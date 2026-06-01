@@ -3,6 +3,7 @@ import PatientScene from './PatientScene.jsx';
 import ClinicalAlgorithm from './ClinicalAlgorithm.jsx';
 import WhyPanel from './WhyPanel.jsx';
 import { getDragConfig } from '../data/gameData.js';
+import medicalOrders from '../data/medical-orders.json';
 import { useDragGame } from '../hooks/useDragGame.js';
 import { useGridDragGame } from '../hooks/useGridDragGame.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
@@ -49,7 +50,6 @@ import {
   getSessionTimerSeconds,
 } from '../lib/caseTimer.js';
 import { getBranding } from '../data/gameData.js';
-import CaseChatPanel from './CaseChatPanel.jsx';
 import CaseNotesPanel from './CaseNotesPanel.jsx';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 import PlaySceneToolbar from './sceneToolbar/PlaySceneToolbar.jsx';
@@ -95,6 +95,10 @@ const LOCATIONS = {
   ICU: { label: 'ICU', image: null, context: 'Intensive Care Unit — critical care monitoring' },
   WARD: { label: 'WARD', image: null, context: 'General ward — stable, routine monitoring' },
 };
+
+const ALL_ORDERS = Object.entries(medicalOrders).flatMap(([category, orders]) =>
+  orders.map((name) => ({ name, category })),
+);
 
 const LOCATION_TRIGGERS = {
   ER: ['move to er', 'transfer er', 'back to er', 'emergency', 'er'],
@@ -142,6 +146,27 @@ function detectLocation(input) {
   return null;
 }
 
+function conversationTextFromEvent(event) {
+  if (!event) return '';
+  if (event.type === 'stack') {
+    return event.method === 'command'
+      ? `Ordered ${event.label}`
+      : `Placed ${event.label}`;
+  }
+  if (event.type === 'location') return `Nurse: moved patient to ${event.to}`;
+  if (event.type === 'note') return `Note: ${event.text}`;
+  if (event.type === 'soap') return `${event.field === 'assessment' ? 'Assessment' : 'Plan'} updated`;
+  if (event.type === 'review_flag') return event.flagged ? 'Flagged for review' : 'Removed review flag';
+  if (event.type === 'patient_life') return `Patient status: ${event.state}`;
+  if (event.type === 'chat') return event.text || '';
+  return '';
+}
+
+function MessageEntry({ role = 'system', content }) {
+  if (!content) return null;
+  return <div className={`conversation-entry ${role}`}>{content}</div>;
+}
+
 export default function Play({
   caseData,
   playMode = 'browse',
@@ -182,7 +207,8 @@ export default function Play({
   const [timedOut, setTimedOut] = useState(false);
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [vitalsHighlight, setVitalsHighlight] = useState(false);
-  const [showCaseChat, setShowCaseChat] = useState(false);
+  const [logOpen, setLogOpen] = useState(false);
+  const [conversationLog, setConversationLog] = useState([]);
   const [playSessionId, setPlaySessionId] = useState(null);
   const playSessionIdRef = useRef(null);
   const stackCommandRef = useRef(null);
@@ -299,6 +325,19 @@ export default function Play({
     }
     return null;
   }, [interventions, orderCommand, placed]);
+
+  const knownOrderMatch = useMemo(() => {
+    const t = normCommandText(orderCommand);
+    if (t.length <= 2 || commandMatch) return null;
+    return (
+      ALL_ORDERS.find((order) => {
+        const name = normCommandText(order.name);
+        const firstWord = name.split(' ')[0];
+        if (!name) return false;
+        return name.includes(t) || t.includes(name) || (firstWord.length > 2 && t.includes(firstWord));
+      }) || null
+    );
+  }, [commandMatch, orderCommand]);
 
   const renderStackPill = (iv, isDecoy = false, displayNumOverride = null) => {
     const seqNum = interventions.findIndex((x) => x.id === iv.id);
@@ -515,6 +554,17 @@ export default function Play({
 
   const logTimeline = useCallback(
     (event) => {
+      const content = conversationTextFromEvent(event);
+      if (content) {
+        setConversationLog((prev) => [
+          ...prev,
+          {
+            id: `${Date.now()}-${prev.length}`,
+            role: event.type === 'chat' ? event.role || 'assistant' : 'system',
+            content,
+          },
+        ]);
+      }
       const sid = playSessionIdRef.current;
       if (!sid || !caseData?.id) return;
       void logPlayEvent(caseData.id, sid, event);
@@ -540,6 +590,11 @@ export default function Play({
   const timedModeEnabled = isTimedMode({ timedMode });
   const timerState = timeLeft > 60 ? 'safe' : timeLeft > 25 ? 'warn' : 'critical';
   const timerLabel = formatTimerLabel(timeLeft);
+
+  useEffect(() => {
+    setLogOpen(false);
+    setConversationLog([]);
+  }, [caseData.id]);
 
   const resumeHydratedRef = useRef(false);
   const skipFreshCaseResetRef = useRef(
@@ -794,7 +849,11 @@ export default function Play({
     }
     const s = commandMatch;
     if (!s) {
-      showToast('No unplaced stack matched that order', 'bad');
+      if (knownOrderMatch) {
+        showToast(`${knownOrderMatch.name} is not indicated in this case`, '');
+        return;
+      }
+      showToast('Order not recognized', 'bad');
       return;
     }
     if (teachMeMode && s.id !== nextExpectedId) {
@@ -824,7 +883,7 @@ export default function Play({
       correct: true,
       method: 'command',
     });
-  }, [commandMatch, orderCommand, teachMeMode, nextExpectedId, interventionById, logTimeline, showToast]);
+  }, [commandMatch, knownOrderMatch, orderCommand, teachMeMode, nextExpectedId, interventionById, logTimeline, showToast]);
 
   const computePostVideoRows = useCallback((override = null) => {
     const expectedOrder = interventions.map((iv) => iv.id);
@@ -2249,11 +2308,16 @@ export default function Play({
                   <button type="submit" className="btn-ghost stack-command-btn">
                     Order
                   </button>
-                  <div className={`stack-command-match ${commandMatch ? 'has-match' : ''}`} aria-live="polite">
+                  <div
+                    className={`stack-command-match ${commandMatch ? 'has-match' : knownOrderMatch ? 'known-order' : ''}`}
+                    aria-live="polite"
+                  >
                     {orderCommand.trim()
                       ? commandMatch
                         ? `Match: ${commandMatch.label}`
-                        : 'No stack matched yet'
+                        : knownOrderMatch
+                          ? `${knownOrderMatch.name} is not indicated in this case`
+                          : 'Order not recognized'
                       : 'Matches unplaced stacks only'}
                   </div>
                 </form>
@@ -2327,13 +2391,6 @@ export default function Play({
         onClose={() => setWhyPanel(null)}
       />
 
-      <CaseChatPanel
-        caseData={caseData}
-        open={showCaseChat}
-        onClose={() => setShowCaseChat(false)}
-        playSessionId={playSessionId}
-      />
-
       <div className={`toast ${toast.type} ${toast.msg ? 'show' : ''}`}>{toast.msg}</div>
 
       {studioCapture && (
@@ -2378,113 +2435,124 @@ export default function Play({
         </div>
       )}
 
-      <PlaySceneToolbar
-        examOpen={activeDrawer === 'exam'}
-        historyOpen={activeDrawer === 'history'}
-        vitalsHighlight={vitalsHighlight}
-        stacksOpen={!dockCollapsed && infoTab === 'treatment'}
-        chatOpen={showCaseChat}
-        readPlaying={readState === 'playing'}
-        showCues={showCues}
-        darkMode={theme === 'dark'}
-        freeDrop={dropMode === 'free'}
-        settingsOpen={stackSettingsOpen}
-        settingsRef={stackCommandRef}
-        settingsPopover={
-          <div className="settings-popover toolbar-settings-popover" role="dialog" aria-label="Toolbar settings">
-            <div className="settings-popover-row">
-              <button
-                type="button"
-                onClick={() =>
-                  updateClinicalTextPrefs({
-                    fontScale: Math.max(0.9, Number((textPrefs.fontScale - 0.08).toFixed(2))),
-                  })
-                }
-                aria-label="Decrease text size"
-              >
-                A−
-              </button>
-              <span className="font-size-display">{Math.round(textPrefs.fontScale * 100)}%</span>
-              <button
-                type="button"
-                onClick={() =>
-                  updateClinicalTextPrefs({
-                    fontScale: Math.min(1.5, Number((textPrefs.fontScale + 0.08).toFixed(2))),
-                  })
-                }
-                aria-label="Increase text size"
-              >
-                A+
-              </button>
-              <button
-                type="button"
-                onClick={() => updateClinicalTextPrefs({ weight: textPrefs.weight === 700 ? 600 : 700 })}
-                className={textPrefs.weight === 700 ? 'active' : ''}
-                aria-label="Toggle bold text"
-              >
-                B
-              </button>
-            </div>
-            <div className="settings-popover-row settings-popover-row-2">
-              <button type="button" onClick={toggleTimedMode}>
-                {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
-              </button>
-              <button type="button" onClick={resetPlacements}>
-                Reset
-              </button>
-            </div>
+      <div className="bottom-ui-block">
+        {logOpen && (
+          <div className="conversation-log" aria-label="Conversation log">
+            {conversationLog.length ? (
+              conversationLog.map((m) => <MessageEntry key={m.id} {...m} />)
+            ) : (
+              <MessageEntry role="system" content="Conversation log will appear here as the case unfolds." />
+            )}
           </div>
-        }
-        onToggleExam={() => setActiveDrawer((d) => (d === 'exam' ? null : 'exam'))}
-        onToggleHistory={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
-        onToggleVitals={() => setVitalsHighlight((v) => !v)}
-        onOpenStacks={() => {
-          setDockCollapsed(false);
-          setInfoTab('treatment');
-        }}
-        onToggleChat={() => setShowCaseChat((v) => !v)}
-        onReadAloud={() => {
-          const section =
-            infoTab === 'exam' ? 'exam' : infoTab === 'notes' ? 'notes' : infoTab === 'treatment' ? 'treatment' : 'hpi';
-          const text =
-            section === 'exam'
-              ? examSummary
-              : section === 'hpi'
-                ? sidebarHpi
-                : section === 'treatment'
-                  ? caseData.objective || ''
-                  : '';
-          if (readState === 'playing') {
-            stopCaseReader();
-            setReadState('idle');
-            return;
+        )}
+        <PlaySceneToolbar
+          examOpen={activeDrawer === 'exam'}
+          historyOpen={activeDrawer === 'history'}
+          vitalsHighlight={!dockCollapsed}
+          stacksOpen={!dockCollapsed && infoTab === 'treatment'}
+          chatOpen={logOpen}
+          readPlaying={readState === 'playing'}
+          showCues={showCues}
+          darkMode={theme === 'dark'}
+          freeDrop={dropMode === 'free'}
+          settingsOpen={stackSettingsOpen}
+          settingsRef={stackCommandRef}
+          settingsPopover={
+            <div className="settings-popover toolbar-settings-popover" role="dialog" aria-label="Toolbar settings">
+              <div className="settings-popover-row">
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateClinicalTextPrefs({
+                      fontScale: Math.max(0.9, Number((textPrefs.fontScale - 0.08).toFixed(2))),
+                    })
+                  }
+                  aria-label="Decrease text size"
+                >
+                  A−
+                </button>
+                <span className="font-size-display">{Math.round(textPrefs.fontScale * 100)}%</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateClinicalTextPrefs({
+                      fontScale: Math.min(1.5, Number((textPrefs.fontScale + 0.08).toFixed(2))),
+                    })
+                  }
+                  aria-label="Increase text size"
+                >
+                  A+
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateClinicalTextPrefs({ weight: textPrefs.weight === 700 ? 600 : 700 })}
+                  className={textPrefs.weight === 700 ? 'active' : ''}
+                  aria-label="Toggle bold text"
+                >
+                  B
+                </button>
+              </div>
+              <div className="settings-popover-row settings-popover-row-2">
+                <button type="button" onClick={toggleTimedMode}>
+                  {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
+                </button>
+                <button type="button" onClick={resetPlacements}>
+                  Reset
+                </button>
+              </div>
+            </div>
           }
-          readCaseAloud({
-            caseId: caseData.id,
-            section,
-            text,
-            onState: (state) => setReadState(state),
-          });
-        }}
-        onTriggerDeath={() => {
-          const death = document.getElementById('death');
-          const idleSlots = document.querySelectorAll('.idle-slot');
-          if (!death) return;
-          idleSlots.forEach((slot) => {
-            slot.pause();
-            slot.style.opacity = '0';
-          });
-          death.style.opacity = '1';
-          death.style.zIndex = '2';
-          death.currentTime = 0;
-          death.play().catch(() => {});
-        }}
-        onRestart={restartCurrentCase}
-        onToggleCues={() => setShowCues((v) => !v)}
-        onToggleTheme={toggleTheme}
-        onToggleDropMode={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
-        onToggleSettings={() => setStackSettingsOpen((v) => !v)}
-      />
+          onToggleExam={() => setActiveDrawer((d) => (d === 'exam' ? null : 'exam'))}
+          onToggleHistory={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
+          onToggleVitals={() => setDockCollapsed((v) => !v)}
+          onOpenStacks={() => {
+            setDockCollapsed(false);
+            setInfoTab('treatment');
+          }}
+          onToggleChat={() => setLogOpen((v) => !v)}
+          onReadAloud={() => {
+            const section =
+              infoTab === 'exam' ? 'exam' : infoTab === 'notes' ? 'notes' : infoTab === 'treatment' ? 'treatment' : 'hpi';
+            const text =
+              section === 'exam'
+                ? examSummary
+                : section === 'hpi'
+                  ? sidebarHpi
+                  : section === 'treatment'
+                    ? caseData.objective || ''
+                    : '';
+            if (readState === 'playing') {
+              stopCaseReader();
+              setReadState('idle');
+              return;
+            }
+            readCaseAloud({
+              caseId: caseData.id,
+              section,
+              text,
+              onState: (state) => setReadState(state),
+            });
+          }}
+          onTriggerDeath={() => {
+            const death = document.getElementById('death');
+            const idleSlots = document.querySelectorAll('.idle-slot');
+            if (!death) return;
+            idleSlots.forEach((slot) => {
+              slot.pause();
+              slot.style.opacity = '0';
+            });
+            death.style.opacity = '1';
+            death.style.zIndex = '2';
+            death.currentTime = 0;
+            death.play().catch(() => {});
+          }}
+          onRestart={restartCurrentCase}
+          onToggleCues={() => setShowCues((v) => !v)}
+          onToggleTheme={toggleTheme}
+          onToggleDropMode={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
+          onToggleSettings={() => setStackSettingsOpen((v) => !v)}
+        />
+      </div>
     </div>
   );
 }

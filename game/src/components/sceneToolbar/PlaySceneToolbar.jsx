@@ -1,8 +1,9 @@
 import {
-  IconActivityHeartbeat,
   IconClipboardPulse,
   IconEyeOff,
   IconFileMedical,
+  IconLayoutSidebarRightCollapse,
+  IconLayoutSidebarRightExpand,
   IconLockOpen,
   IconMessage,
   IconMicrophone,
@@ -74,7 +75,7 @@ export default function PlaySceneToolbar({
         title="Vitals"
         aria-label="Vitals"
       >
-        <IconActivityHeartbeat />
+        {vitalsHighlight ? <IconLayoutSidebarRightCollapse /> : <IconLayoutSidebarRightExpand />}
       </ToolbarBtn>
       <ToolbarBtn
         active={historyOpen}

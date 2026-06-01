@@ -12,10 +12,24 @@ export function IconStethoscope(props) {
   );
 }
 
-export function IconActivityHeartbeat(props) {
+export function IconLayoutSidebarRightCollapse(props) {
   return (
     <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
-      <path d="M3 12h4.5l1.5 -6l4 12l2 -9l1.5 3h4.5" />
+      <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+      <path d="M15 4v16" />
+      <path d="M9 10l2 2l-2 2" />
+      <path d="M11 12h-3" />
+    </svg>
+  );
+}
+
+export function IconLayoutSidebarRightExpand(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+      <path d="M15 4v16" />
+      <path d="M10 10l-2 2l2 2" />
+      <path d="M8 12h3" />
     </svg>
   );
 }
