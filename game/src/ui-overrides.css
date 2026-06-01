@@ -1140,6 +1140,15 @@
   font-weight: var(--clinical-font-weight, 600);
 }
 
+.case-context-body.clinical-text-block,
+.case-notes-body.clinical-text-block,
+.soap-wrap.clinical-text-block .soap-body,
+.soap-wrap.clinical-text-block .soap-input,
+.soap-wrap.clinical-text-block .soap-prompt {
+  font-size: var(--clinical-font-size, 1rem);
+  font-weight: var(--clinical-font-weight, 600);
+}
+
 .clinical-font-controls-wrap {
   display: flex;
   flex-direction: column;
