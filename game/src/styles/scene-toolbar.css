@@ -139,6 +139,85 @@
   bottom: calc(100% + 10px);
   right: 0;
   z-index: 200;
+  min-width: 300px;
+  max-width: min(360px, calc(100vw - 24px));
+  white-space: normal;
+}
+
+/* Audio rows: label on top, full-width slider below */
+.toolbar-settings-popover .audio-settings-panel--embedded {
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  padding-top: 8px;
+  margin-top: 2px;
+}
+
+.toolbar-settings-popover .audio-settings-panel--embedded .audio-settings-row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 6px 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.toolbar-settings-popover .audio-settings-row-label {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.toolbar-settings-popover .audio-volume-mute {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.toolbar-settings-popover .audio-settings-slider {
+  grid-column: 2;
+  grid-row: 2;
+  width: 100%;
+  min-width: 0;
+  height: 22px;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.toolbar-settings-popover .audio-settings-pct {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.toolbar-settings-popover .audio-settings-slider::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.toolbar-settings-popover .audio-settings-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -5.5px;
+  border-radius: 50%;
+  background: #e8b84b;
+  border: 2px solid rgba(14, 16, 22, 0.92);
+  box-shadow: 0 0 0 1px rgba(232, 184, 75, 0.4);
+}
+
+.toolbar-settings-popover .audio-settings-slider::-moz-range-track {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.toolbar-settings-popover .audio-settings-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e8b84b;
+  border: 2px solid rgba(14, 16, 22, 0.92);
+  box-shadow: 0 0 0 1px rgba(232, 184, 75, 0.4);
 }
 
 .game.final-mode .toolbar {

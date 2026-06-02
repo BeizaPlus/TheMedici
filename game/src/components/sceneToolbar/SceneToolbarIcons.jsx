@@ -91,6 +91,16 @@ export function IconRotate(props) {
   );
 }
 
+export function IconDoorExit(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M13 12h8" />
+      <path d="M17 8l4 4l-4 4" />
+      <path d="M5 5v14a2 2 0 0 0 2 2h6" />
+    </svg>
+  );
+}
+
 export function IconEyeOff(props) {
   return (
     <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>

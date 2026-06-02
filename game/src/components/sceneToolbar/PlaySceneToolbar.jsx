@@ -8,6 +8,7 @@ import {
   IconMessage,
   IconMicrophone,
   IconMoon,
+  IconDoorExit,
   IconRotate,
   IconSettings,
   IconSkipForward,
@@ -54,6 +55,7 @@ export default function PlaySceneToolbar({
   onReadAloud,
   onTriggerDeath,
   onRestart,
+  onExitCase,
   onToggleCues,
   onToggleTheme,
   onToggleDropMode,
@@ -113,6 +115,9 @@ export default function PlaySceneToolbar({
       </ToolbarBtn>
       <ToolbarBtn onClick={onRestart} title="Restart case" aria-label="Restart case">
         <IconRotate />
+      </ToolbarBtn>
+      <ToolbarBtn onClick={onExitCase} title="Exit case" aria-label="Exit case">
+        <IconDoorExit />
       </ToolbarBtn>
 
       <ToolbarSep />

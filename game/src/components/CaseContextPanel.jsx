@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FiVolume2 } from 'react-icons/fi';
 import CcsScreenshotLink from './CcsScreenshotLink.jsx';
+import { toTitleCase } from '../lib/clinicalTextFormat.js';
 
 export default function CaseContextPanel({
   caseData,
@@ -48,12 +49,19 @@ export default function CaseContextPanel({
     if (!isControlled) setInfoTab(defaultTab);
   }, [defaultTab, caseData?.id, isControlled]);
 
+  const hpiNarrative =
+    (typeof caseData?.hpi_narrative === 'string' && caseData.hpi_narrative.trim()) ||
+    (typeof hpiText === 'string' && hpiText.trim()) ||
+    '';
   const bodyText =
     tab === 'hpi'
-      ? hpiText || 'No history available.'
+      ? hpiNarrative || 'HPI not yet available for this case.'
       : tab === 'exam'
         ? examSummary || 'No physical exam findings documented yet.'
         : treatmentSummaryText || 'No treatment summary available.';
+  const physicalExam = caseData?.physical_exam;
+  const hasStructuredExam =
+    physicalExam && typeof physicalExam === 'object' && !Array.isArray(physicalExam);
 
   const readSection =
     tab === 'hpi' ? 'hpi' : tab === 'exam' ? 'exam' : tab === 'treatment' ? 'treatment' : tab;
@@ -75,8 +83,8 @@ export default function CaseContextPanel({
             {headerControls}
             <span className="pack-tag">{brandName}</span>
           </div>
-          <h2 className="sidebar-title" title={caseData.title}>
-            {caseData.title}
+          <h2 className="sidebar-title" title={toTitleCase(caseData.title)}>
+            {toTitleCase(caseData.title)}
           </h2>
           {locationContext && <p className="case-location-context">{locationContext}</p>}
         </>
@@ -132,7 +140,31 @@ export default function CaseContextPanel({
           </button>
         </div>
       )}
-      {!isTreatment && !isNotes && (
+      {tab === 'hpi' && !isTreatment && !isNotes && (
+        <div className="hpi-text case-context-body clinical-text-block" style={textStyle}>
+          {hpiNarrative || 'HPI not yet available for this case.'}
+        </div>
+      )}
+      {tab === 'exam' && !isTreatment && !isNotes && hasStructuredExam && (
+        <div className="case-context-body clinical-text-block" style={textStyle}>
+          {Object.entries(physicalExam)
+            .filter(([, value]) => value !== null && value !== '')
+            .map(([system, finding]) => (
+              <div key={system} className="exam-system">
+                <span className="system-label">
+                  {system.toUpperCase().replace(/_/g, ' ')}
+                </span>
+                <span className="system-finding">{finding}</span>
+              </div>
+            ))}
+        </div>
+      )}
+      {tab === 'exam' && !isTreatment && !isNotes && !hasStructuredExam && (
+        <p className="sub case-context-body clinical-text-block" style={textStyle} title={bodyText}>
+          {bodyText}
+        </p>
+      )}
+      {tab !== 'hpi' && tab !== 'exam' && !isTreatment && !isNotes && (
         <p className="sub case-context-body clinical-text-block" style={textStyle} title={bodyText}>
           {bodyText}
         </p>

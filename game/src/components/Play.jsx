@@ -17,6 +17,7 @@ import {
   FiCamera,
   FiMaximize2,
   FiMinimize2,
+  FiX,
   FiEye,
   FiSun,
   FiUnlock,
@@ -56,12 +57,15 @@ import PlaySceneToolbar from './sceneToolbar/PlaySceneToolbar.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
 import IcuMonitorStrip from './IcuMonitorStrip.jsx';
 import ClinicalTextControls from './ClinicalTextControls.jsx';
+import AudioSettingsPanel from './AudioSettingsPanel.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
 import { buildShuffledStackEntries } from '../lib/shuffleStacks.js';
 import CcsScreenshotLink from './CcsScreenshotLink.jsx';
 import { pickTeachingVideo, preloadTeachingVideo } from '../lib/caseTeachingVideo.js';
+import { decoyReason, handleDecoyOrder } from '../lib/decoyOrder.js';
+import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import CaseTeachingVideoOverlay from './CaseTeachingVideoOverlay.jsx';
 import TeachMeSceneOverlay from './TeachMeSceneOverlay.jsx';
 import { IconFileMedical } from './sceneToolbar/SceneToolbarIcons.jsx';
@@ -85,6 +89,7 @@ import { getCaseInterventions, isTimedMode, readUiPrefs, writeUiPrefs } from '..
 import {
   buildSceneSourceSig,
   clearCaseSceneVariantsForSig,
+  clearSceneVariantUnit,
   readCaseRegenImage,
 } from '../lib/patientRegen.js';
 
@@ -153,6 +158,7 @@ function conversationTextFromEvent(event) {
       ? `Ordered ${event.label}`
       : `Placed ${event.label}`;
   }
+  if (event.type === 'extra_order') return `Ordered ${event.label}`;
   if (event.type === 'location') return `Nurse: moved patient to ${event.to}`;
   if (event.type === 'note') return `Note: ${event.text}`;
   if (event.type === 'soap') return `${event.field === 'assessment' ? 'Assessment' : 'Plan'} updated`;
@@ -202,7 +208,10 @@ export default function Play({
   const [teachMeMode, setTeachMeMode] = useState(false);
   const [placementOrder, setPlacementOrder] = useState([]);
   const [orderCommand, setOrderCommand] = useState('');
+  const [extraOrders, setExtraOrders] = useState([]);
+  const [decoyAttempts, setDecoyAttempts] = useState([]);
   const [stackSettingsOpen, setStackSettingsOpen] = useState(false);
+  const [stacksVisible, setStacksVisible] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [timedOut, setTimedOut] = useState(false);
   const [activeDrawer, setActiveDrawer] = useState(null);
@@ -295,9 +304,10 @@ export default function Play({
   const canStartStackDrag = useCallback(
     (ivId) => {
       if (!teachMeMode) return true;
+      if (decoyInterventions.some((d) => d.id === ivId)) return true;
       return ivId === nextExpectedId;
     },
-    [teachMeMode, nextExpectedId],
+    [teachMeMode, nextExpectedId, decoyInterventions],
   );
   const teachGroups = useMemo(() => {
     const longTermWords = /\b(vaccin|vaccine|immuniz|follow.?up|outpatient|counsel|education|rehab|discharge|prevent|lifestyle|diet)\b/i;
@@ -326,6 +336,20 @@ export default function Play({
     return null;
   }, [interventions, orderCommand, placed]);
 
+  const decoyCommandMatch = useMemo(() => {
+    const t = normCommandText(orderCommand);
+    if (t.length <= 2) return null;
+    for (const d of decoyInterventions) {
+      if (placed[d.id]) continue;
+      for (const a of stackAliases(d)) {
+        const alias = normCommandText(a);
+        if (!alias) continue;
+        if (t.includes(alias) || alias.includes(t)) return d;
+      }
+    }
+    return null;
+  }, [decoyInterventions, orderCommand, placed]);
+
   const knownOrderMatch = useMemo(() => {
     const t = normCommandText(orderCommand);
     if (t.length <= 2 || commandMatch) return null;
@@ -338,6 +362,15 @@ export default function Play({
       }) || null
     );
   }, [commandMatch, orderCommand]);
+
+  const orderCommandHint = useMemo(() => {
+    if (!orderCommand.trim()) return 'Matches unplaced stacks only';
+    if (commandMatch) return `Match: ${commandMatch.label}`;
+    if (knownOrderMatch) {
+      return teachMeMode ? `${knownOrderMatch.name} is not indicated in this case` : '';
+    }
+    return 'Order not recognized';
+  }, [orderCommand, commandMatch, knownOrderMatch, teachMeMode]);
 
   const renderStackPill = (iv, isDecoy = false, displayNumOverride = null) => {
     const seqNum = interventions.findIndex((x) => x.id === iv.id);
@@ -470,6 +503,7 @@ export default function Play({
 
   const SOAP_MIN_CHARS = 12;
   const [careUnit, setCareUnit] = useState(caseFlow.dispositionUnits?.[0] || 'ER');
+  const regenSrc = useMemo(() => readCaseRegenImage(caseData?.id), [caseData?.id]);
   const [reviewedAt, setReviewedAt] = useState(null);
   const [sceneByUnit, setSceneByUnit] = useState(() => {
     if (typeof window === 'undefined') return {};
@@ -499,6 +533,7 @@ export default function Play({
   const [activeThanksVideo, setActiveThanksVideo] = useState(null);
   const [thanksVideoIssue, setThanksVideoIssue] = useState('');
   const [showPostVideoReview, setShowPostVideoReview] = useState(false);
+  const [reviewCentered, setReviewCentered] = useState(false);
   const [postVideoRows, setPostVideoRows] = useState([]);
   const [reviewChecked, setReviewChecked] = useState([]);
   const [reviewContinuePulse, setReviewContinuePulse] = useState(false);
@@ -594,6 +629,9 @@ export default function Play({
   useEffect(() => {
     setLogOpen(false);
     setConversationLog([]);
+    setStacksVisible(false);
+    setExtraOrders([]);
+    setDecoyAttempts([]);
   }, [caseData.id]);
 
   const resumeHydratedRef = useRef(false);
@@ -694,6 +732,7 @@ export default function Play({
     if (typeof c.reviewed === 'boolean') setReviewed(c.reviewed);
     if (c.reviewResults) setReviewResults(c.reviewResults);
     if (c.orderReview) setOrderReview(c.orderReview);
+    if (Array.isArray(c.extraOrders)) setExtraOrders(c.extraOrders);
     if (typeof c.reviewCount === 'number') setReviewCount(c.reviewCount);
     if (c.infoTab) {
       const mapped =
@@ -743,6 +782,7 @@ export default function Play({
         reviewed,
         reviewResults,
         orderReview,
+        extraOrders,
         reviewCount,
         infoTab,
         lifePct,
@@ -769,6 +809,7 @@ export default function Play({
       reviewed,
       reviewResults,
       orderReview,
+      extraOrders,
       reviewCount,
       infoTab,
       lifePct,
@@ -795,6 +836,16 @@ export default function Play({
     onQuit();
   }, [buildCheckpoint, onQuit]);
 
+  const confirmExitCase = useCallback(() => {
+    const ok = window.confirm(
+      'Exit this case? Your progress is saved — you can resume from the home screen.',
+    );
+    if (!ok) return;
+    stopCaseReader();
+    void endCurrentPlaySession({ abandoned: true, placed: doneCount, total });
+    handleQuit();
+  }, [endCurrentPlaySession, handleQuit, doneCount, total]);
+
   useEffect(() => {
     if (!studioCapture) return;
     const key = `${STORAGE.playGridItems}_${caseData.id}`;
@@ -820,6 +871,8 @@ export default function Play({
         const parsed = JSON.parse(raw);
         if (parsed?.[sig] && typeof parsed[sig] === 'object') {
           for (const [unit, src] of Object.entries(parsed[sig])) {
+            // ER always uses resolveSceneSrc — cached variants here caused black play scenes.
+            if (unit === 'ER') continue;
             if (isValidSceneSrc(src)) next[unit] = src;
           }
         }
@@ -835,6 +888,149 @@ export default function Play({
     setTimeout(() => setToast({ msg: '', type: '' }), 2200);
   };
 
+  const snapWrapHome = (wrap) => {
+    if (!wrap) return;
+    wrap.style.transition = `transform ${dragCfg.snapBackMs}ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
+    wrap.style.transform = 'translate(0, 0)';
+    wrap.setAttribute('data-x', '0');
+    wrap.setAttribute('data-y', '0');
+    setTimeout(() => {
+      wrap.style.transition = '';
+    }, dragCfg.snapBackMs + 20);
+  };
+
+  const revealedMode = teachMeMode;
+
+  const addConversationMessage = useCallback((role, text, result) => {
+    const content =
+      role === 'order'
+        ? `${text} — ${result}`
+        : role === 'decoy'
+          ? String(result || text)
+          : String(text);
+    setConversationLog((prev) => [
+      ...prev,
+      {
+        id: `${Date.now()}-${prev.length}`,
+        role,
+        content,
+      },
+    ]);
+  }, []);
+
+  const logDecoyAttempt = useCallback(
+    (stack, input) => {
+      const label = stack.label || input;
+      setDecoyAttempts((prev) => {
+        if (prev.some((a) => a.ordered === input && a.label === label)) return prev;
+        return [
+          ...prev,
+          {
+            ordered: input,
+            label,
+            reason_wrong: decoyReason(stack),
+            timestamp: Math.max(0, timerTotal - timeLeft),
+          },
+        ];
+      });
+    },
+    [timeLeft, timerTotal],
+  );
+
+  const acceptDecoyPlacement = useCallback(
+    (stack, target, { wrap, zone, pill }) => {
+      const isGrid = typeof target === 'object' && target != null && 'col' in target;
+      const zoneId = isGrid ? zoneIdForCell(target, zones) : target;
+      pill.dataset.placed = 'true';
+      wrap.classList.add('pill-placed');
+      if (zone) zone.classList.add('zone-done');
+      setPlaced((p) => ({ ...p, [stack.id]: target }));
+      setPins((prev) => [
+        ...prev.filter((pin) => pin.ivId !== stack.id && pin.label !== stack.label),
+        isGrid
+          ? { ...target, label: stack.label, ivId: stack.id, ok: false, isDecoy: true }
+          : { zoneId, label: stack.label, ivId: stack.id, ok: false, isDecoy: true },
+      ]);
+      setReviewed(false);
+      setReviewResults({});
+      setOrderReview({});
+      setReviewedAt(null);
+      void logPlayEvent(caseData.id, playSessionIdRef.current, {
+        type: 'decoy',
+        stackId: stack.id,
+        label: stack.label,
+      });
+    },
+    [caseData.id, zones],
+  );
+
+  const processDecoyOrder = useCallback(
+    async (stack, input, { wrap, zone, pill, target } = {}) => {
+      if (revealedMode) {
+        const teaching = await handleDecoyOrder(stack, caseData);
+        addConversationMessage('decoy', input, teaching);
+        showToast(teaching, '');
+        if (wrap) snapWrapHome(wrap);
+        return;
+      }
+      logDecoyAttempt(stack, input);
+      addConversationMessage('order', input, 'Order placed.');
+      if (wrap && pill && target != null) {
+        acceptDecoyPlacement(stack, target, { wrap, zone, pill });
+      } else if (stack.correct_zone) {
+        setPlaced((p) => ({ ...p, [stack.id]: stack.correct_zone }));
+        setPins((prev) => [
+          ...prev.filter((pin) => pin.ivId !== stack.id && pin.label !== stack.label),
+          {
+            zoneId: stack.correct_zone,
+            label: stack.label,
+            ivId: stack.id,
+            ok: false,
+            isDecoy: true,
+          },
+        ]);
+        setReviewed(false);
+        setReviewResults({});
+        setOrderReview({});
+        setReviewedAt(null);
+      }
+      showToast('Order placed.', 'ok');
+    },
+    [
+      revealedMode,
+      caseData,
+      addConversationMessage,
+      logDecoyAttempt,
+      acceptDecoyPlacement,
+    ],
+  );
+
+  useEffect(() => {
+    if (!showPostVideoReview || decoyAttempts.length === 0) return undefined;
+
+    let cancelled = false;
+    void (async () => {
+      const enriched = await Promise.all(
+        decoyAttempts.map(async (attempt) => {
+          if (attempt.teaching) return attempt;
+          const stack = decoyInterventions.find((d) => d.label === attempt.label) || {
+            label: attempt.label,
+            why: attempt.reason_wrong,
+          };
+          const teaching = await handleDecoyOrder(stack, caseData);
+          return { ...attempt, teaching };
+        }),
+      );
+      if (!cancelled) {
+        setDecoyAttempts(enriched);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [showPostVideoReview, decoyAttempts.length, caseData, decoyInterventions]);
+
   const submitOrderCommand = useCallback(() => {
     const t = normCommandText(orderCommand);
     if (!t) {
@@ -847,10 +1043,33 @@ export default function Play({
       setOrderCommand('');
       return;
     }
+    const decoy = decoyCommandMatch;
+    if (decoy) {
+      const input = orderCommand.trim() || decoy.label;
+      setOrderCommand('');
+      void processDecoyOrder({ ...decoy, isDecoy: true }, input);
+      return;
+    }
     const s = commandMatch;
     if (!s) {
       if (knownOrderMatch) {
-        showToast(`${knownOrderMatch.name} is not indicated in this case`, '');
+        if (teachMeMode) {
+          showToast(`${knownOrderMatch.name} is not indicated in this case`, '');
+          return;
+        }
+        const label = knownOrderMatch.name;
+        setExtraOrders((prev) => {
+          const key = label.toLowerCase();
+          if (prev.some((o) => o.name.toLowerCase() === key)) return prev;
+          return [...prev, { name: label, category: knownOrderMatch.category }];
+        });
+        setOrderCommand('');
+        setReviewed(false);
+        setReviewResults({});
+        setOrderReview({});
+        setReviewedAt(null);
+        showToast(`Ordered ${label}`, 'ok');
+        logTimeline({ type: 'extra_order', label, category: knownOrderMatch.category });
         return;
       }
       showToast('Order not recognized', 'bad');
@@ -883,7 +1102,17 @@ export default function Play({
       correct: true,
       method: 'command',
     });
-  }, [commandMatch, knownOrderMatch, orderCommand, teachMeMode, nextExpectedId, interventionById, logTimeline, showToast]);
+  }, [
+    commandMatch,
+    decoyCommandMatch,
+    knownOrderMatch,
+    orderCommand,
+    teachMeMode,
+    nextExpectedId,
+    interventionById,
+    logTimeline,
+    processDecoyOrder,
+  ]);
 
   const computePostVideoRows = useCallback((override = null) => {
     const expectedOrder = interventions.map((iv) => iv.id);
@@ -911,18 +1140,22 @@ export default function Play({
     }).filter(Boolean);
   }, [interventions, interventionById, placementOrder, reviewed, reviewResults, placed]);
 
+  const dismissPostVideoReview = useCallback(() => {
+    setReviewCentered(false);
+    setShowPostVideoReview(false);
+    setShowThanksVideo(false);
+    setActiveThanksVideo(null);
+    setReviewPanelDragging(false);
+  }, []);
+
   const openFinalReview = useCallback(() => {
-    const panelW = Math.min(520, window.innerWidth - 32);
     setPostVideoRows(computePostVideoRows());
     setReviewChecked(readReviewChecked(caseData.id));
     reviewAllDoneRef.current = false;
     setReviewContinuePulse(false);
     setDockCollapsed(true);
     setReviewPanelCollapsed(false);
-    setReviewPanelPos({
-      x: Math.max(16, (window.innerWidth - panelW) / 2),
-      y: Math.max(56, window.innerHeight - 280),
-    });
+    setReviewCentered(true);
     setShowPostVideoReview(true);
   }, [computePostVideoRows, caseData.id]);
 
@@ -967,6 +1200,7 @@ export default function Play({
       setActiveThanksVideo(null);
       setThanksVideoIssue('');
       setShowPostVideoReview(false);
+      setReviewCentered(false);
       setPostVideoRows([]);
       setReviewPanelCollapsed(false);
       setPendingCompleteResult(null);
@@ -1005,19 +1239,19 @@ export default function Play({
     setTimeout(() => setFlash(''), 280);
   };
 
-  const snapWrapHome = (wrap) => {
-    if (!wrap) return;
-    wrap.style.transition = `transform ${dragCfg.snapBackMs}ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
-    wrap.style.transform = 'translate(0, 0)';
-    wrap.setAttribute('data-x', '0');
-    wrap.setAttribute('data-y', '0');
-    setTimeout(() => {
-      wrap.style.transition = '';
-    }, dragCfg.snapBackMs + 20);
-  };
-
   const handleDrop = useCallback(
     (ivId, target, { wrap, zone, pill }) => {
+      const decoy = decoyInterventions.find((i) => i.id === ivId);
+      if (decoy) {
+        void processDecoyOrder({ ...decoy, isDecoy: true }, decoy.label, {
+          wrap,
+          zone,
+          pill,
+          target,
+        });
+        return;
+      }
+
       const iv = interventions.find((i) => i.id === ivId);
       const isGrid = typeof target === 'object' && target != null && 'col' in target;
       const ok = iv
@@ -1096,6 +1330,8 @@ export default function Play({
     },
     [
       interventions,
+      decoyInterventions,
+      processDecoyOrder,
       dropMode,
       dragCfg.snapBackMs,
       zones,
@@ -1339,6 +1575,28 @@ export default function Play({
     return () => window.removeEventListener('resize', onResize);
   }, [syncImageFrame]);
 
+  const playSceneForceSrc = useMemo(() => {
+    const locImg = LOCATIONS[careUnit]?.image;
+    if (isValidSceneSrc(locImg)) return locImg;
+    if (careUnit !== 'ER') {
+      const unitSrc = sceneByUnit[careUnit];
+      if (isValidSceneSrc(unitSrc)) return unitSrc;
+    }
+    if (isValidSceneSrc(regenSrc)) return regenSrc;
+    return null;
+  }, [careUnit, regenSrc, sceneByUnit]);
+
+  const handleSceneImageError = useCallback(() => {
+    clearSceneVariantUnit(sceneSourceSig, careUnit);
+    if (careUnit !== 'ER') {
+      setSceneByUnit((prev) => {
+        const next = { ...prev };
+        delete next[careUnit];
+        return next;
+      });
+    }
+  }, [careUnit, sceneSourceSig]);
+
   const onDockDragStart = (event) => {
     if (event.button !== 0 || dockCollapsed) return;
     startDockDrag('move', event);
@@ -1368,7 +1626,7 @@ export default function Play({
   }, [reviewPanelDragging]);
 
   const onReviewPanelDragStart = (event) => {
-    if (event.button !== 0) return;
+    if (reviewCentered || event.button !== 0) return;
     const rect = reviewPanelRef.current?.getBoundingClientRect();
     if (!rect) return;
     reviewPanelDragRef.current = {
@@ -1424,6 +1682,7 @@ export default function Play({
     setActiveThanksVideo(null);
     setThanksVideoIssue('');
     setShowPostVideoReview(false);
+    setReviewCentered(false);
     setPostVideoRows([]);
     clearReviewChecked(caseData.id);
     setReviewChecked([]);
@@ -1715,6 +1974,26 @@ export default function Play({
         ref={sceneRef}
       >
         <div className="game-scene-capture" ref={studioCapture ? captureRef : null}>
+        <header className="play-hud" aria-label="Case controls">
+          <button
+            type="button"
+            className="play-hud-exit"
+            onClick={confirmExitCase}
+            aria-label="Exit case and return home"
+          >
+            Exit case
+          </button>
+          <span className="play-hud-case" title={toTitleCase(caseData.title)}>
+            {toTitleCase(caseData.title)}
+          </span>
+          <div className="play-hud-right">
+            {timedModeEnabled && (
+              <span className={`play-hud-timer ${timerState}`} aria-live="polite">
+                {timerLabel}
+              </span>
+            )}
+          </div>
+        </header>
         <div className="scene-dock-left">
           <div className="play-life-top-left">
             <div className="pack-life-head">
@@ -1740,6 +2019,7 @@ export default function Play({
             <IcuMonitorStrip
               vitals={vitals}
               className="icu-monitor-docked"
+              showVolume={false}
               ordersDone={doneCount}
               ordersTotal={total}
               careUnit={careUnit}
@@ -1753,7 +2033,8 @@ export default function Play({
             caseData={caseData}
             imgRef={patientImgRef}
             onLoad={syncImageFrame}
-            forceSrc={LOCATIONS[careUnit]?.image || sceneByUnit[careUnit] || sceneByUnit.ER || null}
+            onSceneError={handleSceneImageError}
+            forceSrc={playSceneForceSrc}
             showVideoBackground={false}
           />
         </div>
@@ -1984,18 +2265,29 @@ export default function Play({
         </div>
       </div>
 
+      {showPostVideoReview && reviewCentered && (
+        <div
+          className="review-backdrop"
+          aria-hidden
+          onClick={dismissPostVideoReview}
+        />
+      )}
       {showPostVideoReview && (
         <div
           ref={reviewPanelRef}
-          className={`post-review-panel ${reviewPanelCollapsed ? 'collapsed' : ''} ${reviewPanelDragging ? 'dragging' : ''}`}
-          style={{ left: `${reviewPanelPos.x}px`, top: `${reviewPanelPos.y}px` }}
+          className={`post-review-panel review-breakdown ${reviewCentered ? 'centered' : ''} ${reviewPanelCollapsed ? 'collapsed' : ''} ${reviewPanelDragging ? 'dragging' : ''}`}
+          style={
+            reviewCentered
+              ? undefined
+              : { left: `${reviewPanelPos.x}px`, top: `${reviewPanelPos.y}px` }
+          }
           role="dialog"
           aria-label="Review breakdown"
         >
           <div
             className="post-review-handle"
             onPointerDown={onReviewPanelDragStart}
-            title="Drag to move"
+            title={reviewCentered ? undefined : 'Drag to move'}
           >
             <span className="post-review-handle-grip">⋮⋮</span>
             <div className="post-review-handle-text">
@@ -2023,6 +2315,18 @@ export default function Play({
               >
                 {reviewPanelCollapsed ? <FiMaximize2 size={14} /> : <FiMinimize2 size={14} />}
               </button>
+              <button
+                type="button"
+                className="post-review-icon-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dismissPostVideoReview();
+                }}
+                title="Close review"
+                aria-label="Close review"
+              >
+                <FiX size={14} />
+              </button>
             </div>
           </div>
           {!reviewPanelCollapsed && (
@@ -2046,6 +2350,47 @@ export default function Play({
                       </span>
                     ))}
                   </div>
+                </div>
+              )}
+              {reviewed && extraOrders.length > 0 && (
+                <section className="post-review-extra-orders" aria-label="Extra orders placed">
+                  <p className="post-review-flow-label">Orders not in case stacks</p>
+                  <ul className="post-review-extra-list">
+                    {extraOrders.map((order) => (
+                      <li key={order.name} className="post-review-extra-item">
+                        <strong>{order.name}</strong>
+                        <span className="post-review-extra-note">Not indicated for this case</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+              {reviewed && postVideoRows.some((row) => !row.ok) && (
+                <section className="post-review-missed" aria-label="Missed case stacks">
+                  <p className="post-review-flow-label">Should have ordered</p>
+                  <ul className="post-review-extra-list">
+                    {postVideoRows
+                      .filter((row) => !row.ok)
+                      .map((row) => (
+                        <li key={row.id} className="post-review-extra-item missed">
+                          <strong>{row.label}</strong>
+                          {row.why ? <span className="post-review-extra-note">{row.why}</span> : null}
+                        </li>
+                      ))}
+                  </ul>
+                </section>
+              )}
+              {decoyAttempts.length > 0 && (
+                <div className="review-section">
+                  <div className="review-section-label">INCORRECT ORDERS</div>
+                  {decoyAttempts.map((attempt, i) => (
+                    <div key={i} className="review-decoy-item">
+                      <span className="decoy-order">▸ {attempt.ordered}</span>
+                      <span className="decoy-teaching">
+                        {attempt.teaching || attempt.reason_wrong}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               )}
               <div className="post-review-list">
@@ -2233,8 +2578,21 @@ export default function Play({
             }
             treatmentPanel={
               <>
-                <p className="sidebar-section-label">Stacks — drag to patient</p>
-                {teachMeMode && (
+                <p
+                  className="sidebar-section-label"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setStacksVisible((v) => !v)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setStacksVisible((v) => !v);
+                    }
+                  }}
+                >
+                  Stacks — drag to patient {stacksVisible ? '↑' : '↓'}
+                </p>
+                {stacksVisible && teachMeMode && (
                   <div className="teach-panel">
                     <p className="teach-title">Teach Me Flow</p>
                     <div className="teach-flow" aria-label="Clinical flow diagram">
@@ -2309,23 +2667,19 @@ export default function Play({
                     Order
                   </button>
                   <div
-                    className={`stack-command-match ${commandMatch ? 'has-match' : knownOrderMatch ? 'known-order' : ''}`}
+                    className={`stack-command-match ${commandMatch ? 'has-match' : teachMeMode && knownOrderMatch ? 'known-order' : ''}`}
                     aria-live="polite"
                   >
-                    {orderCommand.trim()
-                      ? commandMatch
-                        ? `Match: ${commandMatch.label}`
-                        : knownOrderMatch
-                          ? `${knownOrderMatch.name} is not indicated in this case`
-                          : 'Order not recognized'
-                      : 'Matches unplaced stacks only'}
+                    {orderCommandHint || '\u00a0'}
                   </div>
                 </form>
-                <div className="pill-list pill-list-panel pill-list-vertical" id="pill-list">
-                  {shuffledStackEntries.map(({ iv, isDecoy, displayNum }) =>
-                    renderStackPill(iv, isDecoy, displayNum),
-                  )}
-                </div>
+                {stacksVisible && (
+                  <div className="pill-list pill-list-panel pill-list-vertical" id="pill-list">
+                    {shuffledStackEntries.map(({ iv, isDecoy, displayNum }) =>
+                      renderStackPill(iv, isDecoy, displayNum),
+                    )}
+                  </div>
+                )}
               </>
             }
           />
@@ -2500,6 +2854,7 @@ export default function Play({
                   Reset
                 </button>
               </div>
+              <AudioSettingsPanel embedded showGameSounds={false} />
             </div>
           }
           onToggleExam={() => setActiveDrawer((d) => (d === 'exam' ? null : 'exam'))}
@@ -2547,6 +2902,7 @@ export default function Play({
             death.play().catch(() => {});
           }}
           onRestart={restartCurrentCase}
+          onExitCase={confirmExitCase}
           onToggleCues={() => setShowCues((v) => !v)}
           onToggleTheme={toggleTheme}
           onToggleDropMode={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
