@@ -2,8 +2,26 @@ import { useState } from 'react';
 import { readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import { readUiPrefs, writeUiPrefs } from '../lib/uiPrefs.js';
-import { applyPlayUiFavorite, isPlayUiFavoriteActive, readPlayUiFavorite } from '../lib/playUiFavorite.js';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
+
+function isFavoriteLayoutSaved() {
+  try {
+    return localStorage.getItem(STORAGE.playUiFavorite) != null;
+  } catch {
+    return false;
+  }
+}
+
+function favoriteLayoutLabel() {
+  try {
+    const raw = localStorage.getItem(STORAGE.playUiFavorite);
+    if (!raw) return 'Wide stacks, scene monitor dock, notes session foot.';
+    const parsed = JSON.parse(raw);
+    return parsed?.label ? `Favorite: ${parsed.label}` : 'Favorite play layout saved';
+  } catch {
+    return 'Favorite play layout saved';
+  }
+}
 
 function readShowCues() {
   try {
@@ -28,7 +46,7 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
   const [showCues, setShowCues] = useState(readShowCues);
   const [dropMode, setDropMode] = useState(readDropMode);
   const [timedMode, setTimedMode] = useState(() => readUiPrefs().timedMode);
-  const [favoriteSaved, setFavoriteSaved] = useState(isPlayUiFavoriteActive);
+  const [favoriteSaved, setFavoriteSaved] = useState(isFavoriteLayoutSaved);
 
   const persistShowCues = (next) => {
     setShowCues(next);
@@ -129,16 +147,16 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
       <div className="global-ui-settings-block">
         <p className="global-ui-settings-label">Play layout</p>
         <p className="global-ui-settings-note">
-          {favoriteSaved
-            ? `Favorite: ${readPlayUiFavorite().label}`
-            : 'Wide stacks, scene monitor dock, notes session foot.'}
+          {favoriteSaved ? favoriteLayoutLabel() : 'Wide stacks, scene monitor dock, notes session foot.'}
         </p>
         <button
           type="button"
           className="welcome-panel-btn"
           onClick={() => {
-            applyPlayUiFavorite();
-            setFavoriteSaved(true);
+            void import('../lib/playUiFavorite.js').then(({ applyPlayUiFavorite }) => {
+              applyPlayUiFavorite();
+              setFavoriteSaved(true);
+            });
           }}
         >
           ⭐ Save favorite play layout

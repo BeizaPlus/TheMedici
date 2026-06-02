@@ -6447,7 +6447,7 @@ button {
   gap: 2px;
   flex-shrink: 0;
   align-self: flex-end;
-  margin-left: 4px;
+  margin-top: 2px;
 }
 
 .case-chat-bubble-btn {
@@ -6645,27 +6645,31 @@ button {
 
 .case-chat-bubble {
   max-width: 92%;
-  padding: 10px 12px;
-  border-radius: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
   font-size: 0.88rem;
-  line-height: 1.45;
+  line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
   display: flex;
-  align-items: flex-start;
-  gap: 4px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
 }
 
 .case-chat-bubble.user {
   align-self: flex-end;
-  background: rgba(212, 175, 55, 0.18);
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(61, 54, 34, 0.78);
+  border: 1px solid rgba(212, 175, 55, 0.58);
+  color: rgba(240, 238, 232, 0.94);
 }
 
 .case-chat-bubble.assistant {
   align-self: flex-start;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  max-width: 96%;
+  background: rgba(42, 42, 46, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(240, 238, 232, 0.92);
 }
 
 .case-chat-bubble.typing {

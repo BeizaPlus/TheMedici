@@ -4,8 +4,7 @@ import {
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 
 /**
- * Session controls moved out of the sidebar footer — lives in the Notes tab
- * so Treatment can use the full panel width for stacks.
+ * Session progress + Teach Me / Review — lives in the expanded order timeline.
  */
 export default function PlayNotesSessionFoot({
   doneCount,

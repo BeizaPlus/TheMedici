@@ -5,7 +5,6 @@ import {
   IconLockOpen,
   IconMessage,
   IconMoon,
-  IconNotes,
   IconRotate,
   IconSettings,
   IconStethoscope,
@@ -39,7 +38,6 @@ export default function PlaySceneToolbar({
   examOpen,
   historyOpen,
   stacksOpen,
-  notesOpen,
   chatOpen,
   showCues,
   darkMode,
@@ -51,7 +49,6 @@ export default function PlaySceneToolbar({
   onToggleExam,
   onToggleHistory,
   onOpenStacks,
-  onToggleNotes,
   onToggleChat,
   onRestart,
   onToggleCues,
@@ -86,16 +83,8 @@ export default function PlaySceneToolbar({
         >
           <IconFileMedical />
         </ToolbarBtn>
-        <ToolbarBtn active={chatOpen} onClick={onToggleChat} title="Order log" aria-label="Order log">
+        <ToolbarBtn active={chatOpen} onClick={onToggleChat} title="Case thread" aria-label="Case thread">
           <IconMessage />
-        </ToolbarBtn>
-        <ToolbarBtn
-          active={notesOpen}
-          onClick={onToggleNotes}
-          title="Case notes"
-          aria-label="Case notes"
-        >
-          <IconNotes />
         </ToolbarBtn>
         {recordButtonProps ? (
           <CaseRecordButton {...recordButtonProps} variant="toolbar" iconOnly />

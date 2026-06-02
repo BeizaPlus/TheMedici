@@ -27,11 +27,10 @@ export default function CaseContextPanel({
   /** briefing = HPI + physical exam only (no treatment until Begin case) */
   mode = 'play',
   showTreatmentTab = false,
-  showNotesTab = false,
+  showChatTab = false,
   treatmentPanel = null,
   treatmentSummaryText = '',
-  notesPanel = null,
-  notesText = '',
+  chatPanel = null,
   footer = null,
   activeTab: controlledTab,
   onTabChange,
@@ -42,9 +41,9 @@ export default function CaseContextPanel({
   const setTab = isControlled ? onTabChange : setInfoTab;
   const isBriefing = mode === 'briefing';
   const treatmentEnabled = !isBriefing && showTreatmentTab;
-  const notesEnabled = !isBriefing && showNotesTab;
+  const chatEnabled = !isBriefing && showChatTab;
   const isTreatment = tab === 'treatment';
-  const isNotes = tab === 'notes';
+  const isChat = tab === 'chat';
   const stacksWide = isTreatment && Boolean(treatmentPanel);
 
   useEffect(() => {
@@ -76,10 +75,11 @@ export default function CaseContextPanel({
 
   return (
     <div
-      className={`sidebar-top clinical-pack-top case-context-panel ${treatmentEnabled && treatmentPanel ? 'case-context-panel--play' : ''}${stacksWide ? ' case-context-panel--stacks-wide' : ''}${isNotes ? ' case-context-panel--notes-tab' : ''}`.trim()}
+      className={`sidebar-top clinical-pack-top case-context-panel ${treatmentEnabled && treatmentPanel ? 'case-context-panel--play' : ''}${stacksWide ? ' case-context-panel--stacks-wide' : ''}${isChat ? ' case-context-panel--chat-tab' : ''}`.trim()}
     >
+      <div className="case-context-chrome">
       {!hideHeader && (
-        <>
+        <div className="case-context-header">
           <div className="pack-heading-row">
             <p className="sidebar-case-id">
               Case {caseData.ccsNumber || caseData.id}
@@ -94,7 +94,7 @@ export default function CaseContextPanel({
             {toTitleCase(caseData.title)}
           </h2>
           {locationContext && <p className="case-location-context">{locationContext}</p>}
-        </>
+        </div>
       )}
       <div className="case-info-tabs" role="tablist" aria-label="Case context tabs">
         <button
@@ -123,18 +123,18 @@ export default function CaseContextPanel({
             {treatmentPanel ? 'Treatment' : 'Treatment plan'}
           </button>
         )}
-        {notesEnabled && (
+        {chatEnabled && (
           <button
             type="button"
-            className={tab === 'notes' ? 'case-info-tab active' : 'case-info-tab'}
-            onClick={() => setTab('notes')}
-            aria-selected={tab === 'notes'}
+            className={tab === 'chat' ? 'case-info-tab active' : 'case-info-tab'}
+            onClick={() => setTab('chat')}
+            aria-selected={tab === 'chat'}
           >
-            Notes
+            Thread
           </button>
         )}
       </div>
-      {!isNotes && onReadCase && (tab !== 'treatment' || !treatmentPanel) && (
+      {!isChat && onReadCase && (tab !== 'treatment' || !treatmentPanel) && (
         <div className="case-read-row">
           <button
             type="button"
@@ -147,12 +147,14 @@ export default function CaseContextPanel({
           </button>
         </div>
       )}
-      {tab === 'hpi' && !isTreatment && !isNotes && (
+      </div>
+      <div className="case-context-body-wrap">
+      {tab === 'hpi' && !isTreatment && !isChat && (
         <div className="hpi-text case-context-body clinical-text-block" style={textStyle}>
           {hpiNarrative || 'HPI not yet available for this case.'}
         </div>
       )}
-      {tab === 'exam' && !isTreatment && !isNotes && (
+      {tab === 'exam' && !isTreatment && !isChat && (
         <div className="hpi-text case-context-body clinical-text-block exam-by-system" style={textStyle}>
           {hasStructuredExam
             ? formatExamForDisplay(
@@ -163,7 +165,7 @@ export default function CaseContextPanel({
             : bodyText}
         </div>
       )}
-      {tab !== 'hpi' && tab !== 'exam' && !isTreatment && !isNotes && (
+      {tab !== 'hpi' && tab !== 'exam' && !isTreatment && !isChat && (
         <p className="sub case-context-body clinical-text-block" style={textStyle} title={bodyText}>
           {bodyText}
         </p>
@@ -173,20 +175,18 @@ export default function CaseContextPanel({
           {treatmentSummaryText}
         </p>
       )}
-      {isNotes && !notesPanel && notesText && (
-        <p className="sub case-context-body case-notes-body clinical-text-block" style={textStyle}>
-          {notesText}
-        </p>
-      )}
-      {notesEnabled && notesPanel && (
+      {chatEnabled && chatPanel && (
         <div
-          className={`case-notes-tab-wrap${isNotes ? '' : ' case-notes-tab-wrap--hidden'}`}
-          aria-hidden={!isNotes}
+          className={`case-chat-tab-wrap${isChat ? '' : ' case-chat-tab-wrap--hidden'}`}
+          aria-hidden={!isChat}
         >
-          {notesPanel}
+          {chatPanel}
         </div>
       )}
-      {showStats && !stacksWide && !isNotes && (
+      {isTreatment && treatmentPanel && (
+        <div className="case-treatment-stacks sidebar-stacks">{treatmentPanel}</div>
+      )}
+      {showStats && !stacksWide && !isChat && (
         <div className="pack-stats">
           <span>
             Stacks left <strong>{readyCount}</strong>
@@ -202,9 +202,7 @@ export default function CaseContextPanel({
           <strong>{timerLabel}</strong>
         </div>
       )}
-      {isTreatment && treatmentPanel && (
-        <div className="case-treatment-stacks sidebar-stacks">{treatmentPanel}</div>
-      )}
+      </div>
       {footer}
     </div>
   );

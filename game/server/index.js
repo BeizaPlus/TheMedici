@@ -475,7 +475,7 @@ app.post('/api/case-chat/message', async (req, res) => {
   const key = chatApiKeyOrError(res);
   if (!key) return;
 
-  const { sessionId, message } = req.body || {};
+  const { sessionId, message, sessionContext } = req.body || {};
   const text = String(message || '').trim();
   if (!sessionId) return res.status(400).json({ error: 'Missing sessionId' });
   if (!text) return res.status(400).json({ error: 'Missing message' });
@@ -486,7 +486,12 @@ app.post('/api/case-chat/message', async (req, res) => {
   }
 
   try {
-    session.messages.push({ role: 'user', content: text });
+    let userContent = text;
+    if (sessionContext && typeof sessionContext === 'object') {
+      const ctxBlock = `[SESSION SO FAR — orders, notes, and scene activity for this run]\n${JSON.stringify(sessionContext, null, 2)}`;
+      userContent = `${ctxBlock}\n\n---\n\nLearner question: ${text}`;
+    }
+    session.messages.push({ role: 'user', content: userContent });
     const window = session.messages.slice(0, 1).concat(session.messages.slice(-24));
     const reply = await callCaseChatCompletion(key, window);
     session.messages.push({ role: 'assistant', content: reply });

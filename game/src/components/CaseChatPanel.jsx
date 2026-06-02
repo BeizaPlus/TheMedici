@@ -1,30 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FiSend, FiX } from 'react-icons/fi';
-import {
-  checkCaseChatAvailable,
-  ensureCaseChatSession,
-  fetchChatModelLabel,
-  sendCaseChatMessage,
-} from '../lib/caseChat.js';
-import { loadPersistedChatHistory, logChatMessage } from '../lib/caseUserLog.js';
 import { IconCopy, IconFileMedical, IconNotes, IconPlayerStop, IconVolume2 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 import { resolveOrderAutocomplete } from '../lib/orderCommandAutocomplete.js';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { readCaseNotes, writeCaseNotes } from '../lib/caseNotes.js';
-
-function welcomeMessage(caseData) {
-  return caseData?.playRole === 'patient'
-    ? 'Ask me about my symptoms, history, or how I feel — I only know what is in this case.'
-    : 'Ask about this case — presentation, vitals, exam, differential, or workup. Answers use this case JSON only.';
-}
-
-function toUiMessages(rows, caseData) {
-  if (!rows?.length) {
-    return [{ role: 'assistant', content: welcomeMessage(caseData) }];
-  }
-  return rows.map((m) => ({ role: m.role, content: m.content }));
-}
 
 function normCommandText(s) {
   return String(s || '')
@@ -52,11 +32,11 @@ const MIN_W = 340;
 const MIN_H = 320;
 
 export default function CaseChatPanel({
+  chat,
   caseData,
   open,
   onClose,
   playSessionId,
-  onModelReady,
   // order-related props
   interventions = [],
   decoyInterventions = [],
@@ -64,20 +44,20 @@ export default function CaseChatPanel({
   allMedicalOrders = [],
   onOrderPlaced,
 }) {
-  const [available, setAvailable] = useState(null);
-  const [modelLabel, setModelLabel] = useState(null);
-  const [sessionId, setSessionId] = useState(null);
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState('');
-  const [readingIdx, setReadingIdx] = useState(null);
-  const [notesMode, setNotesMode] = useState(false);
-  const [historyLoaded, setHistoryLoaded] = useState(false);
+  const {
+    available,
+    messages,
+    busy,
+    error,
+    sessionId,
+    sendMessage,
+  } = chat;
   const listRef = useRef(null);
   const panelRef = useRef(null);
   const caseId = caseData?.id;
-
+  const [input, setInput] = useState('');
+  const [readingIdx, setReadingIdx] = useState(null);
+  const [notesMode, setNotesMode] = useState(false);
   // ── floating position & size ──
   const [pos, setPos] = useState(() => ({
     x: Math.max(16, (window.innerWidth - 440) / 2),
@@ -225,69 +205,6 @@ export default function CaseChatPanel({
     return base;
   }, [orderCommandHint, inputAutocomplete, knownOrderMatch]);
 
-  const modelLogged = useRef(false);
-
-  // chat init
-  useEffect(() => {
-    let cancelled = false;
-    checkCaseChatAvailable().then((ok) => {
-      if (!cancelled) setAvailable(ok);
-    });
-    fetchChatModelLabel().then((label) => {
-      if (!cancelled && label) {
-        setModelLabel(label);
-        if (!modelLogged.current && onModelReady) {
-          modelLogged.current = true;
-          onModelReady(label);
-        }
-      }
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!caseId) return undefined;
-    let cancelled = false;
-    setHistoryLoaded(false);
-    loadPersistedChatHistory(caseId)
-      .then((rows) => {
-        if (cancelled) return;
-        setMessages(toUiMessages(rows, caseData));
-        setHistoryLoaded(true);
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setMessages([{ role: 'assistant', content: welcomeMessage(caseData) }]);
-          setHistoryLoaded(true);
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [caseId, caseData?.playRole]);
-
-  useEffect(() => {
-    if (!open || !caseId || !historyLoaded) return undefined;
-    let cancelled = false;
-    setError('');
-    setBusy(true);
-    ensureCaseChatSession(caseData)
-      .then((id) => {
-        if (!cancelled) setSessionId(id);
-      })
-      .catch((e) => {
-        if (!cancelled) setError(String(e.message || e));
-      })
-      .finally(() => {
-        if (!cancelled) setBusy(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [open, caseId, caseData, historyLoaded]);
-
   useEffect(() => {
     if (!listRef.current) return;
     listRef.current.scrollTop = listRef.current.scrollHeight;
@@ -304,14 +221,6 @@ export default function CaseChatPanel({
     stopCaseReader();
   }, []);
 
-  const persistMessage = useCallback(
-    (role, content) => {
-      if (!caseId || !content) return;
-      void logChatMessage(caseId, playSessionId, role, content);
-    },
-    [caseId, playSessionId],
-  );
-
   const submit = useCallback(async () => {
     const text = input.trim();
     if (!text || busy) return;
@@ -325,30 +234,10 @@ export default function CaseChatPanel({
       return;
     }
 
-    // Otherwise send as chat message
-    if (!sessionId) return;
+    if (!sessionId && available === false) return;
     setInput('');
-    setError('');
-    setMessages((prev) => [...prev, { role: 'user', content: text }]);
-    persistMessage('user', text);
-    setBusy(true);
-    try {
-      const reply = await sendCaseChatMessage(sessionId, text);
-      setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
-      persistMessage('assistant', reply);
-      // append to notes if in notes mode
-      if (notesMode && caseId) {
-        const existing = readCaseNotes(caseId);
-        const stamp = new Date().toLocaleTimeString();
-        const entry = `\n\n---\n**Chat · ${stamp}**\n> ${text}\n\n${reply}\n`;
-        writeCaseNotes(caseId, existing + entry);
-      }
-    } catch (e) {
-      setError(String(e.message || e));
-    } finally {
-      setBusy(false);
-    }
-  }, [input, sessionId, busy, persistMessage, commandUiMatch, onOrderPlaced]);
+    await sendMessage(text, { notesMode });
+  }, [input, sessionId, busy, sendMessage, commandUiMatch, onOrderPlaced, notesMode, available]);
 
   const canSend = Boolean(
     available !== false && (sessionId || isOrder) && input.trim() && !busy,

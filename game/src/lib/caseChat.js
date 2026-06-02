@@ -51,9 +51,30 @@ export async function checkCaseChatAvailable() {
     const r = await fetch(`${API}/api/health`);
     if (!r.ok) return false;
     const data = await r.json();
-    return Boolean(data.openai);
+    return Boolean(data.openai || data.deepseek);
   } catch {
     return false;
+  }
+}
+
+let _cachedModelLabel = null;
+
+export async function fetchChatModelLabel() {
+  if (_cachedModelLabel) return _cachedModelLabel;
+  try {
+    const r = await fetch(`${API}/api/health`);
+    if (!r.ok) return null;
+    const data = await r.json();
+    if (data.chatProvider === 'deepseek') {
+      _cachedModelLabel = data.chatModel || 'DeepSeek';
+    } else if (data.chatProvider === 'openai') {
+      _cachedModelLabel = data.chatModel || 'OpenAI';
+    } else {
+      _cachedModelLabel = null;
+    }
+    return _cachedModelLabel;
+  } catch {
+    return null;
   }
 }
 
@@ -83,11 +104,11 @@ export function clearCaseChatSession(caseId) {
   sessions.delete(String(caseId || ''));
 }
 
-export async function sendCaseChatMessage(sessionId, message) {
+export async function sendCaseChatMessage(sessionId, message, sessionContext = null) {
   const r = await fetch(`${API}/api/case-chat/message`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sessionId, message }),
+    body: JSON.stringify({ sessionId, message, sessionContext }),
   });
   const data = await r.json().catch(() => ({}));
   if (!r.ok) {

@@ -51,20 +51,27 @@ import {
   getSessionTimerSeconds,
 } from '../lib/caseTimer.js';
 import { getBranding } from '../data/gameData.js';
-import CaseNotesPanel from './CaseNotesPanel.jsx';
 import PatientOrderTimeline from './PatientOrderTimeline.jsx';
 import SceneOrderCommandDock from './SceneOrderCommandDock.jsx';
-import CaseChatPanel from './CaseChatPanel.jsx';
+import PlayChatNotesTabPanel from './PlayChatNotesTabPanel.jsx';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 import PlaySceneToolbar from './sceneToolbar/PlaySceneToolbar.jsx';
-import PlayNotesSessionFoot from './PlayNotesSessionFoot.jsx';
 import { useCaseRecording } from '../hooks/useCaseRecording.js';
+import { useCaseChat } from '../hooks/useCaseChat.js';
+import { buildChatSessionContext } from '../lib/buildChatSessionContext.js';
 import {
   isOrderTimelineEvent,
   orderTimelineEntryFromEvent,
   rebuildOrderTimelineFromCheckpoint,
+  orderTimelineFromServerSession,
+  pickBestOrderTimeline,
 } from '../lib/orderTimeline.js';
+import {
+  appendSessionOrderTimeline,
+  readSessionOrderTimeline,
+  writeSessionOrderTimeline,
+} from '../lib/playSessionTimeline.js';
 import { resolveOrderAutocomplete } from '../lib/orderCommandAutocomplete.js';
 import {
   IconLayoutSidebarRightCollapse,
@@ -88,12 +95,14 @@ import TeachMeSceneOverlay from './TeachMeSceneOverlay.jsx';
 import { IconFileMedical } from './sceneToolbar/SceneToolbarIcons.jsx';
 import {
   endPlaySession,
+  fetchPlaySession,
   logPlayEvent,
   startPlaySession,
 } from '../lib/caseUserLog.js';
 import {
   clearPlayCheckpoint,
   hydrateCheckpointTimer,
+  readPlayCheckpoint,
   writePlayCheckpoint,
 } from '../lib/playSessionResume.js';
 import { computePatientLife, patientLifeState } from '../lib/patientLife.js';
@@ -187,6 +196,69 @@ function conversationTextFromEvent(event) {
   return '';
 }
 
+function readInitialOrderTimeline(initialCheckpoint, caseId, interventionById = {}) {
+  if (!initialCheckpoint || String(initialCheckpoint.caseId) !== String(caseId)) return [];
+  const cp = initialCheckpoint.checkpoint || {};
+  const sessionId = initialCheckpoint.playSessionId || null;
+  const startedAt =
+    typeof cp.sessionStartedAt === 'number' ? cp.sessionStartedAt : Date.now() - 60000;
+  const localTimeline = sessionId ? readSessionOrderTimeline(caseId, sessionId) : [];
+  const rebuiltTimeline =
+    cp.placementOrder?.length || cp.extraOrders?.length
+      ? rebuildOrderTimelineFromCheckpoint({
+          placementOrder: cp.placementOrder || [],
+          extraOrders: cp.extraOrders || [],
+          interventionById,
+          sessionStartedAt: startedAt,
+        })
+      : [];
+  return pickBestOrderTimeline(cp.orderTimelineEvents, localTimeline, rebuiltTimeline);
+}
+
+function countOrderTimelineSeq(events) {
+  return (events || []).filter((ev) => ev.kind === 'order' || ev.kind === 'extra').length;
+}
+
+function resolveCheckpointForCase(initialCheckpoint, caseId) {
+  if (initialCheckpoint && String(initialCheckpoint.caseId) === String(caseId)) {
+    return initialCheckpoint;
+  }
+  const cp = readPlayCheckpoint();
+  if (cp && String(cp.caseId) === String(caseId)) return cp;
+  return null;
+}
+
+function bootOrderTimeline(initialCheckpoint, caseData) {
+  const cp = resolveCheckpointForCase(initialCheckpoint, caseData.id);
+  if (!cp) {
+    return { events: [], seq: 0, sessionId: null, sessionStartedAt: null };
+  }
+  const byId = Object.fromEntries(getCaseInterventions(caseData).map((iv) => [iv.id, iv]));
+  const events = readInitialOrderTimeline(cp, caseData.id, byId);
+  const c = cp.checkpoint || {};
+  const sessionStartedAt =
+    typeof c.sessionStartedAt === 'number'
+      ? c.sessionStartedAt
+      : events[0]?.at
+        ? events[0].at - 1000
+        : null;
+  return {
+    events,
+    seq: countOrderTimelineSeq(events),
+    sessionId: cp.playSessionId ?? null,
+    sessionStartedAt,
+  };
+}
+
+function checkpointHasTimelineProgress(cp, caseId) {
+  if (!cp || String(cp.caseId) !== String(caseId)) return false;
+  const c = cp.checkpoint || {};
+  if (Array.isArray(c.orderTimelineEvents) && c.orderTimelineEvents.length > 0) return true;
+  if (Array.isArray(c.placementOrder) && c.placementOrder.length > 0) return true;
+  if (cp.playSessionId && readSessionOrderTimeline(caseId, cp.playSessionId).length > 0) return true;
+  return false;
+}
+
 function MessageEntry({ role = 'system', content }) {
   if (!content) return null;
   return <div className={`conversation-entry ${role}`}>{renderChatMarkdown(content)}</div>;
@@ -210,6 +282,12 @@ export default function Play({
   const placementMode = layout.placementMode || 'grid';
   const useGridPlacement = placementMode === 'grid';
   const showZonesAlways = !useGridPlacement && layout.zoneDisplay === 'always';
+
+  const playBootRef = useRef(null);
+  if (playBootRef.current === null) {
+    playBootRef.current = bootOrderTimeline(initialCheckpoint, caseData);
+  }
+  const playBoot = playBootRef.current;
 
   const [placed, setPlaced] = useState({});
   const [pins, setPins] = useState([]);
@@ -237,16 +315,13 @@ export default function Play({
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [vitalsHighlight, setVitalsHighlight] = useState(false);
   const [logOpen, setLogOpen] = useState(false);
-  const [showCaseChat, setShowCaseChat] = useState(false);
+  const [dockChatReply, setDockChatReply] = useState(null);
+  const [dockReplyExpanded, setDockReplyExpanded] = useState(false);
   const [recordingsVersion, setRecordingsVersion] = useState(0);
   const [notesVersion, setNotesVersion] = useState(0);
   const [conversationLog, setConversationLog] = useState([]);
-  const [orderTimelineEvents, setOrderTimelineEvents] = useState([]);
-  const [sessionStartedAt, setSessionStartedAt] = useState(null);
-  const sessionStartedAtRef = useRef(null);
-  const orderTimelineSeqRef = useRef(0);
-  const [playSessionId, setPlaySessionId] = useState(null);
-  const playSessionIdRef = useRef(null);
+  const [playSessionId, setPlaySessionId] = useState(() => playBoot.sessionId);
+  const playSessionIdRef = useRef(playBoot.sessionId);
   const stackCommandRef = useRef(null);
   const [dockCollapsed, setDockCollapsed] = useState(false);
   const { layout: dockLayout, startDrag: startDockDrag, resetLayout: resetDockLayout, isDragging: dockDragging } =
@@ -298,6 +373,47 @@ export default function Play({
     () => Object.fromEntries(interventions.map((iv) => [iv.id, iv])),
     [interventions],
   );
+  const [orderTimelineEvents, setOrderTimelineEvents] = useState(() => playBoot.events);
+  const [sessionStartedAt, setSessionStartedAt] = useState(() => playBoot.sessionStartedAt);
+  const sessionStartedAtRef = useRef(playBoot.sessionStartedAt);
+  const orderTimelineSeqRef = useRef(playBoot.seq);
+
+  useEffect(() => {
+    sessionStartedAtRef.current = sessionStartedAt;
+  }, [sessionStartedAt]);
+
+  useEffect(() => {
+    playSessionIdRef.current = playSessionId;
+  }, [playSessionId]);
+
+  useEffect(() => {
+    const cp = resolveCheckpointForCase(initialCheckpoint, caseData.id);
+    if (!cp) return;
+    const merged = readInitialOrderTimeline(cp, caseData.id, interventionById);
+    if (!merged.length) return;
+    setOrderTimelineEvents((prev) => {
+      const best = pickBestOrderTimeline(prev, merged);
+      if (
+        best.length === prev.length &&
+        best.every((ev, index) => ev.id === prev[index]?.id)
+      ) {
+        return prev;
+      }
+      orderTimelineSeqRef.current = countOrderTimelineSeq(best);
+      return best;
+    });
+    const c = cp.checkpoint || {};
+    const startedAt =
+      typeof c.sessionStartedAt === 'number'
+        ? c.sessionStartedAt
+        : merged[0]?.at
+          ? merged[0].at - 1000
+          : null;
+    if (startedAt != null && sessionStartedAtRef.current == null) {
+      sessionStartedAtRef.current = startedAt;
+      setSessionStartedAt(startedAt);
+    }
+  }, [caseData.id, interventionById, initialCheckpoint]);
   const nextExpectedId = useMemo(
     () => expectedOrderIds.find((id) => !placed[id]) || null,
     [expectedOrderIds, placed],
@@ -391,13 +507,13 @@ export default function Play({
   }, [commandMatch, orderCommand]);
 
   const orderCommandHint = useMemo(() => {
-    if (!orderCommand.trim()) return 'Matches unplaced stacks only';
+    if (!orderCommand.trim()) return '';
     if (commandMatch) return `Match: ${commandMatch.label}`;
     if (!teachMeMode && decoyCommandMatch) return `Match: ${decoyCommandMatch.label}`;
     if (knownOrderMatch) {
       return teachMeMode ? `${knownOrderMatch.name} is not indicated in this case` : '';
     }
-    return 'Order not recognized';
+    return 'Ask case chat';
   }, [orderCommand, commandMatch, decoyCommandMatch, knownOrderMatch, teachMeMode]);
 
   const commandUiMatch = commandMatch || (!teachMeMode ? decoyCommandMatch : null);
@@ -418,6 +534,15 @@ export default function Play({
     }
     return base;
   }, [orderCommandHint, orderCommandAutocomplete, knownOrderMatch]);
+
+  const isDockChatMode = useMemo(() => {
+    if (!orderCommand.trim()) return false;
+    if (detectLocation(orderCommand)) return false;
+    if (decoyCommandMatch) return false;
+    if (commandMatch) return false;
+    if (knownOrderMatch && !teachMeMode) return false;
+    return true;
+  }, [orderCommand, decoyCommandMatch, commandMatch, knownOrderMatch, teachMeMode]);
 
   const renderStackPill = (iv, isDecoy = false, displayNumOverride = null) => {
     const seqNum = interventions.findIndex((x) => x.id === iv.id);
@@ -592,11 +717,13 @@ export default function Play({
     x: Math.max(16, (window.innerWidth - 520) / 2),
     y: Math.max(64, window.innerHeight - 320),
   }));
-  const [infoTab, setInfoTab] = useState(playUiFavorite.infoTab);
+  const [infoTab, setInfoTab] = useState(
+    playUiFavorite.infoTab === 'notes' ? 'chat' : playUiFavorite.infoTab,
+  );
   const [dockToolbarCollapsed, setDockToolbarCollapsed] = useState(playUiFavorite.dockToolbarCollapsed);
 
   useEffect(() => {
-    if (infoTab !== 'notes') {
+    if (infoTab !== 'chat') {
       setDockToolbarCollapsed(true);
     }
   }, [infoTab]);
@@ -632,6 +759,17 @@ export default function Play({
 
   const beginPlaySession = useCallback(async () => {
     if (playSessionIdRef.current) return playSessionIdRef.current;
+    const cp = readPlayCheckpoint();
+    if (cp?.playSessionId && String(cp.caseId) === String(caseData.id)) {
+      playSessionIdRef.current = cp.playSessionId;
+      setPlaySessionId(cp.playSessionId);
+      const startedAt = cp.checkpoint?.sessionStartedAt;
+      if (typeof startedAt === 'number' && sessionStartedAtRef.current == null) {
+        sessionStartedAtRef.current = startedAt;
+        setSessionStartedAt(startedAt);
+      }
+      return cp.playSessionId;
+    }
     try {
       const sid = await startPlaySession(caseData.id, {
         title: caseData.title,
@@ -675,14 +813,47 @@ export default function Play({
         const entry = orderTimelineEntryFromEvent(event, { orderIndex });
         if (entry) {
           setOrderTimelineEvents((prev) => [...prev, entry]);
+          const sid = playSessionIdRef.current;
+          if (sid && caseData?.id != null) {
+            appendSessionOrderTimeline(caseData.id, sid, entry);
+          }
         }
       }
       const sid = playSessionIdRef.current;
-      if (!sid || !caseData?.id) return;
+      if (!sid || caseData?.id == null) return;
       void logPlayEvent(caseData.id, sid, event);
     },
     [caseData?.id],
   );
+
+  const getChatSessionContext = useCallback(
+    () =>
+      buildChatSessionContext({
+        careUnit,
+        orderTimelineEvents,
+        conversationLog,
+        placed,
+        interventions: caseData?.interventions || [],
+        caseId: caseData?.id,
+      }),
+    [careUnit, orderTimelineEvents, conversationLog, placed, caseData?.interventions, caseData?.id],
+  );
+
+  const caseChat = useCaseChat({
+    caseData,
+    playSessionId,
+    getSessionContext: getChatSessionContext,
+    onModelReady: useCallback((label) => {
+      logTimeline({ type: 'chat', role: 'system', text: `Case chat running on ${label}` });
+    }, [logTimeline]),
+  });
+
+  useEffect(() => {
+    if (infoTab === 'chat') {
+      setDockReplyExpanded(false);
+      void caseChat.reloadHistory();
+    }
+  }, [infoTab, caseChat.reloadHistory]);
 
   const misses = Math.max(0, attempts - correctAttempts);
   const lifePct = useMemo(
@@ -703,7 +874,17 @@ export default function Play({
   const timerState = timeLeft > 60 ? 'safe' : timeLeft > 25 ? 'warn' : 'critical';
   const timerLabel = formatTimerLabel(timeLeft);
 
+  const resumeHydratedRef = useRef(false);
+  const skipFreshCaseResetRef = useRef(
+    Boolean(
+      initialCheckpoint?.caseId != null &&
+        String(initialCheckpoint.caseId) === String(caseData.id),
+    ),
+  );
+
   useEffect(() => {
+    const cp = readPlayCheckpoint();
+    if (checkpointHasTimelineProgress(cp, caseData.id) || skipFreshCaseResetRef.current) return;
     setLogOpen(false);
     setConversationLog([]);
     setOrderTimelineEvents([]);
@@ -713,13 +894,7 @@ export default function Play({
     setStacksVisible(true);
     setExtraOrders([]);
     setDecoyAttempts([]);
-    setShowCaseChat(false);
   }, [caseData.id]);
-
-  const resumeHydratedRef = useRef(false);
-  const skipFreshCaseResetRef = useRef(
-    Boolean(initialCheckpoint?.caseId && initialCheckpoint.caseId === caseData.id),
-  );
 
   useEffect(() => {
     if (skipFreshCaseResetRef.current) return;
@@ -791,12 +966,11 @@ export default function Play({
     if (
       resumeHydratedRef.current ||
       !initialCheckpoint ||
-      initialCheckpoint.caseId !== caseData.id
+      String(initialCheckpoint.caseId) !== String(caseData.id)
     ) {
       return;
     }
     resumeHydratedRef.current = true;
-    skipFreshCaseResetRef.current = false;
 
     const c = hydrateCheckpointTimer(initialCheckpoint, timerTotal);
     if (!c) return;
@@ -816,32 +990,16 @@ export default function Play({
     if (c.orderReview) setOrderReview(c.orderReview);
     if (Array.isArray(c.extraOrders)) setExtraOrders(c.extraOrders);
     if (typeof c.reviewCount === 'number') setReviewCount(c.reviewCount);
-    if (Array.isArray(c.orderTimelineEvents) && c.orderTimelineEvents.length) {
-      setOrderTimelineEvents(c.orderTimelineEvents);
-      orderTimelineSeqRef.current = c.orderTimelineEvents.filter(
-        (ev) => ev.kind === 'order' || ev.kind === 'extra',
-      ).length;
-    } else if (c.placementOrder?.length || c.extraOrders?.length) {
-      const started = c.sessionStartedAt || Date.now() - 60000;
-      sessionStartedAtRef.current = started;
-      setSessionStartedAt(started);
-      setOrderTimelineEvents(
-        rebuildOrderTimelineFromCheckpoint({
-          placementOrder: c.placementOrder || [],
-          extraOrders: c.extraOrders || [],
-          interventionById,
-          sessionStartedAt: started,
-        }),
-      );
-      orderTimelineSeqRef.current = (c.placementOrder?.length || 0) + (c.extraOrders?.length || 0);
-    }
-    if (typeof c.sessionStartedAt === 'number') {
-      sessionStartedAtRef.current = c.sessionStartedAt;
-      setSessionStartedAt(c.sessionStartedAt);
-    }
+
     if (c.infoTab) {
       const mapped =
-        c.infoTab === 'case' ? 'hpi' : c.infoTab === 'exam' ? 'exam' : c.infoTab;
+        c.infoTab === 'case'
+          ? 'hpi'
+          : c.infoTab === 'exam'
+            ? 'exam'
+            : c.infoTab === 'notes'
+              ? 'chat'
+              : c.infoTab;
       setInfoTab(mapped);
     }
 
@@ -849,10 +1007,14 @@ export default function Play({
       playSessionIdRef.current = initialCheckpoint.playSessionId;
       setPlaySessionId(initialCheckpoint.playSessionId);
     }
-  }, [initialCheckpoint, caseData.id, timerTotal, interventionById]);
+  }, [initialCheckpoint, caseData.id, timerTotal]);
 
   useEffect(() => {
-    if (initialCheckpoint?.caseId === caseData.id && initialCheckpoint?.playSessionId) {
+    if (
+      initialCheckpoint?.caseId != null &&
+      String(initialCheckpoint.caseId) === String(caseData.id) &&
+      initialCheckpoint?.playSessionId
+    ) {
       playSessionIdRef.current = initialCheckpoint.playSessionId;
       setPlaySessionId(initialCheckpoint.playSessionId);
       return undefined;
@@ -862,14 +1024,56 @@ export default function Play({
     return undefined;
   }, [caseData.id, beginPlaySession, initialCheckpoint?.caseId, initialCheckpoint?.playSessionId]);
 
+  useEffect(() => {
+    if (!playSessionId || caseData?.id == null) return undefined;
+    let cancelled = false;
+    void (async () => {
+      const session = await fetchPlaySession(caseData.id, playSessionId);
+      if (cancelled || !session) return;
+      const serverTimeline = orderTimelineFromServerSession(session);
+      const localTimeline = readSessionOrderTimeline(caseData.id, playSessionId);
+      setOrderTimelineEvents((prev) => {
+        const merged = pickBestOrderTimeline(prev, localTimeline, serverTimeline);
+        if (
+          merged.length === prev.length &&
+          merged.every((ev, index) => ev.id === prev[index]?.id)
+        ) {
+          return prev;
+        }
+        if (merged.length < prev.length) return prev;
+        orderTimelineSeqRef.current = merged.filter(
+          (ev) => ev.kind === 'order' || ev.kind === 'extra',
+        ).length;
+        writeSessionOrderTimeline(caseData.id, playSessionId, merged);
+        return merged;
+      });
+      if (!sessionStartedAtRef.current && session.startedAt) {
+        const started = new Date(session.startedAt).getTime();
+        sessionStartedAtRef.current = started;
+        setSessionStartedAt(started);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [caseData?.id, playSessionId]);
+
   const buildCheckpoint = useCallback(
-    () => ({
-      caseId: caseData.id,
+    () => {
+      const sid = playSessionIdRef.current;
+      const timelineForSave =
+        orderTimelineEvents.length > 0
+          ? orderTimelineEvents
+          : sid
+            ? readSessionOrderTimeline(caseData.id, sid)
+            : orderTimelineEvents;
+      return {
+      caseId: String(caseData.id),
       caseTitle: caseData.title,
       caseNumber: caseData.ccsNumber,
       playMode,
       screen: 'play',
-      playSessionId: playSessionIdRef.current,
+      playSessionId: sid,
       checkpoint: {
         placed,
         placementOrder,
@@ -892,10 +1096,11 @@ export default function Play({
         infoTab,
         lifePct,
         lifeState,
-        orderTimelineEvents,
+        orderTimelineEvents: timelineForSave,
         sessionStartedAt: sessionStartedAtRef.current,
       },
-    }),
+    };
+    },
     [
       caseData.id,
       caseData.title,
@@ -963,7 +1168,10 @@ export default function Play({
   useEffect(() => {
     if (!playSessionId) return;
     flushCheckpoint();
-  }, [orderTimelineEvents, placed, placementOrder, extraOrders, playSessionId, flushCheckpoint]);
+    if (caseData?.id != null && orderTimelineEvents.length) {
+      writeSessionOrderTimeline(caseData.id, playSessionId, orderTimelineEvents);
+    }
+  }, [orderTimelineEvents, placed, placementOrder, extraOrders, playSessionId, flushCheckpoint, caseData?.id]);
 
   const handleQuit = useCallback(() => {
     writePlayCheckpoint(buildCheckpoint());
@@ -1034,7 +1242,7 @@ export default function Play({
     onError: (e) => showToast(e?.message || 'Recording failed', 'bad'),
     onRecordingStart: () => {
       setDockCollapsed(false);
-      setInfoTab('notes');
+      setInfoTab('chat');
     },
     onNotesChanged: () => setNotesVersion((v) => v + 1),
   });
@@ -1265,7 +1473,24 @@ export default function Play({
         logTimeline({ type: 'extra_order', label, category: knownOrderMatch.category });
         return;
       }
-      showToast('Order not recognized', 'bad');
+      if (caseChat.available === false) {
+        showToast('Chat unavailable — add DEEPSEEK_API_KEY or OPENAI_API_KEY to .env', 'bad');
+        return;
+      }
+      const question = orderCommand.trim();
+      setOrderCommand('');
+      void (async () => {
+        const reply = await caseChat.sendMessage(question);
+        if (reply) {
+          logTimeline({ type: 'chat', role: 'user', text: question });
+          if (infoTab !== 'chat') {
+            setDockChatReply({ question, answer: reply });
+            setDockReplyExpanded(true);
+          }
+        } else if (caseChat.error) {
+          showToast(caseChat.error, 'bad');
+        }
+      })();
       return;
     }
     if (teachMeMode && s.id !== nextExpectedId) {
@@ -1310,61 +1535,9 @@ export default function Play({
     logTimeline,
     processDecoyOrder,
     switchCareUnit,
+    caseChat,
+    infoTab,
   ]);
-
-  // ── floating chat panel order callback ──
-  const handleChatOrder = useCallback(
-    (matchedStack, inputText) => {
-      const t = normCommandText(inputText);
-      // Handle location trigger
-      const loc = detectLocation(inputText);
-      if (loc) {
-        switchCareUnit(loc);
-        return;
-      }
-      // Handle decoy
-      if (decoyInterventions.some((d) => d.id === matchedStack.id)) {
-        void processDecoyOrder({ ...matchedStack, isDecoy: true }, inputText.trim() || matchedStack.label);
-        return;
-      }
-      // Handle matched intervention
-      if (teachMeMode && matchedStack.id !== nextExpectedId) {
-        const nextIv = nextExpectedId ? interventionById[nextExpectedId] : null;
-        showToast(nextIv ? `Teach Me: next is ${nextIv.label}` : 'Teach Me: all stacks placed', 'bad');
-        return;
-      }
-      setPlaced((p) => ({ ...p, [matchedStack.id]: matchedStack.correct_zone }));
-      setPlacementOrder((prev) => (prev.includes(matchedStack.id) ? prev : [...prev, matchedStack.id]));
-      setPins((prev) => [
-        ...prev.filter((pin) => pin.ivId !== matchedStack.id && pin.label !== matchedStack.label),
-        { zoneId: matchedStack.correct_zone, label: matchedStack.label, ivId: matchedStack.id, ok: null },
-      ]);
-      setReviewed(false);
-      setReviewResults({});
-      setOrderReview({});
-      setReviewedAt(null);
-      setWhyPanel(null);
-      setTeachFocusId(null);
-      setExpandedStackId(matchedStack.id);
-      showToast(`Ordered ${matchedStack.label}`, 'ok');
-      logTimeline({
-        type: 'stack',
-        stackId: matchedStack.id,
-        label: matchedStack.label,
-        correct: true,
-        method: 'command',
-      });
-    },
-    [
-      decoyInterventions,
-      processDecoyOrder,
-      teachMeMode,
-      nextExpectedId,
-      interventionById,
-      logTimeline,
-      switchCareUnit,
-    ],
-  );
 
   const computePostVideoRows = useCallback((override = null) => {
     const expectedOrder = interventions.map((iv) => iv.id);
@@ -1952,7 +2125,10 @@ export default function Play({
     setPendingCompleteResult(null);
     setReviewPanelCollapsed(false);
     setActiveDrawer(null);
-    setShowCaseChat(false);
+    setOrderTimelineEvents([]);
+    orderTimelineSeqRef.current = 0;
+    sessionStartedAtRef.current = null;
+    setSessionStartedAt(null);
 
     void (async () => {
       await endCurrentPlaySession({ restarted: true, placed: doneCount, total });
@@ -2193,7 +2369,10 @@ export default function Play({
   useEffect(() => {
     stopCaseReader();
     setReadState('idle');
-    if (!initialCheckpoint?.caseId || initialCheckpoint.caseId !== caseData.id) {
+    if (
+      !initialCheckpoint?.caseId ||
+      String(initialCheckpoint.caseId) !== String(caseData.id)
+    ) {
       setDockCollapsed(false);
     }
   }, [caseData.id, initialCheckpoint?.caseId]);
@@ -2203,6 +2382,139 @@ export default function Play({
   useEffect(() => {
     if (finalMode) setDockCollapsed(true);
   }, [finalMode]);
+
+  const timelineFootProps = useMemo(
+    () => ({
+      doneCount,
+      total,
+      interventions,
+      placed,
+      timedModeEnabled,
+      timerLabel,
+      timerState,
+      caseData,
+      dropMode,
+      teachMeMode,
+      reviewDisabled: doneCount === 0,
+      toolbarCollapsed: dockToolbarCollapsed,
+      onToggleToolbarCollapsed: () => setDockToolbarCollapsed((v) => !v),
+      onToggleTeachMe: () => {
+        setTeachMeMode((v) => {
+          if (v) setTeachFocusId(null);
+          return !v;
+        });
+      },
+      onReview: reviewPlacements,
+    }),
+    [
+      doneCount,
+      total,
+      interventions,
+      placed,
+      timedModeEnabled,
+      timerLabel,
+      timerState,
+      caseData,
+      dropMode,
+      teachMeMode,
+      dockToolbarCollapsed,
+      reviewPlacements,
+    ],
+  );
+
+  const playSceneToolbar = (
+    <PlaySceneToolbar
+      examOpen={activeDrawer === 'exam'}
+      historyOpen={activeDrawer === 'history'}
+      stacksOpen={!dockCollapsed && infoTab === 'treatment'}
+      chatOpen={infoTab === 'chat'}
+      recordButtonProps={caseRecording}
+      showCues={showCues}
+      darkMode={theme === 'dark'}
+      freeDrop={dropMode === 'free'}
+      settingsOpen={stackSettingsOpen}
+      settingsRef={stackCommandRef}
+      settingsPopover={
+        <div className="settings-popover toolbar-settings-popover" role="dialog" aria-label="Toolbar settings">
+          <div className="settings-popover-row">
+            <button
+              type="button"
+              onClick={() =>
+                updateClinicalTextPrefs({
+                  fontScale: Math.max(0.9, Number((textPrefs.fontScale - 0.08).toFixed(2))),
+                })
+              }
+              aria-label="Decrease text size"
+            >
+              A−
+            </button>
+            <span className="font-size-display">{Math.round(textPrefs.fontScale * 100)}%</span>
+            <button
+              type="button"
+              onClick={() =>
+                updateClinicalTextPrefs({
+                  fontScale: Math.min(1.5, Number((textPrefs.fontScale + 0.08).toFixed(2))),
+                })
+              }
+              aria-label="Increase text size"
+            >
+              A+
+            </button>
+            <button
+              type="button"
+              onClick={() => updateClinicalTextPrefs({ weight: textPrefs.weight === 700 ? 600 : 700 })}
+              className={textPrefs.weight === 700 ? 'active' : ''}
+              aria-label="Toggle bold text"
+            >
+              B
+            </button>
+          </div>
+          <div className="settings-popover-row settings-popover-row-2">
+            <button type="button" onClick={toggleTimedMode}>
+              {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
+            </button>
+            <button type="button" onClick={resetPlacements}>
+              Reset placements
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const death = document.getElementById('death');
+                const idleSlots = document.querySelectorAll('.idle-slot');
+                if (!death) return;
+                idleSlots.forEach((slot) => {
+                  slot.pause();
+                  slot.style.opacity = '0';
+                });
+                death.style.opacity = '1';
+                death.style.zIndex = '2';
+                death.currentTime = 0;
+                death.play().catch(() => {});
+              }}
+            >
+              Simulate deterioration
+            </button>
+          </div>
+          <AudioSettingsPanel embedded showGameSounds={false} />
+        </div>
+      }
+      onToggleExam={() => setActiveDrawer((d) => (d === 'exam' ? null : 'exam'))}
+      onToggleHistory={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
+      onOpenStacks={() => {
+        setDockCollapsed(false);
+        setInfoTab('treatment');
+      }}
+      onToggleChat={() => {
+        setDockCollapsed(false);
+        setInfoTab((tab) => (tab === 'chat' ? 'treatment' : 'chat'));
+      }}
+      onRestart={restartCurrentCase}
+      onToggleCues={() => setShowCues((v) => !v)}
+      onToggleTheme={toggleTheme}
+      onToggleDropMode={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
+      onToggleSettings={() => setStackSettingsOpen((v) => !v)}
+    />
+  );
 
   return (
     <div
@@ -2277,12 +2589,31 @@ export default function Play({
             hint={orderCommandHintDisplay}
             hasMatch={Boolean(commandUiMatch)}
             knownOrder={Boolean(teachMeMode && knownOrderMatch)}
+            isChatMode={isDockChatMode}
+            chatBusy={caseChat.busy}
+            chatOpen={infoTab === 'chat'}
             autocompleteText={orderCommandAutocomplete}
             onScreenshot={capturePlayScreenshot}
             captureBusy={captureBusy}
+            quickReply={dockChatReply}
+            replyExpanded={dockReplyExpanded}
+            onToggleReplyExpanded={() => setDockReplyExpanded((v) => !v)}
+            onDismissReply={() => {
+              setDockChatReply(null);
+              setDockReplyExpanded(false);
+            }}
+            onOpenFullChat={() => {
+              setDockCollapsed(false);
+              setInfoTab('chat');
+            }}
           />
         </div>
-        <PatientOrderTimeline events={orderTimelineEvents} sessionStartedAt={sessionStartedAt} />
+        <PatientOrderTimeline
+          events={orderTimelineEvents}
+          sessionStartedAt={sessionStartedAt}
+          footProps={timelineFootProps}
+          toolbar={playSceneToolbar}
+        />
         <div className="patient-drop-surface" aria-label="Drop stacks on patient">
           <PatientScene
             scene={caseData.patientScene}
@@ -2796,7 +3127,7 @@ export default function Play({
             }
             defaultTab="treatment"
             showTreatmentTab
-            showNotesTab
+            showChatTab
             activeTab={infoTab}
             onTabChange={setInfoTab}
             onReadCase={(section, text) => {
@@ -2808,136 +3139,19 @@ export default function Play({
               });
             }}
             readState={readState}
-            notesPanel={
-              <div className="play-notes-tab-panel">
-                <CaseNotesPanel
-                  caseId={caseData.id}
-                  caseData={caseData}
-                  sessionId={playSessionId}
-                  compact
-                  minimal
-                  recordButtonProps={caseRecording}
-                  recordingsVersion={recordingsVersion}
-                  notesVersion={notesVersion}
-                  onTimelineNote={(text) => logTimeline({ type: 'note', text })}
-                  onRecordingSaved={() => showToast('Intuition recording saved', 'ok')}
-                />
-                <PlayNotesSessionFoot
-                  doneCount={doneCount}
-                  total={total}
-                  interventions={interventions}
-                  placed={placed}
-                  timedModeEnabled={timedModeEnabled}
-                  timerLabel={timerLabel}
-                  timerState={timerState}
-                  caseData={caseData}
-                  dropMode={dropMode}
-                  teachMeMode={teachMeMode}
-                  reviewDisabled={doneCount === 0}
-                  toolbarCollapsed={dockToolbarCollapsed}
-                  onToggleToolbarCollapsed={() => setDockToolbarCollapsed((v) => !v)}
-                  onToggleTeachMe={() => {
-                    setTeachMeMode((v) => !v);
-                    if (teachMeMode) setTeachFocusId(null);
-                  }}
-                  onReview={reviewPlacements}
-                  toolbar={
-                    <PlaySceneToolbar
-                      examOpen={activeDrawer === 'exam'}
-                      historyOpen={activeDrawer === 'history'}
-                      stacksOpen={!dockCollapsed && infoTab === 'treatment'}
-                      notesOpen={!dockCollapsed && infoTab === 'notes'}
-                      chatOpen={showCaseChat}
-                      recordButtonProps={caseRecording}
-                      onToggleNotes={() => {
-                        setDockCollapsed(false);
-                        setInfoTab((tab) => (tab === 'notes' ? 'treatment' : 'notes'));
-                      }}
-                      showCues={showCues}
-                      darkMode={theme === 'dark'}
-                      freeDrop={dropMode === 'free'}
-                      settingsOpen={stackSettingsOpen}
-                      settingsRef={stackCommandRef}
-                      settingsPopover={
-                        <div className="settings-popover toolbar-settings-popover" role="dialog" aria-label="Toolbar settings">
-                          <div className="settings-popover-row">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                updateClinicalTextPrefs({
-                                  fontScale: Math.max(0.9, Number((textPrefs.fontScale - 0.08).toFixed(2))),
-                                })
-                              }
-                              aria-label="Decrease text size"
-                            >
-                              A−
-                            </button>
-                            <span className="font-size-display">{Math.round(textPrefs.fontScale * 100)}%</span>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                updateClinicalTextPrefs({
-                                  fontScale: Math.min(1.5, Number((textPrefs.fontScale + 0.08).toFixed(2))),
-                                })
-                              }
-                              aria-label="Increase text size"
-                            >
-                              A+
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => updateClinicalTextPrefs({ weight: textPrefs.weight === 700 ? 600 : 700 })}
-                              className={textPrefs.weight === 700 ? 'active' : ''}
-                              aria-label="Toggle bold text"
-                            >
-                              B
-                            </button>
-                          </div>
-                          <div className="settings-popover-row settings-popover-row-2">
-                            <button type="button" onClick={toggleTimedMode}>
-                              {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
-                            </button>
-                            <button type="button" onClick={resetPlacements}>
-                              Reset placements
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const death = document.getElementById('death');
-                                const idleSlots = document.querySelectorAll('.idle-slot');
-                                if (!death) return;
-                                idleSlots.forEach((slot) => {
-                                  slot.pause();
-                                  slot.style.opacity = '0';
-                                });
-                                death.style.opacity = '1';
-                                death.style.zIndex = '2';
-                                death.currentTime = 0;
-                                death.play().catch(() => {});
-                              }}
-                            >
-                              Simulate deterioration
-                            </button>
-                          </div>
-                          <AudioSettingsPanel embedded showGameSounds={false} />
-                        </div>
-                      }
-                      onToggleExam={() => setActiveDrawer((d) => (d === 'exam' ? null : 'exam'))}
-                      onToggleHistory={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
-                      onOpenStacks={() => {
-                        setDockCollapsed(false);
-                        setInfoTab('treatment');
-                      }}
-                      onToggleChat={() => setShowCaseChat((v) => !v)}
-                      onRestart={restartCurrentCase}
-                      onToggleCues={() => setShowCues((v) => !v)}
-                      onToggleTheme={toggleTheme}
-                      onToggleDropMode={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
-                      onToggleSettings={() => setStackSettingsOpen((v) => !v)}
-                    />
-                  }
-                />
-              </div>
+            chatPanel={
+              <PlayChatNotesTabPanel
+                chat={caseChat}
+                caseData={caseData}
+                caseId={caseData.id}
+                playSessionId={playSessionId}
+                caseRecording={caseRecording}
+                recordingsVersion={recordingsVersion}
+                notesVersion={notesVersion}
+                onTimelineNote={(text) => logTimeline({ type: 'note', text })}
+                onTimelineChat={(text) => logTimeline({ type: 'chat', role: 'user', text })}
+                onRecordingSaved={() => showToast('Voice note saved', 'ok')}
+              />
             }
             treatmentPanel={
               <>
@@ -3102,20 +3316,6 @@ export default function Play({
         </div>
       )}
 
-      <CaseChatPanel
-        caseData={caseData}
-        open={showCaseChat}
-        onClose={() => setShowCaseChat(false)}
-        playSessionId={playSessionId}
-        onModelReady={(label) => {
-          logTimeline({ type: 'chat', role: 'system', text: `Case chat running on ${label}` });
-        }}
-        interventions={interventions}
-        decoyInterventions={decoyInterventions}
-        placed={placed}
-        allMedicalOrders={ALL_ORDERS}
-        onOrderPlaced={handleChatOrder}
-      />
     </div>
   );
 }

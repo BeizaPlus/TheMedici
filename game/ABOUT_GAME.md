@@ -247,11 +247,13 @@ Format: **path** — purpose | **state** | **key functions** | **reads** | **wri
 
 **`PlaySceneToolbar.jsx`** — Bottom toolbar (exam, SOAP, settings, exit) | none | toggles drawers/settings | callback props from Play | invokes Play handlers
 
-**`SceneToolbarIcons.jsx`** — SVG icons for toolbar | none | icon components | none | none
+**`SceneToolbarIcons.jsx`** — **Tabler Icons** (https://tabler.io/icons) as inline SVG; single source for play-dock icons (`IconStethoscope`, `IconMicrophone`, `IconPlayerStop`, etc.) | none | icon components | none | none
 
-**`CaseChatPanel.jsx`** — Ollama case chat sidebar | messages, session id | `sendCaseChatMessage` | `caseChat.js` API | chat state, API
+**`CaseChatPanel.jsx`** — Case chat sidebar | messages, session id | `sendCaseChatMessage` | `caseChat.js` API | chat state, API; `**bold**` via `chatMessageFormat.jsx`
 
-**`CaseNotesPanel.jsx`** — Extended chart notes tab | none | renders notes text | `getBriefingNotes` content | none
+**`CaseNotesPanel.jsx`** — Notes tab + saved recordings list | none | text notes + playback | `caseNotes.js`, `caseUserLog.js` | none
+
+**`CaseRecordButton.jsx`** — Voice record (mic/stop); icons from `SceneToolbarIcons.jsx`; uploads via `POST .../recording` | `useCaseRecording` hook | Tabler mic/stop | `caseUserLog.js` | session required
 
 **`AudioSettingsPanel.jsx`** — Monitor/voice volume sliders | local prefs | read/write audio prefs | `audioPrefs.js` | localStorage
 
@@ -264,8 +266,6 @@ Format: **path** — purpose | **state** | **key functions** | **reads** | **wri
 **`CaseProgressTag.jsx`** / **`CaseReadyTag.jsx`** / **`CaseReviewFlagButton.jsx`** / **`CaseReviewFlagTag.jsx`** — List badges and flag toggle | none | read progress / flag | `caseProgress.js` | `setCaseReviewFlag`
 
 **`CasePresentationPanel.jsx`** — Presentation mode UI (if used) | varies | presentation helpers | `casePresentation.js` | none
-
-**`CaseRecordButton.jsx`** — Record case audio control | none | `caseReader` | case id | read state
 
 **`GlobalUiSettingsPanel.jsx`** — Global settings UI | none | prefs | storage | localStorage
 

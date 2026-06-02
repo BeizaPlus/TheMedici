@@ -4,8 +4,7 @@ import { applySessionToCase } from '../lib/caseNarrative.js';
 import { readAudienceProfile } from '../lib/audienceProfile.js';
 
 function withSession(gameCase) {
-  const session = readAudienceProfile();
-  if (!session) return gameCase;
+  const session = readAudienceProfile() || {};
   return applySessionToCase(gameCase, session);
 }
 

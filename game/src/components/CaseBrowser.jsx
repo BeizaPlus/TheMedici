@@ -14,6 +14,14 @@ import {
 
   getFlaggedCaseIds,
 
+  getFavoriteCaseIds,
+
+  getFavoriteCount,
+
+  isFavorite,
+
+  toggleFavorite,
+
   pickRandomId,
 
   startShuffleQueue,
@@ -101,6 +109,8 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
   const [flagVersion, setFlagVersion] = useState(0);
 
+  const [favVersion, setFavVersion] = useState(0);
+
   const flaggedIds = useMemo(() => {
     void flagVersion;
     return getFlaggedCaseIds();
@@ -112,6 +122,18 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
     const byId = new Map(catalog.cases.map((c) => [c.id, c]));
     return flaggedIds.map((id) => byId.get(id)).filter(Boolean);
   }, [catalog.cases, flaggedIds]);
+
+  const favoriteIds = useMemo(() => {
+    void favVersion;
+    return getFavoriteCaseIds();
+  }, [favVersion]);
+
+  const favoriteCount = useMemo(() => getFavoriteCount(), [favVersion]);
+
+  const favoriteCases = useMemo(() => {
+    const byId = new Map(catalog.cases.map((c) => [c.id, c]));
+    return favoriteIds.map((id) => byId.get(id)).filter(Boolean);
+  }, [catalog.cases, favoriteIds]);
 
   const overallStats = useMemo(() => getCompletionStats(catalog.totalCases), [catalog.totalCases]);
 
@@ -125,9 +147,11 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
     if (listFilter === 'flagged') return flaggedCases;
 
+    if (listFilter === 'favorites') return favoriteCases;
+
     return getCasesInCategory(activeCategory);
 
-  }, [listFilter, activeCategory, readyCases, stackTestingCases, flaggedCases]);
+  }, [listFilter, activeCategory, readyCases, stackTestingCases, flaggedCases, favoriteCases]);
 
 
 
@@ -215,6 +239,16 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
   };
 
+  const showFavoritesFilter = () => {
+
+    setListFilter('favorites');
+
+    const ids = getFavoriteCaseIds();
+
+    if (ids[0]) setSelectedId(ids[0]);
+
+  };
+
 
 
   const playCase = useCallback(
@@ -269,7 +303,11 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
             ? flaggedIds
 
-            : allCaseIds;
+            : listFilter === 'favorites'
+
+              ? favoriteIds
+
+              : allCaseIds;
 
     const firstId = startShuffleQueue(pool);
 
@@ -292,6 +330,20 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
     playCase(next ? getCaseById(next.id) : null);
 
   }, [flaggedCases, selectedId, playCase]);
+
+  const playNextFavorite = useCallback(() => {
+
+    const next =
+
+      favoriteCases.find((c) => !getCaseRecord(c.id)?.completed) ||
+
+      favoriteCases.find((c) => c.id === selectedId) ||
+
+      favoriteCases[0];
+
+    playCase(next ? getCaseById(next.id) : null);
+
+  }, [favoriteCases, selectedId, playCase]);
 
 
 
@@ -419,6 +471,24 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
           type="button"
 
+          className={listFilter === 'favorites' ? 'ready-filter-chip active' : 'ready-filter-chip'}
+
+          onClick={showFavoritesFilter}
+
+          aria-pressed={listFilter === 'favorites'}
+
+        >
+
+          ⭐ Favorites
+
+          <span className="ready-filter-count">{favoriteCount}</span>
+
+        </button>
+
+        <button
+
+          type="button"
+
           className={listFilter === 'flagged' ? 'ready-filter-chip active' : 'ready-filter-chip'}
 
           onClick={showFlaggedFilter}
@@ -464,6 +534,16 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
           <p className="ready-filter-note">
 
             Largest authored stacks ({STACK_TESTING_MIN_ORDERS}+ orders) — stress-test drag placement and sequencing.
+
+          </p>
+
+        )}
+
+        {listFilter === 'favorites' && (
+
+          <p className="ready-filter-note">
+
+            ⭐ Cases you starred — quick access to your favorite cases.
 
           </p>
 
@@ -575,6 +655,24 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
           </>
 
+        ) : listFilter === 'favorites' ? (
+
+          <>
+
+            <button type="button" className="mode-btn mode-ready" onClick={playNextFavorite} disabled={!favoriteCount}>
+
+              ▶ Start next favorite
+
+            </button>
+
+            <button type="button" className="mode-btn mode-shuffle" onClick={playShuffle} disabled={!favoriteCount}>
+
+              🔀 Shuffle favorites only
+
+            </button>
+
+          </>
+
         ) : listFilter === 'flagged' ? (
 
           <>
@@ -649,11 +747,15 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
                   ? 'Stack testing'
 
-                  : listFilter === 'flagged'
+                  : listFilter === 'favorites'
 
-                    ? 'Review next'
+                    ? '⭐ Favorites'
 
-                    : activeCategoryMeta?.label}
+                    : listFilter === 'flagged'
+
+                      ? 'Review next'
+
+                      : activeCategoryMeta?.label}
 
             </h2>
 
@@ -667,15 +769,23 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
                   ? `${stackTestingCount} cases · ${stackTestingOrderRange} orders each`
 
-                  : listFilter === 'flagged'
+                  : listFilter === 'favorites'
 
-                    ? flaggedCount
+                    ? favoriteCount
 
-                      ? `${flaggedCount} bookmarked case${flaggedCount === 1 ? '' : 's'}`
+                      ? `${favoriteCount} starred case${favoriteCount === 1 ? '' : 's'}`
 
-                      : 'Flag cases during play to build your review list'
+                      : 'Star cases to build your favorites list'
 
-                    : `${activeCategoryMeta?.count || 0} cases in this category`}
+                    : listFilter === 'flagged'
+
+                      ? flaggedCount
+
+                        ? `${flaggedCount} bookmarked case${flaggedCount === 1 ? '' : 's'}`
+
+                        : 'Flag cases during play to build your review list'
+
+                      : `${activeCategoryMeta?.count || 0} cases in this category`}
 
             </p>
 
@@ -719,6 +829,8 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
               const flagged = Boolean(rec?.reviewNext);
 
+              const faved = isFavorite(c.id);
+
               return (
 
                 <button
@@ -731,7 +843,7 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
                   aria-selected={c.id === selectedId}
 
-                  className={`case-row ${c.id === selectedId ? 'selected' : ''} ${rowState} ${isReady ? 'case-row-ready' : ''} ${flagged ? 'case-row-flagged' : ''}`}
+                  className={`case-row ${c.id === selectedId ? 'selected' : ''} ${rowState} ${isReady ? 'case-row-ready' : ''} ${flagged ? 'case-row-flagged' : ''} ${faved ? 'case-row-faved' : ''}`}
 
                   onClick={() => setSelectedId(c.id)}
 
@@ -744,6 +856,32 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
                     {toTitleCase(c.title)}
 
                   </span>
+
+                  <button
+
+                    type="button"
+
+                    className={`case-fav-btn ${faved ? 'is-faved' : ''}`}
+
+                    onClick={(e) => {
+
+                      e.stopPropagation();
+
+                      toggleFavorite(c.id);
+
+                      setFavVersion((v) => v + 1);
+
+                    }}
+
+                    title={faved ? 'Remove from favorites' : 'Add to favorites'}
+
+                    aria-label={faved ? 'Remove from favorites' : 'Add to favorites'}
+
+                  >
+
+                    {faved ? '⭐' : '☆'}
+
+                  </button>
 
                   <span className="case-meta case-meta-tags">
 

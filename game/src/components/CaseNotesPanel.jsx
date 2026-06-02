@@ -11,6 +11,7 @@ export default function CaseNotesPanel({
   sessionId,
   compact = false,
   minimal = false,
+  threadMode = false,
   recordButtonProps = null,
   recordingsVersion = 0,
   notesVersion = 0,
@@ -89,7 +90,7 @@ export default function CaseNotesPanel({
   );
 
   return (
-    <div className={`case-notes-panel ${compact ? 'compact' : ''} ${minimal ? 'minimal' : ''}`}>
+    <div className={`case-notes-panel ${compact ? 'compact' : ''} ${minimal ? 'minimal' : ''}${threadMode ? ' thread-mode' : ''}`}>
       {!minimal && (
         <p className="case-notes-hint">Saved per case in your journal — every run is logged.</p>
       )}
@@ -99,7 +100,7 @@ export default function CaseNotesPanel({
           Transcribing…
         </p>
       )}
-      {recordings.length > 0 && (
+      {recordings.length > 0 && !threadMode && (
         <ul className="case-recordings-list" aria-label="Saved intuition recordings">
           {recordings.map((rec) => (
             <li key={rec.id}>
@@ -119,10 +120,10 @@ export default function CaseNotesPanel({
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         placeholder={placeholder}
-        rows={compact ? 4 : 8}
+        rows={threadMode ? undefined : compact ? 4 : 8}
         aria-label="Case notes"
       />
-      {caseData && (
+      {caseData && !threadMode && (
         <div className="case-notes-screenshot-block">
           <CaseScreenshotThumb caseData={caseData} className="case-screenshot-thumb case-screenshot-thumb--notes" />
           <CcsScreenshotLink caseData={caseData} className="ccs-screenshot-link ccs-screenshot-link--notes" />

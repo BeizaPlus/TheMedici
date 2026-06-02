@@ -47,6 +47,10 @@ export default function Home({
         setCasesFilter('stacks');
         setView('cases');
       }}
+      onOpenFavoritesCases={() => {
+        setCasesFilter('favorites');
+        setView('cases');
+      }}
       onOpenFlaggedCases={() => {
         setCasesFilter('flagged');
         setView('cases');

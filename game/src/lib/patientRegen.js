@@ -1,5 +1,5 @@
 import { buildCaseChatContext } from './caseChat.js';
-import { getBuiltInPatientSrc } from './patientImage.js';
+import { getBuiltInPatientSrc, isValidSceneSrc } from './patientImage.js';
 import { STORAGE } from './storageKeys.js';
 
 const API = 'http://127.0.0.1:3001';
@@ -28,7 +28,8 @@ export function readCaseRegenImage(caseId) {
     const raw = localStorage.getItem(STORAGE.caseRegenImages);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    return parsed?.[String(caseId)] || null;
+    const src = parsed?.[String(caseId)] || null;
+    return isValidSceneSrc(src) ? src : null;
   } catch {
     return null;
   }

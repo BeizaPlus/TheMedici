@@ -25,6 +25,10 @@ export const STORAGE = {
   briefingDockLayout: 'schoonmaker_briefing_dock_layout',
   briefingUiLayout: 'schoonmaker_briefing_ui_layout',
   playUiFavorite: 'schoonmaker_play_ui_favorite',
+  playSessionTimeline: 'schoonmaker_play_session_timeline',
+  threadCollapsed: 'schoonmaker_thread_collapsed',
+  timelineCollapsed: 'schoonmaker_timeline_collapsed',
+  caseChatHistory: 'schoonmaker_case_chat_history',
   activePlayCheckpoint: 'schoonmaker_active_play_checkpoint',
   uiPrefs: 'schoonmaker_ui_prefs',
 };
@@ -62,9 +66,28 @@ export function migrateLegacyStorage() {
         localStorage.setItem(newKey, localStorage.getItem(key));
       }
     }
-    const brokenCheckpoint = localStorage.getItem('undefined');
-    if (brokenCheckpoint && !localStorage.getItem(STORAGE.activePlayCheckpoint)) {
-      localStorage.setItem(STORAGE.activePlayCheckpoint, brokenCheckpoint);
+    const orphan = localStorage.getItem('undefined');
+    if (orphan) {
+      try {
+        const parsed = JSON.parse(orphan);
+        if (
+          parsed?.version === 1 &&
+          parsed?.caseId != null &&
+          !localStorage.getItem(STORAGE.activePlayCheckpoint)
+        ) {
+          localStorage.setItem(STORAGE.activePlayCheckpoint, orphan);
+        } else if (
+          parsed &&
+          typeof parsed === 'object' &&
+          !parsed.version &&
+          Object.values(parsed).some((v) => Array.isArray(v)) &&
+          !localStorage.getItem(STORAGE.caseChatHistory)
+        ) {
+          localStorage.setItem(STORAGE.caseChatHistory, orphan);
+        }
+      } catch {
+        /* ignore */
+      }
       localStorage.removeItem('undefined');
     }
   } catch {

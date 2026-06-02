@@ -33,6 +33,7 @@ export function writePlayCheckpoint(payload) {
       version: CHECKPOINT_VERSION,
       savedAt: new Date().toISOString(),
       ...payload,
+      caseId: String(payload.caseId),
     };
     localStorage.setItem(STORAGE.activePlayCheckpoint, JSON.stringify(next));
     return next;

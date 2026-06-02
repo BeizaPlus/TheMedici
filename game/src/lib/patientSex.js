@@ -1,5 +1,8 @@
 /** Infer patient sex from case narrative text (CCS intros / history). */
 export function inferPatientSex(caseData) {
+  const explicit = caseData?.patientSex;
+  if (explicit === 'female' || explicit === 'male') return explicit;
+
   const blob = [
     caseData?.chief_complaint,
     caseData?.historyText,

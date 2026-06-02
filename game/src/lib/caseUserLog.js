@@ -59,6 +59,17 @@ export async function fetchCaseUserData(caseId) {
   }
 }
 
+export async function fetchPlaySession(caseId, sessionId) {
+  if (!caseId || !sessionId) return null;
+  try {
+    const data = await fetchCaseUserData(caseId);
+    const sessions = data?.sessions || [];
+    return sessions.find((s) => s.id === sessionId) || null;
+  } catch {
+    return null;
+  }
+}
+
 export async function startPlaySession(caseId, meta = {}) {
   const data = await apiJson(`/api/user/case/${encodeURIComponent(caseId)}/session/start`, {
     method: 'POST',
@@ -139,25 +150,48 @@ export function recordingPublicUrl(relativePath) {
   return `${API}/user-data/${relativePath.replace(/^\/+/, '')}`;
 }
 
+function mergeChatRows(...lists) {
+  const out = [];
+  const seen = new Set();
+  for (const list of lists) {
+    if (!Array.isArray(list)) continue;
+    for (const row of list) {
+      if (!row?.content) continue;
+      const key = `${row.role}:${row.at || ''}:${row.content}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(row);
+    }
+  }
+  out.sort((a, b) => {
+    const ta = a.at ? new Date(a.at).getTime() : 0;
+    const tb = b.at ? new Date(b.at).getTime() : 0;
+    return ta - tb;
+  });
+  return out;
+}
+
 export async function loadPersistedChatHistory(caseId) {
-  const local = readLocalChatHistory(caseId);
-  if (local.length) return local;
+  const id = String(caseId || '');
+  if (!id) return [];
+  const local = readLocalChatHistory(id);
+  let remote = [];
   try {
     const data = await fetchCaseUserData(caseId);
-    const remote = data?.chatHistory || [];
-    if (remote.length) {
-      writeLocalChatHistory(
-        caseId,
-        remote.map((m) => ({
-          role: m.role,
-          content: m.content,
-          at: m.at,
-          sessionId: m.sessionId,
-        })),
-      );
-    }
-    return remote.map((m) => ({ role: m.role, content: m.content, at: m.at, sessionId: m.sessionId }));
+    remote = (data?.chatHistory || []).map((m) => ({
+      role: m.role,
+      content: m.content,
+      at: m.at,
+      sessionId: m.sessionId,
+    }));
   } catch {
-    return local;
+    remote = [];
   }
+  const merged = mergeChatRows(local, remote);
+  if (merged.length) {
+    const map = readLocalChatMap();
+    map[id] = merged;
+    writeLocalChatMap(map);
+  }
+  return merged;
 }

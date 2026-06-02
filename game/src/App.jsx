@@ -56,7 +56,7 @@ export default function App() {
     setCurrentCase(gameCase);
     unlockAmbience();
     startIcuMonitor({ fadeMs: 1800 });
-    if (cp?.caseId === String(gameCase.id) && cp.screen === 'play') {
+    if (cp?.caseId != null && String(cp.caseId) === String(gameCase.id) && cp.screen === 'play') {
       setResumeCheckpoint(cp);
       setPlayMode(cp.playMode || 'browse');
       setScreen(SCREENS.play);
@@ -87,7 +87,7 @@ export default function App() {
 
   const startCase = useCallback((gameCase, mode = 'browse', { keepCheckpoint = false } = {}) => {
     const cp = readPlayCheckpoint();
-    if (!keepCheckpoint && cp && cp.caseId !== gameCase.id) {
+    if (!keepCheckpoint && cp && String(cp.caseId) !== String(gameCase.id)) {
       clearPlayCheckpoint();
       setResumeCheckpoint(null);
     }
@@ -240,9 +240,10 @@ export default function App() {
         <Play
           caseData={currentCase}
           playMode={playMode}
-          initialCheckpoint={
-            resumeCheckpoint?.caseId === currentCase.id ? resumeCheckpoint : null
-          }
+          initialCheckpoint={(() => {
+            const cp = resumeCheckpoint || readPlayCheckpoint();
+            return cp?.caseId != null && String(cp.caseId) === String(currentCase.id) ? cp : null;
+          })()}
           onComplete={finishCase}
           onQuit={goHome}
           studioCapture={studioBuild}

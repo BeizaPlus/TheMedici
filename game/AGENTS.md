@@ -67,8 +67,9 @@ See `DATA.md` and `step3/CCS_LOCAL_PROXY.md` for full pipeline docs.
 2. **Expanded stack** shows **one order’s** rationale/guideline — not the full sequence inline (full sequence stays in Teach Me)
 3. **Command dock** must be **draggable and resizable** (gold grips: right, bottom, corner)
 4. **Surface Pro / small screens** — performance matters; avoid huge DOM (SceneGridOverlay uses one surface div, not 1500+ buttons). See `src/lib/deviceProfile.js`, `usePlayDockLayout.js`, compact CSS in `index.css`
+5. **Toolbar icons = Tabler only** — all play-dock / case chrome icons live in `src/components/sceneToolbar/SceneToolbarIcons.jsx`, copied from [tabler.io/icons](https://tabler.io/icons) (outline 24×24, stroke 2). Do not use `react-icons` for toolbar buttons. Voice record: `IconMicrophone` / `IconPlayerStop`. See **ICON RULES** in `CURSOR_RULES.md`.
 
-Key files: `src/components/Play.jsx`, `src/hooks/usePlayDockLayout.js`, `src/index.css`
+Key files: `src/components/Play.jsx`, `src/hooks/usePlayDockLayout.js`, `src/components/sceneToolbar/SceneToolbarIcons.jsx`, `src/index.css`
 
 ---
 
@@ -118,6 +119,7 @@ Key files: `src/components/Play.jsx`, `src/hooks/usePlayDockLayout.js`, `src/ind
 ## Do not
 
 - Change stacks to horizontal layout or nest orders under category headers
+- Add toolbar/case UI icons outside `SceneToolbarIcons.jsx` or from `react-icons`
 - Require `C:\Users\steve\Step 3` external path — use in-repo `step3/`
 - Commit `step3/ccs_credentials.json`, `.env`, or browser profiles
 - Force-push `main` without explicit user request

@@ -2,6 +2,7 @@ import preparedCases from '../data/preparedCases.json' with { type: 'json' };
 import { getCompletionThresholdAdjust } from './sessionProfile.js';
 import { getActiveRefinedNarrative } from './narrativeRefine.js';
 import { resolveCaseExam } from './caseExam.js';
+import { applyPatientName, applyPatientNameToCase, getDefaultPatientName, resolvePatientName } from './patientName.js';
 
 const PREPARED = preparedCases?.cases || {};
 
@@ -28,12 +29,15 @@ export function applySessionToCase(caseData, session = {}) {
     dispositionUnits: prepared?.dispositionUnits || caseData.dispositionUnits,
   };
 
+  const clinicalHpi =
+    prepared?.hpi_narrative ||
+    prepared?.narrative?.doctor?.standard?.hpi ||
+    caseData?.hpi_narrative ||
+    '';
+  merged.clinical_hpi_narrative = clinicalHpi;
+
   if (narr) {
     if (narr.intro) merged.chief_complaint = narr.intro.slice(0, 800);
-    if (narr.hpi) {
-      merged.historyText = narr.hpi;
-      merged.hpi_narrative = narr.hpi;
-    }
     if (narr.vitalsText != null) merged.vitalsText = narr.vitalsText;
     if (narr.clinicalTip) merged.clinical_tip = narr.clinicalTip;
     if (narr.objective) merged.objective = narr.objective;
@@ -42,10 +46,6 @@ export function applySessionToCase(caseData, session = {}) {
   const refined = getActiveRefinedNarrative(caseData?.id, playRole, difficulty);
   if (refined) {
     if (refined.intro) merged.chief_complaint = refined.intro.slice(0, 800);
-    if (refined.hpi) {
-      merged.historyText = refined.hpi;
-      merged.hpi_narrative = refined.hpi;
-    }
     if (refined.vitalsText != null) merged.vitalsText = refined.vitalsText;
     if (refined.clinicalTip) merged.clinical_tip = refined.clinicalTip;
     if (refined.objective) merged.objective = refined.objective;
@@ -87,5 +87,15 @@ export function applySessionToCase(caseData, session = {}) {
     caseData.completionThreshold ?? 99,
   );
 
-  return merged;
+  const caseNum = caseData?.ccsNumber ?? Number(caseData?.id) ?? 0;
+  merged.patient_name_default = getDefaultPatientName(
+    caseNum,
+    merged.patientSex || prepared?.patientSex,
+  );
+  const displayName = resolvePatientName(merged);
+  const namedClinical = applyPatientName(clinicalHpi, displayName);
+  merged.hpi_narrative = namedClinical;
+  merged.historyText = namedClinical;
+  merged.chief_complaint = applyPatientName(merged.chief_complaint || '', displayName);
+  return { ...merged, patientDisplayName: displayName };
 }

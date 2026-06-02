@@ -175,19 +175,6 @@ function inferSex(intro, history, title) {
   return 'unknown';
 }
 
-function toPatientVoice(text, title) {
-  const base = text?.trim() || `I came in because of ${title}.`;
-  return base
-    .replace(/Case Introduction\s*/gi, '')
-    .replace(/A \d+-year-old[^.]{0,120}presents[^.]*\./gi, 'I came in today because ')
-    .replace(/The patient/gi, 'I')
-    .replace(/\bHe\b/g, 'I')
-    .replace(/\bShe\b/g, 'I')
-    .replace(/\bHis\b/g, 'My')
-    .replace(/\bHer\b/g, 'My')
-    .slice(0, 1200);
-}
-
 function asText(value) {
   if (value == null) return '';
   if (typeof value === 'string') return value;
@@ -230,25 +217,25 @@ function buildNarrative({ intro, history, vitalsText, clinicalTip, objective, ti
     },
     patient: {
       easy: {
-        intro: toPatientVoice(introClean, title),
-        hpi: toPatientVoice(hpi, title),
-        vitalsText: 'The team is checking my vital signs now.',
-        clinicalTip: 'You feel unwell and want help — the clinical team will guide next steps.',
-        objective: 'Share your symptoms clearly; ask what happens next.',
+        intro: introClean,
+        hpi,
+        vitalsText: vitalsText || '',
+        clinicalTip: `Teaching hint: ${clinicalTip}`,
+        objective: `${objective} Share your symptoms clearly with the team.`,
       },
       standard: {
-        intro: toPatientVoice(introClean, title),
-        hpi: toPatientVoice(hpi, title),
-        vitalsText: vitalsText ? 'What I was told about my vitals is on the monitor.' : '',
-        clinicalTip: 'Focus on what you feel, when it started, and what makes it worse or better.',
-        objective: 'Participate in shared decision-making as the team stabilizes you.',
+        intro: introClean,
+        hpi,
+        vitalsText: vitalsText || '',
+        clinicalTip,
+        objective,
       },
       hard: {
-        intro: toPatientVoice(introClean, title),
-        hpi: toPatientVoice(hpi, title),
-        vitalsText: '',
-        clinicalTip: 'Limited guidance — advocate for yourself if symptoms worsen.',
-        objective: 'Navigate uncertainty while the team works through the differential.',
+        intro: introClean,
+        hpi,
+        vitalsText: vitalsText || '',
+        clinicalTip: 'Minimal coaching — prioritize life threats without hand-holding.',
+        objective: `High-acuity workup: ${objective}`,
       },
     },
   };
@@ -270,13 +257,25 @@ for (const ccsCase of catalog.cases) {
   const bankCase = caseBank.get(caseNum);
   const pres = catalog.presentations?.[ccsCase.title];
   const pb = resolvePlaybookForBuild(ccsCase, playbooks);
-  const intro = asText(bankCase?.hpi) || pres?.intro || asText(bankCase?.case_introduction) || '';
+  const hpiNarrative =
+    asText(bankCase?.hpi_narrative) || asText(bankCase?.hpi) || pres?.history || '';
+  const intro =
+    asText(bankCase?.chief_complaint) || pres?.intro || asText(bankCase?.case_introduction) || '';
   const vitalsText = (typeof bankCase?.vitals === 'string' ? bankCase.vitals : '') || pres?.vitals || '';
-  const history = asText(bankCase?.hpi) || pres?.history || asText(bankCase?.case_summary) || '';
+  const history = hpiNarrative || pres?.history || asText(bankCase?.case_summary) || '';
   const seed = Number(ccsCase.caseNumber) || 0;
   const { vitals, source: vitalsSource } = parseVitals(vitalsText, ccsCase.category, seed);
   const authored = AUTHORED_FLOWS[id];
-  const examFromBank = Array.isArray(bankCase?.physical_exam) ? bankCase.physical_exam : null;
+  const examFromBank = Array.isArray(bankCase?.physical_exam)
+    ? bankCase.physical_exam
+    : bankCase?.physical_exam && typeof bankCase.physical_exam === 'object'
+      ? Object.entries(bankCase.physical_exam)
+          .filter(([, v]) => v != null && String(v).trim())
+          .map(([k, v]) => [
+            String(k).replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+            String(v).trim(),
+          ])
+      : null;
   const exam = examFromBank || resolveCaseExam({
     caseId: id,
     title: ccsCase.title,
@@ -328,7 +327,9 @@ for (const ccsCase of catalog.cases) {
     flowTrack: authored?.flowTrack || 'Standard ED pathway',
     dispositionUnits: authored?.dispositionUnits || ['ER', 'OBS', 'ICU', 'WARD'],
     exam,
-    patientSex: inferSex(intro, history, ccsCase.title),
+    patientSex: bankCase?.patient_sex || inferSex(intro, history, ccsCase.title),
+    hpi_narrative: hpiNarrative || undefined,
+    patient_name_default: bankCase?.patient_name_default || undefined,
     difficulty: 'standard',
     clinical_tip: clinicalTip,
     objective,

@@ -20,9 +20,12 @@ export function readPlayUiFavorite() {
     return {
       ...PLAY_UI_FAVORITE,
       ...parsed,
-      infoTab: parsed?.infoTab === 'notes' || parsed?.infoTab === 'hpi' || parsed?.infoTab === 'exam'
-        ? parsed.infoTab
-        : 'treatment',
+      infoTab:
+        parsed?.infoTab === 'notes' || parsed?.infoTab === 'chat'
+          ? 'chat'
+          : parsed?.infoTab === 'hpi' || parsed?.infoTab === 'exam' || parsed?.infoTab === 'treatment'
+            ? parsed.infoTab
+            : 'treatment',
     };
   } catch {
     return { ...PLAY_UI_FAVORITE };

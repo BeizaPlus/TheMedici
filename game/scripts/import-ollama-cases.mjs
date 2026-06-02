@@ -130,16 +130,30 @@ if (!Array.isArray(cases)) {
   process.exit(1);
 }
 
+const force = process.argv.includes('--force');
 const bankCases = [];
+let skippedDeepSeek = 0;
 for (const entry of cases) {
   if (entry?.id == null) continue;
+  const outPath = path.join(CASE_BANK_DIR, `case_${entry.id}.json`);
+  if (!force && fs.existsSync(outPath)) {
+    try {
+      const existing = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+      if (existing?.extraction_method === 'deepseek_direct') {
+        bankCases.push(existing);
+        skippedDeepSeek += 1;
+        continue;
+      }
+    } catch {
+      /* overwrite below */
+    }
+  }
   const bank = toCaseBank(entry);
   bankCases.push(bank);
-  fs.writeFileSync(
-    path.join(CASE_BANK_DIR, `case_${entry.id}.json`),
-    `${JSON.stringify(bank, null, 2)}\n`,
-    'utf8',
-  );
+  fs.writeFileSync(outPath, `${JSON.stringify(bank, null, 2)}\n`, 'utf8');
+}
+if (skippedDeepSeek) {
+  console.log(`Skipped ${skippedDeepSeek} deepseek_direct case(s) — use --force to overwrite`);
 }
 
 const master = {

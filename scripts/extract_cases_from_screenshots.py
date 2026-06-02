@@ -291,6 +291,12 @@ def validate_output(case_data: dict, ocr_text: str) -> list[str]:
     if title.lower() in bad_titles:
         errors.append(f"Title is UI text not case name: '{title}'")
 
+    physical_exam = case_data.get("physical_exam") or {}
+    for system, value in physical_exam.items():
+        text = json.dumps(value) if not isinstance(value, str) else value
+        if text and ("<" in text or "[" in text):
+            errors.append(f"physical_exam.{system} contains placeholder: {text[:60]}")
+
     for stack in case_data.get("stacks", []):
         label = stack.get("label", "") if isinstance(stack, dict) else str(stack)
         noise = [
@@ -480,6 +486,17 @@ Return:
     case_data["diagnosis"] = enriched.get("diagnosis") or case_data.get("diagnosis")
     case_data["specialty"] = enriched.get("specialty") or case_data.get("specialty")
     case_data["patient"] = enriched.get("patient") or case_data.get("patient")
+
+    # Re-merge original stack types by label — reconstruct_case drops them
+    original_types = {
+        s["label"].lower(): s.get("type")
+        for s in (case_data.get("stacks") or [])
+        if isinstance(s, dict) and s.get("label") and s.get("type")
+    }
+    for stack in case_data.get("stacks") or []:
+        if isinstance(stack, dict) and stack.get("label") and not stack.get("type"):
+            stack["type"] = original_types.get(stack["label"].lower())
+
     return case_data
 
 
@@ -519,25 +536,30 @@ Return the refined stacks array. Nulls will be filtered out.
 Return only valid JSON array, no markdown:
 [{{"label": "...", "type": "...", "finding": "...", "aliases": []}}]"""
 
-    try:
-        response = requests.post(
-            OLLAMA_GENERATE_URL,
-            json={"model": TEXT_MODEL, "prompt": prompt, "stream": False},
-            timeout=300,
-        )
-        response.raise_for_status()
-        raw = response.json().get("response", "").replace("```json", "").replace("```", "").strip()
-        refined = json.loads(raw)
-        cleaned = [s for s in refined if s and s.get("label")]
-        case_data["order_sets"] = normalize_stack_items(cleaned)
-        print(
-            f"  order_sets: {len(case_data['order_sets'])} clean orders "
-            f"from {len(stacks)} raw stacks"
-        )
-        return case_data
-    except (json.JSONDecodeError, requests.RequestException) as exc:
-        print(f"  Refinement failed — order_sets not written: {exc}")
-        return case_data
+    for attempt in range(1, 4):
+        try:
+            attempt_prompt = prompt if attempt == 1 else prompt + RETRY_SUFFIX
+            response = requests.post(
+                OLLAMA_GENERATE_URL,
+                json={"model": TEXT_MODEL, "prompt": attempt_prompt, "stream": False},
+                timeout=300,
+            )
+            response.raise_for_status()
+            raw = response.json().get("response", "").replace("```json", "").replace("```", "").strip()
+            refined = json.loads(raw)
+            cleaned = [s for s in refined if s and s.get("label")]
+            case_data["order_sets"] = normalize_stack_items(cleaned)
+            print(
+                f"  order_sets: {len(case_data['order_sets'])} clean orders "
+                f"from {len(stacks)} raw stacks (attempt {attempt})"
+            )
+            return case_data
+        except (json.JSONDecodeError, requests.RequestException) as exc:
+            print(f"  Refinement attempt {attempt}/3 failed: {exc}")
+            if attempt < 3:
+                time.sleep(2)
+    print("  Refinement failed after 3 attempts — order_sets not written")
+    return case_data
 
 
 def self_review(case_data: dict, ocr_text: str) -> dict:
@@ -651,6 +673,7 @@ def process_case_with_confidence_loop(
     case_data = refine_stacks(case_data)
 
     print("[4] Self-review loop (target: 99% confidence)...")
+    last_known_confidence: int = 0
     for round_num in range(1, max_rounds + 1):
         print(f"\n  Round {round_num}/{max_rounds}:")
 
@@ -658,8 +681,12 @@ def process_case_with_confidence_loop(
         scores = review.get("scores", {})
         issues = review.get("issues", [])
         confidence = scores.get("overall_confidence", 0)
+        parse_failed = issues and issues[0].get("field") == "parse"
 
-        print(f"  Confidence: {confidence}%")
+        if not parse_failed:
+            last_known_confidence = confidence
+
+        print(f"  Confidence: {confidence}%" + (" (parse failed)" if parse_failed else ""))
         print(
             f"  Scores: title={scores.get('title_accuracy')} "
             f"stacks={scores.get('stacks_quality')} hpi={scores.get('hpi_quality')}"
@@ -668,6 +695,10 @@ def process_case_with_confidence_loop(
         if review.get("ready") or confidence >= 99:
             print(f"  Confidence threshold met on round {round_num}")
             break
+
+        if parse_failed:
+            print("  Self-review parse failed — skipping fix round")
+            continue
 
         if not issues:
             print("  No specific issues identified — stopping loop")
@@ -678,7 +709,13 @@ def process_case_with_confidence_loop(
             print(f"    - {issue.get('field')}: {issue.get('problem')}")
 
         print("  Applying fixes...")
+        _preserved_order_sets = case_data.get("order_sets")
+        _preserved_patient = case_data.get("patient") or None
         case_data = apply_fixes(case_data, issues, ocr_text)
+        if not case_data.get("order_sets") and _preserved_order_sets:
+            case_data["order_sets"] = _preserved_order_sets
+        if not case_data.get("patient") and _preserved_patient:
+            case_data["patient"] = _preserved_patient
         case_data = finalize_case_data(case_data, case_number)
         case_data[f"_confidence_after_round_{round_num}"] = confidence
 
@@ -686,7 +723,14 @@ def process_case_with_confidence_loop(
             print(f"  Max rounds reached. Final confidence: {confidence}%")
 
     final_review = self_review(case_data, ocr_text)
-    final_confidence = final_review.get("scores", {}).get("overall_confidence", 0)
+    final_review_confidence = final_review.get("scores", {}).get("overall_confidence", 0)
+    final_parse_failed = (
+        final_review.get("issues", [{}])[0].get("field") == "parse"
+        if final_review.get("issues") else False
+    )
+    final_confidence = last_known_confidence if final_parse_failed else final_review_confidence
+    if final_parse_failed:
+        print(f"  Final self-review parse failed — using last known confidence: {final_confidence}%")
 
     case_data = {
         k: v
@@ -696,10 +740,15 @@ def process_case_with_confidence_loop(
     case_data["_final_confidence"] = final_confidence
 
     STRUCTURED_CASE_DIR.mkdir(parents=True, exist_ok=True)
+    clean_path = STRUCTURED_CASE_DIR / f"case-{case_number}.json"
     if final_confidence >= 99:
-        output_path = STRUCTURED_CASE_DIR / f"case-{case_number}.json"
-        print(f"\n[5] SERVING -> {output_path} (confidence: {final_confidence}%)")
-        served = True
+        output_path = clean_path
+        if output_path.exists():
+            print(f"\n[5] SKIP WRITE -> {output_path} already exists (not overwritten)")
+            served = True
+        else:
+            print(f"\n[5] SERVING -> {output_path} (confidence: {final_confidence}%)")
+            served = True
     else:
         output_path = STRUCTURED_CASE_DIR / f"case-{case_number}-NEEDS-REVIEW.json"
         case_data["_final_issues"] = final_review.get("issues", [])
@@ -708,7 +757,8 @@ def process_case_with_confidence_loop(
         print(f"\n[5] NEEDS REVIEW -> {output_path} (confidence: {final_confidence}%)")
         served = False
 
-    output_path.write_text(json.dumps(case_data, indent=2) + "\n", encoding="utf-8")
+    if not (final_confidence >= 99 and clean_path.exists()):
+        output_path.write_text(json.dumps(case_data, indent=2) + "\n", encoding="utf-8")
     print(f"    Title:    {case_data.get('title')}")
     print(f"    Diagnosis:{case_data.get('diagnosis')}")
     print(f"    Stacks:   {len(case_data.get('stacks', []))}")
@@ -729,6 +779,27 @@ def finalize_case_data(case_data: dict, case_number: int) -> dict:
     if isinstance(case_data.get("vitals"), dict):
         vitals.update(case_data["vitals"])
     case_data["vitals"] = vitals
+    patient = case_data.get("patient")
+    if isinstance(patient, dict):
+        age = patient.get("age") or "?"
+        sex = patient.get("sex") or "?"
+        case_data["patient"] = f"{sex.capitalize()}, {age}"
+    elif not patient:
+        case_data["patient"] = None
+
+    exam = case_data.get("physical_exam")
+    if isinstance(exam, dict):
+        flat_exam: dict = {}
+        for system in EMPTY_PHYSICAL_EXAM:
+            val = exam.get(system)
+            if isinstance(val, dict):
+                flat_exam[system] = None
+            elif isinstance(val, str) and val.strip():
+                flat_exam[system] = val.strip()
+            else:
+                flat_exam[system] = val
+        case_data["physical_exam"] = flat_exam
+
     return case_data
 
 
@@ -770,11 +841,142 @@ def load_topics() -> dict[int, str]:
 
 def list_screenshots() -> dict[int, Path]:
     mapping: dict[int, Path] = {}
-    for path in sorted(SCREENSHOT_DIR.glob("case_*.png")):
-        parts = path.stem.split("_")
-        if len(parts) >= 2 and parts[1].isdigit():
-            mapping[int(parts[1])] = path
+    search_dirs = [
+        SCREENSHOT_DIR,
+        ROOT_DIR / "game" / "data" / "screenshots",
+    ]
+    patterns = ["case_*.png", "case-*.png", "ccs-*.png"]
+    for directory in search_dirs:
+        if not directory.is_dir():
+            continue
+        for pattern in patterns:
+            for path in sorted(directory.glob(pattern)):
+                stem = path.stem
+                case_num: int | None = None
+                if stem.startswith("case_"):
+                    parts = stem.split("_")
+                    if len(parts) >= 2 and parts[1].isdigit():
+                        case_num = int(parts[1])
+                elif stem.startswith("case-"):
+                    parts = stem.split("-")
+                    if len(parts) >= 2 and parts[1].isdigit():
+                        case_num = int(parts[1])
+                elif stem.startswith("ccs-"):
+                    parts = stem.split("-")
+                    if len(parts) >= 2 and parts[1].isdigit():
+                        case_num = int(parts[1])
+                if case_num is not None:
+                    mapping[case_num] = path
     return mapping
+
+
+def clean_case_json_path(case_number: int) -> Path:
+    return STRUCTURED_CASE_DIR / f"case-{case_number}.json"
+
+
+def needs_review_json_path(case_number: int) -> Path:
+    return STRUCTURED_CASE_DIR / f"case-{case_number}-NEEDS-REVIEW.json"
+
+
+def format_review_errors(case_data: dict | None, validation_errors: list[str] | None = None) -> list[str]:
+    errors: list[str] = []
+    if validation_errors:
+        errors.extend(validation_errors)
+    if isinstance(case_data, dict):
+        for issue in case_data.get("_final_issues") or []:
+            if isinstance(issue, dict):
+                field = issue.get("field") or "issue"
+                problem = issue.get("problem") or issue.get("fix") or "unknown"
+                errors.append(f"{field}: {problem}")
+            else:
+                errors.append(str(issue))
+        for issue in case_data.get("_validation_errors") or []:
+            if issue not in errors:
+                errors.append(str(issue))
+    return errors
+
+
+def run_batch_pipeline() -> int:
+    """Process all screenshots; skip clean case-{n}.json, reprocess NEEDS-REVIEW."""
+    screenshots = list_screenshots()
+    case_numbers = sorted(screenshots.keys())
+
+    print(f"Screenshot directory: {SCREENSHOT_DIR}")
+    print(f"Output directory:     {STRUCTURED_CASE_DIR}")
+    print(f"Total screenshots found: {len(case_numbers)}")
+    print("Case numbers:", ", ".join(str(n) for n in case_numbers))
+    print()
+
+    stats = {
+        "found": len(case_numbers),
+        "done": 0,
+        "review": 0,
+        "skipped": 0,
+        "failed": 0,
+    }
+    needs_review_cases: list[tuple[int, list[str]]] = []
+
+    for case_number in case_numbers:
+        image_path = screenshots[case_number]
+        clean_path = clean_case_json_path(case_number)
+
+        if clean_path.exists():
+            stats["skipped"] += 1
+            print(f"SKIP   case-{case_number} | already processed")
+            continue
+
+        try:
+            case_data, _ocr_text, served = process_case_with_confidence_loop(image_path, case_number)
+        except Exception as exc:
+            stats["failed"] += 1
+            err = str(exc)
+            needs_review_cases.append((case_number, [err]))
+            print(f"FAILED case-{case_number} | {err}")
+            continue
+
+        if case_data is None:
+            stats["failed"] += 1
+            needs_review_cases.append((case_number, ["extraction returned no data"]))
+            print(f"FAILED case-{case_number} | extraction returned no data")
+            continue
+
+        confidence = case_data.get("_final_confidence", 0)
+        stack_count = len(case_data.get("stacks") or [])
+        order_count = len(case_data.get("order_sets") or [])
+        errors = format_review_errors(case_data)
+
+        if served and clean_path.exists():
+            stats["done"] += 1
+            print(
+                f"DONE   case-{case_number} | confidence: {confidence}% | "
+                f"stacks: {stack_count} | order_sets: {order_count}"
+            )
+        else:
+            stats["review"] += 1
+            needs_review_cases.append((case_number, errors or ["confidence below 99%"]))
+            err_text = "; ".join(errors[:3]) if errors else "confidence below 99%"
+            print(
+                f"REVIEW case-{case_number} | confidence: {confidence}% | "
+                f"errors: [{err_text}]"
+            )
+
+    print()
+    print("=== BATCH SUMMARY ===")
+    print(f"Total screenshots found: {stats['found']}")
+    print(f"Successfully processed:    {stats['done']}")
+    print(f"Needs review:              {stats['review']}")
+    print(f"Skipped (already done):    {stats['skipped']}")
+    print(f"Failed:                    {stats['failed']}")
+    print()
+    if needs_review_cases:
+        print("NEEDS-REVIEW cases:")
+        for case_number, errors in needs_review_cases:
+            err_text = "; ".join(errors) if errors else "unknown"
+            print(f"  case-{case_number}: {err_text}")
+    else:
+        print("NEEDS-REVIEW cases: none")
+
+    return 0 if stats["failed"] == 0 else 1
 
 
 def find_duplicate_screenshots(screenshots: dict[int, Path]) -> dict[int, int]:
@@ -1100,9 +1302,9 @@ def main() -> None:
     )
     parser.add_argument(
         "--mode",
-        choices=["resume", "all", "one"],
+        choices=["resume", "all", "one", "batch"],
         default="resume",
-        help="resume = failed cases only; all = full re-extraction; one = single case",
+        help="resume = failed cases only; all = full re-extraction; one = single case; batch = all screenshots with skip rules",
     )
     parser.add_argument("--case-id", type=int, default=None, help="Case number for --mode one")
     args = parser.parse_args()
@@ -1117,6 +1319,9 @@ def main() -> None:
             sys.exit(1)
         process_case(screenshots[args.case_id], args.case_id)
         return
+
+    if args.mode == "batch":
+        sys.exit(run_batch_pipeline())
 
     if args.mode == "resume":
         resume_failed()

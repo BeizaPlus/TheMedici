@@ -18,6 +18,66 @@ export function isValidSceneSrc(src) {
   return s.startsWith('/') || /^https?:/i.test(s);
 }
 
+/** Drop corrupt overrides that cause an all-black ER/briefing scene. */
+export function scrubInvalidSceneStorage() {
+  if (typeof window === 'undefined') return;
+  try {
+    const patientImg = localStorage.getItem(STORAGE.patientImage);
+    if (patientImg && !isValidSceneSrc(patientImg)) {
+      localStorage.removeItem(STORAGE.patientImage);
+      localStorage.removeItem(STORAGE.patientMime);
+    }
+
+    const regenRaw = localStorage.getItem(STORAGE.caseRegenImages);
+    if (regenRaw) {
+      const parsed = JSON.parse(regenRaw);
+      let changed = false;
+      for (const [caseId, src] of Object.entries(parsed)) {
+        if (!isValidSceneSrc(src)) {
+          delete parsed[caseId];
+          changed = true;
+        }
+      }
+      if (changed) {
+        localStorage.setItem(STORAGE.caseRegenImages, JSON.stringify(parsed));
+      }
+    }
+
+    const variantsRaw = localStorage.getItem(STORAGE.sceneVariants);
+    if (variantsRaw) {
+      const parsed = JSON.parse(variantsRaw);
+      let changed = false;
+      for (const [sig, bucket] of Object.entries(parsed)) {
+        if (!bucket || typeof bucket !== 'object') {
+          delete parsed[sig];
+          changed = true;
+          continue;
+        }
+        // ER must always come from built-in/resolveSceneSrc — cached ER URLs caused black play scenes.
+        if (bucket.ER) {
+          delete bucket.ER;
+          changed = true;
+        }
+        for (const [unit, src] of Object.entries(bucket)) {
+          if (!isValidSceneSrc(src)) {
+            delete bucket[unit];
+            changed = true;
+          }
+        }
+        if (Object.keys(bucket).length === 0) {
+          delete parsed[sig];
+          changed = true;
+        }
+      }
+      if (changed) {
+        localStorage.setItem(STORAGE.sceneVariants, JSON.stringify(parsed));
+      }
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
 /** First usable scene image URL, else built-in hospital photo. */
 export function resolveSceneSrc({ forceSrc, overrideSrc, sceneSrc, caseData } = {}) {
   const fallback = getBuiltInPatientSrc(caseData);

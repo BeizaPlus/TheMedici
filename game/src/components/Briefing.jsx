@@ -11,7 +11,7 @@ import {
   writeVisionZones,
 } from '../lib/patientImage.js';
 import { getPresentationHistory } from '../lib/casePresentation.js';
-import { readCaseRegenImage } from '../lib/patientRegen.js';
+import { clearCaseRegenImage, readCaseRegenImage } from '../lib/patientRegen.js';
 import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { unlockAmbience } from '../lib/audio.js';
@@ -321,6 +321,12 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
           className="briefing-scene-img"
           forceSrc={regenSrc}
           showVideoBackground={false}
+          onSceneError={() => {
+            if (regenSrc) {
+              clearCaseRegenImage(caseData?.id);
+              setRegenSrc(null);
+            }
+          }}
         />
         <div className="briefing-scene-dim" />
         <div

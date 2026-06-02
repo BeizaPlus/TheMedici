@@ -1,6 +1,7 @@
 import { STORAGE } from './storageKeys.js';
 import { DEFAULT_TIMER_SECONDS, normalizeTimerSeconds } from './caseTimer.js';
 import { getHighAcuityCaseIds } from './examPrep.js';
+import { DEFAULT_NAME_REGION, normalizeNameRegion } from './patientNameRegions.js';
 
 const CONDITION_CASE_IDS = {
   diabetes: ['004', '032', '056', '060'],
@@ -61,7 +62,8 @@ export function readAudienceProfile() {
       ? parsed.difficulty
       : 'standard';
     const timerSeconds = normalizeTimerSeconds(parsed.timerSeconds, DEFAULT_TIMER_SECONDS);
-    return { level, condition, playRole, difficulty, timerSeconds };
+    const nameRegion = normalizeNameRegion(parsed.nameRegion || DEFAULT_NAME_REGION);
+    return { level, condition, playRole, difficulty, timerSeconds, nameRegion };
   } catch {
     return null;
   }
@@ -72,6 +74,9 @@ export function writeAudienceProfile(profile) {
     const payload = { ...profile };
     if (payload.timerSeconds != null) {
       payload.timerSeconds = normalizeTimerSeconds(payload.timerSeconds, DEFAULT_TIMER_SECONDS);
+    }
+    if (payload.nameRegion != null) {
+      payload.nameRegion = normalizeNameRegion(payload.nameRegion);
     }
     localStorage.setItem(STORAGE.audienceProfile, JSON.stringify(payload));
   } catch {

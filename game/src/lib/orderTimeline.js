@@ -66,3 +66,64 @@ export function rebuildOrderTimelineFromCheckpoint({
   });
   return events;
 }
+
+export function orderTimelineFromServerSession(session) {
+  if (!session?.timeline?.length) return [];
+  const startedMs = session.startedAt ? new Date(session.startedAt).getTime() : Date.now();
+  let orderIndex = 0;
+  return session.timeline
+    .map((ev) => {
+      const at = ev.at ? new Date(ev.at).getTime() : startedMs;
+      if (ev.type === 'stack') {
+        orderIndex += 1;
+        return {
+          id: `srv-stack-${ev.stackId || ev.label}-${at}`,
+          at,
+          label: ev.label || 'Order',
+          kind: 'order',
+          orderIndex,
+        };
+      }
+      if (ev.type === 'extra_order') {
+        orderIndex += 1;
+        return {
+          id: `srv-extra-${ev.label}-${at}`,
+          at,
+          label: ev.label || 'Order',
+          kind: 'extra',
+          orderIndex,
+        };
+      }
+      if (ev.type === 'location') {
+        return {
+          id: `srv-xfer-${ev.location || ev.label}-${at}`,
+          at,
+          label: ev.label || `Transfer to ${ev.location}`,
+          kind: 'transfer',
+          orderIndex: null,
+        };
+      }
+      return null;
+    })
+    .filter(Boolean);
+}
+
+/** Prefer the timeline with more order rows; merge unique ids when equal length. */
+export function pickBestOrderTimeline(...candidates) {
+  const lists = candidates
+    .filter((rows) => Array.isArray(rows) && rows.length)
+    .map((rows) => [...rows]);
+  if (!lists.length) return [];
+  lists.sort((a, b) => b.length - a.length);
+  const best = [...lists[0]];
+  const seen = new Set(best.map((ev) => ev.id));
+  for (let i = 1; i < lists.length; i += 1) {
+    for (const ev of lists[i]) {
+      if (!seen.has(ev.id)) {
+        seen.add(ev.id);
+        best.push(ev);
+      }
+    }
+  }
+  return best.sort((a, b) => (a.at || 0) - (b.at || 0));
+}

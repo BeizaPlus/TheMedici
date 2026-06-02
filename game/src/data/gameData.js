@@ -127,6 +127,7 @@ export function toGameCase(ccsCase, catalog) {
     vitalsText,
     historyText,
     hpi_narrative: hpiNarrative || undefined,
+    patient_name_default: prepared?.patient_name_default || undefined,
     physical_exam: prepared?.physical_exam || undefined,
     clinical_tip: clinicalTip,
     objective,
@@ -138,6 +139,7 @@ export function toGameCase(ccsCase, catalog) {
       chief_complaint: introText,
       historyText,
       title: ccsCase.title,
+      patientSex: sexHint,
     }),
     patientSex: sexHint,
     preparedMeta: prepared

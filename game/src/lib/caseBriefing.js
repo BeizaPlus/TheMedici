@@ -1,4 +1,6 @@
 import { formatClinicalText } from './clinicalTextFormat.js';
+import { applyPatientName, resolvePatientName } from './patientName.js';
+import { getPreparedCase } from './caseNarrative.js';
 
 function formatVitalsLine(vitals = {}) {
   const temp =
@@ -22,10 +24,31 @@ function resolveHpiText(source) {
   return '';
 }
 
-/** HPI narrative string for tabs — hpi_narrative only (no SOAP / history fallbacks). */
+function resolveDisplayPatientName(caseData) {
+  if (caseData?.patientDisplayName) {
+    return caseData.patientDisplayName;
+  }
+  return resolvePatientName(caseData);
+}
+
+/** Third-person clinical HPI template (never patient-voice regex). */
+function getClinicalHpiTemplate(caseData) {
+  const prepared = getPreparedCase(caseData?.id);
+  return (
+    prepared?.hpi_narrative ||
+    caseData?.clinical_hpi_narrative ||
+    caseData?.hpi_narrative ||
+    ''
+  );
+}
+
+/** HPI narrative string for tabs — clinical voice with {{patient_name}} substituted. */
 export function getCaseHpiNarrative(caseData, presentationHpi = '') {
   void presentationHpi;
-  return resolveHpiText(caseData?.hpi_narrative);
+  const raw = resolveHpiText(getClinicalHpiTemplate(caseData));
+  if (!raw) return '';
+  const displayName = resolveDisplayPatientName(caseData);
+  return applyPatientName(raw, displayName);
 }
 
 /** Full HPI for briefing / sidebar. */
@@ -37,11 +60,18 @@ export function getBriefingHpi(caseData, caseFlow, presentationHpi = '') {
   return 'No HPI available for this case.';
 }
 
-/** Multi-line physical exam for briefing. */
+/** One line per exam system (General, CV, Resp, …) — uses pre-wrap in UI. */
+export function formatExamForDisplay(examRows) {
+  if (!Array.isArray(examRows) || examRows.length === 0) return '';
+  return examRows
+    .map(([system, finding]) => `${String(system).trim()}: ${String(finding).trim()}`)
+    .join('\n\n');
+}
+
 export function getBriefingExam(caseFlow) {
   const exam = caseFlow?.exam || [];
   if (!exam.length) return 'No physical exam findings documented yet.';
-  return exam.map(([system, finding]) => `${system}\n${finding}`).join('\n\n');
+  return formatExamForDisplay(exam);
 }
 
 /** Treatment plan summary (text only — stacks appear after Begin). */

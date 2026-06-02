@@ -36,8 +36,43 @@ anything over 95MB must NOT be pushed to GitHub.
 
 ## CHANGE RULES
 Only touch files directly related to the task.
-If the task says "replace icons" — touch only the toolbar component.
-If the task says "wire videos" — touch only the video config file.
+If the task says "replace icons" — touch only `SceneToolbarIcons.jsx` and the component that imports the icon (not random react-icons elsewhere).
+
+---
+
+## ICON RULES (Tabler — non-negotiable)
+
+**Source:** [Tabler Icons](https://tabler.io/icons) — same set as stethoscope, clipboard, chat, settings in the play dock.
+
+**Single file for toolbar / scene chrome icons:**
+`src/components/sceneToolbar/SceneToolbarIcons.jsx`
+
+**When adding or changing an icon:**
+1. Find the icon on https://tabler.io/icons (outline, 24×24, stroke 2).
+2. Copy the SVG `<path>` values from Tabler (or `tabler/tabler-icons` on GitHub).
+3. Add/export a named component in `SceneToolbarIcons.jsx` using the same wrapper as existing icons:
+   - `className="toolbar-icon"`
+   - `width="24" height="24" viewBox="0 0 24 24"`
+   - `fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"`
+4. Import that component from `SceneToolbarIcons.jsx` in buttons/toolbars — **never** import `react-icons`, Feather, or Material icons for play-dock / case UI chrome.
+
+**Already mapped (examples):**
+| UI | Tabler icon | Component |
+|----|-------------|-----------|
+| Stethoscope | `stethoscope` | `IconStethoscope` |
+| SOAP chart | `clipboard-pulse` | `IconClipboardPulse` |
+| Case chat / stacks | `file-medical`, `message` | `IconFileMedical`, `IconMessage` |
+| Voice record | `microphone` | `IconMicrophone` |
+| Stop recording | `player-stop` | `IconPlayerStop` |
+| Notes tab | `clipboard` + lines | `IconNotes` |
+
+**`CaseRecordButton.jsx`** uses `IconMicrophone` / `IconPlayerStop` only — not `FiMic` / `FiSquare`.
+
+**Case chat markdown:** assistant replies may use `**bold**`; render with `src/lib/chatMessageFormat.jsx` (`renderChatMarkdown`), not raw asterisks in the UI.
+
+**Do not** add one-off inline SVGs in `Play.jsx`, `CaseChatPanel.jsx`, or CSS — extend `SceneToolbarIcons.jsx` instead.
+
+---
 If the task says "plug in cases" — touch only the data files.
 
 ## ROLLBACK RULE — UI / LAYOUT CHANGES

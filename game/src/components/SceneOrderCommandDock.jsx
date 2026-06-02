@@ -1,5 +1,7 @@
 import { useRef } from 'react';
+import { FiSend } from 'react-icons/fi';
 import { IconCamera, IconFileMedical } from './sceneToolbar/SceneToolbarIcons.jsx';
+import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 
 export default function SceneOrderCommandDock({
   orderCommand,
@@ -8,16 +10,32 @@ export default function SceneOrderCommandDock({
   hint = '',
   hasMatch = false,
   knownOrder = false,
+  isChatMode = false,
+  chatBusy = false,
+  chatOpen = false,
   onScreenshot,
   captureBusy = false,
   autocompleteText = null,
+  quickReply = null,
+  replyExpanded = false,
+  onToggleReplyExpanded,
+  onDismissReply,
+  onOpenFullChat,
 }) {
   const inputRef = useRef(null);
+  const showDockReply = Boolean(quickReply?.answer && !chatOpen && replyExpanded);
+  const hintText =
+    chatBusy && isChatMode
+      ? 'Thinking…'
+      : chatOpen && quickReply?.answer
+        ? 'Answer in chat →'
+        : hint;
+  const showHintRow = Boolean(hintText?.trim());
 
   return (
-    <div className="scene-order-command-dock">
+    <div className={`scene-order-command-dock${showDockReply ? ' scene-order-command-dock--reply-open' : ''}`}>
       <header className="scene-order-command-head">
-        <span className="scene-order-command-title">Order</span>
+        <span className="scene-order-command-title">Order · Chat</span>
         <div className="scene-order-command-actions">
           <button
             type="button"
@@ -54,21 +72,67 @@ export default function SceneOrderCommandDock({
                 });
               }
             }}
-            placeholder="Type an order, e.g. ECG"
-            aria-label="Type order to match a treatment stack"
+            placeholder="Type an order or ask about this case…"
+            aria-label="Type an order or ask about this case"
             aria-autocomplete="inline"
           />
         </div>
-        <button type="submit" className="btn-ghost stack-command-btn">
-          Order
-        </button>
-        <div
-          className={`stack-command-match ${hasMatch ? 'has-match' : knownOrder ? 'known-order' : ''}`}
-          aria-live="polite"
+        <button
+          type="submit"
+          className={`btn-ghost stack-command-btn${isChatMode ? ' stack-command-btn--chat' : ''}`}
+          disabled={chatBusy && isChatMode}
+          aria-label={isChatMode ? 'Send chat message' : 'Place order'}
         >
-          {hint || '\u00a0'}
-        </div>
+          {isChatMode ? <FiSend aria-hidden /> : 'Order'}
+        </button>
+        {showHintRow && (
+          <div
+            className={`stack-command-match ${hasMatch ? 'has-match' : knownOrder ? 'known-order' : ''}${chatBusy && isChatMode ? ' is-thinking' : ''}`}
+            aria-live="polite"
+          >
+            {hintText}
+          </div>
+        )}
       </form>
+
+      {quickReply?.answer && !chatOpen && (
+        <div className={`scene-order-command-reply${replyExpanded ? ' is-expanded' : ' is-collapsed'}`}>
+          <button
+            type="button"
+            className="scene-order-command-reply-toggle"
+            onClick={() => onToggleReplyExpanded?.()}
+            aria-expanded={replyExpanded}
+          >
+            <span className="scene-order-command-reply-label">
+              {replyExpanded ? 'Hide answer' : 'Show answer'}
+            </span>
+            <span className="scene-order-command-reply-chevron" aria-hidden>
+              {replyExpanded ? '▴' : '▾'}
+            </span>
+          </button>
+          {replyExpanded && (
+            <div className="scene-order-command-reply-body selectable-text">
+              {quickReply.question && (
+                <p className="scene-order-command-reply-question">
+                  <span className="scene-order-command-reply-you">You</span>
+                  {quickReply.question}
+                </p>
+              )}
+              <div className="scene-order-command-reply-answer">
+                {renderChatMarkdown(quickReply.answer)}
+              </div>
+              <div className="scene-order-command-reply-actions">
+                <button type="button" className="btn-ghost btn-ghost-sm" onClick={() => onOpenFullChat?.()}>
+                  Open chat
+                </button>
+                <button type="button" className="btn-ghost btn-ghost-sm" onClick={() => onDismissReply?.()}>
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
