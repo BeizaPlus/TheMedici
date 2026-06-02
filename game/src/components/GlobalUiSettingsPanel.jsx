@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import { readUiPrefs, writeUiPrefs } from '../lib/uiPrefs.js';
+import { applyPlayUiFavorite, isPlayUiFavoriteActive, readPlayUiFavorite } from '../lib/playUiFavorite.js';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
 
 function readShowCues() {
@@ -27,6 +28,7 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
   const [showCues, setShowCues] = useState(readShowCues);
   const [dropMode, setDropMode] = useState(readDropMode);
   const [timedMode, setTimedMode] = useState(() => readUiPrefs().timedMode);
+  const [favoriteSaved, setFavoriteSaved] = useState(isPlayUiFavoriteActive);
 
   const persistShowCues = (next) => {
     setShowCues(next);
@@ -122,6 +124,25 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
             Exam
           </button>
         </div>
+      </div>
+
+      <div className="global-ui-settings-block">
+        <p className="global-ui-settings-label">Play layout</p>
+        <p className="global-ui-settings-note">
+          {favoriteSaved
+            ? `Favorite: ${readPlayUiFavorite().label}`
+            : 'Wide stacks, scene monitor dock, notes session foot.'}
+        </p>
+        <button
+          type="button"
+          className="welcome-panel-btn"
+          onClick={() => {
+            applyPlayUiFavorite();
+            setFavoriteSaved(true);
+          }}
+        >
+          ⭐ Save favorite play layout
+        </button>
       </div>
 
       <button type="button" className="welcome-panel-btn" onClick={resetAllUi}>

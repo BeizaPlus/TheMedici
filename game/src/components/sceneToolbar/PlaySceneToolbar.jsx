@@ -5,10 +5,12 @@ import {
   IconLockOpen,
   IconMessage,
   IconMoon,
+  IconNotes,
   IconRotate,
   IconSettings,
   IconStethoscope,
 } from './SceneToolbarIcons.jsx';
+import CaseRecordButton from '../CaseRecordButton.jsx';
 
 function ToolbarBtn({ active, amber, className = '', children, ...rest }) {
   return (
@@ -37,6 +39,7 @@ export default function PlaySceneToolbar({
   examOpen,
   historyOpen,
   stacksOpen,
+  notesOpen,
   chatOpen,
   showCues,
   darkMode,
@@ -44,9 +47,11 @@ export default function PlaySceneToolbar({
   settingsOpen,
   settingsRef,
   settingsPopover,
+  recordButtonProps,
   onToggleExam,
   onToggleHistory,
   onOpenStacks,
+  onToggleNotes,
   onToggleChat,
   onRestart,
   onToggleCues,
@@ -84,6 +89,17 @@ export default function PlaySceneToolbar({
         <ToolbarBtn active={chatOpen} onClick={onToggleChat} title="Order log" aria-label="Order log">
           <IconMessage />
         </ToolbarBtn>
+        <ToolbarBtn
+          active={notesOpen}
+          onClick={onToggleNotes}
+          title="Case notes"
+          aria-label="Case notes"
+        >
+          <IconNotes />
+        </ToolbarBtn>
+        {recordButtonProps ? (
+          <CaseRecordButton {...recordButtonProps} variant="toolbar" iconOnly />
+        ) : null}
       </ToolbarGroup>
 
       <ToolbarGroup label="Case">

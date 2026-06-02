@@ -45,6 +45,26 @@ export default function App() {
     prefetchMonitorAudio();
   }, []);
 
+  // ── ?case=126 deep-link: auto-launch; resume play if checkpoint matches ──
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const caseId = params.get('case');
+    if (!caseId) return;
+    const gameCase = getCaseById(caseId);
+    if (!gameCase) return;
+    const cp = readPlayCheckpoint();
+    setCurrentCase(gameCase);
+    unlockAmbience();
+    startIcuMonitor({ fadeMs: 1800 });
+    if (cp?.caseId === String(gameCase.id) && cp.screen === 'play') {
+      setResumeCheckpoint(cp);
+      setPlayMode(cp.playMode || 'browse');
+      setScreen(SCREENS.play);
+      return;
+    }
+    setScreen(SCREENS.briefing);
+  }, []);
+
   useEffect(() => {
     if (!studioBuild || typeof window === 'undefined') return undefined;
     window.runEval = () => runEvalSuite();

@@ -92,6 +92,28 @@
   opacity: 1;
 }
 
+.dock-toolbar-nav .case-record-toolbar {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  margin: 0;
+  padding: 0;
+  font-size: 1.1rem;
+}
+
+.dock-toolbar-nav .case-record-toolbar.recording {
+  color: #ff8a8a;
+  background: rgba(220, 80, 80, 0.14);
+}
+
+.dock-toolbar-nav .case-record-toolbar:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .dock-toolbar-nav .toolbar-sep {
   display: none;
 }
@@ -104,6 +126,10 @@
 }
 
 .game-sidebar.collapsed .dock-toolbar {
+  display: none;
+}
+
+.dock-toolbar--collapsible.is-collapsed .dock-toolbar-body {
   display: none;
 }
 
@@ -168,6 +194,9 @@
   color: rgba(244, 242, 236, 0.88);
   font-size: 0.78rem;
   line-height: 1.45;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
 }
 
 .conversation-entry.user {

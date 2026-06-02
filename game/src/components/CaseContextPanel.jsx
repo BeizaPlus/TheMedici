@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FiVolume2 } from 'react-icons/fi';
 import CcsScreenshotLink from './CcsScreenshotLink.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
+import { formatExamForDisplay } from '../lib/caseBriefing.js';
 
 export default function CaseContextPanel({
   caseData,
@@ -44,15 +45,19 @@ export default function CaseContextPanel({
   const notesEnabled = !isBriefing && showNotesTab;
   const isTreatment = tab === 'treatment';
   const isNotes = tab === 'notes';
+  const stacksWide = isTreatment && Boolean(treatmentPanel);
 
   useEffect(() => {
     if (!isControlled) setInfoTab(defaultTab);
   }, [defaultTab, caseData?.id, isControlled]);
 
-  const hpiNarrative =
-    (typeof caseData?.hpi_narrative === 'string' && caseData.hpi_narrative.trim()) ||
-    (typeof hpiText === 'string' && hpiText.trim()) ||
-    '';
+  const hpiNarrative = isBriefing
+    ? (typeof hpiText === 'string' && hpiText.trim()) ||
+      (typeof caseData?.hpi_narrative === 'string' && caseData.hpi_narrative.trim()) ||
+      ''
+    : (typeof caseData?.hpi_narrative === 'string' && caseData.hpi_narrative.trim()) ||
+      (typeof hpiText === 'string' && hpiText.trim()) ||
+      '';
   const bodyText =
     tab === 'hpi'
       ? hpiNarrative || 'HPI not yet available for this case.'
@@ -71,14 +76,16 @@ export default function CaseContextPanel({
 
   return (
     <div
-      className={`sidebar-top clinical-pack-top case-context-panel ${treatmentEnabled && treatmentPanel ? 'case-context-panel--play' : ''}`.trim()}
+      className={`sidebar-top clinical-pack-top case-context-panel ${treatmentEnabled && treatmentPanel ? 'case-context-panel--play' : ''}${stacksWide ? ' case-context-panel--stacks-wide' : ''}${isNotes ? ' case-context-panel--notes-tab' : ''}`.trim()}
     >
       {!hideHeader && (
         <>
           <div className="pack-heading-row">
             <p className="sidebar-case-id">
               Case {caseData.ccsNumber || caseData.id}
-              <CcsScreenshotLink caseData={caseData} className="ccs-screenshot-link ccs-screenshot-link--inline" />
+              {isBriefing && (
+                <CcsScreenshotLink caseData={caseData} className="ccs-screenshot-link ccs-screenshot-link--inline" />
+              )}
             </p>
             {headerControls}
             <span className="pack-tag">{brandName}</span>
@@ -145,24 +152,16 @@ export default function CaseContextPanel({
           {hpiNarrative || 'HPI not yet available for this case.'}
         </div>
       )}
-      {tab === 'exam' && !isTreatment && !isNotes && hasStructuredExam && (
-        <div className="case-context-body clinical-text-block" style={textStyle}>
-          {Object.entries(physicalExam)
-            .filter(([, value]) => value !== null && value !== '')
-            .map(([system, finding]) => (
-              <div key={system} className="exam-system">
-                <span className="system-label">
-                  {system.toUpperCase().replace(/_/g, ' ')}
-                </span>
-                <span className="system-finding">{finding}</span>
-              </div>
-            ))}
+      {tab === 'exam' && !isTreatment && !isNotes && (
+        <div className="hpi-text case-context-body clinical-text-block exam-by-system" style={textStyle}>
+          {hasStructuredExam
+            ? formatExamForDisplay(
+                Object.entries(physicalExam)
+                  .filter(([, value]) => value !== null && value !== '')
+                  .map(([system, finding]) => [system.replace(/_/g, ' '), finding]),
+              )
+            : bodyText}
         </div>
-      )}
-      {tab === 'exam' && !isTreatment && !isNotes && !hasStructuredExam && (
-        <p className="sub case-context-body clinical-text-block" style={textStyle} title={bodyText}>
-          {bodyText}
-        </p>
       )}
       {tab !== 'hpi' && tab !== 'exam' && !isTreatment && !isNotes && (
         <p className="sub case-context-body clinical-text-block" style={textStyle} title={bodyText}>
@@ -179,8 +178,15 @@ export default function CaseContextPanel({
           {notesText}
         </p>
       )}
-      {isNotes && notesPanel}
-      {showStats && (
+      {notesEnabled && notesPanel && (
+        <div
+          className={`case-notes-tab-wrap${isNotes ? '' : ' case-notes-tab-wrap--hidden'}`}
+          aria-hidden={!isNotes}
+        >
+          {notesPanel}
+        </div>
+      )}
+      {showStats && !stacksWide && !isNotes && (
         <div className="pack-stats">
           <span>
             Stacks left <strong>{readyCount}</strong>

@@ -24,6 +24,8 @@ export const STORAGE = {
   playDockLayout: 'schoonmaker_play_dock_layout',
   briefingDockLayout: 'schoonmaker_briefing_dock_layout',
   briefingUiLayout: 'schoonmaker_briefing_ui_layout',
+  playUiFavorite: 'schoonmaker_play_ui_favorite',
+  activePlayCheckpoint: 'schoonmaker_active_play_checkpoint',
   uiPrefs: 'schoonmaker_ui_prefs',
 };
 
@@ -59,6 +61,11 @@ export function migrateLegacyStorage() {
       if (localStorage.getItem(newKey) == null) {
         localStorage.setItem(newKey, localStorage.getItem(key));
       }
+    }
+    const brokenCheckpoint = localStorage.getItem('undefined');
+    if (brokenCheckpoint && !localStorage.getItem(STORAGE.activePlayCheckpoint)) {
+      localStorage.setItem(STORAGE.activePlayCheckpoint, brokenCheckpoint);
+      localStorage.removeItem('undefined');
     }
   } catch {
     /* ignore */

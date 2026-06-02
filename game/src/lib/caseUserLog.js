@@ -60,15 +60,11 @@ export async function fetchCaseUserData(caseId) {
 }
 
 export async function startPlaySession(caseId, meta = {}) {
-  try {
-    const data = await apiJson(`/api/user/case/${encodeURIComponent(caseId)}/session/start`, {
-      method: 'POST',
-      body: JSON.stringify(meta),
-    });
-    return data.sessionId;
-  } catch {
-    return null;
-  }
+  const data = await apiJson(`/api/user/case/${encodeURIComponent(caseId)}/session/start`, {
+    method: 'POST',
+    body: JSON.stringify(meta),
+  });
+  return data.sessionId || null;
 }
 
 export async function endPlaySession(caseId, sessionId, result = {}) {
@@ -133,8 +129,8 @@ export async function uploadCaseRecording(caseId, sessionId, blob, durationMs) {
       },
     );
     return data.recording || null;
-  } catch {
-    return null;
+  } catch (e) {
+    throw e instanceof Error ? e : new Error('Could not save recording');
   }
 }
 

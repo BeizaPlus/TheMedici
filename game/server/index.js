@@ -24,13 +24,20 @@ import {
   saveRecording,
   startCaseSession,
 } from './userCaseStore.js';
+import {
+  mergeVoiceNoteTranscript,
+  transcribeAudioChunk,
+  voiceNoteMergeAvailable,
+  voiceNoteWhisperAvailable,
+} from './voiceNoteTranscribe.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const GAME_ROOT = path.join(__dirname, '..');
 const REPO_ROOT = path.join(__dirname, '../..');
 const PORT = Number(process.env.SPORTMAKER_API_PORT || 3001);
 dotenv.config({ path: path.join(GAME_ROOT, '.env') });
-dotenv.config({ path: path.join(REPO_ROOT, '.env') });
+// Parent MeWorld/.env wins for API keys (game/.env is for chatterbox-only overrides).
+dotenv.config({ path: path.join(REPO_ROOT, '.env'), override: true });
 
 const app = express();
 app.use(cors());
@@ -105,18 +112,31 @@ function pad3(n) {
 const VISION_PROMPT = `Medical training game: return ONLY JSON with keys zone-monitor, zone-iv-bag, zone-blood, zone-arm, zone-icu.
 Each value: { "cx": 0-1, "cy": 0-1, "w": 0.05-0.2, "h": 0.05-0.15 } (center + size as fraction of image).`;
 
-const CHAT_MODEL = process.env.OPENAI_CHAT_MODEL || 'gpt-4o-mini';
+const OPENAI_CHAT_MODEL = process.env.OPENAI_CHAT_MODEL || 'gpt-4o-mini';
+const DEEPSEEK_CHAT_MODEL = process.env.DEEPSEEK_CHAT_MODEL || 'deepseek-chat';
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || '';
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
 const caseChatSessions = new Map();
 
-function openAiKeyOrError(res) {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) {
-    res.status(400).json({
-      error: 'Add OPENAI_API_KEY to .env in the project root (see .env.example)',
-    });
-    return null;
-  }
-  return key;
+function chatProvider() {
+  if (DEEPSEEK_API_KEY) return 'deepseek';
+  if (OPENAI_API_KEY) return 'openai';
+  return null;
+}
+
+function chatModel() {
+  const provider = chatProvider();
+  if (provider === 'deepseek') return DEEPSEEK_CHAT_MODEL;
+  return OPENAI_CHAT_MODEL;
+}
+
+function chatApiKeyOrError(res) {
+  if (DEEPSEEK_API_KEY) return DEEPSEEK_API_KEY;
+  if (OPENAI_API_KEY) return OPENAI_API_KEY;
+  res.status(400).json({
+    error: 'Add DEEPSEEK_API_KEY or OPENAI_API_KEY to .env in the project root (see .env.example)',
+  });
+  return null;
 }
 
 function pruneCaseChatSessions() {
@@ -145,14 +165,21 @@ ${JSON.stringify(caseContext, null, 2)}`;
 }
 
 async function callCaseChatCompletion(key, messages) {
-  const r = await fetch('https://api.openai.com/v1/chat/completions', {
+  const provider = chatProvider();
+  const model = chatModel();
+  const endpoint =
+    provider === 'deepseek'
+      ? 'https://api.deepseek.com/v1/chat/completions'
+      : 'https://api.openai.com/v1/chat/completions';
+
+  const r = await fetch(endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${key}`,
     },
     body: JSON.stringify({
-      model: CHAT_MODEL,
+      model,
       max_tokens: 700,
       temperature: 0.35,
       messages,
@@ -160,7 +187,7 @@ async function callCaseChatCompletion(key, messages) {
   });
   if (!r.ok) {
     const err = await r.text();
-    throw new Error(err || `OpenAI error ${r.status}`);
+    throw new Error(err || `${provider} error ${r.status}`);
   }
   const data = await r.json();
   return data.choices?.[0]?.message?.content?.trim() || 'No response.';
@@ -265,9 +292,13 @@ async function generateSceneImage({ imageBase64, mimeType, prompt }) {
 app.get('/api/health', (_req, res) => {
   const scriptReady = fs.existsSync(READ_CASE_SCRIPT);
   const pythonReady = fs.existsSync(CHATTERBOX_PYTHON);
+  const provider = chatProvider();
   res.json({
     ok: true,
-    openai: Boolean(process.env.OPENAI_API_KEY),
+    openai: Boolean(OPENAI_API_KEY),
+    deepseek: Boolean(DEEPSEEK_API_KEY),
+    chatProvider: provider,
+    chatModel: chatModel(),
     fal: Boolean(process.env.FAL_KEY),
     sceneProvider: sceneImageProvider(),
     falSceneModel: FAL_SCENE_MODEL,
@@ -292,7 +323,7 @@ app.get('/api/user/case/:caseId', async (req, res) => {
   const caseId = String(req.params.caseId || '').trim();
   if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
   try {
-    const data = await readCaseUser(caseId);
+    const data = await readCaseUser(caseId, { migrate: true });
     if (!data) return res.json({ ok: true, caseId, data: null });
     return res.json({ ok: true, caseId, ...data });
   } catch (e) {
@@ -370,8 +401,54 @@ app.post('/api/user/case/:caseId/session/:sessionId/recording', async (req, res)
   }
 });
 
+app.get('/api/voice-note/status', (_req, res) => {
+  return res.json({
+    ok: true,
+    merge: voiceNoteMergeAvailable(),
+    whisper: voiceNoteWhisperAvailable(),
+  });
+});
+
+app.post('/api/voice-note/merge', async (req, res) => {
+  if (!voiceNoteMergeAvailable()) {
+    return res.status(400).json({
+      error: 'Add DEEPSEEK_API_KEY or OPENAI_API_KEY for voice note transcription',
+    });
+  }
+  const { priorTranscript = '', chunkText = '' } = req.body || {};
+  try {
+    const transcript = await mergeVoiceNoteTranscript(priorTranscript, chunkText);
+    return res.json({ ok: true, transcript });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/voice-note/transcribe-chunk', async (req, res) => {
+  const { audioBase64, mimeType, priorTranscript = '' } = req.body || {};
+  if (!audioBase64) return res.status(400).json({ error: 'Missing audioBase64' });
+  if (!voiceNoteWhisperAvailable()) {
+    return res.status(400).json({
+      error: 'Add OPENAI_API_KEY for audio chunk transcription (or use Chrome for live speech)',
+    });
+  }
+  try {
+    const buffer = Buffer.from(audioBase64, 'base64');
+    const chunkText = await transcribeAudioChunk(buffer, mimeType || 'audio/webm');
+    if (!chunkText) {
+      return res.json({ ok: true, transcript: String(priorTranscript || '').trim(), chunkText: '' });
+    }
+    const transcript = voiceNoteMergeAvailable()
+      ? await mergeVoiceNoteTranscript(priorTranscript, chunkText)
+      : `${String(priorTranscript || '').trim()}${priorTranscript ? ' ' : ''}${chunkText}`.trim();
+    return res.json({ ok: true, transcript, chunkText });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
 app.post('/api/case-chat/start', async (req, res) => {
-  const key = openAiKeyOrError(res);
+  const key = chatApiKeyOrError(res);
   if (!key) return;
 
   const { caseContext } = req.body || {};
@@ -395,7 +472,7 @@ app.post('/api/case-chat/start', async (req, res) => {
 });
 
 app.post('/api/case-chat/message', async (req, res) => {
-  const key = openAiKeyOrError(res);
+  const key = chatApiKeyOrError(res);
   if (!key) return;
 
   const { sessionId, message } = req.body || {};

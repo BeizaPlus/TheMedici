@@ -36,15 +36,73 @@ function defaultCaseUser(caseId, meta = {}) {
       lastPlayedAt: null,
     },
     chatHistory: [],
+    recordings: [],
     sessions: [],
   };
 }
 
-export async function readCaseUser(caseId) {
+/** Gather recordings stored on individual play sessions (legacy layout). */
+function collectSessionRecordings(data) {
+  const rows = [];
+  for (const session of data.sessions || []) {
+    for (const rec of session.recordings || []) {
+      rows.push({
+        ...rec,
+        sessionId: rec.sessionId || session.id,
+        attempt: session.attempt,
+      });
+    }
+  }
+  rows.sort((a, b) => String(a.at || '').localeCompare(String(b.at || '')));
+  return rows;
+}
+
+/** Ensure case-level append-only recording slots (never overwrite prior entries). */
+export function ensureCaseRecordings(data) {
+  if (!data) return { data, changed: false };
+  let changed = false;
+
+  if (!Array.isArray(data.recordings)) {
+    data.recordings = [];
+    changed = true;
+  }
+
+  const knownIds = new Set(data.recordings.map((rec) => rec.id).filter(Boolean));
+  for (const legacy of collectSessionRecordings(data)) {
+    if (legacy.id && knownIds.has(legacy.id)) continue;
+    data.recordings.push(legacy);
+    if (legacy.id) knownIds.add(legacy.id);
+    changed = true;
+  }
+
+  data.recordings.sort((a, b) => String(a.at || '').localeCompare(String(b.at || '')));
+  data.recordings.forEach((rec, index) => {
+    const slot = index + 1;
+    if (rec.slot !== slot) {
+      rec.slot = slot;
+      changed = true;
+    }
+  });
+
+  const count = data.recordings.length;
+  if ((data.stats?.recordings || 0) !== count) {
+    data.stats.recordings = count;
+    changed = true;
+  }
+
+  return { data, changed };
+}
+
+export async function readCaseUser(caseId, { migrate = false } = {}) {
   ensureUserDirs();
   try {
     const raw = await fsp.readFile(caseFilePath(caseId), 'utf8');
-    return JSON.parse(raw);
+    const data = JSON.parse(raw);
+    const { data: normalized, changed } = ensureCaseRecordings(data);
+    if (migrate && changed) {
+      await writeCaseUser(caseId, normalized);
+    }
+    return normalized;
   } catch {
     return null;
   }
@@ -145,27 +203,50 @@ export async function saveRecording(caseId, sessionId, buffer, { durationMs, mim
   const relPath = `recordings/${String(caseId).padStart(3, '0')}/${filename}`;
   await fsp.writeFile(path.join(caseDir, filename), buffer);
 
-  const data = await readCaseUser(caseId);
-  if (!data) return null;
+  const data = await getOrCreateCaseUser(caseId);
+  ensureCaseRecordings(data);
+
+  const slot = data.recordings.length + 1;
   const rec = {
     id: recId,
+    slot,
     at: new Date().toISOString(),
     durationMs: durationMs || 0,
     mimeType: mimeType || 'audio/webm',
     file: relPath,
+    sessionId: sessionId || null,
   };
-  const session = data.sessions.find((s) => s.id === sessionId);
+
+  data.recordings.push(rec);
+
+  let session = data.sessions.find((s) => s.id === sessionId);
+  if (!session) {
+    session =
+      [...(data.sessions || [])].reverse().find((s) => !s.endedAt) ||
+      data.sessions[data.sessions.length - 1] ||
+      null;
+  }
   if (session) {
-    session.recordings.push(rec);
+    if (!Array.isArray(session.recordings)) session.recordings = [];
+    session.recordings.push({
+      id: rec.id,
+      slot: rec.slot,
+      at: rec.at,
+      durationMs: rec.durationMs,
+      mimeType: rec.mimeType,
+      file: rec.file,
+    });
     session.timeline.push({
       at: rec.at,
       type: 'recording',
       recordingId: recId,
+      slot: rec.slot,
       durationMs: rec.durationMs,
       file: relPath,
     });
   }
-  data.stats.recordings = (data.stats.recordings || 0) + 1;
+
+  data.stats.recordings = data.recordings.length;
   await writeCaseUser(caseId, data);
   return rec;
 }

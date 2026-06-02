@@ -48,6 +48,42 @@ export function getFlaggedReviewCount() {
   return getFlaggedCaseIds().length;
 }
 
+// ── Favorites ──
+
+export function isFavorite(caseId) {
+  return Boolean(getCaseRecord(caseId)?.favorite);
+}
+
+export function toggleFavorite(caseId) {
+  if (caseId == null || caseId === '') return false;
+  const p = readProgress();
+  const prev = p.cases[caseId] || {
+    plays: 0,
+    bestAccuracy: 0,
+    completed: false,
+    lastPlayed: null,
+  };
+  const next = {
+    ...prev,
+    favorite: !prev.favorite,
+    favoritedAt: !prev.favorite ? new Date().toISOString() : null,
+  };
+  p.cases[caseId] = next;
+  writeProgress(p);
+  return next.favorite;
+}
+
+export function getFavoriteCaseIds() {
+  return Object.entries(readProgress().cases)
+    .filter(([, rec]) => rec?.favorite)
+    .sort((a, b) => String(b[1]?.favoritedAt || '').localeCompare(String(a[1]?.favoritedAt || '')))
+    .map(([id]) => id);
+}
+
+export function getFavoriteCount() {
+  return getFavoriteCaseIds().length;
+}
+
 export function setCaseReviewFlag(caseId, flagged) {
   if (caseId == null || caseId === '') return false;
   const p = readProgress();

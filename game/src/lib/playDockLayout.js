@@ -16,7 +16,7 @@ export function defaultPlayDockLayout() {
   const compact = window.innerWidth <= 900;
   const width = compact
     ? Math.min(window.innerWidth - 16, 640)
-    : clamp(Math.round(window.innerWidth * 0.34), 300, 440);
+    : clamp(Math.round(window.innerWidth * 0.4), 340, 520);
   const height = compact
     ? clamp(Math.round(window.innerHeight * 0.52), 320, 560)
     : clamp(Math.round(window.innerHeight * 0.78), 360, 860);

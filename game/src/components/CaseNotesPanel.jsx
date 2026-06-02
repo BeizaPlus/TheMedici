@@ -2,12 +2,18 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { readCaseNotes, writeCaseNotes } from '../lib/caseNotes.js';
 import { fetchCaseUserData, recordingPublicUrl } from '../lib/caseUserLog.js';
 import CaseRecordButton from './CaseRecordButton.jsx';
+import CaseScreenshotThumb from './CaseScreenshotThumb.jsx';
+import CcsScreenshotLink from './CcsScreenshotLink.jsx';
 
 export default function CaseNotesPanel({
   caseId,
+  caseData = null,
   sessionId,
   compact = false,
   minimal = false,
+  recordButtonProps = null,
+  recordingsVersion = 0,
+  notesVersion = 0,
   placeholder = 'Your notes for this case…',
   onTimelineNote,
   onRecordingSaved,
@@ -15,29 +21,51 @@ export default function CaseNotesPanel({
   const [notes, setNotes] = useState(() => readCaseNotes(caseId));
   const [recordings, setRecordings] = useState([]);
   const noteTimerRef = useRef(null);
+  const skipWriteRef = useRef(false);
+
+  const syncNotesFromStorage = useCallback(() => {
+    skipWriteRef.current = true;
+    setNotes(readCaseNotes(caseId));
+  }, [caseId]);
 
   const loadRecordings = useCallback(async () => {
     const data = await fetchCaseUserData(caseId);
-    if (!data?.sessions) {
+    if (!data) {
       setRecordings([]);
       return;
     }
-    const rows = [];
-    data.sessions.forEach((session) => {
-      (session.recordings || []).forEach((rec) => {
-        rows.push({ ...rec, attempt: session.attempt, sessionId: session.id });
+    let rows = [];
+    if (Array.isArray(data.recordings) && data.recordings.length) {
+      rows = data.recordings.map((rec) => ({ ...rec }));
+    } else if (data.sessions) {
+      data.sessions.forEach((session) => {
+        (session.recordings || []).forEach((rec) => {
+          rows.push({ ...rec, attempt: session.attempt, sessionId: session.id });
+        });
       });
-    });
-    rows.sort((a, b) => String(b.at).localeCompare(String(a.at)));
+    }
+    rows.sort((a, b) => (b.slot || 0) - (a.slot || 0) || String(b.at).localeCompare(String(a.at)));
     setRecordings(rows);
   }, [caseId]);
 
   useEffect(() => {
-    setNotes(readCaseNotes(caseId));
+    syncNotesFromStorage();
     void loadRecordings();
-  }, [caseId, loadRecordings]);
+  }, [caseId, loadRecordings, syncNotesFromStorage]);
 
   useEffect(() => {
+    void loadRecordings();
+  }, [recordingsVersion, loadRecordings]);
+
+  useEffect(() => {
+    syncNotesFromStorage();
+  }, [notesVersion, syncNotesFromStorage]);
+
+  useEffect(() => {
+    if (skipWriteRef.current) {
+      skipWriteRef.current = false;
+      return;
+    }
     writeCaseNotes(caseId, notes);
   }, [caseId, notes]);
 
@@ -65,19 +93,21 @@ export default function CaseNotesPanel({
       {!minimal && (
         <p className="case-notes-hint">Saved per case in your journal — every run is logged.</p>
       )}
-      <CaseRecordButton
-        caseId={caseId}
-        sessionId={sessionId}
-        compact
-        onSaved={handleRecordingSaved}
-        onError={(e) => console.warn(e)}
-      />
+      {recordButtonProps && <CaseRecordButton {...recordButtonProps} compact />}
+      {recordButtonProps?.transcribing && (
+        <p className="case-notes-live-hint" aria-live="polite">
+          Transcribing…
+        </p>
+      )}
       {recordings.length > 0 && (
         <ul className="case-recordings-list" aria-label="Saved intuition recordings">
-          {recordings.slice(0, 8).map((rec) => (
+          {recordings.map((rec) => (
             <li key={rec.id}>
               <span className="case-recording-meta">
-                Run {rec.attempt || '?'} · {Math.round((rec.durationMs || 0) / 1000)}s
+                Voice note #{rec.slot || '?'}
+                {rec.attempt ? ` · Run ${rec.attempt}` : ''}
+                {' · '}
+                {Math.round((rec.durationMs || 0) / 1000)}s
               </span>
               <audio controls preload="none" src={recordingPublicUrl(rec.file)} />
             </li>
@@ -92,6 +122,12 @@ export default function CaseNotesPanel({
         rows={compact ? 4 : 8}
         aria-label="Case notes"
       />
+      {caseData && (
+        <div className="case-notes-screenshot-block">
+          <CaseScreenshotThumb caseData={caseData} className="case-screenshot-thumb case-screenshot-thumb--notes" />
+          <CcsScreenshotLink caseData={caseData} className="ccs-screenshot-link ccs-screenshot-link--notes" />
+        </div>
+      )}
     </div>
   );
 }

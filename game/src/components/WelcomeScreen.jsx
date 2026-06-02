@@ -14,14 +14,14 @@ import {
   pickRandomId,
   readProgress,
 } from '../data/caseProgress.js';
-import { clearVisionZones } from '../lib/patientImage.js';
+import { clearVisionZones, scrubInvalidSceneStorage } from '../lib/patientImage.js';
 import { readTheme, writeTheme } from '../lib/theme.js';
 import { defaultBriefingUiLayout, writeBriefingUiLayout } from '../lib/briefingUiLayout.js';
 import {
   defaultBriefingDockLayout,
-  defaultPlayDockLayout,
   writePlayDockLayout,
 } from '../lib/playDockLayout.js';
+import { applyPlayUiFavorite } from '../lib/playUiFavorite.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
   getAllowedCaseIds,
@@ -31,9 +31,14 @@ import {
   sliderFromLevel,
   writeAudienceProfile,
 } from '../lib/audienceProfile.js';
+import {
+  DEFAULT_NAME_REGION,
+  NAME_REGION_CHOICES,
+  normalizeNameRegion,
+} from '../lib/patientNameRegions.js';
 import { DEFAULT_TIMER_SECONDS, normalizeTimerSeconds } from '../lib/caseTimer.js';
 import { getReadyPracticeCount, getStackTestingCount } from '../lib/caseReadyPractice.js';
-import { getFlaggedReviewCount } from '../data/caseProgress.js';
+import { getFavoriteCount, getFlaggedReviewCount } from '../data/caseProgress.js';
 import { fetchOverallUserStats } from '../lib/caseUserLog.js';
 import {
   applyPhysicianProfile,
@@ -64,6 +69,7 @@ export default function WelcomeScreen({
   onOpenCases,
   onOpenReadyCases,
   onOpenStackTestingCases,
+  onOpenFavoritesCases,
   onOpenFlaggedCases,
   resumeCheckpoint,
   resumeCase,
@@ -79,6 +85,7 @@ export default function WelcomeScreen({
   const stackTestingCount = useMemo(() => getStackTestingCount(catalog.cases), [catalog.cases]);
   const [activeNav, setActiveNav] = useState('play');
   const [panel, setPanel] = useState(null);
+  const favoriteCount = useMemo(() => getFavoriteCount(), [panel]);
   const flaggedCount = useMemo(() => getFlaggedReviewCount(), [panel]);
   const lastCaseId = useMemo(() => getLastPlayedCaseId(), []);
   const lastCase = lastCaseId ? getCaseById(lastCaseId) : null;
@@ -95,6 +102,7 @@ export default function WelcomeScreen({
   const [playRole, setPlayRole] = useState('doctor');
   const [difficulty, setDifficulty] = useState('standard');
   const [timerMinutes, setTimerMinutes] = useState(2.5);
+  const [nameRegion, setNameRegion] = useState(DEFAULT_NAME_REGION);
   const fileRef = useRef(null);
   const magicFileRef = useRef(null);
   const [patientSet, setPatientSet] = useState(() => {
@@ -141,6 +149,7 @@ export default function WelcomeScreen({
     if (saved.playRole) setPlayRole(saved.playRole);
     if (saved.difficulty) setDifficulty(saved.difficulty);
     if (saved.timerSeconds) setTimerMinutes(Math.round((saved.timerSeconds / 60) * 10) / 10);
+    if (saved.nameRegion) setNameRegion(normalizeNameRegion(saved.nameRegion));
   }, []);
 
   useEffect(() => {
@@ -210,10 +219,11 @@ export default function WelcomeScreen({
       playRole,
       difficulty,
       timerSeconds: normalizeTimerSeconds(Math.round(timerMinutes * 60), DEFAULT_TIMER_SECONDS),
+      nameRegion: normalizeNameRegion(nameRegion),
     });
     markOnboardingComplete();
     setAudienceReady(true);
-  }, [audienceLevel, condition, playRole, difficulty, timerMinutes]);
+  }, [audienceLevel, condition, playRole, difficulty, timerMinutes, nameRegion]);
 
   const continueAsPhysician = useCallback(() => {
     const profile = applyPhysicianProfile(timerMinutes);
@@ -631,6 +641,18 @@ export default function WelcomeScreen({
                 Stack testing ({stackTestingCount}) →
               </button>
             )}
+            {onOpenFavoritesCases && (
+              <button
+                type="button"
+                className="welcome-panel-btn"
+                onClick={() => {
+                  ensureReadyForCases();
+                  onOpenFavoritesCases();
+                }}
+              >
+                ⭐ Favorites ({favoriteCount}) →
+              </button>
+            )}
             {onOpenFlaggedCases && (
               <button
                 type="button"
@@ -684,6 +706,27 @@ export default function WelcomeScreen({
                   }}
                 />
               </label>
+              <label className="welcome-settings-field">
+                <span>Patient name region</span>
+                <select
+                  value={nameRegion}
+                  onChange={(e) => {
+                    const next = normalizeNameRegion(e.target.value);
+                    setNameRegion(next);
+                    const profile = readAudienceProfile() || {};
+                    writeAudienceProfile({ ...profile, nameRegion: next, patientName: '' });
+                  }}
+                >
+                  {NAME_REGION_CHOICES.map(({ id, label }) => (
+                    <option key={id} value={id}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+                <span className="welcome-settings-scene-hint muted">
+                  Default patient names in HPI come from this region&apos;s name bank (181+ per region).
+                </span>
+              </label>
               <button type="button" className="welcome-panel-btn" onClick={toggleTheme}>
                 Theme: {theme === 'light' ? 'Light' : 'Dark'}
               </button>
@@ -721,12 +764,13 @@ export default function WelcomeScreen({
                 className="welcome-panel-btn btn-ghost"
                 onClick={() => {
                   writeBriefingUiLayout(defaultBriefingUiLayout());
-                  writePlayDockLayout(defaultPlayDockLayout(), STORAGE.playDockLayout);
+                  applyPlayUiFavorite();
                   writePlayDockLayout(defaultBriefingDockLayout(), STORAGE.briefingDockLayout);
                   localStorage.removeItem(STORAGE.patientImage);
                   localStorage.removeItem(STORAGE.patientMime);
                   localStorage.removeItem(STORAGE.sceneVariants);
                   localStorage.removeItem(STORAGE.caseRegenImages);
+                  scrubInvalidSceneStorage();
                   setPatientSet(false);
                   alert('UI layout reset. Hard-refresh the page (Ctrl+Shift+R), then start a case.');
                 }}

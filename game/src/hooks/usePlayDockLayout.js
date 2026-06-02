@@ -7,6 +7,7 @@ import {
   readPlayDockLayout,
   writePlayDockLayout,
 } from '../lib/playDockLayout.js';
+import { readPlayUiFavorite } from '../lib/playUiFavorite.js';
 
 export function usePlayDockLayout(options = {}) {
   const storageKey = options.storageKey || STORAGE.playDockLayout;
@@ -106,8 +107,15 @@ export function usePlayDockLayout(options = {}) {
   );
 
   const resetLayout = useCallback(() => {
+    if (storageKey === STORAGE.playDockLayout) {
+      const fav = readPlayUiFavorite();
+      if (fav.dockLayout) {
+        persist(fav.dockLayout);
+        return;
+      }
+    }
     persist(getDefault());
-  }, [getDefault, persist]);
+  }, [getDefault, persist, storageKey]);
 
   return { layout, persist, startDrag, resetLayout, isDragging: Boolean(activeDrag) };
 }
