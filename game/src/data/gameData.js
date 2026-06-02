@@ -81,6 +81,13 @@ export function resolvePlaybookForCase(ccsCase) {
   return resolvePlaybook(ccsCase);
 }
 
+/** Prefer refined order_sets for gameplay; fall back to raw stacks. */
+export function resolveCaseOrders(preparedCase) {
+  const rawOrders = preparedCase?.order_sets || preparedCase?.stacks || [];
+  if (!Array.isArray(rawOrders) || rawOrders.length === 0) return null;
+  return rawOrders;
+}
+
 export function toGameCase(ccsCase, catalog) {
   const pb = resolvePlaybook(ccsCase);
   const prepared = getPreparedCase(ccsCase.id);

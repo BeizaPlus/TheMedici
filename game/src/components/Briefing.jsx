@@ -4,7 +4,7 @@ import BriefingCasePicker from './BriefingCasePicker.jsx';
 import CcsScreenshotLink from './CcsScreenshotLink.jsx';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
-import IcuMonitorStrip from './IcuMonitorStrip.jsx';
+import { IconDoorExit } from './sceneToolbar/SceneToolbarIcons.jsx';
 import {
   getPatientImagePayload,
   readVisionZones,
@@ -22,7 +22,6 @@ import {
   getBriefingExam,
   getBriefingHpi,
 } from '../lib/caseBriefing.js';
-import { computePatientLife, patientLifeState } from '../lib/patientLife.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
@@ -81,7 +80,7 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
   const [textPrefs] = useState(() => readClinicalTextPrefs());
   const [uiLayout, setUiLayout] = useState(() => sanitizeBriefingUiLayout(readBriefingUiLayout()));
   const [layoutStudio, setLayoutStudio] = useState(false);
-  const [selectedUiId, setSelectedUiId] = useState('back');
+  const [selectedUiId, setSelectedUiId] = useState('case-hero');
   const [uiDrag, setUiDrag] = useState(null);
   const [copyMsg, setCopyMsg] = useState('');
   const { layout: dockLayout, startDrag: startDockDrag, resetLayout: resetDockLayout, isDragging: dockDragging } =
@@ -194,11 +193,6 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
     [caseData, caseFlow, presentationHistory],
   );
   const examSummary = useMemo(() => getBriefingExam(caseFlow), [caseFlow]);
-  const lifePct = useMemo(
-    () => computePatientLife({ vitals: caseFlow.vitals }),
-    [caseFlow.vitals],
-  );
-  const lifeState = patientLifeState(lifePct);
 
   const handleReadCase = (section, text) => {
     readCaseAloud({
@@ -304,23 +298,19 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
         </div>
       )}
 
-      <div
-        className={uiShellClass('back', uiLayout.back, layoutStudio)}
-        style={studioOnlyPosition(uiLayout.back, layoutStudio)}
-        data-briefing-ui="back"
-        onPointerDown={(e) => startUiDrag('back', e)}
-      >
+      <div className="panel-controls-stack">
         <button
           type="button"
-          className="briefing-back-btn"
+          className="panel-exit-btn"
           onClick={() => {
             if (layoutStudio) return;
             stopCaseReader();
             onBack();
           }}
-          aria-label="Back to cases"
+          title="Exit case"
+          aria-label="Exit case"
         >
-          ←
+          <IconDoorExit />
         </button>
       </div>
 
@@ -333,36 +323,6 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
           showVideoBackground={false}
         />
         <div className="briefing-scene-dim" />
-        <div
-          className={`scene-dock-left briefing-scene-dock ${uiShellClass('scene-dock', uiLayout['scene-dock'], layoutStudio)}`}
-          style={studioOnlyPosition(uiLayout['scene-dock'], layoutStudio)}
-          data-briefing-ui="scene-dock"
-          onPointerDown={(e) => startUiDrag('scene-dock', e)}
-        >
-          <div className="play-life-top-left">
-            <div className="pack-life-head">
-              <span>Patient life</span>
-              <span className={`pack-life-state ${lifeState}`}>{lifeState}</span>
-            </div>
-            <div className="pack-life-track" aria-label="Patient life bar">
-              <div
-                className={`pack-life-fill ${lifeState}`}
-                style={{ width: `${lifePct}%` }}
-                role="progressbar"
-                aria-valuenow={lifePct}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              />
-            </div>
-            <p className="pack-life-pct" aria-hidden>{lifePct}%</p>
-          </div>
-          <IcuMonitorStrip
-            vitals={caseFlow.vitals}
-            className="icu-monitor-docked briefing-monitor"
-            showVolume={false}
-            collapsible={false}
-          />
-        </div>
         <div
           className={`briefing-case-hero ${uiShellClass('case-hero', uiLayout['case-hero'], layoutStudio)}`}
           style={studioOnlyPosition(uiLayout['case-hero'], layoutStudio)}

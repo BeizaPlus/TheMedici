@@ -2,7 +2,6 @@ import { STORAGE } from './storageKeys.js';
 
 /** Briefing chrome elements — position in studio, hide flags apply in player too. */
 export const BRIEFING_UI_ELEMENTS = [
-  { id: 'back', label: 'Back arrow' },
   { id: 'scene-dock', label: 'Life bar + monitor' },
   { id: 'case-hero', label: 'Case title block' },
   { id: 'case-picker', label: 'Cases dropdown' },
@@ -11,7 +10,6 @@ export const BRIEFING_UI_ELEMENTS = [
 
 export function defaultBriefingUiLayout() {
   return {
-    back: { x: null, y: null, hidden: false },
     'scene-dock': { x: null, y: null, hidden: false },
     'case-hero': { x: null, y: null, hidden: false },
     'case-picker': { x: null, y: null, hidden: false },

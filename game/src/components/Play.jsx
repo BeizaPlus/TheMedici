@@ -54,6 +54,11 @@ import { getBranding } from '../data/gameData.js';
 import CaseNotesPanel from './CaseNotesPanel.jsx';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 import PlaySceneToolbar from './sceneToolbar/PlaySceneToolbar.jsx';
+import {
+  IconLayoutSidebarRightCollapse,
+  IconLayoutSidebarRightExpand,
+  IconDoorExit,
+} from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
 import IcuMonitorStrip from './IcuMonitorStrip.jsx';
 import ClinicalTextControls from './ClinicalTextControls.jsx';
@@ -366,23 +371,27 @@ export default function Play({
   const orderCommandHint = useMemo(() => {
     if (!orderCommand.trim()) return 'Matches unplaced stacks only';
     if (commandMatch) return `Match: ${commandMatch.label}`;
+    if (!teachMeMode && decoyCommandMatch) return `Match: ${decoyCommandMatch.label}`;
     if (knownOrderMatch) {
       return teachMeMode ? `${knownOrderMatch.name} is not indicated in this case` : '';
     }
     return 'Order not recognized';
-  }, [orderCommand, commandMatch, knownOrderMatch, teachMeMode]);
+  }, [orderCommand, commandMatch, decoyCommandMatch, knownOrderMatch, teachMeMode]);
+
+  const commandUiMatch = commandMatch || (!teachMeMode ? decoyCommandMatch : null);
 
   const renderStackPill = (iv, isDecoy = false, displayNumOverride = null) => {
     const seqNum = interventions.findIndex((x) => x.id === iv.id);
     const displayNum = displayNumOverride ?? (seqNum >= 0 ? seqNum + 1 : null);
     const blendVisual = displayNumOverride != null;
+    const showDecoyVisual = isDecoy && teachMeMode;
     const isTeachNext = teachMeMode && iv.id === nextExpectedId;
     const isTeachFocused = teachMeMode && teachFocusId === iv.id;
     const isTeachLocked = teachMeMode && !isDecoy && !placed[iv.id] && iv.id !== nextExpectedId;
     return (
       <div
         key={iv.id}
-        className={`drag-pill-wrap pack-item ${!blendVisual && isDecoy ? 'pack-item-decoy' : ''} ${placed[iv.id] ? 'is-placed is-expandable' : ''} ${expandedStackId === iv.id ? 'expanded' : ''} ${isTeachFocused ? 'teach-pill-focused' : ''} ${isTeachNext ? 'teach-pill-next' : ''} ${isTeachLocked ? 'teach-pill-locked' : ''}`}
+        className={`drag-pill-wrap pack-item ${showDecoyVisual && !blendVisual ? 'pack-item-decoy' : ''} ${placed[iv.id] ? 'is-placed is-expandable' : ''} ${expandedStackId === iv.id ? 'expanded' : ''} ${isTeachFocused ? 'teach-pill-focused' : ''} ${isTeachNext ? 'teach-pill-next' : ''} ${isTeachLocked ? 'teach-pill-locked' : ''}`}
         data-x="0"
         data-y="0"
         onClick={() => {
@@ -405,9 +414,9 @@ export default function Play({
             <span className="pill-stack">x1</span>
             {displayNum != null ? (
               <span className="pill-num">{String(displayNum).padStart(2, '0')}</span>
-            ) : (
+            ) : showDecoyVisual ? (
               <span className="pill-num pill-num-decoy">—</span>
-            )}
+            ) : null}
           </span>
         </div>
         {expandedStackId === iv.id && (
@@ -937,31 +946,61 @@ export default function Play({
     [timeLeft, timerTotal],
   );
 
-  const acceptDecoyPlacement = useCallback(
-    (stack, target, { wrap, zone, pill }) => {
+  const commitStackPlacement = useCallback(
+    (iv, target, { wrap, zone, pill } = {}, { silentDecoy = false, viaCommand = false, decoyInput = '' } = {}) => {
       const isGrid = typeof target === 'object' && target != null && 'col' in target;
-      const zoneId = isGrid ? zoneIdForCell(target, zones) : target;
-      pill.dataset.placed = 'true';
-      wrap.classList.add('pill-placed');
-      if (zone) zone.classList.add('zone-done');
-      setPlaced((p) => ({ ...p, [stack.id]: target }));
-      setPins((prev) => [
-        ...prev.filter((pin) => pin.ivId !== stack.id && pin.label !== stack.label),
-        isGrid
-          ? { ...target, label: stack.label, ivId: stack.id, ok: false, isDecoy: true }
-          : { zoneId, label: stack.label, ivId: stack.id, ok: false, isDecoy: true },
-      ]);
+
+      if (wrap && pill) {
+        pill.dataset.placed = 'false';
+        wrap.classList.remove('pill-placed');
+        if (zone) zone.classList.remove('zone-done');
+      }
+
+      setPlaced((p) => ({ ...p, [iv.id]: target }));
+      if (silentDecoy) {
+        logDecoyAttempt(iv, decoyInput || iv.label);
+      } else {
+        setPlacementOrder((prev) => (prev.includes(iv.id) ? prev : [...prev, iv.id]));
+      }
       setReviewed(false);
       setReviewResults({});
       setOrderReview({});
       setReviewedAt(null);
-      void logPlayEvent(caseData.id, playSessionIdRef.current, {
-        type: 'decoy',
-        stackId: stack.id,
-        label: stack.label,
+      setWhyPanel(null);
+      setTeachFocusId(null);
+
+      const pinPayload = isGrid
+        ? { ...target, label: iv.label, ivId: iv.id, ok: null }
+        : { zoneId: target, label: iv.label, ivId: iv.id, ok: null };
+      setPins((prev) => [
+        ...prev.filter((pin) => pin.ivId !== iv.id && pin.label !== iv.label),
+        pinPayload,
+      ]);
+
+      if (!teachMeMode) {
+        showToast('Order placed.', 'ok');
+        if (!silentDecoy) {
+          logTimeline({
+            type: 'stack',
+            stackId: iv.id,
+            label: iv.label,
+            correct: true,
+            ...(viaCommand ? { method: 'command' } : {}),
+          });
+        }
+        return;
+      }
+
+      showToast(viaCommand ? `Ordered ${iv.label}` : `Placed ${iv.label}`, viaCommand ? 'ok' : '');
+      logTimeline({
+        type: 'stack',
+        stackId: iv.id,
+        label: iv.label,
+        correct: true,
+        ...(viaCommand ? { method: 'command' } : {}),
       });
     },
-    [caseData.id, zones],
+    [logDecoyAttempt, logTimeline, teachMeMode],
   );
 
   const processDecoyOrder = useCallback(
@@ -973,35 +1012,30 @@ export default function Play({
         if (wrap) snapWrapHome(wrap);
         return;
       }
-      logDecoyAttempt(stack, input);
-      addConversationMessage('order', input, 'Order placed.');
+
       if (wrap && pill && target != null) {
-        acceptDecoyPlacement(stack, target, { wrap, zone, pill });
-      } else if (stack.correct_zone) {
-        setPlaced((p) => ({ ...p, [stack.id]: stack.correct_zone }));
-        setPins((prev) => [
-          ...prev.filter((pin) => pin.ivId !== stack.id && pin.label !== stack.label),
-          {
-            zoneId: stack.correct_zone,
-            label: stack.label,
-            ivId: stack.id,
-            ok: false,
-            isDecoy: true,
-          },
-        ]);
-        setReviewed(false);
-        setReviewResults({});
-        setOrderReview({});
-        setReviewedAt(null);
+        commitStackPlacement(stack, target, { wrap, zone, pill }, {
+          silentDecoy: true,
+          decoyInput: input || stack.label,
+        });
+        return;
       }
-      showToast('Order placed.', 'ok');
+
+      const zoneTarget = stack.correct_zone;
+      if (zoneTarget) {
+        commitStackPlacement(stack, zoneTarget, {}, {
+          silentDecoy: true,
+          viaCommand: true,
+          decoyInput: input || stack.label,
+        });
+        setExpandedStackId(stack.id);
+      }
     },
     [
       revealedMode,
       caseData,
       addConversationMessage,
-      logDecoyAttempt,
-      acceptDecoyPlacement,
+      commitStackPlacement,
     ],
   );
 
@@ -1094,7 +1128,11 @@ export default function Play({
     setTeachFocusId(null);
     setExpandedStackId(s.id);
     setOrderCommand('');
-    showToast(`Ordered ${s.label}`, 'ok');
+    if (!teachMeMode) {
+      showToast('Order placed.', 'ok');
+    } else {
+      showToast(`Ordered ${s.label}`, 'ok');
+    }
     logTimeline({
       type: 'stack',
       stackId: s.id,
@@ -1243,12 +1281,32 @@ export default function Play({
     (ivId, target, { wrap, zone, pill }) => {
       const decoy = decoyInterventions.find((i) => i.id === ivId);
       if (decoy) {
-        void processDecoyOrder({ ...decoy, isDecoy: true }, decoy.label, {
-          wrap,
-          zone,
-          pill,
-          target,
-        });
+        if (teachMeMode) {
+          void processDecoyOrder({ ...decoy, isDecoy: true }, decoy.label, {
+            wrap,
+            zone,
+            pill,
+            target,
+          });
+          return;
+        }
+
+        const isGrid = typeof target === 'object' && target != null && 'col' in target;
+        const ok = isGrid
+          ? isCorrectGridPlacement(decoy, target, zones)
+          : decoy.correct_zone === target;
+
+        if (dropMode === 'strict' && !ok) {
+          if (zone) {
+            zone.classList.add('zone-hover');
+            setTimeout(() => zone.classList.remove('zone-hover'), 280);
+          }
+          snapWrapHome(wrap);
+          showToast('Strict mode: wrong cell blocked', 'bad');
+          return;
+        }
+
+        commitStackPlacement(decoy, target, { wrap, zone, pill }, { silentDecoy: true });
         return;
       }
 
@@ -1301,45 +1359,19 @@ export default function Play({
         return;
       }
 
-      pill.dataset.placed = 'false';
-      wrap.classList.remove('pill-placed');
-      if (zone) zone.classList.remove('zone-done');
-
-      setPlaced((p) => ({ ...p, [iv.id]: target }));
-      setPlacementOrder((prev) => (prev.includes(iv.id) ? prev : [...prev, iv.id]));
-      setReviewed(false);
-      setReviewResults({});
-      setOrderReview({});
-      const pinPayload = isGrid
-        ? { ...target, label: iv.label, ivId: iv.id, ok: null }
-        : { zoneId: target, label: iv.label, ivId: iv.id, ok: null };
-      setPins((prev) => [
-        ...prev.filter((pin) => pin.ivId !== iv.id && pin.label !== iv.label),
-        pinPayload,
-      ]);
-      setReviewedAt(null);
-      setWhyPanel(null);
-      setTeachFocusId(null);
-      showToast(`Placed ${iv.label}`, '');
-      logTimeline({
-        type: 'stack',
-        stackId: iv.id,
-        label: iv.label,
-        correct: ok,
-      });
+      commitStackPlacement(iv, target, { wrap, zone, pill });
     },
     [
       interventions,
       decoyInterventions,
       processDecoyOrder,
+      commitStackPlacement,
       dropMode,
-      dragCfg.snapBackMs,
       zones,
       teachMeMode,
       nextExpectedId,
       expectedOrderIds,
       interventionById,
-      logTimeline,
     ],
   );
 
@@ -1418,6 +1450,16 @@ export default function Play({
       }
     });
 
+    decoyInterventions.forEach((iv) => {
+      const p = placed[iv.id];
+      if (!p) return;
+      if (typeof p === 'object' && p != null && 'col' in p) {
+        nextPins.push({ ...p, ivId: iv.id, label: iv.label, ok: null });
+      } else {
+        nextPins.push({ zoneId: p, ivId: iv.id, label: iv.label, ok: null });
+      }
+    });
+
     const reviewNum = reviewCount + 1;
     setReviewCount(reviewNum);
     setAttempts(reviewNum);
@@ -1475,6 +1517,7 @@ export default function Play({
     setTimeout(() => playTeachingVideo(result), 900);
   }, [
     interventions,
+    decoyInterventions,
     placed,
     reviewCount,
     total,
@@ -1969,31 +2012,31 @@ export default function Play({
         ['--pill-h']: `${layout.pillRowHeightPx || 52}px`,
       }}
     >
+      <div className="panel-controls-stack">
+        <button
+          type="button"
+          className="panel-toggle-btn"
+          onClick={() => setDockCollapsed((v) => !v)}
+          title={dockCollapsed ? 'Show panel' : 'Hide panel'}
+          aria-label={dockCollapsed ? 'Show panel' : 'Hide panel'}
+        >
+          {dockCollapsed ? <IconLayoutSidebarRightExpand /> : <IconLayoutSidebarRightCollapse />}
+        </button>
+        <button
+          type="button"
+          className="panel-exit-btn"
+          onClick={confirmExitCase}
+          title="Exit case"
+          aria-label="Exit case"
+        >
+          <IconDoorExit />
+        </button>
+      </div>
       <div
         className={`game-scene ${vitals.spo2 < 92 || vitals.sbp < 95 || vitals.hr > 120 ? 'icu-alarm' : ''} ${teachMeMode ? 'teach-me-active' : ''}`}
         ref={sceneRef}
       >
         <div className="game-scene-capture" ref={studioCapture ? captureRef : null}>
-        <header className="play-hud" aria-label="Case controls">
-          <button
-            type="button"
-            className="play-hud-exit"
-            onClick={confirmExitCase}
-            aria-label="Exit case and return home"
-          >
-            Exit case
-          </button>
-          <span className="play-hud-case" title={toTitleCase(caseData.title)}>
-            {toTitleCase(caseData.title)}
-          </span>
-          <div className="play-hud-right">
-            {timedModeEnabled && (
-              <span className={`play-hud-timer ${timerState}`} aria-live="polite">
-                {timerLabel}
-              </span>
-            )}
-          </div>
-        </header>
         <div className="scene-dock-left">
           <div className="play-life-top-left">
             <div className="pack-life-head">
@@ -2667,7 +2710,7 @@ export default function Play({
                     Order
                   </button>
                   <div
-                    className={`stack-command-match ${commandMatch ? 'has-match' : teachMeMode && knownOrderMatch ? 'known-order' : ''}`}
+                    className={`stack-command-match ${commandUiMatch ? 'has-match' : teachMeMode && knownOrderMatch ? 'known-order' : ''}`}
                     aria-live="polite"
                   >
                     {orderCommandHint || '\u00a0'}
@@ -2718,6 +2761,95 @@ export default function Play({
             <button type="button" className="btn-ghost" onClick={reviewPlacements} disabled={doneCount === 0}>
               Review
             </button>
+          </div>
+          <div className="dock-toolbar">
+            <PlaySceneToolbar
+              examOpen={activeDrawer === 'exam'}
+              historyOpen={activeDrawer === 'history'}
+              stacksOpen={!dockCollapsed && infoTab === 'treatment'}
+              chatOpen={logOpen}
+              showCues={showCues}
+              darkMode={theme === 'dark'}
+              freeDrop={dropMode === 'free'}
+              settingsOpen={stackSettingsOpen}
+              settingsRef={stackCommandRef}
+              settingsPopover={
+                <div className="settings-popover toolbar-settings-popover" role="dialog" aria-label="Toolbar settings">
+                  <div className="settings-popover-row">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateClinicalTextPrefs({
+                          fontScale: Math.max(0.9, Number((textPrefs.fontScale - 0.08).toFixed(2))),
+                        })
+                      }
+                      aria-label="Decrease text size"
+                    >
+                      A−
+                    </button>
+                    <span className="font-size-display">{Math.round(textPrefs.fontScale * 100)}%</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateClinicalTextPrefs({
+                          fontScale: Math.min(1.5, Number((textPrefs.fontScale + 0.08).toFixed(2))),
+                        })
+                      }
+                      aria-label="Increase text size"
+                    >
+                      A+
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => updateClinicalTextPrefs({ weight: textPrefs.weight === 700 ? 600 : 700 })}
+                      className={textPrefs.weight === 700 ? 'active' : ''}
+                      aria-label="Toggle bold text"
+                    >
+                      B
+                    </button>
+                  </div>
+                  <div className="settings-popover-row settings-popover-row-2">
+                    <button type="button" onClick={toggleTimedMode}>
+                      {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
+                    </button>
+                    <button type="button" onClick={resetPlacements}>
+                      Reset placements
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const death = document.getElementById('death');
+                        const idleSlots = document.querySelectorAll('.idle-slot');
+                        if (!death) return;
+                        idleSlots.forEach((slot) => {
+                          slot.pause();
+                          slot.style.opacity = '0';
+                        });
+                        death.style.opacity = '1';
+                        death.style.zIndex = '2';
+                        death.currentTime = 0;
+                        death.play().catch(() => {});
+                      }}
+                    >
+                      Simulate deterioration
+                    </button>
+                  </div>
+                  <AudioSettingsPanel embedded showGameSounds={false} />
+                </div>
+              }
+              onToggleExam={() => setActiveDrawer((d) => (d === 'exam' ? null : 'exam'))}
+              onToggleHistory={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
+              onOpenStacks={() => {
+                setDockCollapsed(false);
+                setInfoTab('treatment');
+              }}
+              onToggleChat={() => setLogOpen((v) => !v)}
+              onRestart={restartCurrentCase}
+              onToggleCues={() => setShowCues((v) => !v)}
+              onToggleTheme={toggleTheme}
+              onToggleDropMode={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
+              onToggleSettings={() => setStackSettingsOpen((v) => !v)}
+            />
           </div>
         </div>
         {reviewedAt && <div className="reviewed-stamp">Reviewed at {reviewedAt.toLocaleTimeString()}</div>}
@@ -2789,8 +2921,8 @@ export default function Play({
         </div>
       )}
 
-      <div className="bottom-ui-block">
-        {logOpen && (
+      {logOpen && (
+        <div className="bottom-ui-block">
           <div className="conversation-log" aria-label="Conversation log">
             {conversationLog.length ? (
               conversationLog.map((m) => <MessageEntry key={m.id} {...m} />)
@@ -2798,117 +2930,8 @@ export default function Play({
               <MessageEntry role="system" content="Conversation log will appear here as the case unfolds." />
             )}
           </div>
-        )}
-        <PlaySceneToolbar
-          examOpen={activeDrawer === 'exam'}
-          historyOpen={activeDrawer === 'history'}
-          vitalsHighlight={!dockCollapsed}
-          stacksOpen={!dockCollapsed && infoTab === 'treatment'}
-          chatOpen={logOpen}
-          readPlaying={readState === 'playing'}
-          showCues={showCues}
-          darkMode={theme === 'dark'}
-          freeDrop={dropMode === 'free'}
-          settingsOpen={stackSettingsOpen}
-          settingsRef={stackCommandRef}
-          settingsPopover={
-            <div className="settings-popover toolbar-settings-popover" role="dialog" aria-label="Toolbar settings">
-              <div className="settings-popover-row">
-                <button
-                  type="button"
-                  onClick={() =>
-                    updateClinicalTextPrefs({
-                      fontScale: Math.max(0.9, Number((textPrefs.fontScale - 0.08).toFixed(2))),
-                    })
-                  }
-                  aria-label="Decrease text size"
-                >
-                  A−
-                </button>
-                <span className="font-size-display">{Math.round(textPrefs.fontScale * 100)}%</span>
-                <button
-                  type="button"
-                  onClick={() =>
-                    updateClinicalTextPrefs({
-                      fontScale: Math.min(1.5, Number((textPrefs.fontScale + 0.08).toFixed(2))),
-                    })
-                  }
-                  aria-label="Increase text size"
-                >
-                  A+
-                </button>
-                <button
-                  type="button"
-                  onClick={() => updateClinicalTextPrefs({ weight: textPrefs.weight === 700 ? 600 : 700 })}
-                  className={textPrefs.weight === 700 ? 'active' : ''}
-                  aria-label="Toggle bold text"
-                >
-                  B
-                </button>
-              </div>
-              <div className="settings-popover-row settings-popover-row-2">
-                <button type="button" onClick={toggleTimedMode}>
-                  {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
-                </button>
-                <button type="button" onClick={resetPlacements}>
-                  Reset
-                </button>
-              </div>
-              <AudioSettingsPanel embedded showGameSounds={false} />
-            </div>
-          }
-          onToggleExam={() => setActiveDrawer((d) => (d === 'exam' ? null : 'exam'))}
-          onToggleHistory={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
-          onToggleVitals={() => setDockCollapsed((v) => !v)}
-          onOpenStacks={() => {
-            setDockCollapsed(false);
-            setInfoTab('treatment');
-          }}
-          onToggleChat={() => setLogOpen((v) => !v)}
-          onReadAloud={() => {
-            const section =
-              infoTab === 'exam' ? 'exam' : infoTab === 'notes' ? 'notes' : infoTab === 'treatment' ? 'treatment' : 'hpi';
-            const text =
-              section === 'exam'
-                ? examSummary
-                : section === 'hpi'
-                  ? sidebarHpi
-                  : section === 'treatment'
-                    ? caseData.objective || ''
-                    : '';
-            if (readState === 'playing') {
-              stopCaseReader();
-              setReadState('idle');
-              return;
-            }
-            readCaseAloud({
-              caseId: caseData.id,
-              section,
-              text,
-              onState: (state) => setReadState(state),
-            });
-          }}
-          onTriggerDeath={() => {
-            const death = document.getElementById('death');
-            const idleSlots = document.querySelectorAll('.idle-slot');
-            if (!death) return;
-            idleSlots.forEach((slot) => {
-              slot.pause();
-              slot.style.opacity = '0';
-            });
-            death.style.opacity = '1';
-            death.style.zIndex = '2';
-            death.currentTime = 0;
-            death.play().catch(() => {});
-          }}
-          onRestart={restartCurrentCase}
-          onExitCase={confirmExitCase}
-          onToggleCues={() => setShowCues((v) => !v)}
-          onToggleTheme={toggleTheme}
-          onToggleDropMode={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
-          onToggleSettings={() => setStackSettingsOpen((v) => !v)}
-        />
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -108,6 +108,7 @@ function toCaseBank(entry) {
     ccs_category: entry.specialty || null,
     case_summary: entry.case_summary || null,
     stacks: entry.stacks || [],
+    order_sets: entry.order_sets || [],
     complete: !entry.incomplete,
     extraction_method: 'screenshot+ollama',
     enrichment_sources: ['ollama'],

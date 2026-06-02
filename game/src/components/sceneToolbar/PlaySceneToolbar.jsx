@@ -2,16 +2,11 @@ import {
   IconClipboardPulse,
   IconEyeOff,
   IconFileMedical,
-  IconLayoutSidebarRightCollapse,
-  IconLayoutSidebarRightExpand,
   IconLockOpen,
   IconMessage,
-  IconMicrophone,
   IconMoon,
-  IconDoorExit,
   IconRotate,
   IconSettings,
-  IconSkipForward,
   IconStethoscope,
 } from './SceneToolbarIcons.jsx';
 
@@ -27,20 +22,22 @@ function ToolbarBtn({ active, amber, className = '', children, ...rest }) {
   );
 }
 
-function ToolbarSep() {
-  return <span className="toolbar-sep" aria-hidden="true" />;
+function ToolbarGroup({ label, children }) {
+  return (
+    <div className="toolbar-group" role="group" aria-label={label}>
+      {children}
+    </div>
+  );
 }
 
 /**
- * Bottom scene toolbar — visual match to clinical-scene build.
+ * Dock toolbar — clinical panels, chat, case actions, and display prefs in grouped clusters.
  */
 export default function PlaySceneToolbar({
   examOpen,
   historyOpen,
-  vitalsHighlight,
   stacksOpen,
   chatOpen,
-  readPlaying,
   showCues,
   darkMode,
   freeDrop,
@@ -49,105 +46,90 @@ export default function PlaySceneToolbar({
   settingsPopover,
   onToggleExam,
   onToggleHistory,
-  onToggleVitals,
   onOpenStacks,
   onToggleChat,
-  onReadAloud,
-  onTriggerDeath,
   onRestart,
-  onExitCase,
   onToggleCues,
   onToggleTheme,
   onToggleDropMode,
   onToggleSettings,
 }) {
   return (
-    <nav className="toolbar" aria-label="Scene controls">
-      <ToolbarBtn
-        active={examOpen}
-        onClick={onToggleExam}
-        title="Physical exam"
-        aria-label="Physical exam"
-      >
-        <IconStethoscope />
-      </ToolbarBtn>
-      <ToolbarBtn
-        active={vitalsHighlight}
-        onClick={onToggleVitals}
-        title="Vitals"
-        aria-label="Vitals"
-      >
-        {vitalsHighlight ? <IconLayoutSidebarRightCollapse /> : <IconLayoutSidebarRightExpand />}
-      </ToolbarBtn>
-      <ToolbarBtn
-        active={historyOpen}
-        onClick={onToggleHistory}
-        title="Patient chart"
-        aria-label="Patient chart"
-      >
-        <IconClipboardPulse />
-      </ToolbarBtn>
-      <ToolbarBtn
-        active={stacksOpen}
-        onClick={onOpenStacks}
-        title="Treatment stacks"
-        aria-label="Treatment stacks"
-      >
-        <IconFileMedical />
-      </ToolbarBtn>
-
-      <ToolbarSep />
-
-      <ToolbarBtn active={chatOpen} onClick={onToggleChat} title="Chat" aria-label="Chat">
-        <IconMessage />
-      </ToolbarBtn>
-      <ToolbarBtn
-        active={readPlaying}
-        amber={readPlaying}
-        onClick={onReadAloud}
-        title="Read case aloud"
-        aria-label="Read case aloud"
-      >
-        <IconMicrophone />
-      </ToolbarBtn>
-      <ToolbarBtn onClick={onTriggerDeath} title="Skip to deterioration" aria-label="Skip to deterioration">
-        <IconSkipForward />
-      </ToolbarBtn>
-      <ToolbarBtn onClick={onRestart} title="Restart case" aria-label="Restart case">
-        <IconRotate />
-      </ToolbarBtn>
-      <ToolbarBtn onClick={onExitCase} title="Exit case" aria-label="Exit case">
-        <IconDoorExit />
-      </ToolbarBtn>
-
-      <ToolbarSep />
-
-      <ToolbarBtn active={!showCues} onClick={onToggleCues} title="Hide cues" aria-label="Hide cues">
-        <IconEyeOff />
-      </ToolbarBtn>
-      <ToolbarBtn active={darkMode} onClick={onToggleTheme} title="Dark mode" aria-label="Dark mode">
-        <IconMoon />
-      </ToolbarBtn>
-      <ToolbarBtn
-        active={freeDrop}
-        onClick={onToggleDropMode}
-        title="Free drop mode"
-        aria-label="Free drop mode"
-      >
-        <IconLockOpen />
-      </ToolbarBtn>
-      <span className="toolbar-settings-wrap" ref={settingsRef}>
+    <nav className="dock-toolbar-nav" aria-label="Scene controls">
+      <ToolbarGroup label="Clinical panels">
         <ToolbarBtn
-          active={settingsOpen}
-          onClick={onToggleSettings}
-          title="Settings"
-          aria-label="Settings"
-          aria-expanded={settingsOpen}
+          active={examOpen}
+          onClick={onToggleExam}
+          title="Physical exam overlay"
+          aria-label="Physical exam overlay"
         >
-          <IconSettings />
+          <IconStethoscope />
         </ToolbarBtn>
-        {settingsOpen && settingsPopover}
-      </span>
+        <ToolbarBtn
+          active={historyOpen}
+          onClick={onToggleHistory}
+          title="SOAP chart overlay"
+          aria-label="SOAP chart overlay"
+        >
+          <IconClipboardPulse />
+        </ToolbarBtn>
+        <ToolbarBtn
+          active={stacksOpen}
+          onClick={onOpenStacks}
+          title="Treatment stacks"
+          aria-label="Treatment stacks"
+        >
+          <IconFileMedical />
+        </ToolbarBtn>
+        <ToolbarBtn active={chatOpen} onClick={onToggleChat} title="Order log" aria-label="Order log">
+          <IconMessage />
+        </ToolbarBtn>
+      </ToolbarGroup>
+
+      <ToolbarGroup label="Case">
+        <ToolbarBtn onClick={onRestart} title="Restart case" aria-label="Restart case">
+          <IconRotate />
+        </ToolbarBtn>
+      </ToolbarGroup>
+
+      <ToolbarGroup label="Display and settings">
+        <ToolbarBtn
+          active={!showCues}
+          onClick={onToggleCues}
+          title={showCues ? 'Hide drop zone cues' : 'Show drop zone cues'}
+          aria-label={showCues ? 'Hide drop zone cues' : 'Show drop zone cues'}
+        >
+          <IconEyeOff />
+        </ToolbarBtn>
+        <ToolbarBtn
+          active={darkMode}
+          onClick={onToggleTheme}
+          title={darkMode ? 'Light mode' : 'Dark mode'}
+          aria-label={darkMode ? 'Light mode' : 'Dark mode'}
+        >
+          <IconMoon />
+        </ToolbarBtn>
+        <ToolbarBtn
+          active={freeDrop}
+          onClick={onToggleDropMode}
+          title={freeDrop ? 'Practice drop (free)' : 'Exam drop (strict)'}
+          aria-label={freeDrop ? 'Practice drop mode' : 'Exam drop mode'}
+        >
+          <IconLockOpen />
+        </ToolbarBtn>
+        <span className="toolbar-settings-wrap" ref={settingsRef}>
+          <ToolbarBtn
+            active={settingsOpen}
+            onClick={onToggleSettings}
+            title="Settings"
+            aria-label="Settings"
+            aria-expanded={settingsOpen}
+          >
+            <IconSettings />
+          </ToolbarBtn>
+          {settingsOpen && settingsPopover}
+        </span>
+      </ToolbarGroup>
     </nav>
   );
 }

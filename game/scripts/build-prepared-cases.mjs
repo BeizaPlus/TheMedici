@@ -6,6 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { resolvePlaybook } from '../src/data/resolvePlaybook.js';
+import { resolveCaseOrders } from '../src/data/gameData.js';
 import { resolveCaseExam } from '../src/lib/caseExam.js';
 import {
   loadCaseBank,
@@ -286,9 +287,10 @@ for (const ccsCase of catalog.cases) {
     hasSourceIntro: Boolean(pres?.intro || bankCase?.hpi),
   });
 
+  const bankOrderSource = resolveCaseOrders(bankCase) || bankCase?.correct_orders;
   const bankInterventions =
-    bankCase?.correct_orders?.length
-      ? ordersToInterventions(bankCase.correct_orders, bankCase.rationale || {}, bankCase)
+    bankOrderSource?.length
+      ? ordersToInterventions(bankOrderSource, bankCase.rationale || {}, bankCase)
       : null;
   const bankDecoys = bankCase ? mergeBankDecoys(bankCase, caseNum) : [];
   const interventions = bankInterventions?.length ? bankInterventions : pb.interventions;
