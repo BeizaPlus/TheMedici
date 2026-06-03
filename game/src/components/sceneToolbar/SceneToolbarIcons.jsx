@@ -47,6 +47,18 @@ export function IconClipboardPulse(props) {
   );
 }
 
+/** Tabler: pill — https://tabler.io/icons/icon/pill */
+export function IconPill(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M4.5 12.5l8 8" />
+      <path d="M12.5 4.5l8 8" />
+      <path d="M15 4.5l-7.5 7.5" />
+      <path d="M4.5 13.5l8 8" />
+    </svg>
+  );
+}
+
 export function IconFileMedical(props) {
   return (
     <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>

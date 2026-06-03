@@ -25,6 +25,7 @@ export const STORAGE = {
   briefingDockLayout: 'schoonmaker_briefing_dock_layout',
   briefingUiLayout: 'schoonmaker_briefing_ui_layout',
   playUiFavorite: 'schoonmaker_play_ui_favorite',
+  teachCompareDockWidth: 'schoonmaker_teach_compare_dock_width',
   playSessionTimeline: 'schoonmaker_play_session_timeline',
   threadCollapsed: 'schoonmaker_thread_collapsed',
   timelineCollapsed: 'schoonmaker_timeline_collapsed',

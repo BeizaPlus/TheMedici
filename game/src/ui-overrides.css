@@ -1149,18 +1149,138 @@
 
 .game.final-mode .play-hud,
 .game.final-mode .scene-dock-left,
-.game.final-mode .patient-order-timeline {
+.game.final-mode .scene-timeline-dock {
   opacity: 0.35;
   pointer-events: none;
 }
 
-.patient-order-timeline {
+.scene-timeline-dock {
   position: absolute;
   right: 14px;
   bottom: 14px;
   z-index: 55;
-  width: min(300px, 36vw);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 10px;
   max-height: min(560px, 72vh);
+  pointer-events: none;
+}
+
+.scene-timeline-dock > * {
+  pointer-events: auto;
+}
+
+.teach-compare-scene-dock {
+  position: relative;
+  flex-shrink: 0;
+  width: min(272px, 30vw);
+  max-height: inherit;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: rgba(8, 10, 16, 0.9);
+  border: 1px solid rgba(232, 184, 75, 0.28);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+}
+
+.teach-compare-resize-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 12px;
+  z-index: 3;
+  touch-action: none;
+  cursor: ew-resize;
+}
+
+.teach-compare-resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: 3px;
+  width: 3px;
+  border-radius: 2px;
+  background: rgba(232, 184, 75, 0.35);
+  opacity: 0.55;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.teach-compare-resize-handle:hover::after,
+.teach-compare-scene-dock.is-resizing .teach-compare-resize-handle::after {
+  opacity: 1;
+  background: rgba(232, 184, 75, 0.72);
+}
+
+.teach-compare-scene-head {
+  flex-shrink: 0;
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.teach-compare-scene-title {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(232, 184, 75, 0.92);
+  font-weight: 600;
+}
+
+.teach-compare-scene-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  padding: 8px 10px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.teach-compare-panel--compact {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+.teach-compare-panel--compact .teach-compare-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+}
+
+.teach-compare-panel--compact .teach-compare-next {
+  margin-bottom: 6px;
+  font-size: 0.68rem;
+}
+
+.teach-compare-panel--compact .teach-compare-hint {
+  display: none;
+}
+
+.teach-sidebar-hint {
+  margin: 0 12px 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px dashed rgba(232, 184, 75, 0.35);
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: rgba(232, 184, 75, 0.85);
+  background: rgba(232, 184, 75, 0.06);
+}
+
+.patient-order-timeline {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  z-index: auto;
+  width: min(300px, 36vw);
+  max-height: inherit;
   display: flex;
   flex-direction: column;
   pointer-events: auto;
@@ -1169,6 +1289,7 @@
   border-radius: 12px;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(8px);
+  flex-shrink: 0;
 }
 
 .patient-order-timeline.is-collapsed {
@@ -1371,9 +1492,20 @@
 }
 
 @media (max-width: 900px) {
+  .scene-timeline-dock {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    max-height: min(72vh, 640px);
+  }
+
+  .teach-compare-scene-dock {
+    width: min(240px, 88vw);
+    max-height: min(240px, 34vh);
+  }
+
   .patient-order-timeline {
-    width: min(240px, 42vw);
-    max-height: min(320px, 42vh);
+    width: min(240px, 88vw);
+    max-height: min(320px, 38vh);
   }
 }
 .game.final-mode .play-bottom-bar,
@@ -1996,11 +2128,77 @@
   opacity: 0.85;
 }
 
+/* Teach Me focus — dim scene, keep command UI + compare panel crisp */
+.game.teach-me-focus .game-scene.teach-me-active .patient-drop-surface {
+  filter: brightness(0.42) saturate(0.72) blur(2px);
+  transition: filter 0.35s ease;
+}
+
+.game.teach-me-focus .game-scene.teach-me-active .patient-drop-surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 85% 70% at 50% 45%, rgba(6, 8, 14, 0.08) 0%, rgba(4, 6, 12, 0.62) 100%);
+}
+
+.game.teach-me-focus .game-scene.teach-me-active .drop-zone:not(.zone-teach),
+.game.teach-me-focus .game-scene.teach-me-active .teach-scene-overlay,
+.game.teach-me-focus .game-scene.teach-me-active .scene-generating-badge {
+  opacity: 0.18;
+  filter: saturate(0.55);
+  pointer-events: none;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.game.teach-me-focus .game-scene.teach-me-active .drop-zone.zone-teach {
+  opacity: 0.78;
+  filter: none;
+  pointer-events: auto;
+}
+
+.game.teach-me-focus .game-scene.teach-me-active .scene-dock-left > .play-life-top-left,
+.game.teach-me-focus .game-scene.teach-me-active .scene-dock-left > .scene-monitor-wrap {
+  opacity: 0.28;
+  filter: saturate(0.6);
+  pointer-events: none;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.game.teach-me-focus .game-scene.teach-me-active .scene-dock-left > .scene-order-command-dock {
+  opacity: 1;
+  filter: none;
+  pointer-events: auto;
+}
+
+.game.teach-me-focus .game-sidebar.floating,
+.game.teach-me-focus .scene-timeline-dock {
+  z-index: 58;
+}
+
+.game.teach-me-focus .teach-compare-scene-dock,
+.game.teach-me-focus .scene-order-command-dock {
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(232, 184, 75, 0.22);
+}
+
 .teach-step-marker.focused .teach-step-num {
   animation: teach-step-pulse 1s ease-in-out infinite;
   box-shadow:
     0 0 0 3px rgba(232, 184, 75, 0.55),
     0 0 20px rgba(232, 184, 75, 0.65);
+}
+
+.drag-pill-wrap.teach-pill-placed .drag-pill {
+  border-color: rgba(124, 232, 154, 0.72) !important;
+  background: rgba(95, 216, 138, 0.14) !important;
+}
+
+.drag-pill-wrap.teach-pill-placed .pill-why-inline-status {
+  color: #7ce89a;
 }
 
 .drag-pill-wrap.teach-pill-focused .drag-pill {

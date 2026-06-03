@@ -7,6 +7,7 @@ import medicalOrders from '../data/medical-orders.json';
 import { useDragGame } from '../hooks/useDragGame.js';
 import { useGridDragGame } from '../hooks/useGridDragGame.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
+import { useTeachCompareDockWidth } from '../hooks/useTeachCompareDockWidth.js';
 import { isCorrectGridPlacement, zoneIdForCell } from '../lib/placementGrid.js';
 import SceneGridOverlay from './SceneGridOverlay.jsx';
 import { playWrong, playComplete } from '../lib/audio.js';
@@ -77,6 +78,7 @@ import {
   IconLayoutSidebarRightCollapse,
   IconLayoutSidebarRightExpand,
   IconDoorExit,
+  IconMessage,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
 import IcuMonitorStrip from './IcuMonitorStrip.jsx';
@@ -92,6 +94,7 @@ import { decoyReason, handleDecoyOrder } from '../lib/decoyOrder.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import CaseTeachingVideoOverlay from './CaseTeachingVideoOverlay.jsx';
 import TeachMeSceneOverlay from './TeachMeSceneOverlay.jsx';
+import TeachMeComparePanel from './TeachMeComparePanel.jsx';
 import { IconFileMedical } from './sceneToolbar/SceneToolbarIcons.jsx';
 import {
   endPlaySession,
@@ -326,6 +329,11 @@ export default function Play({
   const [dockCollapsed, setDockCollapsed] = useState(false);
   const { layout: dockLayout, startDrag: startDockDrag, resetLayout: resetDockLayout, isDragging: dockDragging } =
     usePlayDockLayout();
+  const {
+    width: teachCompareDockWidth,
+    startResize: startTeachCompareResize,
+    isResizing: teachCompareResizing,
+  } = useTeachCompareDockWidth();
   const [theme, setTheme] = useState(() => readTheme());
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [dropMode, setDropMode] = useState(() => {
@@ -452,19 +460,6 @@ export default function Play({
     },
     [teachMeMode, nextExpectedId, decoyInterventions],
   );
-  const teachGroups = useMemo(() => {
-    const longTermWords = /\b(vaccin|vaccine|immuniz|follow.?up|outpatient|counsel|education|rehab|discharge|prevent|lifestyle|diet)\b/i;
-    const acute = [];
-    const longTerm = [];
-    interventions.forEach((iv, idx) => {
-      const blob = `${iv.label} ${iv.why || ''} ${iv.guideline || ''}`;
-      const item = { ...iv, seq: idx + 1 };
-      if (longTermWords.test(blob)) longTerm.push(item);
-      else acute.push(item);
-    });
-    return { acute, longTerm };
-  }, [interventions]);
-
   const commandMatch = useMemo(() => {
     const t = normCommandText(orderCommand);
     if (t.length <= 2) return null;
@@ -555,7 +550,7 @@ export default function Play({
     return (
       <div
         key={iv.id}
-        className={`drag-pill-wrap pack-item ${showDecoyVisual && !blendVisual ? 'pack-item-decoy' : ''} ${placed[iv.id] ? 'is-placed is-expandable' : ''} ${expandedStackId === iv.id ? 'expanded' : ''} ${isTeachFocused ? 'teach-pill-focused' : ''} ${isTeachNext ? 'teach-pill-next' : ''} ${isTeachLocked ? 'teach-pill-locked' : ''}`}
+        className={`drag-pill-wrap pack-item ${showDecoyVisual && !blendVisual ? 'pack-item-decoy' : ''} ${placed[iv.id] ? 'is-placed is-expandable' : ''} ${teachMeMode && placed[iv.id] ? 'teach-pill-placed' : ''} ${expandedStackId === iv.id ? 'expanded' : ''} ${isTeachFocused ? 'teach-pill-focused' : ''} ${isTeachNext ? 'teach-pill-next' : ''} ${isTeachLocked ? 'teach-pill-locked' : ''}`}
         data-x="0"
         data-y="0"
         onClick={() => {
@@ -2518,7 +2513,7 @@ export default function Play({
 
   return (
     <div
-      className={`game ${finalMode ? 'final-mode' : ''} ${activeDrawer ? 'drawer-open' : ''}`}
+      className={`game ${finalMode ? 'final-mode' : ''} ${activeDrawer ? 'drawer-open' : ''}${teachMeMode ? ' teach-me-focus' : ''}`}
       style={{
         gridTemplateColumns: '1fr',
         ['--algo-h']: `${layout.algorithmPanelHeightPx || 220}px`,
@@ -2534,6 +2529,19 @@ export default function Play({
           aria-label={dockCollapsed ? 'Show panel' : 'Hide panel'}
         >
           {dockCollapsed ? <IconLayoutSidebarRightExpand /> : <IconLayoutSidebarRightCollapse />}
+        </button>
+        <button
+          type="button"
+          className={`panel-chat-btn${infoTab === 'chat' ? ' active' : ''}`}
+          onClick={() => {
+            setDockCollapsed(false);
+            setInfoTab((tab) => (tab === 'chat' ? 'treatment' : 'chat'));
+          }}
+          title="Case thread"
+          aria-label="Case thread"
+          aria-pressed={infoTab === 'chat'}
+        >
+          <IconMessage />
         </button>
         <button
           type="button"
@@ -2608,12 +2616,44 @@ export default function Play({
             }}
           />
         </div>
-        <PatientOrderTimeline
-          events={orderTimelineEvents}
-          sessionStartedAt={sessionStartedAt}
-          footProps={timelineFootProps}
-          toolbar={playSceneToolbar}
-        />
+        <div className="scene-timeline-dock">
+          {teachMeMode && (
+            <aside
+              className={`teach-compare-scene-dock${teachCompareResizing ? ' is-resizing' : ''}`}
+              aria-label="Standard flow compared to your orders"
+              style={{ width: teachCompareDockWidth }}
+            >
+              <div
+                className="teach-compare-resize-handle"
+                onPointerDown={startTeachCompareResize}
+                aria-hidden
+                title="Drag to resize width"
+              />
+              <header className="teach-compare-scene-head">
+                <span className="teach-compare-scene-title">Standard flow</span>
+              </header>
+              <div className="teach-compare-scene-body">
+                <TeachMeComparePanel
+                  interventions={interventions}
+                  interventionById={interventionById}
+                  placementOrder={placementOrder}
+                  placed={placed}
+                  nextExpectedId={nextExpectedId}
+                  teachFocusId={teachFocusId}
+                  reviewResults={reviewed ? reviewResults : null}
+                  onFocusStep={focusTeachStep}
+                  compact
+                />
+              </div>
+            </aside>
+          )}
+          <PatientOrderTimeline
+            events={orderTimelineEvents}
+            sessionStartedAt={sessionStartedAt}
+            footProps={timelineFootProps}
+            toolbar={playSceneToolbar}
+          />
+        </div>
         <div className="patient-drop-surface" aria-label="Drop stacks on patient">
           <PatientScene
             scene={caseData.patientScene}
@@ -3170,59 +3210,9 @@ export default function Play({
                   Stacks — drag to patient {stacksVisible ? '↑' : '↓'}
                 </p>
                 {stacksVisible && teachMeMode && (
-                  <div className="teach-panel">
-                    <p className="teach-title">Teach Me Flow</p>
-                    <div className="teach-flow" aria-label="Clinical flow diagram">
-                      {expectedOrderIds.map((id, idx) => {
-                        const iv = interventionById[id];
-                        const done = Boolean(placed[id]);
-                        const next = id === nextExpectedId;
-                        const focused = id === teachFocusId;
-                        return (
-                          <button
-                            key={id}
-                            type="button"
-                            className={`teach-flow-chip ${done ? 'done' : ''} ${next ? 'next' : ''} ${focused ? 'focused' : ''}`}
-                            title={`${idx + 1}. ${iv?.label || id}`}
-                            onClick={() => focusTeachStep(id)}
-                            aria-label={`Step ${idx + 1}, ${iv?.label || id}`}
-                          >
-                            {idx + 1}
-                          </button>
-                        );
-                      })}
-                    </div>
-                    <p className="teach-next">
-                      Next correct stack:{' '}
-                      <strong>
-                        {nextExpectedId
-                          ? interventionById[nextExpectedId]?.label
-                          : 'All core stacks placed'}
-                      </strong>
-                    </p>
-                    <div className="teach-groups">
-                      <div className="teach-group">
-                        <p className="teach-group-title">Acute now</p>
-                        {teachGroups.acute.map((iv) => (
-                          <p key={iv.id} className={`teach-group-row ${placed[iv.id] ? 'done' : ''}`}>
-                            #{iv.seq} {iv.label}
-                          </p>
-                        ))}
-                      </div>
-                      <div className="teach-group">
-                        <p className="teach-group-title">Long-term / prevention</p>
-                        {teachGroups.longTerm.length ? (
-                          teachGroups.longTerm.map((iv) => (
-                            <p key={iv.id} className={`teach-group-row ${placed[iv.id] ? 'done' : ''}`}>
-                              #{iv.seq} {iv.label}
-                            </p>
-                          ))
-                        ) : (
-                          <p className="teach-group-row muted">No long-term stacks in this case.</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  <p className="teach-sidebar-hint">
+                    Standard vs your orders — compare panel is beside the timeline on the scene →
+                  </p>
                 )}
                 {stacksVisible && (
                   <div className="pill-list pill-list-panel pill-list-vertical" id="pill-list">

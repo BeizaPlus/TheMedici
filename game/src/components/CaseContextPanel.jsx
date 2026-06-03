@@ -1,8 +1,21 @@
 import { useEffect, useState } from 'react';
 import { FiVolume2 } from 'react-icons/fi';
 import CcsScreenshotLink from './CcsScreenshotLink.jsx';
+import {
+  IconClipboardPulse,
+  IconMessage,
+  IconPill,
+  IconStethoscope,
+} from './sceneToolbar/SceneToolbarIcons.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { formatExamForDisplay } from '../lib/caseBriefing.js';
+
+const CASE_TAB_DEFS = [
+  { id: 'hpi', label: 'HPI', Icon: IconClipboardPulse },
+  { id: 'exam', label: 'Physical exam', Icon: IconStethoscope },
+  { id: 'treatment', label: 'Treatment', Icon: IconPill },
+  { id: 'chat', label: 'Thread', Icon: IconMessage },
+];
 
 export default function CaseContextPanel({
   caseData,
@@ -97,42 +110,23 @@ export default function CaseContextPanel({
         </div>
       )}
       <div className="case-info-tabs" role="tablist" aria-label="Case context tabs">
-        <button
-          type="button"
-          className={tab === 'hpi' ? 'case-info-tab active' : 'case-info-tab'}
-          onClick={() => setTab('hpi')}
-          aria-selected={tab === 'hpi'}
-        >
-          HPI
-        </button>
-        <button
-          type="button"
-          className={tab === 'exam' ? 'case-info-tab active' : 'case-info-tab'}
-          onClick={() => setTab('exam')}
-          aria-selected={tab === 'exam'}
-        >
-          Physical exam
-        </button>
-        {treatmentEnabled && (
+        {CASE_TAB_DEFS.filter((def) => {
+          if (def.id === 'treatment') return treatmentEnabled;
+          if (def.id === 'chat') return chatEnabled;
+          return true;
+        }).map(({ id, label, Icon }) => (
           <button
+            key={id}
             type="button"
-            className={tab === 'treatment' ? 'case-info-tab active' : 'case-info-tab'}
-            onClick={() => setTab('treatment')}
-            aria-selected={tab === 'treatment'}
+            className={tab === id ? 'case-info-tab active case-info-tab--icon' : 'case-info-tab case-info-tab--icon'}
+            onClick={() => setTab(id)}
+            aria-selected={tab === id}
+            aria-label={label}
+            title={label}
           >
-            {treatmentPanel ? 'Treatment' : 'Treatment plan'}
+            <Icon className="case-info-tab-icon" />
           </button>
-        )}
-        {chatEnabled && (
-          <button
-            type="button"
-            className={tab === 'chat' ? 'case-info-tab active' : 'case-info-tab'}
-            onClick={() => setTab('chat')}
-            aria-selected={tab === 'chat'}
-          >
-            Thread
-          </button>
-        )}
+        ))}
       </div>
       {!isChat && onReadCase && (tab !== 'treatment' || !treatmentPanel) && (
         <div className="case-read-row">

@@ -144,6 +144,7 @@
 }
 
 .panel-toggle-btn,
+.panel-chat-btn,
 .panel-exit-btn {
   width: 42px;
   height: 42px;
@@ -160,12 +161,20 @@
 }
 
 .panel-toggle-btn:hover,
+.panel-chat-btn:hover,
 .panel-exit-btn:hover {
   color: #ffffff;
   background: rgba(14,16,22,0.95);
 }
 
+.panel-chat-btn.active {
+  color: #f3d060;
+  background: rgba(232, 184, 75, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.45);
+}
+
 .panel-toggle-btn .toolbar-icon,
+.panel-chat-btn .toolbar-icon,
 .panel-exit-btn .toolbar-icon {
   width: 16px;
   height: 16px;
