@@ -109,6 +109,24 @@ Once something works on the demo/proof page, do not leave it as a one-off:
 
 ---
 
+## COMPONENT CSS GUARD (NON-NEGOTIABLE)
+
+**Bug:** Differential Practice (and any full-page mode) showed as an **unstyled white page** — default browser fonts, no dark theme.
+
+**Causes:** orphaned/truncated rules at the end of `index.css`; `React.lazy()` on route screens; stale Vite on wrong port.
+
+**Rules:**
+1. Full-page features use **`src/styles/<feature>.css`** — not the tail of `index.css`
+2. Import feature CSS in **`src/main.jsx`** always; also import in the feature component
+3. **No `lazy()`** for route screens with dedicated CSS (`Home.jsx` eager-imports `DifferentialPractice`)
+4. Before commit / telling user "done": run **`node scripts/audit-component-css.mjs`** (runs in `predev` smoke test)
+5. New full-page mode → add contract in `scripts/audit-component-css.mjs` `FEATURE_STYLE_CONTRACTS`
+6. `index.css` must never end with bare properties (no selector) — audit fails if truncated
+
+**Verify in browser:** dark background on Differentials, not white Times New Roman.
+
+---
+
 ## NEVER DO THESE THINGS
 - Never rebuild the UI from scratch
 - Never create a parallel version of the app

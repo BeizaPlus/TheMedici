@@ -81,6 +81,8 @@ Key files: `src/components/Play.jsx`, `src/hooks/usePlayDockLayout.js`, `src/com
 | Node 24 JSON imports | `with { type: 'json' }` on JSON imports in data files |
 | Smoke test expected 80% completion | `scripts/smoke-test.mjs` reads `gameConfig.json` threshold (99) |
 | Blank welcome screen (TDZ) | `WelcomeScreen.jsx` — declare `panel` state before `useMemo` that uses it |
+| **White unstyled full-page mode** (Differentials, etc.) | Orphan CSS in `index.css` + lazy route without CSS in main bundle. Fix: `src/styles/differential-practice.css`, import in `main.jsx` + component, eager import in `Home.jsx`. Guard: `node scripts/audit-component-css.mjs` (in `predev`) |
+| **Differential compare + AI score** | Split scroll columns: yours (left) vs answer key (right). `POST /api/differential/score` uses DeepSeek/OpenAI from `.env`. Client: `src/lib/differentialAiScore.js` |
 
 ---
 

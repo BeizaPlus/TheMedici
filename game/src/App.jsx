@@ -153,6 +153,8 @@ export default function App() {
   );
 
   const playAgain = useCallback(() => {
+    clearPlayCheckpoint();
+    setResumeCheckpoint(null);
     startIcuMonitor({ fadeMs: 0 });
     setScreen(SCREENS.briefing);
   }, []);

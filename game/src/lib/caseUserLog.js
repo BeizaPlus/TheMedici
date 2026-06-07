@@ -1,6 +1,10 @@
 import { STORAGE } from './storageKeys.js';
 
-const API = 'http://127.0.0.1:3001';
+/** Browser uses same-origin /api (Vite proxy in dev). Node/scripts use 3001 directly. */
+const API =
+  typeof window !== 'undefined' && window.location?.hostname
+    ? ''
+    : 'http://127.0.0.1:3001';
 
 function readLocalChatMap() {
   try {
@@ -33,13 +37,21 @@ export function writeLocalChatHistory(caseId, messages) {
 }
 
 async function apiJson(path, options = {}) {
-  const r = await fetch(`${API}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
-    ...options,
-  });
-  const data = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(data.error || `Request failed (${r.status})`);
-  return data;
+  const { timeoutMs = 8000, ...fetchOptions } = options;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const r = await fetch(`${API}${path}`, {
+      headers: { 'Content-Type': 'application/json', ...(fetchOptions.headers || {}) },
+      ...fetchOptions,
+      signal: controller.signal,
+    });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(data.error || `Request failed (${r.status})`);
+    return data;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 export async function fetchOverallUserStats() {
@@ -51,9 +63,9 @@ export async function fetchOverallUserStats() {
   }
 }
 
-export async function fetchCaseUserData(caseId) {
+export async function fetchCaseUserData(caseId, { timeoutMs = 2500 } = {}) {
   try {
-    return await apiJson(`/api/user/case/${encodeURIComponent(caseId)}`);
+    return await apiJson(`/api/user/case/${encodeURIComponent(caseId)}`, { timeoutMs });
   } catch {
     return null;
   }
@@ -147,7 +159,8 @@ export async function uploadCaseRecording(caseId, sessionId, blob, durationMs) {
 
 export function recordingPublicUrl(relativePath) {
   if (!relativePath) return '';
-  return `${API}/user-data/${relativePath.replace(/^\/+/, '')}`;
+  const path = relativePath.replace(/^\/+/, '');
+  return `${API}/user-data/${path}`;
 }
 
 function mergeChatRows(...lists) {

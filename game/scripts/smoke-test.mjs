@@ -41,6 +41,15 @@ function makeLocalStorage() {
 }
 
 async function main() {
+  const { auditComponentCss } = await import("./audit-component-css.mjs");
+  const cssIssues = auditComponentCss(root);
+  if (cssIssues.length) {
+    for (const issue of cssIssues) console.log(`❌ css-audit: ${issue}`);
+    process.exitCode = 1;
+    return;
+  }
+  ok(true, "css-audit: feature styles wired", "differential-practice + index.css integrity");
+
   const gameCfg = readJson("src/data/gameConfig.json");
   const catalog = readJson("src/data/ccsCatalog.json");
   const playbooks = readJson("src/data/playbooks.json");

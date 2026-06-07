@@ -64,19 +64,22 @@ export async function mergeVoiceNoteTranscript(priorTranscript, chunkText) {
   const merged = await callChatCompletion(key, [
     {
       role: 'system',
-      content: `You merge live voice-note dictation for a medical training game.
+      content: `You merge live differential-diagnosis dictation for a medical student.
 Given PRIOR transcript and a new RAW speech-to-text CHUNK, output the complete updated transcript.
 
 Rules:
-- Preserve the speaker's intent and wording; fix obvious STT errors and punctuation only.
-- Do not invent clinical facts not spoken in PRIOR or CHUNK.
+- NEVER drop words from PRIOR or CHUNK — include every spoken diagnosis.
+- Fix STT garble (e.g. "colcystitis" → "cholecystitis", "PE" stays "PE").
+- Turn spoken "comma" / "and" between diagnoses into comma-separated list in flowing prose.
+- Strip filler only: "talking about", "it could be", "um", "uh".
+- Do not invent diagnoses not spoken in PRIOR or CHUNK.
 - Return ONLY the merged plain transcript — no markdown, labels, or commentary.`,
     },
     {
       role: 'user',
       content: `PRIOR:\n${prior || '(empty)'}\n\nNEW CHUNK:\n${chunk}\n\nMERGED TRANSCRIPT:`,
     },
-  ]);
+  ], { maxTokens: 600, temperature: 0.1 });
 
   return merged || `${prior}${prior ? ' ' : ''}${chunk}`.trim();
 }

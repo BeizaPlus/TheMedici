@@ -1,4 +1,7 @@
-const API = 'http://127.0.0.1:3001';
+const API =
+  typeof window !== 'undefined' && window.location?.hostname
+    ? ''
+    : 'http://127.0.0.1:3001';
 
 async function apiJson(path, options = {}) {
   const r = await fetch(`${API}${path}`, {

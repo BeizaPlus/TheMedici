@@ -30,8 +30,13 @@ export const STORAGE = {
   threadCollapsed: 'schoonmaker_thread_collapsed',
   timelineCollapsed: 'schoonmaker_timeline_collapsed',
   caseChatHistory: 'schoonmaker_case_chat_history',
+  caseNotes: 'schoonmaker_case_notes',
   activePlayCheckpoint: 'schoonmaker_active_play_checkpoint',
   uiPrefs: 'schoonmaker_ui_prefs',
+  differentialPracticeLog: 'schoonmaker_differential_practice_log',
+  differentialVoiceIndex: 'schoonmaker_differential_voice_index',
+  differentialCaseMemory: 'schoonmaker_differential_case_memory',
+  differentialStackerPrefs: 'schoonmaker_differential_stacker_prefs',
 };
 
 const LEGACY = {
@@ -85,6 +90,14 @@ export function migrateLegacyStorage() {
           !localStorage.getItem(STORAGE.caseChatHistory)
         ) {
           localStorage.setItem(STORAGE.caseChatHistory, orphan);
+        } else if (
+          parsed &&
+          typeof parsed === 'object' &&
+          !parsed.version &&
+          Object.values(parsed).some((v) => typeof v === 'string') &&
+          !localStorage.getItem(STORAGE.caseNotes)
+        ) {
+          localStorage.setItem(STORAGE.caseNotes, orphan);
         }
       } catch {
         /* ignore */

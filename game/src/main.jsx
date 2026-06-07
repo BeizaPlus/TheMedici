@@ -12,6 +12,7 @@ import {
 import { scrubInvalidSceneStorage } from './lib/patientImage.js';
 import { applyDeviceProfile } from './lib/deviceProfile.js';
 import './index.css';
+import './styles/differential-practice.css';
 import './ui-overrides.css';
 import './styles/scene-toolbar.css';
 

@@ -64,6 +64,12 @@ if (!fs.existsSync(CASE_TTS_DIR)) {
 }
 app.use('/case-tts', express.static(CASE_TTS_DIR));
 
+const USER_DATA_DIR = path.join(GAME_ROOT, 'user-data');
+if (!fs.existsSync(USER_DATA_DIR)) {
+  fs.mkdirSync(USER_DATA_DIR, { recursive: true });
+}
+app.use('/user-data', express.static(USER_DATA_DIR));
+
 const CCS_SCREENSHOTS_DIR = process.env.CCS_SCREENSHOTS_DIR || path.join(GAME_ROOT, 'ccs_screenshots');
 
 const CHATTERBOX_ROOT = process.env.CHATTERBOX_ROOT || path.join(process.env.USERPROFILE || process.env.HOME || '', 'chatterbox');
@@ -159,12 +165,13 @@ Rules:
 - Answer ONLY from the CASE JSON below. If something is not in the JSON, say it is not documented in this case.
 - Keep answers concise and practical for emergency medicine training.
 - Do not invent labs, imaging results, or outcomes not present in the JSON unless clearly labeled as teaching speculation.
+- When the learner sends a message, it may include a SESSION SO FAR block with ordersTimeline and standardFlow (Teach Me compare). Use that live session data to explain placement mistakes, out-of-order steps, and what to do next — in addition to the static case JSON.
 
 CASE JSON:
 ${JSON.stringify(caseContext, null, 2)}`;
 }
 
-async function callCaseChatCompletion(key, messages) {
+async function callChatCompletion(key, messages, { maxTokens = 700, temperature = 0.35 } = {}) {
   const provider = chatProvider();
   const model = chatModel();
   const endpoint =
@@ -180,8 +187,8 @@ async function callCaseChatCompletion(key, messages) {
     },
     body: JSON.stringify({
       model,
-      max_tokens: 700,
-      temperature: 0.35,
+      max_tokens: maxTokens,
+      temperature,
       messages,
     }),
   });
@@ -191,6 +198,141 @@ async function callCaseChatCompletion(key, messages) {
   }
   const data = await r.json();
   return data.choices?.[0]?.message?.content?.trim() || 'No response.';
+}
+
+async function callCaseChatCompletion(key, messages) {
+  return callChatCompletion(key, messages);
+}
+
+function parseModelJson(raw) {
+  const text = String(raw || '').trim();
+  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  const candidate = fenced ? fenced[1].trim() : text;
+  const start = candidate.indexOf('{');
+  const end = candidate.lastIndexOf('}');
+  if (start < 0 || end <= start) throw new Error('Model did not return JSON');
+  return JSON.parse(candidate.slice(start, end + 1));
+}
+
+async function parseDifferentialTranscriptWithLlm(key, payload) {
+  const { rawTranscript, topic, caseId, final = false } = payload;
+  const raw = String(rawTranscript || '').trim();
+  if (!raw) {
+    return { cleanedTranscript: '', diagnoses: [] };
+  }
+
+  const system = final
+    ? `You receive the COMPLETE joined raw speech-to-text transcript after a medical student dictated their full differential list.
+Return ONLY valid JSON (no markdown fences):
+{
+  "cleanedTranscript": "comma-separated final list of every diagnosis they said",
+  "diagnoses": ["Diagnosis 1", "Diagnosis 2"]
+}
+This is the authoritative final pass — be thorough and precise.
+Rules:
+- Include EVERY diagnosis spoken anywhere in the transcript — never drop first, middle, or last items.
+- Merge duplicate/overlapping STT fragments into one diagnosis each (e.g. "PE" and "pulmonary embolism" → one entry).
+- Fix garble: cholecystitis not colcystitis; ovarian cyst not repeated "ovarian ovarian".
+- diagnoses: short standard labels — strip ALL filler ("sorry", "you have an", "talking about", spoken "comma"/"period"/"dot").
+- Exclude non-diagnosis chatter (apologies, full sentences about the patient) — only differential labels.
+- Do not invent diagnoses absent from the raw transcript.
+- Keep abbreviations when appropriate (PID, PE, NSTEMI).
+- Preserve logical spoken order; dedupe case-insensitively.`
+    : `You reconstruct a medical student's spoken differential diagnosis list from garbled speech-to-text.
+Return ONLY valid JSON (no markdown fences):
+{
+  "cleanedTranscript": "comma-separated readable list of everything they said",
+  "diagnoses": ["Diagnosis 1", "Diagnosis 2"]
+}
+Rules:
+- Include EVERY diagnosis clearly spoken — never drop the first or last item.
+- Fix obvious STT errors (cholecystitis not colcystitis; pulmonary embolism not embolism talking about).
+- diagnoses: short standard labels only — no filler ("talking about", "it could be", spoken "comma"/"period"/"dot"/"and").
+- Do not invent diagnoses absent from the raw transcript.
+- Keep abbreviations when spoken (PID, PE, NSTEMI, MI).
+- Preserve spoken order; dedupe case-insensitively.
+- cleanedTranscript = faithful comma-separated reconstruction of the full list.`;
+
+  const user = JSON.stringify({
+    caseId: caseId ?? null,
+    chiefComplaint: topic || null,
+    rawTranscript: raw,
+  });
+
+  const content = await callChatCompletion(
+    key,
+    [
+      { role: 'system', content: system },
+      { role: 'user', content: user },
+    ],
+    { maxTokens: 800, temperature: 0.1 },
+  );
+
+  const parsed = parseModelJson(content);
+  const diagnoses = Array.isArray(parsed.diagnoses)
+    ? parsed.diagnoses.map(String).map((d) => d.trim()).filter((d) => d.length >= 2)
+    : [];
+  return {
+    cleanedTranscript: String(parsed.cleanedTranscript || raw).trim() || raw,
+    diagnoses,
+  };
+}
+
+async function scoreDifferentialWithLlm(key, payload) {
+  const {
+    caseId,
+    topic,
+    caseDiagnosis,
+    answerKey = [],
+    guesses = [],
+  } = payload;
+
+  const { rawTranscript = '' } = payload;
+
+  const system = `You are a smart clinical examiner grading a medical student's differential against the official MARKING SCHEME (answerKey).
+Return ONLY valid JSON (no markdown fences):
+{
+  "gradedGuesses": [
+    { "guess": "string", "status": "match" | "extra" | "partial", "matchedAnswer": "string or null", "note": "short reason" }
+  ],
+  "missedAnswers": ["answer key items with no reasonable guess"],
+  "gotCaseDiagnosis": boolean,
+  "scoreSummary": "2-3 sentence report: score fraction, what matched (name them), what was missed from marking scheme, one study tip"
+}
+Marking rules — be fair and clinically literate:
+- answerKey is the ONLY marking scheme. Map learner language to those items generously when clinically justified.
+- status "match": equivalent diagnosis, accepted abbreviation, or clear synonym (e.g. STD/STI/chlamydia/gonorrhea → Pelvic Inflammatory Disease; PE → pulmonary embolism; heart attack → NSTEMI).
+- status "partial": related mechanism or organ system but not specific enough (e.g. "pelvic inflammation", "adnexal infection" → PID partial).
+- status "extra": not on marking scheme and not a reasonable synonym for any answerKey item.
+- One gradedGuesses row per learner guess, same order as learnerGuesses input.
+- If rawTranscript is provided, use it for context when a cleaned guess is vague but the spoken intent clearly matched a marking scheme item.
+- gotCaseDiagnosis: true if any guess (match or strong partial) equals caseDiagnosis clinically.
+- missedAnswers: answerKey items with no match or partial from any guess.
+- scoreSummary: name specific marking scheme items matched and missed.`;
+
+  const user = JSON.stringify({
+    caseId,
+    chiefComplaint: topic,
+    caseDiagnosis: caseDiagnosis || null,
+    answerKey,
+    learnerGuesses: guesses,
+    rawTranscript: rawTranscript || null,
+  });
+
+  const raw = await callChatCompletion(
+    key,
+    [
+      { role: 'system', content: system },
+      { role: 'user', content: user },
+    ],
+    { maxTokens: 1200, temperature: 0.15 },
+  );
+
+  const parsed = parseModelJson(raw);
+  if (!Array.isArray(parsed.gradedGuesses)) {
+    throw new Error('Invalid AI score payload');
+  }
+  return parsed;
 }
 
 const FAL_SCENE_MODEL = process.env.FAL_SCENE_MODEL || 'fal-ai/joyai-image-edit';
@@ -471,6 +613,80 @@ app.post('/api/case-chat/start', async (req, res) => {
   }
 });
 
+app.post('/api/differential/parse-transcript', async (req, res) => {
+  const key = chatApiKeyOrError(res);
+  if (!key) return;
+
+  const { rawTranscript, topic, caseId, final = false } = req.body || {};
+  const raw = String(rawTranscript || '').trim();
+  if (!raw) {
+    return res.status(400).json({ error: 'Missing rawTranscript' });
+  }
+
+  try {
+    const parsed = await parseDifferentialTranscriptWithLlm(key, {
+      rawTranscript: raw,
+      topic,
+      caseId,
+      final: Boolean(final),
+    });
+    return res.json({
+      ok: true,
+      cleanedTranscript: parsed.cleanedTranscript,
+      diagnoses: parsed.diagnoses,
+      provider: chatProvider(),
+      model: chatModel(),
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/differential/score', async (req, res) => {
+  const key = chatApiKeyOrError(res);
+  if (!key) return;
+
+  const {
+    caseId,
+    topic,
+    caseDiagnosis,
+    answerKey,
+    guesses,
+    rawTranscript,
+  } = req.body || {};
+
+  const keyList = Array.isArray(answerKey) ? answerKey.map(String).filter(Boolean) : [];
+  const guessList = Array.isArray(guesses) ? guesses.map(String).filter(Boolean) : [];
+
+  if (!keyList.length) {
+    return res.status(400).json({ error: 'Missing answerKey' });
+  }
+  if (!guessList.length) {
+    return res.status(400).json({ error: 'Add at least one differential before scoring' });
+  }
+
+  try {
+    const graded = await scoreDifferentialWithLlm(key, {
+      caseId,
+      topic,
+      caseDiagnosis,
+      answerKey: keyList,
+      guesses: guessList,
+      rawTranscript: String(rawTranscript || '').trim(),
+    });
+    return res.json({
+      ok: true,
+      score: {
+        ...graded,
+        provider: chatProvider(),
+        model: chatModel(),
+      },
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
 app.post('/api/case-chat/message', async (req, res) => {
   const key = chatApiKeyOrError(res);
   if (!key) return;
@@ -488,7 +704,10 @@ app.post('/api/case-chat/message', async (req, res) => {
   try {
     let userContent = text;
     if (sessionContext && typeof sessionContext === 'object') {
-      const ctxBlock = `[SESSION SO FAR — orders, notes, and scene activity for this run]\n${JSON.stringify(sessionContext, null, 2)}`;
+      const header = sessionContext.standardFlow
+        ? '[SESSION SO FAR — standard flow compare, order timeline, notes, and scene activity for this run]'
+        : '[SESSION SO FAR — orders, notes, and scene activity for this run]';
+      const ctxBlock = `${header}\n${JSON.stringify(sessionContext, null, 2)}`;
       userContent = `${ctxBlock}\n\n---\n\nLearner question: ${text}`;
     }
     session.messages.push({ role: 'user', content: userContent });

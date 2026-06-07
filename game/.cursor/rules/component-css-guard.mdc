@@ -1,0 +1,48 @@
+---
+description: Prevent unstyled white screens — feature CSS must be imported and index.css must stay valid
+globs: src/**/*.{jsx,css},scripts/*.mjs
+alwaysApply: true
+---
+
+# Component CSS guard (Schoonmaker / MeWorld game)
+
+## The bug (2026-06-07)
+
+**Symptom:** Full-page mode (e.g. Differential Practice) renders as plain white HTML — Times New Roman, default buttons, no dark theme.
+
+**Root causes:**
+1. Feature CSS only at the tail of huge `index.css` — a bad edit left **orphaned properties without a selector**, breaking parse from that point onward
+2. `React.lazy()` on a route screen without guaranteeing its stylesheet is in the **main bundle**
+3. Multiple zombie Vite/API processes on 5173–5175 / 3001 serving stale or partial assets
+
+**Fix pattern:**
+- Dedicated file: `src/styles/differential-practice.css`
+- Import in **`src/main.jsx`** AND the feature component (`DifferentialPractice.jsx`)
+- **Eager** import in `Home.jsx` — no `lazy()` for full-page modes with custom CSS
+- Hardcoded fallback colors on `.diff-practice` (`#0c0c10`) not only `var(--bg)`
+
+## Before finishing any UI task — mandatory checks
+
+1. Run `node scripts/audit-component-css.mjs` (also runs in `npm run dev` via smoke-test)
+2. Confirm the feature root class exists in CSS (e.g. `.diff-practice { background: #0c0c10; }`)
+3. Confirm `main.jsx` imports the feature stylesheet
+4. If adding a new full-page mode, add a row to `FEATURE_STYLE_CONTRACTS` in `scripts/audit-component-css.mjs`
+5. **Never** append large new feature blocks to the end of `index.css` — use `src/styles/<feature>.css`
+6. After editing `index.css`, verify the file ends on a clean closing `}` with no stray property lines
+
+## Do not
+
+- `lazy(() => import('./FullPageFeature.jsx'))` for screens with dedicated CSS unless CSS is imported in `main.jsx`
+- Delete or duplicate feature CSS in both `index.css` and the feature stylesheet
+- Tell the user to refresh without killing duplicate node processes on 5173/3001 when styles look missing
+
+## Canonical paths
+
+| Item | Path |
+|------|------|
+| Game root | `C:\Users\steve\MeWorld\game\` |
+| CSS audit | `scripts/audit-component-css.mjs` |
+| Differential styles | `src/styles/differential-practice.css` |
+| Launch | `npm run dev` → http://localhost:5173/ |
+
+See `CURSOR_RULES.md` § COMPONENT CSS GUARD and `AGENTS.md` launch gotchas.

@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import WelcomeScreen from './WelcomeScreen.jsx';
 import CaseBrowser from './CaseBrowser.jsx';
+import DifferentialPractice from './DifferentialPractice.jsx';
 import { isStudioApp } from '../lib/appMode.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
 
@@ -26,6 +27,10 @@ export default function Home({
         onBack={() => setView('welcome')}
       />
     );
+  }
+
+  if (view === 'differential') {
+    return <DifferentialPractice onBack={() => setView('welcome')} />;
   }
 
   return (
@@ -55,6 +60,7 @@ export default function Home({
         setCasesFilter('flagged');
         setView('cases');
       }}
+      onOpenDifferential={() => setView('differential')}
       studioBuild={studioBuild}
     />
   );
