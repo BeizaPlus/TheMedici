@@ -1,0 +1,136 @@
+{
+  "case_number": 106,
+  "title": "Burning During Urination",
+  "specialty": "Internal Medicine",
+  "chief_complaint": "Burning During Urination",
+  "patient": "Ms. X is a young adult woman who has admitted to using illicit substances and does not have any significant past medical history",
+  "location": {
+    "appropriateLocation": "Office"
+  },
+  "diagnosis": "Chlamydia",
+  "hpi_narrative": "A young adult woman, Ms. X, presents with Burning During Urination. Onset of symptoms began recently, with a severity that causes discomfort but does not prevent her from urinating. No associated symptoms or pertinent negatives are found from the ordered tests. The single clinical question this case forces you to answer is 'Does the patient have a urinary tract infection, specifically Chlamydia?', which will be addressed by examining the genitalia and rectal examination, performing a CBC with differential, toxicology screen, urinalysis, antibody, direct fluorescent, chlamydia, urethra, Neisseria gonorrhoeae DNA probe test, urethra, and culture, if necessary.",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": null,
+    "respiratory": null,
+    "abdominal": null,
+    "neurological": null,
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": {
+      "appearance": null,
+      "genitalia": "Genital area appears normal",
+      "rectal": "Rectal examination reveals no abnormalities"
+    },
+    "psychiatric": null
+  },
+  "stacks": [
+    {
+      "label": "General Appearance",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Chest / Lungs",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Heart / Cardiovascular",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Abdomen",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Genitalia",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Rectal",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Toxicology screen, urine",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Urinalysis",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Antibody, direct fluorescent, chlamydia, urethra",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Neisseria gonorrhoeae DNA probe test, urethra",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 0,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual case chief complaint in OCR. Title should be 'Burning During Urination - Internal Medicine Previous Completions' to align with the original.",
+      "fix": "Title: 'Burning During Urination - Internal Medicine Previous Completions'"
+    },
+    {
+      "field": "stacks",
+      "problem": "Stack labels contain unnecessary UI noise such as 'Correctly Ordered' and percentages. They should be clean clinical orders with only the test names.",
+      "fix": "Replace all stack labels with clean clinical orders (e.g., replace 'Correctly Ordered: Physical Exam: General Appearance' with 'Physical Exam: General Appearance')."
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "HPI contains metadata such as scores, percentages, and dates. It should be a proper clinical narrative with no placeholders or UI noise.",
+      "fix": "Replace all metadata from the HPI narrative."
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Physical exam findings are not complete, as some systems have null values where findings should be present.",
+      "fix": "Ensure that physical examination findings are filled out for all systems with actual findings."
+    },
+    {
+      "field": "overall_confidence",
+      "problem": "Overall confidence is low, indicating that the case may not be ready to serve to a learner.",
+      "fix": "Improve the overall quality of the case data to increase the overall confidence score."
+    }
+  ],
+  "_validation_errors": [
+    "Stack label too long \u2014 likely explanatory text: 'Preventive care: Advise patient, safe sex techniqu...'",
+    "Stack label too long \u2014 likely explanatory text: 'Preventive care: Advise patient, no illegal drug u...'",
+    "Stack label too long \u2014 likely explanatory text: 'Preventive care: Advise patient, sexual partner ne...'"
+  ]
+}

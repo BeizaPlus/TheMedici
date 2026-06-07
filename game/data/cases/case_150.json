@@ -1,0 +1,64 @@
+{
+  "id": 150,
+  "topic": "Back Pain and Fatigue",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Office or ward",
+    "CBC",
+    "BMP with calcium",
+    "Serum protein electrophoresis",
+    "Urine protein electrophoresis (UPEP)",
+    "Skeletal survey",
+    "Bisphosphonates",
+    "Hematology / oncology referral"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Office or ward": "Appropriate CCS order for this diagnosis: Office or ward.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "BMP with calcium": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Serum protein electrophoresis": "Appropriate CCS order for this diagnosis: Serum protein electrophoresis.",
+    "Urine protein electrophoresis (UPEP)": "Appropriate CCS order for this diagnosis: Urine protein electrophoresis (UPEP).",
+    "Skeletal survey": "Appropriate CCS order for this diagnosis: Skeletal survey.",
+    "Bisphosphonates": "Appropriate CCS order for this diagnosis: Bisphosphonates.",
+    "Hematology / oncology referral": "Appropriate CCS order for this diagnosis: Hematology / oncology referral."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — back pain and fatigue. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This back pain and fatigue won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Office or ward",
+    "CBC",
+    "BMP with calcium",
+    "Serum protein electrophoresis",
+    "Urine protein electrophoresis (UPEP)",
+    "Skeletal survey",
+    "Bisphosphonates",
+    "Hematology / oncology referral"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

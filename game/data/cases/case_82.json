@@ -1,0 +1,60 @@
+{
+  "id": 82,
+  "topic": "Acute Bacterial Gastroenteritis",
+  "diagnosis": "Acute Bacterial Gastroenteritis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest/Lungs",
+    "Physical Exam: Abdomen",
+    "Laboratory: Urinalysis",
+    "Laboratory: Stool Result",
+    "Fluid resuscitation: model Fluid 1st 24 hours"
+  ],
+  "should_avoid": [
+    "Antibiotics: Reassess, if patient still has severe diarrhea and abdominal pain"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for acute bacterial gastroenteritis.",
+    "Physical Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for acute bacterial gastroenteritis.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with acute bacterial gastroenteritis.",
+    "Laboratory: Urinalysis": "Appropriate CCS order for Acute Bacterial Gastroenteritis: Laboratory: Urinalysis.",
+    "Laboratory: Stool Result": "Appropriate CCS order for Acute Bacterial Gastroenteritis: Laboratory: Stool Result.",
+    "Fluid resuscitation: model Fluid 1st 24 hours": "Appropriate CCS order for Acute Bacterial Gastroenteritis: Fluid resuscitation: model Fluid 1st 24 hours.",
+    "Antibiotics: Reassess, if patient still has severe diarrhea and abdominal pain": "CCS review: avoid this order for Acute Bacterial Gastroenteritis — it does not change acute management."
+  },
+  "hpi": "The patient is a 5-year-old male who presents with abdominal pain, vomiting, and diarrhea. He has a history of recent travel and exposure to contaminated water. The patient is noted to be dehydrated and has a fever. Initial laboratory tests confirm the diagnosis of acute bacterial gastroenteritis. The management plan includes rehydration and monitoring. Antibiotics are not routinely indicated unless there is severe illness or specific bacterial infection identified.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared because my stomach hurts a lot and I keep throwing up.",
+    "history": "I was playing outside and then I got really sick. I think I drank some bad water.",
+    "pain": "It hurts in my belly, and I feel like I need to go to the bathroom a lot."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "The patient is a 5-year-old male who presents with abdominal pain, vomiting, and diarrhea. He has a history of recent travel and exposure to contaminated water. The patient is noted to be dehydrated and has a fever. Initial laboratory tests confirm the diagnosis of acute bacterial gastroenteritis. The management plan includes rehydration and monitoring. Antibiotics are not routinely indicated unless there is severe illness or specific bacterial infection identified.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exams for patient: patient’s General Appearance",
+    "Ordered: CBC with differential",
+    "Ordered: Comprehensive metabolic profile",
+    "Ordered: Sediment"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

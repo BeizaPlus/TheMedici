@@ -1,0 +1,49 @@
+{
+  "id": 163,
+  "topic": "Ear Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Office or home (not ED)",
+    "Pneumatic otoscopy",
+    "Oral amoxicillin"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Office or home (not ED)": "Appropriate CCS order for this diagnosis: Office or home (not ED).",
+    "Pneumatic otoscopy": "Appropriate CCS order for this diagnosis: Pneumatic otoscopy.",
+    "Oral amoxicillin": "Appropriate CCS order for this diagnosis: Oral amoxicillin."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — ear pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This ear pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Office or home (not ED)",
+    "Pneumatic otoscopy",
+    "Oral amoxicillin"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

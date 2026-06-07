@@ -1,0 +1,55 @@
+{
+  "id": 114,
+  "topic": "Pain in Side",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Laboratory tests: Complete Blood Count (CBC), Chemistry Panel, Urinalysis",
+    "Imaging: Abdominal CT scan",
+    "Oxygen",
+    "IV access x2 large-bore"
+  ],
+  "should_avoid": [
+    "Order for immediate surgical intervention without proper diagnostics"
+  ],
+  "rationale": {
+    "Laboratory tests: Complete Blood Count (CBC), Chemistry Panel, Urinalysis": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Imaging: Abdominal CT scan": "Appropriate CCS order for this diagnosis: Imaging: Abdominal CT scan.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access x2 large-bore": "Appropriate CCS order for this diagnosis: IV access x2 large-bore.",
+    "Order for immediate surgical intervention without proper diagnostics": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — pain in side. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This pain in side won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Laboratory tests: Complete Blood Count (CBC), Chemistry Panel, Urinalysis",
+    "Imaging: Abdominal CT scan",
+    "Oxygen",
+    "IV access x2 large-bore"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

@@ -1,0 +1,81 @@
+{
+  "id": 174,
+  "topic": "Hematemesis",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain laboratory tests: CBC, Coagulation panel, Lipase, AST, ALT",
+    "Order upper GI endoscopy",
+    "Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH",
+    "Consult Gastroenterology for endoscopic evaluation and management",
+    "Oxygen",
+    "IV access ×2",
+    "CBC",
+    "CMP",
+    "coags",
+    "CXR"
+  ],
+  "should_avoid": [
+    "Reproductive",
+    "Type & Screen / Crossmatch",
+    "EKG (Electrocardiogram)",
+    "Fingerstick/Serum glucose",
+    "Order unneeded X-rays or CT scans at this stage as they may not be diagnostic for upper GI bleeding"
+  ],
+  "rationale": {
+    "Obtain laboratory tests: CBC, Coagulation panel, Lipase, AST, ALT": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Order upper GI endoscopy": "Appropriate CCS order for this diagnosis: Order upper GI endoscopy.",
+    "Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH": "Appropriate CCS order for this diagnosis: Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH.",
+    "Consult Gastroenterology for endoscopic evaluation and management": "Appropriate CCS order for this diagnosis: Consult Gastroenterology for endoscopic evaluation and management.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "CMP": "Appropriate CCS order for this diagnosis: CMP.",
+    "coags": "Appropriate CCS order for this diagnosis: coags.",
+    "CXR": "Appropriate CCS order for this diagnosis: CXR.",
+    "Reproductive": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical.",
+    "Type & Screen / Crossmatch": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+    "EKG (Electrocardiogram)": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical.",
+    "Fingerstick/Serum glucose": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+    "Order unneeded X-rays or CT scans at this stage as they may not be diagnostic for upper GI bleeding": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — hematemesis. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This hematemesis won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain laboratory tests: CBC, Coagulation panel, Lipase, AST, ALT",
+    "Order upper GI endoscopy",
+    "Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH",
+    "Consult Gastroenterology for endoscopic evaluation and management",
+    "Oxygen",
+    "IV access ×2",
+    "CBC",
+    "CMP",
+    "coags",
+    "CXR"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

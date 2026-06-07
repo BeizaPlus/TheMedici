@@ -1,0 +1,68 @@
+{
+  "id": 96,
+  "topic": "Nausea and Vomiting - Emergency Medicine",
+  "diagnosis": "Toxic Shock Syndrome",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Urinalysis",
+    "CBC with differential",
+    "Bacterial culture, cervix",
+    "Ordered: Comprehensive metabolic profile / liver function panel",
+    "Physical Exam: Chest, Lungs",
+    "CXR",
+    "Blood cultures",
+    "Saline solution: Normal / Localized Rehydration",
+    "Vancomycin / Ceftriaxone / Clindamycin AND Metronidazole"
+  ],
+  "should_avoid": [
+    "Ciprofloxacin"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for nausea and vomiting - emergency medicine.",
+    "Urinalysis": "Appropriate CCS order for Toxic Shock Syndrome: Urinalysis.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Toxic Shock Syndrome.",
+    "Bacterial culture, cervix": "Laboratory testing when systemic illness or severity warrants labs in Toxic Shock Syndrome.",
+    "Ordered: Comprehensive metabolic profile / liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Toxic Shock Syndrome.",
+    "Physical Exam: Chest, Lungs": "Evaluate chest and lungs as part of the initial exam for nausea and vomiting - emergency medicine.",
+    "CXR": "Appropriate CCS order for Toxic Shock Syndrome: CXR.",
+    "Blood cultures": "Laboratory testing when systemic illness or severity warrants labs in Toxic Shock Syndrome.",
+    "Saline solution: Normal / Localized Rehydration": "Appropriate CCS order for Toxic Shock Syndrome: Saline solution: Normal / Localized Rehydration.",
+    "Vancomycin / Ceftriaxone / Clindamycin AND Metronidazole": "Appropriate CCS order for Toxic Shock Syndrome: Vancomycin / Ceftriaxone / Clindamycin AND Metronidazole.",
+    "Ciprofloxacin": "CCS review: avoid this order for Toxic Shock Syndrome — it does not change acute management."
+  },
+  "hpi": "Differential diagnoses include but are not limited to acute gastroenteritis, bacterial infection, and surgical issues. As such, most important is to ensure that the patient is stable. Toxic shock syndrome presents with fever, rash, and hypotension. The patient should receive appropriate antibiotics and fluids to stabilize their condition.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm feeling really sick and scared. I can't stop throwing up.",
+    "history": "I was fine earlier, but then I started feeling nauseous and dizzy.",
+    "pain": "My stomach hurts a lot."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "Differential diagnoses include but are not limited to acute gastroenteritis, bacterial infection, and surgical issues. As such, most important is to ensure that the patient is stable. Toxic shock syndrome presents with fever, rash, and hypotension. The patient should receive appropriate antibiotics and fluids to stabilize their condition.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exams and patient updates: General Appearance, Skin, Abdomen, General",
+    "Ordered: CBC with differential",
+    "Ordered: Bacterial culture, cervix",
+    "Ordered: Comprehensive metabolic profile / liver function panel"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

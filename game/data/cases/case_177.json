@@ -1,0 +1,55 @@
+{
+  "id": 177,
+  "topic": "Vaginal Bleeding",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Laboratory tests: Complete Blood Count (CBC), Coagulation profile, Human Chorionic Gonadotropin (hCG) test, Blood type and cross-match",
+    "Imaging: Transvaginal ultrasound, Pelvis X-ray if trauma suspected",
+    "Type & Screen / Crossmatch",
+    "β-hCG"
+  ],
+  "should_avoid": [
+    "Discharge from hospital without proper diagnosis and treatment"
+  ],
+  "rationale": {
+    "Laboratory tests: Complete Blood Count (CBC), Coagulation profile, Human Chorionic Gonadotropin (hCG) test, Blood type and cross-match": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Imaging: Transvaginal ultrasound, Pelvis X-ray if trauma suspected": "Imaging supports diagnosis when exam findings warrant it for this diagnosis.",
+    "Type & Screen / Crossmatch": "Appropriate CCS order for this diagnosis: Type & Screen / Crossmatch.",
+    "β-hCG": "Appropriate CCS order for this diagnosis: β-hCG.",
+    "Discharge from hospital without proper diagnosis and treatment": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — vaginal bleeding. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This vaginal bleeding won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Laboratory tests: Complete Blood Count (CBC), Coagulation profile, Human Chorionic Gonadotropin (hCG) test, Blood type and cross-match",
+    "Imaging: Transvaginal ultrasound, Pelvis X-ray if trauma suspected",
+    "Type & Screen / Crossmatch",
+    "β-hCG"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

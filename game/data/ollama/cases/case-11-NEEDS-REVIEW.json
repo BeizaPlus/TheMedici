@@ -1,0 +1,68 @@
+{
+  "case_number": 2,
+  "title": "Abdominal Pain - Emergency Medicine",
+  "specialty": "Emergency Medicine",
+  "chief_complaint": "Abdominal Pain",
+  "patient": "Male",
+  "location": "ER",
+  "diagnosis": [
+    "Aspiration Pneumonia",
+    "Hepatitis A"
+  ],
+  "hpi_narrative": "A male patient presents to the emergency department with complaints of abdominal pain and shortness of breath. He has a history of recent cruise travel and is jaundiced. On examination, he is tachycardic, and his liver function tests are elevated.",
+  "physical_exam": {
+    "General": [
+      "Jaundice",
+      "tachycardia"
+    ],
+    "Chest": null,
+    "Heart": null,
+    "Abdomen": null,
+    "Neurologic": null,
+    "Skin": null,
+    "Extremities": null
+  },
+  "tests_ordered": [
+    "CBC with differential",
+    "Liver function tests"
+  ],
+  "xrays_ordered": [
+    "X-ray, chest, PA/lateral"
+  ],
+  "stacks": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 0,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual chief complaint in OCR. It should be 'Abdominal Pain - Emergency Medicine Rotem Caretta'.",
+      "fix": "Change the title to 'Abdominal Pain - Emergency Medicine Rotem Caretta'."
+    },
+    {
+      "field": "stacks",
+      "problem": "Stack labels contain UI noise such as 'Correctly Ordered', 'Should have Ordered'. They should only contain clean clinical orders.",
+      "fix": "Remove UI noise from stack labels and ensure they only contain clean clinical orders."
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "HPI contains placeholders such as '[...]'. It should not contain any placeholders or metadata.",
+      "fix": "Remove placeholders from the HPI narrative."
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Physical exam findings are incomplete and not properly extracted. They should only include actual findings and be null for systems without findings.",
+      "fix": "Ensure physical exam findings are complete and only include actual findings, with systems without findings set to null."
+    },
+    {
+      "field": "overall_confidence",
+      "problem": "Overall confidence is too low. It should be 99 or above for the data to be ready.",
+      "fix": "Increase overall confidence by correcting all issues and ensuring the data is complete."
+    }
+  ]
+}

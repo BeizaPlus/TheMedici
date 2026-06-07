@@ -1,0 +1,60 @@
+{
+  "id": 137,
+  "topic": "Wrist and Ankle Pain",
+  "diagnosis": "Rheumatoid Arthritis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Extremities",
+    "Physical Exam: Neuro",
+    "Physical Exam: Skin",
+    "CXR: Anterior-Posterior",
+    "CT Abdomen: Without Contrast",
+    "2D Echocardiogram"
+  ],
+  "should_avoid": [
+    "History: summary"
+  ],
+  "rationale": {
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Rheumatoid Arthritis.",
+    "Physical Exam: Neuro": "Targeted Physical Exam: Neuro exam supports the differential for Rheumatoid Arthritis.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Rheumatoid Arthritis.",
+    "CXR: Anterior-Posterior": "Appropriate CCS order for Rheumatoid Arthritis: CXR: Anterior-Posterior.",
+    "CT Abdomen: Without Contrast": "Abdominal exam helps exclude alternative causes in a patient with wrist and ankle pain.",
+    "2D Echocardiogram": "Appropriate CCS order for Rheumatoid Arthritis: 2D Echocardiogram.",
+    "History: summary": "CCS review: avoid this order for Rheumatoid Arthritis — it does not change acute management."
+  },
+  "hpi": "This case illustrates the importance of considering the differential diagnosis for joint pain in a patient with known rheumatoid arthritis. The clinician should be aware of the potential for complications related to the disease and the need for appropriate imaging and laboratory studies to guide management.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my wrist and ankle pain. It hurts so much!",
+    "history": "I've had this pain for a while now, and it's getting worse.",
+    "pain": "The pain is sharp and makes it hard to move."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This case illustrates the importance of considering the differential diagnosis for joint pain in a patient with known rheumatoid arthritis. The clinician should be aware of the potential for complications related to the disease and the need for appropriate imaging and laboratory studies to guide management.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "CXR: Anterior-Posterior",
+    "CT Abdomen: Without Contrast",
+    "2D Echocardiogram"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

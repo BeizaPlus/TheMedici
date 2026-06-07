@@ -1,0 +1,52 @@
+{
+  "id": 175,
+  "topic": "Heavy Menstrual Bleeding",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Laboratory tests: Complete blood count (CBC), coagulation panel, thyroid function tests, and hormone levels",
+    "Imaging studies: Transvaginal ultrasound, pelvic MRI",
+    "β-hCG"
+  ],
+  "should_avoid": [
+    "Order for immediate dilation and curettage (D&C) as it may be premature without definitive diagnosis"
+  ],
+  "rationale": {
+    "Laboratory tests: Complete blood count (CBC), coagulation panel, thyroid function tests, and hormone levels": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Imaging studies: Transvaginal ultrasound, pelvic MRI": "Pelvic/cervical evaluation is central for this diagnosis and localizes the source of heavy menstrual bleeding.",
+    "β-hCG": "Appropriate CCS order for this diagnosis: β-hCG.",
+    "Order for immediate dilation and curettage (D&C) as it may be premature without definitive diagnosis": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — heavy menstrual bleeding. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This heavy menstrual bleeding won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Laboratory tests: Complete blood count (CBC), coagulation panel, thyroid function tests, and hormone levels",
+    "Imaging studies: Transvaginal ultrasound, pelvic MRI",
+    "β-hCG"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

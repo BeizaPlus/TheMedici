@@ -1,0 +1,64 @@
+{
+  "id": 87,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Ulcerative Colitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Report of General Appearance",
+    "Report of Blood Stool",
+    "Stool for Occult Blood",
+    "History, Review and Physical Exam",
+    "Colonoscopy / Sigmoidoscopy",
+    "Complete Blood Count",
+    "Stool for C. difficile"
+  ],
+  "should_avoid": [
+    "Urinalysis",
+    "CT Abdomen/Pelvis"
+  ],
+  "rationale": {
+    "Report of General Appearance": "Assess how ill the patient appears before focused testing for abdominal pain.",
+    "Report of Blood Stool": "Diagnostic report or tissue diagnosis clarifies the cause of abdominal pain.",
+    "Stool for Occult Blood": "Appropriate CCS order for Ulcerative Colitis: Stool for Occult Blood.",
+    "History, Review and Physical Exam": "Appropriate CCS order for Ulcerative Colitis: History, Review and Physical Exam.",
+    "Colonoscopy / Sigmoidoscopy": "Appropriate CCS order for Ulcerative Colitis: Colonoscopy / Sigmoidoscopy.",
+    "Complete Blood Count": "Appropriate CCS order for Ulcerative Colitis: Complete Blood Count.",
+    "Stool for C. difficile": "Appropriate CCS order for Ulcerative Colitis: Stool for C. difficile.",
+    "Urinalysis": "CCS review: avoid this order for Ulcerative Colitis — it does not change acute management.",
+    "CT Abdomen/Pelvis": "Advanced imaging is not indicated early for Ulcerative Colitis when the diagnosis is clinical."
+  },
+  "hpi": "Patients often present with abdominal pain, diarrhea, and weight loss. The differential diagnosis includes inflammatory bowel disease, infections, and malignancies. It is important to assess the severity of the disease and rule out other causes of the patient's chronic diarrhea.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my stomach pain. It just won't go away.",
+    "history": "I've been having diarrhea and losing weight. It's been really tough.",
+    "pain": "It hurts a lot, especially after I eat."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Patients often present with abdominal pain, diarrhea, and weight loss. The differential diagnosis includes inflammatory bowel disease, infections, and malignancies. It is important to assess the severity of the disease and rule out other causes of the patient's chronic diarrhea.",
+  "stacks": [
+    "Vitals Ordered",
+    "History, Review and Physical Exam",
+    "Ordered Ambulatory Follow-up",
+    "Ordered Rapid Pain test",
+    "Ordered Ambulatory discharge"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

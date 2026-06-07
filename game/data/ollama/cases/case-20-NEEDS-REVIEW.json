@@ -1,0 +1,124 @@
+{
+  "case_number": 206,
+  "title": "Palpitations",
+  "specialty": "Cardiology",
+  "chief_complaint": "Palpitations",
+  "patient": "65-year-old male",
+  "location": "ER",
+  "diagnosis": "3rd Degree Heart Block",
+  "hpi_narrative": "A 65-year-old male presents with sudden onset of palpitations. The character is irregular, severity is moderate, associated symptoms are none, pertinent negatives are unknown.",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": null,
+    "respiratory": null,
+    "abdominal": null,
+    "neurological": null,
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "aliases": [],
+      "finding": "General examination is extremely useful to determine how sick the patient looks",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "aliases": [],
+      "finding": "It is important to investigate for lung pathology which could be contributing to the patient's symptoms",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "aliases": [],
+      "finding": "The patient is reporting palpitations, so this should be examined",
+      "type": "retry"
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "aliases": [],
+      "finding": "With cardiovascular problems, it's important to examine the extremities to look for pathology",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": "CBC is always a good screening tool in nearly every patient",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+      "aliases": [],
+      "finding": "Hypothyroidism/hyperthyroidism is associated with arrhythmias. It is important to screen for this condition.",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Lipid profile",
+      "aliases": [],
+      "finding": "This gives you a data point for the patient's risk for heart disease",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Serology, lyme disease",
+      "aliases": [],
+      "finding": "Lyme disease is associated with heart block, so it's important to screen for this condition.",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Cardiac troponin |, serum / Cardiac enzymes, serum",
+      "aliases": [],
+      "finding": "It's important to rule out an myocardial infarction",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Sedimentation rate, erythrocyte",
+      "aliases": [],
+      "finding": "This is to help rule out inflammatory conditions that could cause heart block",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long / Monitor, cardiac / Monitor, cardiac, check",
+      "aliases": [],
+      "finding": "EKG / Cardiac monitoring would show a third degree heart block",
+      "type": null
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 0,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "The title does not match the actual case chief complaint in OCR.",
+      "fix": "Title should be 'Palpitations - Emergency Medicine'"
+    },
+    {
+      "field": "stacks[*].label",
+      "problem": "Stack labels contain UI noise, such as copyright symbols and brackets.",
+      "fix": "Stack labels should only contain clean clinical orders."
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "HPI narrative contains no placeholders or metadata, but it is not a proper clinical narrative.",
+      "fix": "HPI narrative should be a detailed description of the patient's presentation and symptoms."
+    },
+    {
+      "field": "physical_exam[*].finding",
+      "problem": "Physical exam findings are missing for all systems.",
+      "fix": "Physical exam findings should be included for each system where applicable."
+    }
+  ],
+  "_validation_errors": [
+    "Stack label too long \u2014 likely explanatory text: 'Hormone, thyroid stimulating, serum ultrasensitive...'",
+    "Stack label too long \u2014 likely explanatory text: 'Cardiac troponin |, serum / Cardiac enzymes, serum...'"
+  ]
+}

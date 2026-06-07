@@ -1,0 +1,70 @@
+{
+  "id": 64,
+  "topic": "Abdominal Pain - Pediatrics",
+  "diagnosis": "Lead Intoxication with Encephalopathy",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Abdomen",
+    "Physical Exam: Neurological",
+    "Physical Exam: Skin",
+    "Physical Exam: Extremities",
+    "Physical Exam: General",
+    "Urine drug screen",
+    "Magnesium level",
+    "Lead level",
+    "X-ray, abdomen, acute",
+    "Consultation: Pediatric Neurology"
+  ],
+  "should_avoid": [
+    "CT Head, without contrast",
+    "Consultation: Pediatric Infectious Disease"
+  ],
+  "rationale": {
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain - pediatrics.",
+    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Lead Intoxication with Encephalopathy.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Lead Intoxication with Encephalopathy.",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Lead Intoxication with Encephalopathy.",
+    "Physical Exam: General": "Appropriate CCS order for Lead Intoxication with Encephalopathy: Physical Exam: General.",
+    "Urine drug screen": "Appropriate CCS order for Lead Intoxication with Encephalopathy: Urine drug screen.",
+    "Magnesium level": "Appropriate CCS order for Lead Intoxication with Encephalopathy: Magnesium level.",
+    "Lead level": "Appropriate CCS order for Lead Intoxication with Encephalopathy: Lead level.",
+    "X-ray, abdomen, acute": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain - pediatrics.",
+    "Consultation: Pediatric Neurology": "Targeted Consultation: Pediatric Neurology exam supports the differential for Lead Intoxication with Encephalopathy.",
+    "CT Head, without contrast": "Advanced imaging is not indicated early for Lead Intoxication with Encephalopathy when the diagnosis is clinical.",
+    "Consultation: Pediatric Infectious Disease": "Advanced imaging is not indicated early for Lead Intoxication with Encephalopathy when the diagnosis is clinical."
+  },
+  "hpi": "Children with lead toxicity may present with abdominal pain, vomiting, and altered mental status. The diagnosis is made by measuring blood lead levels. Treatment includes chelation therapy for severe cases. It is important to consider lead exposure in children with unexplained symptoms, especially in those with known risk factors.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared. My stomach hurts and I feel really dizzy.",
+    "history": "I was playing outside and found some old paint. I think I might have touched it.",
+    "pain": "It hurts a lot in my belly."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "Children with lead toxicity may present with abdominal pain, vomiting, and altered mental status. The diagnosis is made by measuring blood lead levels. Treatment includes chelation therapy for severe cases. It is important to consider lead exposure in children with unexplained symptoms, especially in those with known risk factors.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Ordered: Lead, blood, quantitative",
+    "Ordered: CBC, with differential",
+    "Ordered: Magnesium"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

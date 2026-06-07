@@ -1,0 +1,72 @@
+{
+  "id": 101,
+  "topic": "Fever - Pediatrics",
+  "diagnosis": "Epiglottitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Assessment",
+    "Physical Exam: Chest/Lungs",
+    "Physical Exam: Cardiac exam",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities",
+    "Blood cultures x2",
+    "Respiratory viral panel",
+    "Influenza PCR",
+    "CXR",
+    "CBC"
+  ],
+  "should_avoid": [
+    "Unnecessary CT scan",
+    "Unnecessary MRI",
+    "Unnecessary lumbar puncture"
+  ],
+  "rationale": {
+    "Physical Exam: General Assessment": "Appropriate CCS order for Epiglottitis: Physical Exam: General Assessment.",
+    "Physical Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for fever - pediatrics.",
+    "Physical Exam: Cardiac exam": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to fever - pediatrics.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with fever - pediatrics.",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Epiglottitis.",
+    "Blood cultures x2": "Laboratory testing when systemic illness or severity warrants labs in Epiglottitis.",
+    "Respiratory viral panel": "Evaluate chest and lungs as part of the initial exam for fever - pediatrics.",
+    "Influenza PCR": "Appropriate CCS order for Epiglottitis: Influenza PCR.",
+    "CXR": "Appropriate CCS order for Epiglottitis: CXR.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Epiglottitis.",
+    "Unnecessary CT scan": "Advanced imaging is not indicated early for Epiglottitis when the diagnosis is clinical.",
+    "Unnecessary MRI": "Advanced imaging is not indicated early for Epiglottitis when the diagnosis is clinical.",
+    "Unnecessary lumbar puncture": "Advanced imaging is not indicated early for Epiglottitis when the diagnosis is clinical."
+  },
+  "hpi": "You were in the wrong location (Emergency Department) at estimated time: 0 Days, 00 Hours, 13 Minutes. Correct location at this time was: Intensive Care Unit. Reason: If patient is unstable, they may need to be transferred to the ICU for further evaluation.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My throat hurts a lot.",
+    "history": "I had a fever and trouble breathing.",
+    "pain": "It feels like my throat is closing up."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "You were in the wrong location (Emergency Department) at estimated time: 0 Days, 00 Hours, 13 Minutes. Correct location at this time was: Intensive Care Unit. Reason: If patient is unstable, they may need to be transferred to the ICU for further evaluation.",
+  "stacks": [
+    "Physical Exam: General Assessment",
+    "Physical Exam: Chest/Lungs",
+    "Physical Exam: Cardiac exam",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing."
+}

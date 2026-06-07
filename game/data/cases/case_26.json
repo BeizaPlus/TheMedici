@@ -1,0 +1,62 @@
+{
+  "id": 26,
+  "topic": "Severe Abdominal Pain",
+  "diagnosis": "Acute Appendicitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "CT Abdomen/Pelvis",
+    "IV Fluids",
+    "Pain Management",
+    "Surgical Consult",
+    "CBC",
+    "Electrolytes",
+    "Urinalysis"
+  ],
+  "should_avoid": [
+    "MRI Abdomen"
+  ],
+  "rationale": {
+    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with severe abdominal pain.",
+    "IV Fluids": "Appropriate CCS order for Acute Appendicitis: IV Fluids.",
+    "Pain Management": "Appropriate CCS order for Acute Appendicitis: Pain Management.",
+    "Surgical Consult": "Appropriate CCS order for Acute Appendicitis: Surgical Consult.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Acute Appendicitis.",
+    "Electrolytes": "Appropriate CCS order for Acute Appendicitis: Electrolytes.",
+    "Urinalysis": "Appropriate CCS order for Acute Appendicitis: Urinalysis.",
+    "MRI Abdomen": "Advanced imaging is not indicated early for Acute Appendicitis when the diagnosis is clinical."
+  },
+  "hpi": "This case illustrates the importance of timely diagnosis and management of acute appendicitis. The patient presented with classic symptoms, and appropriate imaging and surgical consultation were critical in the management plan. Early intervention can prevent complications such as perforation.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm in so much pain, it hurts to move.",
+    "history": "I felt a sharp pain in my lower right abdomen. It started suddenly.",
+    "pain": "It feels like a stabbing pain in my side."
+  },
+  "ccs_category": "Surgery",
+  "case_summary": "This case illustrates the importance of timely diagnosis and management of acute appendicitis. The patient presented with classic symptoms, and appropriate imaging and surgical consultation were critical in the management plan. Early intervention can prevent complications such as perforation.",
+  "stacks": [
+    "CT Abdomen/Pelvis",
+    "IV Fluids",
+    "Pain Management",
+    "Surgical Consult",
+    "CBC"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs were not present in the screenshot."
+}

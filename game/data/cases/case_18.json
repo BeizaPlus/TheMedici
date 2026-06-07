@@ -1,0 +1,70 @@
+{
+  "id": 18,
+  "topic": "Constipation and Malaise",
+  "diagnosis": "Colon Cancer (Adenocarcinoma)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Respiratory",
+    "Physical Exam: Lungs",
+    "Physical Exam: Cardiovascular",
+    "Physical Exam: Abdomen",
+    "CT Abdomen and Pelvis",
+    "MRI Abdomen and Pelvis",
+    "Ultrasound Abdomen",
+    "Endoscopy",
+    "Colonoscopy"
+  ],
+  "should_avoid": [
+    "Laparoscopy, exploratory",
+    "Endoscopic biopsy"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for constipation and malaise.",
+    "Physical Exam: Respiratory": "Evaluate chest and lungs as part of the initial exam for constipation and malaise.",
+    "Physical Exam: Lungs": "Evaluate chest and lungs as part of the initial exam for constipation and malaise.",
+    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to constipation and malaise.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with constipation and malaise.",
+    "CT Abdomen and Pelvis": "Abdominal exam helps exclude alternative causes in a patient with constipation and malaise.",
+    "MRI Abdomen and Pelvis": "Abdominal exam helps exclude alternative causes in a patient with constipation and malaise.",
+    "Ultrasound Abdomen": "Abdominal exam helps exclude alternative causes in a patient with constipation and malaise.",
+    "Endoscopy": "Appropriate CCS order for Colon Cancer (Adenocarcinoma): Endoscopy.",
+    "Colonoscopy": "Appropriate CCS order for Colon Cancer (Adenocarcinoma): Colonoscopy.",
+    "Laparoscopy, exploratory": "CCS review: avoid this order for Colon Cancer (Adenocarcinoma) — it does not change acute management.",
+    "Endoscopic biopsy": "CCS review: avoid this order for Colon Cancer (Adenocarcinoma) — it does not change acute management."
+  },
+  "hpi": "This case illustrates the importance of thorough evaluation and management of patients presenting with gastrointestinal symptoms. It is critical to consider the possibility of serious underlying conditions, such as malignancy, in patients with unexplained symptoms. The case also highlights the need for appropriate imaging studies to determine the cause of the patient's symptoms and to guide further management.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my symptoms. I don't know what's wrong with me.",
+    "history": "I've been feeling really unwell for a while now. My stomach hurts a lot.",
+    "pain": "It feels like a sharp pain in my belly."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This case illustrates the importance of thorough evaluation and management of patients presenting with gastrointestinal symptoms. It is critical to consider the possibility of serious underlying conditions, such as malignancy, in patients with unexplained symptoms. The case also highlights the need for appropriate imaging studies to determine the cause of the patient's symptoms and to guide further management.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exam: General Appearance, Abdomen",
+    "Ordered the following Physical Exam: Respiratory, Cardiovascular, Lungs",
+    "Ordered the following Physical Exam: Abdomen",
+    "Ordered the following Physical Exam: General Appearance"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

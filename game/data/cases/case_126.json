@@ -1,0 +1,451 @@
+{
+  "id": 126,
+  "topic": "Shortness of Breath",
+  "title": "Shortness of Breath",
+  "diagnosis": "Non-ST Elevation Myocardial Infarction (NSTEMI)",
+  "confidence": 95,
+  "source": "DeepSeek v4 Pro direct extraction from CCS review screenshot",
+  "extraction_method": "deepseek_direct",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Chest / Lungs",
+    "Electrocardiography, 12 lead",
+    "Monitor, cardiac",
+    "CBC with differential",
+    "Cardiac troponin I, serum",
+    "Basic metabolic profile",
+    "Intravenous access",
+    "Aspirin, therapy",
+    "Atorvastatin / Rosuvastatin",
+    "Beta-blocker (Metoprolol / Atenolol)",
+    "Ticagrelor / Clopidogrel",
+    "Consult, cardiology / Angioplasty with stent placement, coronary artery",
+    "Heparin, therapy"
+  ],
+  "should_avoid": [
+    "Reteplase / Alteplase / Tenecteplase (Fibrinolysis)",
+    "Chest X-ray, PA and lateral",
+    "Morphine sulfate",
+    "Nitroglycerin, sublingual",
+    "D-dimer, serum",
+    "Simvastatin"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "It would be a good idea to take a general look at the patient to see how ill the patient looks.",
+    "Physical Exam: Heart / Cardiovascular": "The patient is having concerning symptoms that involve the heart, so this should be examined.",
+    "Physical Exam: Chest / Lungs": "The patient is complaining of shortness of breath, so this should be examined.",
+    "Electrocardiography, 12 lead": "Shortness of breath and fatigue can be atypical symptoms for MI. This EKG will show NSTEMI which needs to be treated quickly.",
+    "Monitor, cardiac": "The patient will require cardiac monitoring.",
+    "CBC with differential": "CBC will be important to get to look at the hematocrit of the patient.",
+    "Cardiac troponin I, serum": "In a patient with a myocardial infarction, troponin should be drawn.",
+    "Basic metabolic profile": "Chemistries are important to get to rule out other conditions.",
+    "Intravenous access": "Good practice to order IV access when administering IV fluids or medications, though not required for grade.",
+    "Aspirin, therapy": "The patient should immediately be given Aspirin along with a beta blocker and atorvastatin for ACS.",
+    "Atorvastatin / Rosuvastatin": "Guidelines recommend high-intensity statins (Rosuvastatin 20-40 mg or Atorvastatin 40-80 mg) for ACS. Simvastatin is not high-intensity even at max dose.",
+    "Beta-blocker (Metoprolol / Atenolol)": "Metoprolol or atenolol are the preferred agents for treating MI. Oral preferred over IV.",
+    "Ticagrelor / Clopidogrel": "Dual antiplatelet therapy is standard for NSTEMI patients without contraindications. Ticagrelor and Prasugrel preferred over Clopidogrel.",
+    "Consult, cardiology / Angioplasty with stent placement, coronary artery": "Cardiology should be consulted. PCI with stent placement is the preferred reperfusion treatment for NSTEMI.",
+    "Heparin, therapy": "For NSTEMI, unfractionated heparin, enoxaparin, bivalirudin, or fondaparinux help prevent ischemic events.",
+    "Reteplase / Alteplase / Tenecteplase (Fibrinolysis)": "Patients with Unstable angina or NSTEMI do NOT benefit from fibrinolysis. This is a critical distinction from STEMI management.",
+    "Chest X-ray, PA and lateral": "Not first-line for NSTEMI diagnosis — ECG and troponin are priority.",
+    "Morphine sulfate": "Patient denies chest pain — morphine not indicated without pain.",
+    "Nitroglycerin, sublingual": "Patient denies chest pain — nitroglycerin not indicated without anginal symptoms.",
+    "D-dimer, serum": "PE is in differential but ECG findings and atypical anginal presentation point to NSTEMI. Troponin and ECG first.",
+    "Simvastatin": "Simvastatin is not a high-intensity statin. Atorvastatin 40-80 mg or Rosuvastatin 20-40 mg required for ACS."
+  },
+  "hpi": "{{patient_name}} is an elderly woman with a history of diabetes mellitus and hypertension who presents to the emergency department with progressive shortness of breath, fatigue, and dizziness. She denies chest pain. The dyspnea has been gradual in onset, associated with lightheadedness but no fever, cough, palpitations, or orthopnea. Given her cardiovascular risk factors and atypical presentation — ST depression in leads I, II, V4-V6 suggesting subendocardial ischemia — acute coronary syndrome must be ruled out urgently.",
+  "hpi_narrative": "{{patient_name}} is an elderly woman with a history of diabetes mellitus and hypertension who presents to the emergency department with progressive shortness of breath, fatigue, and dizziness. She denies chest pain. The dyspnea has been gradual in onset, associated with lightheadedness but no fever, cough, palpitations, or orthopnea. Given her cardiovascular risk factors and atypical presentation — ST depression in leads I, II, V4-V6 suggesting subendocardial ischemia — acute coronary syndrome must be ruled out urgently.",
+  "chief_complaint": "Shortness of breath and fatigue with dizziness",
+  "patient": "Female, elderly, with DM and HTN",
+  "patient_sex": "female",
+  "patient_name_default": "Mrs. Kuukua Asamoah",
+  "ccs_category": "Emergency Medicine",
+  "physical_exam": [
+    [
+      "General",
+      "Patient appears dyspneic and fatigued. Assess severity of illness and work of breathing."
+    ],
+    [
+      "Cardiovascular",
+      "Heart exam indicated for cardiac etiology. Assess for murmurs, rubs, gallops, JVD."
+    ],
+    [
+      "Respiratory",
+      "Chest and lung exam indicated for shortness of breath. Assess for crackles, wheezes, diminished breath sounds."
+    ]
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "It would be a good idea to take a general look at the patient to see how ill the patient looks.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "The patient is having concerning symptoms that involve the heart, so this should be examined.",
+      "aliases": [
+        "Cardiovascular Exam",
+        "Heart Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "The patient is complaining of shortness of breath, so this should be examined.",
+      "aliases": [
+        "Chest Exam",
+        "Lung Exam",
+        "Respiratory Exam"
+      ]
+    },
+    {
+      "label": "Electrocardiography, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "Shortness of breath and fatigue can be atypical symptoms for MI. This EKG will show NSTEMI which needs to be treated quickly.",
+      "aliases": [
+        "ECG",
+        "EKG",
+        "12-lead ECG",
+        "Electrocardiography, ambulatory",
+        "Electrocardiography, rhythm strip, long"
+      ]
+    },
+    {
+      "label": "Monitor, cardiac",
+      "type": "shouldHaveOrdered",
+      "finding": "The patient will require cardiac monitoring.",
+      "aliases": [
+        "Cardiac monitor",
+        "Telemetry",
+        "Monitor, cardiac, check"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "CBC will be important to get to look at the hematocrit of the patient.",
+      "aliases": [
+        "Complete Blood Count",
+        "CBC"
+      ]
+    },
+    {
+      "label": "Cardiac troponin I, serum",
+      "type": "shouldHaveOrdered",
+      "finding": "In a patient with a myocardial infarction, troponin should be drawn.",
+      "aliases": [
+        "Troponin",
+        "Cardiac enzymes, serum",
+        "Cardiac troponin"
+      ]
+    },
+    {
+      "label": "Basic metabolic profile",
+      "type": "correctlyOrdered",
+      "finding": "Chemistries are important to get to rule out other conditions.",
+      "aliases": [
+        "BMP",
+        "Comprehensive metabolic profile",
+        "CMP",
+        "Chem 7"
+      ]
+    },
+    {
+      "label": "Intravenous access",
+      "type": "optional",
+      "finding": "Good practice to order IV access when administering IV fluids or medications, though not required for grade.",
+      "aliases": [
+        "IV access",
+        "Intravenous line, capped",
+        "IV line"
+      ]
+    },
+    {
+      "label": "Aspirin, therapy",
+      "type": "correctlyOrdered",
+      "finding": "The patient should immediately be given Aspirin along with a beta blocker and atorvastatin for ACS.",
+      "aliases": [
+        "ASA",
+        "Aspirin"
+      ]
+    },
+    {
+      "label": "Atorvastatin / Rosuvastatin",
+      "type": "shouldHaveOrdered",
+      "finding": "Guidelines recommend high-intensity statins (Rosuvastatin 20-40 mg or Atorvastatin 40-80 mg) for ACS. Simvastatin is not high-intensity even at max dose.",
+      "aliases": [
+        "High-intensity statin",
+        "Lipitor",
+        "Crestor"
+      ]
+    },
+    {
+      "label": "Beta-blocker (Metoprolol / Atenolol)",
+      "type": "shouldHaveOrdered",
+      "finding": "Metoprolol or atenolol are the preferred agents for treating MI. Oral preferred over IV.",
+      "aliases": [
+        "Atenolol",
+        "Metoprolol",
+        "Bisoprolol",
+        "Beta blocker",
+        "Esmolol",
+        "Propranolol",
+        "Timolol"
+      ]
+    },
+    {
+      "label": "Ticagrelor / Clopidogrel",
+      "type": "shouldHaveOrdered",
+      "finding": "Dual antiplatelet therapy is standard for NSTEMI patients without contraindications. Ticagrelor and Prasugrel preferred over Clopidogrel.",
+      "aliases": [
+        "Antiplatelet",
+        "P2Y12 inhibitor",
+        "Clopidogrel bisulfate",
+        "Prasugrel"
+      ]
+    },
+    {
+      "label": "Consult, cardiology / Angioplasty with stent placement, coronary artery",
+      "type": "correctlyOrdered",
+      "finding": "Cardiology should be consulted. PCI with stent placement is the preferred reperfusion treatment for NSTEMI.",
+      "aliases": [
+        "PCI",
+        "Percutaneous Coronary Intervention",
+        "Cardiology consult",
+        "Stent placement",
+        "Angioplasty"
+      ]
+    },
+    {
+      "label": "Heparin, therapy",
+      "type": "shouldHaveOrdered",
+      "finding": "For NSTEMI, unfractionated heparin, enoxaparin, bivalirudin, or fondaparinux help prevent ischemic events.",
+      "aliases": [
+        "Unfractionated heparin",
+        "Enoxaparin",
+        "Heparin, low molecular weight",
+        "Fondaparinux",
+        "Anticoagulation"
+      ]
+    },
+    {
+      "label": "Reteplase / Alteplase / Tenecteplase (Fibrinolysis)",
+      "type": "correctlyAvoided",
+      "finding": "Patients with Unstable angina or NSTEMI do NOT benefit from fibrinolysis. This is a critical distinction from STEMI management.",
+      "aliases": [
+        "Fibrinolytics",
+        "Thrombolytics",
+        "tPA",
+        "Streptokinase"
+      ]
+    }
+  ],
+  "order_sets": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Cardiovascular",
+      "type": "correctlyOrdered",
+      "aliases": [
+        "Heart Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Respiratory",
+      "type": "correctlyOrdered",
+      "aliases": [
+        "Chest Exam",
+        "Lung Exam"
+      ]
+    },
+    {
+      "label": "Electrocardiography, 12 lead",
+      "type": "correctlyOrdered",
+      "aliases": [
+        "ECG",
+        "EKG"
+      ]
+    },
+    {
+      "label": "Cardiac monitor",
+      "type": "shouldHaveOrdered",
+      "aliases": [
+        "Telemetry"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Cardiac troponin, serum",
+      "type": "shouldHaveOrdered",
+      "aliases": [
+        "Troponin"
+      ]
+    },
+    {
+      "label": "Basic metabolic profile",
+      "type": "correctlyOrdered",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "IV access",
+      "type": "optional",
+      "aliases": [
+        "Intravenous line"
+      ]
+    },
+    {
+      "label": "Aspirin",
+      "type": "correctlyOrdered",
+      "aliases": [
+        "ASA"
+      ]
+    },
+    {
+      "label": "High-intensity statin",
+      "type": "shouldHaveOrdered",
+      "aliases": [
+        "Atorvastatin",
+        "Rosuvastatin"
+      ]
+    },
+    {
+      "label": "Beta-blocker",
+      "type": "shouldHaveOrdered",
+      "aliases": [
+        "Metoprolol",
+        "Atenolol"
+      ]
+    },
+    {
+      "label": "P2Y12 inhibitor",
+      "type": "shouldHaveOrdered",
+      "aliases": [
+        "Ticagrelor",
+        "Clopidogrel"
+      ]
+    },
+    {
+      "label": "PCI / Angioplasty with stent",
+      "type": "correctlyOrdered",
+      "aliases": [
+        "Percutaneous Coronary Intervention"
+      ]
+    },
+    {
+      "label": "Anticoagulation (Heparin)",
+      "type": "shouldHaveOrdered",
+      "aliases": [
+        "UFH",
+        "Enoxaparin"
+      ]
+    },
+    {
+      "label": "Fibrinolysis",
+      "type": "correctlyAvoided",
+      "aliases": [
+        "Thrombolytics",
+        "tPA"
+      ]
+    }
+  ],
+  "decoys": [
+    {
+      "label": "Chest X-ray, PA and lateral",
+      "reason_wrong": "Not first-line for NSTEMI diagnosis — ECG and troponin are priority."
+    },
+    {
+      "label": "Morphine sulfate",
+      "reason_wrong": "Patient denies chest pain — morphine not indicated without pain."
+    },
+    {
+      "label": "Nitroglycerin, sublingual",
+      "reason_wrong": "Patient denies chest pain — nitroglycerin not indicated without anginal symptoms."
+    },
+    {
+      "label": "D-dimer, serum",
+      "reason_wrong": "PE is in differential but ECG findings and atypical anginal presentation point to NSTEMI. Troponin and ECG first."
+    },
+    {
+      "label": "Simvastatin",
+      "reason_wrong": "Simvastatin is not a high-intensity statin. Atorvastatin 40-80 mg or Rosuvastatin 20-40 mg required for ACS."
+    }
+  ],
+  "teach_me_steps": [
+    {
+      "order": "ECG + Troponin",
+      "category": "Diagnosis",
+      "reasoning": "Atypical MI presentations (dyspnea, fatigue, no chest pain) are common in elderly women and diabetics. ECG and troponin are first-line for suspected ACS."
+    },
+    {
+      "order": "Aspirin",
+      "category": "Treatment",
+      "reasoning": "Aspirin should be given immediately to all suspected ACS patients without contraindications."
+    },
+    {
+      "order": "High-intensity statin",
+      "category": "Treatment",
+      "reasoning": "High-intensity statins are indicated for ACS. Simvastatin does not qualify even at max dose."
+    },
+    {
+      "order": "Beta-blocker",
+      "category": "Treatment",
+      "reasoning": "Beta-blockers reduce myocardial oxygen demand. Metoprolol or atenolol preferred; oral over IV."
+    },
+    {
+      "order": "P2Y12 inhibitor",
+      "category": "Treatment",
+      "reasoning": "Dual antiplatelet therapy (aspirin + P2Y12) is standard for NSTEMI. Ticagrelor preferred over clopidogrel."
+    },
+    {
+      "order": "Anticoagulation (Heparin/Enoxaparin)",
+      "category": "Treatment",
+      "reasoning": "Anticoagulation prevents further ischemic events in NSTEMI."
+    },
+    {
+      "order": "PCI / Cardiology consult",
+      "category": "Treatment",
+      "reasoning": "PCI is the preferred reperfusion strategy for NSTEMI. Fibrinolysis is NOT indicated — critical distinction from STEMI."
+    },
+    {
+      "order": "Admit to ICU/Inpatient",
+      "category": "Disposition",
+      "reasoning": "NSTEMI patients require monitored bed. Extended ER stay is inappropriate — patient must be admitted."
+    }
+  ],
+  "differential": [
+    "ST Elevation Myocardial Infarction",
+    "Acute Aortic Dissection",
+    "Pulmonary Embolism",
+    "Pericardial Tamponade",
+    "Esophageal Rupture"
+  ],
+  "case_summary": "Atypical NSTEMI in elderly woman with DM and HTN. No chest pain — presents with dyspnea and fatigue. ST depression I, II, V4-V6 = subendocardial ischemia. Tx: PCI + DAPT + anticoagulation + beta-blocker + statin. Fibrinolysis contraindicated.",
+  "complete": true,
+  "parse_error": false
+}

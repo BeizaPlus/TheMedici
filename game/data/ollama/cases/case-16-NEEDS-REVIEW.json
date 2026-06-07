@@ -1,0 +1,110 @@
+{
+  "title": "Shortness of breath and non-productive cough - Internal Medicine",
+  "stacks": [
+    {
+      "label": "Abdominal Exam",
+      "aliases": [],
+      "finding": null,
+      "type": "finding"
+    },
+    {
+      "label": "Ordered: Pulse oximetry",
+      "aliases": [],
+      "finding": "Patient has HIV and is coughing. It's important to check for oxygenation.",
+      "type": "Lab"
+    },
+    {
+      "label": "Ordered: Arterial Blood Gases",
+      "aliases": [],
+      "finding": "Important piece in this hypoxemic patient.",
+      "type": "Lab"
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": null,
+      "type": "Lab"
+    },
+    {
+      "label": "Ordered: Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long",
+      "aliases": [],
+      "finding": "An EKG should be done to rule out any cardiac causes of the patient's presentation.",
+      "type": "Imaging"
+    },
+    {
+      "label": "Ordered: Microscopic examination, vaginal fluid / Cervical wet mount",
+      "aliases": [],
+      "finding": "The patient has a yeast infection due to poorly controlled HIV. Microscopy of the discharge with 10% KOH will often reveal hyphae or budding yeast in 50%-70% of cases.",
+      "type": "Lab"
+    },
+    {
+      "label": "Ordered: Hepatitis panel",
+      "aliases": [],
+      "finding": "A patient with symptomatic HIV should be screened for other common co-occurring diseases.",
+      "type": "Lab"
+    },
+    {
+      "label": "Ordered: Bacterial culture, blood",
+      "aliases": [],
+      "finding": "Considering this patient is high risk for infection due to her immunocompromised status, a blood culture would be warranted in this case.",
+      "type": "Lab"
+    },
+    {
+      "label": "Ordered: Gram stain, sputum",
+      "aliases": [],
+      "finding": "It's important to rule out bacterial infection.",
+      "type": "Lab"
+    },
+    {
+      "label": "Ordered: Mycobacterial culture, sputum / Acid fast stain, sputum",
+      "aliases": [],
+      "finding": "Tuberculosis is often seen in immunocompromised patients. It is important to check whether patient's symptoms may be due to tuberculosis.",
+      "type": "Lab"
+    },
+    {
+      "label": "Ordered: Bacterial culture, sputum",
+      "aliases": [],
+      "finding": "It's important to rule out bacterial infection.",
+      "type": "Lab"
+    }
+  ],
+  "case_number": 16,
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "hpi_narrative": "A 30-year-old male with known HIV positivity presents with shortness of breath and non-productive cough. He is experiencing fever and fatigue.",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": null,
+    "respiratory": {
+      "examination_findings": "Shortness of breath and non-productive cough"
+    },
+    "abdominal": null,
+    "neurological": null,
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null
+  },
+  "_final_confidence": 50,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual case chief complaint in OCR. The correct title should be 'Shortness of breath and non-productive cough - HIV positive, Internal Medicine'.",
+      "fix": "Update title to 'Shortness of breath and non-productive cough - HIV positive, Internal Medicine'"
+    },
+    {
+      "field": "stacks.0.label",
+      "problem": "Stack label does not accurately represent the physical exam it is referring to. It should be 'Abdominal Exam'.",
+      "fix": "Update label to 'Abdominal Exam'"
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "HPI narrative contains UI noise such as scores, percentages, and dates. These should be removed for a proper clinical presentation.",
+      "fix": "Update HPI narrative to remove scores, percentages, and dates."
+    }
+  ]
+}

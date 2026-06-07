@@ -1,0 +1,60 @@
+{
+  "id": 69,
+  "topic": "Leg Pain",
+  "diagnosis": "Cellulitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Cardiac / Lungs",
+    "Physical Exam: Abdominal",
+    "Physical Exam: Extremities",
+    "Physical Exam: Skin"
+  ],
+  "should_avoid": [
+    "order2",
+    "Starting anticoagulation therapy before a definitive diagnosis is made"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for leg pain.",
+    "Physical Exam: Cardiac / Lungs": "Evaluate chest and lungs as part of the initial exam for leg pain.",
+    "Physical Exam: Abdominal": "Appropriate CCS order for Cellulitis: Physical Exam: Abdominal.",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Cellulitis.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Cellulitis.",
+    "order2": "CCS review: avoid this order for Cellulitis — it does not change acute management.",
+    "Starting anticoagulation therapy before a definitive diagnosis is made": "CCS review: avoid this order for Cellulitis — it does not change acute management."
+  },
+  "hpi": "Enthusiasm for patient care must be high. Deep venous thrombosis (DVT), pulmonary embolism (PE), renal failure, cardiac arrest, sepsis, and other life-threatening conditions must be considered. The patient is a diabetic, potentially high-risk patient, and the physician must be vigilant in assessing for these conditions. The patient must be educated on the importance of seeking medical attention for any concerning symptoms. The patient should be advised to follow up with their primary care physician within 1-2 weeks.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my leg pain. It feels so swollen and warm.",
+    "history": "I have diabetes and I noticed my leg getting worse over the last few days.",
+    "pain": "It hurts a lot, especially when I try to walk."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Enthusiasm for patient care must be high. Deep venous thrombosis (DVT), pulmonary embolism (PE), renal failure, cardiac arrest, sepsis, and other life-threatening conditions must be considered. The patient is a diabetic, potentially high-risk patient, and the physician must be vigilant in assessing for these conditions. The patient must be educated on the importance of seeking medical attention for any concerning symptoms. The patient should be advised to follow up with their primary care physician within 1-2 weeks.",
+  "stacks": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Cardiac / Lungs",
+    "Physical Exam: Abdominal",
+    "Physical Exam: Extremities",
+    "Physical Exam: Skin"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

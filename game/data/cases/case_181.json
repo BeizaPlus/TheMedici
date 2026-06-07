@@ -1,0 +1,65 @@
+{
+  "id": 181,
+  "topic": "Nocturnal Enuresis",
+  "diagnosis": "Not specified",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain a thorough history and physical examination",
+    "Urinalysis (to rule out underlying UTI or other renal issues)",
+    "order1",
+    "Oxygen",
+    "IV access ×2",
+    "Monitor",
+    "Pulse ox"
+  ],
+  "should_avoid": [
+    "order1",
+    "Direct imaging studies like MRI or CT scan, as they are not indicated for initial evaluation of Nocturnal Enuresis"
+  ],
+  "rationale": {
+    "Obtain a thorough history and physical examination": "Appropriate CCS order for Not specified: Obtain a thorough history and physical examination.",
+    "Urinalysis (to rule out underlying UTI or other renal issues)": "Appropriate CCS order for Not specified: Urinalysis (to rule out underlying UTI or other renal issues).",
+    "order1": "CCS review: avoid this order for Not specified — it does not change acute management.",
+    "Oxygen": "Appropriate CCS order for Not specified: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for Not specified: IV access ×2.",
+    "Monitor": "Appropriate CCS order for Not specified: Monitor.",
+    "Pulse ox": "Pulse oximetry documents oxygenation in the initial assessment.",
+    "Direct imaging studies like MRI or CT scan, as they are not indicated for initial evaluation of Nocturnal Enuresis": "Advanced imaging is not indicated early for Not specified when the diagnosis is clinical."
+  },
+  "hpi": "Not specified",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — nocturnal enuresis. I'm really scared.",
+    "history": "It's been getting worse. They said something about not specified. Not specified...",
+    "pain": "This nocturnal enuresis won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": "Not specified",
+  "stacks": [
+    "Obtain a thorough history and physical examination",
+    "Urinalysis (to rule out underlying UTI or other renal issues)",
+    "order1",
+    "Oxygen",
+    "IV access ×2",
+    "Monitor",
+    "Pulse ox"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

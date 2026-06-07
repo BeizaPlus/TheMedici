@@ -1,0 +1,67 @@
+{
+  "id": 62,
+  "topic": "Altered Mental Status",
+  "diagnosis": "Grand Mal Seizure (Complex Tonic-Clonic Seizure)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdominal",
+    "Physical Exam: Extremities / Skin",
+    "CBC with differential",
+    "Lumbar puncture",
+    "Thyroid panel, urine",
+    "Magnesium level",
+    "Urinalysis",
+    "Electrolytes"
+  ],
+  "should_avoid": [
+    "Lumbar puncture"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for altered mental status.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for altered mental status.",
+    "Physical Exam: Abdominal": "Appropriate CCS order for Grand Mal Seizure (Complex Tonic-Clonic Seizure): Physical Exam: Abdominal.",
+    "Physical Exam: Extremities / Skin": "Skin exam may show rashes or systemic signs relevant to Grand Mal Seizure (Complex Tonic-Clonic Seizure).",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Grand Mal Seizure (Complex Tonic-Clonic Seizure).",
+    "Lumbar puncture": "Advanced imaging is not indicated early for Grand Mal Seizure (Complex Tonic-Clonic Seizure) when the diagnosis is clinical.",
+    "Thyroid panel, urine": "Appropriate CCS order for Grand Mal Seizure (Complex Tonic-Clonic Seizure): Thyroid panel, urine.",
+    "Magnesium level": "Appropriate CCS order for Grand Mal Seizure (Complex Tonic-Clonic Seizure): Magnesium level.",
+    "Urinalysis": "Appropriate CCS order for Grand Mal Seizure (Complex Tonic-Clonic Seizure): Urinalysis.",
+    "Electrolytes": "Appropriate CCS order for Grand Mal Seizure (Complex Tonic-Clonic Seizure): Electrolytes."
+  },
+  "hpi": "Identifying the potential underlying cause of the patient's seizure is critical. The patient should be monitored closely for any further seizures. The history of this patient suggests that this should be considered.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I was really scared when I had the seizure. I didn't know what was happening.",
+    "history": "I have had seizures before, but this one felt different.",
+    "pain": "I felt a strange sensation before it happened."
+  },
+  "ccs_category": "Neurology",
+  "case_summary": "Identifying the potential underlying cause of the patient's seizure is critical. The patient should be monitored closely for any further seizures. The history of this patient suggests that this should be considered.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Ordered: CBC with differential",
+    "Ordered: Electroencephalography",
+    "Ordered: CT Head without contrast / MRI"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

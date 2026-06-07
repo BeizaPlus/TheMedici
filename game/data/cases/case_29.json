@@ -1,0 +1,70 @@
+{
+  "id": 29,
+  "topic": "Vaginal Bleeding",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Ordered: Vitals",
+    "Ordered: Physical Exam",
+    "Ordered: Labs",
+    "Ordered: Imaging",
+    "Ordered: Treatment",
+    "Should Have Ordered: IV fluids",
+    "Should Have Ordered: Transfusion",
+    "Should Have Ordered: Consult GYN",
+    "Should Have Ordered: Medications",
+    "Should Have Ordered: Additional labs"
+  ],
+  "should_avoid": [
+    "Amoxicillin",
+    "Ciprofloxacin"
+  ],
+  "rationale": {
+    "Ordered: Vitals": "Vital signs establish baseline stability before further orders.",
+    "Ordered: Physical Exam": "Appropriate CCS order for this diagnosis: Ordered: Physical Exam.",
+    "Ordered: Labs": "Appropriate CCS order for this diagnosis: Ordered: Labs.",
+    "Ordered: Imaging": "Appropriate CCS order for this diagnosis: Ordered: Imaging.",
+    "Ordered: Treatment": "Appropriate CCS order for this diagnosis: Ordered: Treatment.",
+    "Should Have Ordered: IV fluids": "Appropriate CCS order for this diagnosis: Should Have Ordered: IV fluids.",
+    "Should Have Ordered: Transfusion": "Appropriate CCS order for this diagnosis: Should Have Ordered: Transfusion.",
+    "Should Have Ordered: Consult GYN": "Appropriate CCS order for this diagnosis: Should Have Ordered: Consult GYN.",
+    "Should Have Ordered: Medications": "Appropriate CCS order for this diagnosis: Should Have Ordered: Medications.",
+    "Should Have Ordered: Additional labs": "Appropriate CCS order for this diagnosis: Should Have Ordered: Additional labs.",
+    "Amoxicillin": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+    "Ciprofloxacin": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": "In this case, the patient presented with vaginal bleeding. The assessment and management of vaginal bleeding can be complex, and it is important to consider the patient's history, physical examination, and laboratory findings. The differential diagnosis for vaginal bleeding includes a variety of conditions, and appropriate management is crucial to ensure patient safety. In this case, the patient required further evaluation and treatment to address the underlying cause of the bleeding.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this bleeding. I don't know what's happening.",
+    "history": "I've been bleeding for a few days now, and it's getting worse.",
+    "pain": "It feels like a lot of pressure and cramping."
+  },
+  "ccs_category": "OB/GYN",
+  "case_summary": "In this case, the patient presented with vaginal bleeding. The assessment and management of vaginal bleeding can be complex, and it is important to consider the patient's history, physical examination, and laboratory findings. The differential diagnosis for vaginal bleeding includes a variety of conditions, and appropriate management is crucial to ensure patient safety. In this case, the patient required further evaluation and treatment to address the underlying cause of the bleeding.",
+  "stacks": [
+    "Ordered: Vitals",
+    "Ordered: Physical Exam",
+    "Ordered: Labs",
+    "Ordered: Imaging",
+    "Ordered: Treatment"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

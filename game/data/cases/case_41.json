@@ -1,0 +1,62 @@
+{
+  "id": 41,
+  "topic": "Weakness - Pediatrics",
+  "diagnosis": "Poststreptococcal Glomerulonephritis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam General",
+    "Vital Signs",
+    "Laboratory Studies",
+    "Ordered Comprehensive metabolic panel",
+    "Ordered Urinalysis",
+    "Pediatric Consult",
+    "Pediatric Nephrology"
+  ],
+  "should_avoid": [
+    "Invasive procedures"
+  ],
+  "rationale": {
+    "Physical Exam General": "Appropriate CCS order for Poststreptococcal Glomerulonephritis: Physical Exam General.",
+    "Vital Signs": "Vital signs establish baseline stability before further orders.",
+    "Laboratory Studies": "Appropriate CCS order for Poststreptococcal Glomerulonephritis: Laboratory Studies.",
+    "Ordered Comprehensive metabolic panel": "Laboratory testing when systemic illness or severity warrants labs in Poststreptococcal Glomerulonephritis.",
+    "Ordered Urinalysis": "Appropriate CCS order for Poststreptococcal Glomerulonephritis: Ordered Urinalysis.",
+    "Pediatric Consult": "Appropriate CCS order for Poststreptococcal Glomerulonephritis: Pediatric Consult.",
+    "Pediatric Nephrology": "Appropriate CCS order for Poststreptococcal Glomerulonephritis: Pediatric Nephrology.",
+    "Invasive procedures": "CCS review: avoid this order for Poststreptococcal Glomerulonephritis — it does not change acute management."
+  },
+  "hpi": "This case illustrates the importance of recognizing poststreptococcal glomerulonephritis as a potential complication of streptococcal infections, particularly in pediatric patients. Key features include the patient's history of recent streptococcal infection, clinical presentation of weakness, and laboratory findings consistent with glomerulonephritis. Management involves supportive care and monitoring for potential complications. Early recognition and appropriate referral to nephrology can improve outcomes.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm feeling really weak and tired. I don't know what's wrong with me.",
+    "history": "I had a sore throat a week ago, and now I just feel so weak.",
+    "pain": "I don't have any specific pain, just this overwhelming weakness."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "This case illustrates the importance of recognizing poststreptococcal glomerulonephritis as a potential complication of streptococcal infections, particularly in pediatric patients. Key features include the patient's history of recent streptococcal infection, clinical presentation of weakness, and laboratory findings consistent with glomerulonephritis. Management involves supportive care and monitoring for potential complications. Early recognition and appropriate referral to nephrology can improve outcomes.",
+  "stacks": [
+    "Vital Signs",
+    "Ordered Comprehensive metabolic panel",
+    "Ordered Urinalysis",
+    "Physical Exam General",
+    "Laboratory Studies"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

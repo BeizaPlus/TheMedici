@@ -118,6 +118,13 @@ function toCaseBank(entry) {
 
 ensureDataDirs();
 if (!fs.existsSync(OLLAMA_CASES_JSON)) {
+  const existing = fs.existsSync(CASE_BANK_DIR)
+    ? fs.readdirSync(CASE_BANK_DIR).filter((f) => /^case_\d+\.json$/i.test(f))
+    : [];
+  if (existing.length >= 100) {
+    console.log(`Skipping Ollama import — ${existing.length} cases already in ${CASE_BANK_DIR}`);
+    process.exit(0);
+  }
   console.error(`Missing ${OLLAMA_CASES_JSON}`);
   console.error('Copy your Ollama cases.json to game/data/ollama/cases.json first.');
   process.exit(1);

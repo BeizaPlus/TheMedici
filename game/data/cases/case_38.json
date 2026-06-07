@@ -1,0 +1,64 @@
+{
+  "id": 38,
+  "topic": "Yellowing of Eyes",
+  "diagnosis": "Pancreatic Adenocarcinoma",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdominal Exam",
+    "Physical Exam: HEENT",
+    "Physical Exam: Extremities",
+    "Physical Exam: Neurological Exam",
+    "Magnesium, serum",
+    "Liver, serum",
+    "Lipid panel"
+  ],
+  "should_avoid": [
+    "CT, abdomen / pelvis"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for yellowing of eyes.",
+    "Physical Exam: Abdominal Exam": "Appropriate CCS order for Pancreatic Adenocarcinoma: Physical Exam: Abdominal Exam.",
+    "Physical Exam: HEENT": "Targeted Physical Exam: HEENT exam supports the differential for Pancreatic Adenocarcinoma.",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Pancreatic Adenocarcinoma.",
+    "Physical Exam: Neurological Exam": "Targeted Physical Exam: Neurological Exam exam supports the differential for Pancreatic Adenocarcinoma.",
+    "Magnesium, serum": "Appropriate CCS order for Pancreatic Adenocarcinoma: Magnesium, serum.",
+    "Liver, serum": "Appropriate CCS order for Pancreatic Adenocarcinoma: Liver, serum.",
+    "Lipid panel": "Appropriate CCS order for Pancreatic Adenocarcinoma: Lipid panel.",
+    "CT, abdomen / pelvis": "Advanced imaging is not indicated early for Pancreatic Adenocarcinoma when the diagnosis is clinical."
+  },
+  "hpi": "Review the case of a patient with pancreatic cancer along with other disorders that affect the patient's ability to respond to therapy. If the patient does not have dependent edema, prednisolone may be used to aid in the treatment process.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my yellowing eyes. What does it mean?",
+    "history": "I noticed my eyes changing color. I feel tired and worried.",
+    "pain": "I have some discomfort in my abdomen."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Review the case of a patient with pancreatic cancer along with other disorders that affect the patient's ability to respond to therapy. If the patient does not have dependent edema, prednisolone may be used to aid in the treatment process.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Laboratory Tests",
+    "Imaging Ordered",
+    "Consults Ordered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

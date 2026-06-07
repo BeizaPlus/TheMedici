@@ -1,0 +1,62 @@
+{
+  "id": 48,
+  "topic": "Cough",
+  "diagnosis": "Community Acquired Pneumonia",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "CXR Ordered",
+    "CBC Ordered",
+    "BMP Ordered",
+    "Blood Cultures Ordered",
+    "Sputum Culture Ordered",
+    "Influenza Testing",
+    "COVID Testing"
+  ],
+  "should_avoid": [
+    "CT Chest"
+  ],
+  "rationale": {
+    "CXR Ordered": "Appropriate CCS order for Community Acquired Pneumonia: CXR Ordered.",
+    "CBC Ordered": "Laboratory testing when systemic illness or severity warrants labs in Community Acquired Pneumonia.",
+    "BMP Ordered": "Laboratory testing when systemic illness or severity warrants labs in Community Acquired Pneumonia.",
+    "Blood Cultures Ordered": "Laboratory testing when systemic illness or severity warrants labs in Community Acquired Pneumonia.",
+    "Sputum Culture Ordered": "Laboratory testing when systemic illness or severity warrants labs in Community Acquired Pneumonia.",
+    "Influenza Testing": "Appropriate CCS order for Community Acquired Pneumonia: Influenza Testing.",
+    "COVID Testing": "Appropriate CCS order for Community Acquired Pneumonia: COVID Testing.",
+    "CT Chest": "Advanced imaging is not indicated early for Community Acquired Pneumonia when the diagnosis is clinical."
+  },
+  "hpi": "This case illustrates the importance of appropriate diagnostic testing in a patient presenting with cough and fever. The patient was diagnosed with community-acquired pneumonia and appropriate antibiotics were initiated. It is crucial to consider viral testing in cases of pneumonia, especially during flu season.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. I can't stop coughing and I feel so weak.",
+    "history": "I've had this cough for days. It started with a fever and now I can barely breathe.",
+    "pain": "It hurts to take a deep breath."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This case illustrates the importance of appropriate diagnostic testing in a patient presenting with cough and fever. The patient was diagnosed with community-acquired pneumonia and appropriate antibiotics were initiated. It is crucial to consider viral testing in cases of pneumonia, especially during flu season.",
+  "stacks": [
+    "Vitals Ordered",
+    "CXR Ordered",
+    "CBC Ordered",
+    "BMP Ordered",
+    "Blood Cultures Ordered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

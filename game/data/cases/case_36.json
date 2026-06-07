@@ -1,0 +1,62 @@
+{
+  "id": 36,
+  "topic": "Headache - Emergency Nutrition",
+  "diagnosis": "Bacterial Meningitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Lungs",
+    "Physical Exam: Heart",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Neurological",
+    "Physical Exam: Skin",
+    "CT Head: Non-Contrast",
+    "Lumbar Puncture: CSF Analysis"
+  ],
+  "should_avoid": [
+    "CT Head: Contrast"
+  ],
+  "rationale": {
+    "Physical Exam: Lungs": "Evaluate chest and lungs as part of the initial exam for headache - emergency nutrition.",
+    "Physical Exam: Heart": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to headache - emergency nutrition.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with headache - emergency nutrition.",
+    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Bacterial Meningitis.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Bacterial Meningitis.",
+    "CT Head: Non-Contrast": "Appropriate CCS order for Bacterial Meningitis: CT Head: Non-Contrast.",
+    "Lumbar Puncture: CSF Analysis": "Appropriate CCS order for Bacterial Meningitis: Lumbar Puncture: CSF Analysis.",
+    "CT Head: Contrast": "Advanced imaging is not indicated early for Bacterial Meningitis when the diagnosis is clinical."
+  },
+  "hpi": "Characterized by a severe headache, fever, and altered mental status, bacterial meningitis is a critical condition requiring prompt diagnosis and treatment. Key diagnostic steps include lumbar puncture for CSF analysis and imaging studies to rule out other causes. Early recognition and intervention are crucial for improving outcomes.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I have a terrible headache and feel really confused.",
+    "history": "I was fine earlier, but then I started feeling feverish and my head hurt a lot.",
+    "pain": "It feels like my head is pounding."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "Characterized by a severe headache, fever, and altered mental status, bacterial meningitis is a critical condition requiring prompt diagnosis and treatment. Key diagnostic steps include lumbar puncture for CSF analysis and imaging studies to rule out other causes. Early recognition and intervention are crucial for improving outcomes.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Laboratory Tests",
+    "Imaging Studies",
+    "Medications"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs were not present in the screenshot."
+}

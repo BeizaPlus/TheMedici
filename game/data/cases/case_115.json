@@ -1,0 +1,62 @@
+{
+  "id": 115,
+  "topic": "Agitation - Psychiatry",
+  "diagnosis": "Acute Agitation",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Neuro / Psych",
+    "CBC with differential",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Droperidol / Olanzapine / Haloperidol / Ziprasidone",
+    "Consult: Psychiatry",
+    "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long"
+  ],
+  "should_avoid": [
+    "Diphenhydramine hydrochloride / Benztropine mesylate"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for agitation - psychiatry.",
+    "Physical Exam: Neuro / Psych": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Acute Agitation.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Acute Agitation.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Acute Agitation.",
+    "Droperidol / Olanzapine / Haloperidol / Ziprasidone": "Appropriate CCS order for Acute Agitation: Droperidol / Olanzapine / Haloperidol / Ziprasidone.",
+    "Consult: Psychiatry": "Appropriate CCS order for Acute Agitation: Consult: Psychiatry.",
+    "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+    "Diphenhydramine hydrochloride / Benztropine mesylate": "CCS review: avoid this order for Acute Agitation — it does not change acute management."
+  },
+  "hpi": "Differential diagnosis: Substance induced psychotic disorder, Schizophrenia, Psychosis secondary to a medical condition, Delirium, Epileptic seizures, Electrolyte disturbance\n\nThis case is similar to the schizophrenia cases, but this case focuses just on correctly treating acute agitation which is a common occurrence in most emergency departments. As the patient has already assaulted a staff member, IV medication is needed for rapid medication onset to be effective. A typical regimen is colloquially called the 5-2-1 regimen 5 mg of Halidol (Haloperidol), 2 mg of IM Ativan (Lorazepam), and 1 mg of IM Cogentin. As Cogentin is key here, an alternative is 2.5 mg of Halidol, 2 mg of IM Ativan (Lorazepam), and 5 mg of IM Benadryl (Diphenhydramine). Droperidol has its limitations as it is not the best choice. Once the patient is treated, the vital signs can be completed. There can be medical causes of acute agitation which should be ruled out, but given the age of the patient and his history in the hospital, it is unlikely that a medical diagnosis will be determined in this case.\n\nOther second-generation antipsychotics are available for the distressed patient including: IM Olanzapine (Zyprexa), IM Aripiprazole (Abilify), or IM Ziprasidone (Geodon). Halidol is the most commonly administered in hospital emergency settings due to the availability of IM administration along with Lorazepam (Ativan) along with Cogentin or Benadryl to avoid a potential EPS (Extrapyramidal Syndrome) and dyskinesias. This is an area which is being studied as newer antipsychotics will treat agitation as well as psychosis.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I feel really out of control and scared. I don't know what's happening to me.",
+    "history": "I was just sitting there, and then everything got overwhelming.",
+    "pain": "I feel like my head is spinning and my heart is racing."
+  },
+  "ccs_category": "Psychiatry",
+  "case_summary": "Differential diagnosis: Substance induced psychotic disorder, Schizophrenia, Psychosis secondary to a medical condition, Delirium, Epileptic seizures, Electrolyte disturbance\n\nThis case is similar to the schizophrenia cases, but this case focuses just on correctly treating acute agitation which is a common occurrence in most emergency departments. As the patient has already assaulted a staff member, IV medication is needed for rapid medication onset to be effective. A typical regimen is colloquially called the 5-2-1 regimen 5 mg of Halidol (Haloperidol), 2 mg of IM Ativan (Lorazepam), and 1 mg of IM Cogentin. As Cogentin is key here, an alternative is 2.5 mg of Halidol, 2 mg of IM Ativan (Lorazepam), and 5 mg of IM Benadryl (Diphenhydramine). Droperidol has its limitations as it is not the best choice. Once the patient is treated, the vital signs can be completed. There can be medical causes of acute agitation which should be ruled out, but given the age of the patient and his history in the hospital, it is unlikely that a medical diagnosis will be determined in this case.\n\nOther second-generation antipsychotics are available for the distressed patient including: IM Olanzapine (Zyprexa), IM Aripiprazole (Abilify), or IM Ziprasidone (Geodon). Halidol is the most commonly administered in hospital emergency settings due to the availability of IM administration along with Lorazepam (Ativan) along with Cogentin or Benadryl to avoid a potential EPS (Extrapyramidal Syndrome) and dyskinesias. This is an area which is being studied as newer antipsychotics will treat agitation as well as psychosis.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered: Haloperidol",
+    "Ordered: Lorazepam",
+    "Ordered: Benztropine mesylate",
+    "Virtual Time Advanced 60 minutes"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

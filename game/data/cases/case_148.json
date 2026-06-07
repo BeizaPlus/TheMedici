@@ -1,0 +1,83 @@
+{
+  "id": 148,
+  "topic": "Chest Pain",
+  "diagnosis": "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: General Appearance",
+    "Pulse oximetry",
+    "CBC with differential",
+    "Cardiac troponin I, serum / Cardiac enzymes, serum",
+    "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long",
+    "X-ray, chest, left lateral decubitus / X-ray, chest, right lateral decubitus / X-ray, chest, PA / X-ray, chest, PA/lateral / X-ray, chest, AP, portable",
+    "Liver function panel / Comprehensive metabolic profile / Basic metabolic profile",
+    "Aspirin, therapy / Acetaminophen, therapy",
+    "Advise patient, rest at home",
+    {
+      "order": "Colchicine",
+      "rationale": "Treatment with colchicine is controversial in post myocardial infarction pericarditis as there are not many studies showing its effectiveness, so this is optional.",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional"
+    }
+  ],
+  "should_avoid": [
+    "Celecoxib / Diclofenac sodium / Etodolac / Fenoprofen / Ibuprofen / Indomethacin / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Mefenamic acid / Meloxicam / Nabumetone / Naproxen / Oxaprozin / Piroxicam / Sulindac / Tolmetin"
+  ],
+  "rationale": {
+    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for chest pain.",
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for chest pain.",
+    "Pulse oximetry": "Pulse oximetry documents oxygenation in the initial assessment.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome).",
+    "Cardiac troponin I, serum / Cardiac enzymes, serum": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+    "X-ray, chest, left lateral decubitus / X-ray, chest, right lateral decubitus / X-ray, chest, PA / X-ray, chest, PA/lateral / X-ray, chest, AP, portable": "Evaluate chest and lungs as part of the initial exam for chest pain.",
+    "Liver function panel / Comprehensive metabolic profile / Basic metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome).",
+    "Aspirin, therapy / Acetaminophen, therapy": "Appropriate CCS order for Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome): Aspirin, therapy / Acetaminophen, therapy.",
+    "Advise patient, rest at home": "Appropriate CCS order for Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome): Advise patient, rest at home.",
+    "Colchicine": "Treatment with colchicine is controversial in post myocardial infarction pericarditis as there are not many studies showing its effectiveness, so this is optional.",
+    "Celecoxib / Diclofenac sodium / Etodolac / Fenoprofen / Ibuprofen / Indomethacin / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Mefenamic acid / Meloxicam / Nabumetone / Naproxen / Oxaprozin / Piroxicam / Sulindac / Tolmetin": "CCS review: avoid this order for Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome) — it does not change acute management."
+  },
+  "hpi": "Differential: Myocardial infarction, myocardial ischemia, peptic ulcer disease, pulmonary embolism, aortic dissection, aortic stenosis, esophageal rupture, esophageal spasm, acute gastritis, GERD, coronary artery vasospasm, angina pectoris, esophagitis, cardiac tamponade.\n\nThis case is post myocardial infarction pericarditis (post-MI syndrome). Avoid treatment with NSAIDs other than aspirin. Acetaminophen or aspirin can be used for pain, and colchicine is optional because evidence is controversial. Diagnostics should focus on ruling out another myocardial infarction. Do not discontinue the patient's recent MI medications.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — chest pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This chest pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "Differential: Myocardial infarction, myocardial ischemia, peptic ulcer disease, pulmonary embolism, aortic dissection, aortic stenosis, esophageal rupture, esophageal spasm, acute gastritis, GERD, coronary artery vasospasm, angina pectoris, esophagitis, cardiac tamponade.\n\nThis case is post myocardial infarction pericarditis (post-MI syndrome). Avoid treatment with NSAIDs other than aspirin. Acetaminophen or aspirin can be used for pain, and colchicine is optional because evidence is controversial. Diagnostics should focus on ruling out another myocardial infarction. Do not discontinue the patient's recent MI medications.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exams and/or patient updates: General Appearance, Chest and Lung, Cardiovascular, Extremities and Spine",
+    "Time Advanced 4 minutes",
+    "Ordered: X-ray, chest, PA/lateral",
+    "Ordered: Echocardiography",
+    "Ordered: Cardiac troponin I serum",
+    "Ordered: CBC with differential",
+    "Ordered: Comprehensive metabolic profile",
+    "Ordered: Pulse oximetry",
+    "Ordered: Electrocardiography, 12 lead"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Re-transcribed from game/ccs_screenshots/case_148_Chest_Pain.png. HPI, PE, and vitals are not on review page; scored orders and case summary are from the screenshot."
+}

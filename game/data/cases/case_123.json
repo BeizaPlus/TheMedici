@@ -1,0 +1,65 @@
+{
+  "id": 123,
+  "topic": "Leg Pain - Internal Medicine",
+  "diagnosis": "Deep Venous Thrombosis (DVT)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "PT/PTT / Fibrin thromboplastin time AND PT/INR",
+    "Doppler: lower extremities, venous / Duplex ultrasonography, lower extremities, venous",
+    "Physical Exam: Skin",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Instruction patient, smoking cessation",
+    "Diet: Calories restricted"
+  ],
+  "should_avoid": [
+    "order1",
+    "Immediate surgery without proper diagnostic workup",
+    "Prescribing specific medications without identifying the underlying cause"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for leg pain - internal medicine.",
+    "PT/PTT / Fibrin thromboplastin time AND PT/INR": "Appropriate CCS order for Deep Venous Thrombosis (DVT): PT/PTT / Fibrin thromboplastin time AND PT/INR.",
+    "Doppler: lower extremities, venous / Duplex ultrasonography, lower extremities, venous": "Targeted Doppler: lower extremities, venous / Duplex ultrasonography, lower extremities, venous exam supports the differential for Deep Venous Thrombosis (DVT).",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Deep Venous Thrombosis (DVT).",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Deep Venous Thrombosis (DVT).",
+    "Instruction patient, smoking cessation": "Appropriate CCS order for Deep Venous Thrombosis (DVT): Instruction patient, smoking cessation.",
+    "Diet: Calories restricted": "Appropriate CCS order for Deep Venous Thrombosis (DVT): Diet: Calories restricted.",
+    "order1": "CCS review: avoid this order for Deep Venous Thrombosis (DVT) — it does not change acute management.",
+    "Immediate surgery without proper diagnostic workup": "CCS review: avoid this order for Deep Venous Thrombosis (DVT) — it does not change acute management.",
+    "Prescribing specific medications without identifying the underlying cause": "CCS review: avoid this order for Deep Venous Thrombosis (DVT) — it does not change acute management."
+  },
+  "hpi": "The patient has classical symptoms of DVT. The risk factors for DVT include: obesity, tenderness at area of interest, pitting edema, calf swelling 3cm larger than the other leg, and distal swelling of the leg. Use of the Wells Score.\n\nThe D-Dimer results will be elevated in DVT, but this would be a high probability due to risk factors including a positive PVT. A calf ultrasound (duplex) should be done to confirm the diagnosis. The patient should be put on anticoagulants. The options for anticoagulants for DVT are: LMWH heparin (Lovenox) / Warfarin (Coumadin) CR Lovenox / dalteparin CR Lovenox / edoxaban OR Rivaroxaban monotherapy OR Apixaban Monotherapy.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this leg pain. It feels swollen and heavy.",
+    "history": "I noticed the pain getting worse over the last few days. It started as a small ache.",
+    "pain": "It hurts a lot, especially when I try to walk."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "The patient has classical symptoms of DVT. The risk factors for DVT include: obesity, tenderness at area of interest, pitting edema, calf swelling 3cm larger than the other leg, and distal swelling of the leg. Use of the Wells Score.\n\nThe D-Dimer results will be elevated in DVT, but this would be a high probability due to risk factors including a positive PVT. A calf ultrasound (duplex) should be done to confirm the diagnosis. The patient should be put on anticoagulants. The options for anticoagulants for DVT are: LMWH heparin (Lovenox) / Warfarin (Coumadin) CR Lovenox / dalteparin CR Lovenox / edoxaban OR Rivaroxaban monotherapy OR Apixaban Monotherapy.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exams and/or patient updates: General Appearance, Chest and lung, Cardiovascular, Extremities and Spine, Neurologic and Psychologic",
+    "Doppler: lower extremities, arterial",
+    "Ordered: Monitor, arterial"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

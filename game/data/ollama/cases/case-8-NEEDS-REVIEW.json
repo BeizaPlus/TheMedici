@@ -1,0 +1,152 @@
+{
+  "case_number": 106,
+  "title": "Burning During Urination - Internal Medicine",
+  "specialty": "Urology",
+  "chief_complaint": "Burning During Urination",
+  "patient": {
+    "age": 50,
+    "sex": "Male"
+  },
+  "location": "Office",
+  "diagnosis": null,
+  "hpi_narrative": "A 50-year-old male presents with burning during urination. He has no significant past medical history and is sexually active. He also has fevers and chills.",
+  "physical_exam": {
+    "general": {
+      "label": "Physical Exam: General Appearance",
+      "finding": "The general examination is extremely useful to determine how sick the patient looks"
+    },
+    "chest": null,
+    "cardiovascular": null,
+    "abdominal": null,
+    "neurological": null,
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": {
+      "exam": true
+    },
+    "psychiatric": null
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: Chest",
+      "aliases": [],
+      "finding": null,
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Heart",
+      "aliases": [],
+      "finding": null,
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "aliases": [],
+      "finding": null,
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Genitalia",
+      "aliases": [],
+      "finding": "Genital exam indicated - genitalia part of differential for burning during urination.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "aliases": [],
+      "finding": "Rectal examination will help confirm the diagnosis.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Urinalysis",
+      "aliases": [],
+      "finding": "A quick diagnostic tool to guide treatment is to get a urinalysis and a urine culture.",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Gram stain, urine, unspun",
+      "aliases": [],
+      "finding": "This will help guide antibiotic treatment.",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Antibody, direct fluorescent, chlamydia, urethra",
+      "aliases": [],
+      "finding": "To rule out a sexually transmitted infection.",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Neisseria gonorrhoeae DNA probe test, urethra",
+      "aliases": [],
+      "finding": "To rule out a sexually transmitted infection.",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Bacterial culture, urine",
+      "aliases": [],
+      "finding": "Before antibiotic treatment",
+      "type": "shouldHaveOrdered"
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 80,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual chief complaint in OCR. The correct value should be 'Burning During Urination - Internal Medicine (Urology)',",
+      "fix": "Update title to reflect the specialty"
+    },
+    {
+      "field": "case_number",
+      "problem": "Case number is not used in the OCR text. It may not be necessary or relevant for this case.",
+      "fix": "Remove case_number from extracted data"
+    },
+    {
+      "field": "specialty",
+      "problem": "Specialty was automatically changed to Urology instead of Internal Medicine, which is the actual specialty in the OCR text. The correct value should be 'Internal Medicine'.",
+      "fix": "Update specialty to reflect the actual specialty"
+    },
+    {
+      "field": "patient",
+      "problem": "Patient's age and sex are extracted, but they were not present in the OCR text. They may be added for context, but since they were not provided in the original data, it is not an issue with accuracy.",
+      "fix": "Keep patient information as is or remove if not relevant"
+    },
+    {
+      "field": "location",
+      "problem": "The location is changed to 'Office' instead of 'ER' which was in the OCR text. The correct value should be 'ER'.",
+      "fix": "Update location to reflect the actual location"
+    },
+    {
+      "field": "diagnosis",
+      "problem": "Diagnosis is missing in the extracted data, but it was not provided in the OCR text. It is not an issue with accuracy.",
+      "fix": "Leave diagnosis as null or add if available"
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "HPI narrative is accurate and does not have placeholders or metadata, but there are some minor differences in wording compared to the OCR text. This may be due to variations in language used by different providers.",
+      "fix": "Keep hpi_narrative as is"
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Physical exam findings are correctly extracted, but some systems have more than one finding associated with them (e.g., Rectal has two findings). This may be due to variations in language used by different providers.",
+      "fix": "Clean up physical_exam section to have single findings per system"
+    },
+    {
+      "field": "stacks",
+      "problem": "Stack labels are clean clinical orders with no UI noise, but some orders were automatically ordered based on the OCR text (e.g., Physical Exam: Rectal) instead of being explicitly stated as such. This may create confusion for learners.",
+      "fix": "Update stack labels to explicitly state they are part of a physical exam (e.g., Physical Exam: Rectal Examination)"
+    },
+    {
+      "field": "vitals",
+      "problem": "Vitals are missing in the extracted data, but they were not provided in the OCR text. It is not an issue with accuracy.",
+      "fix": "Leave vitals as null or add if available"
+    }
+  ]
+}

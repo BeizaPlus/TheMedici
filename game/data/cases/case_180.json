@@ -1,0 +1,64 @@
+{
+  "id": 180,
+  "topic": "Headache",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain a detailed history and perform a physical examination",
+    "Order relevant laboratory investigations (e.g., complete blood count, electrolytes, glucose, thyroid function tests, and lumbar puncture if necessary)",
+    "Request imaging studies such as CT or MRI of the brain",
+    "Consult with a neurologist for further evaluation and management",
+    "If the patient's condition is stable, consider admitting the patient for observation",
+    "Oxygen",
+    "IV access ×2"
+  ],
+  "should_avoid": [
+    "Prescribing medication without proper diagnostic workup to establish the cause of the headache"
+  ],
+  "rationale": {
+    "Obtain a detailed history and perform a physical examination": "Appropriate CCS order for this diagnosis: Obtain a detailed history and perform a physical examination.",
+    "Order relevant laboratory investigations (e.g., complete blood count, electrolytes, glucose, thyroid function tests, and lumbar puncture if necessary)": "Appropriate CCS order for this diagnosis: Order relevant laboratory investigations (e.g., complete blood count, electrolytes, glucose, thyroid function tests, and lumbar puncture if necessary).",
+    "Request imaging studies such as CT or MRI of the brain": "Appropriate CCS order for this diagnosis: Request imaging studies such as CT or MRI of the brain.",
+    "Consult with a neurologist for further evaluation and management": "Targeted Consult with a neurologist for further evaluation and management exam supports the differential for this diagnosis.",
+    "If the patient's condition is stable, consider admitting the patient for observation": "Appropriate CCS order for this diagnosis: If the patient's condition is stable, consider admitting the patient for observation.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
+    "Prescribing medication without proper diagnostic workup to establish the cause of the headache": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — headache. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This headache won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain a detailed history and perform a physical examination",
+    "Order relevant laboratory investigations (e.g., complete blood count, electrolytes, glucose, thyroid function tests, and lumbar puncture if necessary)",
+    "Request imaging studies such as CT or MRI of the brain",
+    "Consult with a neurologist for further evaluation and management",
+    "If the patient's condition is stable, consider admitting the patient for observation",
+    "Oxygen",
+    "IV access ×2"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

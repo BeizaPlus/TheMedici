@@ -1,0 +1,106 @@
+{
+  "case_number": 2,
+  "title": "Abdominal Pain: Sharp, Severe, Acute Onset",
+  "diagnosis": "Diabetic Ketoacidosis",
+  "timeline": [
+    {
+      "time": "0 Days, 00 Hours, 00 Minutes",
+      "actions": [
+        "Vitals Ordered",
+        "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Breast (findings if present in OCR text), Lymph Node (findings if present in OCR text), HEENT (Head, Eyes, Ears, Nose, Throat) (findings if present in OCR text), Chest and Lung, Cardiovascular, Abdomen: Distended, Tender, Genital (findings if present in OCR text), Rectal (findings if present in OCR text), Neurologic (findings if present in OCR text), Psychologic (findings if present in OCR text)"
+      ]
+    },
+    {
+      "time": "0 Days, 00 Hours, 15 Minutes",
+      "actions": [
+        "Ordered: Comprehensive metabolic profile"
+      ]
+    },
+    {
+      "time": "0 Days, 00 Hours, 30 Minutes",
+      "actions": [
+        "Ordered: CBC with differential",
+        "Ordered: Urinalysis"
+      ]
+    }
+  ],
+  "treatment": [
+    "IV normal saline",
+    "Insulin"
+  ],
+  "location": "Intensive Care Unit",
+  "preventive_care": [
+    "Papanicolaou smear",
+    "Human papillomavirus DNA probe test, cervix",
+    "Vaccine, diphtheria/tetanus/pertussis",
+    "Vaccine, diphtheria/tetanus/pertussis/HIB",
+    "Vaccine, human papillomavirus",
+    "Advise patient, no illegal drug use",
+    "Instruct patient, diabetes"
+  ],
+  "stacks": [
+    {
+      "label": "Comprehensive metabolic profile",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Urinalysis",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "hpi_narrative": "45-year-old female presents with acute onset abdominal pain characterized as sharp and severe. Associated symptoms include nausea and vomiting, but there is no fever or loss of consciousness.",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": null,
+    "respiratory": null,
+    "abdominal": {},
+    "neurological": null,
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null
+  },
+  "specialty": "Emergency Medicine",
+  "patient": {
+    "age": "45-year-old female"
+  },
+  "physical_exam.general": {
+    "appearance": null
+  },
+  "_final_confidence": 50,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "'Abdominal Pain: Sharp, Severe, Acute Onset' does not match the actual chief complaint in OCR",
+      "fix": "'Abdominal Pain' should be used as the title"
+    },
+    {
+      "field": "stacks",
+      "problem": "Some stack labels have additional information that is not necessary, such as 'Comprehensive metabolic profile', 'CBC with differential', and 'Urinalysis'",
+      "fix": "Stack labels should only contain the actual orders or examinations"
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Some physical exam sections do not have findings, but have null values instead",
+      "fix": "Physical exam sections without findings should be empty, not contain null values"
+    }
+  ]
+}

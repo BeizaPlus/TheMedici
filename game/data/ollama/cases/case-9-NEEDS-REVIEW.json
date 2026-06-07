@@ -1,0 +1,116 @@
+{
+  "case_number": "N/A",
+  "title": "Abdominal Pain - Emergency Medicine",
+  "specialty": "General Surgery or Internal Medicine",
+  "chief_complaint": "Abdominal Pain",
+  "patient": {
+    "age": "50",
+    "sex": "female"
+  },
+  "location": "Inpatient Unit",
+  "diagnosis": "Intra-abdominal Abscess",
+  "hpi_narrative": "Ms. Y is a 50-year-old female with no significant past medical history who presents with severe abdominal pain. Onset is acute, the character is constant, and severity is high, associated with fever. Pertinent findings include severe pain on abdominal examination and tachycardia.",
+  "physical_exam": {
+    "general": "Patient having severe pain",
+    "cardiovascular": {
+      "findings": "Tachycardia"
+    },
+    "respiratory": null,
+    "neurological": null,
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null,
+    "abdominal": {
+      "findings": "severe pain"
+    }
+  },
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null,
+    "heart_rate": "Tachycardia"
+  },
+  "stacks": [
+    {
+      "label": "General Appearance",
+      "aliases": [],
+      "finding": "Patient having severe pain \u2013 appropriate to look at patient to help guide diagnosis.",
+      "type": null
+    },
+    {
+      "label": "Chest / Lungs",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Heart / Cardiovascular",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Abdomen",
+      "aliases": [],
+      "finding": "This is the chief complaint, so this should be examined.",
+      "type": null
+    },
+    {
+      "label": "Bacterial culture, blood",
+      "aliases": [],
+      "finding": "Fever and tachycardia after an abdominal surgery is worrisome, and therefore, a blood culture is warranted.",
+      "type": null
+    },
+    {
+      "label": "Bacterial culture, urine",
+      "aliases": [],
+      "finding": "As the patient is experiencing abdominal pain, a urine culture is warranted to rule out genitourinary pathology.",
+      "type": null
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": "Important to order a CBC with differential in a patient with a fever.",
+      "type": null
+    },
+    {
+      "label": "X-ray, chest",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Urinalysis",
+      "aliases": [],
+      "finding": "It's important to get an urinalysis to rule out bacterial infection and other causes of fever.",
+      "type": null
+    }
+  ],
+  "_final_confidence": 60,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual case chief complaint in OCR. It should be 'Abdominal Pain - Emergency Medicine' instead of 'Abdominal Pain - Emergency Medicine, General Surgery or Internal Medicine'.",
+      "fix": "'Abdominal Pain - Emergency Medicine'"
+    },
+    {
+      "field": "stacks",
+      "problem": "Stack labels have UI noise like percentages and metadata. They should be clean clinical orders like in the gold standard example.",
+      "fix": "Clean stack labels with no UI noise"
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "HPI narrative has some placeholders and metadata. It should read like a real clinical presentation like in the gold standard example.",
+      "fix": "A proper clinical narrative with no placeholders or metadata"
+    },
+    {
+      "field": "vitals",
+      "problem": "Vitals only include values actually visible in the screenshot. However, HR (heart rate) is missing and should be included as it's an important vital sign.",
+      "fix": "Include 'hr': 'N/A', or the actual value if available"
+    }
+  ]
+}

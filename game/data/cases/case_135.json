@@ -1,0 +1,64 @@
+{
+  "id": 135,
+  "topic": "Muscle Weakness",
+  "diagnosis": "Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General / Appearance",
+    "Physical Exam: Neuro / Psych",
+    "CBC with differential",
+    "Basic metabolic profile / Electrolytes, serum / Comprehensive metabolic profile",
+    "Calcium chloride / Calcium gluconate",
+    "Monitor, cardiac / Monitor, cardiac check",
+    "Albuterol / Insulin, regular AND Dextrose: 10% in normal saline solution / Insulin, regular AND Dextrose: 10% in water / Insulin, regular AND Dextrose: 25% in normal saline solution / Insulin, regular AND Dextrose: 5% in normal saline solution / Insulin, regular AND Dextrose: 50% in water",
+    "Potassium-restricted diet / Diet, low potassium"
+  ],
+  "should_avoid": [
+    "Dialysis"
+  ],
+  "rationale": {
+    "Physical Exam: General / Appearance": "Assess how ill the patient appears before focused testing for muscle weakness.",
+    "Physical Exam: Neuro / Psych": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use.",
+    "Basic metabolic profile / Electrolytes, serum / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use.",
+    "Calcium chloride / Calcium gluconate": "Appropriate CCS order for Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use: Calcium chloride / Calcium gluconate.",
+    "Monitor, cardiac / Monitor, cardiac check": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to muscle weakness.",
+    "Albuterol / Insulin, regular AND Dextrose: 10% in normal saline solution / Insulin, regular AND Dextrose: 10% in water / Insulin, regular AND Dextrose: 25% in normal saline solution / Insulin, regular AND Dextrose: 5% in normal saline solution / Insulin, regular AND Dextrose: 50% in water": "Appropriate CCS order for Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use: Albuterol / Insulin, regular AND Dextrose: 10% in normal saline solution / Insulin, regular AND Dextrose: 10% in water / Insulin, regular AND Dextrose: 25% in normal saline solution / Insulin, regular AND Dextrose: 5% in normal …",
+    "Potassium-restricted diet / Diet, low potassium": "Appropriate CCS order for Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use: Potassium-restricted diet / Diet, low potassium.",
+    "Dialysis": "CCS review: avoid this order for Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use — it does not change acute management."
+  },
+  "hpi": "Calcium chloride, insulin, hyperkalemia, potassium predisposition. Patients with hyperkalemic emergencies due to NSAID and ACE inhibitor use should be treated with calcium, insulin, and dextrose. These patients will exhibit signs of hyperkalemia. Cardiac status is very important in these patients. Dialysis can be attempted first, and if the patient continues to be refractory from initial treatment, then dialysis can be considered.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm feeling really weak and scared. I don't know what's happening to me.",
+    "history": "I have been taking medication for my heart. I feel so tired and weak.",
+    "pain": "My muscles feel heavy and I can't move them well."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Calcium chloride, insulin, hyperkalemia, potassium predisposition. Patients with hyperkalemic emergencies due to NSAID and ACE inhibitor use should be treated with calcium, insulin, and dextrose. These patients will exhibit signs of hyperkalemia. Cardiac status is very important in these patients. Dialysis can be attempted first, and if the patient continues to be refractory from initial treatment, then dialysis can be considered.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "CBC with differential",
+    "Basic metabolic profile / Electrolytes, serum / Comprehensive metabolic profile",
+    "Calcium chloride / Calcium gluconate"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

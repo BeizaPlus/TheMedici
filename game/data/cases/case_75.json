@@ -1,0 +1,66 @@
+{
+  "id": 75,
+  "topic": "Chest Pain",
+  "diagnosis": "Aortic Dissection",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Rapid Bedside Clinical Appearance",
+    "Physical Exam: Cardiac",
+    "Physical Exam: Extremities/Neuro",
+    "CT Angiogram",
+    "IV Access: Peripheral",
+    "Cardiac Enzymes",
+    "Type and Crossmatch",
+    "Electrolytes"
+  ],
+  "should_avoid": [
+    "Aspirin",
+    "Anticoagulation"
+  ],
+  "rationale": {
+    "Rapid Bedside Clinical Appearance": "Appropriate CCS order for Aortic Dissection: Rapid Bedside Clinical Appearance.",
+    "Physical Exam: Cardiac": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Physical Exam: Extremities/Neuro": "Targeted Physical Exam: Extremities/Neuro exam supports the differential for Aortic Dissection.",
+    "CT Angiogram": "Appropriate CCS order for Aortic Dissection: CT Angiogram.",
+    "IV Access: Peripheral": "Appropriate CCS order for Aortic Dissection: IV Access: Peripheral.",
+    "Cardiac Enzymes": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Type and Crossmatch": "Appropriate CCS order for Aortic Dissection: Type and Crossmatch.",
+    "Electrolytes": "Appropriate CCS order for Aortic Dissection: Electrolytes.",
+    "Aspirin": "CCS review: avoid this order for Aortic Dissection — it does not change acute management.",
+    "Anticoagulation": "CCS review: avoid this order for Aortic Dissection — it does not change acute management."
+  },
+  "hpi": "This case illustrates the importance of recognizing aortic dissection as a potential cause of chest pain. The patient presented with classic symptoms, and timely imaging and intervention are critical for a favorable outcome. Understanding the risk factors and clinical presentation can aid in prompt diagnosis and management.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My chest hurts a lot.",
+    "history": "I felt a sudden sharp pain in my chest. It was like nothing I've ever felt before.",
+    "pain": "It feels like a heavy pressure in my chest."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "This case illustrates the importance of recognizing aortic dissection as a potential cause of chest pain. The patient presented with classic symptoms, and timely imaging and intervention are critical for a favorable outcome. Understanding the risk factors and clinical presentation can aid in prompt diagnosis and management.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Laboratory Tests",
+    "Imaging Ordered",
+    "Medications Ordered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

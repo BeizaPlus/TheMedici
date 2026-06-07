@@ -1,0 +1,62 @@
+{
+  "id": 11,
+  "topic": "Abdominal Pain - Emergency Medicine",
+  "diagnosis": "Hepatitis A",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Laboratory: CBC",
+    "Laboratory: CMP",
+    "Laboratory: Lipase",
+    "Laboratory: Hepatitis Panel",
+    "Imaging: Abdominal Ultrasound",
+    "Laboratory: Urinalysis"
+  ],
+  "should_avoid": [
+    "Imaging: CT Abdomen/Pelvis"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for abdominal pain - emergency medicine.",
+    "Laboratory: CBC": "Laboratory testing when systemic illness or severity warrants labs in Hepatitis A.",
+    "Laboratory: CMP": "Appropriate CCS order for Hepatitis A: Laboratory: CMP.",
+    "Laboratory: Lipase": "Appropriate CCS order for Hepatitis A: Laboratory: Lipase.",
+    "Laboratory: Hepatitis Panel": "Appropriate CCS order for Hepatitis A: Laboratory: Hepatitis Panel.",
+    "Imaging: Abdominal Ultrasound": "Appropriate CCS order for Hepatitis A: Imaging: Abdominal Ultrasound.",
+    "Laboratory: Urinalysis": "Appropriate CCS order for Hepatitis A: Laboratory: Urinalysis.",
+    "Imaging: CT Abdomen/Pelvis": "Advanced imaging is not indicated early for Hepatitis A when the diagnosis is clinical."
+  },
+  "hpi": "This case illustrates the importance of a thorough evaluation in patients presenting with abdominal pain. The differential diagnosis can be broad, and it is crucial to consider both common and serious conditions. In this case, the patient presented with symptoms consistent with hepatitis A, which was confirmed by laboratory testing. The management included supportive care and patient education regarding the disease process and prevention of transmission.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this pain in my stomach. It hurts a lot.",
+    "history": "I felt fine until yesterday. Now, I can't eat anything.",
+    "pain": "It feels sharp and comes in waves."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "This case illustrates the importance of a thorough evaluation in patients presenting with abdominal pain. The differential diagnosis can be broad, and it is crucial to consider both common and serious conditions. In this case, the patient presented with symptoms consistent with hepatitis A, which was confirmed by laboratory testing. The management included supportive care and patient education regarding the disease process and prevention of transmission.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following: Physical Exam",
+    "Ordered: CBC",
+    "Ordered: CMP",
+    "Ordered: Lipase"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

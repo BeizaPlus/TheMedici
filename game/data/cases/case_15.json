@@ -1,0 +1,64 @@
+{
+  "id": 15,
+  "topic": "Chest Pain",
+  "diagnosis": "Pericarditis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Abdomen",
+    "Physical Exam: Cardiovascular",
+    "Physical Exam: Respiratory",
+    "Physical Exam: Extremities",
+    "Physical Exam: Neurological",
+    "Cardiac Enzymes",
+    "Echocardiogram",
+    "Chest X-ray"
+  ],
+  "should_avoid": [
+    "CT Angiogram"
+  ],
+  "rationale": {
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with chest pain.",
+    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Physical Exam: Respiratory": "Evaluate chest and lungs as part of the initial exam for chest pain.",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Pericarditis.",
+    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Pericarditis.",
+    "Cardiac Enzymes": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Echocardiogram": "Appropriate CCS order for Pericarditis: Echocardiogram.",
+    "Chest X-ray": "Evaluate chest and lungs as part of the initial exam for chest pain.",
+    "CT Angiogram": "Advanced imaging is not indicated early for Pericarditis when the diagnosis is clinical."
+  },
+  "hpi": "Initially, the patient presents with chest pain. The history is pertinent for recent viral illness. Develops chest pain with exertion. EKG shows ST elevation in leads II, III, and aVF. Troponin is elevated. The patient is diagnosed with pericarditis. The challenges in this case include differentiating between pericarditis and myocardial infarction, especially in a young patient with a viral history.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My chest hurts a lot.",
+    "history": "I had a cold last week, and now my chest feels tight.",
+    "pain": "It feels sharp and gets worse when I breathe."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "Initially, the patient presents with chest pain. The history is pertinent for recent viral illness. Develops chest pain with exertion. EKG shows ST elevation in leads II, III, and aVF. Troponin is elevated. The patient is diagnosed with pericarditis. The challenges in this case include differentiating between pericarditis and myocardial infarction, especially in a young patient with a viral history.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exam",
+    "Time Advanced 10 minutes",
+    "Ordered Electrocardiogram",
+    "Ordered Cardiac troponin I, 12 lead"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

@@ -1,0 +1,1133 @@
+﻿Screenshot directory: C:\Users\steve\MeWorld\game\ccs_screenshots
+Output directory:     C:\Users\steve\MeWorld\game\data\ollama\cases
+Total screenshots found: 146
+Case numbers: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33, 34, 35, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 48, 49, 50, 51, 52, 54, 56, 57, 58, 60, 61, 62, 63, 64, 66, 67, 68, 69, 71, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 104, 105, 106, 107, 109, 110, 111, 112, 113, 115, 118, 119, 120, 122, 123, 125, 126, 127, 130, 133, 134, 135, 136, 137, 138, 139, 140, 142, 143, 145, 146, 148, 149, 150, 151, 152, 153, 154, 156, 157, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 172, 173, 181
+
+
+==================================================
+PROCESSING CASE 1
+==================================================
+[1] OCR...
+    6179 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Validation errors on attempt 1:
+    - Stack label too long ù likely explanatory text: 'X-ray, chest, left lateral decubitus / X-ray, ches...'
+    - Stack label too long ù likely explanatory text: 'Cardiac troponin |, serum / Cardiac enzymes, serum...'
+    - Stack label too long ù likely explanatory text: 'Electrocardiography, 12 lead / Electrocardiography...'
+    - Stack label too long ù likely explanatory text: 'Thoracentesis / Tube thoracostomy / Needle thoraco...'
+  Retrying with error context...
+  Attempt 2/3...
+  Validation errors on attempt 2:
+    - Stack label too long ù likely explanatory text: 'Cardiac troponin |, serum / Cardiac enzymes, serum...'
+    - Stack label too long ù likely explanatory text: 'Electrocardiography, 12 lead / Electrocardiography...'
+    - Stack label too long ù likely explanatory text: 'Thoracentesis / Tube thoracostomy / Needle thoraco...'
+  Retrying with error context...
+  Attempt 3/3...
+  Validation errors on attempt 3:
+    - Stack label too long ù likely explanatory text: 'X-ray, chest, left lateral decubitus / X-ray, ches...'
+    - Stack label too long ù likely explanatory text: 'Cardiac troponin |, serum / Cardiac enzymes, serum...'
+    - Stack label too long ù likely explanatory text: 'Electrocardiography, 12 lead / Electrocardiography...'
+    - Stack label too long ù likely explanatory text: 'Thoracentesis / Tube thoracostomy / Needle thoraco...'
+  All 3 attempts failed
+    Initial extraction failed validation ù attempting reconstruction anyway
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 70%
+  Scores: title=None stacks=60 hpi=80
+  Issues to fix (4):
+    - title: The title is missing the actual chief complaint from the OCR text ('Chest Pain - Emergency Medicine'). It should be 'Chest Pain'.
+    - stacks: There are some UI noise in stack labels such as 'Your ScoreÆ and 'Weight given for total score:', which should be removed.
+    - hpi_narrative: There are some punctuation errors in the HPI narrative (e.g., single quotes around 'Mr John Doe' and missing periods after 'Pain' and 'Distress').
+    - physical_exam: Some physical exam findings are not present or are wrong (e.g., 'respiratory' section should have findings instead of 'in respiratory distress').
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 30%
+  Scores: title=0 stacks=10 hpi=70
+  Issues to fix (3):
+    - title: Title does not match the actual case chief complaint in OCR. Title should be 'Chest Pain - Emergency Medicine' instead of 'Chest Pain'.
+    - stacks: Stack labels contain UI noise such as percentages and metadata. They should be clean clinical orders with no UI noise.
+    - physical_exam: Physical exam findings are not correctly extracted by the system. Physical exam should have actual findings if there are any.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 40%
+  Scores: title=None stacks=85 hpi=75
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint in OCR. It should be 'Chest Pain - Emergency Medicine' instead of 'Chest Pain'.
+    - stacks: Some stack labels contain unnecessary information like aliases and types. They should only have clean clinical orders with no UI noise.
+    - physical_exam: Physical exam findings are not correctly extracted by the system. It should contain relevant findings for each system.
+  Applying fixes...
+  Fix application parse failed ù keeping previous version
+
+  Round 4/5:
+  Confidence: 30%
+  Scores: title=None stacks=0 hpi=50
+  Issues to fix (4):
+    - title: Title does not match the actual chief complaint in OCR. Title should be 'Chest Pain - Emergency Medicine - Tension Pneumothorax' instead of just 'Chest Pain - Emergency Medicine'.
+    - stacks: Stack labels contain unnecessary metadata such as 'Correctly Ordered', which should be removed. The stack label format should follow the example in the gold standard: 'Physical Exam: General Appearance'.
+    - hpi_narrative: HPI contains brackets, placeholders, and metadata. This should be removed to ensure it reads like a real clinical presentation.
+    - physical_exam: Physical exam contains null values for all systems. Physical exam findings should only be recorded if there are actual findings, as per the gold standard.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 0%
+  Scores: title=None stacks=0 hpi=0
+  Issues to fix (5):
+    - title: The title does not match the actual chief complaint in OCR. It should be 'Chest Pain - Emergency Medicine - Tension Pneumothorax' instead of 'Chest Pain - Emergency Medicine - fe Eve vinee Comet ore'.
+    - stacks: The labels in stacks do not have clean clinical orders without UI noise. They should be formatted like the gold standard example, with 'label', 'type', and 'finding' properties.
+    - hpi_narrative: The HPI narrative has placeholders such as 'Mr John Doe'. It should not have any placeholders and read like a real clinical presentation.
+    - physical_exam: The physical exam findings are not correctly extracted by the system. It should only populate systems with actual findings, as in the gold standard example.
+    - overall_confidence: The overall confidence is low (0%). This indicates that the data is not ready to serve to a learner. It should be >= 99%.
+  Applying fixes...
+  Fix application parse failed ù keeping previous version
+  Max rounds reached. Final confidence: 0%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-1-NEEDS-REVIEW.json (confidence: 0%)
+    Title:    Chest Pain - Emergency Medicine - Tension Pneumothorax
+    Diagnosis:Tension Pneumothorax
+    Stacks:   7
+    Orders:   0
+    HPI:      Mr John Doe is a 50-year-old male with no significant past medical history who presents with chest pain and respiratory ...
+REVIEW case-1 | confidence: 0% | errors: [title: Title does not match the actual chief complaint in OCR. The title should be 'Chest Pain', not 'Chest Pain - Emergency Medicine - Tension Pneumothorax'.; stacks: Stack labels contain UI noise and are not clean clinical orders. They should be formatted as seen in the example (e.g., Physical Exam: General Appearance instead of General Appearance).; hpi_narrative: HPI contains UI noise and is not a proper clinical narrative. It should contain no placeholders or metadata (e.g., absence of arm or jaw pain).]
+
+==================================================
+PROCESSING CASE 2
+==================================================
+[1] OCR...
+    6580 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Validation errors on attempt 1:
+    - Stack label too long ù likely explanatory text: 'Hormone, thyroid stimulating, serum ultrasensitive...'
+    - Stack label too long ù likely explanatory text: 'CT of head without contrast / MRI, head, with gado...'
+    - Stack label too long ù likely explanatory text: 'Basic metabolic profile / Comprehensive metabolic ...'
+  Retrying with error context...
+  Attempt 2/3...
+  Passed validation on attempt 2
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 40%
+  Scores: title=None stacks=30 hpi=60
+  Issues to fix (4):
+    - title: Title does not match the actual chief complaint from OCR text: 'Altered Mental Status' should be 'Subdural Hematoma'
+    - stacks: Stack labels contain UI noise such as 'Should have Ordered', 'Correctly Ordered'. These should be removed.
+    - hpi_narrative: HPI narrative contains no brackets or placeholders, but it does not read like a real clinical presentation due to some incomplete and vague information.
+    - physical_exam: Physical exam findings are not correctly extracted. For example, there is no chest/lungs or abdomen examination, but they should be present according to the OCR text.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 40%
+  Scores: title=None stacks=80 hpi=85
+  Issues to fix (9):
+    - title: Title does not match the actual chief complaint in OCR. Should be 'Altered Mental Status' instead of 'Subdural Hematoma'.
+    - stacks[0].label: Stack labels have some UI noise (percentages, scores). Should be only clean clinical orders.
+    - hpi_narrative: HPI narrative has some metadata (date, UI text). Should not include this data.
+    - physical_exam.chest.finding: No finding for chest examination provided despite being ordered in OCR. Should be 'null' or a description of the finding if one exists.
+    - physical_exam.lungs.finding: No finding for lungs examination provided despite being ordered in OCR. Should be 'null' or a description of the finding if one exists.
+    - physical_exam.abdomen.finding: No finding for abdomen examination provided despite being ordered in OCR. Should be 'null' or a description of the finding if one exists.
+    - physical_exam.neurological.finding: No finding for neurological examination provided despite being ordered in OCR and it being the chief complaint of the patient. Should be 'delirious patient' or a description of the finding if one exists.
+    - physical_exam.psychiatric.finding: No psychiatric examination was ordered in OCR, but the patient's altered mental status suggests it might be important. Should consider adding this to the physical exam.
+    - vitals: Vitals are not provided in the extracted data, although some were ordered in OCR. The heart rate (HR), SpO2, blood pressure (BP), respiratory rate (RR), and temperature (Temp) should be present.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 70%
+  Scores: title=None stacks=85 hpi=60
+  Issues to fix (3):
+    - title: The title does not match the actual case chief complaint in OCR. It should be 'Altered Mental Status - Neurology' instead of 'Altered Mental Status'.
+    - hpi_narrative: The HPI narrative contains UI noise such as percentages, 'Case Diagnosis', and metadata. These should be removed for a clean clinical presentation.
+    - physical_exam: The physical exam section contains findings that are not relevant to the case such as 'delirious patient'. Only systems with actual findings should be populated, the rest should be null.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 70%
+  Scores: title=0 stacks=70 hpi=80
+  Issues to fix (3):
+    - title: Title does not match the actual case chief complaint in OCR. It should be 'Altered Mental Status - Neurology' instead of 'Abdominal Pain'.
+    - stacks: Some stack labels have additional information such as copyright, reasons, and UI terms like 'Correctly Ordered'. These should be removed for clean clinical labels.
+    - physical_exam: Some physical exam systems have findings that are not null but lack specific details. For example, 'delirious patient' under neurological does not provide a detailed description.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 0%
+  Scores: title=None stacks=0 hpi=60
+  Issues to fix (4):
+    - title: 'Altered Mental Status - Neurology' does not match the actual chief complaint 'Delirium' in the OCR text.
+    - stacks: Stack labels contain incorrect UI noise such as 'Completed', 'First Attempt Score', 'Case Diagnosis', etc.
+    - hpi_narrative: HPI narrative contains incorrect information such as 'A 60-year-old female with no significant past medical history presents with Altered Mental Status'. The OCR text states the patient's age and sex but not their medical history or specific presentation.
+    - physical_exam: Physical exam findings are missing from the OCR text for systems other than 'neurological'.
+  Applying fixes...
+  Max rounds reached. Final confidence: 0%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-2-NEEDS-REVIEW.json (confidence: 0%)
+    Title:    Delirium
+    Diagnosis:Subdural Hematoma
+    Stacks:   3
+    Orders:   0
+    HPI:      A 60-year-old female presents with Delirium. Onset is acute, characterized by delirium. The severity is high as indicate...
+REVIEW case-2 | confidence: 0% | errors: [title: The title does not match the actual case chief complaint in OCR. The provided data has 'Delirium' as the title, but in the original text it is 'Altered Mental Status - Neurology'.; stacks: The stack labels contain UI noise such as 'Should have Ordered' and 'Correctly Ordered'. These should be removed, and the labels should only contain clean clinical orders.; hpi_narrative: The HPI narrative contains no brackets or placeholders, but it does not read like a real clinical presentation. It lacks specific symptoms and vital signs.]
+
+==================================================
+PROCESSING CASE 3
+==================================================
+[1] OCR...
+    4080 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Validation errors on attempt 1:
+    - Stack label too long ù likely explanatory text: 'CT, abdomen/pelvis, with contrast / CT, abdomen/pe...'
+  Retrying with error context...
+  Attempt 2/3...
+  Validation errors on attempt 2:
+    - Stack label too long ù likely explanatory text: 'CT, abdomen/pelvis, with contrast / CT, abdomen/pe...'
+  Retrying with error context...
+  Attempt 3/3...
+  Validation errors on attempt 3:
+    - Stack label too long ù likely explanatory text: 'CT, abdomen/pelvis, with contrast / CT, abdomen/pe...'
+  All 3 attempts failed
+    Initial extraction failed validation ù attempting reconstruction anyway
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 62.5%
+  Scores: title=0 stacks=50 hpi=87.5
+  Issues to fix (4):
+    - title: 'Pelvic Pain' does not match the actual chief complaint in OCR: 'Pelvic Pain - OB/GYN'
+    - stacks: Stack labels have UI noise such as reasons and '⌐'. They should only contain clean clinical orders.
+    - physical_exam: Physical exam findings are not correctly extracted for some systems. For example, chest and lungs are missing.
+    - ready: Overall confidence is below 99 due to issues with title, stack labels, physical exam findings.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 87.5%
+  Scores: title=0 stacks=75 hpi=100
+  Issues to fix (3):
+    - title: Title should match the actual case chief complaint in OCR: 'Pelvic Pain - OB/GYN' should be 'Acute Onset Severe Pelvic Pain - OB/GYN'.
+    - physical_exam.general: Physical exam general should have a finding or be null, not empty.
+    - vitals.hr: HR (Heart Rate) value is missing in vitals.
+  Applying fixes...
+  Fix application parse failed ù keeping previous version
+
+  Round 3/5:
+  Confidence: 82.5%
+  Scores: title=0 stacks=85 hpi=90
+  Issues to fix (4):
+    - title: Title is not the actual chief complaint in OCR. It should be 'Pelvic Pain' instead of 'Pelvic Pain - OB/GYN'
+    - stacks: Stacks contain unnecessary metadata such as 'Completed', 'Weight given for total score', and 'Reason'. These should be removed for a cleaner clinical presentation.
+    - physical_exam: Physical exam contains systems with no actual findings, such as 'cardiovascular', 'respiratory', and others. These should be removed or have findings added if applicable.
+    - vitals: Vitals are missing some values such as heart rate (HR), oxygen saturation (SpO2), blood pressure (BP), respiratory rate (RR), and temperature.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=75
+  Issues to fix (4):
+    - title: Title is not identical to the actual chief complaint in OCR. In the OCR text, it's 'Pelvic Pain - OB/GYN', but here it's just 'Pelvic Pain'.
+    - stacks: Stack labels contain metadata and UI noise. They should be clean clinical orders without any extra information.
+    - hpi_narrative: There is some UI noise in the HPI narrative. It includes the patient's age, which is not necessary for this case.
+    - physical_exam: Physical exam findings are not complete. The general examination, cardiovascular, respiratory, neurological, skin, heent, musculoskeletal, and psychiatric systems are all missing. Only the abdomen and genitourinary systems have findings.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=0
+  Issues to fix (5):
+    - title: The title does not match the actual chief complaint in OCR. It should be 'Pelvic Pain - OB/GYN' instead of 'Pelvic Pain - OBGYN'.
+    - stacks: The labels contain UI noise such as percentages and metadata. They should be clean clinical orders without any additional information.
+    - hpi_narrative: The HPI narrative contains UI noise such as placeholders, brackets, and scores. It should be a proper clinical narrative with no additional information.
+    - physical_exam: The physical exam only populates systems with actual findings ù rest are null. However, the 'skin', 'heent', 'musculoskeletal', and 'psychiatric' sections should not be empty if they were examined during the case.
+    - overall_confidence: The overall confidence is not 99 or above.
+  Applying fixes...
+  Fix application parse failed ù keeping previous version
+  Max rounds reached. Final confidence: 0%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-3-NEEDS-REVIEW.json (confidence: 0%)
+    Title:    Pelvic Pain - OB/GYN
+    Diagnosis:Endometrioma
+    Stacks:   4
+    Orders:   0
+    HPI:      A 35-year-old female presents with pelvic pain. Onset is acute, character is severe and persistent, associated symptoms ...
+REVIEW case-3 | confidence: 0% | errors: [title: Title does not match the actual case chief complaint in OCR.; stacks: Stack labels contain UI noise such as scores, percentages, and reasons.; hpi_narrative: HPI narrative contains placeholders and metadata.]
+
+==================================================
+PROCESSING CASE 4
+==================================================
+[1] OCR...
+    10492 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Passed validation on attempt 1
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 76%
+  Scores: title=None stacks=75 hpi=75
+  Issues to fix (4):
+    - title: Title does not match the actual chief complaint in OCR. It should be 'Abdominal Pain - Emergency Medicine' instead of 'Abdominal Pain'.
+    - stacks: Some stack labels contain UI noise like ⌐ and High Yield @ v which should be removed.
+    - hpi_narrative: HPI narrative contains phrases like 'Review Later' and 'Aa Reading Options', which should be removed for cleaner clinical presentation.
+    - physical_exam: Some physical exam systems like Breast, Lymph Node, HEENT, Neck, Psychiatric, and Extremities and Spine do not have any findings mentioned in the OCR text.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 50%
+  Scores: title=0 stacks=80 hpi=70
+  Issues to fix (5):
+    - title: Title does not match the actual chief complaint in OCR. It should be 'Abdominal Pain - Type 1 Diabetic Ketoacidosis'.
+    - stacks: Stack labels have some UI noise. They should be clean clinical orders with no labels like 'Correctly Ordered' or references to the reason for ordering.
+    - hpi_narrative: HPI narrative has some placeholders and metadata. It should be a proper clinical narrative with no brackets or mentions of the case number.
+    - physical_exam: Physical exam findings are not always correctly extracted by system. Some systems may have missing or incorrect findings.
+    - overall_confidence: Overall confidence is low due to issues in the above dimensions. To be ready to serve to a learner, the overall_confidence should be 99 or higher.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 60%
+  Scores: title=None stacks=10 hpi=80
+  Issues to fix (4):
+    - title: 'Abdominal Pain - Type 1 Diabetic Ketoacidosis' does not match the actual chief complaint 'Acute onset abdominal pain characterized as sharp and severe.'
+    - stacks: The labels lack the actual order information, which is crucial for this case.
+    - hpi_narrative: The HPI narrative contains additional information not present in the OCR text, such as 'A 45-year-old female with a significant past medical history of type 1 diabetes'.
+    - physical_exam: Not all physical exam findings are present. For example, 'Skin', 'HEENT (Head, Eyes, Ears, Nose, Throat)', 'Neurologic', and 'Psychiatric' sections have no findings.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 60%
+  Scores: title=0 stacks=80 hpi=75
+  Issues to fix (5):
+    - title: Title does not match the actual chief complaint in OCR. Title should be 'Abdominal Pain: Sharp, Severe, Acute Onset' instead of 'Abdominal Pain: Sharp, Severe, Acute Onset - Emergency Medicine'.
+    - stacks: Stack labels have extra information like 'Comprehensive Metabolic Profile Ordered' which is UI noise. They should be clean clinical orders like 'Comprehensive metabolic profile', 'CBC with differential', and 'Urinalysis'.
+    - hpi_narrative: HPI narrative has extra text like 'A 45-year-old female presents with' which is not needed. It should only contain the clinical presentation.
+    - physical_exam: Physical exam findings are incomplete and not properly formatted. For example, 'abdominal': { 'status': 'distended', 'tenderness': true } should be replaced with 'Abdomen: Distended, Tender'.
+    - overall_confidence: Overall confidence is below 99. This indicates that the data may not be ready to serve to a learner.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 60%
+  Scores: title=None stacks=85 hpi=100
+  Issues to fix (3):
+    - title: Title does not match the actual case chief complaint in OCR. It should be 'Abdominal Pain: Sharp, Severe, Acute Onset'.
+    - stacks[0].label: Stack labels have additional text like '⌐', which is not part of clean clinical orders.
+    - physical_exam.general: There is no general examination finding provided in the physical exam section.
+  Applying fixes...
+  Max rounds reached. Final confidence: 60%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-4-NEEDS-REVIEW.json (confidence: 50%)
+    Title:    Abdominal Pain: Sharp, Severe, Acute Onset
+    Diagnosis:Diabetic Ketoacidosis
+    Stacks:   3
+    Orders:   0
+    HPI:      45-year-old female presents with acute onset abdominal pain characterized as sharp and severe. Associated symptoms inclu...
+REVIEW case-4 | confidence: 50% | errors: [title: 'Abdominal Pain: Sharp, Severe, Acute Onset' does not match the actual chief complaint in OCR; stacks: Some stack labels have additional information that is not necessary, such as 'Comprehensive metabolic profile', 'CBC with differential', and 'Urinalysis'; physical_exam: Some physical exam sections do not have findings, but have null values instead]
+
+==================================================
+PROCESSING CASE 5
+==================================================
+[1] OCR...
+    8094 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Validation errors on attempt 1:
+    - Stack label too long ù likely explanatory text: 'CSF cultures for viral, bacterial, and fungal path...'
+  Retrying with error context...
+  Attempt 2/3...
+  Validation errors on attempt 2:
+    - Stack label too long ù likely explanatory text: 'CSF cultures for viral, bacterial, and fungal path...'
+  Retrying with error context...
+  Attempt 3/3...
+  Validation errors on attempt 3:
+    - Stack label too long ù likely explanatory text: 'CSF cultures for viral, bacterial, and fungal path...'
+  All 3 attempts failed
+    Initial extraction failed validation ù attempting reconstruction anyway
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 76.67%
+  Scores: title=0 stacks=100 hpi=95
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint in OCR (Headache -> High Yield @ Review Later)
+    - hpi_narrative: Contains UI text such as 'Your Score Average First Attempt Score Case Diagnosis'. This should be removed.
+    - physical_exam.general: Contains null value instead of actual findings.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 60%
+  Scores: title=None stacks=60 hpi=80
+  Issues to fix (5):
+    - title: Title does not match the actual case chief complaint in OCR. It should be 'Headache' instead of 'High Yield @ Review Later - Headache'.
+    - specialty: Specialty is incorrect. The case belongs to Infectious Disease but it's listed as OB/GYN in the example.
+    - physical_exam: Some physical exam findings are present that should not be, like 'Patient appears sick'. The rest of the physical examination systems should be null as no actual findings were mentioned.
+    - stacks: Some stack labels have UI noise like 'Correctly Ordered' in the original OCR text. These should be removed for clean clinical orders.
+    - vitals: Some vitals like heart rate (HR), SpO2, Blood pressure (BP) are missing. They should be included if available in the OCR text.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=80
+  Issues to fix (8):
+    - title: The title does not match the actual chief complaint from OCR. The title should be 'Headache - Internal Medicine' to reflect the original case.
+    - specialty: The specialty is Infectious Disease instead of Internal Medicine as in the OCR text. This should be corrected to match.
+    - patient: The patient data structure in the extracted case is different from the original OCR. It should be consistent across both for better comparison.
+    - location: The location in the extracted case is Office, while it's ER in the original OCR. This should be corrected.
+    - diagnosis: The diagnosis is West Nile Encephalitis, but the original OCR does not provide a specific diagnosis for this case. It's unclear if this is accurate.
+    - hpi_narrative: While the hpi_narrative contains useful information, it still has some UI noise (i.e., pertinent negatives). The narrative should be cleaned for better comparison.
+    - physical_exam: The physical exam section in the extracted case is missing information (i.e., general, cardiovascular, respiratory, abdominal). These should be populated like in the original OCR.
+    - vitals: The vitals section is empty, while it contains values in the original OCR. This should be populated for better comparison.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=70
+  Issues to fix (3):
+    - title: The title does not match the actual case chief complaint in OCR. It should be 'Headache - Internal Medicine' instead of 'Headache'.
+    - stacks: Stack labels have UI noise such as 'Correctly Ordered' and 'should have Ordered', they should be clean clinical orders without any such labels.
+    - physical_exam: Physical exam findings are not correctly extracted. Only systems with actual findings should be included, while others should be null.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=80
+  Issues to fix (3):
+    - title: Title does not match the actual case chief complaint in OCR. It should be 'Headache - Internal Medicine' instead of 'Abdominal Pain'.
+    - stacks: Stack labels contain UI noise such as 'Correctly Ordered', 'Should have Ordered', and reasons for orders. They should be clean clinical labels.
+    - physical_exam: Physical exam findings are not correctly extracted. All systems should have actual findings or null if no finding.
+  Applying fixes...
+  Max rounds reached. Final confidence: 0%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-5-NEEDS-REVIEW.json (confidence: 0%)
+    Title:    Headache - Internal Medicine
+    Diagnosis:None
+    Stacks:   6
+    Orders:   0
+    HPI:      Mr. X is a 50-year-old male with no significant past medical history who presents with a headache. Onset was sudden and ...
+REVIEW case-5 | confidence: 0% | errors: [title: Title does not match the actual chief complaint in OCR. It should be 'Headache - Internal Medicine' instead of 'Headache'.; stacks: Stack labels have placeholders like '⌐', 'Completed', and percentages, which are UI noise. They should only contain clean clinical orders.; physical_exam: Physical exam findings are missing for some systems. There should be values for general, cardiovascular, respiratory, abdominal, neurological, skin, heent (eyes and ears), musculoskeletal, genitourinary, and psychiatric.]
+
+==================================================
+PROCESSING CASE 6
+==================================================
+[1] OCR...
+    5840 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Validation errors on attempt 1:
+    - Stack label too long ù likely explanatory text: 'Infectious mononucleosis screening test, serum / A...'
+    - Stack label too long ù likely explanatory text: 'Basic metabolic profile / Comprehensive metabolic ...'
+  Retrying with error context...
+  Attempt 2/3...
+  Validation errors on attempt 2:
+    - Stack label too long ù likely explanatory text: 'Basic metabolic profile / Comprehensive metabolic ...'
+  Retrying with error context...
+  Attempt 3/3...
+  Validation errors on attempt 3:
+    - Stack label too long ù likely explanatory text: 'Infectious mononucleosis screening test, serum / A...'
+    - Stack label too long ù likely explanatory text: 'Basic metabolic profile / Comprehensive metabolic ...'
+  All 3 attempts failed
+    Initial extraction failed validation ù attempting reconstruction anyway
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 85%
+  Scores: title=0 stacks=75 hpi=80
+  Issues to fix (4):
+    - title: Title does not match the actual case chief complaint in OCR.
+    - stacks: Stack labels have explanatory text which is not clean clinical orders.
+    - hpi_narrative: HPI narrative contains a UI element (UI text) not present in the OCR text.
+    - physical_exam: Physical exam findings do not include all systems with actual findings.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 65%
+  Scores: title=None stacks=75 hpi=80
+  Issues to fix (4):
+    - title: Title does not match the actual case chief complaint in OCR. The title is 'Rash and Lethargy - Pediatrics', but the actual chief complaint is 'Mononucleosis'.
+    - specialty: Specialty is incorrect. The patient's specialty should be Pediatrics, not Internal Medicine.
+    - chief_complaint: Chief complaint does not match the actual case chief complaint. The chief complaint is 'Rash and Lethargy', but the actual chief complaint is 'Mononucleosis'.
+    - physical_exam: Physical exam findings are incorrect. The patient's vital signs (HR, BP, RR, and Temp) should be included. Also, some systems that have no finding should not be null.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 60%
+  Scores: title=0 stacks=80 hpi=60
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint in OCR. The title should be 'Rash and Lethargy' instead of 'Mononucleosis'.
+    - hpi_narrative: HPI narrative includes incorrect UI text like placeholders (e.g., 'Onset is unknown') and contains some information not directly related to the chief complaint (e.g., 'A 20-year-old female with no significant past medical history'). The HPI should be more focused on the symptoms of rash and lethargy, like: 'A 20-year-old female presents with a rash and lethargy. Onset is unknown, character is not specified, severity is mild to moderate as indicated by the presence of symptoms. Associated symptoms include fatigue. Pertinent negatives include no reported fever or lymphadenopathy.'
+    - physical_exam: Physical exam findings are not completely extracted by the system. For example, the 'cardiovascular', 'respiratory', 'abdominal (except Splenomegaly)', 'musculoskeletal', 'genitourinary', 'psychiatric' systems have no relevant findings mentioned in the OCR text.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 65%
+  Scores: title=0 stacks=10 hpi=80
+  Issues to fix (13):
+    - title: Title does not match the actual case chief complaint in OCR (Rash and Lethargy instead of Mononucleosis).
+    - hpi_narrative: Contains UI noise (Onset is unknown, character is not specified, severity is mild to moderate as indicated by the presence of symptoms).
+    - physical_exam.general: No finding specified, should be null or include a proper finding.
+    - physical_exam.cardiovascular: No finding specified, should be null or include a proper finding.
+    - physical_exam.respiratory: No finding specified, should be null or include a proper finding.
+    - physical_exam.abdomen: Splenomegaly should be part of the finding, not a key.
+    - physical_exam.neurological: No finding specified, should be null or include a proper finding.
+    - physical_exam.skin: Rash should be part of the key, not a value.
+    - physical_exam.heent: No finding specified, should be null or include a proper finding.
+    - physical_exam.musculoskeletal: No finding specified, should be null or include a proper finding.
+    - physical_exam.genitourinary: No finding specified, should be null or include a proper finding.
+    - physical_exam.psychiatric: No finding specified, should be null or include a proper finding.
+    - stacks: Contains UI noise (Correctly Ordered, ⌐ Physical Exam: Abdomen, etc.).
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=0
+  Issues to fix (5):
+    - title: Title does not match the actual case chief complaint in OCR. Title should be 'Rash and Lethargy' instead of 'Mononucleosis'.
+    - stacks: Stack labels contain UI noise such as percentages, ⌐, and Reason. These should be removed for clean clinical orders.
+    - hpi_narrative: HPI narrative contains no brackets or placeholders, but the text is not a proper clinical presentation. It lacks important details like symptoms and physical exam findings.
+    - physical_exam: Physical exam findings are incomplete and not correctly extracted by the system. The cardiovascular, respiratory, neurological, heent, musculoskeletal, genitourinary, psychiatric systems should have been examined according to the OCR text, but they are null.
+    - overall_confidence: The overall confidence is too low (60%) for this data to be ready to serve to a learner. It should ideally be 99% or higher.
+  Applying fixes...
+  Max rounds reached. Final confidence: 0%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-6-NEEDS-REVIEW.json (confidence: 65%)
+    Title:    Rash and Lethargy
+    Diagnosis:Mononucleosis
+    Stacks:   3
+    Orders:   0
+    HPI:      A 20-year-old female presents with rash and lethargy. She has been experiencing fever, fatigue, and a sore throat for th...
+REVIEW case-6 | confidence: 65% | errors: [title: The title does not match the actual case chief complaint in OCR.; stacks: Stack labels have UI noise such as percentage scores, 'Correctly Ordered' as a label, and dates.; hpi_narrative: The HPI narrative contains some placeholders such as 'A 20-year-old female' which should ideally be extracted and formatted correctly.]
+
+==================================================
+PROCESSING CASE 7
+==================================================
+[1] OCR...
+    11539 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Validation errors on attempt 1:
+    - Both title and stacks are empty ù likely extraction failure
+  Retrying with error context...
+  Attempt 2/3...
+  Passed validation on attempt 2
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 60%
+  Scores: title=0 stacks=0 hpi=50
+  Issues to fix (4):
+    - title: Title does not match the actual case chief complaint from OCR. It should be 'Generalized Weakness'.
+    - stacks: Stack labels contain UI noise such as brackets, percentages, and scores. They should be clean clinical orders like in the gold standard example.
+    - hpi_narrative: HPI contains UI noise such as brackets, placeholders, and metadata. It should be a proper clinical narrative like in the gold standard example.
+    - physical_exam: Physical exam findings are not complete. For example, cardiovascular and respiratory systems are missing in this case.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 50%
+  Scores: title=0 stacks=0 hpi=80
+  Issues to fix (5):
+    - title: Title does not match the actual chief complaint in OCR. Original title: 'Generalized Weakness', Extracted case title should be 'Myasthenia Gravis'.
+    - stacks: Stack labels contain UI noise such as 'Correctly Ordered', 'Should have Ordered', and 'Optional Order'. These should be removed for clean clinical labels.
+    - hpi_narrative: There are no issues with the HPI narrative. However, it could be improved by removing brackets and placeholders if they exist in the original OCR text.
+    - physical_exam: Physical exam findings are not correctly extracted for all systems. For example, there is no 'Cardiovascular' or 'Respiratory' system in the physical examination.
+    - overall_confidence: Overall confidence is low due to issues with title accuracy, stack labels, and physical exam extraction. Confidence should be high (99 or above) for the data to be ready to serve to a learner.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=100
+  Issues to fix (4):
+    - title: Title does not match the actual chief complaint in OCR. Title should be 'Generalized Weakness' instead of 'Myasthenia Gravis'.
+    - stacks: Stack labels have no clinical orders, missing reason and type. Example: Missing 'Reason' and 'Type' for Physical Exam: Heart / Cardiovascular.
+    - physical_exam: Physical exam findings are not correctly extracted by the system. Example: Neurological section has incorrect structure.
+    - overall_confidence: Overall confidence is not high due to multiple issues with the extracted data. Confidence should be 99 or higher.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=100
+  Issues to fix (3):
+    - title: Title does not match the actual case chief complaint from OCR. It should be 'Generalized Weakness - Internal Medicine' instead of 'Generalized Weakness'.
+    - stacks: Stack labels contain additional information not relevant for clinical orders. They should be clean clinical orders with no UI noise. For example, labels such as 'Physical Exam: General Appearance', 'Correctly Ordered' or 'Reason:' are not necessary.
+    - physical_exam: Physical exam findings are not completely extracted. For example, the 'neurological' section only contains 'muscle strength', 'reflexes' and 'sensory' are missing.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=0
+  Issues to fix (5):
+    - title: Title does not match the actual case chief complaint in OCR. It should be 'Generalized Weakness - Internal Medicine' instead of 'Generalized Weakness'.
+    - stacks: Stack labels contain UI noise like 'Physical Exam:', which should be removed. Also, the type and finding fields are not provided, they should be included.
+    - hpi_narrative: HPI narrative contains placeholders like 'Ms. X'. These should be replaced with actual patient data.
+    - physical_exam: Physical exam findings are not correctly extracted. Only systems with actual findings are populated, while the rest are null. However, the 'neurological' system is populated, but it lacks specific findings like muscle strength, reflexes, and sensory data.
+    - overall_confidence: Overall confidence is too low (0). It should be above 99 for the data to be considered ready.
+  Applying fixes...
+  Max rounds reached. Final confidence: 0%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-7-NEEDS-REVIEW.json (confidence: 25%)
+    Title:    Generalized Weakness - Internal Medicine
+    Diagnosis:Myasthenia Gravis
+    Stacks:   9
+    Orders:   0
+    HPI:      A 60-year-old female with no significant past medical history presents with weakness and fatigability of the muscles, pa...
+REVIEW case-7 | confidence: 25% | errors: [title: Title does not match the actual case chief complaint in OCR. Title should be 'Generalized Weakness - Internal Medicine SRG']
+
+==================================================
+PROCESSING CASE 8
+==================================================
+[1] OCR...
+    7216 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Validation errors on attempt 1:
+    - Stack label too long ù likely explanatory text: 'Antibody, direct fluorescent, chlamydia, urethra /...'
+    - Stack label too long ù likely explanatory text: 'Neisseria gonorrhoeae DNA probe test, urethra / Ne...'
+  Retrying with error context...
+  Attempt 2/3...
+  Passed validation on attempt 2
+[3] Holistic reconstruction...
+  HPI still contains placeholders or metadata ù keeping previous/null
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 50%
+  Scores: title=0 stacks=100 hpi=70
+  Issues to fix (3):
+    - title: The title does not match the actual chief complaint in OCR. It should be 'Burning During Urination - Prostatitis'.
+    - hpi_narrative: The HPI narrative has some inconsistencies with the OCR text. For example, the age of the patient is 50 in the extracted data but 19 in the OCR text.
+    - physical_exam.general: The general examination is null while it should have been ordered according to the OCR text.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 83.33%
+  Scores: title=0 stacks=87.5 hpi=100
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint in OCR. Title should be 'Burning During Urination' instead of 'Burning During Urination - Prostatitis'.
+    - stacks[4].label: Stack label contains extra information that should be removed for clean clinical orders (e.g., copyright symbol).
+    - physical_exam.abdominal: Physical exam findings are missing for the abdomen system, which should have been included as the patient has tenderness of the prostate.
+  Applying fixes...
+  Fix application parse failed ù keeping previous version
+
+  Round 3/5:
+  Confidence: 85%
+  Scores: title=0 stacks=75 hpi=100
+  Issues to fix (4):
+    - title: The title does not match the actual chief complaint from OCR. The correct title should be 'Burning During Urination - Internal Medicine' instead of 'Burning During Urination - Prostatitis'.
+    - specialty: The specialty is incorrect. The case should be under Urology instead of Internal Medicine.
+    - location: The location is incorrect. The patient presented in an office, not in the ER.
+    - diagnosis: The diagnosis is 'Prostatitis' but the case does not provide enough information to confirm this diagnosis. It could be that the patient has other conditions causing burning during urination.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 60%
+  Scores: title=None stacks=80 hpi=50
+  Issues to fix (4):
+    - title: Title does not match the actual chief complaint in OCR. It should be 'Burning During Urination' instead of 'Burning During Urination - Internal Medicine'.
+    - stacks: Some stack labels contain UI noise such as copyright symbols and trademark notices. They should be removed.
+    - hpi_narrative: HPI contains extraneous information like the case diagnosis, scores, and percentages that are not part of a proper clinical presentation.
+    - physical_exam: Some physical exam sections have been populated with findings from other systems, such as the chest and cardiovascular exams. These should be left null or removed.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 85%
+  Scores: title=0 stacks=75 hpi=100
+  Issues to fix (2):
+    - title: Title is not the actual chief complaint from OCR. It should be 'Burning During Urination - Internal Medicine' instead of 'Burning During Urination'.
+    - stacks: Some stack labels contain UI noise such as copyright symbols and reasons. These should be removed.
+  Applying fixes...
+  Max rounds reached. Final confidence: 85%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-8-NEEDS-REVIEW.json (confidence: 80%)
+    Title:    Burning During Urination - Internal Medicine
+    Diagnosis:None
+    Stacks:   10
+    Orders:   0
+    HPI:      A 50-year-old male presents with burning during urination. He has no significant past medical history and is sexually ac...
+REVIEW case-8 | confidence: 80% | errors: [title: Title does not match the actual chief complaint in OCR. The correct value should be 'Burning During Urination - Internal Medicine (Urology)',; case_number: Case number is not used in the OCR text. It may not be necessary or relevant for this case.; specialty: Specialty was automatically changed to Urology instead of Internal Medicine, which is the actual specialty in the OCR text. The correct value should be 'Internal Medicine'.]
+
+==================================================
+PROCESSING CASE 9
+==================================================
+[1] OCR...
+    8235 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Passed validation on attempt 1
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=0
+  Issues to fix (5):
+    - title: Title does not match the actual case chief complaint in OCR. Title should be 'Abdominal Pain - Inpatient Unit'.
+    - specialty: Specialty is not accurately identified from the OCR. Specialty should be General Surgery or Internal Medicine.
+    - physical_exam: Physical exam is incomplete and not accurately extracted. Examine the cardiovascular, respiratory, neurological, skin, heent, musculoskeletal, genitourinary, and psychiatric systems.
+    - stacks: Stack labels are missing some clinical orders from the OCR. X-ray, chest, left lateral decubitus / X-ray, chest, right lateral decubitus / X-ray, chest, PA / X-ray, chest, PA/lateral / X-ray, chest, AP, portable should be included.
+    - hpi_narrative: HPI is not accurate and lacks important information from the OCR. The narrative should reflect that Ms. Y has normal vital signs and bowel sounds.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 60%
+  Scores: title=None stacks=80 hpi=50
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint in OCR.
+    - hpi_narrative: HPI contains UI noise and placeholders (e.g., normal vital signs, no specific values).
+    - physical_exam: Some physical exam systems are populated with null values, while others have findings.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 40%
+  Scores: title=0 stacks=60 hpi=80
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint in OCR. Title should be 'Abdominal Pain - Inpatient Unit'
+    - stacks: Stack labels contain UI noise, specifically the 'Correctly Ordered' label. Stack labels should be clean clinical orders.
+    - physical_exam: Physical exam findings are not correctly extracted by the system. Only systems with actual findings should populate, others should be null.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 72%
+  Scores: title=None stacks=90 hpi=80
+  Issues to fix (5):
+    - title: Title does not match the actual chief complaint in OCR. The title should be 'Abdominal Pain - Inpatient Unit' instead of 'Abdominal Pain - Emergency Medicine Rotem Caretta'.
+    - specialty: Specialty is not correctly identified. It should be either 'General Surgery' or 'Internal Medicine', based on the context.
+    - hpi_narrative: The HPI narrative contains some inaccuracies and missing information. For example, the patient is described as having normal vital signs (including heart rate) and bowel sounds, but these findings are not present in the physical exam section.
+    - physical_exam: The physical exam section is incomplete and does not provide all relevant findings. For example, there are no findings for cardiovascular, respiratory, neurological, skin, heent, musculoskeletal, genitourinary, psychiatric systems.
+    - vitals: Vitals are not present in the extracted case data. They should be included if they were visible in the screenshot.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 60%
+  Scores: title=0 stacks=10 hpi=30
+  Issues to fix (6):
+    - title: Title is not the actual chief complaint from OCR. Title should be 'Abdominal Pain - Emergency Medicine'.
+    - title: 'Inpatient Unit' is not part of the title in OCR. It should be removed from extracted case data.
+    - hpi_narrative: HPI narrative contains UI noise such as dates and scores. These should be removed for better clarity.
+    - physical_exam: Some physical exam systems do not have findings in the extracted case data. They should be filled with actual findings from OCR.
+    - stacks: Some stack labels contain UI noise such as 'shouldHaveOrdered' and 'Correctly Ordered'. These should be removed for better clarity.
+    - stacks: Some stack labels do not match the actual orders in OCR. They should be corrected to match the actual orders.
+  Applying fixes...
+  Max rounds reached. Final confidence: 60%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-9-NEEDS-REVIEW.json (confidence: 60%)
+    Title:    Abdominal Pain - Emergency Medicine
+    Diagnosis:Intra-abdominal Abscess
+    Stacks:   9
+    Orders:   0
+    HPI:      Ms. Y is a 50-year-old female with no significant past medical history who presents with severe abdominal pain. Onset is...
+REVIEW case-9 | confidence: 60% | errors: [title: Title does not match the actual case chief complaint in OCR. It should be 'Abdominal Pain - Emergency Medicine' instead of 'Abdominal Pain - Emergency Medicine, General Surgery or Internal Medicine'.; stacks: Stack labels have UI noise like percentages and metadata. They should be clean clinical orders like in the gold standard example.; hpi_narrative: HPI narrative has some placeholders and metadata. It should read like a real clinical presentation like in the gold standard example.]
+
+==================================================
+PROCESSING CASE 10
+==================================================
+[1] OCR...
+    8564 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Passed validation on attempt 1
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 72%
+  Scores: title=0 stacks=100 hpi=80
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint in OCR. Title should be: 'Pain in Legs - Intermittent Claudication'
+    - hpi_narrative: HPI contains some UI noise. It includes 'Mr Smith' and '65-year-old male'. These should be replaced with 'patient' or 'patient information'. Also, it lacks the acute onset information as in the gold standard example.
+    - physical_exam: Physical exam is not complete according to the gold standard example. Some findings are missing, such as cardiovascular, abdominal, neurological, skin, heent, musculoskeletal, genitourinary, and psychiatric.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 72%
+  Scores: title=0 stacks=95 hpi=90
+  Issues to fix (9):
+    - title: Title does not match the actual chief complaint in OCR. The correct title should be 'Pain in Legs - Intermittent Claudication' instead of 'Pain in Legs'.
+    - stacks.0.label: The label contains unnecessary UI noise: 'Correctly Ordered'. It should be just 'Physical Exam: General Appearance'.
+    - stacks.1.label: The label contains unnecessary UI noise: 'Correctly Ordered'. It should be just 'Physical Exam: Chest / Lungs'.
+    - stacks.2.label: The label contains unnecessary UI noise: 'Correctly Ordered'. It should be just 'Physical Exam: Heart / Cardiovascular'.
+    - stacks.3.label: The label contains unnecessary UI noise: 'Correctly Ordered'. It should be just 'Physical Exam: Extremities / Spine'.
+    - stacks.4.label: The label contains unnecessary UI noise: 'Correctly Ordered'. It should be just 'Physical Exam: Neuro / Psych'.
+    - hpi_narrative: HPI contains metadata such as dates. It should only contain the clinical narrative.
+    - physical_exam.psychiatric: There is no psychiatric exam finding, but it was extracted. It should be null or empty.
+    - overall_confidence: Overall confidence is less than 99, indicating the data may not be ready for a learner. The score should be higher.
+  Applying fixes...
+  Fix application parse failed ù keeping previous version
+
+  Round 3/5:
+  Confidence: 60%
+  Scores: title=0 stacks=80 hpi=70
+  Issues to fix (7):
+    - title: The title does not match the actual chief complaint from OCR. The correct title should be 'Pain in Legs - Intermittent Claudication' instead of 'Pain in Legs'.
+    - stacks[1].label: The label should be 'Physical Exam: Chest' instead of 'Physical Exam: Chest / Lungs'.
+    - stacks[2].label: The label should be 'Physical Exam: Heart' instead of 'Physical Exam: Heart / Cardiovascular'.
+    - stacks[3].label: The label should be 'Physical Exam: Extremities' instead of 'Physical Exam: Extremities / Spine'.
+    - hpi_narrative: There are some extraneous characters in the HPI narrative. The correct version should be 'The patient is a 65-year-old male with no significant past medical history who presents with intermittent leg pain. Onset is gradual, character is cramping and aching, severity varies but can be quite debilitating during physical activity. Associated symptoms include coldness and numbness in the affected limbs. Pertinent negatives include no shortness of breath or neurological deficits.'
+    - physical_exam.heent: The head, eyes, ears, nose, and throat examination is not present in the physical exam section.
+    - stacks[5].type: This stack should have 'shouldHaveOrdered' type instead of 'order'.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 25%
+  Scores: title=0 stacks=87.5 hpi=100
+  Issues to fix (3):
+    - title: The title does not match the actual case chief complaint in OCR. The correct title should be 'Pain in Legs - Intermittent Claudication' instead of 'Pain in Legs'.
+    - physical_exam: Physical exam findings are not correctly extracted by the system. All systems except 'General Appearance' should have actual findings instead of null.
+    - overall_confidence: The overall confidence is low due to issues in title accuracy, physical exam quality, and the presence of UI noise in the stacks.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 70%
+  Scores: title=0 stacks=60 hpi=80
+  Issues to fix (5):
+    - title: Title is not the actual chief complaint from OCR. The title should be 'Pain in Legs - Intermittent Claudication' instead of 'Pain in Legs - Internal Medicine Paes'.
+    - stacks: Stack labels have UI noise like 'Correctly Ordered' and 'shouldHaveOrdered'. These should be removed, leaving only the clinical label.
+    - hpi_narrative: HPI has some UI noise like dates and percentages, which should be removed.
+    - physical_exam: Physical exam findings are not properly extracted. Some systems have no findings while others have null values instead of actual findings.
+    - vitals: Vitals only include values actually visible in the screenshot, but the OCR text includes HR, BP, and RR.
+  Applying fixes...
+  Max rounds reached. Final confidence: 70%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-10-NEEDS-REVIEW.json (confidence: 0%)
+    Title:    Pain in Legs - Intermittent Claudication
+    Diagnosis:Peripheral Vascular Disease
+    Stacks:   7
+    Orders:   0
+    HPI:      The patient is a 65-year-old male with no significant past medical history who presents with intermittent leg pain. Onse...
+REVIEW case-10 | confidence: 0% | errors: [title: The title is not exactly the same as the chief complaint in OCR. In OCR it is 'Pain in Legs - Intermittent Claudication', while here it is 'Pain in Legs'.; stacks: The labels are not clean clinical orders and include UI noise such as 'Correctly Ordered', and lack finding for each label.; hpi_narrative: While it is more readable than the OCR, it still contains some brackets ('û') that should be removed.]
+
+==================================================
+PROCESSING CASE 11
+==================================================
+[1] OCR...
+    9447 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Passed validation on attempt 1
+[3] Holistic reconstruction...
+  Reconstruction parse failed: Expecting ':' delimiter: line 6 column 61 (char 581)
+[3b] Stack label refinement...
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 50%
+  Scores: title=0 stacks=0 hpi=50
+  Issues to fix (4):
+    - title: The title does not match the actual chief complaint in OCR. It should be 'Abdominal Pain - Emergency Medicine Rotem Caretta'.
+    - stacks: Stack labels contain UI noise, such as 'Correctly Ordered', 'Should have Ordered', and reasons for ordering. They should be clean clinical orders with no UI noise.
+    - hpi_narrative: HPI narrative has placeholders, such as 'A 45-year-old male' and metadata, such as 'Completed: July 23, 2025, 2:45 PM'. It should be a proper clinical narrative with no placeholders or metadata.
+    - physical_exam: Physical exam findings are not complete. Lungs, Cardiovascular, Abdomen, Extremities, and Neurologic exams are missing.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 20%
+  Scores: title=0 stacks=0 hpi=40
+  Issues to fix (5):
+    - title: Title does not match the actual chief complaint in OCR. The correct title should be 'Abdominal Pain - Emergency Medicine' instead of 'Abdominal Pain - Emergency Medicine Rotem Caretta'.
+    - stacks: Stack labels have UI noise such as 'Correctly Ordered' and 'Should have Ordered'. They should only contain clean clinical orders.
+    - hpi_narrative: HPI has placeholders such as 'he' and 'his'. It should be a proper clinical narrative with no placeholders or metadata.
+    - physical_exam: Physical exam findings are not completely extracted by the system. The 'lymph_node', 'cardiovascular', and 'neurologic' sections should have findings if they were examined.
+    - overall_confidence: The overall confidence is very low. The case data has several issues that need to be addressed.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 60%
+  Scores: title=0 stacks=0 hpi=80
+  Issues to fix (4):
+    - title: Title does not match the actual chief complaint in OCR. The title should be 'Abdominal Pain - Emergency Medicine Rotem Caretta' instead of 'Abdominal Pain - Emergency Medicine'.
+    - stacks: Stack labels contain UI noise such as correct or should have ordered, reasons. These should be removed to maintain clinical focus.
+    - physical_exam: Physical exam findings are not complete. There are missing systems such as lymph nodes, heart, abdomen, extremities, and neurologic.
+    - diagnosis: Diagnosis contains more than one diagnosis (Aspiration Pneumonia and Hepatitis A), but the extracted case only includes Hepatitis A. This suggests that there may be additional diagnoses not captured in the data.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 60%
+  Scores: title=None stacks=0 hpi=70
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint in OCR. The title should be 'Abdominal Pain - Emergency Medicine' instead of 'Abdominal Pain - Emergency Medicine Rotem Caretta'.
+    - stacks: Stack labels are mixed with UI noise like 'Correctly Ordered', 'Should have Ordered'. These should be removed and only the clinical orders and reasons should remain.
+    - physical_exam: Some physical exam findings are missing or incorrect. The physical examination should include: General, Cardiovascular, Respiratory, Abdominal, Neurologic, Skin, and Extremities.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 0%
+  Scores: title=None stacks=0 hpi=0
+  Issues to fix (4):
+    - title: Title does not match the actual case chief complaint in OCR. The title should be 'Abdominal Pain - Emergency Medicine' instead of 'Abdominal Pain - Emergency Medicine'.
+    - stacks: Stack labels have UI noise like 'Correctly Ordered', 'Should have Ordered' and 'Reason:'. These should be removed for clean clinical labels.
+    - hpi_narrative: HPI narrative has placeholders and metadata like 'Completed', 'Your Score Average First Attempt Score Case Diagnosis' etc. These should be removed to have a proper clinical narrative.
+    - physical_exam: Physical exam findings are not correctly extracted by the system. For example, 'Jaundice, tachycardia' is not part of any specific system and should be under a proper physical exam section.
+  Applying fixes...
+  Max rounds reached. Final confidence: 0%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-11-NEEDS-REVIEW.json (confidence: 0%)
+    Title:    Abdominal Pain - Emergency Medicine
+    Diagnosis:['Aspiration Pneumonia', 'Hepatitis A']
+    Stacks:   0
+    Orders:   0
+    HPI:      A male patient presents to the emergency department with complaints of abdominal pain and shortness of breath. He has a ...
+REVIEW case-11 | confidence: 0% | errors: [title: Title does not match the actual chief complaint in OCR. It should be 'Abdominal Pain - Emergency Medicine Rotem Caretta'.; stacks: Stack labels contain UI noise such as 'Correctly Ordered', 'Should have Ordered'. They should only contain clean clinical orders.; hpi_narrative: HPI contains placeholders such as '[...]'. It should not contain any placeholders or metadata.]
+
+==================================================
+PROCESSING CASE 12
+==================================================
+[1] OCR...
+    7185 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Validation errors on attempt 1:
+    - Stack label too long ù likely explanatory text: 'Antibody, direct fluorescent, chlamydia, urethra /...'
+    - Stack label too long ù likely explanatory text: 'Preventive care: Advise patient, safe sex techniqu...'
+    - Stack label too long ù likely explanatory text: 'Preventive care: Advise patient, no illegal drug u...'
+    - Stack label too long ù likely explanatory text: 'Preventive care: Advise patient, sexual partner ne...'
+  Retrying with error context...
+  Attempt 2/3...
+  JSON parse failed: Expecting ':' delimiter: line 106 column 3 (char 3941)
+  Attempt 3/3...
+  Validation errors on attempt 3:
+    - Stack label too long ù likely explanatory text: 'Preventive care: Advise patient, safe sex techniqu...'
+    - Stack label too long ù likely explanatory text: 'Preventive care: Advise patient, no illegal drug u...'
+    - Stack label too long ù likely explanatory text: 'Preventive care: Advise patient, sexual partner ne...'
+  All 3 attempts failed
+    Initial extraction failed validation ù attempting reconstruction anyway
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 85%
+  Scores: title=0 stacks=75 hpi=85
+  Issues to fix (2):
+    - title: Title includes 'Burning During Urination - Internal Medicine Previous Completions' instead of just the actual chief complaint.
+    - stacks: Labels contain extra information like weights given for total score, Correctly Ordered as a label, dates, and metadata. These should be removed.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 40%
+  Scores: title=0 stacks=0 hpi=50
+  Issues to fix (5):
+    - title: Title is not the actual chief complaint from OCR. The title should be 'Burning During Urination - Internal Medicine' as it reflects the chief complaint mentioned in OCR.
+    - stacks: Stack labels have UI noise like 'Correctly Ordered', which should be removed. They should only include clean clinical orders.
+    - hpi_narrative: HPI has placeholders like 'Ms. X', which should be removed to maintain a proper clinical narrative.
+    - physical_exam: Physical exam findings are incomplete as some systems do not have any findings. All systems should have either a null value or an actual finding.
+    - location: Location is missing in the extracted case data. The location should be mentioned as it is present in OCR.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 50%
+  Scores: title=0 stacks=0 hpi=0
+  Issues to fix (4):
+    - title: Title does not match the actual case chief complaint in OCR. It should be 'Burning During Urination' instead of 'Burning During Urination - Internal Medicine'.
+    - stacks: Stack labels have unnecessary information such as weights and reasons, which should be removed. They should only contain clean clinical orders with no UI noise.
+    - hpi_narrative: HPI has some additional information such as 'Completed: July 23, 2025, 5:03 AM' and 'Your Score Average First Attempt Score Case Diagnosis', which should be removed. It should only contain a proper clinical narrative with no placeholders or metadata.
+    - physical_exam: Physical exam findings are incomplete. For example, 'cardiovascular', 'respiratory', 'abdominal', 'neurological', 'skin', 'heent', 'musculoskeletal', and 'psychiatric' systems have no findings although they should if they were examined.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 40%
+  Scores: title=0 stacks=80 hpi=60
+  Issues to fix (4):
+    - title: Title does not match the actual case chief complaint in OCR.
+    - stacks: Some stack labels contain UI noise like weight given for total score, reasons and type.
+    - hpi_narrative: HPI narrative contains scores, percentages, and some metadata.
+    - physical_exam: Physical exam findings are incomplete and contain null values for many systems.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 65%
+  Scores: title=0 stacks=80 hpi=75
+  Issues to fix (4):
+    - title: Title is not the actual chief complaint from OCR text (Burning During Urination) but instead UI text (Burning During Urination - Internal Medicine)
+    - stacks: 'Correctly Ordered' and 'Should have Ordered' labels contain UI noise. They should be removed.
+    - hpi_narrative: Contains metadata (Your Score Average First Attempt Score Case Diagnosis) and has some UI noise (the reason for each diagnostic order).
+    - physical_exam.general: Contains no findings although it is not null.
+  Applying fixes...
+  Max rounds reached. Final confidence: 65%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-12-NEEDS-REVIEW.json (confidence: 0%)
+    Title:    Burning During Urination
+    Diagnosis:Chlamydia
+    Stacks:   11
+    Orders:   0
+    HPI:      A young adult woman, Ms. X, presents with Burning During Urination. Onset of symptoms began recently, with a severity th...
+REVIEW case-12 | confidence: 0% | errors: [title: Title does not match the actual case chief complaint in OCR. Title should be 'Burning During Urination - Internal Medicine Previous Completions' to align with the original.; stacks: Stack labels contain unnecessary UI noise such as 'Correctly Ordered' and percentages. They should be clean clinical orders with only the test names.; hpi_narrative: HPI contains metadata such as scores, percentages, and dates. It should be a proper clinical narrative with no placeholders or UI noise.]
+
+==================================================
+PROCESSING CASE 13
+==================================================
+[1] OCR...
+    7809 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  JSON parse failed: Expecting ',' delimiter: line 2 column 19 (char 20)
+  Attempt 2/3...
+  JSON parse failed: Expecting ',' delimiter: line 2 column 19 (char 20)
+  Attempt 3/3...
+  JSON parse failed: Expecting ',' delimiter: line 2 column 19 (char 20)
+FAILED case-13 | extraction returned no data
+
+==================================================
+PROCESSING CASE 14
+==================================================
+[1] OCR...
+    11613 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Validation errors on attempt 1:
+    - Both title and stacks are empty ù likely extraction failure
+  Retrying with error context...
+  Attempt 2/3...
+  Passed validation on attempt 2
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=0
+  Issues to fix (5):
+    - title: Title does not match the actual chief complaint in OCR. Title should be 'Facial and Upper Extremity Edema' instead of 'Pre-Eclampsia with Severe Features'
+    - stacks: Stack labels are not clean clinical orders, they have UI noise such as placeholders for diagnostic tests and medications, and they don't follow the clean structure seen in the gold standard example.
+    - hpi_narrative: HPI is not a proper clinical narrative, it contains placeholders for some diagnostic test results.
+    - physical_exam: Physical exam findings are not correctly extracted by the system, only 'eye fundus' has been populated.
+    - overall_confidence: Overall confidence is very low due to multiple issues found.
+  Applying fixes...
+
+  Round 2/5:
+  Confidence: 60%
+  Scores: title=0 stacks=70 hpi=0
+  Issues to fix (4):
+    - title: The title does not match the actual chief complaint from OCR. It should be 'Facial and Upper Extremity Edema - Pre-eclampsia with Severe Features'.
+    - stacks: Some stack labels are not clean clinical orders as they contain UI noise (e.g., 'Completed: September 4, 2025, 5:48 AM', 'Your Score Average First Attempt Score Case Diagnosis'). They should only include the specific order or finding.
+    - hpi_narrative: The HPI contains brackets and metadata from OCR (e.g., 'High Yield @ v Review Later'). It should only contain the proper clinical narrative.
+    - physical_exam: Some physical exam findings are missing (e.g., 'General', 'Cardiovascular', 'Respiratory', 'Neurological: mental status, cranial nerves, reflexes'). They should be filled if there is any relevant information found in the OCR text.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 0%
+  Scores: title=0 stacks=10 hpi=0
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint in OCR. Title should be 'Facial and Upper Extremity Edema' instead of 'Facial and Upper Extremity Edema - Pre-eclampsia with Severe Features'.
+    - hpi_narrative: HPI narrative has no brackets, no placeholders, reads like a real clinical presentation. However, it contains additional information not relevant to the chief complaint (Pre-eclampsia with Severe Features), making it inaccurate.
+    - physical_exam: Physical exam findings are not correctly extracted by the system. The OCR text mentions 'facial edema' and 'upper extremity edema', but these findings are not present in the physical_exam object.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 0%
+  Scores: title=0 stacks=0 hpi=0
+  Issues to fix (5):
+    - title: Title does not match the actual case chief complaint in OCR. The title is 'Facial and Upper Extremity Edema', but from the OCR text, it should be 'Pre-Eclampsia with Severe Features'.
+    - stacks: Stack labels have UI noise. They should be clean clinical orders with no placeholders or metadata.
+    - hpi_narrative: HPI is not a proper clinical narrative. It has placeholders such as 'Ms. X' and '35-year-old female'.
+    - physical_exam: Physical exam findings are not correctly extracted by the system. There should be findings in at least some systems.
+    - overall_confidence: Overall confidence is very low. The data has numerous issues that need to be addressed.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 0%
+  Scores: title=None stacks=0 hpi=0
+  Issues to fix (4):
+    - title: Title does not match the actual chief complaint in OCR.
+    - stacks: Stack labels contain UI noise, such as 'Should have Ordered'. They should be clean clinical orders.
+    - hpi_narrative: HPI lacks a proper clinical narrative with no placeholders or metadata.
+    - physical_exam: Physical exam findings are not correctly extracted by the system.
+  Applying fixes...
+  Max rounds reached. Final confidence: 0%
+
+[5] NEEDS REVIEW -> C:\Users\steve\MeWorld\game\data\ollama\cases\case-14-NEEDS-REVIEW.json (confidence: 0%)
+    Title:    Pre-Eclampsia with Severe Features
+    Diagnosis:None
+    Stacks:   13
+    Orders:   0
+    HPI:      A 35-year-old female with no significant past medical history presents with signs and symptoms of facial and upper extre...
+REVIEW case-14 | confidence: 0% | errors: [title: Title does not match the actual chief complaint from OCR. Title should be 'Facial and Upper Extremity Edema'.; stacks: Stack labels have no clinical context or order information. They should be labeled as appropriate clinical orders with clear reasons for ordering.; hpi_narrative: HPI does not follow a proper clinical narrative format, contains no patient history or symptoms beyond edema, and includes UI noise (e.g., 'High Yield @ v Review Later', completion date).]
+
+==================================================
+PROCESSING CASE 15
+==================================================
+[1] OCR...
+    7957 chars extracted
+[2] Initial extraction...
+  Attempt 1/3...
+  Validation errors on attempt 1:
+    - Stack label too long ù likely explanatory text: 'Electrocardiography, 12 lead / Electrocardiography...'
+  Retrying with error context...
+  Attempt 2/3...
+  Passed validation on attempt 2
+[3] Holistic reconstruction...
+[3b] Stack label refinement...
+  Refinement failed ù order_sets not written: Expecting value: line 1 column 1 (char 0)
+[4] Self-review loop (target: 99% confidence)...
+
+  Round 1/5:
+  Confidence: 50%
+  Scores: title=0 stacks=80 hpi=100
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint in OCR. The title should be 'Chest Pain' instead of 'Pericarditis'.
+    - specialty: Specialty is incorrect. It should be 'Cardiology' instead of 'Emergency Medicine'.
+    - physical_exam: Physical exam is missing some findings. For instance, there should be findings for 'Heart' and 'Lungs'.
+  Applying fixes...
+  Fix application parse failed ù keeping previous version
+
+  Round 2/5:
+  Confidence: 60%
+  Scores: title=0 stacks=70 hpi=100
+  Issues to fix (5):
+    - title: The title does not match the actual chief complaint in OCR. It should be 'Chest Pain' instead of 'Pericarditis'.
+    - stacks[0].label: The label is missing the word 'Examination' before 'General Appearance'.
+    - stacks[1].label: The label should include both 'Chest' and 'Lungs', not just one.
+    - physical_exam.general: There should be no null values for systems with actual findings. In this case, general examination is mentioned in the stacks but not in physical_exam.
+    - overall_confidence: The overall confidence is too low because of the title issue and minor inconsistencies in stack labels.
+  Applying fixes...
+
+  Round 3/5:
+  Confidence: 50%
+  Scores: title=0 stacks=0 hpi=70
+  Issues to fix (3):
+    - title: Title does not match the actual chief complaint from OCR. Should be 'Chest Pain Radiating to Back' instead of 'Chest Pain'.
+    - stacks: Stack labels contain UI noise such as the label format (e.g., 'Physical Exam: General Appearance', 'Cardiac troponin I, serum'). They should be clean clinical orders without any UI noise.
+    - vitals: Vital signs values are missing in the extracted data, which should include values actually visible in the screenshot.
+  Applying fixes...
+
+  Round 4/5:
+  Confidence: 60%
+  Scores: title=0 stacks=85 hpi=100
+  Issues to fix (3):
+    - title: 'Chest Pain Radiating to Back' does not match the actual chief complaint in OCR: 'Idiopathic Pericarditis'
+    - stacks: Some stack labels have '%', '⌐', and '+' which are not clean clinical orders.
+    - vitals: No vitals values are present in the extracted case data, but they were present in the OCR.
+  Applying fixes...
+
+  Round 5/5:
+  Confidence: 85%
+  Scores: title=0 stacks=95 hpi=95
+  Issues to fix (4):
+    - title: Title does not match the actual chief complaint in OCR. Title should be 'Chest Pain Radiating to Back' instead of 'Idiopathic Pericarditis'.
+    - stacks[6].label: The label is not a clean clinical order as it has the word 'Cardiac Troponin I'. It should be simplified to 'Cardiac Troponin'.
+    - stacks[7].label: The label is not a clean clinical order as it has the word 'ECG'. It should be simplified to 'EKG'.
+    - physical_exam.cardiovascular: The finding in this system is incorrectly identified as null while it should be 'Pericardial friction rub'.
+  Applying fixes...

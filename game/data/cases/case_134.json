@@ -1,0 +1,68 @@
+{
+  "id": 134,
+  "topic": "Scrotal Pain",
+  "diagnosis": "Acute Epididymitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Antibiotics, direct fluorescent, chlamydia, urethra / Chlamydia trachomatis DNA probe test, urine / Chlamydia trachomatis DNA probe test, urethra / Antigen, bacterial, chlamydia, urine / Chlamydia trachomatis culture, urethra",
+    "Neisseria gonorrhoeae DNA probe test, urethra / Neisseria gonorrhoeae DNA probe test, urine / Antigen, bacterial, gonococcus, urine / Bacterial antigens detection, gonococcus, urine",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Acetaminophen / Gentamicin, therapy / Ceftriaxone sodium AND Ciprofloxacin / Ceftriaxone sodium AND Gentamicin / Ceftriaxone sodium AND Levofloxacin / Ceftriaxone sodium AND Moxifloxacin hydrochloride / Ceftriaxone sodium AND Metronidazole / Ceftriaxone sodium AND Doxycycline",
+    "Ice applied to the scrotum can help decrease swelling and pain.",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia",
+    "Compresses, cold",
+    "Advise patient, safe sex techniques"
+  ],
+  "should_avoid": [
+    "order1",
+    "Initial management with broad-spectrum antibiotics without further diagnostic workup"
+  ],
+  "rationale": {
+    "Antibiotics, direct fluorescent, chlamydia, urethra / Chlamydia trachomatis DNA probe test, urine / Chlamydia trachomatis DNA probe test, urethra / Antigen, bacterial, chlamydia, urine / Chlamydia trachomatis culture, urethra": "Laboratory testing when systemic illness or severity warrants labs in Acute Epididymitis.",
+    "Neisseria gonorrhoeae DNA probe test, urethra / Neisseria gonorrhoeae DNA probe test, urine / Antigen, bacterial, gonococcus, urine / Bacterial antigens detection, gonococcus, urine": "Appropriate CCS order for Acute Epididymitis: Neisseria gonorrhoeae DNA probe test, urethra / Neisseria gonorrhoeae DNA probe test, urine / Antigen, bacterial, gonococcus, urine / Bacterial antigens detection, gonococcus, urine.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Acute Epididymitis.",
+    "Acetaminophen / Gentamicin, therapy / Ceftriaxone sodium AND Ciprofloxacin / Ceftriaxone sodium AND Gentamicin / Ceftriaxone sodium AND Levofloxacin / Ceftriaxone sodium AND Moxifloxacin hydrochloride / Ceftriaxone sodium AND Metronidazole / Ceftriaxone sodium AND Doxycycline": "Appropriate CCS order for Acute Epididymitis: Acetaminophen / Gentamicin, therapy / Ceftriaxone sodium AND Ciprofloxacin / Ceftriaxone sodium AND Gentamicin / Ceftriaxone sodium AND Levofloxacin / Ceftriaxone sodium AND Moxifloxacin hydrochloride / Ceftriaxone sodium AND Metronidazole / Ceftriaxone sodium AND Doxycycl…",
+    "Ice applied to the scrotum can help decrease swelling and pain.": "Appropriate CCS order for Acute Epididymitis: Ice applied to the scrotum can help decrease swelling and pain..",
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for scrotal pain.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with scrotal pain.",
+    "Physical Exam: Genitalia": "Pelvic/cervical evaluation is central for Acute Epididymitis and localizes the source of scrotal pain.",
+    "Compresses, cold": "Appropriate CCS order for Acute Epididymitis: Compresses, cold.",
+    "Advise patient, safe sex techniques": "Appropriate CCS order for Acute Epididymitis: Advise patient, safe sex techniques.",
+    "order1": "CCS review: avoid this order for Acute Epididymitis — it does not change acute management.",
+    "Initial management with broad-spectrum antibiotics without further diagnostic workup": "Advanced imaging is not indicated early for Acute Epididymitis when the diagnosis is clinical."
+  },
+  "hpi": "Differential: Testicular Torsion, Trauma, Inguinal Hernia, Testicular cancer, Referred pain.\n\nThe patient has Acute Epididymitis. Due to the age of the patient and his risk sexual partners, his acute Acute Epididymitis is most likely from an infectious source. Imaging is not required in this case as the Physical exam shows tenderness and swelling of the epididymis. The patient’s clinical picture reflects the quality would be negative in testicular torsion.\n\nThe most common infectious causes of Acute Epididymitis are N. gonorrhoeae and C. trachomatis. These should be tested for, but they are commonly negative in those who do not have urinary tract symptoms such as in this case. As the patient practices safe sex, co-infection between the two could be the cause of his Acute Epididymitis.\n\nThis case can be treated as an outpatient. The patient can be treated with oral antibiotics, NSAIDS, application of ice to the scrotum, and scrotal elevation.\n\nThe antibiotic choice in this case would be ceftriaxone plus a fluoroquinolone to cover all the possible culprits of gonorrhea, chlamydia, and rectal flora.\n\nAfter 48 hours of treatment, the patient will begin to feel better, and the case will end. The patient should be counseled on safe sex practices.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this pain in my scrotum. It hurts a lot.",
+    "history": "I noticed the pain started suddenly. I don't remember any injury.",
+    "pain": "It feels sharp and throbbing."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Differential: Testicular Torsion, Trauma, Inguinal Hernia, Testicular cancer, Referred pain.\n\nThe patient has Acute Epididymitis. Due to the age of the patient and his risk sexual partners, his acute Acute Epididymitis is most likely from an infectious source. Imaging is not required in this case as the Physical exam shows tenderness and swelling of the epididymis. The patient’s clinical picture reflects the quality would be negative in testicular torsion.\n\nThe most common infectious causes of Acute Epididymitis are N. gonorrhoeae and C. trachomatis. These should be tested for, but they are commonly negative in those who do not have urinary tract symptoms such as in this case. As the patient practices safe sex, co-infection between the two could be the cause of his Acute Epididymitis.\n\nThis case can be treated as an outpatient. The patient can be treated with oral antibiotics, NSAIDS, application of ice to the scrotum, and scrotal elevation.\n\nThe antibiotic choice in this case would be ceftriaxone plus a fluoroquinolone to cover all the possible culprits of gonorrhea, chlamydia, and rectal flora.\n\nAfter 48 hours of treatment, the patient will begin to feel better, and the case will end. The patient should be counseled on safe sex practices.",
+  "stacks": [
+    "Vitals Ordered",
+    "Virtual Time Advanced 1500 minutes",
+    "Negative Patient Update Reported"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

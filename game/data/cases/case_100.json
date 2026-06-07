@@ -1,0 +1,60 @@
+{
+  "id": 100,
+  "topic": "Vaginal Itching",
+  "diagnosis": "Atrophic Vaginitis (Genitourinary Syndrome of Menopause)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Lungs",
+    "Physical Exam: Heart/Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Skin",
+    "Cervical exam report"
+  ],
+  "should_avoid": [
+    "CBC with differential"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for vaginal itching.",
+    "Physical Exam: Lungs": "Evaluate chest and lungs as part of the initial exam for vaginal itching.",
+    "Physical Exam: Heart/Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to vaginal itching.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with vaginal itching.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Atrophic Vaginitis (Genitourinary Syndrome of Menopause).",
+    "Cervical exam report": "Pelvic/cervical evaluation is central for Atrophic Vaginitis (Genitourinary Syndrome of Menopause) and localizes the source of vaginal itching.",
+    "CBC with differential": "CBC is not needed for uncomplicated Atrophic Vaginitis (Genitourinary Syndrome of Menopause) without fever, systemic symptoms, or abnormal vitals."
+  },
+  "hpi": "The patient is a 60-year-old female with vaginal itching. Atrophic vaginitis is a common condition in postmenopausal women. It is important to consider the underlying causes of vaginal symptoms. This patient should be educated on the use of vaginal moisturizers and lubricants to help with sexual intercourse due to vaginal atrophy. Hormonal therapy may also be considered if the vaginal atrophy is more severe.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this vaginal itching. It's been bothering me a lot.",
+    "history": "I never had this issue before. It started after menopause.",
+    "pain": "It feels uncomfortable and itchy down there."
+  },
+  "ccs_category": "OB/GYN",
+  "case_summary": "The patient is a 60-year-old female with vaginal itching. Atrophic vaginitis is a common condition in postmenopausal women. It is important to consider the underlying causes of vaginal symptoms. This patient should be educated on the use of vaginal moisturizers and lubricants to help with sexual intercourse due to vaginal atrophy. Hormonal therapy may also be considered if the vaginal atrophy is more severe.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam: General Appearance",
+    "Time Advanced 5 minutes",
+    "Ordered the following Physical Exams and/or patient complaints: General: Genital, Extremities",
+    "Ordered: Counsel patient: hormone"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Quick 3-case build from existing app case bank JSON."
+}

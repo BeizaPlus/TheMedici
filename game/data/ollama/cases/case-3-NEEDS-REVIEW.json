@@ -1,0 +1,87 @@
+{
+  "case_number": 106,
+  "title": "Pelvic Pain - OB/GYN",
+  "specialty": "Obstetrics/Gynecology",
+  "chief_complaint": "Pelvic Pain",
+  "patient": null,
+  "location": null,
+  "diagnosis": "Endometrioma",
+  "hpi_narrative": "A 35-year-old female presents with pelvic pain. Onset is acute, character is severe and persistent, associated symptoms include none, pertinent negatives are no known allergies or current medications. The single clinical question this case forces you to answer is: What is the cause of the patient's pelvic pain?",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": null,
+    "respiratory": null,
+    "neurological": null,
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": {
+      "genitalia": {
+        "finding": "This is important to do since the source of the patient's pain is coming from the pelvic area."
+      }
+    },
+    "abdomen": {
+      "finding": "Abdominal pathology can present as pelvic pain. An example of this is inflammatory bowel disease."
+    },
+    "psychiatric": null
+  },
+  "stacks": [
+    {
+      "label": "General Appearance",
+      "aliases": [],
+      "finding": "Patient having severe pain \u2013 appropriate to look at patient to help guide diagnosis.",
+      "type": null
+    },
+    {
+      "label": "Chest / Lungs",
+      "aliases": [],
+      "finding": "Important to rule out any lung issues such as metastatic disease.",
+      "type": null
+    },
+    {
+      "label": "CT, abdomen/pelvis, with contrast / CT, abdomen/pelvis, without contrast / MRI, abdomen/pelvis, with gadolinium / MRI, abdomen/pelvis, without gadolinium / US, pelvis, transvaginal / US, pelvis, transabdominal",
+      "aliases": [],
+      "finding": "CT would give diagnosis of endometrioma.",
+      "type": null
+    },
+    {
+      "label": "Laparotomy / Laparoscopy / Consult, obstetrics/gynecology",
+      "aliases": [],
+      "finding": "The endometrioma should be removed.",
+      "type": null
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_validation_errors": [
+    "Stack label too long \u2014 likely explanatory text: 'CT, abdomen/pelvis, with contrast / CT, abdomen/pe...'"
+  ],
+  "_final_confidence": 0,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual case chief complaint in OCR.",
+      "fix": "Should be 'Pelvic Pain - Acute Onset, Severe and Persistent'."
+    },
+    {
+      "field": "stacks",
+      "problem": "Stack labels contain UI noise such as scores, percentages, and reasons.",
+      "fix": "Labels should only include the clinical order name."
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "HPI narrative contains placeholders and metadata.",
+      "fix": "Should contain a proper clinical narrative with no placeholders or metadata."
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Physical exam findings are not properly extracted for all systems.",
+      "fix": "All systems should populate with actual findings, or be null if none found."
+    }
+  ]
+}

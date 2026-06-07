@@ -1,0 +1,60 @@
+{
+  "id": 24,
+  "topic": "Burning During Urination",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain urine sample for culture and sensitivity",
+    "Prescribe broad-spectrum antibiotics pending culture results",
+    "order1",
+    "CMP/BMP",
+    "UA (Urinalysis ± culture)"
+  ],
+  "should_avoid": [
+    "order2",
+    "Order imaging studies such as CT or MRI, as they are not indicated in a patient presenting with burning during urination."
+  ],
+  "rationale": {
+    "Obtain urine sample for culture and sensitivity": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Prescribe broad-spectrum antibiotics pending culture results": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "order1": "Appropriate CCS order for this diagnosis: order1.",
+    "CMP/BMP": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "UA (Urinalysis ± culture)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "order2": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+    "Order imaging studies such as CT or MRI, as they are not indicated in a patient presenting with burning during urination.": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I don't feel right. Something's wrong.",
+    "history": "It started... I don't know when.",
+    "pain": "Everything hurts."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain urine sample for culture and sensitivity",
+    "Prescribe broad-spectrum antibiotics pending culture results",
+    "order1",
+    "CMP/BMP",
+    "UA (Urinalysis ± culture)"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Screenshot file is identical to case 23; re-capture needed."
+}

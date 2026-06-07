@@ -1,0 +1,70 @@
+{
+  "id": 155,
+  "topic": "Shortness of breath",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain vital signs, including oxygen saturation and blood pressure",
+    "Perform chest X-ray to evaluate lung fields",
+    "Order arterial blood gas (ABG) analysis for oxygenation status and acid-base balance",
+    "Administer supplemental oxygen as needed to maintain oxygen saturation above 90%",
+    "Initiate diuretics if signs of heart failure are present or pulmonary edema is suspected",
+    "Consider obtaining echocardiogram to assess cardiac function",
+    "Consult Internal Medicine, Pulmonology, and Intensive Care Unit (ICU) as needed based on the patient's condition",
+    "Oxygen",
+    "IV access ×2 large-bore"
+  ],
+  "should_avoid": [
+    "Discharging the patient without a clear diagnosis or stabilization"
+  ],
+  "rationale": {
+    "Obtain vital signs, including oxygen saturation and blood pressure": "Vital signs establish baseline stability before further orders.",
+    "Perform chest X-ray to evaluate lung fields": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
+    "Order arterial blood gas (ABG) analysis for oxygenation status and acid-base balance": "Appropriate CCS order for this diagnosis: Order arterial blood gas (ABG) analysis for oxygenation status and acid-base balance.",
+    "Administer supplemental oxygen as needed to maintain oxygen saturation above 90%": "Appropriate CCS order for this diagnosis: Administer supplemental oxygen as needed to maintain oxygen saturation above 90%.",
+    "Initiate diuretics if signs of heart failure are present or pulmonary edema is suspected": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
+    "Consider obtaining echocardiogram to assess cardiac function": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
+    "Consult Internal Medicine, Pulmonology, and Intensive Care Unit (ICU) as needed based on the patient's condition": "Appropriate CCS order for this diagnosis: Consult Internal Medicine, Pulmonology, and Intensive Care Unit (ICU) as needed based on the patient's condition.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2 large-bore": "Appropriate CCS order for this diagnosis: IV access ×2 large-bore.",
+    "Discharging the patient without a clear diagnosis or stabilization": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — shortness of breath. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This shortness of breath won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain vital signs, including oxygen saturation and blood pressure",
+    "Perform chest X-ray to evaluate lung fields",
+    "Order arterial blood gas (ABG) analysis for oxygenation status and acid-base balance",
+    "Administer supplemental oxygen as needed to maintain oxygen saturation above 90%",
+    "Initiate diuretics if signs of heart failure are present or pulmonary edema is suspected",
+    "Consider obtaining echocardiogram to assess cardiac function",
+    "Consult Internal Medicine, Pulmonology, and Intensive Care Unit (ICU) as needed based on the patient's condition",
+    "Oxygen",
+    "IV access ×2 large-bore"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

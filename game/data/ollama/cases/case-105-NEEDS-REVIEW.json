@@ -1,0 +1,96 @@
+{
+  "case_number": 105,
+  "title": "Abdominal Pain - OB/GYN",
+  "location": null,
+  "hpi_raw": null,
+  "hpi_narrative": "[Ms] X is a [age unknown]-year-old female with [PMH not specified] who presents with Abdominal Pain. [Onset: sudden, Character: severe, Severity: high, Associated symptoms: guarding, tenderness, decreasing hematocrit, tachycardia, hypotension, Symptomatology: severe pain, Pertinent negatives: none specified]. The clinical question this case forces you to answer is to diagnose the cause of the abdominal pain and order appropriate tests and treatments.",
+  "stacks": [
+    {
+      "label": "Physical Exam: Genitalia",
+      "type": "correctlyOrdered",
+      "finding": "The genital area is part of the differential that could be causing abdominal pain, so it is worth examining."
+    },
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "The patient is having severe pain. It would be appropriate to generally look at the patient to help guide diagnosis."
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": null
+    },
+    {
+      "label": "CBC with differential",
+      "type": "shouldHaveOrdered",
+      "finding": "It's important to check for blood loss as the patient is having symptoms of hemoperitoneum."
+    },
+    {
+      "label": "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative",
+      "type": "correctlyOrdered",
+      "finding": "Evaluation of serum 8hCG-levels is necessary to differentiate ruptured ovarian cyst from a ruptured ectopic pregnancy, which may have a similar presentation."
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "shouldHaveOrdered",
+      "finding": "Important to check on oxygenation because the patient has hemoperitoneum causing blood loss."
+    },
+    {
+      "label": "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long",
+      "type": "shouldHaveOrdered",
+      "finding": "The patient is likely to have surgery, so getting a pre-surgery EKG is important"
+    },
+    {
+      "label": "US, abdomen/pelvis, with contrast / US, pelvis, transabdominal / US, pelvis, transvaginal",
+      "type": "correctlyOrdered",
+      "finding": null
+    },
+    {
+      "label": "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
+      "type": "shouldHaveOrdered",
+      "finding": "Chemistries are an important screening tool to reach a diagnosis."
+    },
+    {
+      "label": "Type and screen, blood / Type and Rh factor, blood",
+      "type": "correctlyOrdered",
+      "finding": null
+    },
+    {
+      "label": "Intravenous access / Intravenous line, capped",
+      "type": null,
+      "finding": "Although not required, it would be a good idea to make a habit to order an IV Access when you are administering IV fluids / medications."
+    },
+    {
+      "label": "Saline solution, normal / Lactated Ringer solution",
+      "type": "shouldHaveOrdered",
+      "finding": "The patient is tachycardic and has a decreasing hematocrit and is actively bleeding. Fluids are necessary."
+    },
+    {
+      "label": "Transfusion, packed red blood cells",
+      "type": "shouldHaveOrdered",
+      "finding": "The patient has a dropping hematocrit prior to surgery and is hypotensive and is symptomatic, so she requires a blood transfusion."
+    },
+    {
+      "label": "Hydromorphone hydrochloride / Fentanyl / Morphine sulfate / Ketorolac tromethamine",
+      "type": "correctlyOrdered",
+      "finding": null
+    },
+    {
+      "label": "PT/PTT / Partial thromboplastin time AND PT/INR",
+      "type": "\u00a9 PT/PTT / Partial thromboplastin time AND PT/INR",
+      "finding": "The patient will require surgery, so getting pre-surgery labs is important."
+    },
+    {
+      "label": "Cefazolin sodium / Cefoxitin sodium / Cefotetan / Cephalosporins",
+      "type": null,
+      "finding": null
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  }
+}

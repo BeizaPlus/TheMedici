@@ -1,0 +1,62 @@
+{
+  "id": 23,
+  "topic": "Congestive Heart Failure",
+  "diagnosis": "Congestive Heart Failure",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Patient Education",
+    "Diuretics Ordered",
+    "Cardiology Consult",
+    "Labs Ordered",
+    "IV Fluids Ordered",
+    "Chest X-Ray",
+    "EKG"
+  ],
+  "should_avoid": [
+    "CT Scan"
+  ],
+  "rationale": {
+    "Patient Education": "Patient education and counseling are part of definitive care for Congestive Heart Failure.",
+    "Diuretics Ordered": "Appropriate CCS order for Congestive Heart Failure: Diuretics Ordered.",
+    "Cardiology Consult": "Appropriate CCS order for Congestive Heart Failure: Cardiology Consult.",
+    "Labs Ordered": "Appropriate CCS order for Congestive Heart Failure: Labs Ordered.",
+    "IV Fluids Ordered": "Appropriate CCS order for Congestive Heart Failure: IV Fluids Ordered.",
+    "Chest X-Ray": "Evaluate chest and lungs as part of the initial exam for congestive heart failure.",
+    "EKG": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+    "CT Scan": "Advanced imaging is not indicated early for Congestive Heart Failure when the diagnosis is clinical."
+  },
+  "hpi": "The patient was experiencing shortness of breath and edema. The treatment plan included diuretics and monitoring fluid status. Education on heart failure management was provided. Follow-up with cardiology was recommended.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. I can't breathe well and my legs are swollen.",
+    "history": "I have a history of heart problems. I feel so tired and weak.",
+    "pain": "It feels like there's pressure in my chest."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "The patient was experiencing shortness of breath and edema. The treatment plan included diuretics and monitoring fluid status. Education on heart failure management was provided. Follow-up with cardiology was recommended.",
+  "stacks": [
+    "Patient Education",
+    "Diuretics Ordered",
+    "Cardiology Consult",
+    "Labs Ordered",
+    "IV Fluids Ordered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

@@ -1,0 +1,60 @@
+{
+  "id": 130,
+  "topic": "Cough",
+  "diagnosis": "Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "History and Physical Exam",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Lungs / Respiratory",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities",
+    "Renal Ultrasound"
+  ],
+  "should_avoid": [
+    "CT scan, abdomen"
+  ],
+  "rationale": {
+    "History and Physical Exam": "Appropriate CCS order for Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia): History and Physical Exam.",
+    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to cough.",
+    "Physical Exam: Lungs / Respiratory": "Evaluate chest and lungs as part of the initial exam for cough.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with cough.",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia).",
+    "Renal Ultrasound": "Appropriate CCS order for Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia): Renal Ultrasound.",
+    "CT scan, abdomen": "Advanced imaging is not indicated early for Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia) when the diagnosis is clinical."
+  },
+  "hpi": "Legionella pneumonia is a type of atypical pneumonia that is caused by the bacterium Legionella pneumophila. It is important to recognize this condition as it can lead to severe illness and requires specific treatment.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. I can't stop coughing.",
+    "history": "I was feeling fine until a few days ago. Then I started coughing and felt really weak.",
+    "pain": "It hurts to breathe deeply."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Legionella pneumonia is a type of atypical pneumonia that is caused by the bacterium Legionella pneumophila. It is important to recognize this condition as it can lead to severe illness and requires specific treatment.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "History and Physical Exam",
+    "Laboratory Tests",
+    "Imaging"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

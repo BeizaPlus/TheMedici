@@ -1,0 +1,62 @@
+{
+  "id": 52,
+  "topic": "Chest Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "ECG Ordered",
+    "Chest X-Ray Ordered",
+    "Troponin Ordered",
+    "Aspirin Ordered",
+    "Nitroglycerin Ordered",
+    "Cardiac Enzymes Ordered",
+    "Beta Blocker Ordered"
+  ],
+  "should_avoid": [
+    "CT Chest Ordered"
+  ],
+  "rationale": {
+    "ECG Ordered": "Appropriate CCS order for this diagnosis: ECG Ordered.",
+    "Chest X-Ray Ordered": "Evaluate chest and lungs as part of the initial exam for chest pain.",
+    "Troponin Ordered": "Appropriate CCS order for this diagnosis: Troponin Ordered.",
+    "Aspirin Ordered": "Appropriate CCS order for this diagnosis: Aspirin Ordered.",
+    "Nitroglycerin Ordered": "Appropriate CCS order for this diagnosis: Nitroglycerin Ordered.",
+    "Cardiac Enzymes Ordered": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Beta Blocker Ordered": "Appropriate CCS order for this diagnosis: Beta Blocker Ordered.",
+    "CT Chest Ordered": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+  },
+  "hpi": "Chest pain is a common complaint in the emergency department. It is important to differentiate between cardiac and non-cardiac causes. A thorough history and physical examination, along with appropriate diagnostic testing, are essential in the management of these patients.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My chest hurts a lot.",
+    "history": "I felt a tightness in my chest. It started suddenly.",
+    "pain": "It feels like a heavy weight on my chest."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "Chest pain is a common complaint in the emergency department. It is important to differentiate between cardiac and non-cardiac causes. A thorough history and physical examination, along with appropriate diagnostic testing, are essential in the management of these patients.",
+  "stacks": [
+    "ECG Ordered",
+    "Chest X-Ray Ordered",
+    "Troponin Ordered",
+    "Aspirin Ordered",
+    "Nitroglycerin Ordered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

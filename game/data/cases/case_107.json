@@ -1,0 +1,64 @@
+{
+  "id": 107,
+  "topic": "Paranoia - Psychiatry",
+  "diagnosis": "Schizophrenia",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Patient History",
+    "Mental Status Exam",
+    "Crisis Assessment",
+    "Risk Assessment: Suicide Risk",
+    "Psychiatric History",
+    "Medication Adherence",
+    "Substance Use History"
+  ],
+  "should_avoid": [
+    "CT Head: Non-Contrast"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for paranoia - psychiatry.",
+    "Patient History": "Appropriate CCS order for Schizophrenia: Patient History.",
+    "Mental Status Exam": "Appropriate CCS order for Schizophrenia: Mental Status Exam.",
+    "Crisis Assessment": "Appropriate CCS order for Schizophrenia: Crisis Assessment.",
+    "Risk Assessment: Suicide Risk": "Appropriate CCS order for Schizophrenia: Risk Assessment: Suicide Risk.",
+    "Psychiatric History": "Appropriate CCS order for Schizophrenia: Psychiatric History.",
+    "Medication Adherence": "Appropriate CCS order for Schizophrenia: Medication Adherence.",
+    "Substance Use History": "Appropriate CCS order for Schizophrenia: Substance Use History.",
+    "CT Head: Non-Contrast": "Advanced imaging is not indicated early for Schizophrenia when the diagnosis is clinical."
+  },
+  "hpi": "In this case, the patient presented with psychiatric concerns that all advisory be resolved sooner. The patient was not able to provide a clear history of their symptoms. It is important to gather a thorough psychiatric history to understand the patient's condition. The patient was also assessed for risk factors, including suicidal ideation, which is critical in managing psychiatric emergencies. The importance of medication adherence and substance use history was also highlighted in the case.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared and don't know what's happening to me.",
+    "history": "I feel like everyone is out to get me. I can't trust anyone.",
+    "pain": "It's like a heavy weight on my chest."
+  },
+  "ccs_category": "Psychiatry",
+  "case_summary": "In this case, the patient presented with psychiatric concerns that all advisory be resolved sooner. The patient was not able to provide a clear history of their symptoms. It is important to gather a thorough psychiatric history to understand the patient's condition. The patient was also assessed for risk factors, including suicidal ideation, which is critical in managing psychiatric emergencies. The importance of medication adherence and substance use history was also highlighted in the case.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Patient History",
+    "Mental Status Exam",
+    "Crisis Assessment"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

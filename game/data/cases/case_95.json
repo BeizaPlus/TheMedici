@@ -1,0 +1,68 @@
+{
+  "id": 95,
+  "topic": "Vaginal Bleeding",
+  "diagnosis": "Spontaneous Abortion",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Type and screen, blood",
+    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
+    "US pelvis, transabdominal / Doppler, fetal heart rate / Non-stress test / Maternal, fetal check",
+    "Hydrocodone / Methadone",
+    "Multivitamin with minerals",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Lungs",
+    "Physical Exam: Abdominal",
+    "CBC with differential"
+  ],
+  "should_avoid": [
+    "order1",
+    "Surgical Procedures: Dilatation and Curettage (D&C) without a clear indication based on diagnostic results"
+  ],
+  "rationale": {
+    "Type and screen, blood": "Appropriate CCS order for Spontaneous Abortion: Type and screen, blood.",
+    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Spontaneous Abortion.",
+    "US pelvis, transabdominal / Doppler, fetal heart rate / Non-stress test / Maternal, fetal check": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to vaginal bleeding.",
+    "Hydrocodone / Methadone": "Appropriate CCS order for Spontaneous Abortion: Hydrocodone / Methadone.",
+    "Multivitamin with minerals": "Appropriate CCS order for Spontaneous Abortion: Multivitamin with minerals.",
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for vaginal bleeding.",
+    "Physical Exam: Heart / Lungs": "Evaluate chest and lungs as part of the initial exam for vaginal bleeding.",
+    "Physical Exam: Abdominal": "Appropriate CCS order for Spontaneous Abortion: Physical Exam: Abdominal.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Spontaneous Abortion.",
+    "order1": "CCS review: avoid this order for Spontaneous Abortion — it does not change acute management.",
+    "Surgical Procedures: Dilatation and Curettage (D&C) without a clear indication based on diagnostic results": "CCS review: avoid this order for Spontaneous Abortion — it does not change acute management."
+  },
+  "hpi": "Case Summary: This case highlights the importance of thorough evaluation and management of patients presenting with vaginal bleeding in early pregnancy. Understanding the differential diagnosis and appropriate interventions is crucial in ensuring patient safety and optimal outcomes.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about the bleeding. I don't know what's happening.",
+    "history": "I didn't expect this to happen. I thought everything was fine.",
+    "pain": "It feels like cramping and I'm worried."
+  },
+  "ccs_category": "OB/GYN",
+  "case_summary": "Case Summary: This case highlights the importance of thorough evaluation and management of patients presenting with vaginal bleeding in early pregnancy. Understanding the differential diagnosis and appropriate interventions is crucial in ensuring patient safety and optimal outcomes.",
+  "stacks": [
+    "Consider, psychiatry",
+    "Vaginal bleeding, OB/GYN",
+    "US pelvis, transabdominal / Doppler, fetal heart rate / Non-stress test / Maternal, fetal check",
+    "Hydrocodone / Methadone",
+    "Multivitamin with minerals"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

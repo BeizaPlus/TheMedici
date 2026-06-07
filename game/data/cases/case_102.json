@@ -1,0 +1,64 @@
+{
+  "id": 102,
+  "topic": "Generalized Weakness",
+  "diagnosis": "Insulinoma",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Joints/Neck",
+    "Physical Exam: Neuro/Psych",
+    "Physical Exam: Skin",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdominal Exam",
+    "Insulin, serum",
+    "C-peptide, serum",
+    "Glucose, serum"
+  ],
+  "should_avoid": [
+    "Basic metabolic profile / Comprehensive metabolic profile"
+  ],
+  "rationale": {
+    "Physical Exam: Joints/Neck": "Appropriate CCS order for Insulinoma: Physical Exam: Joints/Neck.",
+    "Physical Exam: Neuro/Psych": "Targeted Physical Exam: Neuro/Psych exam supports the differential for Insulinoma.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Insulinoma.",
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for generalized weakness.",
+    "Physical Exam: Abdominal Exam": "Appropriate CCS order for Insulinoma: Physical Exam: Abdominal Exam.",
+    "Insulin, serum": "Appropriate CCS order for Insulinoma: Insulin, serum.",
+    "C-peptide, serum": "Appropriate CCS order for Insulinoma: C-peptide, serum.",
+    "Glucose, serum": "Appropriate CCS order for Insulinoma: Glucose, serum.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "CCS review: avoid this order for Insulinoma — it does not change acute management."
+  },
+  "hpi": "Consider diagnosis: Insulinoma. Symptoms: Hypoglycemia, weakness, confusion. Patients with insulinoma may present with hypoglycemia, which can lead to symptoms such as generalized weakness. It is important to recognize this condition as it can be life-threatening.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm feeling really weak and confused. I'm scared something is seriously wrong.",
+    "history": "I have been feeling weak for a while. Sometimes I feel dizzy and shaky.",
+    "pain": "I don't have any specific pain, just this overwhelming weakness."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Consider diagnosis: Insulinoma. Symptoms: Hypoglycemia, weakness, confusion. Patients with insulinoma may present with hypoglycemia, which can lead to symptoms such as generalized weakness. It is important to recognize this condition as it can be life-threatening.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Consults: surgery, general / surgery / endocrinology",
+    "Hormones: hormone stimulating",
+    "Hormones: hormone stimulating"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

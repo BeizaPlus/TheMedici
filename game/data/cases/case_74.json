@@ -1,0 +1,66 @@
+{
+  "id": 74,
+  "topic": "Persistent Cough",
+  "diagnosis": "Lung Cancer (Adenocarcinoma)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Ordered the following: CT scan",
+    "Ordered the following: Chest X-ray",
+    "Ordered the following: Pulmonary consult",
+    "Ordered the following: CBC",
+    "Ordered the following: Comprehensive metabolic panel",
+    "Considered: Bronchoscopy",
+    "Considered: Sputum culture",
+    "Considered: Pulmonary function tests"
+  ],
+  "should_avoid": [
+    "Avoided: Antibiotics",
+    "Avoided: Steroids"
+  ],
+  "rationale": {
+    "Ordered the following: CT scan": "Appropriate CCS order for Lung Cancer (Adenocarcinoma): Ordered the following: CT scan.",
+    "Ordered the following: Chest X-ray": "Evaluate chest and lungs as part of the initial exam for persistent cough.",
+    "Ordered the following: Pulmonary consult": "Appropriate CCS order for Lung Cancer (Adenocarcinoma): Ordered the following: Pulmonary consult.",
+    "Ordered the following: CBC": "Laboratory testing when systemic illness or severity warrants labs in Lung Cancer (Adenocarcinoma).",
+    "Ordered the following: Comprehensive metabolic panel": "Laboratory testing when systemic illness or severity warrants labs in Lung Cancer (Adenocarcinoma).",
+    "Considered: Bronchoscopy": "Appropriate CCS order for Lung Cancer (Adenocarcinoma): Considered: Bronchoscopy.",
+    "Considered: Sputum culture": "Laboratory testing when systemic illness or severity warrants labs in Lung Cancer (Adenocarcinoma).",
+    "Considered: Pulmonary function tests": "Appropriate CCS order for Lung Cancer (Adenocarcinoma): Considered: Pulmonary function tests.",
+    "Avoided: Antibiotics": "CCS review: avoid this order for Lung Cancer (Adenocarcinoma) — it does not change acute management.",
+    "Avoided: Steroids": "CCS review: avoid this order for Lung Cancer (Adenocarcinoma) — it does not change acute management."
+  },
+  "hpi": "This case highlights the importance of thorough evaluation in patients presenting with persistent cough. The differential diagnosis can be broad, and appropriate imaging and consultations are crucial in guiding management. In this case, the diagnosis of lung cancer was established through imaging and further evaluation, emphasizing the need for timely intervention.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this cough that won't go away. I don't know what's wrong.",
+    "history": "I've been coughing for weeks. It feels worse at night.",
+    "pain": "It hurts when I cough."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This case highlights the importance of thorough evaluation in patients presenting with persistent cough. The differential diagnosis can be broad, and appropriate imaging and consultations are crucial in guiding management. In this case, the diagnosis of lung cancer was established through imaging and further evaluation, emphasizing the need for timely intervention.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following: CT scan",
+    "Ordered the following: Chest X-ray",
+    "Ordered the following: Pulmonary consult",
+    "Ordered the following: CBC"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

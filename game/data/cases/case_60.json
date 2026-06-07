@@ -1,0 +1,68 @@
+{
+  "id": 60,
+  "topic": "Abdominal Pain - Emergency Medicine",
+  "diagnosis": "Nephrolithiasis (Kidney Stone)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Supine",
+    "Physical Exam: Lying",
+    "Physical Exam: Sitting",
+    "Physical Exam: General",
+    "Physical Exam: Abdominal",
+    "Magnesium serum",
+    "Pregnancy test",
+    "Ultrasound"
+  ],
+  "should_avoid": [
+    "CT Abdomen/Pelvis",
+    "IV fluids",
+    "Urinalysis"
+  ],
+  "rationale": {
+    "Physical Exam: Supine": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Physical Exam: Supine.",
+    "Physical Exam: Lying": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Physical Exam: Lying.",
+    "Physical Exam: Sitting": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Physical Exam: Sitting.",
+    "Physical Exam: General": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Physical Exam: General.",
+    "Physical Exam: Abdominal": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Physical Exam: Abdominal.",
+    "Magnesium serum": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Magnesium serum.",
+    "Pregnancy test": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Pregnancy test.",
+    "Ultrasound": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Ultrasound.",
+    "CT Abdomen/Pelvis": "Advanced imaging is not indicated early for Nephrolithiasis (Kidney Stone) when the diagnosis is clinical.",
+    "IV fluids": "IV fluids/access are not indicated unless the patient is unstable or cannot tolerate PO.",
+    "Urinalysis": "CCS review: avoid this order for Nephrolithiasis (Kidney Stone) — it does not change acute management."
+  },
+  "hpi": "Emergency Department Disposition: Nephrolithiasis, Discharge with prescriptions for pain management and follow-up. Patient education provided regarding hydration and dietary modifications.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared because my stomach hurts so much.",
+    "history": "I have had this pain for a few hours now, and it feels sharp.",
+    "pain": "It hurts really bad in my side."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "Emergency Department Disposition: Nephrolithiasis, Discharge with prescriptions for pain management and follow-up. Patient education provided regarding hydration and dietary modifications.",
+  "stacks": [
+    "Vitals Ordered",
+    "Patient Update Reported",
+    "Physical Exam",
+    "Ordered IV fluids",
+    "Ordered Ultrasound"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

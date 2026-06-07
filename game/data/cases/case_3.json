@@ -1,0 +1,81 @@
+{
+  "id": 3,
+  "topic": "Pelvic Pain - OB/GYN",
+  "diagnosis": "Endometrioma",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Genitalia",
+    "CT, abdomen/pelvis, with contrast / CT, abdomen/pelvis, with gadolinium / MRI, abdomen/pelvis, without gadolinium / US, pelvis, transvaginal / US, pelvis",
+    "Physical Exam: Abdomen",
+    "Laparotomy / Laparoscopy / Consult, obstetrics/gynecology",
+    "Advise patient, no illegal drug use"
+  ],
+  "should_avoid": [
+    "1",
+    "5"
+  ],
+  "rationale": {
+    "1": "CCS review: avoid this order for Endometrioma — it does not change acute management.",
+    "5": "CCS review: avoid this order for Endometrioma — it does not change acute management.",
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for pelvic pain - ob/gyn.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for pelvic pain - ob/gyn.",
+    "Physical Exam: Genitalia": "Pelvic/cervical evaluation is central for Endometrioma and localizes the source of pelvic pain - ob/gyn.",
+    "CT, abdomen/pelvis, with contrast / CT, abdomen/pelvis, with gadolinium / MRI, abdomen/pelvis, without gadolinium / US, pelvis, transvaginal / US, pelvis": "Abdominal exam helps exclude alternative causes in a patient with pelvic pain - ob/gyn. Finding: Physical Exam: Abdomen",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with pelvic pain - ob/gyn. Finding: Physical Exam: Abdomen",
+    "Laparotomy / Laparoscopy / Consult, obstetrics/gynecology": "Appropriate CCS order for Endometrioma: Laparotomy / Laparoscopy / Consult, obstetrics/gynecology.",
+    "Advise patient, no illegal drug use": "Appropriate CCS order for Endometrioma: Advise patient, no illegal drug use."
+  },
+  "hpi": "Differential: There is a large differential for a right adnexal mass in a reproductive age female. This could include ectopic pregnancy, tubo-ovarian abscess, inflammatory bowel disease, ovarian mass, endometrioma, theca lutein cysts, germ cell neoplasms, metastatic disease, and many others.\n\nThe patient has an endometrioma. She is having severe pelvic pain which worsens with sexual activity. Typically a pelvic ultrasound is performed, but a CT scan or a MRI of the abdomen/pelvis area would also be acceptable to find the endometrioma. This can be removed by ordering a laparotomy. It is also acceptable to consult OB/GYN who can do the laparotomy. Once this is done, the case will end. You can then do preventative measures of counseling regarding smoking cessation and illicit drug use.",
+  "physical_exam": [
+    [
+      "0",
+      "General,Physical Exam: General Appearance"
+    ],
+    [
+      "1",
+      "Cardiovascular,Physical Exam: Chest / Lungs"
+    ],
+    [
+      "2",
+      "Abdomen,Physical Exam: Abdomen"
+    ],
+    [
+      "3",
+      "Heent,Physical Exam: Genitalia"
+    ]
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this pain in my pelvic area. It hurts so much.",
+    "history": "I've been having this pain for a while now. It gets worse during sex.",
+    "pain": "The pain is sharp and it feels like it's getting worse."
+  },
+  "ccs_category": "OB/GYN",
+  "case_summary": "Differential: There is a large differential for a right adnexal mass in a reproductive age female. This could include ectopic pregnancy, tubo-ovarian abscess, inflammatory bowel disease, ovarian mass, endometrioma, theca lutein cysts, germ cell neoplasms, metastatic disease, and many others.\n\nThe patient has an endometrioma. She is having severe pelvic pain which worsens with sexual activity. Typically a pelvic ultrasound is performed, but a CT scan or a MRI of the abdomen/pelvis area would also be acceptable to find the endometrioma. This can be removed by ordering a laparotomy. It is also acceptable to consult OB/GYN who can do the laparotomy. Once this is done, the case will end. You can then do preventative measures of counseling regarding smoking cessation and illicit drug use.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, Chest and Lung, Cardiovascular, Genital, Rectal, Neurologic and Psychological",
+    "Ordered: US, abdomen",
+    "Time Advanced 11 minutes",
+    "Ordered: Ibuprofen"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings for respiratory, extremities, neuro, skin, musculoskeletal, psych, and numeric vitals."
+}

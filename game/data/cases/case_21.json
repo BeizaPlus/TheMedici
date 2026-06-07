@@ -1,0 +1,64 @@
+{
+  "id": 21,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Irritable Bowel Syndrome",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Complete blood count",
+    "Electrolytes",
+    "Liver function tests",
+    "Abdominal ultrasound",
+    "CT abdomen/pelvis",
+    "Stool studies",
+    "H. pylori testing",
+    "Thyroid function tests"
+  ],
+  "should_avoid": [
+    "Endoscopy"
+  ],
+  "rationale": {
+    "Complete blood count": "Appropriate CCS order for Irritable Bowel Syndrome: Complete blood count.",
+    "Electrolytes": "Appropriate CCS order for Irritable Bowel Syndrome: Electrolytes.",
+    "Liver function tests": "Appropriate CCS order for Irritable Bowel Syndrome: Liver function tests.",
+    "Abdominal ultrasound": "Appropriate CCS order for Irritable Bowel Syndrome: Abdominal ultrasound.",
+    "CT abdomen/pelvis": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Stool studies": "Appropriate CCS order for Irritable Bowel Syndrome: Stool studies.",
+    "H. pylori testing": "Appropriate CCS order for Irritable Bowel Syndrome: H. pylori testing.",
+    "Thyroid function tests": "Appropriate CCS order for Irritable Bowel Syndrome: Thyroid function tests.",
+    "Endoscopy": "CCS review: avoid this order for Irritable Bowel Syndrome — it does not change acute management."
+  },
+  "hpi": "This patient presents with abdominal pain. History reveals chronic symptoms. Exam findings are unremarkable. Labs and imaging are performed to rule out other causes. The diagnosis of irritable bowel syndrome is made based on clinical criteria.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this pain in my stomach. It just won't go away.",
+    "history": "I've had this pain for a long time. It comes and goes, and sometimes it's really bad.",
+    "pain": "It feels like a cramp, and it hurts a lot."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This patient presents with abdominal pain. History reveals chronic symptoms. Exam findings are unremarkable. Labs and imaging are performed to rule out other causes. The diagnosis of irritable bowel syndrome is made based on clinical criteria.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Ordered CBC",
+    "Ordered Electrolytes",
+    "Ordered Abdominal ultrasound"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

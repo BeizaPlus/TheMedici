@@ -1,0 +1,79 @@
+{
+  "id": 131,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain complete blood count (CBC)",
+    "Obtain basic metabolic panel",
+    "Obtain urinalysis",
+    "Order abdominal X-ray",
+    "Order abdominal ultrasound or CT scan",
+    "Consider obtaining electrocardiogram (ECG) to rule out ischemic heart disease",
+    "Administer analgesia for pain management",
+    "IV Fluids + NPO",
+    "CBC · Lipase · LFTs · UA",
+    "CT Abdomen/Pelvis",
+    "Surgery Consult",
+    "Antibiotics if indicated"
+  ],
+  "should_avoid": [
+    "Start broad-spectrum antibiotics without culture and sensitivity"
+  ],
+  "rationale": {
+    "Obtain complete blood count (CBC)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Obtain basic metabolic panel": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Obtain urinalysis": "Appropriate CCS order for this diagnosis: Obtain urinalysis.",
+    "Order abdominal X-ray": "Imaging supports diagnosis when exam findings warrant it for this diagnosis.",
+    "Order abdominal ultrasound or CT scan": "Appropriate CCS order for this diagnosis: Order abdominal ultrasound or CT scan.",
+    "Consider obtaining electrocardiogram (ECG) to rule out ischemic heart disease": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to abdominal pain.",
+    "Administer analgesia for pain management": "Appropriate CCS order for this diagnosis: Administer analgesia for pain management.",
+    "IV Fluids + NPO": "Appropriate CCS order for this diagnosis: IV Fluids + NPO.",
+    "CBC · Lipase · LFTs · UA": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Surgery Consult": "Appropriate CCS order for this diagnosis: Surgery Consult.",
+    "Antibiotics if indicated": "Appropriate CCS order for this diagnosis: Antibiotics if indicated.",
+    "Start broad-spectrum antibiotics without culture and sensitivity": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — abdominal pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This abdominal pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain complete blood count (CBC)",
+    "Obtain basic metabolic panel",
+    "Obtain urinalysis",
+    "Order abdominal X-ray",
+    "Order abdominal ultrasound or CT scan",
+    "Consider obtaining electrocardiogram (ECG) to rule out ischemic heart disease",
+    "Administer analgesia for pain management",
+    "IV Fluids + NPO",
+    "CBC · Lipase · LFTs · UA",
+    "CT Abdomen/Pelvis",
+    "Surgery Consult",
+    "Antibiotics if indicated"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

@@ -1,0 +1,104 @@
+{
+  "case_number": 106,
+  "title": "Headache - Internal Medicine",
+  "specialty": "Internal Medicine",
+  "chief_complaint": "Headache",
+  "patient": {
+    "age": "50-year-old",
+    "gender": "male"
+  },
+  "location": "ER",
+  "diagnosis": null,
+  "hpi_narrative": "Mr. X is a 50-year-old male with no significant past medical history who presents with a headache. Onset was sudden and severe, accompanied by fever and stiff neck \u2013 suggestive of meningitis. There are pertinent negatives as the patient does not report any visual changes, speech difficulties or limb weakness.",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": null,
+    "respiratory": null,
+    "abdominal": null,
+    "neurological": null,
+    "skin": null,
+    "heent": {
+      "eyes": null,
+      "ears": null
+    },
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null
+  },
+  "stacks": [
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "X-ray, chest",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Urinalysis",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Lumbar puncture",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "CSF cultures for viral, bacterial, and fungal pathogens",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "MRI of the head",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    }
+  ],
+  "preventive_care": [
+    {
+      "vaccine": "diphthe"
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 0,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual chief complaint in OCR. It should be 'Headache - Internal Medicine' instead of 'Headache'.",
+      "fix": "'Headache - Internal Medicine'"
+    },
+    {
+      "field": "stacks",
+      "problem": "Stack labels have placeholders like '\u00a9', 'Completed', and percentages, which are UI noise. They should only contain clean clinical orders.",
+      "fix": "Clean clinical labels without UI noise"
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Physical exam findings are missing for some systems. There should be values for general, cardiovascular, respiratory, abdominal, neurological, skin, heent (eyes and ears), musculoskeletal, genitourinary, and psychiatric.",
+      "fix": "Complete physical exam findings for all systems"
+    },
+    {
+      "field": "overall_confidence",
+      "problem": "The overall confidence is missing. A strict medical data quality reviewer should have an overall confidence score of at least 99.",
+      "fix": "Provide an overall confidence score of at least 99"
+    }
+  ],
+  "_validation_errors": [
+    "Stack label too long \u2014 likely explanatory text: 'CSF cultures for viral, bacterial, and fungal path...'"
+  ]
+}

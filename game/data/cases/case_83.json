@@ -1,0 +1,64 @@
+{
+  "id": 83,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain basic labs (CBC, BMP, Coagulation panel)",
+    "Order imaging studies (Axial CT scan of the abdomen and pelvis with IV contrast)",
+    "IV Fluids + NPO",
+    "CBC · Lipase · LFTs · UA",
+    "CT Abdomen/Pelvis",
+    "Surgery Consult",
+    "Antibiotics if indicated"
+  ],
+  "should_avoid": [
+    "Initial exploratory laparotomy"
+  ],
+  "rationale": {
+    "Obtain basic labs (CBC, BMP, Coagulation panel)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Order imaging studies (Axial CT scan of the abdomen and pelvis with IV contrast)": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "IV Fluids + NPO": "Appropriate CCS order for this diagnosis: IV Fluids + NPO.",
+    "CBC · Lipase · LFTs · UA": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Surgery Consult": "Appropriate CCS order for this diagnosis: Surgery Consult.",
+    "Antibiotics if indicated": "Appropriate CCS order for this diagnosis: Antibiotics if indicated.",
+    "Initial exploratory laparotomy": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — abdominal pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This abdominal pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain basic labs (CBC, BMP, Coagulation panel)",
+    "Order imaging studies (Axial CT scan of the abdomen and pelvis with IV contrast)",
+    "IV Fluids + NPO",
+    "CBC · Lipase · LFTs · UA",
+    "CT Abdomen/Pelvis",
+    "Surgery Consult",
+    "Antibiotics if indicated"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

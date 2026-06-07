@@ -1,0 +1,64 @@
+{
+  "id": 35,
+  "topic": "Alcohol Withdrawal - Delirium Tremens",
+  "diagnosis": "Alcohol Withdrawal - Delirium Tremens",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "IV fluids",
+    "Benzodiazepines",
+    "Thiamine",
+    "Electrolytes",
+    "Monitor",
+    "CT Head",
+    "Liver Function Tests"
+  ],
+  "should_avoid": [
+    "Opioids",
+    "Sedatives"
+  ],
+  "rationale": {
+    "IV fluids": "Appropriate CCS order for Alcohol Withdrawal - Delirium Tremens: IV fluids.",
+    "Benzodiazepines": "Appropriate CCS order for Alcohol Withdrawal - Delirium Tremens: Benzodiazepines.",
+    "Thiamine": "Appropriate CCS order for Alcohol Withdrawal - Delirium Tremens: Thiamine.",
+    "Electrolytes": "Appropriate CCS order for Alcohol Withdrawal - Delirium Tremens: Electrolytes.",
+    "Monitor": "Appropriate CCS order for Alcohol Withdrawal - Delirium Tremens: Monitor.",
+    "CT Head": "Appropriate CCS order for Alcohol Withdrawal - Delirium Tremens: CT Head.",
+    "Liver Function Tests": "Appropriate CCS order for Alcohol Withdrawal - Delirium Tremens: Liver Function Tests.",
+    "Opioids": "CCS review: avoid this order for Alcohol Withdrawal - Delirium Tremens — it does not change acute management.",
+    "Sedatives": "CCS review: avoid this order for Alcohol Withdrawal - Delirium Tremens — it does not change acute management."
+  },
+  "hpi": "The patient is a 45-year-old male with a history of alcohol use disorder who presented with confusion, agitation, and tremors. He was found to have signs of severe alcohol withdrawal and was treated with benzodiazepines and supportive care. The importance of thiamine administration to prevent Wernicke's encephalopathy was emphasized. The case highlights the need for careful monitoring of vital signs and the potential complications of alcohol withdrawal.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I feel really shaky and confused. I don't know what's happening.",
+    "history": "I've been drinking heavily for years. I tried to stop, but it's been hard.",
+    "pain": "I have a headache and feel really anxious."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "The patient is a 45-year-old male with a history of alcohol use disorder who presented with confusion, agitation, and tremors. He was found to have signs of severe alcohol withdrawal and was treated with benzodiazepines and supportive care. The importance of thiamine administration to prevent Wernicke's encephalopathy was emphasized. The case highlights the need for careful monitoring of vital signs and the potential complications of alcohol withdrawal.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Medications Administered",
+    "Laboratory Tests",
+    "Consults"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

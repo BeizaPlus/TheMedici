@@ -1,0 +1,70 @@
+{
+  "id": 9,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Abdominal Abscess",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Survey",
+    "Physical Exam: Lung",
+    "Physical Exam: Heart",
+    "Urinalysis",
+    "CT Abdomen/Pelvis",
+    "Lactate",
+    "Doppler Ultrasound",
+    "Consult: Surgery",
+    "CT Abdomen/Pelvis with contrast",
+    "Consult: Gastroenterology"
+  ],
+  "should_avoid": [
+    "Narcotics",
+    "Consult: Psychiatry"
+  ],
+  "rationale": {
+    "Physical Exam: General Survey": "Appropriate CCS order for Abdominal Abscess: Physical Exam: General Survey.",
+    "Physical Exam: Lung": "Evaluate chest and lungs as part of the initial exam for abdominal pain.",
+    "Physical Exam: Heart": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to abdominal pain.",
+    "Urinalysis": "Appropriate CCS order for Abdominal Abscess: Urinalysis.",
+    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Lactate": "Appropriate CCS order for Abdominal Abscess: Lactate.",
+    "Doppler Ultrasound": "Appropriate CCS order for Abdominal Abscess: Doppler Ultrasound.",
+    "Consult: Surgery": "Appropriate CCS order for Abdominal Abscess: Consult: Surgery.",
+    "CT Abdomen/Pelvis with contrast": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Consult: Gastroenterology": "Appropriate CCS order for Abdominal Abscess: Consult: Gastroenterology.",
+    "Narcotics": "CCS review: avoid this order for Abdominal Abscess — it does not change acute management.",
+    "Consult: Psychiatry": "CCS review: avoid this order for Abdominal Abscess — it does not change acute management."
+  },
+  "hpi": "This case illustrates the importance of timely diagnosis and management of abdominal pain. The differential diagnosis for abdominal pain is broad, and it is crucial to consider serious conditions such as appendicitis, diverticulitis, and abscess formation. Appropriate imaging and consultation can significantly impact patient outcomes.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this pain in my stomach. It hurts a lot.",
+    "history": "I’ve been feeling unwell for a few days. The pain started suddenly.",
+    "pain": "It feels sharp and is mostly on my lower right side."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "This case illustrates the importance of timely diagnosis and management of abdominal pain. The differential diagnosis for abdominal pain is broad, and it is crucial to consider serious conditions such as appendicitis, diverticulitis, and abscess formation. Appropriate imaging and consultation can significantly impact patient outcomes.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Laboratory Tests",
+    "Imaging Ordered",
+    "Consults"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

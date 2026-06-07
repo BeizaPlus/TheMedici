@@ -1,0 +1,53 @@
+{
+  "id": 149,
+  "topic": "Chronic Diarrhea",
+  "diagnosis": "Acute Myocardial Ischemia",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Aspirin 325mg",
+    "Atenolol 25 mg",
+    "Clopidogrel 75 mg",
+    "Tirofiban 2.5 mcg/kg/min"
+  ],
+  "should_avoid": [
+    "Magnesium Sulfate 324mg"
+  ],
+  "rationale": {
+    "Aspirin 325mg": "Appropriate CCS order for Acute Myocardial Ischemia: Aspirin 325mg.",
+    "Atenolol 25 mg": "Appropriate CCS order for Acute Myocardial Ischemia: Atenolol 25 mg.",
+    "Clopidogrel 75 mg": "Appropriate CCS order for Acute Myocardial Ischemia: Clopidogrel 75 mg.",
+    "Tirofiban 2.5 mcg/kg/min": "Appropriate CCS order for Acute Myocardial Ischemia: Tirofiban 2.5 mcg/kg/min.",
+    "Magnesium Sulfate 324mg": "CCS review: avoid this order for Acute Myocardial Ischemia — it does not change acute management."
+  },
+  "hpi": "A patient presents with chest pain and is diagnosed with Acute Myocardial Ischemia (AMI). The review page shows that the healthcare provider should have ordered aspirin, atenolol, clopidogrel, and tirofiban to manage the condition. Magnesium sulfate was inappropriately ordered, and nitroglycerine should be avoided.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — chronic diarrhea. I'm really scared.",
+    "history": "It's been getting worse. They said something about acute myocardial ischemia. A patient presents with chest pain and is diagnosed with Acute Myocardial Ischem...",
+    "pain": "This chronic diarrhea won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": "A patient presents with chest pain and is diagnosed with Acute Myocardial Ischemia (AMI). The review page shows that the healthcare provider should have ordered aspirin, atenolol, clopidogrel, and tirofiban to manage the condition. Magnesium sulfate was inappropriately ordered, and nitroglycerine should be avoided.",
+  "stacks": [
+    "Aspirin 325mg",
+    "Atenolol 25 mg"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

@@ -1,0 +1,68 @@
+{
+  "id": 110,
+  "topic": "Rash",
+  "diagnosis": "Syphilis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Assessment",
+    "Physical Exam: Skin",
+    "Laboratory: Syphilis",
+    "Antibiotic: Benzathine penicillin G, 2.4 million units IM",
+    "Laboratory: Comprehensive metabolic profile",
+    "Laboratory: Rapid Plasma Reagin (RPR)",
+    "Laboratory: HIV",
+    "Laboratory: Complete Blood Count (CBC)",
+    "Laboratory: Blood cultures"
+  ],
+  "should_avoid": [
+    "Physical Exam: Neurological",
+    "Laboratory: CT scan of the abdomen/pelvis"
+  ],
+  "rationale": {
+    "Physical Exam: General Assessment": "Appropriate CCS order for Syphilis: Physical Exam: General Assessment.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Syphilis.",
+    "Laboratory: Syphilis": "Appropriate CCS order for Syphilis: Laboratory: Syphilis.",
+    "Antibiotic: Benzathine penicillin G, 2.4 million units IM": "Appropriate CCS order for Syphilis: Antibiotic: Benzathine penicillin G, 2.4 million units IM.",
+    "Laboratory: Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Syphilis.",
+    "Laboratory: Rapid Plasma Reagin (RPR)": "Appropriate CCS order for Syphilis: Laboratory: Rapid Plasma Reagin (RPR).",
+    "Laboratory: HIV": "Appropriate CCS order for Syphilis: Laboratory: HIV.",
+    "Laboratory: Complete Blood Count (CBC)": "Laboratory testing when systemic illness or severity warrants labs in Syphilis.",
+    "Laboratory: Blood cultures": "Laboratory testing when systemic illness or severity warrants labs in Syphilis.",
+    "Physical Exam: Neurological": "CCS review: avoid this order for Syphilis — it does not change acute management.",
+    "Laboratory: CT scan of the abdomen/pelvis": "Advanced imaging is not indicated early for Syphilis when the diagnosis is clinical."
+  },
+  "hpi": "A 25-year-old male presented with a rash on his palms and soles with a history of sexual encounters that were not protected. The patient was diagnosed with secondary syphilis based on the clinical findings and serological tests. Syphilis is a sexually transmitted infection that can present with a variety of symptoms, including rashes, and it is important to obtain a thorough sexual history to guide diagnosis and treatment. The patient was treated with Benzathine penicillin G, and follow-up was arranged to ensure resolution of symptoms.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this rash on my hands and feet. I don't know what it could be.",
+    "history": "I had unprotected sex a few weeks ago. Now I have this rash.",
+    "pain": "It doesn't hurt, but it looks really bad."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "A 25-year-old male presented with a rash on his palms and soles with a history of sexual encounters that were not protected. The patient was diagnosed with secondary syphilis based on the clinical findings and serological tests. Syphilis is a sexually transmitted infection that can present with a variety of symptoms, including rashes, and it is important to obtain a thorough sexual history to guide diagnosis and treatment. The patient was treated with Benzathine penicillin G, and follow-up was arranged to ensure resolution of symptoms.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Laboratory: CBC with differential",
+    "Ordered: Comprehensive metabolic profile",
+    "Ordered: Cultures"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

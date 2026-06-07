@@ -1,0 +1,70 @@
+{
+  "id": 8,
+  "topic": "Burning During Urination",
+  "diagnosis": "Prostatitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Genitourinary",
+    "Physical Exam: Rectal Exam",
+    "Physical Exam: Abdominal Exam",
+    "Physical Exam: Skin",
+    "Urinalysis",
+    "Stool culture",
+    "CT abdomen/pelvis",
+    "Urine culture",
+    "Urine toxicology"
+  ],
+  "should_avoid": [
+    "Fluids only",
+    "Pain control"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for burning during urination.",
+    "Physical Exam: Genitourinary": "Appropriate CCS order for Prostatitis: Physical Exam: Genitourinary.",
+    "Physical Exam: Rectal Exam": "Appropriate CCS order for Prostatitis: Physical Exam: Rectal Exam.",
+    "Physical Exam: Abdominal Exam": "Appropriate CCS order for Prostatitis: Physical Exam: Abdominal Exam.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Prostatitis.",
+    "Urinalysis": "Appropriate CCS order for Prostatitis: Urinalysis.",
+    "Stool culture": "Laboratory testing when systemic illness or severity warrants labs in Prostatitis.",
+    "CT abdomen/pelvis": "Abdominal exam helps exclude alternative causes in a patient with burning during urination.",
+    "Urine culture": "Laboratory testing when systemic illness or severity warrants labs in Prostatitis.",
+    "Urine toxicology": "Appropriate CCS order for Prostatitis: Urine toxicology.",
+    "Fluids only": "CCS review: avoid this order for Prostatitis — it does not change acute management.",
+    "Pain control": "CCS review: avoid this order for Prostatitis — it does not change acute management."
+  },
+  "hpi": "A 45-year-old male presents with burning during urination. He has a history of recurrent urinary tract infections and is concerned about his prostate health. A quick diagnosis could guide treatment to avoid antibiotics and a urine culture.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this burning when I urinate. It feels awful.",
+    "history": "I've had this issue before, and it keeps coming back. I don't know what to do.",
+    "pain": "It hurts a lot when I try to go."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "A 45-year-old male presents with burning during urination. He has a history of recurrent urinary tract infections and is concerned about his prostate health. A quick diagnosis could guide treatment to avoid antibiotics and a urine culture.",
+  "stacks": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Genitourinary",
+    "Physical Exam: Rectal Exam",
+    "Physical Exam: Abdominal Exam",
+    "Physical Exam: Skin"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

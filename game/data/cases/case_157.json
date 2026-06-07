@@ -1,0 +1,67 @@
+{
+  "id": 157,
+  "topic": "Frequency of Urination",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Office / clinic",
+    "Fasting plasma glucose",
+    "HbA1c",
+    "Urinalysis glucose/ketones",
+    "Lipid panel",
+    "Microalbumin/creatinine ratio",
+    "Start metformin",
+    "Ophthalmology referral",
+    "Diabetic foot exam"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Office / clinic": "Appropriate CCS order for this diagnosis: Office / clinic.",
+    "Fasting plasma glucose": "Appropriate CCS order for this diagnosis: Fasting plasma glucose.",
+    "HbA1c": "Appropriate CCS order for this diagnosis: HbA1c.",
+    "Urinalysis glucose/ketones": "Appropriate CCS order for this diagnosis: Urinalysis glucose/ketones.",
+    "Lipid panel": "Appropriate CCS order for this diagnosis: Lipid panel.",
+    "Microalbumin/creatinine ratio": "Appropriate CCS order for this diagnosis: Microalbumin/creatinine ratio.",
+    "Start metformin": "Appropriate CCS order for this diagnosis: Start metformin.",
+    "Ophthalmology referral": "Appropriate CCS order for this diagnosis: Ophthalmology referral.",
+    "Diabetic foot exam": "Appropriate CCS order for this diagnosis: Diabetic foot exam."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — frequency of urination. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This frequency of urination won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Office / clinic",
+    "Fasting plasma glucose",
+    "HbA1c",
+    "Urinalysis glucose/ketones",
+    "Lipid panel",
+    "Microalbumin/creatinine ratio",
+    "Start metformin",
+    "Ophthalmology referral",
+    "Diabetic foot exam"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

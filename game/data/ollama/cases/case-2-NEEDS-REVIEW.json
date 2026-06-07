@@ -1,0 +1,78 @@
+{
+  "case_number": 106,
+  "title": "Delirium",
+  "specialty": "Emergency Medicine",
+  "chief_complaint": "Delirium",
+  "patient": {
+    "age": "60",
+    "sex": "female"
+  },
+  "location": "ED",
+  "diagnosis": "Subdural Hematoma",
+  "hpi_narrative": "A 60-year-old female presents with Delirium. Onset is acute, characterized by delirium. The severity is high as indicated by the patient's delirious state. Associated symptoms include none that can be definitively inferred from the provided data. Pertinent negatives are also not clearly stated. The single clinical question this case forces you to answer is 'What is the cause of the patient's altered mental status?'",
+  "physical_exam": {
+    "general": null,
+    "chest": null,
+    "lungs": null,
+    "abdomen": null,
+    "neurological": {
+      "delirious patient": true
+    },
+    "psychiatric": null
+  },
+  "stacks": [
+    {
+      "label": "CT of head without contrast",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 0,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "The title does not match the actual case chief complaint in OCR. The provided data has 'Delirium' as the title, but in the original text it is 'Altered Mental Status - Neurology'.",
+      "fix": "Update the title to 'Altered Mental Status - Neurology'"
+    },
+    {
+      "field": "stacks",
+      "problem": "The stack labels contain UI noise such as 'Should have Ordered' and 'Correctly Ordered'. These should be removed, and the labels should only contain clean clinical orders.",
+      "fix": "Clean the stack labels to remove UI noise."
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "The HPI narrative contains no brackets or placeholders, but it does not read like a real clinical presentation. It lacks specific symptoms and vital signs.",
+      "fix": "Add specific symptoms and vital signs to the HPI narrative."
+    },
+    {
+      "field": "physical_exam",
+      "problem": "The physical exam findings are not correctly extracted by the system. Only the 'neurological' section has a finding, while the others are null.",
+      "fix": "Extract and populate all relevant physical exam findings."
+    },
+    {
+      "field": "overall_confidence",
+      "problem": "The overall confidence is very low (0). This indicates that the data is not ready to serve to a learner.",
+      "fix": "Improve the accuracy and completeness of the data to increase the overall confidence."
+    }
+  ]
+}

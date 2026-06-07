@@ -1,0 +1,67 @@
+{
+  "id": 117,
+  "topic": "Chest Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "EKG: To evaluate for signs of ischemia or rhythm abnormalities",
+    "Troponin level: For diagnosis and monitoring of ACS, including myocardial infarction",
+    "Chest X-ray: May help identify conditions such as pneumonia, pulmonary edema, or aortic dissection",
+    "Cardiology consult: For further evaluation, management, and potential intervention",
+    "Pain management: Administration of pain relievers appropriate for acute chest pain",
+    "Oxygen",
+    "IV access ×2",
+    "order: time-sensitive interventions first"
+  ],
+  "should_avoid": [
+    "Ordering unnecessary tests or interventions without a specific clinical indication"
+  ],
+  "rationale": {
+    "EKG: To evaluate for signs of ischemia or rhythm abnormalities": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+    "Troponin level: For diagnosis and monitoring of ACS, including myocardial infarction": "Appropriate CCS order for this diagnosis: Troponin level: For diagnosis and monitoring of ACS, including myocardial infarction.",
+    "Chest X-ray: May help identify conditions such as pneumonia, pulmonary edema, or aortic dissection": "Evaluate chest and lungs as part of the initial exam for chest pain.",
+    "Cardiology consult: For further evaluation, management, and potential intervention": "Appropriate CCS order for this diagnosis: Cardiology consult: For further evaluation, management, and potential intervention.",
+    "Pain management: Administration of pain relievers appropriate for acute chest pain": "Evaluate chest and lungs as part of the initial exam for chest pain.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
+    "order: time-sensitive interventions first": "Appropriate CCS order for this diagnosis: order: time-sensitive interventions first.",
+    "Ordering unnecessary tests or interventions without a specific clinical indication": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — chest pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This chest pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "EKG: To evaluate for signs of ischemia or rhythm abnormalities",
+    "Troponin level: For diagnosis and monitoring of ACS, including myocardial infarction",
+    "Chest X-ray: May help identify conditions such as pneumonia, pulmonary edema, or aortic dissection",
+    "Cardiology consult: For further evaluation, management, and potential intervention",
+    "Pain management: Administration of pain relievers appropriate for acute chest pain",
+    "Oxygen",
+    "IV access ×2",
+    "order: time-sensitive interventions first"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

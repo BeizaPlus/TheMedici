@@ -1,0 +1,62 @@
+{
+  "id": 85,
+  "topic": "Amenorrhea",
+  "diagnosis": "Polycystic Ovary Syndrome (PCOS)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Prepare Dean's List: Amenorrhea",
+    "Prepare Dean's List: PCOS",
+    "Prepare Dean's List: Endocrinology",
+    "Prepare Dean's List: Gynecology",
+    "Prepare Dean's List: Hormones",
+    "Lipid panel",
+    "Endometrial biopsy"
+  ],
+  "should_avoid": [
+    "Jade's test: Hysteroscopy"
+  ],
+  "rationale": {
+    "Prepare Dean's List: Amenorrhea": "Appropriate CCS order for Polycystic Ovary Syndrome (PCOS): Prepare Dean's List: Amenorrhea.",
+    "Prepare Dean's List: PCOS": "Appropriate CCS order for Polycystic Ovary Syndrome (PCOS): Prepare Dean's List: PCOS.",
+    "Prepare Dean's List: Endocrinology": "Appropriate CCS order for Polycystic Ovary Syndrome (PCOS): Prepare Dean's List: Endocrinology.",
+    "Prepare Dean's List: Gynecology": "Appropriate CCS order for Polycystic Ovary Syndrome (PCOS): Prepare Dean's List: Gynecology.",
+    "Prepare Dean's List: Hormones": "Patient education and counseling are part of definitive care for Polycystic Ovary Syndrome (PCOS).",
+    "Lipid panel": "Appropriate CCS order for Polycystic Ovary Syndrome (PCOS): Lipid panel.",
+    "Endometrial biopsy": "Diagnostic report or tissue diagnosis clarifies the cause of amenorrhea.",
+    "Jade's test: Hysteroscopy": "CCS review: avoid this order for Polycystic Ovary Syndrome (PCOS) — it does not change acute management."
+  },
+  "hpi": "This patient presents with amenorrhea, likely secondary to polycystic ovary syndrome (PCOS). She has a history of irregular menstrual cycles, obesity, and insulin resistance. The management of PCOS includes lifestyle modifications, hormonal therapy, and monitoring for potential complications such as endometrial hyperplasia. It is important to address the patient's concerns regarding fertility and provide education on the condition. Follow-up should include regular monitoring of metabolic parameters and menstrual cycle regulation.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really worried about my missed periods. It's been months.",
+    "history": "I have always had irregular cycles, but this is different. I feel so confused.",
+    "pain": "I don't have pain, but I'm scared about what this means for my health."
+  },
+  "ccs_category": "OB/GYN",
+  "case_summary": "This patient presents with amenorrhea, likely secondary to polycystic ovary syndrome (PCOS). She has a history of irregular menstrual cycles, obesity, and insulin resistance. The management of PCOS includes lifestyle modifications, hormonal therapy, and monitoring for potential complications such as endometrial hyperplasia. It is important to address the patient's concerns regarding fertility and provide education on the condition. Follow-up should include regular monitoring of metabolic parameters and menstrual cycle regulation.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following: Physical exam",
+    "Ordered: Hormones, follicle stimulating",
+    "Ordered: Insulin, thyroid stimulating",
+    "Ordered: HCG, CBC"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing."
+}

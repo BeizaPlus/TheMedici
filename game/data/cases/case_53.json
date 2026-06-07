@@ -1,0 +1,55 @@
+{
+  "id": 53,
+  "topic": "Shortness of Breath",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain arterial blood gas (ABG) analysis",
+    "Echocardiogram to assess heart function",
+    "Oxygen",
+    "IV access ×2 large-bore"
+  ],
+  "should_avoid": [
+    "Chest X-ray (initial test)"
+  ],
+  "rationale": {
+    "Obtain arterial blood gas (ABG) analysis": "Appropriate CCS order for this diagnosis: Obtain arterial blood gas (ABG) analysis.",
+    "Echocardiogram to assess heart function": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2 large-bore": "Appropriate CCS order for this diagnosis: IV access ×2 large-bore.",
+    "Chest X-ray (initial test)": "This imaging is not required for the expected CCS pathway in this diagnosis."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — shortness of breath. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This shortness of breath won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain arterial blood gas (ABG) analysis",
+    "Echocardiogram to assess heart function",
+    "Oxygen",
+    "IV access ×2 large-bore"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

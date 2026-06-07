@@ -1,0 +1,64 @@
+{
+  "id": 106,
+  "topic": "Fatigue",
+  "diagnosis": "Neutropenic Fever",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Skin",
+    "Physical Exam: HEENT / Neck",
+    "Physical Exam: Lymph Nodes",
+    "Physical Exam: Chest and Lung",
+    "Bacterial culture: blood",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Admit to ICU"
+  ],
+  "should_avoid": [
+    "Ordering unnecessary imaging such as a CT scan or MRI since the diagnosis is unknown"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for fatigue.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Neutropenic Fever.",
+    "Physical Exam: HEENT / Neck": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Neutropenic Fever.",
+    "Physical Exam: Lymph Nodes": "Targeted Physical Exam: Lymph Nodes exam supports the differential for Neutropenic Fever.",
+    "Physical Exam: Chest and Lung": "Evaluate chest and lungs as part of the initial exam for fatigue.",
+    "Bacterial culture: blood": "Laboratory testing when systemic illness or severity warrants labs in Neutropenic Fever.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Neutropenic Fever.",
+    "Admit to ICU": "Appropriate CCS order for Neutropenic Fever: Admit to ICU.",
+    "Ordering unnecessary imaging such as a CT scan or MRI since the diagnosis is unknown": "Advanced imaging is not indicated early for Neutropenic Fever when the diagnosis is clinical."
+  },
+  "hpi": "Clinical Summary: This patient was admitted with neutropenic fever. Tumor lysis syndrome was considered. The patient was started on IV fluids, antibiotics, and supportive care. The patient was admitted to the ICU for close monitoring and further management. The patient was noted to have a high ANC, >500, but the patient was still at risk for infection. It is important to understand the severity of the patient's neutropenia. In this case, the patient is severely neutropenic.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm feeling really weak and tired. I'm scared something is seriously wrong.",
+    "history": "I just started feeling unwell. I have a fever and I don't know why.",
+    "pain": "I have a dull ache all over my body."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Clinical Summary: This patient was admitted with neutropenic fever. Tumor lysis syndrome was considered. The patient was started on IV fluids, antibiotics, and supportive care. The patient was admitted to the ICU for close monitoring and further management. The patient was noted to have a high ANC, >500, but the patient was still at risk for infection. It is important to understand the severity of the patient's neutropenia. In this case, the patient is severely neutropenic.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Ordered: CBC with differential",
+    "Ordered: Bacterial culture: blood",
+    "Ordered: Basic metabolic profile"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

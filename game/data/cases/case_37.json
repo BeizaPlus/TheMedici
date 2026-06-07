@@ -1,0 +1,58 @@
+{
+  "id": 37,
+  "topic": "Fatigue",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Laboratory tests: CBC, comprehensive metabolic panel, ESR/CRP, HIV, Hepatitis panels, Lyme disease test, thyroid function tests",
+    "Imaging studies (if clinically indicated): Chest X-ray, MRI/CT if neurological symptoms present",
+    "Oxygen",
+    "IV access ×2",
+    "glucose check"
+  ],
+  "should_avoid": [
+    "Ordering extensive and unnecessary testing at this stage may lead to increased cost and potential harm to the patient without providing additional diagnostic value."
+  ],
+  "rationale": {
+    "Laboratory tests: CBC, comprehensive metabolic panel, ESR/CRP, HIV, Hepatitis panels, Lyme disease test, thyroid function tests": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Imaging studies (if clinically indicated): Chest X-ray, MRI/CT if neurological symptoms present": "Evaluate chest and lungs as part of the initial exam for fatigue.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
+    "glucose check": "Appropriate CCS order for this diagnosis: glucose check.",
+    "Ordering extensive and unnecessary testing at this stage may lead to increased cost and potential harm to the patient without providing additional diagnostic value.": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — fatigue. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This fatigue won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Laboratory tests: CBC, comprehensive metabolic panel, ESR/CRP, HIV, Hepatitis panels, Lyme disease test, thyroid function tests",
+    "Imaging studies (if clinically indicated): Chest X-ray, MRI/CT if neurological symptoms present",
+    "Oxygen",
+    "IV access ×2",
+    "glucose check"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

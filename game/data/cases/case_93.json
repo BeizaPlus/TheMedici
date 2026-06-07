@@ -1,0 +1,64 @@
+{
+  "id": 93,
+  "topic": "Altered Mental Status",
+  "diagnosis": "Septic Shock",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Head CT",
+    "CBC",
+    "Lactate",
+    "Blood Cultures",
+    "IV Fluids",
+    "Urinalysis",
+    "Electrolytes",
+    "Chest X-ray"
+  ],
+  "should_avoid": [
+    "CT Abdomen/Pelvis"
+  ],
+  "rationale": {
+    "Head CT": "Appropriate CCS order for Septic Shock: Head CT.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Septic Shock.",
+    "Lactate": "Appropriate CCS order for Septic Shock: Lactate.",
+    "Blood Cultures": "Laboratory testing when systemic illness or severity warrants labs in Septic Shock.",
+    "IV Fluids": "Appropriate CCS order for Septic Shock: IV Fluids.",
+    "Urinalysis": "Appropriate CCS order for Septic Shock: Urinalysis.",
+    "Electrolytes": "Appropriate CCS order for Septic Shock: Electrolytes.",
+    "Chest X-ray": "Evaluate chest and lungs as part of the initial exam for altered mental status.",
+    "CT Abdomen/Pelvis": "Advanced imaging is not indicated early for Septic Shock when the diagnosis is clinical."
+  },
+  "hpi": "This case illustrates the importance of recognizing septic shock in a patient with altered mental status. Early identification and treatment are crucial for improving outcomes. Key interventions include fluid resuscitation, broad-spectrum antibiotics, and monitoring for organ dysfunction.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I feel really confused and scared. I don't know what's happening to me.",
+    "history": "I was fine earlier, but then everything got blurry. I can't remember much.",
+    "pain": "It hurts a bit in my stomach."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "This case illustrates the importance of recognizing septic shock in a patient with altered mental status. Early identification and treatment are crucial for improving outcomes. Key interventions include fluid resuscitation, broad-spectrum antibiotics, and monitoring for organ dysfunction.",
+  "stacks": [
+    "Vitals Ordered",
+    "Head CT",
+    "CBC",
+    "Lactate",
+    "Blood Cultures"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

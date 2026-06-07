@@ -1,0 +1,55 @@
+{
+  "id": 116,
+  "topic": "Headache",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Initial assessment and monitoring for potential signs of serious conditions (e.g., neurological examination, vital signs, and observation)",
+    "Imaging (CT or MRI) if the clinical situation warrants it to rule out structural causes such as Subarachnoid Hemorrhage",
+    "Oxygen",
+    "IV access ×2 large-bore"
+  ],
+  "should_avoid": [
+    "Initiation of specific treatment for migraine or other secondary headaches without first ruling out serious conditions"
+  ],
+  "rationale": {
+    "Initial assessment and monitoring for potential signs of serious conditions (e.g., neurological examination, vital signs, and observation)": "Targeted Initial assessment and monitoring for potential signs of serious conditions (e.g., neurological examination, vital signs, and observation) exam supports the differential for this diagnosis.",
+    "Imaging (CT or MRI) if the clinical situation warrants it to rule out structural causes such as Subarachnoid Hemorrhage": "Appropriate CCS order for this diagnosis: Imaging (CT or MRI) if the clinical situation warrants it to rule out structural causes such as Subarachnoid Hemorrhage.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2 large-bore": "Appropriate CCS order for this diagnosis: IV access ×2 large-bore.",
+    "Initiation of specific treatment for migraine or other secondary headaches without first ruling out serious conditions": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — headache. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This headache won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Initial assessment and monitoring for potential signs of serious conditions (e.g., neurological examination, vital signs, and observation)",
+    "Imaging (CT or MRI) if the clinical situation warrants it to rule out structural causes such as Subarachnoid Hemorrhage",
+    "Oxygen",
+    "IV access ×2 large-bore"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

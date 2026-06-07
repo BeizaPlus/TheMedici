@@ -1,0 +1,68 @@
+{
+  "id": 56,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "NPO",
+    "IV Fluids",
+    "Ordered: Antibiotics, unknown specific list",
+    "Ordered: Treatment: Dextrose, normal saline",
+    "Ordered: CBC with differential",
+    "Physical Exam: General appearance",
+    "Physical Exam: Abdominal exam",
+    "Physical Exam: Neurological exam",
+    "Physical Exam: Skin exam",
+    "Physical Exam: Extremities exam"
+  ],
+  "should_avoid": [
+    "Glucose-6-Phosphate-Dehydrogenase: Does not affect grade"
+  ],
+  "rationale": {
+    "NPO": "Appropriate CCS order for Glucose-6-Phosphate-Dehydrogenase Deficiency: NPO.",
+    "IV Fluids": "Appropriate CCS order for Glucose-6-Phosphate-Dehydrogenase Deficiency: IV Fluids.",
+    "Ordered: Antibiotics, unknown specific list": "Appropriate CCS order for Glucose-6-Phosphate-Dehydrogenase Deficiency: Ordered: Antibiotics, unknown specific list.",
+    "Ordered: Treatment: Dextrose, normal saline": "Appropriate CCS order for Glucose-6-Phosphate-Dehydrogenase Deficiency: Ordered: Treatment: Dextrose, normal saline.",
+    "Ordered: CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Glucose-6-Phosphate-Dehydrogenase Deficiency.",
+    "Physical Exam: General appearance": "Assess how ill the patient appears before focused testing for abdominal pain.",
+    "Physical Exam: Abdominal exam": "Appropriate CCS order for Glucose-6-Phosphate-Dehydrogenase Deficiency: Physical Exam: Abdominal exam.",
+    "Physical Exam: Neurological exam": "Targeted Physical Exam: Neurological exam exam supports the differential for Glucose-6-Phosphate-Dehydrogenase Deficiency.",
+    "Physical Exam: Skin exam": "Skin exam may show rashes or systemic signs relevant to Glucose-6-Phosphate-Dehydrogenase Deficiency.",
+    "Physical Exam: Extremities exam": "Targeted Physical Exam: Extremities exam exam supports the differential for Glucose-6-Phosphate-Dehydrogenase Deficiency.",
+    "Glucose-6-Phosphate-Dehydrogenase: Does not affect grade": "Advanced imaging is not indicated early for Glucose-6-Phosphate-Dehydrogenase Deficiency when the diagnosis is clinical."
+  },
+  "hpi": "Patient: 26-year-old male, presents with abdominal pain. The important medical history includes hypertension. The patient has a history of G6PD deficiency. The patient was given IV fluids and antibiotics. The patient was also monitored for any signs of hemolysis. The patient was discharged with instructions to follow up with his primary care physician. The important teaching points include the management of G6PD deficiency and the importance of avoiding triggers.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this pain in my stomach. I don't know what's happening.",
+    "history": "I have a history of G6PD deficiency. I was fine until now.",
+    "pain": "It hurts a lot, especially when I move."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "Patient: 26-year-old male, presents with abdominal pain. The important medical history includes hypertension. The patient has a history of G6PD deficiency. The patient was given IV fluids and antibiotics. The patient was also monitored for any signs of hemolysis. The patient was discharged with instructions to follow up with his primary care physician. The important teaching points include the management of G6PD deficiency and the importance of avoiding triggers.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Ordered: Antibiotics, unknown specific list",
+    "Ordered: Treatment: Dextrose, normal saline",
+    "Ordered: CBC with differential"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

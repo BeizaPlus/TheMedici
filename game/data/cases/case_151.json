@@ -1,0 +1,58 @@
+{
+  "id": 151,
+  "topic": "Found Unconscious",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Emergency Department",
+    "100% O₂ non-rebreather",
+    "Carboxyhemoglobin level",
+    "IV access",
+    "Cardiac monitor",
+    "Neurologic checks"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Emergency Department": "Appropriate CCS order for this diagnosis: Emergency Department.",
+    "100% O₂ non-rebreather": "Appropriate CCS order for this diagnosis: 100% O₂ non-rebreather.",
+    "Carboxyhemoglobin level": "Appropriate CCS order for this diagnosis: Carboxyhemoglobin level.",
+    "IV access": "Appropriate CCS order for this diagnosis: IV access.",
+    "Cardiac monitor": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to found unconscious.",
+    "Neurologic checks": "Targeted Neurologic checks exam supports the differential for this diagnosis."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — found unconscious. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This found unconscious won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Emergency Department",
+    "100% O₂ non-rebreather",
+    "Carboxyhemoglobin level",
+    "IV access",
+    "Cardiac monitor",
+    "Neurologic checks"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

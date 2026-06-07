@@ -1,0 +1,55 @@
+{
+  "id": 144,
+  "topic": "Short Stature",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Blood tests: Complete blood count (CBC), comprehensive metabolic panel, thyroid function tests, IGF-1 level, and bone age X-ray",
+    "Consultations: Pediatric Endocrinologist, Geneticist",
+    "Oxygen",
+    "Order"
+  ],
+  "should_avoid": [
+    "Genetic testing without a confirmed diagnosis or indicative symptoms"
+  ],
+  "rationale": {
+    "Blood tests: Complete blood count (CBC), comprehensive metabolic panel, thyroid function tests, IGF-1 level, and bone age X-ray": "Imaging supports diagnosis when exam findings warrant it for this diagnosis.",
+    "Consultations: Pediatric Endocrinologist, Geneticist": "Appropriate CCS order for this diagnosis: Consultations: Pediatric Endocrinologist, Geneticist.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "Order": "Appropriate CCS order for this diagnosis: Order.",
+    "Genetic testing without a confirmed diagnosis or indicative symptoms": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — short stature. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This short stature won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Blood tests: Complete blood count (CBC), comprehensive metabolic panel, thyroid function tests, IGF-1 level, and bone age X-ray",
+    "Consultations: Pediatric Endocrinologist, Geneticist",
+    "Oxygen",
+    "Order"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

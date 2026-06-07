@@ -1,0 +1,68 @@
+{
+  "id": 68,
+  "topic": "Muscle Weakness",
+  "diagnosis": "Myopathy due to Simvastatin and Gemfibrozil",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Extremities",
+    "Physical Exam: Neurological",
+    "Physical Exam: Cardiovascular",
+    "Physical Exam: Abdominal",
+    "Remove Statin therapy",
+    "TSH",
+    "Sodium levels",
+    "Electrolytes",
+    "Consider possible causes of CKD"
+  ],
+  "should_avoid": [
+    "CT Abdomen/Pelvis"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for muscle weakness.",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Myopathy due to Simvastatin and Gemfibrozil.",
+    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Myopathy due to Simvastatin and Gemfibrozil.",
+    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to muscle weakness.",
+    "Physical Exam: Abdominal": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: Physical Exam: Abdominal.",
+    "Remove Statin therapy": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: Remove Statin therapy.",
+    "TSH": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: TSH.",
+    "Sodium levels": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: Sodium levels.",
+    "Electrolytes": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: Electrolytes.",
+    "Consider possible causes of CKD": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: Consider possible causes of CKD.",
+    "CT Abdomen/Pelvis": "Advanced imaging is not indicated early for Myopathy due to Simvastatin and Gemfibrozil when the diagnosis is clinical."
+  },
+  "hpi": "The patient is a 68-year-old female with a history of hyperlipidemia and diabetes who presented with muscle weakness. She was started on Simvastatin and Gemfibrozil for her hyperlipidemia. After a few weeks, she developed muscle weakness and was found to have elevated creatine kinase levels. The case highlights the importance of monitoring for myopathy in patients on statins, especially when combined with other medications that can increase the risk of muscle injury.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My muscles feel weak and I can't do things I used to.",
+    "history": "I started feeling weak after taking my new medication. I didn't think it would affect me like this.",
+    "pain": "It feels like my legs are heavy and I can't lift them."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "The patient is a 68-year-old female with a history of hyperlipidemia and diabetes who presented with muscle weakness. She was started on Simvastatin and Gemfibrozil for her hyperlipidemia. After a few weeks, she developed muscle weakness and was found to have elevated creatine kinase levels. The case highlights the importance of monitoring for myopathy in patients on statins, especially when combined with other medications that can increase the risk of muscle injury.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Laboratory Tests",
+    "Imaging",
+    "Consultation"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

@@ -1,0 +1,69 @@
+{
+  "id": 49,
+  "topic": "Headache",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain a detailed history, including family history of headaches, trigger factors, and associated symptoms",
+    "Perform a physical examination focusing on the neurological system",
+    "Order appropriate laboratory tests (CBC, ESR, glucose, electrolytes, thyroid function tests) to rule out secondary causes if necessary",
+    "Consider imaging studies such as CT or MRI of the brain if symptoms persist, worsen, or are atypical",
+    "If no secondary cause is identified and headaches meet criteria for migraine or tension-type headache, initiate appropriate treatment (e.g., analgesics, antiemetics, antimigraine drugs)",
+    "Refer the patient to a neurologist for further evaluation and management if necessary",
+    "Oxygen",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+  ],
+  "should_avoid": [
+    "order1",
+    "Initiate treatment with strong narcotics or corticosteroids without first attempting non-pharmacologic treatments, obtaining a proper diagnosis, and ruling out secondary causes"
+  ],
+  "rationale": {
+    "Obtain a detailed history, including family history of headaches, trigger factors, and associated symptoms": "Appropriate CCS order for this diagnosis: Obtain a detailed history, including family history of headaches, trigger factors, and associated symptoms.",
+    "Perform a physical examination focusing on the neurological system": "Targeted Perform a physical examination focusing on the neurological system exam supports the differential for this diagnosis.",
+    "Order appropriate laboratory tests (CBC, ESR, glucose, electrolytes, thyroid function tests) to rule out secondary causes if necessary": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Consider imaging studies such as CT or MRI of the brain if symptoms persist, worsen, or are atypical": "Appropriate CCS order for this diagnosis: Consider imaging studies such as CT or MRI of the brain if symptoms persist, worsen, or are atypical.",
+    "If no secondary cause is identified and headaches meet criteria for migraine or tension-type headache, initiate appropriate treatment (e.g., analgesics, antiemetics, antimigraine drugs)": "Appropriate CCS order for this diagnosis: If no secondary cause is identified and headaches meet criteria for migraine or tension-type headache, initiate appropriate treatment (e.g., analgesics, antiemetics, antimigraine drugs).",
+    "Refer the patient to a neurologist for further evaluation and management if necessary": "Targeted Refer the patient to a neurologist for further evaluation and management if necessary exam supports the differential for this diagnosis.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "Appropriate CCS order for this diagnosis: Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check).",
+    "order1": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+    "Initiate treatment with strong narcotics or corticosteroids without first attempting non-pharmacologic treatments, obtaining a proper diagnosis, and ruling out secondary causes": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I don't feel right. Something's wrong.",
+    "history": "It started... I don't know when.",
+    "pain": "Everything hurts."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain a detailed history, including family history of headaches, trigger factors, and associated symptoms",
+    "Perform a physical examination focusing on the neurological system",
+    "Order appropriate laboratory tests (CBC, ESR, glucose, electrolytes, thyroid function tests) to rule out secondary causes if necessary",
+    "Consider imaging studies such as CT or MRI of the brain if symptoms persist, worsen, or are atypical",
+    "If no secondary cause is identified and headaches meet criteria for migraine or tension-type headache, initiate appropriate treatment (e.g., analgesics, antiemetics, antimigraine drugs)",
+    "Refer the patient to a neurologist for further evaluation and management if necessary",
+    "Oxygen",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Screenshot file is identical to case 48; re-capture needed."
+}

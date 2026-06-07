@@ -1,0 +1,60 @@
+{
+  "id": 16,
+  "topic": "Intra Abdominal Hypertension",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "CT Abdomen/Pelvis",
+    "Fluid Resuscitation",
+    "Lactate",
+    "CBC",
+    "Type and Crossmatch",
+    "Abdominal Ultrasound"
+  ],
+  "should_avoid": [
+    "CT Chest"
+  ],
+  "rationale": {
+    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with intra abdominal hypertension.",
+    "Fluid Resuscitation": "Appropriate CCS order for this diagnosis: Fluid Resuscitation.",
+    "Lactate": "Appropriate CCS order for this diagnosis: Lactate.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Type and Crossmatch": "Appropriate CCS order for this diagnosis: Type and Crossmatch.",
+    "Abdominal Ultrasound": "Appropriate CCS order for this diagnosis: Abdominal Ultrasound.",
+    "CT Chest": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+  },
+  "hpi": "Intra-abdominal hypertension (IAH) is defined as an intra-abdominal pressure (IAP) greater than 12 mmHg. It is a common complication in critically ill patients, particularly those with trauma, sepsis, or abdominal surgery. IAH can lead to abdominal compartment syndrome (ACS), which can cause organ dysfunction and failure. Early recognition and management of IAH are crucial to prevent progression to ACS. Treatment options include fluid resuscitation, decompression, and monitoring of intra-abdominal pressure.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm feeling a lot of pressure in my abdomen. It's really uncomfortable.",
+    "history": "I had a car accident and now my stomach hurts. I can't breathe well.",
+    "pain": "It feels like a tight band around my belly."
+  },
+  "ccs_category": "PTT Trauma",
+  "case_summary": "Intra-abdominal hypertension (IAH) is defined as an intra-abdominal pressure (IAP) greater than 12 mmHg. It is a common complication in critically ill patients, particularly those with trauma, sepsis, or abdominal surgery. IAH can lead to abdominal compartment syndrome (ACS), which can cause organ dysfunction and failure. Early recognition and management of IAH are crucial to prevent progression to ACS. Treatment options include fluid resuscitation, decompression, and monitoring of intra-abdominal pressure.",
+  "stacks": [
+    "CT Abdomen/Pelvis",
+    "Fluid Resuscitation",
+    "Lactate",
+    "CBC",
+    "Type and Crossmatch"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

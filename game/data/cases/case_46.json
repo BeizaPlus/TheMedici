@@ -1,0 +1,60 @@
+{
+  "id": 46,
+  "topic": "Guillain-Barré Syndrome",
+  "diagnosis": "Guillain-Barré Syndrome",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Neurology Consult",
+    "IVIG",
+    "Labs Ordered",
+    "CT Head",
+    "MRI Brain",
+    "Lumbar Puncture"
+  ],
+  "should_avoid": [
+    "CT Chest"
+  ],
+  "rationale": {
+    "Neurology Consult": "Targeted Neurology Consult exam supports the differential for Guillain-Barré Syndrome.",
+    "IVIG": "Appropriate CCS order for Guillain-Barré Syndrome: IVIG.",
+    "Labs Ordered": "Appropriate CCS order for Guillain-Barré Syndrome: Labs Ordered.",
+    "CT Head": "Appropriate CCS order for Guillain-Barré Syndrome: CT Head.",
+    "MRI Brain": "Appropriate CCS order for Guillain-Barré Syndrome: MRI Brain.",
+    "Lumbar Puncture": "Appropriate CCS order for Guillain-Barré Syndrome: Lumbar Puncture.",
+    "CT Chest": "Advanced imaging is not indicated early for Guillain-Barré Syndrome when the diagnosis is clinical."
+  },
+  "hpi": "Guillain-Barré syndrome (GBS) is an acute inflammatory demyelinating polyneuropathy characterized by rapid onset of muscle weakness and areflexia. It is often preceded by an infection. Diagnosis is primarily clinical, but can be supported by lumbar puncture showing albuminocytologic dissociation. Treatment includes supportive care and may involve IVIG or plasmapheresis.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I feel weak and my legs are giving out. I'm really scared.",
+    "history": "I had a cold a few weeks ago, and now I can't walk properly.",
+    "pain": "My legs feel heavy and tingly."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Guillain-Barré syndrome (GBS) is an acute inflammatory demyelinating polyneuropathy characterized by rapid onset of muscle weakness and areflexia. It is often preceded by an infection. Diagnosis is primarily clinical, but can be supported by lumbar puncture showing albuminocytologic dissociation. Treatment includes supportive care and may involve IVIG or plasmapheresis.",
+  "stacks": [
+    "Neurology Consult",
+    "IVIG",
+    "Labs Ordered",
+    "CT Head",
+    "MRI Brain"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

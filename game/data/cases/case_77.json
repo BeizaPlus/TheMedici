@@ -1,0 +1,62 @@
+{
+  "id": 77,
+  "topic": "Chest Pain",
+  "diagnosis": "Atrial Fibrillation",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "12 Lead EKG",
+    "Cardiac Enzymes",
+    "Chest X-Ray",
+    "CBC",
+    "Basic Metabolic Panel",
+    "Troponin",
+    "D-Dimer"
+  ],
+  "should_avoid": [
+    "CT Chest"
+  ],
+  "rationale": {
+    "12 Lead EKG": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+    "Cardiac Enzymes": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Chest X-Ray": "Evaluate chest and lungs as part of the initial exam for chest pain.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Atrial Fibrillation.",
+    "Basic Metabolic Panel": "Laboratory testing when systemic illness or severity warrants labs in Atrial Fibrillation.",
+    "Troponin": "Appropriate CCS order for Atrial Fibrillation: Troponin.",
+    "D-Dimer": "Appropriate CCS order for Atrial Fibrillation: D-Dimer.",
+    "CT Chest": "Advanced imaging is not indicated early for Atrial Fibrillation when the diagnosis is clinical."
+  },
+  "hpi": "This case involves a patient presenting with chest pain and a history of atrial fibrillation. The appropriate diagnostic orders were placed, but some critical tests were missed. The patient was stabilized, and further management was discussed. It is essential to recognize the signs of atrial fibrillation and the need for timely intervention.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My chest hurts a lot.",
+    "history": "I have a history of heart problems. This pain started suddenly.",
+    "pain": "It feels like a tight pressure in my chest."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "This case involves a patient presenting with chest pain and a history of atrial fibrillation. The appropriate diagnostic orders were placed, but some critical tests were missed. The patient was stabilized, and further management was discussed. It is essential to recognize the signs of atrial fibrillation and the need for timely intervention.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "12 Lead EKG",
+    "Cardiac Enzymes",
+    "Chest X-Ray"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

@@ -1,0 +1,72 @@
+{
+  "id": 89,
+  "topic": "Burns to Face and Buttocks",
+  "diagnosis": "Non-Accidental Trauma (Child Abuse)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Abdominal",
+    "CXR - Anterior-Posterior",
+    "Physical Exam: General",
+    "Physical Exam: Skin",
+    "Physical Exam: HEENT",
+    "Physical Exam: Extremities",
+    "Physical Exam: Neuro",
+    "Physical Exam: Psych",
+    "Physical Exam: Buttocks",
+    "Physical Exam: Face",
+    "Consult: Surgery",
+    "Consult: Social Work"
+  ],
+  "should_avoid": [
+    "Legislation: Child Abuse"
+  ],
+  "rationale": {
+    "Physical Exam: Abdominal": "Appropriate CCS order for Non-Accidental Trauma (Child Abuse): Physical Exam: Abdominal.",
+    "CXR - Anterior-Posterior": "Appropriate CCS order for Non-Accidental Trauma (Child Abuse): CXR - Anterior-Posterior.",
+    "Physical Exam: General": "Appropriate CCS order for Non-Accidental Trauma (Child Abuse): Physical Exam: General.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Non-Accidental Trauma (Child Abuse).",
+    "Physical Exam: HEENT": "Targeted Physical Exam: HEENT exam supports the differential for Non-Accidental Trauma (Child Abuse).",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Non-Accidental Trauma (Child Abuse).",
+    "Physical Exam: Neuro": "Targeted Physical Exam: Neuro exam supports the differential for Non-Accidental Trauma (Child Abuse).",
+    "Physical Exam: Psych": "Appropriate CCS order for Non-Accidental Trauma (Child Abuse): Physical Exam: Psych.",
+    "Physical Exam: Buttocks": "Appropriate CCS order for Non-Accidental Trauma (Child Abuse): Physical Exam: Buttocks.",
+    "Physical Exam: Face": "Appropriate CCS order for Non-Accidental Trauma (Child Abuse): Physical Exam: Face.",
+    "Consult: Surgery": "Appropriate CCS order for Non-Accidental Trauma (Child Abuse): Consult: Surgery.",
+    "Consult: Social Work": "Appropriate CCS order for Non-Accidental Trauma (Child Abuse): Consult: Social Work.",
+    "Legislation: Child Abuse": "CCS review: avoid this order for Non-Accidental Trauma (Child Abuse) — it does not change acute management."
+  },
+  "hpi": "The patient is a young child with burns on the face and buttocks. The history is concerning for non-accidental trauma. A thorough evaluation is necessary to assess for potential child abuse. The child should be evaluated by social work and surgery for further management.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared and my burns hurt a lot.",
+    "history": "I was playing and fell, but I don't remember how I got these burns.",
+    "pain": "It hurts really bad, especially on my face and butt."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "The patient is a young child with burns on the face and buttocks. The history is concerning for non-accidental trauma. A thorough evaluation is necessary to assess for potential child abuse. The child should be evaluated by social work and surgery for further management.",
+  "stacks": [
+    "Physical Exam: General",
+    "Physical Exam: Skin",
+    "Physical Exam: HEENT",
+    "Physical Exam: Extremities",
+    "Physical Exam: Neuro"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

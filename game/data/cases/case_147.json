@@ -1,0 +1,55 @@
+{
+  "id": 147,
+  "topic": "Heart Palpitations",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Order a 12-lead ECG to evaluate for any cardiac arrhythmias.",
+    "Refer the patient to a cardiologist for further evaluation and management.",
+    "Oxygen",
+    "IV access ×2"
+  ],
+  "should_avoid": [
+    "Initiate unnecessary invasive procedures at this stage, as the diagnosis is still uncertain."
+  ],
+  "rationale": {
+    "Order a 12-lead ECG to evaluate for any cardiac arrhythmias.": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to heart palpitations.",
+    "Refer the patient to a cardiologist for further evaluation and management.": "Appropriate CCS order for this diagnosis: Refer the patient to a cardiologist for further evaluation and management..",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
+    "Initiate unnecessary invasive procedures at this stage, as the diagnosis is still uncertain.": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — heart palpitations. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This heart palpitations won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Order a 12-lead ECG to evaluate for any cardiac arrhythmias.",
+    "Refer the patient to a cardiologist for further evaluation and management.",
+    "Oxygen",
+    "IV access ×2"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

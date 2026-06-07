@@ -1,0 +1,64 @@
+{
+  "id": 51,
+  "topic": "Altered Mental Status",
+  "diagnosis": "Transient Ischemic Attack (TIA)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "CT Head",
+    "CBC",
+    "BMP",
+    "PT/INR",
+    "PTT",
+    "MRI Brain",
+    "Carotid Doppler",
+    "Echocardiogram"
+  ],
+  "should_avoid": [
+    "LP"
+  ],
+  "rationale": {
+    "CT Head": "Appropriate CCS order for Transient Ischemic Attack (TIA): CT Head.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Transient Ischemic Attack (TIA).",
+    "BMP": "Laboratory testing when systemic illness or severity warrants labs in Transient Ischemic Attack (TIA).",
+    "PT/INR": "Appropriate CCS order for Transient Ischemic Attack (TIA): PT/INR.",
+    "PTT": "Appropriate CCS order for Transient Ischemic Attack (TIA): PTT.",
+    "MRI Brain": "Appropriate CCS order for Transient Ischemic Attack (TIA): MRI Brain.",
+    "Carotid Doppler": "Appropriate CCS order for Transient Ischemic Attack (TIA): Carotid Doppler.",
+    "Echocardiogram": "Appropriate CCS order for Transient Ischemic Attack (TIA): Echocardiogram.",
+    "LP": "CCS review: avoid this order for Transient Ischemic Attack (TIA) — it does not change acute management."
+  },
+  "hpi": "A 70-year-old male with a history of hypertension and diabetes presented with sudden onset of confusion and difficulty speaking. He was evaluated for a possible TIA. Initial imaging and lab work were performed, and the patient was monitored closely. The importance of timely intervention in TIA cases was emphasized.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I was so confused and couldn't speak right. It scared me.",
+    "history": "I have high blood pressure and diabetes. This just happened suddenly.",
+    "pain": "I didn't feel any pain, just confusion."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "A 70-year-old male with a history of hypertension and diabetes presented with sudden onset of confusion and difficulty speaking. He was evaluated for a possible TIA. Initial imaging and lab work were performed, and the patient was monitored closely. The importance of timely intervention in TIA cases was emphasized.",
+  "stacks": [
+    "CT Head",
+    "CBC",
+    "BMP",
+    "PT/INR",
+    "PTT"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs were missing from the screenshot."
+}

@@ -1,0 +1,55 @@
+{
+  "id": 55,
+  "topic": "Shortness of Breath",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain electrocardiogram (ECG) to assess heart function and rule out acute coronary syndrome",
+    "Chest X-ray to evaluate lung fields, cardiac silhouette, and pleural effusions",
+    "Oxygen",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+  ],
+  "should_avoid": [
+    "Starting a broad-spectrum antibiotic therapy without culture results"
+  ],
+  "rationale": {
+    "Obtain electrocardiogram (ECG) to assess heart function and rule out acute coronary syndrome": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
+    "Chest X-ray to evaluate lung fields, cardiac silhouette, and pleural effusions": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "Appropriate CCS order for this diagnosis: Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check).",
+    "Starting a broad-spectrum antibiotic therapy without culture results": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — shortness of breath. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This shortness of breath won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain electrocardiogram (ECG) to assess heart function and rule out acute coronary syndrome",
+    "Chest X-ray to evaluate lung fields, cardiac silhouette, and pleural effusions",
+    "Oxygen",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

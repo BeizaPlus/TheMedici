@@ -1,0 +1,67 @@
+{
+  "id": 179,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain vital signs",
+    "Perform physical examination with focus on abdominal examination",
+    "Order complete blood count (CBC), basic metabolic panel, lipase, amylase",
+    "Consider imaging studies such as ultrasound or CT scan of the abdomen",
+    "Consult general surgery if signs of surgical emergency (e.g., peritonitis, rebound tenderness)",
+    "Initiate broad-spectrum antibiotics for suspected intra-abdominal infection",
+    "Consider pain management as needed",
+    "Oxygen",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Obtain vital signs": "Vital signs establish baseline stability before further orders.",
+    "Perform physical examination with focus on abdominal examination": "Appropriate CCS order for this diagnosis: Perform physical examination with focus on abdominal examination.",
+    "Order complete blood count (CBC), basic metabolic panel, lipase, amylase": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Consider imaging studies such as ultrasound or CT scan of the abdomen": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Consult general surgery if signs of surgical emergency (e.g., peritonitis, rebound tenderness)": "Appropriate CCS order for this diagnosis: Consult general surgery if signs of surgical emergency (e.g., peritonitis, rebound tenderness).",
+    "Initiate broad-spectrum antibiotics for suspected intra-abdominal infection": "Appropriate CCS order for this diagnosis: Initiate broad-spectrum antibiotics for suspected intra-abdominal infection.",
+    "Consider pain management as needed": "Appropriate CCS order for this diagnosis: Consider pain management as needed.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "Appropriate CCS order for this diagnosis: Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — abdominal pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This abdominal pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain vital signs",
+    "Perform physical examination with focus on abdominal examination",
+    "Order complete blood count (CBC), basic metabolic panel, lipase, amylase",
+    "Consider imaging studies such as ultrasound or CT scan of the abdomen",
+    "Consult general surgery if signs of surgical emergency (e.g., peritonitis, rebound tenderness)",
+    "Initiate broad-spectrum antibiotics for suspected intra-abdominal infection",
+    "Consider pain management as needed",
+    "Oxygen",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

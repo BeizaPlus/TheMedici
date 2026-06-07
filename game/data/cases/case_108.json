@@ -1,0 +1,67 @@
+{
+  "id": 108,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Immediate abdominal examination and resuscitation",
+    "Laboratory tests: Complete Blood Count (CBC), Chemistry panel, Lipase, Amylase",
+    "Imaging: Non-contrast CT Abdomen/Pelvis or Ultrasound Abdomen",
+    "Consults: General Surgery and Emergency Medicine",
+    "Further diagnostic workup based on imaging results",
+    "Oxygen",
+    "IV access ×2",
+    "Placement of patient in appropriate location (ER → ICU vs floor)"
+  ],
+  "should_avoid": [
+    "Unnecessary surgeries until a definitive diagnosis is made"
+  ],
+  "rationale": {
+    "Immediate abdominal examination and resuscitation": "Appropriate CCS order for this diagnosis: Immediate abdominal examination and resuscitation.",
+    "Laboratory tests: Complete Blood Count (CBC), Chemistry panel, Lipase, Amylase": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Imaging: Non-contrast CT Abdomen/Pelvis or Ultrasound Abdomen": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Consults: General Surgery and Emergency Medicine": "Appropriate CCS order for this diagnosis: Consults: General Surgery and Emergency Medicine.",
+    "Further diagnostic workup based on imaging results": "Appropriate CCS order for this diagnosis: Further diagnostic workup based on imaging results.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
+    "Placement of patient in appropriate location (ER → ICU vs floor)": "CCS case progression step for this scenario.",
+    "Unnecessary surgeries until a definitive diagnosis is made": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — abdominal pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This abdominal pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Immediate abdominal examination and resuscitation",
+    "Laboratory tests: Complete Blood Count (CBC), Chemistry panel, Lipase, Amylase",
+    "Imaging: Non-contrast CT Abdomen/Pelvis or Ultrasound Abdomen",
+    "Consults: General Surgery and Emergency Medicine",
+    "Further diagnostic workup based on imaging results",
+    "Oxygen",
+    "IV access ×2",
+    "Placement of patient in appropriate location (ER → ICU vs floor)"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

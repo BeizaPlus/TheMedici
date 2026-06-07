@@ -1,0 +1,68 @@
+{
+  "id": 76,
+  "topic": "Fever and Rash - Pediatrics",
+  "diagnosis": "Roseola Infantum (Exanthem Subitum)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: HEENT / Neck",
+    "Physical Exam: Skin",
+    "Physical Exam: Lymph Nodes",
+    "Resusitate patient"
+  ],
+  "should_avoid": [
+    "order1",
+    "Unnecessary antibiotics until bacterial infection is confirmed by culture results"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for fever and rash - pediatrics.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for fever and rash - pediatrics.",
+    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to fever and rash - pediatrics.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with fever and rash - pediatrics.",
+    "Physical Exam: Extremities / Spine": "Targeted Physical Exam: Extremities / Spine exam supports the differential for Roseola Infantum (Exanthem Subitum).",
+    "Physical Exam: HEENT / Neck": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Roseola Infantum (Exanthem Subitum).",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Roseola Infantum (Exanthem Subitum).",
+    "Physical Exam: Lymph Nodes": "Targeted Physical Exam: Lymph Nodes exam supports the differential for Roseola Infantum (Exanthem Subitum).",
+    "Resusitate patient": "Appropriate CCS order for Roseola Infantum (Exanthem Subitum): Resusitate patient.",
+    "order1": "CCS review: avoid this order for Roseola Infantum (Exanthem Subitum) — it does not change acute management.",
+    "Unnecessary antibiotics until bacterial infection is confirmed by culture results": "Advanced imaging is not indicated early for Roseola Infantum (Exanthem Subitum) when the diagnosis is clinical."
+  },
+  "hpi": "Differential: Fifth disease, Measles, Meningitis, Rubella, Scarlet Fever, Drug allergy\n\nThis patient has Roseola infantum (exanthem subitum), most frequently caused by human Herpesvirus 6 (HHV-6). The classic presentation for Roseola is in infants 7-13 months old who develop high fevers for 3-5 days (can often cause febrile seizures) that resolve abruptly, followed by the appearance of a macular rash on the neck and torso, spreading to the extremities. Infants are generally well-appearing, active, and after throughout the course of the illness and treatment is mainly supportive (antipyretics for fever, ensuring adequate fluid intake, etc). The main points of this case is to recognize the clinical presentation and make the diagnosis without any diagnostic tests and manage it conservatively without invasive measures.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared because my baby has a high fever and a rash.",
+    "history": "My baby had a fever for days, and now there's a rash. I don't know what to do.",
+    "pain": "My baby seems uncomfortable and fussy."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "Differential: Fifth disease, Measles, Meningitis, Rubella, Scarlet Fever, Drug allergy\n\nThis patient has Roseola infantum (exanthem subitum), most frequently caused by human Herpesvirus 6 (HHV-6). The classic presentation for Roseola is in infants 7-13 months old who develop high fevers for 3-5 days (can often cause febrile seizures) that resolve abruptly, followed by the appearance of a macular rash on the neck and torso, spreading to the extremities. Infants are generally well-appearing, active, and after throughout the course of the illness and treatment is mainly supportive (antipyretics for fever, ensuring adequate fluid intake, etc). The main points of this case is to recognize the clinical presentation and make the diagnosis without any diagnostic tests and manage it conservatively without invasive measures.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Lymph Node, HEENT, Chest and Lung, Cardiovascular, Abdomen, Extremities and Spine, Neurologic and Physiologic",
+    "Ordered: Bacterial culture, blood",
+    "Ordered: Calamine",
+    "Time Advanced 10 minutes"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing."
+}

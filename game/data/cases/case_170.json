@@ -1,0 +1,58 @@
+{
+  "id": 170,
+  "topic": "Fall",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Office or home (not ED)",
+    "Orthostatic vital signs",
+    "EKG",
+    "BMP and CBC",
+    "IV fluid bolus if acutely symptomatic",
+    "Stop offending diuretics / antihypertensives"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Office or home (not ED)": "Appropriate CCS order for this diagnosis: Office or home (not ED).",
+    "Orthostatic vital signs": "Vital signs establish baseline stability before further orders.",
+    "EKG": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+    "BMP and CBC": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "IV fluid bolus if acutely symptomatic": "Appropriate CCS order for this diagnosis: IV fluid bolus if acutely symptomatic.",
+    "Stop offending diuretics / antihypertensives": "Appropriate CCS order for this diagnosis: Stop offending diuretics / antihypertensives."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — fall. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This fall won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Office or home (not ED)",
+    "Orthostatic vital signs",
+    "EKG",
+    "BMP and CBC",
+    "IV fluid bolus if acutely symptomatic",
+    "Stop offending diuretics / antihypertensives"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

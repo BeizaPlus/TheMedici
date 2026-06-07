@@ -1,0 +1,64 @@
+{
+  "id": 86,
+  "topic": "Blood in Urine",
+  "diagnosis": "Autosomal Dominant Polycystic Kidney Disease",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities / Spine",
+    "MRI, abdominal area",
+    "Lipid profile",
+    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel"
+  ],
+  "should_avoid": [
+    "US abdomen: CT abdomen/pelvis, with contrast / CT abdomen/pelvis, without contrast"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for blood in urine.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for blood in urine.",
+    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to blood in urine.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with blood in urine.",
+    "Physical Exam: Extremities / Spine": "Targeted Physical Exam: Extremities / Spine exam supports the differential for Autosomal Dominant Polycystic Kidney Disease.",
+    "MRI, abdominal area": "Appropriate CCS order for Autosomal Dominant Polycystic Kidney Disease: MRI, abdominal area.",
+    "Lipid profile": "Appropriate CCS order for Autosomal Dominant Polycystic Kidney Disease: Lipid profile.",
+    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Autosomal Dominant Polycystic Kidney Disease.",
+    "US abdomen: CT abdomen/pelvis, with contrast / CT abdomen/pelvis, without contrast": "Advanced imaging is not indicated early for Autosomal Dominant Polycystic Kidney Disease when the diagnosis is clinical."
+  },
+  "hpi": "The patient is found to have Autosomal Dominant Polycystic Kidney Disease. This disease predisposes patients to renal failure and increases the chances of urinary symptoms. Not recognizing this diagnosis could lead to a family history of renal insufficiency, patients could be misdiagnosed as having nephrolithiasis, and they may require different management. The patient should be referred to a MRA. Indications for MRA include a family history of renal failure, agents to rule out other pathology, and the patient should be counseled on the importance of screening. The patient should be counseled on their family history, as it is reasonable to get a MRA in this case.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my kidney issues. I don't want to end up on dialysis.",
+    "history": "I have a family history of kidney problems. My mom had issues, and I think I might too.",
+    "pain": "It hurts when I urinate, and I'm worried about what it means."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "The patient is found to have Autosomal Dominant Polycystic Kidney Disease. This disease predisposes patients to renal failure and increases the chances of urinary symptoms. Not recognizing this diagnosis could lead to a family history of renal insufficiency, patients could be misdiagnosed as having nephrolithiasis, and they may require different management. The patient should be referred to a MRA. Indications for MRA include a family history of renal failure, agents to rule out other pathology, and the patient should be counseled on the importance of screening. The patient should be counseled on their family history, as it is reasonable to get a MRA in this case.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following physical exams and/or patient updates: General appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lung, Cardiovascular",
+    "Ordered: CBC with differential",
+    "Ordered: Comprehensive metabolic profile",
+    "Ordered: Urinalysis"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

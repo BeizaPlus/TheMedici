@@ -1,0 +1,89 @@
+{
+  "case_number": 106,
+  "title": "Rash and Lethargy",
+  "specialty": "Pediatrics",
+  "chief_complaint": "Rash and Lethargy",
+  "patient": "A 20-year-old female",
+  "location": "Office or Home",
+  "diagnosis": "Mononucleosis",
+  "hpi_narrative": "A 20-year-old female presents with rash and lethargy. She has been experiencing fever, fatigue, and a sore throat for the past few days. Upon physical examination, she exhibits an enlarged spleen and tenderness in the abdomen.",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": null,
+    "respiratory": null,
+    "abdomen": {
+      "findings": [
+        "Guarding and tenderness present. Spleen enlarged."
+      ]
+    },
+    "neurological": null,
+    "skin": {
+      "Rash": true
+    },
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null,
+    "vitals": {
+      "hr": null,
+      "spo2": null,
+      "bp": null,
+      "rr": null,
+      "temp": null
+    }
+  },
+  "stacks": [
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": "CBC is important to check for infection - patient having symptoms of mononucleosis.",
+      "type": null
+    },
+    {
+      "label": "Infectious mononucleosis screening test, serum / Antibody",
+      "aliases": [],
+      "finding": "This confirms the diagnosis of mononucleosis.",
+      "type": null
+    },
+    {
+      "label": "Basic metabolic profile / Comprehensive metabolic panel",
+      "aliases": [],
+      "finding": "These tests are excellent screening tools in any differential diagnosis.",
+      "type": null
+    }
+  ],
+  "_validation_errors": [
+    "Stack label too long \u2014 likely explanatory text: 'Infectious mononucleosis screening test, serum / A...'",
+    "Stack label too long \u2014 likely explanatory text: 'Basic metabolic profile / Comprehensive metabolic ...'"
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 65,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "The title does not match the actual case chief complaint in OCR.",
+      "fix": "Title should be 'Rash and Lethargy - Pediatrics Paes'"
+    },
+    {
+      "field": "stacks",
+      "problem": "Stack labels have UI noise such as percentage scores, 'Correctly Ordered' as a label, and dates.",
+      "fix": "Stack labels should be clean clinical orders without any UI noise."
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "The HPI narrative contains some placeholders such as 'A 20-year-old female' which should ideally be extracted and formatted correctly.",
+      "fix": "HPI narrative should have the correct age, gender, and other relevant details."
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Physical exam findings are not complete. Some systems such as cardiovascular, respiratory, neurological, musculoskeletal, genitourinary, psychiatric, and HEENT/Neck have no findings.",
+      "fix": "All physical exam systems should have findings if they were examined."
+    }
+  ]
+}

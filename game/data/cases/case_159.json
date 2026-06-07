@@ -1,0 +1,50 @@
+{
+  "id": 159,
+  "topic": "Abnormal Behavior",
+  "diagnosis": "Hepatitis B",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Hepatitis A",
+    "Hepatitis B",
+    "Hepatitis C"
+  ],
+  "should_avoid": [
+    "Hepatitis A"
+  ],
+  "rationale": {
+    "Hepatitis A": "CCS review: avoid this order for Hepatitis B — it does not change acute management.",
+    "Hepatitis B": "Appropriate CCS order for Hepatitis B: Hepatitis B.",
+    "Hepatitis C": "Appropriate CCS order for Hepatitis B: Hepatitis C."
+  },
+  "hpi": "This case involves a patient who was administered Hepatitis B before Hepatitis A. While the first dose is important for immunity, the sequence of vaccinations should ideally be followed to ensure maximum protection against hepatitis and other related infections.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — abnormal behavior. I'm really scared.",
+    "history": "It's been getting worse. They said something about hepatitis b. This case involves a patient who was administered Hepatitis B before Hepatitis A...",
+    "pain": "This abnormal behavior won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": "This case involves a patient who was administered Hepatitis B before Hepatitis A. While the first dose is important for immunity, the sequence of vaccinations should ideally be followed to ensure maximum protection against hepatitis and other related infections.",
+  "stacks": [
+    "Hepatitis A",
+    "Hepatitis B"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

@@ -1,0 +1,64 @@
+{
+  "id": 70,
+  "topic": "Fever",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain blood cultures before starting antibiotics",
+    "Perform complete blood count (CBC), comprehensive metabolic panel (CMP), and urinalysis",
+    "Consider obtaining lumbar puncture (LP) for cerebrospinal fluid analysis in cases where meningitis is suspected",
+    "Obtain a chest X-ray or consider computed tomography (CT) scan if pneumonia is suspected",
+    "Start empiric broad-spectrum antibiotics after obtaining blood cultures",
+    "Oxygen",
+    "IV access ×2"
+  ],
+  "should_avoid": [
+    "Immediately starting broad-spectrum antibiotics without obtaining blood cultures"
+  ],
+  "rationale": {
+    "Obtain blood cultures before starting antibiotics": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Perform complete blood count (CBC), comprehensive metabolic panel (CMP), and urinalysis": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Consider obtaining lumbar puncture (LP) for cerebrospinal fluid analysis in cases where meningitis is suspected": "Appropriate CCS order for this diagnosis: Consider obtaining lumbar puncture (LP) for cerebrospinal fluid analysis in cases where meningitis is suspected.",
+    "Obtain a chest X-ray or consider computed tomography (CT) scan if pneumonia is suspected": "Evaluate chest and lungs as part of the initial exam for fever.",
+    "Start empiric broad-spectrum antibiotics after obtaining blood cultures": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
+    "Immediately starting broad-spectrum antibiotics without obtaining blood cultures": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — fever. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This fever won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain blood cultures before starting antibiotics",
+    "Perform complete blood count (CBC), comprehensive metabolic panel (CMP), and urinalysis",
+    "Consider obtaining lumbar puncture (LP) for cerebrospinal fluid analysis in cases where meningitis is suspected",
+    "Obtain a chest X-ray or consider computed tomography (CT) scan if pneumonia is suspected",
+    "Start empiric broad-spectrum antibiotics after obtaining blood cultures",
+    "Oxygen",
+    "IV access ×2"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

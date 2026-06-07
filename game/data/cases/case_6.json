@@ -1,0 +1,62 @@
+{
+  "id": 6,
+  "topic": "Rash and Lethargy - Pediatrics",
+  "diagnosis": "Mononucleosis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Abdominal",
+    "CBC with differential",
+    "Public transport",
+    "Physical Exam: Skin",
+    "Physical Exam: Lymph nodes",
+    "vaccination: MMR / Dtap"
+  ],
+  "should_avoid": [
+    "Acute therapy",
+    "Aminoglycoside and penicillin combination"
+  ],
+  "rationale": {
+    "Physical Exam: Abdominal": "Appropriate CCS order for Mononucleosis: Physical Exam: Abdominal.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Mononucleosis.",
+    "Public transport": "Appropriate CCS order for Mononucleosis: Public transport.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Mononucleosis.",
+    "Physical Exam: Lymph nodes": "Targeted Physical Exam: Lymph nodes exam supports the differential for Mononucleosis.",
+    "vaccination: MMR / Dtap": "Appropriate CCS order for Mononucleosis: vaccination: MMR / Dtap.",
+    "Acute therapy": "CCS review: avoid this order for Mononucleosis — it does not change acute management.",
+    "Aminoglycoside and penicillin combination": "CCS review: avoid this order for Mononucleosis — it does not change acute management."
+  },
+  "hpi": "This case is a child with a broad differential. A full examination should be done. The patient is always excellent for learning to help with differential diagnosis.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. I feel so tired and my skin is breaking out.",
+    "history": "I had a rash for a few days. My mom says I look pale.",
+    "pain": "It hurts when I touch my stomach."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "This case is a child with a broad differential. A full examination should be done. The patient is always excellent for learning to help with differential diagnosis.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Laboratory Tests",
+    "Patient Education",
+    "Consultation"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

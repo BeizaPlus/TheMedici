@@ -1,0 +1,59 @@
+{
+  "id": 162,
+  "topic": "Pain During Urination",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Laboratory tests: Urinalysis, Urine Culture and Sensitivity",
+    "Imaging studies: Ultrasound of the kidneys, ureters, and bladder (US KUB) if patient's condition warrants imaging",
+    "order1",
+    "CMP/BMP",
+    "UA"
+  ],
+  "should_avoid": [
+    "order1",
+    "Urinary catheterization unless clinically indicated for severe symptoms or failure to pass urine"
+  ],
+  "rationale": {
+    "Laboratory tests: Urinalysis, Urine Culture and Sensitivity": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Imaging studies: Ultrasound of the kidneys, ureters, and bladder (US KUB) if patient's condition warrants imaging": "Appropriate CCS order for this diagnosis: Imaging studies: Ultrasound of the kidneys, ureters, and bladder (US KUB) if patient's condition warrants imaging.",
+    "order1": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+    "CMP/BMP": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "UA": "Appropriate CCS order for this diagnosis: UA.",
+    "Urinary catheterization unless clinically indicated for severe symptoms or failure to pass urine": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — pain during urination. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This pain during urination won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Laboratory tests: Urinalysis, Urine Culture and Sensitivity",
+    "Imaging studies: Ultrasound of the kidneys, ureters, and bladder (US KUB) if patient's condition warrants imaging",
+    "order1",
+    "CMP/BMP",
+    "UA"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

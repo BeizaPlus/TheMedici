@@ -1,0 +1,46 @@
+{
+  "id": 156,
+  "topic": "Generalized Swelling",
+  "diagnosis": "Renal Stone",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Ultrafiltration"
+  ],
+  "should_avoid": [
+    "Bowel Decompression"
+  ],
+  "rationale": {
+    "Ultrafiltration": "Appropriate CCS order for Renal Stone: Ultrafiltration.",
+    "Bowel Decompression": "CCS review: avoid this order for Renal Stone — it does not change acute management."
+  },
+  "hpi": "12-year-old with hematuria, proteinuria and microhematuria. CBC reveals a R/C ratio of 20. Bone scan was ordered in the past and is not indicated by the results available.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — generalized swelling. I'm really scared.",
+    "history": "It's been getting worse. They said something about renal stone. 12-year-old with hematuria, proteinuria and microhematuria. CBC reveals a R/C ra...",
+    "pain": "This generalized swelling won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": "12-year-old with hematuria, proteinuria and microhematuria. CBC reveals a R/C ratio of 20. Bone scan was ordered in the past and is not indicated by the results available.",
+  "stacks": [
+    "Ultrafiltration"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

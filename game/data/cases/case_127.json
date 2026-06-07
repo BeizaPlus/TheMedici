@@ -1,0 +1,65 @@
+{
+  "id": 127,
+  "topic": "Rash - Pediatrics",
+  "diagnosis": "Immune Thrombocytopenia (ITP)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Skin",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Immune globulin / Rho (D) immune globulin / Dexamethasone / Prednisone / Methylprednisolone / Prednisolone",
+    "Advise patient, no sports",
+    "Advise patient, no NSAIDs",
+    "Advise patient, no aspirin"
+  ],
+  "should_avoid": [
+    "Celecoxib / Diclofenac sodium / Etodolac / Fenoprofen / Ibuprofen / Indomethacin / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Mefenamic acid / Nabumetone / Naproxen / Choline / Aspirin / Salicylate / Tetanus / therapy / Aspirin, therapy"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for rash - pediatrics.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Immune Thrombocytopenia (ITP).",
+    "Physical Exam: HEENT / Neck": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Immune Thrombocytopenia (ITP).",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Immune Thrombocytopenia (ITP).",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Immune Thrombocytopenia (ITP).",
+    "Immune globulin / Rho (D) immune globulin / Dexamethasone / Prednisone / Methylprednisolone / Prednisolone": "Treatment aligned with CCS management for Immune Thrombocytopenia (ITP).",
+    "Advise patient, no sports": "Appropriate CCS order for Immune Thrombocytopenia (ITP): Advise patient, no sports.",
+    "Advise patient, no NSAIDs": "Appropriate CCS order for Immune Thrombocytopenia (ITP): Advise patient, no NSAIDs.",
+    "Advise patient, no aspirin": "Appropriate CCS order for Immune Thrombocytopenia (ITP): Advise patient, no aspirin.",
+    "Celecoxib / Diclofenac sodium / Etodolac / Fenoprofen / Ibuprofen / Indomethacin / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Mefenamic acid / Nabumetone / Naproxen / Choline / Aspirin / Salicylate / Tetanus / therapy / Aspirin, therapy": "CCS review: avoid this order for Immune Thrombocytopenia (ITP) — it does not change acute management."
+  },
+  "hpi": "This patient in this case has immune thrombocytopenia (ITP). The patient most likely developed ITP after having a recent viral infection. ITP patients will have platelet counts less than 100,000/microl, with a normal white blood cell count and hemoglobin. The majority of children develop ITP after a recent viral illness. The patient has gingival bleeding and petechiae. This would classify the patient as a grade I/IV between moderate and severe. The patient will require treatment with either glucocorticoids, IVIG or both. \n\nThe patient at risk for potentially severe bleeding if injured, so the patient should be counseled to avoid contact sports as well as to avoid antiplatelet medications like Aspirin and NSAIDs. Depending on the treatment choice, the patient can be treated either inpatient or outpatient. Once the patient gets treatment, he will improve.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my bleeding. I don't want to get hurt.",
+    "history": "I had a virus recently, and now I have these spots and bleeding.",
+    "pain": "My gums bleed when I brush my teeth."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "This patient in this case has immune thrombocytopenia (ITP). The patient most likely developed ITP after having a recent viral infection. ITP patients will have platelet counts less than 100,000/microl, with a normal white blood cell count and hemoglobin. The majority of children develop ITP after a recent viral illness. The patient has gingival bleeding and petechiae. This would classify the patient as a grade I/IV between moderate and severe. The patient will require treatment with either glucocorticoids, IVIG or both. \n\nThe patient at risk for potentially severe bleeding if injured, so the patient should be counseled to avoid contact sports as well as to avoid antiplatelet medications like Aspirin and NSAIDs. Depending on the treatment choice, the patient can be treated either inpatient or outpatient. Once the patient gets treatment, he will improve.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lung, Cardiovascular, Abdomen, Genital, Rectal, Extremities and Spine, Neurological and Psychological",
+    "Ordered: CBC with differential",
+    "Ordered: Comprehensive profile"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing."
+}

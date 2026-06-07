@@ -1,0 +1,61 @@
+{
+  "id": 122,
+  "topic": "Painful Rash - Pediatrics",
+  "diagnosis": "Stevens-Johnson Syndrome",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Skin",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Streptococci, mycoplasma",
+    "Bacterial culture, wound / bacterial culture, skin",
+    "Cyclosporine"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for painful rash - pediatrics.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Stevens-Johnson Syndrome.",
+    "Physical Exam: HEENT / Neck": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Stevens-Johnson Syndrome.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Stevens-Johnson Syndrome.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Stevens-Johnson Syndrome.",
+    "Streptococci, mycoplasma": "Appropriate CCS order for Stevens-Johnson Syndrome: Streptococci, mycoplasma.",
+    "Bacterial culture, wound / bacterial culture, skin": "Skin exam may show rashes or systemic signs relevant to Stevens-Johnson Syndrome.",
+    "Cyclosporine": "Appropriate CCS order for Stevens-Johnson Syndrome: Cyclosporine."
+  },
+  "hpi": "Differentiate systemic symptoms from Stevens-Johnson syndrome versus other illness elements. The patient should be monitored closely for signs of infection. The patient should be admitted to the ICU and the treatment should include the use of supportive care and possible immunosuppressive therapy.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared because my rash hurts a lot. I don't know what's happening.",
+    "history": "I had a fever and then the rash started. It feels really painful.",
+    "pain": "It hurts all over my body, especially where the rash is."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "Differentiate systemic symptoms from Stevens-Johnson syndrome versus other illness elements. The patient should be monitored closely for signs of infection. The patient should be admitted to the ICU and the treatment should include the use of supportive care and possible immunosuppressive therapy.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam: General Appearance",
+    "Ordered: Comprehensive metabolic profile",
+    "Ordered: CBC with differential",
+    "Ordered: Cefepime"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

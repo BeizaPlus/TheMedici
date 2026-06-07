@@ -1,0 +1,68 @@
+{
+  "id": 109,
+  "topic": "Unresponsive",
+  "diagnosis": "Diazepam Overdose",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Neuro",
+    "Physical Exam: Skin",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities",
+    "Laboratory: CBC",
+    "Laboratory: BMP",
+    "Laboratory: Tox Screen",
+    "Laboratory: Coags",
+    "Laboratory: Urine Drug Screen"
+  ],
+  "should_avoid": [
+    "Discharge Instructions: No follow-up"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for unresponsive.",
+    "Physical Exam: Neuro": "Targeted Physical Exam: Neuro exam supports the differential for Diazepam Overdose.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Diazepam Overdose.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with unresponsive.",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Diazepam Overdose.",
+    "Laboratory: CBC": "Laboratory testing when systemic illness or severity warrants labs in Diazepam Overdose.",
+    "Laboratory: BMP": "Laboratory testing when systemic illness or severity warrants labs in Diazepam Overdose.",
+    "Laboratory: Tox Screen": "Appropriate CCS order for Diazepam Overdose: Laboratory: Tox Screen.",
+    "Laboratory: Coags": "Appropriate CCS order for Diazepam Overdose: Laboratory: Coags.",
+    "Laboratory: Urine Drug Screen": "Appropriate CCS order for Diazepam Overdose: Laboratory: Urine Drug Screen.",
+    "Discharge Instructions: No follow-up": "Advanced imaging is not indicated early for Diazepam Overdose when the diagnosis is clinical."
+  },
+  "hpi": "The patient was brought in for an overdose of diazepam. The case was complicated by the patient's history of substance use disorder and the need for careful monitoring. The patient was stabilized and treated appropriately, but the case highlights the importance of thorough assessment and monitoring in overdose situations.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I can't remember what happened. I just feel so out of it.",
+    "history": "I took some pills... I don't know how many.",
+    "pain": "I don't feel pain, just really confused."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "The patient was brought in for an overdose of diazepam. The case was complicated by the patient's history of substance use disorder and the need for careful monitoring. The patient was stabilized and treated appropriately, but the case highlights the importance of thorough assessment and monitoring in overdose situations.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Neuro",
+    "Physical Exam: Skin",
+    "Physical Exam: Abdomen"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

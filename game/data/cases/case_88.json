@@ -1,0 +1,62 @@
+{
+  "id": 88,
+  "topic": "Frequency of Urination",
+  "diagnosis": "Prostate Cancer",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "U.S. prostate / MRI abdomen/pelvis, with gadolinium",
+    "Cystoscopy, prostate biopsy / Free needle aspiration, prostate",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: General",
+    "Adenosine, soluble, specific, serum / PSA, total/free"
+  ],
+  "should_avoid": [
+    "order1",
+    "Immediate catheterization without proper diagnostics"
+  ],
+  "rationale": {
+    "U.S. prostate / MRI abdomen/pelvis, with gadolinium": "Abdominal exam helps exclude alternative causes in a patient with frequency of urination.",
+    "Cystoscopy, prostate biopsy / Free needle aspiration, prostate": "Diagnostic report or tissue diagnosis clarifies the cause of frequency of urination.",
+    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to frequency of urination.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with frequency of urination.",
+    "Physical Exam: General": "Appropriate CCS order for Prostate Cancer: Physical Exam: General.",
+    "Adenosine, soluble, specific, serum / PSA, total/free": "Appropriate CCS order for Prostate Cancer: Adenosine, soluble, specific, serum / PSA, total/free.",
+    "order1": "CCS review: avoid this order for Prostate Cancer — it does not change acute management.",
+    "Immediate catheterization without proper diagnostics": "CCS review: avoid this order for Prostate Cancer — it does not change acute management."
+  },
+  "hpi": "Clinical indications include: malignancy suspicion. Medical history includes: urinary symptoms. Patient presents with urinary frequency and is being evaluated for prostate cancer. Wearing the catheter provides important insights.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my frequent urination. What could it mean?",
+    "history": "I've been having trouble going to the bathroom. It feels urgent.",
+    "pain": "Sometimes I feel a sharp pain when I try to go."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Clinical indications include: malignancy suspicion. Medical history includes: urinary symptoms. Patient presents with urinary frequency and is being evaluated for prostate cancer. Wearing the catheter provides important insights.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Laboratory Tests",
+    "Imaging Ordered",
+    "Consults Ordered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

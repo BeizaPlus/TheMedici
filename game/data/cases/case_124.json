@@ -1,0 +1,67 @@
+{
+  "id": 124,
+  "topic": "Chest Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain immediate ECG",
+    "Order serum biomarkers such as Troponin I/T",
+    "Admit the patient for continuous monitoring and further investigation",
+    "Consult Cardiology",
+    "Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated",
+    "Oxygen",
+    "IV access ×2",
+    "glucose check"
+  ],
+  "should_avoid": [
+    "Order immediate cardiac catheterization unless the patient's condition warrants it (e.g., persistent ST-segment elevation or hemodynamic instability)"
+  ],
+  "rationale": {
+    "Obtain immediate ECG": "Appropriate CCS order for this diagnosis: Obtain immediate ECG.",
+    "Order serum biomarkers such as Troponin I/T": "Appropriate CCS order for this diagnosis: Order serum biomarkers such as Troponin I/T.",
+    "Admit the patient for continuous monitoring and further investigation": "Appropriate CCS order for this diagnosis: Admit the patient for continuous monitoring and further investigation.",
+    "Consult Cardiology": "Appropriate CCS order for this diagnosis: Consult Cardiology.",
+    "Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated": "Appropriate CCS order for this diagnosis: Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
+    "glucose check": "Appropriate CCS order for this diagnosis: glucose check.",
+    "Order immediate cardiac catheterization unless the patient's condition warrants it (e.g., persistent ST-segment elevation or hemodynamic instability)": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — chest pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This chest pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain immediate ECG",
+    "Order serum biomarkers such as Troponin I/T",
+    "Admit the patient for continuous monitoring and further investigation",
+    "Consult Cardiology",
+    "Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated",
+    "Oxygen",
+    "IV access ×2",
+    "glucose check"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

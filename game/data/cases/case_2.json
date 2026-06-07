@@ -1,0 +1,60 @@
+{
+  "id": 2,
+  "topic": "Altered Mental Status",
+  "diagnosis": "Subdural Hematoma",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "CT of head without contrast / MRI, head, without gadolinium",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "CBC with differential",
+    "Hormone: thyroid stimulating, serum"
+  ],
+  "should_avoid": [
+    "CT, head, with contrast"
+  ],
+  "rationale": {
+    "CT of head without contrast / MRI, head, without gadolinium": "Appropriate CCS order for Subdural Hematoma: CT of head without contrast / MRI, head, without gadolinium.",
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for altered mental status.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for altered mental status.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with altered mental status.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Subdural Hematoma.",
+    "Hormone: thyroid stimulating, serum": "Patient education and counseling are part of definitive care for Subdural Hematoma.",
+    "CT, head, with contrast": "Advanced imaging is not indicated early for Subdural Hematoma when the diagnosis is clinical."
+  },
+  "hpi": "Differential: the differential for altered mental status in an elderly patient includes: seizures, bacterial meningitis, urinary tract infection, trauma, electrolyte disturbances, drug or alcohol toxicity, heart failure, metabolic disorders: hypoglycemia, hypercalcemia, uremia, liver failure, thyrotoxicosis.\n\nThe patient has a substantial hemorrhage. The clerk is told the patient had a recent fall and has been having episodes of altered mental status since that time. The patient is also at a higher risk for subdural hematomas due to his advanced age and having a recent alcohol intoxication. Especially with falls in elderly, it is important to look for head trauma. CT without contrast is more widely used for the swift turn-around time for results, but MRI is more sensitive in detecting intracranial hemorrhages. Time is of utmost importance in this case as bleeds may cause mass effects that may lead to increased brain damage as time elapses.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. I can't remember what happened.",
+    "history": "I fell and now I feel confused. I don't know where I am.",
+    "pain": "My head hurts a lot."
+  },
+  "ccs_category": "Neurology",
+  "case_summary": "Differential: the differential for altered mental status in an elderly patient includes: seizures, bacterial meningitis, urinary tract infection, trauma, electrolyte disturbances, drug or alcohol toxicity, heart failure, metabolic disorders: hypoglycemia, hypercalcemia, uremia, liver failure, thyrotoxicosis.\n\nThe patient has a substantial hemorrhage. The clerk is told the patient had a recent fall and has been having episodes of altered mental status since that time. The patient is also at a higher risk for subdural hematomas due to his advanced age and having a recent alcohol intoxication. Especially with falls in elderly, it is important to look for head trauma. CT without contrast is more widely used for the swift turn-around time for results, but MRI is more sensitive in detecting intracranial hemorrhages. Time is of utmost importance in this case as bleeds may cause mass effects that may lead to increased brain damage as time elapses.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered: Saline solution, normal",
+    "Ordered: CT of head without contrast",
+    "Ordered: Toxicology screen",
+    "Ordered: Neurology consult"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

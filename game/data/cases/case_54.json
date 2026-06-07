@@ -1,0 +1,68 @@
+{
+  "id": 54,
+  "topic": "Breast Feeding Neonatal Jaundice",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Proposal sent: Admin",
+    "Proposal sent: Infant / Cardivascular",
+    "Proposal sent: Infant / Lungs",
+    "Proposal sent: Infant / Head",
+    "Proposal sent: Infant / Skin",
+    "Physical Exam: Infant / Cardivascular",
+    "Physical Exam: Infant / Lungs",
+    "Physical Exam: Infant / Head",
+    "Physical Exam: Infant / Skin",
+    "Physical Exam: Infant / Appearance"
+  ],
+  "should_avoid": [
+    "Proposal sent: Infant / Blank"
+  ],
+  "rationale": {
+    "Proposal sent: Admin": "Appropriate CCS order for this diagnosis: Proposal sent: Admin.",
+    "Proposal sent: Infant / Cardivascular": "Appropriate CCS order for this diagnosis: Proposal sent: Infant / Cardivascular.",
+    "Proposal sent: Infant / Lungs": "Evaluate chest and lungs as part of the initial exam for breast feeding neonatal jaundice.",
+    "Proposal sent: Infant / Head": "Appropriate CCS order for this diagnosis: Proposal sent: Infant / Head.",
+    "Proposal sent: Infant / Skin": "Skin exam may show rashes or systemic signs relevant to this diagnosis.",
+    "Physical Exam: Infant / Cardivascular": "Appropriate CCS order for this diagnosis: Physical Exam: Infant / Cardivascular.",
+    "Physical Exam: Infant / Lungs": "Evaluate chest and lungs as part of the initial exam for breast feeding neonatal jaundice.",
+    "Physical Exam: Infant / Head": "Appropriate CCS order for this diagnosis: Physical Exam: Infant / Head.",
+    "Physical Exam: Infant / Skin": "Skin exam may show rashes or systemic signs relevant to this diagnosis.",
+    "Physical Exam: Infant / Appearance": "Appropriate CCS order for this diagnosis: Physical Exam: Infant / Appearance.",
+    "Proposal sent: Infant / Blank": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": "Differential diagnosis by the pediatrician. Physiology of hyperbilirubinemia, Gilbert's syndrome, weight, breast milk jaundice, hemolytic disease of the newborn (ABO incompatibility), biliary atresia and G6PD deficiency. The key is to ensure that the baby is feeding well and that the mother is not overfeeding the baby. Although bilirubin levels can be obtained in the laboratory, it is essential for the pediatrician to determine if the infant is feeding well. This is important because if the infant continues to be breastfed the bilirubin levels may continue to rise. It is also important that breastfeeding is encouraged.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really worried about my baby's jaundice. It looks so yellow.",
+    "history": "I noticed my baby was getting yellower each day. I’m scared it might be serious.",
+    "pain": "I just want to make sure my baby is okay."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "Differential diagnosis by the pediatrician. Physiology of hyperbilirubinemia, Gilbert's syndrome, weight, breast milk jaundice, hemolytic disease of the newborn (ABO incompatibility), biliary atresia and G6PD deficiency. The key is to ensure that the baby is feeding well and that the mother is not overfeeding the baby. Although bilirubin levels can be obtained in the laboratory, it is essential for the pediatrician to determine if the infant is feeding well. This is important because if the infant continues to be breastfed the bilirubin levels may continue to rise. It is also important that breastfeeding is encouraged.",
+  "stacks": [
+    "Proposal sent: Admin",
+    "Proposal sent: Infant / Cardivascular",
+    "Proposal sent: Infant / Lungs",
+    "Proposal sent: Infant / Head",
+    "Proposal sent: Infant / Skin"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

@@ -1,0 +1,66 @@
+{
+  "id": 34,
+  "topic": "Headache",
+  "diagnosis": "Hypertensive Emergency",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Hypertensive Emergency: Escalate",
+    "Hypertensive Emergency: Consult",
+    "Hypertensive Emergency: Disposition",
+    "Hypertensive Emergency: IV Access",
+    "Hypertensive Emergency: Labs",
+    "Hypertensive Emergency: EKG",
+    "Hypertensive Emergency: CT Head",
+    "Hypertensive Emergency: Neurology Consult"
+  ],
+  "should_avoid": [
+    "Hypertensive Emergency: MRI Head",
+    "Hypertensive Emergency: Admission"
+  ],
+  "rationale": {
+    "Hypertensive Emergency: Escalate": "Appropriate CCS order for Hypertensive Emergency: Hypertensive Emergency: Escalate.",
+    "Hypertensive Emergency: Consult": "Appropriate CCS order for Hypertensive Emergency: Hypertensive Emergency: Consult.",
+    "Hypertensive Emergency: Disposition": "Appropriate CCS order for Hypertensive Emergency: Hypertensive Emergency: Disposition.",
+    "Hypertensive Emergency: IV Access": "Appropriate CCS order for Hypertensive Emergency: Hypertensive Emergency: IV Access.",
+    "Hypertensive Emergency: Labs": "Appropriate CCS order for Hypertensive Emergency: Hypertensive Emergency: Labs.",
+    "Hypertensive Emergency: EKG": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+    "Hypertensive Emergency: CT Head": "Appropriate CCS order for Hypertensive Emergency: Hypertensive Emergency: CT Head.",
+    "Hypertensive Emergency: Neurology Consult": "Targeted Hypertensive Emergency: Neurology Consult exam supports the differential for Hypertensive Emergency.",
+    "Hypertensive Emergency: MRI Head": "Advanced imaging is not indicated early for Hypertensive Emergency when the diagnosis is clinical.",
+    "Hypertensive Emergency: Admission": "CCS review: avoid this order for Hypertensive Emergency — it does not change acute management."
+  },
+  "hpi": "This case illustrates the importance of recognizing and managing hypertensive emergencies. Proper assessment and timely intervention can prevent serious complications. Always consider the potential for end-organ damage in patients with severe hypertension.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My head is pounding and I feel dizzy.",
+    "history": "I have high blood pressure. It’s been really bad lately.",
+    "pain": "It feels like a tight band around my head."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "This case illustrates the importance of recognizing and managing hypertensive emergencies. Proper assessment and timely intervention can prevent serious complications. Always consider the potential for end-organ damage in patients with severe hypertension.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Labs",
+    "Consults",
+    "Disposition"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

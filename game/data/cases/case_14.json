@@ -1,0 +1,76 @@
+{
+  "id": 14,
+  "topic": "Acute and Upper Extremity Edema",
+  "diagnosis": "Pre-Eclampsia with Severe Features",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Labs Ordered",
+    "IV Fluids Ordered",
+    "Consults Ordered",
+    "Medications Ordered",
+    "Monitoring Ordered",
+    "Magnesium Sulfate",
+    "Labetalol",
+    "Fetal Monitoring",
+    "CBC",
+    "Liver Function Tests"
+  ],
+  "should_avoid": [
+    "CT Scan",
+    "MRI",
+    "X-Ray",
+    "Ultrasound",
+    "Invasive Procedures"
+  ],
+  "rationale": {
+    "Labs Ordered": "Appropriate CCS order for Pre-Eclampsia with Severe Features: Labs Ordered.",
+    "IV Fluids Ordered": "Appropriate CCS order for Pre-Eclampsia with Severe Features: IV Fluids Ordered.",
+    "Consults Ordered": "Appropriate CCS order for Pre-Eclampsia with Severe Features: Consults Ordered.",
+    "Medications Ordered": "Appropriate CCS order for Pre-Eclampsia with Severe Features: Medications Ordered.",
+    "Monitoring Ordered": "Appropriate CCS order for Pre-Eclampsia with Severe Features: Monitoring Ordered.",
+    "Magnesium Sulfate": "Appropriate CCS order for Pre-Eclampsia with Severe Features: Magnesium Sulfate.",
+    "Labetalol": "Appropriate CCS order for Pre-Eclampsia with Severe Features: Labetalol.",
+    "Fetal Monitoring": "Appropriate CCS order for Pre-Eclampsia with Severe Features: Fetal Monitoring.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Pre-Eclampsia with Severe Features.",
+    "Liver Function Tests": "Appropriate CCS order for Pre-Eclampsia with Severe Features: Liver Function Tests.",
+    "CT Scan": "Advanced imaging is not indicated early for Pre-Eclampsia with Severe Features when the diagnosis is clinical.",
+    "MRI": "Advanced imaging is not indicated early for Pre-Eclampsia with Severe Features when the diagnosis is clinical.",
+    "X-Ray": "This imaging is not required for the expected CCS pathway in Pre-Eclampsia with Severe Features.",
+    "Ultrasound": "CCS review: avoid this order for Pre-Eclampsia with Severe Features — it does not change acute management.",
+    "Invasive Procedures": "CCS review: avoid this order for Pre-Eclampsia with Severe Features — it does not change acute management."
+  },
+  "hpi": "This case involves a patient presenting with severe edema and hypertension, consistent with pre-eclampsia. The management included appropriate monitoring and medication to stabilize the patient's condition. It is crucial to recognize the signs of severe features in pre-eclampsia to prevent complications for both the mother and fetus.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about the swelling in my arms and legs. I feel like something is wrong.",
+    "history": "I have been feeling unwell for a few days. The swelling started suddenly.",
+    "pain": "My arms and legs feel heavy and uncomfortable."
+  },
+  "ccs_category": "OB/GYN",
+  "case_summary": "This case involves a patient presenting with severe edema and hypertension, consistent with pre-eclampsia. The management included appropriate monitoring and medication to stabilize the patient's condition. It is crucial to recognize the signs of severe features in pre-eclampsia to prevent complications for both the mother and fetus.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Labs Ordered",
+    "Medications Ordered",
+    "Consults Ordered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

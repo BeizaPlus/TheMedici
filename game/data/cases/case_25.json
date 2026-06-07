@@ -1,0 +1,60 @@
+{
+  "id": 25,
+  "topic": "Semivoluntary Pull - Pediatric",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Family Defined",
+    "Vitals Ordered",
+    "History Obtained",
+    "Physical Exam",
+    "Correctly Documented",
+    "Additional Testing"
+  ],
+  "should_avoid": [
+    "Unnecessary Medications"
+  ],
+  "rationale": {
+    "Family Defined": "Appropriate CCS order for this diagnosis: Family Defined.",
+    "Vitals Ordered": "Vital signs establish baseline stability before further orders.",
+    "History Obtained": "Appropriate CCS order for this diagnosis: History Obtained.",
+    "Physical Exam": "Appropriate CCS order for this diagnosis: Physical Exam.",
+    "Correctly Documented": "Appropriate CCS order for this diagnosis: Correctly Documented.",
+    "Additional Testing": "Appropriate CCS order for this diagnosis: Additional Testing.",
+    "Unnecessary Medications": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": "This case highlights the importance of thorough history taking and physical examination in pediatric patients. It emphasizes the need for appropriate documentation and the avoidance of unnecessary interventions.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I was really scared when I came in. I didn't know what was happening.",
+    "history": "I felt weak and dizzy. My parents were worried.",
+    "pain": "It hurt a lot in my stomach."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "This case highlights the importance of thorough history taking and physical examination in pediatric patients. It emphasizes the need for appropriate documentation and the avoidance of unnecessary interventions.",
+  "stacks": [
+    "Family Defined",
+    "Vitals Ordered",
+    "History Obtained",
+    "Physical Exam",
+    "Correctly Documented"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

@@ -1,0 +1,70 @@
+{
+  "id": 133,
+  "topic": "Back Pain",
+  "diagnosis": "Ankylosing Spondylitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: HEENT / Neck",
+    "Physical Exam: Skin",
+    "Physical Exam: Extremities / Spine",
+    "CBC with differential",
+    "Antigen: HLA-B27, leukocytes",
+    "Rheumatoid factor",
+    "X-ray: pelvis / X-ray: spine, sacrum/coxyx",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Creatine phosphokinase / Serum / Sedimentation rate, erythrocyte"
+  ],
+  "should_avoid": [
+    "CT: abdomen/pelvis, with contrast / CT: abdomen/pelvis, without contrast",
+    "MRI: abdomen/pelvis, with gadolinium / MRI: abdomen/pelvis, without gadolinium"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for back pain.",
+    "Physical Exam: HEENT / Neck": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Ankylosing Spondylitis.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Ankylosing Spondylitis.",
+    "Physical Exam: Extremities / Spine": "Targeted Physical Exam: Extremities / Spine exam supports the differential for Ankylosing Spondylitis.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Ankylosing Spondylitis.",
+    "Antigen: HLA-B27, leukocytes": "Appropriate CCS order for Ankylosing Spondylitis: Antigen: HLA-B27, leukocytes.",
+    "Rheumatoid factor": "Appropriate CCS order for Ankylosing Spondylitis: Rheumatoid factor.",
+    "X-ray: pelvis / X-ray: spine, sacrum/coxyx": "Imaging supports diagnosis when exam findings warrant it for Ankylosing Spondylitis.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Ankylosing Spondylitis.",
+    "Creatine phosphokinase / Serum / Sedimentation rate, erythrocyte": "Appropriate CCS order for Ankylosing Spondylitis: Creatine phosphokinase / Serum / Sedimentation rate, erythrocyte.",
+    "CT: abdomen/pelvis, with contrast / CT: abdomen/pelvis, without contrast": "Advanced imaging is not indicated early for Ankylosing Spondylitis when the diagnosis is clinical.",
+    "MRI: abdomen/pelvis, with gadolinium / MRI: abdomen/pelvis, without gadolinium": "Advanced imaging is not indicated early for Ankylosing Spondylitis when the diagnosis is clinical."
+  },
+  "hpi": "Differential: Chronic Nonspecific Back Pain, Fibromyalgia, Vertebral Compression Fracture, Sacroiliac joint infection, Diffuse Idiopathic Skeletal Hyperostosis.\n\nThe patient has Ankylosing Spondylitis. The patient has classic symptoms of Ankylosing Spondylitis which include back pain, morning stiffness, and a history of psoriasis. These increase the likelihood of having Spondylitis.\n\nInitial evaluation should be a physical exam focusing on extremities and eyes for iritis/uveitis. Other tests include HLA-B27, and X-rays of the pelvis and spine.\n\nOnce the diagnosis of Ankylosing Spondylitis is made, treatment should be with a TNF inhibitors Etanercept, Infliximab, Adalimumab (not an order on the USMLE), but TNF inhibitors in 1 inhibitors are not yet available as orders on the USMLE which include Secukinumab and Ixekizumab. Interleukin 17 inhibitors are also treatment options for Ankylosing Spondylitis.\n\nOnce the correct treatment is given, the patient will begin to feel better after a week, and the case will end.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my back pain. It feels so intense.",
+    "history": "I've had this pain for a while now, and it gets worse in the morning.",
+    "pain": "The pain is sharp and makes it hard to move."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Differential: Chronic Nonspecific Back Pain, Fibromyalgia, Vertebral Compression Fracture, Sacroiliac joint infection, Diffuse Idiopathic Skeletal Hyperostosis.\n\nThe patient has Ankylosing Spondylitis. The patient has classic symptoms of Ankylosing Spondylitis which include back pain, morning stiffness, and a history of psoriasis. These increase the likelihood of having Spondylitis.\n\nInitial evaluation should be a physical exam focusing on extremities and eyes for iritis/uveitis. Other tests include HLA-B27, and X-rays of the pelvis and spine.\n\nOnce the diagnosis of Ankylosing Spondylitis is made, treatment should be with a TNF inhibitors Etanercept, Infliximab, Adalimumab (not an order on the USMLE), but TNF inhibitors in 1 inhibitors are not yet available as orders on the USMLE which include Secukinumab and Ixekizumab. Interleukin 17 inhibitors are also treatment options for Ankylosing Spondylitis.\n\nOnce the correct treatment is given, the patient will begin to feel better after a week, and the case will end.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered: Physical Exam: General Appearance, Skin, Breasts, Genital, HEENT, Neck, Extremities, Spine, Neurological Exam",
+    "Ordered: CBC with differential",
+    "Ordered: Antigen: HLA-B27, leukocytes",
+    "Ordered: Comprehensive metabolic profile"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

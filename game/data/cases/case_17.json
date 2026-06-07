@@ -1,0 +1,64 @@
+{
+  "id": 17,
+  "topic": "Weight Loss and Night Sweats",
+  "diagnosis": "Hodgkin's Lymphoma",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "CBC with differential",
+    "Comprehensive metabolic panel",
+    "Lactate dehydrogenase",
+    "HIV test",
+    "Chest X-ray",
+    "CT scan of the chest",
+    "Bone marrow biopsy"
+  ],
+  "should_avoid": [
+    "Urinalysis",
+    "Pregnancy test"
+  ],
+  "rationale": {
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Hodgkin's Lymphoma.",
+    "Comprehensive metabolic panel": "Laboratory testing when systemic illness or severity warrants labs in Hodgkin's Lymphoma.",
+    "Lactate dehydrogenase": "Appropriate CCS order for Hodgkin's Lymphoma: Lactate dehydrogenase.",
+    "HIV test": "Appropriate CCS order for Hodgkin's Lymphoma: HIV test.",
+    "Chest X-ray": "Evaluate chest and lungs as part of the initial exam for weight loss and night sweats.",
+    "CT scan of the chest": "Evaluate chest and lungs as part of the initial exam for weight loss and night sweats.",
+    "Bone marrow biopsy": "Diagnostic report or tissue diagnosis clarifies the cause of weight loss and night sweats.",
+    "Urinalysis": "CCS review: avoid this order for Hodgkin's Lymphoma — it does not change acute management.",
+    "Pregnancy test": "CCS review: avoid this order for Hodgkin's Lymphoma — it does not change acute management."
+  },
+  "hpi": "This case illustrates the importance of considering hematologic malignancies in patients presenting with weight loss and night sweats. A thorough workup including imaging and laboratory tests is essential for accurate diagnosis and management.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my weight loss and these night sweats.",
+    "history": "I've been losing weight without trying and sweating a lot at night.",
+    "pain": "I don't have any specific pain, just feel really weak."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This case illustrates the importance of considering hematologic malignancies in patients presenting with weight loss and night sweats. A thorough workup including imaging and laboratory tests is essential for accurate diagnosis and management.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "CBC with differential",
+    "Comprehensive metabolic panel",
+    "Lactate dehydrogenase"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

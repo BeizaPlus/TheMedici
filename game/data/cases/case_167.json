@@ -1,0 +1,55 @@
+{
+  "id": 167,
+  "topic": "Nausea and Vomiting",
+  "diagnosis": "No diagnosis provided",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Ward if dehydrated",
+    "BMP / electrolytes",
+    "Gastric emptying study",
+    "Metoclopramide or erythromycin",
+    "EGD if obstruction suspected"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Ward if dehydrated": "Appropriate CCS order for No diagnosis provided: Ward if dehydrated.",
+    "BMP / electrolytes": "Laboratory testing when systemic illness or severity warrants labs in No diagnosis provided.",
+    "Gastric emptying study": "Appropriate CCS order for No diagnosis provided: Gastric emptying study.",
+    "Metoclopramide or erythromycin": "Appropriate CCS order for No diagnosis provided: Metoclopramide or erythromycin.",
+    "EGD if obstruction suspected": "Appropriate CCS order for No diagnosis provided: EGD if obstruction suspected."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — nausea and vomiting. I'm really scared.",
+    "history": "It's been getting worse. They said something about no diagnosis provided. ...",
+    "pain": "This nausea and vomiting won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Ward if dehydrated",
+    "BMP / electrolytes",
+    "Gastric emptying study",
+    "Metoclopramide or erythromycin",
+    "EGD if obstruction suspected"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

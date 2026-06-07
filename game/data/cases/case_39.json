@@ -1,0 +1,68 @@
+{
+  "id": 39,
+  "topic": "Epigastric pain",
+  "diagnosis": "Acute Pancreatitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "IV fluids",
+    "NPO",
+    "Pain management",
+    "CBC",
+    "LFTs",
+    "Amylase",
+    "Lipase",
+    "CT abdomen",
+    "Electrolytes",
+    "Urinalysis"
+  ],
+  "should_avoid": [
+    "Antibiotics"
+  ],
+  "rationale": {
+    "IV fluids": "Appropriate CCS order for Acute Pancreatitis: IV fluids.",
+    "NPO": "Appropriate CCS order for Acute Pancreatitis: NPO.",
+    "Pain management": "Appropriate CCS order for Acute Pancreatitis: Pain management.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Acute Pancreatitis.",
+    "LFTs": "Appropriate CCS order for Acute Pancreatitis: LFTs.",
+    "Amylase": "Appropriate CCS order for Acute Pancreatitis: Amylase.",
+    "Lipase": "Appropriate CCS order for Acute Pancreatitis: Lipase.",
+    "CT abdomen": "Abdominal exam helps exclude alternative causes in a patient with epigastric pain.",
+    "Electrolytes": "Appropriate CCS order for Acute Pancreatitis: Electrolytes.",
+    "Urinalysis": "Appropriate CCS order for Acute Pancreatitis: Urinalysis.",
+    "Antibiotics": "CCS review: avoid this order for Acute Pancreatitis — it does not change acute management."
+  },
+  "hpi": "Acute pancreatitis is a common condition that can present with epigastric pain. It is important to assess the patient's history and perform appropriate imaging to confirm the diagnosis. Management typically includes supportive care, including IV fluids and pain control. In cases of severe pancreatitis, further interventions may be necessary.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My stomach hurts so much.",
+    "history": "I had a big meal before this pain started. It feels sharp and constant.",
+    "pain": "It hurts right in the middle of my stomach."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "Acute pancreatitis is a common condition that can present with epigastric pain. It is important to assess the patient's history and perform appropriate imaging to confirm the diagnosis. Management typically includes supportive care, including IV fluids and pain control. In cases of severe pancreatitis, further interventions may be necessary.",
+  "stacks": [
+    "IV fluids",
+    "NPO",
+    "Pain management",
+    "CBC",
+    "LFTs"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs were missing from the screenshot."
+}

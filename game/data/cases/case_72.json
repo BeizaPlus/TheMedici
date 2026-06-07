@@ -1,0 +1,61 @@
+{
+  "id": 72,
+  "topic": "Routine Check-Up",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Complete Blood Count (CBC)",
+    "Chemistry Panel",
+    "Urinalysis",
+    "Electrocardiogram (ECG)",
+    "Imaging studies (X-ray, CT, MRI as necessary)",
+    "Universal Labs (CBC, CMP, UA)",
+    "EKG + CXR if indicated"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Complete Blood Count (CBC)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Chemistry Panel": "Appropriate CCS order for this diagnosis: Chemistry Panel.",
+    "Urinalysis": "Appropriate CCS order for this diagnosis: Urinalysis.",
+    "Electrocardiogram (ECG)": "Appropriate CCS order for this diagnosis: Electrocardiogram (ECG).",
+    "Imaging studies (X-ray, CT, MRI as necessary)": "Imaging supports diagnosis when exam findings warrant it for this diagnosis.",
+    "Universal Labs (CBC, CMP, UA)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "EKG + CXR if indicated": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — routine check-up. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This routine check-up won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Complete Blood Count (CBC)",
+    "Chemistry Panel",
+    "Urinalysis",
+    "Electrocardiogram (ECG)",
+    "Imaging studies (X-ray, CT, MRI as necessary)",
+    "Universal Labs (CBC, CMP, UA)",
+    "EKG + CXR if indicated"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

@@ -1,0 +1,177 @@
+{
+  "case_number": 126,
+  "title": "Shortness of Breath",
+  "specialty": "Cardiology",
+  "chief_complaint": "Shortness of breath in a 65-year-old male",
+  "patient": "65-year-old male with no significant past medical history",
+  "location": "ER",
+  "diagnosis": "Non-ST Elevation Myocardial Infarction (NSTEMI)",
+  "hpi_narrative": "A 65-year-old male with no significant past medical history presents to the ER with acute onset shortness of breath. The severity is moderate, and it is associated with chest pain. Pertinent negatives include orthopnea and paroxysmal nocturnal dyspnea.",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": null,
+    "respiratory": null,
+    "abdominal": null,
+    "neurological": null,
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "aliases": [],
+      "finding": "It would be a good idea to take a general look at the patient to see how ill the patient looks.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "aliases": [],
+      "finding": "The patient is having concerning symptoms that involve the heart, so this should be examined.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "aliases": [],
+      "finding": "The patient is complaining of shortness of breath, so this should be examined.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Electrocardiography, 12 lead",
+      "aliases": [],
+      "finding": "Will show a NSTEMI which needs to be treated quickly.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Heparin, therapy",
+      "aliases": [],
+      "finding": "For NSTEMI, unfractionated heparin or enoxaparin has been shown to help prevent ischemic events.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Angioplasty with Stent Placement",
+      "aliases": [],
+      "finding": "The preferred treatment for NSTEMI is reperfusion.",
+      "type": "correctlyOrdered"
+    }
+  ],
+  "timing": {
+    "appropriate_speed": true,
+    "appropriate_orders": true,
+    "appropriate_location": false,
+    "correct_sequencing": true
+  },
+  "case_summary": {
+    "differential": "ST Elevation Myocardial Infarction, Acute Aortic Dissection, Pulmonary embolism, Pericardial tamponade, Esophageal rupture"
+  },
+  "average_orders": {
+    "number_of_orders": 20,
+    "users_average": 35.14
+  },
+  "z_score": -1.44,
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "order_sets": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "aliases": [],
+      "finding": null,
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Cardiovascular",
+      "aliases": [],
+      "finding": null,
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Respiratory",
+      "aliases": [
+        "Respiratory"
+      ],
+      "finding": null,
+      "type": "should have Ordered"
+    },
+    {
+      "label": "Physical Exam: Abdominal",
+      "aliases": [
+        "Abdominal"
+      ],
+      "finding": null,
+      "type": "should have Ordered"
+    },
+    {
+      "label": "Physical Exam: Neurological",
+      "aliases": [
+        "Neurological"
+      ],
+      "finding": null,
+      "type": "should have Ordered"
+    },
+    {
+      "label": "Physical Exam: Skin",
+      "aliases": [
+        "Skin"
+      ],
+      "finding": null,
+      "type": "should have Ordered"
+    },
+    {
+      "label": "Physical Exam: HEENT",
+      "aliases": [
+        "HEENT"
+      ],
+      "finding": null,
+      "type": "should have Ordered"
+    },
+    {
+      "label": "Physical Exam: Musculoskeletal",
+      "aliases": [
+        "Musculoskeletal"
+      ],
+      "finding": null,
+      "type": "should have Ordered"
+    },
+    {
+      "label": "Physical Exam: Genitourinary",
+      "aliases": [
+        "Genitourinary"
+      ],
+      "finding": null,
+      "type": "should have Ordered"
+    },
+    {
+      "label": "Physical Exam: Psychiatric",
+      "aliases": [
+        "Psychiatric"
+      ],
+      "finding": null,
+      "type": "should have Ordered"
+    }
+  ],
+  "_final_confidence": 70,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual chief complaint in OCR. Title should be 'Shortness of Breath - Emergency Medicine' instead of 'Shortness of Breath'.",
+      "fix": "'Shortness of Breath - Emergency Medicine'"
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Physical exam findings are not correctly extracted by the system. Instead of null values, appropriate findings should be present for systems where the patient was examined (e.g., cardiovascular, respiratory).",
+      "fix": "Appropriate findings for systems where the patient was examined."
+    },
+    {
+      "field": "ready",
+      "problem": "Overall confidence score is below 99.",
+      "fix": "Improve the quality of title and physical exam findings to achieve overall confidence of 99 or higher."
+    }
+  ]
+}

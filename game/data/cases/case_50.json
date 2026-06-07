@@ -1,0 +1,60 @@
+{
+  "id": 50,
+  "topic": "Cluster Headache",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Head / Eyes",
+    "Physical Exam: Neck",
+    "Physical Exam: Neurological",
+    "Physical Exam: Skin",
+    "History: Detailed History of Present Illness"
+  ],
+  "should_avoid": [
+    "CT Brain without Contrast"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for cluster headache.",
+    "Physical Exam: Head / Eyes": "Appropriate CCS order for this diagnosis: Physical Exam: Head / Eyes.",
+    "Physical Exam: Neck": "Appropriate CCS order for this diagnosis: Physical Exam: Neck.",
+    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for this diagnosis.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to this diagnosis.",
+    "History: Detailed History of Present Illness": "Appropriate CCS order for this diagnosis: History: Detailed History of Present Illness.",
+    "CT Brain without Contrast": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+  },
+  "hpi": "This case demonstrates the importance of a thorough history and physical examination in the evaluation of headache. It is critical to differentiate primary headaches from secondary causes, as this will guide management and treatment. In this case, the patient presented with a classic cluster headache, which is characterized by unilateral, severe pain, often associated with autonomic symptoms. The management of cluster headaches includes abortive and preventive therapies, and understanding the patient's history is essential in tailoring the treatment plan.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I have these terrible headaches that come and go. They make me feel scared and helpless.",
+    "history": "I've had these headaches before, but this time feels different.",
+    "pain": "The pain is sharp and only on one side of my head."
+  },
+  "ccs_category": "Neurology",
+  "case_summary": "This case demonstrates the importance of a thorough history and physical examination in the evaluation of headache. It is critical to differentiate primary headaches from secondary causes, as this will guide management and treatment. In this case, the patient presented with a classic cluster headache, which is characterized by unilateral, severe pain, often associated with autonomic symptoms. The management of cluster headaches includes abortive and preventive therapies, and understanding the patient's history is essential in tailoring the treatment plan.",
+  "stacks": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Head / Eyes",
+    "Physical Exam: Neck",
+    "Physical Exam: Neurological",
+    "Physical Exam: Skin"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

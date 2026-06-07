@@ -1,0 +1,71 @@
+{
+  "id": 120,
+  "topic": "Sore Throat",
+  "diagnosis": "Group A Streptococcal Pharyngitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Skin",
+    "Physical Exam: HEENT / Neck",
+    "Streptococcal culture, throat, rapid / Streptococcal culture, throat / Bacterial culture, throat / Antibody, streptolysin O, serum / Streptozymes, serum / Bacterial culture, nose",
+    "acetaminophen, therapy / ibuprofen",
+    "Penicillin V / Penicillin G procaine / penicillin G benzathine / Amoxicillin and potassium clavulanate / Cephalexin monohydrate / Cefadroxil / Cefuroxime sodium / Cefdinir / Ceftazidime / Clarithromycin / Clindamycin / Amoxicillin, therapy / Penicillin G"
+  ],
+  "should_avoid": [
+    "order1",
+    "Prescribing antibiotics without obtaining rapid streptococcal antigen test"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for sore throat.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Group A Streptococcal Pharyngitis. Finding: Skin",
+    "Physical Exam: HEENT / Neck": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Group A Streptococcal Pharyngitis.",
+    "Streptococcal culture, throat, rapid / Streptococcal culture, throat / Bacterial culture, throat / Antibody, streptolysin O, serum / Streptozymes, serum / Bacterial culture, nose": "Laboratory testing when systemic illness or severity warrants labs in Group A Streptococcal Pharyngitis.",
+    "acetaminophen, therapy / ibuprofen": "Appropriate CCS order for Group A Streptococcal Pharyngitis: acetaminophen, therapy / ibuprofen.",
+    "Penicillin V / Penicillin G procaine / penicillin G benzathine / Amoxicillin and potassium clavulanate / Cephalexin monohydrate / Cefadroxil / Cefuroxime sodium / Cefdinir / Ceftazidime / Clarithromycin / Clindamycin / Amoxicillin, therapy / Penicillin G": "Appropriate CCS order for Group A Streptococcal Pharyngitis: Penicillin V / Penicillin G procaine / penicillin G benzathine / Amoxicillin and potassium clavulanate / Cephalexin monohydrate / Cefadroxil / Cefuroxime sodium / Cefdinir / Ceftazidime / Clarithromycin / Clindamycin / Amoxicillin, therapy / Penicillin G.",
+    "order1": "CCS review: avoid this order for Group A Streptococcal Pharyngitis — it does not change acute management.",
+    "Prescribing antibiotics without obtaining rapid streptococcal antigen test": "CCS review: avoid this order for Group A Streptococcal Pharyngitis — it does not change acute management."
+  },
+  "hpi": "Differential: Group C and G Streptococcal Pharyngitis, Retropharyngeal Abscess, Epiglottitis, Infectious mononucleosis, Viral Pharyngitis.\n\nGroup A Streptococcus (GAS) is the most common cause of bacterial pharyngitis in children. The physical exam and history are consistent with a bacterial pharyngitis. The patient does not have any real symptoms such as congestion or cough. The patient also has a characteristic purplish rash along with tonsillar edema. A rapid strep test should be ordered. It will take too long to make the right decision regarding whether to administer antibiotics or not if the 24 hour strep test is done.\n\nPenicillin/Amoxicillin are the treatment of choice for GAS. Alternatives include Cephalosporins (Cephalexin, Ceftriaxone, Cefuroxime, Cefdinir, Meropenem, Azithromycin or Clindamycin).\n\nAcetaminophen or Tylenol can be administered to treat pain and fever. Once antibiotics are given, the patient will feel better. The patient should be counseled to take the entire regimen of antibiotics to avoid developing antibiotic resistance.",
+  "physical_exam": [
+    [
+      "0",
+      "Skin,Skin"
+    ],
+    [
+      "1",
+      "Heent,HEENT / Neck"
+    ]
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My throat hurts so much!",
+    "history": "I can't swallow well. It hurts a lot.",
+    "pain": "It feels like my throat is on fire."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "Differential: Group C and G Streptococcal Pharyngitis, Retropharyngeal Abscess, Epiglottitis, Infectious mononucleosis, Viral Pharyngitis.\n\nGroup A Streptococcus (GAS) is the most common cause of bacterial pharyngitis in children. The physical exam and history are consistent with a bacterial pharyngitis. The patient does not have any real symptoms such as congestion or cough. The patient also has a characteristic purplish rash along with tonsillar edema. A rapid strep test should be ordered. It will take too long to make the right decision regarding whether to administer antibiotics or not if the 24 hour strep test is done.\n\nPenicillin/Amoxicillin are the treatment of choice for GAS. Alternatives include Cephalosporins (Cephalexin, Ceftriaxone, Cefuroxime, Cefdinir, Meropenem, Azithromycin or Clindamycin).\n\nAcetaminophen or Tylenol can be administered to treat pain and fever. Once antibiotics are given, the patient will feel better. The patient should be counseled to take the entire regimen of antibiotics to avoid developing antibiotic resistance.",
+  "stacks": [
+    "Vitals Ordered",
+    "Patient location changed to Emergency Department",
+    "Ordered: Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lung, Cardiovascular, Abdomen, Genital, Rectal, Extremities and Spine, Neurologic and Psychologic",
+    "Ordered: X-ray, spine, cervical",
+    "Ordered: X-ray, chest"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

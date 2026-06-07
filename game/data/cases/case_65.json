@@ -1,0 +1,55 @@
+{
+  "id": 65,
+  "topic": "Anxiety",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain a psychiatric consult for comprehensive evaluation and management plan",
+    "Order laboratory tests (CBC, Chemistry panel, Thyroid function tests) to rule out any medical causes of the patient's symptoms",
+    "Oxygen",
+    "IV access ×2"
+  ],
+  "should_avoid": [
+    "Prescribing medication without proper diagnosis"
+  ],
+  "rationale": {
+    "Obtain a psychiatric consult for comprehensive evaluation and management plan": "Appropriate CCS order for this diagnosis: Obtain a psychiatric consult for comprehensive evaluation and management plan.",
+    "Order laboratory tests (CBC, Chemistry panel, Thyroid function tests) to rule out any medical causes of the patient's symptoms": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
+    "Prescribing medication without proper diagnosis": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — anxiety. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This anxiety won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain a psychiatric consult for comprehensive evaluation and management plan",
+    "Order laboratory tests (CBC, Chemistry panel, Thyroid function tests) to rule out any medical causes of the patient's symptoms",
+    "Oxygen",
+    "IV access ×2"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

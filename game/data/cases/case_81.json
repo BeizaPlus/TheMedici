@@ -1,0 +1,66 @@
+{
+  "id": 81,
+  "topic": "Diarrhea - Internal Medicine",
+  "diagnosis": "Crohn's Disease",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Chief Complaint",
+    "Plan: Team Care/Change",
+    "Plan: Patient Education",
+    "Plan: Patient Follow-Up",
+    "Stool studies",
+    "Electrolytes",
+    "Complete blood count (CBC), renal, electrolytes, creatinine",
+    "Stool culture",
+    "Stool for C. difficile"
+  ],
+  "should_avoid": [
+    "Antibiotics"
+  ],
+  "rationale": {
+    "Physical Exam: Chief Complaint": "Appropriate CCS order for Crohn's Disease: Physical Exam: Chief Complaint.",
+    "Plan: Team Care/Change": "Appropriate CCS order for Crohn's Disease: Plan: Team Care/Change.",
+    "Plan: Patient Education": "Patient education and counseling are part of definitive care for Crohn's Disease.",
+    "Plan: Patient Follow-Up": "Appropriate CCS order for Crohn's Disease: Plan: Patient Follow-Up.",
+    "Stool studies": "Appropriate CCS order for Crohn's Disease: Stool studies.",
+    "Electrolytes": "Appropriate CCS order for Crohn's Disease: Electrolytes.",
+    "Complete blood count (CBC), renal, electrolytes, creatinine": "Laboratory testing when systemic illness or severity warrants labs in Crohn's Disease.",
+    "Stool culture": "Laboratory testing when systemic illness or severity warrants labs in Crohn's Disease.",
+    "Stool for C. difficile": "Appropriate CCS order for Crohn's Disease: Stool for C. difficile.",
+    "Antibiotics": "CCS review: avoid this order for Crohn's Disease — it does not change acute management."
+  },
+  "hpi": "Crohn's disease is a chronic inflammatory bowel disease that can affect any part of the gastrointestinal tract. Symptoms can include abdominal pain, diarrhea, weight loss, and fatigue. Diagnosis is often made through a combination of clinical evaluation, laboratory tests, and imaging studies. Treatment typically involves medications to reduce inflammation and manage symptoms. In some cases, surgery may be necessary to remove affected portions of the intestine.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my diarrhea. It just won't stop.",
+    "history": "I've been feeling awful for weeks. My stomach hurts a lot.",
+    "pain": "It feels like a sharp pain in my belly."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Crohn's disease is a chronic inflammatory bowel disease that can affect any part of the gastrointestinal tract. Symptoms can include abdominal pain, diarrhea, weight loss, and fatigue. Diagnosis is often made through a combination of clinical evaluation, laboratory tests, and imaging studies. Treatment typically involves medications to reduce inflammation and manage symptoms. In some cases, surgery may be necessary to remove affected portions of the intestine.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered Sedimentation rate, erythrocyte",
+    "Ordered Stool studies",
+    "Ordered Complete blood count (CBC), renal, electrolytes, creatinine",
+    "Ordered Sigmoidoscopy, flexible"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

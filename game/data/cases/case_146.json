@@ -1,0 +1,74 @@
+{
+  "id": 146,
+  "topic": "Found Unconscious",
+  "diagnosis": "CCS review page",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain vital signs and initiate basic life support if necessary.",
+    "Obtain a detailed history including mechanism of injury, LOC, Glasgow Coma Scale (GCS), past medical history, medications, and allergies.",
+    "Obtain physical examination focusing on neurological assessment.",
+    "Immediate imaging studies: Non-contrast head CT to assess for intracranial hemorrhage or other structural abnormalities.",
+    "Consult Neurosurgery if GCS is less than 15, signs of increased ICP, or if there are associated skull fractures.",
+    "Obtain labs such as complete blood count (CBC), coagulation profile, electrolytes, and glucose.",
+    "Admit to an intensive care unit for close monitoring.",
+    "order1",
+    "Oxygen",
+    "IV access ×2"
+  ],
+  "should_avoid": [
+    "order1",
+    "Elective procedures or medications that could alter the patient's mental status."
+  ],
+  "rationale": {
+    "Obtain vital signs and initiate basic life support if necessary.": "Vital signs establish baseline stability before further orders.",
+    "Obtain a detailed history including mechanism of injury, LOC, Glasgow Coma Scale (GCS), past medical history, medications, and allergies.": "Appropriate CCS order for CCS review page: Obtain a detailed history including mechanism of injury, LOC, Glasgow Coma Scale (GCS), past medical history, medications, and allergies..",
+    "Obtain physical examination focusing on neurological assessment.": "Targeted Obtain physical examination focusing on neurological assessment. exam supports the differential for CCS review page.",
+    "Immediate imaging studies: Non-contrast head CT to assess for intracranial hemorrhage or other structural abnormalities.": "Appropriate CCS order for CCS review page: Immediate imaging studies: Non-contrast head CT to assess for intracranial hemorrhage or other structural abnormalities..",
+    "Consult Neurosurgery if GCS is less than 15, signs of increased ICP, or if there are associated skull fractures.": "Targeted Consult Neurosurgery if GCS is less than 15, signs of increased ICP, or if there are associated skull fractures. exam supports the differential for CCS review page.",
+    "Obtain labs such as complete blood count (CBC), coagulation profile, electrolytes, and glucose.": "Laboratory testing when systemic illness or severity warrants labs in CCS review page.",
+    "Admit to an intensive care unit for close monitoring.": "Appropriate CCS order for CCS review page: Admit to an intensive care unit for close monitoring..",
+    "order1": "CCS review: avoid this order for CCS review page — it does not change acute management.",
+    "Oxygen": "Appropriate CCS order for CCS review page: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for CCS review page: IV access ×2.",
+    "Elective procedures or medications that could alter the patient's mental status.": "Advanced imaging is not indicated early for CCS review page when the diagnosis is clinical."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — found unconscious. I'm really scared.",
+    "history": "It's been getting worse. They said something about ccs review page. ...",
+    "pain": "This found unconscious won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain vital signs and initiate basic life support if necessary.",
+    "Obtain a detailed history including mechanism of injury, LOC, Glasgow Coma Scale (GCS), past medical history, medications, and allergies.",
+    "Obtain physical examination focusing on neurological assessment.",
+    "Immediate imaging studies: Non-contrast head CT to assess for intracranial hemorrhage or other structural abnormalities.",
+    "Consult Neurosurgery if GCS is less than 15, signs of increased ICP, or if there are associated skull fractures.",
+    "Obtain labs such as complete blood count (CBC), coagulation profile, electrolytes, and glucose.",
+    "Admit to an intensive care unit for close monitoring.",
+    "order1",
+    "Oxygen",
+    "IV access ×2"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

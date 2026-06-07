@@ -1,0 +1,125 @@
+{
+  "case_number": 234567,
+  "title": "'Sharp, radiating chest pain to the back. The onset is acute, character is pleuritic, and severity varies with changes in position.'",
+  "specialty": "Emergency Medicine",
+  "chief_complaint": "Chest Pain",
+  "patient": "45-year-old male",
+  "location": "ED",
+  "diagnosis": "Idiopathic Pericarditis",
+  "hpi_narrative": "A 45-year-old male presents with sharp, radiating chest pain to the back. The onset is acute, character is pleuritic, and severity varies with changes in position. Associated symptoms include back pain. Pertinent negatives include no history of trauma or recent infection. The single clinical question this case forces you to answer is 'What is the cause of the patient's pericarditis?'",
+  "physical_exam": {
+    "general": "Patient appears uncomfortable but vital signs within normal limits.",
+    "cardiovascular": "Cardiac examination reveals pericardial rub.",
+    "respiratory": null,
+    "abdomen": null,
+    "neurological": null,
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "aliases": [],
+      "finding": "Patient appears uncomfortable but vital signs within normal limits.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Chest",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "aliases": [],
+      "finding": "Cardiac examination reveals pericardial rub.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Lab Tests: Pulse oximetry",
+      "aliases": [],
+      "finding": null,
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Lab Tests: CBC with differential",
+      "aliases": [],
+      "finding": null,
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Electrocardiography, 12 lead",
+      "aliases": [],
+      "finding": null,
+      "type": "ordered"
+    },
+    {
+      "label": "Lab Tests: Cardiac troponin I, serum",
+      "aliases": [],
+      "finding": null,
+      "type": "ordered"
+    },
+    {
+      "label": "Imaging: Echocardiography",
+      "aliases": [],
+      "finding": null,
+      "type": "ordered"
+    }
+  ],
+  "treatment": [
+    {
+      "medication": "Non-steroidal anti-inflammatory drugs (NSAIDs)",
+      "reason": "Treatment of choice for patients with acute pericarditis"
+    },
+    {
+      "medication": "Colchicine",
+      "reason": "Reduces symptoms and decreases the rate of recurrent pericarditis"
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 60,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual case chief complaint in OCR. It should be 'Sharp, radiating chest pain to the back. The onset is acute, character is pleuritic, and severity varies with changes in position.' instead of 'Idiopathic Pericarditis'.",
+      "fix": "Modify the title to match the actual chief complaint."
+    },
+    {
+      "field": "stacks",
+      "problem": "Stack labels have some UI noise like 'Correctly Ordered' as a label and a reason. They should only have clean clinical labels, correct type, and finding = the reason from the case.",
+      "fix": "Modify stack labels to remove UI noise and ensure they meet the quality target."
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Some physical exam findings like cardiovascular are present but null, while some systems like musculoskeletal and genitourinary are empty. It should follow the quality target where only systems with actual findings are populated.",
+      "fix": "Populate physical_exam fields correctly based on the presented case."
+    }
+  ]
+}

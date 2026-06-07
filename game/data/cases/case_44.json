@@ -1,0 +1,66 @@
+{
+  "id": 44,
+  "topic": "Diarrhea",
+  "diagnosis": "Giardiasis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Lungs",
+    "Physical Exam: Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities",
+    "Physical Exam: Skin",
+    "Hormone, thyroid stimulating serum / Hormone, thyroid stimulating serum",
+    "Antibody, Hepatitis A, IgM serum / Hepatitis panel",
+    "Urinalysis"
+  ],
+  "should_avoid": [
+    "order1",
+    "Unnecessary imaging studies unless red flags are present such as fever, abdominal pain or bloody diarrhea"
+  ],
+  "rationale": {
+    "Physical Exam: Lungs": "Evaluate chest and lungs as part of the initial exam for diarrhea.",
+    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to diarrhea.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with diarrhea.",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Giardiasis.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Giardiasis.",
+    "Hormone, thyroid stimulating serum / Hormone, thyroid stimulating serum": "Patient education and counseling are part of definitive care for Giardiasis.",
+    "Antibody, Hepatitis A, IgM serum / Hepatitis panel": "Appropriate CCS order for Giardiasis: Antibody, Hepatitis A, IgM serum / Hepatitis panel.",
+    "Urinalysis": "Appropriate CCS order for Giardiasis: Urinalysis.",
+    "order1": "CCS review: avoid this order for Giardiasis — it does not change acute management.",
+    "Unnecessary imaging studies unless red flags are present such as fever, abdominal pain or bloody diarrhea": "CCS review: avoid this order for Giardiasis — it does not change acute management."
+  },
+  "hpi": "Case Summary: Giardiasis is an infection caused by the parasite Giardia lamblia. It is important to consider this diagnosis in patients presenting with diarrhea, especially if they have traveled recently or have been exposed to contaminated water. The treatment of choice is metronidazole, but other antiparasitic agents will kill Giardia as well. It is also important to ensure that the patient is hydrated, as dehydration can be a significant concern with diarrhea. Additionally, educating the patient about the importance of proper hygiene and avoiding contaminated food and water sources is crucial in preventing future infections.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared because I've been having diarrhea for days.",
+    "history": "I traveled recently and drank some water that didn't seem clean.",
+    "pain": "My stomach hurts a lot."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Case Summary: Giardiasis is an infection caused by the parasite Giardia lamblia. It is important to consider this diagnosis in patients presenting with diarrhea, especially if they have traveled recently or have been exposed to contaminated water. The treatment of choice is metronidazole, but other antiparasitic agents will kill Giardia as well. It is also important to ensure that the patient is hydrated, as dehydration can be a significant concern with diarrhea. Additionally, educating the patient about the importance of proper hygiene and avoiding contaminated food and water sources is crucial in preventing future infections.",
+  "stacks": [
+    "Vitals Ordered",
+    "General Appearance, Skin, Lymph Node, HEENT, General, Rectal Examinations",
+    "Ordered: Vibrio species culture, stool",
+    "Ordered: Bacterial culture, stool",
+    "Ordered: Polymerase Chain Reaction (PCR) for stool"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

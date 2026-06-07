@@ -1,0 +1,55 @@
+{
+  "id": 132,
+  "topic": "Foot Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain radiographs of the foot to assess for fractures, dislocations, or degenerative changes",
+    "Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein) to evaluate for systemic inflammation",
+    "Oxygen",
+    "IV access ×2 large-bore"
+  ],
+  "should_avoid": [
+    "Prescribe nonsteroidal anti-inflammatory drugs (NSAIDs) without a definitive diagnosis"
+  ],
+  "rationale": {
+    "Obtain radiographs of the foot to assess for fractures, dislocations, or degenerative changes": "Imaging supports diagnosis when exam findings warrant it for this diagnosis.",
+    "Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein) to evaluate for systemic inflammation": "Appropriate CCS order for this diagnosis: Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein) to evaluate for systemic inflammation.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2 large-bore": "Appropriate CCS order for this diagnosis: IV access ×2 large-bore.",
+    "Prescribe nonsteroidal anti-inflammatory drugs (NSAIDs) without a definitive diagnosis": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — foot pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This foot pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain radiographs of the foot to assess for fractures, dislocations, or degenerative changes",
+    "Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein) to evaluate for systemic inflammation",
+    "Oxygen",
+    "IV access ×2 large-bore"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

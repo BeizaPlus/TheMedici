@@ -1,0 +1,58 @@
+{
+  "id": 166,
+  "topic": "Oral Bleeding",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "ED or ward",
+    "CBC",
+    "PTT",
+    "Factor VIII assay",
+    "Factor VIII replacement",
+    "Avoid NSAIDs / IM injections"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "ED or ward": "Appropriate CCS order for this diagnosis: ED or ward.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "PTT": "Appropriate CCS order for this diagnosis: PTT.",
+    "Factor VIII assay": "Appropriate CCS order for this diagnosis: Factor VIII assay.",
+    "Factor VIII replacement": "Appropriate CCS order for this diagnosis: Factor VIII replacement.",
+    "Avoid NSAIDs / IM injections": "Appropriate CCS order for this diagnosis: Avoid NSAIDs / IM injections."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — oral bleeding. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This oral bleeding won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "ED or ward",
+    "CBC",
+    "PTT",
+    "Factor VIII assay",
+    "Factor VIII replacement",
+    "Avoid NSAIDs / IM injections"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

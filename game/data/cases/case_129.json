@@ -1,0 +1,64 @@
+{
+  "id": 129,
+  "topic": "Facial Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain a detailed history, focusing on the onset, duration, and characteristics of the pain",
+    "Perform a neurological examination, including cranial nerve evaluation",
+    "Order MRI or CT with contrast to evaluate for any structural lesions in the trigeminal nerve region",
+    "Consider referral to a neurologist or neurosurgeon for further evaluation and management if MRI/CT reveals abnormalities",
+    "Initiate pain management as needed, such as carbamazepine or gabapentin, while awaiting specialist consultation",
+    "Oxygen",
+    "IV access x2"
+  ],
+  "should_avoid": [
+    "Immediate surgical intervention without proper diagnostic workup"
+  ],
+  "rationale": {
+    "Obtain a detailed history, focusing on the onset, duration, and characteristics of the pain": "Appropriate CCS order for this diagnosis: Obtain a detailed history, focusing on the onset, duration, and characteristics of the pain.",
+    "Perform a neurological examination, including cranial nerve evaluation": "Targeted Perform a neurological examination, including cranial nerve evaluation exam supports the differential for this diagnosis.",
+    "Order MRI or CT with contrast to evaluate for any structural lesions in the trigeminal nerve region": "Appropriate CCS order for this diagnosis: Order MRI or CT with contrast to evaluate for any structural lesions in the trigeminal nerve region.",
+    "Consider referral to a neurologist or neurosurgeon for further evaluation and management if MRI/CT reveals abnormalities": "Targeted Consider referral to a neurologist or neurosurgeon for further evaluation and management if MRI/CT reveals abnormalities exam supports the differential for this diagnosis.",
+    "Initiate pain management as needed, such as carbamazepine or gabapentin, while awaiting specialist consultation": "Appropriate CCS order for this diagnosis: Initiate pain management as needed, such as carbamazepine or gabapentin, while awaiting specialist consultation.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access x2": "Appropriate CCS order for this diagnosis: IV access x2.",
+    "Immediate surgical intervention without proper diagnostic workup": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — facial pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This facial pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain a detailed history, focusing on the onset, duration, and characteristics of the pain",
+    "Perform a neurological examination, including cranial nerve evaluation",
+    "Order MRI or CT with contrast to evaluate for any structural lesions in the trigeminal nerve region",
+    "Consider referral to a neurologist or neurosurgeon for further evaluation and management if MRI/CT reveals abnormalities",
+    "Initiate pain management as needed, such as carbamazepine or gabapentin, while awaiting specialist consultation",
+    "Oxygen",
+    "IV access x2"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

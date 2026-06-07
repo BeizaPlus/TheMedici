@@ -1,0 +1,58 @@
+{
+  "id": 154,
+  "topic": "Vaginal Discharge",
+  "diagnosis": "None specified",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Clinic",
+    "Wet mount",
+    "Vaginal pH",
+    "HIV, RPR, chlamydia/gonorrhea NAAT",
+    "Oral metronidazole",
+    "Treat sexual partner"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Clinic": "Appropriate CCS order for None specified: Clinic.",
+    "Wet mount": "Appropriate CCS order for None specified: Wet mount.",
+    "Vaginal pH": "Appropriate CCS order for None specified: Vaginal pH.",
+    "HIV, RPR, chlamydia/gonorrhea NAAT": "Appropriate CCS order for None specified: HIV, RPR, chlamydia/gonorrhea NAAT.",
+    "Oral metronidazole": "Appropriate CCS order for None specified: Oral metronidazole.",
+    "Treat sexual partner": "Appropriate CCS order for None specified: Treat sexual partner."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — vaginal discharge. I'm really scared.",
+    "history": "It's been getting worse. They said something about none specified. ...",
+    "pain": "This vaginal discharge won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Clinic",
+    "Wet mount",
+    "Vaginal pH",
+    "HIV, RPR, chlamydia/gonorrhea NAAT",
+    "Oral metronidazole",
+    "Treat sexual partner"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

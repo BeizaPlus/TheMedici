@@ -1,0 +1,73 @@
+{
+  "id": 90,
+  "topic": "Prenatal followup",
+  "diagnosis": "Pregnancy Induced Hypertension (Gestational hypertension)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Ordered: Nifedipine",
+    "Ordered: Magnesium sulfate",
+    "Ordered: Intravenous access",
+    "Ordered: Methyldopa",
+    "Ordered: Nifedipine",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest/Lungs",
+    "Physical Exam: Cardiovascular",
+    "Physical Exam: Abdominal",
+    "Physical Exam: Extremities"
+  ],
+  "should_avoid": [
+    "CMP/BMP (Metabolic Panel): CMP/BMP (Metabolic Panel): Electrolytes, renal/liver status; UA ± culture; UTI, sepsis workup",
+    "Never forget: Never forget: pregnancy test; in women of childbearing age.",
+    "order1",
+    "Premature delivery prevention medications"
+  ],
+  "rationale": {
+    "Ordered: Nifedipine": "Appropriate CCS order for Pregnancy Induced Hypertension (Gestational hypertension): Ordered: Nifedipine.",
+    "Ordered: Magnesium sulfate": "Appropriate CCS order for Pregnancy Induced Hypertension (Gestational hypertension): Ordered: Magnesium sulfate.",
+    "Ordered: Intravenous access": "Appropriate CCS order for Pregnancy Induced Hypertension (Gestational hypertension): Ordered: Intravenous access.",
+    "Ordered: Methyldopa": "Appropriate CCS order for Pregnancy Induced Hypertension (Gestational hypertension): Ordered: Methyldopa.",
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for prenatal followup.",
+    "Physical Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for prenatal followup.",
+    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to prenatal followup.",
+    "Physical Exam: Abdominal": "Appropriate CCS order for Pregnancy Induced Hypertension (Gestational hypertension): Physical Exam: Abdominal.",
+    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Pregnancy Induced Hypertension (Gestational hypertension).",
+    "CMP/BMP (Metabolic Panel): CMP/BMP (Metabolic Panel): Electrolytes, renal/liver status; UA ± culture; UTI, sepsis workup": "Advanced imaging is not indicated early for Pregnancy Induced Hypertension (Gestational hypertension) when the diagnosis is clinical.",
+    "Never forget: Never forget: pregnancy test; in women of childbearing age.": "CCS review: avoid this order for Pregnancy Induced Hypertension (Gestational hypertension) — it does not change acute management.",
+    "order1": "CCS review: avoid this order for Pregnancy Induced Hypertension (Gestational hypertension) — it does not change acute management.",
+    "Premature delivery prevention medications": "CCS review: avoid this order for Pregnancy Induced Hypertension (Gestational hypertension) — it does not change acute management."
+  },
+  "hpi": "Obstetric/Gestational Hypertension: Clinical Presentation and Management. Gestational hypertension is defined as new-onset hypertension after 20 weeks of gestation. The patient should be monitored closely for signs of preeclampsia. The treatment for gestational hypertension includes monitoring blood pressure and, if necessary, initiating antihypertensive therapy. It is important to note that the patient should be counseled regarding the potential risks associated with gestational hypertension and the need for close follow-up. The management of gestational hypertension may include lifestyle modifications and, in some cases, medication.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really worried about my blood pressure. It feels so high.",
+    "history": "I didn't have high blood pressure before. Now I'm scared.",
+    "pain": "I feel a tightness in my chest sometimes."
+  },
+  "ccs_category": "OB/GYN",
+  "case_summary": "Obstetric/Gestational Hypertension: Clinical Presentation and Management. Gestational hypertension is defined as new-onset hypertension after 20 weeks of gestation. The patient should be monitored closely for signs of preeclampsia. The treatment for gestational hypertension includes monitoring blood pressure and, if necessary, initiating antihypertensive therapy. It is important to note that the patient should be counseled regarding the potential risks associated with gestational hypertension and the need for close follow-up. The management of gestational hypertension may include lifestyle modifications and, in some cases, medication.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered: Nifedipine",
+    "Ordered: Magnesium sulfate",
+    "Ordered: Intravenous access",
+    "Ordered: Methyldopa"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

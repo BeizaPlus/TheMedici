@@ -1,0 +1,60 @@
+{
+  "id": 28,
+  "topic": "Pelvic Inflammatory Disease",
+  "diagnosis": "Pelvic Inflammatory Disease",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "CBC",
+    "Urinalysis",
+    "Pregnancy Test",
+    "Pelvic Exam",
+    "Culture",
+    "CT Abdomen/Pelvis"
+  ],
+  "should_avoid": [
+    "MRI"
+  ],
+  "rationale": {
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Pelvic Inflammatory Disease.",
+    "Urinalysis": "Appropriate CCS order for Pelvic Inflammatory Disease: Urinalysis.",
+    "Pregnancy Test": "Appropriate CCS order for Pelvic Inflammatory Disease: Pregnancy Test.",
+    "Pelvic Exam": "Pelvic/cervical evaluation is central for Pelvic Inflammatory Disease and localizes the source of pelvic inflammatory disease.",
+    "Culture": "Laboratory testing when systemic illness or severity warrants labs in Pelvic Inflammatory Disease.",
+    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with pelvic inflammatory disease.",
+    "MRI": "Advanced imaging is not indicated early for Pelvic Inflammatory Disease when the diagnosis is clinical."
+  },
+  "hpi": "This case illustrates the importance of considering pelvic inflammatory disease in women of childbearing age presenting with abdominal pain. The diagnosis can often be made based on clinical findings and appropriate laboratory tests. Treatment typically involves antibiotics, and in some cases, surgical intervention may be necessary. It is crucial to rule out other potential causes of abdominal pain, including ectopic pregnancy and appendicitis.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. I have this terrible pain in my lower abdomen.",
+    "history": "I felt fine until yesterday. The pain started suddenly and got worse.",
+    "pain": "It hurts a lot, especially when I move."
+  },
+  "ccs_category": null,
+  "case_summary": "This case illustrates the importance of considering pelvic inflammatory disease in women of childbearing age presenting with abdominal pain. The diagnosis can often be made based on clinical findings and appropriate laboratory tests. Treatment typically involves antibiotics, and in some cases, surgical intervention may be necessary. It is crucial to rule out other potential causes of abdominal pain, including ectopic pregnancy and appendicitis.",
+  "stacks": [
+    "CBC Ordered",
+    "Urinalysis Ordered",
+    "Pregnancy Test Ordered",
+    "Pelvic Exam Ordered",
+    "Culture Ordered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

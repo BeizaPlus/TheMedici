@@ -1,0 +1,70 @@
+{
+  "id": 136,
+  "topic": "Shortness of Breath",
+  "diagnosis": "Sarcoidosis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam (General)",
+    "Pulmonary Function Tests",
+    "Chest X-ray, PA & Lateral",
+    "CBC with Differential",
+    "Comprehensive metabolic panel",
+    "Vitamin D Level",
+    "Antinuclear Antibody (ANA) test",
+    "Arterial Blood Gas (ABG) study",
+    "Sputum Culture",
+    "Bronchoscopy"
+  ],
+  "should_avoid": [
+    "CT Chest",
+    "MRI Brain"
+  ],
+  "rationale": {
+    "Physical Exam (General)": "Appropriate CCS order for Sarcoidosis: Physical Exam (General).",
+    "Pulmonary Function Tests": "Appropriate CCS order for Sarcoidosis: Pulmonary Function Tests.",
+    "Chest X-ray, PA & Lateral": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
+    "CBC with Differential": "Laboratory testing when systemic illness or severity warrants labs in Sarcoidosis.",
+    "Comprehensive metabolic panel": "Laboratory testing when systemic illness or severity warrants labs in Sarcoidosis.",
+    "Vitamin D Level": "Appropriate CCS order for Sarcoidosis: Vitamin D Level.",
+    "Antinuclear Antibody (ANA) test": "Appropriate CCS order for Sarcoidosis: Antinuclear Antibody (ANA) test.",
+    "Arterial Blood Gas (ABG) study": "Appropriate CCS order for Sarcoidosis: Arterial Blood Gas (ABG) study.",
+    "Sputum Culture": "Laboratory testing when systemic illness or severity warrants labs in Sarcoidosis.",
+    "Bronchoscopy": "Appropriate CCS order for Sarcoidosis: Bronchoscopy.",
+    "CT Chest": "Advanced imaging is not indicated early for Sarcoidosis when the diagnosis is clinical.",
+    "MRI Brain": "Advanced imaging is not indicated early for Sarcoidosis when the diagnosis is clinical."
+  },
+  "hpi": "The patient has sarcoidosis. Sarcoidosis can present with respiratory symptoms and is often diagnosed by imaging studies. Research on the clinical management of sarcoidosis suggests that initial treatment is typically corticosteroids, and this is primarily for those with significant respiratory symptoms. The results from imaging studies should be reviewed, as they can provide information on the extent of the disease. The case summary highlights the importance of considering sarcoidosis in patients presenting with respiratory symptoms and the need for appropriate diagnostic studies to confirm the diagnosis.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared because I can't breathe well. It feels like I'm suffocating.",
+    "history": "I have been feeling short of breath for a while now. It gets worse at night.",
+    "pain": "I feel tightness in my chest, especially when I try to take a deep breath."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "The patient has sarcoidosis. Sarcoidosis can present with respiratory symptoms and is often diagnosed by imaging studies. Research on the clinical management of sarcoidosis suggests that initial treatment is typically corticosteroids, and this is primarily for those with significant respiratory symptoms. The results from imaging studies should be reviewed, as they can provide information on the extent of the disease. The case summary highlights the importance of considering sarcoidosis in patients presenting with respiratory symptoms and the need for appropriate diagnostic studies to confirm the diagnosis.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exams",
+    "Ordered: CBC with differential",
+    "Ordered: Comprehensive metabolic panel",
+    "Ordered: X-ray, chest"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

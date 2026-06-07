@@ -1,0 +1,64 @@
+{
+  "id": 33,
+  "topic": "Altered Mental Status",
+  "diagnosis": "Normal Pressure Hydrocephalus",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Neurological / Psych",
+    "CT, brain, without contrast",
+    "Lumbar puncture"
+  ],
+  "should_avoid": [
+    "CBC with differential",
+    "Urinalysis"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for altered mental status.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for altered mental status.",
+    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to altered mental status.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with altered mental status.",
+    "Physical Exam: Neurological / Psych": "Targeted Physical Exam: Neurological / Psych exam supports the differential for Normal Pressure Hydrocephalus.",
+    "CT, brain, without contrast": "Appropriate CCS order for Normal Pressure Hydrocephalus: CT, brain, without contrast.",
+    "Lumbar puncture": "Appropriate CCS order for Normal Pressure Hydrocephalus: Lumbar puncture.",
+    "CBC with differential": "CBC is not needed for uncomplicated Normal Pressure Hydrocephalus without fever, systemic symptoms, or abnormal vitals.",
+    "Urinalysis": "CCS review: avoid this order for Normal Pressure Hydrocephalus — it does not change acute management."
+  },
+  "hpi": "Differential: Normal pressure hydrocephalus, Progressive multifocal leukoencephalopathy, Subdural hematoma, Dementia, Other causes. Patients with normal pressure hydrocephalus can present with cognitive decline, gait disturbance, and urinary incontinence. The diagnosis is made with neuroimaging, and the treatment is a ventriculoperitoneal shunt. It is important to recognize that normal pressure hydrocephalus is treatable. It was emphasized that the lumbar puncture is the gold standard to diagnose normal pressure hydrocephalus. All of the above patients with these symptoms can be seen in the emergency department. The lumbar puncture is the definitive test for normal pressure hydrocephalus.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. I feel confused and can't remember things.",
+    "history": "I don't know what's happening to me. My family says I've been acting different.",
+    "pain": "I don't have pain, just this weird feeling in my head."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Differential: Normal pressure hydrocephalus, Progressive multifocal leukoencephalopathy, Subdural hematoma, Dementia, Other causes. Patients with normal pressure hydrocephalus can present with cognitive decline, gait disturbance, and urinary incontinence. The diagnosis is made with neuroimaging, and the treatment is a ventriculoperitoneal shunt. It is important to recognize that normal pressure hydrocephalus is treatable. It was emphasized that the lumbar puncture is the gold standard to diagnose normal pressure hydrocephalus. All of the above patients with these symptoms can be seen in the emergency department. The lumbar puncture is the definitive test for normal pressure hydrocephalus.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

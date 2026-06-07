@@ -1,0 +1,68 @@
+{
+  "id": 57,
+  "topic": "Abdominal Pain - Pediatrics",
+  "diagnosis": "Intussusception",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "CBC with differential",
+    "X-ray, abdomen, acute series: KUB, abdomen, AP",
+    "Lactate metabolic profile / Comprehensive metabolic profile / Liver function panel",
+    "Saline solution, normal / Lactated Ringer solution / Dextrose 5% in lactated Ringer solution / Dextrose 5% in normal saline solution",
+    "Physical Exam: Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "U.S. abdomen / Intussusception reduction, imaging guided",
+    "Barium enema / Intussusception reduction, imaging guided / Barium / Enema without contrast"
+  ],
+  "should_avoid": [
+    "NPO / Nothing by mouth except ice chips",
+    "Nasogastric tube with feeding strategy / Nasogastric tube with suction"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for abdominal pain - pediatrics.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Intussusception.",
+    "X-ray, abdomen, acute series: KUB, abdomen, AP": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain - pediatrics.",
+    "Lactate metabolic profile / Comprehensive metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Intussusception.",
+    "Saline solution, normal / Lactated Ringer solution / Dextrose 5% in lactated Ringer solution / Dextrose 5% in normal saline solution": "Appropriate CCS order for Intussusception: Saline solution, normal / Lactated Ringer solution / Dextrose 5% in lactated Ringer solution / Dextrose 5% in normal saline solution.",
+    "Physical Exam: Lungs": "Evaluate chest and lungs as part of the initial exam for abdominal pain - pediatrics.",
+    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to abdominal pain - pediatrics.",
+    "U.S. abdomen / Intussusception reduction, imaging guided": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain - pediatrics.",
+    "Barium enema / Intussusception reduction, imaging guided / Barium / Enema without contrast": "Appropriate CCS order for Intussusception: Barium enema / Intussusception reduction, imaging guided / Barium / Enema without contrast.",
+    "NPO / Nothing by mouth except ice chips": "CCS review: avoid this order for Intussusception — it does not change acute management.",
+    "Nasogastric tube with feeding strategy / Nasogastric tube with suction": "Advanced imaging is not indicated early for Intussusception when the diagnosis is clinical."
+  },
+  "hpi": "Differential: Metabolic acidosis, Intestinal obstruction, Gastroenteritis, Sepsis, Intussusception. This patient has been vomiting lately due to his bowel obstruction and is showing signs of dehydration (lethargy), so he needs to be resuscitated with fluids.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared because my stomach hurts a lot. I feel really weak.",
+    "history": "I have been throwing up and my belly feels really bad.",
+    "pain": "It hurts so much in my belly."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "Differential: Metabolic acidosis, Intestinal obstruction, Gastroenteritis, Sepsis, Intussusception. This patient has been vomiting lately due to his bowel obstruction and is showing signs of dehydration (lethargy), so he needs to be resuscitated with fluids.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam: General Appearance",
+    "CBC with differential",
+    "X-ray, abdomen, acute series: KUB, abdomen, AP",
+    "Lactate metabolic profile / Comprehensive metabolic profile / Liver function panel"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing."
+}

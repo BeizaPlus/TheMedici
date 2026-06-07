@@ -1,0 +1,106 @@
+{
+  "case_number": 100,
+  "title": "Atrophic Vaginitis (Genitourinary Syndrome of Menopause)",
+  "location": null,
+  "hpi_raw": null,
+  "hpi_narrative": "[Ms] Patient is a [unknown age]-year-old female with [unknown PMH] who presents with Atrophic Vaginitis. Onset is not specified, character and severity are vaginal dryness, discharge and postcoital bleeding. Associated symptoms include vaginal itchiness and pain with intercourse. The clinical question this case forces you to answer is to diagnose the cause of the patient's symptoms and prescribe appropriate treatment.",
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "The general examination is extremely useful to determine how sick the patient looks"
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "shouldHaveOrdered",
+      "finding": "It is important to investigate for lung pathology"
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "shouldHaveOrdered",
+      "finding": "It is important to investigate for cardiac pathology"
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "It is important to investigate for abdominal pathology"
+    },
+    {
+      "label": "Physical Exam: Genitalia",
+      "type": "correctlyOrdered",
+      "finding": "This is the patient's chief complaint, so this should be examined"
+    },
+    {
+      "label": "CBC with differential",
+      "type": "shouldHaveOrdered",
+      "finding": "CBC is always a good screening tool in nearly every patient"
+    },
+    {
+      "label": "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+      "type": "shouldHaveOrdered",
+      "finding": "A TSH would be a good lab to order to screen for abnormal thyroid levels which could contribute to the patient's current symptoms"
+    },
+    {
+      "label": "Cervical wet mount",
+      "type": "shouldHaveOrdered",
+      "finding": "This is to look for infections that could be contributing to the patient's presentation"
+    },
+    {
+      "label": "Antibody, direct fluorescent, chlamydia, urethra / Chlamydia trachomatis DNA probe test, urethra / Chlamydia trachomatis DNA probe test, urine / Antigen, bacterial, chlamydia, urine / Chlamydia culture, urethra",
+      "type": null
+    },
+    {
+      "label": "Antibody, direct fluorescent, chlamydia, cervix / Chlamydia trachomatis DNA probe test, cervix / Chlamydia trachomatis DNA probe test, vagina / Chlamydia culture, vagina",
+      "type": null
+    },
+    {
+      "label": "Neisseria gonorrhoeae DNA probe test, urethra / Neisseria gonorrhoeae DNA probe test, urine / Antigen, bacterial, gonococcus, urine / Culture, gonococcal, urethra / Bacterial antigens detection, gonococcus, urine / Neisseria gonorrhoeae DNA probe test, cervix / Gonococcal culture, cervix",
+      "type": null
+    },
+    {
+      "label": "Papanicolaou smear / Human papillomavirus DNA probe test, cervix",
+      "type": null
+    },
+    {
+      "label": "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
+      "type": null
+    },
+    {
+      "label": "Lubricating jelly",
+      "type": "correctlyOrdered",
+      "finding": null
+    },
+    {
+      "label": "Hormone therapy, conjugated estrogen / Estradiol, therapy",
+      "type": "shouldHaveOrdered",
+      "finding": "This should be prescribed vaginally to help with the vaginal atrophy. Oral has more side effects and could potentially be more dangerous"
+    },
+    {
+      "label": "Vaccine, diphtheria/tetanus/pertussis / Vaccine, diphtheria/tetanus/pertussis/HIB",
+      "type": "shouldHaveOrdered",
+      "finding": "Tdap vaccines should be given every 10 years. No history of this was given, so this should be administered"
+    },
+    {
+      "label": "Vaccine, varicella virus",
+      "type": "shouldHaveOrdered",
+      "finding": "If a patient is over the age of 50, he should be administered a herpes-zoster immunization. The CDC recommends Shingrix (Recombinant zoster vaccine) as the preferred shingles vaccine and is recommended for healthy adults 50 years and older. Zostavax may still be used to prevent shingles in healthy adults 60 years and older."
+    },
+    {
+      "label": "Mammography",
+      "type": "shouldHaveOrdered",
+      "finding": "All women older than 40 years old should get a yearly clinical breast exam and mammogram (if risk factors are present, start at 35)"
+    },
+    {
+      "label": null,
+      "type": null,
+      "finding": "You had 2 negative patient updates prior to correct treatment"
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  }
+}

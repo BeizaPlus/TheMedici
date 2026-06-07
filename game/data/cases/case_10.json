@@ -1,0 +1,68 @@
+{
+  "id": 10,
+  "topic": "Pain in Leg",
+  "diagnosis": "Intermittent Claudication (Peripheral Vascular Disease)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam and Diagnostic",
+    "Laboratory Studies",
+    "Imaging Studies",
+    "Consultation",
+    "Medication",
+    "Invasive Studies",
+    "Additional Imaging",
+    "Additional Laboratory Studies",
+    "Referral",
+    "Patient Education"
+  ],
+  "should_avoid": [
+    "Inappropriate consultation"
+  ],
+  "rationale": {
+    "Physical Exam and Diagnostic": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Physical Exam and Diagnostic.",
+    "Laboratory Studies": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Laboratory Studies.",
+    "Imaging Studies": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Imaging Studies.",
+    "Consultation": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Consultation.",
+    "Medication": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Medication.",
+    "Invasive Studies": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Invasive Studies.",
+    "Additional Imaging": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Additional Imaging.",
+    "Additional Laboratory Studies": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Additional Laboratory Studies.",
+    "Referral": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Referral.",
+    "Patient Education": "Patient education and counseling are part of definitive care for Intermittent Claudication (Peripheral Vascular Disease).",
+    "Inappropriate consultation": "CCS review: avoid this order for Intermittent Claudication (Peripheral Vascular Disease) — it does not change acute management."
+  },
+  "hpi": "Intermittent claudication is a condition characterized by pain, cramping, or heaviness in the legs during physical activity, which is relieved by rest. It is caused by insufficient blood flow to the muscles due to arterial occlusion. The patient should be evaluated for risk factors, and appropriate management should be initiated, including lifestyle modifications and possibly revascularization procedures. It is important to assess the severity of the disease and the patient's functional status.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about the pain in my leg. It hurts so much when I walk.",
+    "history": "I have been feeling this pain for a while now. It gets worse when I walk.",
+    "pain": "The pain is sharp and comes in waves."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Intermittent claudication is a condition characterized by pain, cramping, or heaviness in the legs during physical activity, which is relieved by rest. It is caused by insufficient blood flow to the muscles due to arterial occlusion. The patient should be evaluated for risk factors, and appropriate management should be initiated, including lifestyle modifications and possibly revascularization procedures. It is important to assess the severity of the disease and the patient's functional status.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Laboratory Studies",
+    "Imaging Studies",
+    "Consultation"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

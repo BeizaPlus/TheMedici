@@ -1,0 +1,64 @@
+{
+  "id": 58,
+  "topic": "Shortness of Breath",
+  "diagnosis": "Croup (Laryngotracheitis)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Pulse oximetry",
+    "Dexamethasone / Prednisone / Budesonide",
+    "Nebulized epinephrine therapy"
+  ],
+  "should_avoid": [
+    "X-ray, neck, soft tissue",
+    "Intravenous access / Intravenous fluids, caped"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for shortness of breath.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
+    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with shortness of breath.",
+    "Pulse oximetry": "Pulse oximetry documents oxygenation in the initial assessment.",
+    "Dexamethasone / Prednisone / Budesonide": "Treatment aligned with CCS management for Croup (Laryngotracheitis).",
+    "Nebulized epinephrine therapy": "Treatment aligned with CCS management for Croup (Laryngotracheitis).",
+    "X-ray, neck, soft tissue": "This imaging is not required for the expected CCS pathway in Croup (Laryngotracheitis).",
+    "Intravenous access / Intravenous fluids, caped": "IV fluids/access are not indicated unless the patient is unstable or cannot tolerate PO."
+  },
+  "hpi": "Differential: Bacterial tracheitis, Epiglottitis, Measles, Pertussis, Bronchopneumonia, abscess, foreign body aspiration, anaphylaxis.\n\nThis patient has croup (laryngotracheitis) that most likely stems from respiratory distress. She has the classic findings of croup including a barking cough and respiratory stridor in the setting of recent upper respiratory symptoms. Based on the history and physical exam, she likely has viral croup and is not in respiratory distress. Therefore, further diagnostic testing does not need to be done. In the ED, the patient should receive nebulized epinephrine, dexamethasone (or M.C.M. if whether the patient can tolerate IV access when you are administering IV fluids). Once the patient is given the epinephrine and dexamethasone, the patient will be reevaluated before discharge.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. I can't breathe well.",
+    "history": "I had a cold before. Now my throat hurts and I can't stop coughing.",
+    "pain": "It hurts when I cough."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "Differential: Bacterial tracheitis, Epiglottitis, Measles, Pertussis, Bronchopneumonia, abscess, foreign body aspiration, anaphylaxis.\n\nThis patient has croup (laryngotracheitis) that most likely stems from respiratory distress. She has the classic findings of croup including a barking cough and respiratory stridor in the setting of recent upper respiratory symptoms. Based on the history and physical exam, she likely has viral croup and is not in respiratory distress. Therefore, further diagnostic testing does not need to be done. In the ED, the patient should receive nebulized epinephrine, dexamethasone (or M.C.M. if whether the patient can tolerate IV access when you are administering IV fluids). Once the patient is given the epinephrine and dexamethasone, the patient will be reevaluated before discharge.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lung, Cardiovascular, Abdomen, General, Extremities and Simple, Neurological and Psychological",
+    "Time Advanced 15 minutes",
+    "Patient location changed to Emergency Department",
+    "Ordered: Pulse oximetry"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

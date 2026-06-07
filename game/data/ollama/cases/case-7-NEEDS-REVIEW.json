@@ -1,0 +1,92 @@
+{
+  "title": "Generalized Weakness - Internal Medicine",
+  "stacks": [
+    {
+      "label": "General Appearance",
+      "aliases": [],
+      "finding": null,
+      "type": "physical_exam"
+    },
+    {
+      "label": "Chest / Lungs",
+      "aliases": [],
+      "finding": null,
+      "type": "physical_exam"
+    },
+    {
+      "label": "Heart / Cardiovascular",
+      "aliases": [],
+      "finding": null,
+      "type": "physical_exam"
+    },
+    {
+      "label": "Abdomen",
+      "aliases": [],
+      "finding": null,
+      "type": "physical_exam"
+    },
+    {
+      "label": "Genitalia",
+      "aliases": [],
+      "finding": null,
+      "type": "physical_exam"
+    },
+    {
+      "label": "HEENT / Neck",
+      "aliases": [],
+      "finding": "mild ptosis",
+      "type": "physical_exam"
+    },
+    {
+      "label": "Skin",
+      "aliases": [],
+      "finding": null,
+      "type": "physical_exam"
+    },
+    {
+      "label": "Extremities / Spine",
+      "aliases": [],
+      "finding": null,
+      "type": "physical_exam"
+    },
+    {
+      "label": "Neuro / Psych",
+      "aliases": [],
+      "finding": "weakness and fatigability, double vision, normal cognitive function",
+      "type": "physical_exam"
+    }
+  ],
+  "case_number": 7,
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "hpi_narrative": "A 60-year-old female with no significant past medical history presents with weakness and fatigability of the muscles, particularly noticed in the ocular and limb muscles. Onset is gradual, character is progressive, and severity varies throughout the day. Associated symptoms include double vision and difficulty speaking. Pertinent negatives include normal cognitive function.",
+  "physical_exam": {
+    "neurological": {
+      "muscle_strength": "weakness and fatigability",
+      "reflexes": null,
+      "sensory": null,
+      "cranial_nerves": "double vision"
+    },
+    "cardiovascular": null,
+    "respiratory": null
+  },
+  "diagnosis": "Myasthenia Gravis",
+  "specialty": "Neurology",
+  "patient": {
+    "age": "60",
+    "sex": "female"
+  },
+  "_final_confidence": 25,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual case chief complaint in OCR. Title should be 'Generalized Weakness - Internal Medicine SRG'",
+      "fix": "'Generalized Weakness - Internal Medicine SRG'"
+    }
+  ]
+}

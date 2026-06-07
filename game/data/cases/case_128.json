@@ -1,0 +1,67 @@
+{
+  "id": 128,
+  "topic": "Depression",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Psychiatric Consult",
+    "Laboratory workup (CBC, Chemistry Panel, TSH, Urinalysis)",
+    "Psychological Evaluation",
+    "Cardiac Monitor",
+    "IV Access + Fluids",
+    "Stat Labs",
+    "Bedside / CT imaging",
+    "Admit / Disposition"
+  ],
+  "should_avoid": [
+    "Prescribing medications without proper evaluation and consultation"
+  ],
+  "rationale": {
+    "Psychiatric Consult": "Appropriate CCS order for this diagnosis: Psychiatric Consult.",
+    "Laboratory workup (CBC, Chemistry Panel, TSH, Urinalysis)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Psychological Evaluation": "Appropriate CCS order for this diagnosis: Psychological Evaluation.",
+    "Cardiac Monitor": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to depression.",
+    "IV Access + Fluids": "Appropriate CCS order for this diagnosis: IV Access + Fluids.",
+    "Stat Labs": "Appropriate CCS order for this diagnosis: Stat Labs.",
+    "Bedside / CT imaging": "Appropriate CCS order for this diagnosis: Bedside / CT imaging.",
+    "Admit / Disposition": "Appropriate CCS order for this diagnosis: Admit / Disposition.",
+    "Prescribing medications without proper evaluation and consultation": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — depression. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This depression won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Psychiatric Consult",
+    "Laboratory workup (CBC, Chemistry Panel, TSH, Urinalysis)",
+    "Psychological Evaluation",
+    "Cardiac Monitor",
+    "IV Access + Fluids",
+    "Stat Labs",
+    "Bedside / CT imaging",
+    "Admit / Disposition"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

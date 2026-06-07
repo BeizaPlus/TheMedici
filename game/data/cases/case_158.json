@@ -1,0 +1,58 @@
+{
+  "id": 158,
+  "topic": "Knee Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain a detailed history and perform a physical examination",
+    "Order X-rays to rule out fractures or other bony abnormalities",
+    "Consider ordering an MRI if symptoms persist or worsen, or in cases of severe trauma",
+    "If the diagnosis is still uncertain, consider a knee aspiration and synovial fluid analysis",
+    "CMP/BMP"
+  ],
+  "should_avoid": [
+    "Order immediate joint arthroscopy without proper diagnostics"
+  ],
+  "rationale": {
+    "Obtain a detailed history and perform a physical examination": "Appropriate CCS order for this diagnosis: Obtain a detailed history and perform a physical examination.",
+    "Order X-rays to rule out fractures or other bony abnormalities": "Imaging supports diagnosis when exam findings warrant it for this diagnosis.",
+    "Consider ordering an MRI if symptoms persist or worsen, or in cases of severe trauma": "Appropriate CCS order for this diagnosis: Consider ordering an MRI if symptoms persist or worsen, or in cases of severe trauma.",
+    "If the diagnosis is still uncertain, consider a knee aspiration and synovial fluid analysis": "Appropriate CCS order for this diagnosis: If the diagnosis is still uncertain, consider a knee aspiration and synovial fluid analysis.",
+    "CMP/BMP": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Order immediate joint arthroscopy without proper diagnostics": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — knee pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This knee pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain a detailed history and perform a physical examination",
+    "Order X-rays to rule out fractures or other bony abnormalities",
+    "Consider ordering an MRI if symptoms persist or worsen, or in cases of severe trauma",
+    "If the diagnosis is still uncertain, consider a knee aspiration and synovial fluid analysis",
+    "CMP/BMP"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

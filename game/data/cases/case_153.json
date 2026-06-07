@@ -1,0 +1,61 @@
+{
+  "id": 153,
+  "topic": "Skin Lesions",
+  "diagnosis": "Not possible to determine from the image",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Office / clinic",
+    "Urine porphyrin screen",
+    "Serum ferritin / iron studies",
+    "Hepatitis C screening",
+    "Phlebotomy or hydroxychloroquine",
+    "Sun protection counseling",
+    "Alcohol cessation counseling"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Office / clinic": "Appropriate CCS order for Not possible to determine from the image: Office / clinic.",
+    "Urine porphyrin screen": "Appropriate CCS order for Not possible to determine from the image: Urine porphyrin screen.",
+    "Serum ferritin / iron studies": "Appropriate CCS order for Not possible to determine from the image: Serum ferritin / iron studies.",
+    "Hepatitis C screening": "Appropriate CCS order for Not possible to determine from the image: Hepatitis C screening.",
+    "Phlebotomy or hydroxychloroquine": "Appropriate CCS order for Not possible to determine from the image: Phlebotomy or hydroxychloroquine.",
+    "Sun protection counseling": "Patient education and counseling are part of definitive care for Not possible to determine from the image.",
+    "Alcohol cessation counseling": "Patient education and counseling are part of definitive care for Not possible to determine from the image."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — skin lesions. I'm really scared.",
+    "history": "It's been getting worse. They said something about not possible to determine from the image. ...",
+    "pain": "This skin lesions won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Office / clinic",
+    "Urine porphyrin screen",
+    "Serum ferritin / iron studies",
+    "Hepatitis C screening",
+    "Phlebotomy or hydroxychloroquine",
+    "Sun protection counseling",
+    "Alcohol cessation counseling"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

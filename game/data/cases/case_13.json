@@ -1,0 +1,62 @@
+{
+  "id": 13,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Acute Gastritis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Hospital Exam: General Appearance",
+    "Hospital Exam: Chest/Lungs",
+    "Physical Exam: Abdominal",
+    "Hospital Exam: Abdomen",
+    "Hospital Exam: Neurological",
+    "Antibiotic: Rifampin",
+    "Basic metabolic panel / Comprehensive metabolic profile / Liver function panel"
+  ],
+  "should_avoid": [
+    "Endoscopy: Upper gastrointestinal"
+  ],
+  "rationale": {
+    "Hospital Exam: General Appearance": "Assess how ill the patient appears before focused testing for abdominal pain.",
+    "Hospital Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for abdominal pain.",
+    "Physical Exam: Abdominal": "Appropriate CCS order for Acute Gastritis: Physical Exam: Abdominal.",
+    "Hospital Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Hospital Exam: Neurological": "Targeted Hospital Exam: Neurological exam supports the differential for Acute Gastritis.",
+    "Antibiotic: Rifampin": "Appropriate CCS order for Acute Gastritis: Antibiotic: Rifampin.",
+    "Basic metabolic panel / Comprehensive metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Acute Gastritis.",
+    "Endoscopy: Upper gastrointestinal": "CCS review: avoid this order for Acute Gastritis — it does not change acute management."
+  },
+  "hpi": "The patient is a 45-year-old male with a history of alcohol use disorder who presents with abdominal pain. He has been experiencing this pain for the past week. The pain is described as sharp and located in the epigastric region. He reports nausea and vomiting. On examination, he appears in mild distress. Laboratory tests reveal elevated liver enzymes and a CT scan shows thickening of the gastric wall. The patient is diagnosed with acute gastritis likely secondary to alcohol use. Management includes supportive care, avoidance of NSAIDs, and counseling on alcohol cessation.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this pain in my stomach. It hurts a lot.",
+    "history": "I've been drinking a lot lately. The pain started a week ago.",
+    "pain": "It feels sharp and is right in the middle of my stomach."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "The patient is a 45-year-old male with a history of alcohol use disorder who presents with abdominal pain. He has been experiencing this pain for the past week. The pain is described as sharp and located in the epigastric region. He reports nausea and vomiting. On examination, he appears in mild distress. Laboratory tests reveal elevated liver enzymes and a CT scan shows thickening of the gastric wall. The patient is diagnosed with acute gastritis likely secondary to alcohol use. Management includes supportive care, avoidance of NSAIDs, and counseling on alcohol cessation.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Laboratory Tests",
+    "Medications Ordered",
+    "Consultation"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

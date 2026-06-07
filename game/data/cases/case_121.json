@@ -1,0 +1,67 @@
+{
+  "id": 121,
+  "topic": "Poor Feeding",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements",
+    "Physical examination to assess growth parameters, signs of dehydration, abdominal distension, or other relevant findings",
+    "Investigations such as complete blood count (CBC), chemistry panel, urinalysis, stool studies, and electrolytes to rule out potential underlying causes like infections, metabolic disorders, or anemia",
+    "Consider a swallowing study (videofluoroscopy) or pH monitoring if GERD is suspected",
+    "Refer the patient to a pediatric gastroenterologist for further evaluation and management",
+    "Oxygen",
+    "IV access x2",
+    "glucose check"
+  ],
+  "should_avoid": [
+    "Initiate aggressive treatment (e.g., antibiotics, proton pump inhibitors) without proper investigations as the underlying cause may not be related to an infection or GERD."
+  ],
+  "rationale": {
+    "Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements": "Appropriate CCS order for this diagnosis: Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements.",
+    "Physical examination to assess growth parameters, signs of dehydration, abdominal distension, or other relevant findings": "Appropriate CCS order for this diagnosis: Physical examination to assess growth parameters, signs of dehydration, abdominal distension, or other relevant findings.",
+    "Investigations such as complete blood count (CBC), chemistry panel, urinalysis, stool studies, and electrolytes to rule out potential underlying causes like infections, metabolic disorders, or anemia": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Consider a swallowing study (videofluoroscopy) or pH monitoring if GERD is suspected": "Appropriate CCS order for this diagnosis: Consider a swallowing study (videofluoroscopy) or pH monitoring if GERD is suspected.",
+    "Refer the patient to a pediatric gastroenterologist for further evaluation and management": "Appropriate CCS order for this diagnosis: Refer the patient to a pediatric gastroenterologist for further evaluation and management.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access x2": "Appropriate CCS order for this diagnosis: IV access x2.",
+    "glucose check": "Appropriate CCS order for this diagnosis: glucose check.",
+    "Initiate aggressive treatment (e.g., antibiotics, proton pump inhibitors) without proper investigations as the underlying cause may not be related to an infection or GERD.": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — poor feeding. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This poor feeding won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements",
+    "Physical examination to assess growth parameters, signs of dehydration, abdominal distension, or other relevant findings",
+    "Investigations such as complete blood count (CBC), chemistry panel, urinalysis, stool studies, and electrolytes to rule out potential underlying causes like infections, metabolic disorders, or anemia",
+    "Consider a swallowing study (videofluoroscopy) or pH monitoring if GERD is suspected",
+    "Refer the patient to a pediatric gastroenterologist for further evaluation and management",
+    "Oxygen",
+    "IV access x2",
+    "glucose check"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

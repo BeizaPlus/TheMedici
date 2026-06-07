@@ -1,0 +1,68 @@
+{
+  "id": 118,
+  "topic": "Muscle Pain",
+  "diagnosis": "Rhabdomyolysis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Limbs/Spine",
+    "Basic metabolic profile / Liver function panel",
+    "Saline solution: CAVS / Lactated Ringer solution / Saline solution, normal",
+    "Physical Exam: Neuro/Psych",
+    "Creatine phosphokinase levels/serum / Creatine phosphokinase, serum, total",
+    "Urinalysis",
+    "Sodium bicarbonate therapy"
+  ],
+  "should_avoid": [
+    "Myoglobin, serum, quantitative",
+    "Myoglobin, urine, qualitative",
+    "Myoglobin, serum"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for muscle pain.",
+    "Physical Exam: Limbs/Spine": "Appropriate CCS order for Rhabdomyolysis: Physical Exam: Limbs/Spine.",
+    "Basic metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Rhabdomyolysis.",
+    "Saline solution: CAVS / Lactated Ringer solution / Saline solution, normal": "Appropriate CCS order for Rhabdomyolysis: Saline solution: CAVS / Lactated Ringer solution / Saline solution, normal.",
+    "Physical Exam: Neuro/Psych": "Targeted Physical Exam: Neuro/Psych exam supports the differential for Rhabdomyolysis.",
+    "Creatine phosphokinase levels/serum / Creatine phosphokinase, serum, total": "Appropriate CCS order for Rhabdomyolysis: Creatine phosphokinase levels/serum / Creatine phosphokinase, serum, total.",
+    "Urinalysis": "Appropriate CCS order for Rhabdomyolysis: Urinalysis.",
+    "Sodium bicarbonate therapy": "Appropriate CCS order for Rhabdomyolysis: Sodium bicarbonate therapy.",
+    "Myoglobin, serum, quantitative": "CCS review: avoid this order for Rhabdomyolysis — it does not change acute management.",
+    "Myoglobin, urine, qualitative": "CCS review: avoid this order for Rhabdomyolysis — it does not change acute management.",
+    "Myoglobin, serum": "CCS review: avoid this order for Rhabdomyolysis — it does not change acute management."
+  },
+  "hpi": "Rhabdomyolysis is a condition characterized by the breakdown of muscle tissue, leading to the release of muscle fiber contents into the bloodstream. This can result in serious complications, including acute kidney injury. The management of rhabdomyolysis involves identifying the underlying cause, providing supportive care, and monitoring for complications. It is important to maintain adequate hydration and to monitor renal function closely. In some cases, additional treatments such as bicarbonate therapy may be indicated to prevent kidney injury.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My muscles hurt so much.",
+    "history": "I felt weak and my muscles started to ache.",
+    "pain": "It feels like a deep ache in my muscles."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Rhabdomyolysis is a condition characterized by the breakdown of muscle tissue, leading to the release of muscle fiber contents into the bloodstream. This can result in serious complications, including acute kidney injury. The management of rhabdomyolysis involves identifying the underlying cause, providing supportive care, and monitoring for complications. It is important to maintain adequate hydration and to monitor renal function closely. In some cases, additional treatments such as bicarbonate therapy may be indicated to prevent kidney injury.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Limbs/Spine",
+    "Basic metabolic profile / Liver function panel",
+    "Saline solution: CAVS / Lactated Ringer solution / Saline solution, normal"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

@@ -1,0 +1,73 @@
+{
+  "id": 59,
+  "topic": "Shortness of Breath",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain vital signs",
+    "Chest X-ray",
+    "Arterial Blood Gases (ABG)",
+    "Electrocardiogram (ECG)",
+    "Pulse oximetry",
+    "Complete blood count (CBC)",
+    "B-type Natriuretic Peptide (BNP) or Brain natriuretic peptide (BNP) and N-terminal pro B-type natriuretic peptide (NT-proBNP)",
+    "Chest CT if indications arise",
+    "Consult Internal Medicine/Cardiology",
+    "Oxygen"
+  ],
+  "should_avoid": [
+    "Ordering immediate invasive procedures such as thoracentesis or cardiac catheterization without further diagnostics"
+  ],
+  "rationale": {
+    "Obtain vital signs": "Vital signs establish baseline stability before further orders.",
+    "Chest X-ray": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
+    "Arterial Blood Gases (ABG)": "Appropriate CCS order for this diagnosis: Arterial Blood Gases (ABG).",
+    "Electrocardiogram (ECG)": "Appropriate CCS order for this diagnosis: Electrocardiogram (ECG).",
+    "Pulse oximetry": "Pulse oximetry documents oxygenation in the initial assessment.",
+    "Complete blood count (CBC)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "B-type Natriuretic Peptide (BNP) or Brain natriuretic peptide (BNP) and N-terminal pro B-type natriuretic peptide (NT-proBNP)": "Appropriate CCS order for this diagnosis: B-type Natriuretic Peptide (BNP) or Brain natriuretic peptide (BNP) and N-terminal pro B-type natriuretic peptide (NT-proBNP).",
+    "Chest CT if indications arise": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
+    "Consult Internal Medicine/Cardiology": "Appropriate CCS order for this diagnosis: Consult Internal Medicine/Cardiology.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "Ordering immediate invasive procedures such as thoracentesis or cardiac catheterization without further diagnostics": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — shortness of breath. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This shortness of breath won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain vital signs",
+    "Chest X-ray",
+    "Arterial Blood Gases (ABG)",
+    "Electrocardiogram (ECG)",
+    "Pulse oximetry",
+    "Complete blood count (CBC)",
+    "B-type Natriuretic Peptide (BNP) or Brain natriuretic peptide (BNP) and N-terminal pro B-type natriuretic peptide (NT-proBNP)",
+    "Chest CT if indications arise",
+    "Consult Internal Medicine/Cardiology",
+    "Oxygen"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

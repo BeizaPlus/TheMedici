@@ -1,0 +1,64 @@
+{
+  "id": 171,
+  "topic": "Agitation",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain vital signs, perform a detailed physical examination, and assess mental status",
+    "Order laboratory workup: CBC, electrolytes, glucose, renal/hepatic function tests, thyroid function tests, urine toxicology screen",
+    "Order imaging studies if necessary (CT scan or MRI of the brain)",
+    "Consult psychiatry for further evaluation and management",
+    "If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold",
+    "CMP/BMP",
+    "UA"
+  ],
+  "should_avoid": [
+    "Prescribe medications without a clear diagnosis (e.g., antipsychotics, benzodiazepines)"
+  ],
+  "rationale": {
+    "Obtain vital signs, perform a detailed physical examination, and assess mental status": "Vital signs establish baseline stability before further orders.",
+    "Order laboratory workup: CBC, electrolytes, glucose, renal/hepatic function tests, thyroid function tests, urine toxicology screen": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Order imaging studies if necessary (CT scan or MRI of the brain)": "Appropriate CCS order for this diagnosis: Order imaging studies if necessary (CT scan or MRI of the brain).",
+    "Consult psychiatry for further evaluation and management": "Appropriate CCS order for this diagnosis: Consult psychiatry for further evaluation and management.",
+    "If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold": "Appropriate CCS order for this diagnosis: If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold.",
+    "CMP/BMP": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "UA": "Appropriate CCS order for this diagnosis: UA.",
+    "Prescribe medications without a clear diagnosis (e.g., antipsychotics, benzodiazepines)": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — agitation. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This agitation won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain vital signs, perform a detailed physical examination, and assess mental status",
+    "Order laboratory workup: CBC, electrolytes, glucose, renal/hepatic function tests, thyroid function tests, urine toxicology screen",
+    "Order imaging studies if necessary (CT scan or MRI of the brain)",
+    "Consult psychiatry for further evaluation and management",
+    "If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold",
+    "CMP/BMP",
+    "UA"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}

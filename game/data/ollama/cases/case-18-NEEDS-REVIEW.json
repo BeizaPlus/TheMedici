@@ -1,0 +1,103 @@
+{
+  "case_number": 106,
+  "title": "Constipation and Malaise - Internal Medicine Case",
+  "specialty": "General Surgery / Colorectal Surgery",
+  "chief_complaint": "Constipation and Malaise",
+  "patient": "65-year-old male",
+  "location": "Office",
+  "diagnosis": "Colon Cancer (Adenocarcinoma)",
+  "hpi_narrative": "A 65-year-old male with no significant past medical history presents with constipation and malaise. The onset of symptoms is unknown, the character and severity are moderate, associated symptoms include nausea and vomiting, pertinent negatives include no reported fever or weight loss. The single clinical question this case forces you to answer is whether the patient has colon cancer and if so, to what extent it has spread.",
+  "physical_exam": {
+    "general": "General examination is extremely useful to determine how sick the patient looks",
+    "chest": "It is important to investigate for lung pathology",
+    "abdomen": "This is the patient's chief complaint, so this should be examined",
+    "rectal": "The patient is complaining of nausea, vomiting, and constipation, so this should be examined"
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "aliases": [],
+      "finding": "General examination is extremely useful to determine how sick the patient looks.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Chest",
+      "aliases": [],
+      "finding": "It is important to investigate for lung pathology",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "aliases": [],
+      "finding": "This is the patient's chief complaint, so this should be examined",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "aliases": [],
+      "finding": "The patient is complaining of nausea, vomiting, and constipation, so this should be examined",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": "CBC is always a good screening tool in nearly every patient",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Colonoscopy",
+      "aliases": [],
+      "finding": "A colonoscopy would be warranted so that a biopsy may be taken from the mass that was found on imaging for diagnostic confirmation. A sigmoidoscopy or a flexible sigmoidoscopy does not cover enough of the colon to verify if a patient does or does not have polyps/cancer. Patients should undergo a full colonoscopy before surgery for colon cancer.",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "CT, abdomen/pelvis, with contrast / CT, abdomen/pelvis, without contrast / MRI, abdomen/pelvis, with gadolinium / MRI, abdomen/pelvis, without gadolinium / Scan, PET, whole body",
+      "aliases": [],
+      "finding": "A CT chest, abdomen, and pelvis (contrast) is recommended to determine the cancer staging of this patient.",
+      "type": "shouldHaveOrdered"
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 70,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual chief complaint from OCR. The title should be 'Constipation and Malaise - Colon Cancer (Adenocarcinoma)' instead of 'Constipation and Malaise - Internal Medicine Case'.",
+      "fix": "Change the title to 'Constipation and Malaise - Colon Cancer (Adenocarcinoma)'."
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "The HPI narrative has some discrepancies with the OCR text. The narrative mentions the patient's age, while the OCR text does not specify it. Also, the narrative uses terms like 'moderate', 'unknown', and 'pertinent negatives' which are not in the OCR text.",
+      "fix": "Modify the HPI narrative to match the information provided in the OCR text as closely as possible."
+    },
+    {
+      "field": "location",
+      "problem": "The location is specified as 'Office' in the extracted case data, while it is not mentioned in the OCR text. It should be determined from context or confirmed with additional information.",
+      "fix": "Determine the location based on context or confirm with additional information."
+    },
+    {
+      "field": "diagnosis",
+      "problem": "The diagnosis is 'Colon Cancer (Adenocarcinoma)', while it is not explicitly stated as such in the OCR text. It is inferred from the context but should be confirmed with additional information if available.",
+      "fix": "Confirm the diagnosis with additional information if available."
+    },
+    {
+      "field": "vitals",
+      "problem": "There are no vitals provided in the extracted case data, while some vitals are listed in the OCR text (HR, BP). It is not clear if the vitals were intentionally omitted or not present in the source data.",
+      "fix": "Include vitals if available in the source data."
+    }
+  ],
+  "_validation_errors": [
+    "Stack label too long \u2014 likely explanatory text: 'CT, abdomen/pelvis, with contrast / CT, abdomen/pe...'",
+    "Stack label too long \u2014 likely explanatory text: 'X-ray, chest, left lateral decubitus / X-ray, ches...'",
+    "Stack label too long \u2014 likely explanatory text: 'PT/PTT / Partial thromboplastin time AND PT/INR...'",
+    "Stack label too long \u2014 likely explanatory text: 'Type and screen, blood / Type and Rh factor, blood...'",
+    "Stack label too long \u2014 likely explanatory text: 'Diet, NPO / Nothing by mouth except ice chips...'",
+    "Stack label too long \u2014 likely explanatory text: 'Consult, surgery, general / Consult, colorectal su...'"
+  ]
+}

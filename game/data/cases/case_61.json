@@ -1,0 +1,68 @@
+{
+  "id": 61,
+  "topic": "Tension Headache",
+  "diagnosis": "Tension Headache",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Neuro / Psych",
+    "MRI head, with gadolinium / MR, head, without gadolinium / MRA, cerebral arteries",
+    "Celecoxib / Dextrose sodium / Excedrin / Ibuprofen / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Metolazone / Naproxen / Oxycodone / Prochlorperazine / Sulindac / Tolmetin / Aspirin, therapy / acetaminophen, therapy",
+    "Vaccine, diphtheria/tetanus/pertussis / Vaccine, diphtheria/tetanus/pertussis/HIB",
+    "Pap smear / Human papillomavirus DNA probe test, cervix"
+  ],
+  "should_avoid": [
+    "order1",
+    "Discharge the patient without further evaluation"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for tension headache.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for tension headache.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with tension headache.",
+    "Physical Exam: Extremities / Spine": "Targeted Physical Exam: Extremities / Spine exam supports the differential for Tension Headache.",
+    "Physical Exam: Neuro / Psych": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Tension Headache.",
+    "MRI head, with gadolinium / MR, head, without gadolinium / MRA, cerebral arteries": "Appropriate CCS order for Tension Headache: MRI head, with gadolinium / MR, head, without gadolinium / MRA, cerebral arteries.",
+    "Celecoxib / Dextrose sodium / Excedrin / Ibuprofen / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Metolazone / Naproxen / Oxycodone / Prochlorperazine / Sulindac / Tolmetin / Aspirin, therapy / acetaminophen, therapy": "Appropriate CCS order for Tension Headache: Celecoxib / Dextrose sodium / Excedrin / Ibuprofen / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Metolazone / Naproxen / Oxycodone / Prochlorperazine / Sulindac / Tolmetin / Aspirin, therapy / acetaminophen, therapy.",
+    "Vaccine, diphtheria/tetanus/pertussis / Vaccine, diphtheria/tetanus/pertussis/HIB": "Appropriate CCS order for Tension Headache: Vaccine, diphtheria/tetanus/pertussis / Vaccine, diphtheria/tetanus/pertussis/HIB.",
+    "Pap smear / Human papillomavirus DNA probe test, cervix": "Appropriate CCS order for Tension Headache: Pap smear / Human papillomavirus DNA probe test, cervix.",
+    "order1": "CCS review: avoid this order for Tension Headache — it does not change acute management.",
+    "Discharge the patient without further evaluation": "CCS review: avoid this order for Tension Headache — it does not change acute management."
+  },
+  "hpi": "Differential: Cluster headache, Intracranial neoplasm, Meningitis, Migraine headache, Pseudotumor cerebri, Sinusitis, Tension headache.\n\nThe purpose of this case is to have the user identify a benign condition and restrain from doing unnecessary, dangerous procedures. This patient has a simple tension headache, a very common condition that can be diagnosed clinically and treated as an outpatient. The patient describes certain features including mild to moderate pain which is supported by the physical finding of pericranial and neck muscle tenderness. Otherwise, the exam and vital signs are normal. The user should recognize that unnecessary tests, such as \"understanding\" identity and acute stress, neurologic deficits, nausea/vomiting, or wanting to sleep in the next hour are not helpful diagnostic to ascertain whether this is a tension headache or not. A CT, MRI, or lumbar puncture is not necessary for tension headaches because the patient has no red flags, as stress is a contributing factor in many patients. The patient will get better with simple NSAID therapy. Alternative treatments for tension headaches include relaxation techniques and trigger point injections. However, there are no restrictive treatments and should only be used after the patient has failed these measures.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My head hurts so much.",
+    "history": "I've had headaches before, but this one feels different.",
+    "pain": "It feels like a tight band around my head."
+  },
+  "ccs_category": "Neurology",
+  "case_summary": "Differential: Cluster headache, Intracranial neoplasm, Meningitis, Migraine headache, Pseudotumor cerebri, Sinusitis, Tension headache.\n\nThe purpose of this case is to have the user identify a benign condition and restrain from doing unnecessary, dangerous procedures. This patient has a simple tension headache, a very common condition that can be diagnosed clinically and treated as an outpatient. The patient describes certain features including mild to moderate pain which is supported by the physical finding of pericranial and neck muscle tenderness. Otherwise, the exam and vital signs are normal. The user should recognize that unnecessary tests, such as \"understanding\" identity and acute stress, neurologic deficits, nausea/vomiting, or wanting to sleep in the next hour are not helpful diagnostic to ascertain whether this is a tension headache or not. A CT, MRI, or lumbar puncture is not necessary for tension headaches because the patient has no red flags, as stress is a contributing factor in many patients. The patient will get better with simple NSAID therapy. Alternative treatments for tension headaches include relaxation techniques and trigger point injections. However, there are no restrictive treatments and should only be used after the patient has failed these measures.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Skin, Breast, Lymph Node, HEENT, Chest and Lungs",
+    "Ordered: following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lungs",
+    "Ordered: Hormone, thyroid stimulating"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

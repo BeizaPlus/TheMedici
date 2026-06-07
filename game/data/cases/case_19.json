@@ -1,0 +1,66 @@
+{
+  "id": 19,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Acute Diverticulitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam Assistance",
+    "Physical Exam: Abdomen",
+    "Physical Exam: General",
+    "Physical Exam: CV",
+    "Physical Exam: Neuro",
+    "IV fluids, Lactated Ringer's",
+    "NPO",
+    "CT Abdomen/Pelvis, w/ contrast"
+  ],
+  "should_avoid": [
+    "Surgical consult",
+    "Antibiotics"
+  ],
+  "rationale": {
+    "Physical Exam Assistance": "Appropriate CCS order for Acute Diverticulitis: Physical Exam Assistance.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Physical Exam: General": "Appropriate CCS order for Acute Diverticulitis: Physical Exam: General.",
+    "Physical Exam: CV": "Appropriate CCS order for Acute Diverticulitis: Physical Exam: CV.",
+    "Physical Exam: Neuro": "Targeted Physical Exam: Neuro exam supports the differential for Acute Diverticulitis.",
+    "IV fluids, Lactated Ringer's": "Appropriate CCS order for Acute Diverticulitis: IV fluids, Lactated Ringer's.",
+    "NPO": "Appropriate CCS order for Acute Diverticulitis: NPO.",
+    "CT Abdomen/Pelvis, w/ contrast": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Surgical consult": "CCS review: avoid this order for Acute Diverticulitis — it does not change acute management.",
+    "Antibiotics": "CCS review: avoid this order for Acute Diverticulitis — it does not change acute management."
+  },
+  "hpi": "The patient is a 65-year-old male with abdominal pain. The patient has a history of diverticulitis and presents with fever and leukocytosis. The patient was treated with IV fluids and antibiotics. The patient was admitted for further management. The patient improved with conservative management and was discharged home on a clear liquid diet. Follow-up was arranged with the primary care physician.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared because my stomach hurts a lot. I don't know what's wrong.",
+    "history": "I have had this pain before. It feels worse now.",
+    "pain": "It hurts really bad in my lower abdomen."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "The patient is a 65-year-old male with abdominal pain. The patient has a history of diverticulitis and presents with fever and leukocytosis. The patient was treated with IV fluids and antibiotics. The patient was admitted for further management. The patient improved with conservative management and was discharged home on a clear liquid diet. Follow-up was arranged with the primary care physician.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "IV Access",
+    "Labs Ordered",
+    "Medications Ordered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

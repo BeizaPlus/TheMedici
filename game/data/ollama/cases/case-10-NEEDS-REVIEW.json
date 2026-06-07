@@ -1,0 +1,115 @@
+{
+  "case_number": 250723,
+  "title": "Pain in Legs - Intermittent Claudication",
+  "specialty": null,
+  "chief_complaint": "Pain in Legs",
+  "patient": "A 65-year-old male",
+  "location": "Office",
+  "diagnosis": "Peripheral Vascular Disease",
+  "hpi_narrative": "The patient is a 65-year-old male with no significant past medical history who presents with intermittent leg pain. Onset is gradual, character is cramping and aching, severity varies but can be quite debilitating during physical activity. Associated symptoms include coldness and numbness in the affected limbs. Pertinent negatives include no shortness of breath or neurological deficits.",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": null,
+    "respiratory": null,
+    "abdominal": null,
+    "neurological": null,
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "aliases": [],
+      "finding": "Patient appears well, no signs of acute distress \u2013 appropriate to look at patient to help guide diagnosis.",
+      "type": null
+    },
+    {
+      "label": "Physical Exam: Chest",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Physical Exam: Heart",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Physical Exam: Extremities",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": "CBC is always a good screening test.",
+      "type": null
+    },
+    {
+      "label": "Ankle-brachial index (ABI)",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    }
+  ],
+  "treatment_plan": [
+    {
+      "drug": "Lisinopril or other ACEI",
+      "indication": "Control hypertension and protect kidney due to elevated glucose levels"
+    },
+    {
+      "drug": "Statin",
+      "indication": "Control cholesterol which can prevent worsening of peripheral vascular disease"
+    },
+    {
+      "drug": "Aspirin",
+      "indication": "Antiplatelet therapy for prevention of thrombosis"
+    },
+    {
+      "intervention": "Smoking cessation counseling",
+      "indication": "Indicated due to patient's age and potential risk factors"
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null,
+    "date_time": "Completed: July 23, 2025, 3:21 PM"
+  },
+  "_final_confidence": 0,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "The title is not exactly the same as the chief complaint in OCR. In OCR it is 'Pain in Legs - Intermittent Claudication', while here it is 'Pain in Legs'.",
+      "fix": "Change the title to 'Pain in Legs - Intermittent Claudication'"
+    },
+    {
+      "field": "stacks",
+      "problem": "The labels are not clean clinical orders and include UI noise such as 'Correctly Ordered', and lack finding for each label.",
+      "fix": "Remove the 'Correctly Ordered' and provide a finding for each label."
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "While it is more readable than the OCR, it still contains some brackets ('\u2013') that should be removed.",
+      "fix": "Remove the '\u2013' from the HPI narrative."
+    },
+    {
+      "field": "physical_exam",
+      "problem": "No physical exam findings are present, unlike in OCR where some findings are provided.",
+      "fix": "Extract and provide physical exam findings as seen in the original OCR."
+    }
+  ]
+}

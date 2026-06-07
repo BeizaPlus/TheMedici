@@ -1,0 +1,101 @@
+{
+  "case_number": 82,
+  "title": "Abdominal Pain",
+  "location": null,
+  "hpi_raw": null,
+  "hpi_narrative": "Mr/Ms X is a -year-old with High Yield @ Review Later who presents with Abdominal Pain. Onset is not specified, character and severity are not specified, associated symptoms include diarrhea. The clinical question this case forces you to answer is to diagnose the cause of the patient's abdominal pain.",
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "The general examination is extremely useful to determine how sick the patient looks"
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "It's important to evaluate for lung pathology"
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "It's important to evaluate for cardiac pathology"
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "This is the patient's chief complaint, so this should be examined"
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "correctlyOrdered",
+      "finding": "The patient is having diarrhea, so it'd be important to look for blood in the Gl tract"
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Urinalysis",
+      "type": "optional"
+    },
+    {
+      "label": "Bacterial culture, urine",
+      "type": "optional"
+    },
+    {
+      "label": "Loperamide / Diphenoxylate hydrochloride with atropine sulfate",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Antibody, Hepatitis A, IgG and IgM, serum / Hepatitis panel",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Bacterial culture, stool",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Fat, semiquantitative, stool / Fecal fat, 72-hour",
+      "type": "should have Ordered"
+    },
+    {
+      "label": "Ova and parasites, stool / Antigen, Giardia lamblia, stool / Antibody, Giardia, serum",
+      "type": "should have Ordered"
+    },
+    {
+      "label": "Polymerase chain reaction, clostridium difficile, stool / Clostridium difficile toxin assay, stool",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Ciprofloxacin / Levofloxacin / Norfloxacin / Ofloxacin / Gemifloxacin / Moxifloxacin hydrochloride / Nalidixic acid / Azithromycin / Rifaximin",
+      "type": null,
+      "finding": "Treatment is with azithromycin or a fluoroquinolone (such as ciprofloxacin). Fluoroquinolones have historically been first-line, empiric options for treatment of traveler's diarrhea, but azithromycin is now being used more often given the increasing rates of fluoroquinolone resistance and adverse side effects of fluoroquinolone therapy. Rifaximin and rifamycin (rifamycin is not currently available on the USMLE test yet) are also acceptable alternatives."
+    },
+    {
+      "label": "Vaccine, diphtheria/tetanus/pertussis / Vaccine, diphtheria/tetanus/pertussis/HIB",
+      "type": null,
+      "finding": "Tdap vaccines should be given every 10 years. No history of this was given, so this should be administered"
+    },
+    {
+      "label": "Advise patient, medication compliance",
+      "type": null,
+      "finding": "The patient should be counseled about medication compliance to prevent antibiotic resistance"
+    },
+    {
+      "label": "Instruct patient, smoking cessation",
+      "type": null,
+      "finding": "One of the most important things patients can do for their health is to stop smoking. This would be an excellent opportunity to address this issue"
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  }
+}

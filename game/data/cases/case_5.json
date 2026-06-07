@@ -1,0 +1,64 @@
+{
+  "id": 5,
+  "topic": "Headache",
+  "diagnosis": "West Nile Encephalitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "CT Head",
+    "Physical Exam",
+    "Labs",
+    "IV Fluids",
+    "Neuro Consult",
+    "MRI, with and without contrast",
+    "LP, if indicated"
+  ],
+  "should_avoid": [
+    "CT Abdomen and Pelvis",
+    "Toxicology Screen"
+  ],
+  "rationale": {
+    "CT Head": "Appropriate CCS order for West Nile Encephalitis: CT Head.",
+    "Physical Exam": "Appropriate CCS order for West Nile Encephalitis: Physical Exam.",
+    "Labs": "Appropriate CCS order for West Nile Encephalitis: Labs.",
+    "IV Fluids": "Appropriate CCS order for West Nile Encephalitis: IV Fluids.",
+    "Neuro Consult": "Targeted Neuro Consult exam supports the differential for West Nile Encephalitis.",
+    "MRI, with and without contrast": "Appropriate CCS order for West Nile Encephalitis: MRI, with and without contrast.",
+    "LP, if indicated": "Appropriate CCS order for West Nile Encephalitis: LP, if indicated.",
+    "CT Abdomen and Pelvis": "Advanced imaging is not indicated early for West Nile Encephalitis when the diagnosis is clinical.",
+    "Toxicology Screen": "CCS review: avoid this order for West Nile Encephalitis — it does not change acute management."
+  },
+  "hpi": "West Nile Virus is a neurotropic virus that can cause viral meningitis and encephalitis. The most common symptoms are fever, headache, and altered mental status. Most patients will have a mild illness, but some will develop severe neurological disease. The diagnosis is made clinically, and supportive care is the mainstay of treatment.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I have a terrible headache and feel really weak. I'm scared something is wrong.",
+    "history": "I was outside a lot last week. I started feeling sick with a fever and headache.",
+    "pain": "My head hurts so much, it feels like it's pounding."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "West Nile Virus is a neurotropic virus that can cause viral meningitis and encephalitis. The most common symptoms are fever, headache, and altered mental status. Most patients will have a mild illness, but some will develop severe neurological disease. The diagnosis is made clinically, and supportive care is the mainstay of treatment.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Labs",
+    "CT Head",
+    "Neuro Consult"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

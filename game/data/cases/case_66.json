@@ -1,0 +1,60 @@
+{
+  "id": 66,
+  "topic": "English Internal Medicine",
+  "diagnosis": "Tuberculosis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Ordered the following: Physical Exam",
+    "Ordered the following: Vitals",
+    "Ordered the following: CBC",
+    "Ordered the following: Chest X-ray",
+    "Ordered the following: Sputum Culture",
+    "Should have ordered: TB Skin Test"
+  ],
+  "should_avoid": [
+    "Correctly avoided: MRI"
+  ],
+  "rationale": {
+    "Ordered the following: Physical Exam": "Appropriate CCS order for Tuberculosis: Ordered the following: Physical Exam.",
+    "Ordered the following: Vitals": "Vital signs establish baseline stability before further orders.",
+    "Ordered the following: CBC": "Laboratory testing when systemic illness or severity warrants labs in Tuberculosis.",
+    "Ordered the following: Chest X-ray": "Evaluate chest and lungs as part of the initial exam for english internal medicine.",
+    "Ordered the following: Sputum Culture": "Laboratory testing when systemic illness or severity warrants labs in Tuberculosis.",
+    "Should have ordered: TB Skin Test": "Skin exam may show rashes or systemic signs relevant to Tuberculosis.",
+    "Correctly avoided: MRI": "Advanced imaging is not indicated early for Tuberculosis when the diagnosis is clinical."
+  },
+  "hpi": "This case highlights the importance of recognizing the signs and symptoms of tuberculosis in patients presenting with respiratory complaints. Early diagnosis and appropriate treatment are crucial in managing this infectious disease. The case also emphasizes the need for thorough history taking and physical examination to guide diagnostic testing.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I was feeling really weak and had a bad cough. I was scared something serious was wrong.",
+    "history": "I have been coughing for weeks and losing weight. I didn't know what to do.",
+    "pain": "My chest hurts when I cough."
+  },
+  "ccs_category": "Tuberculosis",
+  "case_summary": "This case highlights the importance of recognizing the signs and symptoms of tuberculosis in patients presenting with respiratory complaints. Early diagnosis and appropriate treatment are crucial in managing this infectious disease. The case also emphasizes the need for thorough history taking and physical examination to guide diagnostic testing.",
+  "stacks": [
+    "Ordered the following: Physical Exam",
+    "Ordered the following: Vitals",
+    "Ordered the following: CBC",
+    "Ordered the following: Chest X-ray",
+    "Ordered the following: Sputum Culture"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

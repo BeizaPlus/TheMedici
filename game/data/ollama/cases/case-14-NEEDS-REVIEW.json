@@ -1,0 +1,115 @@
+{
+  "title": "Pre-Eclampsia with Severe Features",
+  "stacks": [
+    {
+      "label": "Abdomen",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Pulse oximetry",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "12 lead Electrocardiography / Cardiac Monitor",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Blood Type and Screen / Blood Type and Rh factor",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "PT/PTT AND PT/INR",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Urinalysis",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Transabdominal US and Transvaginal US",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Basic metabolic profile / Comprehensive metabolic panel",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "'Betamethasone'",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "'Magnesium sulfate'",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "'Labetalol hydrochloride / Hydralazine hydrochloride'",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "'Consult, obstetrics/gynecology / Cesarean section'",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    }
+  ],
+  "case_number": 14,
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "hpi_narrative": "A 35-year-old female with no significant past medical history presents with signs and symptoms of facial and upper extremity edema. She has no reported history of chronic conditions such as diabetes or kidney disease.",
+  "_final_confidence": 0,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual chief complaint from OCR. Title should be 'Facial and Upper Extremity Edema'.",
+      "fix": "Change title to 'Facial and Upper Extremity Edema'"
+    },
+    {
+      "field": "stacks",
+      "problem": "Stack labels have no clinical context or order information. They should be labeled as appropriate clinical orders with clear reasons for ordering.",
+      "fix": "Update stack labels to provide clean clinical orders and include reasons for ordering."
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "HPI does not follow a proper clinical narrative format, contains no patient history or symptoms beyond edema, and includes UI noise (e.g., 'High Yield @ v Review Later', completion date).",
+      "fix": "Update HPI to provide a proper clinical narrative including relevant patient history, symptoms, and physical examination findings."
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Physical exam findings are not properly extracted or do not match the OCR data. They should include relevant findings from the OCR text.",
+      "fix": "Update physical exam findings to accurately reflect information in the OCR data."
+    }
+  ]
+}

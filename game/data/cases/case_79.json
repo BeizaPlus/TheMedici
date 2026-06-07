@@ -1,0 +1,64 @@
+{
+  "id": 79,
+  "topic": "Back Pain",
+  "diagnosis": "Acute Pyelonephritis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Urinalysis",
+    "Physical Exam: General",
+    "Physical Exam: Chest/Lungs",
+    "Physical Exam: Heart/Cardiovascular",
+    "Physical Exam: Abdomen",
+    "CT Abdomen/Pelvis",
+    "Ultrasound"
+  ],
+  "should_avoid": [
+    "Narcotics",
+    "Fluids"
+  ],
+  "rationale": {
+    "Urinalysis": "Appropriate CCS order for Acute Pyelonephritis: Urinalysis.",
+    "Physical Exam: General": "Appropriate CCS order for Acute Pyelonephritis: Physical Exam: General.",
+    "Physical Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for back pain.",
+    "Physical Exam: Heart/Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to back pain.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with back pain.",
+    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with back pain.",
+    "Ultrasound": "Appropriate CCS order for Acute Pyelonephritis: Ultrasound.",
+    "Narcotics": "CCS review: avoid this order for Acute Pyelonephritis — it does not change acute management.",
+    "Fluids": "CCS review: avoid this order for Acute Pyelonephritis — it does not change acute management."
+  },
+  "hpi": "This patient presents with classic symptoms and findings highly suggestive of an infection of the urinary tract. Evaluation and treatment should be done. The patient is at risk for developing sepsis due to renal impairment, and if this patient presents with simple therapy, the results may remain misleading.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My back hurts so much and I feel so sick.",
+    "history": "I have been feeling unwell for a few days. It started with back pain and then I felt feverish.",
+    "pain": "The pain in my back is sharp and it makes it hard to move."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This patient presents with classic symptoms and findings highly suggestive of an infection of the urinary tract. Evaluation and treatment should be done. The patient is at risk for developing sepsis due to renal impairment, and if this patient presents with simple therapy, the results may remain misleading.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam: General",
+    "Physical Exam: Chest/Lungs",
+    "Physical Exam: Heart/Cardiovascular",
+    "Physical Exam: Abdomen"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

@@ -1,0 +1,75 @@
+{
+  "id": 42,
+  "topic": "Knee Pain",
+  "diagnosis": "Acute Gout",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Joint Appraisal",
+    "Physical Exam: Pain / Laxity",
+    "Physical Exam: Joint Stability",
+    "Physical Exam: Range of Motion",
+    "Joint Aspirate",
+    "Ultrasound",
+    "Joint Fluid Analysis",
+    "Blood Cultures",
+    "Spinal Fluid Analysis",
+    "Joint Injection"
+  ],
+  "should_avoid": [
+    "CT Abdomen/Pelvis",
+    "MRI Knee",
+    "X-ray Knee",
+    "Joint Injection",
+    "Joint Aspiration"
+  ],
+  "rationale": {
+    "Physical Exam: Joint Appraisal": "Appropriate CCS order for Acute Gout: Physical Exam: Joint Appraisal.",
+    "Physical Exam: Pain / Laxity": "Appropriate CCS order for Acute Gout: Physical Exam: Pain / Laxity.",
+    "Physical Exam: Joint Stability": "Appropriate CCS order for Acute Gout: Physical Exam: Joint Stability.",
+    "Physical Exam: Range of Motion": "Appropriate CCS order for Acute Gout: Physical Exam: Range of Motion.",
+    "Joint Aspirate": "Appropriate CCS order for Acute Gout: Joint Aspirate.",
+    "Ultrasound": "Appropriate CCS order for Acute Gout: Ultrasound.",
+    "Joint Fluid Analysis": "Appropriate CCS order for Acute Gout: Joint Fluid Analysis.",
+    "Blood Cultures": "Laboratory testing when systemic illness or severity warrants labs in Acute Gout.",
+    "Spinal Fluid Analysis": "Appropriate CCS order for Acute Gout: Spinal Fluid Analysis.",
+    "Joint Injection": "Advanced imaging is not indicated early for Acute Gout when the diagnosis is clinical.",
+    "CT Abdomen/Pelvis": "Advanced imaging is not indicated early for Acute Gout when the diagnosis is clinical.",
+    "MRI Knee": "Advanced imaging is not indicated early for Acute Gout when the diagnosis is clinical.",
+    "X-ray Knee": "This imaging is not required for the expected CCS pathway in Acute Gout.",
+    "Joint Aspiration": "CCS review: avoid this order for Acute Gout — it does not change acute management."
+  },
+  "hpi": "Acute gout is a common inflammatory arthritis characterized by the deposition of monosodium urate crystals in the joints. The patient typically presents with sudden onset of severe pain, swelling, and redness in the affected joint, often the first metatarsophalangeal joint. Diagnosis is made clinically, but can be confirmed with joint fluid analysis showing urate crystals. Treatment includes NSAIDs, colchicine, or corticosteroids for acute attacks, and urate-lowering therapy for chronic management.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my knee pain. It hurts so much!",
+    "history": "I woke up with my knee swollen and red. I can't walk properly.",
+    "pain": "The pain is sharp and feels like it's burning."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Acute gout is a common inflammatory arthritis characterized by the deposition of monosodium urate crystals in the joints. The patient typically presents with sudden onset of severe pain, swelling, and redness in the affected joint, often the first metatarsophalangeal joint. Diagnosis is made clinically, but can be confirmed with joint fluid analysis showing urate crystals. Treatment includes NSAIDs, colchicine, or corticosteroids for acute attacks, and urate-lowering therapy for chronic management.",
+  "stacks": [
+    "Physical Exam",
+    "Joint Aspirate",
+    "Joint Fluid Analysis",
+    "Blood Cultures",
+    "Ultrasound"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

@@ -1,0 +1,74 @@
+{
+  "id": 12,
+  "topic": "Burning During Urination",
+  "diagnosis": "Chlamydia",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Pelvic Exam: Cervical Assessment",
+    "Chlamydia",
+    "Urinalysis",
+    "Urine Culture",
+    "CBC with Differential",
+    "Pelvic Exam: Other Issues",
+    "Pelvic Exam: Lymphadenopathy",
+    "Antibiotic Sensitivity",
+    "Urinalysis: Other Tests",
+    "Urine Culture: Other Tests"
+  ],
+  "should_avoid": [
+    "Antibiotic: Azithromycin",
+    "Antibiotic: Doxycycline",
+    "Antibiotic: Other",
+    "Antibiotic: Other",
+    "Antibiotic: Other"
+  ],
+  "rationale": {
+    "Pelvic Exam: Cervical Assessment": "Pelvic/cervical evaluation is central for Chlamydia and localizes the source of burning during urination.",
+    "Chlamydia": "Appropriate CCS order for Chlamydia: Chlamydia.",
+    "Urinalysis": "Appropriate CCS order for Chlamydia: Urinalysis.",
+    "Urine Culture": "Laboratory testing when systemic illness or severity warrants labs in Chlamydia.",
+    "CBC with Differential": "Laboratory testing when systemic illness or severity warrants labs in Chlamydia.",
+    "Pelvic Exam: Other Issues": "Pelvic/cervical evaluation is central for Chlamydia and localizes the source of burning during urination.",
+    "Pelvic Exam: Lymphadenopathy": "Targeted Pelvic Exam: Lymphadenopathy exam supports the differential for Chlamydia.",
+    "Antibiotic Sensitivity": "Appropriate CCS order for Chlamydia: Antibiotic Sensitivity.",
+    "Urinalysis: Other Tests": "Appropriate CCS order for Chlamydia: Urinalysis: Other Tests.",
+    "Urine Culture: Other Tests": "Laboratory testing when systemic illness or severity warrants labs in Chlamydia.",
+    "Antibiotic: Azithromycin": "CCS review: avoid this order for Chlamydia — it does not change acute management.",
+    "Antibiotic: Doxycycline": "CCS review: avoid this order for Chlamydia — it does not change acute management.",
+    "Antibiotic: Other": "CCS review: avoid this order for Chlamydia — it does not change acute management."
+  },
+  "hpi": "The patient presented with burning during urination, which is a common symptom of a urinary tract infection or sexually transmitted infection. A thorough history and physical examination are essential to determine the underlying cause. Appropriate diagnostic tests, including a urinalysis and culture, should be performed to confirm the diagnosis and guide treatment. In this case, chlamydia was identified as the causative agent, and appropriate antibiotic therapy was initiated. Education on safe sexual practices and follow-up care is also important.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared because it hurts when I urinate. I don't know what's wrong.",
+    "history": "I’ve been feeling this way for a few days. I’m worried it might be serious.",
+    "pain": "It feels like a burning sensation every time I go to the bathroom."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "The patient presented with burning during urination, which is a common symptom of a urinary tract infection or sexually transmitted infection. A thorough history and physical examination are essential to determine the underlying cause. Appropriate diagnostic tests, including a urinalysis and culture, should be performed to confirm the diagnosis and guide treatment. In this case, chlamydia was identified as the causative agent, and appropriate antibiotic therapy was initiated. Education on safe sexual practices and follow-up care is also important.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Ordered CBC with Differential",
+    "Ordered Bacterial Culture",
+    "Ordered Chlamydia"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

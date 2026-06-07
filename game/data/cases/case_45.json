@@ -1,0 +1,62 @@
+{
+  "id": 45,
+  "topic": "Unresponsive - Emergency Medicine",
+  "diagnosis": "Opioid Overdose",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Administer Naloxone",
+    "Obtain IV access",
+    "Monitor vital signs",
+    "Administer oxygen",
+    "Obtain blood glucose",
+    "Obtain ECG",
+    "Administer activated charcoal"
+  ],
+  "should_avoid": [
+    "Administer Flumazenil"
+  ],
+  "rationale": {
+    "Administer Naloxone": "Appropriate CCS order for Opioid Overdose: Administer Naloxone.",
+    "Obtain IV access": "Appropriate CCS order for Opioid Overdose: Obtain IV access.",
+    "Monitor vital signs": "Vital signs establish baseline stability before further orders.",
+    "Administer oxygen": "Appropriate CCS order for Opioid Overdose: Administer oxygen.",
+    "Obtain blood glucose": "Appropriate CCS order for Opioid Overdose: Obtain blood glucose.",
+    "Obtain ECG": "Appropriate CCS order for Opioid Overdose: Obtain ECG.",
+    "Administer activated charcoal": "Appropriate CCS order for Opioid Overdose: Administer activated charcoal.",
+    "Administer Flumazenil": "CCS review: avoid this order for Opioid Overdose — it does not change acute management."
+  },
+  "hpi": "This case highlights the importance of recognizing and managing opioid overdose in the emergency setting. Key interventions include administering naloxone, monitoring vital signs, and ensuring airway protection. It is crucial to avoid the use of flumazenil due to the risk of seizures in poly-drug overdoses. Continuous monitoring and supportive care are essential for patient recovery.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I can't breathe and feel really dizzy.",
+    "history": "I was at a party and took something. I don't remember much.",
+    "pain": "I feel pressure in my chest."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "This case highlights the importance of recognizing and managing opioid overdose in the emergency setting. Key interventions include administering naloxone, monitoring vital signs, and ensuring airway protection. It is crucial to avoid the use of flumazenil due to the risk of seizures in poly-drug overdoses. Continuous monitoring and supportive care are essential for patient recovery.",
+  "stacks": [
+    "Administer Naloxone",
+    "Obtain IV access",
+    "Monitor vital signs",
+    "Administer oxygen",
+    "Obtain blood glucose"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

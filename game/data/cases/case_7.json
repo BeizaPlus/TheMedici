@@ -1,0 +1,62 @@
+{
+  "id": 7,
+  "topic": "Myasthenia Gravis",
+  "diagnosis": "Myasthenia Gravis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Neurology Consult",
+    "CT Chest",
+    "Electromyography",
+    "Labs - Basic Metabolic Panel",
+    "Labs - Complete Blood Count",
+    "MRI Brain",
+    "Labs - Thyroid Function Tests"
+  ],
+  "should_avoid": [
+    "Labs - Urinalysis"
+  ],
+  "rationale": {
+    "Neurology Consult": "Targeted Neurology Consult exam supports the differential for Myasthenia Gravis.",
+    "CT Chest": "Evaluate chest and lungs as part of the initial exam for myasthenia gravis.",
+    "Electromyography": "Appropriate CCS order for Myasthenia Gravis: Electromyography.",
+    "Labs - Basic Metabolic Panel": "Laboratory testing when systemic illness or severity warrants labs in Myasthenia Gravis.",
+    "Labs - Complete Blood Count": "Appropriate CCS order for Myasthenia Gravis: Labs - Complete Blood Count.",
+    "MRI Brain": "Appropriate CCS order for Myasthenia Gravis: MRI Brain.",
+    "Labs - Thyroid Function Tests": "Appropriate CCS order for Myasthenia Gravis: Labs - Thyroid Function Tests.",
+    "Labs - Urinalysis": "CCS review: avoid this order for Myasthenia Gravis — it does not change acute management."
+  },
+  "hpi": "This case highlights the importance of recognizing the signs and symptoms of Myasthenia Gravis, a neuromuscular disorder characterized by weakness and rapid fatigue of voluntary muscles. Early diagnosis and appropriate management are crucial to improve patient outcomes. Key diagnostic tests include CT imaging of the chest to assess for thymoma and electromyography to evaluate neuromuscular transmission.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. I feel weak and tired all the time.",
+    "history": "I have trouble lifting my arms and sometimes my eyelids droop.",
+    "pain": "I don't have pain, just weakness."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This case highlights the importance of recognizing the signs and symptoms of Myasthenia Gravis, a neuromuscular disorder characterized by weakness and rapid fatigue of voluntary muscles. Early diagnosis and appropriate management are crucial to improve patient outcomes. Key diagnostic tests include CT imaging of the chest to assess for thymoma and electromyography to evaluate neuromuscular transmission.",
+  "stacks": [
+    "Neurology Consult",
+    "CT Chest",
+    "Electromyography",
+    "Labs - Basic Metabolic Panel",
+    "Labs - Complete Blood Count"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

@@ -1,0 +1,60 @@
+{
+  "id": 30,
+  "topic": "Pain in Right Arm",
+  "diagnosis": "Colles' Fracture of Right Arm Due to Domestic Abuse",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Repeat Physical Exam",
+    "Repeat Physical Exam",
+    "Repeat Physical Exam",
+    "Repeat Physical Exam",
+    "Repeat Physical Exam",
+    "X-ray of the Right Arm",
+    "Pain Management",
+    "Consult Orthopedics"
+  ],
+  "should_avoid": [
+    "Repeat Physical Exam",
+    "Repeat Physical Exam"
+  ],
+  "rationale": {
+    "Repeat Physical Exam": "CCS review: avoid this order for Colles' Fracture of Right Arm Due to Domestic Abuse — it does not change acute management.",
+    "X-ray of the Right Arm": "Imaging supports diagnosis when exam findings warrant it for Colles' Fracture of Right Arm Due to Domestic Abuse.",
+    "Pain Management": "Appropriate CCS order for Colles' Fracture of Right Arm Due to Domestic Abuse: Pain Management.",
+    "Consult Orthopedics": "Appropriate CCS order for Colles' Fracture of Right Arm Due to Domestic Abuse: Consult Orthopedics."
+  },
+  "hpi": "Subjective: Patient presents with pain in the right arm after a fall. Objective: Patient has tenderness and swelling in the right wrist. Assessment: Colles' fracture of the right arm due to domestic abuse. Plan: Order X-ray, consult orthopedics, and manage pain.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my arm. It hurts so much.",
+    "history": "I fell and hit my arm. It was painful right away.",
+    "pain": "It feels sharp and throbbing."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Subjective: Patient presents with pain in the right arm after a fall. Objective: Patient has tenderness and swelling in the right wrist. Assessment: Colles' fracture of the right arm due to domestic abuse. Plan: Order X-ray, consult orthopedics, and manage pain.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "X-ray Ordered",
+    "Consult Orthopedics",
+    "Pain Management"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

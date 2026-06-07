@@ -1,0 +1,68 @@
+{
+  "id": 80,
+  "topic": "Vomiting",
+  "diagnosis": "Malrotation with Volvulus",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "X-ray, abdomen, acute series / X-ray, abdomen, AP",
+    "US, abdomen / X-ray, upper gastrointestinal series",
+    "Consult, pediatric surgery",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "CBC with differential",
+    "Saline solution, normal / Lactated Ringer solution / Dextrose 5% in 0.45% saline solution / Dextrose 5% in Lactated Ringer solution / Dextrose 5% in normal saline solution",
+    "Nasogastric tube with saline lavage"
+  ],
+  "should_avoid": [
+    "CT abdomen/pelvis with contrast",
+    "Intravenous access / intravenous line, capped"
+  ],
+  "rationale": {
+    "X-ray, abdomen, acute series / X-ray, abdomen, AP": "Abdominal exam helps exclude alternative causes in a patient with vomiting.",
+    "US, abdomen / X-ray, upper gastrointestinal series": "Abdominal exam helps exclude alternative causes in a patient with vomiting.",
+    "Consult, pediatric surgery": "Appropriate CCS order for Malrotation with Volvulus: Consult, pediatric surgery.",
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for vomiting.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for vomiting.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with vomiting.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Malrotation with Volvulus.",
+    "Saline solution, normal / Lactated Ringer solution / Dextrose 5% in 0.45% saline solution / Dextrose 5% in Lactated Ringer solution / Dextrose 5% in normal saline solution": "Appropriate CCS order for Malrotation with Volvulus: Saline solution, normal / Lactated Ringer solution / Dextrose 5% in 0.45% saline solution / Dextrose 5% in Lactated Ringer solution / Dextrose 5% in normal saline solution.",
+    "Nasogastric tube with saline lavage": "Appropriate CCS order for Malrotation with Volvulus: Nasogastric tube with saline lavage.",
+    "CT abdomen/pelvis with contrast": "Advanced imaging is not indicated early for Malrotation with Volvulus when the diagnosis is clinical.",
+    "Intravenous access / intravenous line, capped": "IV fluids/access are not indicated unless the patient is unstable or cannot tolerate PO."
+  },
+  "hpi": "This case is a great illustration of the goal with a diagnosis of malrotation. Malrotation occurs as a result of an abnormality of the intestinal gut during embryogenesis. Volvulus occurs when the small bowel twists around itself, causing obstruction. This can lead to ischemia and obstruction. In this case, obstruction was seen by X-rays showing the intestinal loops, and potentially leading to dehydration and necrosis due to the vessels supplying blood to the bowel being cut off. The patient's slow rise in vital signs can lead to severe dehydration as potential hemorrhagic components. The important part of this case is to diagnose the problem quickly and ensure that the diagnosis is made, after which the patient should be stabilized with NG tube decompression and IV fluid resuscitation prior to surgery.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared because I keep throwing up. I don't know what's wrong.",
+    "history": "I felt fine, then suddenly I was sick. My stomach hurts a lot.",
+    "pain": "It hurts in my belly, and I feel really nauseous."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "This case is a great illustration of the goal with a diagnosis of malrotation. Malrotation occurs as a result of an abnormality of the intestinal gut during embryogenesis. Volvulus occurs when the small bowel twists around itself, causing obstruction. This can lead to ischemia and obstruction. In this case, obstruction was seen by X-rays showing the intestinal loops, and potentially leading to dehydration and necrosis due to the vessels supplying blood to the bowel being cut off. The patient's slow rise in vital signs can lead to severe dehydration as potential hemorrhagic components. The important part of this case is to diagnose the problem quickly and ensure that the diagnosis is made, after which the patient should be stabilized with NG tube decompression and IV fluid resuscitation prior to surgery.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered: Consult, pediatric surgery",
+    "Ordered: X-ray, abdomen, acute series",
+    "Results Reported for X-ray, abdomen, acute series",
+    "Ordered: X-ray, upper gastrointestinal series"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

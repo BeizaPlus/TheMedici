@@ -1,0 +1,69 @@
+{
+  "id": 84,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Ischemic Colitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Assessment",
+    "CT Abdomen/Pelvis, without contrast",
+    "CT Abdomen/Pelvis, with contrast",
+    "Surgical consult",
+    "X-ray, abdomen, acute series",
+    "Physical Exam: Chief Complaint",
+    "IV Fluid Resuscitation",
+    "Lactate",
+    "Abdominal ultrasound",
+    "History and Physical"
+  ],
+  "should_avoid": [
+    "CT Abdomen/Pelvis, with contrast",
+    "MRI, consultation, without sedation"
+  ],
+  "rationale": {
+    "Physical Exam: General Assessment": "Appropriate CCS order for Ischemic Colitis: Physical Exam: General Assessment.",
+    "CT Abdomen/Pelvis, without contrast": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "CT Abdomen/Pelvis, with contrast": "Advanced imaging is not indicated early for Ischemic Colitis when the diagnosis is clinical.",
+    "Surgical consult": "Appropriate CCS order for Ischemic Colitis: Surgical consult.",
+    "X-ray, abdomen, acute series": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Physical Exam: Chief Complaint": "Appropriate CCS order for Ischemic Colitis: Physical Exam: Chief Complaint.",
+    "IV Fluid Resuscitation": "Appropriate CCS order for Ischemic Colitis: IV Fluid Resuscitation.",
+    "Lactate": "Appropriate CCS order for Ischemic Colitis: Lactate.",
+    "Abdominal ultrasound": "Appropriate CCS order for Ischemic Colitis: Abdominal ultrasound.",
+    "History and Physical": "Appropriate CCS order for Ischemic Colitis: History and Physical.",
+    "MRI, consultation, without sedation": "Advanced imaging is not indicated early for Ischemic Colitis when the diagnosis is clinical."
+  },
+  "hpi": "The patient is a 67-year-old female who presents with abdominal pain that has been persistent for the last 24 hours. She has a history of hypertension and hyperlipidemia. The patient reports that the pain is located in the lower abdomen and is associated with nausea and vomiting. On examination, the patient appears to be in moderate distress. Initial laboratory tests reveal elevated white blood cell count and lactate levels. Imaging studies confirm the diagnosis of ischemic colitis. The patient was admitted for further management and surgical consultation was obtained. It is important to recognize the signs and symptoms of ischemic colitis as it can lead to significant morbidity if not treated promptly.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My stomach hurts so much.",
+    "history": "I’ve been feeling pain for a day. It just won’t go away.",
+    "pain": "It hurts in my lower belly."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "The patient is a 67-year-old female who presents with abdominal pain that has been persistent for the last 24 hours. She has a history of hypertension and hyperlipidemia. The patient reports that the pain is located in the lower abdomen and is associated with nausea and vomiting. On examination, the patient appears to be in moderate distress. Initial laboratory tests reveal elevated white blood cell count and lactate levels. Imaging studies confirm the diagnosis of ischemic colitis. The patient was admitted for further management and surgical consultation was obtained. It is important to recognize the signs and symptoms of ischemic colitis as it can lead to significant morbidity if not treated promptly.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Ordered: CT abdomen/pelvis, without contrast",
+    "Ordered: CT abdomen/pelvis, with contrast",
+    "Ordered: Surgical consult"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

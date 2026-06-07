@@ -1,0 +1,59 @@
+{
+  "id": 142,
+  "topic": "Seizures - Pediatrics",
+  "diagnosis": "Maple Syrup Urine Disease (MSUD)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Neuro / Psych",
+    "CBC with differential",
+    "Urinalysis",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Vitamin B1, therapy",
+    "Diet, low protein / Consult, nutrition"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for seizures - pediatrics.",
+    "Physical Exam: Neuro / Psych": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Maple Syrup Urine Disease (MSUD).",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Maple Syrup Urine Disease (MSUD).",
+    "Urinalysis": "Appropriate CCS order for Maple Syrup Urine Disease (MSUD): Urinalysis.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Maple Syrup Urine Disease (MSUD).",
+    "Vitamin B1, therapy": "Appropriate CCS order for Maple Syrup Urine Disease (MSUD): Vitamin B1, therapy.",
+    "Diet, low protein / Consult, nutrition": "Appropriate CCS order for Maple Syrup Urine Disease (MSUD): Diet, low protein / Consult, nutrition."
+  },
+  "hpi": "Differential: Beta-ketothiolase deficiency, Glycine encephalopathy, Methylmalonic acidemia, Propionic acidemia.\n\nThe patient has the signs of classic Maple Syrup Urine Disease (MSUD) which include irritability, poor feeding, bicycling movements, focal dystonia, and seizures. The are 5 types of MSUD (Classic, Intermediate, Intermittent, Thiamine-responsive, and E3-deficient). Classic MSUD is the most common. The amino acid levels are given in two because these orders are not present on the USMLE at this time. There are no orders for serum or urine levels of leucine, valine, isoleucine, or leucine. However, you must put together that high amino acid levels with the presentation to come up with the MSUD diagnosis.\n\nThe treatment for MSUD is a no-protein/low-protein diet. This specialized diet would be life-long much like PKU. The patient would not be able to breast-feed and would need a non-branched-chain amino acids (meaning low, leucine, valine, isoleucine) formula. There is no specific diet for non-branched-chain amino acid diet, so a low-protein/protein diet is utilized. It is recommended that all patients with MSUD be treated with a thiamine to see if the patient has the Thiamine-responsive type. If there is no improvement after 4 weeks, then the thiamine treatment can be discontinued.\n\nA potential long term treatment of MSUD is liver transplantation. As the patient is only a week old, this discussion would happen at a later time and would depend on the outcome of diet modification.\n\nNote that in this case, the CBC/ CMP will be normal which is not abnormal as the patient seems to be suffering more neurological damage than metabolic issues. However, metabolic decompensation is a possibility, so the patient should be followed closely. Admitting to the hospital/ICU is appropriate until the patient can be stabilized and amino acid levels returned to normal levels. MSUD is more severe than PKU as this can lead to death.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared and feel really weak. I don't understand what's happening.",
+    "history": "I was feeding fine, but then I started feeling strange. My movements are weird.",
+    "pain": "I have a strange feeling in my stomach and my head hurts."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "Differential: Beta-ketothiolase deficiency, Glycine encephalopathy, Methylmalonic acidemia, Propionic acidemia.\n\nThe patient has the signs of classic Maple Syrup Urine Disease (MSUD) which include irritability, poor feeding, bicycling movements, focal dystonia, and seizures. The are 5 types of MSUD (Classic, Intermediate, Intermittent, Thiamine-responsive, and E3-deficient). Classic MSUD is the most common. The amino acid levels are given in two because these orders are not present on the USMLE at this time. There are no orders for serum or urine levels of leucine, valine, isoleucine, or leucine. However, you must put together that high amino acid levels with the presentation to come up with the MSUD diagnosis.\n\nThe treatment for MSUD is a no-protein/low-protein diet. This specialized diet would be life-long much like PKU. The patient would not be able to breast-feed and would need a non-branched-chain amino acids (meaning low, leucine, valine, isoleucine) formula. There is no specific diet for non-branched-chain amino acid diet, so a low-protein/protein diet is utilized. It is recommended that all patients with MSUD be treated with a thiamine to see if the patient has the Thiamine-responsive type. If there is no improvement after 4 weeks, then the thiamine treatment can be discontinued.\n\nA potential long term treatment of MSUD is liver transplantation. As the patient is only a week old, this discussion would happen at a later time and would depend on the outcome of diet modification.\n\nNote that in this case, the CBC/ CMP will be normal which is not abnormal as the patient seems to be suffering more neurological damage than metabolic issues. However, metabolic decompensation is a possibility, so the patient should be followed closely. Admitting to the hospital/ICU is appropriate until the patient can be stabilized and amino acid levels returned to normal levels. MSUD is more severe than PKU as this can lead to death.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered: Saline solution, normal",
+    "Ordered: Intravenous access",
+    "Time Advanced 60 minutes",
+    "Virtual Time Advanced 420 minutes"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

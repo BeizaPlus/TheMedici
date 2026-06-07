@@ -1,0 +1,60 @@
+{
+  "id": 31,
+  "topic": "Dizziness and Fatigue",
+  "diagnosis": "Duodenal Ulcer",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Cardiac Exam",
+    "Physical Exam: Lung Exam",
+    "Physical Exam: Abdomen",
+    "Consultation: Gastroenterology",
+    "Fluid resuscitation in patients with hypovolemia"
+  ],
+  "should_avoid": [
+    "Consultation: Infectious Disease"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for dizziness and fatigue.",
+    "Physical Exam: Cardiac Exam": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to dizziness and fatigue.",
+    "Physical Exam: Lung Exam": "Evaluate chest and lungs as part of the initial exam for dizziness and fatigue.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with dizziness and fatigue.",
+    "Consultation: Gastroenterology": "Appropriate CCS order for Duodenal Ulcer: Consultation: Gastroenterology.",
+    "Fluid resuscitation in patients with hypovolemia": "Appropriate CCS order for Duodenal Ulcer: Fluid resuscitation in patients with hypovolemia.",
+    "Consultation: Infectious Disease": "Advanced imaging is not indicated early for Duodenal Ulcer when the diagnosis is clinical."
+  },
+  "hpi": "This case highlights the importance of recognizing the signs and symptoms of gastrointestinal bleeding. The patient presented with dizziness and fatigue, which can be indicative of significant blood loss. It is crucial to perform a thorough evaluation to determine the underlying cause of the patient's symptoms, especially in cases where there is a potential for serious pathology.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm feeling really dizzy and tired all the time. It's scary.",
+    "history": "I just can't shake this feeling. I thought it was just stress.",
+    "pain": "I have this nagging pain in my stomach."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This case highlights the importance of recognizing the signs and symptoms of gastrointestinal bleeding. The patient presented with dizziness and fatigue, which can be indicative of significant blood loss. It is crucial to perform a thorough evaluation to determine the underlying cause of the patient's symptoms, especially in cases where there is a potential for serious pathology.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Consultation: Gastroenterology",
+    "Laboratory Tests",
+    "Imaging Studies"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

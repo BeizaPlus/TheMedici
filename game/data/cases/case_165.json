@@ -1,0 +1,66 @@
+{
+  "id": 165,
+  "topic": "Postcoital Bleeding",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain medical history including menstrual cycle, sexual activity, contraceptive use, and any known bleeding disorders",
+    "Complete a pelvic examination and ultrasound to assess the uterus and adnexa",
+    "Coagulation panel for patients with a history of bleeding disorder or if abnormal coagulation cannot be ruled out clinically",
+    "Transvaginal ultrasound may be necessary in cases where pelvic examination is inconclusive",
+    "Consult Obstetrics and Gynecology if uterine pathology suspected, and Hematology if coagulopathy suspected",
+    "order1",
+    "pregnancy test"
+  ],
+  "should_avoid": [
+    "order2",
+    "D&C (dilation and curettage) should be avoided until a diagnosis is established to avoid unnecessary procedures"
+  ],
+  "rationale": {
+    "Obtain medical history including menstrual cycle, sexual activity, contraceptive use, and any known bleeding disorders": "Appropriate CCS order for this diagnosis: Obtain medical history including menstrual cycle, sexual activity, contraceptive use, and any known bleeding disorders.",
+    "Complete a pelvic examination and ultrasound to assess the uterus and adnexa": "Pelvic/cervical evaluation is central for this diagnosis and localizes the source of postcoital bleeding.",
+    "Coagulation panel for patients with a history of bleeding disorder or if abnormal coagulation cannot be ruled out clinically": "Appropriate CCS order for this diagnosis: Coagulation panel for patients with a history of bleeding disorder or if abnormal coagulation cannot be ruled out clinically.",
+    "Transvaginal ultrasound may be necessary in cases where pelvic examination is inconclusive": "Pelvic/cervical evaluation is central for this diagnosis and localizes the source of postcoital bleeding.",
+    "Consult Obstetrics and Gynecology if uterine pathology suspected, and Hematology if coagulopathy suspected": "Diagnostic report or tissue diagnosis clarifies the cause of postcoital bleeding.",
+    "order1": "Appropriate CCS order for this diagnosis: order1.",
+    "pregnancy test": "Appropriate CCS order for this diagnosis: pregnancy test.",
+    "order2": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+    "D&C (dilation and curettage) should be avoided until a diagnosis is established to avoid unnecessary procedures": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — postcoital bleeding. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This postcoital bleeding won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain medical history including menstrual cycle, sexual activity, contraceptive use, and any known bleeding disorders",
+    "Complete a pelvic examination and ultrasound to assess the uterus and adnexa",
+    "Coagulation panel for patients with a history of bleeding disorder or if abnormal coagulation cannot be ruled out clinically",
+    "Transvaginal ultrasound may be necessary in cases where pelvic examination is inconclusive",
+    "Consult Obstetrics and Gynecology if uterine pathology suspected, and Hematology if coagulopathy suspected",
+    "order1",
+    "pregnancy test"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

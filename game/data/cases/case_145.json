@@ -1,0 +1,46 @@
+{
+  "id": 145,
+  "topic": "Facial Pain",
+  "diagnosis": "Bronchitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "A"
+  ],
+  "should_avoid": [
+    "B"
+  ],
+  "rationale": {
+    "A": "Appropriate CCS order for Bronchitis: A.",
+    "B": "CCS review: avoid this order for Bronchitis — it does not change acute management."
+  },
+  "hpi": "The image shows a CCS review page with a clinical scenario presented. The user's score is -1, indicating that the order chosen was not correct according to the guidelines of CCS (the Centers for Medicare & Medicaid Services). There are two options available: A and B. Option A is marked as correctly ordered, with a rationale provided, while option B is marked as inappropriate due to an error in selection. Option C is not shown in the image. The average score of all users on this question is also -1.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — facial pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about bronchitis. The image shows a CCS review page with a clinical scenario presented. The user's...",
+    "pain": "This facial pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": "The image shows a CCS review page with a clinical scenario presented. The user's score is -1, indicating that the order chosen was not correct according to the guidelines of CCS (the Centers for Medicare & Medicaid Services). There are two options available: A and B. Option A is marked as correctly ordered, with a rationale provided, while option B is marked as inappropriate due to an error in selection. Option C is not shown in the image. The average score of all users on this question is also -1.",
+  "stacks": [
+    "A"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

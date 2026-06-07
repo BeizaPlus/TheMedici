@@ -1,0 +1,64 @@
+{
+  "id": 4,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Diabetic Ketoacidosis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Fluid Resuscitation",
+    "Insulin Drip",
+    "Electrolyte Replacement",
+    "CBC",
+    "BMP",
+    "CT Abdomen/Pelvis",
+    "Lactate",
+    "Type and Crossmatch"
+  ],
+  "should_avoid": [
+    "Unnecessary Imaging"
+  ],
+  "rationale": {
+    "Fluid Resuscitation": "Appropriate CCS order for Diabetic Ketoacidosis: Fluid Resuscitation.",
+    "Insulin Drip": "Appropriate CCS order for Diabetic Ketoacidosis: Insulin Drip.",
+    "Electrolyte Replacement": "Appropriate CCS order for Diabetic Ketoacidosis: Electrolyte Replacement.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Diabetic Ketoacidosis.",
+    "BMP": "Laboratory testing when systemic illness or severity warrants labs in Diabetic Ketoacidosis.",
+    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Lactate": "Appropriate CCS order for Diabetic Ketoacidosis: Lactate.",
+    "Type and Crossmatch": "Appropriate CCS order for Diabetic Ketoacidosis: Type and Crossmatch.",
+    "Unnecessary Imaging": "CCS review: avoid this order for Diabetic Ketoacidosis — it does not change acute management."
+  },
+  "hpi": "You were in the wrong location (Emergency Department) and activated for 3 Days, 01 Hours, 45 Minutes. Correct location is the same Immediate Care location that was used. You were not able to provide the appropriate care for this patient during the case.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My stomach hurts so much.",
+    "history": "I have diabetes and I feel really weak.",
+    "pain": "It feels like a sharp pain in my belly."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "You were in the wrong location (Emergency Department) and activated for 3 Days, 01 Hours, 45 Minutes. Correct location is the same Immediate Care location that was used. You were not able to provide the appropriate care for this patient during the case.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "CBC",
+    "BMP",
+    "Fluid Resuscitation"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

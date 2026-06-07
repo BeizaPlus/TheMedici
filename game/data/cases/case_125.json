@@ -1,0 +1,62 @@
+{
+  "id": 125,
+  "topic": "Chest Pain",
+  "diagnosis": "Right Ventricular Myocardial Infarction",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam - General Appearance",
+    "Physical Exam - Heart: Cardiac Exam",
+    "Physical Exam - Chest: Auscultation",
+    "Cardiac Enzymes: Troponin",
+    "Cardiac Catheterization: Angiography",
+    "Blood pressure monitoring: non-invasive",
+    "CXR: Chest X-ray"
+  ],
+  "should_avoid": [
+    "Phlebotomy"
+  ],
+  "rationale": {
+    "Physical Exam - General Appearance": "Assess how ill the patient appears before focused testing for chest pain.",
+    "Physical Exam - Heart: Cardiac Exam": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Physical Exam - Chest: Auscultation": "Evaluate chest and lungs as part of the initial exam for chest pain.",
+    "Cardiac Enzymes: Troponin": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Cardiac Catheterization: Angiography": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+    "Blood pressure monitoring: non-invasive": "Appropriate CCS order for Right Ventricular Myocardial Infarction: Blood pressure monitoring: non-invasive.",
+    "CXR: Chest X-ray": "Evaluate chest and lungs as part of the initial exam for chest pain.",
+    "Phlebotomy": "CCS review: avoid this order for Right Ventricular Myocardial Infarction — it does not change acute management."
+  },
+  "hpi": "This case illustrates that patients with chest pain can have a variety of presentations, and it is important to recognize the potential for serious conditions such as myocardial infarction. The importance of timely intervention cannot be overstated, as delays can lead to significant morbidity and mortality. In this case, the patient presented with silent ischemia, which can be particularly challenging to diagnose. It is crucial to maintain a high index of suspicion and to utilize appropriate diagnostic tools to ensure timely treatment.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My chest hurts a lot.",
+    "history": "I felt a tightness in my chest. It came on suddenly.",
+    "pain": "It feels like a heavy weight on my chest."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "This case illustrates that patients with chest pain can have a variety of presentations, and it is important to recognize the potential for serious conditions such as myocardial infarction. The importance of timely intervention cannot be overstated, as delays can lead to significant morbidity and mortality. In this case, the patient presented with silent ischemia, which can be particularly challenging to diagnose. It is crucial to maintain a high index of suspicion and to utilize appropriate diagnostic tools to ensure timely treatment.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered the following Physical Exam and/or patient updates: General Appearance, Skin, Heart, Lungs, Abdomen, Extremities, Neurological, and Mental Status.",
+    "Ordered: Cardiac enzymes, serum",
+    "Ordered: Echocardiography",
+    "Ordered: Troponin"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

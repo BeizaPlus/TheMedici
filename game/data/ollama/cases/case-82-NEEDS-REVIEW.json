@@ -1,0 +1,89 @@
+{
+  "case_number": 82,
+  "title": "Abdominal Pain and Diarrhea - Internal Medicine Rotem Caretta",
+  "location": null,
+  "hpi_raw": "Mr Caretta is a middle-aged man with no significant past medical history who presents with abdominal pain and diarrhea. Onset is acute, the character is crampy, severity is moderate, associated symptoms include loose stools with occasional blood, pertinent negatives include normal heart and lung examination.",
+  "hpi_narrative": "A middle-aged man with no significant past medical history presents with acute onset of abdominal pain and diarrhea. The character is crampy, severity moderate, associated symptoms include loose stools with occasional blood, and pertinent negatives include normal heart and lung examination.",
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "aliases": [],
+      "finding": "The general examination is extremely useful to determine how sick the patient looks",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "aliases": [],
+      "finding": "It's important to evaluate for lung pathology",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "aliases": [],
+      "finding": null,
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "aliases": [],
+      "finding": "The patient is having diarrhea, so it'd be important to look for blood in the Gl tract",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": "CBC is always a good screening tool in nearly every patient",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Antibody, Hepatitis A, IgG and IgM, serum / Hepatitis panel",
+      "aliases": [],
+      "finding": null,
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Bacterial culture, stool",
+      "aliases": [],
+      "finding": "This is to rule out E-coli or other overgrowth of intestinal bacteria",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Fat, semiquantitative, stool / Fecal fat, 72-hour",
+      "aliases": [],
+      "finding": "This is to look for malabsorption problems which could be causing the patient's diarrhea",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Ova and parasites, stool / Antigen, Giardia lamblia, stool / Antibody, Giardia, serum",
+      "aliases": [],
+      "finding": "This is to rule out a parasite infection",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Polymerase chain reaction, clostridium difficile, stool / Clostridium difficile toxin assay, stool",
+      "aliases": [],
+      "finding": "C. Diff is a common cause of diarrhea even in the community",
+      "type": "correctlyOrdered"
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 85,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual case chief complaint in OCR. It should be 'Abdominal Pain and Diarrhea - Internal Medicine Rotem Caretta'.",
+      "fix": "Correct the title to 'Abdominal Pain and Diarrhea - Internal Medicine Rotem Caretta'"
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "HPI narrative contains some extra information like 'Mr Caretta is a middle-aged man with no significant past medical history' which should be removed.",
+      "fix": "Remove the extra information from HPI narrative."
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": 20,
+  "topic": "Palpitations",
+  "diagnosis": "3rd Degree Heart Block",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest/Lungs",
+    "Physical Exam: Heart/ Cardiovascular",
+    "Physical Exam: Abdominal Exam",
+    "Physical Exam: Extremities/ Skin",
+    "Electrolytes",
+    "Cardiac Ischemia Panel",
+    "Sodium, Serum",
+    "Sodium, Urine",
+    "Synchronized cardioversion, epinephrine"
+  ],
+  "should_avoid": [
+    "Electrocardiography, 12 Lead",
+    "Transesophageal Echocardiography, Ambulatory Electrocardiography, Rhythm Strip, Holter Monitor, Cardiac Ultrasound, etc."
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for palpitations.",
+    "Physical Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for palpitations.",
+    "Physical Exam: Heart/ Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to palpitations.",
+    "Physical Exam: Abdominal Exam": "Appropriate CCS order for 3rd Degree Heart Block: Physical Exam: Abdominal Exam.",
+    "Physical Exam: Extremities/ Skin": "Skin exam may show rashes or systemic signs relevant to 3rd Degree Heart Block.",
+    "Electrolytes": "Appropriate CCS order for 3rd Degree Heart Block: Electrolytes.",
+    "Cardiac Ischemia Panel": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to palpitations.",
+    "Sodium, Serum": "Appropriate CCS order for 3rd Degree Heart Block: Sodium, Serum.",
+    "Sodium, Urine": "Appropriate CCS order for 3rd Degree Heart Block: Sodium, Urine.",
+    "Synchronized cardioversion, epinephrine": "Treatment aligned with CCS management for 3rd Degree Heart Block.",
+    "Electrocardiography, 12 Lead": "Advanced imaging is not indicated early for 3rd Degree Heart Block when the diagnosis is clinical.",
+    "Transesophageal Echocardiography, Ambulatory Electrocardiography, Rhythm Strip, Holter Monitor, Cardiac Ultrasound, etc.": "Advanced imaging is not indicated early for 3rd Degree Heart Block when the diagnosis is clinical."
+  },
+  "hpi": "The patient presented with palpitations. The patient was found to have a 3rd degree heart block. It is important to recognize this condition as it can lead to significant morbidity and mortality. The management of this condition includes monitoring and potential pacing. It is crucial to assess for reversible causes of the heart block.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I felt my heart racing and it scared me. I didn't know what was happening.",
+    "history": "I've had some episodes of feeling my heart skip beats.",
+    "pain": "I felt a tightness in my chest."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "The patient presented with palpitations. The patient was found to have a 3rd degree heart block. It is important to recognize this condition as it can lead to significant morbidity and mortality. The management of this condition includes monitoring and potential pacing. It is crucial to assess for reversible causes of the heart block.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Ordered Electrocardiography, 12 Lead",
+    "Ordered Cardiac Ischemia Panel",
+    "Ordered Electrolytes"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+}

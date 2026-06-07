@@ -1,0 +1,90 @@
+{
+  "id": 143,
+  "topic": "Poor Feeding",
+  "diagnosis": "Galactosemia",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    {
+      "order": "Physical Exam: General Appearance",
+      "rationale": "",
+      "guideline": "",
+      "sequence": 1,
+      "category": "emergent"
+    },
+    {
+      "order": "Physical Exam: Skin",
+      "rationale": "",
+      "guideline": "",
+      "sequence": 2,
+      "category": "emergent"
+    },
+    {
+      "order": "Physical Exam: Abdomen",
+      "rationale": "",
+      "guideline": "",
+      "sequence": 3,
+      "category": "emergent"
+    },
+    {
+      "order": "Labs: CBC",
+      "rationale": "",
+      "guideline": "",
+      "sequence": 4,
+      "category": "emergent"
+    },
+    {
+      "order": "Labs: Comprehensive metabolic profile / Liver function panel",
+      "rationale": "",
+      "guideline": "",
+      "sequence": 5,
+      "category": "emergent"
+    },
+    "Consult: genetics"
+  ],
+  "should_avoid": [
+    "IV fluid administration"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for poor feeding.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Galactosemia.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with poor feeding.",
+    "Labs: CBC": "Laboratory testing when systemic illness or severity warrants labs in Galactosemia.",
+    "Labs: Comprehensive metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Galactosemia.",
+    "Consult: genetics": "Appropriate CCS order for Galactosemia: Consult: genetics.",
+    "IV fluid administration": "IV fluids/access are not indicated unless the patient is unstable or cannot tolerate PO."
+  },
+  "hpi": "Three-month-old female infant, admitted for social reasons. Fourth daughter of non-consanguineous parents; mother with cognitive deficit. Born of 36-week pregnancy complicated by gestational diabetes in the third trimester. Caesarean delivery due to dystocia. Apgar Index=8/9; birth weight of 2,650 g (Percentile3-15), length of 45.5 cm (Percentile3), head circumference of 33.2 cm (Percentile15). Admitted in the first five weeks of life to the neonatal intermediate care unit due to respiratory failure, asymptomatic hypoglycemia, feeding difficulty and by social reason. Second admission to hospital at two months old, lasting 48 hours, for acute bronchiolitis caused by respiratory syncytial virus (RSV). Adequate weight-bearing growth and psychomotor development. The infant was taken to the pediatric emergency room for a clinical picture of 48 hours of fever (maximum axillary temperature 38.5 C), prostration and groaning, in the context of varicella, with the first skin lesions identified for about ten days. Upon examination at the emergency room, the infant had fever, was groaning, normal fontanel, blood pressure of 94/54 mmHg, heart rate at 150 bpm, good perfusion, eupneic. Numerous s",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I don't feel right. Something is wrong.",
+    "history": "It got worse and they brought me in.",
+    "pain": "I hurt and I'm scared."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "This is a difficult case that may require a multi-faceted feeding approach to resolve. It is tempting to just put the baby under bright lights and advance the clock, however, there are concerning findings which include jaundice and poor feeding, which would be red flags for HEM and can lead to severe issues if not addressed promptly. The infant would benefit from closer monitoring and possible genetic evaluation.",
+  "stacks": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Skin",
+    "Physical Exam: Abdomen",
+    "Labs: CBC",
+    "Labs: Comprehensive metabolic profile / Liver function panel"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": null
+}

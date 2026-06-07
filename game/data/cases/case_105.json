@@ -1,0 +1,60 @@
+{
+  "id": 105,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Hemoperitoneum from a Ruptured Ovarian Cyst",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam General",
+    "Physical Exam Abdominal",
+    "Physical Exam GYN",
+    "CBC with differential",
+    "CT abdomen/pelvis",
+    "Transvaginal ultrasound"
+  ],
+  "should_avoid": [
+    "Laparoscopy"
+  ],
+  "rationale": {
+    "Physical Exam General": "Appropriate CCS order for Hemoperitoneum from a Ruptured Ovarian Cyst: Physical Exam General.",
+    "Physical Exam Abdominal": "Appropriate CCS order for Hemoperitoneum from a Ruptured Ovarian Cyst: Physical Exam Abdominal.",
+    "Physical Exam GYN": "Appropriate CCS order for Hemoperitoneum from a Ruptured Ovarian Cyst: Physical Exam GYN.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Hemoperitoneum from a Ruptured Ovarian Cyst.",
+    "CT abdomen/pelvis": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "Transvaginal ultrasound": "Appropriate CCS order for Hemoperitoneum from a Ruptured Ovarian Cyst: Transvaginal ultrasound.",
+    "Laparoscopy": "CCS review: avoid this order for Hemoperitoneum from a Ruptured Ovarian Cyst — it does not change acute management."
+  },
+  "hpi": "Patient diagnosed with ruptured ovarian cyst, which ultimately requires surgical intervention. The patient was in a stable condition and was treated appropriately. The patient was likely to have surgery, so getting pre-surgery labs is important. Unclear whether the patient was treated in the correct location.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared and in a lot of pain. I don't know what's happening.",
+    "history": "I felt a sudden pain in my abdomen. It got worse quickly.",
+    "pain": "It hurts a lot, especially on my left side."
+  },
+  "ccs_category": "OB/GYN",
+  "case_summary": "Patient diagnosed with ruptured ovarian cyst, which ultimately requires surgical intervention. The patient was in a stable condition and was treated appropriately. The patient was likely to have surgery, so getting pre-surgery labs is important. Unclear whether the patient was treated in the correct location.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam General",
+    "Physical Exam Abdominal",
+    "Physical Exam GYN",
+    "Laboratory Ordered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Quick 3-case build from existing app case bank JSON."
+}

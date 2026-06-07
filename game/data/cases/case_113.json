@@ -1,0 +1,64 @@
+{
+  "id": 113,
+  "topic": "Drowning",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "CBC with differential",
+    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
+    "Saline solution, normal / Lactated Ringer's solution",
+    "Epinephrine, therapy",
+    "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long",
+    "Monitor, cardiac, check",
+    "Warming blankets"
+  ],
+  "should_avoid": [
+    "Cardiopulmonary resuscitation, basic / CPR, compressions & breathing",
+    "Mechanical ventilation"
+  ],
+  "rationale": {
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Saline solution, normal / Lactated Ringer's solution": "Appropriate CCS order for this diagnosis: Saline solution, normal / Lactated Ringer's solution.",
+    "Epinephrine, therapy": "Treatment aligned with CCS management for this diagnosis.",
+    "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+    "Monitor, cardiac, check": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to drowning.",
+    "Warming blankets": "Appropriate CCS order for this diagnosis: Warming blankets.",
+    "Cardiopulmonary resuscitation, basic / CPR, compressions & breathing": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+    "Mechanical ventilation": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": "Hypothermia patients should be treated immediately before physical exam should be done. The patient has a weak pulse, and CPR should be continued. PALS recommends CPR in patients with a heart rate less than 60 beats per minute who do not respond to positive pressure ventilation. The patient does have a weak pulse. There is a risk of not receiving sufficient blood flow to the brain while performing CPR. The patient should be processed by your hands and not with the machine. The patient should be monitored, and a warming blanket should be given when the patient is hypothermic. Hypothermic patients are almost always confused about their condition. The patient should then be given epinephrine based on the recommendation of Pediatric Advanced Life Support (PALS) protocol.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm scared. I can't feel my body.",
+    "history": "I was in the water for too long. I don't remember much.",
+    "pain": "I feel cold and weak."
+  },
+  "ccs_category": "Pediatrics",
+  "case_summary": "Hypothermia patients should be treated immediately before physical exam should be done. The patient has a weak pulse, and CPR should be continued. PALS recommends CPR in patients with a heart rate less than 60 beats per minute who do not respond to positive pressure ventilation. The patient does have a weak pulse. There is a risk of not receiving sufficient blood flow to the brain while performing CPR. The patient should be processed by your hands and not with the machine. The patient should be monitored, and a warming blanket should be given when the patient is hypothermic. Hypothermic patients are almost always confused about their condition. The patient should then be given epinephrine based on the recommendation of Pediatric Advanced Life Support (PALS) protocol.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered: Comprehensive metabolic profile",
+    "Ordered: Epinephrine, therapy",
+    "Ordered: CBC with differential",
+    "Ordered: Saline solution"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

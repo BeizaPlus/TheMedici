@@ -1,0 +1,76 @@
+{
+  "id": 40,
+  "topic": "Chest Pain - Psychiatry",
+  "diagnosis": "Panic Attack",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Appearance",
+    "Physical Exam: Lung",
+    "Physical Exam: Cardiovascular",
+    "Physical Exam: Neurological",
+    "Physical Exam: Skin",
+    "HCG (Beta) Qualitative",
+    "CBC (Complete Blood Count)",
+    "Electrolytes",
+    "Troponin",
+    "D-dimer"
+  ],
+  "should_avoid": [
+    "CT Chest",
+    "MRI Brain",
+    "Echocardiogram",
+    "Cardiac Stress Test",
+    "Cardiac Catheterization"
+  ],
+  "rationale": {
+    "Physical Exam: Appearance": "Appropriate CCS order for Panic Attack: Physical Exam: Appearance.",
+    "Physical Exam: Lung": "Evaluate chest and lungs as part of the initial exam for chest pain - psychiatry.",
+    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain - psychiatry.",
+    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Panic Attack.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Panic Attack.",
+    "HCG (Beta) Qualitative": "Appropriate CCS order for Panic Attack: HCG (Beta) Qualitative.",
+    "CBC (Complete Blood Count)": "Laboratory testing when systemic illness or severity warrants labs in Panic Attack.",
+    "Electrolytes": "Appropriate CCS order for Panic Attack: Electrolytes.",
+    "Troponin": "Appropriate CCS order for Panic Attack: Troponin.",
+    "D-dimer": "Appropriate CCS order for Panic Attack: D-dimer.",
+    "CT Chest": "Advanced imaging is not indicated early for Panic Attack when the diagnosis is clinical.",
+    "MRI Brain": "Advanced imaging is not indicated early for Panic Attack when the diagnosis is clinical.",
+    "Echocardiogram": "CCS review: avoid this order for Panic Attack — it does not change acute management.",
+    "Cardiac Stress Test": "CCS review: avoid this order for Panic Attack — it does not change acute management.",
+    "Cardiac Catheterization": "CCS review: avoid this order for Panic Attack — it does not change acute management."
+  },
+  "hpi": "In this case, the patient is a 30-year-old female presenting with chest pain and a history of anxiety. The patient describes the pain as sharp and intermittent, with associated symptoms of palpitations and shortness of breath. The initial assessment should focus on ruling out any serious cardiac conditions, given the presentation. However, the patient's history of anxiety and panic attacks is significant and should be considered in the management plan. The appropriate workup includes a thorough physical exam and relevant laboratory tests to assess for any underlying issues. The patient should be monitored closely, and if the symptoms are consistent with a panic attack, appropriate interventions should be initiated.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. My chest hurts and I can't breathe.",
+    "history": "I've had anxiety for years. This pain feels different, though.",
+    "pain": "It feels sharp and comes and goes."
+  },
+  "ccs_category": "Psychiatry",
+  "case_summary": "In this case, the patient is a 30-year-old female presenting with chest pain and a history of anxiety. The patient describes the pain as sharp and intermittent, with associated symptoms of palpitations and shortness of breath. The initial assessment should focus on ruling out any serious cardiac conditions, given the presentation. However, the patient's history of anxiety and panic attacks is significant and should be considered in the management plan. The appropriate workup includes a thorough physical exam and relevant laboratory tests to assess for any underlying issues. The patient should be monitored closely, and if the symptoms are consistent with a panic attack, appropriate interventions should be initiated.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "History Taken",
+    "Labs Ordered",
+    "Medications Administered"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

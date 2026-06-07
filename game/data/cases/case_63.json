@@ -1,0 +1,62 @@
+{
+  "id": 63,
+  "topic": "Ovarian Cancer",
+  "diagnosis": "Ovarian Cancer",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam",
+    "History and Physical",
+    "Laboratory Studies",
+    "Imaging Studies",
+    "Consultation",
+    "CT Abdomen/Pelvis",
+    "Tumor Markers"
+  ],
+  "should_avoid": [
+    "Inappropriate invasive orders when there are no indications."
+  ],
+  "rationale": {
+    "Physical Exam": "Appropriate CCS order for Ovarian Cancer: Physical Exam.",
+    "History and Physical": "Appropriate CCS order for Ovarian Cancer: History and Physical.",
+    "Laboratory Studies": "Appropriate CCS order for Ovarian Cancer: Laboratory Studies.",
+    "Imaging Studies": "Appropriate CCS order for Ovarian Cancer: Imaging Studies.",
+    "Consultation": "Appropriate CCS order for Ovarian Cancer: Consultation.",
+    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with ovarian cancer.",
+    "Tumor Markers": "Appropriate CCS order for Ovarian Cancer: Tumor Markers.",
+    "Inappropriate invasive orders when there are no indications.": "CCS review: avoid this order for Ovarian Cancer — it does not change acute management."
+  },
+  "hpi": "The patient is a 54-year-old female with a history of abdominal pain and bloating. She presented to the emergency department with worsening symptoms. Imaging studies revealed a large ovarian mass. The patient was referred to gynecology for further evaluation and management. It is important to consider the differential diagnosis in such cases.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my symptoms. I just want to know what's wrong.",
+    "history": "I've been feeling bloated and in pain for weeks. It just keeps getting worse.",
+    "pain": "It hurts a lot in my abdomen, especially after eating."
+  },
+  "ccs_category": "OB/GYN",
+  "case_summary": "The patient is a 54-year-old female with a history of abdominal pain and bloating. She presented to the emergency department with worsening symptoms. Imaging studies revealed a large ovarian mass. The patient was referred to gynecology for further evaluation and management. It is important to consider the differential diagnosis in such cases.",
+  "stacks": [
+    "Vitals Ordered",
+    "History and Physical",
+    "Laboratory Studies",
+    "Imaging Studies",
+    "Consultation"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+}

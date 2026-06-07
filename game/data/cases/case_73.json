@@ -1,0 +1,60 @@
+{
+  "id": 73,
+  "topic": "Memory Loss - Neurology",
+  "diagnosis": "Alzheimer's Disease",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Head/Face",
+    "Physical Exam: Neurological",
+    "Physical Exam: Cognitive",
+    "Physical Exam: Speech",
+    "Minimum Neurological Exam (e.g., motor, sensory, reflexes, cranial nerves, etc.)"
+  ],
+  "should_avoid": [
+    "Urinalysis"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for memory loss - neurology.",
+    "Physical Exam: Head/Face": "Appropriate CCS order for Alzheimer's Disease: Physical Exam: Head/Face.",
+    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Alzheimer's Disease.",
+    "Physical Exam: Cognitive": "Appropriate CCS order for Alzheimer's Disease: Physical Exam: Cognitive.",
+    "Physical Exam: Speech": "Appropriate CCS order for Alzheimer's Disease: Physical Exam: Speech.",
+    "Minimum Neurological Exam (e.g., motor, sensory, reflexes, cranial nerves, etc.)": "Targeted Minimum Neurological Exam (e.g., motor, sensory, reflexes, cranial nerves, etc.) exam supports the differential for Alzheimer's Disease.",
+    "Urinalysis": "CCS review: avoid this order for Alzheimer's Disease — it does not change acute management."
+  },
+  "hpi": "Clinical Context:  This patient is a 70-year-old female. Depression is likely contributing to her memory loss. The patient demonstrates functional impairment. Current medications include donepezil.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my memory loss. I feel like I'm forgetting things.",
+    "history": "I used to remember everything. Now, I struggle with simple tasks.",
+    "pain": "I don't have physical pain, but this memory issue is really distressing."
+  },
+  "ccs_category": "Neurology",
+  "case_summary": "Clinical Context:  This patient is a 70-year-old female. Depression is likely contributing to her memory loss. The patient demonstrates functional impairment. Current medications include donepezil.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Ordered: Comprehensive metabolic panel",
+    "Ordered: CBC with differential",
+    "Ordered: CT scan"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

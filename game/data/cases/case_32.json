@@ -1,0 +1,62 @@
+{
+  "id": 32,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Acute Cholecystitis",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "IV FLUIDS",
+    "PAIN MANAGEMENT",
+    "LABS",
+    "IMAGING",
+    "SURGERY CONSULT",
+    "ULTRASOUND",
+    "CT ABDOMEN"
+  ],
+  "should_avoid": [
+    "UNNECESSARY MEDICATIONS"
+  ],
+  "rationale": {
+    "IV FLUIDS": "Appropriate CCS order for Acute Cholecystitis: IV FLUIDS.",
+    "PAIN MANAGEMENT": "Appropriate CCS order for Acute Cholecystitis: PAIN MANAGEMENT.",
+    "LABS": "Appropriate CCS order for Acute Cholecystitis: LABS.",
+    "IMAGING": "Appropriate CCS order for Acute Cholecystitis: IMAGING.",
+    "SURGERY CONSULT": "Appropriate CCS order for Acute Cholecystitis: SURGERY CONSULT.",
+    "ULTRASOUND": "Appropriate CCS order for Acute Cholecystitis: ULTRASOUND.",
+    "CT ABDOMEN": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
+    "UNNECESSARY MEDICATIONS": "CCS review: avoid this order for Acute Cholecystitis — it does not change acute management."
+  },
+  "hpi": "This case highlights the importance of timely diagnosis and management of acute cholecystitis. The patient presented with classic symptoms, and appropriate imaging and surgical consultation were critical in the management plan. Early intervention can significantly improve outcomes in such cases.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I have severe pain in my abdomen. I'm really scared.",
+    "history": "It started suddenly, and it hurts a lot. I can't eat anything.",
+    "pain": "The pain is sharp and constant."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "This case highlights the importance of timely diagnosis and management of acute cholecystitis. The patient presented with classic symptoms, and appropriate imaging and surgical consultation were critical in the management plan. Early intervention can significantly improve outcomes in such cases.",
+  "stacks": [
+    "Vitals Ordered",
+    "Labs Ordered",
+    "Imaging Ordered",
+    "Surgery Consult",
+    "Pain Management"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

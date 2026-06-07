@@ -1,0 +1,62 @@
+{
+  "id": 94,
+  "topic": "Rash with Joint Pain",
+  "diagnosis": "Systemic Lupus Erythematosus",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Labs: CBC with differential",
+    "Labs: CMP",
+    "Labs: ESR",
+    "Labs: Urinalysis",
+    "Labs: ANA",
+    "Labs: Anti-dsDNA",
+    "Labs: Complement levels"
+  ],
+  "should_avoid": [
+    "Labs: Blood cultures"
+  ],
+  "rationale": {
+    "Labs: CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Systemic Lupus Erythematosus.",
+    "Labs: CMP": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: CMP.",
+    "Labs: ESR": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: ESR.",
+    "Labs: Urinalysis": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: Urinalysis.",
+    "Labs: ANA": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: ANA.",
+    "Labs: Anti-dsDNA": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: Anti-dsDNA.",
+    "Labs: Complement levels": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: Complement levels.",
+    "Labs: Blood cultures": "CCS review: avoid this order for Systemic Lupus Erythematosus — it does not change acute management."
+  },
+  "hpi": "This case illustrates the importance of recognizing the clinical features of systemic lupus erythematosus (SLE) in a patient presenting with joint pain and rash. The diagnosis can be challenging due to the variability of symptoms and the need for specific laboratory tests to confirm the diagnosis. Early recognition and appropriate management are crucial to prevent complications associated with SLE.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this rash and my joint pain. It hurts a lot.",
+    "history": "I've been feeling unwell for a while. The rash started a few days ago.",
+    "pain": "My joints are aching, especially in my hands and knees."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This case illustrates the importance of recognizing the clinical features of systemic lupus erythematosus (SLE) in a patient presenting with joint pain and rash. The diagnosis can be challenging due to the variability of symptoms and the need for specific laboratory tests to confirm the diagnosis. Early recognition and appropriate management are crucial to prevent complications associated with SLE.",
+  "stacks": [
+    "Created the following Patient Case",
+    "Ordered Consults",
+    "Ordered CBC with differential",
+    "Ordered CMP",
+    "Ordered ESR"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

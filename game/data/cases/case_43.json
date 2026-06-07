@@ -1,0 +1,60 @@
+{
+  "id": 43,
+  "topic": "Knee Pain, Internal Medicine",
+  "diagnosis": "Septic Arthritis (Bacterial Arthritis)",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Blood Cultures",
+    "CBC",
+    "IV Fluids",
+    "Pain Management",
+    "Joint Aspiration",
+    "MRI of the Knee"
+  ],
+  "should_avoid": [
+    "CT of the Abdomen"
+  ],
+  "rationale": {
+    "Blood Cultures": "Laboratory testing when systemic illness or severity warrants labs in Septic Arthritis (Bacterial Arthritis).",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Septic Arthritis (Bacterial Arthritis).",
+    "IV Fluids": "Appropriate CCS order for Septic Arthritis (Bacterial Arthritis): IV Fluids.",
+    "Pain Management": "Appropriate CCS order for Septic Arthritis (Bacterial Arthritis): Pain Management.",
+    "Joint Aspiration": "Appropriate CCS order for Septic Arthritis (Bacterial Arthritis): Joint Aspiration.",
+    "MRI of the Knee": "Appropriate CCS order for Septic Arthritis (Bacterial Arthritis): MRI of the Knee.",
+    "CT of the Abdomen": "Advanced imaging is not indicated early for Septic Arthritis (Bacterial Arthritis) when the diagnosis is clinical."
+  },
+  "hpi": "This case highlights the importance of recognizing septic arthritis in patients presenting with joint pain and swelling. Early diagnosis and treatment are crucial to prevent joint damage. Key considerations include obtaining joint fluid for analysis and starting appropriate antibiotics. The differential diagnosis should include other causes of joint pain, such as gout and trauma.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my knee. It hurts so much.",
+    "history": "I can't move it well. It started hurting suddenly.",
+    "pain": "It feels sharp and throbbing."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "This case highlights the importance of recognizing septic arthritis in patients presenting with joint pain and swelling. Early diagnosis and treatment are crucial to prevent joint damage. Key considerations include obtaining joint fluid for analysis and starting appropriate antibiotics. The differential diagnosis should include other causes of joint pain, such as gout and trauma.",
+  "stacks": [
+    "Blood Cultures",
+    "CBC",
+    "IV Fluids",
+    "Pain Management",
+    "Joint Aspiration"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

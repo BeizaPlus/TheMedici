@@ -1,0 +1,64 @@
+{
+  "id": 98,
+  "topic": "Back Pain - Neurology",
+  "diagnosis": "Lumbar Disk Herniation",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Extremity / Spine",
+    "CBC with differential",
+    "Celiac study / Dihydrocodeine / Eperisone / Ibuprofen / Indomethacin / Ketorolac / Meloxicam / Naproxen / Oxycodone / Proxomol / Sulindac / Tizanidine / Aspirin, therapy",
+    "Physical Exam: Cardiovascular",
+    "Hormone, thyroid stimulating serum / Hormone, thyroid stimulating, serum"
+  ],
+  "should_avoid": [
+    "order2",
+    "Ordering imaging studies such as an MRI or CT scan initially unless there are red flags indicating potential serious pathology (e.g., severe trauma, age >50, history of cancer, fever, significant neurological deficits, or progressive symptoms)"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for back pain - neurology.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for back pain - neurology.",
+    "Physical Exam: Extremity / Spine": "Targeted Physical Exam: Extremity / Spine exam supports the differential for Lumbar Disk Herniation.",
+    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Lumbar Disk Herniation.",
+    "Celiac study / Dihydrocodeine / Eperisone / Ibuprofen / Indomethacin / Ketorolac / Meloxicam / Naproxen / Oxycodone / Proxomol / Sulindac / Tizanidine / Aspirin, therapy": "Appropriate CCS order for Lumbar Disk Herniation: Celiac study / Dihydrocodeine / Eperisone / Ibuprofen / Indomethacin / Ketorolac / Meloxicam / Naproxen / Oxycodone / Proxomol / Sulindac / Tizanidine / Aspirin, therapy.",
+    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to back pain - neurology.",
+    "Hormone, thyroid stimulating serum / Hormone, thyroid stimulating, serum": "Patient education and counseling are part of definitive care for Lumbar Disk Herniation.",
+    "order2": "CCS review: avoid this order for Lumbar Disk Herniation — it does not change acute management.",
+    "Ordering imaging studies such as an MRI or CT scan initially unless there are red flags indicating potential serious pathology (e.g., severe trauma, age >50, history of cancer, fever, significant neurological deficits, or progressive symptoms)": "Advanced imaging is not indicated early for Lumbar Disk Herniation when the diagnosis is clinical."
+  },
+  "hpi": "Differential: Cauda equina syndrome. Compression herniation. This patient has a short history of NASS and has not had neurological deficits. He is at risk for a herniated disk and should be monitored closely. If he develops neurological deficits, he should be evaluated for surgical intervention.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about my back pain. It hurts so much.",
+    "history": "I felt fine until yesterday. Now, I can't move without pain.",
+    "pain": "It's a sharp pain in my lower back."
+  },
+  "ccs_category": "Neurology",
+  "case_summary": "Differential: Cauda equina syndrome. Compression herniation. This patient has a short history of NASS and has not had neurological deficits. He is at risk for a herniated disk and should be monitored closely. If he develops neurological deficits, he should be evaluated for surgical intervention.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam",
+    "Celiac study / Dihydrocodeine / Eperisone / Ibuprofen / Indomethacin / Ketorolac / Meloxicam / Naproxen / Oxycodone / Proxomol / Sulindac / Tizanidine / Aspirin, therapy",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

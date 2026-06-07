@@ -1,0 +1,62 @@
+{
+  "id": 112,
+  "topic": "Found Unconscious",
+  "diagnosis": "Rape victim",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "HIV Test Consent Agreement",
+    "Urine Drug Screen",
+    "CT Head",
+    "CBC",
+    "Type and Cross",
+    "Pelvic examination",
+    "CT abdomen/pelvis"
+  ],
+  "should_avoid": [
+    "Cardiac monitoring"
+  ],
+  "rationale": {
+    "HIV Test Consent Agreement": "Appropriate CCS order for Rape victim: HIV Test Consent Agreement.",
+    "Urine Drug Screen": "Appropriate CCS order for Rape victim: Urine Drug Screen.",
+    "CT Head": "Appropriate CCS order for Rape victim: CT Head.",
+    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Rape victim.",
+    "Type and Cross": "Appropriate CCS order for Rape victim: Type and Cross.",
+    "Pelvic examination": "Pelvic/cervical evaluation is central for Rape victim and localizes the source of found unconscious.",
+    "CT abdomen/pelvis": "Abdominal exam helps exclude alternative causes in a patient with found unconscious.",
+    "Cardiac monitoring": "CCS review: avoid this order for Rape victim — it does not change acute management."
+  },
+  "hpi": "This case illustrates the importance of timely evaluation and management of patients who present with altered mental status. The patient was found unconscious and required immediate stabilization and assessment. It is crucial to consider potential causes of altered mental status, including substance use, trauma, and medical conditions. In this case, appropriate imaging and laboratory studies were essential to guide further management.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I don't remember what happened. I just woke up here.",
+    "history": "I was at a party, and then everything is a blur.",
+    "pain": "I feel really confused and scared."
+  },
+  "ccs_category": "Emergency Medicine",
+  "case_summary": "This case illustrates the importance of timely evaluation and management of patients who present with altered mental status. The patient was found unconscious and required immediate stabilization and assessment. It is crucial to consider potential causes of altered mental status, including substance use, trauma, and medical conditions. In this case, appropriate imaging and laboratory studies were essential to guide further management.",
+  "stacks": [
+    "Vitals Ordered",
+    "Ordered Physical Exam",
+    "Ordered CBC with differential",
+    "Ordered Urine drug screen collection",
+    "Ordered CT Head"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+}

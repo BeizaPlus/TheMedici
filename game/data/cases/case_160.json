@@ -1,0 +1,62 @@
+{
+  "id": 160,
+  "topic": "Anxiety",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Obtain a psychiatric consultation",
+    "Order comprehensive psychiatric evaluation including mental status examination",
+    "order1",
+    "Oxygen",
+    "IV access ×2",
+    "universal labs + imaging"
+  ],
+  "should_avoid": [
+    "order1",
+    "Order unnecessary lab tests or imaging as they are not typically indicated for anxiety disorder without a specific suspected etiology"
+  ],
+  "rationale": {
+    "Obtain a psychiatric consultation": "Appropriate CCS order for this diagnosis: Obtain a psychiatric consultation.",
+    "Order comprehensive psychiatric evaluation including mental status examination": "Appropriate CCS order for this diagnosis: Order comprehensive psychiatric evaluation including mental status examination.",
+    "order1": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
+    "universal labs + imaging": "Appropriate CCS order for this diagnosis: universal labs + imaging.",
+    "Order unnecessary lab tests or imaging as they are not typically indicated for anxiety disorder without a specific suspected etiology": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — anxiety. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This anxiety won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Obtain a psychiatric consultation",
+    "Order comprehensive psychiatric evaluation including mental status examination",
+    "order1",
+    "Oxygen",
+    "IV access ×2",
+    "universal labs + imaging"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+}

@@ -1,0 +1,58 @@
+{
+  "id": 111,
+  "topic": "Shortness of Breath",
+  "diagnosis": "Fat Embolism Syndrome",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: Lungs",
+    "Physical Exam: Skin",
+    "Physical Exam: Cardiovascular",
+    "Physical Exam: Neuro",
+    "Physical Exam: Pulse Ox"
+  ],
+  "should_avoid": [
+    "Heparin, low molecular weight / Heparin therapy / Heparin sodium / Concomitant / Spinal cord / Aspirin"
+  ],
+  "rationale": {
+    "Physical Exam: Lungs": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Fat Embolism Syndrome.",
+    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
+    "Physical Exam: Neuro": "Targeted Physical Exam: Neuro exam supports the differential for Fat Embolism Syndrome.",
+    "Physical Exam: Pulse Ox": "Pulse oximetry documents oxygenation in the initial assessment.",
+    "Heparin, low molecular weight / Heparin therapy / Heparin sodium / Concomitant / Spinal cord / Aspirin": "CCS review: avoid this order for Fat Embolism Syndrome — it does not change acute management."
+  },
+  "hpi": "Differentiate: CHF, pneumonia, embolism, aspiration, heart failure, pneumonia, systemic lupus erythematosus.\n\nThe patient has fat embolism syndrome (FES). This typically occurs from hours to days after an initial injury that allows globules (typically from bone marrow) to enter the blood stream. Long bones such as a femur are common causes of FES. FES can also cause respiratory distress, and information on risk factors should be taken, including the patient's history.\n\nThe patient has many metabolic abnormalities; the lab results and thrombocytopenia which are very common in fat embolism syndrome. He also has metabolic acidosis, increased level of BUN, and increased creatinine which are also commonly seen in fat embolism syndrome.\n\nDiagnosis is mainly clinical as imaging is not very reliable. Chest x-ray and CT scans can be misleading in this case. The patient could have an abnormal CT scan, but this will take too much time to administer. The patient will require immediate supportive treatment.\n\nA commonly used criteria is the Gurd and Wilson criteria for fat embolism to help clinicians determine if the patient is suffering from a fat embolism. The major criteria are:\n\n1. Pyrexia > 38.0 °C\n2. Central nervous system depression\n3. Petechiae\n\nThere are other criteria, but these will not be listed. The patient, positive in the minor criteria, has tachycardia more than 100 beats per minute, and his globules in plasma in the urine. At least two positive major criteria plus one minor criteria is suggestive of fat embolism. In this case, the patient has safety problems, hypotension, and tachycardia; all of these in turn is a concern order on the EMS.\n\nTreatment is supportive. The patient should be transferred to the ICU, intubated, put on a ventilator. The patient should be given fluids. Albumin therapy is considered experimental and corticosteroids administration is controversial, so the majority treatment is just supportive. One thing to avoid is heparin/anticoagulant treatment. This has shown benefit in fat embolism cases, and it increases the risk of hemorrhage.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared. I can't breathe well at all.",
+    "history": "I had an injury a few days ago, and now I feel terrible.",
+    "pain": "It feels like there's pressure in my chest."
+  },
+  "ccs_category": "Internal Medicine",
+  "case_summary": "Differentiate: CHF, pneumonia, embolism, aspiration, heart failure, pneumonia, systemic lupus erythematosus.\n\nThe patient has fat embolism syndrome (FES). This typically occurs from hours to days after an initial injury that allows globules (typically from bone marrow) to enter the blood stream. Long bones such as a femur are common causes of FES. FES can also cause respiratory distress, and information on risk factors should be taken, including the patient's history.\n\nThe patient has many metabolic abnormalities; the lab results and thrombocytopenia which are very common in fat embolism syndrome. He also has metabolic acidosis, increased level of BUN, and increased creatinine which are also commonly seen in fat embolism syndrome.\n\nDiagnosis is mainly clinical as imaging is not very reliable. Chest x-ray and CT scans can be misleading in this case. The patient could have an abnormal CT scan, but this will take too much time to administer. The patient will require immediate supportive treatment.\n\nA commonly used criteria is the Gurd and Wilson criteria for fat embolism to help clinicians determine if the patient is suffering from a fat embolism. The major criteria are:\n\n1. Pyrexia > 38.0 °C\n2. Central nervous system depression\n3. Petechiae\n\nThere are other criteria, but these will not be listed. The patient, positive in the minor criteria, has tachycardia more than 100 beats per minute, and his globules in plasma in the urine. At least two positive major criteria plus one minor criteria is suggestive of fat embolism. In this case, the patient has safety problems, hypotension, and tachycardia; all of these in turn is a concern order on the EMS.\n\nTreatment is supportive. The patient should be transferred to the ICU, intubated, put on a ventilator. The patient should be given fluids. Albumin therapy is considered experimental and corticosteroids administration is controversial, so the majority treatment is just supportive. One thing to avoid is heparin/anticoagulant treatment. This has shown benefit in fat embolism cases, and it increases the risk of hemorrhage.",
+  "stacks": [
+    "Physical Exam",
+    "Laboratory Tests",
+    "Imaging Studies",
+    "Medications",
+    "Consults"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+}

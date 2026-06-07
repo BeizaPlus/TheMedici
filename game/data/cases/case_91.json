@@ -1,0 +1,59 @@
+{
+  "id": 91,
+  "topic": "Lump in Breast",
+  "diagnosis": "Breast Cancer",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Skin",
+    "Consult: surgery, general / Consult: thoracic surgery",
+    "Consult: radiation therapy"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for lump in breast.",
+    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for lump in breast.",
+    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to lump in breast.",
+    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with lump in breast.",
+    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Breast Cancer.",
+    "Consult: surgery, general / Consult: thoracic surgery": "Appropriate CCS order for Breast Cancer: Consult: surgery, general / Consult: thoracic surgery.",
+    "Consult: radiation therapy": "Appropriate CCS order for Breast Cancer: Consult: radiation therapy."
+  },
+  "hpi": "The patient in this case has breast cancer, specifically invasive lobular carcinoma. This is discovered first by doing imaging such as a mammogram or breast ultrasound followed by a needle biopsy. Once the diagnosis is made, the patient should be referred to oncology, general surgery for tumor removal, and radiation. Once the curative has been made, the case will need to initiate chemotherapy regimens.",
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I'm really scared about this lump in my breast. I don't know what it means.",
+    "history": "I found a lump and it feels different. I just want to know if it's serious.",
+    "pain": "It doesn't hurt, but I'm worried it might be something bad."
+  },
+  "ccs_category": "OB/GYN",
+  "case_summary": "The patient in this case has breast cancer, specifically invasive lobular carcinoma. This is discovered first by doing imaging such as a mammogram or breast ultrasound followed by a needle biopsy. Once the diagnosis is made, the patient should be referred to oncology, general surgery for tumor removal, and radiation. Once the curative has been made, the case will need to initiate chemotherapy regimens.",
+  "stacks": [
+    "Vitals Ordered",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+}

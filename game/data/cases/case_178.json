@@ -1,0 +1,57 @@
+{
+  "id": 178,
+  "topic": "Epigastric Pain",
+  "diagnosis": "Unknown",
+  "confidence": "partial",
+  "source": "game/data/ollama/cases.json",
+  "correct_orders": [
+    "Laboratory tests: Complete Blood Count (CBC), Basic Metabolic Panel, Lipase, Amylase",
+    "Imaging: Abdominal CT scan with contrast",
+    "Oxygen",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+  ],
+  "should_avoid": [
+    "Order unneccessary invasive procedures without clear indications or prior imaging",
+    "Initial orders should not focus on a specific diagnosis as the etiology is unknown"
+  ],
+  "rationale": {
+    "Laboratory tests: Complete Blood Count (CBC), Basic Metabolic Panel, Lipase, Amylase": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+    "Imaging: Abdominal CT scan with contrast": "Appropriate CCS order for this diagnosis: Imaging: Abdominal CT scan with contrast.",
+    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "Appropriate CCS order for this diagnosis: Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check).",
+    "Order unneccessary invasive procedures without clear indications or prior imaging": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+    "Initial orders should not focus on a specific diagnosis as the etiology is unknown": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+  },
+  "hpi": null,
+  "physical_exam": [],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp_systolic": null,
+    "bp_diastolic": null,
+    "rr": null,
+    "temp": null,
+    "map": null,
+    "lactate": null
+  },
+  "patient_voice": {
+    "chief_complaint": "I need help — epigastric pain. I'm really scared.",
+    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
+    "pain": "This epigastric pain won't let up and I'm afraid something bad is happening."
+  },
+  "ccs_category": null,
+  "case_summary": null,
+  "stacks": [
+    "Laboratory tests: Complete Blood Count (CBC), Basic Metabolic Panel, Lipase, Amylase",
+    "Imaging: Abdominal CT scan with contrast",
+    "Oxygen",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+  ],
+  "order_sets": [],
+  "complete": false,
+  "extraction_method": "screenshot+ollama",
+  "enrichment_sources": [
+    "ollama"
+  ],
+  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+}
