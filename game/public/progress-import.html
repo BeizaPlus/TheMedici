@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Import MeWorld progress</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+    input { margin: 1rem 0; }
+  </style>
+</head>
+<body>
+  <h1>Import browser progress</h1>
+  <p>Load <code>progress-backup/browser-localStorage.json</code> from the repo or zip.</p>
+  <input type="file" id="file" accept="application/json,.json" />
+  <p id="status"></p>
+  <script>
+    document.getElementById('file').onchange = async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const text = await file.text();
+      const data = JSON.parse(text);
+      const keys = data.keys || data;
+      let n = 0;
+      for (const [k, v] of Object.entries(keys)) {
+        if (typeof v === 'string') {
+          localStorage.setItem(k, v);
+          n += 1;
+        }
+      }
+      document.getElementById('status').textContent = `Imported ${n} keys. Refresh the app.`;
+    };
+  </script>
+</body>
+</html>
