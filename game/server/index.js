@@ -153,16 +153,58 @@ function pruneCaseChatSessions() {
   }
 }
 
+function simulationCreativityBand(score) {
+  const c = Math.max(0, Math.min(100, Number(score) || 55));
+  if (c < 30) return { band: 'strict', temperature: 0.28 };
+  if (c < 65) return { band: 'balanced', temperature: 0.48 };
+  return { band: 'immersive', temperature: 0.78 };
+}
+
 function buildCaseChatSystemPrompt(caseContext) {
-  const role = caseContext?.playRole === 'patient' ? 'patient' : 'doctor';
+  const creativity = caseContext?.simulationCreativity ?? 55;
+  const { band } = simulationCreativityBand(creativity);
+  const name = caseContext?.patientName || 'the patient';
+  const facts = caseContext?.patientFacts || {};
+  const patientSim = caseContext?.chatMode === 'patient_sim' || caseContext?.playRole === 'patient';
+
+  if (patientSim) {
+    const bandRules =
+      band === 'strict'
+        ? `- Use PATIENT FACTS and CASE JSON only. Speak in first person, 1–3 sentences.
+- If a detail is missing, say you are not sure or do not remember — NEVER say "not documented in this case" or "check my records".`
+        : band === 'balanced'
+          ? `- Speak naturally in first person as the sick patient. Use PATIENT FACTS, HPI EXCERPT, and CASE JSON.
+- Answer history questions (age, travel, smoking, symptoms) from documented history when available.
+- NEVER say "not documented in this case". If unsure: "I don't remember" or "Nobody asked me that yet".`
+          : `- Fully inhabit ${name}. Natural, conversational first-person answers (1–4 sentences).
+- Use HPI EXCERPT, PATIENT FACTS, vitals, and presentation to simulate a believable ED patient.
+- If age, travel, smoking, or other history is missing from PATIENT FACTS, invent plausible details consistent with the illness (e.g. adult with pneumonia) and keep them stable across the interview.
+- Plausible everyday details are OK (work, family, when symptoms started).
+- NEVER break character. NEVER say "not documented", "JSON", or "simulation".
+- For tests not done yet: "They haven't given me those results yet" — not chart-speak.`;
+
+    return `You ARE the patient "${name}" in the emergency department. The learner is interviewing you.
+
+SIMULATION CREATIVITY: ${creativity}/100 (${band} mode)
+${bandRules}
+
+PATIENT FACTS (ground truth for interview answers):
+${JSON.stringify(facts, null, 2)}
+
+HPI EXCERPT:
+${caseContext?.hpiExcerpt || '(see CASE JSON history fields)'}
+
+When the learner message includes SESSION SO FAR (orders, vitals, timeline), you may reference what has already happened in this visit — still in patient voice.
+
+CASE JSON:
+${JSON.stringify(caseContext, null, 2)}`;
+  }
+
   const roleLine =
-    role === 'patient'
-      ? 'Respond in first person as the patient in this case. Stay in character and only use facts from the case JSON.'
-      : 'Respond as a clinical tutor helping the learner work through this case. Use only the case JSON — no outside facts.';
+    'Respond as a clinical tutor helping the learner work through this case. Use the case JSON — no outside facts.';
   return `${roleLine}
 
 Rules:
-- Answer ONLY from the CASE JSON below. If something is not in the JSON, say it is not documented in this case.
 - Keep answers concise and practical for emergency medicine training.
 - Do not invent labs, imaging results, or outcomes not present in the JSON unless clearly labeled as teaching speculation.
 - When the learner sends a message, it may include a SESSION SO FAR block with ordersTimeline and standardFlow (Teach Me compare). Use that live session data to explain placement mistakes, out-of-order steps, and what to do next — in addition to the static case JSON.
@@ -200,8 +242,8 @@ async function callChatCompletion(key, messages, { maxTokens = 700, temperature 
   return data.choices?.[0]?.message?.content?.trim() || 'No response.';
 }
 
-async function callCaseChatCompletion(key, messages) {
-  return callChatCompletion(key, messages);
+async function callCaseChatCompletion(key, messages, { temperature = 0.45 } = {}) {
+  return callChatCompletion(key, messages, { temperature });
 }
 
 function parseModelJson(raw) {
@@ -601,9 +643,13 @@ app.post('/api/case-chat/start', async (req, res) => {
   try {
     pruneCaseChatSessions();
     const sessionId = crypto.randomBytes(16).toString('hex');
+    const creativity = caseContext?.simulationCreativity ?? 55;
+    const { temperature } = simulationCreativityBand(creativity);
     const systemPrompt = buildCaseChatSystemPrompt(caseContext);
     caseChatSessions.set(sessionId, {
       caseId: String(caseContext.id),
+      creativity,
+      temperature,
       messages: [{ role: 'system', content: systemPrompt }],
       lastUsed: Date.now(),
     });
@@ -712,7 +758,9 @@ app.post('/api/case-chat/message', async (req, res) => {
     }
     session.messages.push({ role: 'user', content: userContent });
     const window = session.messages.slice(0, 1).concat(session.messages.slice(-24));
-    const reply = await callCaseChatCompletion(key, window);
+    const reply = await callCaseChatCompletion(key, window, {
+      temperature: session.temperature ?? 0.45,
+    });
     session.messages.push({ role: 'assistant', content: reply });
     session.lastUsed = Date.now();
     return res.json({ ok: true, reply });

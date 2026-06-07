@@ -34,6 +34,8 @@ export const STORAGE = {
   activePlayCheckpoint: 'schoonmaker_active_play_checkpoint',
   uiPrefs: 'schoonmaker_ui_prefs',
   differentialPracticeLog: 'schoonmaker_differential_practice_log',
+  differentialCaseTranscripts: 'schoonmaker_differential_case_transcripts',
+  caseSimulationCreativity: 'schoonmaker_case_simulation_creativity',
   differentialVoiceIndex: 'schoonmaker_differential_voice_index',
   differentialCaseMemory: 'schoonmaker_differential_case_memory',
   differentialStackerPrefs: 'schoonmaker_differential_stacker_prefs',

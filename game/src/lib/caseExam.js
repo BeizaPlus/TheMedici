@@ -22,7 +22,18 @@ const GENERIC_FINDINGS = new Set([
   'Soft, non-distended',
   'Alert unless hypoperfused',
   'Diaphoretic; perfusion varies with stability',
+  'Soft, non-distended, no focal peritoneal signs on initial exam.',
+  'Alert and oriented unless perfusion or metabolic derangement present.',
+  'No acute rash; capillary refill and perfusion assessed.',
+  'Exam findings reflect presentation acuity on arrival.',
 ]);
+
+const GENERIC_FINDING_PATTERNS = [
+  /^soft, non-distended, no focal peritoneal signs/i,
+  /^alert and oriented unless perfusion/i,
+  /^no acute rash; capillary refill/i,
+  /^exam findings reflect presentation acuity/i,
+];
 
 /** Authored per-case exams (cases with captured CCS depth). */
 export const AUTHORED_CASE_EXAMS = {
@@ -113,6 +124,14 @@ export const PRESENTATION_EXAMS = {
     ['Neuro', 'Alert unless hypercapnic or hypoxic'],
     ['Skin', 'Cyanosis absent unless critical hypoxemia'],
   ],
+  Cough: [
+    ['General', 'Ill-appearing with frequent cough; fatigued, speaks in short phrases'],
+    ['Cardiovascular', 'Tachycardic; no acute murmur or JVD on first pass'],
+    ['Respiratory', 'Tachypneic with productive cough; focal crackles or rhonchi on auscultation'],
+    ['Abdomen', 'Soft, non-tender, no guarding'],
+    ['Neuro', 'Alert and oriented; no meningismus'],
+    ['Skin', 'No petechiae; mild diaphoresis with exertional cough'],
+  ],
   'Found Unconscious': [
     ['General', 'Unresponsive on arrival, airway and circulation addressed first'],
     ['Cardiovascular', 'Hemodynamics stabilized with monitoring'],
@@ -122,6 +141,89 @@ export const PRESENTATION_EXAMS = {
     ['Skin', 'Trauma survey for lacerations, track marks, temperature'],
   ],
 };
+
+/** Diagnosis-specific exams when presentation title alone is too broad (e.g. Cough → TB). */
+const DIAGNOSIS_EXAMS = {
+  Tuberculosis: [
+    ['General', 'Cachectic-appearing; weak with paroxysmal cough; weeks of symptoms and weight loss'],
+    ['Cardiovascular', 'Tachycardic; hemodynamically stable on arrival'],
+    ['Respiratory', 'Tachypneic and hypoxemic; decreased breath sounds with upper-lobe crackles possible'],
+    ['Abdomen', 'Soft, non-tender, no peritoneal signs'],
+    ['Neuro', 'Alert; no focal deficits'],
+    ['Skin', 'No acute rash; night sweats reported in history when obtained'],
+  ],
+  'Community Acquired Pneumonia': [
+    ['General', 'Febrile and ill-appearing with productive cough'],
+    ['Cardiovascular', 'Tachycardic; BP stable'],
+    ['Respiratory', 'Tachypneic; focal crackles and dullness to percussion on affected side'],
+    ['Abdomen', 'Soft, non-tender'],
+    ['Neuro', 'Alert and oriented'],
+    ['Skin', 'Warm with fever; no petechiae'],
+  ],
+  Pneumonia: [
+    ['General', 'Ill-appearing with cough and fever'],
+    ['Cardiovascular', 'Tachycardic'],
+    ['Respiratory', 'Tachypneic; focal lung findings on exam'],
+    ['Abdomen', 'Soft, non-tender'],
+    ['Neuro', 'Alert'],
+    ['Skin', 'Febrile, no rash'],
+  ],
+};
+
+function patientVoiceToText(patientVoice) {
+  if (!patientVoice || typeof patientVoice !== 'object') return '';
+  return [patientVoice.chief_complaint, patientVoice.history, patientVoice.pain]
+    .filter(Boolean)
+    .map((s) => String(s).trim())
+    .join(' ');
+}
+
+export function composeCaseHistory({
+  history = '',
+  patientVoice = null,
+  clinicalHpi = '',
+  chiefComplaint = '',
+} = {}) {
+  const pv = patientVoiceToText(patientVoice);
+  const parts = [
+    String(history || '').trim(),
+    pv,
+    String(clinicalHpi || '').trim(),
+    String(chiefComplaint || '').trim(),
+  ].filter((p) => p.length > 0);
+  const seen = new Set();
+  const unique = [];
+  for (const p of parts) {
+    const key = p.slice(0, 80).toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(p);
+  }
+  return unique.join(' ');
+}
+
+function diagnosisKey(diagnosis = '') {
+  const d = String(diagnosis || '').trim();
+  if (!d || d === 'Unknown') return null;
+  if (DIAGNOSIS_EXAMS[d]) return d;
+  const found = Object.keys(DIAGNOSIS_EXAMS).find(
+    (k) => k.toLowerCase() === d.toLowerCase(),
+  );
+  return found || null;
+}
+
+function isTeachingHpi(text = '') {
+  return /this case highlights|emphasizes the importance|follow ccs review|complete diagnosis and treatment orders/i.test(
+    text,
+  );
+}
+
+function isGenericFinding(text = '') {
+  const t = String(text || '').trim();
+  if (!t) return true;
+  if (GENERIC_FINDINGS.has(t)) return true;
+  return GENERIC_FINDING_PATTERNS.some((re) => re.test(t));
+}
 
 function isGenericTemplateExam(exam) {
   if (!Array.isArray(exam) || !exam.length) return true;
@@ -153,8 +255,11 @@ function formatCardiovascular(vitals = {}, historyLower = '') {
   return parts.length ? `${parts.join('; ')}.` : 'Heart rate and rhythm assessed at bedside.';
 }
 
-function formatRespiratory(vitals = {}, historyLower = '') {
+function formatRespiratory(vitals = {}, historyLower = '', diagnosis = '', title = '') {
   const parts = [];
+  const dl = String(diagnosis || '').toLowerCase();
+  const tl = String(title || '').toLowerCase();
+
   if (vitals.rr != null) {
     let note = `RR ${vitals.rr}`;
     if (vitals.rr > 22) note += ', tachypneic';
@@ -162,17 +267,39 @@ function formatRespiratory(vitals = {}, historyLower = '') {
   }
   if (vitals.spo2 != null) {
     parts.push(`SpO₂ ${vitals.spo2}%`);
-    if (vitals.spo2 < 92) parts.push('hypoxemic');
+    if (vitals.spo2 < 94) parts.push('hypoxemic');
   }
-  if (/dyspnea|shortness of breath|respiratory distress|wheez|crackles/i.test(historyLower)) {
+  if (/tuberculosis|\btb\b|mycobacter/i.test(dl)) {
+    parts.push('productive cough; decreased breath sounds with possible upper-lobe crackles');
+  } else if (/pneumonia/i.test(dl)) {
+    parts.push('focal crackles and dullness to percussion on affected side');
+  } else if (/cough/.test(tl) || /cough/.test(historyLower)) {
+    parts.push('productive cough with scattered rhonchi; increased work of breathing');
+  } else if (/dyspnea|shortness of breath|respiratory distress|wheez|crackles/i.test(historyLower)) {
     parts.push('increased work of breathing noted');
   }
   return parts.length ? `${parts.join('; ')}.` : 'Breath sounds and work of breathing assessed.';
 }
 
-function deriveGeneral(history = '', title = '') {
+function deriveGeneral(history = '', title = '', diagnosis = '', patientVoice = null) {
   const h = history;
   const hl = h.toLowerCase();
+  const pv = patientVoiceToText(patientVoice).toLowerCase();
+  const dl = String(diagnosis || '').toLowerCase();
+  const tl = String(title || '').toLowerCase();
+
+  if (/tuberculosis|\btb\b|mycobacter/i.test(dl)) {
+    return 'Cachectic-appearing; weak with paroxysmal cough; reports weeks of symptoms and weight loss.';
+  }
+  if (/cough/.test(tl) || /cough/.test(pv) || /cough/.test(hl)) {
+    if (/weight loss|weak|weeks/i.test(pv + hl)) {
+      return 'Ill-appearing with chronic cough; fatigued and thinner than stated baseline.';
+    }
+    return 'Ill-appearing with frequent cough; speaks in short phrases between paroxysms.';
+  }
+  if (/pneumonia/i.test(dl)) {
+    return 'Febrile and ill-appearing with productive cough and malaise.';
+  }
   if (/diaphoretic|anxious|clutching|acute distress|moaning/i.test(h)) {
     const m = h.match(/[^.!?]*(?:diaphoretic|distress|moaning|anxious)[^.!?]*[.!?]/i);
     if (m) return clip(m[0]);
@@ -180,11 +307,11 @@ function deriveGeneral(history = '', title = '') {
   if (/behavioral|barely talks|stares|somnolent|confused|lethargic|altered mental|memory loss/i.test(hl)) {
     return 'Decreased engagement and cognitive change compared with reported baseline.';
   }
-  if (/pain|rash|weakness|headache|cough|bleeding/i.test(hl)) {
+  if (!isTeachingHpi(h) && /pain|rash|weakness|headache|bleeding/i.test(hl)) {
     const m = h.match(/(?:presents|complaining|reports)[^.!?]{20,180}[.!?]/i);
     if (m) return clip(m[0]);
   }
-  if (title) return clip(`${title} — exam tailored to chief complaint on arrival.`);
+  if (title) return `Acutely ill appearance consistent with ${title.toLowerCase()}.`;
   return 'Exam findings reflect presentation acuity on arrival.';
 }
 
@@ -225,6 +352,9 @@ function deriveNeuro(historyLower = '', title = '') {
 }
 
 function deriveSkin(historyLower = '', vitals = {}) {
+  if (/night sweat|weight loss|cachectic|tuberculosis|\btb\b/i.test(historyLower)) {
+    return 'No acute rash; night sweats and weight loss noted in history when obtained.';
+  }
   if (/rash|petech|lesion|jaundice|diaphoretic|clammy|pale/i.test(historyLower)) {
     if (/rash|petech/i.test(historyLower)) return 'Skin rash morphology and distribution documented.';
     if (/diaphoretic|clammy|pale/i.test(historyLower)) return 'Diaphoretic or pale skin with perfusion checked.';
@@ -233,16 +363,27 @@ function deriveSkin(historyLower = '', vitals = {}) {
   return 'No acute rash; capillary refill and perfusion assessed.';
 }
 
-/** Build exam rows from imported CCS history + parsed vitals. */
-export function deriveExamFromHistory(history = '', vitals = {}, title = '', category = '') {
+/** Build exam rows from history, vitals, diagnosis, and patient voice. */
+export function deriveExamFromHistory(
+  history = '',
+  vitals = {},
+  title = '',
+  category = '',
+  diagnosis = '',
+  patientVoice = null,
+) {
   const clean = String(history).replace(/\s+/g, ' ').trim();
-  if (clean.length < 80) return null;
+  const pv = patientVoiceToText(patientVoice);
+  const usable = isTeachingHpi(clean) ? pv || clean : clean || pv;
+  if (usable.length < 24 && !diagnosisKey(diagnosis) && !PRESENTATION_EXAMS[titleKey(title)]) {
+    return null;
+  }
 
-  const hl = clean.toLowerCase();
+  const hl = `${usable} ${diagnosis} ${title}`.toLowerCase();
   return [
-    ['General', deriveGeneral(clean, title)],
+    ['General', deriveGeneral(usable || pv, title, diagnosis, patientVoice)],
     ['Cardiovascular', formatCardiovascular(vitals, hl)],
-    ['Respiratory', formatRespiratory(vitals, hl)],
+    ['Respiratory', formatRespiratory(vitals, hl, diagnosis, title)],
     ['Abdomen', deriveAbdomen(hl, title || category)],
     ['Neuro', deriveNeuro(hl, title || category)],
     ['Skin', deriveSkin(hl, vitals)],
@@ -258,33 +399,36 @@ function titleKey(title = '') {
   return found || t;
 }
 
-function applyVitalsToExam(exam, vitals = {}) {
+function applyVitalsToExam(exam, vitals = {}, diagnosis = '', title = '') {
   return exam.map(([system, finding]) => {
     if (system === 'Cardiovascular') return [system, formatCardiovascular(vitals, '')];
-    if (system === 'Respiratory') return [system, formatRespiratory(vitals, '')];
+    if (system === 'Respiratory') return [system, formatRespiratory(vitals, '', diagnosis, title)];
     return [system, finding];
   });
 }
 
-function mergeExamWithVitals(template, derived, vitals) {
+function mergeExamWithVitals(template, derived, vitals, diagnosis = '', title = '') {
   const derivedMap = Object.fromEntries(derived);
   return template.map(([system, finding]) => {
     if (system === 'Cardiovascular') return [system, formatCardiovascular(vitals, '')];
-    if (system === 'Respiratory') return [system, formatRespiratory(vitals, '')];
+    if (system === 'Respiratory') return [system, formatRespiratory(vitals, '', diagnosis, title)];
     const fromHistory = derivedMap[system];
     if (system === 'General' || system === 'Neuro' || system === 'Abdomen' || system === 'Skin') {
-      return [system, fromHistory || finding];
+      const pick =
+        fromHistory && !isGenericFinding(fromHistory) ? fromHistory : finding;
+      return [system, pick];
     }
     return [system, finding];
   });
 }
 
-function vitalsBasedExam(vitals = {}, title = '', category = '') {
-  const hl = `${title} ${category}`.toLowerCase();
+function vitalsBasedExam(vitals = {}, title = '', category = '', diagnosis = '', patientVoice = null) {
+  const pv = patientVoiceToText(patientVoice);
+  const hl = `${pv} ${title} ${category} ${diagnosis}`.toLowerCase();
   return [
-    ['General', deriveGeneral('', title || category)],
+    ['General', deriveGeneral(pv, title || category, diagnosis, patientVoice)],
     ['Cardiovascular', formatCardiovascular(vitals, hl)],
-    ['Respiratory', formatRespiratory(vitals, hl)],
+    ['Respiratory', formatRespiratory(vitals, hl, diagnosis, title)],
     ['Abdomen', deriveAbdomen(hl, title)],
     ['Neuro', deriveNeuro(hl, title)],
     ['Skin', deriveSkin(hl, vitals)],
@@ -299,37 +443,68 @@ export function resolveCaseExam({
   caseId = '',
   title = '',
   category = '',
+  diagnosis = '',
   history = '',
   vitals = {},
+  patientVoice = null,
   preparedExam = null,
   hasSourceIntro = false,
 } = {}) {
   const key = String(caseId || '').padStart(3, '0');
   const presentationTitle = titleKey(title);
+  const dxKey = diagnosisKey(diagnosis);
 
   if (AUTHORED_CASE_EXAMS[key]) {
     return AUTHORED_CASE_EXAMS[key];
   }
 
-  if (PRESENTATION_EXAMS[presentationTitle]) {
-    const template = PRESENTATION_EXAMS[presentationTitle];
-    if (hasSourceIntro || history.length > 120) {
-      const derived = deriveExamFromHistory(history, vitals, presentationTitle, category);
-      if (derived) {
-        return mergeExamWithVitals(template, derived, vitals);
-      }
+  if (dxKey && DIAGNOSIS_EXAMS[dxKey]) {
+    const template = DIAGNOSIS_EXAMS[dxKey];
+    const derived = deriveExamFromHistory(
+      history,
+      vitals,
+      presentationTitle,
+      category,
+      diagnosis,
+      patientVoice,
+    );
+    if (derived) {
+      return mergeExamWithVitals(template, derived, vitals, diagnosis, presentationTitle);
     }
-    return applyVitalsToExam(template, vitals);
+    return applyVitalsToExam(template, vitals, diagnosis, presentationTitle);
   }
 
-  const derived = deriveExamFromHistory(history, vitals, presentationTitle, category);
+  if (PRESENTATION_EXAMS[presentationTitle]) {
+    const template = PRESENTATION_EXAMS[presentationTitle];
+    const derived = deriveExamFromHistory(
+      history,
+      vitals,
+      presentationTitle,
+      category,
+      diagnosis,
+      patientVoice,
+    );
+    if (derived) {
+      return mergeExamWithVitals(template, derived, vitals, diagnosis, presentationTitle);
+    }
+    return applyVitalsToExam(template, vitals, diagnosis, presentationTitle);
+  }
+
+  const derived = deriveExamFromHistory(
+    history,
+    vitals,
+    presentationTitle,
+    category,
+    diagnosis,
+    patientVoice,
+  );
   if (derived) return derived;
 
   if (preparedExam?.length && !isGenericTemplateExam(preparedExam)) {
-    return preparedExam;
+    return applyVitalsToExam(preparedExam, vitals, diagnosis, presentationTitle);
   }
 
-  return vitalsBasedExam(vitals, presentationTitle, category);
+  return vitalsBasedExam(vitals, presentationTitle, category, diagnosis, patientVoice);
 }
 
 export function isGenericExam(exam) {

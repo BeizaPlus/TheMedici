@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   checkCaseChatAvailable,
+  clearCaseChatSession,
   ensureCaseChatSession,
   fetchChatModelLabel,
   sendCaseChatMessage,
@@ -113,6 +114,19 @@ export function useCaseChat({ caseData, playSessionId, onModelReady, getSessionC
     [caseId, persistMessage],
   );
 
+  const resetSession = useCallback(async () => {
+    if (!caseId) return;
+    clearCaseChatSession(caseId);
+    setSessionId(null);
+    setError('');
+    try {
+      const id = await ensureCaseChatSession(caseData);
+      setSessionId(id);
+    } catch (e) {
+      setError(String(e.message || e));
+    }
+  }, [caseId, caseData]);
+
   const sendMessage = useCallback(
     async (text, { notesMode = false } = {}) => {
       const trimmed = String(text || '').trim();
@@ -163,5 +177,6 @@ export function useCaseChat({ caseData, playSessionId, onModelReady, getSessionC
     persistMessage,
     reloadHistory,
     appendNote,
+    resetSession,
   };
 }

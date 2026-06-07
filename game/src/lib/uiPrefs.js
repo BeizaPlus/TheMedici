@@ -4,6 +4,7 @@ import { getPreparedCase } from './caseNarrative.js';
 export function defaultUiPrefs() {
   return {
     timedMode: 'timed',
+    simulationCreativity: 55,
   };
 }
 
@@ -16,6 +17,10 @@ export function readUiPrefs() {
       ...defaultUiPrefs(),
       ...parsed,
       timedMode: parsed?.timedMode === 'untimed' ? 'untimed' : 'timed',
+      simulationCreativity:
+        Number.isFinite(Number(parsed?.simulationCreativity))
+          ? Math.max(0, Math.min(100, Math.round(Number(parsed.simulationCreativity))))
+          : 55,
     };
   } catch {
     return defaultUiPrefs();

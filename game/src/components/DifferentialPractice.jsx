@@ -2,18 +2,25 @@ import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import '../styles/differential-practice.css';
 import bank from '../data/differentialBank.json';
 import CaseRecordButton from './CaseRecordButton.jsx';
+import MicWaveform from './MicWaveform.jsx';
+import { IconPlayerPause, IconPlayerPlay } from './sceneToolbar/SceneToolbarIcons.jsx';
 import DifferentialRecordingsList from './DifferentialRecordingsList.jsx';
 import DifferentialMnemonicPanel from './DifferentialMnemonicPanel.jsx';
 import DifferentialAttemptHistory from './DifferentialAttemptHistory.jsx';
 import {
   readStackerPrefs,
+  STACKER_FIRST_PARSE_SECONDS,
+  STACKER_INCREMENTAL_SECONDS,
+  STACKER_PREFINAL_LEAD_SECONDS,
   STACKER_REVIEW_SECONDS,
   writeStackerPrefs,
 } from '../lib/differentialStackerPrefs.js';
 import { useDifferentialVoice } from '../hooks/useDifferentialVoice.js';
+import DifferentialProgressBar from './DifferentialProgressBar.jsx';
 import {
   downloadDifferentialLog,
   getCaseStats,
+  getGlobalDifferentialProgress,
   logDifferentialAttempt,
 } from '../lib/differentialPracticeLog.js';
 import {
@@ -69,6 +76,7 @@ export default function DifferentialPractice({ onBack }) {
   const [input, setInput] = useState('');
   const [revealed, setRevealed] = useState(false);
   const [statsTick, setStatsTick] = useState(0);
+  const [progressPulse, setProgressPulse] = useState(false);
   const [recordingsVersion, setRecordingsVersion] = useState(0);
   const [voiceError, setVoiceError] = useState('');
   const [aiScore, setAiScore] = useState(null);
@@ -76,12 +84,16 @@ export default function DifferentialPractice({ onBack }) {
   const [aiError, setAiError] = useState('');
   const [stacker, setStacker] = useState(() => readStackerPrefs());
   const [stackerPhase, setStackerPhase] = useState('practice');
+  const [stackerPaused, setStackerPaused] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(() => readStackerPrefs().seconds);
   const [sessionComplete, setSessionComplete] = useState(false);
+  const [apiOk, setApiOk] = useState(null);
   const inputRef = useRef(null);
+  const voiceFocusRef = useRef(null);
   const loggedRoundRef = useRef(false);
   const stackerBusyRef = useRef(false);
   const onStackerExpireRef = useRef(() => {});
+  const prefinalMarksRef = useRef(new Set());
 
   const entry = bank[cardIdx];
 
@@ -97,6 +109,8 @@ export default function DifferentialPractice({ onBack }) {
     onDiagnosesHeard: applyParsedDiagnoses,
     onSaved: () => setRecordingsVersion((v) => v + 1),
     onError: (e) => setVoiceError(e?.message || 'Voice error'),
+    deferLiveDiagnoses: stacker.enabled,
+    incrementalParse: stacker.enabled,
   });
 
   const tagGuesses = useMemo(
@@ -192,8 +206,13 @@ export default function DifferentialPractice({ onBack }) {
     [entry.caseId, statsTick],
   );
 
+  const globalProgress = useMemo(
+    () => getGlobalDifferentialProgress(bank.length),
+    [statsTick],
+  );
+
   const recordAttempt = useCallback(
-    (guessList, revealedNow, aiFields = null) => {
+    (guessList, revealedNow, aiFields = null, transcripts = null) => {
       if (loggedRoundRef.current) return;
       const tags = flattenGuessList(guessList);
       if (!tags.length && !revealedNow) return;
@@ -218,18 +237,31 @@ export default function DifferentialPractice({ onBack }) {
         gotCaseDiagnosis: Boolean(nailed),
         aiProvider: aiFields?.aiProvider || null,
         aiSummary: aiFields?.aiSummary || '',
+        rawTranscript: transcripts?.hearingTranscript || '',
+        cleanedTranscript: transcripts?.cleanedTranscript || '',
       });
       loggedRoundRef.current = true;
       setStatsTick((t) => t + 1);
+      if (revealedNow) {
+        setProgressPulse(true);
+        window.setTimeout(() => setProgressPulse(false), 900);
+      }
     },
     [entry, cardIdx],
   );
 
   const flushAttempt = useCallback(
     (revealedNow) => {
-      recordAttempt(mergeGuesses(guesses, revealedNow ? '' : input), revealedNow);
+      const transcripts =
+        voice.livePreview || voice.cleanedPreview
+          ? {
+              hearingTranscript: voice.livePreview || '',
+              cleanedTranscript: voice.cleanedPreview || voice.livePreview || '',
+            }
+          : null;
+      recordAttempt(mergeGuesses(guesses, revealedNow ? '' : input), revealedNow, null, transcripts);
     },
-    [guesses, input, recordAttempt],
+    [guesses, input, recordAttempt, voice.livePreview, voice.cleanedPreview],
   );
 
   const resetRound = useCallback(() => {
@@ -240,7 +272,12 @@ export default function DifferentialPractice({ onBack }) {
     setAiScore(null);
     setAiLoading(false);
     setAiError('');
+    setVoiceError('');
   }, []);
+
+  const voiceBelongsToCase =
+    voice.recordingCaseId === entry.caseId &&
+    (voice.recording || voice.livePreview || voice.cleanedPreview);
 
   const addGuess = useCallback(() => {
     const merged = mergeGuesses(guesses, input);
@@ -251,7 +288,7 @@ export default function DifferentialPractice({ onBack }) {
   }, [input, guesses]);
 
   const scoreReveal = useCallback(
-    async (merged, rawTranscript = '') => {
+    async (merged, transcripts = {}) => {
       if (!merged.length) return false;
       setGuesses(merged);
       setInput('');
@@ -259,6 +296,7 @@ export default function DifferentialPractice({ onBack }) {
       setAiScore(null);
       setAiError('');
       setAiLoading(true);
+      const forAi = transcripts.cleanedTranscript || transcripts.hearingTranscript || '';
       try {
         const score = await scoreDifferentialWithAi({
           caseId: entry.caseId,
@@ -266,14 +304,14 @@ export default function DifferentialPractice({ onBack }) {
           caseDiagnosis: entry.diagnosis,
           answerKey: entry.diagnoses,
           guesses: merged,
-          rawTranscript,
+          rawTranscript: forAi,
         });
         setAiScore(score);
         const aiFields = aiScoreToAttemptFields(score, entry.diagnoses);
-        recordAttempt(merged, true, aiFields);
+        recordAttempt(merged, true, aiFields, transcripts);
       } catch (e) {
         setAiError(e?.message || 'AI scoring unavailable — using exact match');
-        recordAttempt(merged, true);
+        recordAttempt(merged, true, null, transcripts);
       } finally {
         setAiLoading(false);
       }
@@ -283,20 +321,26 @@ export default function DifferentialPractice({ onBack }) {
   );
 
   const resolveGuessesForScore = useCallback(async () => {
+    const hearingTranscript = voice.livePreview || '';
     const finalized = await voice.finalizeTranscript();
     const diagnoses = finalized?.diagnoses?.length
       ? flattenGuessList(finalized.diagnoses)
       : mergeGuesses(guesses, input);
+    const cleanedTranscript = finalized?.cleanedTranscript || hearingTranscript;
     return {
       diagnoses,
-      rawTranscript: finalized?.cleanedTranscript || voice.livePreview || '',
+      hearingTranscript,
+      cleanedTranscript,
     };
   }, [voice, guesses, input]);
 
   const handleReveal = useCallback(async () => {
-    const { diagnoses, rawTranscript } = await resolveGuessesForScore();
-    if (!diagnoses.length) return;
-    await scoreReveal(diagnoses, rawTranscript);
+    const resolved = await resolveGuessesForScore();
+    if (!resolved.diagnoses.length) return;
+    await scoreReveal(resolved.diagnoses, {
+      hearingTranscript: resolved.hearingTranscript,
+      cleanedTranscript: resolved.cleanedTranscript,
+    });
   }, [resolveGuessesForScore, scoreReveal]);
 
   const toggleStacker = useCallback(() => {
@@ -306,15 +350,21 @@ export default function DifferentialPractice({ onBack }) {
       if (next.enabled) {
         setSessionComplete(false);
         setCardIdx(0);
+        voice.stopRecording();
+        voice.resetVoiceState();
         resetRound();
         setStackerPhase('practice');
+        setStackerPaused(false);
         setSecondsLeft(next.seconds);
       } else {
         setStackerPhase('practice');
+        setStackerPaused(false);
+        voice.stopRecording();
+        voice.resetVoiceState();
       }
       return next;
     });
-  }, [resetRound]);
+  }, [resetRound, voice]);
 
   const setStackerSeconds = useCallback((seconds) => {
     setStacker((prev) => {
@@ -325,11 +375,42 @@ export default function DifferentialPractice({ onBack }) {
     setSecondsLeft(seconds);
   }, []);
 
+  const resumeStacker = useCallback(() => {
+    setStackerPaused(false);
+    if (stackerPhase === 'practice' && !voice.recording && !voice.busy) {
+      void voice.startRecording();
+    }
+  }, [stackerPhase, voice]);
+
+  const pauseStacker = useCallback(() => {
+    setStackerPaused(true);
+    voice.stopRecording();
+  }, [voice]);
+
+  const toggleStackerPause = useCallback(() => {
+    if (stackerPaused) resumeStacker();
+    else pauseStacker();
+  }, [stackerPaused, resumeStacker, pauseStacker]);
+
+  const handleSpaceMic = useCallback(() => {
+    if (voice.disabled) return;
+    if (stacker.enabled && stackerPhase === 'processing') return;
+    if (stacker.enabled && stackerPaused) {
+      resumeStacker();
+      return;
+    }
+    voice.toggleRecording();
+  }, [voice, stacker.enabled, stackerPhase, stackerPaused, resumeStacker]);
+
   useEffect(() => {
-    if (!stacker.enabled) return undefined;
+    if (!stacker.enabled) return;
     const duration =
       stackerPhase === 'review' ? STACKER_REVIEW_SECONDS : stacker.seconds;
     setSecondsLeft(duration);
+  }, [stacker.enabled, stacker.seconds, stackerPhase, cardIdx]);
+
+  useEffect(() => {
+    if (!stacker.enabled || stackerPhase === 'processing' || stackerPaused) return undefined;
     const id = window.setInterval(() => {
       setSecondsLeft((prev) => {
         if (prev > 1) return prev - 1;
@@ -338,16 +419,20 @@ export default function DifferentialPractice({ onBack }) {
       });
     }, 1000);
     return () => window.clearInterval(id);
-  }, [stacker.enabled, stacker.seconds, stackerPhase, cardIdx]);
+  }, [stacker.enabled, stackerPhase, stackerPaused]);
 
   const goToIndex = useCallback(
     (nextIdx) => {
       if (!revealed) flushAttempt(false);
+      voice.stopRecording();
+      voice.resetVoiceState();
       setCardIdx(((nextIdx % bank.length) + bank.length) % bank.length);
       resetRound();
       setStackerPhase('practice');
+      setStackerPaused(false);
+      prefinalMarksRef.current.clear();
     },
-    [flushAttempt, revealed, resetRound],
+    [flushAttempt, revealed, resetRound, voice],
   );
 
   const goNext = useCallback(() => {
@@ -380,19 +465,44 @@ export default function DifferentialPractice({ onBack }) {
         setStackerPhase('practice');
         return;
       }
-      if (!revealed) {
-        const { diagnoses, rawTranscript } = await resolveGuessesForScore();
-        if (diagnoses.length) {
-          await scoreReveal(diagnoses, rawTranscript);
+      if (stackerPhase === 'practice') {
+        setStackerPaused(false);
+        setStackerPhase('processing');
+        const resolved = await resolveGuessesForScore();
+        if (resolved.diagnoses.length) {
+          await scoreReveal(resolved.diagnoses, {
+            hearingTranscript: resolved.hearingTranscript,
+            cleanedTranscript: resolved.cleanedTranscript,
+          });
         } else {
           setRevealed(true);
         }
+        setStackerPhase('review');
+        setSecondsLeft(STACKER_REVIEW_SECONDS);
       }
-      setStackerPhase('review');
     } finally {
       stackerBusyRef.current = false;
     }
   };
+
+  const focusVoiceMode = useCallback(() => {
+    inputRef.current?.blur();
+    voiceFocusRef.current?.focus({ preventScroll: true });
+  }, []);
+
+  const refreshCase = useCallback(() => {
+    if (!revealed) flushAttempt(false);
+    voice.stopRecording();
+    voice.resetVoiceState();
+    resetRound();
+    setStackerPhase('practice');
+    setStackerPaused(false);
+    prefinalMarksRef.current.clear();
+    if (stacker.enabled) {
+      setSecondsLeft(stacker.seconds);
+    }
+    focusVoiceMode();
+  }, [flushAttempt, revealed, resetRound, stacker.enabled, stacker.seconds, voice, focusVoiceMode]);
 
   const shuffleCase = useCallback(() => {
     if (!revealed) flushAttempt(false);
@@ -401,9 +511,13 @@ export default function DifferentialPractice({ onBack }) {
     while (next === cardIdx) {
       next = Math.floor(Math.random() * bank.length);
     }
+    voice.stopRecording();
+    voice.resetVoiceState();
     setCardIdx(next);
     resetRound();
-  }, [cardIdx, flushAttempt, revealed, resetRound]);
+    setStackerPaused(false);
+    prefinalMarksRef.current.clear();
+  }, [cardIdx, flushAttempt, revealed, resetRound, voice]);
 
   const handleBack = useCallback(() => {
     if (!revealed) flushAttempt(false);
@@ -430,6 +544,11 @@ export default function DifferentialPractice({ onBack }) {
   useEffect(() => {
     const onKey = (e) => {
       if (e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+      if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        handleSpaceMic();
+        return;
+      }
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
         goPrev();
@@ -440,17 +559,44 @@ export default function DifferentialPractice({ onBack }) {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [goPrev, goNext]);
+  }, [goPrev, goNext, handleSpaceMic]);
 
   useEffect(() => {
-    loggedRoundRef.current = false;
-    setVoiceError('');
-    voice.stopRecording();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- stop mic when case changes
-  }, [cardIdx]);
+    focusVoiceMode();
+  }, [cardIdx, focusVoiceMode]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/health')
+      .then((r) => {
+        if (!cancelled) setApiOk(r.ok);
+      })
+      .catch(() => {
+        if (!cancelled) setApiOk(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!stacker.enabled || stackerPhase !== 'practice' || !voice.recording) return;
+    const marks = [STACKER_PREFINAL_LEAD_SECONDS, 5];
+    for (const sec of marks) {
+      if (secondsLeft <= sec && !prefinalMarksRef.current.has(sec)) {
+        prefinalMarksRef.current.add(sec);
+        void voice.triggerPrefinalParse();
+      }
+    }
+  }, [stacker.enabled, stackerPhase, secondsLeft, voice.recording, voice]);
 
   return (
-    <div className="diff-practice">
+    <div
+      className="diff-practice"
+      ref={voiceFocusRef}
+      tabIndex={-1}
+      aria-label="Differential practice — Space starts microphone"
+    >
       <header className="diff-header">
         <button className="diff-back" onClick={handleBack} aria-label="Back" type="button">
           ← Back
@@ -479,10 +625,18 @@ export default function DifferentialPractice({ onBack }) {
                 <option value={120}>2m</option>
               </select>
               <span
-                className={`diff-stacker-timer${secondsLeft <= 10 ? ' diff-stacker-timer--urgent' : ''}${stackerPhase === 'review' ? ' diff-stacker-timer--review' : ''}`}
+                className={`diff-stacker-timer${secondsLeft <= 10 && stackerPhase !== 'processing' && !stackerPaused ? ' diff-stacker-timer--urgent' : ''}${stackerPhase === 'review' ? ' diff-stacker-timer--review' : ''}${stackerPhase === 'processing' ? ' diff-stacker-timer--processing' : ''}${stackerPaused ? ' diff-stacker-timer--paused' : ''}`}
                 aria-live="polite"
               >
-                {stackerPhase === 'review' ? `Review ${secondsLeft}s` : `${secondsLeft}s`}
+                {stackerPaused
+                  ? stackerPhase === 'review'
+                    ? `Review · Paused ${secondsLeft}s`
+                    : `Paused ${secondsLeft}s`
+                  : stackerPhase === 'processing'
+                    ? 'Processing…'
+                    : stackerPhase === 'review'
+                      ? `Review ${secondsLeft}s`
+                      : `${secondsLeft}s`}
               </span>
             </>
           )}
@@ -500,6 +654,8 @@ export default function DifferentialPractice({ onBack }) {
         </div>
       </header>
 
+      <DifferentialProgressBar progress={globalProgress} pulse={progressPulse} />
+
       {sessionComplete && (
         <div className="diff-session-complete" role="status">
           <p>Stack complete — all {bank.length} cases.</p>
@@ -510,59 +666,87 @@ export default function DifferentialPractice({ onBack }) {
       )}
 
       <div className="diff-card">
-        <div className="diff-cycle-bar" aria-label="Cycle cases">
-          <button
-            type="button"
-            className="diff-cycle-btn"
-            onClick={goPrev}
-            aria-label="Previous case"
-            title="Previous case (←)"
-          >
-            ‹
-          </button>
+        <div className="diff-cycle-bar" aria-label="Current case">
           <div className="diff-cycle-center">
             <p className="diff-case-id">CCS Case {entry.caseId}</p>
             <h2 className="diff-topic-label">Chief Complaint</h2>
             <h1 className="diff-topic">{entry.topic}</h1>
-            <span className="diff-cycle-pos">
-              {cardIdx + 1} / {bank.length}
-            </span>
           </div>
-          <button
-            type="button"
-            className="diff-cycle-btn"
-            onClick={goNext}
-            aria-label="Next case"
-            title="Next case (→)"
-          >
-            ›
-          </button>
         </div>
+
+        {apiOk === false && (
+          <p className="diff-voice-error" role="alert">
+            API server not running — open a terminal in MeWorld/game and run npm run dev
+          </p>
+        )}
 
         {stacker.enabled && (
           <p className="diff-stacker-hint">
-            Stacker — {stacker.seconds}s practice · {STACKER_REVIEW_SECONDS}s review · auto next
+            Stacker — <kbd>Space</kbd> start/stop mic · Pause freezes timer · Resume auto-starts mic ·
+            Corrected at {STACKER_FIRST_PARSE_SECONDS}s then every {STACKER_INCREMENTAL_SECONDS}s
+          </p>
+        )}
+        {!stacker.enabled && (
+          <p className="diff-stacker-hint">
+            <kbd>Space</kbd> — start/stop microphone
+          </p>
+        )}
+
+        {stacker.enabled && stackerPhase === 'processing' && (
+          <p className="diff-stacker-processing" role="status">
+            Finishing smart review…
           </p>
         )}
 
         <DifferentialMnemonicPanel caseId={entry.caseId} />
 
-        {!revealed && (
+        {(!revealed || stacker.enabled) && (
           <div className="diff-voice-block">
-            <CaseRecordButton
-              recording={voice.recording}
-              busy={voice.busy}
-              transcribing={voice.transcribing || voice.finalizing}
-              disabled={voice.disabled}
-              toggleRecording={voice.toggleRecording}
-              compact
-            />
-            {voice.finalizing && (
+            <div className="diff-voice-controls">
+              <CaseRecordButton
+                recording={voice.recording}
+                busy={voice.busy}
+                transcribing={voice.transcribing || voice.finalizing || voice.incrementalParsing}
+                disabled={voice.disabled}
+                toggleRecording={voice.toggleRecording}
+                compact
+              />
+              {stacker.enabled && stackerPhase !== 'processing' && (
+                <button
+                  type="button"
+                  className={`diff-stacker-pause-btn${stackerPaused ? ' diff-stacker-pause-btn--on' : ''}`}
+                  onClick={toggleStackerPause}
+                  title={stackerPaused ? 'Resume stacker timer' : 'Pause timer for more review time'}
+                  aria-label={stackerPaused ? 'Resume timer' : 'Pause timer'}
+                >
+                  {stackerPaused ? <IconPlayerPlay /> : <IconPlayerPause />}
+                  <span>{stackerPaused ? 'Resume' : 'Pause'}</span>
+                </button>
+              )}
+            </div>
+            {voice.recording && voice.mediaStream && (
+              <MicWaveform
+                stream={voice.mediaStream}
+                active={voice.recording}
+                className="diff-mic-waveform"
+              />
+            )}
+            {voice.incrementalParsing && stacker.enabled && stackerPhase === 'practice' && (
+              <p className="diff-voice-live diff-voice-finalizing" aria-live="polite">
+                DeepSeek cleaning {STACKER_INCREMENTAL_SECONDS}s chunk…
+              </p>
+            )}
+            {voice.finalizing && stackerPhase !== 'practice' && (
               <p className="diff-voice-live diff-voice-finalizing" aria-live="polite">
                 Smart reviewer cleaning your list…
               </p>
             )}
-            {!voice.finalizing && voice.livePreview && (
+            {stacker.enabled && voiceBelongsToCase && voice.cleanedPreview && (
+              <p className="diff-voice-live diff-voice-cleaned" aria-live="polite">
+                Corrected: {voice.cleanedPreview}
+              </p>
+            )}
+            {!voice.finalizing && voiceBelongsToCase && voice.livePreview && (
               <p className="diff-voice-live" aria-live="polite">
                 Hearing: {voice.livePreview}
               </p>
@@ -580,8 +764,7 @@ export default function DifferentialPractice({ onBack }) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKey}
-              placeholder="Type differentials — separate with commas"
-              autoFocus
+              placeholder="Type differentials — separate with commas (click here to type)"
             />
             <button className="diff-add-btn" type="button" onClick={addGuess} disabled={!input.trim()}>
               Add
@@ -591,12 +774,12 @@ export default function DifferentialPractice({ onBack }) {
 
         <DifferentialRecordingsList caseId={entry.caseId} version={recordingsVersion} />
 
-        {(revealed || voice.livePreview || tagGuesses.length > 0) && (
+        {(revealed || voiceBelongsToCase || tagGuesses.length > 0) && (
           <div className="diff-compare" aria-label="Compare your differential to the answer key">
             <div className="diff-compare-col diff-compare-col--yours">
               <h3 className="diff-compare-title">Your differential</h3>
               <div className="diff-compare-scroll">
-                {!revealed && voice.livePreview && !tagGuesses.length ? (
+                {!revealed && voiceBelongsToCase && voice.livePreview && !tagGuesses.length ? (
                   <p className="diff-compare-live">{voice.livePreview}</p>
                 ) : guessRows.length ? (
                   <ol className="diff-compare-list">
@@ -707,6 +890,9 @@ export default function DifferentialPractice({ onBack }) {
         <div className="diff-nav">
           <button type="button" className="diff-nav-btn" onClick={goPrev}>
             ‹ Prev
+          </button>
+          <button type="button" className="diff-nav-btn" onClick={refreshCase}>
+            ↻ Refresh
           </button>
           {!stacker.enabled && (
             <button type="button" className="diff-nav-btn" onClick={shuffleCase}>

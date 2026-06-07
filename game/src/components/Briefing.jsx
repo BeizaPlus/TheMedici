@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import PatientScene from './PatientScene.jsx';
 import BriefingCasePicker from './BriefingCasePicker.jsx';
-import CcsScreenshotLink from './CcsScreenshotLink.jsx';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
 import { IconDoorExit } from './sceneToolbar/SceneToolbarIcons.jsx';
@@ -397,8 +396,6 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             CCS Case {caseData.ccsNumber || caseData.id}
             {caseData.category ? ` · ${caseData.category}` : ''}
             {caseData.timeLimit ? ` · ${caseData.timeLimit}` : ''}
-            {' · '}
-            <CcsScreenshotLink caseData={caseData} className="ccs-screenshot-link" />
           </p>
           <h1>{toTitleCase(caseData.title)}</h1>
           {caseData.diagnosis && (

@@ -91,7 +91,11 @@ import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
 import { buildShuffledStackEntries } from '../lib/shuffleStacks.js';
-import CcsScreenshotLink from './CcsScreenshotLink.jsx';
+import {
+  neutralStackOrderName,
+  resolveStackDecoys,
+  stackPillDisplayLabel,
+} from '../lib/stackDecoys.js';
 import { pickTeachingVideo, preloadTeachingVideo } from '../lib/caseTeachingVideo.js';
 import { decoyReason, handleDecoyOrder } from '../lib/decoyOrder.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
@@ -363,12 +367,10 @@ export default function Play({
   const [imageFrame, setImageFrame] = useState({ x: 0, y: 0, w: 1, h: 1 });
   const interventions = useMemo(() => getCaseInterventions(caseData), [caseData]);
   const requiredOrderTotal = interventions.length;
-  const decoyInterventions = useMemo(() => {
-    if (!Array.isArray(caseData?.decoys) || caseData.decoys.length === 0) {
-      return [];
-    }
-    return caseData.decoys.filter((d) => !interventions.some((iv) => iv.label === d.label));
-  }, [caseData?.decoys, interventions]);
+  const decoyInterventions = useMemo(
+    () => resolveStackDecoys(caseData, interventions),
+    [caseData, interventions],
+  );
   const expectedOrderIds = useMemo(() => interventions.map((iv) => iv.id), [interventions]);
 
   const shuffledStackEntries = useMemo(
@@ -568,8 +570,11 @@ export default function Play({
           onTouchStart={() => setDragging(true)}
           onTouchEnd={() => setDragging(false)}
         >
-          <span className="pill-text" title={iv.label}>
-            {iv.label}
+          <span
+            className="pill-text"
+            title={stackPillDisplayLabel(iv, { teachMeMode })}
+          >
+            {stackPillDisplayLabel(iv, { teachMeMode })}
           </span>
           <span className="pill-meta">
             <span className="pill-stack">x1</span>
@@ -631,10 +636,10 @@ export default function Play({
       if (!p) return;
       const zoneId = typeof p === 'string' ? p : zoneIdForCell(p, zones);
       if (!zoneId) return;
-      byZone[zoneId] = iv.label;
+      byZone[zoneId] = teachMeMode ? iv.label : neutralStackOrderName(iv.label);
     });
     return byZone;
-  }, [interventions, placed, zones]);
+  }, [interventions, placed, zones, teachMeMode]);
   const caseFlow = useMemo(() => getCaseFlow(caseData), [caseData]);
   const vitals = caseFlow.vitals;
   const exam = caseFlow.exam;
@@ -962,7 +967,8 @@ export default function Play({
     sessionStartedAtRef.current = null;
     setSessionStartedAt(null);
     soapLoggedRef.current = { assessment: null, plan: null };
-    setStacksVisible(true);
+    setStacksVisible(false);
+    setExpandedStackId(null);
     setExtraOrders([]);
     setDecoyAttempts([]);
   }, [caseData.id]);
@@ -1388,9 +1394,10 @@ export default function Play({
       setWhyPanel(null);
       setTeachFocusId(null);
 
+      const pinLabel = teachMeMode ? iv.label : neutralStackOrderName(iv.label);
       const pinPayload = isGrid
-        ? { ...target, label: iv.label, ivId: iv.id, ok: null }
-        : { zoneId: target, label: iv.label, ivId: iv.id, ok: null };
+        ? { ...target, label: pinLabel, ivId: iv.id, ok: null }
+        : { zoneId: target, label: pinLabel, ivId: iv.id, ok: null };
       setPins((prev) => [
         ...prev.filter((pin) => pin.ivId !== iv.id && pin.label !== iv.label),
         pinPayload,
@@ -1422,6 +1429,17 @@ export default function Play({
     [logDecoyAttempt, logTimeline, teachMeMode],
   );
 
+  const rejectDecoyInPractice = useCallback(
+    (stack, input, wrap) => {
+      if (wrap) snapWrapHome(wrap);
+      logDecoyAttempt(stack, input || stack.label);
+      flashScreen('bad');
+      playWrong();
+      showToast('Not indicated for this case — pick a different order.', 'bad');
+    },
+    [logDecoyAttempt],
+  );
+
   const processDecoyOrder = useCallback(
     async (stack, input, { wrap, zone, pill, target } = {}) => {
       if (revealedMode) {
@@ -1429,6 +1447,11 @@ export default function Play({
         addConversationMessage('decoy', input, teaching);
         showToast(teaching, '');
         if (wrap) snapWrapHome(wrap);
+        return;
+      }
+
+      if (!teachMeMode) {
+        rejectDecoyInPractice(stack, input, wrap);
         return;
       }
 
@@ -1455,6 +1478,8 @@ export default function Play({
       caseData,
       addConversationMessage,
       commitStackPlacement,
+      teachMeMode,
+      rejectDecoyInPractice,
     ],
   );
 
@@ -1792,7 +1817,7 @@ export default function Play({
           return;
         }
 
-        commitStackPlacement(decoy, target, { wrap, zone, pill }, { silentDecoy: true });
+        rejectDecoyInPractice(decoy, decoy.label, wrap);
         return;
       }
 
@@ -1851,6 +1876,7 @@ export default function Play({
       interventions,
       decoyInterventions,
       processDecoyOrder,
+      rejectDecoyInPractice,
       commitStackPlacement,
       dropMode,
       zones,
@@ -3377,11 +3403,32 @@ export default function Play({
                   </p>
                 )}
                 {stacksVisible && (
-                  <div className="pill-list pill-list-panel pill-list-vertical" id="pill-list">
-                    {shuffledStackEntries.map(({ iv, isDecoy, displayNum }) =>
-                      renderStackPill(iv, isDecoy, displayNum),
-                    )}
-                  </div>
+                  <>
+                    <button
+                      type="button"
+                      className="stacks-list-resize-handle"
+                      aria-label="Resize stack list"
+                      title="Drag to resize stack list"
+                      onPointerDown={(e) => startDockDrag('resize-stacks', e)}
+                    />
+                    <div
+                      className="pill-list pill-list-panel pill-list-vertical"
+                      id="pill-list"
+                      style={
+                        dockLayout.stacksListPx > 0
+                          ? {
+                              flex: '0 0 auto',
+                              height: `${dockLayout.stacksListPx}px`,
+                              maxHeight: `${dockLayout.stacksListPx}px`,
+                            }
+                          : undefined
+                      }
+                    >
+                      {shuffledStackEntries.map(({ iv, isDecoy, displayNum }) =>
+                        renderStackPill(iv, isDecoy, displayNum),
+                      )}
+                    </div>
+                  </>
                 )}
               </>
             }

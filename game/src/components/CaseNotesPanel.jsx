@@ -3,7 +3,6 @@ import { readCaseNotes, writeCaseNotes } from '../lib/caseNotes.js';
 import { fetchCaseUserData, recordingPublicUrl } from '../lib/caseUserLog.js';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import CaseScreenshotThumb from './CaseScreenshotThumb.jsx';
-import CcsScreenshotLink from './CcsScreenshotLink.jsx';
 
 export default function CaseNotesPanel({
   caseId,
@@ -126,7 +125,6 @@ export default function CaseNotesPanel({
       {caseData && !threadMode && (
         <div className="case-notes-screenshot-block">
           <CaseScreenshotThumb caseData={caseData} className="case-screenshot-thumb case-screenshot-thumb--notes" />
-          <CcsScreenshotLink caseData={caseData} className="ccs-screenshot-link ccs-screenshot-link--notes" />
         </div>
       )}
     </div>

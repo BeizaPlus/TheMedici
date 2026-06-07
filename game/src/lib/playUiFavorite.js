@@ -7,7 +7,7 @@ export const PLAY_UI_FAVORITE = {
   label: 'Wide stacks + scene monitor',
   savedAt: '2026-06-02T00:00:00.000Z',
   infoTab: 'treatment',
-  stacksVisible: true,
+  stacksVisible: false,
   dockToolbarCollapsed: true,
   dockCollapsed: false,
 };

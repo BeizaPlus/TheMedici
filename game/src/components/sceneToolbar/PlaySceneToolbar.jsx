@@ -1,7 +1,7 @@
 import {
+  IconClipboardList,
   IconClipboardPulse,
   IconEyeOff,
-  IconFileMedical,
   IconLockOpen,
   IconMessage,
   IconMoon,
@@ -81,7 +81,7 @@ export default function PlaySceneToolbar({
           title="Treatment stacks"
           aria-label="Treatment stacks"
         >
-          <IconFileMedical />
+          <IconClipboardList />
         </ToolbarBtn>
         <ToolbarBtn active={chatOpen} onClick={onToggleChat} title="Case thread" aria-label="Case thread">
           <IconMessage />

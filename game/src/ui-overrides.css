@@ -1063,6 +1063,7 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .case-context-panel--play .case-context-body-wrap .case-chat-tab-wrap {
@@ -1079,6 +1080,7 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .case-treatment-stacks {
@@ -1103,11 +1105,35 @@
 }
 
 .pill-list-panel {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
   padding: 4px 12px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2d35 transparent;
+}
+
+.stacks-list-resize-handle {
+  flex: 0 0 8px;
+  margin: 0 10px;
+  border: 0;
+  border-radius: 4px;
+  padding: 0;
+  cursor: row-resize;
+  touch-action: none;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(232, 184, 75, 0.28),
+    transparent
+  );
+}
+
+.stacks-list-resize-handle:hover,
+.stacks-list-resize-handle:active {
+  background: rgba(232, 184, 75, 0.22);
 }
 
 .game-sidebar.floating.dragging {
@@ -1549,10 +1575,11 @@
 
 .case-context-panel--play .case-treatment-stacks,
 .case-context-panel--play .sidebar-stacks {
+  flex: 1 1 auto;
   min-height: 0;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #2a2d35 transparent;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .case-context-panel--stacks-wide .case-treatment-stacks {
@@ -1915,6 +1942,83 @@
 .case-context-panel--chat-tab .case-chat-panel--embedded .case-chat-bubble.assistant {
   align-self: flex-start;
   max-width: 96%;
+}
+
+.sim-creativity {
+  flex-shrink: 0;
+  margin: 0 12px 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sim-creativity--compact {
+  margin: 0 2px 8px;
+  padding: 8px 10px;
+}
+
+.sim-creativity-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.sim-creativity-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.sim-creativity-band {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent, #6eb5ff);
+}
+
+.sim-creativity-value {
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.sim-creativity-slider {
+  width: 100%;
+  margin: 4px 0 6px;
+  accent-color: var(--accent, #6eb5ff);
+}
+
+.sim-creativity-hint {
+  margin: 0;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sim-creativity-case-actions {
+  margin-top: 6px;
+}
+
+.sim-creativity-reset,
+.sim-creativity-using-global {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.sim-creativity-reset {
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.global-ui-settings .sim-creativity {
+  margin: 0;
 }
 
 .play-notes-session-foot {

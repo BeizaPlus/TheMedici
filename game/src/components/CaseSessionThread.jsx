@@ -12,6 +12,7 @@ import { mergeSessionThread, parseNoteBubbleContent } from '../lib/caseSessionTh
 import { getCaseById } from '../data/useCcsCatalog.js';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import CaseThreadCaseRail from './CaseThreadCaseRail.jsx';
+import SimulationCreativityControl from './SimulationCreativityControl.jsx';
 import { STORAGE } from '../lib/storageKeys.js';
 
 function readCollapsed(key, defaultValue = false) {
@@ -87,8 +88,17 @@ export default function CaseSessionThread({
   fillTab = false,
   onTimelineChat,
 }) {
-  const { available, messages, busy, error, historyLoaded, sendMessage, appendNote, reloadHistory } =
-    chat;
+  const {
+    available,
+    messages,
+    busy,
+    error,
+    historyLoaded,
+    sendMessage,
+    appendNote,
+    reloadHistory,
+    resetSession,
+  } = chat;
   const listRef = useRef(null);
   const inputRef = useRef(null);
   const [readingIdx, setReadingIdx] = useState(null);
@@ -215,11 +225,18 @@ export default function CaseSessionThread({
           )}
           {error && <p className="case-chat-banner bad">{error}</p>}
 
+          <SimulationCreativityControl
+            caseId={caseId}
+            showCaseOverride
+            compact
+            onCreativityChange={() => void resetSession?.()}
+          />
+
           <div className="case-chat-messages selectable-text" ref={listRef}>
             {!historyLoaded && <p className="case-chat-tab-empty">Loading…</p>}
             {historyLoaded && thread.length === 0 && !busy && (
               <p className="case-chat-tab-empty">
-                Ask about vitals, exam, differential, or workup — or jot a note.
+                Talk to the patient — ask age, travel, smoking, symptoms — or jot a clinical note.
               </p>
             )}
             {thread.map((m, i) => {
@@ -292,7 +309,7 @@ export default function CaseSessionThread({
                   className="case-chat-cmd-input"
                   value={draft}
                   onChange={(e) => setDraft(e.target.value)}
-                  placeholder="Note or ask about this case…"
+                  placeholder="Ask the patient or jot a note…"
                   aria-label="Add to case thread"
                   disabled={busy}
                 />

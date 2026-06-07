@@ -50,7 +50,6 @@ import CaseReadyTag from './CaseReadyTag.jsx';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 
 import CaseReviewFlagTag from './CaseReviewFlagTag.jsx';
-import CcsScreenshotLink from './CcsScreenshotLink.jsx';
 import { getBuiltInPatientSrc } from '../lib/patientImage.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import CaseLandscapeRail from './CaseLandscapeRail.jsx';
@@ -924,9 +923,6 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
                 />
                 <div className="case-detail-scene-cap">
                   <span>ER scene preview</span>
-                  {selectedGameCase && (
-                    <CcsScreenshotLink caseData={selectedGameCase} className="ccs-screenshot-link case-detail-screenshot" />
-                  )}
                 </div>
               </div>
 

@@ -1,7 +1,7 @@
 import preparedCases from '../data/preparedCases.json' with { type: 'json' };
 import { getCompletionThresholdAdjust } from './sessionProfile.js';
 import { getActiveRefinedNarrative } from './narrativeRefine.js';
-import { resolveCaseExam } from './caseExam.js';
+import { composeCaseHistory, resolveCaseExam } from './caseExam.js';
 import { applyPatientName, applyPatientNameToCase, getDefaultPatientName, resolvePatientName } from './patientName.js';
 
 const PREPARED = preparedCases?.cases || {};
@@ -72,12 +72,22 @@ export function applySessionToCase(caseData, session = {}) {
     merged.preparedExam = prepared.exam;
   }
 
+  const patientVoice =
+    caseData?.patient_voice || caseData?.patientVoice || prepared?.patient_voice || null;
+  const composedHistory = composeCaseHistory({
+    history: merged.historyText || prepared?.narrative?.doctor?.standard?.hpi || '',
+    patientVoice,
+    clinicalHpi: merged.clinical_hpi_narrative || prepared?.hpi_narrative || '',
+    chiefComplaint: merged.chief_complaint || '',
+  });
   merged.preparedExam = resolveCaseExam({
     caseId: caseData?.id,
     title: prepared?.title || caseData?.title,
     category: prepared?.category || caseData?.category,
-    history: merged.historyText || prepared?.narrative?.doctor?.standard?.hpi || '',
+    diagnosis: merged.diagnosis || prepared?.diagnosis || caseData?.diagnosis || '',
+    history: composedHistory,
     vitals: prepared?.vitals || merged.preparedVitals,
+    patientVoice,
     preparedExam: merged.preparedExam,
     hasSourceIntro: prepared?.hasSourceIntro || caseData?.preparedMeta?.hasSourceIntro,
   });

@@ -7,7 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { resolvePlaybook } from '../src/data/resolvePlaybook.js';
 import { resolveCaseOrders } from '../src/data/gameData.js';
-import { resolveCaseExam } from '../src/lib/caseExam.js';
+import { composeCaseHistory, resolveCaseExam } from '../src/lib/caseExam.js';
 import {
   loadCaseBank,
   ordersToInterventions,
@@ -266,22 +266,34 @@ for (const ccsCase of catalog.cases) {
   const seed = Number(ccsCase.caseNumber) || 0;
   const { vitals, source: vitalsSource } = parseVitals(vitalsText, ccsCase.category, seed);
   const authored = AUTHORED_FLOWS[id];
-  const examFromBank = Array.isArray(bankCase?.physical_exam)
-    ? bankCase.physical_exam
-    : bankCase?.physical_exam && typeof bankCase.physical_exam === 'object'
-      ? Object.entries(bankCase.physical_exam)
-          .filter(([, v]) => v != null && String(v).trim())
-          .map(([k, v]) => [
-            String(k).replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-            String(v).trim(),
-          ])
-      : null;
-  const exam = examFromBank || resolveCaseExam({
+  let examFromBank = null;
+  if (Array.isArray(bankCase?.physical_exam) && bankCase.physical_exam.length) {
+    examFromBank = bankCase.physical_exam;
+  } else if (bankCase?.physical_exam && typeof bankCase.physical_exam === 'object' && !Array.isArray(bankCase.physical_exam)) {
+    const rows = Object.entries(bankCase.physical_exam)
+      .filter(([, v]) => v != null && String(v).trim())
+      .map(([k, v]) => [
+        String(k).replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+        String(v).trim(),
+      ]);
+    if (rows.length) examFromBank = rows;
+  }
+  const patientVoice = bankCase?.patient_voice || null;
+  const diagnosis = bankCase?.diagnosis || pb.diagnosis || null;
+  const composedHistory = composeCaseHistory({
+    history,
+    patientVoice,
+    clinicalHpi: hpiNarrative,
+    chiefComplaint: intro,
+  });
+  const exam = examFromBank?.length ? examFromBank : resolveCaseExam({
     caseId: id,
     title: ccsCase.title,
     category: ccsCase.category,
-    history,
+    diagnosis: diagnosis || '',
+    history: composedHistory,
     vitals,
+    patientVoice,
     preparedExam: authored?.exam || null,
     hasSourceIntro: Boolean(pres?.intro || bankCase?.hpi),
   });
@@ -314,7 +326,8 @@ for (const ccsCase of catalog.cases) {
     category,
     presentationKey: ccsCase.title,
     playbookKey: bankInterventions?.length ? `case-bank-${caseNum}` : pb.playbookKey || pb.presentation || ccsCase.title,
-    diagnosis: bankCase?.diagnosis || pb.diagnosis || null,
+    diagnosis,
+    patient_voice: patientVoice || undefined,
     caseBankSource:
       bankCase?.extraction_method ||
       (Array.isArray(bankCase?.enrichment_sources) ? bankCase.enrichment_sources.join('+') : null) ||

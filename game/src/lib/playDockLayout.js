@@ -4,6 +4,8 @@ const MIN_W = 260;
 const MIN_H = 280;
 const MIN_CLINICAL = 100;
 const MIN_STACKS = 120;
+const MIN_STACKS_LIST = 96;
+const MAX_STACKS_LIST = 720;
 
 function clamp(n, min, max) {
   return Math.min(max, Math.max(min, n));
@@ -11,7 +13,7 @@ function clamp(n, min, max) {
 
 export function defaultPlayDockLayout() {
   if (typeof window === 'undefined') {
-    return { x: 12, y: 52, width: 360, height: 520, clinicalPx: 200 };
+    return { x: 12, y: 52, width: 360, height: 520, clinicalPx: 200, stacksListPx: 0 };
   }
   const compact = window.innerWidth <= 900;
   const width = compact
@@ -23,7 +25,7 @@ export function defaultPlayDockLayout() {
   const x = compact ? 8 : Math.max(12, window.innerWidth - width - 18);
   const y = compact ? Math.max(44, window.innerHeight - height - 52) : 52;
   const clinicalPx = clamp(Math.round(height * 0.38), MIN_CLINICAL, height - MIN_STACKS - 80);
-  return { x, y, width, height, clinicalPx };
+  return { x, y, width, height, clinicalPx, stacksListPx: 0 };
 }
 
 export function defaultBriefingDockLayout() {
@@ -64,6 +66,7 @@ export function readPlayDockLayout(storageKey = STORAGE.playDockLayout) {
       width: clamp(Number(parsed.width) || base.width, MIN_W, window.innerWidth - 8),
       height: clamp(Number(parsed.height) || base.height, MIN_H, window.innerHeight - 44),
       clinicalPx: Number(parsed.clinicalPx) || base.clinicalPx,
+      stacksListPx: Number(parsed.stacksListPx) || 0,
     };
     const clamped = clampDockLayout(layout);
     if (!isDockLayoutOnScreen(clamped)) return fallback;
@@ -95,7 +98,12 @@ export function clampDockLayout(layout) {
     MIN_CLINICAL,
     height - MIN_STACKS - 72,
   );
-  return { x, y, width, height, clinicalPx };
+  const stacksRaw = Number(layout.stacksListPx) || 0;
+  const stacksListPx =
+    stacksRaw <= 0
+      ? 0
+      : clamp(stacksRaw, MIN_STACKS_LIST, Math.min(MAX_STACKS_LIST, height - 160));
+  return { x, y, width, height, clinicalPx, stacksListPx };
 }
 
-export { MIN_W, MIN_H, MIN_CLINICAL, MIN_STACKS };
+export { MIN_W, MIN_H, MIN_CLINICAL, MIN_STACKS, MIN_STACKS_LIST, MAX_STACKS_LIST };

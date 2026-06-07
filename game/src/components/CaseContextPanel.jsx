@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { FiVolume2 } from 'react-icons/fi';
-import CcsScreenshotLink from './CcsScreenshotLink.jsx';
 import {
   IconClipboardPulse,
   IconMessage,
-  IconPill,
+  IconClipboardList,
   IconStethoscope,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
@@ -13,7 +12,7 @@ import { formatExamForDisplay } from '../lib/caseBriefing.js';
 const CASE_TAB_DEFS = [
   { id: 'hpi', label: 'HPI', Icon: IconClipboardPulse },
   { id: 'exam', label: 'Physical exam', Icon: IconStethoscope },
-  { id: 'treatment', label: 'Treatment', Icon: IconPill },
+  { id: 'treatment', label: 'Orders', Icon: IconClipboardList },
   { id: 'chat', label: 'Thread', Icon: IconMessage },
 ];
 
@@ -96,9 +95,6 @@ export default function CaseContextPanel({
           <div className="pack-heading-row">
             <p className="sidebar-case-id">
               Case {caseData.ccsNumber || caseData.id}
-              {isBriefing && (
-                <CcsScreenshotLink caseData={caseData} className="ccs-screenshot-link ccs-screenshot-link--inline" />
-              )}
             </p>
             {headerControls}
             <span className="pack-tag">{brandName}</span>

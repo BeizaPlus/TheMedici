@@ -3,6 +3,7 @@ import { readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTe
 import { STORAGE } from '../lib/storageKeys.js';
 import { readUiPrefs, writeUiPrefs } from '../lib/uiPrefs.js';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
+import SimulationCreativityControl from './SimulationCreativityControl.jsx';
 
 function isFavoriteLayoutSaved() {
   try {
@@ -46,6 +47,7 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
   const [showCues, setShowCues] = useState(readShowCues);
   const [dropMode, setDropMode] = useState(readDropMode);
   const [timedMode, setTimedMode] = useState(() => readUiPrefs().timedMode);
+  const [creativityTick, setCreativityTick] = useState(0);
   const [favoriteSaved, setFavoriteSaved] = useState(isFavoriteLayoutSaved);
 
   const persistShowCues = (next) => {
@@ -78,6 +80,8 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
     persistShowCues(true);
     persistDropMode('free');
     persistTimedMode('timed');
+    writeUiPrefs({ simulationCreativity: 55 });
+    setCreativityTick((t) => t + 1);
   };
 
   return (
@@ -122,6 +126,12 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
             Untimed
           </button>
         </div>
+      </div>
+
+      <div className="global-ui-settings-block" key={`sim-creativity-${creativityTick}`}>
+        <SimulationCreativityControl
+          onCreativityChange={() => setCreativityTick((t) => t + 1)}
+        />
       </div>
 
       <div className="global-ui-settings-block">

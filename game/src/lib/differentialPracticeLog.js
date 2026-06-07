@@ -1,6 +1,7 @@
 import { STORAGE } from './storageKeys.js';
 
 const EMPTY = { version: 1, attempts: [] };
+const TRANSCRIPT_EMPTY = { version: 1, cases: {} };
 
 function normalizeEntry(raw) {
   if (!raw || typeof raw !== 'object') return EMPTY;
@@ -26,6 +27,56 @@ export function writeDifferentialLog(data) {
   }
 }
 
+export function readCaseTranscriptArchive() {
+  try {
+    const raw = localStorage.getItem(STORAGE.differentialCaseTranscripts);
+    if (!raw) return { ...TRANSCRIPT_EMPTY, cases: {} };
+    const parsed = JSON.parse(raw);
+    return {
+      version: 1,
+      cases: parsed?.cases && typeof parsed.cases === 'object' ? parsed.cases : {},
+    };
+  } catch {
+    return { ...TRANSCRIPT_EMPTY, cases: {} };
+  }
+}
+
+export function writeCaseTranscriptArchive(data) {
+  try {
+    localStorage.setItem(STORAGE.differentialCaseTranscripts, JSON.stringify(data, null, 2));
+  } catch {
+    /* ignore quota */
+  }
+}
+
+function archiveCaseTranscript(attempt) {
+  if (attempt.caseId == null) return;
+  const hearing = String(attempt.rawTranscript || '').trim();
+  const cleaned = String(attempt.cleanedTranscript || '').trim();
+  if (!hearing && !cleaned && !attempt.guesses?.length) return;
+
+  const archive = readCaseTranscriptArchive();
+  const id = String(attempt.caseId);
+  const bucket = archive.cases[id] || {
+    caseId: attempt.caseId,
+    topic: attempt.topic,
+    attempts: [],
+  };
+  bucket.topic = attempt.topic;
+  bucket.lastAt = attempt.at;
+  bucket.attempts.push({
+    at: attempt.at,
+    rawTranscript: hearing,
+    cleanedTranscript: cleaned,
+    guesses: [...(attempt.guesses || [])],
+    pct: attempt.pct,
+    gotCaseDiagnosis: Boolean(attempt.gotCaseDiagnosis),
+    revealed: Boolean(attempt.revealed),
+  });
+  archive.cases[id] = bucket;
+  writeCaseTranscriptArchive(archive);
+}
+
 function pct(correct, total) {
   if (!total) return 0;
   return Math.round((correct / total) * 100);
@@ -48,6 +99,8 @@ export function logDifferentialAttempt({
   gotCaseDiagnosis = false,
   aiProvider = null,
   aiSummary = '',
+  rawTranscript = '',
+  cleanedTranscript = '',
 }) {
   const total = answerKey.length;
   const correct = matched.length;
@@ -71,12 +124,46 @@ export function logDifferentialAttempt({
     revealed,
     aiProvider: aiProvider || null,
     aiSummary: aiSummary || '',
+    rawTranscript: String(rawTranscript || '').trim(),
+    cleanedTranscript: String(cleanedTranscript || '').trim(),
   };
 
   const log = readDifferentialLog();
   log.attempts.push(entry);
   writeDifferentialLog(log);
+  archiveCaseTranscript(entry);
   return entry;
+}
+
+/** Unique cases with at least one revealed attempt + session stats for progress UI. */
+export function getGlobalDifferentialProgress(bankSize = 181) {
+  const attempts = readDifferentialLog().attempts;
+  const revealed = attempts.filter((a) => a.revealed && a.caseId != null);
+  const caseIds = new Set(revealed.map((a) => String(a.caseId)));
+  const last = revealed.at(-1) || null;
+  const bestRecent = revealed.slice(-5).map((a) => a.pct ?? pct(a.correct, a.total));
+  const avgRecent =
+    bestRecent.length > 0
+      ? Math.round(bestRecent.reduce((s, n) => s + n, 0) / bestRecent.length)
+      : null;
+
+  return {
+    attemptedCount: caseIds.size,
+    totalCases: bankSize,
+    totalAttempts: revealed.length,
+    bankPct: bankSize ? Math.round((caseIds.size / bankSize) * 100) : 0,
+    lastPct: last?.pct ?? null,
+    lastCaseId: last?.caseId ?? null,
+    lastTopic: last?.topic ?? null,
+    avgRecentPct: avgRecent,
+    nailedLast: Boolean(last?.gotCaseDiagnosis),
+  };
+}
+
+export function exportCaseTranscriptJson(caseId) {
+  const id = String(caseId);
+  const bucket = readCaseTranscriptArchive().cases[id];
+  return JSON.stringify(bucket || { caseId, attempts: [] }, null, 2);
 }
 
 export function getAttemptsForTopic(topic) {
@@ -144,7 +231,14 @@ export function getTopicStats(topic) {
 }
 
 export function exportDifferentialLogJson() {
-  return JSON.stringify(readDifferentialLog(), null, 2);
+  return JSON.stringify(
+    {
+      log: readDifferentialLog(),
+      caseTranscripts: readCaseTranscriptArchive(),
+    },
+    null,
+    2,
+  );
 }
 
 export function downloadDifferentialLog() {

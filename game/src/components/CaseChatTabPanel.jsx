@@ -36,7 +36,7 @@ export default function CaseChatTabPanel({ chat, caseData, compactHint = true })
           <p className="case-chat-tab-empty">Loading chat history…</p>
         )}
         {historyLoaded && visibleMessages.length === 0 && !busy && (
-          <p className="case-chat-tab-empty">No messages yet — ask about vitals, exam, differential, or workup.</p>
+          <p className="case-chat-tab-empty">No messages yet — talk to the patient or ask about workup.</p>
         )}
         {visibleMessages.map((m, i) => (
           <div key={`${m.role}-${i}-${m.content.slice(0, 24)}`} className={`case-chat-bubble ${m.role}`}>

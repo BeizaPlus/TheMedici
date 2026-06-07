@@ -75,6 +75,14 @@ export function usePlayDockLayout(options = {}) {
           ...startLayout,
           clinicalPx: startLayout.clinicalPx + dy,
         });
+        return;
+      }
+      if (mode === 'resize-stacks') {
+        const base = startLayout.stacksListPx > 0 ? startLayout.stacksListPx : 220;
+        persist({
+          ...startLayout,
+          stacksListPx: base + dy,
+        });
       }
     };
 
