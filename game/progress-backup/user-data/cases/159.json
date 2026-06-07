@@ -1,0 +1,169 @@
+{
+  "caseId": "159",
+  "caseNumber": "159",
+  "title": "ABNORMAL BEHAVIOR",
+  "diagnosis": "Hepatitis B",
+  "updatedAt": "2026-06-07T18:43:03.012Z",
+  "stats": {
+    "sessions": 6,
+    "chatMessages": 0,
+    "recordings": 0,
+    "noteEvents": 0,
+    "stacksPlaced": 1,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-01T22:35:07.679Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "25e1aae28a4d2f3d06ea571e",
+      "startedAt": "2026-06-01T22:21:02.685Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:21:02.685Z",
+          "type": "session_start",
+          "attempt": 1
+        },
+        {
+          "at": "2026-06-01T22:21:02.707Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 88
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "831cbea6e9fc7c2301bb427a",
+      "startedAt": "2026-06-01T22:25:32.424Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:25:32.424Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-01T22:28:12.978Z",
+          "type": "stack",
+          "stackId": "hepatitis-c",
+          "label": "Hepatitis C",
+          "correct": false
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "33147fca76524a84bad61196",
+      "startedAt": "2026-06-01T22:33:43.422Z",
+      "endedAt": null,
+      "attempt": 3,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:33:43.422Z",
+          "type": "session_start",
+          "attempt": 3
+        },
+        {
+          "at": "2026-06-01T22:33:59.538Z",
+          "type": "location",
+          "location": "OBS",
+          "label": "Patient transferred to OBS",
+          "context": "Observation unit — monitored bed, step-down level care"
+        },
+        {
+          "at": "2026-06-01T22:34:00.893Z",
+          "type": "location",
+          "location": "ICU",
+          "label": "Patient transferred to ICU",
+          "context": "Intensive Care Unit — critical care monitoring"
+        },
+        {
+          "at": "2026-06-01T22:34:01.569Z",
+          "type": "location",
+          "location": "WARD",
+          "label": "Patient transferred to WARD",
+          "context": "General ward — stable, routine monitoring"
+        },
+        {
+          "at": "2026-06-01T22:34:02.656Z",
+          "type": "location",
+          "location": "ER",
+          "label": "Patient transferred to ER",
+          "context": "Emergency Room — acute resuscitation bay"
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "0e5e03e7f62d69fa30bda4ee",
+      "startedAt": "2026-06-01T22:34:08.362Z",
+      "endedAt": null,
+      "attempt": 4,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:34:08.362Z",
+          "type": "session_start",
+          "attempt": 4
+        },
+        {
+          "at": "2026-06-01T22:34:08.389Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 88
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "a1f932a67d985724fb7fde8c",
+      "startedAt": "2026-06-01T22:34:30.654Z",
+      "endedAt": null,
+      "attempt": 5,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:34:30.654Z",
+          "type": "session_start",
+          "attempt": 5
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "ef63bbaa8818bb9d13b627f8",
+      "startedAt": "2026-06-01T22:35:07.679Z",
+      "endedAt": null,
+      "attempt": 6,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:35:07.679Z",
+          "type": "session_start",
+          "attempt": 6
+        },
+        {
+          "at": "2026-06-01T22:41:09.124Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 88
+        },
+        {
+          "at": "2026-06-01T22:41:12.407Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 88
+        }
+      ],
+      "recordings": []
+    }
+  ],
+  "recordings": []
+}

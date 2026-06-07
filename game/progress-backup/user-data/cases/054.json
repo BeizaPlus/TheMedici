@@ -1,0 +1,133 @@
+{
+  "caseId": "54",
+  "caseNumber": "54",
+  "title": "",
+  "diagnosis": null,
+  "updatedAt": "2026-06-07T18:38:05.643Z",
+  "stats": {
+    "sessions": 4,
+    "chatMessages": 0,
+    "recordings": 2,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-07T18:38:05.591Z"
+  },
+  "chatHistory": [],
+  "recordings": [
+    {
+      "id": "cdd992f187e9b30e",
+      "slot": 1,
+      "at": "2026-06-07T16:14:03.450Z",
+      "durationMs": 78905,
+      "mimeType": "audio/webm;codecs=opus",
+      "file": "recordings/054/cdd992f187e9b30e.webm",
+      "sessionId": "4cfa33ffc0582793ce796fdc"
+    },
+    {
+      "id": "c76778f96a739108",
+      "slot": 2,
+      "at": "2026-06-07T18:38:05.643Z",
+      "durationMs": 80577,
+      "mimeType": "audio/webm;codecs=opus",
+      "file": "recordings/054/c76778f96a739108.webm",
+      "sessionId": "c3cf8dcea5c63ee90de2a14f"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "822fdef9bf402b10692d6fba",
+      "startedAt": "2026-06-07T16:12:44.466Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T16:12:44.466Z",
+          "type": "session_start",
+          "attempt": 1
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "4cfa33ffc0582793ce796fdc",
+      "startedAt": "2026-06-07T16:14:03.383Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T16:14:03.383Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-07T16:14:03.450Z",
+          "type": "recording",
+          "recordingId": "cdd992f187e9b30e",
+          "slot": 1,
+          "durationMs": 78905,
+          "file": "recordings/054/cdd992f187e9b30e.webm"
+        }
+      ],
+      "recordings": [
+        {
+          "id": "cdd992f187e9b30e",
+          "slot": 1,
+          "at": "2026-06-07T16:14:03.450Z",
+          "durationMs": 78905,
+          "mimeType": "audio/webm;codecs=opus",
+          "file": "recordings/054/cdd992f187e9b30e.webm"
+        }
+      ]
+    },
+    {
+      "id": "61b9f9240d102d9b4d9b250f",
+      "startedAt": "2026-06-07T18:36:45.004Z",
+      "endedAt": null,
+      "attempt": 3,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T18:36:45.004Z",
+          "type": "session_start",
+          "attempt": 3
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "c3cf8dcea5c63ee90de2a14f",
+      "startedAt": "2026-06-07T18:38:05.591Z",
+      "endedAt": null,
+      "attempt": 4,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T18:38:05.591Z",
+          "type": "session_start",
+          "attempt": 4
+        },
+        {
+          "at": "2026-06-07T18:38:05.643Z",
+          "type": "recording",
+          "recordingId": "c76778f96a739108",
+          "slot": 2,
+          "durationMs": 80577,
+          "file": "recordings/054/c76778f96a739108.webm"
+        }
+      ],
+      "recordings": [
+        {
+          "id": "c76778f96a739108",
+          "slot": 2,
+          "at": "2026-06-07T18:38:05.643Z",
+          "durationMs": 80577,
+          "mimeType": "audio/webm;codecs=opus",
+          "file": "recordings/054/c76778f96a739108.webm"
+        }
+      ]
+    }
+  ]
+}

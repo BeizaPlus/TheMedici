@@ -1,0 +1,98 @@
+{
+  "caseId": "148",
+  "caseNumber": "148",
+  "title": "CHEST PAIN",
+  "diagnosis": "Unknown",
+  "updatedAt": "2026-06-07T18:43:01.090Z",
+  "stats": {
+    "sessions": 2,
+    "chatMessages": 0,
+    "recordings": 0,
+    "noteEvents": 2,
+    "stacksPlaced": 2,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-01T16:21:06.186Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "65aa21ff523d94490979c250",
+      "startedAt": "2026-06-01T16:21:06.124Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T16:21:06.124Z",
+          "type": "session_start",
+          "attempt": 1
+        },
+        {
+          "at": "2026-06-01T16:21:06.191Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 81
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "98aa5f3e5c791b2270d51467",
+      "startedAt": "2026-06-01T16:21:06.186Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T16:21:06.186Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-01T16:24:09.452Z",
+          "type": "stack",
+          "stackId": "esr",
+          "label": "ESR",
+          "correct": false
+        },
+        {
+          "at": "2026-06-01T16:34:11.103Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 81
+        },
+        {
+          "at": "2026-06-01T16:43:41.847Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 81
+        },
+        {
+          "at": "2026-06-01T16:49:28.803Z",
+          "type": "stack",
+          "stackId": "pulse-oximetry",
+          "label": "Pulse oximetry",
+          "correct": false
+        },
+        {
+          "at": "2026-06-01T16:56:08.207Z",
+          "type": "note",
+          "text": ""
+        },
+        {
+          "at": "2026-06-01T16:58:21.351Z",
+          "type": "note",
+          "text": ""
+        },
+        {
+          "at": "2026-06-01T16:58:33.624Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 71
+        }
+      ],
+      "recordings": []
+    }
+  ],
+  "recordings": []
+}

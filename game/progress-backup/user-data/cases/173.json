@@ -1,0 +1,70 @@
+{
+  "caseId": "173",
+  "caseNumber": "173",
+  "title": "SEXUAL ASSAULT",
+  "diagnosis": "Unknown",
+  "updatedAt": "2026-06-07T18:43:05.534Z",
+  "stats": {
+    "sessions": 2,
+    "chatMessages": 0,
+    "recordings": 0,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-01T22:06:17.101Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "226a7ba92edddb14034c3620",
+      "startedAt": "2026-06-01T22:06:17.046Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:06:17.046Z",
+          "type": "session_start",
+          "attempt": 1
+        },
+        {
+          "at": "2026-06-01T22:06:17.113Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 88
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "22beb66336edcb26393b024c",
+      "startedAt": "2026-06-01T22:06:17.101Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:06:17.101Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-01T22:06:25.870Z",
+          "type": "location",
+          "location": "OBS",
+          "label": "Patient transferred to OBS",
+          "context": "Observation unit — monitored bed, step-down level care"
+        },
+        {
+          "at": "2026-06-01T22:06:27.007Z",
+          "type": "location",
+          "location": "ER",
+          "label": "Patient transferred to ER",
+          "context": "Emergency Room — acute resuscitation bay"
+        }
+      ],
+      "recordings": []
+    }
+  ],
+  "recordings": []
+}

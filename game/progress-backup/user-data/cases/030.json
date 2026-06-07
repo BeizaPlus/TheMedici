@@ -1,0 +1,176 @@
+{
+  "caseId": "030",
+  "caseNumber": "30",
+  "title": "PAIN IN RIGHT ARM",
+  "diagnosis": "Colles' Fracture of Right Arm Due to Domestic Abuse",
+  "updatedAt": "2026-06-07T17:18:28.136Z",
+  "stats": {
+    "sessions": 6,
+    "chatMessages": 0,
+    "recordings": 1,
+    "noteEvents": 0,
+    "stacksPlaced": 1,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-07T17:18:28.065Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "ee39d36e516383d2d206a056",
+      "startedAt": "2026-06-02T16:26:55.013Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T16:26:55.013Z",
+          "type": "session_start",
+          "attempt": 1
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "536992df1fb7719fd04dd491",
+      "startedAt": "2026-06-02T16:26:55.017Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T16:26:55.017Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-02T16:26:55.049Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 88
+        },
+        {
+          "at": "2026-06-02T16:27:07.012Z",
+          "type": "extra_order",
+          "label": "CBC",
+          "category": "labs"
+        },
+        {
+          "at": "2026-06-02T16:28:02.160Z",
+          "type": "stack",
+          "stackId": "x-ray-of-the-right-arm",
+          "label": "X-ray of the Right Arm",
+          "correct": true,
+          "method": "command"
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "f567e37187fdbb7b7dde18b0",
+      "startedAt": "2026-06-02T16:29:52.180Z",
+      "endedAt": null,
+      "attempt": 3,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T16:29:52.180Z",
+          "type": "session_start",
+          "attempt": 3
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "04f636587526b52425fdd2f6",
+      "startedAt": "2026-06-02T16:29:59.354Z",
+      "endedAt": null,
+      "attempt": 4,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T16:29:59.354Z",
+          "type": "session_start",
+          "attempt": 4
+        },
+        {
+          "at": "2026-06-02T16:30:22.606Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 91
+        },
+        {
+          "at": "2026-06-02T16:31:02.152Z",
+          "type": "location",
+          "location": "OBS",
+          "label": "Patient transferred to OBS",
+          "context": "Observation unit — monitored bed, step-down level care"
+        },
+        {
+          "at": "2026-06-02T16:34:56.085Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 81
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "e5299dc924dcc47a3625608d",
+      "startedAt": "2026-06-07T17:17:06.649Z",
+      "endedAt": null,
+      "attempt": 5,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T17:17:06.649Z",
+          "type": "session_start",
+          "attempt": 5
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "366c4a2a1e6b845eb03ab2e6",
+      "startedAt": "2026-06-07T17:18:28.065Z",
+      "endedAt": null,
+      "attempt": 6,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T17:18:28.065Z",
+          "type": "session_start",
+          "attempt": 6
+        },
+        {
+          "at": "2026-06-07T17:18:28.136Z",
+          "type": "recording",
+          "recordingId": "74633f37df81cc1d",
+          "slot": 1,
+          "durationMs": 81408,
+          "file": "recordings/030/74633f37df81cc1d.webm"
+        }
+      ],
+      "recordings": [
+        {
+          "id": "74633f37df81cc1d",
+          "slot": 1,
+          "at": "2026-06-07T17:18:28.136Z",
+          "durationMs": 81408,
+          "mimeType": "audio/webm;codecs=opus",
+          "file": "recordings/030/74633f37df81cc1d.webm"
+        }
+      ]
+    }
+  ],
+  "recordings": [
+    {
+      "id": "74633f37df81cc1d",
+      "slot": 1,
+      "at": "2026-06-07T17:18:28.136Z",
+      "durationMs": 81408,
+      "mimeType": "audio/webm;codecs=opus",
+      "file": "recordings/030/74633f37df81cc1d.webm",
+      "sessionId": "366c4a2a1e6b845eb03ab2e6"
+    }
+  ]
+}
