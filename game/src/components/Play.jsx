@@ -60,7 +60,9 @@ import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 import PlaySceneToolbar from './sceneToolbar/PlaySceneToolbar.jsx';
 import { useCaseRecording } from '../hooks/useCaseRecording.js';
 import { useCaseChat } from '../hooks/useCaseChat.js';
+import { getCaseById } from '../data/useCcsCatalog.js';
 import { buildChatSessionContext } from '../lib/buildChatSessionContext.js';
+import { consumePlayOpenTab, listCasesWithChatActivity } from '../lib/recentChatCases.js';
 import {
   isOrderTimelineEvent,
   orderTimelineEntryFromEvent,
@@ -78,6 +80,7 @@ import {
   IconLayoutSidebarRightCollapse,
   IconLayoutSidebarRightExpand,
   IconDoorExit,
+  IconFlagCheckered,
   IconMessage,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
@@ -222,20 +225,19 @@ function countOrderTimelineSeq(events) {
   return (events || []).filter((ev) => ev.kind === 'order' || ev.kind === 'extra').length;
 }
 
-function resolveCheckpointForCase(initialCheckpoint, caseId) {
-  if (initialCheckpoint && String(initialCheckpoint.caseId) === String(caseId)) {
-    return initialCheckpoint;
-  }
-  const cp = readPlayCheckpoint();
-  if (cp && String(cp.caseId) === String(caseId)) return cp;
-  return null;
+function isResumeCheckpoint(initialCheckpoint, caseId) {
+  return Boolean(
+    initialCheckpoint?.caseId != null &&
+      String(initialCheckpoint.caseId) === String(caseId) &&
+      initialCheckpoint?.playSessionId,
+  );
 }
 
 function bootOrderTimeline(initialCheckpoint, caseData) {
-  const cp = resolveCheckpointForCase(initialCheckpoint, caseData.id);
-  if (!cp) {
+  if (!isResumeCheckpoint(initialCheckpoint, caseData.id)) {
     return { events: [], seq: 0, sessionId: null, sessionStartedAt: null };
   }
+  const cp = initialCheckpoint;
   const byId = Object.fromEntries(getCaseInterventions(caseData).map((iv) => [iv.id, iv]));
   const events = readInitialOrderTimeline(cp, caseData.id, byId);
   const c = cp.checkpoint || {};
@@ -291,6 +293,7 @@ export default function Play({
     playBootRef.current = bootOrderTimeline(initialCheckpoint, caseData);
   }
   const playBoot = playBootRef.current;
+  const resumeSession = isResumeCheckpoint(initialCheckpoint, caseData.id);
 
   const [placed, setPlaced] = useState({});
   const [pins, setPins] = useState([]);
@@ -395,9 +398,8 @@ export default function Play({
   }, [playSessionId]);
 
   useEffect(() => {
-    const cp = resolveCheckpointForCase(initialCheckpoint, caseData.id);
-    if (!cp) return;
-    const merged = readInitialOrderTimeline(cp, caseData.id, interventionById);
+    if (!resumeSession || !initialCheckpoint) return;
+    const merged = readInitialOrderTimeline(initialCheckpoint, caseData.id, interventionById);
     if (!merged.length) return;
     setOrderTimelineEvents((prev) => {
       const best = pickBestOrderTimeline(prev, merged);
@@ -410,7 +412,7 @@ export default function Play({
       orderTimelineSeqRef.current = countOrderTimelineSeq(best);
       return best;
     });
-    const c = cp.checkpoint || {};
+    const c = initialCheckpoint.checkpoint || {};
     const startedAt =
       typeof c.sessionStartedAt === 'number'
         ? c.sessionStartedAt
@@ -421,7 +423,7 @@ export default function Play({
       sessionStartedAtRef.current = startedAt;
       setSessionStartedAt(startedAt);
     }
-  }, [caseData.id, interventionById, initialCheckpoint]);
+  }, [resumeSession, initialCheckpoint, caseData.id, interventionById]);
   const nextExpectedId = useMemo(
     () => expectedOrderIds.find((id) => !placed[id]) || null,
     [expectedOrderIds, placed],
@@ -712,9 +714,12 @@ export default function Play({
     x: Math.max(16, (window.innerWidth - 520) / 2),
     y: Math.max(64, window.innerHeight - 320),
   }));
+  const [reviewRevealStep, setReviewRevealStep] = useState(0);
+  const reviewRevealTimerRef = useRef(null);
   const [infoTab, setInfoTab] = useState(
     playUiFavorite.infoTab === 'notes' ? 'chat' : playUiFavorite.infoTab,
   );
+  const [threadViewCaseId, setThreadViewCaseId] = useState(() => String(caseData?.id || ''));
   const [dockToolbarCollapsed, setDockToolbarCollapsed] = useState(playUiFavorite.dockToolbarCollapsed);
 
   useEffect(() => {
@@ -722,6 +727,24 @@ export default function Play({
       setDockToolbarCollapsed(true);
     }
   }, [infoTab]);
+
+  useEffect(() => {
+    setThreadViewCaseId(String(caseData.id));
+  }, [caseData.id]);
+
+  useEffect(() => {
+    const tab = consumePlayOpenTab();
+    if (tab === 'chat') {
+      setDockCollapsed(false);
+      setInfoTab('chat');
+    }
+  }, [caseData.id]);
+
+  const threadViewCase = useMemo(
+    () => getCaseById(threadViewCaseId) || caseData,
+    [threadViewCaseId, caseData],
+  );
+  const threadIsPlayCase = String(threadViewCaseId) === String(caseData.id);
   const [readState, setReadState] = useState('idle');
   const [textPrefs, setTextPrefs] = useState(() => readClinicalTextPrefs());
   const clinicalStyle = useMemo(() => clinicalTextStyle(textPrefs), [textPrefs]);
@@ -752,39 +775,47 @@ export default function Play({
     [caseData?.id],
   );
 
-  const beginPlaySession = useCallback(async () => {
-    if (playSessionIdRef.current) return playSessionIdRef.current;
-    const cp = readPlayCheckpoint();
-    if (cp?.playSessionId && String(cp.caseId) === String(caseData.id)) {
-      playSessionIdRef.current = cp.playSessionId;
-      setPlaySessionId(cp.playSessionId);
-      const startedAt = cp.checkpoint?.sessionStartedAt;
-      if (typeof startedAt === 'number' && sessionStartedAtRef.current == null) {
-        sessionStartedAtRef.current = startedAt;
-        setSessionStartedAt(startedAt);
+  const beginPlaySession = useCallback(
+    async ({ resume = false, forceNew = false } = {}) => {
+      if (!forceNew && playSessionIdRef.current) return playSessionIdRef.current;
+      if (resume && !forceNew) {
+        const cp = readPlayCheckpoint();
+        if (cp?.playSessionId && String(cp.caseId) === String(caseData.id)) {
+          playSessionIdRef.current = cp.playSessionId;
+          setPlaySessionId(cp.playSessionId);
+          const startedAt = cp.checkpoint?.sessionStartedAt;
+          if (typeof startedAt === 'number' && sessionStartedAtRef.current == null) {
+            sessionStartedAtRef.current = startedAt;
+            setSessionStartedAt(startedAt);
+          }
+          return cp.playSessionId;
+        }
       }
-      return cp.playSessionId;
-    }
-    try {
-      const sid = await startPlaySession(caseData.id, {
-        title: caseData.title,
-        caseNumber: caseData.ccsNumber,
-        diagnosis: caseData.diagnosis,
-      });
-      if (sid) {
-        playSessionIdRef.current = sid;
-        setPlaySessionId(sid);
-        if (!sessionStartedAtRef.current) {
+      if (forceNew) {
+        playSessionIdRef.current = null;
+        setPlaySessionId(null);
+      }
+      try {
+        const sid = await startPlaySession(caseData.id, {
+          title: caseData.title,
+          caseNumber: caseData.ccsNumber,
+          diagnosis: caseData.diagnosis,
+        });
+        if (sid) {
+          playSessionIdRef.current = sid;
+          setPlaySessionId(sid);
           const started = Date.now();
           sessionStartedAtRef.current = started;
           setSessionStartedAt(started);
+          writeSessionOrderTimeline(caseData.id, sid, []);
         }
+        return sid;
+      } catch {
+        return null;
       }
-      return sid;
-    } catch {
-      return null;
-    }
-  }, [caseData]);
+    },
+    [caseData],
+  );
 
   const logTimeline = useCallback(
     (event) => {
@@ -828,20 +859,63 @@ export default function Play({
         orderTimelineEvents,
         conversationLog,
         placed,
-        interventions: caseData?.interventions || [],
+        interventions,
         caseId: caseData?.id,
+        teachMeMode,
+        placementOrder,
+        interventionById,
+        nextExpectedId,
+        reviewResults: reviewed ? reviewResults : null,
+        sessionStartedAt,
       }),
-    [careUnit, orderTimelineEvents, conversationLog, placed, caseData?.interventions, caseData?.id],
+    [
+      careUnit,
+      orderTimelineEvents,
+      conversationLog,
+      placed,
+      interventions,
+      caseData?.id,
+      teachMeMode,
+      placementOrder,
+      interventionById,
+      nextExpectedId,
+      reviewed,
+      reviewResults,
+      sessionStartedAt,
+    ],
   );
 
   const caseChat = useCaseChat({
-    caseData,
-    playSessionId,
-    getSessionContext: getChatSessionContext,
+    caseData: threadViewCase,
+    playSessionId: threadIsPlayCase ? playSessionId : null,
+    getSessionContext: threadIsPlayCase ? getChatSessionContext : undefined,
     onModelReady: useCallback((label) => {
+      if (!threadIsPlayCase) return;
       logTimeline({ type: 'chat', role: 'system', text: `Case chat running on ${label}` });
-    }, [logTimeline]),
+    }, [logTimeline, threadIsPlayCase]),
   });
+
+  const threadChatCases = useMemo(() => {
+    const activity = listCasesWithChatActivity({ limit: 20 });
+    const currentId = String(caseData.id);
+    const byId = new Map(activity.map((row) => [row.caseId, row]));
+    if (!byId.has(currentId)) {
+      byId.set(currentId, {
+        caseId: currentId,
+        ccsNumber: caseData.ccsNumber ?? caseData.id,
+        title: caseData.title,
+        messageCount: 0,
+        lastAt: null,
+      });
+    }
+    return [...byId.values()].sort((a, b) => {
+      if (a.caseId === currentId) return -1;
+      if (b.caseId === currentId) return 1;
+      const ta = a.lastAt ? new Date(a.lastAt).getTime() : 0;
+      const tb = b.lastAt ? new Date(b.lastAt).getTime() : 0;
+      return tb - ta;
+    });
+  }, [caseData.id, caseData.ccsNumber, caseData.title, notesVersion, caseChat.messages.length]);
 
   useEffect(() => {
     if (infoTab === 'chat') {
@@ -870,6 +944,7 @@ export default function Play({
   const timerLabel = formatTimerLabel(timeLeft);
 
   const resumeHydratedRef = useRef(false);
+  const soapLoggedRef = useRef({ assessment: null, plan: null });
   const skipFreshCaseResetRef = useRef(
     Boolean(
       initialCheckpoint?.caseId != null &&
@@ -886,6 +961,7 @@ export default function Play({
     orderTimelineSeqRef.current = 0;
     sessionStartedAtRef.current = null;
     setSessionStartedAt(null);
+    soapLoggedRef.current = { assessment: null, plan: null };
     setStacksVisible(true);
     setExtraOrders([]);
     setDecoyAttempts([]);
@@ -934,9 +1010,10 @@ export default function Play({
   useEffect(() => {
     if (!playSessionId) return undefined;
     const timer = setTimeout(() => {
-      if (userAssessment.trim()) {
-        logTimeline({ type: 'soap', field: 'assessment', text: userAssessment.trim() });
-      }
+      const text = userAssessment.trim();
+      if (!text || soapLoggedRef.current.assessment === text) return;
+      soapLoggedRef.current.assessment = text;
+      logTimeline({ type: 'soap', field: 'assessment', text });
     }, 1500);
     return () => clearTimeout(timer);
   }, [userAssessment, playSessionId, logTimeline]);
@@ -944,9 +1021,10 @@ export default function Play({
   useEffect(() => {
     if (!playSessionId) return undefined;
     const timer = setTimeout(() => {
-      if (userPlan.trim()) {
-        logTimeline({ type: 'soap', field: 'plan', text: userPlan.trim() });
-      }
+      const text = userPlan.trim();
+      if (!text || soapLoggedRef.current.plan === text) return;
+      soapLoggedRef.current.plan = text;
+      logTimeline({ type: 'soap', field: 'plan', text });
     }, 1500);
     return () => clearTimeout(timer);
   }, [userPlan, playSessionId, logTimeline]);
@@ -1005,22 +1083,18 @@ export default function Play({
   }, [initialCheckpoint, caseData.id, timerTotal]);
 
   useEffect(() => {
-    if (
-      initialCheckpoint?.caseId != null &&
-      String(initialCheckpoint.caseId) === String(caseData.id) &&
-      initialCheckpoint?.playSessionId
-    ) {
+    if (resumeSession && initialCheckpoint?.playSessionId) {
       playSessionIdRef.current = initialCheckpoint.playSessionId;
       setPlaySessionId(initialCheckpoint.playSessionId);
       return undefined;
     }
     if (resumeHydratedRef.current) return undefined;
-    void beginPlaySession();
+    void beginPlaySession({ resume: false, forceNew: true });
     return undefined;
-  }, [caseData.id, beginPlaySession, initialCheckpoint?.caseId, initialCheckpoint?.playSessionId]);
+  }, [caseData.id, beginPlaySession, resumeSession, initialCheckpoint?.playSessionId]);
 
   useEffect(() => {
-    if (!playSessionId || caseData?.id == null) return undefined;
+    if (!playSessionId || caseData?.id == null || !resumeSession) return undefined;
     let cancelled = false;
     void (async () => {
       const session = await fetchPlaySession(caseData.id, playSessionId);
@@ -1051,7 +1125,7 @@ export default function Play({
     return () => {
       cancelled = true;
     };
-  }, [caseData?.id, playSessionId]);
+  }, [caseData?.id, playSessionId, resumeSession]);
 
   const buildCheckpoint = useCallback(
     () => {
@@ -1573,11 +1647,41 @@ export default function Play({
     setReviewChecked(readReviewChecked(caseData.id));
     reviewAllDoneRef.current = false;
     setReviewContinuePulse(false);
+    setReviewRevealStep(0);
     setDockCollapsed(true);
     setReviewPanelCollapsed(false);
     setReviewCentered(true);
     setShowPostVideoReview(true);
   }, [computePostVideoRows, caseData.id]);
+
+  useEffect(() => {
+    if (!showPostVideoReview || postVideoRows.length === 0) {
+      setReviewRevealStep(0);
+      return undefined;
+    }
+    setReviewRevealStep(1);
+    if (reviewRevealTimerRef.current) {
+      clearInterval(reviewRevealTimerRef.current);
+    }
+    reviewRevealTimerRef.current = window.setInterval(() => {
+      setReviewRevealStep((prev) => {
+        if (prev >= postVideoRows.length) {
+          if (reviewRevealTimerRef.current) {
+            clearInterval(reviewRevealTimerRef.current);
+            reviewRevealTimerRef.current = null;
+          }
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 850);
+    return () => {
+      if (reviewRevealTimerRef.current) {
+        clearInterval(reviewRevealTimerRef.current);
+        reviewRevealTimerRef.current = null;
+      }
+    };
+  }, [showPostVideoReview, postVideoRows.length]);
 
   const reviewProgress = useMemo(() => {
     const total = postVideoRows.length;
@@ -1809,107 +1913,139 @@ export default function Play({
     [interventions, decoyInterventions, dragCfg.snapBackMs],
   );
 
+  const wrapUpCase = useCallback(
+    ({ requireAllPlaced = true } = {}) => {
+      const results = {};
+      const orderResults = {};
+      const nextPins = [];
+      let correct = 0;
+      let placedCount = 0;
+
+      interventions.forEach((iv) => {
+        const p = placed[iv.id];
+        if (!p) return;
+        placedCount += 1;
+        const ok = useGridPlacement
+          ? isCorrectGridPlacement(iv, p, zones)
+          : iv.correct_zone === p;
+        results[iv.id] = ok;
+        if (ok) correct += 1;
+        if (typeof p === 'object' && p != null && 'col' in p) {
+          nextPins.push({ ...p, ivId: iv.id, label: iv.label, ok });
+        } else {
+          nextPins.push({ zoneId: p, ivId: iv.id, label: iv.label, ok });
+        }
+      });
+
+      decoyInterventions.forEach((iv) => {
+        const p = placed[iv.id];
+        if (!p) return;
+        if (typeof p === 'object' && p != null && 'col' in p) {
+          nextPins.push({ ...p, ivId: iv.id, label: iv.label, ok: null });
+        } else {
+          nextPins.push({ zoneId: p, ivId: iv.id, label: iv.label, ok: null });
+        }
+      });
+
+      if (placedCount === 0) {
+        showToast('Place at least one order before ending the case.', 'bad');
+        return;
+      }
+
+      if (requireAllPlaced && placedCount < total) {
+        playWrong();
+        showToast(`Review: ${placedCount}/${total} placed`, 'bad');
+        return;
+      }
+
+      const reviewNum = reviewCount + 1;
+      setReviewCount(reviewNum);
+      setAttempts(reviewNum);
+      setCorrectAttempts(correct);
+      setReviewed(true);
+      setReviewedAt(new Date());
+      setReviewResults(results);
+      setPins(nextPins);
+
+      const expectedOrder = interventions.map((iv) => iv.id);
+      const placedRanks = new Map(placementOrder.map((id, idx) => [id, idx + 1]));
+      const expectedRanks = new Map(expectedOrder.map((id, idx) => [id, idx + 1]));
+      let orderMismatches = 0;
+      const acc = total > 0 ? Math.round((correct / total) * 100) : 0;
+      const rows = computePostVideoRows({ results, placementOrder });
+      setPostVideoRows(rows);
+      interventions.forEach((iv) => {
+        const po = placedRanks.get(iv.id) || null;
+        const eo = expectedRanks.get(iv.id) || null;
+        orderResults[iv.id] = po != null && eo != null ? po === eo : null;
+        if (po && eo && po !== eo) orderMismatches += 1;
+      });
+      setOrderReview(orderResults);
+      const minCorrect = Math.ceil(total * (completionThreshold / 100));
+      const meetsThreshold = acc >= completionThreshold && correct >= minCorrect;
+      const secs = Math.round((Date.now() - startRef.current) / 1000);
+      const result = { attempts: reviewNum, accuracy: acc, seconds: secs };
+
+      if (requireAllPlaced) {
+        if (meetsThreshold) {
+          flashScreen('ok');
+          playComplete();
+          if (orderMismatches > 0) {
+            showToast(
+              `Accuracy ${acc}% — ${orderMismatches} stack(s) out of emergent order.`,
+              'bad',
+            );
+          } else {
+            showToast(`Case ready — ${acc}% (≥${completionThreshold}%)`, 'ok');
+          }
+        } else if (correct === total) {
+          flashScreen('bad');
+          playWrong();
+          showToast(`Need ${completionThreshold}% to master (now ${acc}%) — teaching video next`, 'bad');
+        } else {
+          flashScreen('bad');
+          playWrong();
+          showToast(`Review: ${correct}/${total} correct — teaching video next`, 'bad');
+        }
+        setTimeout(() => playTeachingVideo(result), 900);
+        return;
+      }
+
+      showToast(
+        orderMismatches > 0
+          ? `Ending case — ${orderMismatches} step(s) out of standard order.`
+          : 'Ending case — teaching video next.',
+        orderMismatches > 0 ? 'bad' : 'ok',
+      );
+      void playTeachingVideo(result);
+    },
+    [
+      interventions,
+      decoyInterventions,
+      placed,
+      reviewCount,
+      total,
+      useGridPlacement,
+      zones,
+      playTeachingVideo,
+      placementOrder,
+      computePostVideoRows,
+      completionThreshold,
+    ],
+  );
+
   const reviewPlacements = useCallback(() => {
-    const results = {};
-    const orderResults = {};
-    const nextPins = [];
-    let correct = 0;
-    let placedCount = 0;
+    wrapUpCase({ requireAllPlaced: true });
+  }, [wrapUpCase]);
 
-    interventions.forEach((iv) => {
-      const p = placed[iv.id];
-      if (!p) return;
-      placedCount += 1;
-      const ok = useGridPlacement
-        ? isCorrectGridPlacement(iv, p, zones)
-        : iv.correct_zone === p;
-      results[iv.id] = ok;
-      if (ok) correct += 1;
-      if (typeof p === 'object' && p != null && 'col' in p) {
-        nextPins.push({ ...p, ivId: iv.id, label: iv.label, ok });
-      } else {
-        nextPins.push({ zoneId: p, ivId: iv.id, label: iv.label, ok });
-      }
-    });
-
-    decoyInterventions.forEach((iv) => {
-      const p = placed[iv.id];
-      if (!p) return;
-      if (typeof p === 'object' && p != null && 'col' in p) {
-        nextPins.push({ ...p, ivId: iv.id, label: iv.label, ok: null });
-      } else {
-        nextPins.push({ zoneId: p, ivId: iv.id, label: iv.label, ok: null });
-      }
-    });
-
-    const reviewNum = reviewCount + 1;
-    setReviewCount(reviewNum);
-    setAttempts(reviewNum);
-    setCorrectAttempts(correct);
-    setReviewed(true);
-    setReviewedAt(new Date());
-    setReviewResults(results);
-    setPins(nextPins);
-
-    if (placedCount < total) {
-      playWrong();
-      showToast(`Review: ${placedCount}/${total} placed`, 'bad');
-      return;
-    }
-
-    const expectedOrder = interventions.map((iv) => iv.id);
-    const placedRanks = new Map(placementOrder.map((id, idx) => [id, idx + 1]));
-    const expectedRanks = new Map(expectedOrder.map((id, idx) => [id, idx + 1]));
-    let orderMismatches = 0;
-    const acc = Math.round((correct / total) * 100);
-    setPostVideoRows(computePostVideoRows({ results, placementOrder }));
-    interventions.forEach((iv) => {
-      const po = placedRanks.get(iv.id) || null;
-      const eo = expectedRanks.get(iv.id) || null;
-      orderResults[iv.id] = po != null && eo != null ? po === eo : null;
-      if (po && eo && po !== eo) orderMismatches += 1;
-    });
-    setOrderReview(orderResults);
-    const minCorrect = Math.ceil(total * (completionThreshold / 100));
-    const meetsThreshold = acc >= completionThreshold && correct >= minCorrect;
-    const secs = Math.round((Date.now() - startRef.current) / 1000);
-    const result = { attempts: reviewNum, accuracy: acc, seconds: secs };
-
-    if (meetsThreshold) {
-      flashScreen('ok');
-      playComplete();
-      if (orderMismatches > 0) {
-        showToast(
-          `Accuracy ${acc}% — ${orderMismatches} stack(s) out of emergent order.`,
-          'bad',
-        );
-      } else {
-        showToast(`Case ready — ${acc}% (≥${completionThreshold}%)`, 'ok');
-      }
-    } else if (correct === total) {
-      flashScreen('bad');
-      playWrong();
-      showToast(`Need ${completionThreshold}% to master (now ${acc}%) — teaching video next`, 'bad');
-    } else {
-      flashScreen('bad');
-      playWrong();
-      showToast(`Review: ${correct}/${total} correct — teaching video next`, 'bad');
-    }
-
-    setTimeout(() => playTeachingVideo(result), 900);
-  }, [
-    interventions,
-    decoyInterventions,
-    placed,
-    reviewCount,
-    total,
-    useGridPlacement,
-    zones,
-    playTeachingVideo,
-    placementOrder,
-    computePostVideoRows,
-    completionThreshold,
-  ]);
+  const endCaseNow = useCallback(() => {
+    if (showThanksVideo || showPostVideoReview) return;
+    const ok = window.confirm(
+      'End this case now? The teaching video will play, then your orders are reviewed step-by-step against the standard sequence.',
+    );
+    if (!ok) return;
+    wrapUpCase({ requireAllPlaced: false });
+  }, [showThanksVideo, showPostVideoReview, wrapUpCase]);
 
   useDragGame({
     sceneRef,
@@ -2125,10 +2261,12 @@ export default function Play({
     sessionStartedAtRef.current = null;
     setSessionStartedAt(null);
 
+    soapLoggedRef.current = { assessment: null, plan: null };
+
     void (async () => {
       await endCurrentPlaySession({ restarted: true, placed: doneCount, total });
       clearPlayCheckpoint();
-      await beginPlaySession();
+      await beginPlaySession({ resume: false, forceNew: true });
     })();
 
     startRef.current = Date.now();
@@ -2542,6 +2680,16 @@ export default function Play({
           aria-pressed={infoTab === 'chat'}
         >
           <IconMessage />
+        </button>
+        <button
+          type="button"
+          className="panel-end-case-btn"
+          onClick={endCaseNow}
+          disabled={finalMode}
+          title="End case — teaching video and order review"
+          aria-label="End case"
+        >
+          <IconFlagCheckered />
         </button>
         <button
           type="button"
@@ -2965,13 +3113,18 @@ export default function Play({
               )}
               {postVideoRows.length > 0 && (
                 <div className="post-review-flow-wrap">
-                  <p className="post-review-flow-label">Emergent flow</p>
+                  <p className="post-review-flow-label">
+                    Standard order
+                    {reviewRevealStep > 0 && reviewRevealStep < postVideoRows.length
+                      ? ` · step ${reviewRevealStep} of ${postVideoRows.length}`
+                      : ''}
+                  </p>
                   <div className="post-review-flow" aria-label="Expected clinical flow">
                     {postVideoRows.map((row) => (
                       <span
                         key={row.id}
-                        className={`post-review-flow-chip ${row.ok ? 'ok' : 'bad'} ${row.orderOk === false ? 'order-late' : ''}`}
-                        title={`${row.seq}. ${row.label}`}
+                        className={`post-review-flow-chip ${row.ok ? 'ok' : 'bad'} ${row.orderOk === false ? 'order-late' : ''} ${row.seq <= reviewRevealStep ? 'is-revealed' : 'is-reveal-pending'} ${row.seq === reviewRevealStep ? 'is-reveal-active' : ''}`}
+                        title={`${row.seq}. ${row.label}${row.placedOrder != null ? ` · you placed #${row.placedOrder}` : ''}`}
                       >
                         {row.seq}
                       </span>
@@ -3026,10 +3179,16 @@ export default function Play({
                 )}
                 {postVideoRows.map((row) => {
                   const isStudentReviewed = reviewChecked.includes(row.seq);
+                  const revealClass =
+                    row.seq > reviewRevealStep
+                      ? 'is-reveal-pending'
+                      : row.seq === reviewRevealStep
+                        ? 'is-reveal-active'
+                        : 'is-revealed';
                   return (
                   <article
                     key={row.id}
-                    className={`post-review-row ${row.ok ? 'ok' : 'bad'} ${isStudentReviewed ? 'is-student-reviewed' : ''}`}
+                    className={`post-review-row ${row.ok ? 'ok' : 'bad'} ${isStudentReviewed ? 'is-student-reviewed' : ''} ${revealClass}`}
                   >
                     <button
                       type="button"
@@ -3182,10 +3341,13 @@ export default function Play({
             chatPanel={
               <PlayChatNotesTabPanel
                 chat={caseChat}
-                caseData={caseData}
-                caseId={caseData.id}
-                playSessionId={playSessionId}
-                caseRecording={caseRecording}
+                caseData={threadViewCase}
+                caseId={threadViewCase.id}
+                playCaseId={caseData.id}
+                caseRailItems={threadChatCases}
+                threadViewCaseId={threadViewCaseId}
+                onSelectThreadCase={setThreadViewCaseId}
+                caseRecording={threadIsPlayCase ? caseRecording : null}
                 recordingsVersion={recordingsVersion}
                 notesVersion={notesVersion}
                 onTimelineNote={(text) => logTimeline({ type: 'note', text })}

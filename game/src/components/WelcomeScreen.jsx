@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState, useEffect, useCallback } from 'react';
 import {
   FiCrosshair,
+  FiGitBranch,
   FiLogOut,
   FiSettings,
   FiUser,
@@ -59,6 +60,7 @@ import {
 const NAV = [
   { id: 'play', label: 'Play', Icon: FiZap, action: 'play' },
   { id: 'continue', label: 'Continue', Icon: FiCrosshair, action: 'continue' },
+  { id: 'differential', label: 'Differentials', Icon: FiGitBranch, action: 'differential' },
   { id: 'profiles', label: 'Profiles', Icon: FiUser, action: 'panel' },
   { id: 'settings', label: 'Settings', Icon: FiSettings, action: 'panel' },
   { id: 'exit', label: 'Exit', Icon: FiLogOut, action: 'exit' },
@@ -71,6 +73,7 @@ export default function WelcomeScreen({
   onOpenStackTestingCases,
   onOpenFavoritesCases,
   onOpenFlaggedCases,
+  onOpenDifferential,
   resumeCheckpoint,
   resumeCase,
   onResumeSession,
@@ -242,7 +245,10 @@ export default function WelcomeScreen({
   const runNavAction = (id) => {
     if (id === 'play') handlePlay();
     else if (id === 'continue') handleContinue();
-    else if (id === 'profiles' || id === 'settings') setPanel(id);
+    else if (id === 'differential') {
+      ensureReadyForCases();
+      onOpenDifferential?.();
+    } else if (id === 'profiles' || id === 'settings') setPanel(id);
     else if (id === 'exit') window.close();
   };
 
@@ -565,10 +571,12 @@ export default function WelcomeScreen({
               onFocus={() => setActiveNav(id)}
               disabled={
                 (id === 'continue' && !lastCase && !resumeCheckpoint?.caseId) ||
+                (id === 'differential' && !onOpenDifferential) ||
                 (!audienceReady && id !== 'settings' && id !== 'profiles')
               }
               aria-disabled={
                 (id === 'continue' && !lastCase && !resumeCheckpoint?.caseId) ||
+                (id === 'differential' && !onOpenDifferential) ||
                 (!audienceReady && id !== 'settings' && id !== 'profiles')
               }
               title={
@@ -619,6 +627,18 @@ export default function WelcomeScreen({
             </p>
           )}
           <div className="welcome-panel-actions">
+            {onOpenDifferential && (
+              <button
+                type="button"
+                className="welcome-panel-btn welcome-panel-btn--accent"
+                onClick={() => {
+                  ensureReadyForCases();
+                  onOpenDifferential();
+                }}
+              >
+                🧠 Differential practice →
+              </button>
+            )}
             <button
               type="button"
               className="welcome-panel-btn"

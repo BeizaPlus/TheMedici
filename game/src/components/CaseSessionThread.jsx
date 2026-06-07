@@ -9,7 +9,9 @@ import {
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { mergeSessionThread, parseNoteBubbleContent } from '../lib/caseSessionThread.js';
+import { getCaseById } from '../data/useCcsCatalog.js';
 import CaseRecordButton from './CaseRecordButton.jsx';
+import CaseThreadCaseRail from './CaseThreadCaseRail.jsx';
 import { STORAGE } from '../lib/storageKeys.js';
 
 function readCollapsed(key, defaultValue = false) {
@@ -75,6 +77,10 @@ export default function CaseSessionThread({
   chat,
   caseData,
   caseId,
+  playCaseId = null,
+  caseRailItems = [],
+  threadViewCaseId,
+  onSelectThreadCase,
   caseRecording,
   notesVersion = 0,
   onTimelineNote,
@@ -92,6 +98,16 @@ export default function CaseSessionThread({
   );
 
   const caseLabel = caseData?.ccsNumber || caseData?.id;
+  const playCaseLabel = useMemo(() => {
+    if (playCaseId == null) return null;
+    const gc = getCaseById(playCaseId);
+    return gc?.ccsNumber ?? playCaseId;
+  }, [playCaseId]);
+
+  const viewingOtherCase =
+    playCaseId != null &&
+    threadViewCaseId != null &&
+    String(threadViewCaseId) !== String(playCaseId);
 
   const thread = useMemo(
     () => mergeSessionThread(messages, caseId),
@@ -179,6 +195,19 @@ export default function CaseSessionThread({
 
       {expanded && (
         <>
+          {caseRailItems.length > 0 && onSelectThreadCase && (
+            <CaseThreadCaseRail
+              items={caseRailItems}
+              activeCaseId={threadViewCaseId ?? caseId}
+              playCaseId={playCaseId}
+              onSelectCase={onSelectThreadCase}
+            />
+          )}
+          {viewingOtherCase && (
+            <p className="case-chat-banner case-thread-view-banner">
+              Chat for case #{caseLabel} — your play session is still case #{playCaseLabel}.
+            </p>
+          )}
           {available === false && (
             <p className="case-chat-banner bad">
               Add API keys to <code>.env</code> for case chat answers.

@@ -129,6 +129,19 @@ export function IconDoorExit(props) {
   );
 }
 
+/** Tabler: flag-checkered — end / finish case */
+export function IconFlagCheckered(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M8 5h12" />
+      <path d="M8 9h12" />
+      <path d="M8 13h12" />
+      <path d="M8 17h12" />
+      <path d="M4 5v14" />
+    </svg>
+  );
+}
+
 export function IconEyeOff(props) {
   return (
     <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>

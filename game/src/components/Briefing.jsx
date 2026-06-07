@@ -16,6 +16,7 @@ import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPre
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { unlockAmbience } from '../lib/audio.js';
 import { getCaseFlow } from '../data/caseFlows.js';
+import { getAllGameCases } from '../data/useCcsCatalog.js';
 import { getBranding } from '../data/gameData.js';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import {
@@ -250,6 +251,38 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
 
   const selectedEntry = uiLayout[selectedUiId] || {};
 
+  const allCases = useMemo(() => getAllGameCases(), []);
+  const caseCycleIndex = useMemo(
+    () => allCases.findIndex((c) => String(c.id) === String(caseData?.id)),
+    [allCases, caseData?.id],
+  );
+
+  const cycleCase = useCallback(
+    (delta) => {
+      if (!onSelectCase || caseCycleIndex < 0 || allCases.length < 2) return;
+      stopCaseReader();
+      const next = allCases[(caseCycleIndex + delta + allCases.length) % allCases.length];
+      onSelectCase(next);
+    },
+    [allCases, caseCycleIndex, onSelectCase],
+  );
+
+  useEffect(() => {
+    if (layoutStudio) return undefined;
+    const onKey = (e) => {
+      if (e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        cycleCase(-1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        cycleCase(1);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [cycleCase, layoutStudio]);
+
   return (
     <main className={`briefing briefing-with-scene briefing-dock-style ${layoutStudio ? 'briefing-layout-studio' : ''}`}>
       {studioCapture && (
@@ -315,6 +348,31 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
       </div>
 
       <div className="briefing-scene-wrap">
+        {onSelectCase && allCases.length > 1 && (
+          <div className="briefing-case-cycler" aria-label="Cycle cases">
+            <button
+              type="button"
+              className="briefing-case-cycler-btn"
+              onClick={() => cycleCase(-1)}
+              aria-label="Previous case"
+              title="Previous case (←)"
+            >
+              ‹
+            </button>
+            <span className="briefing-case-cycler-label">
+              {caseCycleIndex >= 0 ? `${caseCycleIndex + 1} / ${allCases.length}` : ''}
+            </span>
+            <button
+              type="button"
+              className="briefing-case-cycler-btn"
+              onClick={() => cycleCase(1)}
+              aria-label="Next case"
+              title="Next case (→)"
+            >
+              ›
+            </button>
+          </div>
+        )}
         <PatientScene
           scene={caseData.patientScene}
           caseData={caseData}

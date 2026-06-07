@@ -108,22 +108,54 @@ export function orderTimelineFromServerSession(session) {
     .filter(Boolean);
 }
 
-/** Prefer the timeline with more order rows; merge unique ids when equal length. */
+function normTimelineLabel(label) {
+  return String(label || '')
+    .trim()
+    .toLowerCase();
+}
+
+/** Collapse duplicate rows from checkpoint/local/server sync (different ids, same event). */
+export function dedupeOrderTimeline(events = []) {
+  const out = [];
+  for (const ev of events) {
+    if (!ev) continue;
+    const label = normTimelineLabel(ev.label);
+    const kind = ev.kind || 'order';
+    const at = ev.at || 0;
+    const dupe = out.find(
+      (row) =>
+        (row.kind || 'order') === kind &&
+        normTimelineLabel(row.label) === label &&
+        Math.abs((row.at || 0) - at) < 5000,
+    );
+    if (!dupe) {
+      out.push(ev);
+      continue;
+    }
+    if (at < (dupe.at || 0)) {
+      const idx = out.indexOf(dupe);
+      out[idx] = ev;
+    }
+  }
+  return out.sort((a, b) => (a.at || 0) - (b.at || 0));
+}
+
+/** Prefer the richest timeline, then dedupe cross-source duplicates. */
 export function pickBestOrderTimeline(...candidates) {
   const lists = candidates
     .filter((rows) => Array.isArray(rows) && rows.length)
     .map((rows) => [...rows]);
   if (!lists.length) return [];
   lists.sort((a, b) => b.length - a.length);
-  const best = [...lists[0]];
-  const seen = new Set(best.map((ev) => ev.id));
+  const merged = [...lists[0]];
+  const seenIds = new Set(merged.map((ev) => ev.id));
   for (let i = 1; i < lists.length; i += 1) {
     for (const ev of lists[i]) {
-      if (!seen.has(ev.id)) {
-        seen.add(ev.id);
-        best.push(ev);
+      if (!seenIds.has(ev.id)) {
+        seenIds.add(ev.id);
+        merged.push(ev);
       }
     }
   }
-  return best.sort((a, b) => (a.at || 0) - (b.at || 0));
+  return dedupeOrderTimeline(merged);
 }

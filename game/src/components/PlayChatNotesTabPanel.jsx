@@ -5,6 +5,10 @@ export default function PlayChatNotesTabPanel({
   chat,
   caseData,
   caseId,
+  playCaseId = null,
+  caseRailItems = [],
+  threadViewCaseId,
+  onSelectThreadCase,
   caseRecording,
   notesVersion,
   onTimelineNote,
@@ -15,6 +19,10 @@ export default function PlayChatNotesTabPanel({
       chat={chat}
       caseData={caseData}
       caseId={caseId}
+      playCaseId={playCaseId}
+      caseRailItems={caseRailItems}
+      threadViewCaseId={threadViewCaseId}
+      onSelectThreadCase={onSelectThreadCase}
       caseRecording={caseRecording}
       notesVersion={notesVersion}
       onTimelineNote={onTimelineNote}

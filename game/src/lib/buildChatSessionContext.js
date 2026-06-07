@@ -1,4 +1,14 @@
 import { readCaseNotes } from './caseNotes.js';
+import { buildTeachCompareChatContext } from './teachMeCompare.js';
+
+function formatTimelineElapsed(at, sessionStartedAt) {
+  if (!sessionStartedAt || !at) return null;
+  const delta = Math.max(0, at - sessionStartedAt);
+  const totalSec = Math.floor(delta / 1000);
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `T+${m}:${String(s).padStart(2, '0')}`;
+}
 
 /** Snapshot of play session for case-chat — orders, scene, notes, activity. */
 export function buildChatSessionContext({
@@ -8,12 +18,19 @@ export function buildChatSessionContext({
   placed = {},
   interventions = [],
   caseId = null,
+  teachMeMode = false,
+  placementOrder = [],
+  interventionById = {},
+  nextExpectedId = null,
+  reviewResults = null,
+  sessionStartedAt = null,
 }) {
-  const orders = orderTimelineEvents.map((ev, i) => ({
+  const ordersTimeline = orderTimelineEvents.map((ev, i) => ({
     seq: ev.orderIndex ?? i + 1,
     label: ev.label,
     kind: ev.kind || 'order',
-    time: ev.at ? new Date(ev.at).toLocaleTimeString() : null,
+    clockTime: ev.at ? new Date(ev.at).toLocaleTimeString() : null,
+    elapsed: formatTimelineElapsed(ev.at, sessionStartedAt),
   }));
 
   const stacksPlaced = (interventions || [])
@@ -27,23 +44,44 @@ export function buildChatSessionContext({
 
   const learnerNotes = caseId ? readCaseNotes(caseId).trim().slice(-6000) : '';
 
-  return {
+  const ctx = {
     currentLocation: careUnit || null,
-    ordersThisSession: orders,
+    ordersTimeline,
+    ordersThisSession: ordersTimeline,
     stacksPlaced,
     sessionActivity,
     learnerNotes: learnerNotes || null,
   };
+
+  if (teachMeMode) {
+    ctx.standardFlow = buildTeachCompareChatContext({
+      interventions,
+      interventionById,
+      placementOrder,
+      placed,
+      nextExpectedId,
+      reviewResults,
+    });
+    ctx.tutorHint =
+      'Teach Me mode is on. Use standardFlow (ideal CCS sequence vs the learner’s placement order) and ordersTimeline to explain where they went out of order, what step is next, and why the standard sequence matters.';
+  }
+
+  return ctx;
 }
 
 export function formatChatSessionContextBlock(ctx) {
   if (!ctx || typeof ctx !== 'object') return '';
   const hasData =
+    ctx.ordersTimeline?.length ||
     ctx.ordersThisSession?.length ||
     ctx.stacksPlaced?.length ||
     ctx.sessionActivity?.length ||
     ctx.learnerNotes ||
-    ctx.currentLocation;
+    ctx.currentLocation ||
+    ctx.standardFlow;
   if (!hasData) return '';
-  return `[SESSION SO FAR — orders, notes, and scene activity for this run]\n${JSON.stringify(ctx, null, 2)}`;
+  const header = ctx.standardFlow
+    ? '[SESSION SO FAR — standard flow compare, order timeline, notes, and scene activity for this run]'
+    : '[SESSION SO FAR — orders, notes, and scene activity for this run]';
+  return `${header}\n${JSON.stringify(ctx, null, 2)}`;
 }

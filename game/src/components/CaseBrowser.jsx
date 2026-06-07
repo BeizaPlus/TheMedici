@@ -53,6 +53,7 @@ import CaseReviewFlagTag from './CaseReviewFlagTag.jsx';
 import CcsScreenshotLink from './CcsScreenshotLink.jsx';
 import { getBuiltInPatientSrc } from '../lib/patientImage.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
+import CaseLandscapeRail from './CaseLandscapeRail.jsx';
 
 
 
@@ -914,6 +915,7 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
         <section className="shell-detail shell-detail--landscape">
           {selected ? (
             <div className="case-detail-landscape">
+              <div className="case-detail-landscape-main">
               <div className="case-detail-scene" aria-hidden={false}>
                 <img
                   src={getBuiltInPatientSrc(selectedGameCase)}
@@ -991,6 +993,17 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
                   ▶ Play case #{selected.ccsNumber}
                 </button>
               </div>
+              </div>
+
+              <CaseLandscapeRail
+                cases={casesInView}
+                selectedId={selectedId}
+                onSelectCase={setSelectedId}
+                onPlayCase={(id) => {
+                  const gameCase = getCaseById(id);
+                  if (gameCase) playCase(gameCase);
+                }}
+              />
             </div>
           ) : (
             <p className="shell-detail-empty">Select a case from the list.</p>

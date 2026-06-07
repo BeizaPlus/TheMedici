@@ -84,3 +84,58 @@ export function teachCompareStatusLabel(status) {
       return 'Pending';
   }
 }
+
+/** Compact standard-flow snapshot for case chat session context. */
+export function buildTeachCompareChatContext({
+  interventions = [],
+  interventionById = {},
+  placementOrder = [],
+  placed = {},
+  nextExpectedId = null,
+  reviewResults = null,
+}) {
+  const { rows, extras } = buildTeachCompareRows({
+    interventions,
+    interventionById,
+    placementOrder,
+    placed,
+    nextExpectedId,
+    reviewResults,
+  });
+
+  const nextRow = rows.find((r) => r.id === nextExpectedId);
+
+  return {
+    teachMeActive: true,
+    nextStep: nextRow
+      ? { standardSeq: nextRow.expectedSeq, label: nextRow.label }
+      : null,
+    rows: rows.map((r) => ({
+      standardSeq: r.expectedSeq,
+      label: r.label,
+      yourPlacementSeq: r.yourSeq,
+      status: r.status,
+      statusLabel: teachCompareStatusLabel(r.status),
+      ...(r.isPlaced ? { clinicalRationale: r.why } : {}),
+      ...(r.guideline ? { guideline: r.guideline } : {}),
+      ...(r.status === 'order-off' && r.yourSeq != null
+        ? { orderNote: `Standard step #${r.expectedSeq}, you placed it #${r.yourSeq}.` }
+        : {}),
+      ...(reviewResults && r.isPlaced
+        ? { clinicallyAppropriate: Boolean(reviewResults[r.id]) }
+        : {}),
+    })),
+    outsideStandard: extras.map((e) => ({
+      yourPlacementSeq: e.yourSeq,
+      label: e.label,
+      statusLabel: teachCompareStatusLabel(e.status),
+    })),
+    counts: {
+      totalStandard: rows.length,
+      placed: rows.filter((r) => r.isPlaced).length,
+      onSequence: rows.filter((r) => r.status === 'match').length,
+      outOfOrder: rows.filter((r) => r.status === 'order-off').length,
+      pending: rows.filter((r) => ['pending', 'next', 'missed'].includes(r.status)).length,
+    },
+  };
+}

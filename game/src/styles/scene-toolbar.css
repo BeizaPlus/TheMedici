@@ -145,6 +145,7 @@
 
 .panel-toggle-btn,
 .panel-chat-btn,
+.panel-end-case-btn,
 .panel-exit-btn {
   width: 42px;
   height: 42px;
@@ -162,6 +163,7 @@
 
 .panel-toggle-btn:hover,
 .panel-chat-btn:hover,
+.panel-end-case-btn:hover:not(:disabled),
 .panel-exit-btn:hover {
   color: #ffffff;
   background: rgba(14,16,22,0.95);
@@ -173,8 +175,23 @@
   box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.45);
 }
 
+.panel-end-case-btn {
+  color: rgba(143, 230, 175, 0.88);
+}
+
+.panel-end-case-btn:hover:not(:disabled) {
+  color: #9ef0b8;
+  background: rgba(95, 216, 138, 0.12);
+}
+
+.panel-end-case-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .panel-toggle-btn .toolbar-icon,
 .panel-chat-btn .toolbar-icon,
+.panel-end-case-btn .toolbar-icon,
 .panel-exit-btn .toolbar-icon {
   width: 16px;
   height: 16px;
