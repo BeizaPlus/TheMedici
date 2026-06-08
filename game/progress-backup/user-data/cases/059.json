@@ -1,0 +1,56 @@
+{
+  "caseId": "059",
+  "caseNumber": "59",
+  "title": "SHORTNESS OF BREATH",
+  "diagnosis": "Unknown",
+  "updatedAt": "2026-06-07T18:42:25.121Z",
+  "stats": {
+    "sessions": 2,
+    "chatMessages": 0,
+    "recordings": 0,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-01T22:42:01.976Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "dd5fd60a27494390c2105f9f",
+      "startedAt": "2026-06-01T22:42:01.965Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:42:01.965Z",
+          "type": "session_start",
+          "attempt": 1
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "fd7c329cf8c5babe0362c09d",
+      "startedAt": "2026-06-01T22:42:01.976Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:42:01.976Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-01T22:42:02.010Z",
+          "type": "patient_life",
+          "state": "critical",
+          "pct": 35
+        }
+      ],
+      "recordings": []
+    }
+  ],
+  "recordings": []
+}

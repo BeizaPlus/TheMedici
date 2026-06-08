@@ -1,0 +1,113 @@
+{
+  "caseId": "033",
+  "caseNumber": "33",
+  "title": "ALTERED MENTAL STATUS",
+  "diagnosis": "Normal Pressure Hydrocephalus",
+  "updatedAt": "2026-06-07T17:22:51.687Z",
+  "stats": {
+    "sessions": 4,
+    "chatMessages": 0,
+    "recordings": 1,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-07T17:22:51.640Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "e23b084c83e75dfe0308bdb4",
+      "startedAt": "2026-06-01T18:46:37.064Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T18:46:37.064Z",
+          "type": "session_start",
+          "attempt": 1
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "636fc3f0362cd722bca67032",
+      "startedAt": "2026-06-01T18:46:37.080Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T18:46:37.080Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-01T18:46:37.110Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 88
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "a86b349f4a28aee5abdc5b3e",
+      "startedAt": "2026-06-07T17:21:26.861Z",
+      "endedAt": null,
+      "attempt": 3,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T17:21:26.861Z",
+          "type": "session_start",
+          "attempt": 3
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "3c7428b546684d6bd397b8d1",
+      "startedAt": "2026-06-07T17:22:51.640Z",
+      "endedAt": null,
+      "attempt": 4,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T17:22:51.640Z",
+          "type": "session_start",
+          "attempt": 4
+        },
+        {
+          "at": "2026-06-07T17:22:51.687Z",
+          "type": "recording",
+          "recordingId": "fde59e0ebcec4418",
+          "slot": 1,
+          "durationMs": 84766,
+          "file": "recordings/033/fde59e0ebcec4418.webm"
+        }
+      ],
+      "recordings": [
+        {
+          "id": "fde59e0ebcec4418",
+          "slot": 1,
+          "at": "2026-06-07T17:22:51.687Z",
+          "durationMs": 84766,
+          "mimeType": "audio/webm;codecs=opus",
+          "file": "recordings/033/fde59e0ebcec4418.webm"
+        }
+      ]
+    }
+  ],
+  "recordings": [
+    {
+      "id": "fde59e0ebcec4418",
+      "slot": 1,
+      "at": "2026-06-07T17:22:51.687Z",
+      "durationMs": 84766,
+      "mimeType": "audio/webm;codecs=opus",
+      "file": "recordings/033/fde59e0ebcec4418.webm",
+      "sessionId": "3c7428b546684d6bd397b8d1"
+    }
+  ]
+}

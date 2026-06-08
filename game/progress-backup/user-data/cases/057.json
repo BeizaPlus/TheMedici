@@ -1,0 +1,92 @@
+{
+  "caseId": "57",
+  "caseNumber": "57",
+  "title": "",
+  "diagnosis": null,
+  "updatedAt": "2026-06-07T18:42:15.336Z",
+  "stats": {
+    "sessions": 3,
+    "chatMessages": 0,
+    "recordings": 1,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-07T18:42:15.287Z"
+  },
+  "chatHistory": [],
+  "recordings": [
+    {
+      "id": "5ccc171303c58863",
+      "slot": 1,
+      "at": "2026-06-07T18:42:15.336Z",
+      "durationMs": 72528,
+      "mimeType": "audio/webm;codecs=opus",
+      "file": "recordings/057/5ccc171303c58863.webm",
+      "sessionId": "284fd1d7e8b01c07d918cab7"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "490b15c1a70059fbe7df03d7",
+      "startedAt": "2026-06-07T16:16:51.788Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T16:16:51.788Z",
+          "type": "session_start",
+          "attempt": 1
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "995715b6203521d73b29fe68",
+      "startedAt": "2026-06-07T18:41:02.743Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T18:41:02.743Z",
+          "type": "session_start",
+          "attempt": 2
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "284fd1d7e8b01c07d918cab7",
+      "startedAt": "2026-06-07T18:42:15.287Z",
+      "endedAt": null,
+      "attempt": 3,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T18:42:15.287Z",
+          "type": "session_start",
+          "attempt": 3
+        },
+        {
+          "at": "2026-06-07T18:42:15.336Z",
+          "type": "recording",
+          "recordingId": "5ccc171303c58863",
+          "slot": 1,
+          "durationMs": 72528,
+          "file": "recordings/057/5ccc171303c58863.webm"
+        }
+      ],
+      "recordings": [
+        {
+          "id": "5ccc171303c58863",
+          "slot": 1,
+          "at": "2026-06-07T18:42:15.336Z",
+          "durationMs": 72528,
+          "mimeType": "audio/webm;codecs=opus",
+          "file": "recordings/057/5ccc171303c58863.webm"
+        }
+      ]
+    }
+  ]
+}

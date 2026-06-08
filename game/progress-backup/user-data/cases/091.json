@@ -1,0 +1,132 @@
+{
+  "caseId": "091",
+  "caseNumber": "91",
+  "title": "LUMP IN BREAST",
+  "diagnosis": "Breast Cancer",
+  "updatedAt": "2026-06-07T15:29:53.118Z",
+  "stats": {
+    "sessions": 4,
+    "chatMessages": 0,
+    "recordings": 1,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-07T15:29:08.083Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "6e2c16ecc81822cd4b2e3d2f",
+      "startedAt": "2026-06-01T22:40:57.350Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:40:57.350Z",
+          "type": "session_start",
+          "attempt": 1
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "91d83552e9aa87e4a50f1253",
+      "startedAt": "2026-06-01T22:40:57.363Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:40:57.363Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-01T22:40:57.395Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 88
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "4196788a59a2c8492f05edc4",
+      "startedAt": "2026-06-02T18:12:28.053Z",
+      "endedAt": "2026-06-02T18:14:29.889Z",
+      "attempt": 3,
+      "result": {
+        "abandoned": true,
+        "placed": 0,
+        "total": 7
+      },
+      "timeline": [
+        {
+          "at": "2026-06-02T18:12:28.053Z",
+          "type": "session_start",
+          "attempt": 3
+        },
+        {
+          "at": "2026-06-02T18:12:28.073Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 88
+        },
+        {
+          "at": "2026-06-02T18:14:29.889Z",
+          "type": "session_end",
+          "result": {
+            "abandoned": true,
+            "placed": 0,
+            "total": 7
+          }
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "108c7da0d0ca4c78a3bf7f98",
+      "startedAt": "2026-06-07T15:29:08.083Z",
+      "endedAt": null,
+      "attempt": 4,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T15:29:08.083Z",
+          "type": "session_start",
+          "attempt": 4
+        },
+        {
+          "at": "2026-06-07T15:29:53.118Z",
+          "type": "recording",
+          "recordingId": "de12789305a31592",
+          "slot": 1,
+          "durationMs": 44999,
+          "file": "recordings/091/de12789305a31592.webm"
+        }
+      ],
+      "recordings": [
+        {
+          "id": "de12789305a31592",
+          "slot": 1,
+          "at": "2026-06-07T15:29:53.118Z",
+          "durationMs": 44999,
+          "mimeType": "audio/webm;codecs=opus",
+          "file": "recordings/091/de12789305a31592.webm"
+        }
+      ]
+    }
+  ],
+  "recordings": [
+    {
+      "id": "de12789305a31592",
+      "slot": 1,
+      "at": "2026-06-07T15:29:53.118Z",
+      "durationMs": 44999,
+      "mimeType": "audio/webm;codecs=opus",
+      "file": "recordings/091/de12789305a31592.webm",
+      "sessionId": "108c7da0d0ca4c78a3bf7f98"
+    }
+  ]
+}

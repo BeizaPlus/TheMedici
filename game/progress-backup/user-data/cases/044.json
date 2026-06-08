@@ -1,0 +1,238 @@
+{
+  "caseId": "044",
+  "caseNumber": "44",
+  "title": "DIARRHEA",
+  "diagnosis": "Giardiasis",
+  "updatedAt": "2026-06-07T18:43:14.832Z",
+  "stats": {
+    "sessions": 12,
+    "chatMessages": 0,
+    "recordings": 0,
+    "noteEvents": 0,
+    "stacksPlaced": 2,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-02T18:00:25.955Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "ebe4cbcdf9f796625a1532ee",
+      "startedAt": "2026-06-02T17:43:33.558Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T17:43:33.558Z",
+          "type": "session_start",
+          "attempt": 1
+        },
+        {
+          "at": "2026-06-02T17:43:33.579Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 76
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "a2e8ed94f4a789ae14b843ba",
+      "startedAt": "2026-06-02T17:49:04.312Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T17:49:04.312Z",
+          "type": "session_start",
+          "attempt": 2
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "2cd8212249bbbb110576f698",
+      "startedAt": "2026-06-02T17:49:31.512Z",
+      "endedAt": null,
+      "attempt": 3,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T17:49:31.512Z",
+          "type": "session_start",
+          "attempt": 3
+        },
+        {
+          "at": "2026-06-02T17:52:05.784Z",
+          "type": "extra_order",
+          "label": "CBC",
+          "category": "labs"
+        },
+        {
+          "at": "2026-06-02T17:52:15.500Z",
+          "type": "extra_order",
+          "label": "ECG 12-lead",
+          "category": "imaging"
+        },
+        {
+          "at": "2026-06-02T17:52:41.925Z",
+          "type": "stack",
+          "stackId": "hormone-thyroid-stimulating-serum-hormon",
+          "label": "Hormone, thyroid stimulating serum / Hormone, thyroid stimulating serum",
+          "correct": false
+        },
+        {
+          "at": "2026-06-02T17:52:47.059Z",
+          "type": "stack",
+          "stackId": "physical-exam-abdomen",
+          "label": "Physical Exam: Abdomen",
+          "correct": false
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "931f7f55a604cf1901117a3d",
+      "startedAt": "2026-06-02T17:53:31.906Z",
+      "endedAt": null,
+      "attempt": 4,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T17:53:31.906Z",
+          "type": "session_start",
+          "attempt": 4
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "a7e4a41a8efdecef4196c0f6",
+      "startedAt": "2026-06-02T17:57:34.107Z",
+      "endedAt": null,
+      "attempt": 5,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T17:57:34.107Z",
+          "type": "session_start",
+          "attempt": 5
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "5ee84fcc7be33d09391bbe52",
+      "startedAt": "2026-06-02T17:57:38.161Z",
+      "endedAt": null,
+      "attempt": 6,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T17:57:38.161Z",
+          "type": "session_start",
+          "attempt": 6
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "2df3a078ea7c586b94101453",
+      "startedAt": "2026-06-02T17:57:48.324Z",
+      "endedAt": null,
+      "attempt": 7,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T17:57:48.324Z",
+          "type": "session_start",
+          "attempt": 7
+        },
+        {
+          "at": "2026-06-02T17:57:48.353Z",
+          "type": "patient_life",
+          "state": "stable",
+          "pct": 76
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "323009d9418753d3f25e8769",
+      "startedAt": "2026-06-02T17:58:04.078Z",
+      "endedAt": null,
+      "attempt": 8,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T17:58:04.078Z",
+          "type": "session_start",
+          "attempt": 8
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "aad5aef85f1e34780b37df6c",
+      "startedAt": "2026-06-02T17:58:32.668Z",
+      "endedAt": null,
+      "attempt": 9,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T17:58:32.668Z",
+          "type": "session_start",
+          "attempt": 9
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "c0aa2f8b54169b50f621c38b",
+      "startedAt": "2026-06-02T17:58:41.206Z",
+      "endedAt": null,
+      "attempt": 10,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T17:58:41.206Z",
+          "type": "session_start",
+          "attempt": 10
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "77db3230287bf875f19cc47d",
+      "startedAt": "2026-06-02T18:00:21.520Z",
+      "endedAt": null,
+      "attempt": 11,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T18:00:21.520Z",
+          "type": "session_start",
+          "attempt": 11
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "37c27213206708b937d89d5f",
+      "startedAt": "2026-06-02T18:00:25.955Z",
+      "endedAt": null,
+      "attempt": 12,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T18:00:25.955Z",
+          "type": "session_start",
+          "attempt": 12
+        }
+      ],
+      "recordings": []
+    }
+  ],
+  "recordings": []
+}

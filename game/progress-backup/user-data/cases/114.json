@@ -1,0 +1,107 @@
+{
+  "caseId": "114",
+  "caseNumber": "114",
+  "title": "",
+  "diagnosis": null,
+  "updatedAt": "2026-06-07T16:33:01.755Z",
+  "stats": {
+    "sessions": 4,
+    "chatMessages": 0,
+    "recordings": 1,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-07T16:33:01.703Z"
+  },
+  "chatHistory": [],
+  "recordings": [
+    {
+      "id": "d8b774d4edf67ab1",
+      "slot": 1,
+      "at": "2026-06-07T16:33:01.755Z",
+      "durationMs": 82349,
+      "mimeType": "audio/webm;codecs=opus",
+      "file": "recordings/114/d8b774d4edf67ab1.webm",
+      "sessionId": "544f18ef731b1d3f4ca6d2e6"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "29a8a94d7718b8063a16951f",
+      "startedAt": "2026-06-07T16:27:13.894Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T16:27:13.894Z",
+          "type": "session_start",
+          "attempt": 1
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "960b3298c105e69a7bda3b93",
+      "startedAt": "2026-06-07T16:27:13.922Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T16:27:13.922Z",
+          "type": "session_start",
+          "attempt": 2
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "0d5f84bac39c783c2061cfcc",
+      "startedAt": "2026-06-07T16:31:39.344Z",
+      "endedAt": null,
+      "attempt": 3,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T16:31:39.344Z",
+          "type": "session_start",
+          "attempt": 3
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "544f18ef731b1d3f4ca6d2e6",
+      "startedAt": "2026-06-07T16:33:01.703Z",
+      "endedAt": null,
+      "attempt": 4,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T16:33:01.703Z",
+          "type": "session_start",
+          "attempt": 4
+        },
+        {
+          "at": "2026-06-07T16:33:01.755Z",
+          "type": "recording",
+          "recordingId": "d8b774d4edf67ab1",
+          "slot": 1,
+          "durationMs": 82349,
+          "file": "recordings/114/d8b774d4edf67ab1.webm"
+        }
+      ],
+      "recordings": [
+        {
+          "id": "d8b774d4edf67ab1",
+          "slot": 1,
+          "at": "2026-06-07T16:33:01.755Z",
+          "durationMs": 82349,
+          "mimeType": "audio/webm;codecs=opus",
+          "file": "recordings/114/d8b774d4edf67ab1.webm"
+        }
+      ]
+    }
+  ]
+}

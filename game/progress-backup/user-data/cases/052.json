@@ -1,0 +1,77 @@
+{
+  "caseId": "52",
+  "caseNumber": "52",
+  "title": "",
+  "diagnosis": null,
+  "updatedAt": "2026-06-07T16:11:14.992Z",
+  "stats": {
+    "sessions": 2,
+    "chatMessages": 0,
+    "recordings": 1,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-07T16:11:14.943Z"
+  },
+  "chatHistory": [],
+  "recordings": [
+    {
+      "id": "4c02c75507314f8c",
+      "slot": 1,
+      "at": "2026-06-07T16:11:14.992Z",
+      "durationMs": 75717,
+      "mimeType": "audio/webm;codecs=opus",
+      "file": "recordings/052/4c02c75507314f8c.webm",
+      "sessionId": "70d19ee81b6b7866f17c4db6"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "801766ef2de51eb1a84e4181",
+      "startedAt": "2026-06-07T16:09:59.217Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T16:09:59.217Z",
+          "type": "session_start",
+          "attempt": 1
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "70d19ee81b6b7866f17c4db6",
+      "startedAt": "2026-06-07T16:11:14.943Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T16:11:14.943Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-07T16:11:14.992Z",
+          "type": "recording",
+          "recordingId": "4c02c75507314f8c",
+          "slot": 1,
+          "durationMs": 75717,
+          "file": "recordings/052/4c02c75507314f8c.webm"
+        }
+      ],
+      "recordings": [
+        {
+          "id": "4c02c75507314f8c",
+          "slot": 1,
+          "at": "2026-06-07T16:11:14.992Z",
+          "durationMs": 75717,
+          "mimeType": "audio/webm;codecs=opus",
+          "file": "recordings/052/4c02c75507314f8c.webm"
+        }
+      ]
+    }
+  ]
+}

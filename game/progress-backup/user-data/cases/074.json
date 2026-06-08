@@ -1,0 +1,56 @@
+{
+  "caseId": "074",
+  "caseNumber": "74",
+  "title": "PERSISTENT COUGH",
+  "diagnosis": "Lung Cancer (Adenocarcinoma)",
+  "updatedAt": "2026-06-07T18:42:48.458Z",
+  "stats": {
+    "sessions": 2,
+    "chatMessages": 0,
+    "recordings": 0,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-01T22:21:50.212Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "365fe74601c74b63b637c169",
+      "startedAt": "2026-06-01T22:21:50.195Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:21:50.195Z",
+          "type": "session_start",
+          "attempt": 1
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "a8e6273d1802934fc6558fb8",
+      "startedAt": "2026-06-01T22:21:50.212Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T22:21:50.212Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-01T22:21:50.252Z",
+          "type": "patient_life",
+          "state": "guarded",
+          "pct": 61
+        }
+      ],
+      "recordings": []
+    }
+  ],
+  "recordings": []
+}

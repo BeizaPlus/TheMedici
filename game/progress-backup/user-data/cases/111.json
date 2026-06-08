@@ -1,0 +1,90 @@
+{
+  "caseId": "111",
+  "caseNumber": "111",
+  "title": "SHORTNESS OF BREATH",
+  "diagnosis": "Fat Embolism Syndrome",
+  "updatedAt": "2026-06-07T15:06:48.658Z",
+  "stats": {
+    "sessions": 3,
+    "chatMessages": 0,
+    "recordings": 0,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-02T18:18:44.073Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "f27b28bdd5f1e5a341a635b5",
+      "startedAt": "2026-06-02T18:15:18.161Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T18:15:18.161Z",
+          "type": "session_start",
+          "attempt": 1
+        },
+        {
+          "at": "2026-06-02T18:15:18.231Z",
+          "type": "patient_life",
+          "state": "guarded",
+          "pct": 54
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "45a5ac25b929cc07cd400dde",
+      "startedAt": "2026-06-02T18:15:18.219Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-02T18:15:18.219Z",
+          "type": "session_start",
+          "attempt": 2
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "7ca4f77035d60e7138be48f1",
+      "startedAt": "2026-06-02T18:17:30.177Z",
+      "endedAt": "2026-06-02T18:18:44.073Z",
+      "attempt": 3,
+      "result": {
+        "abandoned": true,
+        "placed": 0,
+        "total": 5
+      },
+      "timeline": [
+        {
+          "at": "2026-06-02T18:17:30.177Z",
+          "type": "session_start",
+          "attempt": 3
+        },
+        {
+          "at": "2026-06-02T18:18:35.370Z",
+          "type": "patient_life",
+          "state": "guarded",
+          "pct": 54
+        },
+        {
+          "at": "2026-06-02T18:18:44.073Z",
+          "type": "session_end",
+          "result": {
+            "abandoned": true,
+            "placed": 0,
+            "total": 5
+          }
+        }
+      ],
+      "recordings": []
+    }
+  ],
+  "recordings": []
+}

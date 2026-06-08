@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Export MeWorld progress</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+    button { padding: 0.6rem 1rem; font-size: 1rem; cursor: pointer; }
+    pre { background: #111; color: #9f9; padding: 1rem; overflow: auto; font-size: 0.75rem; }
+  </style>
+</head>
+<body>
+  <h1>Export browser progress</h1>
+  <p>Downloads <code>browser-localStorage.json</code> — timer, case queue, differential log, checkpoint, notes.</p>
+  <button id="export">Download progress JSON</button>
+  <p id="status"></p>
+  <script>
+    const KEYS = [
+      'schoonmaker_progress',
+      'schoonmaker_audience_profile',
+      'schoonmaker_ui_prefs',
+      'schoonmaker_active_play_checkpoint',
+      'schoonmaker_differential_practice_log',
+      'schoonmaker_differential_case_transcripts',
+      'schoonmaker_differential_stacker_prefs',
+      'schoonmaker_differential_voice_index',
+      'schoonmaker_differential_case_memory',
+      'schoonmaker_case_simulation_creativity',
+      'schoonmaker_case_chat_history',
+      'schoonmaker_case_notes',
+      'schoonmaker_play_session_timeline',
+      'schoonmaker_soap_draft',
+    ];
+    document.getElementById('export').onclick = () => {
+      const out = { exportedAt: new Date().toISOString(), keys: {} };
+      for (const k of KEYS) {
+        const v = localStorage.getItem(k);
+        if (v != null) out.keys[k] = v;
+      }
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k?.startsWith('schoonmaker_soap_draft_') && !out.keys[k]) {
+          out.keys[k] = localStorage.getItem(k);
+        }
+        if (k?.startsWith('schoonmaker_play_session_timeline_') && !out.keys[k]) {
+          out.keys[k] = localStorage.getItem(k);
+        }
+      }
+      const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'browser-localStorage.json';
+      a.click();
+      document.getElementById('status').textContent = `Exported ${Object.keys(out.keys).length} keys.`;
+    };
+  </script>
+</body>
+</html>

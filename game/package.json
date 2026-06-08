@@ -21,7 +21,9 @@
     "dev:studio": "concurrently -n api,web -c blue,green \"node server/index.js\" \"vite --open /studio.html\"",
     "build": "vite build",
     "preview": "vite preview",
-    "eval": "python scripts/self_eval.py --no-fix"
+    "eval": "python scripts/self_eval.py --no-fix",
+    "package:progress": "node scripts/package-progress-backup.mjs",
+    "restore:progress": "node scripts/restore-progress-backup.mjs"
   },
   "dependencies": {
     "@interactjs/interact": "^1.10.27",

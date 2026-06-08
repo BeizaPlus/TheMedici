@@ -1,0 +1,158 @@
+{
+  "caseId": "143",
+  "caseNumber": "143",
+  "title": "POOR FEEDING",
+  "diagnosis": null,
+  "updatedAt": "2026-06-07T16:55:31.865Z",
+  "stats": {
+    "sessions": 1,
+    "chatMessages": 2,
+    "recordings": 0,
+    "noteEvents": 0,
+    "stacksPlaced": 9,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-05-31T16:32:10.851Z"
+  },
+  "chatHistory": [
+    {
+      "at": "2026-05-31T16:25:09.652Z",
+      "sessionId": "a2bab1f02465de77bc724927",
+      "role": "user",
+      "content": "waht wrogn with this patinet?"
+    },
+    {
+      "at": "2026-05-31T16:25:12.782Z",
+      "sessionId": "a2bab1f02465de77bc724927",
+      "role": "assistant",
+      "content": "I am presenting with poor feeding, which is my chief complaint. My vital signs show tachycardia with a heart rate of 128, hypotension with a blood pressure of 96/58, tachypnea with a respiratory rate of 28, and a fever with a temperature of 39. My oxygen saturation is at 95%. Overall, I may be experiencing a potentially septic condition, as indicated by my symptoms and vital signs."
+    }
+  ],
+  "sessions": [
+    {
+      "id": "a2bab1f02465de77bc724927",
+      "startedAt": "2026-05-31T16:24:35.786Z",
+      "endedAt": "2026-05-31T16:32:10.851Z",
+      "attempt": 1,
+      "result": {
+        "attempts": 1,
+        "accuracy": 0,
+        "seconds": 370,
+        "placed": 8,
+        "total": 8,
+        "completed": true
+      },
+      "timeline": [
+        {
+          "at": "2026-05-31T16:24:35.786Z",
+          "type": "session_start",
+          "attempt": 1
+        },
+        {
+          "at": "2026-05-31T16:24:35.837Z",
+          "type": "patient_life",
+          "state": "guarded",
+          "pct": 48
+        },
+        {
+          "at": "2026-05-31T16:25:09.652Z",
+          "type": "chat",
+          "role": "user",
+          "text": "waht wrogn with this patinet?"
+        },
+        {
+          "at": "2026-05-31T16:25:12.782Z",
+          "type": "chat",
+          "role": "assistant",
+          "text": "I am presenting with poor feeding, which is my chief complaint. My vital signs show tachycardia with a heart rate of 128, hypotension with a blood pressure of 96/58, tachypnea with a respiratory rate of 28, and a fever with a temperature of 39. My oxygen saturation is at 95%. Overall, I may be experiencing a potentially septic condition, as indicated by my symptoms and vital signs."
+        },
+        {
+          "at": "2026-05-31T16:27:07.767Z",
+          "type": "stack",
+          "stackId": "monitor",
+          "label": "Cardiac Monitor + Pulse ox",
+          "correct": false
+        },
+        {
+          "at": "2026-05-31T16:27:15.251Z",
+          "type": "stack",
+          "stackId": "iv",
+          "label": "IV Access + Fluids",
+          "correct": false
+        },
+        {
+          "at": "2026-05-31T16:27:19.554Z",
+          "type": "stack",
+          "stackId": "labs",
+          "label": "Stat Labs (CBC, BMP, glucose)",
+          "correct": false
+        },
+        {
+          "at": "2026-05-31T16:27:21.281Z",
+          "type": "stack",
+          "stackId": "cultures",
+          "label": "Blood Culture",
+          "correct": false
+        },
+        {
+          "at": "2026-05-31T16:27:23.138Z",
+          "type": "stack",
+          "stackId": "ua",
+          "label": "Urinalysis + Culture",
+          "correct": false
+        },
+        {
+          "at": "2026-05-31T16:27:25.050Z",
+          "type": "stack",
+          "stackId": "cxr",
+          "label": "Chest X-ray",
+          "correct": false
+        },
+        {
+          "at": "2026-05-31T16:27:32.703Z",
+          "type": "stack",
+          "stackId": "antipyretic",
+          "label": "Antipyretic + Comfort care",
+          "correct": false
+        },
+        {
+          "at": "2026-05-31T16:27:36.023Z",
+          "type": "stack",
+          "stackId": "admit",
+          "label": "Admit / Observation",
+          "correct": false
+        },
+        {
+          "at": "2026-05-31T16:28:22.167Z",
+          "type": "stack",
+          "stackId": "admit",
+          "label": "Admit / Observation",
+          "correct": false
+        },
+        {
+          "at": "2026-05-31T16:29:59.346Z",
+          "type": "review_flag",
+          "flagged": true
+        },
+        {
+          "at": "2026-05-31T16:30:05.516Z",
+          "type": "review_flag",
+          "flagged": false
+        },
+        {
+          "at": "2026-05-31T16:32:10.851Z",
+          "type": "session_end",
+          "result": {
+            "attempts": 1,
+            "accuracy": 0,
+            "seconds": 370,
+            "placed": 8,
+            "total": 8,
+            "completed": true
+          }
+        }
+      ],
+      "recordings": []
+    }
+  ],
+  "recordings": []
+}

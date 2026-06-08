@@ -1,0 +1,113 @@
+{
+  "caseId": "020",
+  "caseNumber": "20",
+  "title": "PALPITATIONS",
+  "diagnosis": "3rd Degree Heart Block",
+  "updatedAt": "2026-06-07T17:04:32.942Z",
+  "stats": {
+    "sessions": 4,
+    "chatMessages": 0,
+    "recordings": 1,
+    "noteEvents": 0,
+    "stacksPlaced": 0,
+    "bestAccuracy": 0,
+    "lastPlayedAt": "2026-06-07T17:04:32.890Z"
+  },
+  "chatHistory": [],
+  "sessions": [
+    {
+      "id": "3bb55a8bb14995631bda5437",
+      "startedAt": "2026-06-01T18:45:46.217Z",
+      "endedAt": null,
+      "attempt": 1,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T18:45:46.217Z",
+          "type": "session_start",
+          "attempt": 1
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "a03c62a15a8c985776b5c9c3",
+      "startedAt": "2026-06-01T18:45:46.234Z",
+      "endedAt": null,
+      "attempt": 2,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-01T18:45:46.234Z",
+          "type": "session_start",
+          "attempt": 2
+        },
+        {
+          "at": "2026-06-01T18:45:46.264Z",
+          "type": "patient_life",
+          "state": "guarded",
+          "pct": 54
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "ff2496c688acfdc57da85748",
+      "startedAt": "2026-06-07T17:03:13.746Z",
+      "endedAt": null,
+      "attempt": 3,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T17:03:13.746Z",
+          "type": "session_start",
+          "attempt": 3
+        }
+      ],
+      "recordings": []
+    },
+    {
+      "id": "34a088d94fd7acf9b90a7780",
+      "startedAt": "2026-06-07T17:04:32.890Z",
+      "endedAt": null,
+      "attempt": 4,
+      "result": null,
+      "timeline": [
+        {
+          "at": "2026-06-07T17:04:32.890Z",
+          "type": "session_start",
+          "attempt": 4
+        },
+        {
+          "at": "2026-06-07T17:04:32.942Z",
+          "type": "recording",
+          "recordingId": "c9e03b18d1b8c0b2",
+          "slot": 1,
+          "durationMs": 79123,
+          "file": "recordings/020/c9e03b18d1b8c0b2.webm"
+        }
+      ],
+      "recordings": [
+        {
+          "id": "c9e03b18d1b8c0b2",
+          "slot": 1,
+          "at": "2026-06-07T17:04:32.942Z",
+          "durationMs": 79123,
+          "mimeType": "audio/webm;codecs=opus",
+          "file": "recordings/020/c9e03b18d1b8c0b2.webm"
+        }
+      ]
+    }
+  ],
+  "recordings": [
+    {
+      "id": "c9e03b18d1b8c0b2",
+      "slot": 1,
+      "at": "2026-06-07T17:04:32.942Z",
+      "durationMs": 79123,
+      "mimeType": "audio/webm;codecs=opus",
+      "file": "recordings/020/c9e03b18d1b8c0b2.webm",
+      "sessionId": "34a088d94fd7acf9b90a7780"
+    }
+  ]
+}
