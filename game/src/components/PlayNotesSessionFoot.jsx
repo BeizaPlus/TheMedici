@@ -48,7 +48,7 @@ export default function PlayNotesSessionFoot({
       </div>
       <span className="mode-legend">
         {caseData.playRole === 'patient' ? 'Patient view' : 'Doctor view'} ·{' '}
-        {caseData.sessionDifficulty || 'standard'} · {dropMode === 'free' ? 'Practice' : 'Exam'} ·{' '}
+        {caseData.sessionDifficulty || 'standard'} · Practice ·{' '}
         {timedModeEnabled ? 'Timed' : 'Untimed'} · {teachMeMode ? 'Teach Me: on' : 'Teach Me: off'}
       </span>
       <div className="sidebar-foot-buttons">

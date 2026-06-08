@@ -198,7 +198,7 @@ export default function CaseSessionThread({
         )}
         {expanded && caseRecording && (
           <div className="case-chat-head-actions">
-            <CaseRecordButton {...caseRecording} compact variant="toolbar" iconOnly />
+            <CaseRecordButton {...caseRecording} compact variant="toolbar" iconOnly chatMode={available === true} />
           </div>
         )}
       </header>
@@ -326,7 +326,7 @@ export default function CaseSessionThread({
           </form>
           {caseRecording?.transcribing && (
             <p className="case-notes-live-hint case-session-thread-live-hint" aria-live="polite">
-              Transcribing voice note…
+              Transcribing voice…{available !== false ? ' sending to case chat' : ''}
             </p>
           )}
         </>

@@ -11,6 +11,7 @@ export default function CaseRecordButton({
   iconOnly = false,
   variant = 'default',
   listenOnly = false,
+  chatMode = false,
 }) {
   const isToolbar = variant === 'toolbar';
   const active = recording || (listenOnly && recording);
@@ -34,10 +35,20 @@ export default function CaseRecordButton({
         listenOnly
           ? 'Stacker mode — microphone stays on'
           : recording
-            ? 'Stop recording — saves audio and finalizes transcript'
-            : 'Record voice notes — live transcription appends to notes'
+            ? 'Stop recording — saves audio and sends transcript to case chat'
+            : chatMode
+              ? 'Ask the patient by voice — speech is transcribed and sent to case chat'
+              : 'Record voice notes — live transcription appends to notes'
       }
-      aria-label={listenOnly ? 'Microphone listening' : recording ? 'Stop recording' : 'Record voice notes'}
+      aria-label={
+        listenOnly
+          ? 'Microphone listening'
+          : recording
+            ? 'Stop recording'
+            : chatMode
+              ? 'Ask the patient by voice'
+              : 'Record voice notes'
+      }
     >
       {listenOnly || !recording ? <IconMicrophone /> : <IconPlayerStop />}
       {!iconOnly && !isToolbar && <span>{label}</span>}

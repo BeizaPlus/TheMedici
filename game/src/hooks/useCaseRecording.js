@@ -24,6 +24,7 @@ export function useCaseRecording({
   onRecordingStart,
   onTranscriptUpdate,
   onNotesChanged,
+  onTranscriptReady,
 }) {
   const [recording, setRecording] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -40,6 +41,8 @@ export function useCaseRecording({
   const liveStampRef = useRef('');
   const interimRef = useRef('');
   const whisperBackupRef = useRef(false);
+  const onTranscriptReadyRef = useRef(onTranscriptReady);
+  onTranscriptReadyRef.current = onTranscriptReady;
 
   sessionIdRef.current = sessionId;
 
@@ -264,14 +267,15 @@ export function useCaseRecording({
           if (!transcriptRef.current.trim() && blob.size > 0) {
             await transcribeFullRecording(blob);
           }
-          if (!transcriptRef.current.trim()) {
+          const finalTranscript = transcriptRef.current.trim();
+          if (!finalTranscript) {
             onError?.(
               new Error('No speech captured — check mic permissions or add OPENAI_API_KEY on the API server'),
             );
           }
           const saved = await uploadCaseRecording(caseId, uploadSessionId, blob, durationMs);
           if (caseId) {
-            finalizeLiveVoiceNote(caseId, transcriptRef.current, {
+            finalizeLiveVoiceNote(caseId, finalTranscript, {
               slot: saved?.slot,
               stamp: liveStampRef.current || new Date().toLocaleTimeString(),
             });
@@ -279,6 +283,10 @@ export function useCaseRecording({
           }
           if (saved) onSaved?.(saved);
           else onError?.(new Error('Could not save recording'));
+          // Fire transcript ready callback so callers can e.g. auto-submit to case chat
+          if (finalTranscript) {
+            onTranscriptReadyRef.current?.(finalTranscript);
+          }
         } catch (e) {
           onError?.(e);
         } finally {

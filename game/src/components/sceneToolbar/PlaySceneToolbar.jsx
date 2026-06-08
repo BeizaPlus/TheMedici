@@ -115,10 +115,10 @@ export default function PlaySceneToolbar({
           <IconMoon />
         </ToolbarBtn>
         <ToolbarBtn
-          active={freeDrop}
+          active={true}
           onClick={onToggleDropMode}
-          title={freeDrop ? 'Practice drop (free)' : 'Exam drop (strict)'}
-          aria-label={freeDrop ? 'Practice drop mode' : 'Exam drop mode'}
+          title="Fail-first: wrong orders placed & logged for review"
+          aria-label="Fail-first mode: wrong orders placed for review"
         >
           <IconLockOpen />
         </ToolbarBtn>

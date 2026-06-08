@@ -33,19 +33,9 @@ function readShowCues() {
   }
 }
 
-function readDropMode() {
-  try {
-    const raw = localStorage.getItem(STORAGE.dropMode);
-    return raw === 'strict' ? 'strict' : 'free';
-  } catch {
-    return 'free';
-  }
-}
-
 export default function GlobalUiSettingsPanel({ embedded = false }) {
   const [textPrefs, setTextPrefs] = useState(() => readClinicalTextPrefs());
   const [showCues, setShowCues] = useState(readShowCues);
-  const [dropMode, setDropMode] = useState(readDropMode);
   const [timedMode, setTimedMode] = useState(() => readUiPrefs().timedMode);
   const [creativityTick, setCreativityTick] = useState(0);
   const [favoriteSaved, setFavoriteSaved] = useState(isFavoriteLayoutSaved);
@@ -54,15 +44,6 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
     setShowCues(next);
     try {
       localStorage.setItem(STORAGE.showCues, next ? '1' : '0');
-    } catch {
-      /* ignore */
-    }
-  };
-
-  const persistDropMode = (next) => {
-    setDropMode(next);
-    try {
-      localStorage.setItem(STORAGE.dropMode, next);
     } catch {
       /* ignore */
     }
@@ -78,7 +59,6 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
     writeClinicalTextPrefs(defaults);
     setTextPrefs(defaults);
     persistShowCues(true);
-    persistDropMode('free');
     persistTimedMode('timed');
     writeUiPrefs({ simulationCreativity: 55 });
     setCreativityTick((t) => t + 1);
@@ -135,23 +115,10 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
       </div>
 
       <div className="global-ui-settings-block">
-        <p className="global-ui-settings-label">Default drop mode</p>
-        <div className="global-ui-segment">
-          <button
-            type="button"
-            className={dropMode === 'free' ? 'active' : ''}
-            onClick={() => persistDropMode('free')}
-          >
-            Practice
-          </button>
-          <button
-            type="button"
-            className={dropMode === 'strict' ? 'active' : ''}
-            onClick={() => persistDropMode('strict')}
-          >
-            Exam
-          </button>
-        </div>
+        <p className="global-ui-settings-label">Drop mode</p>
+        <p className="global-ui-settings-note">
+          Fail-first: any order placed on any zone is accepted and logged. Review shows correct vs wrong placements.
+        </p>
       </div>
 
       <div className="global-ui-settings-block">

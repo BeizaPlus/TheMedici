@@ -1320,6 +1320,13 @@ export default function Play({
       setInfoTab('chat');
     },
     onNotesChanged: () => setNotesVersion((v) => v + 1),
+    onTranscriptReady: (text) => {
+      // Auto-submit voice transcript as a chat message to the AI patient
+      if (text && caseChat.available !== false) {
+        void caseChat.sendMessage(text);
+        showToast('Voice question sent to patient', 'ok');
+      }
+    },
   });
 
   const snapWrapHome = (wrap) => {
@@ -1372,7 +1379,7 @@ export default function Play({
   );
 
   const commitStackPlacement = useCallback(
-    (iv, target, { wrap, zone, pill } = {}, { silentDecoy = false, viaCommand = false, decoyInput = '' } = {}) => {
+    (iv, target, { wrap, zone, pill } = {}, { silentDecoy = false, viaCommand = false, decoyInput = '', isCorrect = true } = {}) => {
       const isGrid = typeof target === 'object' && target != null && 'col' in target;
 
       if (wrap && pill) {
@@ -1404,13 +1411,19 @@ export default function Play({
       ]);
 
       if (!teachMeMode) {
-        showToast('Order placed.', 'ok');
+        if (!isCorrect) {
+          flashScreen('bad');
+          playWrong();
+          showToast('Wrong zone — but logged for review.', 'bad');
+        } else {
+          showToast('Order placed.', 'ok');
+        }
         if (!silentDecoy) {
           logTimeline({
             type: 'stack',
             stackId: iv.id,
             label: iv.label,
-            correct: true,
+            correct: isCorrect,
             ...(viaCommand ? { method: 'command' } : {}),
           });
         }
@@ -1422,7 +1435,7 @@ export default function Play({
         type: 'stack',
         stackId: iv.id,
         label: iv.label,
-        correct: true,
+        correct: isCorrect,
         ...(viaCommand ? { method: 'command' } : {}),
       });
     },
@@ -1802,22 +1815,8 @@ export default function Play({
           return;
         }
 
-        const isGrid = typeof target === 'object' && target != null && 'col' in target;
-        const ok = isGrid
-          ? isCorrectGridPlacement(decoy, target, zones)
-          : decoy.correct_zone === target;
-
-        if (dropMode === 'strict' && !ok) {
-          if (zone) {
-            zone.classList.add('zone-hover');
-            setTimeout(() => zone.classList.remove('zone-hover'), 280);
-          }
-          snapWrapHome(wrap);
-          showToast('Strict mode: wrong cell blocked', 'bad');
-          return;
-        }
-
-        rejectDecoyInPractice(decoy, decoy.label, wrap);
+        // Allow decoy placement in free mode — logged as incorrect for review
+        commitStackPlacement(decoy, target, { wrap, zone, pill }, { isCorrect: false });
         return;
       }
 
@@ -1855,22 +1854,13 @@ export default function Play({
           );
           return;
         }
-        if (!ok) {
-          snapWrapHome(wrap);
-          showToast('Teach Me: wrong body zone for this step', 'bad');
-          return;
-        }
-      } else if (dropMode === 'strict' && !ok) {
-        if (zone) {
-          zone.classList.add('zone-hover');
-          setTimeout(() => zone.classList.remove('zone-hover'), 280);
-        }
-        snapWrapHome(wrap);
-        showToast('Strict mode: wrong cell blocked', 'bad');
+        // Always allow placement even on wrong zone — logs for review
+        commitStackPlacement(iv, target, { wrap, zone, pill }, { isCorrect: ok });
         return;
       }
 
-      commitStackPlacement(iv, target, { wrap, zone, pill });
+      // Always allow placement — logs correct/incorrect for review
+      commitStackPlacement(iv, target, { wrap, zone, pill }, { isCorrect: ok });
     },
     [
       interventions,
@@ -1878,7 +1868,6 @@ export default function Play({
       processDecoyOrder,
       rejectDecoyInPractice,
       commitStackPlacement,
-      dropMode,
       zones,
       teachMeMode,
       nextExpectedId,
