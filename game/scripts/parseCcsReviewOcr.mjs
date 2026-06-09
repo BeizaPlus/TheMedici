@@ -4,7 +4,7 @@
  */
 
 const ORDER_HEADER =
-  /^(Correctly Ordered|Should have Ordered|Correctly Avoided|Treatment Orders|Preventive care|Timing|Appropriate Orders|Appropriate Location|Appropriate Speed)/i;
+  /^(Correctly Ordered|Should have Ordered|Suggested Order|Correctly Avoided|Treatment Orders|Preventive care|Timing|Appropriate Orders|Appropriate Location|Appropriate Speed)/i;
 
 export function parseCcsReviewOcr(raw = '') {
   const text = String(raw).replace(/\r\n/g, '\n').trim();
@@ -43,12 +43,13 @@ export function parseCcsReviewOcr(raw = '') {
   while (i < lines.length) {
     const line = lines[i].trim();
     const statusMatch = line.match(
-      /^(Correctly Ordered|Should have Ordered|Correctly Avoided)\s*$/i,
+      /^(Correctly Ordered|Should have Ordered|Suggested Order|Correctly Avoided)\s*$/i,
     );
     if (statusMatch) {
-      const status = statusMatch[1].toLowerCase().includes('should')
+      const label = statusMatch[1].toLowerCase();
+      const status = label.includes('should') || label.includes('suggested')
         ? 'missed'
-        : statusMatch[1].toLowerCase().includes('avoided')
+        : label.includes('avoided')
           ? 'avoided'
           : 'correct';
       i += 1;

@@ -1,67 +1,148 @@
 {
   "id": 124,
   "topic": "Chest Pain",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Chest Pain",
+  "diagnosis": "Inferior myocardial infarction (STEMI)",
+  "differential": [
+    "Acute aortic dissection",
+    "Pulmonary embolism",
+    "Pericardial tamponade",
+    "Esophageal rupture"
+  ],
+  "chief_complaint": "Acute chest pain — evaluate for STEMI",
+  "hpi_narrative": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
+  "case_summary": "Differential: Acute Aortic Dissection, Pulmonary embolism, Pericardial tamponade, Esophageal rupture.\n\nThe patient has an ST-elevated inferior myocardial infarction (STEMI). ST elevations will be present in leads II, III, and aVF. The patient should immediately be started on dual antiplatelet therapy (DAPT): Aspirin plus a P2Y12 inhibitor (Ticagrelor is preferred; Clopidogrel is also accepted). A beta blocker and atorvastatin should also be initiated. Cardiology should be consulted and percutaneous coronary intervention (PCI) — angioplasty with stent placement — should be performed, as this is the preferred reperfusion strategy.\n\nIn the USMLE, immediate PCI is available, so fibrinolytic therapy is not required. If fibrinolysis is ordered, partial credit will be awarded, but full credit requires PCI as the preferred approach. Ticagrelor and Prasugrel are the preferred P2Y12 agents; Clopidogrel is acceptable for full credit. Heparin is optional in STEMI going to cath lab.",
+  "patient_sex": "male",
+  "patient_age_years": null,
+  "location": "Emergency Department",
+  "specialty": "Emergency Medicine",
+  "case_introduction": "Case Introduction\n\nChest Pain — Emergency Medicine\nA patient presents with acute chest pain requiring rapid ACS evaluation.",
+  "vitals": null,
+  "physical_exam": [
+    ["General", "Assess how ill the patient appears — diaphoresis, distress."],
+    ["Cardiovascular", "Chest pain — examine heart; assess for signs of ischemia or hemodynamic compromise."],
+    ["Chest / Lungs", "Evaluate for alternative causes of chest pain and respiratory compromise."],
+    ["Neuro", "Alert unless perfusion compromised."]
+  ],
+  "patient_voice": {
+    "chief_complaint": "My chest hurts so bad — it came on suddenly and won't stop.",
+    "history": "I've never had pain like this before. It feels like pressure and it's making me sweaty and scared.",
+    "pain": "Heavy pressure in my chest, maybe an 8 out of 10."
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess how ill the patient looks.",
+      "aliases": ["General appearance"]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Chest pain — cardiovascular exam warranted.",
+      "aliases": ["Cardiovascular exam"]
+    },
+    {
+      "label": "Electrocardiography, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "EKG shows inferior STEMI — treat urgently.",
+      "aliases": ["EKG", "ECG", "Electrocardiography, rhythm strip, long"]
+    },
+    {
+      "label": "Monitor, cardiac",
+      "type": "correctlyOrdered",
+      "finding": "Continuous cardiac monitoring required.",
+      "aliases": ["Monitor, cardiac, check", "Telemetry"]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Baseline hematocrit and screening labs.",
+      "aliases": ["CBC"]
+    },
+    {
+      "label": "Cardiac troponin I, serum",
+      "type": "correctlyOrdered",
+      "finding": "Confirm myocardial injury in suspected MI.",
+      "aliases": ["Cardiac enzymes, serum", "Troponin"]
+    },
+    {
+      "label": "Basic metabolic profile",
+      "type": "correctlyOrdered",
+      "finding": "Chemistries to rule out other conditions and assess renal function before contrast/PCI.",
+      "aliases": ["Comprehensive metabolic profile", "CMP", "BMP"]
+    },
+    {
+      "label": "Aspirin, therapy",
+      "type": "correctlyOrdered",
+      "finding": "Immediate aspirin — cornerstone of STEMI DAPT.",
+      "aliases": ["Aspirin"]
+    },
+    {
+      "label": "Atorvastatin",
+      "type": "correctlyOrdered",
+      "finding": "High-intensity statin mandated in acute STEMI per ACC/AHA.",
+      "aliases": ["Rosuvastatin"]
+    },
+    {
+      "label": "Ticagrelor",
+      "type": "correctlyOrdered",
+      "finding": "P2Y12 inhibitor for DAPT with aspirin in STEMI.",
+      "aliases": ["Clopidogrel bisulfate", "Clopidogrel"]
+    },
+    {
+      "label": "Consult, cardiology",
+      "type": "correctlyOrdered",
+      "finding": "Cardiology consult for emergent reperfusion.",
+      "aliases": ["Cardiology consult"]
+    },
+    {
+      "label": "Angioplasty with stent placement, coronary artery",
+      "type": "correctlyOrdered",
+      "finding": "PCI is preferred reperfusion strategy over fibrinolysis in USMLE CCS.",
+      "aliases": ["Percutaneous coronary intervention", "PCI", "Angiocardiography, right and left heart"]
+    }
+  ],
+  "decoys": [
+    {
+      "label": "Simvastatin",
+      "reason_wrong": "Not acceptable high-intensity statin for acute STEMI — use atorvastatin or rosuvastatin only."
+    },
+    {
+      "label": "Consult, interventional radiology",
+      "reason_wrong": "IR does not perform coronary PCI for STEMI — cardiology/interventional cardiology required."
+    },
+    {
+      "label": "Reteplase, recombinant",
+      "reason_wrong": "Fibrinolysis gives only partial credit when immediate PCI is available and preferred."
+    },
+    {
+      "label": "Alteplase, recombinant",
+      "reason_wrong": "Thrombolytics are inferior to PCI for STEMI when PCI is immediately available."
+    }
+  ],
   "correct_orders": [
-    "Obtain immediate ECG",
-    "Order serum biomarkers such as Troponin I/T",
-    "Admit the patient for continuous monitoring and further investigation",
-    "Consult Cardiology",
-    "Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated",
-    "Oxygen",
-    "IV access ×2",
-    "glucose check"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Cardiovascular",
+    "Electrocardiography, 12 lead",
+    "Monitor, cardiac",
+    "CBC with differential",
+    "Cardiac troponin I, serum",
+    "Basic metabolic profile",
+    "Aspirin, therapy",
+    "Atorvastatin",
+    "Ticagrelor",
+    "Consult, cardiology",
+    "Angioplasty with stent placement, coronary artery"
   ],
   "should_avoid": [
-    "Order immediate cardiac catheterization unless the patient's condition warrants it (e.g., persistent ST-segment elevation or hemodynamic instability)"
+    "Simvastatin",
+    "Consult, interventional radiology"
   ],
-  "rationale": {
-    "Obtain immediate ECG": "Appropriate CCS order for this diagnosis: Obtain immediate ECG.",
-    "Order serum biomarkers such as Troponin I/T": "Appropriate CCS order for this diagnosis: Order serum biomarkers such as Troponin I/T.",
-    "Admit the patient for continuous monitoring and further investigation": "Appropriate CCS order for this diagnosis: Admit the patient for continuous monitoring and further investigation.",
-    "Consult Cardiology": "Appropriate CCS order for this diagnosis: Consult Cardiology.",
-    "Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated": "Appropriate CCS order for this diagnosis: Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
-    "glucose check": "Appropriate CCS order for this diagnosis: glucose check.",
-    "Order immediate cardiac catheterization unless the patient's condition warrants it (e.g., persistent ST-segment elevation or hemodynamic instability)": "CCS review: avoid this order for this diagnosis — it does not change acute management."
-  },
-  "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — chest pain. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This chest pain won't let up and I'm afraid something bad is happening."
-  },
-  "ccs_category": null,
-  "case_summary": null,
-  "stacks": [
-    "Obtain immediate ECG",
-    "Order serum biomarkers such as Troponin I/T",
-    "Admit the patient for continuous monitoring and further investigation",
-    "Consult Cardiology",
-    "Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated",
-    "Oxygen",
-    "IV access ×2",
-    "glucose check"
-  ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
-  "enrichment_sources": [
-    "ollama"
-  ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "confidence": 95,
+  "source": "ccs_source_manual",
+  "extraction_method": "ccs_source_manual",
+  "complete": true,
+  "screenshot_processed": true,
+  "enrichment_sources": ["ccs_source_manual", "ccs_review_pdf"]
 }

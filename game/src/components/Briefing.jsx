@@ -429,9 +429,6 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             {caseData.timeLimit ? ` · ${caseData.timeLimit}` : ''}
           </p>
           <h1>{toTitleCase(caseData.title)}</h1>
-          {caseData.diagnosis && (
-            <p className="briefing-diagnosis-line">{caseData.diagnosis}</p>
-          )}
         </div>
       </div>
 

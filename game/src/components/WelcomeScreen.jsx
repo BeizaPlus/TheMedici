@@ -46,6 +46,7 @@ import {
   hasCompletedOnboarding,
   markOnboardingComplete,
 } from '../lib/onboarding.js';
+import { endSessionMonitor } from '../lib/audio.js';
 import GridPlacementLayer from './GridPlacementLayer.jsx';
 import AudioSettingsPanel from './AudioSettingsPanel.jsx';
 import GlobalUiSettingsPanel from './GlobalUiSettingsPanel.jsx';
@@ -82,6 +83,63 @@ export default function WelcomeScreen({
 }) {
   const brand = getBranding();
   const plateSrc = brand.welcomePlate || '/welcome-plate.png';
+  const plateVideoSrc = brand.welcomePlateVideo || '';
+  const plateVideoLoop = brand.welcomePlateVideoLoop !== false;
+  const plateVideoIdleMs = Number(brand.welcomePlateVideoIdleMs) > 0 ? Number(brand.welcomePlateVideoIdleMs) : 3000;
+  const welcomeVideoRef = useRef(null);
+  const idleTimerRef = useRef(null);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const [idleVideoTriggered, setIdleVideoTriggered] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const hasPlateVideo = Boolean(plateVideoSrc) && !videoFailed;
+
+  useEffect(() => {
+    void endSessionMonitor({ fadeMs: 400 });
+  }, []);
+
+  const silenceWelcomeVideo = useCallback(() => {
+    const el = welcomeVideoRef.current;
+    if (!el) return;
+    el.muted = true;
+    el.volume = 0;
+    el.defaultMuted = true;
+  }, []);
+
+  useEffect(() => {
+    if (!hasPlateVideo || idleVideoTriggered) return undefined;
+
+    const armIdleTimer = () => {
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = window.setTimeout(() => {
+        setIdleVideoTriggered(true);
+      }, plateVideoIdleMs);
+    };
+
+    armIdleTimer();
+
+    const onActivity = () => armIdleTimer();
+    const events = ['mousemove', 'pointerdown', 'keydown', 'touchstart', 'wheel'];
+    events.forEach((eventName) => window.addEventListener(eventName, onActivity, { passive: true }));
+
+    return () => {
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+      events.forEach((eventName) => window.removeEventListener(eventName, onActivity));
+    };
+  }, [hasPlateVideo, idleVideoTriggered, plateVideoIdleMs]);
+
+  useEffect(() => {
+    if (!idleVideoTriggered || !hasPlateVideo) return undefined;
+    const el = welcomeVideoRef.current;
+    if (!el) return undefined;
+    silenceWelcomeVideo();
+    const play = () => {
+      silenceWelcomeVideo();
+      void el.play().catch(() => setVideoFailed(true));
+    };
+    play();
+    el.addEventListener('canplay', play);
+    return () => el.removeEventListener('canplay', play);
+  }, [idleVideoTriggered, hasPlateVideo, silenceWelcomeVideo]);
   const catalog = getCatalog();
   const stats = useMemo(() => getCompletionStats(catalog.totalCases), [catalog.totalCases]);
   const readyCount = getReadyPracticeCount();
@@ -366,7 +424,33 @@ export default function WelcomeScreen({
 
   return (
     <main className="welcome-screen" aria-label="Welcome">
-      <img className="welcome-plate-img" src={plateSrc} alt="" draggable={false} />
+      <img
+        className={`welcome-plate-img${videoPlaying ? ' welcome-plate-img--faded' : ''}`}
+        src={plateSrc}
+        alt=""
+        draggable={false}
+      />
+      {hasPlateVideo && (
+        <video
+          ref={welcomeVideoRef}
+          className={`welcome-plate-img welcome-plate-video${videoPlaying ? ' welcome-plate-video--visible' : ''}`}
+          src={plateVideoSrc}
+          poster={plateSrc}
+          muted
+          defaultMuted
+          playsInline
+          loop={plateVideoLoop}
+          preload={idleVideoTriggered ? 'auto' : 'metadata'}
+          draggable={false}
+          aria-hidden
+          onLoadedMetadata={silenceWelcomeVideo}
+          onPlaying={() => {
+            silenceWelcomeVideo();
+            setVideoPlaying(true);
+          }}
+          onError={() => setVideoFailed(true)}
+        />
+      )}
       <div className="welcome-plate-scrim" aria-hidden />
 
       {studioBuild && (
@@ -544,9 +628,7 @@ export default function WelcomeScreen({
           <h1 className="welcome-title">{brand.name}</h1>
           <div className="welcome-tagline" aria-label={brand.tagline}>
             <span className="welcome-tagline-line" aria-hidden />
-            <span className="welcome-tagline-gem" aria-hidden>◆</span>
             <span className="welcome-tagline-text">{brand.tagline}</span>
-            <span className="welcome-tagline-gem" aria-hidden>◆</span>
             <span className="welcome-tagline-line" aria-hidden />
           </div>
         </header>

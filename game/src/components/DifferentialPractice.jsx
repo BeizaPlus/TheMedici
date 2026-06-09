@@ -45,6 +45,8 @@ import ClinicalFontControls from './ClinicalFontControls.jsx';
 import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { prefetchMonitorAudio, startIcuMonitor, unlockAmbience } from '../lib/audio.js';
 import { practiceCaseHeadline } from '../lib/differentialHeadline.js';
+import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
+import { normalizeCaseProgressId } from '../data/caseProgress.js';
 
 function pickInitial() {
   return pickRandomIndex(-1);
@@ -115,9 +117,12 @@ export default function DifferentialPractice({ onBack }) {
   const [progressPulse, setProgressPulse] = useState(false);
   const [recordingsVersion, setRecordingsVersion] = useState(0);
   const [timelineFocusVersion, setTimelineFocusVersion] = useState(0);
+  const [studyTabRequest, setStudyTabRequest] = useState(null);
+  const [reviewQueueTick, setReviewQueueTick] = useState(0);
   const [voiceError, setVoiceError] = useState('');
   const [aiScore, setAiScore] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [flagToast, setFlagToast] = useState('');
   const [aiError, setAiError] = useState('');
   const [stacker, setStacker] = useState(() => readStackerPrefs());
   const [stackerPhase, setStackerPhase] = useState('practice');
@@ -182,6 +187,10 @@ export default function DifferentialPractice({ onBack }) {
   const caseRef = useMemo(
     () => caseData || { id: entry.caseId, ccsNumber: entry.caseId, title: entry.title },
     [caseData, entry.caseId, entry.title],
+  );
+  const flagCaseId = useMemo(
+    () => caseData?.id || normalizeCaseProgressId(entry.caseId),
+    [caseData?.id, entry.caseId],
   );
   const presentationIntro = useMemo(
     () => (caseData ? getPresentationIntro(caseData) : ''),
@@ -673,7 +682,7 @@ export default function DifferentialPractice({ onBack }) {
   }, [goToIndex]);
 
   const goToCaseId = useCallback(
-    (raw) => {
+    (raw, options = {}) => {
       const trimmed = String(raw ?? '').trim().replace(/^#/, '');
       if (!trimmed) {
         setCaseJumpError('Enter a case number');
@@ -691,6 +700,9 @@ export default function DifferentialPractice({ onBack }) {
       }
       setCaseJumpError('');
       setCaseJumpInput(String(caseId));
+      if (options.tab) {
+        setStudyTabRequest({ version: Date.now(), tab: options.tab });
+      }
       if (idx === cardIdx) {
         refreshCase();
       } else {
@@ -776,7 +788,6 @@ export default function DifferentialPractice({ onBack }) {
   return (
     <div
       className={`diff-practice${revealed ? ' diff-practice--revealed' : ''}`}
-      style={clinicalStyle}
       ref={voiceFocusRef}
       tabIndex={-1}
       aria-label="Differential practice — Space starts microphone"
@@ -876,6 +887,12 @@ export default function DifferentialPractice({ onBack }) {
           </span>
         </div>
       </header>
+
+      {flagToast ? (
+        <p className="diff-flag-toast" role="status">
+          {flagToast}
+        </p>
+      ) : null}
 
       <DifferentialProgressBar progress={globalProgress} pulse={progressPulse} />
 
@@ -1103,6 +1120,7 @@ export default function DifferentialPractice({ onBack }) {
 
         <DifferentialStudyPanel
           caseId={entry.caseId}
+          clinicalStyle={clinicalStyle}
           caseStats={caseStats}
           caseRef={caseRef}
           hasReviewText={hasReviewText}
@@ -1116,6 +1134,12 @@ export default function DifferentialPractice({ onBack }) {
           topic={entry.topic || ''}
           recordingsVersion={recordingsVersion}
           timelineFocusVersion={timelineFocusVersion}
+          studyTabRequest={studyTabRequest}
+          reviewQueueTick={reviewQueueTick + statsTick}
+          onJumpToCase={goToCaseId}
+          onPauseForStudy={() => {
+            if (stacker.enabled && !stackerPaused) pauseStacker();
+          }}
           onStudyTabOpen={(tabId) => {
             if (tabId === 'realworld' && stacker.enabled && !stackerPaused) {
               pauseStacker();
@@ -1126,7 +1150,7 @@ export default function DifferentialPractice({ onBack }) {
         <div className="diff-case-foot">
           {stacker.enabled ? (
             <p className="diff-stacker-hint">
-              Stacker — <kbd>Space</kbd> start/stop mic · Pause freezes timer · Resume auto-starts mic ·
+              Stacker — <kbd>Space</kbd> start/stop mic · Case tab auto-pauses · Resume auto-starts mic ·
               Corrected at {STACKER_FIRST_PARSE_SECONDS}s then every {STACKER_INCREMENTAL_SECONDS}s
             </p>
           ) : (
@@ -1170,7 +1194,17 @@ export default function DifferentialPractice({ onBack }) {
         </div>
       </div>
 
-      <aside className="diff-ambience-dock" aria-label="Text size and ICU monitor">
+      <aside className="diff-ambience-dock" aria-label="Bookmark, text size, and ICU monitor">
+        <CaseReviewFlagButton
+          caseId={flagCaseId}
+          iconOnly
+          className="diff-dock-bookmark-btn"
+          onChange={(flagged) => {
+            setReviewQueueTick((t) => t + 1);
+            setFlagToast(flagged ? 'Bookmarked for review later' : 'Bookmark removed');
+            window.setTimeout(() => setFlagToast(''), 2400);
+          }}
+        />
         <ClinicalFontControls
           prefs={textPrefs}
           onChange={setTextPrefs}

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import DifferentialAttemptHistory from './DifferentialAttemptHistory.jsx';
+import DifferentialReviewQueuePanel from './DifferentialReviewQueuePanel.jsx';
 import DifferentialReviewPanel from './DifferentialReviewPanel.jsx';
 import DifferentialRealWorldPanel from './DifferentialRealWorldPanel.jsx';
 import DifferentialMnemonicPanel from './DifferentialMnemonicPanel.jsx';
@@ -10,8 +11,10 @@ import { getRealWorldPrefetch, prefetchRealWorldStories, subscribeRealWorldPrefe
 import { listLocalDifferentialRecordings } from '../lib/differentialVoiceStorage.js';
 import { readCaseMemoryMeta } from '../lib/differentialCaseMemory.js';
 import { resolveCaseSummaryText } from '../lib/ccsCaseSummary.js';
+import { buildDifferentialReviewQueue } from '../lib/differentialReviewQueue.js';
 
 const TABS = [
+  { id: 'review', label: 'Review', shortLabel: 'Rev' },
   { id: 'timeline', label: 'Timeline', shortLabel: 'Log' },
   { id: 'case', label: 'Case', shortLabel: 'Case' },
   { id: 'notes', label: 'Notes', shortLabel: 'Notes' },
@@ -20,6 +23,7 @@ const TABS = [
 
 export default function DifferentialStudyPanel({
   caseId,
+  clinicalStyle = {},
   caseStats,
   caseRef,
   hasReviewText,
@@ -33,7 +37,11 @@ export default function DifferentialStudyPanel({
   topic = '',
   recordingsVersion = 0,
   onStudyTabOpen,
+  onPauseForStudy,
+  onJumpToCase,
   timelineFocusVersion = 0,
+  studyTabRequest = null,
+  reviewQueueTick = 0,
 }) {
   const [tab, setTab] = useState('case');
   const [expanded, setExpanded] = useState(false);
@@ -97,6 +105,11 @@ export default function DifferentialStudyPanel({
 
   const timelineItems = (caseStats?.count || 0) + (caseStats?.count ? 0 : recordingCount);
 
+  const reviewQueue = useMemo(
+    () => buildDifferentialReviewQueue(),
+    [reviewQueueTick],
+  );
+
   useEffect(() => {
     setExpanded(false);
     setTab(timelineItems ? 'timeline' : hasReviewText || hasCaseData ? 'case' : 'timeline');
@@ -108,6 +121,17 @@ export default function DifferentialStudyPanel({
     setExpanded(true);
   }, [timelineFocusVersion]);
 
+  useEffect(() => {
+    if (!studyTabRequest?.version || !studyTabRequest.tab) return;
+    setTab(studyTabRequest.tab);
+    setExpanded(true);
+    if (studyTabRequest.tab === 'case') onPauseForStudy?.();
+  }, [studyTabRequest, onPauseForStudy]);
+
+  const pauseIfCaseDeepDive = useCallback(() => {
+    onPauseForStudy?.();
+  }, [onPauseForStudy]);
+
   const toggleTab = useCallback((id) => {
     if (expanded && tab === id) {
       setExpanded(false);
@@ -115,8 +139,9 @@ export default function DifferentialStudyPanel({
     }
     setTab(id);
     setExpanded(true);
+    if (id === 'case') onPauseForStudy?.();
     if (id === 'realworld') onStudyTabOpen?.(id);
-  }, [expanded, tab, onStudyTabOpen]);
+  }, [expanded, tab, onStudyTabOpen, onPauseForStudy]);
 
   const showTimeline = timelineItems > 0;
   const showCase = hasReviewText || hasCaseData;
@@ -124,9 +149,10 @@ export default function DifferentialStudyPanel({
   return (
     <section
       className={`diff-study-panel${expanded ? ' diff-study-panel--expanded' : ' diff-study-panel--collapsed'}`}
+      style={clinicalStyle}
       aria-label="Practice timeline and CCS case reference"
     >
-      <div className="diff-study-tabs" role="tablist" aria-label="Timeline, case, and real world">
+      <div className="diff-study-tabs" role="tablist" aria-label="Review list, timeline, case, notes, and real world">
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -139,6 +165,11 @@ export default function DifferentialStudyPanel({
           >
             <span className="diff-study-tab-label diff-study-tab-label--long">{t.label}</span>
             <span className="diff-study-tab-label diff-study-tab-label--short">{t.shortLabel}</span>
+            {t.id === 'review' && reviewQueue.bookmarkCount > 0 && (
+              <span className="diff-study-tab-badge diff-study-tab-badge--gold">
+                {reviewQueue.bookmarkCount}
+              </span>
+            )}
             {t.id === 'timeline' && timelineItems > 0 && (
               <span className="diff-study-tab-badge">{timelineItems}</span>
             )}
@@ -156,6 +187,14 @@ export default function DifferentialStudyPanel({
 
       {expanded && (
         <div className="diff-study-body" role="tabpanel">
+          {tab === 'review' && (
+            <DifferentialReviewQueuePanel
+              currentCaseId={caseId}
+              onJumpToCase={onJumpToCase}
+              refreshTick={reviewQueueTick}
+            />
+          )}
+
           {tab === 'timeline' && (
             <>
               <DifferentialAttemptHistory
@@ -173,7 +212,7 @@ export default function DifferentialStudyPanel({
           )}
 
           {tab === 'case' && (
-            <>
+            <div className="diff-study-case-panel" onClick={pauseIfCaseDeepDive}>
               {caseRef && (
                 <div className="diff-study-case-actions">
                   <button
@@ -186,7 +225,11 @@ export default function DifferentialStudyPanel({
                 </div>
               )}
               {hasReviewText && ccsReview ? (
-                <DifferentialReviewPanel review={ccsReview} className="diff-case-review" />
+                <DifferentialReviewPanel
+                  review={ccsReview}
+                  className="diff-case-review"
+                  onInteract={pauseIfCaseDeepDive}
+                />
               ) : hasCaseData ? (
                 <CasePresentationPanel
                   intro={presentationIntro}
@@ -199,7 +242,7 @@ export default function DifferentialStudyPanel({
                   No CCS review text for Case {caseId}. Use CCS screenshot if available.
                 </p>
               )}
-            </>
+            </div>
           )}
 
           {tab === 'notes' && <DifferentialMnemonicPanel caseId={caseId} embedded />}

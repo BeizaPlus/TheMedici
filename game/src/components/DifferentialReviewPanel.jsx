@@ -45,7 +45,7 @@ function OrdersFlowList({ orders = [] }) {
   );
 }
 
-export default function DifferentialReviewPanel({ review, className = '' }) {
+export default function DifferentialReviewPanel({ review, className = '', onInteract }) {
   const tabs = useMemo(() => {
     const list = [];
     const summaryText = resolveCaseSummaryText(review);
@@ -74,7 +74,10 @@ export default function DifferentialReviewPanel({ review, className = '' }) {
             key={t.id}
             type="button"
             className={activeTab === t.id ? 'case-info-tab active' : 'case-info-tab'}
-            onClick={() => setTab(t.id)}
+            onClick={() => {
+              onInteract?.();
+              setTab(t.id);
+            }}
             aria-selected={activeTab === t.id}
           >
             {t.label}

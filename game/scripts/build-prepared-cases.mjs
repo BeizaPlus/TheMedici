@@ -124,6 +124,11 @@ const AUTHORED_FLOWS = {
       ['Skin', 'Pale, slightly diaphoretic'],
     ],
   },
+  '144': {
+    flowTrack: 'Office growth evaluation',
+    dispositionUnits: ['OFFICE', 'ER', 'WARD'],
+    exam: null,
+  },
 };
 
 function defaultExam(category, title) {
@@ -260,8 +265,12 @@ for (const ccsCase of catalog.cases) {
   const hpiNarrative =
     asText(bankCase?.hpi_narrative) || asText(bankCase?.hpi) || pres?.history || '';
   const intro =
-    asText(bankCase?.chief_complaint) || pres?.intro || asText(bankCase?.case_introduction) || '';
-  const vitalsText = (typeof bankCase?.vitals === 'string' ? bankCase.vitals : '') || pres?.vitals || '';
+    asText(bankCase?.case_introduction) || pres?.intro || asText(bankCase?.chief_complaint) || '';
+  const vitalsText =
+    (typeof bankCase?.vitals === 'string' ? bankCase.vitals : '') ||
+    asText(bankCase?.vitals_text) ||
+    pres?.vitals ||
+    '';
   const history = hpiNarrative || pres?.history || asText(bankCase?.case_summary) || '';
   const seed = Number(ccsCase.caseNumber) || 0;
   const { vitals, source: vitalsSource } = parseVitals(vitalsText, ccsCase.category, seed);

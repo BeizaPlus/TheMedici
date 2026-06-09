@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "builtAt": "2026-06-09T04:03:44.640Z",
+  "builtAt": "2026-06-09T14:06:50.478Z",
   "totalCases": 181,
   "caseBankMerged": 181,
   "caseBankSource": "ollama-case-bank",
@@ -4597,13 +4597,13 @@
       "category": "Cardiopulmonary",
       "presentationKey": "Chest Pain",
       "playbookKey": "case-bank-124",
-      "diagnosis": "Unknown",
+      "diagnosis": "Inferior myocardial infarction (STEMI)",
       "patient_voice": {
-        "chief_complaint": "I need help — chest pain. I'm really scared.",
-        "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-        "pain": "This chest pain won't let up and I'm afraid something bad is happening."
+        "chief_complaint": "My chest hurts so bad — it came on suddenly and won't stop.",
+        "history": "I've never had pain like this before. It feels like pressure and it's making me sweaty and scared.",
+        "pain": "Heavy pressure in my chest, maybe an 8 out of 10."
       },
-      "caseBankSource": "screenshot+ollama",
+      "caseBankSource": "ccs_source_manual",
       "hasSourceIntro": true,
       "vitals": {
         "sbp": 100,
@@ -4626,106 +4626,134 @@
       "exam": [
         [
           "General",
-          "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: The patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, whe…"
+          "Assess how ill the patient appears — diaphoresis, distress."
         ],
         [
           "Cardiovascular",
-          "HR 120, tachycardic; BP 100/60."
+          "Chest pain — examine heart; assess for signs of ischemia or hemodynamic compromise."
         ],
         [
-          "Respiratory",
-          "RR 34, tachypneic; SpO₂ 96%."
-        ],
-        [
-          "Abdomen",
-          "Soft, non-tender"
+          "Chest / Lungs",
+          "Evaluate for alternative causes of chest pain and respiratory compromise."
         ],
         [
           "Neuro",
-          "Alert and oriented"
-        ],
-        [
-          "Skin",
-          "Cool clammy extremities"
+          "Alert unless perfusion compromised."
         ]
       ],
       "patientSex": "male",
-      "hpi_narrative": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance’s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+      "hpi_narrative": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
       "difficulty": "standard",
-      "clinical_tip": "Until proven otherwise, treat unstable chest pain as ACS.",
-      "objective": "Rule out life threats. ECG within 10 minutes.",
+      "clinical_tip": "Inferior myocardial infarction (STEMI) — follow CCS review orders.",
+      "objective": "Complete diagnosis and treatment orders for Inferior myocardial infarction (STEMI).",
       "interventionIds": [
-        "obtain-immediate-ecg",
-        "order-serum-biomarkers-such-as-troponin-",
-        "admit-the-patient-for-continuous-monitor",
+        "physical-exam-general-appearance",
+        "physical-exam-heart-cardiovascular",
+        "electrocardiography-12-lead",
+        "monitor-cardiac",
+        "cbc-with-differential",
+        "cardiac-troponin-i-serum",
+        "basic-metabolic-profile",
+        "aspirin-therapy",
+        "atorvastatin",
+        "ticagrelor",
         "consult-cardiology",
-        "prescribe-aspirin-unless-contraindicated",
-        "oxygen",
-        "iv-access-2",
-        "glucose-check"
+        "angioplasty-with-stent-placement-coronar"
       ],
       "interventions": [
         {
-          "id": "obtain-immediate-ecg",
-          "label": "Obtain immediate ECG",
-          "correct_zone": "zone-monitor",
-          "why": "Appropriate CCS order for this diagnosis: Obtain immediate ECG.",
+          "id": "physical-exam-general-appearance",
+          "label": "Physical Exam: General Appearance",
+          "correct_zone": "zone-custom-1",
+          "why": "Assess how ill the patient appears before focused testing for chest pain.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "order-serum-biomarkers-such-as-troponin-",
-          "label": "Order serum biomarkers such as Troponin I/T",
+          "id": "physical-exam-heart-cardiovascular",
+          "label": "Physical Exam: Heart / Cardiovascular",
+          "correct_zone": "zone-custom-1",
+          "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain. Finding: Chest pain — examine heart; assess for signs of ischemia or hemodynamic compromise.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "electrocardiography-12-lead",
+          "label": "Electrocardiography, 12 lead",
+          "correct_zone": "zone-arm",
+          "why": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "monitor-cardiac",
+          "label": "Monitor, cardiac",
+          "correct_zone": "zone-monitor",
+          "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "cbc-with-differential",
+          "label": "CBC with differential",
           "correct_zone": "zone-blood",
-          "why": "Appropriate CCS order for this diagnosis: Order serum biomarkers such as Troponin I/T.",
+          "why": "Laboratory testing when systemic illness or severity warrants labs in Inferior myocardial infarction (STEMI).",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "admit-the-patient-for-continuous-monitor",
-          "label": "Admit the patient for continuous monitoring and further investigation",
-          "correct_zone": "zone-monitor",
-          "why": "Appropriate CCS order for this diagnosis: Admit the patient for continuous monitoring and further investigation.",
+          "id": "cardiac-troponin-i-serum",
+          "label": "Cardiac troponin I, serum",
+          "correct_zone": "zone-blood",
+          "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "basic-metabolic-profile",
+          "label": "Basic metabolic profile",
+          "correct_zone": "zone-arm",
+          "why": "Laboratory testing when systemic illness or severity warrants labs in Inferior myocardial infarction (STEMI).",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "aspirin-therapy",
+          "label": "Aspirin, therapy",
+          "correct_zone": "zone-iv-bag",
+          "why": "Appropriate CCS order for Inferior myocardial infarction (STEMI): Aspirin, therapy.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "atorvastatin",
+          "label": "Atorvastatin",
+          "correct_zone": "zone-iv-bag",
+          "why": "Appropriate CCS order for Inferior myocardial infarction (STEMI): Atorvastatin.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "ticagrelor",
+          "label": "Ticagrelor",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Inferior myocardial infarction (STEMI): Ticagrelor.",
           "guideline": "ACEP",
           "optional": false
         },
         {
           "id": "consult-cardiology",
-          "label": "Consult Cardiology",
+          "label": "Consult, cardiology",
           "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for this diagnosis: Consult Cardiology.",
+          "why": "Appropriate CCS order for Inferior myocardial infarction (STEMI): Consult, cardiology.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "prescribe-aspirin-unless-contraindicated",
-          "label": "Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated",
-          "correct_zone": "zone-iv-bag",
-          "why": "Appropriate CCS order for this diagnosis: Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "oxygen",
-          "label": "Oxygen",
-          "correct_zone": "zone-monitor",
-          "why": "Appropriate CCS order for this diagnosis: Oxygen.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "iv-access-2",
-          "label": "IV access ×2",
-          "correct_zone": "zone-arm",
-          "why": "Appropriate CCS order for this diagnosis: IV access ×2.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "glucose-check",
-          "label": "glucose check",
-          "correct_zone": "zone-blood",
-          "why": "Appropriate CCS order for this diagnosis: glucose check.",
+          "id": "angioplasty-with-stent-placement-coronar",
+          "label": "Angioplasty with stent placement, coronary artery",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Inferior myocardial infarction (STEMI): Angioplasty with stent placement, coronary artery.",
           "guideline": "ACEP",
           "optional": false
         }
@@ -4733,56 +4761,62 @@
       "decoys": [
         {
           "id": "decoy-avoid-124-0",
-          "label": "Order immediate cardiac catheterization unless the patient's condition warrants it (e.g., persistent ST-segment elevation or hemodynamic instability)",
-          "why": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
+          "label": "Simvastatin",
+          "why": "CCS review: avoid this order for Inferior myocardial infarction (STEMI) — it does not change acute management.",
+          "correct_zone": "zone-iv-bag"
+        },
+        {
+          "id": "decoy-avoid-124-1",
+          "label": "Consult, interventional radiology",
+          "why": "CCS review: avoid this order for Inferior myocardial infarction (STEMI) — it does not change acute management.",
           "correct_zone": "zone-icu"
         }
       ],
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Case Introduction Day 1 @ 16:00 Emergency Department A 65-year-old white man is brought in to the emergency department because of sharp chest pain and difficulty breathing. At bedside, he currently is in acute distress, and is moaning and holding his hands over the right side of his chest",
-            "hpi": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: The patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance’s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "intro": "Case Introduction Chest Pain — Emergency Medicine A patient presents with acute chest pain requiring rapid ACS evaluation.",
+            "hpi": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
             "vitalsText": "Initial Vital Signs\n\nDay 1 @ 16:00\n\nTemperature:\n\n37.0 C (98.6 degrees F)\n\nPulse:\n\n120 beats/min, Weak\n\nRespiratory rate:\n\n34 /minute\n\nBlood pressure, systolic:\n\n100 mm Hg\n\nBlood pressure, diastolic:\n\n60 mm Hg\n\nHeight:\n\n183cm (72.0 in)\n\nWeight:\n\n97.5 kg (215 lb)\n\nBody Mass Index:\n\n29.1 kg/m2",
-            "clinicalTip": "Teaching hint: Until proven otherwise, treat unstable chest pain as ACS.",
-            "objective": "Rule out life threats. ECG within 10 minutes. Start with stabilization, then targeted testing."
+            "clinicalTip": "Teaching hint: Inferior myocardial infarction (STEMI) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Inferior myocardial infarction (STEMI). Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Case Introduction Day 1 @ 16:00 Emergency Department A 65-year-old white man is brought in to the emergency department because of sharp chest pain and difficulty breathing. At bedside, he currently is in acute distress, and is moaning and holding his hands over the right side of his chest",
-            "hpi": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: The patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance’s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "intro": "Case Introduction Chest Pain — Emergency Medicine A patient presents with acute chest pain requiring rapid ACS evaluation.",
+            "hpi": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
             "vitalsText": "Initial Vital Signs\n\nDay 1 @ 16:00\n\nTemperature:\n\n37.0 C (98.6 degrees F)\n\nPulse:\n\n120 beats/min, Weak\n\nRespiratory rate:\n\n34 /minute\n\nBlood pressure, systolic:\n\n100 mm Hg\n\nBlood pressure, diastolic:\n\n60 mm Hg\n\nHeight:\n\n183cm (72.0 in)\n\nWeight:\n\n97.5 kg (215 lb)\n\nBody Mass Index:\n\n29.1 kg/m2",
-            "clinicalTip": "Until proven otherwise, treat unstable chest pain as ACS.",
-            "objective": "Rule out life threats. ECG within 10 minutes."
+            "clinicalTip": "Inferior myocardial infarction (STEMI) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Inferior myocardial infarction (STEMI)."
           },
           "hard": {
-            "intro": "Case Introduction Day 1 @ 16:00 Emergency Department A 65-year-old white man is brought in to the emergency department because of sharp chest pain and difficulty breathing. At bedside, he currently is in acute distress, and is moaning and holding his hands over the right side of his chest",
-            "hpi": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: The patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance’s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "intro": "Case Introduction Chest Pain — Emergency Medicine A patient presents with acute chest pain requiring rapid ACS evaluation.",
+            "hpi": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
             "vitalsText": "Initial Vital Signs\n\nDay 1 @ 16:00\n\nTemperature:\n\n37.0 C (98.6 degrees F)\n\nPulse:\n\n120 beats/min, Weak\n\nRespiratory rate:\n\n34 /minute\n\nBlood pressure, systolic:\n\n100 mm Hg\n\nBlood pressure, diastolic:\n\n60 mm Hg\n\nHeight:\n\n183cm (72.0 in)\n\nWeight:\n\n97.5 kg (215 lb)\n\nBody Mass Index:\n\n29.1 kg/m2",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Rule out life threats. ECG within 10 minutes."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Inferior myocardial infarction (STEMI)."
           }
         },
         "patient": {
           "easy": {
-            "intro": "Case Introduction Day 1 @ 16:00 Emergency Department A 65-year-old white man is brought in to the emergency department because of sharp chest pain and difficulty breathing. At bedside, he currently is in acute distress, and is moaning and holding his hands over the right side of his chest",
-            "hpi": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: The patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance’s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "intro": "Case Introduction Chest Pain — Emergency Medicine A patient presents with acute chest pain requiring rapid ACS evaluation.",
+            "hpi": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
             "vitalsText": "Initial Vital Signs\n\nDay 1 @ 16:00\n\nTemperature:\n\n37.0 C (98.6 degrees F)\n\nPulse:\n\n120 beats/min, Weak\n\nRespiratory rate:\n\n34 /minute\n\nBlood pressure, systolic:\n\n100 mm Hg\n\nBlood pressure, diastolic:\n\n60 mm Hg\n\nHeight:\n\n183cm (72.0 in)\n\nWeight:\n\n97.5 kg (215 lb)\n\nBody Mass Index:\n\n29.1 kg/m2",
-            "clinicalTip": "Teaching hint: Until proven otherwise, treat unstable chest pain as ACS.",
-            "objective": "Rule out life threats. ECG within 10 minutes. Share your symptoms clearly with the team."
+            "clinicalTip": "Teaching hint: Inferior myocardial infarction (STEMI) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Inferior myocardial infarction (STEMI). Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Case Introduction Day 1 @ 16:00 Emergency Department A 65-year-old white man is brought in to the emergency department because of sharp chest pain and difficulty breathing. At bedside, he currently is in acute distress, and is moaning and holding his hands over the right side of his chest",
-            "hpi": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: The patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance’s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "intro": "Case Introduction Chest Pain — Emergency Medicine A patient presents with acute chest pain requiring rapid ACS evaluation.",
+            "hpi": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
             "vitalsText": "Initial Vital Signs\n\nDay 1 @ 16:00\n\nTemperature:\n\n37.0 C (98.6 degrees F)\n\nPulse:\n\n120 beats/min, Weak\n\nRespiratory rate:\n\n34 /minute\n\nBlood pressure, systolic:\n\n100 mm Hg\n\nBlood pressure, diastolic:\n\n60 mm Hg\n\nHeight:\n\n183cm (72.0 in)\n\nWeight:\n\n97.5 kg (215 lb)\n\nBody Mass Index:\n\n29.1 kg/m2",
-            "clinicalTip": "Until proven otherwise, treat unstable chest pain as ACS.",
-            "objective": "Rule out life threats. ECG within 10 minutes."
+            "clinicalTip": "Inferior myocardial infarction (STEMI) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Inferior myocardial infarction (STEMI)."
           },
           "hard": {
-            "intro": "Case Introduction Day 1 @ 16:00 Emergency Department A 65-year-old white man is brought in to the emergency department because of sharp chest pain and difficulty breathing. At bedside, he currently is in acute distress, and is moaning and holding his hands over the right side of his chest",
-            "hpi": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: The patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance’s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "intro": "Case Introduction Chest Pain — Emergency Medicine A patient presents with acute chest pain requiring rapid ACS evaluation.",
+            "hpi": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
             "vitalsText": "Initial Vital Signs\n\nDay 1 @ 16:00\n\nTemperature:\n\n37.0 C (98.6 degrees F)\n\nPulse:\n\n120 beats/min, Weak\n\nRespiratory rate:\n\n34 /minute\n\nBlood pressure, systolic:\n\n100 mm Hg\n\nBlood pressure, diastolic:\n\n60 mm Hg\n\nHeight:\n\n183cm (72.0 in)\n\nWeight:\n\n97.5 kg (215 lb)\n\nBody Mass Index:\n\n29.1 kg/m2",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Rule out life threats. ECG within 10 minutes."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Inferior myocardial infarction (STEMI)."
           }
         }
       }
@@ -8543,155 +8577,188 @@
       "category": "Pediatrics",
       "presentationKey": "Short Stature",
       "playbookKey": "case-bank-144",
-      "diagnosis": "Unknown",
+      "diagnosis": "Turner syndrome with coarctation of the aorta",
       "patient_voice": {
-        "chief_complaint": "I need help — short stature. I'm really scared.",
-        "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-        "pain": "This short stature won't let up and I'm afraid something bad is happening."
+        "chief_complaint": "My mom says I'm the shortest in my class.",
+        "history": "My mom brought me because I'm small. I eat a lot and I'm doing fine at school. I like to play outside.",
+        "pain": "I don't hurt anywhere."
       },
-      "caseBankSource": "screenshot+ollama",
+      "caseBankSource": "ccs_source_manual",
       "hasSourceIntro": false,
       "vitals": {
-        "sbp": 99,
+        "sbp": 100,
         "dbp": 60,
-        "hr": 132,
-        "rr": 29,
-        "temp": 39.2,
+        "hr": 85,
+        "rr": 16,
+        "temp": 36.1,
         "spo2": 96,
-        "lactate": 1.9
+        "lactate": 1.8
       },
-      "vitalsSource": "template",
-      "vitalsText": "",
-      "flowTrack": "Standard ED pathway",
+      "vitalsSource": "parsed",
+      "vitalsText": "Temperature: 36.1 C (97.0 degrees F) Pulse: 85 beats/min, Regular Respiratory rate: 16/minute Blood pressure, systolic: 100 mm Hg Blood pressure, diastolic: 60 mm Hg Height: 109.2 cm (43.0 in) Weight: 25.0 kg (55.0 lb) Body Mass Index: 10th percentile for Height. 90th percentile for weight.",
+      "flowTrack": "Office growth evaluation",
       "dispositionUnits": [
+        "OFFICE",
         "ER",
-        "OBS",
-        "ICU",
         "WARD"
       ],
       "exam": [
         [
           "General",
-          "Acutely ill appearance consistent with short stature."
+          "Well-appearing 6-year-old girl; height 10th percentile, weight 90th percentile. Possible Turner stigmata: short stature, webbed neck, shield chest, widely spaced nipples."
+        ],
+        [
+          "HEENT",
+          "Negative on review of systems."
         ],
         [
           "Cardiovascular",
-          "HR 132, tachycardic; BP 99/60."
+          "Systolic murmur on auscultation; compare systolic blood pressure in upper and lower extremities for coarctation."
         ],
         [
           "Respiratory",
-          "RR 29, tachypneic; SpO₂ 96%."
+          "Negative on review of systems."
         ],
         [
           "Abdomen",
-          "Soft, non-distended, no focal peritoneal signs on initial exam."
+          "Negative on review of systems."
         ],
         [
-          "Neuro",
-          "Alert and oriented unless perfusion or metabolic derangement present."
+          "Genitourinary",
+          "Negative on review of systems."
         ],
         [
-          "Skin",
-          "Warm skin with fever; no purpura on initial survey."
+          "Neuropsychiatric",
+          "Negative on review of systems; doing well in school."
         ]
       ],
-      "patientSex": "unknown",
+      "patientSex": "female",
+      "hpi_narrative": "{{patient_name}} is a 6-year-old girl who presents to your office with her mother for short stature. Her mother reports she is the shortest girl in her class and is concerned about her growth. The patient has a good appetite and eats more than others her age; her mother is also worried about her weight. She is doing well in school, is active, and her mother has no other concerns. Born at term (40 weeks) via uncomplicated vaginal delivery; APGAR scores 10 and 10. No hospitalizations or medical problems. Vaccinations up to date. Family history is unremarkable.",
       "difficulty": "standard",
-      "clinical_tip": "Febrile infant — sepsis workup, fluids, and close monitoring before disposition.",
-      "objective": "Stabilize the pediatric patient and complete emergent workup before disposition.",
+      "clinical_tip": "Turner syndrome with coarctation of the aorta — follow CCS review orders.",
+      "objective": "Complete diagnosis and treatment orders for Turner syndrome with coarctation of the aorta.",
       "interventionIds": [
-        "blood-tests-complete-blood-count-cbc-com",
-        "consultations-pediatric-endocrinologist-",
-        "oxygen",
-        "order"
+        "physical-exam-general-appearance",
+        "physical-exam-heart-cardiovascular",
+        "electrocardiography-12-lead-ecg",
+        "chest-x-ray",
+        "echocardiography",
+        "chromosome-analysis-karyotype",
+        "consult-cardiothoracic-surgery",
+        "consult-pediatric-endocrinology"
       ],
       "interventions": [
         {
-          "id": "blood-tests-complete-blood-count-cbc-com",
-          "label": "Blood tests: Complete blood count (CBC), comprehensive metabolic panel, thyroid function tests, IGF-1 level, and bone age X-ray",
+          "id": "physical-exam-general-appearance",
+          "label": "Physical Exam: General Appearance",
+          "correct_zone": "zone-custom-1",
+          "why": "Assess how ill the patient appears before focused testing for short stature.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-heart-cardiovascular",
+          "label": "Physical Exam: Heart / Cardiovascular",
+          "correct_zone": "zone-custom-1",
+          "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to short stature. Finding: Systolic murmur on auscultation; compare systolic blood pressure in upper and lower extremities for coarctation.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "electrocardiography-12-lead-ecg",
+          "label": "Electrocardiography (12-lead ECG)",
           "correct_zone": "zone-monitor",
-          "why": "Imaging supports diagnosis when exam findings warrant it for this diagnosis.",
+          "why": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "consultations-pediatric-endocrinologist-",
-          "label": "Consultations: Pediatric Endocrinologist, Geneticist",
-          "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for this diagnosis: Consultations: Pediatric Endocrinologist, Geneticist.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "oxygen",
-          "label": "Oxygen",
+          "id": "chest-x-ray",
+          "label": "Chest X-ray",
           "correct_zone": "zone-monitor",
-          "why": "Appropriate CCS order for this diagnosis: Oxygen.",
+          "why": "Evaluate chest and lungs as part of the initial exam for short stature. Finding: Negative on review of systems.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "order",
-          "label": "Order",
+          "id": "echocardiography",
+          "label": "Echocardiography",
           "correct_zone": "zone-arm",
-          "why": "Appropriate CCS order for this diagnosis: Order.",
+          "why": "Appropriate CCS order for Turner syndrome with coarctation of the aorta: Echocardiography.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "chromosome-analysis-karyotype",
+          "label": "Chromosome analysis, karyotype",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Turner syndrome with coarctation of the aorta: Chromosome analysis, karyotype.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "consult-cardiothoracic-surgery",
+          "label": "Consult, cardiothoracic surgery",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Turner syndrome with coarctation of the aorta: Consult, cardiothoracic surgery.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "consult-pediatric-endocrinology",
+          "label": "Consult, pediatric endocrinology",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Turner syndrome with coarctation of the aorta: Consult, pediatric endocrinology.",
           "guideline": "ACEP",
           "optional": false
         }
       ],
-      "decoys": [
-        {
-          "id": "decoy-avoid-144-0",
-          "label": "Genetic testing without a confirmed diagnosis or indicative symptoms",
-          "why": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-          "correct_zone": "zone-icu"
-        }
-      ],
+      "decoys": [],
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Short Stature — emergency presentation.",
-            "hpi": "Short Stature — emergency presentation.",
-            "vitalsText": "",
-            "clinicalTip": "Teaching hint: Febrile infant — sepsis workup, fluids, and close monitoring before disposition.",
-            "objective": "Stabilize the pediatric patient and complete emergent workup before disposition. Start with stabilization, then targeted testing."
+            "intro": "Case Introduction Day 1 @ 9:00 Office A 6-year-old girl presents to your office due to short stature.",
+            "hpi": "{{patient_name}} is a 6-year-old girl who presents to your office with her mother for short stature. Her mother reports she is the shortest girl in her class and is concerned about her growth. The patient has a good appetite and eats more than others her age; her mother is also worried about her weight. She is doing well in school, is active, and her mother has no other concerns. Born at term (40 weeks) via uncomplicated vaginal delivery; APGAR scores 10 and 10. No hospitalizations or medical problems. Vaccinations up to date. Family history is unremarkable.",
+            "vitalsText": "Temperature:\n36.1 C (97.0 degrees F)\nPulse:\n85 beats/min, Regular\nRespiratory rate:\n16/minute\nBlood pressure, systolic:\n100 mm Hg\nBlood pressure, diastolic:\n60 mm Hg\nHeight:\n109.2 cm (43.0 in)\nWeight:\n25.0 kg (55.0 lb)\nBody Mass Index:\n10th percentile for Height. 90th percentile for weight.",
+            "clinicalTip": "Teaching hint: Turner syndrome with coarctation of the aorta — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Turner syndrome with coarctation of the aorta. Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Short Stature — emergency presentation.",
-            "hpi": "Short Stature — emergency presentation.",
-            "vitalsText": "",
-            "clinicalTip": "Febrile infant — sepsis workup, fluids, and close monitoring before disposition.",
-            "objective": "Stabilize the pediatric patient and complete emergent workup before disposition."
+            "intro": "Case Introduction Day 1 @ 9:00 Office A 6-year-old girl presents to your office due to short stature.",
+            "hpi": "{{patient_name}} is a 6-year-old girl who presents to your office with her mother for short stature. Her mother reports she is the shortest girl in her class and is concerned about her growth. The patient has a good appetite and eats more than others her age; her mother is also worried about her weight. She is doing well in school, is active, and her mother has no other concerns. Born at term (40 weeks) via uncomplicated vaginal delivery; APGAR scores 10 and 10. No hospitalizations or medical problems. Vaccinations up to date. Family history is unremarkable.",
+            "vitalsText": "Temperature:\n36.1 C (97.0 degrees F)\nPulse:\n85 beats/min, Regular\nRespiratory rate:\n16/minute\nBlood pressure, systolic:\n100 mm Hg\nBlood pressure, diastolic:\n60 mm Hg\nHeight:\n109.2 cm (43.0 in)\nWeight:\n25.0 kg (55.0 lb)\nBody Mass Index:\n10th percentile for Height. 90th percentile for weight.",
+            "clinicalTip": "Turner syndrome with coarctation of the aorta — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Turner syndrome with coarctation of the aorta."
           },
           "hard": {
-            "intro": "Short Stature — emergency presentation.",
-            "hpi": "Short Stature — emergency presentation.",
-            "vitalsText": "",
+            "intro": "Case Introduction Day 1 @ 9:00 Office A 6-year-old girl presents to your office due to short stature.",
+            "hpi": "{{patient_name}} is a 6-year-old girl who presents to your office with her mother for short stature. Her mother reports she is the shortest girl in her class and is concerned about her growth. The patient has a good appetite and eats more than others her age; her mother is also worried about her weight. She is doing well in school, is active, and her mother has no other concerns. Born at term (40 weeks) via uncomplicated vaginal delivery; APGAR scores 10 and 10. No hospitalizations or medical problems. Vaccinations up to date. Family history is unremarkable.",
+            "vitalsText": "Temperature:\n36.1 C (97.0 degrees F)\nPulse:\n85 beats/min, Regular\nRespiratory rate:\n16/minute\nBlood pressure, systolic:\n100 mm Hg\nBlood pressure, diastolic:\n60 mm Hg\nHeight:\n109.2 cm (43.0 in)\nWeight:\n25.0 kg (55.0 lb)\nBody Mass Index:\n10th percentile for Height. 90th percentile for weight.",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Stabilize the pediatric patient and complete emergent workup before disposition."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Turner syndrome with coarctation of the aorta."
           }
         },
         "patient": {
           "easy": {
-            "intro": "Short Stature — emergency presentation.",
-            "hpi": "Short Stature — emergency presentation.",
-            "vitalsText": "",
-            "clinicalTip": "Teaching hint: Febrile infant — sepsis workup, fluids, and close monitoring before disposition.",
-            "objective": "Stabilize the pediatric patient and complete emergent workup before disposition. Share your symptoms clearly with the team."
+            "intro": "Case Introduction Day 1 @ 9:00 Office A 6-year-old girl presents to your office due to short stature.",
+            "hpi": "{{patient_name}} is a 6-year-old girl who presents to your office with her mother for short stature. Her mother reports she is the shortest girl in her class and is concerned about her growth. The patient has a good appetite and eats more than others her age; her mother is also worried about her weight. She is doing well in school, is active, and her mother has no other concerns. Born at term (40 weeks) via uncomplicated vaginal delivery; APGAR scores 10 and 10. No hospitalizations or medical problems. Vaccinations up to date. Family history is unremarkable.",
+            "vitalsText": "Temperature:\n36.1 C (97.0 degrees F)\nPulse:\n85 beats/min, Regular\nRespiratory rate:\n16/minute\nBlood pressure, systolic:\n100 mm Hg\nBlood pressure, diastolic:\n60 mm Hg\nHeight:\n109.2 cm (43.0 in)\nWeight:\n25.0 kg (55.0 lb)\nBody Mass Index:\n10th percentile for Height. 90th percentile for weight.",
+            "clinicalTip": "Teaching hint: Turner syndrome with coarctation of the aorta — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Turner syndrome with coarctation of the aorta. Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Short Stature — emergency presentation.",
-            "hpi": "Short Stature — emergency presentation.",
-            "vitalsText": "",
-            "clinicalTip": "Febrile infant — sepsis workup, fluids, and close monitoring before disposition.",
-            "objective": "Stabilize the pediatric patient and complete emergent workup before disposition."
+            "intro": "Case Introduction Day 1 @ 9:00 Office A 6-year-old girl presents to your office due to short stature.",
+            "hpi": "{{patient_name}} is a 6-year-old girl who presents to your office with her mother for short stature. Her mother reports she is the shortest girl in her class and is concerned about her growth. The patient has a good appetite and eats more than others her age; her mother is also worried about her weight. She is doing well in school, is active, and her mother has no other concerns. Born at term (40 weeks) via uncomplicated vaginal delivery; APGAR scores 10 and 10. No hospitalizations or medical problems. Vaccinations up to date. Family history is unremarkable.",
+            "vitalsText": "Temperature:\n36.1 C (97.0 degrees F)\nPulse:\n85 beats/min, Regular\nRespiratory rate:\n16/minute\nBlood pressure, systolic:\n100 mm Hg\nBlood pressure, diastolic:\n60 mm Hg\nHeight:\n109.2 cm (43.0 in)\nWeight:\n25.0 kg (55.0 lb)\nBody Mass Index:\n10th percentile for Height. 90th percentile for weight.",
+            "clinicalTip": "Turner syndrome with coarctation of the aorta — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Turner syndrome with coarctation of the aorta."
           },
           "hard": {
-            "intro": "Short Stature — emergency presentation.",
-            "hpi": "Short Stature — emergency presentation.",
-            "vitalsText": "",
+            "intro": "Case Introduction Day 1 @ 9:00 Office A 6-year-old girl presents to your office due to short stature.",
+            "hpi": "{{patient_name}} is a 6-year-old girl who presents to your office with her mother for short stature. Her mother reports she is the shortest girl in her class and is concerned about her growth. The patient has a good appetite and eats more than others her age; her mother is also worried about her weight. She is doing well in school, is active, and her mother has no other concerns. Born at term (40 weeks) via uncomplicated vaginal delivery; APGAR scores 10 and 10. No hospitalizations or medical problems. Vaccinations up to date. Family history is unremarkable.",
+            "vitalsText": "Temperature:\n36.1 C (97.0 degrees F)\nPulse:\n85 beats/min, Regular\nRespiratory rate:\n16/minute\nBlood pressure, systolic:\n100 mm Hg\nBlood pressure, diastolic:\n60 mm Hg\nHeight:\n109.2 cm (43.0 in)\nWeight:\n25.0 kg (55.0 lb)\nBody Mass Index:\n10th percentile for Height. 90th percentile for weight.",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Stabilize the pediatric patient and complete emergent workup before disposition."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Turner syndrome with coarctation of the aorta."
           }
         }
       }
@@ -13714,13 +13781,13 @@
       "category": "GI & Abdomen",
       "presentationKey": "Hematemesis",
       "playbookKey": "case-bank-174",
-      "diagnosis": "Unknown",
+      "diagnosis": "Bleeding esophageal varices",
       "patient_voice": {
-        "chief_complaint": "I need help — hematemesis. I'm really scared.",
-        "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-        "pain": "This hematemesis won't let up and I'm afraid something bad is happening."
+        "chief_complaint": "I've been vomiting blood and my stools have been black. I'm terrified.",
+        "history": "I have cirrhosis from alcohol. This started today — I threw up blood and noticed dark stools.",
+        "pain": "My belly feels full and I'm weak and dizzy when I stand up."
       },
-      "caseBankSource": "screenshot+ollama",
+      "caseBankSource": "ccs_source_manual",
       "hasSourceIntro": false,
       "vitals": {
         "sbp": 117,
@@ -13743,123 +13810,232 @@
       "exam": [
         [
           "General",
-          "Acutely ill appearance consistent with hematemesis."
+          "Ill-appearing; assess for shock, jaundice, cachexia, and stigmata of chronic liver disease."
         ],
         [
           "Cardiovascular",
-          "HR 116, tachycardic; BP 117/74."
+          "Tachycardia; evaluate for hypotension indicating hypovolemia."
         ],
         [
-          "Respiratory",
-          "RR 23, tachypneic; SpO₂ 100%."
+          "Chest / Lungs",
+          "Evaluate for respiratory distress or aspiration."
         ],
         [
           "Abdomen",
-          "Soft, non-distended, no focal peritoneal signs on initial exam."
+          "Assess for ascites, splenomegaly, or tenderness suggesting portal hypertension."
+        ],
+        [
+          "Rectal",
+          "Melena confirming upper GI bleeding."
         ],
         [
           "Neuro",
-          "Alert and oriented unless perfusion or metabolic derangement present."
-        ],
-        [
-          "Skin",
-          "Warm skin with fever; no purpura on initial survey."
+          "Alert unless encephalopathy or perfusion compromise; watch for hepatic encephalopathy after bleed."
         ]
       ],
-      "patientSex": "unknown",
+      "patientSex": "male",
+      "hpi_narrative": "{{patient_name}} is a 55-year-old man with alcoholic cirrhosis who presents with hematemesis and melena. He is found to have severe anemia (Hct 24%, Hgb 8.0 g/dL), mild coagulopathy (INR 1.8), and thrombocytopenia (platelets 100,000). Evaluate for upper GI bleeding from portal hypertension — esophageal varices are the leading concern.",
       "difficulty": "standard",
-      "clinical_tip": "Elderly and immunocompromised may have minimal exam findings until rupture.",
-      "objective": "Resuscitate, image, involve surgery early if indicated.",
+      "clinical_tip": "Bleeding esophageal varices — follow CCS review orders.",
+      "objective": "Complete diagnosis and treatment orders for Bleeding esophageal varices.",
       "interventionIds": [
-        "obtain-laboratory-tests-cbc-coagulation-",
-        "order-upper-gi-endoscopy",
-        "administer-intravenous-fluids-and-antaci",
-        "consult-gastroenterology-for-endoscopic-",
-        "oxygen",
-        "iv-access-2",
-        "cbc",
-        "cmp",
-        "coags",
-        "cxr"
+        "physical-exam-general-appearance",
+        "physical-exam-chest-lungs",
+        "physical-exam-heart-cardiovascular",
+        "physical-exam-abdomen",
+        "physical-exam-rectal",
+        "cbc-with-differential",
+        "pt-inr",
+        "basic-metabolic-profile",
+        "type-and-screen-blood",
+        "endoscopy-upper-gastrointestinal",
+        "saline-solution-normal",
+        "transfusion-packed-red-blood-cells",
+        "octreotide-acetate",
+        "diet-npo",
+        "pantoprazole-sodium",
+        "ceftriaxone-sodium",
+        "vaccine-hepatitis-a-inactivated",
+        "vaccine-hepatitis-b",
+        "advise-patient-no-alcohol",
+        "propranolol-hydrochloride",
+        "instruct-patient-smoking-cessation",
+        "lactulose"
       ],
       "interventions": [
         {
-          "id": "obtain-laboratory-tests-cbc-coagulation-",
-          "label": "Obtain laboratory tests: CBC, Coagulation panel, Lipase, AST, ALT",
-          "correct_zone": "zone-blood",
-          "why": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+          "id": "physical-exam-general-appearance",
+          "label": "Physical Exam: General Appearance",
+          "correct_zone": "zone-custom-1",
+          "why": "Assess how ill the patient appears before focused testing for hematemesis.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "order-upper-gi-endoscopy",
-          "label": "Order upper GI endoscopy",
+          "id": "physical-exam-chest-lungs",
+          "label": "Physical Exam: Chest / Lungs",
+          "correct_zone": "zone-custom-1",
+          "why": "Evaluate chest and lungs as part of the initial exam for hematemesis. Finding: Evaluate for respiratory distress or aspiration.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-heart-cardiovascular",
+          "label": "Physical Exam: Heart / Cardiovascular",
+          "correct_zone": "zone-custom-1",
+          "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to hematemesis. Finding: Tachycardia; evaluate for hypotension indicating hypovolemia.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-abdomen",
+          "label": "Physical Exam: Abdomen",
+          "correct_zone": "zone-custom-1",
+          "why": "Abdominal exam helps exclude alternative causes in a patient with hematemesis. Finding: Assess for ascites, splenomegaly, or tenderness suggesting portal hypertension.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-rectal",
+          "label": "Physical Exam: Rectal",
+          "correct_zone": "zone-custom-1",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Physical Exam: Rectal.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "cbc-with-differential",
+          "label": "CBC with differential",
+          "correct_zone": "zone-blood",
+          "why": "Laboratory testing when systemic illness or severity warrants labs in Bleeding esophageal varices.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "pt-inr",
+          "label": "PT/INR",
           "correct_zone": "zone-arm",
-          "why": "Appropriate CCS order for this diagnosis: Order upper GI endoscopy.",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: PT/INR.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "administer-intravenous-fluids-and-antaci",
-          "label": "Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH",
-          "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for this diagnosis: Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "consult-gastroenterology-for-endoscopic-",
-          "label": "Consult Gastroenterology for endoscopic evaluation and management",
-          "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for this diagnosis: Consult Gastroenterology for endoscopic evaluation and management.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "oxygen",
-          "label": "Oxygen",
-          "correct_zone": "zone-monitor",
-          "why": "Appropriate CCS order for this diagnosis: Oxygen.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "iv-access-2",
-          "label": "IV access ×2",
+          "id": "basic-metabolic-profile",
+          "label": "Basic metabolic profile",
           "correct_zone": "zone-arm",
-          "why": "Appropriate CCS order for this diagnosis: IV access ×2.",
+          "why": "Laboratory testing when systemic illness or severity warrants labs in Bleeding esophageal varices.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "cbc",
-          "label": "CBC",
-          "correct_zone": "zone-blood",
-          "why": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+          "id": "type-and-screen-blood",
+          "label": "Type and screen, blood",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Type and screen, blood.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "cmp",
-          "label": "CMP",
-          "correct_zone": "zone-blood",
-          "why": "Appropriate CCS order for this diagnosis: CMP.",
+          "id": "endoscopy-upper-gastrointestinal",
+          "label": "Endoscopy, upper gastrointestinal",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Endoscopy, upper gastrointestinal.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "coags",
-          "label": "coags",
-          "correct_zone": "zone-blood",
-          "why": "Appropriate CCS order for this diagnosis: coags.",
+          "id": "saline-solution-normal",
+          "label": "Saline solution, normal",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Saline solution, normal.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "cxr",
-          "label": "CXR",
+          "id": "transfusion-packed-red-blood-cells",
+          "label": "Transfusion, packed red blood cells",
+          "correct_zone": "zone-iv-bag",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Transfusion, packed red blood cells.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "octreotide-acetate",
+          "label": "Octreotide acetate",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Octreotide acetate.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "diet-npo",
+          "label": "Diet, NPO",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Diet, NPO.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "pantoprazole-sodium",
+          "label": "Pantoprazole sodium",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Pantoprazole sodium.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "ceftriaxone-sodium",
+          "label": "Ceftriaxone sodium",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Ceftriaxone sodium.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "vaccine-hepatitis-a-inactivated",
+          "label": "Vaccine, Hepatitis A, inactivated",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Vaccine, Hepatitis A, inactivated.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "vaccine-hepatitis-b",
+          "label": "Vaccine, hepatitis B",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Vaccine, hepatitis B.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "advise-patient-no-alcohol",
+          "label": "Advise patient, no alcohol",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Advise patient, no alcohol.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "propranolol-hydrochloride",
+          "label": "Propranolol hydrochloride",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Propranolol hydrochloride.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "instruct-patient-smoking-cessation",
+          "label": "Instruct patient, smoking cessation",
           "correct_zone": "zone-monitor",
-          "why": "Appropriate CCS order for this diagnosis: CXR.",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Instruct patient, smoking cessation.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "lactulose",
+          "label": "Lactulose",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Bleeding esophageal varices: Lactulose.",
           "guideline": "ACEP",
           "optional": false
         }
@@ -13867,80 +14043,86 @@
       "decoys": [
         {
           "id": "decoy-avoid-174-0",
-          "label": "Reproductive",
-          "why": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical.",
+          "label": "Spironolactone",
+          "why": "Advanced imaging is not indicated early for Bleeding esophageal varices when the diagnosis is clinical.",
           "correct_zone": "zone-arm"
         },
         {
           "id": "decoy-avoid-174-1",
-          "label": "Type & Screen / Crossmatch",
-          "why": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-          "correct_zone": "zone-blood"
+          "label": "Omeprazole",
+          "why": "CCS review: avoid this order for Bleeding esophageal varices — it does not change acute management.",
+          "correct_zone": "zone-arm"
         },
         {
           "id": "decoy-avoid-174-2",
-          "label": "EKG (Electrocardiogram)",
-          "why": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical.",
-          "correct_zone": "zone-monitor"
+          "label": "Levofloxacin",
+          "why": "CCS review: avoid this order for Bleeding esophageal varices — it does not change acute management.",
+          "correct_zone": "zone-arm"
         },
         {
           "id": "decoy-avoid-174-3",
-          "label": "Fingerstick/Serum glucose",
-          "why": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-          "correct_zone": "zone-blood"
+          "label": "Transfusion, platelets",
+          "why": "CCS review: avoid this order for Bleeding esophageal varices — it does not change acute management.",
+          "correct_zone": "zone-iv-bag"
         },
         {
           "id": "decoy-avoid-174-4",
-          "label": "Order unneeded X-rays or CT scans at this stage as they may not be diagnostic for upper GI bleeding",
-          "why": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical.",
-          "correct_zone": "zone-monitor"
+          "label": "Transfusion, fresh frozen plasma",
+          "why": "CCS review: avoid this order for Bleeding esophageal varices — it does not change acute management.",
+          "correct_zone": "zone-iv-bag"
+        },
+        {
+          "id": "decoy-avoid-174-5",
+          "label": "Reproductive",
+          "why": "Advanced imaging is not indicated early for Bleeding esophageal varices when the diagnosis is clinical.",
+          "correct_zone": "zone-arm"
         }
       ],
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Hematemesis — emergency presentation.",
-            "hpi": "Hematemesis — emergency presentation.",
+            "intro": "Case Introduction Hematemesis — Emergency Medicine A 55-year-old man with alcoholic cirrhosis presents with hematemesis and melena.",
+            "hpi": "{{patient_name}} is a 55-year-old man with alcoholic cirrhosis who presents with hematemesis and melena. He is found to have severe anemia (Hct 24%, Hgb 8.0 g/dL), mild coagulopathy (INR 1.8), and thrombocytopenia (platelets 100,000). Evaluate for upper GI bleeding from portal hypertension — esophageal varices are the leading concern.",
             "vitalsText": "",
-            "clinicalTip": "Teaching hint: Elderly and immunocompromised may have minimal exam findings until rupture.",
-            "objective": "Resuscitate, image, involve surgery early if indicated. Start with stabilization, then targeted testing."
+            "clinicalTip": "Teaching hint: Bleeding esophageal varices — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Bleeding esophageal varices. Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Hematemesis — emergency presentation.",
-            "hpi": "Hematemesis — emergency presentation.",
+            "intro": "Case Introduction Hematemesis — Emergency Medicine A 55-year-old man with alcoholic cirrhosis presents with hematemesis and melena.",
+            "hpi": "{{patient_name}} is a 55-year-old man with alcoholic cirrhosis who presents with hematemesis and melena. He is found to have severe anemia (Hct 24%, Hgb 8.0 g/dL), mild coagulopathy (INR 1.8), and thrombocytopenia (platelets 100,000). Evaluate for upper GI bleeding from portal hypertension — esophageal varices are the leading concern.",
             "vitalsText": "",
-            "clinicalTip": "Elderly and immunocompromised may have minimal exam findings until rupture.",
-            "objective": "Resuscitate, image, involve surgery early if indicated."
+            "clinicalTip": "Bleeding esophageal varices — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Bleeding esophageal varices."
           },
           "hard": {
-            "intro": "Hematemesis — emergency presentation.",
-            "hpi": "Hematemesis — emergency presentation.",
+            "intro": "Case Introduction Hematemesis — Emergency Medicine A 55-year-old man with alcoholic cirrhosis presents with hematemesis and melena.",
+            "hpi": "{{patient_name}} is a 55-year-old man with alcoholic cirrhosis who presents with hematemesis and melena. He is found to have severe anemia (Hct 24%, Hgb 8.0 g/dL), mild coagulopathy (INR 1.8), and thrombocytopenia (platelets 100,000). Evaluate for upper GI bleeding from portal hypertension — esophageal varices are the leading concern.",
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Resuscitate, image, involve surgery early if indicated."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Bleeding esophageal varices."
           }
         },
         "patient": {
           "easy": {
-            "intro": "Hematemesis — emergency presentation.",
-            "hpi": "Hematemesis — emergency presentation.",
+            "intro": "Case Introduction Hematemesis — Emergency Medicine A 55-year-old man with alcoholic cirrhosis presents with hematemesis and melena.",
+            "hpi": "{{patient_name}} is a 55-year-old man with alcoholic cirrhosis who presents with hematemesis and melena. He is found to have severe anemia (Hct 24%, Hgb 8.0 g/dL), mild coagulopathy (INR 1.8), and thrombocytopenia (platelets 100,000). Evaluate for upper GI bleeding from portal hypertension — esophageal varices are the leading concern.",
             "vitalsText": "",
-            "clinicalTip": "Teaching hint: Elderly and immunocompromised may have minimal exam findings until rupture.",
-            "objective": "Resuscitate, image, involve surgery early if indicated. Share your symptoms clearly with the team."
+            "clinicalTip": "Teaching hint: Bleeding esophageal varices — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Bleeding esophageal varices. Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Hematemesis — emergency presentation.",
-            "hpi": "Hematemesis — emergency presentation.",
+            "intro": "Case Introduction Hematemesis — Emergency Medicine A 55-year-old man with alcoholic cirrhosis presents with hematemesis and melena.",
+            "hpi": "{{patient_name}} is a 55-year-old man with alcoholic cirrhosis who presents with hematemesis and melena. He is found to have severe anemia (Hct 24%, Hgb 8.0 g/dL), mild coagulopathy (INR 1.8), and thrombocytopenia (platelets 100,000). Evaluate for upper GI bleeding from portal hypertension — esophageal varices are the leading concern.",
             "vitalsText": "",
-            "clinicalTip": "Elderly and immunocompromised may have minimal exam findings until rupture.",
-            "objective": "Resuscitate, image, involve surgery early if indicated."
+            "clinicalTip": "Bleeding esophageal varices — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Bleeding esophageal varices."
           },
           "hard": {
-            "intro": "Hematemesis — emergency presentation.",
-            "hpi": "Hematemesis — emergency presentation.",
+            "intro": "Case Introduction Hematemesis — Emergency Medicine A 55-year-old man with alcoholic cirrhosis presents with hematemesis and melena.",
+            "hpi": "{{patient_name}} is a 55-year-old man with alcoholic cirrhosis who presents with hematemesis and melena. He is found to have severe anemia (Hct 24%, Hgb 8.0 g/dL), mild coagulopathy (INR 1.8), and thrombocytopenia (platelets 100,000). Evaluate for upper GI bleeding from portal hypertension — esophageal varices are the leading concern.",
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Resuscitate, image, involve surgery early if indicated."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Bleeding esophageal varices."
           }
         }
       }
@@ -20645,11 +20827,11 @@
         "ordered-labs",
         "ordered-imaging",
         "ordered-treatment",
-        "should-have-ordered-iv-fluids",
-        "should-have-ordered-transfusion",
-        "should-have-ordered-consult-gyn",
-        "should-have-ordered-medications",
-        "should-have-ordered-additional-labs"
+        "iv-fluids",
+        "transfusion",
+        "consult-gyn",
+        "medications",
+        "additional-labs"
       ],
       "interventions": [
         {
@@ -20693,40 +20875,40 @@
           "optional": false
         },
         {
-          "id": "should-have-ordered-iv-fluids",
-          "label": "Should Have Ordered: IV fluids",
+          "id": "iv-fluids",
+          "label": "IV fluids",
           "correct_zone": "zone-iv-bag",
           "why": "Appropriate CCS order for this diagnosis: Should Have Ordered: IV fluids.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "should-have-ordered-transfusion",
-          "label": "Should Have Ordered: Transfusion",
+          "id": "transfusion",
+          "label": "Transfusion",
           "correct_zone": "zone-iv-bag",
           "why": "Appropriate CCS order for this diagnosis: Should Have Ordered: Transfusion.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "should-have-ordered-consult-gyn",
-          "label": "Should Have Ordered: Consult GYN",
+          "id": "consult-gyn",
+          "label": "Consult GYN",
           "correct_zone": "zone-icu",
           "why": "Appropriate CCS order for this diagnosis: Should Have Ordered: Consult GYN.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "should-have-ordered-medications",
-          "label": "Should Have Ordered: Medications",
+          "id": "medications",
+          "label": "Medications",
           "correct_zone": "zone-arm",
           "why": "Appropriate CCS order for this diagnosis: Should Have Ordered: Medications.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "should-have-ordered-additional-labs",
-          "label": "Should Have Ordered: Additional labs",
+          "id": "additional-labs",
+          "label": "Additional labs",
           "correct_zone": "zone-blood",
           "why": "Appropriate CCS order for this diagnosis: Should Have Ordered: Additional labs.",
           "guideline": "ACEP",
@@ -27621,13 +27803,13 @@
       "category": "Psychiatry & Social",
       "presentationKey": "Anxiety",
       "playbookKey": "case-bank-65",
-      "diagnosis": "Unknown",
+      "diagnosis": "Graves' hyperthyroidism",
       "patient_voice": {
-        "chief_complaint": "I need help — anxiety. I'm really scared.",
-        "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-        "pain": "This anxiety won't let up and I'm afraid something bad is happening."
+        "chief_complaint": "I can't stop feeling anxious and my heart races. My hands are shaking.",
+        "history": "I've been nervous, sweaty, and shaky. I thought it was just stress but it's not getting better.",
+        "pain": "My chest feels fluttery when my heart races."
       },
-      "caseBankSource": "screenshot+ollama",
+      "caseBankSource": "ccs_source_manual",
       "hasSourceIntro": false,
       "vitals": {
         "sbp": 125,
@@ -27650,126 +27832,259 @@
       "exam": [
         [
           "General",
-          "Acutely ill appearance consistent with anxiety."
+          "Anxious-appearing young woman; diaphoresis."
+        ],
+        [
+          "HEENT / Neck",
+          "Large thyroid; mild exophthalmos."
         ],
         [
           "Cardiovascular",
-          "HR 88; BP 125/80."
+          "Tachycardia; evaluate for arrhythmia contributing to palpitations."
         ],
         [
-          "Respiratory",
-          "RR 15; SpO₂ 98%."
+          "Chest / Lungs",
+          "Examine for pulmonary pathology that could contribute to anxiety symptoms."
         ],
         [
           "Abdomen",
-          "Soft, non-distended, no focal peritoneal signs on initial exam."
+          "Screen for abdominal pathology contributing to symptoms."
         ],
         [
-          "Neuro",
-          "Alert and oriented unless perfusion or metabolic derangement present."
+          "Extremities",
+          "Bilateral pretibial edema (pretibial myxedema); tremor."
         ],
         [
-          "Skin",
-          "No acute rash; capillary refill and perfusion assessed."
+          "Neuro / Psych",
+          "Tremor; psychiatric symptoms may reflect underlying hyperthyroidism."
         ]
       ],
-      "patientSex": "unknown",
+      "patientSex": "female",
+      "hpi_narrative": "{{patient_name}} is a young woman who presents with anxiety, palpitations, tremor, and sweating. She reports feeling nervous and on edge. Symptoms could be mistaken for a primary psychiatric disorder, but the presentation warrants evaluation for medical causes of anxiety — especially hyperthyroidism, substance use, arrhythmia, and withdrawal. She is of child-bearing age; pregnancy status affects choice of antithyroid therapy.",
       "difficulty": "standard",
-      "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
-      "objective": "Identify and treat life threats within the time limit.",
+      "clinical_tip": "Graves' hyperthyroidism — follow CCS review orders.",
+      "objective": "Complete diagnosis and treatment orders for Graves' hyperthyroidism.",
       "interventionIds": [
-        "obtain-a-psychiatric-consult-for-compreh",
-        "order-laboratory-tests-cbc-chemistry-pan",
-        "oxygen",
-        "iv-access-2"
+        "physical-exam-general-appearance",
+        "physical-exam-chest-lungs",
+        "physical-exam-heart-cardiovascular",
+        "physical-exam-abdomen",
+        "physical-exam-extremities-spine",
+        "physical-exam-neuro-psych",
+        "physical-exam-heent-neck",
+        "cbc-with-differential",
+        "hormone-thyroid-stimulating-serum",
+        "electrocardiography-12-lead",
+        "hcg-beta-urine-qualitative",
+        "toxicology-screen-urine",
+        "basic-metabolic-profile",
+        "triiodothyronine-serum-free",
+        "propranolol-hydrochloride",
+        "consult-endocrinology",
+        "methimazole",
+        "vaccine-diphtheria-tetanus-pertussis",
+        "papanicolaou-smear"
       ],
       "interventions": [
         {
-          "id": "obtain-a-psychiatric-consult-for-compreh",
-          "label": "Obtain a psychiatric consult for comprehensive evaluation and management plan",
+          "id": "physical-exam-general-appearance",
+          "label": "Physical Exam: General Appearance",
+          "correct_zone": "zone-custom-1",
+          "why": "Assess how ill the patient appears before focused testing for anxiety.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-chest-lungs",
+          "label": "Physical Exam: Chest / Lungs",
+          "correct_zone": "zone-custom-1",
+          "why": "Evaluate chest and lungs as part of the initial exam for anxiety. Finding: Examine for pulmonary pathology that could contribute to anxiety symptoms.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-heart-cardiovascular",
+          "label": "Physical Exam: Heart / Cardiovascular",
+          "correct_zone": "zone-custom-1",
+          "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to anxiety. Finding: Tachycardia; evaluate for arrhythmia contributing to palpitations.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-abdomen",
+          "label": "Physical Exam: Abdomen",
+          "correct_zone": "zone-custom-1",
+          "why": "Abdominal exam helps exclude alternative causes in a patient with anxiety. Finding: Screen for abdominal pathology contributing to symptoms.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-extremities-spine",
+          "label": "Physical Exam: Extremities / Spine",
+          "correct_zone": "zone-custom-1",
+          "why": "Targeted Physical Exam: Extremities / Spine exam supports the differential for Graves' hyperthyroidism.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-neuro-psych",
+          "label": "Physical Exam: Neuro / Psych",
           "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for this diagnosis: Obtain a psychiatric consult for comprehensive evaluation and management plan.",
+          "why": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Graves' hyperthyroidism.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "order-laboratory-tests-cbc-chemistry-pan",
-          "label": "Order laboratory tests (CBC, Chemistry panel, Thyroid function tests) to rule out any medical causes of the patient's symptoms",
+          "id": "physical-exam-heent-neck",
+          "label": "Physical Exam: HEENT / Neck",
+          "correct_zone": "zone-icu",
+          "why": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Graves' hyperthyroidism.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "cbc-with-differential",
+          "label": "CBC with differential",
           "correct_zone": "zone-blood",
-          "why": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
+          "why": "Laboratory testing when systemic illness or severity warrants labs in Graves' hyperthyroidism.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "oxygen",
-          "label": "Oxygen",
-          "correct_zone": "zone-monitor",
-          "why": "Appropriate CCS order for this diagnosis: Oxygen.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "iv-access-2",
-          "label": "IV access ×2",
+          "id": "hormone-thyroid-stimulating-serum",
+          "label": "Hormone, thyroid stimulating, serum",
           "correct_zone": "zone-arm",
-          "why": "Appropriate CCS order for this diagnosis: IV access ×2.",
+          "why": "Patient education and counseling are part of definitive care for Graves' hyperthyroidism.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "electrocardiography-12-lead",
+          "label": "Electrocardiography, 12 lead",
+          "correct_zone": "zone-arm",
+          "why": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "hcg-beta-urine-qualitative",
+          "label": "HCG, beta, urine, qualitative",
+          "correct_zone": "zone-blood",
+          "why": "Appropriate CCS order for Graves' hyperthyroidism: HCG, beta, urine, qualitative.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "toxicology-screen-urine",
+          "label": "Toxicology screen, urine",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Graves' hyperthyroidism: Toxicology screen, urine.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "basic-metabolic-profile",
+          "label": "Basic metabolic profile",
+          "correct_zone": "zone-arm",
+          "why": "Laboratory testing when systemic illness or severity warrants labs in Graves' hyperthyroidism.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "triiodothyronine-serum-free",
+          "label": "Triiodothyronine, serum, free",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Graves' hyperthyroidism: Triiodothyronine, serum, free.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "propranolol-hydrochloride",
+          "label": "Propranolol hydrochloride",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Graves' hyperthyroidism: Propranolol hydrochloride.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "consult-endocrinology",
+          "label": "Consult, endocrinology",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Graves' hyperthyroidism: Consult, endocrinology.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "methimazole",
+          "label": "Methimazole",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Graves' hyperthyroidism: Methimazole.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "vaccine-diphtheria-tetanus-pertussis",
+          "label": "Vaccine, diphtheria/tetanus/pertussis",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Graves' hyperthyroidism: Vaccine, diphtheria/tetanus/pertussis.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "papanicolaou-smear",
+          "label": "Papanicolaou smear",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Graves' hyperthyroidism: Papanicolaou smear.",
           "guideline": "ACEP",
           "optional": false
         }
       ],
-      "decoys": [
-        {
-          "id": "decoy-avoid-65-0",
-          "label": "Prescribing medication without proper diagnosis",
-          "why": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-          "correct_zone": "zone-arm"
-        }
-      ],
+      "decoys": [],
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Anxiety — emergency presentation.",
-            "hpi": "Anxiety — emergency presentation.",
+            "intro": "Case Introduction Anxiety — Internal Medicine A young woman presents with anxiety, palpitations, tremor, and sweating.",
+            "hpi": "{{patient_name}} is a young woman who presents with anxiety, palpitations, tremor, and sweating. She reports feeling nervous and on edge. Symptoms could be mistaken for a primary psychiatric disorder, but the presentation warrants evaluation for medical causes of anxiety — especially hyperthyroidism, substance use, arrhythmia, and withdrawal. She is of child-bearing age; pregnancy status affects choice of antithyroid therapy.",
             "vitalsText": "",
-            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
-            "objective": "Identify and treat life threats within the time limit. Start with stabilization, then targeted testing."
+            "clinicalTip": "Teaching hint: Graves' hyperthyroidism — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Graves' hyperthyroidism. Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Anxiety — emergency presentation.",
-            "hpi": "Anxiety — emergency presentation.",
+            "intro": "Case Introduction Anxiety — Internal Medicine A young woman presents with anxiety, palpitations, tremor, and sweating.",
+            "hpi": "{{patient_name}} is a young woman who presents with anxiety, palpitations, tremor, and sweating. She reports feeling nervous and on edge. Symptoms could be mistaken for a primary psychiatric disorder, but the presentation warrants evaluation for medical causes of anxiety — especially hyperthyroidism, substance use, arrhythmia, and withdrawal. She is of child-bearing age; pregnancy status affects choice of antithyroid therapy.",
             "vitalsText": "",
-            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
-            "objective": "Identify and treat life threats within the time limit."
+            "clinicalTip": "Graves' hyperthyroidism — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Graves' hyperthyroidism."
           },
           "hard": {
-            "intro": "Anxiety — emergency presentation.",
-            "hpi": "Anxiety — emergency presentation.",
+            "intro": "Case Introduction Anxiety — Internal Medicine A young woman presents with anxiety, palpitations, tremor, and sweating.",
+            "hpi": "{{patient_name}} is a young woman who presents with anxiety, palpitations, tremor, and sweating. She reports feeling nervous and on edge. Symptoms could be mistaken for a primary psychiatric disorder, but the presentation warrants evaluation for medical causes of anxiety — especially hyperthyroidism, substance use, arrhythmia, and withdrawal. She is of child-bearing age; pregnancy status affects choice of antithyroid therapy.",
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Graves' hyperthyroidism."
           }
         },
         "patient": {
           "easy": {
-            "intro": "Anxiety — emergency presentation.",
-            "hpi": "Anxiety — emergency presentation.",
+            "intro": "Case Introduction Anxiety — Internal Medicine A young woman presents with anxiety, palpitations, tremor, and sweating.",
+            "hpi": "{{patient_name}} is a young woman who presents with anxiety, palpitations, tremor, and sweating. She reports feeling nervous and on edge. Symptoms could be mistaken for a primary psychiatric disorder, but the presentation warrants evaluation for medical causes of anxiety — especially hyperthyroidism, substance use, arrhythmia, and withdrawal. She is of child-bearing age; pregnancy status affects choice of antithyroid therapy.",
             "vitalsText": "",
-            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
-            "objective": "Identify and treat life threats within the time limit. Share your symptoms clearly with the team."
+            "clinicalTip": "Teaching hint: Graves' hyperthyroidism — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Graves' hyperthyroidism. Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Anxiety — emergency presentation.",
-            "hpi": "Anxiety — emergency presentation.",
+            "intro": "Case Introduction Anxiety — Internal Medicine A young woman presents with anxiety, palpitations, tremor, and sweating.",
+            "hpi": "{{patient_name}} is a young woman who presents with anxiety, palpitations, tremor, and sweating. She reports feeling nervous and on edge. Symptoms could be mistaken for a primary psychiatric disorder, but the presentation warrants evaluation for medical causes of anxiety — especially hyperthyroidism, substance use, arrhythmia, and withdrawal. She is of child-bearing age; pregnancy status affects choice of antithyroid therapy.",
             "vitalsText": "",
-            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
-            "objective": "Identify and treat life threats within the time limit."
+            "clinicalTip": "Graves' hyperthyroidism — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Graves' hyperthyroidism."
           },
           "hard": {
-            "intro": "Anxiety — emergency presentation.",
-            "hpi": "Anxiety — emergency presentation.",
+            "intro": "Case Introduction Anxiety — Internal Medicine A young woman presents with anxiety, palpitations, tremor, and sweating.",
+            "hpi": "{{patient_name}} is a young woman who presents with anxiety, palpitations, tremor, and sweating. She reports feeling nervous and on edge. Symptoms could be mistaken for a primary psychiatric disorder, but the presentation warrants evaluation for medical causes of anxiety — especially hyperthyroidism, substance use, arrhythmia, and withdrawal. She is of child-bearing age; pregnancy status affects choice of antithyroid therapy.",
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Graves' hyperthyroidism."
           }
         }
       }
@@ -27838,58 +28153,58 @@
       "clinical_tip": "Tuberculosis — follow CCS review orders.",
       "objective": "Complete diagnosis and treatment orders for Tuberculosis.",
       "interventionIds": [
-        "ordered-the-following-physical-exam",
-        "ordered-the-following-vitals",
-        "ordered-the-following-cbc",
-        "ordered-the-following-chest-x-ray",
-        "ordered-the-following-sputum-culture",
-        "should-have-ordered-tb-skin-test"
+        "physical-exam",
+        "vitals",
+        "cbc",
+        "chest-x-ray",
+        "sputum-culture",
+        "tb-skin-test"
       ],
       "interventions": [
         {
-          "id": "ordered-the-following-physical-exam",
-          "label": "Ordered the following: Physical Exam",
-          "correct_zone": "zone-icu",
+          "id": "physical-exam",
+          "label": "Physical Exam",
+          "correct_zone": "zone-custom-1",
           "why": "Appropriate CCS order for Tuberculosis: Ordered the following: Physical Exam.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "ordered-the-following-vitals",
-          "label": "Ordered the following: Vitals",
-          "correct_zone": "zone-icu",
+          "id": "vitals",
+          "label": "Vitals",
+          "correct_zone": "zone-arm",
           "why": "Vital signs establish baseline stability before further orders.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "ordered-the-following-cbc",
-          "label": "Ordered the following: CBC",
+          "id": "cbc",
+          "label": "CBC",
           "correct_zone": "zone-blood",
           "why": "Laboratory testing when systemic illness or severity warrants labs in Tuberculosis.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "ordered-the-following-chest-x-ray",
-          "label": "Ordered the following: Chest X-ray",
+          "id": "chest-x-ray",
+          "label": "Chest X-ray",
           "correct_zone": "zone-monitor",
           "why": "Evaluate chest and lungs as part of the initial exam for english internal medicine.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "ordered-the-following-sputum-culture",
-          "label": "Ordered the following: Sputum Culture",
+          "id": "sputum-culture",
+          "label": "Sputum Culture",
           "correct_zone": "zone-blood",
           "why": "Laboratory testing when systemic illness or severity warrants labs in Tuberculosis.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "should-have-ordered-tb-skin-test",
-          "label": "Should have ordered: TB Skin Test",
-          "correct_zone": "zone-icu",
+          "id": "tb-skin-test",
+          "label": "TB Skin Test",
+          "correct_zone": "zone-arm",
           "why": "Skin exam may show rashes or systemic signs relevant to Tuberculosis.",
           "guideline": "ACEP",
           "optional": false
@@ -27898,7 +28213,7 @@
       "decoys": [
         {
           "id": "decoy-avoid-66-0",
-          "label": "Correctly avoided: MRI",
+          "label": "MRI",
           "why": "Advanced imaging is not indicated early for Tuberculosis when the diagnosis is clinical.",
           "correct_zone": "zone-monitor"
         }
@@ -29324,52 +29639,52 @@
       "clinical_tip": "Lung Cancer (Adenocarcinoma) — follow CCS review orders.",
       "objective": "Complete diagnosis and treatment orders for Lung Cancer (Adenocarcinoma).",
       "interventionIds": [
-        "ordered-the-following-ct-scan",
-        "ordered-the-following-chest-x-ray",
-        "ordered-the-following-pulmonary-consult",
-        "ordered-the-following-cbc",
-        "ordered-the-following-comprehensive-meta",
+        "ct-scan",
+        "chest-x-ray",
+        "pulmonary-consult",
+        "cbc",
+        "comprehensive-metabolic-panel",
         "considered-bronchoscopy",
         "considered-sputum-culture",
         "considered-pulmonary-function-tests"
       ],
       "interventions": [
         {
-          "id": "ordered-the-following-ct-scan",
-          "label": "Ordered the following: CT scan",
+          "id": "ct-scan",
+          "label": "CT scan",
           "correct_zone": "zone-monitor",
           "why": "Appropriate CCS order for Lung Cancer (Adenocarcinoma): Ordered the following: CT scan.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "ordered-the-following-chest-x-ray",
-          "label": "Ordered the following: Chest X-ray",
+          "id": "chest-x-ray",
+          "label": "Chest X-ray",
           "correct_zone": "zone-monitor",
           "why": "Evaluate chest and lungs as part of the initial exam for persistent cough.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "ordered-the-following-pulmonary-consult",
-          "label": "Ordered the following: Pulmonary consult",
+          "id": "pulmonary-consult",
+          "label": "Pulmonary consult",
           "correct_zone": "zone-icu",
           "why": "Appropriate CCS order for Lung Cancer (Adenocarcinoma): Ordered the following: Pulmonary consult.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "ordered-the-following-cbc",
-          "label": "Ordered the following: CBC",
+          "id": "cbc",
+          "label": "CBC",
           "correct_zone": "zone-blood",
           "why": "Laboratory testing when systemic illness or severity warrants labs in Lung Cancer (Adenocarcinoma).",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "ordered-the-following-comprehensive-meta",
-          "label": "Ordered the following: Comprehensive metabolic panel",
-          "correct_zone": "zone-icu",
+          "id": "comprehensive-metabolic-panel",
+          "label": "Comprehensive metabolic panel",
+          "correct_zone": "zone-arm",
           "why": "Laboratory testing when systemic illness or severity warrants labs in Lung Cancer (Adenocarcinoma).",
           "guideline": "ACEP",
           "optional": false

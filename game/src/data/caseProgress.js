@@ -3,6 +3,13 @@ import { getBranding } from './gameData.js';
 
 const STORAGE_KEY = STORAGE.progress;
 
+/** Catalog ids are zero-padded (`065`); differential deck uses bare numbers (`65`). */
+export function normalizeCaseProgressId(caseId) {
+  const raw = String(caseId ?? '').trim();
+  if (!raw) return '';
+  return /^\d+$/.test(raw) ? raw.padStart(3, '0') : raw;
+}
+
 function defaultProgress() {
   return {
     cases: {},
@@ -30,7 +37,8 @@ export function writeProgress(data) {
 }
 
 export function getCaseRecord(caseId) {
-  return readProgress().cases[caseId] || null;
+  const id = normalizeCaseProgressId(caseId);
+  return readProgress().cases[id] || null;
 }
 
 export function isCaseFlaggedForReview(caseId) {
@@ -55,9 +63,10 @@ export function isFavorite(caseId) {
 }
 
 export function toggleFavorite(caseId) {
-  if (caseId == null || caseId === '') return false;
+  const id = normalizeCaseProgressId(caseId);
+  if (!id) return false;
   const p = readProgress();
-  const prev = p.cases[caseId] || {
+  const prev = p.cases[id] || {
     plays: 0,
     bestAccuracy: 0,
     completed: false,
@@ -68,7 +77,7 @@ export function toggleFavorite(caseId) {
     favorite: !prev.favorite,
     favoritedAt: !prev.favorite ? new Date().toISOString() : null,
   };
-  p.cases[caseId] = next;
+  p.cases[id] = next;
   writeProgress(p);
   return next.favorite;
 }
@@ -85,9 +94,10 @@ export function getFavoriteCount() {
 }
 
 export function setCaseReviewFlag(caseId, flagged) {
-  if (caseId == null || caseId === '') return false;
+  const id = normalizeCaseProgressId(caseId);
+  if (!id) return false;
   const p = readProgress();
-  const prev = p.cases[caseId] || {
+  const prev = p.cases[id] || {
     plays: 0,
     bestAccuracy: 0,
     completed: false,
@@ -98,7 +108,7 @@ export function setCaseReviewFlag(caseId, flagged) {
     reviewNext: Boolean(flagged),
     flaggedAt: flagged ? new Date().toISOString() : null,
   };
-  p.cases[caseId] = next;
+  p.cases[id] = next;
   writeProgress(p);
   return next.reviewNext;
 }
@@ -109,16 +119,17 @@ export function toggleCaseReviewFlag(caseId) {
 
 /** Leave case unfinished — bookmark for review and do not mark completed. */
 export function markCaseIncomplete(caseId) {
-  if (caseId == null || caseId === '') return;
-  setCaseReviewFlag(caseId, true);
+  const id = normalizeCaseProgressId(caseId);
+  if (!id) return;
+  setCaseReviewFlag(id, true);
   const p = readProgress();
-  const prev = p.cases[caseId] || {
+  const prev = p.cases[id] || {
     plays: 0,
     bestAccuracy: 0,
     completed: false,
     lastPlayed: null,
   };
-  p.cases[caseId] = {
+  p.cases[id] = {
     ...prev,
     completed: false,
     incomplete: true,
@@ -129,8 +140,10 @@ export function markCaseIncomplete(caseId) {
 }
 
 export function recordCaseComplete(caseId, { accuracy, attempts, seconds }) {
+  const id = normalizeCaseProgressId(caseId);
+  if (!id) return null;
   const p = readProgress();
-  const prev = p.cases[caseId] || {
+  const prev = p.cases[id] || {
     plays: 0,
     bestAccuracy: 0,
     completed: false,
@@ -145,7 +158,7 @@ export function recordCaseComplete(caseId, { accuracy, attempts, seconds }) {
     lastAttempts: attempts,
     lastSeconds: seconds,
   };
-  p.cases[caseId] = next;
+  p.cases[id] = next;
   writeProgress(p);
   return next;
 }

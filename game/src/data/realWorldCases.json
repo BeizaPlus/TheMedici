@@ -3,7 +3,21 @@
   "maxPerCase": 2,
   "stories": [
     {
+      "id": "phelps-drowning-adjacent",
+      "tier": "adjacent",
+      "name": "Michael Phelps",
+      "headline": "Olympic swimmer — post-career depression & mental health advocacy",
+      "summary": "After competitive swimming, Michael Phelps has spoken publicly about depression, suicidal ideation, and seeking help. Useful adjacent frame for drowning/rescue CCS cases: survivor mental health, pediatric water-safety context, and recognizing psychiatric needs after critical illness or near-drowning — not the same diagnosis, but broadens learning around the topic.",
+      "match": {
+        "caseIds": [113],
+        "diagnoses": ["drowning", "near-drowning", "near drowning"],
+        "topics": ["drowning"]
+      },
+      "videos": []
+    },
+    {
       "id": "alex-lewis",
+      "tier": "direct",
       "name": "Alex Lewis",
       "headline": "Strep A → septicemia, TSS & necrotizing fasciitis",
       "summary": "In 2013 a mild illness became Group A Streptococcus septicemia, toxic shock syndrome, and necrotizing fasciitis. Given ~3% survival, he required quadruple amputation and facial reconstruction — including lip grafts from shoulder tissue and medical tattooing. Often confused with Staph; both can cause TSS. Documentary: The Extraordinary Case of Alex Lewis.",
@@ -27,6 +41,7 @@
     },
     {
       "id": "lauren-wasser",
+      "tier": "direct",
       "name": "Lauren Wasser",
       "headline": "Menstrual TSS — tampon-associated shock & amputation",
       "summary": "Model Lauren Wasser developed tampon-associated toxic shock syndrome at 24. Profound hypotension, multi-organ failure, and gangrene led to below-knee amputation and ongoing limb risk. Classic real-world anchor for menstrual TSS teaching — remove source, resuscitate, broad antibiotics, ICU.",

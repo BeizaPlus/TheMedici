@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { buildYouTubeSearchUrl } from '../lib/realWorldCases.js';
+import { mergeStoriesByTier } from '../lib/realWorldStoryMerge.js';
 import { formatYoutubeTimestamp, seekYoutubeEmbed, youtubeEmbedUrl } from '../lib/youtubePlayer.js';
 import {
   getRealWorldPrefetch,
@@ -525,6 +526,12 @@ function StoryStage({
         <div className="diff-rw-stage-titles">
           <h3 className="diff-rw-name">
             {story.name}
+            {story.tier === 'adjacent' && (
+              <span className="diff-rw-tier diff-rw-tier--adjacent"> · broader context</span>
+            )}
+            {story.tier !== 'adjacent' && (
+              <span className="diff-rw-tier diff-rw-tier--direct"> · direct match</span>
+            )}
             {sourceLabel && (
               <span className={`diff-rw-source diff-rw-source--${story.source}`}> · {sourceLabel}</span>
             )}
@@ -577,18 +584,10 @@ export default function DifferentialRealWorldPanel({
     [curatedStories],
   );
 
-  const displayStories = useMemo(() => {
-    const seen = new Set();
-    const out = [];
-    for (const s of [...curated, ...remoteStories]) {
-      const key = `${s.name}|${s.headline}`.toLowerCase();
-      if (seen.has(key)) continue;
-      seen.add(key);
-      out.push(s);
-      if (out.length >= 2) break;
-    }
-    return out;
-  }, [curated, remoteStories]);
+  const displayStories = useMemo(
+    () => mergeStoriesByTier([...curated, ...remoteStories], 2),
+    [curated, remoteStories],
+  );
 
   const casePlaylist = useMemo(() => buildCasePlaylist(displayStories), [displayStories]);
 

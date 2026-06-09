@@ -4,13 +4,16 @@ import {
   geminiRealWorldAvailable,
 } from './geminiRealWorld.js';
 
-/** deepseek (default) · gemini only if REAL_WORLD_PROVIDER=gemini */
+/**
+ * gemini (default when key set — Google Search grounding for stories + videos)
+ * deepseek if REAL_WORLD_PROVIDER=deepseek or no GEMINI_API_KEY
+ */
 export function realWorldProvider() {
   const forced = String(process.env.REAL_WORLD_PROVIDER || '').toLowerCase();
   if (forced === 'gemini') return geminiRealWorldAvailable() ? 'gemini' : null;
   if (forced === 'deepseek') return deepseekRealWorldAvailable() ? 'deepseek' : null;
-  if (deepseekRealWorldAvailable()) return 'deepseek';
   if (geminiRealWorldAvailable()) return 'gemini';
+  if (deepseekRealWorldAvailable()) return 'deepseek';
   return null;
 }
 

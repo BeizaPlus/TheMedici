@@ -44,15 +44,19 @@ function stackTypeToStatus(type = '') {
 
 
 
-function loadOcrCaseSummary(caseId) {
+function loadOcrParsed(caseId) {
   const ocrPath = path.join(CASE_DIR, `case_${caseId}_ocr.txt`);
-  if (!fs.existsSync(ocrPath)) return '';
+  if (!fs.existsSync(ocrPath)) return null;
   try {
-    const parsed = parseCcsReviewOcr(fs.readFileSync(ocrPath, 'utf8'));
-    return String(parsed.caseSummary || '').trim();
+    return parseCcsReviewOcr(fs.readFileSync(ocrPath, 'utf8'));
   } catch {
-    return '';
+    return null;
   }
+}
+
+function loadOcrCaseSummary(caseId) {
+  const parsed = loadOcrParsed(caseId);
+  return String(parsed?.caseSummary || '').trim();
 }
 
 function resolveCaseSummary(row) {
@@ -63,45 +67,44 @@ function resolveCaseSummary(row) {
   return fromOcr;
 }
 
-function caseJsonToReview(row) {
-
+function ordersFromCaseJson(row) {
   const orders = [];
 
-
-
   for (const stack of row.stacks || []) {
-
     if (!stack?.label) continue;
-
     orders.push({
-
       status: stackTypeToStatus(stack.type),
-
       order: stack.label,
-
       reason: stack.finding || '',
-
     });
-
   }
-
-
 
   for (const decoy of row.decoys || []) {
-
     if (!decoy?.label) continue;
-
     orders.push({
-
       status: 'avoided',
-
       order: decoy.label,
-
       reason: decoy.reason_wrong || decoy.reason || '',
-
     });
-
   }
+
+  return orders;
+}
+
+function resolveOrders(row, ocrParsed) {
+  const jsonOrders = ordersFromCaseJson(row);
+  const ocrOrders = (ocrParsed?.orders || []).filter((o) => o?.order);
+
+  // CCS screenshot OCR is the full Action Log order list; JSON stacks are often condensed.
+  if (ocrOrders.length > jsonOrders.length) return { orders: ocrOrders, source: 'ocr' };
+  if (jsonOrders.length) return { orders: jsonOrders, source: 'json' };
+  if (ocrOrders.length) return { orders: ocrOrders, source: 'ocr' };
+  return { orders: [], source: 'none' };
+}
+
+function caseJsonToReview(row) {
+  const ocrParsed = loadOcrParsed(row.id);
+  const { orders, source: ordersSource } = resolveOrders(row, ocrParsed);
 
 
 
@@ -155,7 +158,17 @@ function caseJsonToReview(row) {
 
     structuredBy: row.extraction_method || row.source || 'clean_json',
 
-    parseQuality: row.complete ? 'good' : row.confidence >= 80 ? 'good' : orders.length ? 'partial' : 'weak',
+    parseQuality:
+      ordersSource === 'ocr' && orders.length >= 3
+        ? 'good'
+        : row.complete
+          ? 'good'
+          : row.confidence >= 80
+            ? 'good'
+            : orders.length
+              ? 'partial'
+              : 'weak',
+    ordersSource,
 
     complete: Boolean(row.complete),
 

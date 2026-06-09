@@ -17,19 +17,29 @@ Chief complaint: ${chiefComplaint || '—'}
 Clinical context: ${(hpiSnippet || '').slice(0, 600)}
 
 Requirements:
-- Return EXACTLY 2 distinct real named patients (not fictional) from documented news, hospital features, or medical documentaries.
+- Return EXACTLY 2 distinct real stories (not fictional).
+- Story 1 — tier "direct": a documented patient whose condition matches this CCS diagnosis/presentation (news, hospital feature, medical documentary).
+- Story 2 — tier "adjacent": a broader REAL public story that teaches AROUND the topic (e.g. Michael Phelps on post-Olympic depression for a drowning case; organ-donor story for sepsis). Public figures OK when the teaching link is explicit in the headline.
 - Each story: what happened, key medical teaching point, organism/etiology if known.
-- Prefer famous teaching cases when they exist (e.g. Alex Lewis for strep TSS, Lauren Wasser for tampon-related TSS).
+- Prefer famous direct teaching cases when they exist (e.g. Alex Lewis for strep TSS, Lauren Wasser for tampon-related TSS).
 - Do NOT include video URLs — text only.
-- Only use patients you are confident are real public cases.
+- Only use cases you are confident are real public stories.
 
 Return JSON only:
 {
   "stories": [
     {
       "id": "kebab-case-slug",
+      "tier": "direct",
       "name": "Full name",
       "headline": "One line",
+      "summary": "2-5 sentences"
+    },
+    {
+      "id": "adjacent-slug",
+      "tier": "adjacent",
+      "name": "Full name",
+      "headline": "One line — teaching angle around the topic",
       "summary": "2-5 sentences"
     }
   ]
@@ -37,8 +47,10 @@ Return JSON only:
 }
 
 function normalizeStory(raw, index) {
+  const tier = raw?.tier === 'adjacent' ? 'adjacent' : 'direct';
   return {
     id: String(raw?.id || `deepseek-${index + 1}`).trim(),
+    tier,
     name: String(raw?.name || 'Unknown patient').trim(),
     headline: String(raw?.headline || '').trim(),
     summary: String(raw?.summary || '').trim(),
@@ -68,8 +80,10 @@ async function attachYouTubeVideos(stories, ctx) {
         patientName: story.name,
         headline: story.headline,
         summary: story.summary,
-        diagnosis: ctx.diagnosis,
+        diagnosis: story.tier === 'adjacent' ? ctx.diagnosis : story.headline || ctx.diagnosis,
         topic: ctx.topic,
+        tier: story.tier || 'direct',
+        ccsDiagnosis: ctx.diagnosis,
       },
       2,
     );

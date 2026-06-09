@@ -13,6 +13,15 @@
   text-transform: uppercase;
 }
 
+.diff-flag-toast {
+  margin: 0;
+  padding: 8px 24px;
+  font-size: 0.82rem;
+  color: var(--green, #3ecf8e);
+  background: rgba(62, 207, 142, 0.08);
+  border-bottom: 1px solid rgba(62, 207, 142, 0.2);
+}
+
 .diff-practice {
   min-height: 100vh;
   min-height: 100dvh;
@@ -184,6 +193,32 @@
   pointer-events: auto;
 }
 
+.diff-ambience-dock .diff-dock-bookmark-btn.case-review-flag-btn {
+  margin: 0;
+  padding: 0;
+  min-width: 28px;
+  min-height: 28px;
+  width: 28px;
+  height: 28px;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.diff-ambience-dock .diff-dock-bookmark-btn .case-review-bookmark-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.diff-ambience-dock .diff-dock-bookmark-btn.active {
+  border-color: rgba(120, 180, 255, 0.65);
+  color: #9ec5ff;
+  background: rgba(120, 180, 255, 0.12);
+}
+
 .diff-ambience-dock .clinical-font-controls-wrap {
   align-items: flex-end;
 }
@@ -198,21 +233,21 @@
   padding: 0 6px;
 }
 
-.diff-practice .diff-study-body,
-.diff-practice .diff-case-review,
-.diff-practice .diff-case-presentation,
-.diff-practice .diff-score-panel,
-.diff-practice .diff-voice-cleaned,
-.diff-practice .diff-voice-live,
-.diff-practice .diff-guess-chip,
-.diff-practice .diff-dx-list,
-.diff-practice .diff-stacker-hint,
-.diff-practice .diff-mnemonic-input,
-.diff-practice .diff-mnemonic-hint,
-.diff-practice .diff-attempt-guesses,
-.diff-practice .diff-attempt-hearing,
-.diff-practice .diff-rw-panel,
-.diff-practice .clinical-text-block {
+/* A+/A−/B — readable study content only (case summary, orders, transcripts, notes) */
+.diff-study-panel .differential-review-body,
+.diff-study-panel .differential-review-text,
+.diff-study-panel .diff-ccs-case-summary,
+.diff-study-panel .diff-ccs-case-summary-body,
+.diff-study-panel .diff-ccs-case-summary-diff,
+.diff-study-panel .diff-order-name,
+.diff-study-panel .diff-order-reason,
+.diff-study-panel .diff-case-presentation .soap-body,
+.diff-study-panel .diff-mnemonic-input,
+.diff-study-panel .diff-rw-summary--full,
+.diff-study-panel .diff-rw-transcript-text,
+.diff-study-panel .diff-attempt-hearing,
+.diff-study-panel .diff-attempt-guesses,
+.diff-study-panel .clinical-text-block {
   font-size: var(--clinical-font-size, 1rem);
   font-weight: var(--clinical-font-weight, 600);
 }
@@ -482,6 +517,19 @@
 
 .diff-rw-source--gemini {
   color: #8ab4f8;
+}
+
+.diff-rw-tier {
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.diff-rw-tier--direct {
+  color: #9fd89f;
+}
+
+.diff-rw-tier--adjacent {
+  color: #e8b84b;
 }
 
 .diff-rw-story-tabs {
@@ -1333,6 +1381,169 @@
 
 .diff-study-case-actions {
   margin-bottom: 10px;
+}
+
+.diff-review-queue-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 4px 2px 8px;
+}
+
+.diff-review-section-head {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, #888);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diff-review-section-count {
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #aaa;
+}
+
+.diff-review-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diff-review-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.diff-review-row--current {
+  border-color: rgba(232, 184, 75, 0.45);
+  background: rgba(232, 184, 75, 0.07);
+}
+
+.diff-review-row-main {
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.diff-review-row-dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.diff-review-row-dot--bookmark {
+  background: var(--gold, #e8b84b);
+  box-shadow: 0 0 0 3px rgba(232, 184, 75, 0.15);
+}
+
+.diff-review-row-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.diff-review-row-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.84rem;
+}
+
+.diff-review-row-title strong {
+  color: #ddd;
+}
+
+.diff-review-row-topic {
+  color: var(--muted, #888);
+  font-size: 0.78rem;
+}
+
+.diff-review-row-flag {
+  color: var(--gold, #e8b84b);
+  font-size: 0.72rem;
+}
+
+.diff-review-row-here {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gold, #e8b84b);
+}
+
+.diff-review-row-diagnosis {
+  margin: 4px 0 0;
+  font-size: 0.76rem;
+  color: #aaa;
+}
+
+.diff-review-row-meta {
+  margin: 4px 0 0;
+  font-size: 0.72rem;
+  color: var(--muted, #777);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.diff-review-row-score {
+  color: var(--green, #3ecf8e);
+}
+
+.diff-review-row-nailed {
+  color: var(--gold, #e8b84b);
+}
+
+.diff-review-row-notes-hint {
+  color: #9ab;
+}
+
+.diff-review-row-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.diff-review-jump-btn {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ccc;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.diff-review-jump-btn:hover {
+  border-color: rgba(232, 184, 75, 0.4);
+  color: var(--gold, #e8b84b);
+  background: rgba(232, 184, 75, 0.08);
+}
+
+.diff-review-jump-btn--notes {
+  color: var(--muted, #888);
 }
 
 .diff-attempt-history {
@@ -2692,6 +2903,7 @@
 
 .diff-stacker-hint {
   font-size: 0.78rem;
+  font-weight: 400;
   color: var(--muted, #888);
   text-align: center;
   margin: 0;

@@ -35,6 +35,7 @@ function normalizeStory(raw, index) {
 
   return {
     id: String(raw?.id || `gemini-${index + 1}`).trim(),
+    tier: raw?.tier === 'adjacent' ? 'adjacent' : 'direct',
     name: String(raw?.name || 'Unknown patient').trim(),
     headline: String(raw?.headline || '').trim(),
     summary: String(raw?.summary || '').trim(),
@@ -75,12 +76,14 @@ Chief complaint: ${chiefComplaint || '—'}
 Clinical context: ${(hpiSnippet || '').slice(0, 600)}
 
 Requirements:
-- Return EXACTLY 2 distinct real named patients (not fictional).
+- Return EXACTLY 2 distinct real stories (not fictional).
+- Story 1 — tier "direct": documented patient matching this CCS diagnosis/presentation.
+- Story 2 — tier "adjacent": broader REAL public story teaching AROUND the topic (public figure OK when link is explicit, e.g. Michael Phelps depression advocacy for drowning/rescue cases).
 - Each story: what happened, key medical teaching point, organism/etiology if known.
-- Prefer famous teaching cases when they exist (e.g. Alex Lewis for strep TSS/NF).
+- Prefer famous direct teaching cases when they exist (e.g. Alex Lewis for strep TSS/NF).
 - Include 1–2 YouTube watch URLs per story when available (interviews, documentaries).
 - Only include YouTube URLs you found in Google Search — never invent or guess video IDs.
-- Prefer well-known official documentaries and news segments that are still public on YouTube.
+- Direct-tier videos must match the patient/condition; adjacent-tier videos may teach the broader angle named in the headline.
 - Note common confusions (e.g. Strep vs Staph) when relevant.
 
 Return JSON only:
@@ -88,8 +91,17 @@ Return JSON only:
   "stories": [
     {
       "id": "kebab-case-slug",
+      "tier": "direct",
       "name": "Full name",
       "headline": "One line",
+      "summary": "2-5 sentences",
+      "videos": [{ "title": "Video title", "url": "https://www.youtube.com/watch?v=..." }]
+    },
+    {
+      "id": "adjacent-slug",
+      "tier": "adjacent",
+      "name": "Full name",
+      "headline": "One line — teaching angle",
       "summary": "2-5 sentences",
       "videos": [{ "title": "Video title", "url": "https://www.youtube.com/watch?v=..." }]
     }
@@ -185,19 +197,38 @@ function parseVideosFromGemini(data) {
     .slice(0, 2);
 }
 
-function buildRepairPrompt({ patientName, headline, diagnosis, topic, brokenTitles = [] }) {
-  return `Find WORKING, PUBLIC YouTube videos for this real patient medical story.
+function buildRepairPrompt({
+  patientName,
+  headline,
+  summary = '',
+  diagnosis,
+  topic,
+  brokenTitles = [],
+  tier = 'direct',
+  ccsDiagnosis = '',
+} = {}) {
+  const redacted = /^[A-Za-z][A-Za-z'-]+\s+[A-Z]\.?$/.test(String(patientName || '').trim());
+  const adjacent = tier === 'adjacent';
+  return `Find WORKING, PUBLIC YouTube videos for this REAL medical story.
 
-Patient: ${patientName}
+Tier: ${tier}${adjacent ? ' (broader teaching angle — NOT required to be the same diagnosis as the CCS case)' : ' (direct patient/condition match)'}
+Patient / subject: ${patientName}${redacted ? ' (anonymized — do NOT search celebrity names like Charlie Sheen)' : ''}
 Headline: ${headline || '—'}
-Diagnosis / condition: ${diagnosis || '—'}
-Presentation: ${topic || '—'}
-Broken or missing previous links: ${brokenTitles.length ? brokenTitles.join('; ') : 'none provided'}
+Summary: ${(summary || '').slice(0, 500)}
+Condition keywords: ${diagnosis || '—'}
+CCS case diagnosis: ${ccsDiagnosis || '—'}
+CCS presentation: ${topic || '—'}
+Broken or wrong previous links: ${brokenTitles.length ? brokenTitles.join('; ') : 'none provided'}
 
-Use Google Search on YouTube for queries like:
-- "${patientName} patient story interview"
-- "${diagnosis} patient documentary"
-- "${patientName} ${diagnosis}"
+Use Google Search on YouTube. Prefer:
+${adjacent
+    ? `- Interviews/documentaries about the headline teaching angle (e.g. mental health advocacy, water safety, survivor story)
+- Educational medical segments that match the ADJACENT headline — not random celebrity sports highlights`
+    : `- Medical lectures / genetics rounds on the SAME condition (e.g. ACAN, aggrecan, whole-exome short stature)
+- Hospital or endocrinology channels (Children's National, pediatric endocrine society)
+- Patient documentaries that match the condition — NOT a different disease sharing the first name`}
+
+${redacted && !adjacent ? 'Do NOT search by first name only — search condition + genetics instead.' : !adjacent ? `Also try: "${patientName} patient story interview"` : `Try: "${patientName} ${headline}" interview documentary`}
 
 Return ONLY videos that appear in search results and are currently public on YouTube.
 Do not invent video IDs.
@@ -236,10 +267,15 @@ async function fetchRepairVideosWithModel(ctx, model) {
 export async function fetchRepairVideosWithGemini(ctx) {
   if (!geminiApiKey()) return [];
 
+  const repairCtx = {
+    ...ctx,
+    diagnosis: ctx.diagnosis || ctx.headline || ctx.summary || '',
+  };
+
   let lastError = null;
   for (const model of MODEL_FALLBACKS) {
     try {
-      const candidates = await fetchRepairVideosWithModel(ctx, model);
+      const candidates = await fetchRepairVideosWithModel(repairCtx, model);
       const { working } = await filterWorkingVideos(candidates);
       if (working.length) return working;
     } catch (err) {
@@ -262,8 +298,10 @@ export async function ensureStoriesHaveWorkingVideos(stories = [], ctx = {}) {
       patientName: story.name,
       headline: story.headline,
       summary: story.summary,
-      diagnosis: ctx.diagnosis,
+      diagnosis: story.tier === 'adjacent' ? story.headline : ctx.diagnosis,
       topic: ctx.topic,
+      tier: story.tier || 'direct',
+      ccsDiagnosis: ctx.diagnosis,
     };
 
     const { working, broken } = await filterWorkingVideos(story.videos);
@@ -277,7 +315,15 @@ export async function ensureStoriesHaveWorkingVideos(stories = [], ctx = {}) {
         brokenTitles: [...broken, ...irrelevant].map((b) => b.title),
       };
 
-      const found = await searchWorkingYouTubeVideos(repairCtxWithBroken, 2 - videos.length);
+      const found = await searchWorkingYouTubeVideos(
+        {
+          ...repairCtxWithBroken,
+          summary: story.summary,
+          tier: story.tier || 'direct',
+          ccsDiagnosis: ctx.diagnosis,
+        },
+        2 - videos.length,
+      );
 
       for (const v of found) {
         if (!videos.some((w) => w.youtubeId === v.youtubeId)) videos.push(v);

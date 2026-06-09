@@ -830,7 +830,7 @@ app.post('/api/differential/parse-transcript', async (req, res) => {
 app.post('/api/differential/real-world', async (req, res) => {
   if (!realWorldAvailable()) {
     return res.status(400).json({
-      error: 'Add DEEPSEEK_API_KEY to MeWorld/.env (preferred). Optional: GEMINI_API_KEY with REAL_WORLD_PROVIDER=gemini',
+      error: 'Add GEMINI_API_KEY to MeWorld/.env (preferred — Google Search for stories + videos). Fallback: DEEPSEEK_API_KEY',
     });
   }
 

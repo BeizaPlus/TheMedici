@@ -1,81 +1,233 @@
 {
   "id": 174,
   "topic": "Hematemesis",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Hematemesis",
+  "diagnosis": "Bleeding esophageal varices",
+  "differential": [
+    "Esophageal varices",
+    "Peptic ulcer disease",
+    "Mallory-Weiss tear",
+    "Gastric erosions",
+    "Malignancy"
+  ],
+  "chief_complaint": "Hematemesis and melena in a patient with alcoholic cirrhosis",
+  "hpi_narrative": "{{patient_name}} is a 55-year-old man with alcoholic cirrhosis who presents with hematemesis and melena. He is found to have severe anemia (Hct 24%, Hgb 8.0 g/dL), mild coagulopathy (INR 1.8), and thrombocytopenia (platelets 100,000). Evaluate for upper GI bleeding from portal hypertension — esophageal varices are the leading concern.",
+  "case_summary": "Differential: Esophageal varices, peptic ulcer disease, Mallory-Weiss tear, gastric erosions, malignancy.\n\nEsophageal varices are dilated submucosal veins that develop as a consequence of portal hypertension, most commonly from cirrhosis. This case presents a classic scenario: a 55-year-old man with alcoholic cirrhosis presenting with hematemesis and melena, found to have severe anemia (Hct 24%, Hgb 8.0), mild coagulopathy (INR 1.8), and thrombocytopenia (platelets 100,000).\n\nThe definitive diagnosis is made via urgent esophagogastroduodenoscopy (EGD) with band ligation. Acute management: type and crossmatch, cautious IV resuscitation, restrictive PRBC transfusion (Hb 7–9 g/dL), octreotide IV, IV PPI, ceftriaxone prophylaxis in cirrhotics with GI bleed, and NPO for endoscopy. With platelets 100,000 and INR 1.8, platelet or FFP transfusion is NOT required. Spironolactone is contraindicated during acute variceal hemorrhage. After stabilization: non-selective beta-blocker for secondary prophylaxis, hepatitis A/B vaccination, alcohol cessation counseling, and lactulose to prevent hepatic encephalopathy.",
+  "patient_sex": "male",
+  "patient_age_years": 55,
+  "location": "Emergency Department",
+  "specialty": "Emergency Medicine",
+  "case_introduction": "Case Introduction\n\nHematemesis — Emergency Medicine\nA 55-year-old man with alcoholic cirrhosis presents with hematemesis and melena.",
+  "vitals": null,
+  "physical_exam": [
+    ["General", "Ill-appearing; assess for shock, jaundice, cachexia, and stigmata of chronic liver disease."],
+    ["Cardiovascular", "Tachycardia; evaluate for hypotension indicating hypovolemia."],
+    ["Chest / Lungs", "Evaluate for respiratory distress or aspiration."],
+    ["Abdomen", "Assess for ascites, splenomegaly, or tenderness suggesting portal hypertension."],
+    ["Rectal", "Melena confirming upper GI bleeding."],
+    ["Neuro", "Alert unless encephalopathy or perfusion compromise; watch for hepatic encephalopathy after bleed."]
+  ],
+  "patient_voice": {
+    "chief_complaint": "I've been vomiting blood and my stools have been black. I'm terrified.",
+    "history": "I have cirrhosis from alcohol. This started today — I threw up blood and noticed dark stools.",
+    "pain": "My belly feels full and I'm weak and dizzy when I stand up."
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess overall appearance for signs of shock, jaundice, or cachexia.",
+      "aliases": ["General appearance"]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Evaluate for respiratory distress or aspiration.",
+      "aliases": ["Chest exam", "Lung exam"]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Check for tachycardia or hypotension indicating hypovolemia.",
+      "aliases": ["Cardiovascular exam"]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Look for ascites, splenomegaly, or tenderness suggesting portal hypertension.",
+      "aliases": ["Abdominal exam"]
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "correctlyOrdered",
+      "finding": "Assess for melena to confirm GI bleed.",
+      "aliases": ["Rectal exam"]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Assess anemia from blood loss and thrombocytopenia from cirrhosis.",
+      "aliases": ["Hemoglobin, blood", "Hemoglobin and hematocrit"]
+    },
+    {
+      "label": "PT/INR",
+      "type": "correctlyOrdered",
+      "finding": "Assess coagulopathy from liver disease.",
+      "aliases": ["PT/PTT", "Partial thromboplastin time"]
+    },
+    {
+      "label": "Basic metabolic profile",
+      "type": "correctlyOrdered",
+      "finding": "Evaluate electrolytes and renal function; elevated BUN/Cr ratio suggests upper GI bleed.",
+      "aliases": ["Liver function panel", "Comprehensive metabolic profile", "CMP"]
+    },
+    {
+      "label": "Type and screen, blood",
+      "type": "correctlyOrdered",
+      "finding": "Prepare for possible transfusion in active bleeding.",
+      "aliases": ["Type and Rh factor, blood"]
+    },
+    {
+      "label": "Endoscopy, upper gastrointestinal",
+      "type": "correctlyOrdered",
+      "finding": "Diagnostic and therapeutic for variceal bleeding — most important intervention.",
+      "aliases": ["Consult, gastroenterology", "Upper GI endoscopy", "EGD"]
+    },
+    {
+      "label": "Saline solution, normal",
+      "type": "correctlyOrdered",
+      "finding": "Volume resuscitation in hypovolemic shock; avoid over-resuscitation worsening portal pressure.",
+      "aliases": ["Lactated Ringer solution", "IV fluids"]
+    },
+    {
+      "label": "Transfusion, packed red blood cells",
+      "type": "correctlyOrdered",
+      "finding": "If Hb ≤8 g/dL or ongoing bleeding, transfuse to maintain Hb >7 with restrictive strategy.",
+      "aliases": ["PRBC", "Packed red blood cells"]
+    },
+    {
+      "label": "Octreotide acetate",
+      "type": "correctlyOrdered",
+      "finding": "Vasoconstrictor reducing portal pressure and variceal bleeding.",
+      "aliases": ["Octreotide"]
+    },
+    {
+      "label": "Diet, NPO",
+      "type": "correctlyOrdered",
+      "finding": "NPO to prepare for urgent endoscopy.",
+      "aliases": ["Nothing by mouth except ice chips", "NPO"]
+    },
+    {
+      "label": "Pantoprazole sodium",
+      "type": "correctlyOrdered",
+      "finding": "IV PPI to reduce rebleeding risk; IV route preferred over oral PPI in acute bleed.",
+      "aliases": ["Esomeprazole", "IV PPI"]
+    },
+    {
+      "label": "Ceftriaxone sodium",
+      "type": "correctlyOrdered",
+      "finding": "Prophylactic antibiotics in cirrhotic with GI bleed — prevents SBP and reduces mortality.",
+      "aliases": ["Cefotaxime sodium"]
+    },
+    {
+      "label": "Vaccine, Hepatitis A, inactivated",
+      "type": "correctlyOrdered",
+      "finding": "Prevent superinfection in chronic liver disease; recommended for all with cirrhosis.",
+      "aliases": ["Hepatitis A vaccine"]
+    },
+    {
+      "label": "Vaccine, hepatitis B",
+      "type": "correctlyOrdered",
+      "finding": "Prevent superinfection in chronic liver disease; recommended for all with cirrhosis.",
+      "aliases": ["Hepatitis B vaccine"]
+    },
+    {
+      "label": "Advise patient, no alcohol",
+      "type": "correctlyOrdered",
+      "finding": "Prevent progression of cirrhosis and recurrent bleeds.",
+      "aliases": ["Advise patient, limit alcohol intake"]
+    },
+    {
+      "label": "Propranolol hydrochloride",
+      "type": "correctlyOrdered",
+      "finding": "Non-selective beta-blocker for secondary prophylaxis after bleeding controlled — not during acute instability.",
+      "aliases": ["Nadolol", "Carvedilol", "Timolol maleate"]
+    },
+    {
+      "label": "Instruct patient, smoking cessation",
+      "type": "correctlyOrdered",
+      "finding": "Address modifiable risk factor during hospitalization.",
+      "aliases": ["Smoking cessation counseling"]
+    },
+    {
+      "label": "Lactulose",
+      "type": "correctlyOrdered",
+      "finding": "Prevent hepatic encephalopathy after upper GI bleed in cirrhosis.",
+      "aliases": []
+    }
+  ],
+  "decoys": [
+    {
+      "label": "Spironolactone",
+      "reason_wrong": "Contraindicated during acute variceal hemorrhage — patient is volume-depleted; diuretic risks hypotension and AKI."
+    },
+    {
+      "label": "Omeprazole",
+      "reason_wrong": "Oral PPI loses points — IV pantoprazole/esomeprazole preferred in acute upper GI bleed."
+    },
+    {
+      "label": "Levofloxacin",
+      "reason_wrong": "Inferior prophylactic choice in cirrhotic GI bleed — ceftriaxone/cefotaxime preferred over quinolones."
+    },
+    {
+      "label": "Transfusion, platelets",
+      "reason_wrong": "Platelets 100,000 — transfusion not indicated unless <50,000 with active bleeding."
+    },
+    {
+      "label": "Transfusion, fresh frozen plasma",
+      "reason_wrong": "INR 1.8 without indication for FFP in this scenario — restrictive transfusion strategy applies."
+    },
+    {
+      "label": "Reproductive",
+      "reason_wrong": "Male patient — pregnancy-related orders not indicated."
+    }
+  ],
   "correct_orders": [
-    "Obtain laboratory tests: CBC, Coagulation panel, Lipase, AST, ALT",
-    "Order upper GI endoscopy",
-    "Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH",
-    "Consult Gastroenterology for endoscopic evaluation and management",
-    "Oxygen",
-    "IV access ×2",
-    "CBC",
-    "CMP",
-    "coags",
-    "CXR"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    "PT/INR",
+    "Basic metabolic profile",
+    "Type and screen, blood",
+    "Endoscopy, upper gastrointestinal",
+    "Saline solution, normal",
+    "Transfusion, packed red blood cells",
+    "Octreotide acetate",
+    "Diet, NPO",
+    "Pantoprazole sodium",
+    "Ceftriaxone sodium",
+    "Vaccine, Hepatitis A, inactivated",
+    "Vaccine, hepatitis B",
+    "Advise patient, no alcohol",
+    "Propranolol hydrochloride",
+    "Instruct patient, smoking cessation",
+    "Lactulose"
   ],
   "should_avoid": [
-    "Reproductive",
-    "Type & Screen / Crossmatch",
-    "EKG (Electrocardiogram)",
-    "Fingerstick/Serum glucose",
-    "Order unneeded X-rays or CT scans at this stage as they may not be diagnostic for upper GI bleeding"
+    "Spironolactone",
+    "Omeprazole",
+    "Levofloxacin",
+    "Transfusion, platelets",
+    "Transfusion, fresh frozen plasma",
+    "Reproductive"
   ],
-  "rationale": {
-    "Obtain laboratory tests: CBC, Coagulation panel, Lipase, AST, ALT": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Order upper GI endoscopy": "Appropriate CCS order for this diagnosis: Order upper GI endoscopy.",
-    "Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH": "Appropriate CCS order for this diagnosis: Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH.",
-    "Consult Gastroenterology for endoscopic evaluation and management": "Appropriate CCS order for this diagnosis: Consult Gastroenterology for endoscopic evaluation and management.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "CMP": "Appropriate CCS order for this diagnosis: CMP.",
-    "coags": "Appropriate CCS order for this diagnosis: coags.",
-    "CXR": "Appropriate CCS order for this diagnosis: CXR.",
-    "Reproductive": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical.",
-    "Type & Screen / Crossmatch": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "EKG (Electrocardiogram)": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical.",
-    "Fingerstick/Serum glucose": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "Order unneeded X-rays or CT scans at this stage as they may not be diagnostic for upper GI bleeding": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
-  },
-  "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — hematemesis. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This hematemesis won't let up and I'm afraid something bad is happening."
-  },
-  "ccs_category": null,
-  "case_summary": null,
-  "stacks": [
-    "Obtain laboratory tests: CBC, Coagulation panel, Lipase, AST, ALT",
-    "Order upper GI endoscopy",
-    "Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH",
-    "Consult Gastroenterology for endoscopic evaluation and management",
-    "Oxygen",
-    "IV access ×2",
-    "CBC",
-    "CMP",
-    "coags",
-    "CXR"
-  ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
-  "enrichment_sources": [
-    "ollama"
-  ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "confidence": 95,
+  "source": "ccs_source_manual",
+  "extraction_method": "ccs_source_manual",
+  "complete": true,
+  "screenshot_processed": true,
+  "enrichment_sources": ["ccs_source_manual", "ccs_review_pdf"]
 }

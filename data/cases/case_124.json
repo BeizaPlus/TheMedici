@@ -1,66 +1,148 @@
 {
   "id": 124,
   "topic": "Chest Pain",
-  "diagnosis": "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses in a patient presenting with chest pain of unknown etiology.",
-  "confidence": "inferred",
-  "source": "preparedCases+fmgmatch+mistral",
+  "title": "Chest Pain",
+  "diagnosis": "Inferior myocardial infarction (STEMI)",
+  "differential": [
+    "Acute aortic dissection",
+    "Pulmonary embolism",
+    "Pericardial tamponade",
+    "Esophageal rupture"
+  ],
+  "chief_complaint": "Acute chest pain — evaluate for STEMI",
+  "hpi_narrative": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
+  "case_summary": "Differential: Acute Aortic Dissection, Pulmonary embolism, Pericardial tamponade, Esophageal rupture.\n\nThe patient has an ST-elevated inferior myocardial infarction (STEMI). ST elevations will be present in leads II, III, and aVF. The patient should immediately be started on dual antiplatelet therapy (DAPT): Aspirin plus a P2Y12 inhibitor (Ticagrelor is preferred; Clopidogrel is also accepted). A beta blocker and atorvastatin should also be initiated. Cardiology should be consulted and percutaneous coronary intervention (PCI) — angioplasty with stent placement — should be performed, as this is the preferred reperfusion strategy.\n\nIn the USMLE, immediate PCI is available, so fibrinolytic therapy is not required. If fibrinolysis is ordered, partial credit will be awarded, but full credit requires PCI as the preferred approach. Ticagrelor and Prasugrel are the preferred P2Y12 agents; Clopidogrel is acceptable for full credit. Heparin is optional in STEMI going to cath lab.",
+  "patient_sex": "male",
+  "patient_age_years": null,
+  "location": "Emergency Department",
+  "specialty": "Emergency Medicine",
+  "case_introduction": "Case Introduction\n\nChest Pain — Emergency Medicine\nA patient presents with acute chest pain requiring rapid ACS evaluation.",
+  "vitals": null,
+  "physical_exam": [
+    ["General", "Assess how ill the patient appears — diaphoresis, distress."],
+    ["Cardiovascular", "Chest pain — examine heart; assess for signs of ischemia or hemodynamic compromise."],
+    ["Chest / Lungs", "Evaluate for alternative causes of chest pain and respiratory compromise."],
+    ["Neuro", "Alert unless perfusion compromised."]
+  ],
+  "patient_voice": {
+    "chief_complaint": "My chest hurts so bad — it came on suddenly and won't stop.",
+    "history": "I've never had pain like this before. It feels like pressure and it's making me sweaty and scared.",
+    "pain": "Heavy pressure in my chest, maybe an 8 out of 10."
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess how ill the patient looks.",
+      "aliases": ["General appearance"]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Chest pain — cardiovascular exam warranted.",
+      "aliases": ["Cardiovascular exam"]
+    },
+    {
+      "label": "Electrocardiography, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "EKG shows inferior STEMI — treat urgently.",
+      "aliases": ["EKG", "ECG", "Electrocardiography, rhythm strip, long"]
+    },
+    {
+      "label": "Monitor, cardiac",
+      "type": "correctlyOrdered",
+      "finding": "Continuous cardiac monitoring required.",
+      "aliases": ["Monitor, cardiac, check", "Telemetry"]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Baseline hematocrit and screening labs.",
+      "aliases": ["CBC"]
+    },
+    {
+      "label": "Cardiac troponin I, serum",
+      "type": "correctlyOrdered",
+      "finding": "Confirm myocardial injury in suspected MI.",
+      "aliases": ["Cardiac enzymes, serum", "Troponin"]
+    },
+    {
+      "label": "Basic metabolic profile",
+      "type": "correctlyOrdered",
+      "finding": "Chemistries to rule out other conditions and assess renal function before contrast/PCI.",
+      "aliases": ["Comprehensive metabolic profile", "CMP", "BMP"]
+    },
+    {
+      "label": "Aspirin, therapy",
+      "type": "correctlyOrdered",
+      "finding": "Immediate aspirin — cornerstone of STEMI DAPT.",
+      "aliases": ["Aspirin"]
+    },
+    {
+      "label": "Atorvastatin",
+      "type": "correctlyOrdered",
+      "finding": "High-intensity statin mandated in acute STEMI per ACC/AHA.",
+      "aliases": ["Rosuvastatin"]
+    },
+    {
+      "label": "Ticagrelor",
+      "type": "correctlyOrdered",
+      "finding": "P2Y12 inhibitor for DAPT with aspirin in STEMI.",
+      "aliases": ["Clopidogrel bisulfate", "Clopidogrel"]
+    },
+    {
+      "label": "Consult, cardiology",
+      "type": "correctlyOrdered",
+      "finding": "Cardiology consult for emergent reperfusion.",
+      "aliases": ["Cardiology consult"]
+    },
+    {
+      "label": "Angioplasty with stent placement, coronary artery",
+      "type": "correctlyOrdered",
+      "finding": "PCI is preferred reperfusion strategy over fibrinolysis in USMLE CCS.",
+      "aliases": ["Percutaneous coronary intervention", "PCI", "Angiocardiography, right and left heart"]
+    }
+  ],
+  "decoys": [
+    {
+      "label": "Simvastatin",
+      "reason_wrong": "Not acceptable high-intensity statin for acute STEMI — use atorvastatin or rosuvastatin only."
+    },
+    {
+      "label": "Consult, interventional radiology",
+      "reason_wrong": "IR does not perform coronary PCI for STEMI — cardiology/interventional cardiology required."
+    },
+    {
+      "label": "Reteplase, recombinant",
+      "reason_wrong": "Fibrinolysis gives only partial credit when immediate PCI is available and preferred."
+    },
+    {
+      "label": "Alteplase, recombinant",
+      "reason_wrong": "Thrombolytics are inferior to PCI for STEMI when PCI is immediately available."
+    }
+  ],
   "correct_orders": [
-    "Obtain immediate ECG",
-    "Order serum biomarkers such as Troponin I/T",
-    "Admit the patient for continuous monitoring and further investigation",
-    "Consult Cardiology",
-    "Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated",
-    "Oxygen",
-    "IV access \u00d72",
-    "glucose check"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Cardiovascular",
+    "Electrocardiography, 12 lead",
+    "Monitor, cardiac",
+    "CBC with differential",
+    "Cardiac troponin I, serum",
+    "Basic metabolic profile",
+    "Aspirin, therapy",
+    "Atorvastatin",
+    "Ticagrelor",
+    "Consult, cardiology",
+    "Angioplasty with stent placement, coronary artery"
   ],
   "should_avoid": [
-    "Order immediate cardiac catheterization unless the patient's condition warrants it (e.g., persistent ST-segment elevation or hemodynamic instability)"
+    "Simvastatin",
+    "Consult, interventional radiology"
   ],
-  "rationale": {
-    "Obtain immediate ECG": "To evaluate for signs of ischemia, such as ST-segment elevations, depression, or T-wave inversions",
-    "Order serum biomarkers such as Troponin I/T": "To assess myocardial injury and help confirm a diagnosis of ACS",
-    "Admit the patient for continuous monitoring and further investigation": "Given the unclear etiology, close observation is necessary to identify any signs of acute decompensation or progression",
-    "Consult Cardiology": "For expert advice on management strategies and potential interventions such as PCI or CABG",
-    "Prescribe aspirin (unless contraindicated) and other antiplatelet agents as indicated": "To reduce the risk of thrombosis, which is a common complication in ACS",
-    "Order immediate cardiac catheterization unless the patient's condition warrants it": "This procedure carries risks and should only be performed when necessary to guide treatment decisions",
-    "Oxygen": "The patient is experiencing chest pain, which could be a life-threatening condition. Oxygen is essential to ensure adequate oxygenation.",
-    "IV access \u00d72": "Establishing IV access is crucial for administering medications and fluids quickly if needed.",
-    "glucose check": "Hypoglycemia can cause symptoms similar to chest pain, so it's important to rule this out early."
-  },
-  "hpi": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
-  "physical_exam": [
-    [
-      "General",
-      "Chest Pain \u2014 exam tailored to chief complaint on arrival."
-    ],
-    [
-      "Cardiovascular",
-      "HR 120, tachycardic; BP 100/60."
-    ],
-    [
-      "Respiratory",
-      "RR 34, tachypneic; SpO\u2082 96%."
-    ],
-    [
-      "Abdomen",
-      "Soft, non-distended, no focal peritoneal signs on initial exam."
-    ],
-    [
-      "Neuro",
-      "Alert and oriented unless perfusion or metabolic derangement present."
-    ],
-    [
-      "Skin",
-      "No acute rash; capillary refill and perfusion assessed."
-    ]
-  ],
-  "vitals": "Initial Vital Signs Day 1 @ 16:00 Temperature: 37.0 C (98.6 degrees F) Pulse: 120 beats/min, Weak Respiratory rate: 34 /minute Blood pressure, systolic: 100 mm Hg Blood pressure, diastolic: 60 mm Hg Height: 183cm (72.0 in) Weight: 97.5 kg (215 lb) Body Mass Index: 29.1 kg/m2",
-  "patient_voice": null,
+  "confidence": 95,
+  "source": "ccs_source_manual",
+  "extraction_method": "ccs_source_manual",
   "complete": true,
-  "screenshot_processed": false,
-  "enrichment_sources": [
-    "fmgmatch",
-    "mistral"
-  ]
+  "screenshot_processed": true,
+  "enrichment_sources": ["ccs_source_manual", "ccs_review_pdf"]
 }

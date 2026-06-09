@@ -27,19 +27,33 @@ export default function CaseReviewFlagButton({
 
   if (!caseId) return null;
 
+  const label = flagged ? 'Remove bookmark' : 'Bookmark case for review later';
+
   return (
     <button
       type="button"
-      className={`case-review-flag-btn ${flagged ? 'active' : ''} ${compact ? 'compact' : ''} ${className}`.trim()}
+      className={`case-review-flag-btn ${flagged ? 'active' : ''} ${compact ? 'compact' : ''} ${iconOnly ? 'icon-only' : ''} ${className}`.trim()}
       onClick={toggle}
       aria-pressed={flagged}
-      title={flagged ? 'Remove from review list' : 'Flag to review next time'}
+      aria-label={label}
+      title={label}
     >
-      <svg className="chip-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M4 5v14l12 -7l-12 -7" />
-        <path d="M20 5l0 14" />
+      <svg
+        className="chip-icon case-review-bookmark-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill={flagged ? 'currentColor' : 'none'}
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
       </svg>
-      {!iconOnly && <span>{flagged ? 'Flagged' : 'Review next'}</span>}
+      {!iconOnly && <span>{flagged ? 'Bookmarked' : 'Review later'}</span>}
     </button>
   );
 }

@@ -58,16 +58,28 @@ Or `npm run build:differential-review` (included in `build:data` / `predev`).
 - Orders: structured list with gold step numbers — not `[OK]` text blocks
 - CSS: `src/styles/differential-practice.css` — audit via `scripts/audit-component-css.mjs`
 
-## Real World tab — Gemini + Google Search (primary)
+## Real World tab — tiered stories + video repair
 
-On tab open: `POST /api/differential/real-world` → `server/geminiRealWorld.js`
+On tab open: `POST /api/differential/real-world` → `server/realWorldProvider.js`
 
-- Requires **`GEMINI_API_KEY`** in `MeWorld/.env` (Google AI Studio)
-- Uses **`google_search`** tool (same capability as Gemini app with Google access)
-- Caches per case: `game/.real-world-cache/case_N.json`
-- Client: `src/lib/fetchGeminiRealWorld.js` · UI: `DifferentialRealWorldPanel.jsx`
+| Provider | When | Strength |
+|----------|------|----------|
+| **Gemini** (default if `GEMINI_API_KEY`) | `geminiRealWorld.js` | **Google Search grounding** — finds real patients + YouTube URLs |
+| **DeepSeek** (fallback) | `deepseekRealWorld.js` | Good story text, no web search — videos via `youtubeSearchRepair.js` |
 
-**Curated fallback:** `src/data/realWorldCases.json` (caseId/diagnosis match only — no loose topic-only matches). Case 96: Alex Lewis + Lauren Wasser.
+Env (`MeWorld/.env`):
+- `GEMINI_API_KEY` — free tier at [Google AI Studio](https://aistudio.google.com/apikey) (preferred)
+- `DEEPSEEK_API_KEY` — fallback stories only
+- `REAL_WORLD_PROVIDER=deepseek` — force DeepSeek
+- `REAL_WORLD_VIDEO_PROVIDER=yt-search` — skip Gemini video repair
+
+**Two tiers per case (always aim for both):**
+1. **`direct`** — real patient matching CCS diagnosis (e.g. Alex Lewis / TSS)
+2. **`adjacent`** — broader real public story teaching around the topic (e.g. Michael Phelps mental health for drowning Case 113)
+
+Video plug-in: `youtubeSearchRepair.js` — Gemini repair when key set, else `yt-search` npm (free, weaker). Scoring is stricter for `direct`, looser for `adjacent`. Cache: `game/.real-world-cache/case_N.json` — use Refresh in UI or `refresh: true` after rule changes.
+
+**Curated:** `src/data/realWorldCases.json` — hand-verified `tier` + `match.caseIds`. UI merges curated + API via `mergeStoriesByTier`.
 
 ## Key files
 
