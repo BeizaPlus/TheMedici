@@ -3,7 +3,7 @@ import { uploadCaseRecording } from '../lib/caseUserLog.js';
 import {
   fetchVoiceNoteStatus,
   mergeVoiceNoteChunk,
-  transcribeVoiceNoteAudioChunk,
+  transcribeVoiceNoteFull,
 } from '../lib/voiceNoteTranscribe.js';
 import {
   beginLiveVoiceNote,
@@ -12,9 +12,10 @@ import {
 } from '../lib/voiceNoteNotes.js';
 import { createLiveSpeechRecognition, speechRecognitionSupported } from '../lib/liveSpeechRecognition.js';
 
-const CHUNK_MS = 5000;
+const RECORDING_LABEL = 'Recording…';
+const TRANSCRIBING_LABEL = 'Transcribing…';
 
-/** Mic capture → live transcription (DeepSeek merge) → append to case notes → save audio on stop */
+/** Mic capture → batch STT on stop (Cursor-style) → append to case notes → save audio */
 export function useCaseRecording({
   caseId,
   sessionId,
@@ -25,6 +26,7 @@ export function useCaseRecording({
   onTranscriptUpdate,
   onNotesChanged,
   onTranscriptReady,
+  promptHint = '',
 }) {
   const [recording, setRecording] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -40,9 +42,11 @@ export function useCaseRecording({
   const mergeQueueRef = useRef(Promise.resolve());
   const liveStampRef = useRef('');
   const interimRef = useRef('');
-  const whisperBackupRef = useRef(false);
+  const batchModeRef = useRef(false);
+  const promptHintRef = useRef(promptHint || '');
   const onTranscriptReadyRef = useRef(onTranscriptReady);
   onTranscriptReadyRef.current = onTranscriptReady;
+  promptHintRef.current = promptHint || '';
 
   sessionIdRef.current = sessionId;
 
@@ -113,7 +117,7 @@ export function useCaseRecording({
   }, []);
 
   const startSpeechRecognition = useCallback(() => {
-    if (!speechRecognitionSupported()) return false;
+    if (batchModeRef.current || !speechRecognitionSupported()) return false;
     const rec = createLiveSpeechRecognition({
       onFinalChunk: (text) => {
         void enqueueMerge(text);
@@ -153,43 +157,25 @@ export function useCaseRecording({
     }
   }, [enqueueMerge, onError, pushNotes]);
 
-  const handleAudioChunk = useCallback(
-    (blob) => {
-      if (!blob?.size || !whisperBackupRef.current) return;
-      void mergeQueueRef.current.then(async () => {
-        try {
-          setTranscribing(true);
-          const merged = await transcribeVoiceNoteAudioChunk(blob, transcriptRef.current);
-          if (merged) {
-            transcriptRef.current = merged;
-            interimRef.current = '';
-            pushNotes(merged);
-          }
-        } catch {
-          /* optional whisper path */
-        } finally {
-          setTranscribing(false);
-        }
-      });
-    },
-    [pushNotes],
-  );
-
-  const transcribeFullRecording = useCallback(
+  const transcribeBatchClip = useCallback(
     async (blob) => {
-      if (!blob?.size || !whisperBackupRef.current) return;
+      if (!blob?.size) return '';
+      setTranscribing(true);
+      pushNotes(TRANSCRIBING_LABEL);
       try {
-        setTranscribing(true);
-        const merged = await transcribeVoiceNoteAudioChunk(blob, transcriptRef.current);
-        if (merged) {
-          transcriptRef.current = merged;
+        const result = await transcribeVoiceNoteFull(blob, {
+          promptHint: promptHintRef.current,
+        });
+        const text = result.transcript || result.raw || '';
+        if (text) {
+          transcriptRef.current = text;
           interimRef.current = '';
-          pushNotes(merged);
+          pushNotes(text);
         }
+        return text;
       } catch (e) {
-        if (!transcriptRef.current.trim()) {
-          onError?.(e instanceof Error ? e : new Error('Could not transcribe voice note'));
-        }
+        onError?.(e instanceof Error ? e : new Error('Could not transcribe voice note'));
+        return '';
       } finally {
         setTranscribing(false);
       }
@@ -218,14 +204,15 @@ export function useCaseRecording({
     }
 
     const status = await fetchVoiceNoteStatus();
+    batchModeRef.current = Boolean(status.batch);
     const speechAvailable = speechRecognitionSupported();
-    whisperBackupRef.current = Boolean(status.whisper);
-    if (!speechAvailable && !status.whisper) {
+    if (!batchModeRef.current && !speechAvailable) {
       onError?.(
         new Error(
-          'Live transcription unavailable — use Chrome/Edge or add OPENAI_API_KEY on the API server',
+          'Transcription unavailable — start API server with OPENAI_API_KEY or install faster-whisper',
         ),
       );
+      return;
     }
 
     try {
@@ -243,14 +230,15 @@ export function useCaseRecording({
       const rec = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
       chunksRef.current = [];
 
-      const speechStarted = startSpeechRecognition();
+      if (batchModeRef.current) {
+        pushNotes(RECORDING_LABEL);
+      } else {
+        startSpeechRecognition();
+      }
 
       rec.ondataavailable = (event) => {
         if (!event.data?.size) return;
         chunksRef.current.push(event.data);
-        if (!speechStarted || !transcriptRef.current.trim()) {
-          handleAudioChunk(event.data);
-        }
       };
 
       rec.onstop = async () => {
@@ -263,14 +251,16 @@ export function useCaseRecording({
         const uploadSessionId = sessionIdRef.current || sid;
         setBusy(true);
         try {
-          await mergeQueueRef.current;
-          if (!transcriptRef.current.trim() && blob.size > 0) {
-            await transcribeFullRecording(blob);
+          if (batchModeRef.current && blob.size > 0) {
+            await transcribeBatchClip(blob);
+          } else {
+            await mergeQueueRef.current;
           }
+
           const finalTranscript = transcriptRef.current.trim();
           if (!finalTranscript) {
             onError?.(
-              new Error('No speech captured — check mic permissions or add OPENAI_API_KEY on the API server'),
+              new Error('No speech captured — check mic permissions or STT setup on the API server'),
             );
           }
           const saved = await uploadCaseRecording(caseId, uploadSessionId, blob, durationMs);
@@ -283,7 +273,6 @@ export function useCaseRecording({
           }
           if (saved) onSaved?.(saved);
           else onError?.(new Error('Could not save recording'));
-          // Fire transcript ready callback so callers can e.g. auto-submit to case chat
           if (finalTranscript) {
             onTranscriptReadyRef.current?.(finalTranscript);
           }
@@ -297,7 +286,7 @@ export function useCaseRecording({
 
       recorderRef.current = rec;
       startedAtRef.current = Date.now();
-      rec.start(CHUNK_MS);
+      rec.start();
       setRecording(true);
       onRecordingStart?.();
     } catch (e) {
@@ -308,7 +297,6 @@ export function useCaseRecording({
   }, [
     busy,
     caseId,
-    handleAudioChunk,
     onError,
     onNotesChanged,
     onRecordingStart,
@@ -318,7 +306,8 @@ export function useCaseRecording({
     startSpeechRecognition,
     stopSpeechRecognition,
     stopTracks,
-    transcribeFullRecording,
+    transcribeBatchClip,
+    pushNotes,
   ]);
 
   const toggleRecording = useCallback(() => {

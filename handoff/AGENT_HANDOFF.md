@@ -126,6 +126,13 @@ If `predev` is slow on first run, that’s normal — it validates 181 cases.
 
 ---
 
+## Planned work (spec only — see `handoff/FUTURE_UPDATES.md`)
+
+- **Real World video → case avatar** — pick a YouTube story video, extract speaking frame, infuse likeness into 3D portrait, cache per case (no re-search on return)
+- **Transcription quality** — notes in `handoff/TRANSCRIPTION_NOTES.md` (browser STT vs Whisper; why Cursor mic may feel better)
+
+---
+
 ## Recent work (context for agents)
 
 - **Live physical exam cues** — `src/lib/caseExam.js`, `caseFlows.js`, `preparedCases.json` rebuilt with TB/cough-specific findings
