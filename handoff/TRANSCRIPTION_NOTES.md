@@ -1,6 +1,7 @@
 # MeWorld — How voice transcription works (vs Cursor)
 
-**Last updated:** 2026-06-09
+**Last updated:** 2026-06-09  
+**Status:** Batch STT **implemented** — `POST /api/voice-note/transcribe-full`, local faster-whisper + OpenAI fallback
 
 ---
 

@@ -850,8 +850,17 @@ export default function DifferentialPractice({ onBack }) {
               </p>
             )}
             {!voice.finalizing && voiceBelongsToCase && voice.livePreview && (
-              <p className="diff-voice-live" aria-live="polite">
-                Hearing: {voice.livePreview}
+              <p
+                className={`diff-voice-live${
+                  voice.livePreview === 'Recording…' || voice.livePreview === 'Transcribing…'
+                    ? ' diff-voice-live--status'
+                    : ''
+                }`}
+                aria-live="polite"
+              >
+                {voice.livePreview === 'Recording…' || voice.livePreview === 'Transcribing…'
+                  ? voice.livePreview
+                  : `Hearing: ${voice.livePreview}`}
               </p>
             )}
             {voiceError && <p className="diff-voice-error">{voiceError}</p>}

@@ -1322,6 +1322,9 @@ export default function Play({
   const caseRecording = useCaseRecording({
     caseId: caseData.id,
     sessionId: playSessionId,
+    promptHint: [caseData.title, caseData.chiefComplaint, caseData.diagnosis]
+      .filter(Boolean)
+      .join(' — '),
     ensureSession: beginPlaySession,
     onSaved: (rec) => {
       setRecordingsVersion((v) => v + 1);

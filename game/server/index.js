@@ -27,7 +27,9 @@ import {
 import {
   mergeVoiceNoteTranscript,
   transcribeAudioChunk,
+  transcribeFullAudio,
   voiceNoteMergeAvailable,
+  voiceNoteStatus,
   voiceNoteWhisperAvailable,
 } from './voiceNoteTranscribe.js';
 import {
@@ -682,12 +684,13 @@ app.post('/api/user/case/:caseId/session/:sessionId/recording', async (req, res)
   }
 });
 
-app.get('/api/voice-note/status', (_req, res) => {
-  return res.json({
-    ok: true,
-    merge: voiceNoteMergeAvailable(),
-    whisper: voiceNoteWhisperAvailable(),
-  });
+app.get('/api/voice-note/status', async (_req, res) => {
+  try {
+    const status = await voiceNoteStatus();
+    return res.json({ ok: true, ...status });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
 });
 
 app.post('/api/voice-note/merge', async (req, res) => {
@@ -706,23 +709,48 @@ app.post('/api/voice-note/merge', async (req, res) => {
 });
 
 app.post('/api/voice-note/transcribe-chunk', async (req, res) => {
-  const { audioBase64, mimeType, priorTranscript = '' } = req.body || {};
+  const { audioBase64, mimeType, priorTranscript = '', promptHint = '' } = req.body || {};
   if (!audioBase64) return res.status(400).json({ error: 'Missing audioBase64' });
-  if (!voiceNoteWhisperAvailable()) {
+  const status = await voiceNoteStatus();
+  if (!status.batch) {
     return res.status(400).json({
-      error: 'Add OPENAI_API_KEY for audio chunk transcription (or use Chrome for live speech)',
+      error: 'Batch STT unavailable — install faster-whisper (see game/tools/whisper) or add OPENAI_API_KEY',
     });
   }
   try {
     const buffer = Buffer.from(audioBase64, 'base64');
-    const chunkText = await transcribeAudioChunk(buffer, mimeType || 'audio/webm');
+    const chunkText = await transcribeAudioChunk(buffer, mimeType || 'audio/webm', promptHint);
     if (!chunkText) {
       return res.json({ ok: true, transcript: String(priorTranscript || '').trim(), chunkText: '' });
     }
     const transcript = voiceNoteMergeAvailable()
       ? await mergeVoiceNoteTranscript(priorTranscript, chunkText)
       : `${String(priorTranscript || '').trim()}${priorTranscript ? ' ' : ''}${chunkText}`.trim();
-    return res.json({ ok: true, transcript, chunkText });
+    return res.json({ ok: true, transcript, chunkText, provider: status.mode });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/voice-note/transcribe-full', async (req, res) => {
+  const { audioBase64, mimeType, promptHint = '' } = req.body || {};
+  if (!audioBase64) return res.status(400).json({ error: 'Missing audioBase64' });
+  const status = await voiceNoteStatus();
+  if (!status.batch) {
+    return res.status(400).json({
+      error: 'Batch STT unavailable — install faster-whisper (see game/tools/whisper) or add OPENAI_API_KEY',
+    });
+  }
+  try {
+    const buffer = Buffer.from(audioBase64, 'base64');
+    const result = await transcribeFullAudio(buffer, mimeType || 'audio/webm', { promptHint });
+    return res.json({
+      ok: true,
+      transcript: result.transcript || '',
+      raw: result.raw || result.transcript || '',
+      provider: result.provider || status.mode,
+      model: result.model || null,
+    });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
   }
