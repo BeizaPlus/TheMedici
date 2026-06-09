@@ -128,6 +128,7 @@ import {
   clearCaseSceneVariantsForSig,
   clearCaseRegenImage,
   clearSceneVariantUnit,
+  ensureCasePortrait,
   readCaseRegenImage,
 } from '../lib/patientRegen.js';
 
@@ -678,7 +679,8 @@ export default function Play({
 
   const SOAP_MIN_CHARS = 12;
   const [careUnit, setCareUnit] = useState(caseFlow.dispositionUnits?.[0] || 'ER');
-  const regenSrc = useMemo(() => readCaseRegenImage(caseData?.id), [caseData?.id]);
+  const [portraitReady, setPortraitReady] = useState(0);
+  const regenSrc = useMemo(() => readCaseRegenImage(caseData?.id), [caseData?.id, portraitReady]);
   const [reviewedAt, setReviewedAt] = useState(null);
   const [sceneByUnit, setSceneByUnit] = useState(() => {
     if (typeof window === 'undefined') return {};
@@ -894,6 +896,7 @@ export default function Play({
     caseData: threadViewCase,
     playSessionId: threadIsPlayCase ? playSessionId : null,
     getSessionContext: threadIsPlayCase ? getChatSessionContext : undefined,
+    portraitVersion: portraitReady,
     onModelReady: useCallback((label) => {
       if (!threadIsPlayCase) return;
       logTimeline({ type: 'chat', role: 'system', text: `Case chat running on ${label}` });
@@ -1270,6 +1273,17 @@ export default function Play({
   }, [studioCapture, caseData.id]);
 
   useEffect(() => {
+    if (!caseData?.id) return;
+    let cancelled = false;
+    void ensureCasePortrait(caseData).then((url) => {
+      if (!cancelled && url) setPortraitReady((n) => n + 1);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [caseData?.id]);
+
+  useEffect(() => {
     const overrideSrc = localStorage.getItem(STORAGE.patientImage);
     const regenSrc = readCaseRegenImage(caseData.id);
     const erSrc = resolveSceneSrc({
@@ -1298,7 +1312,7 @@ export default function Play({
       /* ignore */
     }
     setSceneByUnit(next);
-  }, [caseData.id, caseData.patientSex, caseData.patientScene?.src]);
+  }, [caseData.id, caseData.patientSex, caseData.patientScene?.src, portraitReady]);
 
   const showToast = (msg, type = '') => {
     setToast({ msg, type });

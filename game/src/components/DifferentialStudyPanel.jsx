@@ -5,6 +5,7 @@ import DifferentialRealWorldPanel from './DifferentialRealWorldPanel.jsx';
 import CasePresentationPanel from './CasePresentationPanel.jsx';
 import { openCcsScreenshot } from '../lib/ccsScreenshot.js';
 import { getRealWorldStories } from '../lib/realWorldCases.js';
+import { listLocalDifferentialRecordings } from '../lib/differentialVoiceStorage.js';
 
 const TABS = [
   { id: 'timeline', label: 'Timeline' },
@@ -25,9 +26,17 @@ export default function DifferentialStudyPanel({
   hasCaseData,
   diagnosis = '',
   topic = '',
+  recordingsVersion = 0,
+  onStudyTabOpen,
+  timelineFocusVersion = 0,
 }) {
   const [tab, setTab] = useState('case');
   const [expanded, setExpanded] = useState(false);
+
+  const recordingCount = useMemo(
+    () => listLocalDifferentialRecordings(caseId).length,
+    [caseId, recordingsVersion],
+  );
 
   const realWorld = useMemo(
     () =>
@@ -41,10 +50,18 @@ export default function DifferentialStudyPanel({
 
   const hasRealWorld = realWorld.hasCurated;
 
+  const timelineItems = (caseStats?.count || 0) + (caseStats?.count ? 0 : recordingCount);
+
   useEffect(() => {
     setExpanded(false);
-    setTab(caseStats?.count ? 'timeline' : hasReviewText || hasCaseData ? 'case' : 'timeline');
-  }, [caseId, caseStats?.count, hasReviewText, hasCaseData]);
+    setTab(timelineItems ? 'timeline' : hasReviewText || hasCaseData ? 'case' : 'timeline');
+  }, [caseId, timelineItems, hasReviewText, hasCaseData]);
+
+  useEffect(() => {
+    if (!timelineFocusVersion) return;
+    setTab('timeline');
+    setExpanded(true);
+  }, [timelineFocusVersion]);
 
   const toggleTab = useCallback((id) => {
     if (expanded && tab === id) {
@@ -53,9 +70,10 @@ export default function DifferentialStudyPanel({
     }
     setTab(id);
     setExpanded(true);
-  }, [expanded, tab]);
+    if (id === 'realworld') onStudyTabOpen?.(id);
+  }, [expanded, tab, onStudyTabOpen]);
 
-  const showTimeline = Boolean(caseStats?.count);
+  const showTimeline = timelineItems > 0;
   const showCase = hasReviewText || hasCaseData;
 
   return (
@@ -75,8 +93,8 @@ export default function DifferentialStudyPanel({
             onClick={() => toggleTab(t.id)}
           >
             {t.label}
-            {t.id === 'timeline' && caseStats?.count > 0 && (
-              <span className="diff-study-tab-badge">{caseStats.count}</span>
+            {t.id === 'timeline' && timelineItems > 0 && (
+              <span className="diff-study-tab-badge">{timelineItems}</span>
             )}
             {t.id === 'realworld' && hasRealWorld && (
               <span className="diff-study-tab-badge diff-study-tab-badge--gold">
@@ -91,11 +109,15 @@ export default function DifferentialStudyPanel({
         <div className="diff-study-body" role="tabpanel">
           {tab === 'timeline' && (
             <>
-              {showTimeline ? (
-                <DifferentialAttemptHistory caseId={caseId} caseStats={caseStats} embedded />
-              ) : (
+              <DifferentialAttemptHistory
+                caseId={caseId}
+                caseStats={caseStats}
+                embedded
+                recordingsVersion={recordingsVersion}
+              />
+              {!showTimeline && (
                 <p className="diff-study-empty">
-                  No practice attempts for Case {caseId} yet. Reveal &amp; score to build your timeline.
+                  No voice notes or scored attempts for Case {caseId} yet. Record or reveal &amp; score to build your timeline.
                 </p>
               )}
             </>

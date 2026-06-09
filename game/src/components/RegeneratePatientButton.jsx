@@ -60,7 +60,7 @@ export default function RegeneratePatientButton({
     onBusyChange?.(true);
     try {
       clearVisionZones();
-      const result = await regeneratePatientFromCase(caseData);
+      const result = await regeneratePatientFromCase(caseData, { refresh: true });
       const sourceKey = `regen:${caseData.id}`;
       await detectZonesForDataUrl(result.dataUrl, sourceKey);
       onRegenerated?.(result);

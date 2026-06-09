@@ -1,3 +1,4 @@
+import { buildCaseDiscussionContext } from './caseDiscussionContext.js';
 import { readCaseNotes } from './caseNotes.js';
 import { buildTeachCompareChatContext } from './teachMeCompare.js';
 
@@ -43,6 +44,7 @@ export function buildChatSessionContext({
   }));
 
   const learnerNotes = caseId ? readCaseNotes(caseId).trim().slice(-6000) : '';
+  const caseDiscussion = caseId ? buildCaseDiscussionContext(caseId) : null;
 
   const ctx = {
     currentLocation: careUnit || null,
@@ -51,6 +53,7 @@ export function buildChatSessionContext({
     stacksPlaced,
     sessionActivity,
     learnerNotes: learnerNotes || null,
+    caseDiscussion,
   };
 
   if (teachMeMode) {

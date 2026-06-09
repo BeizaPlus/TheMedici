@@ -101,6 +101,7 @@ export function logDifferentialAttempt({
   aiSummary = '',
   rawTranscript = '',
   cleanedTranscript = '',
+  recordingId = null,
 }) {
   const total = answerKey.length;
   const correct = matched.length;
@@ -126,6 +127,7 @@ export function logDifferentialAttempt({
     aiSummary: aiSummary || '',
     rawTranscript: String(rawTranscript || '').trim(),
     cleanedTranscript: String(cleanedTranscript || '').trim(),
+    recordingId: recordingId || null,
   };
 
   const log = readDifferentialLog();

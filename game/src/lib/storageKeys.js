@@ -36,6 +36,8 @@ export const STORAGE = {
   differentialPracticeLog: 'schoonmaker_differential_practice_log',
   differentialCaseTranscripts: 'schoonmaker_differential_case_transcripts',
   caseSimulationCreativity: 'schoonmaker_case_simulation_creativity',
+  casePortraitPersona: 'schoonmaker_case_portrait_persona',
+  caseBriefMarkdown: 'schoonmaker_case_brief_markdown',
   differentialVoiceIndex: 'schoonmaker_differential_voice_index',
   differentialCaseMemory: 'schoonmaker_differential_case_memory',
   differentialStackerPrefs: 'schoonmaker_differential_stacker_prefs',

@@ -14,7 +14,13 @@ function toUiMessages(rows) {
   return rows.map((m) => ({ role: m.role, content: m.content }));
 }
 
-export function useCaseChat({ caseData, playSessionId, onModelReady, getSessionContext }) {
+export function useCaseChat({
+  caseData,
+  playSessionId,
+  onModelReady,
+  getSessionContext,
+  portraitVersion = 0,
+}) {
   const [available, setAvailable] = useState(null);
   const [modelLabel, setModelLabel] = useState(null);
   const [sessionId, setSessionId] = useState(null);
@@ -98,7 +104,7 @@ export function useCaseChat({ caseData, playSessionId, onModelReady, getSessionC
     return () => {
       cancelled = true;
     };
-  }, [caseId, caseData, historyLoaded]);
+  }, [caseId, caseData, historyLoaded, portraitVersion]);
 
   const appendNote = useCallback(
     async (text, { header = 'Note' } = {}) => {

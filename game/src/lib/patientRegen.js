@@ -1,8 +1,10 @@
-import { buildCaseChatContext } from './caseChat.js';
+import { buildCaseChatContext, writeCasePortraitPersona } from './caseChat.js';
 import { getBuiltInPatientSrc, isValidSceneSrc } from './patientImage.js';
 import { STORAGE } from './storageKeys.js';
 
 const API = 'http://127.0.0.1:3001';
+
+const portraitInflight = new Map();
 
 async function fetchBuiltInImagePayload(caseData) {
   const src = getBuiltInPatientSrc(caseData);
@@ -91,8 +93,62 @@ export function buildSceneSourceSig(caseData, erSrc) {
   return `${caseData.id}:${caseData.patientSex || 'unknown'}:${erSrc.slice(0, 96)}:${erSrc.length}`;
 }
 
+export async function fetchCasePortraitStatus(caseId) {
+  if (!caseId) return { exists: false, url: null };
+  try {
+    const r = await fetch(`${API}/api/case-portrait/${encodeURIComponent(caseId)}`);
+    if (!r.ok) return { exists: false, url: null };
+    const data = await r.json();
+    if (data.exists && data.url) {
+      if (data.persona) writeCasePortraitPersona(caseId, data.persona);
+      return {
+        exists: true,
+        url: data.url,
+        analysis: data.analysis || null,
+        persona: data.persona || null,
+        cachedAt: data.cachedAt || null,
+      };
+    }
+    return { exists: false, url: null };
+  } catch {
+    return { exists: false, url: null };
+  }
+}
+
+/** Load or generate a case-specific patient portrait (OpenAI, server disk cache). */
+export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
+  const caseId = caseData?.id;
+  if (!caseId) return null;
+
+  if (!refresh) {
+    const local = readCaseRegenImage(caseId);
+    if (isValidSceneSrc(local)) return local;
+    const status = await fetchCasePortraitStatus(caseId);
+    if (status.exists && status.url) {
+      writeCaseRegenImage(caseId, status.url);
+      return status.url;
+    }
+  }
+
+  const key = `${caseId}:${refresh ? 'refresh' : 'gen'}`;
+  if (portraitInflight.has(key)) return portraitInflight.get(key);
+
+  const work = (async () => {
+    try {
+      const result = await regeneratePatientFromCase(caseData, { refresh });
+      return result.dataUrl;
+    } catch {
+      return null;
+    } finally {
+      portraitInflight.delete(key);
+    }
+  })();
+  portraitInflight.set(key, work);
+  return work;
+}
+
 /** Base template image + case JSON → analyzed & reconstructed patient (once cached per case/context). */
-export async function regeneratePatientFromCase(caseData) {
+export async function regeneratePatientFromCase(caseData, { refresh = false } = {}) {
   const payload = await fetchBuiltInImagePayload(caseData);
   const caseContext = buildCaseChatContext(caseData);
 
@@ -103,6 +159,7 @@ export async function regeneratePatientFromCase(caseData) {
       imageBase64: payload.base64,
       mimeType: payload.mimeType,
       caseContext,
+      refresh,
     }),
   });
   const data = await r.json().catch(() => ({}));
@@ -114,9 +171,11 @@ export async function regeneratePatientFromCase(caseData) {
   if (!resolvedUrl) throw new Error('No regenerated patient image returned');
 
   writeCaseRegenImage(caseData.id, resolvedUrl);
+  if (data.persona) writeCasePortraitPersona(caseData.id, data.persona);
   return {
     dataUrl: resolvedUrl,
     cached: Boolean(data.cached),
     analysis: data.analysis || null,
+    persona: data.persona || null,
   };
 }

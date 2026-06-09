@@ -77,7 +77,7 @@ function RealWorldVideoLightbox({
             <p className="diff-rw-lightbox-title">{video.title}</p>
             {hasMultiple && (
               <p className="diff-rw-lightbox-counter">
-                Video {index + 1} of {total} — click sides or use ← →
+                Video {index + 1} of {total} — use ‹ › or ← →
               </p>
             )}
           </div>
@@ -99,22 +99,6 @@ function RealWorldVideoLightbox({
           )}
 
           <div className="diff-rw-lightbox-frame">
-            {hasMultiple && (
-              <>
-                <button
-                  type="button"
-                  className="diff-rw-lightbox-hit diff-rw-lightbox-hit--prev"
-                  onClick={() => step(-1)}
-                  aria-label="Previous video"
-                />
-                <button
-                  type="button"
-                  className="diff-rw-lightbox-hit diff-rw-lightbox-hit--next"
-                  onClick={() => step(1)}
-                  aria-label="Next video"
-                />
-              </>
-            )}
             <iframe
               key={video.youtubeId}
               title={video.title}
@@ -138,7 +122,15 @@ function RealWorldVideoLightbox({
 
         <footer className="diff-rw-lightbox-foot">
           {hasMultiple && (
-            <div className="diff-rw-lightbox-dots" role="tablist" aria-label="Case videos">
+            <div className="diff-rw-lightbox-strip">
+              <button
+                type="button"
+                className="diff-rw-lightbox-strip-btn"
+                onClick={() => step(-1)}
+              >
+                ‹ Prev
+              </button>
+              <div className="diff-rw-lightbox-dots" role="tablist" aria-label="Case videos">
               {playlist.map((item, i) => (
                 <button
                   key={item.youtubeId}
@@ -150,6 +142,14 @@ function RealWorldVideoLightbox({
                   onClick={() => onIndexChange(i)}
                 />
               ))}
+              </div>
+              <button
+                type="button"
+                className="diff-rw-lightbox-strip-btn"
+                onClick={() => step(1)}
+              >
+                Next ›
+              </button>
             </div>
           )}
           <a
@@ -228,24 +228,23 @@ function StoryVideos({ videos = [], patientName = '', diagnosis = '', onOpenFull
           </a>
         </div>
       </div>
-      <button
-        type="button"
-        className="diff-rw-iframe-wrap"
-        onClick={openFull}
-        aria-label={`Play ${current.title} in full view`}
-      >
+      <div className="diff-rw-iframe-wrap">
         <iframe
           title={current.title}
           src={youtubeEmbedUrl(current.youtubeId)}
           loading="lazy"
-          tabIndex={-1}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         />
-        <span className="diff-rw-iframe-expand-hint" aria-hidden>
-          Tap for full view
-        </span>
-      </button>
+        <button
+          type="button"
+          className="diff-rw-iframe-expand-btn"
+          onClick={openFull}
+          aria-label={`Full view: ${current.title}`}
+        >
+          ⛶
+        </button>
+      </div>
     </div>
   );
 }

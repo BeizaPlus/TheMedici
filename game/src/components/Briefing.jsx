@@ -10,7 +10,7 @@ import {
   writeVisionZones,
 } from '../lib/patientImage.js';
 import { getPresentationHistory } from '../lib/casePresentation.js';
-import { clearCaseRegenImage, readCaseRegenImage } from '../lib/patientRegen.js';
+import { clearCaseRegenImage, ensureCasePortrait, readCaseRegenImage } from '../lib/patientRegen.js';
 import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { unlockAmbience } from '../lib/audio.js';
@@ -97,6 +97,17 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
     setReadState('idle');
     setReadMsg('');
   }, [caseData?.id]);
+
+  useEffect(() => {
+    if (!caseData?.id) return;
+    let cancelled = false;
+    void ensureCasePortrait(caseData).then((url) => {
+      if (!cancelled && url) setRegenSrc(url);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [caseData]);
 
   useEffect(() => () => stopCaseReader(), []);
 

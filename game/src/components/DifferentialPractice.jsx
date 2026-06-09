@@ -95,6 +95,7 @@ export default function DifferentialPractice({ onBack }) {
   const [statsTick, setStatsTick] = useState(0);
   const [progressPulse, setProgressPulse] = useState(false);
   const [recordingsVersion, setRecordingsVersion] = useState(0);
+  const [timelineFocusVersion, setTimelineFocusVersion] = useState(0);
   const [voiceError, setVoiceError] = useState('');
   const [aiScore, setAiScore] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
@@ -109,6 +110,7 @@ export default function DifferentialPractice({ onBack }) {
   const inputRef = useRef(null);
   const voiceFocusRef = useRef(null);
   const loggedRoundRef = useRef(false);
+  const lastRecordingRef = useRef(null);
   const stackerBusyRef = useRef(false);
   const onStackerExpireRef = useRef(() => {});
   const prefinalMarksRef = useRef(new Set());
@@ -200,7 +202,11 @@ export default function DifferentialPractice({ onBack }) {
     caseId: entry.caseId,
     topic: entry.topic,
     onDiagnosesHeard: applyParsedDiagnoses,
-    onSaved: () => setRecordingsVersion((v) => v + 1),
+    onSaved: (saved) => {
+      lastRecordingRef.current = saved || null;
+      setRecordingsVersion((v) => v + 1);
+      setTimelineFocusVersion((v) => v + 1);
+    },
     onError: (e) => setVoiceError(e?.message || 'Voice error'),
     deferLiveDiagnoses: stacker.enabled,
     incrementalParse: stacker.enabled,
@@ -332,6 +338,8 @@ export default function DifferentialPractice({ onBack }) {
         aiSummary: aiFields?.aiSummary || '',
         rawTranscript: transcripts?.hearingTranscript || '',
         cleanedTranscript: transcripts?.cleanedTranscript || '',
+        recordingId:
+          lastRecordingRef.current?.localId || lastRecordingRef.current?.id || null,
       });
       loggedRoundRef.current = true;
       setStatsTick((t) => t + 1);
@@ -991,6 +999,13 @@ export default function DifferentialPractice({ onBack }) {
           hasCaseData={Boolean(caseData)}
           diagnosis={entry.diagnosis || ccsReview?.diagnosis || ''}
           topic={entry.topic || ''}
+          recordingsVersion={recordingsVersion}
+          timelineFocusVersion={timelineFocusVersion}
+          onStudyTabOpen={(tabId) => {
+            if (tabId === 'realworld' && stacker.enabled && !stackerPaused) {
+              pauseStacker();
+            }
+          }}
         />
 
         <div className="diff-nav">

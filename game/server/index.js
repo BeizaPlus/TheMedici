@@ -40,6 +40,26 @@ import {
   realWorldAvailable,
   realWorldProvider,
 } from './realWorldProvider.js';
+import {
+  buildPortraitAnalysis,
+  buildPortraitPersona,
+  buildPortraitPrompt,
+  extractPersonaFromPortraitImage,
+  formatPersonaForChat,
+  generatePortraitWithOpenAI,
+  portraitPublicUrl,
+  readPortraitCache,
+  writePortraitCache,
+} from './casePortrait.js';
+import {
+  caseBriefFileName,
+  ensureBriefDir,
+  hashRawBundle,
+  loadCaseRawBundle,
+  readBriefCache,
+  synthesizeCaseBriefMarkdown,
+  writeBriefCache,
+} from './caseBriefMarkdown.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const GAME_ROOT = path.join(__dirname, '..');
@@ -75,6 +95,19 @@ if (!fs.existsSync(CASE_TTS_DIR)) {
 app.use('/case-tts', express.static(CASE_TTS_DIR));
 
 const REAL_WORLD_CACHE_DIR = path.join(GAME_ROOT, '.real-world-cache');
+
+const CASE_PORTRAIT_DIR = path.join(GAME_ROOT, '.case-portraits');
+if (!fs.existsSync(CASE_PORTRAIT_DIR)) {
+  fs.mkdirSync(CASE_PORTRAIT_DIR, { recursive: true });
+}
+app.use('/case-portraits', express.static(CASE_PORTRAIT_DIR));
+
+const CASE_BRIEF_DIR = path.join(GAME_ROOT, '.case-briefs');
+ensureBriefDir(CASE_BRIEF_DIR);
+app.use('/case-briefs', express.static(CASE_BRIEF_DIR));
+
+const MEWORLD_CASES_DIR = path.join(REPO_ROOT, 'data', 'cases');
+const DIFFERENTIAL_REVIEW_PATH = path.join(GAME_ROOT, 'src', 'data', 'differentialReview.json');
 
 const USER_DATA_DIR = path.join(GAME_ROOT, 'user-data');
 if (!fs.existsSync(USER_DATA_DIR)) {
@@ -165,6 +198,44 @@ function pruneCaseChatSessions() {
   }
 }
 
+function formatCaseDiscussionForChat(discussion) {
+  if (!discussion || typeof discussion !== 'object') return '';
+  const lines = [];
+  if (discussion.memoryHook) {
+    lines.push(`Learner memory hook for this case: ${discussion.memoryHook}`);
+  }
+  if (discussion.voiceTranscripts?.length) {
+    lines.push('Voice / mic transcripts on this case (what the learner heard or said aloud):');
+    for (const row of discussion.voiceTranscripts) {
+      lines.push(`- [${row.at || 'unknown'}] ${row.text}`);
+    }
+  }
+  if (discussion.differentialAttempts?.length) {
+    lines.push('Differential practice attempts on this case:');
+    for (const a of discussion.differentialAttempts) {
+      const bits = [];
+      if (a.cleanedTranscript || a.rawTranscript) {
+        bits.push(`heard: ${a.cleanedTranscript || a.rawTranscript}`);
+      }
+      if (a.guesses?.length) bits.push(`guesses: ${a.guesses.join(', ')}`);
+      if (a.score) bits.push(`score: ${a.score}`);
+      if (a.aiSummary) bits.push(`review: ${a.aiSummary}`);
+      lines.push(`- [${a.at || 'unknown'}] ${bits.join(' · ')}`);
+    }
+  }
+  if (discussion.priorPatientChat?.length) {
+    lines.push('Prior patient-mode chat on this case (stay consistent with what you already said):');
+    for (const m of discussion.priorPatientChat) {
+      const who = m.role === 'assistant' ? 'Patient' : 'Learner';
+      lines.push(`- [${m.at || ''}] ${who}: ${m.content}`);
+    }
+  }
+  if (discussion.learnerNotes) {
+    lines.push(`Learner notes (do not read aloud; use only if the learner asks what they wrote): ${discussion.learnerNotes}`);
+  }
+  return lines.join('\n');
+}
+
 function simulationCreativityBand(score) {
   const c = Math.max(0, Math.min(100, Number(score) || 55));
   if (c < 30) return { band: 'strict', temperature: 0.28 };
@@ -202,10 +273,20 @@ ${bandRules}
 
 PATIENT FACTS (ground truth for interview answers):
 ${JSON.stringify(facts, null, 2)}
-
+${caseContext?.patientPersona ? `
+PATIENT APPEARANCE & PRESENCE (from this case's portrait — stay consistent with how you look and sound):
+${formatPersonaForChat(caseContext.patientPersona)}
+` : ''}
 HPI EXCERPT:
 ${caseContext?.hpiExcerpt || '(see CASE JSON history fields)'}
-
+${caseContext?.caseDiscussion ? `
+PRIOR CASE DISCUSSION & TRANSCRIPTS (this case only — treat as your memory of earlier interviews and what you already told the learner; stay consistent):
+${formatCaseDiscussionForChat(caseContext.caseDiscussion)}
+` : ''}
+${caseContext?.caseBriefMarkdown ? `
+CASE DOSSIER (Markdown — OCR, constants, transcripts, and raw data reorganized for this case; ground truth for interview):
+${caseContext.caseBriefMarkdown}
+` : ''}
 When the learner message includes SESSION SO FAR (orders, vitals, timeline), you may reference what has already happened in this visit — still in patient voice.
 
 CASE JSON:
@@ -500,6 +581,7 @@ app.get('/api/health', (_req, res) => {
     chatModel: chatModel(),
     fal: Boolean(process.env.FAL_KEY),
     sceneProvider: sceneImageProvider(),
+    casePortraits: Boolean(process.env.OPENAI_API_KEY),
     falSceneModel: FAL_SCENE_MODEL,
     chatterbox: pythonReady && scriptReady,
     chatterboxPython: CHATTERBOX_PYTHON,
@@ -866,9 +948,12 @@ app.post('/api/case-chat/message', async (req, res) => {
     let userContent = text;
     if (sessionContext && typeof sessionContext === 'object') {
       const header = sessionContext.standardFlow
-        ? '[SESSION SO FAR — standard flow compare, order timeline, notes, and scene activity for this run]'
-        : '[SESSION SO FAR — orders, notes, and scene activity for this run]';
-      const ctxBlock = `${header}\n${JSON.stringify(sessionContext, null, 2)}`;
+        ? '[SESSION SO FAR — standard flow compare, order timeline, case transcripts, notes, and scene activity for this run]'
+        : '[SESSION SO FAR — orders, case transcripts, notes, and scene activity for this run]';
+      let ctxBlock = `${header}\n${JSON.stringify(sessionContext, null, 2)}`;
+      if (sessionContext.caseDiscussion) {
+        ctxBlock += `\n\n[CASE DISCUSSION SUMMARY]\n${formatCaseDiscussionForChat(sessionContext.caseDiscussion)}`;
+      }
       userContent = `${ctxBlock}\n\n---\n\nLearner question: ${text}`;
     }
     session.messages.push({ role: 'user', content: userContent });
@@ -1113,6 +1198,199 @@ app.post('/api/detect-zones', async (req, res) => {
     res.json({ zones });
   } catch (e) {
     res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/case-persona', async (req, res) => {
+  const { caseContext } = req.body || {};
+  const caseId = caseContext?.id ?? caseContext?.ccsNumber;
+  if (!caseId) return res.status(400).json({ error: 'Missing caseContext.id' });
+
+  try {
+    const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId);
+    const persona =
+      cached.meta?.persona ||
+      cached.meta?.analysis?.persona ||
+      buildPortraitPersona(caseContext);
+    return res.json({
+      ok: true,
+      caseId,
+      persona,
+      fromPortrait: Boolean(cached.exists),
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.get('/api/case-portrait/:caseId', async (req, res) => {
+  const caseId = String(req.params.caseId || '').trim();
+  if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
+  try {
+    const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId);
+    if (!cached.exists) {
+      return res.json({ ok: true, exists: false, caseId });
+    }
+    const url = portraitPublicUrl(caseId, PORT);
+    return res.json({
+      ok: true,
+      exists: true,
+      caseId,
+      url,
+      cachedAt: cached.meta?.cachedAt || null,
+      analysis: cached.meta?.analysis || null,
+      persona: cached.meta?.persona || cached.meta?.analysis?.persona || null,
+      provider: cached.meta?.provider || 'openai',
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+function caseBriefPublicUrl(caseId) {
+  const fileName = caseBriefFileName(caseId);
+  if (!fileName) return null;
+  return `http://127.0.0.1:${PORT}/case-briefs/${fileName}`;
+}
+
+async function buildOrLoadCaseBrief({
+  caseId,
+  refresh = false,
+  clientDiscussion = null,
+  caseContext = null,
+}) {
+  const bundle = await loadCaseRawBundle({
+    casesDir: MEWORLD_CASES_DIR,
+    reviewPath: DIFFERENTIAL_REVIEW_PATH,
+    portraitDir: CASE_PORTRAIT_DIR,
+    caseId,
+    clientDiscussion,
+    clientContext: caseContext,
+  });
+  const sourceHash = hashRawBundle(bundle);
+
+  if (!refresh) {
+    const cached = await readBriefCache(CASE_BRIEF_DIR, caseId);
+    if (cached.exists && cached.meta?.sourceHash === sourceHash && cached.markdown) {
+      return {
+        cached: true,
+        markdown: cached.markdown,
+        sourceHash,
+        url: caseBriefPublicUrl(caseId),
+        cachedAt: cached.meta?.cachedAt || null,
+      };
+    }
+  }
+
+  const key = DEEPSEEK_API_KEY || OPENAI_API_KEY;
+  if (!key) throw new Error('DEEPSEEK_API_KEY or OPENAI_API_KEY required for case brief');
+  const markdown = await synthesizeCaseBriefMarkdown(key, bundle, async (apiKey, messages) =>
+    callChatCompletion(apiKey, messages, { maxTokens: 2800, temperature: 0.25 }),
+  );
+  await writeBriefCache(CASE_BRIEF_DIR, caseId, markdown, { sourceHash, provider: chatProvider() });
+  return {
+    cached: false,
+    markdown,
+    sourceHash,
+    url: caseBriefPublicUrl(caseId),
+    cachedAt: new Date().toISOString(),
+  };
+}
+
+app.get('/api/case-brief/:caseId', async (req, res) => {
+  const caseId = String(req.params.caseId || '').trim();
+  if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
+  try {
+    const cached = await readBriefCache(CASE_BRIEF_DIR, caseId);
+    if (!cached.exists) {
+      return res.json({ ok: true, exists: false, caseId });
+    }
+    return res.json({
+      ok: true,
+      exists: true,
+      caseId,
+      markdown: cached.markdown,
+      url: caseBriefPublicUrl(caseId),
+      cachedAt: cached.meta?.cachedAt || null,
+      sourceHash: cached.meta?.sourceHash || null,
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/case-brief/:caseId', async (req, res) => {
+  const caseId = String(req.params.caseId || '').trim();
+  if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
+
+  const { refresh = false, clientDiscussion = null, caseContext = null } = req.body || {};
+  const key = chatApiKeyOrError(res);
+  if (!key) return;
+
+  try {
+    const result = await buildOrLoadCaseBrief({
+      caseId,
+      refresh,
+      clientDiscussion,
+      caseContext,
+    });
+    return res.json({ ok: true, caseId, ...result });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/regenerate-patient-from-case', async (req, res) => {
+  if (!process.env.OPENAI_API_KEY) {
+    return res.status(400).json({ error: 'OPENAI_API_KEY not configured in MeWorld/.env' });
+  }
+
+  const { imageBase64, mimeType = 'image/png', caseContext, refresh = false } = req.body || {};
+  const caseId = caseContext?.id ?? caseContext?.ccsNumber;
+  if (!caseId) return res.status(400).json({ error: 'Missing case id in caseContext' });
+  if (!imageBase64) return res.status(400).json({ error: 'Missing image' });
+
+  try {
+    if (!refresh) {
+      const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId);
+      if (cached.exists) {
+        const url = portraitPublicUrl(caseId, PORT);
+        const persona = cached.meta?.persona || cached.meta?.analysis?.persona || buildPortraitPersona(caseContext);
+        return res.json({
+          ok: true,
+          cached: true,
+          url,
+          dataUrl: url,
+          provider: 'openai',
+          analysis: cached.meta?.analysis || buildPortraitAnalysis(caseContext, persona),
+          persona,
+        });
+      }
+    }
+
+    const prompt = buildPortraitPrompt(caseContext);
+    const outB64 = await generatePortraitWithOpenAI({ imageBase64, mimeType, prompt });
+    let visionPersona = null;
+    try {
+      visionPersona = await extractPersonaFromPortraitImage(outB64);
+    } catch (visionErr) {
+      console.warn('[case-portrait] vision persona skipped:', visionErr.message);
+    }
+    const persona = buildPortraitPersona(caseContext, visionPersona);
+    const analysis = buildPortraitAnalysis(caseContext, persona);
+    await writePortraitCache(CASE_PORTRAIT_DIR, caseId, outB64, { analysis, persona });
+    const url = portraitPublicUrl(caseId, PORT);
+    return res.json({
+      ok: true,
+      cached: false,
+      url,
+      dataUrl: url,
+      provider: 'openai',
+      analysis,
+      persona,
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
   }
 });
 

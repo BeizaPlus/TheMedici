@@ -1,3 +1,4 @@
+import { recordingPublicUrl } from './caseUserLog.js';
 import { STORAGE } from './storageKeys.js';
 
 const DB_NAME = 'schoonmaker_diff_voice';
@@ -145,4 +146,50 @@ export function findServerRecordingFallback(caseId, localRec, serverData) {
   if (!serverData || !localRec || caseId == null || caseId === '') return null;
   const remote = listAllDifferentialRecordings(caseId, serverData).filter((r) => !r.local);
   return remote.find((r) => recordingsLikelySame(localRec, r)) || null;
+}
+
+/** Match a practice-log attempt to the closest saved voice note (by id or timestamp). */
+export function findRecordingForAttempt(attempt, recordings = []) {
+  if (!attempt || !recordings.length) return null;
+
+  const recordingId = attempt.recordingId || attempt.voiceRecordingId || null;
+  if (recordingId) {
+    const byId = recordings.find(
+      (r) => r.id === recordingId || r.localId === recordingId,
+    );
+    if (byId) return byId;
+  }
+
+  const tAttempt = attempt.at ? new Date(attempt.at).getTime() : 0;
+  if (!tAttempt) return null;
+
+  let best = null;
+  let bestDelta = Infinity;
+  for (const rec of recordings) {
+    const tRec = rec.at ? new Date(rec.at).getTime() : 0;
+    if (!tRec) continue;
+    const delta = Math.abs(tAttempt - tRec);
+    // Reveal may lag recording stop — prefer closest within 5 minutes.
+    if (delta <= 5 * 60 * 1000 && delta < bestDelta) {
+      bestDelta = delta;
+      best = rec;
+    }
+  }
+  return best;
+}
+
+export function localRecordingKey(rec) {
+  return rec?.localId || rec?.id || '';
+}
+
+export function resolveRecordingPlaybackSrc(caseId, rec, localUrls, serverData) {
+  if (!rec) return '';
+  if (rec.local) {
+    const key = localRecordingKey(rec);
+    if (key && localUrls?.[key]) return localUrls[key];
+    const remote = findServerRecordingFallback(caseId, rec, serverData);
+    if (remote?.file) return recordingPublicUrl(remote.file);
+    return '';
+  }
+  return recordingPublicUrl(rec.file);
 }

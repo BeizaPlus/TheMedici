@@ -2,12 +2,19 @@ import { getCaseFlow } from '../data/caseFlows.js';
 import { getPreparedCase } from './caseNarrative.js';
 import { extractPatientFacts, hpiExcerpt } from './patientFactsFromHpi.js';
 import { resolvePatientName } from './patientName.js';
+import { briefCacheKey, resolveCaseBriefMarkdown } from './caseBrief.js';
+import { buildCaseDiscussionContext, discussionCacheKey } from './caseDiscussionContext.js';
 import { resolveSimulationCreativity } from './simulationCreativity.js';
+import { STORAGE } from './storageKeys.js';
 
 const API = 'http://127.0.0.1:3001';
 const sessions = new Map();
 
-export function buildCaseChatContext(caseData) {
+export function buildCaseChatContext(caseData, {
+  patientPersona = null,
+  caseDiscussion = null,
+  caseBriefMarkdown = null,
+} = {}) {
   const flow = getCaseFlow(caseData);
   const prepared = getPreparedCase(caseData?.id);
   const enriched = {
@@ -23,7 +30,7 @@ export function buildCaseChatContext(caseData) {
   const patientFacts = extractPatientFacts(enriched);
   const simulationCreativity = resolveSimulationCreativity(caseData?.id);
 
-  return {
+  const ctx = {
     id: caseData?.id,
     ccsNumber: caseData?.ccsNumber,
     title: caseData?.title,
@@ -66,6 +73,75 @@ export function buildCaseChatContext(caseData) {
         }
       : null,
   };
+
+  if (patientPersona && typeof patientPersona === 'object') {
+    ctx.patientPersona = patientPersona;
+  }
+  if (caseDiscussion && typeof caseDiscussion === 'object') {
+    ctx.caseDiscussion = caseDiscussion;
+  }
+  if (caseBriefMarkdown && typeof caseBriefMarkdown === 'string') {
+    ctx.caseBriefMarkdown = caseBriefMarkdown;
+  }
+
+  return ctx;
+}
+
+function personaCacheKey(persona) {
+  try {
+    return JSON.stringify(persona || null);
+  } catch {
+    return '';
+  }
+}
+
+export function readCasePortraitPersona(caseId) {
+  try {
+    const raw = localStorage.getItem(STORAGE.casePortraitPersona);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed?.[String(caseId)] || null;
+  } catch {
+    return null;
+  }
+}
+
+export function writeCasePortraitPersona(caseId, persona) {
+  if (!caseId || !persona) return;
+  try {
+    const raw = localStorage.getItem(STORAGE.casePortraitPersona);
+    const parsed = raw ? JSON.parse(raw) : {};
+    parsed[String(caseId)] = persona;
+    localStorage.setItem(STORAGE.casePortraitPersona, JSON.stringify(parsed));
+  } catch {
+    /* ignore */
+  }
+}
+
+export async function resolvePatientPersona(caseData) {
+  const caseId = caseData?.id;
+  if (!caseId) return null;
+
+  const cached = readCasePortraitPersona(caseId);
+  if (cached?.summary) return cached;
+
+  try {
+    const caseContext = buildCaseChatContext(caseData);
+    const r = await fetch(`${API}/api/case-persona`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ caseContext }),
+    });
+    const data = await r.json().catch(() => ({}));
+    if (r.ok && data.persona) {
+      writeCasePortraitPersona(caseId, data.persona);
+      return data.persona;
+    }
+  } catch {
+    /* ignore */
+  }
+
+  return cached || null;
 }
 
 export async function checkCaseChatAvailable() {
@@ -100,16 +176,39 @@ export async function fetchChatModelLabel() {
   }
 }
 
-/** One OpenAI session per case id — case JSON sent once in the system prompt. */
+/** One chat session per case — case JSON + portrait persona in the system prompt. */
 export async function ensureCaseChatSession(caseData) {
   const caseId = String(caseData?.id || '');
   if (!caseId) throw new Error('Missing case id');
 
-  const caseContext = buildCaseChatContext(caseData);
+  const patientPersona = await resolvePatientPersona(caseData);
+  const caseDiscussion = buildCaseDiscussionContext(caseId);
+  const draftContext = buildCaseChatContext(caseData, { patientPersona, caseDiscussion });
+  const caseBriefMarkdown = await resolveCaseBriefMarkdown(caseId, {
+    caseDiscussion,
+    caseContext: draftContext,
+    refresh: false,
+  });
+  const caseContext = buildCaseChatContext(caseData, {
+    patientPersona,
+    caseDiscussion,
+    caseBriefMarkdown,
+  });
+  const personaKey = personaCacheKey(patientPersona);
+  const discussionKey = discussionCacheKey(caseDiscussion);
+  const briefKey = briefCacheKey(caseBriefMarkdown);
   const cached = sessions.get(caseId);
-  if (cached?.sessionId && cached.creativity === caseContext.simulationCreativity) {
+
+  if (
+    cached?.sessionId &&
+    cached.creativity === caseContext.simulationCreativity &&
+    cached.personaKey === personaKey &&
+    cached.discussionKey === discussionKey &&
+    cached.briefKey === briefKey
+  ) {
     return cached.sessionId;
   }
+
   sessions.delete(caseId);
   const r = await fetch(`${API}/api/case-chat/start`, {
     method: 'POST',
@@ -124,6 +223,9 @@ export async function ensureCaseChatSession(caseData) {
     sessionId: data.sessionId,
     caseId,
     creativity: caseContext.simulationCreativity,
+    personaKey,
+    discussionKey,
+    briefKey,
   });
   return data.sessionId;
 }
