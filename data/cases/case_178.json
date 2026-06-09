@@ -1,0 +1,58 @@
+{
+  "id": 178,
+  "topic": "Epigastric Pain",
+  "diagnosis": "Acute Abdomen (undetermined etiology)",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral+fmgmatch+mistral",
+  "correct_orders": [
+    "Laboratory tests: Complete Blood Count (CBC), Basic Metabolic Panel, Lipase, Amylase",
+    "Imaging: Abdominal CT scan with contrast",
+    "Oxygen",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+  ],
+  "should_avoid": [
+    "Order unneccessary invasive procedures without clear indications or prior imaging",
+    "Initial orders should not focus on a specific diagnosis as the etiology is unknown"
+  ],
+  "rationale": {
+    "Laboratory tests": "These tests help assess for possible causes of acute abdomen such as infection, pancreatitis, or obstruction",
+    "Abdominal CT scan with contrast": "This imaging modality can help identify the source of pain and provide a clearer picture of the abdominal pathology",
+    "Oxygen": "The patient is experiencing epigastric pain, which could be a sign of various emergencies such as acute abdomen or cardiac conditions. Oxygen should always be the first intervention to ensure adequate oxygenation.",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "As mentioned in 'How to Use It on Exam Day', immediate action includes ordering oxygen, setting up IV access, and checking glucose levels."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Epigastric Pain \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 104; BP 108/68."
+    ],
+    [
+      "Respiratory",
+      "RR 20; SpO\u2082 97%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

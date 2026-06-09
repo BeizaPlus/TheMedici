@@ -175,6 +175,34 @@ Refresh data: `npm run build:cases` (imports ollama JSON → rebuilds preparedCa
 
 Do not read case data from `MeWorld\data\` or `Step 3\` at runtime.
 
+---
+
+## DIFFERENTIAL PRACTICE (study mode)
+
+**Screen:** Welcome → Differentials · `src/components/DifferentialPractice.jsx`
+
+**Case tab data:** `src/data/differentialReview.json` — built from **`C:\Users\steve\MeWorld\data\cases\case_N.json`** (clean DeepSeek bank), **not** raw `*_ocr.txt` and **not** `game/data/cases/` thin Ollama copies.
+
+```powershell
+npm run build:differential-review
+```
+
+**Study panel tabs:** Timeline · Case · **Real World**
+
+| Tab | Source |
+|-----|--------|
+| Case Summary / Orders | `differentialReview.json` via `personalizeDifferentialReview()` |
+| Real World (2 stories) | `src/data/realWorldCases.json` + YouTube iframes |
+| Patient names | Settings `nameRegion` (default `mixed` = NYC multicultural) |
+
+**UI rules:**
+- Orders show as numbered sequence (1, 2, 3…) — not `[OK]` tags
+- Chief complaint: two lines (complaint + specialty)
+- ICU ambience: bottom-right volume, no rectangle border
+- CSS: `src/styles/differential-practice.css` — keep in audit contract
+
+**Agent handoff:** `game/.cursor/rules/differential-practice.mdc` · `AGENTS.md` § Differential Practice
+
 **Never put in preparedCases.json:**
 - Placeholder HPI like "Title — emergency presentation."
 - Labels order1, order2, or generic admin decoys

@@ -1,0 +1,63 @@
+{
+  "id": 171,
+  "topic": "Agitation",
+  "diagnosis": "Possible neuropsychiatric disorders such as delirium, dementia, or psychiatric emergencies",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain vital signs, perform a detailed physical examination, and assess mental status",
+    "Order laboratory workup: CBC, electrolytes, glucose, renal/hepatic function tests, thyroid function tests, urine toxicology screen",
+    "Order imaging studies if necessary (CT scan or MRI of the brain)",
+    "Consult psychiatry for further evaluation and management",
+    "If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold",
+    "CMP/BMP",
+    "UA"
+  ],
+  "should_avoid": [
+    "Prescribe medications without a clear diagnosis (e.g., antipsychotics, benzodiazepines)"
+  ],
+  "rationale": {
+    "Obtain vital signs, perform a detailed physical examination, and assess mental status": "To gather initial data on the patient's condition",
+    "Order laboratory workup": "To help rule out medical causes of agitation such as electrolyte imbalances, infections, or metabolic disorders",
+    "Order imaging studies": "If necessary to further evaluate potential neurological conditions",
+    "Consult psychiatry": "For a comprehensive evaluation and management plan",
+    "Prescribe medications without a clear diagnosis": "Could lead to incorrect treatment and potential harm due to lack of proper diagnostics",
+    "CMP/BMP": "To evaluate electrolytes, renal and liver function which could contribute to the patient's agitation",
+    "UA": "To rule out urinary tract infection or other kidney-related issues"
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Agitation \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 92; BP 128/82."
+    ],
+    [
+      "Respiratory",
+      "RR 16; SpO\u2082 99%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

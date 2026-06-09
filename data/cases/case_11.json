@@ -1,0 +1,47 @@
+{
+  "id": 11, "topic": "Abdominal Pain", "title": "Abdominal Pain", "diagnosis": "Hepatitis A with Aspiration Pneumonia",
+  "hpi_narrative": "{{patient_name}} is a man who recently returned from a cruise ship and presents with abdominal pain, nausea, vomiting, jaundice, and shortness of breath. He has RUQ tenderness on exam. LFTs are markedly elevated in the 2000-3000 range. The cruise ship travel and profoundly elevated transaminases are highly suspicious for acute viral hepatitis A (fecal-oral transmission). His episodes of vomiting led to aspiration pneumonia. Acetaminophen level should be checked to rule out overdose as a cause of acute liver injury. Management is supportive: IV fluids, antiemetics, oxygen for hypoxia, and antibiotics for aspiration pneumonia per ATS/IDSA guidelines (treat as community-acquired pneumonia; no anaerobic coverage needed without abscess/empyema). Acetaminophen is contraindicated with hepatic injury. Admit to inpatient unit.",
+  "chief_complaint": "Abdominal pain, jaundice, nausea, vomiting, shortness of breath",
+  "patient": null, "patient_name": "Kwaku Osei", "patient_sex": "male", "location": "ER", "specialty": "Emergency Medicine / Hepatology",
+  "stacks": [
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Determine how sick the patient looks.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"correctlyOrdered","finding":"Patient is short of breath — examine lungs.","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: Heart / Cardiovascular","type":"correctlyOrdered","finding":"Patient has chest pain — examine heart.","aliases":["Cardiovascular Exam"]},
+    {"label":"Physical Exam: Abdomen","type":"correctlyOrdered","finding":"Chief complaint — abdominal pain with RUQ tenderness.","aliases":["Abdominal Exam"]},
+    {"label":"Physical Exam: Extremities / Spine","type":"correctlyOrdered","finding":"Focused exam may narrow differential.","aliases":["Extremity Exam"]},
+    {"label":"Physical Exam: Skin","type":"shouldHaveOrdered","finding":"Examining skin for jaundice gives a key clue for liver pathology.","aliases":["Skin Exam"]},
+    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Good screening tool.","aliases":["CBC"]},
+    {"label":"ECG, 12 lead","type":"correctlyOrdered","finding":"Rule out cardiac causes of chest pain.","aliases":["EKG"]},
+    {"label":"Chest imaging (X-ray / CT)","type":"correctlyOrdered","finding":"Chest imaging will show aspiration pneumonia from vomiting episodes.","aliases":["CXR","Chest CT"]},
+    {"label":"Abdominal imaging (US / CT / MRI)","type":"shouldHaveOrdered","finding":"RUQ tenderness — abdominal imaging for further clarification.","aliases":["Abd US","CT abdomen"]},
+    {"label":"Acetaminophen level / Toxicology screen","type":"correctlyOrdered","finding":"With very high LFTs, must rule out acetaminophen overdose.","aliases":["APAP level"]},
+    {"label":"Pulse oximetry","type":"correctlyOrdered","finding":"Patient having trouble breathing — check SpO2.","aliases":["SpO2"]},
+    {"label":"Bacterial culture, sputum","type":"shouldHaveOrdered","finding":"Aspiration pneumonia — sputum culture to guide antibiotics. May be negative (anaerobes); treat empirically.","aliases":["Sputum culture"]},
+    {"label":"BMP / CMP / LFTs","type":"correctlyOrdered","finding":"LFTs show markedly elevated transaminases (2000-3000). Key diagnostic clue.","aliases":["BMP","CMP","LFTs"]},
+    {"label":"Hepatitis panel / HAV IgM & IgG","type":"correctlyOrdered","finding":"Cruise ship travel + very high LFTs = high suspicion for viral hepatitis. HAV IgM confirms.","aliases":["Hepatitis serology","HAV antibody"]},
+    {"label":"IV fluids (NS / LR)","type":"shouldHaveOrdered","finding":"Low sodium, nausea/vomiting — IV fluids indicated.","aliases":["IV fluids","NS","LR"]},
+    {"label":"Antiemetic (Ondansetron / Metoclopramide)","type":"shouldHaveOrdered","finding":"Patient is nauseous — treat symptomatically.","aliases":["Zofran","Reglan"]},
+    {"label":"Oxygen","type":"correctlyOrdered","finding":"Low oxygen — supplemental O2.","aliases":["O2"]},
+    {"label":"Analgesia (Hydromorphone / Fentanyl / Morphine)","type":"shouldHaveOrdered","finding":"Treat patient's pain.","aliases":["Pain medication"]},
+    {"label":"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin","type":"correctlyOrdered","finding":"ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.","aliases":["Antibiotics","Levaquin","Ceftriaxone"]},
+    {"label":"Acetaminophen","type":"correctlyAvoided","finding":"Acetaminophen with hepatitis and high LFTs is CONTRAINDICATED.","aliases":["Tylenol","APAP"]},
+    {"label":"Advise patient, no alcohol","type":"shouldHaveOrdered","finding":"Avoid alcohol to prevent further liver damage during recovery.","aliases":["Alcohol counseling"]},
+    {"label":"Follow-up LFTs in 1-4 weeks","type":"correctlyOrdered","finding":"Schedule follow-up to monitor downward trajectory of liver enzymes.","aliases":["LFT follow-up"]}
+  ],
+  "physical_exam": {"general":"Jaundiced, appears ill.","cardiovascular":null,"respiratory":"Dyspneic — aspiration pneumonia.","abdominal":"RUQ tenderness. Hepatomegaly.","neurological":null,"skin":"Jaundice — key finding in hepatitis.","heent":null,"musculoskeletal":null,"genitourinary":null,"psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[
+    {"label":"Acetaminophen for pain/fever","reason_wrong":"Contraindicated with acute hepatitis and elevated LFTs — hepatotoxic."},
+    {"label":"Tube thoracostomy","reason_wrong":"Invasive and not indicated for aspiration pneumonia without empyema."},
+    {"label":"Anaerobic antibiotic coverage (clindamycin / metronidazole)","reason_wrong":"ATS/IDSA guidelines: treat aspiration pneumonia as CAP without anaerobic coverage unless abscess or empyema present."}
+  ],
+  "teach_me_steps":[
+    {"order":"Hepatitis panel + acetaminophen level","category":"Diagnosis","reasoning":"Cruise ship = HAV risk (fecal-oral). High LFTs + jaundice = acute hepatitis. Always rule out acetaminophen toxicity in acute liver injury."},
+    {"order":"Treat aspiration pneumonia per CAP guidelines","category":"Treatment","reasoning":"ATS/IDSA: aspiration pneumonia = CAP treatment. No anaerobic coverage needed unless abscess/empyema. Levofloxacin, ceftriaxone + azithromycin."},
+    {"order":"Supportive care: IV fluids + antiemetics + O2","category":"Treatment","reasoning":"HAV is self-limited. Supportive care while liver recovers. Avoid hepatotoxins (acetaminophen, alcohol)."},
+    {"order":"Admit to inpatient unit","category":"Disposition","reasoning":"LFTs 2000-3000, jaundiced, intractable vomiting — requires IV fluids, IV antibiotics, LFT monitoring."}
+  ],
+  "differential":["Acute hepatitis A/B/C","Chronic hepatitis","Acute HIV","Drug-induced liver injury","CAP","Aspiration pneumonia","Chronic liver disease"],
+  "case_summary":"Hepatitis A from cruise ship (fecal-oral) with aspiration pneumonia from vomiting. LFTs 2000-3000. Supportive care + CAP antibiotics + O2. Avoid acetaminophen. Inpatient admission.",
+  "confidence":94,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

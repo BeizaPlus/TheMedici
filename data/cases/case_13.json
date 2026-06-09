@@ -1,0 +1,41 @@
+{
+  "id": 13, "topic": "Abdominal Pain", "title": "Abdominal Pain", "diagnosis": "Acute Gastritis (NSAID-induced)",
+  "hpi_narrative": "{{patient_name}} is an older man with chronic osteoarthritis who presents with epigastric abdominal pain of one week's duration. History reveals extensive, prolonged use of oral ibuprofen for knee pain. NSAIDs block both COX-1 and COX-2, impairing gastric prostaglandin production and disrupting mucosal defense — this is classic NSAID-induced gastropathy. Symptoms began one week ago and the patient is medically stable. Conservative management is key: discontinue NSAIDs, start a proton-pump inhibitor, and follow up in 2-4 weeks. If no improvement with conservative therapy, then EGD would be indicated, but ordering it now loses points — the USMLE tests restraint from invasive testing. H. pylori should be ruled out. For his osteoarthritis, switch to acetaminophen and/or topical diclofenac gel rather than oral NSAIDs. Address modifiable risk factors: smoking cessation and alcohol avoidance.",
+  "chief_complaint": "Epigastric abdominal pain, 1 week duration",
+  "patient": null, "patient_name": "Kwabena Frimpong", "patient_sex": "male", "location": "Office", "specialty": "Internal Medicine / Gastroenterology",
+  "stacks": [
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Determine how sick the patient looks.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"correctlyOrdered","finding":"Investigate for lung pathology.","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: Heart / Cardiovascular","type":"correctlyOrdered","finding":"Investigate for cardiac pathology.","aliases":["Cardiovascular Exam"]},
+    {"label":"Physical Exam: Abdomen","type":"correctlyOrdered","finding":"Chief complaint — epigastric tenderness.","aliases":["Abdominal Exam"]},
+    {"label":"Physical Exam: Rectal","type":"correctlyOrdered","finding":"May contribute to current symptoms.","aliases":["Rectal Exam"]},
+    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Good screening tool.","aliases":["CBC"]},
+    {"label":"H. pylori testing (antibody / urea breath test / stool antigen)","type":"shouldHaveOrdered","finding":"H. pylori should be ruled out as cause of gastritis.","aliases":["H pylori test","Urea breath test"]},
+    {"label":"Occult blood, stool","type":"optional","finding":"Rule out GI bleed. Negative in this case. Not required — could be gathered from physical exam.","aliases":["FOBT","Stool guaiac"]},
+    {"label":"BMP / CMP / LFTs","type":"correctlyOrdered","finding":"Screening labs.","aliases":["BMP","CMP"]},
+    {"label":"Endoscopy, upper gastrointestinal (EGD)","type":"shouldHaveAvoided","finding":"EGD should ONLY be done after conservative treatment has failed for 2-4 weeks. Ordering now loses points — tests restraint from invasive testing.","aliases":["EGD","Upper endoscopy"]},
+    {"label":"PPI (Omeprazole / Lansoprazole / Pantoprazole / Esomeprazole) or H2 blocker","type":"correctlyOrdered","finding":"Decrease stomach acid to treat NSAID-induced gastritis. PPIs preferred over H2 blockers.","aliases":["Omeprazole","Pantoprazole","Famotidine","Protonix","Prilosec"]},
+    {"label":"Acetaminophen / Topical diclofenac","type":"shouldHaveOrdered","finding":"For osteoarthritis pain: Tylenol first-line. If ineffective, topical diclofenac gel is preferred initial pharmacologic therapy. Avoid oral NSAIDs and opioids.","aliases":["Tylenol","Diclofenac gel"]},
+    {"label":"Consult, orthopedic surgery","type":"shouldHaveOrdered","finding":"Long-term solution for osteoarthritis — surgical evaluation.","aliases":["Orthopedic consult"]},
+    {"label":"Advise patient, no NSAIDs","type":"correctlyOrdered","finding":"Extensive NSAID use caused this gastritis. Must discontinue oral NSAIDs.","aliases":["NSAID cessation"]},
+    {"label":"Advise patient, no alcohol","type":"shouldHaveOrdered","finding":"Alcohol exacerbates acute gastritis — avoid until symptoms resolve.","aliases":["Alcohol counseling"]},
+    {"label":"Instruct patient, smoking cessation","type":"shouldHaveOrdered","finding":"Smoking contributes to gastritis and peptic ulcer disease.","aliases":["Smoking cessation"]},
+    {"label":"Tdap vaccine","type":"shouldHaveOrdered","finding":"Tdap every 10 years. No history given.","aliases":["Tdap"]}
+  ],
+  "physical_exam": {"general":"Stable, not acutely ill.","cardiovascular":null,"respiratory":null,"abdominal":"Epigastric tenderness. No peritoneal signs. No rebound/guarding.","neurological":null,"skin":null,"heent":null,"musculoskeletal":"Osteoarthritic knee changes — source of chronic NSAID use.","genitourinary":null,"psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[
+    {"label":"EGD / Upper endoscopy","reason_wrong":"Should only be ordered after 2-4 weeks of failed conservative therapy. The USMLE tests your ability to restrain from ordering invasive tests in stable patients."},
+    {"label":"Opioids for chronic OA pain","reason_wrong":"Opioids are not first-line for chronic osteoarthritis. Acetaminophen and topical NSAIDs are preferred. Avoid long-term opioid prescribing."},
+    {"label":"Broad-spectrum antibiotics","reason_wrong":"No evidence of infection. H. pylori negative. Gastritis is chemical (NSAID-induced), not infectious."}
+  ],
+  "teach_me_steps":[
+    {"order":"Take thorough medication history (NSAIDs)","category":"Diagnosis","reasoning":"Extensive ibuprofen use = NSAID-induced gastropathy. NSAIDs block COX-1 → decreased gastric prostaglandins → impaired mucosal defense. This is the most common cause of acute gastritis."},
+    {"order":"Conservative management: stop NSAIDs + PPI","category":"Treatment","reasoning":"First-line: discontinue offending agent + acid suppression (PPI > H2 blocker). Follow up in 2-4 weeks. EGD only if no improvement."},
+    {"order":"Switch OA treatment: acetaminophen + topical diclofenac","category":"Treatment","reasoning":"Acetaminophen first-line for OA. Topical diclofenac gel preferred over oral NSAIDs. Avoid opioids for chronic use."},
+    {"order":"Address risk factors: smoking, alcohol","category":"Prevention","reasoning":"Smoking and alcohol exacerbate gastritis and PUD. Address modifiable risk factors."}
+  ],
+  "differential":["Acute gastritis","Peptic ulcer disease","H. pylori infection","B-cell lymphoma","Gastric cancer","Cholelithiasis","Cholecystitis","Viral gastroenteritis"],
+  "case_summary":"NSAID-induced acute gastritis from chronic ibuprofen use for OA. Conservative management: stop NSAIDs, start PPI, switch to acetaminophen/topical diclofenac. Avoid EGD unless fails 2-4 weeks of conservative therapy. Office management.",
+  "confidence":95,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

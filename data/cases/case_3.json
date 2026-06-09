@@ -1,0 +1,46 @@
+{
+  "id": 3,
+  "topic": "Pelvic Pain",
+  "title": "Pelvic Pain",
+  "diagnosis": "Endometrioma",
+  "hpi_narrative": "{{patient_name}} is a reproductive-age woman who presents with severe pelvic pain that worsens with sexual activity. The pain is localized to the right adnexal region. Differential for a right adnexal mass in a reproductive-age female is broad and includes ectopic pregnancy, tuboovarian abscess, inflammatory bowel disease, ovarian mass, endometrioma, theca lutein cysts, and germ cell neoplasms. Imaging and appropriate surgical consultation are required.",
+  "chief_complaint": "Severe pelvic pain, worse with intercourse",
+  "patient": null,
+  "patient_name": "Abena Asare",
+  "patient_sex": "female",
+  "location": "ER",
+  "specialty": "OB/GYN",
+  "stacks": [
+    { "label": "Physical Exam: General Appearance", "type": "correctlyOrdered", "finding": "The general examination is extremely useful to determine how sick the patient looks.", "aliases": ["General Appearance"] },
+    { "label": "Physical Exam: Chest / Lungs", "type": "correctlyOrdered", "finding": "It's important to rule out any lung issues such as metastatic disease.", "aliases": ["Chest Exam", "Lung Exam"] },
+    { "label": "Physical Exam: Abdomen", "type": "shouldHaveOrdered", "finding": "Abdominal pathology can present as pelvic pain. Example: inflammatory bowel disease.", "aliases": ["Abdominal Exam"] },
+    { "label": "Physical Exam: Genitalia", "type": "correctlyOrdered", "finding": "Important since the source of pain is coming from the pelvic area.", "aliases": ["Pelvic Exam", "Genital Exam"] },
+    { "label": "CT/MRI/US abdomen/pelvis", "type": "correctlyOrdered", "finding": "CT would give diagnosis of endometrioma. Pelvic US (transvaginal) is typically first-line.", "aliases": ["CT abdomen/pelvis with contrast", "MRI abdomen/pelvis", "US pelvis transvaginal", "Pelvic ultrasound"] },
+    { "label": "Laparotomy / Laparoscopy / Consult OB/GYN", "type": "shouldHaveOrdered", "finding": "The endometrioma should be surgically removed. OB/GYN consult is appropriate.", "aliases": ["Surgery consult", "OB/GYN consult", "Laparoscopy"] },
+    { "label": "Instruct patient, smoking cessation", "type": "shouldHaveOrdered", "finding": "One of the most important things patients can do for their health is to stop smoking.", "aliases": ["Smoking cessation counseling"] },
+    { "label": "Advise patient, no illegal drug use", "type": "shouldHaveOrdered", "finding": "Good opportunity to discuss the medical effects of cannabis use.", "aliases": ["Drug counseling"] }
+  ],
+  "physical_exam": {
+    "general": "Patient in moderate distress from pelvic pain.",
+    "cardiovascular": null,
+    "respiratory": null,
+    "abdominal": "Lower abdominal tenderness. Pelvic pathology can present with abdominal symptoms.",
+    "neurological": null, "skin": null, "heent": null, "musculoskeletal": null,
+    "genitourinary": "Right adnexal mass. Pelvic exam indicated — source of pain is pelvic. Cervical motion tenderness assessment needed.",
+    "psychiatric": null
+  },
+  "vitals": { "hr": null, "spo2": null, "bp": null, "rr": null, "temp": null },
+  "decoys": [
+    { "label": "Appendectomy", "reason_wrong": "While appendicitis can present with RLQ pain, imaging shows adnexal mass consistent with endometrioma. Gynecologic consult is correct." },
+    { "label": "Broad-spectrum antibiotics (without culture)", "reason_wrong": "No evidence of infection. Tuboovarian abscess is on the differential but imaging should guide therapy." },
+    { "label": "Discharge home without follow-up", "reason_wrong": "Patient has a surgical adnexal mass requiring OB/GYN consultation and likely operative management." }
+  ],
+  "teach_me_steps": [
+    { "order": "Pelvic ultrasound / imaging", "category": "Diagnosis", "reasoning": "Transvaginal US is first-line for adnexal masses. CT or MRI also acceptable. Characterize the mass before intervention." },
+    { "order": "OB/GYN consult / Laparoscopy", "category": "Treatment", "reasoning": "Endometriomas require surgical removal. Laparoscopy is the standard approach." },
+    { "order": "Preventive counseling", "category": "Prevention", "reasoning": "Smoking cessation and substance use counseling are appropriate preventive measures when treating reproductive-age patients." }
+  ],
+  "differential": ["Ectopic pregnancy", "Tuboovarian abscess", "Inflammatory bowel disease", "Ovarian mass", "Endometrioma", "Theca lutein cysts", "Germ cell neoplasm", "Metastatic disease"],
+  "case_summary": "Right adnexal mass in reproductive-age woman with severe pelvic pain and dyspareunia. Imaging (US/CT/MRI) → endometrioma. Treatment: laparotomy/laparoscopy by OB/GYN. Preventive counseling for smoking cessation and drug use.",
+  "confidence": 95, "source": "DeepSeek v4 Pro", "extraction_method": "deepseek_direct", "complete": true, "parse_error": false
+}

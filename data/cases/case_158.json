@@ -1,0 +1,60 @@
+{
+  "id": 158,
+  "topic": "Knee Pain",
+  "diagnosis": "Proximal Tibiofibular Joint Sprain, Patellofemoral Pain Syndrome, or Meniscal Tear (common causes of knee pain)",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain a detailed history and perform a physical examination",
+    "Order X-rays to rule out fractures or other bony abnormalities",
+    "Consider ordering an MRI if symptoms persist or worsen, or in cases of severe trauma",
+    "If the diagnosis is still uncertain, consider a knee aspiration and synovial fluid analysis",
+    "CMP/BMP"
+  ],
+  "should_avoid": [
+    "Order immediate joint arthroscopy without proper diagnostics"
+  ],
+  "rationale": {
+    "Obtain a detailed history and perform a physical examination": "This is the first step in diagnosing knee pain. It allows for a comprehensive understanding of the patient's symptoms, their onset, and any aggravating or alleviating factors.",
+    "Order X-rays to rule out fractures or other bony abnormalities": "X-rays can help identify fractures, osteochondritis dissecans, avascular necrosis, or other bone disorders that may cause knee pain.",
+    "Consider ordering an MRI if symptoms persist or worsen, or in cases of severe trauma": "MRI is useful for diagnosing soft tissue injuries such as ligament sprains, meniscal tears, and cartilage damage.",
+    "If the diagnosis is still uncertain, consider a knee aspiration and synovial fluid analysis": "This can help identify inflammatory conditions or infections that may be causing the knee pain.",
+    "Order immediate joint arthroscopy without proper diagnostics": "This is premature as it involves invasive procedures and should only be done after proper diagnostics to confirm the suspected condition.",
+    "CMP/BMP": "This bundle includes electrolytes, renal function, and liver function tests that can help in the diagnosis of various conditions causing knee pain. It also includes a urinalysis (UA) to check for any potential infection or urinary issues."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Knee Pain \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 102; BP 135/86."
+    ],
+    [
+      "Respiratory",
+      "RR 19; SpO\u2082 99%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

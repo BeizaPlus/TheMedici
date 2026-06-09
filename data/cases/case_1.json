@@ -1,0 +1,47 @@
+{
+  "id": 1,
+  "topic": "Chest Pain",
+  "title": "Chest Pain",
+  "diagnosis": "Tension Pneumothorax",
+  "hpi_narrative": "{{patient_name}} presents to the emergency department with acute onset chest pain and severe respiratory distress. The patient appears diaphoretic, tachypneic, and in extremis. Symptoms began suddenly with rapid progression. Exam reveals unilateral absence of breath sounds, tracheal deviation, and hyperresonance on percussion. Tension pneumothorax is a clinical diagnosis made at the bedside — immediate intervention is critical and must not be delayed for imaging.",
+  "chief_complaint": "Chest pain with severe respiratory distress",
+  "patient": null,
+  "patient_name": "Akosua Mensah",
+  "patient_sex": "female",
+  "location": "ER",
+  "specialty": "Emergency Medicine",
+  "stacks": [
+    { "label": "Physical Exam: General Appearance", "type": "correctlyOrdered", "finding": "It is always important to see how the patient looks in general to assess how sick the patient is.", "aliases": ["General Appearance"] },
+    { "label": "Physical Exam: Chest / Lungs", "type": "correctlyOrdered", "finding": "Evaluate chest/lungs in a patient with respiratory distress.", "aliases": ["Chest Exam", "Lung Exam", "Respiratory Exam"] },
+    { "label": "Physical Exam: Heart / Cardiovascular", "type": "correctlyOrdered", "finding": "Cardiovascular evaluation provides key information in respiratory distress. Only focused exam needed in emergency.", "aliases": ["Cardiovascular Exam", "Heart Exam"] },
+    { "label": "Physical Exam: Extremities / Spine", "type": "correctlyOrdered", "finding": "Symptoms could result from PE — evaluate extremities for signs of DVT.", "aliases": ["Extremity Exam"] },
+    { "label": "Pulse oximetry", "type": "correctlyOrdered", "finding": "Patient in respiratory distress — check pulse oximetry.", "aliases": ["SpO2", "O2 sat"] },
+    { "label": "Electrocardiography, 12 lead", "type": "correctlyOrdered", "finding": "Initial EKG to rule out myocardial infarction.", "aliases": ["ECG", "EKG", "12-lead ECG"] },
+    { "label": "Cardiac troponin I, serum", "type": "shouldHaveOrdered", "finding": "Troponins should be evaluated — patient has chest pain, MI must be ruled out.", "aliases": ["Troponin", "Cardiac enzymes, serum"] },
+    { "label": "Thoracentesis", "type": "optional", "finding": "Good diagnostic step to confirm tension pneumothorax. However, chest tube must follow to prevent recurrence.", "aliases": ["Needle decompression"] },
+    { "label": "Tube thoracostomy / Needle thoracostomy", "type": "correctlyOrdered", "finding": "Chest tube should be placed after needle thoracostomy and placed to suction.", "aliases": ["Chest tube", "Thoracostomy"] },
+    { "label": "Chest X-ray (post-procedure)", "type": "correctlyOrdered", "finding": "X-ray verifies chest tube placement AFTER insertion. Do NOT diagnose by X-ray — tension pneumothorax is a clinical diagnosis. Imaging before tube placement loses points.", "aliases": ["X-ray, chest, PA", "X-ray, chest, PA/lateral"] }
+  ],
+  "physical_exam": {
+    "general": "Acute respiratory distress, diaphoretic, tachypneic.",
+    "cardiovascular": "Tachycardic; assess for muffled heart sounds and JVD.",
+    "respiratory": "Unilateral absence of breath sounds. Tracheal deviation. Hyperresonance on affected side.",
+    "abdominal": null, "neurological": null, "skin": "Diaphoretic, assess for cyanosis.", "heent": null, "musculoskeletal": null, "genitourinary": null, "psychiatric": null
+  },
+  "vitals": { "hr": null, "spo2": null, "bp": null, "rr": null, "temp": null },
+  "decoys": [
+    { "label": "Chest X-ray (before intervention)", "reason_wrong": "Tension pneumothorax is a clinical diagnosis. Imaging before decompression causes dangerous delay." },
+    { "label": "CT chest with contrast", "reason_wrong": "CT causes unacceptable delay in a life-threatening emergency." },
+    { "label": "Echocardiogram", "reason_wrong": "Too time-consuming. Immediate decompression is the priority." },
+    { "label": "D-dimer, serum", "reason_wrong": "While PE is on the differential, exam findings point to tension pneumothorax. Decompress first." }
+  ],
+  "teach_me_steps": [
+    { "order": "Diagnose tension pneumothorax clinically", "category": "Diagnosis", "reasoning": "Clinical triad: tracheal deviation + absent breath sounds + hyperresonance. Hypotension and respiratory distress. Do NOT wait for imaging." },
+    { "order": "Immediate needle thoracostomy", "category": "Treatment", "reasoning": "2nd intercostal space, midclavicular line. Converts tension to simple pneumothorax. Life-saving." },
+    { "order": "Tube thoracostomy", "category": "Treatment", "reasoning": "Follows needle decompression. Place to suction for definitive management." },
+    { "order": "Chest X-ray AFTER tube", "category": "Diagnosis", "reasoning": "Confirms tube position and lung re-expansion. Must be AFTER intervention, never before." }
+  ],
+  "differential": ["Aortic dissection", "Tension pneumothorax", "Asthma exacerbation", "Pulmonary embolism", "Angina"],
+  "case_summary": "Medical emergency. Clinical diagnosis of tension pneumothorax — needle decompression then chest tube, X-ray only after to verify placement. Admit for monitoring.",
+  "confidence": 95, "source": "DeepSeek v4 Pro", "extraction_method": "deepseek_direct", "complete": true, "parse_error": false
+}

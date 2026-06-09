@@ -1,0 +1,25 @@
+{
+  "id":30,"topic":"Pain in Right Arm","title":"Pain in Right Arm","diagnosis":"Colles' Fracture of Right Arm / Domestic Abuse",
+  "hpi_narrative":"{{patient_name}} presents with right wrist pain, swelling, and deformity after a reported fall. X-ray reveals a Colles' fracture — distal radius fracture with dorsal angulation (dinner fork deformity). However, the mechanism of injury and clinical presentation raise concern for domestic abuse. The physician must recognize red flags: inconsistent history, delay in seeking care, pattern of injuries in various stages of healing, and accompanying fearfulness or avoidance. Management: closed reduction and casting/splinting for the fracture. But equally important: a safety assessment, documentation of injuries, and referral to social work or appropriate support services. Domestic violence screening should be done privately and sensitively.",
+  "chief_complaint":"Right wrist pain, swelling, and deformity after fall","patient":null,"patient_name":"Abena Gyamfi","patient_sex":"female","location":"ER","specialty":"Emergency Medicine / Orthopedics",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Assess for other injuries, fearfulness, withdrawn behavior.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Extremities / Spine","type":"correctlyOrdered","finding":"Right wrist: dinner fork deformity, swelling, tenderness. Neurovascular exam (median nerve at risk).","aliases":["Extremity Exam"]},
+    {"label":"Physical Exam: Skin","type":"correctlyOrdered","finding":"Look for bruises in various stages of healing — sign of ongoing abuse.","aliases":["Skin Exam"]},
+    {"label":"X-ray, right wrist/forearm","type":"correctlyOrdered","finding":"Colles' fracture: distal radius with dorsal angulation. May have associated ulnar styloid fracture.","aliases":["Wrist X-ray"]},
+    {"label":"CBC","type":"correctlyOrdered","finding":"Screening.","aliases":["CBC"]},
+    {"label":"BMP / CMP","type":"correctlyOrdered","finding":"Screening.","aliases":["BMP"]},
+    {"label":"Closed reduction + casting/splinting","type":"correctlyOrdered","finding":"Colles' fracture management: closed reduction under hematoma block or sedation, then immobilization in sugar-tong splint or short arm cast.","aliases":["Reduction","Casting"]},
+    {"label":"Analgesia (NSAIDs / Acetaminophen / Opioids PRN)","type":"correctlyOrdered","finding":"Pain control.","aliases":["Pain medication"]},
+    {"label":"Orthopedic follow-up","type":"correctlyOrdered","finding":"Serial X-rays to ensure reduction maintained.","aliases":["Ortho follow-up"]},
+    {"label":"Social work consult / Domestic violence screening","type":"shouldHaveOrdered","finding":"Suspected domestic abuse. Screen privately. Document findings. Refer to social services. Safety planning.","aliases":["Social work","DV screening"]},
+    {"label":"Reassure patient / Counseling","type":"shouldHaveOrdered","finding":"Create safe, non-judgmental space. Provide domestic violence resources.","aliases":["Reassurance"]}
+  ],
+  "physical_exam":{"general":"Assess for distress, fearfulness, withdrawn behavior.","cardiovascular":null,"respiratory":null,"abdominal":null,"neurological":"Median nerve function assessment.","skin":"Inspect for bruises in various stages of healing — concern for ongoing abuse.","heent":null,"musculoskeletal":"Right wrist: dorsal angulation (dinner fork deformity), swelling, tenderness, limited ROM.","genitourinary":null,"psychiatric":"Screen for domestic violence privately and sensitively."},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[{"label":"Surgical fixation (ORIF) first-line for Colles'","reason_wrong":"Closed reduction and casting is first-line for Colles' fracture. Surgery reserved for intra-articular fractures, significant comminution, or failed closed reduction."}],
+  "teach_me_steps":[{"order":"Recognize Colles' fracture: dinner fork deformity + dorsal angulation","category":"Diagnosis","reasoning":"Distal radius fracture with dorsal displacement. Common in FOOSH (fall on outstretched hand). X-ray confirms. Check median nerve."},{"order":"Closed reduction + immobilization","category":"Treatment","reasoning":"Hematoma block or sedation → reduce → sugar-tong splint/short arm cast. Orthopedic follow-up for serial X-rays."},{"order":"Screen for domestic violence","category":"Treatment","reasoning":"Red flags: inconsistent history, delay, multiple injuries in various stages. Screen PRIVATELY. Document. Social work consult. Safety planning."}],
+  "differential":["Colles' fracture","Smith's fracture","Scaphoid fracture","Wrist sprain","Domestic abuse"],
+  "case_summary":"Colles' fracture (dinner fork deformity) in setting of suspected domestic abuse. Closed reduction + casting. Social work consult + DV screening. Ortho follow-up.",
+  "confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

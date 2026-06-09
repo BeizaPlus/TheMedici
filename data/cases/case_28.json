@@ -1,0 +1,30 @@
+{
+  "id":28,"topic":"Pelvic Pain","title":"Pelvic Pain","diagnosis":"Pelvic Inflammatory Disease",
+  "hpi_narrative":"{{patient_name}} is a sexually active young woman presenting with bilateral lower abdominal/pelvic pain, cervical motion tenderness, adnexal tenderness, purulent cervical discharge, fever, and leukocytosis. Pelvic inflammatory disease is an ascending infection from the lower genital tract — commonly Chlamydia trachomatis and Neisseria gonorrhoeae, though polymicrobial. Diagnosis is clinical based on CDC criteria: uterine/adnexal tenderness + cervical motion tenderness (minimum). Complications: tubo-ovarian abscess, infertility, ectopic pregnancy, chronic pelvic pain. Treatment: empiric broad-spectrum antibiotics covering chlamydia, gonorrhea, and anaerobes — ceftriaxone 250mg IM once + doxycycline 100mg PO BID x 14 days + metronidazole 500mg PO BID x 14 days. Partner treatment essential. Screen for other STIs. Admit if severe, TOA, pregnant, or failed outpatient treatment.",
+  "chief_complaint":"Bilateral pelvic pain, fever, purulent discharge","patient":null,"patient_name":"Afua Kyere","patient_sex":"female","location":"ER","specialty":"OB/GYN / Infectious Disease",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Assess severity.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Abdomen","type":"correctlyOrdered","finding":"Bilateral lower abdominal tenderness.","aliases":["Abdominal Exam"]},
+    {"label":"Physical Exam: Genitalia / Pelvic","type":"correctlyOrdered","finding":"Cervical motion tenderness + adnexal tenderness + purulent discharge = classic PID.","aliases":["Pelvic Exam"]},
+    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Leukocytosis supports infection.","aliases":["CBC"]},
+    {"label":"Urinalysis / Urine culture","type":"correctlyOrdered","finding":"Rule out UTI/pyelo — dysuria can overlap.","aliases":["UA"]},
+    {"label":"Chlamydia / Gonorrhea NAAT","type":"correctlyOrdered","finding":"Identify causative organisms. NAAT on cervical swab or urine.","aliases":["CT/GC testing"]},
+    {"label":"HCG, beta (pregnancy test)","type":"correctlyOrdered","finding":"MUST rule out ectopic pregnancy — can mimic PID.","aliases":["Pregnancy test"]},
+    {"label":"Pelvic ultrasound","type":"correctlyOrdered","finding":"Rule out tubo-ovarian abscess. Transvaginal preferred.","aliases":["Pelvic US","TVUS"]},
+    {"label":"HIV / Syphilis / Hepatitis screening","type":"shouldHaveOrdered","finding":"One STI → screen for all.","aliases":["STI panel"]},
+    {"label":"BMP / CMP","type":"correctlyOrdered","finding":"Screening.","aliases":["BMP"]},
+    {"label":"Ceftriaxone 250mg IM once","type":"correctlyOrdered","finding":"Covers gonorrhea. Single IM dose.","aliases":["Rocephin"]},
+    {"label":"Doxycycline 100mg PO BID x 14 days","type":"correctlyOrdered","finding":"Covers chlamydia. 14-day course for PID (not 7-day like uncomplicated CT).","aliases":["Doxycycline"]},
+    {"label":"Metronidazole 500mg PO BID x 14 days","type":"correctlyOrdered","finding":"Anaerobic coverage for PID.","aliases":["Flagyl"]},
+    {"label":"Analgesia (NSAIDs / Acetaminophen)","type":"shouldHaveOrdered","finding":"Pain management.","aliases":["Pain medication"]},
+    {"label":"Advise patient, safe sex techniques","type":"shouldHaveOrdered","finding":"STI prevention counseling.","aliases":["Safe sex"]},
+    {"label":"Advise patient, sexual partner needs treatment","type":"shouldHaveOrdered","finding":"Partner treatment essential to prevent reinfection.","aliases":["Partner treatment"]}
+  ],
+  "physical_exam":{"general":"Febrile, appears uncomfortable.","cardiovascular":null,"respiratory":null,"abdominal":"Bilateral lower quadrant tenderness. No peritoneal signs.","neurological":null,"skin":null,"heent":null,"musculoskeletal":null,"genitourinary":"Cervical motion tenderness. Adnexal tenderness (bilateral). Purulent cervical discharge. Uterine tenderness.","psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[{"label":"Doxycycline x 7 days only","reason_wrong":"PID requires 14-day course, not the 7-day course used for uncomplicated chlamydia. Inadequate duration risks treatment failure and complications."}],
+  "teach_me_steps":[{"order":"CDC clinical criteria for PID","category":"Diagnosis","reasoning":"Minimum: uterine/adnexal tenderness + cervical motion tenderness. Additional: fever, leukocytosis, purulent discharge, CT/GC positive. Rule out ectopic with HCG."},{"order":"Ceftriaxone + Doxycycline x14d + Metronidazole x14d","category":"Treatment","reasoning":"Empiric coverage: GC (ceftriaxone), CT (doxycycline), anaerobes (metronidazole). 14-day course. Partner treatment essential."}],
+  "differential":["PID","Ectopic pregnancy","Tubo-ovarian abscess","Appendicitis","UTI/Pyelonephritis","Ovarian cyst","Endometriosis"],
+  "case_summary":"PID diagnosed clinically. Cervical motion tenderness + adnexal tenderness + fever + discharge. Ceftriaxone IM + doxycycline x14d + metronidazole x14d. Rule out ectopic. Partner treatment.",
+  "confidence":94,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

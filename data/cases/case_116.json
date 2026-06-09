@@ -1,0 +1,58 @@
+{
+  "id": 116,
+  "topic": "Headache",
+  "diagnosis": "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Initial assessment and monitoring for potential signs of serious conditions (e.g., neurological examination, vital signs, and observation)",
+    "Imaging (CT or MRI) if the clinical situation warrants it to rule out structural causes such as Subarachnoid Hemorrhage",
+    "Oxygen",
+    "IV access \u00d72 large-bore"
+  ],
+  "should_avoid": [
+    "Initiation of specific treatment for migraine or other secondary headaches without first ruling out serious conditions"
+  ],
+  "rationale": {
+    "Initial assessment and monitoring": "To evaluate the patient's overall condition and to watch for signs of more severe conditions",
+    "Imaging (CT or MRI)": "To help identify potential structural causes of headache, such as Subarachnoid Hemorrhage",
+    "Initiation of specific treatment for migraine or other secondary headaches": "Because the diagnosis is unknown; initiating treatment without first ruling out serious conditions could lead to delayed detection and management of life-threatening conditions",
+    "Oxygen": "To provide immediate support for the patient experiencing a headache, which could be a symptom of various critical conditions.",
+    "IV access \u00d72 large-bore": "For potential fluid resuscitation and administration of necessary medications."
+  },
+  "hpi": "Initial History\n\nReason(s) for visit: Headache\nHistory of present Illness:\nA 55-year-old female with a past medical history of hypertension presents to your office with a an occipital headache, mild vertigo, and a tendency to fall when walking for 6 days. She states that she never had any problems walking or being off-balance. Eight days ago, she stated that she had a pink rash on her arms and torso and felt feverish. The rash improved after a couple days, but the headache and tendency to fall persisted. She had nausea, but she denied any vomiting. She feels weak and \"under the weather.\"  She denies travel, but went hiking 2 weeks ago nearby her house which she routinely does every summer. She denies any history of migraines. She will occasionally get a tension headache which she will treat with Ibuprofen. She has never had a headache that has lasted this long. She denies any trauma to her head. She denies any sick contacts. She denies any recent antibiotic use.  She is very concerned about her symptoms.\n\nPMH:\nPast Medical History: Hypertension. The patient recently had a colonoscopy screening which was normal. \nCurrent medications: HCTZ 25mg PO daily\nAllergies: None\nVaccinations: Received Childhood vaccinations.\nWomen's health: The patient cannot remember when her last pap smear was done.\nFamily History:\nHer father has a history of Hypertension and died of a stroke. Her mother has no health problems and is still living.\n\nSocial History:\nMarital/Family: She is married with one child. She lives in Gaithersburg, Maryland.\nPersonal habits: The patient denies smoking. She lives an active lifestyle. She drinks alcohol socially. She denies use of illegal drugs or misuse of medications.\nOccupation/educational: She works as a public relations specialist. She is a college graduate with a BS in communication.\nRecreational: The patient enjoys to bike and hike. She loves the outdoors and spends as much time as she is able.\n\nReview of systems:\nGeneral: See HPI\nSkin: See HPI\nHEENT: Negative\nCardiorespiratory: Negative\nGastrointestinal: See HPI\nGenitourinary: Negative\nNeuropsychiatric: See HPI\n\n--- Chart tabs ---\n\n* Chart: Progress Notes \u2192 presentation_5_Headache_chart_Progress_Notes.png\n* Chart: Vital Signs \u2192 presentation_5_Headache_chart_Vital_Signs.png",
+  "physical_exam": [
+    [
+      "General",
+      "presents to your office with a an occipital headache, mild vertigo, and a tendency to fall when walking for 6 days."
+    ],
+    [
+      "Cardiovascular",
+      "HR 88; BP 118/70."
+    ],
+    [
+      "Respiratory",
+      "RR 18; SpO\u2082 96%."
+    ],
+    [
+      "Abdomen",
+      "Abdominal tenderness pattern matches history; no rigid abdomen documented yet."
+    ],
+    [
+      "Neuro",
+      "Mental status intact; cranial nerves and neck stiffness assessed."
+    ],
+    [
+      "Skin",
+      "Skin rash morphology and distribution documented."
+    ]
+  ],
+  "vitals": "Initial Vital Signs Day 1 @ 9:00 Temperature: 38.3 C (101.0 degrees F) Pulse: 88 beats/min. Regular rhythm Respiratory rate: 18 /minute Blood pressure, systolic: 118 mm Hg Blood pressure, diastolic: 70 mm Hg Height: 175.3 cm (69.0 in) Weight: 65.8 kg (145 lb) Body Mass Index: 21.4 kg/m2",
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

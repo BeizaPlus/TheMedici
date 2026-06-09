@@ -1,0 +1,71 @@
+{
+  "id": 103,
+  "topic": "Routine Check-Up",
+  "diagnosis": "Initial Workup for Undetermined Condition",
+  "confidence": "inferred",
+  "source": "preparedCases+mistral",
+  "correct_orders": [
+    "Complete Blood Count (CBC)",
+    "Comprehensive Metabolic Panel (CMP)",
+    "Urinalysis",
+    "Electrocardiogram (ECG)",
+    "Chest X-ray",
+    "Consultation with Internal Medicine or Hospitalist",
+    "Cardiac Monitor",
+    "IV Access + Fluids",
+    "Stat Labs",
+    "Bedside / CT imaging",
+    "Admit / Disposition"
+  ],
+  "should_avoid": [
+    "Prescription for specific medication without a confirmed diagnosis"
+  ],
+  "rationale": {
+    "Complete Blood Count (CBC)": "Helps to evaluate general health status, detect infections and anemia.",
+    "Comprehensive Metabolic Panel (CMP)": "Assesses the metabolism of carbohydrates, proteins, and fats, and helps to identify electrolyte imbalances, kidney function, and liver disease.",
+    "Urinalysis": "Helps to evaluate kidney function, detect infections, or abnormalities such as protein or glucose in the urine.",
+    "Electrocardiogram (ECG)": "Assesses the heart's electrical activity and can help identify potential cardiac problems.",
+    "Chest X-ray": "Helps to diagnose conditions affecting the lungs, heart, and chest.",
+    "Consultation with Internal Medicine or Hospitalist": "For further evaluation, management, and potential diagnostic procedures.",
+    "Prescription for specific medication without a confirmed diagnosis": "Avoiding unnecessary medications until a definite diagnosis has been established.",
+    "Cardiac Monitor": "Continuous vitals.",
+    "IV Access + Fluids": "Two large-bore if shock.",
+    "Stat Labs": "CBC, BMP, lactate.",
+    "Bedside / CT imaging": "Targeted imaging.",
+    "Admit / Disposition": "Match acuity."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Routine Check-Up \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 110; BP 116/74."
+    ],
+    [
+      "Respiratory",
+      "RR 22; SpO\u2082 98%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "mistral"
+  ]
+}

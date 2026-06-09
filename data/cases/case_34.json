@@ -1,0 +1,28 @@
+{
+  "id":34,"topic":"Headache","title":"Headache","diagnosis":"Hypertensive Emergency",
+  "hpi_narrative":"{{patient_name}} presents with severe headache, blurred vision, and severely elevated blood pressure (>180/120). This is a hypertensive emergency — severe hypertension WITH evidence of acute end-organ damage (headache/visual changes suggesting cerebral involvement, possible papilledema, retinal hemorrhages). Must be distinguished from hypertensive urgency (severe HTN without end-organ damage — manage with oral meds as outpatient). Workup: fundoscopy (papilledema, hemorrhages, exudates), ECG (LVH, ischemia), CXR (pulmonary edema, aortic dissection signs), UA (proteinuria, hematuria), BMP (elevated Cr — renal damage), cardiac enzymes, CT head if focal neuro deficits. Treatment: IV antihypertensives in ICU — reduce MAP by no more than 25% in first hour (too rapid reduction causes cerebral/coronary hypoperfusion). Labetalol IV, nicardipine, or clevidipine. Goal: reduce DBP to 100-105 over 2-6 hours. Do NOT use short-acting nifedipine (risk of rapid uncontrollable hypotension).",
+  "chief_complaint":"Severe headache, blurry vision, severely elevated BP","patient":null,"patient_name":"Esi Nyarko","patient_sex":"female","location":"ER","specialty":"Emergency Medicine / Cardiology",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Assess severity — severe headache, distress.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"correctlyOrdered","finding":"Assess for pulmonary edema.","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: Heart / Cardiovascular","type":"correctlyOrdered","finding":"Hypertensive emergency → assess for LVH, S4, new murmurs.","aliases":["Cardiovascular Exam"]},
+    {"label":"Physical Exam: Neuro / Psych","type":"correctlyOrdered","finding":"Headache + visual changes — assess for focal deficits, altered mental status.","aliases":["Neuro Exam"]},
+    {"label":"Physical Exam: Fundoscopy","type":"correctlyOrdered","finding":"Papilledema, retinal hemorrhages, cotton wool spots, AV nicking — signs of end-organ damage.","aliases":["Eye exam"]},
+    {"label":"ECG, 12 lead","type":"correctlyOrdered","finding":"LVH, strain pattern, ischemia.","aliases":["EKG"]},
+    {"label":"Chest X-ray","type":"correctlyOrdered","finding":"Pulmonary edema, widened mediastinum (dissection).","aliases":["CXR"]},
+    {"label":"CBC","type":"correctlyOrdered","finding":"Screening.","aliases":["CBC"]},
+    {"label":"BMP / CMP","type":"correctlyOrdered","finding":"Creatinine — assess for acute kidney injury from hypertensive damage.","aliases":["BMP"]},
+    {"label":"Cardiac troponin","type":"correctlyOrdered","finding":"Myocardial ischemia from demand-supply mismatch.","aliases":["Troponin"]},
+    {"label":"Urinalysis","type":"correctlyOrdered","finding":"Proteinuria, hematuria — renal end-organ damage.","aliases":["UA"]},
+    {"label":"CT head without contrast","type":"correctlyOrdered","finding":"Rule out intracranial hemorrhage if focal neuro deficits or AMS.","aliases":["Head CT"]},
+    {"label":"IV Labetalol / Nicardipine / Clevidipine","type":"correctlyOrdered","finding":"IV antihypertensive. Reduce MAP by ≤25% in first hour. Goal DBP 100-105 over 2-6h. Do NOT rapidly normalize BP.","aliases":["Labetalol IV"]},
+    {"label":"Admit to ICU","type":"correctlyOrdered","finding":"Hypertensive emergency requires ICU for continuous BP monitoring and IV therapy.","aliases":["ICU admission"]}
+  ],
+  "physical_exam":{"general":"In distress, severe headache.","cardiovascular":"Severely elevated BP >180/120. S4 gallop (LVH). Assess for aortic regurgitation murmur (dissection).","respiratory":null,"abdominal":null,"neurological":"Headache, blurry vision. No focal deficits. Assess for altered mental status.","skin":null,"heent":"Fundoscopy: papilledema, retinal hemorrhages, exudates.","musculoskeletal":null,"genitourinary":null,"psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":">180/120","rr":null,"temp":null},
+  "decoys":[{"label":"Short-acting nifedipine PO","reason_wrong":"Rapid, uncontrollable hypotension → cerebral and coronary hypoperfusion → stroke and MI. NEVER use short-acting nifedipine for hypertensive emergency."},{"label":"Rapid BP normalization to 120/80","reason_wrong":"Reduce MAP by ≤25% in first hour. Rapid normalization causes cerebral hypoperfusion (loss of autoregulation). Goal DBP 100-105 over 2-6 hours."}],
+  "teach_me_steps":[{"order":"Hypertensive emergency = severe HTN + end-organ damage","category":"Diagnosis","reasoning":"Headache + visual changes + papilledema = cerebral end-organ damage. Fundoscopy + ECG + UA + Cr + troponin + CT head. Emergency ≠ urgency (no end-organ damage)."},{"order":"IV labetalol: slow, controlled BP reduction","category":"Treatment","reasoning":"Reduce MAP by ≤25% in first hour. Goal DBP 100-105 over 2-6h. ICU for continuous monitoring. NEVER short-acting nifedipine."}],
+  "differential":["Hypertensive emergency","Hypertensive urgency","Intracranial hemorrhage","Aortic dissection","Acute kidney injury","Pheochromocytoma"],
+  "case_summary":"Hypertensive emergency with cerebral end-organ damage (headache + visual changes + papilledema). IV labetalol in ICU. Reduce MAP ≤25% in first hour. Avoid rapid normalization.",
+  "confidence":94,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

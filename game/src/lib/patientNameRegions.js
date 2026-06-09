@@ -3,7 +3,7 @@ import { STORAGE } from './storageKeys.js';
 
 const REGIONS = banks?.regions || {};
 
-export const DEFAULT_NAME_REGION = banks?.defaultRegion || 'ghana';
+export const DEFAULT_NAME_REGION = banks?.defaultRegion || 'mixed';
 
 /** Underlying regions rotated when "Mixed (NYC)" is selected — one culture per case #. */
 export const MIXED_SOURCE_REGIONS = ['ghana', 'chinese', 'brazilian', 'indian', 'nigerian'];

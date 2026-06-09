@@ -1,0 +1,59 @@
+{
+  "id": 70,
+  "topic": "Fever",
+  "diagnosis": "Infectious workup including sepsis, meningitis, or pneumonia are potential considerations due to the fever being of unknown origin.",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain blood cultures before starting antibiotics",
+    "Perform complete blood count (CBC), comprehensive metabolic panel (CMP), and urinalysis",
+    "Consider obtaining lumbar puncture (LP) for cerebrospinal fluid analysis in cases where meningitis is suspected",
+    "Obtain a chest X-ray or consider computed tomography (CT) scan if pneumonia is suspected",
+    "Start empiric broad-spectrum antibiotics after obtaining blood cultures",
+    "Oxygen",
+    "IV access \u00d72"
+  ],
+  "should_avoid": [
+    "Immediately starting broad-spectrum antibiotics without obtaining blood cultures"
+  ],
+  "rationale": {
+    "starting antibiotics before blood cultures": "Avoid starting antibiotics immediately to preserve culture sensitivity, allowing for more accurate identification of the pathogen.",
+    "Oxygen": "Fever is a symptom that could indicate an infection, and the patient may be in distress. Oxygen should be administered immediately.",
+    "IV access \u00d72": "Intravenous access is essential for administering fluids, medications, and other lifesaving interventions."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Fever \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 106; BP 93/58; hypotensive."
+    ],
+    [
+      "Respiratory",
+      "RR 19; SpO\u2082 91%; hypoxemic."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "Warm skin with fever; no purpura on initial survey."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": 147,
+  "topic": "Heart Palpitations",
+  "diagnosis": "Possible cardiac arrhythmia or other underlying heart condition",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Order a 12-lead ECG to evaluate for any cardiac arrhythmias.",
+    "Refer the patient to a cardiologist for further evaluation and management.",
+    "Oxygen",
+    "IV access \u00d72"
+  ],
+  "should_avoid": [
+    "Initiate unnecessary invasive procedures at this stage, as the diagnosis is still uncertain."
+  ],
+  "rationale": {
+    "Order1": "ECG is a non-invasive diagnostic test that can help identify various types of arrhythmias and other cardiac conditions. A referral to a cardiologist ensures proper management and further investigation.",
+    "should_avoid1": "Avoiding invasive procedures at this stage helps minimize patient discomfort, potential complications, and reduces unnecessary costs.",
+    "Oxygen": "The patient is experiencing heart palpitations, which can potentially be life-threatening. Oxygen is crucial to provide immediate support for any respiratory distress.",
+    "IV access \u00d72": "Immediate IV access is essential for the administration of medications and fluids if necessary."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Heart Palpitations \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 100; BP 89/56; hypotensive."
+    ],
+    [
+      "Respiratory",
+      "RR 21; SpO\u2082 88%; hypoxemic."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

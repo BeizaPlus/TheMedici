@@ -1,0 +1,61 @@
+{
+  "id": 72,
+  "topic": "Routine Check-Up",
+  "diagnosis": "Pending further diagnostic results",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Complete Blood Count (CBC)",
+    "Chemistry Panel",
+    "Urinalysis",
+    "Electrocardiogram (ECG)",
+    "Imaging studies (X-ray, CT, MRI as necessary)",
+    "Universal Labs (CBC, CMP, UA)",
+    "EKG + CXR if indicated"
+  ],
+  "should_avoid": [],
+  "rationale": {
+    "Complete Blood Count (CBC)": "To evaluate the patient's overall health and detect potential issues with red blood cells, white blood cells, and platelets.",
+    "Chemistry Panel": "To assess kidney function, liver function, electrolyte levels, and glucose levels.",
+    "Urinalysis": "To evaluate kidney function, detect urinary tract infections or other abnormalities.",
+    "Electrocardiogram (ECG)": "To evaluate the patient's heart rhythm and cardiac health.",
+    "Imaging studies (X-ray, CT, MRI as necessary)": "To visualize internal organs and structures for potential abnormalities.",
+    "Universal Labs (CBC, CMP, UA)": "Establishing baseline renal, liver, and electrolyte functions, as well as urinalysis results is essential for a comprehensive workup.",
+    "EKG + CXR if indicated": "An EKG can help in detecting cardiac abnormalities while a chest X-ray can aid in identifying lung pathologies."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Routine Check-Up \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 98; BP 107/68."
+    ],
+    [
+      "Respiratory",
+      "RR 19; SpO\u2082 95%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

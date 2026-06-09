@@ -1,0 +1,57 @@
+{
+  "id": 65,
+  "topic": "Anxiety",
+  "diagnosis": "Psychiatric Disorder such as Generalized Anxiety Disorder, Panic Disorder, or Adjustment Disorder",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain a psychiatric consult for comprehensive evaluation and management plan",
+    "Order laboratory tests (CBC, Chemistry panel, Thyroid function tests) to rule out any medical causes of the patient's symptoms",
+    "Oxygen",
+    "IV access \u00d72"
+  ],
+  "should_avoid": [
+    "Prescribing medication without proper diagnosis"
+  ],
+  "rationale": {
+    "Obtain a psychiatric consult for comprehensive evaluation and management plan": "For accurate diagnosis and appropriate treatment plan, it is essential to involve a mental health professional.",
+    "Prescribing medication without proper diagnosis": "Medication should not be prescribed without a confirmed diagnosis to ensure safe and effective treatment.",
+    "Oxygen": "Anxiety could potentially be a sign of underlying distress or AMS, requiring oxygen immediately.",
+    "IV access \u00d72": "In case further interventions are needed, it's essential to have adequate IV access."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Anxiety \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 88; BP 125/80."
+    ],
+    [
+      "Respiratory",
+      "RR 15; SpO\u2082 98%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

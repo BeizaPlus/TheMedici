@@ -1,0 +1,56 @@
+{
+  "id": 53,
+  "topic": "Shortness of Breath",
+  "diagnosis": "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain arterial blood gas (ABG) analysis",
+    "Echocardiogram to assess heart function",
+    "Oxygen",
+    "IV access \u00d72 large-bore"
+  ],
+  "should_avoid": [
+    "Chest X-ray (initial test)"
+  ],
+  "rationale": {
+    "Chest X-ray (initial test)": "Initial investigation for Shortness of Breath should not be a Chest X-ray, but rather vital signs and oxygen saturation. If the patient is unstable, prompt ABG analysis and echocardiogram are necessary before imaging.",
+    "Oxygen": "Shortness of breath is a symptom that necessitates immediate oxygen administration.",
+    "IV access \u00d72 large-bore": "The case describes shortness of breath, which may indicate an acute condition. Large-bore IV access ensures quick fluid resuscitation if needed."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Dyspneic, speaking in short phrases if severe"
+    ],
+    [
+      "Cardiovascular",
+      "HR 116, tachycardic; BP 101/64."
+    ],
+    [
+      "Respiratory",
+      "RR 25, tachypneic; SpO\u2082 92%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended"
+    ],
+    [
+      "Neuro",
+      "Alert unless hypercapnic or hypoxic"
+    ],
+    [
+      "Skin",
+      "Cyanosis absent unless critical hypoxemia"
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

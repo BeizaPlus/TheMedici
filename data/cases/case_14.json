@@ -1,0 +1,51 @@
+{
+  "id": 14, "topic": "Facial and Upper Extremity Edema", "title": "Facial and Upper Extremity Edema", "diagnosis": "Pre-Eclampsia with Severe Features",
+  "hpi_narrative": "{{patient_name}} is a pregnant woman at 33 weeks gestation who presents with facial and upper extremity edema, severe hypertension (189/99), new-onset headaches, and blurry vision — signs of end-organ damage. Pre-eclampsia is defined as SBP > 140 or DBP > 90 developing after 20 weeks gestation WITH end-organ dysfunction (proteinuria, visual/cerebral disturbances, pulmonary edema, creatinine > 1.1, elevated LFTs, or thrombocytopenia < 100,000). With SBP > 160, she meets criteria for pre-eclampsia with severe features. Management triad: (1) Magnesium sulfate for seizure prophylaxis to prevent progression to eclampsia, (2) IV labetalol or hydralazine for blood pressure control (labetalol is superior with fewer side effects), (3) Betamethasone for fetal lung maturity if delivering < 34 weeks. Definitive treatment is delivery — with severe features, deliver at ≥ 34 weeks. OB/GYN consult for cesarean section. Admit to ICU or inpatient unit — this is an emergency.",
+  "chief_complaint": "Facial/upper extremity edema, severe hypertension, headache, blurry vision at 33 weeks",
+  "patient": null, "patient_name": "Adwoa Duah", "patient_sex": "female", "location": "ICU", "specialty": "OB/GYN / Maternal-Fetal Medicine",
+  "stacks": [
+    {"label":"Physical Exam: General Appearance","type":"shouldHaveOrdered","finding":"Full physical exam — broad differential in pregnancy.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Breasts","type":"shouldHaveOrdered","finding":"Full obstetric physical exam.","aliases":["Breast Exam"]},
+    {"label":"Physical Exam: Heart / Cardiovascular","type":"shouldHaveOrdered","finding":"Severe hypertension — cardiovascular exam essential.","aliases":["Cardiovascular Exam"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"shouldHaveOrdered","finding":"Assess for pulmonary edema.","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: Abdomen","type":"shouldHaveOrdered","finding":"Obstetric abdominal exam — assess fundal height, tenderness.","aliases":["Abdominal Exam"]},
+    {"label":"Physical Exam: Lymph Nodes","type":"shouldHaveOrdered","finding":"Full exam.","aliases":["Lymph Node Exam"]},
+    {"label":"Physical Exam: Neuro / Psych","type":"shouldHaveOrdered","finding":"Headache + visual changes = neurological assessment for end-organ damage.","aliases":["Neuro Exam"]},
+    {"label":"Physical Exam: Rectal","type":"shouldHaveOrdered","finding":"Full exam.","aliases":["Rectal Exam"]},
+    {"label":"Physical Exam: Skin","type":"shouldHaveOrdered","finding":"Assess for edema.","aliases":["Skin Exam"]},
+    {"label":"Physical Exam: Extremities / Spine","type":"shouldHaveOrdered","finding":"Upper extremity edema — examine.","aliases":["Extremity Exam"]},
+    {"label":"Physical Exam: Genitalia","type":"shouldHaveOrdered","finding":"Obstetric exam.","aliases":["Genital Exam"]},
+    {"label":"Physical Exam: HEENT / Neck","type":"shouldHaveOrdered","finding":"Full exam.","aliases":["HEENT"]},
+    {"label":"Pulse oximetry","type":"shouldHaveOrdered","finding":"Verify oxygenation in pregnant patient with hypertension.","aliases":["SpO2"]},
+    {"label":"Cardiac monitor / ECG","type":"shouldHaveOrdered","finding":"Monitor heart in pre-eclamptic patient.","aliases":["Cardiac monitor","EKG"]},
+    {"label":"CBC with differential","type":"shouldHaveOrdered","finding":"Screening. Assess for thrombocytopenia (<100K = severe feature).","aliases":["CBC"]},
+    {"label":"Type and screen / Type and Rh","type":"shouldHaveOrdered","finding":"Baby may need delivery — pre-operative labs essential.","aliases":["Blood type"]},
+    {"label":"PT/PTT / INR","type":"shouldHaveOrdered","finding":"Pre-operative labs for potential cesarean.","aliases":["Coags"]},
+    {"label":"Urinalysis","type":"shouldHaveOrdered","finding":"Screen for proteinuria — positive in pre-eclampsia. Leads to 24-hour quantitative protein.","aliases":["UA"]},
+    {"label":"US pelvis (transabdominal, then transvaginal)","type":"shouldHaveOrdered","finding":"Monitor fetus: amniotic fluid volume, EFW. Risk of oligohydramnios and IUGR. TA before TV for placenta previa screening.","aliases":["Obstetric US"]},
+    {"label":"Fetal heart rate monitoring / Doppler","type":"shouldHaveOrdered","finding":"Monitor fetal well-being.","aliases":["FHR","Fetal monitoring"]},
+    {"label":"Protein, 24-hour urine, quantitative","type":"shouldHaveOrdered","finding":"≥300mg in 24h = proteinuria supporting pre-eclampsia diagnosis. May not return before intervention but must be started.","aliases":["24h urine protein"]},
+    {"label":"BMP / CMP / LFTs","type":"shouldHaveOrdered","finding":"Elevated creatinine, LFTs, and uric acid. Screen for HELLP syndrome.","aliases":["BMP","CMP","LFTs"]},
+    {"label":"Betamethasone / Dexamethasone","type":"shouldHaveOrdered","finding":"Antenatal corticosteroids for fetal lung maturity if < 34 weeks. Patient likely to deliver at 33 weeks.","aliases":["Steroids","Celestone"]},
+    {"label":"Magnesium sulfate","type":"correctlyOrdered","finding":"Seizure prophylaxis to prevent progression to eclampsia. Standard of care for pre-eclampsia with severe features.","aliases":["MgSO4","Mag"]},
+    {"label":"Labetalol / Hydralazine (IV)","type":"correctlyOrdered","finding":"IV labetalol is first-line for pre-eclampsia hypertension — superior efficacy with fewer side effects than hydralazine. Nifedipine has fetal effects.","aliases":["Labetalol","Hydralazine"]},
+    {"label":"Consult OB/GYN / Cesarean section","type":"correctlyOrdered","finding":"Delivery is definitive treatment. With severe features, deliver ≥ 34 weeks. OB/GYN for cesarean.","aliases":["OB consult","C-section"]},
+    {"label":"Intravenous access","type":"optional","finding":"Good practice for IV fluids/medications.","aliases":["IV access"]}
+  ],
+  "physical_exam": {"general":"Edematous, severely hypertensive, headache.","cardiovascular":"Severe hypertension (189/99). Assess for pulmonary edema.","respiratory":null,"abdominal":"Gravid uterus at 33 weeks.","neurological":"Headache, blurry vision — signs of cerebral end-organ damage. Hyperreflexia may be present.","skin":"Facial and upper extremity edema.","heent":null,"musculoskeletal":null,"genitourinary":"Proteinuria expected.","psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":"189/99","rr":null,"temp":null},
+  "decoys":[
+    {"label":"Nifedipine","reason_wrong":"Can cause reflexive tachycardia and has fetal effects. Not mentioned in ACOG recommendations for pre-eclampsia. Labetalol and hydralazine are preferred."},
+    {"label":"Expectant management / discharge home","reason_wrong":"Pre-eclampsia with severe features is an emergency. Requires ICU/inpatient management. Delivery is definitive treatment."}
+  ],
+  "teach_me_steps":[
+    {"order":"Diagnose pre-eclampsia with severe features","category":"Diagnosis","reasoning":"SBP > 160 OR DBP > 110 after 20 weeks + end-organ dysfunction (headache, visual changes, proteinuria, elevated Cr/LFTs, thrombocytopenia). This patient: 189/99 + headache + blurry vision = severe."},
+    {"order":"Magnesium sulfate for seizure prophylaxis","category":"Treatment","reasoning":"Prevents progression to eclampsia. Standard of care for severe pre-eclampsia. Monitor for magnesium toxicity (loss of DTRs, respiratory depression)."},
+    {"order":"IV labetalol for BP control","category":"Treatment","reasoning":"First-line antihypertensive for pre-eclampsia. Target SBP < 160 and DBP < 105 (not normal, just safe range)."},
+    {"order":"Betamethasone if < 34 weeks","category":"Treatment","reasoning":"Promotes fetal lung maturity when delivery anticipated before 34 weeks. 2 doses IM 24h apart."},
+    {"order":"Delivery at ≥ 34 weeks (severe features)","category":"Treatment","reasoning":"Definitive treatment = delivery. ≥ 34 weeks: deliver. < 34 weeks: corticosteroids then deliver. Cesarean if unfavorable cervix."}
+  ],
+  "differential":["Pre-existing hypertension","Antiphospholipid syndrome","Acute fatty liver of pregnancy","TTP","HUS","HELLP syndrome"],
+  "case_summary":"Pre-eclampsia with severe features at 33 weeks. BP 189/99 + headache + blurry vision. MgSO4 + IV labetalol + betamethasone + cesarean delivery by OB/GYN. Admit to ICU.",
+  "confidence":95,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

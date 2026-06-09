@@ -1,0 +1,33 @@
+{
+  "id":26,"topic":"Shortness of Breath","title":"Shortness of Breath","diagnosis":"Cystic Fibrosis",
+  "hpi_narrative":"{{patient_name}} is a child presenting with chronic cough, recurrent respiratory infections, shortness of breath, and failure to thrive. Exam reveals nasal polyps, clubbing, and diffuse crackles. Cystic fibrosis is an autosomal recessive disorder caused by a mutation in the CFTR gene on chromosome 7. The defect in chloride transport leads to thick, viscous secretions affecting the lungs, pancreas, GI tract, and reproductive system. Diagnosis is made by elevated sweat chloride test (>60 mEq/L). CXR shows hyperinflation and bronchiectasis. Management includes pancreatic enzyme replacement, fat-soluble vitamin supplementation, airway clearance techniques, and aggressive treatment of pulmonary infections.",
+  "chief_complaint":"Chronic cough, dyspnea, recurrent infections, poor growth","patient":null,"patient_name":"Yaa Asantewaa Bediako","patient_sex":"female","location":"Office","specialty":"Pediatrics / Pulmonology",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"shouldHaveOrdered","finding":"Full pediatric exam for chronic disease.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"shouldHaveOrdered","finding":"Respiratory symptoms — thorough lung exam. Crackles, wheezes.","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: HEENT / Neck","type":"shouldHaveOrdered","finding":"Nasal polyps common in CF.","aliases":["HEENT"]},
+    {"label":"Physical Exam: Extremities","type":"shouldHaveOrdered","finding":"Digital clubbing from chronic hypoxia.","aliases":["Extremity Exam"]},
+    {"label":"Physical Exam: Abdomen","type":"shouldHaveOrdered","finding":"Assess for hepatosplenomegaly, failure to thrive.","aliases":["Abdominal Exam"]},
+    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Screening.","aliases":["CBC"]},
+    {"label":"Chest X-ray","type":"correctlyOrdered","finding":"Hyperinflation, bronchiectasis, peribronchial thickening.","aliases":["CXR"]},
+    {"label":"Pulse oximetry","type":"correctlyOrdered","finding":"Assess oxygenation — chronic hypoxemia possible.","aliases":["SpO2"]},
+    {"label":"Sweat chloride test","type":"correctlyOrdered","finding":"Gold standard for CF diagnosis. >60 mEq/L = positive.","aliases":["Sweat test"]},
+    {"label":"CFTR genetic testing","type":"correctlyOrdered","finding":"Confirms mutation. ΔF508 most common.","aliases":["CFTR gene"]},
+    {"label":"BMP / CMP / LFTs","type":"correctlyOrdered","finding":"Screening labs.","aliases":["BMP"]},
+    {"label":"Sputum culture","type":"correctlyOrdered","finding":"Pseudomonas aeruginosa, S. aureus, H. influenzae common in CF.","aliases":["Sputum culture"]},
+    {"label":"Pancreatic elastase, stool","type":"shouldHaveOrdered","finding":"Assess pancreatic insufficiency — common in CF.","aliases":["Fecal elastase"]},
+    {"label":"Pulmonary function tests","type":"correctlyOrdered","finding":"Obstructive pattern. FEV1 monitoring guides therapy.","aliases":["PFTs"]},
+    {"label":"Pancreatic enzyme replacement","type":"shouldHaveOrdered","finding":"CREON or similar — replaces digestive enzymes for malabsorption.","aliases":["Pancreatic enzymes","CREON"]},
+    {"label":"Fat-soluble vitamins (ADEK)","type":"shouldHaveOrdered","finding":"Supplementation required due to fat malabsorption.","aliases":["Vitamins ADEK"]},
+    {"label":"Airway clearance therapy","type":"correctlyOrdered","finding":"Chest physiotherapy, PEP valve, vest therapy.","aliases":["Chest PT"]},
+    {"label":"Albuterol / Hypertonic saline nebulizer","type":"correctlyOrdered","finding":"Bronchodilator + mucolytic for airway clearance.","aliases":["Nebulizer"]},
+    {"label":"Consult, pediatric pulmonology","type":"correctlyOrdered","finding":"CF center referral for multidisciplinary care.","aliases":["Pulmonary consult"]}
+  ],
+  "physical_exam":{"general":"Poor growth, low BMI — failure to thrive.","cardiovascular":null,"respiratory":"Diffuse crackles, wheezes. Chronic productive cough.","abdominal":null,"neurological":null,"skin":null,"heent":"Nasal polyps. Chronic sinusitis.","musculoskeletal":"Digital clubbing.","genitourinary":null,"psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[{"label":"Asthma diagnosis without further workup","reason_wrong":"Chronic respiratory symptoms + failure to thrive + clubbing = not typical asthma. CF must be ruled out with sweat chloride test."}],
+  "teach_me_steps":[{"order":"Sweat chloride test = gold standard","category":"Diagnosis","reasoning":">60 mEq/L confirms CF. CFTR gene testing for specific mutation. Autosomal recessive — chromosome 7, ΔF508 most common."},{"order":"Multidisciplinary CF care","category":"Treatment","reasoning":"Pancreatic enzymes + fat-soluble vitamins + airway clearance + aggressive antibiotic treatment of pulmonary infections. Refer to CF center."}],
+  "differential":["Cystic fibrosis","Asthma","Primary ciliary dyskinesia","Immunodeficiency","Recurrent pneumonia","Bronchiectasis"],
+  "case_summary":"CF in child. Chronic cough + recurrent infections + failure to thrive + clubbing + nasal polyps. Sweat chloride >60 confirms. CFTR testing. Pancreatic enzymes + ADEK vitamins + airway clearance + pulm referral.",
+  "confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

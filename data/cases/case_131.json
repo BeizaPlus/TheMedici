@@ -1,0 +1,66 @@
+{
+  "id": 131,
+  "topic": "Abdominal Pain",
+  "diagnosis": "Acute abdomen (non-specific)",
+  "confidence": "inferred",
+  "source": "preparedCases+mistral",
+  "correct_orders": [
+    "Obtain complete blood count (CBC)",
+    "Obtain basic metabolic panel",
+    "Obtain urinalysis",
+    "Order abdominal X-ray",
+    "Order abdominal ultrasound or CT scan",
+    "Consider obtaining electrocardiogram (ECG) to rule out ischemic heart disease",
+    "Administer analgesia for pain management",
+    "IV Fluids + NPO",
+    "CBC \u00b7 Lipase \u00b7 LFTs \u00b7 UA",
+    "CT Abdomen/Pelvis",
+    "Surgery Consult",
+    "Antibiotics if indicated"
+  ],
+  "should_avoid": [
+    "Start broad-spectrum antibiotics without culture and sensitivity"
+  ],
+  "rationale": {
+    "Start broad-spectrum antibiotics without culture and sensitivity": "This order should be avoided as it can lead to unnecessary antimicrobial use and contribute to antibiotic resistance.",
+    "IV Fluids + NPO": "Resuscitate before imaging if hypotensive.",
+    "CBC \u00b7 Lipase \u00b7 LFTs \u00b7 UA": "Narrow differential: biliary, pancreatic, UTI, medical.",
+    "CT Abdomen/Pelvis": "High yield for appendicitis, diverticulitis, obstruction.",
+    "Surgery Consult": "Perforation, appendicitis, mesenteric ischemia.",
+    "Antibiotics if indicated": "Give before OR if sepsis or perforation suspected."
+  },
+  "hpi": "Initial History\n\nReason(s) for visit: Abdominal Pain\nHistory of present Illness:\nA 22-year-old female presents to the emergency room with abdominal pain, lethargy, and vomiting x2 days. Her vomiting is non-bloody. Her abdominal pain is diffuse, which she rates as a 6/10. She also claims to have had an increased appetite prior to having these symptoms. She also claims that she\u2019s been developing blurry vision, dizziness, and drowsiness. She also states that she is having increased urination\n\nPast Medical History\n\nPast Medical History: None\nCurrent medications: Birth control\nAllergies: None\nVaccinations: The patient received her childhood vaccinations. She has never received any HPV vaccines.\nWomen's health: The patient cannot remember when her last pap smear was done.\nFamily History: The patient has a brother with Diabetes. \n\nSocial History:\nMarital/Family: Single. She is an undergraduate student at a local university.\nPersonal habits: The patient denies smoking. She drinks socially. She smoked marijuana \"a few times\" with her friends. She denies other illicit drugs or misuse of medications. Occupation/educational: She is a student at a local university\nRecreational: She plays the piano and sings in a band. \n\nReview of systems:\nGeneral: See HPI\nSkin: Her skin is dry. \nHEENT: Her throat is dry. \nCardiorespiratory: She feels that her heart is beating faster.\nGastrointestinal: See HPI\nGenitourinary: See HPI\nNeuropsychiatric: See HPI\n\n--- Chart tabs ---\n\n* Chart: Progress Notes \u2192 presentation_4_Abdominal_Pain_chart_Progress_Notes.png\n* Chart: Vital Signs \u2192 presentation_4_Abdominal_Pain_chart_Vital_Signs.png",
+  "physical_exam": [
+    [
+      "General",
+      "presents to the emergency room with abdominal pain, lethargy, and vomiting x2 days."
+    ],
+    [
+      "Cardiovascular",
+      "HR 106; BP 114/79."
+    ],
+    [
+      "Respiratory",
+      "RR 20; SpO\u2082 96%."
+    ],
+    [
+      "Abdomen",
+      "Abdominal tenderness pattern matches history; no rigid abdomen documented yet."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": "Initial Vital Signs Day 1 @ 18:00 Temperature: 37.2 C (98.9 degrees F) Pulse: 106 beat/min, Tachycardic Respiratory rate: 20 /minute Blood pressure, systolic: 114 mm Hg Blood pressure, diastolic: 79 mm Hg Height: 160.0 cm (63.0 in) Weight: 80.5 kg (177.4 lb) Body Mass Index: 31.4 kg/m2",
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "mistral"
+  ]
+}

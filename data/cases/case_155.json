@@ -1,0 +1,67 @@
+{
+  "id": 155,
+  "topic": "Shortness of breath",
+  "diagnosis": "Acute respiratory distress syndrome (ARDS) or pulmonary edema as potential causes of shortness of breath in an undiagnosed patient",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain vital signs, including oxygen saturation and blood pressure",
+    "Perform chest X-ray to evaluate lung fields",
+    "Order arterial blood gas (ABG) analysis for oxygenation status and acid-base balance",
+    "Administer supplemental oxygen as needed to maintain oxygen saturation above 90%",
+    "Initiate diuretics if signs of heart failure are present or pulmonary edema is suspected",
+    "Consider obtaining echocardiogram to assess cardiac function",
+    "Consult Internal Medicine, Pulmonology, and Intensive Care Unit (ICU) as needed based on the patient's condition",
+    "Oxygen",
+    "IV access \u00d72 large-bore"
+  ],
+  "should_avoid": [
+    "Discharging the patient without a clear diagnosis or stabilization"
+  ],
+  "rationale": {
+    "Obtain vital signs, including oxygen saturation and blood pressure": "Essential for initial assessment of patient's condition",
+    "Perform chest X-ray to evaluate lung fields": "Useful in identifying potential causes such as pneumonia, pleural effusion, or pulmonary edema",
+    "Order arterial blood gas (ABG) analysis for oxygenation status and acid-base balance": "Critical for assessing the patient's respiratory and metabolic status",
+    "Administer supplemental oxygen as needed to maintain oxygen saturation above 90%": "Important for preventing further deterioration in the patient's respiratory status",
+    "Initiate diuretics if signs of heart failure are present or pulmonary edema is suspected": "Helps manage fluid overload and reduce symptoms associated with pulmonary edema",
+    "Consider obtaining echocardiogram to assess cardiac function": "Helpful in ruling out cardiogenic causes of dyspnea",
+    "Discharging the patient without a clear diagnosis or stabilization": "Potentially dangerous as it could lead to further complications or worsening of the patient's condition",
+    "Oxygen": "The patient is experiencing shortness of breath, making oxygen a necessary intervention.",
+    "IV access \u00d72 large-bore": "In cases where the patient's condition may worsen rapidly or require emergency treatment, having large-bore IV access is crucial."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Dyspneic, speaking in short phrases if severe"
+    ],
+    [
+      "Cardiovascular",
+      "HR 104; BP 92/58; hypotensive."
+    ],
+    [
+      "Respiratory",
+      "RR 22; SpO\u2082 89%; hypoxemic."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended"
+    ],
+    [
+      "Neuro",
+      "Alert unless hypercapnic or hypoxic"
+    ],
+    [
+      "Skin",
+      "Cyanosis absent unless critical hypoxemia"
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

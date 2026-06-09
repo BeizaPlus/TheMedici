@@ -1,0 +1,57 @@
+{
+  "id": 144,
+  "topic": "Short Stature",
+  "diagnosis": "Unknown Genetic or Endocrine Disorder causing Short Stature",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Blood tests: Complete blood count (CBC), comprehensive metabolic panel, thyroid function tests, IGF-1 level, and bone age X-ray",
+    "Consultations: Pediatric Endocrinologist, Geneticist",
+    "Oxygen",
+    "Order"
+  ],
+  "should_avoid": [
+    "Genetic testing without a confirmed diagnosis or indicative symptoms"
+  ],
+  "rationale": {
+    "Blood tests": "These tests help to evaluate various aspects of the patient's health, such as overall blood count, metabolic status, thyroid function, and growth hormone levels. A bone age X-ray can provide information about the patient's skeletal maturity.",
+    "Genetic testing": "While genetic testing may be relevant in some cases, it should not be the first step without a confirmed diagnosis or indicative symptoms as it can have significant implications for the patient and their family.",
+    "Oxygen": "Initial support for a patient in distress",
+    "Order": "Obtaining vital signs and glucose levels"
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Short Stature \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 132, tachycardic; BP 99/60."
+    ],
+    [
+      "Respiratory",
+      "RR 29, tachypneic; SpO\u2082 96%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "Warm skin with fever; no purpura on initial survey."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

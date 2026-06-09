@@ -6,7 +6,6 @@ import MicWaveform from './MicWaveform.jsx';
 import { IconPlayerPause, IconPlayerPlay } from './sceneToolbar/SceneToolbarIcons.jsx';
 import DifferentialRecordingsList from './DifferentialRecordingsList.jsx';
 import DifferentialMnemonicPanel from './DifferentialMnemonicPanel.jsx';
-import DifferentialAttemptHistory from './DifferentialAttemptHistory.jsx';
 import {
   readStackerPrefs,
   STACKER_FIRST_PARSE_SECONDS,
@@ -28,6 +27,24 @@ import {
   scoreDifferentialWithAi,
 } from '../lib/differentialAiScore.js';
 import { parseDiagnosisList } from '../lib/differentialGuessParse.js';
+import DifferentialStudyPanel from './DifferentialStudyPanel.jsx';
+import { getCaseById } from '../data/useCcsCatalog.js';
+import {
+  getDifferentialReview,
+  hasDifferentialReview,
+  personalizeDifferentialReview,
+} from '../lib/differentialReview.js';
+import { readAudienceProfile } from '../lib/audienceProfile.js';
+import { STORAGE } from '../lib/storageKeys.js';
+import {
+  getPresentationIntro,
+  getPresentationHistory,
+  getPresentationVitals,
+} from '../lib/casePresentation.js';
+import { getBriefingHpi } from '../lib/caseBriefing.js';
+import AudioVolumeControl from './AudioVolumeControl.jsx';
+import { prefetchMonitorAudio, startIcuMonitor, unlockAmbience } from '../lib/audio.js';
+import { splitChiefComplaintHeadline } from '../lib/differentialHeadline.js';
 
 function pickInitial() {
   return Math.floor(Math.random() * bank.length);
@@ -88,6 +105,7 @@ export default function DifferentialPractice({ onBack }) {
   const [secondsLeft, setSecondsLeft] = useState(() => readStackerPrefs().seconds);
   const [sessionComplete, setSessionComplete] = useState(false);
   const [apiOk, setApiOk] = useState(null);
+  const [settingsTick, setSettingsTick] = useState(0);
   const inputRef = useRef(null);
   const voiceFocusRef = useRef(null);
   const loggedRoundRef = useRef(false);
@@ -95,7 +113,84 @@ export default function DifferentialPractice({ onBack }) {
   const onStackerExpireRef = useRef(() => {});
   const prefinalMarksRef = useRef(new Set());
 
+  useEffect(() => {
+    prefetchMonitorAudio();
+    unlockAmbience();
+    startIcuMonitor({ fadeMs: 1800 });
+  }, []);
+
+  useEffect(() => {
+    const bump = () => setSettingsTick((t) => t + 1);
+    const onStorage = (event) => {
+      if (
+        event.key === STORAGE.audienceProfile ||
+        event.key === STORAGE.refinedNarratives ||
+        event.key == null
+      ) {
+        bump();
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('focus', bump);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') bump();
+    });
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('focus', bump);
+    };
+  }, []);
+
   const entry = bank[cardIdx];
+  const audienceProfile = useMemo(() => readAudienceProfile(), [settingsTick]);
+
+  const caseData = useMemo(
+    () => getCaseById(entry.caseId),
+    [entry.caseId, audienceProfile?.nameRegion, audienceProfile?.playRole, audienceProfile?.difficulty],
+  );
+  const caseRef = useMemo(
+    () => caseData || { id: entry.caseId, ccsNumber: entry.caseId, title: entry.title },
+    [caseData, entry.caseId, entry.title],
+  );
+  const presentationIntro = useMemo(
+    () => (caseData ? getPresentationIntro(caseData) : ''),
+    [caseData],
+  );
+  const presentationHistory = useMemo(
+    () => (caseData ? getPresentationHistory(caseData) : ''),
+    [caseData],
+  );
+  const presentationVitals = useMemo(
+    () => (caseData ? getPresentationVitals(caseData) : ''),
+    [caseData],
+  );
+  const ccsReview = useMemo(() => {
+    const raw = getDifferentialReview(entry.caseId);
+    if (!raw) return null;
+    return personalizeDifferentialReview(raw, {
+      id: entry.caseId,
+      ccsNumber: entry.caseId,
+      patientDisplayName: caseData?.patientDisplayName,
+      patientSex: caseData?.patientSex,
+      playRole: audienceProfile?.playRole,
+      difficulty: audienceProfile?.difficulty,
+    });
+  }, [entry.caseId, caseData, audienceProfile]);
+  const hasReviewText = hasDifferentialReview(entry.caseId);
+  const complaintHeadline = useMemo(
+    () =>
+      splitChiefComplaintHeadline({
+        topic: entry.topic,
+        title: ccsReview?.title || entry.title,
+        specialty: ccsReview?.specialty,
+        location: ccsReview?.location,
+      }),
+    [entry.topic, entry.title, ccsReview],
+  );
+  const fallbackHistory = useMemo(
+    () => (caseData ? getBriefingHpi(caseData, null, '') : ''),
+    [caseData],
+  );
 
   const applyParsedDiagnoses = useCallback((parts) => {
     if (!parts?.length) return;
@@ -670,7 +765,12 @@ export default function DifferentialPractice({ onBack }) {
           <div className="diff-cycle-center">
             <p className="diff-case-id">CCS Case {entry.caseId}</p>
             <h2 className="diff-topic-label">Chief Complaint</h2>
-            <h1 className="diff-topic">{entry.topic}</h1>
+            <h1 className="diff-topic">
+              <span className="diff-topic-line">{complaintHeadline.line1}</span>
+              {complaintHeadline.line2 && (
+                <span className="diff-topic-line diff-topic-line--sub">{complaintHeadline.line2}</span>
+              )}
+            </h1>
           </div>
         </div>
 
@@ -883,9 +983,20 @@ export default function DifferentialPractice({ onBack }) {
           </div>
         )}
 
-        {caseStats.count > 0 && (
-          <DifferentialAttemptHistory caseId={entry.caseId} caseStats={caseStats} />
-        )}
+        <DifferentialStudyPanel
+          caseId={entry.caseId}
+          caseStats={caseStats}
+          caseRef={caseRef}
+          hasReviewText={hasReviewText}
+          ccsReview={ccsReview}
+          presentationIntro={presentationIntro}
+          presentationHistory={presentationHistory}
+          presentationVitals={presentationVitals}
+          fallbackHistory={fallbackHistory}
+          hasCaseData={Boolean(caseData)}
+          diagnosis={entry.diagnosis || ccsReview?.diagnosis || ''}
+          topic={entry.topic || ''}
+        />
 
         <div className="diff-nav">
           <button type="button" className="diff-nav-btn" onClick={goPrev}>
@@ -904,6 +1015,10 @@ export default function DifferentialPractice({ onBack }) {
           </button>
         </div>
       </div>
+
+      <aside className="diff-ambience-dock" aria-label="ICU monitor ambience">
+        <AudioVolumeControl label="ICU monitor" />
+      </aside>
     </div>
   );
 }

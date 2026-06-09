@@ -1,6 +1,7 @@
 import { STORAGE } from './storageKeys.js';
 import { readAudienceProfile, writeAudienceProfile } from './audienceProfile.js';
 import { DEFAULT_TIMER_SECONDS, normalizeTimerSeconds } from './caseTimer.js';
+import { DEFAULT_NAME_REGION } from './patientNameRegions.js';
 
 export function hasCompletedOnboarding() {
   try {
@@ -27,6 +28,7 @@ export function applyPhysicianProfile(timerMinutes = 2.5) {
     playRole: 'doctor',
     difficulty: 'standard',
     timerSeconds: normalizeTimerSeconds(Math.round(timerMinutes * 60), DEFAULT_TIMER_SECONDS),
+    nameRegion: DEFAULT_NAME_REGION,
   };
   writeAudienceProfile(profile);
   markOnboardingComplete();

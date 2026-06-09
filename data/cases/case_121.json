@@ -1,0 +1,61 @@
+{
+  "id": 121,
+  "topic": "Poor Feeding",
+  "diagnosis": "Failure to Thrive (FTT) or Gastroesophageal Reflux Disease (GERD) are common considerations for Poor Feeding of unknown cause in pediatric patients.",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements",
+    "Physical examination to assess growth parameters, signs of dehydration, abdominal distension, or other relevant findings",
+    "Investigations such as complete blood count (CBC), chemistry panel, urinalysis, stool studies, and electrolytes to rule out potential underlying causes like infections, metabolic disorders, or anemia",
+    "Consider a swallowing study (videofluoroscopy) or pH monitoring if GERD is suspected",
+    "Refer the patient to a pediatric gastroenterologist for further evaluation and management",
+    "Oxygen",
+    "IV access x2",
+    "glucose check"
+  ],
+  "should_avoid": [
+    "Initiate aggressive treatment (e.g., antibiotics, proton pump inhibitors) without proper investigations as the underlying cause may not be related to an infection or GERD."
+  ],
+  "rationale": {
+    "Initiate aggressive treatment": "It is essential to avoid making premature assumptions and starting unnecessary treatments. The diagnosis should first be established through a thorough history, physical examination, and appropriate investigations.",
+    "Oxygen": "To provide supplemental oxygen and help maintain adequate oxygenation in the patient with poor feeding",
+    "IV access x2": "To establish two large-bore IV access for fluid administration, medication delivery, and blood draws",
+    "glucose check": "To quickly assess the blood glucose level of the patient to rule out hypoglycemia as a possible cause of poor feeding"
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Poor Feeding \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 124, tachycardic; BP 93/56; hypotensive."
+    ],
+    [
+      "Respiratory",
+      "RR 27, tachypneic; SpO\u2082 94%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "Warm skin with fever; no purpura on initial survey."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

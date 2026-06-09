@@ -1,0 +1,58 @@
+{
+  "id": 132,
+  "topic": "Foot Pain",
+  "diagnosis": "Likely diagnoses may include traumatic injuries, neuropathies, or arthritis. However, a definitive diagnosis will require further investigation.",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain radiographs of the foot to assess for fractures, dislocations, or degenerative changes",
+    "Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein) to evaluate for systemic inflammation",
+    "Oxygen",
+    "IV access \u00d72 large-bore"
+  ],
+  "should_avoid": [
+    "Prescribe nonsteroidal anti-inflammatory drugs (NSAIDs) without a definitive diagnosis"
+  ],
+  "rationale": {
+    "Obtain radiographs of the foot": "To identify any fractures, dislocations, or degenerative changes that may indicate underlying conditions such as osteoarthritis.",
+    "Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein)": "To evaluate for systemic inflammation, which can be associated with a variety of conditions causing foot pain.",
+    "Prescribe nonsteroidal anti-inflammatory drugs (NSAIDs) without a definitive diagnosis": "Since the diagnosis is unknown, it's important to avoid administering NSAIDs as they may provide temporary relief but could mask underlying pathologies that require specific treatments.",
+    "Oxygen": "The patient is experiencing foot pain, which may indicate an issue requiring immediate attention. Oxygen is essential to help maintain adequate oxygenation levels in case of hypoxia.",
+    "IV access \u00d72 large-bore": "Intravenous access is necessary for administering medications, fluids, and other life-saving interventions."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Foot Pain \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 110; BP 141/90."
+    ],
+    [
+      "Respiratory",
+      "RR 21; SpO\u2082 101%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

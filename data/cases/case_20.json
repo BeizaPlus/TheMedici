@@ -1,0 +1,40 @@
+{
+  "id":20,"topic":"Palpitations","title":"Palpitations","diagnosis":"Complete (3rd Degree) AV Heart Block",
+  "hpi_narrative":"{{patient_name}} is an older woman with hypertension on hydrochlorothiazide who presents with palpitations, syncope, dizziness, and hypotension. ECG demonstrates complete heart block (3rd degree AV block) — complete dissociation between P waves and QRS complexes with no relationship. This is a bradycardic rhythm. Third-degree AV block has an extensive differential: coronary ischemia (most common), fibrosis/sclerosis of conduction system (Lenegre/Lev disease — likely in this patient given age and HTN), Lyme disease, sarcoidosis, hyperkalemia, thyroid disorders, iatrogenic (AV nodal blockers), and congenital (unlikely — 90% symptomatic by age 30). TSH normal, troponin negative, chemistries normal, ESR normal, CBC normal — infectious and inflammatory causes unlikely. Most likely: fibrous degeneration of conduction system from aging + hypertension. Management: temporary transcutaneous/transvenous pacemaker, then permanent pacemaker placement.",
+  "chief_complaint":"Palpitations, syncope, dizziness, hypotension","patient":null,"patient_name":"Esi Nyarko","patient_sex":"female","location":"ER","specialty":"Emergency Medicine / Cardiology",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Determine how sick the patient looks.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"correctlyOrdered","finding":"Investigate for lung pathology.","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: Heart / Cardiovascular","type":"correctlyOrdered","finding":"Palpitations — cardiovascular exam essential. Bradycardia likely.","aliases":["Cardiovascular Exam"]},
+    {"label":"Physical Exam: Extremities / Spine","type":"correctlyOrdered","finding":"Cardiovascular problems — examine extremities.","aliases":["Extremity Exam"]},
+    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Screening.","aliases":["CBC"]},
+    {"label":"TSH, serum","type":"shouldHaveOrdered","finding":"Hypo/hyperthyroidism associated with arrhythmias including heart block.","aliases":["TSH"]},
+    {"label":"Lipid profile","type":"shouldHaveOrdered","finding":"Risk stratification for heart disease.","aliases":["Lipids"]},
+    {"label":"Lyme serology","type":"shouldHaveOrdered","finding":"Lyme disease is associated with heart block — must screen.","aliases":["Lyme test"]},
+    {"label":"Cardiac troponin I, serum","type":"shouldHaveOrdered","finding":"Rule out MI — most common cause of 3rd degree AV block is coronary ischemia.","aliases":["Troponin"]},
+    {"label":"ESR","type":"shouldHaveOrdered","finding":"Rule out inflammatory conditions causing heart block.","aliases":["Sed rate"]},
+    {"label":"ECG, 12 lead / Cardiac monitor","type":"correctlyOrdered","finding":"ECG shows complete AV dissociation — P and QRS with no relationship. Diagnostic.","aliases":["EKG","Cardiac monitor"]},
+    {"label":"BMP / CMP / LFTs","type":"correctlyOrdered","finding":"Screening labs. Check potassium (hyperkalemia can cause AV block).","aliases":["BMP","CMP"]},
+    {"label":"Consult, cardiology / Permanent pacemaker","type":"correctlyOrdered","finding":"Symptomatic complete heart block requires permanent pacemaker. Cardiology consult for placement.","aliases":["Cardiology consult","PPM"]},
+    {"label":"Temporary pacemaker (transcutaneous / transvenous)","type":"shouldHaveOrdered","finding":"Temporary pacing first to stabilize, then permanent pacemaker placement.","aliases":["Temporary pacer","Transcutaneous pacing"]},
+    {"label":"Diet, NPO","type":"shouldHaveOrdered","finding":"NPO for pacemaker placement procedure.","aliases":["NPO"]},
+    {"label":"Monitor, cardiac","type":"shouldHaveOrdered","finding":"Heart not beating appropriately — continuous cardiac monitoring essential.","aliases":["Cardiac monitor"]},
+    {"label":"PT/PTT / INR","type":"correctlyOrdered","finding":"Pre-op labs for pacemaker surgery.","aliases":["Coags"]},
+    {"label":"Type and screen / Type and Rh","type":"correctlyOrdered","finding":"Pre-op labs for surgery.","aliases":["Blood type"]}
+  ],
+  "physical_exam":{"general":"Symptomatic — syncope, dizziness, hypotension.","cardiovascular":"Bradycardic rhythm. Regular but slow. No relationship between atrial and ventricular contractions. Cannon A waves may be present in JVP.","respiratory":null,"abdominal":null,"neurological":"Syncope from cerebral hypoperfusion.","skin":null,"heent":null,"musculoskeletal":null,"genitourinary":null,"psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[
+    {"label":"Atropine as sole therapy","reason_wrong":"Atropine is ineffective in 3rd degree heart block (infranodal). Definitive treatment is pacing."},
+    {"label":"Discharge on oral medications","reason_wrong":"Symptomatic complete heart block requires permanent pacemaker. Cannot be managed medically."}
+  ],
+  "teach_me_steps":[
+    {"order":"ECG diagnosis: AV dissociation","category":"Diagnosis","reasoning":"Complete AV dissociation — P waves and QRS complexes have no relationship. Atrial rate > ventricular rate. Bradycardic escape rhythm."},
+    {"order":"Rule out reversible causes","category":"Diagnosis","reasoning":"Check troponin (ischemia), TSH (thyroid), lyme titer, chemistries (K), ESR (inflammation). Most common cause is coronary ischemia involving conduction system."},
+    {"order":"Temporary pacemaker → Permanent pacemaker","category":"Treatment","reasoning":"Stabilize with transcutaneous or transvenous temporary pacing. Definitive: permanent pacemaker. NPO, pre-op labs."},
+    {"order":"Admit to ICU/inpatient with cardiac monitoring","category":"Disposition","reasoning":"Complete heart block requires monitored bed. ICU appropriate for temporary pacing management."}
+  ],
+  "differential":["Coronary ischemia (most common)","Lyme carditis","Viral myocarditis","Increased vagal tone","Lenegre disease","Lev disease","Cardiomyopathy (amyloid/sarcoid)","Congenital AV block","Hyperkalemia","Thyroid disorders","Iatrogenic (AV nodal blockers)"],
+  "case_summary":"Complete (3rd degree) AV block — likely fibrotic degeneration from aging + HTN. ECG: P and QRS dissociation. Troponin negative, TSH normal, chemistries normal, ESR normal — infectious/inflammatory unlikely. Temporary pacer → permanent pacemaker. ER → ICU/inpatient.",
+  "confidence":95,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

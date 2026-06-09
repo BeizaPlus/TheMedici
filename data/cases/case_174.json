@@ -1,0 +1,72 @@
+{
+  "id": 174,
+  "topic": "Hematemesis",
+  "diagnosis": "Gastrointestinal Bleeding (Upper GI source suspected)",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain laboratory tests: CBC, Coagulation panel, Lipase, AST, ALT",
+    "Order upper GI endoscopy",
+    "Administer intravenous fluids and antacids to prevent further bleeding and alkalinize gastric pH",
+    "Consult Gastroenterology for endoscopic evaluation and management",
+    "Oxygen",
+    "IV access \u00d72",
+    "CBC",
+    "CMP",
+    "coags",
+    "CXR"
+  ],
+  "should_avoid": [
+    "Reproductive",
+    "Type & Screen / Crossmatch",
+    "EKG (Electrocardiogram)",
+    "Fingerstick/Serum glucose",
+    "Order unneeded X-rays or CT scans at this stage as they may not be diagnostic for upper GI bleeding"
+  ],
+  "rationale": {
+    "Obtain laboratory tests": "To assess for anemia, coagulopathy and liver function which may provide clues to the cause of gastrointestinal bleeding",
+    "Order upper GI endoscopy": "As it is the gold standard diagnostic test for upper gastrointestinal bleeding",
+    "Administer intravenous fluids and antacids": "To prevent further bleeding and alleviate symptoms",
+    "Consult Gastroenterology": "For further evaluation and management of the patient",
+    "Order unneeded X-rays or CT scans": "As they may not be diagnostic for upper gastrointestinal bleeding at this stage, and may expose the patient to unnecessary radiation",
+    "Reproductive": "Pregnancy test is not necessary in this case as the patient's chief complaint is Hematemesis, not related to reproductive issues.",
+    "Type & Screen / Crossmatch": "Not required for upper GI bleed unless there is a risk of bleeding that may lead to surgery or transfusion.",
+    "EKG (Electrocardiogram)": "Not necessary as the patient's chief complaint is Hematemesis, not related to cardiac issues.",
+    "Fingerstick/Serum glucose": "While it could be important in some cases, it is not the priority in this case of upper GI bleed."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Hematemesis \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 116, tachycardic; BP 117/74."
+    ],
+    [
+      "Respiratory",
+      "RR 23, tachypneic; SpO\u2082 100%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "Warm skin with fever; no purpura on initial survey."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

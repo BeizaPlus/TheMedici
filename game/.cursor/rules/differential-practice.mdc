@@ -1,0 +1,86 @@
+---
+description: Differential Practice — study panel, clean case bank, patient names, real-world YouTube tab
+globs:
+  - src/components/Differential*.jsx
+  - src/lib/differential*.js
+  - src/lib/realWorldCases.js
+  - src/lib/differentialHeadline.js
+  - src/data/differentialReview.json
+  - src/data/realWorldCases.json
+  - scripts/build-differential-review.mjs
+  - src/styles/differential-practice.css
+alwaysApply: false
+---
+
+# Differential Practice (MeWorld game)
+
+**Entry:** Welcome → Differentials · `Home.jsx` eager-imports `DifferentialPractice.jsx` (no lazy — CSS guard).
+
+## Data sources (critical)
+
+| What | Path | Used by |
+|------|------|---------|
+| **Clean LLM cases (canonical)** | `C:\Users\steve\MeWorld\data\cases\case_N.json` | Build only |
+| **Differential review bank** | `game/src/data/differentialReview.json` | Case tab |
+| **Practice cards** | `game/src/data/differentialBank.json` | Chief complaint + answer key |
+| **Real-world stories** | `game/src/data/realWorldCases.json` | Real World tab |
+| **Runtime play cases (thin)** | `game/data/cases/` + `preparedCases.json` | Play/Briefing only — **not** differential Case tab |
+
+Rebuild review bank after clean JSON changes:
+```powershell
+Set-Location C:\Users\steve\MeWorld\game
+node scripts/build-differential-review.mjs
+```
+Or `npm run build:differential-review` (included in `build:data` / `predev`).
+
+**Do not** parse `*_ocr.txt` for differential Case tab — use `case_N.json` via build script.
+
+## Study panel tabs
+
+`DifferentialStudyPanel.jsx` — three tabs:
+
+1. **Timeline** — practice attempt history
+2. **Case** — `DifferentialReviewPanel`: Case Summary + **numbered Orders** (1, 2, 3… workflow)
+3. **Real World** — up to 2 curated patient stories + YouTube iframes + search fallback
+
+## Patient names
+
+- Templates use `{{patient_name}}` in clean JSON HPI.
+- Runtime: `personalizeDifferentialReview()` in `src/lib/differentialReview.js`
+- Name region from **Settings → audience profile** (`readAudienceProfile().nameRegion`)
+- **Default region:** `mixed` (NYC / multicultural — one culture per case #)
+- Also applies refined HPI from `narrativeRefine.js` when user has agreed refined narrative saved.
+
+## UI conventions
+
+- Chief complaint: **2 lines** — complaint + specialty/setting (`splitChiefComplaintHeadline`)
+- ICU ambience: `unlockAmbience` + `startIcuMonitor` on enter; volume control **fixed bottom-right**, no border box (`.diff-ambience-dock`)
+- Orders: structured list with gold step numbers — not `[OK]` text blocks
+- CSS: `src/styles/differential-practice.css` — audit via `scripts/audit-component-css.mjs`
+
+## Real World tab — Gemini + Google Search (primary)
+
+On tab open: `POST /api/differential/real-world` → `server/geminiRealWorld.js`
+
+- Requires **`GEMINI_API_KEY`** in `MeWorld/.env` (Google AI Studio)
+- Uses **`google_search`** tool (same capability as Gemini app with Google access)
+- Caches per case: `game/.real-world-cache/case_N.json`
+- Client: `src/lib/fetchGeminiRealWorld.js` · UI: `DifferentialRealWorldPanel.jsx`
+
+**Curated fallback:** `src/data/realWorldCases.json` (caseId/diagnosis match only — no loose topic-only matches). Case 96: Alex Lewis + Lauren Wasser.
+
+## Key files
+
+| File | Role |
+|------|------|
+| `DifferentialPractice.jsx` | Main screen, stacker, scoring |
+| `DifferentialReviewPanel.jsx` | Case Summary / Orders tabs |
+| `DifferentialRealWorldPanel.jsx` | Real-world cards + iframes |
+| `build-differential-review.mjs` | MeWorld `data/cases` → `differentialReview.json` |
+| `useCcsCatalog.js` | `getCaseById` for CCS links (numeric + string id) |
+
+## Open gaps
+
+- Play/Briefing still use thin `game/data/cases/` — sync from `MeWorld/data/cases/` if Steve wants one bank everywhere
+- Real World: most cases need curated stories (only TSS + a few diagnosis keys seeded)
+- Auto YouTube discovery not wired — search link fallback only

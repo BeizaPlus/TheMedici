@@ -1,0 +1,28 @@
+{
+  "id":39,"topic":"Epigastric Pain","title":"Epigastric Pain","diagnosis":"Acute Pancreatitis",
+  "hpi_narrative":"{{patient_name}} presents with acute severe epigastric pain radiating to the back, nausea, vomiting, and low-grade fever. Exam reveals epigastric tenderness with guarding, jaundiced sclera, and possibly Grey Turner/Cullen signs in severe cases. Most common causes: gallstones (GET SMASHED mnemonic — Gallstones, Ethanol, Trauma, Steroids, Mumps, Autoimmune, Scorpion stings, Hypercalcemia/Hypertriglyceridemia, ERCP, Drugs). Diagnosis requires 2 of 3: (1) characteristic epigastric pain, (2) lipase/amylase >3x upper limit, (3) CT findings. Lipase is more sensitive and specific than amylase (especially in delayed presentation). Ranson criteria and BISAP score for severity. Management: aggressive IV fluid resuscitation (LR preferred over NS), NPO initially, IV analgesics (morphine OK), antiemetics. Early enteral nutrition within 24-48h (NG or NJ feeds). ERCP within 24h if gallstone pancreatitis with cholangitis or obstruction. CT with contrast at 48-72h if not improving to assess for necrosis/complications.",
+  "chief_complaint":"Severe epigastric pain radiating to back, nausea, vomiting","patient":null,"patient_name":"Ama Nkrumah","patient_sex":"female","location":"ER","specialty":"Emergency Medicine / Gastroenterology",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Assess severity — may appear very ill.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"correctlyOrdered","finding":"Pleural effusion possible (sympathetic).","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: Heart / Cardiovascular","type":"correctlyOrdered","finding":"Tachycardia from pain, hypovolemia.","aliases":["Cardiovascular Exam"]},
+    {"label":"Physical Exam: Abdomen","type":"correctlyOrdered","finding":"Epigastric tenderness + guarding. Grey Turner (flank) / Cullen (periumbilical) in severe hemorrhagic pancreatitis.","aliases":["Abdominal Exam"]},
+    {"label":"Physical Exam: HEENT / Neck","type":"correctlyOrdered","finding":"Jaundiced sclera — suggests gallstone etiology.","aliases":["HEENT"]},
+    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Leukocytosis. Hemoconcentration (high Hct = poor prognosis).","aliases":["CBC"]},
+    {"label":"BMP / CMP / LFTs","type":"correctlyOrdered","finding":"Elevated AST/ALT/ALP/bilirubin if gallstone etiology. Elevated BUN ≥20 at 48h = poor prognosis.","aliases":["BMP","LFTs"]},
+    {"label":"Lipase","type":"correctlyOrdered","finding":">3x ULN = diagnostic. More sensitive and specific than amylase.","aliases":["Lipase"]},
+    {"label":"RUQ ultrasound","type":"correctlyOrdered","finding":"Check for gallstones — most common cause.","aliases":["RUQ US"]},
+    {"label":"CT abdomen/pelvis with IV contrast","type":"correctlyOrdered","finding":"At 48-72h if not improving. Assess for necrosis, pseudocyst, abscess.","aliases":["CT abdomen"]},
+    {"label":"IV fluids (Lactated Ringer preferred)","type":"correctlyOrdered","finding":"Aggressive resuscitation. LR preferred over NS — reduces systemic inflammation. 250-500 mL/hr initially.","aliases":["IV fluids","LR"]},
+    {"label":"Diet, NPO","type":"correctlyOrdered","finding":"Initially NPO for bowel rest. Advance to clear liquids as pain improves.","aliases":["NPO"]},
+    {"label":"IV analgesics (Morphine / Hydromorphone)","type":"correctlyOrdered","finding":"Pain management. Morphine is acceptable — does NOT worsen pancreatitis (old teaching was incorrect).","aliases":["Morphine","Pain medication"]},
+    {"label":"Antiemetic (Ondansetron / Metoclopramide)","type":"correctlyOrdered","finding":"Nausea/vomiting management.","aliases":["Zofran"]}
+  ],
+  "physical_exam":{"general":"In severe pain, febrile, diaphoretic.","cardiovascular":"Tachycardic (pain + hypovolemia).","respiratory":"May have decreased breath sounds (pleural effusion).","abdominal":"Epigastric tenderness with guarding. Assess for Grey Turner (flank ecchymosis) and Cullen (periumbilical ecchymosis) — retroperitoneal hemorrhage.","neurological":null,"skin":null,"heent":"Scleral icterus — suggests gallstone pancreatitis.","musculoskeletal":null,"genitourinary":null,"psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[{"label":"Prophylactic antibiotics in all pancreatitis","reason_wrong":"Antibiotics NOT indicated for sterile pancreatic necrosis. Only for confirmed infected necrosis or concurrent infection. Prophylaxis does not improve outcomes."}],
+  "teach_me_steps":[{"order":"Diagnosis: 2 of 3 criteria","category":"Diagnosis","reasoning":"(1) Epigastric pain, (2) Lipase >3x ULN, (3) CT findings. Lipase > amylase (more sensitive/specific). Ranson/BISAP for severity scoring."},{"order":"Aggressive IV fluids (LR) + pain control","category":"Treatment","reasoning":"LR preferred over NS. 250-500 mL/hr. NPO initially. Early enteral feeds within 24-48h reduce infectious complications. ERCP within 24h if gallstone + cholangitis."}],
+  "differential":["Acute pancreatitis","Peptic ulcer disease","Cholecystitis","Bowel obstruction","AAA","Myocardial infarction"],
+  "case_summary":"Acute pancreatitis (likely gallstone). Epigastric pain radiating to back + jaundice + lipase >3x ULN. Aggressive LR IV fluids + NPO + pain control. RUQ US → CT at 48-72h if not improving.",
+  "confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

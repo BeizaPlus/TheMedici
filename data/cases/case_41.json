@@ -1,0 +1,31 @@
+{
+  "id":41,"topic":"Generalized Weakness","title":"Generalized Weakness","diagnosis":"Poststreptococcal Glomerulonephritis",
+  "hpi_narrative":"{{patient_name}} is a child who presents with generalized weakness, oliguria, cola-colored (dark brown) urine, periorbital and ankle edema (2+ pitting), and hypertension 1-4 weeks after a streptococcal pharyngitis or skin infection (impetigo). This is acute poststreptococcal glomerulonephritis — an immune complex-mediated (type III hypersensitivity) disease. Antigen-antibody complexes deposit in the glomerular basement membrane → complement activation → glomerular inflammation. Labs: UA shows hematuria (dysmorphic RBCs, RBC casts — pathognomonic), proteinuria (<3.5g/day — nephritic, not nephrotic range). Low C3 complement (returns to normal in 6-8 weeks). Elevated ASO titer (pharyngitis) or anti-DNase B (skin infection). BMP shows elevated BUN/Cr (acute kidney injury). Diagnosis is clinical. Renal biopsy only if rapidly progressive GN or atypical course. Treatment: supportive — salt/fluid restriction, diuretics (furosemide) for hypertension and edema, antihypertensives if needed. Prognosis excellent in children (>95% complete recovery). Antibiotics if active strep infection. No immunosuppression needed.",
+  "chief_complaint":"Generalized weakness, cola-colored urine, periorbital/ankle edema","patient":null,"patient_name":"Dzifa Agbeko","patient_sex":"female","location":"ER","specialty":"Pediatrics / Nephrology",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Assess for edema, respiratory distress from fluid overload.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"correctlyOrdered","finding":"Recent strep infection — assess for pneumonia signs.","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: Heart / Cardiovascular","type":"correctlyOrdered","finding":"Hypertension from fluid overload.","aliases":["Cardiovascular Exam"]},
+    {"label":"Physical Exam: Abdomen","type":"correctlyOrdered","finding":"Assess for ascites.","aliases":["Abdominal Exam"]},
+    {"label":"Physical Exam: Extremities","type":"correctlyOrdered","finding":"2+ pitting edema around ankles — classic nephritic finding.","aliases":["Extremity Exam"]},
+    {"label":"Physical Exam: HEENT / Neck","type":"correctlyOrdered","finding":"Periorbital edema — classic nephritic finding.","aliases":["HEENT"]},
+    {"label":"Urinalysis with microscopy","type":"correctlyOrdered","finding":"Dysmorphic RBCs, RBC casts (pathognomonic), proteinuria (nephritic range <3.5g/day). Cola-colored urine from hematuria.","aliases":["UA"]},
+    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Screening. Mild anemia from dilution/hematuria.","aliases":["CBC"]},
+    {"label":"BMP / CMP","type":"correctlyOrdered","finding":"Elevated BUN/Cr — acute kidney injury. Hyperkalemia possible.","aliases":["BMP"]},
+    {"label":"C3, C4 complement","type":"correctlyOrdered","finding":"Low C3 (returns to normal in 6-8 weeks). C4 normal — distinguishes PSGN from other GN.","aliases":["Complement"]},
+    {"label":"ASO titer / Anti-DNase B","type":"correctlyOrdered","finding":"ASO elevated after strep pharyngitis. Anti-DNase B after skin infection.","aliases":["ASO","Strep titers"]},
+    {"label":"24-hour urine protein","type":"correctlyOrdered","finding":"Quantify proteinuria. Nephritic <3.5g/day (vs nephrotic >3.5g/day).","aliases":["Urine protein"]},
+    {"label":"Renal ultrasound","type":"correctlyOrdered","finding":"Normal or slightly enlarged kidneys. Rule out obstruction.","aliases":["Renal US"]},
+    {"label":"Fluid restriction / Salt restriction","type":"correctlyOrdered","finding":"Manage fluid overload and hypertension.","aliases":["Fluid restriction"]},
+    {"label":"Furosemide (Lasix)","type":"correctlyOrdered","finding":"Loop diuretic for edema and hypertension management.","aliases":["Lasix"]},
+    {"label":"Antihypertensive if needed (Labetalol / Amlodipine)","type":"correctlyOrdered","finding":"Control BP.","aliases":["BP control"]},
+    {"label":"Antibiotics (Penicillin) if active strep","type":"correctlyOrdered","finding":"Treat active streptococcal infection. Does not alter course of GN but prevents spread.","aliases":["Penicillin"]}
+  ],
+  "physical_exam":{"general":"Weak, appears ill, edematous.","cardiovascular":"Hypertensive from fluid overload.","respiratory":"Assess for pulmonary edema from fluid overload.","abdominal":null,"neurological":null,"skin":null,"heent":"Periorbital edema — classic nephritic finding.","musculoskeletal":"2+ pitting ankle edema.","genitourinary":"Oliguria. Cola-colored urine (hematuria).","psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[{"label":"Immunosuppression (steroids / cyclophosphamide)","reason_wrong":"PSGN is self-limited, immune complex-mediated. Immunosuppression is NOT indicated. Supportive care only — spontaneous recovery in 95%+ of children."}],
+  "teach_me_steps":[{"order":"Nephritic syndrome: hematuria + HTN + edema + AKI","category":"Diagnosis","reasoning":"RBC casts = pathognomonic for glomerulonephritis. Low C3 (normal C4). Elevated ASO/anti-DNase B. 1-4 weeks after strep infection. Type III hypersensitivity."},{"order":"Supportive care: no immunosuppression","category":"Treatment","reasoning":"Self-limited disease. Salt/fluid restriction + furosemide + BP control. Antibiotics if active strep (doesn't alter GN course). >95% children recover completely."}],
+  "differential":["Poststreptococcal GN","IgA nephropathy","Lupus nephritis","Membranoproliferative GN","Henoch-Schonlein purpura","Nephrotic syndrome"],
+  "case_summary":"PSGN in child. Cola urine + periorbital/ankle edema + HTN + AKI 1-4 weeks after strep pharyngitis. UA: RBC casts + proteinuria. Low C3. Supportive care: fluid restriction + furosemide. Excellent prognosis.",
+  "confidence":95,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

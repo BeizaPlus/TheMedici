@@ -86,6 +86,64 @@ Key files: `src/components/Play.jsx`, `src/hooks/usePlayDockLayout.js`, `src/com
 
 ---
 
+## Differential Practice (study mode)
+
+**Entry:** Welcome → **Differentials** · `src/components/DifferentialPractice.jsx`
+
+Full-page study loop: chief complaint → voice/type differentials → reveal & score → bottom study panel.
+
+### Study panel tabs (`DifferentialStudyPanel.jsx`)
+
+| Tab | Content |
+|-----|---------|
+| **Timeline** | Saved practice attempts per case |
+| **Case** | Clean LLM case reference — HPI summary + **numbered order workflow** (1, 2, 3…) |
+| **Real World** | Up to 2 real patient stories + YouTube embeds (deep dive) |
+
+### Case data — two banks (do not confuse)
+
+| Bank | Path | Used by |
+|------|------|---------|
+| **Clean (canonical)** | `C:\Users\steve\MeWorld\data\cases\case_N.json` (181, DeepSeek) | Build → `differentialReview.json` |
+| **Game runtime** | `game/data/cases/` + `preparedCases.json` | Play / Briefing only |
+
+Rebuild differential review:
+```powershell
+npm run build:differential-review
+```
+
+### Patient names & settings
+
+- `{{patient_name}}` in HPI → resolved via `personalizeDifferentialReview()` + `patientName.js`
+- Name region from Welcome **Settings** (`audienceProfile.nameRegion`)
+- **Default:** `mixed` (NYC multicultural — rotates Ghanaian, Chinese, Brazilian, Indian, Nigerian per case #)
+- Refined agreed HPI from `narrativeRefine.js` overrides when saved for that case
+
+### Real World tab
+
+- Curated: `src/data/realWorldCases.json` — match by `caseId`, diagnosis, topic
+- Lookup: `src/lib/realWorldCases.js` · UI: `DifferentialRealWorldPanel.jsx`
+- **Seeded:** Case 96 TSS — Alex Lewis, Lauren Wasser (verified YouTube IDs)
+- Fallback: pre-filled YouTube search link when no curated match
+
+### Audio & layout
+
+- ICU monitor ambience on enter (`src/lib/audio.js`)
+- Volume: fixed **bottom-right**, no bordered box (`.diff-ambience-dock`)
+- Chief complaint: **2-line headline** (complaint + specialty) — `differentialHeadline.js`
+
+### Agent rule file
+
+`game/.cursor/rules/differential-practice.mdc` — read before differential tasks.
+
+### Open work
+
+1. Sync clean `MeWorld/data/cases/` → `game/data/cases/` for Play/Briefing
+2. Curate more `realWorldCases.json` entries (target: 2 stories per high-yield case)
+3. Optional: API/AI auto-discovery for real-world YouTube matches
+
+---
+
 ## Git / auth
 
 - Remote: **SSH** `git@github.com:BeizaPlus/TheSchoonMaker.git`

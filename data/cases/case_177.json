@@ -1,0 +1,58 @@
+{
+  "id": 177,
+  "topic": "Vaginal Bleeding",
+  "diagnosis": "Vaginal bleeding could be due to various causes such as hormonal imbalances, infections, cancer, or trauma. The most likely cause in a patient with unknown history can't be definitively determined without further investigation.",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Laboratory tests: Complete Blood Count (CBC), Coagulation profile, Human Chorionic Gonadotropin (hCG) test, Blood type and cross-match",
+    "Imaging: Transvaginal ultrasound, Pelvis X-ray if trauma suspected",
+    "Type & Screen / Crossmatch",
+    "\u03b2-hCG"
+  ],
+  "should_avoid": [
+    "Discharge from hospital without proper diagnosis and treatment"
+  ],
+  "rationale": {
+    "Laboratory tests": "To help determine the cause of bleeding, assess the patient's blood count, coagulation status, pregnancy status, and blood type.",
+    "Imaging": "To visualize the pelvic organs for potential sources of bleeding and to rule out trauma or other pathologies.",
+    "Discharge from hospital without proper diagnosis and treatment": "Given the potential seriousness of vaginal bleeding, it is essential not to discharge a patient without a definitive diagnosis and appropriate treatment.",
+    "Type & Screen / Crossmatch": "To prepare for potential surgery or transfusion in case of complications related to the unknown vaginal bleeding.",
+    "\u03b2-hCG": "As this is a case involving a woman, a pregnancy test is essential."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Vaginal Bleeding \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 104; BP 115/72."
+    ],
+    [
+      "Respiratory",
+      "RR 19; SpO\u2082 97%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

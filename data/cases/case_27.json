@@ -1,0 +1,59 @@
+{
+  "id": 27,
+  "topic": "Fatigue",
+  "diagnosis": "A comprehensive workup is necessary due to the unknown cause of fatigue.",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain complete blood count (CBC) and metabolic panel",
+    "Consider additional testing based on initial findings such as thyroid function tests, vitamin B12/Folate levels, and comprehensive metabolic panel with liver enzymes",
+    "Oxygen",
+    "IV access \u00d72",
+    "Glucose check"
+  ],
+  "should_avoid": [
+    "Prescribe medication for fatigue without a confirmed diagnosis"
+  ],
+  "rationale": {
+    "Obtain complete blood count (CBC) and metabolic panel": "These tests are useful in identifying anemia, electrolyte imbalances, or kidney dysfunction that could cause fatigue.",
+    "Prescribe medication for fatigue without a confirmed diagnosis": "It is important to first establish a diagnosis before starting any specific treatment for fatigue.",
+    "Oxygen": "Patient presents with fatigue, which could be a symptom of multiple conditions including hypoglycemia. Oxygen is crucial to support patient's respiration.",
+    "IV access \u00d72": "To administer necessary fluids and medications promptly.",
+    "Glucose check": "Fatigue can also be a symptom of low blood sugar."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Fatigue \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 114, tachycardic; BP 119/76."
+    ],
+    [
+      "Respiratory",
+      "RR 23, tachypneic; SpO\u2082 99%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id":33,"topic":"Altered Mental Status","title":"Altered Mental Status","diagnosis":"Normal Pressure Hydrocephalus",
+  "hpi_narrative":"{{patient_name}} is an elderly patient presenting with the classic triad of normal pressure hydrocephalus: (1) gait disturbance ('magnetic gait' — feet feel stuck to floor), (2) urinary incontinence, and (3) progressive cognitive decline/dementia. NPH is one of the few reversible causes of dementia and must be recognized early. CT/MRI shows ventriculomegaly out of proportion to sulcal atrophy, without obstruction. LP opening pressure is NORMAL (<18 cm H2O) — this distinguishes NPH from obstructive hydrocephalus. High-volume LP (30-50 mL CSF removal) with pre- and post- gait assessment is diagnostic: improvement in gait after CSF removal supports the diagnosis and predicts response to VP shunting. Definitive treatment: ventriculoperitoneal shunt.",
+  "chief_complaint":"Gait disturbance, urinary incontinence, cognitive decline","patient":null,"patient_name":"Kobina Essien","patient_sex":"male","location":"Office","specialty":"Internal Medicine / Neurology / Neurosurgery",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Assess general condition.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Neuro / Psych","type":"correctlyOrdered","finding":"Gait assessment — magnetic gait, wide-based, shuffling. Cognitive: MMSE for baseline.","aliases":["Neuro Exam"]},
+    {"label":"CT head without contrast / MRI brain","type":"correctlyOrdered","finding":"Ventriculomegaly out of proportion to sulcal atrophy. No obstruction. Evans' index >0.3.","aliases":["Head CT","MRI brain"]},
+    {"label":"Lumbar puncture (high-volume, 30-50 mL)","type":"correctlyOrdered","finding":"Normal opening pressure (<18 cm H2O). CSF analysis to rule out other causes. Post-LP gait assessment — improvement supports NPH diagnosis.","aliases":["LP"]},
+    {"label":"CBC","type":"correctlyOrdered","finding":"Screening.","aliases":["CBC"]},
+    {"label":"TSH, B12, RPR","type":"correctlyOrdered","finding":"Rule out reversible causes of dementia (hypothyroidism, B12 deficiency, neurosyphilis).","aliases":["TSH","B12"]},
+    {"label":"BMP / CMP","type":"correctlyOrdered","finding":"Screening.","aliases":["BMP"]},
+    {"label":"Neurosurgery consult / VP shunt","type":"correctlyOrdered","finding":"Definitive treatment: ventriculoperitoneal shunt. Best results if early intervention before irreversible damage.","aliases":["VP shunt","Neurosurgery"]}
+  ],
+  "physical_exam":{"general":"Elderly, slow gait.","cardiovascular":null,"respiratory":null,"abdominal":null,"neurological":"Triad: magnetic gait (shuffling, feet stuck to floor) + urinary incontinence + cognitive decline. MMSE decreased. No focal deficits. Reflexes normal.","skin":null,"heent":null,"musculoskeletal":null,"genitourinary":"Urinary incontinence.","psychiatric":"Cognitive decline — dementia, progressive."},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[{"label":"Alzheimer's diagnosis without NPH workup","reason_wrong":"NPH is one of the FEW reversible causes of dementia. Classic triad + ventriculomegaly on imaging must prompt LP and consideration of VP shunting. Missing this condemns patient to irreversible decline."}],
+  "teach_me_steps":[{"order":"NPH triad: gait + incontinence + dementia","category":"Diagnosis","reasoning":"Wet, wacky, wobbly' = urinary incontinence + cognitive decline + gait disturbance. Ventriculomegaly WITHOUT obstruction. Normal LP opening pressure."},{"order":"High-volume LP: diagnostic + predictive","category":"Diagnosis","reasoning":"Remove 30-50 mL CSF. Gait improvement after LP predicts good response to VP shunting. This is a reversible cause of dementia."},{"order":"VP shunt = definitive treatment","category":"Treatment","reasoning":"Ventriculoperitoneal shunt diverts CSF. Early intervention prevents irreversible neurological damage."}],
+  "differential":["Normal pressure hydrocephalus","Alzheimer disease","Vascular dementia","Parkinson disease","B12 deficiency","Hypothyroidism","Neurosyphilis"],
+  "case_summary":"NPH: classic triad + ventriculomegaly with normal LP opening pressure. High-volume LP shows gait improvement → VP shunt placed by neurosurgery. Reversible dementia — must recognize early.",
+  "confidence":95,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

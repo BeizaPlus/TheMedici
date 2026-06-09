@@ -1,0 +1,54 @@
+{
+  "id": 175,
+  "topic": "Heavy Menstrual Bleeding",
+  "diagnosis": "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Laboratory tests: Complete blood count (CBC), coagulation panel, thyroid function tests, and hormone levels",
+    "Imaging studies: Transvaginal ultrasound, pelvic MRI",
+    "\u03b2-hCG"
+  ],
+  "should_avoid": [
+    "Order for immediate dilation and curettage (D&C) as it may be premature without definitive diagnosis"
+  ],
+  "rationale": {
+    "Order for D&C": "It should be avoided initially because the goal is to diagnose, not just manage symptoms. A definitive diagnosis will guide further management.",
+    "Order": "Since the patient is a woman of childbearing age, a pregnancy test (\u03b2-hCG) should be ordered first to determine if there is an underlying pregnancy causing heavy menstrual bleeding."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Heavy Menstrual Bleeding \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 96; BP 109/68."
+    ],
+    [
+      "Respiratory",
+      "RR 17; SpO\u2082 95%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

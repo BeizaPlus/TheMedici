@@ -1,0 +1,44 @@
+{
+  "id": 12, "topic": "Burning During Urination", "title": "Burning During Urination", "diagnosis": "Chlamydia Urethritis",
+  "hpi_narrative": "{{patient_name}} is a sexually active young adult who presents with dysuria, purulent urethral discharge, and scrotal swelling. The patient admits to illicit drug use and risky sexual practices. Chlamydia trachomatis is the most common bacterial STI — an obligate intracellular pathogen. Co-infection with gonorrhea is common (40% of women, 20% of men), so empiric treatment for both is recommended even if only chlamydia is confirmed. Most cases are asymptomatic (80% women, 50% men), making the presence of overt urethritis clinically useful. First-line diagnosis is NAAT (DNA probe) on first-catch urine. Treatment: azithromycin 1g PO single dose OR doxycycline 100mg PO BID x 7 days. Sexual partners must be treated. Screen for all STIs (gonorrhea, HIV, hepatitis B/C, syphilis, HSV).",
+  "chief_complaint": "Dysuria, purulent urethral discharge, scrotal swelling",
+  "patient": null, "patient_name": "Yaw Boateng", "patient_sex": "male", "location": "Office", "specialty": "Internal Medicine / Infectious Disease",
+  "stacks": [
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Determine how sick the patient looks.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"shouldHaveOrdered","finding":"Investigate for lung pathology.","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: Heart / Cardiovascular","type":"shouldHaveOrdered","finding":"Investigate for cardiac pathology.","aliases":["Cardiovascular Exam"]},
+    {"label":"Physical Exam: Abdomen","type":"shouldHaveOrdered","finding":"Urinary pathologies can present in abdominal exam.","aliases":["Abdominal Exam"]},
+    {"label":"Physical Exam: Genitalia","type":"correctlyOrdered","finding":"Chief complaint — genital exam essential. Purulent urethral discharge.","aliases":["Genital Exam"]},
+    {"label":"Physical Exam: Rectal","type":"correctlyOrdered","finding":"Should be examined — may contribute to symptoms.","aliases":["Rectal Exam"]},
+    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Good screening tool.","aliases":["CBC"]},
+    {"label":"Toxicology screen, urine","type":"shouldHaveOrdered","finding":"Patient admits to illicit drug use — toxicology screen to identify substances.","aliases":["Urine tox"]},
+    {"label":"Urinalysis","type":"correctlyOrdered","finding":"Dysuria — UA is first-line. Pyuria without bacteria on Gram stain suggests urethritis.","aliases":["UA"]},
+    {"label":"Chlamydia testing (NAAT / DNA probe / culture)","type":"correctlyOrdered","finding":"Clinches the diagnosis. NAAT on first-catch urine is first-line.","aliases":["Chlamydia DNA probe","Chlamydia NAAT"]},
+    {"label":"Gonorrhea testing (NAAT / DNA probe / culture)","type":"shouldHaveOrdered","finding":"Co-infection with gonorrhea is common (20-40%). Empiric treatment recommended.","aliases":["GC test","Gonorrhea NAAT"]},
+    {"label":"HIV testing (antibody/antigen / PCR / rapid test)","type":"shouldHaveOrdered","finding":"One STI → screen for all STIs. HIV testing essential.","aliases":["HIV test"]},
+    {"label":"Hepatitis C antibody / PCR","type":"shouldHaveOrdered","finding":"Screen for all STIs including hepatitis C.","aliases":["HCV test"]},
+    {"label":"Hepatitis B panel (HBsAg / HBcAb / HBeAg)","type":"shouldHaveOrdered","finding":"Screen for all STIs including hepatitis B.","aliases":["HBV panel"]},
+    {"label":"BMP / CMP / LFTs","type":"correctlyOrdered","finding":"Screening labs.","aliases":["BMP","CMP"]},
+    {"label":"Azithromycin 1g PO once / Doxycycline 100mg BID x 7d","type":"shouldHaveOrdered","finding":"Azithromycin single dose or doxycycline x 7 days treats chlamydia. Also covers gonorrhea empirically.","aliases":["Azithromycin","Doxycycline","Zithromax"]},
+    {"label":"NSAIDs / Acetaminophen for fever/pain","type":"correctlyOrdered","finding":"Mild low-grade fever and pain — symptomatic management.","aliases":["Ibuprofen","Tylenol"]},
+    {"label":"Advise patient, safe sex techniques","type":"shouldHaveOrdered","finding":"STI treatment → must review safe sex practices.","aliases":["Safe sex counseling"]},
+    {"label":"Advise patient, no illegal drug use","type":"shouldHaveOrdered","finding":"Patient admits to illicit substances — educate on dangers.","aliases":["Drug counseling"]},
+    {"label":"Advise patient, sexual partner needs treatment","type":"shouldHaveOrdered","finding":"Partner likely infected — must be treated to prevent reinfection.","aliases":["Partner treatment"]},
+    {"label":"Instruct patient, smoking cessation","type":"shouldHaveOrdered","finding":"Excellent opportunity to address smoking.","aliases":["Smoking cessation"]}
+  ],
+  "physical_exam": {"general":"Mildly febrile.","cardiovascular":null,"respiratory":null,"abdominal":null,"neurological":null,"skin":null,"heent":null,"musculoskeletal":null,"genitourinary":"Purulent urethral discharge. Dysuria. Scrotal swelling. No CVA tenderness (rules out pyelo).","psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[
+    {"label":"Ciprofloxacin / Levofloxacin alone","reason_wrong":"Fluoroquinolones are NOT first-line for chlamydia. Azithromycin or doxycycline is the treatment of choice."},
+    {"label":"Treat without STI panel","reason_wrong":"Co-infection with gonorrhea, HIV, hepatitis B/C, and syphilis is common. Full STI screening is mandatory."}
+  ],
+  "teach_me_steps":[
+    {"order":"NAAT on first-catch urine for chlamydia AND gonorrhea","category":"Diagnosis","reasoning":"NAAT (DNA probe) is first-line for chlamydia diagnosis. Test for gonorrhea simultaneously — 20-40% co-infection rate."},
+    {"order":"Empiric treatment for chlamydia AND gonorrhea","category":"Treatment","reasoning":"Azithromycin 1g PO once OR doxycycline 100mg BID x 7d. Empiric gonorrhea coverage recommended due to high co-infection rate."},
+    {"order":"Full STI screening (HIV, HBV, HCV, syphilis, HSV)","category":"Diagnosis","reasoning":"Presence of one STI increases risk of others. Screen for all."},
+    {"order":"Treat sexual partners + safe sex counseling","category":"Prevention","reasoning":"Partners must be treated to prevent reinfection. Review safe sex practices and substance use counseling."}
+  ],
+  "differential":["Urethritis","Epididymitis","Gonorrhea","Syphilis","HIV","HSV"],
+  "case_summary":"Chlamydia urethritis — most common bacterial STI. NAAT on urine confirms. Azithromycin 1g PO once. Partner treated. Full STI panel. Office management.",
+  "confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

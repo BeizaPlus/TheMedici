@@ -1,0 +1,28 @@
+{
+  "id":31,"topic":"Dizziness and Fatigue","title":"Dizziness and Fatigue","diagnosis":"Duodenal Ulcer with Iron Deficiency Anemia",
+  "hpi_narrative":"{{patient_name}} presents with progressive fatigue, dizziness, and dyspnea on exertion. Exam reveals pallor and epigastric tenderness. Labs show iron deficiency anemia. History reveals NSAID use and epigastric pain relieved by food — classic for duodenal ulcer. Duodenal ulcers are more common than gastric ulcers and pain classically improves with meals (food buffers acid). H. pylori testing is essential. Treatment: PPI, H. pylori eradication if positive, discontinue NSAIDs. Iron supplementation for anemia. If alarm symptoms (weight loss, bleeding, early satiety) → endoscopy. Avoid invasive testing in stable patient with classic history.",
+  "chief_complaint":"Fatigue, dizziness, dyspnea on exertion","patient":null,"patient_name":"Akwasi Baah","patient_sex":"male","location":"Office","specialty":"Internal Medicine / Gastroenterology",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Assess severity — pallor suggests anemia.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"correctlyOrdered","finding":"Investigating for lung pathology.","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: Heart / Cardiovascular","type":"correctlyOrdered","finding":"Tachycardia from anemia. Flow murmur possible.","aliases":["Cardiovascular Exam"]},
+    {"label":"Physical Exam: Abdomen","type":"correctlyOrdered","finding":"Epigastric tenderness. No peritoneal signs.","aliases":["Abdominal Exam"]},
+    {"label":"Physical Exam: Rectal","type":"correctlyOrdered","finding":"DRE for melena — rule out GI bleeding.","aliases":["Rectal Exam"]},
+    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Microcytic hypochromic anemia — iron deficiency.","aliases":["CBC"]},
+    {"label":"Iron studies (ferritin, serum iron, TIBC)","type":"correctlyOrdered","finding":"Low ferritin, low iron, high TIBC = iron deficiency anemia.","aliases":["Iron panel"]},
+    {"label":"Occult blood, stool","type":"correctlyOrdered","finding":"Positive — chronic GI blood loss from ulcer.","aliases":["FOBT"]},
+    {"label":"H. pylori testing (stool antigen / urea breath test / serology)","type":"correctlyOrdered","finding":"Duodenal ulcers strongly associated with H. pylori. Eradication prevents recurrence.","aliases":["H pylori"]},
+    {"label":"BMP / CMP / LFTs","type":"correctlyOrdered","finding":"Screening labs.","aliases":["BMP"]},
+    {"label":"PPI (Omeprazole / Pantoprazole)","type":"correctlyOrdered","finding":"Acid suppression for ulcer healing. 4-8 week course.","aliases":["PPI","Omeprazole"]},
+    {"label":"H. pylori eradication (triple/quadruple therapy)","type":"shouldHaveOrdered","finding":"Clarithromycin triple therapy or bismuth quadruple if resistance concern.","aliases":["H pylori treatment"]},
+    {"label":"Iron supplementation","type":"correctlyOrdered","finding":"Oral ferrous sulfate for IDA.","aliases":["Iron","Ferrous sulfate"]},
+    {"label":"Discontinue NSAIDs / Aspirin","type":"correctlyOrdered","finding":"NSAIDs impair gastric mucosal defense.","aliases":["NSAID cessation"]}
+  ],
+  "physical_exam":{"general":"Fatigued, pallor present.","cardiovascular":"Tachycardic (anemia).","respiratory":null,"abdominal":"Epigastric tenderness. No guarding/rebound.","neurological":null,"skin":"Pallor.","heent":"Pale conjunctivae.","musculoskeletal":null,"genitourinary":null,"psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[{"label":"EGD before H. pylori testing","reason_wrong":"EGD reserved for alarm symptoms (weight loss, bleeding, >55yo with new dyspepsia). Test for H. pylori and treat empirically in young patients without alarm symptoms."}],
+  "teach_me_steps":[{"order":"Duodenal ulcer: pain RELIEVED by food","category":"Diagnosis","reasoning":"Duodenal ulcer pain improves with meals (food buffers acid). Gastric ulcer pain worsens with meals. IDA from chronic blood loss."},{"order":"H. pylori test + treat","category":"Treatment","reasoning":"H. pylori eradication prevents recurrence. Triple therapy: PPI + clarithromycin + amoxicillin/metronidazole. PPI for 4-8 weeks."}],
+  "differential":["Duodenal ulcer","Gastric ulcer","Gastritis","GERD","Celiac disease","Colon cancer"],
+  "case_summary":"Duodenal ulcer + IDA from chronic blood loss. Epigastric pain relieved by food + FOBT positive + microcytic anemia. H. pylori test → PPI + eradication + iron. Stop NSAIDs.",
+  "confidence":92,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

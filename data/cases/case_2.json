@@ -1,0 +1,47 @@
+{
+  "id": 2,
+  "topic": "Altered Mental Status",
+  "title": "Altered Mental Status",
+  "diagnosis": "Subdural Hematoma",
+  "hpi_narrative": "{{patient_name}} is an elderly patient with a history of chronic alcoholism who presents to the emergency department with altered mental status following a recent fall. The patient has had episodic confusion and fluctuating consciousness since the fall. The subdural hematoma risk is elevated due to advanced age and chronic alcohol use, both of which contribute to brain atrophy and increased tension on bridging veins. Time is critical — expanding hematoma may cause mass effect and progressive neurological deterioration.",
+  "chief_complaint": "Altered mental status following fall",
+  "patient": null,
+  "patient_name": "Kofi Owusu",
+  "patient_sex": "male",
+  "location": "ER",
+  "specialty": "Neurology / Neurosurgery",
+  "stacks": [
+    { "label": "Physical Exam: General Appearance", "type": "shouldHaveOrdered", "finding": "The general examination is extremely useful to determine how sick the patient looks.", "aliases": ["General Appearance"] },
+    { "label": "Physical Exam: Chest / Lungs", "type": "shouldHaveOrdered", "finding": "It's important to look for lung pathology.", "aliases": ["Chest Exam", "Lung Exam"] },
+    { "label": "Physical Exam: Abdomen", "type": "shouldHaveOrdered", "finding": "It's important to look for abdominal pathology.", "aliases": ["Abdominal Exam"] },
+    { "label": "Physical Exam: Neuro / Psych", "type": "shouldHaveOrdered", "finding": "This is the patient's chief complaint — neurologic exam is essential.", "aliases": ["Neurologic Exam", "Neuro Exam"] },
+    { "label": "CBC with differential", "type": "shouldHaveOrdered", "finding": "CBC is always a good screening tool in nearly every patient.", "aliases": ["CBC"] },
+    { "label": "TSH, serum", "type": "shouldHaveOrdered", "finding": "TSH screens for abnormal thyroid levels which could contribute to altered mental status.", "aliases": ["Thyroid stimulating hormone"] },
+    { "label": "CT of head without contrast", "type": "correctlyOrdered", "finding": "CT without contrast is the order of choice. With possible head trauma, rule out intracranial bleed. CT with contrast makes it difficult to distinguish contrast from hemorrhage. CT preferred for speed; MRI more sensitive but slower.", "aliases": ["Head CT", "CT head non-contrast", "MRI, head"] },
+    { "label": "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel", "type": "shouldHaveOrdered", "finding": "Chemistries are an important screening tool to reach a diagnosis.", "aliases": ["BMP", "CMP", "Chem 7", "LFTs"] },
+    { "label": "CT, head, with contrast", "type": "correctlyAvoided", "finding": "CT with contrast makes it difficult to distinguish between contrast enhancement and intracranial hemorrhage. Non-contrast CT is the correct choice for suspected bleed.", "aliases": ["Head CT with contrast"] },
+    { "label": "Consult, surgery, neurologic / Craniotomy", "type": "correctlyOrdered", "finding": "Neurosurgery should be consulted to evacuate the subdural hematoma. Craniotomy for evacuation.", "aliases": ["Neurosurgery consult", "Craniotomy", "Burr hole evacuation"] }
+  ],
+  "physical_exam": {
+    "general": "Altered mental status, fluctuating consciousness.",
+    "cardiovascular": null,
+    "respiratory": null,
+    "abdominal": null,
+    "neurological": "Fluctuating level of consciousness. Assess for lateralizing signs, pupil asymmetry, and GCS. Focal deficits may indicate mass effect from expanding hematoma.",
+    "skin": null, "heent": "Assess for signs of head trauma or skull fracture.", "musculoskeletal": null, "genitourinary": null, "psychiatric": "Altered mental status — differentiate from psychiatric etiology."
+  },
+  "vitals": { "hr": null, "spo2": null, "bp": null, "rr": null, "temp": null },
+  "decoys": [
+    { "label": "CT head with contrast", "reason_wrong": "Contrast makes it difficult to distinguish blood from enhancement. Non-contrast CT is required for suspected intracranial hemorrhage." },
+    { "label": "Lumbar puncture", "reason_wrong": "LP is contraindicated with suspected mass effect from intracranial hemorrhage — risk of herniation." },
+    { "label": "EEG", "reason_wrong": "While seizure is on the differential, CT head takes priority given history of fall and AMS." }
+  ],
+  "teach_me_steps": [
+    { "order": "CT head without contrast", "category": "Diagnosis", "reasoning": "First-line imaging for suspected intracranial hemorrhage. Non-contrast is essential — contrast obscures blood. CT faster than MRI." },
+    { "order": "Neurosurgery consult / Craniotomy", "category": "Treatment", "reasoning": "Subdural hematoma with mass effect requires surgical evacuation. Time is brain." },
+    { "order": "Admit to inpatient unit", "category": "Disposition", "reasoning": "Elderly patient with AMS and surgical pathology requires admission, not ER discharge." }
+  ],
+  "differential": ["Seizures", "Bacterial meningitis", "Urinary tract infection", "Trauma", "Electrolyte disturbance", "Drug/alcohol toxicity", "Heart failure", "Metabolic disorder"],
+  "case_summary": "Elderly alcoholic patient with fall → subdural hematoma. Subdurals result from venous bleeding after blunt head trauma — bridging veins rupture. Risks: advanced age, alcoholism, anticoagulation. CT without contrast → neurosurgery for evacuation.",
+  "confidence": 95, "source": "DeepSeek v4 Pro", "extraction_method": "deepseek_direct", "complete": true, "parse_error": false
+}

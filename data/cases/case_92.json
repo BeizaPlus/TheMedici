@@ -1,0 +1,58 @@
+{
+  "id": 92,
+  "topic": "Vaginal Bleeding",
+  "diagnosis": "Vaginal bleeding could be due to various causes such as endometrial cancer, cervical cancer, uterine fibroids, vaginitis, or trauma. Given the uncertainty of diagnosis, a comprehensive workup is required.",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Laboratory tests: Complete blood count (CBC), coagulation panel, urinalysis, and pregnancy test",
+    "Imaging studies: Transvaginal ultrasound, pelvic MRI (if available)",
+    "Oxygen",
+    "IV access \u00d72 large-bore",
+    "pregnancy test (\u03b2-hCG)"
+  ],
+  "should_avoid": [
+    "Exploratory laparotomy"
+  ],
+  "rationale": {
+    "Exploratory laparotomy": "This invasive procedure should be avoided as it is a major surgery and the diagnosis is currently unknown. It's best to perform less invasive diagnostics first.",
+    "Oxygen": "Vaginal bleeding can be a symptom of various conditions, including pregnancy. Oxygen and IV access are essential life-saving interventions.",
+    "IV access \u00d72 large-bore": "For potential blood loss assessment and fluid resuscitation if necessary.",
+    "pregnancy test (\u03b2-hCG)": "Vaginal bleeding is a common symptom in pregnancy. A \u03b2-hCG test will help determine the stage of pregnancy or possible ectopic pregnancy."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Vaginal Bleeding \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 100; BP 112/70."
+    ],
+    [
+      "Respiratory",
+      "RR 18; SpO\u2082 96%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

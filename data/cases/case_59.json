@@ -1,0 +1,61 @@
+{
+  "id": 59,
+  "topic": "Shortness of Breath",
+  "diagnosis": "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain vital signs",
+    "Chest X-ray",
+    "Arterial Blood Gases (ABG)",
+    "Electrocardiogram (ECG)",
+    "Pulse oximetry",
+    "Complete blood count (CBC)",
+    "B-type Natriuretic Peptide (BNP) or Brain natriuretic peptide (BNP) and N-terminal pro B-type natriuretic peptide (NT-proBNP)",
+    "Chest CT if indications arise",
+    "Consult Internal Medicine/Cardiology",
+    "Oxygen"
+  ],
+  "should_avoid": [
+    "Ordering immediate invasive procedures such as thoracentesis or cardiac catheterization without further diagnostics"
+  ],
+  "rationale": {
+    "Ordering immediate invasive procedures": "Without a clear diagnosis, it is not advisable to perform invasive procedures initially. These should be considered after the results of initial diagnostic tests are available.",
+    "Oxygen": "The patient is experiencing shortness of breath, indicating potential respiratory distress. Oxygen is the first life-saving intervention that must be ordered immediately in this case."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Dyspneic, speaking in short phrases if severe"
+    ],
+    [
+      "Cardiovascular",
+      "HR 112, tachycardic; BP 98/62."
+    ],
+    [
+      "Respiratory",
+      "RR 24, tachypneic; SpO\u2082 91%; hypoxemic."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended"
+    ],
+    [
+      "Neuro",
+      "Alert unless hypercapnic or hypoxic"
+    ],
+    [
+      "Skin",
+      "Cyanosis absent unless critical hypoxemia"
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

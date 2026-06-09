@@ -1,0 +1,26 @@
+{
+  "id":29,"topic":"Vaginal Bleeding","title":"Vaginal Bleeding","diagnosis":"Dysfunctional Uterine Bleeding (Anovulatory)",
+  "hpi_narrative":"{{patient_name}} is a reproductive-age woman presenting with irregular, heavy vaginal bleeding without identifiable structural or systemic cause. This is dysfunctional uterine bleeding (DUB), most commonly anovulatory — unopposed estrogen stimulation leads to endometrial hyperplasia and irregular shedding. Diagnosis of exclusion after ruling out pregnancy, structural lesions (fibroids, polyps), thyroid dysfunction, coagulopathy, and malignancy. Workup: HCG (rule out pregnancy/complications), CBC (assess anemia from blood loss), TSH/prolactin, pelvic ultrasound (rule out structural causes), endometrial biopsy if age >45 or risk factors. Treatment depends on severity and fertility goals: hormonal regulation with combined OCPs or cyclic progestins. If acute heavy bleeding: high-dose estrogen or IV conjugated estrogens. Iron supplementation for anemia.",
+  "chief_complaint":"Irregular heavy vaginal bleeding","patient":null,"patient_name":"Kobina Essien","patient_sex":"female","location":"Office","specialty":"OB/GYN",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Assess for pallor, hemodynamic stability.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Abdomen","type":"correctlyOrdered","finding":"Assess for pelvic mass or tenderness.","aliases":["Abdominal Exam"]},
+    {"label":"Physical Exam: Genitalia / Pelvic / Speculum","type":"correctlyOrdered","finding":"Visualize source of bleeding. Bimanual exam for uterine size, adnexal masses.","aliases":["Pelvic Exam"]},
+    {"label":"HCG, beta (pregnancy test)","type":"correctlyOrdered","finding":"MUST rule out pregnancy — ectopic, miscarriage, molar pregnancy can all present with vaginal bleeding.","aliases":["Pregnancy test"]},
+    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Assess degree of anemia from blood loss. Platelet count.","aliases":["CBC"]},
+    {"label":"TSH / Prolactin","type":"correctlyOrdered","finding":"Thyroid dysfunction and hyperprolactinemia cause anovulatory bleeding.","aliases":["TSH","Prolactin"]},
+    {"label":"PT/PTT / INR","type":"correctlyOrdered","finding":"Screen for coagulopathy (von Willebrand disease can present with menorrhagia).","aliases":["Coags"]},
+    {"label":"Pelvic ultrasound (transvaginal)","type":"correctlyOrdered","finding":"Rule out fibroids, polyps, adenomyosis, ovarian masses. Assess endometrial thickness.","aliases":["Pelvic US","TVUS"]},
+    {"label":"Endometrial biopsy","type":"shouldHaveOrdered","finding":"Indicated if age >45, unopposed estrogen exposure, or risk factors for endometrial hyperplasia/cancer.","aliases":["EMB"]},
+    {"label":"BMP / CMP / LFTs","type":"correctlyOrdered","finding":"Screening labs. Iron studies if anemic.","aliases":["BMP"]},
+    {"label":"Combined oral contraceptives","type":"correctlyOrdered","finding":"Hormonal regulation. Estrogen-progestin combination stabilizes endometrium and regulates cycles.","aliases":["OCPs","Birth control"]},
+    {"label":"Iron supplementation","type":"shouldHaveOrdered","finding":"Treat iron deficiency anemia from chronic blood loss.","aliases":["Iron","Ferrous sulfate"]}
+  ],
+  "physical_exam":{"general":"Assess for pallor (anemia), hemodynamic stability.","cardiovascular":null,"respiratory":null,"abdominal":"No masses. Uterus normal size.","neurological":null,"skin":"Pallor if significant anemia.","heent":null,"musculoskeletal":null,"genitourinary":"Vaginal bleeding on speculum. No cervical lesions. Bimanual: normal uterus, no adnexal masses.","psychiatric":null},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[{"label":"Hysterectomy as first-line","reason_wrong":"DUB responds to medical management (OCPs, cyclic progestins). Surgery reserved for failed medical therapy or completed childbearing."}],
+  "teach_me_steps":[{"order":"DUB is diagnosis of exclusion","category":"Diagnosis","reasoning":"Rule out pregnancy (HCG), structural (US), thyroid (TSH), prolactin, coagulopathy (PT/PTT). Anovulatory = unopposed estrogen → endometrial proliferation → irregular shedding."},{"order":"Medical management: OCPs or cyclic progestins","category":"Treatment","reasoning":"Hormonal regulation stabilizes endometrium. Iron for anemia. EM biopsy if age >45 or risk factors for hyperplasia."}],
+  "differential":["DUB (anovulatory)","Uterine fibroids","Endometrial polyps","Adenomyosis","Coagulopathy (vWD)","Thyroid dysfunction","Endometrial hyperplasia/cancer"],
+  "case_summary":"Anovulatory DUB. HCG negative, normal pelvic US, normal TSH. CBC shows iron deficiency anemia. OCPs for cycle regulation + iron supplementation. EM biopsy if indicated by age/risk.",
+  "confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

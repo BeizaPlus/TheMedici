@@ -30,6 +30,16 @@ import {
   voiceNoteMergeAvailable,
   voiceNoteWhisperAvailable,
 } from './voiceNoteTranscribe.js';
+import {
+  ensureStoriesHaveWorkingVideos,
+  readRealWorldCache,
+  writeRealWorldCache,
+} from './geminiRealWorld.js';
+import {
+  fetchRealWorldStories,
+  realWorldAvailable,
+  realWorldProvider,
+} from './realWorldProvider.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const GAME_ROOT = path.join(__dirname, '..');
@@ -63,6 +73,8 @@ if (!fs.existsSync(CASE_TTS_DIR)) {
   fs.mkdirSync(CASE_TTS_DIR, { recursive: true });
 }
 app.use('/case-tts', express.static(CASE_TTS_DIR));
+
+const REAL_WORLD_CACHE_DIR = path.join(GAME_ROOT, '.real-world-cache');
 
 const USER_DATA_DIR = path.join(GAME_ROOT, 'user-data');
 if (!fs.existsSync(USER_DATA_DIR)) {
@@ -481,6 +493,9 @@ app.get('/api/health', (_req, res) => {
     ok: true,
     openai: Boolean(OPENAI_API_KEY),
     deepseek: Boolean(DEEPSEEK_API_KEY),
+    gemini: Boolean(process.env.GEMINI_API_KEY),
+    realWorld: realWorldAvailable(),
+    realWorldProvider: realWorldProvider(),
     chatProvider: provider,
     chatModel: chatModel(),
     fal: Boolean(process.env.FAL_KEY),
@@ -682,6 +697,106 @@ app.post('/api/differential/parse-transcript', async (req, res) => {
       diagnoses: parsed.diagnoses,
       provider: chatProvider(),
       model: chatModel(),
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/differential/real-world', async (req, res) => {
+  if (!realWorldAvailable()) {
+    return res.status(400).json({
+      error: 'Add DEEPSEEK_API_KEY to MeWorld/.env (preferred). Optional: GEMINI_API_KEY with REAL_WORLD_PROVIDER=gemini',
+    });
+  }
+
+  const {
+    caseId,
+    topic = '',
+    diagnosis = '',
+    chiefComplaint = '',
+    hpiSnippet = '',
+    refresh = false,
+    repairVideos = true,
+  } = req.body || {};
+
+  const id = parseInt(String(caseId ?? ''), 10);
+  if (!Number.isFinite(id)) {
+    return res.status(400).json({ error: 'Missing caseId' });
+  }
+
+  const ctx = {
+    caseId: id,
+    topic: String(topic),
+    diagnosis: String(diagnosis),
+    chiefComplaint: String(chiefComplaint),
+    hpiSnippet: String(hpiSnippet),
+  };
+
+  async function persistStories(stories, meta = {}) {
+    if (!stories.length) return;
+    await writeRealWorldCache(REAL_WORLD_CACHE_DIR, id, {
+      caseId: id,
+      stories,
+      ...meta,
+    });
+  }
+
+  try {
+    if (!refresh) {
+      const cached = await readRealWorldCache(REAL_WORLD_CACHE_DIR, id);
+      if (cached?.stories?.length) {
+        if (repairVideos) {
+          const fixed = await ensureStoriesHaveWorkingVideos(cached.stories, ctx);
+          if (fixed.repaired) {
+            await persistStories(fixed.stories, {
+              model: cached.model,
+              webSearchQueries: cached.webSearchQueries,
+              groundingChunks: cached.groundingChunks,
+            });
+          }
+          return res.json({
+            ok: true,
+            stories: fixed.stories,
+            source: fixed.repaired ? 'cache-repaired' : 'cache',
+            cachedAt: cached.cachedAt,
+            webSearchQueries: cached.webSearchQueries || [],
+            videosRepaired: fixed.repaired,
+          });
+        }
+
+        return res.json({
+          ok: true,
+          stories: cached.stories,
+          source: 'cache',
+          cachedAt: cached.cachedAt,
+          webSearchQueries: cached.webSearchQueries || [],
+        });
+      }
+    }
+
+    const result = await fetchRealWorldStories(ctx);
+    const fixed = repairVideos
+      ? await ensureStoriesHaveWorkingVideos(result.stories, ctx)
+      : { stories: result.stories, repaired: false };
+
+    if (fixed.stories.length) {
+      await persistStories(fixed.stories, {
+        model: result.model,
+        webSearchQueries: result.webSearchQueries,
+        groundingChunks: result.groundingChunks,
+      });
+    }
+
+    return res.json({
+      ok: true,
+      stories: fixed.stories,
+      source: fixed.repaired ? `${result.provider || realWorldProvider()}-repaired` : (result.provider || realWorldProvider()),
+      model: result.model,
+      provider: result.provider || realWorldProvider(),
+      webSearchQueries: result.webSearchQueries,
+      groundingChunks: result.groundingChunks,
+      videosRepaired: fixed.repaired,
     });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });

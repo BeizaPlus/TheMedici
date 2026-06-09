@@ -161,7 +161,7 @@ regions.mixed = {
 
 const payload = {
   version: 2,
-  defaultRegion: 'ghana',
+  defaultRegion: 'mixed',
   generatedAt: new Date().toISOString(),
   regions,
 };

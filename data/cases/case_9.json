@@ -1,0 +1,61 @@
+{
+  "id": 9,
+  "topic": "Abdominal Pain",
+  "title": "Abdominal Pain",
+  "diagnosis": "Intra-abdominal Abscess (post-appendectomy)",
+  "hpi_narrative": "{{patient_name}} is a young woman with recent appendectomy who presents to the inpatient unit with RLQ abdominal pain, fever, tachycardia, nausea, and vomiting. She is febrile and tachycardic with localized RLQ tenderness. Labs show leukocytosis. The combination of recent abdominal surgery, fever, tachycardia, and localized pain is highly suggestive of a postoperative intra-abdominal abscess. CT abdomen/pelvis with IV contrast is the imaging of choice. Management involves percutaneous image-guided abscess drainage (first-line, avoiding the morbidity of open laparotomy) plus broad-spectrum empiric antibiotics covering gram-negative organisms, anaerobes, and enterococci.",
+  "chief_complaint": "RLQ abdominal pain, fever, nausea post-appendectomy",
+  "patient": null,
+  "patient_name": "Ama Gyasi",
+  "patient_sex": "female",
+  "location": "Inpatient Unit",
+  "specialty": "Emergency Medicine / General Surgery",
+  "stacks": [
+    { "label": "Physical Exam: General Appearance", "type": "correctlyOrdered", "finding": "Determine how sick the patient looks.", "aliases": ["General Appearance"] },
+    { "label": "Physical Exam: Chest / Lungs", "type": "correctlyOrdered", "finding": "Investigate for lung pathology — sometimes presents as abdominal pain.", "aliases": ["Chest Exam"] },
+    { "label": "Physical Exam: Heart / Cardiovascular", "type": "correctlyOrdered", "finding": "Investigate for cardiac pathology. Tachycardia noted.", "aliases": ["Cardiovascular Exam"] },
+    { "label": "Physical Exam: Abdomen", "type": "correctlyOrdered", "finding": "Chief complaint — RLQ tenderness, assess for peritoneal signs.", "aliases": ["Abdominal Exam"] },
+    { "label": "Bacterial culture, blood", "type": "shouldHaveOrdered", "finding": "Fever + tachycardia after abdominal surgery is concerning — blood culture warranted prior to antibiotics.", "aliases": ["Blood culture"] },
+    { "label": "Bacterial culture, urine", "type": "shouldHaveOrdered", "finding": "Abdominal pain — urine culture to rule out GU pathology prior to antibiotics.", "aliases": ["Urine culture"] },
+    { "label": "CBC with differential", "type": "correctlyOrdered", "finding": "Important in febrile patient. Leukocytosis supports infection.", "aliases": ["CBC"] },
+    { "label": "Chest X-ray", "type": "shouldHaveOrdered", "finding": "Lung pathology can present as abdominal pain — rule out.", "aliases": ["CXR"] },
+    { "label": "Urinalysis", "type": "correctlyOrdered", "finding": "Rule out bacterial infection and other causes of fever.", "aliases": ["UA"] },
+    { "label": "Bacterial culture, abscess", "type": "shouldHaveOrdered", "finding": "Culture of drained abscess confirms organism and guides antibiotic therapy.", "aliases": ["Abscess culture"] },
+    { "label": "Gram stain, abscess", "type": "shouldHaveOrdered", "finding": "Gram stain provides early guidance for antibiotic selection before culture results.", "aliases": ["Abscess Gram stain"] },
+    { "label": "Basic metabolic profile / Comprehensive metabolic profile / LFTs", "type": "correctlyOrdered", "finding": "Chemistries are important screening tool.", "aliases": ["BMP", "CMP", "LFTs"] },
+    { "label": "CT abdomen/pelvis with contrast", "type": "correctlyOrdered", "finding": "CT with IV contrast is preferred for abdominal pathology — will reveal intra-abdominal abscess.", "aliases": ["CT abdomen/pelvis", "Abdominal CT", "US abdomen", "MRI abdomen/pelvis"] },
+    { "label": "Normal saline / Lactated Ringer", "type": "correctlyOrdered", "finding": "Low sodium, nausea/vomiting — IV fluids indicated for resuscitation.", "aliases": ["IV fluids", "NS", "LR"] },
+    { "label": "Analgesia (Hydromorphone / Fentanyl / Morphine / Ketorolac)", "type": "correctlyOrdered", "finding": "Patient is in pain — treat. Nauseous, so IV route appropriate.", "aliases": ["Pain medication", "Dilaudid", "Morphine"] },
+    { "label": "Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)", "type": "shouldHaveOrdered", "finding": "Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.", "aliases": ["Meropenem", "Zosyn", "Pip-Tazo", "Cipro + Flagyl"] },
+    { "label": "Antiemetic (Ondansetron / Metoclopramide / Promethazine)", "type": "shouldHaveOrdered", "finding": "Patient is nauseous — treat symptomatically.", "aliases": ["Zofran", "Reglan", "Phenergan"] },
+    { "label": "Acetaminophen", "type": "shouldHaveOrdered", "finding": "Patient is febrile. Ibuprofen/NSAIDs not ideal after recent surgery and upcoming procedure.", "aliases": ["Tylenol"] },
+    { "label": "Needle drainage, abscess, imaging guided", "type": "correctlyOrdered", "finding": "First step: percutaneous image-guided drainage. Avoids difficult laparotomy, anesthesia, wound complications, and reduces hospitalization length. Open laparotomy is excessive — less invasive first.", "aliases": ["Percutaneous drainage", "IR drainage"] },
+    { "label": "Intravenous access", "type": "optional", "finding": "Good practice for IV fluids/medications.", "aliases": ["IV access"] },
+    { "label": "Advise patient, safe sex techniques", "type": "shouldHaveOrdered", "finding": "Patient is sexually active — review safe sex practices.", "aliases": ["Safe sex counseling"] },
+    { "label": "Instruct patient, smoking cessation", "type": "correctlyOrdered", "finding": "One of the most important health interventions — excellent opportunity.", "aliases": ["Smoking cessation"] },
+    { "label": "Papanicolaou smear / HPV DNA test", "type": "shouldHaveOrdered", "finding": "Patient has not had recent pap smear — should be scheduled.", "aliases": ["Pap smear"] }
+  ],
+  "physical_exam": {
+    "general": "Febrile, tachycardic, appears ill.",
+    "cardiovascular": "Tachycardic — SIRS response to infection.",
+    "respiratory": null,
+    "abdominal": "RLQ tenderness. Assess for rebound, guarding. Post-surgical setting — concern for abscess.",
+    "neurological": null, "skin": null, "heent": null, "musculoskeletal": null, "genitourinary": null, "psychiatric": null
+  },
+  "vitals": { "hr": null, "spo2": null, "bp": null, "rr": null, "temp": null },
+  "decoys": [
+    { "label": "Open laparotomy (first-line)", "reason_wrong": "Percutaneous drainage is preferred — less invasive, avoids laparotomy morbidity, reduces hospitalization. Open only if percutaneous approach fails or necrotic tissue present." },
+    { "label": "NSAIDs (ibuprofen/ketorolac)", "reason_wrong": "Patient recently had surgery and needs another procedure — increased bleeding risk. Acetaminophen preferred for fever." },
+    { "label": "Discharge from ED", "reason_wrong": "Intra-abdominal abscess requires inpatient monitoring. Percutaneous drainage + IV antibiotics + observation." }
+  ],
+  "teach_me_steps": [
+    { "order": "CT abdomen/pelvis with IV contrast", "category": "Diagnosis", "reasoning": "CT with contrast is imaging of choice for intra-abdominal pathology. Reveals abscess, characterizes location for drainage planning." },
+    { "order": "Blood and urine cultures BEFORE antibiotics", "category": "Diagnosis", "reasoning": "Cultures obtained prior to antibiotics maximize pathogen identification. Post-surgical fever + tachycardia warrants blood cultures." },
+    { "order": "Percutaneous image-guided drainage", "category": "Treatment", "reasoning": "First-line for accessible abscess without necrotic tissue. Less invasive than laparotomy, reduces length of stay." },
+    { "order": "Broad-spectrum empiric antibiotics", "category": "Treatment", "reasoning": "Cover gram-negatives, anaerobes, enterococci. Pip-tazo, meropenem, or ciprofloxacin + metronidazole." },
+    { "order": "Inpatient monitoring", "category": "Disposition", "reasoning": "Post-procedural monitoring required. IV antibiotics, drain management, observation for clinical improvement." }
+  ],
+  "differential": ["Abdominal abscess", "Kidney stone", "Pelvic inflammatory disease", "Abdominal wall pain", "Ectopic pregnancy"],
+  "case_summary": "Post-appendectomy intra-abdominal abscess. Recent surgery + RLQ pain + fever + tachycardia + leukocytosis. CT shows abscess → percutaneous drainage + broad-spectrum antibiotics + IV fluids + inpatient monitoring. Prevention: smoking cessation, safe sex counseling, pap smear.",
+  "confidence": 94, "source": "DeepSeek v4 Pro", "extraction_method": "deepseek_direct", "complete": true, "parse_error": false
+}

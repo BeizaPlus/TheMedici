@@ -1,0 +1,56 @@
+{
+  "id": 55,
+  "topic": "Shortness of Breath",
+  "diagnosis": "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain electrocardiogram (ECG) to assess heart function and rule out acute coronary syndrome",
+    "Chest X-ray to evaluate lung fields, cardiac silhouette, and pleural effusions",
+    "Oxygen",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+  ],
+  "should_avoid": [
+    "Starting a broad-spectrum antibiotic therapy without culture results"
+  ],
+  "rationale": {
+    "Starting a broad-spectrum antibiotic therapy without culture results": "This should be avoided because it can lead to antibiotic resistance and unnecessary costs",
+    "Oxygen": "The patient presents with shortness of breath which is a life-threatening symptom. Immediate administration of oxygen is crucial to stabilize the patient.",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "IV access and glucose check are also important for immediate stabilization of the patient."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Dyspneic, speaking in short phrases if severe"
+    ],
+    [
+      "Cardiovascular",
+      "HR 124, tachycardic; BP 107/68."
+    ],
+    [
+      "Respiratory",
+      "RR 27, tachypneic; SpO\u2082 94%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended"
+    ],
+    [
+      "Neuro",
+      "Alert unless hypercapnic or hypoxic"
+    ],
+    [
+      "Skin",
+      "Cyanosis absent unless critical hypoxemia"
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

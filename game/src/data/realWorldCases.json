@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "maxPerCase": 2,
+  "stories": [
+    {
+      "id": "alex-lewis",
+      "name": "Alex Lewis",
+      "headline": "Strep A → septicemia, TSS & necrotizing fasciitis",
+      "summary": "In 2013 a mild illness became Group A Streptococcus septicemia, toxic shock syndrome, and necrotizing fasciitis. Given ~3% survival, he required quadruple amputation and facial reconstruction — including lip grafts from shoulder tissue and medical tattooing. Often confused with Staph; both can cause TSS. Documentary: The Extraordinary Case of Alex Lewis.",
+      "match": {
+        "caseIds": [96],
+        "diagnoses": ["toxic shock", "tss", "necrotizing fasciitis", "strep"],
+        "topics": []
+      },
+      "videos": [
+        {
+          "title": "The Extraordinary Life Of Alex Lewis | This Morning",
+          "youtubeId": "eaZJSqrsNEs",
+          "url": "https://www.youtube.com/watch?v=eaZJSqrsNEs"
+        },
+        {
+          "title": "How I Lost All My Limbs | LADbible Stories",
+          "youtubeId": "xkTbwZeozsE",
+          "url": "https://www.youtube.com/watch?v=xkTbwZeozsE"
+        }
+      ]
+    },
+    {
+      "id": "lauren-wasser",
+      "name": "Lauren Wasser",
+      "headline": "Menstrual TSS — tampon-associated shock & amputation",
+      "summary": "Model Lauren Wasser developed tampon-associated toxic shock syndrome at 24. Profound hypotension, multi-organ failure, and gangrene led to below-knee amputation and ongoing limb risk. Classic real-world anchor for menstrual TSS teaching — remove source, resuscitate, broad antibiotics, ICU.",
+      "match": {
+        "caseIds": [96],
+        "diagnoses": ["toxic shock", "tss"],
+        "topics": []
+      },
+      "videos": [
+        {
+          "title": "Don't look for fashion models, look for role models | TEDx",
+          "youtubeId": "t2KzXF-8ROQ",
+          "url": "https://www.youtube.com/watch?v=t2KzXF-8ROQ"
+        }
+      ]
+    },
+    {
+      "id": "aimee-copeland",
+      "name": "Aimee Copeland",
+      "headline": "Necrotizing fasciitis after zip-line wound",
+      "summary": "After a zip-line accident in 2012, Aeromonas hydrophila caused necrotizing fasciitis. She lost both hands, a leg, and a foot but survived. Useful contrast to strep-driven NF/TSS — different organism, same surgical urgency and ICU resuscitation.",
+      "match": {
+        "caseIds": [96],
+        "diagnoses": ["necrotizing fasciitis", "flesh-eating", "toxic shock"],
+        "topics": []
+      },
+      "videos": [
+        {
+          "title": "Flesh-Eating Bacteria Survivor Aimee Copeland Speaks Out | GMA",
+          "youtubeId": "sLWYUxeFrKE",
+          "url": "https://www.youtube.com/watch?v=sLWYUxeFrKE"
+        }
+      ]
+    },
+    {
+      "id": "tension-ptx-edu",
+      "name": "Tension pneumothorax — emergency decompression",
+      "headline": "Clinical recognition & needle thoracostomy",
+      "summary": "Emergency medicine teaching cases on tension pneumothorax: absent breath sounds, tracheal deviation, hypotension — decompress before imaging when clinically certain.",
+      "match": {
+        "caseIds": [1],
+        "diagnoses": ["tension pneumothorax", "pneumothorax"],
+        "topics": ["chest pain"]
+      },
+      "videos": []
+    },
+    {
+      "id": "dka-patient-vlog",
+      "name": "New-onset DKA patient accounts",
+      "headline": "Abdominal pain masquerade + hyperglycemia",
+      "summary": "Patient stories of first Type 1 presentation as DKA — polyuria, abdominal pain, marked hyperglycemia — mirroring CCS cases where the surgical abdomen is a trap.",
+      "match": {
+        "caseIds": [4],
+        "diagnoses": ["diabetic ketoacidosis", "dka"],
+        "topics": ["abdominal pain"]
+      },
+      "videos": []
+    },
+    {
+      "id": "subdural-elderly",
+      "name": "Subdural hematoma after fall",
+      "headline": "Elderly fall → expanding subdural",
+      "summary": "Real-world accounts of chronic subdural after minor falls — fluctuating consciousness, anticoagulation risk, neurosurgical evacuation.",
+      "match": {
+        "caseIds": [2],
+        "diagnoses": ["subdural", "subdural hematoma"],
+        "topics": ["altered mental status"]
+      },
+      "videos": []
+    }
+  ]
+}

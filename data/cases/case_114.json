@@ -1,0 +1,56 @@
+{
+  "id": 114,
+  "topic": "Pain in Side",
+  "diagnosis": "Possible Renal Colic due to obstructive uropathy or Appendicitis",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Laboratory tests: Complete Blood Count (CBC), Chemistry Panel, Urinalysis",
+    "Imaging: Abdominal CT scan",
+    "Oxygen",
+    "IV access x2 large-bore"
+  ],
+  "should_avoid": [
+    "Order for immediate surgical intervention without proper diagnostics"
+  ],
+  "rationale": {
+    "Order for immediate surgical intervention without proper diagnostics": "Avoid premature and invasive procedures without confirming the diagnosis.",
+    "Oxygen": "Immediate oxygen administration is crucial for any case involving respiratory distress or AMS.",
+    "IV access x2 large-bore": "Large-bore IV access is essential for rapid fluid resuscitation if necessary."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Pain in Side \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 98; BP 107/68."
+    ],
+    [
+      "Respiratory",
+      "RR 19; SpO\u2082 95%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

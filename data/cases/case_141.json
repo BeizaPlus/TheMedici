@@ -1,0 +1,58 @@
+{
+  "id": 141,
+  "topic": "Rash",
+  "diagnosis": "Undetermined rash",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Obtain a detailed history, including onset, location, distribution, and characteristics of the rash.",
+    "Perform physical examination with dermatological assessment.",
+    "Order laboratory tests: Complete blood count (CBC), liver function tests (LFTs), renal function tests (RFTs), urinalysis, and blood cultures if fever is present.",
+    "Consider skin biopsy or other specialized tests such as direct immunofluorescence or PCR for specific etiologies based on clinical suspicion.",
+    "If the rash is associated with systemic symptoms like fever, malaise, or lymphadenopathy, consider empiric antibiotic therapy pending culture results (e.g., broad-spectrum penicillin or cephalosporin) but avoid administering antihistamines and steroids until the cause is determined.",
+    "Consult dermatology for further evaluation and management.",
+    "CMP/BMP"
+  ],
+  "should_avoid": [
+    "Administer antihistamines and steroids without determining the causative agent"
+  ],
+  "rationale": {
+    "administer antihistamines and steroids without determining the causative agent": "These medications may mask or alter the presentation of the rash, making it difficult to determine the underlying cause.",
+    "CMP/BMP": "This bundle includes the necessary lab tests to check for electrolytes, renal function, and liver function which can be useful in determining the underlying cause of a rash."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Rash \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 110; BP 96/60."
+    ],
+    [
+      "Respiratory",
+      "RR 20; SpO\u2082 92%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "Skin rash morphology and distribution documented."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

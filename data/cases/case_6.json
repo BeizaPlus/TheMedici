@@ -1,0 +1,61 @@
+{
+  "id": 6,
+  "topic": "Rash and Lethargy",
+  "title": "Rash and Lethargy",
+  "diagnosis": "Mononucleosis",
+  "hpi_narrative": "{{patient_name}} is a 6-year-old child who presents with fever, sore throat, malaise, and generalized rash. Exam reveals posterior cervical lymphadenopathy, palatal petechiae, and splenomegaly. The combination of pharyngitis, lymphadenopathy, fever, and the characteristic maculopapular rash is classic for infectious mononucleosis caused by Epstein-Barr virus. The differential includes other viral infections (CMV, acute HIV), streptococcal pharyngitis, and toxoplasmosis. Key management considerations: avoid amoxicillin/ampicillin (causes characteristic EBV rash), avoid aspirin (Reye syndrome risk in febrile children), and in older patients, restrict contact sports to prevent splenic rupture.",
+  "chief_complaint": "Fever, rash, and lethargy",
+  "patient": null,
+  "patient_name": "Kwame Asante",
+  "patient_sex": "male",
+  "location": "Office",
+  "specialty": "Pediatrics / Infectious Disease",
+  "stacks": [
+    { "label": "Physical Exam: General Appearance", "type": "correctlyOrdered", "finding": "Full examination in a pediatric patient with broad differential.", "aliases": ["General Appearance"] },
+    { "label": "Physical Exam: Chest / Lungs", "type": "correctlyOrdered", "finding": "Full exam in a child with broad differential.", "aliases": ["Chest Exam"] },
+    { "label": "Physical Exam: Heart / Cardiovascular", "type": "correctlyOrdered", "finding": "Full exam in a child with broad differential.", "aliases": ["Cardiovascular Exam"] },
+    { "label": "Physical Exam: Abdomen", "type": "correctlyOrdered", "finding": "Full exam — assess for splenomegaly (classic EBV finding).", "aliases": ["Abdominal Exam"] },
+    { "label": "Physical Exam: Lymph Nodes", "type": "correctlyOrdered", "finding": "Assess for posterior cervical adenopathy — hallmark of mononucleosis.", "aliases": ["Lymph Node Exam"] },
+    { "label": "Physical Exam: Neuro / Psych", "type": "correctlyOrdered", "finding": "Full exam in a child with broad differential.", "aliases": ["Neuro Exam"] },
+    { "label": "Physical Exam: Skin", "type": "correctlyOrdered", "finding": "Characterize the rash — maculopapular eruption is classic in EBV infection.", "aliases": ["Skin Exam"] },
+    { "label": "Physical Exam: Extremities / Spine", "type": "correctlyOrdered", "finding": "Full exam in a child with broad differential.", "aliases": ["Extremity Exam"] },
+    { "label": "Physical Exam: HEENT / Neck", "type": "correctlyOrdered", "finding": "Assess pharynx for palatal petechiae and tonsillar exudates.", "aliases": ["HEENT"] },
+    { "label": "CBC with differential", "type": "correctlyOrdered", "finding": "CBC should be ordered on all patients with fever. Will show atypical lymphocytosis in EBV.", "aliases": ["CBC"] },
+    { "label": "Pulse oximetry", "type": "correctlyOrdered", "finding": "Always important to verify oxygenation in a febrile patient.", "aliases": ["SpO2"] },
+    { "label": "Sedimentation rate, erythrocyte", "type": "optional", "finding": "Not required, but ESR would be elevated in EBV.", "aliases": ["ESR"] },
+    { "label": "Mononucleosis screening / EBV serology", "type": "correctlyOrdered", "finding": "Heterophil antibody (Monospot) or EBV-specific serology confirms the diagnosis.", "aliases": ["Monospot", "EBV titer", "Heterophil antibody"] },
+    { "label": "Basic metabolic profile / LFTs", "type": "correctlyOrdered", "finding": "BMPs are excellent screening tools. LFTs may show elevated transaminases in EBV hepatitis.", "aliases": ["BMP", "CMP", "LFTs"] },
+    { "label": "Acetaminophen / Ibuprofen", "type": "shouldHaveOrdered", "finding": "Tylenol or ibuprofen for fever reduction. Symptomatic management.", "aliases": ["Tylenol", "Fever reducer"] },
+    { "label": "Aspirin, therapy", "type": "correctlyAvoided", "finding": "Administering aspirin to a febrile child is associated with Reye's syndrome. Contraindicated.", "aliases": ["ASA"] },
+    { "label": "Amoxicillin / Ampicillin", "type": "correctlyAvoided", "finding": "In EBV, amoxicillin and ampicillin cause a characteristic morbilliform rash. Viral infection — antibiotics ineffective. Especially avoid these two.", "aliases": ["Amoxicillin", "Ampicillin", "Augmentin"] },
+    { "label": "Advise patient, no aspirin", "type": "shouldHaveOrdered", "finding": "Important to tell caregiver not to give aspirin to the febrile child.", "aliases": ["Aspirin counseling"] }
+  ],
+  "physical_exam": {
+    "general": "Febrile, lethargic child. Sore throat, malaise.",
+    "cardiovascular": null,
+    "respiratory": null,
+    "abdominal": "Splenomegaly — classic finding in mononucleosis. Palpable spleen tip.",
+    "neurological": null,
+    "skin": "Maculopapular rash — characteristic of EBV infection.",
+    "heent": "Posterior cervical lymphadenopathy. Palatal petechiae. Pharyngeal erythema with tonsillar exudates.",
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null
+  },
+  "vitals": { "hr": null, "spo2": null, "bp": null, "rr": null, "temp": null },
+  "decoys": [
+    { "label": "Amoxicillin / Ampicillin", "reason_wrong": "Causes characteristic morbilliform rash in EBV infection. Viral — antibiotics ineffective." },
+    { "label": "Aspirin", "reason_wrong": "Associated with Reye's syndrome in febrile children. Use acetaminophen or ibuprofen instead." },
+    { "label": "CT abdomen", "reason_wrong": "Splenomegaly diagnosis is clinical. CT not indicated unless splenic rupture suspected." }
+  ],
+  "teach_me_steps": [
+    { "order": "Recognize classic triad: fever + pharyngitis + lymphadenopathy", "category": "Diagnosis", "reasoning": "EBV mononucleosis presents with sore throat (often with palatal petechiae), fever, malaise, posterior cervical adenopathy, and splenomegaly." },
+    { "order": "Monospot / EBV serology", "category": "Diagnosis", "reasoning": "Heterophil antibody test (Monospot) is screening; EBV-specific IgM/IgG confirms in young children who may be Monospot-negative." },
+    { "order": "Avoid ampicillin/amoxicillin", "category": "Treatment", "reasoning": "Ampicillin and amoxicillin cause a characteristic drug rash in EBV. Viral infection does not require antibiotics." },
+    { "order": "Avoid aspirin in children", "category": "Treatment", "reasoning": "Aspirin in febrile children is associated with Reye's syndrome. Use acetaminophen or ibuprofen." },
+    { "order": "Manage in office/home", "category": "Disposition", "reasoning": "Uncomplicated mononucleosis can be managed as outpatient. Hospitalization only if airway compromise or splenic rupture." }
+  ],
+  "differential": ["Mononucleosis", "CMV", "Acute HIV", "Streptococcal pharyngitis", "Toxoplasma gondii", "Other viral infections"],
+  "case_summary": "Classic pediatric mononucleosis. Fever + pharyngitis + lymphadenopathy + splenomegaly. Monospot/EBV serology confirms. Symptomatic treatment: acetaminophen, rest. Avoid aspirin (Reye's) and amoxicillin/ampicillin (drug rash). Office management.",
+  "confidence": 93, "source": "DeepSeek v4 Pro", "extraction_method": "deepseek_direct", "complete": true, "parse_error": false
+}

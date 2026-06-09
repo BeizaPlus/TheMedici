@@ -1,0 +1,62 @@
+{
+  "id": 176,
+  "topic": "Animal Bite",
+  "diagnosis": "Rabies, Cellulitis, Tetanus",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Stabilize the patient: ensure airway, breathing, and circulatory status; administer tetanus prophylaxis if needed",
+    "Obtain a complete blood count (CBC) and serum glucose level",
+    "Culture and debridement of the wound if appropriate",
+    "Consult Infectious Disease specialist for potential rabies prophylaxis",
+    "Oxygen",
+    "IV access x2"
+  ],
+  "should_avoid": [
+    "Initiate antibiotics prior to culture results due to risk of developing antibiotic-resistant infections"
+  ],
+  "rationale": {
+    "Stabilize the patient": "To address any immediate life-threatening issues and administer tetanus prophylaxis",
+    "Obtain CBC and serum glucose level": "To monitor for infection or complications",
+    "Culture and debridement of the wound": "To diagnose potential infections and remove necrotic tissue",
+    "Consult Infectious Disease specialist": "For potential rabies prophylaxis if the animal cannot be traced or if it is a known rabid animal",
+    "Initiate antibiotics prior to culture results": "Avoidance due to risk of developing antibiotic-resistant infections",
+    "Oxygen": "To provide supplemental oxygen for the patient suffering from an animal bite, which can cause distress or airway obstruction.",
+    "IV access x2": "For fluid and medication administration in case of severe infection or complications arising from the animal bite."
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Animal Bite \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 116, tachycardic; BP 82/50; hypotensive."
+    ],
+    [
+      "Respiratory",
+      "RR 24, tachypneic; SpO\u2082 87%; hypoxemic."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

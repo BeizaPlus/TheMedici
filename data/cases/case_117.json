@@ -1,0 +1,66 @@
+{
+  "id": 117,
+  "topic": "Chest Pain",
+  "diagnosis": "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "EKG: To evaluate for signs of ischemia or rhythm abnormalities",
+    "Troponin level: For diagnosis and monitoring of ACS, including myocardial infarction",
+    "Chest X-ray: May help identify conditions such as pneumonia, pulmonary edema, or aortic dissection",
+    "Cardiology consult: For further evaluation, management, and potential intervention",
+    "Pain management: Administration of pain relievers appropriate for acute chest pain",
+    "Oxygen",
+    "IV access \u00d72",
+    "order: time-sensitive interventions first"
+  ],
+  "should_avoid": [
+    "Ordering unnecessary tests or interventions without a specific clinical indication"
+  ],
+  "rationale": {
+    "EKG": "To evaluate for signs of ischemia or rhythm abnormalities that may indicate acute coronary syndrome",
+    "Troponin level": "For diagnosis and monitoring of ACS, including myocardial infarction",
+    "Chest X-ray": "May help identify conditions such as pneumonia, pulmonary edema, or aortic dissection that can present with chest pain",
+    "Cardiology consult": "For further evaluation, management, and potential intervention in cases of suspected cardiac disease",
+    "Pain management": "To provide relief for acute chest pain while other tests are being performed",
+    "Ordering unnecessary tests or interventions": "Can lead to increased cost, potential harm, and delays in appropriate care",
+    "Oxygen": "Chest pain can be a symptom of various conditions, including cardiac ischemia, and oxygen should be provided immediately.",
+    "IV access \u00d72": "To administer fluids, medications, and blood products if needed.",
+    "order: time-sensitive interventions first": "Stabilizing the patient's vital signs is crucial in managing chest pain cases."
+  },
+  "hpi": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+  "physical_exam": [
+    [
+      "General",
+      "Chest Pain \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 120, tachycardic; BP 100/60."
+    ],
+    [
+      "Respiratory",
+      "RR 34, tachypneic; SpO\u2082 96%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": "Initial Vital Signs Day 1 @ 16:00 Temperature: 37.0 C (98.6 degrees F) Pulse: 120 beats/min, Weak Respiratory rate: 34 /minute Blood pressure, systolic: 100 mm Hg Blood pressure, diastolic: 60 mm Hg Height: 183cm (72.0 in) Weight: 97.5 kg (215 lb) Body Mass Index: 29.1 kg/m2",
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}

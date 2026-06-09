@@ -1,0 +1,29 @@
+{
+  "id":40,"topic":"Chest Pain","title":"Chest Pain","diagnosis":"Panic Attack / Panic Disorder",
+  "hpi_narrative":"{{patient_name}} presents with acute onset chest pain, palpitations, shortness of breath, diaphoresis, nausea, and sense of impending doom. Symptoms peak within minutes and occur in discrete episodes. The patient has a history of similar episodes and significant anxiety about future attacks (anticipatory anxiety). This is a panic attack — a psychiatric diagnosis but one that requires thorough medical evaluation because patients often present to the ED with cardiac concerns. Key: rule out MI, PE, arrhythmia, hyperthyroidism, pheochromocytoma, and substance-induced anxiety. ECG, troponin, CXR, TSH, and toxicology screen are appropriate. If negative and history consistent, panic disorder is the diagnosis. Treatment: SSRIs (first-line: sertraline, paroxetine, escitalopram) + CBT. Benzodiazepines for short-term acute management only (risk of dependence). Reassurance and psychoeducation are therapeutic.",
+  "chief_complaint":"Acute chest pain, palpitations, SOB, sense of impending doom","patient":null,"patient_name":"Yao Sela","patient_sex":"male","location":"ER","specialty":"Psychiatry / Emergency Medicine",
+  "stacks":[
+    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Appears anxious, diaphoretic, hyperventilating.","aliases":["General Appearance"]},
+    {"label":"Physical Exam: Chest / Lungs","type":"correctlyOrdered","finding":"Shortness of breath — assess lungs.","aliases":["Chest Exam"]},
+    {"label":"Physical Exam: Heart / Cardiovascular","type":"correctlyOrdered","finding":"Chest pain — assess cardiac. Tachycardia common in panic.","aliases":["Cardiovascular Exam"]},
+    {"label":"Physical Exam: Abdomen","type":"correctlyOrdered","finding":"Nausea — examine.","aliases":["Abdominal Exam"]},
+    {"label":"Physical Exam: Extremities","type":"correctlyOrdered","finding":"Clues to etiology.","aliases":["Extremity Exam"]},
+    {"label":"ECG, 12 lead","type":"correctlyOrdered","finding":"Rule out MI/arrhythmia — may show sinus tachycardia only.","aliases":["EKG"]},
+    {"label":"Cardiac troponin","type":"correctlyOrdered","finding":"Rule out MI — must be negative to differentiate from ACS.","aliases":["Troponin"]},
+    {"label":"Chest X-ray","type":"correctlyOrdered","finding":"Rule out pulmonary causes.","aliases":["CXR"]},
+    {"label":"CBC","type":"correctlyOrdered","finding":"Screening.","aliases":["CBC"]},
+    {"label":"TSH","type":"correctlyOrdered","finding":"Hyperthyroidism can mimic panic attacks.","aliases":["TSH"]},
+    {"label":"Toxicology screen, urine","type":"correctlyOrdered","finding":"Rule out substance-induced anxiety (cocaine, amphetamines, PCP).","aliases":["Urine tox"]},
+    {"label":"BMP / CMP","type":"correctlyOrdered","finding":"Screening.","aliases":["BMP"]},
+    {"label":"Reassure patient / Psychoeducation","type":"correctlyOrdered","finding":"Explain diagnosis — panic attacks are real physiological events but not dangerous. Education is therapeutic.","aliases":["Reassurance"]},
+    {"label":"SSRI (Sertraline / Paroxetine / Escitalopram)","type":"shouldHaveOrdered","finding":"First-line for panic disorder. Start low, titrate slow.","aliases":["SSRI"]},
+    {"label":"Refer to psychiatry / CBT","type":"shouldHaveOrdered","finding":"CBT is gold standard psychotherapy for panic disorder. Psychiatry follow-up for medication management.","aliases":["Psychiatry referral","CBT"]}
+  ],
+  "physical_exam":{"general":"Anxious, diaphoretic, tachypneic (hyperventilating).","cardiovascular":"Sinus tachycardia.","respiratory":"Clear to auscultation.","abdominal":"Non-tender.","neurological":null,"skin":"Diaphoretic.","heent":null,"musculoskeletal":null,"genitourinary":null,"psychiatric":"Sense of impending doom. Fear of dying, losing control. Anticipatory anxiety about future attacks."},
+  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
+  "decoys":[{"label":"Benzodiazepines as sole long-term treatment","reason_wrong":"Benzos are for short-term acute management only (risk of dependence, tolerance, withdrawal). SSRIs are first-line for long-term panic disorder. CBT is essential."},{"label":"Discharge without cardiac workup","reason_wrong":"Must rule out MI, PE, arrhythmia, hyperthyroidism, and substance-induced anxiety. Panic attack is a diagnosis of exclusion in the ED."}],
+  "teach_me_steps":[{"order":"Panic attack = diagnosis of exclusion","category":"Diagnosis","reasoning":"Must rule out MI (ECG, troponin), PE, hyperthyroidism (TSH), substance-induced (tox screen). Panic: discrete episodes peaking in minutes, fear of dying/losing control, anticipatory anxiety."},{"order":"SSRI + CBT for long-term","category":"Treatment","reasoning":"SSRI first-line (sertraline, paroxetine). CBT is gold standard psychotherapy. Benzos only short-term/acute. Psychoeducation reduces fear."}],
+  "differential":["Panic attack","Myocardial infarction","Pulmonary embolism","Hyperthyroidism","Pheochromocytoma","Substance-induced anxiety"],
+  "case_summary":"Panic attack. Chest pain + palpitations + SOB + impending doom. ECG/troponin/CXR/TSH all normal. Reassurance + SSRIs + CBT referral. Rule out cardiac before diagnosing panic.",
+  "confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+}

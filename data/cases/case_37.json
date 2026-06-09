@@ -1,0 +1,57 @@
+{
+  "id": 37,
+  "topic": "Fatigue",
+  "diagnosis": "Unknown fatigue could be caused by a wide range of conditions including metabolic disorders, infectious diseases, autoimmune disorders, neurological disorders, and psychological issues. Initial workup should focus on common causes.",
+  "confidence": "inferred",
+  "source": "preparedCases+fmgmatch+mistral",
+  "correct_orders": [
+    "Laboratory tests: CBC, comprehensive metabolic panel, ESR/CRP, HIV, Hepatitis panels, Lyme disease test, thyroid function tests",
+    "Imaging studies (if clinically indicated): Chest X-ray, MRI/CT if neurological symptoms present",
+    "Oxygen",
+    "IV access \u00d72",
+    "glucose check"
+  ],
+  "should_avoid": [
+    "Ordering extensive and unnecessary testing at this stage may lead to increased cost and potential harm to the patient without providing additional diagnostic value."
+  ],
+  "rationale": {
+    "Oxygen": "To provide oxygen to the patient, essential for maintaining life",
+    "IV access \u00d72": "To ensure adequate intravenous access for administration of fluids and medications",
+    "glucose check": "To assess blood glucose level, which can be a cause of fatigue"
+  },
+  "hpi": null,
+  "physical_exam": [
+    [
+      "General",
+      "Fatigue \u2014 exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 98; BP 107/68."
+    ],
+    [
+      "Respiratory",
+      "RR 19; SpO\u2082 95%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
+  "complete": true,
+  "screenshot_processed": false,
+  "enrichment_sources": [
+    "fmgmatch",
+    "mistral"
+  ]
+}
