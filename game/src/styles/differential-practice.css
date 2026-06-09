@@ -277,9 +277,27 @@
   overflow: hidden;
 }
 
+.diff-study-panel--collapsed {
+  border-color: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.015);
+}
+
 .diff-study-tabs {
   display: flex;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.diff-study-panel--collapsed .diff-study-tabs {
+  border-bottom: none;
+}
+
+.diff-study-panel--collapsed .diff-study-tab {
+  color: var(--muted, #777);
+}
+
+.diff-study-panel--collapsed .diff-study-tab:hover {
+  color: var(--gold, #e8b84b);
+  background: rgba(232, 184, 75, 0.06);
 }
 
 .diff-study-tab {

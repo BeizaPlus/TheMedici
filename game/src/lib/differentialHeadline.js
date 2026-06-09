@@ -1,3 +1,12 @@
+/** One-line case name for differential practice (no specialty/category). */
+export function practiceCaseHeadline({ topic = '', title = '' } = {}) {
+  const raw = String(topic || title || '').trim();
+  if (!raw) return 'Unknown case';
+  const dashIdx = raw.lastIndexOf(' - ');
+  if (dashIdx > 0) return raw.slice(0, dashIdx).trim();
+  return raw;
+}
+
 /** Split CCS case title into two headline lines (complaint + setting/specialty). */
 export function splitChiefComplaintHeadline({
   topic = '',

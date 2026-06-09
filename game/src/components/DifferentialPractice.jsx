@@ -44,7 +44,7 @@ import {
 import { getBriefingHpi } from '../lib/caseBriefing.js';
 import AudioVolumeControl from './AudioVolumeControl.jsx';
 import { prefetchMonitorAudio, startIcuMonitor, unlockAmbience } from '../lib/audio.js';
-import { splitChiefComplaintHeadline } from '../lib/differentialHeadline.js';
+import { practiceCaseHeadline } from '../lib/differentialHeadline.js';
 
 function pickInitial() {
   return Math.floor(Math.random() * bank.length);
@@ -177,13 +177,11 @@ export default function DifferentialPractice({ onBack }) {
     });
   }, [entry.caseId, caseData, audienceProfile]);
   const hasReviewText = hasDifferentialReview(entry.caseId);
-  const complaintHeadline = useMemo(
+  const caseHeadline = useMemo(
     () =>
-      splitChiefComplaintHeadline({
+      practiceCaseHeadline({
         topic: entry.topic,
         title: ccsReview?.title || entry.title,
-        specialty: ccsReview?.specialty,
-        location: ccsReview?.location,
       }),
     [entry.topic, entry.title, ccsReview],
   );
@@ -766,10 +764,7 @@ export default function DifferentialPractice({ onBack }) {
             <p className="diff-case-id">CCS Case {entry.caseId}</p>
             <h2 className="diff-topic-label">Chief Complaint</h2>
             <h1 className="diff-topic">
-              <span className="diff-topic-line">{complaintHeadline.line1}</span>
-              {complaintHeadline.line2 && (
-                <span className="diff-topic-line diff-topic-line--sub">{complaintHeadline.line2}</span>
-              )}
+              <span className="diff-topic-line">{caseHeadline}</span>
             </h1>
           </div>
         </div>
