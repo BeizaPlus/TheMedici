@@ -253,16 +253,20 @@ function buildCaseChatSystemPrompt(caseContext) {
   if (patientSim) {
     const bandRules =
       band === 'strict'
-        ? `- Use PATIENT FACTS and CASE JSON only. Speak in first person, 1–3 sentences.
+        ? `- Use PATIENT DEMOGRAPHICS, PATIENT FACTS, and CASE JSON only. Speak in first person, 1–3 sentences.
+- When asked age, answer with patientDemographics.ageLabel exactly.
+- If isPediatric/speakAsChild, you are a child — never answer with an adult age.
 - If a detail is missing, say you are not sure or do not remember — NEVER say "not documented in this case" or "check my records".`
         : band === 'balanced'
-          ? `- Speak naturally in first person as the sick patient. Use PATIENT FACTS, HPI EXCERPT, and CASE JSON.
-- Answer history questions (age, travel, smoking, symptoms) from documented history when available.
+          ? `- Speak naturally in first person as the sick patient. Use PATIENT DEMOGRAPHICS, PATIENT FACTS, HPI EXCERPT, and CASE JSON.
+- When asked age, use patientDemographics.ageLabel exactly — never invent a different age.
+- If isPediatric or speakAsChild is true, you are a child patient (not an adult). Use simple words; a parent may be nearby.
 - NEVER say "not documented in this case". If unsure: "I don't remember" or "Nobody asked me that yet".`
           : `- Fully inhabit ${name}. Natural, conversational first-person answers (1–4 sentences).
-- Use HPI EXCERPT, PATIENT FACTS, vitals, and presentation to simulate a believable ED patient.
-- If age, travel, smoking, or other history is missing from PATIENT FACTS, invent plausible details consistent with the illness (e.g. adult with pneumonia) and keep them stable across the interview.
-- Plausible everyday details are OK (work, family, when symptoms started).
+- Use PATIENT DEMOGRAPHICS, HPI EXCERPT, PATIENT FACTS, vitals, and presentation to simulate a believable ED patient.
+- When asked age, answer with patientDemographics.ageLabel exactly. If isPediatric/speakAsChild, never claim to be an adult (30s–50s).
+- Only invent missing social details that fit the same age band (child vs adult) — keep them stable across the interview.
+- Plausible everyday details are OK (school vs work, family, when symptoms started).
 - NEVER break character. NEVER say "not documented", "JSON", or "simulation".
 - For tests not done yet: "They haven't given me those results yet" — not chart-speak.`;
 
@@ -271,8 +275,15 @@ function buildCaseChatSystemPrompt(caseContext) {
 SIMULATION CREATIVITY: ${creativity}/100 (${band} mode)
 ${bandRules}
 
+PATIENT DEMOGRAPHICS (mandatory — age questions must match this; overrides guesses):
+${JSON.stringify(caseContext?.patientDemographics || {}, null, 2)}
+
 PATIENT FACTS (ground truth for interview answers):
 ${JSON.stringify(facts, null, 2)}
+${caseContext?.patientVoice ? `
+PATIENT VOICE (first-person cues — child vs adult tone):
+${JSON.stringify(caseContext.patientVoice, null, 2)}
+` : ''}
 ${caseContext?.patientPersona ? `
 PATIENT APPEARANCE & PRESENCE (from this case's portrait — stay consistent with how you look and sound):
 ${formatPersonaForChat(caseContext.patientPersona)}
@@ -1345,7 +1356,13 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
     return res.status(400).json({ error: 'OPENAI_API_KEY not configured in MeWorld/.env' });
   }
 
-  const { imageBase64, mimeType = 'image/png', caseContext, refresh = false } = req.body || {};
+  const {
+    imageBase64,
+    mimeType = 'image/png',
+    caseContext,
+    portraitBrief = '',
+    refresh = false,
+  } = req.body || {};
   const caseId = caseContext?.id ?? caseContext?.ccsNumber;
   if (!caseId) return res.status(400).json({ error: 'Missing case id in caseContext' });
   if (!imageBase64) return res.status(400).json({ error: 'Missing image' });
@@ -1368,7 +1385,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       }
     }
 
-    const prompt = buildPortraitPrompt(caseContext);
+    const prompt = buildPortraitPrompt(caseContext, { portraitBrief });
     const outB64 = await generatePortraitWithOpenAI({ imageBase64, mimeType, prompt });
     let visionPersona = null;
     try {
@@ -1378,7 +1395,11 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
     }
     const persona = buildPortraitPersona(caseContext, visionPersona);
     const analysis = buildPortraitAnalysis(caseContext, persona);
-    await writePortraitCache(CASE_PORTRAIT_DIR, caseId, outB64, { analysis, persona });
+    await writePortraitCache(CASE_PORTRAIT_DIR, caseId, outB64, {
+      analysis,
+      persona,
+      portraitBrief: String(portraitBrief || '').trim() || null,
+    });
     const url = portraitPublicUrl(caseId, PORT);
     return res.json({
       ok: true,

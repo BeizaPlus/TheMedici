@@ -1,4 +1,5 @@
 import { decoyReason } from './decoyOrder.js';
+import { neutralStackOrderName } from './stackDecoys.js';
 
 /** Build standard vs your-order rows for Teach Me compare panel. */
 export function buildTeachCompareRows({
@@ -35,7 +36,7 @@ export function buildTeachCompareRows({
       id,
       expectedSeq,
       yourSeq,
-      label: iv.label,
+      label: neutralStackOrderName(iv.label),
       why: iv.why || 'No rationale available yet.',
       guideline: iv.guideline || '',
       status,
@@ -55,7 +56,7 @@ export function buildTeachCompareRows({
     extras.push({
       id,
       yourSeq: idx + 1,
-      label: iv.label,
+      label: neutralStackOrderName(iv.label),
       why: iv.why || decoyReason(iv) || 'This order is not part of the standard emergent sequence.',
       guideline: iv.guideline || '',
       status: 'extra',

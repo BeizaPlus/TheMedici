@@ -431,7 +431,7 @@ function siblingNearMissPool(interventions = []) {
 function bankDecoyToStack(decoy, caseId, idx) {
   return {
     id: decoy.id || `decoy-bank-${caseId}-${idx}`,
-    label: decoy.label,
+    label: neutralStackOrderName(decoy.label),
     why: decoy.why || decoy.reason_wrong || 'Incorrect for this presentation.',
     correct_zone: decoy.correct_zone || 'zone-monitor',
     isSupplemental: false,
@@ -444,7 +444,7 @@ function pushDecoy(list, seen, correctLabels, template, caseId) {
   seen.add(key);
   list.push({
     id: `decoy-sup-${caseId}-${list.length}`,
-    label: template.label,
+    label: neutralStackOrderName(template.label),
     why: template.why,
     correct_zone: template.correct_zone || 'zone-monitor',
     isSupplemental: true,
@@ -504,8 +504,6 @@ export function neutralStackOrderName(label) {
  * Practice: neutral order entry (no “should have ordered” hints).
  * Teach Me: full CCS labels for review learning.
  */
-export function stackPillDisplayLabel(iv, { teachMeMode = false } = {}) {
-  const label = String(iv?.label || '');
-  if (teachMeMode) return label;
-  return neutralStackOrderName(label);
+export function stackPillDisplayLabel(iv) {
+  return neutralStackOrderName(iv?.label || '');
 }

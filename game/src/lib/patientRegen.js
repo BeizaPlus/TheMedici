@@ -1,4 +1,5 @@
 import { buildCaseChatContext, writeCasePortraitPersona } from './caseChat.js';
+import { resolvePortraitBriefForApi } from './casePortraitBrief.js';
 import { getBuiltInPatientSrc, isValidSceneSrc } from './patientImage.js';
 import { STORAGE } from './storageKeys.js';
 
@@ -152,6 +153,8 @@ export async function regeneratePatientFromCase(caseData, { refresh = false } = 
   const payload = await fetchBuiltInImagePayload(caseData);
   const caseContext = buildCaseChatContext(caseData);
 
+  const portraitBrief = resolvePortraitBriefForApi(caseData.id);
+
   const r = await fetch(`${API}/api/regenerate-patient-from-case`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -159,6 +162,7 @@ export async function regeneratePatientFromCase(caseData, { refresh = false } = 
       imageBase64: payload.base64,
       mimeType: payload.mimeType,
       caseContext,
+      portraitBrief,
       refresh,
     }),
   });

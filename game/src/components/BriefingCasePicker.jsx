@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FiChevronDown, FiChevronUp, FiSearch } from 'react-icons/fi';
 import { getAllGameCases, getCategories, getCasesInCategory } from '../data/useCcsCatalog.js';
-import { getCaseRecord, getCompletionStats } from '../data/caseProgress.js';
+import { getCaseRecord, getCompletionStats, pickRandomId } from '../data/caseProgress.js';
+import { IconShuffle } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseProgressTag from './CaseProgressTag.jsx';
 import CaseReadyTag from './CaseReadyTag.jsx';
 import { hasCaseSpecificPlaybook } from '../data/resolvePlaybook.js';
@@ -169,6 +170,19 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
     setDragging(true);
   };
 
+  const shuffleCase = useCallback(() => {
+    const pool = filteredCases.length ? filteredCases : visibleAllCases;
+    if (!pool.length) return;
+    let candidates = pool;
+    if (pool.length > 1 && currentCaseId) {
+      const others = pool.filter((c) => c.id !== currentCaseId);
+      if (others.length) candidates = others;
+    }
+    const id = pickRandomId(candidates.map((c) => c.id));
+    const picked = candidates.find((c) => c.id === id) || candidates[0];
+    if (picked) onSelectCase(picked);
+  }, [filteredCases, visibleAllCases, currentCaseId, onSelectCase]);
+
   return (
     <aside
       ref={pickerRef}
@@ -236,17 +250,30 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
             </span>
           </label>
 
-          <button
-            type="button"
-            className={readyOnly ? 'briefing-ready-filter active' : 'briefing-ready-filter'}
-            onClick={() => {
-              setReadyOnly((v) => !v);
-              setQuery('');
-            }}
-            aria-pressed={readyOnly}
-          >
-            Ready to practice ({readyCount})
-          </button>
+          <div className="briefing-picker-actions">
+            <button
+              type="button"
+              className={readyOnly ? 'briefing-ready-filter active' : 'briefing-ready-filter'}
+              onClick={() => {
+                setReadyOnly((v) => !v);
+                setQuery('');
+              }}
+              aria-pressed={readyOnly}
+            >
+              Ready to practice ({readyCount})
+            </button>
+            <button
+              type="button"
+              className="briefing-shuffle-btn"
+              onClick={shuffleCase}
+              disabled={!(filteredCases.length || visibleAllCases.length)}
+              title="Pick a random case from the current list"
+              aria-label="Shuffle — random case"
+            >
+              <IconShuffle />
+              <span>Shuffle</span>
+            </button>
+          </div>
 
           <p className="briefing-picker-meta">
             {readyOnly

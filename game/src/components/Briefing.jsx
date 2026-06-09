@@ -11,6 +11,7 @@ import {
 } from '../lib/patientImage.js';
 import { getPresentationHistory } from '../lib/casePresentation.js';
 import { clearCaseRegenImage, ensureCasePortrait, readCaseRegenImage } from '../lib/patientRegen.js';
+import CasePortraitBriefPanel from './CasePortraitBriefPanel.jsx';
 import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { unlockAmbience } from '../lib/audio.js';
@@ -75,6 +76,8 @@ function studioOnlyPosition(entry, layoutStudio) {
 export default function Briefing({ caseData, onBegin, onBack, onSelectCase, studioCapture = false }) {
   const brand = getBranding();
   const [regenSrc, setRegenSrc] = useState(() => readCaseRegenImage(caseData?.id));
+  const [portraitRegenBusy, setPortraitRegenBusy] = useState(false);
+  const [portraitRegenMsg, setPortraitRegenMsg] = useState('');
   const [readState, setReadState] = useState('idle');
   const [readMsg, setReadMsg] = useState('');
   const [textPrefs] = useState(() => readClinicalTextPrefs());
@@ -396,6 +399,12 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             }
           }}
         />
+        {portraitRegenBusy && (
+          <div className="portrait-regen-overlay portrait-regen-overlay--briefing" role="status" aria-live="polite">
+            <span className="portrait-regen-overlay-spinner" aria-hidden />
+            Regenerating patient portrait…
+          </div>
+        )}
         <div className="briefing-scene-dim" />
         <div
           className={`briefing-case-hero ${uiShellClass('case-hero', uiLayout['case-hero'], layoutStudio)}`}
@@ -481,6 +490,22 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
                 {readMsg && <p className="case-read-msg">{readMsg}</p>}
                 {caseData.objective && (
                   <p className="briefing-objective">Objective — {caseData.objective}</p>
+                )}
+                <CasePortraitBriefPanel
+                  caseData={caseData}
+                  compact
+                  onBusyChange={setPortraitRegenBusy}
+                  onRegenerated={(result) => {
+                    if (result?.dataUrl) setRegenSrc(result.dataUrl);
+                    setPortraitRegenMsg('Portrait updated.');
+                    window.setTimeout(() => setPortraitRegenMsg(''), 4000);
+                  }}
+                  onError={(msg) => setPortraitRegenMsg(msg)}
+                />
+                {portraitRegenMsg && !portraitRegenBusy && (
+                  <p className="portrait-brief-status portrait-brief-status--briefing" role="status">
+                    {portraitRegenMsg}
+                  </p>
                 )}
                 <div className="briefing-actions">
                   <button

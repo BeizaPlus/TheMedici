@@ -9,6 +9,8 @@ export const STORAGE = {
   dropMode: 'schoonmaker_drop_mode',
   showCues: 'schoonmaker_show_cues',
   sceneVariants: 'schoonmaker_scene_variant_urls',
+  caseRegenImages: 'schoonmaker_case_regen_images',
+  casePortraitBrief: 'schoonmaker_case_portrait_brief',
   captureAttempt: 'schoonmaker_capture_attempt',
   welcomePlate: 'schoonmaker_welcome_plate',
   welcomeGridItems: 'schoonmaker_welcome_grid',

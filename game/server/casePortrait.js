@@ -39,7 +39,10 @@ function presentationCueForComplaint(cc) {
   return 'appropriate distress for the chief complaint';
 }
 
-function voiceToneForComplaint(cc) {
+function voiceToneForComplaint(cc, { speakAsChild = false } = {}) {
+  if (speakAsChild) {
+    return 'child voice — simple words, short sentences; parent may answer some questions';
+  }
   const ccLower = String(cc || '').toLowerCase();
   if (/chest pain|mi|acs/.test(ccLower)) return 'anxious, guarded, speaks in short phrases';
   if (/dyspnea|shortness|breath/.test(ccLower)) return 'breathless, pauses between short sentences';
@@ -52,8 +55,11 @@ function voiceToneForComplaint(cc) {
 /** Structured persona for patient_sim chat — from case JSON (+ optional vision pass on portrait). */
 export function buildPortraitPersona(caseContext = {}, visionDetails = null) {
   const facts = caseContext.patientFacts || {};
+  const demo = caseContext.patientDemographics || {};
   const age =
-    facts.age != null ? `${facts.age} ${facts.ageUnit || 'years'}` : 'adult';
+    facts.ageLabel ||
+    demo.ageLabel ||
+    (facts.age != null ? `${facts.age} ${facts.ageUnit || 'years'}` : demo.isPediatric ? '7 years' : 'adult');
   const sex = facts.sex || caseContext.patientSex || 'patient';
   const name = caseContext.patientName || facts.name || 'the patient';
   const cc =
@@ -64,6 +70,8 @@ export function buildPortraitPersona(caseContext = {}, visionDetails = null) {
   const presentationCue = presentationCueForComplaint(cc);
   const composition =
     'Single patient in hospital gown on ED stretcher; monitor cables and pulse ox visible; dignified clinical lighting; overhead/wide bedside framing.';
+  const isPediatric = Boolean(demo.isPediatric || facts.isPediatric);
+  const speakAsChild = Boolean(demo.speakAsChild || facts.speakAsChild);
 
   const base = {
     patientName: name,
@@ -71,24 +79,39 @@ export function buildPortraitPersona(caseContext = {}, visionDetails = null) {
     sex,
     chiefComplaint: cc,
     category: caseContext.category || null,
+    isPediatric,
+    speakAsChild,
     appearance: `${age} ${sex} in the ED with ${presentationCue}.`,
     distressLevel: presentationCue,
     composition,
-    voiceTone: voiceToneForComplaint(cc),
+    voiceTone: voiceToneForComplaint(cc, { speakAsChild }),
     summary: `${name} is a ${age} old ${sex} presenting with ${cc}. Visible distress: ${presentationCue}. ${composition}`,
   };
 
   if (!visionDetails || typeof visionDetails !== 'object') return base;
 
+  const visionAge = visionDetails.estimatedAgeYears;
+  const visionConflictsPediatric =
+    base.isPediatric &&
+    visionAge != null &&
+    Number.isFinite(Number(visionAge)) &&
+    Number(visionAge) >= 18;
+
   return {
     ...base,
     ...visionDetails,
-    summary:
-      visionDetails.summary ||
-      [visionDetails.appearance, visionDetails.distress, visionDetails.composition]
-        .filter(Boolean)
-        .join(' ') ||
-      base.summary,
+    age: base.age,
+    isPediatric: base.isPediatric,
+    speakAsChild: base.speakAsChild,
+    estimatedAgeYears:
+      visionConflictsPediatric && base.isPediatric ? 7 : visionAge,
+    summary: visionConflictsPediatric
+      ? base.summary
+      : visionDetails.summary ||
+        [visionDetails.appearance, visionDetails.distress, visionDetails.composition]
+          .filter(Boolean)
+          .join(' ') ||
+        base.summary,
   };
 }
 
@@ -128,8 +151,9 @@ export async function extractPersonaFromPortraitImage(imageBase64) {
             {
               type: 'text',
               text: `Describe this emergency department patient photo for a medical simulation chatbot.
-Return JSON only with keys: appearance, distress, composition, visibleFindings, voiceTone, personalityCues, summary.
-- appearance: age/sex presentation, skin, posture, clothing (1-2 sentences)
+Return JSON only with keys: appearance, distress, composition, visibleFindings, voiceTone, personalityCues, summary, estimatedAgeYears.
+- estimatedAgeYears: best estimate of patient age in years (number; use decimals for infants, e.g. 0.5 for 6 months)
+- appearance: age/sex presentation, skin, posture, clothing (1-2 sentences) — state if child vs adult clearly
 - distress: how sick they look
 - composition: bed, monitors, pose in frame
 - visibleFindings: only what is clearly visible (no invented labs)
@@ -163,6 +187,8 @@ Clinical, dignified, no names unless visible on image.`,
       voiceTone: parsed.voiceTone || null,
       personalityCues: parsed.personalityCues || null,
       summary: parsed.summary || null,
+      estimatedAgeYears:
+        parsed.estimatedAgeYears != null ? Number(parsed.estimatedAgeYears) : null,
       source: 'vision',
     };
   } catch {
@@ -171,10 +197,13 @@ Clinical, dignified, no names unless visible on image.`,
 }
 
 /** House-style cold-open portrait prompt from case presentation context. */
-export function buildPortraitPrompt(caseContext = {}) {
+export function buildPortraitPrompt(caseContext = {}, { portraitBrief = '' } = {}) {
   const facts = caseContext.patientFacts || {};
+  const demo = caseContext.patientDemographics || {};
   const age =
-    facts.age != null ? `${facts.age} ${facts.ageUnit || 'years'}` : 'adult';
+    facts.ageLabel ||
+    demo.ageLabel ||
+    (facts.age != null ? `${facts.age} ${facts.ageUnit || 'years'}` : demo.isPediatric ? '7 years' : 'adult');
   const sex = facts.sex || caseContext.patientSex || 'patient';
   const name = caseContext.patientName || facts.name || 'the patient';
   const cc =
@@ -189,11 +218,20 @@ export function buildPortraitPrompt(caseContext = {}) {
 
   const contextLine = excerpt ? `History cue: ${excerpt}.` : '';
 
-  return `Photorealistic emergency medicine training scene. ${age} old ${sex} named ${name} in an ED hospital bed${category}.
+  const custom = String(portraitBrief || caseContext.portraitBrief || '').trim();
+  const base = `Photorealistic emergency medicine training scene. ${age} old ${sex} named ${name} in an ED hospital bed${category}.
 Chief complaint: ${cc}. ${contextLine}
 Show ${presentationCue}. Single patient in hospital gown on stretcher, monitor cables and pulse ox visible, dignified clinical lighting.
 Keep the same camera angle, bed alignment, and single-person framing as the reference template.
 No text, watermark, logos, or extra people. No gore or sensational injury.`;
+
+  if (!custom) return base;
+
+  return `${base}
+
+MANDATORY USER PORTRAIT DIRECTION (follow closely; overrides generic cues where they conflict):
+${custom}
+Match the described age, body size, ethnicity, pose, distress, clothing, and who is in frame. Keep dignified clinical ED photography — no gore, watermarks, or text.`;
 }
 
 export function buildPortraitAnalysis(caseContext = {}, persona = null) {

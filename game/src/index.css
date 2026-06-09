@@ -1347,9 +1347,16 @@ button {
   color: var(--muted);
 }
 
-.briefing-ready-filter {
-  width: 100%;
+.briefing-picker-actions {
+  display: flex;
+  gap: 8px;
   margin-bottom: 8px;
+}
+
+.briefing-ready-filter {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-bottom: 0;
   padding: 7px 10px;
   border-radius: 6px;
   border: 1px solid rgba(212, 175, 55, 0.22);
@@ -1361,6 +1368,39 @@ button {
 
 .briefing-ready-filter.active {
   background: rgba(212, 175, 55, 0.18);
+}
+
+.briefing-shuffle-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.briefing-shuffle-btn:hover:not(:disabled) {
+  border-color: rgba(62, 207, 142, 0.45);
+  background: rgba(62, 207, 142, 0.1);
+  color: #9ef0b8;
+}
+
+.briefing-shuffle-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.briefing-shuffle-btn .toolbar-icon {
+  width: 15px;
+  height: 15px;
 }
 
 .welcome-panel-actions {

@@ -9,9 +9,11 @@ Medical training game: **181 CCS cases**, drag-and-place clinical orders onto a 
 ## Run the app
 
 ```powershell
-Set-Location "C:\Users\steve\dev\TheSchoonMaker"
+Set-Location "C:\Users\steve\MeWorld\game"
 npm run dev
 ```
+
+Or: `C:\Users\steve\MeWorld\START-GAME.bat` / `START-MEWORLD.bat`
 
 - Web: http://localhost:5173 (Vite)
 - API: http://localhost:3001 (Express)
@@ -144,6 +146,65 @@ npm run build:differential-review
 
 ---
 
+## Case portraits (OpenAI)
+
+Per-case **House-style cold-open** patient image from built-in ED template + case JSON. Requires `OPENAI_API_KEY` in `MeWorld/.env`.
+
+| Piece | Path / behavior |
+|-------|-----------------|
+| Server module | `server/casePortrait.js` — prompt, OpenAI `gpt-image-1` edit, vision persona |
+| Disk cache | `game/.case-portraits/case_N.png` + `.json` meta (gitignored) |
+| Static URL | `GET http://127.0.0.1:3001/case-portraits/case_N.png` |
+| API | `GET /api/case-portrait/:id` · `POST /api/regenerate-patient-from-case` · `POST /api/case-persona` |
+| Client | `src/lib/patientRegen.js` — `ensureCasePortrait()`, `regeneratePatientFromCase()` |
+| Auto-load | Briefing + Play on case enter (cache hit = instant) |
+
+### Custom portrait brief (per case)
+
+| Piece | Behavior |
+|-------|----------|
+| UI | `CasePortraitBriefPanel.jsx` — **Play toolbar gear** + **Briefing sidebar footer** |
+| Toggle | **Auto** = demographics + CC from case JSON · **Custom** = user textarea guides OpenAI |
+| Storage | `localStorage` key `schoonmaker_case_portrait_brief` (`casePortraitBrief.js`) |
+| Regen feedback | Button **Regenerating…** + spinning icon; scene **overlay** “Regenerating patient portrait…” (~20–40s); toast on done in Play |
+| Server | `buildPortraitPrompt(caseContext, { portraitBrief })` appends mandatory user direction |
+
+Example custom brief (case 25 sickle cell): *6-year-old boy, curled on stretcher in pain, parents at bedside, monitor cables, dignified ED lighting.*
+
+---
+
+## Patient simulation chat
+
+Case chat runs in **patient_sim** mode (DeepSeek or OpenAI from `.env`).
+
+| Piece | Path / behavior |
+|-------|----------|
+| Context | `src/lib/caseChat.js` — `buildCaseChatContext()`, session per case |
+| Demographics | `src/lib/patientFactsFromHpi.js` — `resolvePatientDemographics()`, `extractPatientFacts()` |
+| Prompt | `server/index.js` — `PATIENT DEMOGRAPHICS` block; age answers must match `ageLabel` |
+| Pediatric | `Pediatrics` category + child `patient_voice` → infer ~6–7 yo if HPI has no explicit age; never invent adult age |
+| Persona cache | Portrait vision + `PORTRAIT_PERSONA_VERSION = 2` in `caseChat.js` |
+| Creativity | Global: Welcome → Settings · Per-case override: **Play gear** (`SimulationCreativityControl`) |
+
+### Case chat rail (Play → Chat tab)
+
+**Cases · drag sideways** — recent cases with saved chat. Badge number = **message count**. Gold border = chat you're viewing; lighter border = case you're still playing.
+
+---
+
+## Play UX (recent)
+
+| Feature | Location |
+|---------|----------|
+| Next case | `IconSkipForward` in play panel stack (`Play.jsx` + `App.jsx` `skipToNextCase`) |
+| Shuffle case | `IconShuffle` in Briefing case picker |
+| Case creativity | Play gear settings (not in chat thread) |
+| Differential cycle arrows | Left/right when revealed (`DifferentialPractice.jsx`) |
+| CCS stack labels | `neutralStackOrderName` — no OCR “Ordered the following:” on real tests/workflow steps |
+| Teaching video | Single-start guard (`CaseTeachingVideoOverlay.jsx`) |
+
+---
+
 ## Git / auth
 
 - Remote: **SSH** `git@github.com:BeizaPlus/TheSchoonMaker.git`
@@ -155,11 +216,11 @@ npm run build:differential-review
 
 ## Suggested next work (priority order)
 
-1. **Commit & push** uncommitted case-bank integration if user wants it on GitHub
-2. **Capture more case bank depth:** `step3/ccs_credentials.json` → `npm run capture:case-list` → `npm run capture:presentations` → `npm run refresh:case-bank`
-3. **Expand playbooks** for high-volume presentation titles still on `default`
-4. **Verify on Surface Pro** — vertical stacks, dock resize, perf after changes
-5. Optional: longer cases (up to ~20 orders) — add interventions in JSON playbooks; UI already supports variable counts
+1. **Commit & push** MeWorld batch: portraits, custom brief, pediatric chat, play UX (when Steve asks)
+2. **Test case 25** — custom portrait brief + patient chat age (~6 yo)
+3. **Capture more case bank depth:** `step3/ccs_credentials.json` → capture scripts → `npm run refresh:case-bank`
+4. **Expand playbooks** for high-volume presentation titles still on `default`
+5. Optional: batch pre-cache all 181 case portraits on server
 
 ---
 
@@ -171,6 +232,10 @@ npm run build:differential-review
 | `src/data/gameData.js` | Merges catalog + preparedCases + playbooks → game case |
 | `src/data/useCcsCatalog.js` | Catalog hook |
 | `src/components/Play.jsx` | Main play UI + command dock |
+| `src/lib/patientRegen.js` | Case portrait load/regenerate |
+| `src/lib/casePortraitBrief.js` | Per-case custom portrait text |
+| `src/lib/patientFactsFromHpi.js` | Patient demographics for chat |
+| `server/casePortrait.js` | OpenAI portrait prompt + cache |
 | `scripts/smoke-test.mjs` | Pre-dev sanity checks |
 | `step3/` | CCS capture toolchain + mirror cache |
 

@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { CASE_BANK_DIR, CASE_BANK_MASTER } from './paths.mjs';
 import { isGenericDuplicateWhy, resolveOrderWhy } from './orderRationale.mjs';
+import { neutralStackOrderName } from '../src/lib/stackDecoys.js';
 
 export { CASE_BANK_DIR, CASE_BANK_MASTER };
 
@@ -46,10 +47,12 @@ export function filterBankOrders(orders = []) {
 
 export function ordersToInterventions(orders = [], rationale = {}, entry = null) {
   return filterBankOrders(orders).map((order, idx) => {
-    const label = typeof order === 'string' ? order : order?.order || order?.label || '';
+    const rawLabel = typeof order === 'string' ? order : order?.order || order?.label || '';
+    const label = neutralStackOrderName(rawLabel);
     if (!label) return null;
     const id = slugify(label, idx);
     let why =
+      rationale[rawLabel] ||
       rationale[label] ||
       (typeof order === 'object' ? order.rationale || order.why : '') ||
       '';
@@ -71,7 +74,8 @@ export function ordersToInterventions(orders = [], rationale = {}, entry = null)
 
 export function distractorsToDecoys(distractors = [], caseId) {
   return distractors.map((d, idx) => {
-    const label = typeof d === 'string' ? d : d?.order || '';
+    const rawLabel = typeof d === 'string' ? d : d?.order || '';
+    const label = neutralStackOrderName(rawLabel);
     if (!label || PLACEHOLDER_ORDER.test(String(label).trim())) return null;
     return {
       id: `decoy-bank-${caseId}-${idx}`,
@@ -85,15 +89,19 @@ export function distractorsToDecoys(distractors = [], caseId) {
 /** Map Ollama `should_avoid` strings into game decoys. */
 export function shouldAvoidToDecoys(shouldAvoid = [], rationale = {}, caseId, startIdx = 0, entry = null) {
   return filterBankOrders(shouldAvoid).map((item, idx) => {
-    const label = typeof item === 'string' ? item : item?.order || item?.label || '';
+    const rawLabel = typeof item === 'string' ? item : item?.order || item?.label || '';
+    const label = neutralStackOrderName(rawLabel);
     if (!label) return null;
     return {
       id: `decoy-avoid-${caseId}-${startIdx + idx}`,
       label,
       why:
-        (entry && (!rationale[label] || isGenericDuplicateWhy(rationale[label], entry))
+        (entry &&
+        ((!rationale[rawLabel] && !rationale[label]) ||
+          isGenericDuplicateWhy(rationale[rawLabel] || rationale[label] || '', entry))
           ? resolveOrderWhy(label, rationale, entry, 'avoid')
           : null) ||
+        rationale[rawLabel] ||
         rationale[label] ||
         (typeof item === 'object' ? item.why_wrong || item.why : '') ||
         'Listed as should avoid on CCS review.',

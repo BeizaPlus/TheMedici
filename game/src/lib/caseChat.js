@@ -1,6 +1,10 @@
 import { getCaseFlow } from '../data/caseFlows.js';
 import { getPreparedCase } from './caseNarrative.js';
-import { extractPatientFacts, hpiExcerpt } from './patientFactsFromHpi.js';
+import {
+  extractPatientFacts,
+  hpiExcerpt,
+  resolvePatientDemographics,
+} from './patientFactsFromHpi.js';
 import { resolvePatientName } from './patientName.js';
 import { briefCacheKey, resolveCaseBriefMarkdown } from './caseBrief.js';
 import { buildCaseDiscussionContext, discussionCacheKey } from './caseDiscussionContext.js';
@@ -9,6 +13,8 @@ import { STORAGE } from './storageKeys.js';
 
 const API = 'http://127.0.0.1:3001';
 const sessions = new Map();
+/** Bump when portrait/demographics logic changes — clears stale localStorage personas. */
+const PORTRAIT_PERSONA_VERSION = 2;
 
 export function buildCaseChatContext(caseData, {
   patientPersona = null,
@@ -27,7 +33,8 @@ export function buildCaseChatContext(caseData, {
       '',
     hpi_narrative: prepared?.hpi_narrative || caseData?.hpi_narrative,
   };
-  const patientFacts = extractPatientFacts(enriched);
+  const patientFacts = extractPatientFacts(enriched, patientPersona);
+  const patientDemographics = resolvePatientDemographics(enriched, patientPersona);
   const simulationCreativity = resolveSimulationCreativity(caseData?.id);
 
   const ctx = {
@@ -42,6 +49,8 @@ export function buildCaseChatContext(caseData, {
     simulationCreativity,
     patientName: resolvePatientName(caseData),
     patientFacts,
+    patientDemographics,
+    patientVoice: prepared?.patient_voice || caseData?.patient_voice || null,
     hpiExcerpt: hpiExcerpt(enriched),
     patientSex: caseData?.patientSex,
     chief_complaint: caseData?.chief_complaint,
@@ -95,12 +104,22 @@ function personaCacheKey(persona) {
   }
 }
 
+function demographicsCacheKey(demographics) {
+  try {
+    return JSON.stringify(demographics || null);
+  } catch {
+    return '';
+  }
+}
+
 export function readCasePortraitPersona(caseId) {
   try {
     const raw = localStorage.getItem(STORAGE.casePortraitPersona);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    return parsed?.[String(caseId)] || null;
+    const persona = parsed?.[String(caseId)] || null;
+    if (persona && persona.personaVersion !== PORTRAIT_PERSONA_VERSION) return null;
+    return persona;
   } catch {
     return null;
   }
@@ -111,7 +130,7 @@ export function writeCasePortraitPersona(caseId, persona) {
   try {
     const raw = localStorage.getItem(STORAGE.casePortraitPersona);
     const parsed = raw ? JSON.parse(raw) : {};
-    parsed[String(caseId)] = persona;
+    parsed[String(caseId)] = { ...persona, personaVersion: PORTRAIT_PERSONA_VERSION };
     localStorage.setItem(STORAGE.casePortraitPersona, JSON.stringify(parsed));
   } catch {
     /* ignore */
@@ -195,6 +214,7 @@ export async function ensureCaseChatSession(caseData) {
     caseBriefMarkdown,
   });
   const personaKey = personaCacheKey(patientPersona);
+  const demographicsKey = demographicsCacheKey(caseContext.patientDemographics);
   const discussionKey = discussionCacheKey(caseDiscussion);
   const briefKey = briefCacheKey(caseBriefMarkdown);
   const cached = sessions.get(caseId);
@@ -203,6 +223,7 @@ export async function ensureCaseChatSession(caseData) {
     cached?.sessionId &&
     cached.creativity === caseContext.simulationCreativity &&
     cached.personaKey === personaKey &&
+    cached.demographicsKey === demographicsKey &&
     cached.discussionKey === discussionKey &&
     cached.briefKey === briefKey
   ) {
@@ -224,6 +245,7 @@ export async function ensureCaseChatSession(caseData) {
     caseId,
     creativity: caseContext.simulationCreativity,
     personaKey,
+    demographicsKey,
     discussionKey,
     briefKey,
   });

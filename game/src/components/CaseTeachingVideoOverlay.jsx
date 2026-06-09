@@ -11,6 +11,12 @@ export default function CaseTeachingVideoOverlay({
 }) {
   const videoRef = useRef(null);
   const endedRef = useRef(false);
+  const playTokenRef = useRef(null);
+  const onErrorRef = useRef(onError);
+
+  useEffect(() => {
+    onErrorRef.current = onError;
+  }, [onError]);
 
   const freezeFrame = useCallback(() => {
     const el = videoRef.current;
@@ -38,21 +44,45 @@ export default function CaseTeachingVideoOverlay({
   useEffect(() => {
     if (!open || !src) {
       endedRef.current = false;
-      return;
+      playTokenRef.current = null;
+      return undefined;
     }
-    if (frozen || endedRef.current) return;
+    if (frozen || endedRef.current) return undefined;
+
+    const token = src;
+    if (playTokenRef.current === token) return undefined;
+    playTokenRef.current = token;
 
     const el = videoRef.current;
-    if (!el) return;
+    if (!el) return undefined;
+
+    let cancelled = false;
+
+    const startPlayback = () => {
+      if (cancelled || endedRef.current || frozen || playTokenRef.current !== token) return;
+      if (!el.paused && el.currentTime > 0.15) return;
+      el.muted = false;
+      el.currentTime = 0;
+      el.play().catch(() => {
+        if (cancelled) return;
+        el.muted = true;
+        el.play().catch(() => {
+          onErrorRef.current?.('Tap play on the video to continue.');
+        });
+      });
+    };
 
     el.preload = 'auto';
-    el.muted = false;
-    el.currentTime = 0;
-    el.play().catch(() => {
-      el.muted = true;
-      el.play().catch(() => onError?.('Tap play on the video to continue.'));
-    });
-  }, [open, src, frozen, onError]);
+    if (el.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      startPlayback();
+    } else {
+      el.addEventListener('canplay', startPlayback, { once: true });
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [open, src, frozen]);
 
   useEffect(() => {
     if (open && frozen) freezeFrame();
@@ -85,7 +115,6 @@ export default function CaseTeachingVideoOverlay({
         className="thanks-video-player"
         src={src}
         style={{ objectPosition }}
-        autoPlay
         playsInline
         preload="auto"
         muted

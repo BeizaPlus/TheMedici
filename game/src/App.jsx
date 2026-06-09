@@ -9,6 +9,7 @@ import {
   recordCaseComplete,
   nextInQueue,
   setLastMode,
+  markCaseIncomplete,
 } from './data/caseProgress.js';
 import { runEvalSuite } from './data/evalSuite.js';
 import { isStudioApp, playerAppHref } from './lib/appMode.js';
@@ -166,6 +167,34 @@ export default function App() {
     setHomeKey((k) => k + 1);
   }, [refreshResumeCheckpoint]);
 
+  const skipToNextCase = useCallback(() => {
+    if (!currentCase?.id) return;
+    const cp = readPlayCheckpoint();
+    if (cp?.playSessionId && String(cp.caseId) === String(currentCase.id)) {
+      void endPlaySession(currentCase.id, cp.playSessionId, { skipped: true, incomplete: true });
+    }
+    markCaseIncomplete(currentCase.id);
+    clearPlayCheckpoint();
+    setResumeCheckpoint(null);
+
+    const allCases = getAllGameCases();
+    const idx = allCases.findIndex((c) => String(c.id) === String(currentCase.id));
+    const nextCase =
+      idx >= 0 && allCases.length > 1
+        ? allCases[(idx + 1) % allCases.length]
+        : null;
+
+    if (!nextCase) {
+      goHome();
+      return;
+    }
+
+    setCurrentCase(nextCase);
+    unlockAmbience();
+    startIcuMonitor({ fadeMs: 0 });
+    setScreen(SCREENS.play);
+  }, [currentCase, goHome]);
+
   const playNextInMode = useCallback(() => {
     const catalog = getCatalog();
     const allIds = catalog.cases.map((c) => c.id);
@@ -240,6 +269,7 @@ export default function App() {
       )}
       {screen === SCREENS.play && currentCase && (
         <Play
+          key={currentCase.id}
           caseData={currentCase}
           playMode={playMode}
           initialCheckpoint={(() => {
@@ -248,6 +278,7 @@ export default function App() {
           })()}
           onComplete={finishCase}
           onQuit={goHome}
+          onSkipToNext={skipToNextCase}
           studioCapture={studioBuild}
         />
       )}

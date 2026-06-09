@@ -145,6 +145,7 @@
 
 .panel-toggle-btn,
 .panel-chat-btn,
+.panel-next-case-btn,
 .panel-end-case-btn,
 .panel-exit-btn {
   width: 42px;
@@ -163,6 +164,7 @@
 
 .panel-toggle-btn:hover,
 .panel-chat-btn:hover,
+.panel-next-case-btn:hover:not(:disabled),
 .panel-end-case-btn:hover:not(:disabled),
 .panel-exit-btn:hover {
   color: #ffffff;
@@ -173,6 +175,20 @@
   color: #f3d060;
   background: rgba(232, 184, 75, 0.14);
   box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.45);
+}
+
+.panel-next-case-btn {
+  color: rgba(232, 184, 75, 0.9);
+}
+
+.panel-next-case-btn:hover:not(:disabled) {
+  color: #f3d060;
+  background: rgba(232, 184, 75, 0.14);
+}
+
+.panel-next-case-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .panel-end-case-btn {
@@ -191,6 +207,7 @@
 
 .panel-toggle-btn .toolbar-icon,
 .panel-chat-btn .toolbar-icon,
+.panel-next-case-btn .toolbar-icon,
 .panel-end-case-btn .toolbar-icon,
 .panel-exit-btn .toolbar-icon {
   width: 16px;
@@ -328,6 +345,17 @@
   min-width: 300px;
   max-width: min(360px, calc(100vw - 24px));
   white-space: normal;
+}
+
+.toolbar-settings-popover .settings-popover-block {
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  padding-top: 10px;
+  margin-top: 8px;
+}
+
+.toolbar-settings-popover .settings-popover-block .sim-creativity,
+.toolbar-settings-popover .settings-popover-block .portrait-brief {
+  margin: 0;
 }
 
 /* Audio rows: label on top, full-width slider below */

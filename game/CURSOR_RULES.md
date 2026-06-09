@@ -131,7 +131,7 @@ Once something works on the demo/proof page, do not leave it as a one-off:
 - Never rebuild the UI from scratch
 - Never create a parallel version of the app
 - Never create files in Downloads\ as the primary output
-- Never use OpenAI API — use Anthropic API or Ollama only
+- Never use OpenAI for **chat/tutor** — case chat uses DeepSeek or OpenAI from `.env` per `server/index.js`; **case portraits** use OpenAI `gpt-image-1` only (`casePortrait.js`)
 - Never use absolute paths like C:\Users\steve\ in source code
 - Never overwrite preparedCases.json without backing it up first
 - Never run a script that modifies all 181 cases without
@@ -202,6 +202,20 @@ npm run build:differential-review
 - CSS: `src/styles/differential-practice.css` — keep in audit contract
 
 **Agent handoff:** `game/.cursor/rules/differential-practice.mdc` · `AGENTS.md` § Differential Practice
+
+---
+
+## CASE PORTRAITS + PATIENT CHAT
+
+**Portraits:** OpenAI `gpt-image-1` edit per case — `server/casePortrait.js`, cache `.case-portraits/`. Auto on Briefing/Play.
+
+**Custom look:** `CasePortraitBriefPanel` — Play gear + Briefing footer. Auto/Custom toggle; `casePortraitBrief.js` → `portraitBrief` in regen API. Scene overlay while regenerating.
+
+**Patient chat:** `patientFactsFromHpi.js` → `PATIENT DEMOGRAPHICS` in system prompt. Pediatric cases must answer child age (`ageLabel`), not invented adult age. Creativity slider in Play gear (per-case override).
+
+**Chat rail:** badge = message count; gold = viewing, light border = play case.
+
+See `AGENTS.md` § Case portraits · § Patient simulation chat.
 
 **Never put in preparedCases.json:**
 - Placeholder HPI like "Title — emergency presentation."

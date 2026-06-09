@@ -107,6 +107,27 @@ export function toggleCaseReviewFlag(caseId) {
   return setCaseReviewFlag(caseId, !isCaseFlaggedForReview(caseId));
 }
 
+/** Leave case unfinished — bookmark for review and do not mark completed. */
+export function markCaseIncomplete(caseId) {
+  if (caseId == null || caseId === '') return;
+  setCaseReviewFlag(caseId, true);
+  const p = readProgress();
+  const prev = p.cases[caseId] || {
+    plays: 0,
+    bestAccuracy: 0,
+    completed: false,
+    lastPlayed: null,
+  };
+  p.cases[caseId] = {
+    ...prev,
+    completed: false,
+    incomplete: true,
+    skippedAt: new Date().toISOString(),
+    lastPlayed: new Date().toISOString(),
+  };
+  writeProgress(p);
+}
+
 export function recordCaseComplete(caseId, { accuracy, attempts, seconds }) {
   const p = readProgress();
   const prev = p.cases[caseId] || {

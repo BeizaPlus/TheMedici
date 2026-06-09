@@ -82,11 +82,14 @@ import {
   IconDoorExit,
   IconFlagCheckered,
   IconMessage,
+  IconSkipForward,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
 import IcuMonitorStrip from './IcuMonitorStrip.jsx';
 import ClinicalTextControls from './ClinicalTextControls.jsx';
 import AudioSettingsPanel from './AudioSettingsPanel.jsx';
+import SimulationCreativityControl from './SimulationCreativityControl.jsx';
+import CasePortraitBriefPanel from './CasePortraitBriefPanel.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
@@ -280,6 +283,7 @@ export default function Play({
   initialCheckpoint = null,
   onComplete,
   onQuit,
+  onSkipToNext,
   studioCapture = false,
 }) {
   const brand = getBranding();
@@ -573,9 +577,9 @@ export default function Play({
         >
           <span
             className="pill-text"
-            title={stackPillDisplayLabel(iv, { teachMeMode })}
+            title={stackPillDisplayLabel(iv)}
           >
-            {stackPillDisplayLabel(iv, { teachMeMode })}
+            {stackPillDisplayLabel(iv)}
           </span>
           <span className="pill-meta">
             <span className="pill-stack">x1</span>
@@ -637,7 +641,7 @@ export default function Play({
       if (!p) return;
       const zoneId = typeof p === 'string' ? p : zoneIdForCell(p, zones);
       if (!zoneId) return;
-      byZone[zoneId] = teachMeMode ? iv.label : neutralStackOrderName(iv.label);
+      byZone[zoneId] = neutralStackOrderName(iv.label);
     });
     return byZone;
   }, [interventions, placed, zones, teachMeMode]);
@@ -680,6 +684,7 @@ export default function Play({
   const SOAP_MIN_CHARS = 12;
   const [careUnit, setCareUnit] = useState(caseFlow.dispositionUnits?.[0] || 'ER');
   const [portraitReady, setPortraitReady] = useState(0);
+  const [portraitRegenBusy, setPortraitRegenBusy] = useState(false);
   const regenSrc = useMemo(() => readCaseRegenImage(caseData?.id), [caseData?.id, portraitReady]);
   const [reviewedAt, setReviewedAt] = useState(null);
   const [sceneByUnit, setSceneByUnit] = useState(() => {
@@ -715,6 +720,7 @@ export default function Play({
   const [reviewChecked, setReviewChecked] = useState([]);
   const [reviewContinuePulse, setReviewContinuePulse] = useState(false);
   const reviewAllDoneRef = useRef(false);
+  const teachingVideoStartedRef = useRef(false);
   const [reviewPanelCollapsed, setReviewPanelCollapsed] = useState(false);
   const [reviewPanelDragging, setReviewPanelDragging] = useState(false);
   const [reviewPanelPos, setReviewPanelPos] = useState(() => ({
@@ -1266,6 +1272,18 @@ export default function Play({
     handleQuit();
   }, [endCurrentPlaySession, handleQuit, doneCount, total]);
 
+  const handleSkipToNext = useCallback(() => {
+    if (!onSkipToNext) return;
+    const ok = window.confirm(
+      'Skip to the next case? This case will be flagged incomplete for review.',
+    );
+    if (!ok) return;
+    stopCaseReader();
+    void endCurrentPlaySession({ skipped: true, incomplete: true, placed: doneCount, total });
+    clearPlayCheckpoint();
+    onSkipToNext();
+  }, [onSkipToNext, endCurrentPlaySession, doneCount, total]);
+
   useEffect(() => {
     if (!studioCapture) return;
     const key = `${STORAGE.playGridItems}_${caseData.id}`;
@@ -1415,7 +1433,7 @@ export default function Play({
       setWhyPanel(null);
       setTeachFocusId(null);
 
-      const pinLabel = teachMeMode ? iv.label : neutralStackOrderName(iv.label);
+      const pinLabel = neutralStackOrderName(iv.label);
       const pinPayload = isGrid
         ? { ...target, label: pinLabel, ivId: iv.id, ok: null }
         : { zoneId: target, label: pinLabel, ivId: iv.id, ok: null };
@@ -1692,6 +1710,7 @@ export default function Play({
     setShowThanksVideo(false);
     setActiveThanksVideo(null);
     setReviewPanelDragging(false);
+    teachingVideoStartedRef.current = false;
   }, []);
 
   const openFinalReview = useCallback(() => {
@@ -1772,6 +1791,7 @@ export default function Play({
 
   const completeNow = useCallback(
     (result) => {
+      teachingVideoStartedRef.current = false;
       setShowThanksVideo(false);
       setActiveThanksVideo(null);
       setThanksVideoIssue('');
@@ -1794,9 +1814,12 @@ export default function Play({
 
   const playTeachingVideo = useCallback(
     async (result) => {
+      if (teachingVideoStartedRef.current) return;
+      teachingVideoStartedRef.current = true;
       setPendingCompleteResult(result);
       const { src, error } = await pickTeachingVideo(caseData);
       if (!src) {
+        teachingVideoStartedRef.current = false;
         setThanksVideoIssue(error);
         showToast(`${error} Opening review instead.`, 'bad');
         openFinalReview();
@@ -1808,6 +1831,17 @@ export default function Play({
       setShowThanksVideo(true);
     },
     [caseData, openFinalReview],
+  );
+
+  const handleTeachingVideoError = useCallback(
+    (msg) => {
+      teachingVideoStartedRef.current = false;
+      setThanksVideoIssue(msg);
+      showToast(`${msg} Opening review instead.`, 'bad');
+      setShowThanksVideo(false);
+      openFinalReview();
+    },
+    [openFinalReview],
   );
 
   const flashScreen = (kind) => {
@@ -2275,6 +2309,7 @@ export default function Play({
     setShowThanksVideo(false);
     setActiveThanksVideo(null);
     setThanksVideoIssue('');
+    teachingVideoStartedRef.current = false;
     setShowPostVideoReview(false);
     setReviewCentered(false);
     setPostVideoRows([]);
@@ -2512,10 +2547,10 @@ export default function Play({
   useEffect(() => {
     // In Teach Me mode, auto-run review once all core stacks are placed.
     // This lets completion/video trigger without requiring an extra click.
-    if (!teachMeMode || reviewed || timedOut) return;
+    if (!teachMeMode || reviewed || timedOut || showThanksVideo || showPostVideoReview) return;
     if (doneCount !== total || total === 0) return;
     reviewPlacements();
-  }, [teachMeMode, reviewed, timedOut, doneCount, total, reviewPlacements]);
+  }, [teachMeMode, reviewed, timedOut, doneCount, total, reviewPlacements, showThanksVideo, showPostVideoReview]);
 
   const finalMode = showThanksVideo || showPostVideoReview;
 
@@ -2657,6 +2692,25 @@ export default function Play({
               Simulate deterioration
             </button>
           </div>
+          <div className="settings-popover-block">
+            <SimulationCreativityControl
+              caseId={caseData.id}
+              showCaseOverride
+              onCreativityChange={() => void caseChat.resetSession?.()}
+            />
+          </div>
+          <div className="settings-popover-block">
+            <CasePortraitBriefPanel
+              caseData={caseData}
+              compact
+              onBusyChange={setPortraitRegenBusy}
+              onRegenerated={() => {
+                setPortraitReady((n) => n + 1);
+                showToast('Patient portrait updated', 'ok');
+              }}
+              onError={(msg) => showToast(msg, 'bad')}
+            />
+          </div>
           <AudioSettingsPanel embedded showGameSounds={false} />
         </div>
       }
@@ -2709,6 +2763,16 @@ export default function Play({
           aria-pressed={infoTab === 'chat'}
         >
           <IconMessage />
+        </button>
+        <button
+          type="button"
+          className="panel-next-case-btn"
+          onClick={handleSkipToNext}
+          disabled={!onSkipToNext || finalMode}
+          title="Next case — flag incomplete"
+          aria-label="Next case"
+        >
+          <IconSkipForward />
         </button>
         <button
           type="button"
@@ -2832,6 +2896,12 @@ export default function Play({
           />
         </div>
         <div className="patient-drop-surface" aria-label="Drop stacks on patient">
+          {portraitRegenBusy && (
+            <div className="portrait-regen-overlay" role="status" aria-live="polite">
+              <span className="portrait-regen-overlay-spinner" aria-hidden />
+              Regenerating patient portrait…
+            </div>
+          )}
           <PatientScene
             scene={caseData.patientScene}
             caseData={caseData}
@@ -2953,12 +3023,7 @@ export default function Play({
           objectPosition={caseData.patientScene?.objectPosition || 'center center'}
           onEnded={openFinalReview}
           onSkip={openFinalReview}
-          onError={(msg) => {
-            setThanksVideoIssue(msg);
-            showToast(`${msg} Opening review instead.`, 'bad');
-            setShowThanksVideo(false);
-            openFinalReview();
-          }}
+          onError={handleTeachingVideoError}
         />
         <div className={`scene-drawer ${activeDrawer === 'exam' ? 'open' : ''}`}>
           <div className="scene-drawer-head">

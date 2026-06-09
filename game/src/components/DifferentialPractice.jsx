@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import '../styles/differential-practice.css';
 import bank from '../data/differentialBank.json';
 import CaseRecordButton from './CaseRecordButton.jsx';
@@ -693,7 +694,7 @@ export default function DifferentialPractice({ onBack }) {
 
   return (
     <div
-      className="diff-practice"
+      className={`diff-practice${revealed ? ' diff-practice--revealed' : ''}`}
       ref={voiceFocusRef}
       tabIndex={-1}
       aria-label="Differential practice — Space starts microphone"
@@ -768,6 +769,17 @@ export default function DifferentialPractice({ onBack }) {
 
       <div className="diff-card">
         <div className="diff-cycle-bar" aria-label="Current case">
+          {revealed && (
+            <button
+              type="button"
+              className="diff-case-cycle-btn"
+              onClick={goPrev}
+              aria-label={`Previous case (${cardIdx} of ${bank.length})`}
+              title="Previous case"
+            >
+              <FiChevronLeft aria-hidden />
+            </button>
+          )}
           <div className="diff-cycle-center">
             <p className="diff-case-id">CCS Case {entry.caseId}</p>
             <h2 className="diff-topic-label">Chief Complaint</h2>
@@ -775,6 +787,17 @@ export default function DifferentialPractice({ onBack }) {
               <span className="diff-topic-line">{caseHeadline}</span>
             </h1>
           </div>
+          {revealed && (
+            <button
+              type="button"
+              className="diff-case-cycle-btn"
+              onClick={goNext}
+              aria-label={`Next case (${cardIdx + 2} of ${bank.length})`}
+              title="Next case"
+            >
+              <FiChevronRight aria-hidden />
+            </button>
+          )}
         </div>
 
         {apiOk === false && (
@@ -983,6 +1006,29 @@ export default function DifferentialPractice({ onBack }) {
               )}
               <span className="diff-score-saved"> · saved to practice log</span>
             </div>
+            <nav className="diff-case-cycle-inline" aria-label="Cycle cases">
+              <button
+                type="button"
+                className="diff-case-cycle-btn"
+                onClick={goPrev}
+                aria-label="Previous case"
+                title="Previous case (←)"
+              >
+                <FiChevronLeft aria-hidden />
+              </button>
+              <span className="diff-case-cycle-label">
+                {cardIdx + 1} / {bank.length}
+              </span>
+              <button
+                type="button"
+                className="diff-case-cycle-btn diff-case-cycle-btn--next"
+                onClick={goNext}
+                aria-label="Next case"
+                title="Next case (→)"
+              >
+                <FiChevronRight aria-hidden />
+              </button>
+            </nav>
           </div>
         )}
 
@@ -1025,6 +1071,35 @@ export default function DifferentialPractice({ onBack }) {
           </button>
         </div>
       </div>
+
+      {revealed && (
+        <nav className="diff-case-cycle-bar" aria-label="Previous or next case">
+          <button
+            type="button"
+            className="diff-case-cycle-btn"
+            onClick={goPrev}
+            aria-label="Previous case"
+            title="Previous case (←)"
+          >
+            <FiChevronLeft aria-hidden />
+          </button>
+          <div className="diff-case-cycle-meta">
+            <span className="diff-case-cycle-dir">Case {entry.caseId}</span>
+            <span className="diff-case-cycle-pos">
+              {cardIdx + 1} / {bank.length}
+            </span>
+          </div>
+          <button
+            type="button"
+            className="diff-case-cycle-btn diff-case-cycle-btn--next"
+            onClick={goNext}
+            aria-label="Next case"
+            title="Next case (→)"
+          >
+            <FiChevronRight aria-hidden />
+          </button>
+        </nav>
+      )}
 
       <aside className="diff-ambience-dock" aria-label="ICU monitor ambience">
         <AudioVolumeControl label="ICU monitor" />

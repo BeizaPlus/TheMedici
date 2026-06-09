@@ -2021,6 +2021,166 @@
   margin: 0;
 }
 
+.portrait-brief {
+  flex-shrink: 0;
+  margin: 0 12px 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.portrait-brief--compact {
+  margin: 0 2px 8px;
+  padding: 8px 10px;
+}
+
+.portrait-brief-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.portrait-brief-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.portrait-brief-toggle {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+}
+
+.portrait-brief-toggle.is-on {
+  border-color: color-mix(in srgb, var(--accent, #c9a227) 55%, transparent);
+  background: color-mix(in srgb, var(--accent, #c9a227) 18%, transparent);
+  color: var(--accent, #e8b84b);
+}
+
+.portrait-brief-hint {
+  margin: 0 0 8px;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.portrait-brief-input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.9);
+  resize: vertical;
+  min-height: 4.5em;
+}
+
+.portrait-brief-input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--accent, #c9a227) 50%, transparent);
+}
+
+.portrait-brief-regen {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+}
+
+.portrait-brief-regen:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.portrait-brief-regen:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.portrait-brief-regen svg {
+  width: 14px;
+  height: 14px;
+}
+
+.portrait-brief-regen svg.spin {
+  animation: regen-spin 0.9s linear infinite;
+}
+
+.portrait-brief.is-busy {
+  border-color: color-mix(in srgb, var(--accent, #c9a227) 45%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent, #c9a227) 20%, transparent);
+}
+
+.portrait-brief-status {
+  margin: 8px 0 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: var(--accent, #e8b84b);
+}
+
+.portrait-brief-status-note {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.portrait-brief-status--briefing {
+  margin: 0 0 10px;
+}
+
+.portrait-regen-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(8, 12, 20, 0.62);
+  backdrop-filter: blur(2px);
+  pointer-events: none;
+}
+
+.portrait-regen-overlay--briefing {
+  z-index: 6;
+  border-radius: inherit;
+}
+
+.portrait-regen-overlay-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: var(--accent, #e8b84b);
+  border-radius: 50%;
+  animation: regen-spin 0.8s linear infinite;
+}
+
+.briefing-panel-footer .portrait-brief {
+  margin: 0 0 12px;
+}
+
 .play-notes-session-foot {
   flex-shrink: 0;
   margin-top: auto;

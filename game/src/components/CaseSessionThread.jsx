@@ -12,7 +12,6 @@ import { mergeSessionThread, parseNoteBubbleContent } from '../lib/caseSessionTh
 import { getCaseById } from '../data/useCcsCatalog.js';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import CaseThreadCaseRail from './CaseThreadCaseRail.jsx';
-import SimulationCreativityControl from './SimulationCreativityControl.jsx';
 import { STORAGE } from '../lib/storageKeys.js';
 
 function readCollapsed(key, defaultValue = false) {
@@ -97,7 +96,6 @@ export default function CaseSessionThread({
     sendMessage,
     appendNote,
     reloadHistory,
-    resetSession,
   } = chat;
   const listRef = useRef(null);
   const inputRef = useRef(null);
@@ -224,13 +222,6 @@ export default function CaseSessionThread({
             </p>
           )}
           {error && <p className="case-chat-banner bad">{error}</p>}
-
-          <SimulationCreativityControl
-            caseId={caseId}
-            showCaseOverride
-            compact
-            onCreativityChange={() => void resetSession?.()}
-          />
 
           <div className="case-chat-messages selectable-text" ref={listRef}>
             {!historyLoaded && <p className="case-chat-tab-empty">Loading…</p>}
