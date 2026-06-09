@@ -4,6 +4,7 @@ import { createLiveSpeechRecognition, speechRecognitionSupported } from '../lib/
 import {
   fetchVoiceNoteStatus,
   mergeVoiceNoteChunk,
+  transcribeVoiceNoteAudioChunk,
   transcribeVoiceNoteFull,
 } from '../lib/voiceNoteTranscribe.js';
 import { saveLocalDifferentialRecording } from '../lib/differentialVoiceStorage.js';
@@ -19,6 +20,8 @@ const TRANSCRIBING_LABEL = 'Transcribing…';
 
 const INCREMENTAL_MS = STACKER_INCREMENTAL_SECONDS * 1000;
 const FIRST_PARSE_MS = STACKER_FIRST_PARSE_SECONDS * 1000;
+/** Rolling Whisper slices while recording — preview only; full clip on stop is authoritative. */
+const WHISPER_CHUNK_MS = 12_000;
 
 export function speechTextToDiagnoses(text) {
   return parseDiagnosisList(text);
@@ -54,11 +57,14 @@ export function useDifferentialVoice({
   const livePreviewRef = useRef('');
   const recordingCaseIdRef = useRef(caseId);
   const mergeQueueRef = useRef(Promise.resolve());
+  const whisperQueueRef = useRef(Promise.resolve());
   const incrementalQueueRef = useRef(Promise.resolve());
   const incrementalResultRef = useRef(null);
   const incrementalIntervalRef = useRef(null);
   const firstParseTimerRef = useRef(null);
   const batchModeRef = useRef(false);
+  const stopWaitRef = useRef(null);
+  const fullAudioParsedRef = useRef(false);
   const promptHintRef = useRef(topic || '');
   const deferLiveRef = useRef(deferLiveDiagnoses);
   const incrementalParseRef = useRef(incrementalParse);
@@ -173,7 +179,9 @@ export function useDifferentialVoice({
     clearIncrementalTimers();
     incrementalQueueRef.current = Promise.resolve();
     mergeQueueRef.current = Promise.resolve();
+    whisperQueueRef.current = Promise.resolve();
     incrementalResultRef.current = null;
+    fullAudioParsedRef.current = false;
     transcriptRef.current = '';
     livePreviewRef.current = '';
     setLivePreview('');
@@ -187,7 +195,7 @@ export function useDifferentialVoice({
   }, [clearIncrementalTimers]);
 
   const runIncrementalParse = useCallback(
-    ({ final = false, force = false } = {}) => {
+    ({ final = false, force = false, previewOnly = false, fromFullAudio = false } = {}) => {
       if (!incrementalParseRef.current) return incrementalQueueRef.current;
 
       const epoch = voiceEpochRef.current;
@@ -196,24 +204,27 @@ export function useDifferentialVoice({
         .then(async () => {
           if (isStaleVoice(epoch, parseCaseId)) return;
           await mergeQueueRef.current;
+          await whisperQueueRef.current;
           if (isStaleVoice(epoch, parseCaseId)) return;
           const raw = commitLivePreview();
-          if (!raw || raw.length < 3) return;
+          if (!raw || raw.length < 3 || raw === RECORDING_LABEL || raw === TRANSCRIBING_LABEL) return;
 
           const cached = incrementalResultRef.current;
-          if (!force && cached?.raw === raw && Boolean(cached.isFinal) === final) return;
-          if (!force && !final && cached?.raw === raw) return;
+          if (!previewOnly && !force && cached?.raw === raw && Boolean(cached.isFinal) === final) return;
+          if (!previewOnly && !force && !final && cached?.raw === raw) return;
 
           setIncrementalParsing(true);
-          if (final) setFinalizing(true);
+          if (final && !previewOnly) setFinalizing(true);
           try {
             const result = await parseDifferentialTranscript({
               rawTranscript: raw,
               topic,
               caseId: parseCaseId,
-              final,
+              final: previewOnly ? false : final,
             });
             if (isStaleVoice(epoch, parseCaseId)) return;
+            setCleanedPreview(result.cleanedTranscript || raw);
+            if (previewOnly) return;
             const diagnoses = result.diagnoses?.length
               ? result.diagnoses
               : speechTextToDiagnoses(raw);
@@ -223,8 +234,9 @@ export function useDifferentialVoice({
               diagnoses,
               provider: result.provider || null,
               isFinal: final,
+              fromFullAudio: fromFullAudio || Boolean(cached?.fromFullAudio),
             };
-            setCleanedPreview(result.cleanedTranscript || raw);
+            if (fromFullAudio && final) fullAudioParsedRef.current = true;
           } catch (e) {
             if (!isStaleVoice(epoch, parseCaseId)) {
               onError?.(e instanceof Error ? e : new Error('Could not parse transcript chunk'));
@@ -232,7 +244,7 @@ export function useDifferentialVoice({
           } finally {
             if (!isStaleVoice(epoch, parseCaseId)) {
               setIncrementalParsing(false);
-              if (final) setFinalizing(false);
+              if (final && !previewOnly) setFinalizing(false);
             }
           }
         })
@@ -243,23 +255,68 @@ export function useDifferentialVoice({
     [caseId, topic, onError, commitLivePreview, isStaleVoice],
   );
 
+  const enqueueWhisperChunk = useCallback(
+    (blob, epoch, forCaseId) => {
+      if (!blob?.size || blob.size < 800) return whisperQueueRef.current;
+
+      whisperQueueRef.current = whisperQueueRef.current
+        .then(async () => {
+          if (isStaleVoice(epoch, forCaseId)) return;
+          setTranscribing(true);
+          try {
+            const merged = await transcribeVoiceNoteAudioChunk(
+              blob,
+              transcriptRef.current,
+              promptHintRef.current,
+            );
+            if (isStaleVoice(epoch, forCaseId)) return;
+            if (merged) {
+              // Preview only — full clip Whisper on stop is authoritative for scoring.
+              applyTranscript(merged, epoch, forCaseId);
+              if (incrementalParseRef.current) {
+                await runIncrementalParse({ previewOnly: true });
+              }
+            }
+          } catch {
+            /* chunk failures are non-fatal — full clip runs when the case ends */
+          } finally {
+            if (!isStaleVoice(epoch, forCaseId)) setTranscribing(false);
+          }
+        })
+        .catch(() => {});
+
+      return whisperQueueRef.current;
+    },
+    [applyTranscript, isStaleVoice, runIncrementalParse],
+  );
+
   const triggerPrefinalParse = useCallback(() => {
+    if (batchModeRef.current) {
+      return runIncrementalParse({ previewOnly: true, force: true });
+    }
     return runIncrementalParse({ final: true, force: true });
   }, [runIncrementalParse]);
 
   const startIncrementalParsing = useCallback(() => {
     clearIncrementalTimers();
     incrementalResultRef.current = null;
+    fullAudioParsedRef.current = false;
     setCleanedPreview('');
     incrementalQueueRef.current = Promise.resolve();
-    if (!incrementalParseRef.current || batchModeRef.current) return;
+    if (!incrementalParseRef.current) return;
 
     firstParseTimerRef.current = window.setTimeout(() => {
-      void runIncrementalParse({ final: false });
+      void runIncrementalParse({
+        final: false,
+        previewOnly: batchModeRef.current,
+      });
     }, FIRST_PARSE_MS);
 
     incrementalIntervalRef.current = window.setInterval(() => {
-      void runIncrementalParse({ final: false });
+      void runIncrementalParse({
+        final: false,
+        previewOnly: batchModeRef.current,
+      });
     }, INCREMENTAL_MS);
   }, [clearIncrementalTimers, runIncrementalParse]);
 
@@ -292,6 +349,7 @@ export function useDifferentialVoice({
     setTranscribing(true);
     try {
       await mergeQueueRef.current;
+      await whisperQueueRef.current;
       await incrementalQueueRef.current;
     } finally {
       if (!isStaleVoice(epoch, forCaseId)) setTranscribing(false);
@@ -302,14 +360,17 @@ export function useDifferentialVoice({
     }
 
     const raw = commitLivePreview();
-    if (!raw) return { cleanedTranscript: '', diagnoses: [] };
-
-    const cached = incrementalResultRef.current;
-    if (cached?.raw === raw && cached.isFinal && cached.diagnoses?.length) {
-      return applyParseResult(cached, raw, epoch, forCaseId);
+    if (!raw || raw === RECORDING_LABEL || raw === TRANSCRIBING_LABEL) {
+      return { cleanedTranscript: '', diagnoses: [] };
     }
 
-    if (cached?.raw === raw && cached.diagnoses?.length && incrementalParseRef.current) {
+    const cached = incrementalResultRef.current;
+    if (
+      cached?.fromFullAudio &&
+      cached?.isFinal &&
+      cached.raw === raw &&
+      cached.diagnoses?.length
+    ) {
       return applyParseResult(cached, raw, epoch, forCaseId);
     }
 
@@ -414,9 +475,11 @@ export function useDifferentialVoice({
         if (isStaleVoice(epoch, forCaseId)) return '';
         const text = result.transcript || result.raw || '';
         if (text) {
+          incrementalResultRef.current = null;
+          fullAudioParsedRef.current = false;
           applyTranscript(text, epoch, forCaseId);
           if (incrementalParseRef.current) {
-            await runIncrementalParse({ final: true, force: true });
+            await runIncrementalParse({ final: true, force: true, fromFullAudio: true });
           }
         }
         return text;
@@ -435,11 +498,24 @@ export function useDifferentialVoice({
   const stopRecording = useCallback(() => {
     clearIncrementalTimers();
     const rec = recorderRef.current;
-    if (!rec || rec.state === 'inactive') return;
+    if (!rec || rec.state === 'inactive') return Promise.resolve();
     rec.stop();
     setRecording(false);
     stopSpeechRecognition();
+    return Promise.resolve();
   }, [clearIncrementalTimers, stopSpeechRecognition]);
+
+  /** Stop mic and wait until upload / Whisper / parse queues finish. */
+  const stopRecordingAsync = useCallback(() => {
+    const rec = recorderRef.current;
+    if (!rec || rec.state === 'inactive') {
+      return Promise.all([mergeQueueRef.current, whisperQueueRef.current, incrementalQueueRef.current]);
+    }
+    return new Promise((resolve) => {
+      stopWaitRef.current = resolve;
+      stopRecording();
+    });
+  }, [stopRecording]);
 
   const startRecording = useCallback(async () => {
     if (recording || busy) return;
@@ -464,6 +540,8 @@ export function useDifferentialVoice({
     setLivePreview('');
     setCleanedPreview('');
     mergeQueueRef.current = Promise.resolve();
+    whisperQueueRef.current = Promise.resolve();
+    fullAudioParsedRef.current = false;
     startIncrementalParsing();
 
     try {
@@ -485,6 +563,9 @@ export function useDifferentialVoice({
 
       rec.ondataavailable = (event) => {
         if (event.data?.size) chunksRef.current.push(event.data);
+        if (batchModeRef.current && event.data?.size > 800) {
+          void enqueueWhisperChunk(event.data, epoch, saveCaseId);
+        }
       };
 
       rec.onstop = async () => {
@@ -495,6 +576,7 @@ export function useDifferentialVoice({
         setBusy(true);
         try {
           if (batchModeRef.current && blob.size > 0) {
+            await whisperQueueRef.current;
             await transcribeBatchClip(blob, epoch, saveCaseId);
           } else {
             await mergeQueueRef.current;
@@ -527,13 +609,20 @@ export function useDifferentialVoice({
         } finally {
           setBusy(false);
           recorderRef.current = null;
+          const waiter = stopWaitRef.current;
+          stopWaitRef.current = null;
+          if (waiter) {
+            Promise.all([mergeQueueRef.current, whisperQueueRef.current, incrementalQueueRef.current])
+              .then(() => waiter())
+              .catch(() => waiter());
+          }
         }
       };
 
       recorderRef.current = rec;
       startedAtRef.current = Date.now();
       void ensureSession(saveCaseId);
-      rec.start();
+      rec.start(batchModeRef.current ? WHISPER_CHUNK_MS : undefined);
       setRecording(true);
     } catch (e) {
       clearIncrementalTimers();
@@ -554,6 +643,7 @@ export function useDifferentialVoice({
     stopSpeechRecognition,
     stopTracks,
     transcribeBatchClip,
+    enqueueWhisperChunk,
     setPreview,
   ]);
 
@@ -573,6 +663,7 @@ export function useDifferentialVoice({
     disabled: busy,
     toggleRecording,
     stopRecording,
+    stopRecordingAsync,
     startRecording,
     finalizeTranscript,
     triggerPrefinalParse,

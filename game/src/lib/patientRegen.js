@@ -1,4 +1,8 @@
 import { buildCaseChatContext, writeCasePortraitPersona } from './caseChat.js';
+import {
+  generateCasePortraitFromAvatarSource,
+  readStoredCaseAvatarSource,
+} from './caseAvatar.js';
 import { resolvePortraitBriefForApi } from './casePortraitBrief.js';
 import { getBuiltInPatientSrc, isValidSceneSrc } from './patientImage.js';
 import { STORAGE } from './storageKeys.js';
@@ -108,6 +112,7 @@ export async function fetchCasePortraitStatus(caseId) {
         analysis: data.analysis || null,
         persona: data.persona || null,
         cachedAt: data.cachedAt || null,
+        sourceVideo: data.sourceVideo || null,
       };
     }
     return { exists: false, url: null };
@@ -131,11 +136,16 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
     }
   }
 
-  const key = `${caseId}:${refresh ? 'refresh' : 'gen'}`;
+  const avatarSource = readStoredCaseAvatarSource(caseId);
+  const genKey = avatarSource?.youtubeId ? 'avatar-video' : 'builtin';
+  const key = `${caseId}:${genKey}:${refresh ? 'refresh' : 'gen'}`;
   if (portraitInflight.has(key)) return portraitInflight.get(key);
 
   const work = (async () => {
     try {
+      if (avatarSource?.youtubeId) {
+        return await generateCasePortraitFromAvatarSource(caseData, { refresh });
+      }
       const result = await regeneratePatientFromCase(caseData, { refresh });
       return result.dataUrl;
     } catch {

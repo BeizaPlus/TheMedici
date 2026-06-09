@@ -2,15 +2,20 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import DifferentialAttemptHistory from './DifferentialAttemptHistory.jsx';
 import DifferentialReviewPanel from './DifferentialReviewPanel.jsx';
 import DifferentialRealWorldPanel from './DifferentialRealWorldPanel.jsx';
+import DifferentialMnemonicPanel from './DifferentialMnemonicPanel.jsx';
 import CasePresentationPanel from './CasePresentationPanel.jsx';
 import { openCcsScreenshot } from '../lib/ccsScreenshot.js';
 import { getRealWorldStories } from '../lib/realWorldCases.js';
+import { getRealWorldPrefetch, prefetchRealWorldStories, subscribeRealWorldPrefetch } from '../lib/realWorldPrefetch.js';
 import { listLocalDifferentialRecordings } from '../lib/differentialVoiceStorage.js';
+import { readCaseMemoryMeta } from '../lib/differentialCaseMemory.js';
+import { resolveCaseSummaryText } from '../lib/ccsCaseSummary.js';
 
 const TABS = [
-  { id: 'timeline', label: 'Timeline' },
-  { id: 'case', label: 'Case' },
-  { id: 'realworld', label: 'Real World' },
+  { id: 'timeline', label: 'Timeline', shortLabel: 'Log' },
+  { id: 'case', label: 'Case', shortLabel: 'Case' },
+  { id: 'notes', label: 'Notes', shortLabel: 'Notes' },
+  { id: 'realworld', label: 'Real World', shortLabel: 'Real' },
 ];
 
 export default function DifferentialStudyPanel({
@@ -38,6 +43,9 @@ export default function DifferentialStudyPanel({
     [caseId, recordingsVersion],
   );
 
+  const notesMeta = useMemo(() => readCaseMemoryMeta(caseId), [caseId]);
+  const hasNotes = Boolean(notesMeta.text?.trim() || notesMeta.hasImage);
+
   const realWorld = useMemo(
     () =>
       getRealWorldStories({
@@ -49,6 +57,43 @@ export default function DifferentialStudyPanel({
   );
 
   const hasRealWorld = realWorld.hasCurated;
+
+  const caseSummaryText = useMemo(() => resolveCaseSummaryText(ccsReview), [ccsReview]);
+
+  const realWorldSearchParams = useMemo(
+    () => ({
+      caseId,
+      topic,
+      diagnosis: diagnosis || ccsReview?.diagnosis || '',
+      chiefComplaint: ccsReview?.chiefComplaint || '',
+      hpiSnippet: ccsReview?.hpiNarrative || ccsReview?.history || '',
+    }),
+    [caseId, topic, diagnosis, ccsReview?.diagnosis, ccsReview?.chiefComplaint, ccsReview?.hpiNarrative, ccsReview?.history],
+  );
+
+  useEffect(() => {
+    if (!caseId) return;
+    void prefetchRealWorldStories(realWorldSearchParams);
+  }, [caseId, realWorldSearchParams]);
+
+  const [remoteStoryCount, setRemoteStoryCount] = useState(() => {
+    const hit = getRealWorldPrefetch(caseId);
+    return hit?.status === 'ready' ? hit.data?.stories?.length || 0 : 0;
+  });
+
+  useEffect(() => {
+    const apply = (key, entry) => {
+      if (key !== String(caseId)) return;
+      if (entry?.status === 'ready') {
+        setRemoteStoryCount(entry.data?.stories?.length || 0);
+      }
+    };
+    const cached = getRealWorldPrefetch(caseId);
+    if (cached?.status === 'ready') {
+      setRemoteStoryCount(cached.data?.stories?.length || 0);
+    }
+    return subscribeRealWorldPrefetch(apply);
+  }, [caseId]);
 
   const timelineItems = (caseStats?.count || 0) + (caseStats?.count ? 0 : recordingCount);
 
@@ -92,14 +137,18 @@ export default function DifferentialStudyPanel({
             aria-expanded={expanded && tab === t.id}
             onClick={() => toggleTab(t.id)}
           >
-            {t.label}
+            <span className="diff-study-tab-label diff-study-tab-label--long">{t.label}</span>
+            <span className="diff-study-tab-label diff-study-tab-label--short">{t.shortLabel}</span>
             {t.id === 'timeline' && timelineItems > 0 && (
               <span className="diff-study-tab-badge">{timelineItems}</span>
             )}
-            {t.id === 'realworld' && hasRealWorld && (
+            {t.id === 'realworld' && (hasRealWorld || remoteStoryCount > 0) && (
               <span className="diff-study-tab-badge diff-study-tab-badge--gold">
-                {realWorld.stories.length}
+                {Math.max(realWorld.stories.length, remoteStoryCount)}
               </span>
+            )}
+            {t.id === 'notes' && hasNotes && (
+              <span className="diff-study-tab-badge diff-study-tab-badge--gold">•</span>
             )}
           </button>
         ))}
@@ -153,6 +202,8 @@ export default function DifferentialStudyPanel({
             </>
           )}
 
+          {tab === 'notes' && <DifferentialMnemonicPanel caseId={caseId} embedded />}
+
           {tab === 'realworld' && (
             <DifferentialRealWorldPanel
               caseId={caseId}
@@ -162,7 +213,9 @@ export default function DifferentialStudyPanel({
               topic={topic}
               chiefComplaint={ccsReview?.chiefComplaint || ''}
               hpiSnippet={ccsReview?.hpiNarrative || ccsReview?.history || ''}
+              caseSummaryText={caseSummaryText}
               active={expanded && tab === 'realworld'}
+              prefetchParams={realWorldSearchParams}
             />
           )}
         </div>

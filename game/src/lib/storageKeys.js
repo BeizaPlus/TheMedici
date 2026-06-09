@@ -10,6 +10,7 @@ export const STORAGE = {
   showCues: 'schoonmaker_show_cues',
   sceneVariants: 'schoonmaker_scene_variant_urls',
   caseRegenImages: 'schoonmaker_case_regen_images',
+  caseAvatarSources: 'schoonmaker_case_avatar_sources',
   casePortraitBrief: 'schoonmaker_case_portrait_brief',
   captureAttempt: 'schoonmaker_capture_attempt',
   welcomePlate: 'schoonmaker_welcome_plate',

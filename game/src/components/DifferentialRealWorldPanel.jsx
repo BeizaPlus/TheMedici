@@ -1,7 +1,77 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { buildYouTubeSearchUrl, youtubeEmbedUrl } from '../lib/realWorldCases.js';
-import { fetchGeminiRealWorld } from '../lib/fetchGeminiRealWorld.js';
+import { buildYouTubeSearchUrl } from '../lib/realWorldCases.js';
+import { formatYoutubeTimestamp, seekYoutubeEmbed, youtubeEmbedUrl } from '../lib/youtubePlayer.js';
+import {
+  getRealWorldPrefetch,
+  invalidateRealWorldPrefetch,
+  prefetchRealWorldStories,
+  subscribeRealWorldPrefetch,
+} from '../lib/realWorldPrefetch.js';
+import { IconCircleCheck } from './sceneToolbar/SceneToolbarIcons.jsx';
+import {
+  readCaseAvatarSource,
+  readStoredCaseAvatarSource,
+  setCaseAvatarFromVideo,
+  avatarPickMatches,
+} from '../lib/caseAvatar.js';
+import { fetchYoutubeTranscript } from '../lib/fetchYoutubeTranscript.js';
+import CcsCaseSummaryBody from './CcsCaseSummaryBody.jsx';
+
+function AvatarIconButton({ selected, busy, onClick, title = 'Use as case avatar' }) {
+  return (
+    <button
+      type="button"
+      className={`diff-rw-avatar-icon-btn${selected ? ' diff-rw-avatar-icon-btn--on' : ''}${busy ? ' diff-rw-avatar-icon-btn--busy' : ''}`}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick?.(e);
+      }}
+      disabled={busy}
+      aria-pressed={selected}
+      title={selected ? 'Case avatar selected' : title}
+      aria-label={selected ? 'Case avatar selected' : title}
+    >
+      <IconCircleCheck className="diff-rw-avatar-icon" aria-hidden />
+    </button>
+  );
+}
+
+function AvatarPickButton({ selected, busy, onClick, compact = false, className = '' }) {
+  if (compact) {
+    return <AvatarIconButton selected={selected} busy={busy} onClick={onClick} />;
+  }
+  return (
+    <button
+      type="button"
+      className={`diff-rw-avatar-btn${selected ? ' diff-rw-avatar-btn--selected' : ''}${busy ? ' diff-rw-avatar-btn--busy' : ''} ${className}`.trim()}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick?.(e);
+      }}
+      disabled={busy}
+      aria-pressed={selected}
+      title={selected ? 'Case avatar — this patient' : 'Use as case avatar'}
+      aria-label={selected ? 'Case avatar selected' : 'Use as case avatar'}
+    >
+      <IconCircleCheck className="diff-rw-avatar-icon" aria-hidden />
+      <span>{busy ? 'Building…' : 'Avatar'}</span>
+    </button>
+  );
+}
+
+function primaryVideoForStory(story) {
+  for (const raw of story?.videos || []) {
+    const youtubeId = String(raw?.youtubeId || '').trim();
+    if (!youtubeId || youtubeId.includes(' ')) continue;
+    return {
+      youtubeId,
+      title: String(raw?.title || 'YouTube').trim(),
+      patientName: story.name,
+    };
+  }
+  return null;
+}
 
 function buildCasePlaylist(stories = []) {
   const items = [];
@@ -31,6 +101,8 @@ function RealWorldVideoLightbox({
   index = 0,
   onIndexChange,
   onClose,
+  selectedAvatar = null,
+  onSelectAvatar,
 }) {
   const video = playlist[index];
   const total = playlist.length;
@@ -121,6 +193,18 @@ function RealWorldVideoLightbox({
         </div>
 
         <footer className="diff-rw-lightbox-foot">
+          {onSelectAvatar && video?.youtubeId && (
+            <AvatarPickButton
+              selected={avatarPickMatches(selectedAvatar, video)}
+              onClick={() =>
+                onSelectAvatar({
+                  youtubeId: video.youtubeId,
+                  title: video.title,
+                  patientName: video.patientName,
+                })
+              }
+            />
+          )}
           {hasMultiple && (
             <div className="diff-rw-lightbox-strip">
               <button
@@ -167,7 +251,13 @@ function RealWorldVideoLightbox({
   );
 }
 
-function StoryVideos({ videos = [], patientName = '', diagnosis = '', onOpenFullView }) {
+function StoryVideos({
+  videos = [],
+  patientName = '',
+  diagnosis = '',
+  onOpenFullView,
+  videoIframeRef = null,
+}) {
   const [active, setActive] = useState(0);
   const embeddable = (videos || []).filter((v) => v.youtubeId && !String(v.youtubeId).includes(' '));
   const searchUrl = buildYouTubeSearchUrl({ name: patientName, diagnosis });
@@ -230,6 +320,7 @@ function StoryVideos({ videos = [], patientName = '', diagnosis = '', onOpenFull
       </div>
       <div className="diff-rw-iframe-wrap">
         <iframe
+          ref={videoIframeRef}
           title={current.title}
           src={youtubeEmbedUrl(current.youtubeId)}
           loading="lazy"
@@ -249,7 +340,169 @@ function StoryVideos({ videos = [], patientName = '', diagnosis = '', onOpenFull
   );
 }
 
-function StoryStage({ story, index, diagnosis = '', active, onOpenFullView }) {
+function TranscriptCueList({ cues = [], activeStart = null, onSeek }) {
+  if (!cues.length) {
+    return <p className="diff-rw-status">No timed captions for this clip.</p>;
+  }
+
+  return (
+    <ol className="diff-rw-transcript-cues" aria-label="Video transcript with timestamps">
+      {cues.map((cue, index) => {
+        const isActive = activeStart != null && Math.abs(activeStart - cue.start) < 0.05;
+        return (
+          <li key={`${cue.start}-${index}`} className={`diff-rw-transcript-cue${isActive ? ' diff-rw-transcript-cue--active' : ''}`}>
+            <button
+              type="button"
+              className="diff-rw-transcript-cue-btn"
+              onClick={() => onSeek?.(cue.start)}
+              title={`Jump to ${formatYoutubeTimestamp(cue.start)}`}
+            >
+              <span className="diff-rw-transcript-time">{formatYoutubeTimestamp(cue.start)}</span>
+              <span className="diff-rw-transcript-text">{cue.text}</span>
+            </button>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+function StoryReadPanel({ story, youtubeId = null, caseSummaryText = '', onSeekVideo }) {
+  const [expanded, setExpanded] = useState(false);
+  const [mode, setMode] = useState('summary');
+  const [transcriptCues, setTranscriptCues] = useState([]);
+  const [activeCueStart, setActiveCueStart] = useState(null);
+  const [transcriptState, setTranscriptState] = useState('idle');
+
+  const ccsSummary = String(caseSummaryText || '').trim();
+  const storySummary = story.summary || story.headline;
+  const preview = ccsSummary
+    ? ccsSummary.replace(/\s+/g, ' ').slice(0, 220) + (ccsSummary.length > 220 ? '…' : '')
+    : storySummary;
+  if (!preview && !youtubeId) return null;
+
+  useEffect(() => {
+    if (!expanded || mode !== 'transcript' || !youtubeId) return undefined;
+    let cancelled = false;
+    setTranscriptState('loading');
+    setTranscriptCues([]);
+    setActiveCueStart(null);
+    void fetchYoutubeTranscript(youtubeId)
+      .then((data) => {
+        if (cancelled) return;
+        setTranscriptCues(data.cues || []);
+        setTranscriptState('ready');
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setTranscriptCues([]);
+        setTranscriptState('error');
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [expanded, mode, youtubeId]);
+
+  useEffect(() => {
+    setExpanded(false);
+    setMode('summary');
+    setTranscriptCues([]);
+    setActiveCueStart(null);
+    setTranscriptState('idle');
+  }, [story.id, story.name, youtubeId, caseSummaryText]);
+
+  const handleSeekCue = useCallback(
+    (seconds) => {
+      setActiveCueStart(seconds);
+      onSeekVideo?.(seconds);
+    },
+    [onSeekVideo],
+  );
+
+  return (
+    <section className={`diff-rw-read${expanded ? ' diff-rw-read--open' : ''}`}>
+      <div className="diff-rw-read-head">
+        <button
+          type="button"
+          className="diff-rw-read-toggle"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+        >
+          {expanded ? 'Collapse' : ccsSummary ? 'Read case summary' : 'Read full story'}
+        </button>
+        {expanded && (
+          <div className="diff-rw-read-tabs" role="tablist" aria-label="Story text">
+            <button
+              type="button"
+              role="tab"
+              className={`diff-rw-read-tab${mode === 'summary' ? ' diff-rw-read-tab--active' : ''}`}
+              aria-selected={mode === 'summary'}
+              onClick={() => setMode('summary')}
+            >
+              {ccsSummary ? 'Case Summary' : 'Summary'}
+            </button>
+            <button
+              type="button"
+              role="tab"
+              className={`diff-rw-read-tab${mode === 'transcript' ? ' diff-rw-read-tab--active' : ''}`}
+              aria-selected={mode === 'transcript'}
+              onClick={() => setMode('transcript')}
+              disabled={!youtubeId}
+              title={youtubeId ? 'YouTube captions — click a time to jump' : 'No video for transcript'}
+            >
+              Transcript
+            </button>
+          </div>
+        )}
+      </div>
+      {!expanded ? (
+        <p className="diff-rw-summary diff-rw-summary--preview">{preview}</p>
+      ) : mode === 'summary' ? (
+        <div className="diff-rw-read-body">
+          {ccsSummary ? (
+            <CcsCaseSummaryBody text={ccsSummary} className="diff-rw-summary diff-rw-summary--full" />
+          ) : (
+            <>
+              {story.headline && <p className="diff-rw-headline diff-rw-headline--body">{story.headline}</p>}
+              <p className="diff-rw-summary diff-rw-summary--full">{story.summary || '—'}</p>
+            </>
+          )}
+        </div>
+      ) : (
+        <div className="diff-rw-read-body">
+          {transcriptState === 'loading' && (
+            <p className="diff-rw-status" role="status">
+              Loading video transcript…
+            </p>
+          )}
+          {transcriptState === 'error' && (
+            <p className="diff-rw-error" role="alert">
+              No transcript for this clip — use Summary or watch the video.
+            </p>
+          )}
+          {transcriptState === 'ready' && (
+            <TranscriptCueList cues={transcriptCues} activeStart={activeCueStart} onSeek={handleSeekCue} />
+          )}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function StoryStage({
+  story,
+  index,
+  diagnosis = '',
+  active,
+  onOpenFullView,
+  caseSummaryText = '',
+}) {
+  const videoIframeRef = useRef(null);
+  const primary = primaryVideoForStory(story);
+
+  const handleSeekVideo = useCallback((seconds) => {
+    seekYoutubeEmbed(videoIframeRef.current, seconds);
+  }, []);
   const sourceLabel =
     story.source === 'deepseek'
       ? 'DeepSeek'
@@ -279,12 +532,18 @@ function StoryStage({ story, index, diagnosis = '', active, onOpenFullView }) {
           {story.headline && <p className="diff-rw-headline">{story.headline}</p>}
         </div>
       </header>
-      {story.summary && <p className="diff-rw-summary">{story.summary}</p>}
+      <StoryReadPanel
+        story={story}
+        youtubeId={primary?.youtubeId || null}
+        caseSummaryText={caseSummaryText}
+        onSeekVideo={handleSeekVideo}
+      />
       <StoryVideos
         videos={story.videos}
         patientName={story.name}
         diagnosis={diagnosis}
         onOpenFullView={onOpenFullView}
+        videoIframeRef={videoIframeRef}
       />
     </article>
   );
@@ -298,7 +557,9 @@ export default function DifferentialRealWorldPanel({
   topic = '',
   chiefComplaint = '',
   hpiSnippet = '',
+  caseSummaryText = '',
   active = false,
+  prefetchParams = null,
 }) {
   const [remoteStories, setRemoteStories] = useState([]);
   const [storyIndex, setStoryIndex] = useState(0);
@@ -307,6 +568,9 @@ export default function DifferentialRealWorldPanel({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [meta, setMeta] = useState(null);
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
+  const [avatarError, setAvatarError] = useState('');
+  const [avatarLabel, setAvatarLabel] = useState('');
 
   const curated = useMemo(
     () => curatedStories.map((s) => ({ ...s, source: s.source || 'curated' })),
@@ -347,46 +611,135 @@ export default function DifferentialRealWorldPanel({
     [casePlaylist, lightboxIndex],
   );
 
+  const searchParams = useMemo(
+    () =>
+      prefetchParams || {
+        caseId,
+        topic,
+        diagnosis,
+        chiefComplaint,
+        hpiSnippet,
+      },
+    [prefetchParams, caseId, topic, diagnosis, chiefComplaint, hpiSnippet],
+  );
+
+  const applySearchResult = useCallback((data) => {
+    setRemoteStories(data.stories || []);
+    setStoryIndex(0);
+    setLightboxOpen(false);
+    setMeta({
+      source: data.source,
+      provider: data.provider,
+      model: data.model,
+      webSearchQueries: data.webSearchQueries,
+      videosRepaired: data.videosRepaired,
+    });
+  }, []);
+
   const runSearch = useCallback(
     async (refresh = false) => {
       setLoading(true);
       setError('');
       try {
-        const data = await fetchGeminiRealWorld({
-          caseId,
-          topic,
-          diagnosis,
-          chiefComplaint,
-          hpiSnippet,
-          refresh,
-        });
-        setRemoteStories(data.stories || []);
-        setStoryIndex(0);
-        setLightboxOpen(false);
-        setMeta({
-          source: data.source,
-          provider: data.provider,
-          model: data.model,
-          webSearchQueries: data.webSearchQueries,
-          videosRepaired: data.videosRepaired,
-        });
+        if (refresh) invalidateRealWorldPrefetch(caseId);
+        const data = await prefetchRealWorldStories(searchParams, { refresh });
+        applySearchResult(data);
       } catch (e) {
         setError(e?.message || 'Real-world search failed');
       } finally {
         setLoading(false);
       }
     },
-    [caseId, topic, diagnosis, chiefComplaint, hpiSnippet],
+    [applySearchResult, caseId, searchParams],
   );
 
   useEffect(() => {
-    if (!active || !caseId) return;
-    setRemoteStories([]);
-    setStoryIndex(0);
-    setLightboxOpen(false);
-    setMeta(null);
-    void runSearch(false);
-  }, [active, caseId, runSearch]);
+    if (!caseId) return undefined;
+
+    const syncFromCache = () => {
+      const hit = getRealWorldPrefetch(caseId);
+      if (hit?.status === 'ready' && hit.data) {
+        applySearchResult(hit.data);
+        setLoading(false);
+        setError('');
+        return;
+      }
+      setRemoteStories([]);
+      setStoryIndex(0);
+      setLightboxOpen(false);
+      setMeta(null);
+      if (hit?.status === 'loading') {
+        setLoading(true);
+        setError('');
+      } else if (hit?.status === 'error') {
+        setLoading(false);
+        setError(hit.error?.message || 'Real-world search failed');
+      } else {
+        setLoading(true);
+        setError('');
+      }
+    };
+
+    syncFromCache();
+
+    const unsub = subscribeRealWorldPrefetch((key, entry) => {
+      if (key !== String(caseId)) return;
+      if (entry.status === 'ready' && entry.data) {
+        applySearchResult(entry.data);
+        setLoading(false);
+        setError('');
+      } else if (entry.status === 'loading') {
+        setLoading(true);
+      } else if (entry.status === 'error') {
+        setLoading(false);
+        setError(entry.error?.message || 'Real-world search failed');
+      }
+    });
+
+    void prefetchRealWorldStories(searchParams).catch(() => {});
+
+    return unsub;
+  }, [caseId, searchParams, applySearchResult]);
+
+  useEffect(() => {
+    if (!caseId) return;
+    const local = readStoredCaseAvatarSource(caseId);
+    if (local) {
+      setSelectedAvatar(local);
+      setAvatarLabel(local.patientName || local.title || '');
+    }
+    let cancelled = false;
+    void readCaseAvatarSource(caseId).then((source) => {
+      if (cancelled) return;
+      setSelectedAvatar(source?.youtubeId ? source : null);
+      setAvatarLabel(source?.patientName || source?.title || '');
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [caseId]);
+
+  const handleSelectAvatar = useCallback(
+    ({ youtubeId, title, patientName, storyId = null }) => {
+      if (!caseId || !youtubeId) return;
+      setAvatarError('');
+      try {
+        const data = setCaseAvatarFromVideo({
+          caseId,
+          youtubeId,
+          title,
+          patientName,
+          storyId,
+        });
+        setSelectedAvatar(data.sourceVideo);
+        setAvatarLabel(patientName || title || '');
+        return data;
+      } catch (e) {
+        setAvatarError(String(e.message || e));
+      }
+    },
+    [caseId],
+  );
 
   useEffect(() => {
     if (storyIndex >= displayStories.length) setStoryIndex(0);
@@ -403,6 +756,9 @@ export default function DifferentialRealWorldPanel({
           {meta?.source?.includes('cache') && ' · cached'}
           {meta?.videosRepaired && ' · videos fixed'}
           {casePlaylist.length > 0 && ` · ${casePlaylist.length} videos`}
+          {selectedAvatar?.patientName && avatarLabel && (
+            <span className="diff-rw-avatar-kicker"> · Avatar: {avatarLabel}</span>
+          )}
         </p>
         <div className="diff-rw-toolbar-actions">
           <a className="diff-rw-search-inline" href={fallbackUrl} target="_blank" rel="noopener noreferrer">
@@ -419,30 +775,57 @@ export default function DifferentialRealWorldPanel({
         </div>
       </div>
 
-      {(loading && !displayStories.length) || error || (loading && displayStories.length > 0) ? (
+      {(loading && !displayStories.length) || error || avatarError || (loading && displayStories.length > 0) ? (
         <p
-          className={error ? 'diff-rw-error' : 'diff-rw-status'}
-          role={error ? 'alert' : 'status'}
+          className={error || avatarError ? 'diff-rw-error' : 'diff-rw-status'}
+          role={error || avatarError ? 'alert' : 'status'}
         >
-          {error || (displayStories.length ? 'Checking video links…' : 'Finding patient stories…')}
+          {error || avatarError || (displayStories.length ? 'Checking video links…' : 'Finding patient stories…')}
         </p>
       ) : null}
 
-      {displayStories.length > 1 && (
+      {displayStories.length > 0 && (
         <div className="diff-rw-story-tabs" role="tablist" aria-label="Patient stories">
-          {displayStories.map((story, index) => (
-            <button
-              key={`${story.id}-${index}`}
-              type="button"
-              role="tab"
-              className={`diff-rw-story-tab${storyIndex === index ? ' diff-rw-story-tab--active' : ''}`}
-              aria-selected={storyIndex === index}
-              onClick={() => setStoryIndex(index)}
-            >
-              <span className="diff-rw-story-tab-num">{index + 1}</span>
-              <span className="diff-rw-story-tab-name">{story.name}</span>
-            </button>
-          ))}
+          {displayStories.map((story, index) => {
+            const primary = primaryVideoForStory(story);
+            const storySelected =
+              primary &&
+              avatarPickMatches(selectedAvatar, {
+                youtubeId: primary.youtubeId,
+                patientName: primary.patientName,
+                storyId: story.id,
+              });
+            return (
+              <div
+                key={`${story.id}-${index}`}
+                role="tab"
+                className={`diff-rw-story-tab${storyIndex === index ? ' diff-rw-story-tab--active' : ''}`}
+                aria-selected={storyIndex === index}
+              >
+                <button
+                  type="button"
+                  className="diff-rw-story-tab-select"
+                  onClick={() => setStoryIndex(index)}
+                >
+                  <span className="diff-rw-story-tab-num">{index + 1}</span>
+                  <span className="diff-rw-story-tab-name">{story.name}</span>
+                </button>
+                {primary && (
+                  <AvatarIconButton
+                    selected={storySelected}
+                    onClick={() =>
+                      handleSelectAvatar({
+                        youtubeId: primary.youtubeId,
+                        title: primary.title,
+                        patientName: primary.patientName,
+                        storyId: story.id,
+                      })
+                    }
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -456,6 +839,7 @@ export default function DifferentialRealWorldPanel({
               diagnosis={diagnosis}
               active={storyIndex === index}
               onOpenFullView={openLightboxAt}
+              caseSummaryText={caseSummaryText}
             />
           ))}
         </div>
@@ -473,6 +857,8 @@ export default function DifferentialRealWorldPanel({
         index={lightboxIndex}
         onIndexChange={handleLightboxIndex}
         onClose={() => setLightboxOpen(false)}
+        selectedAvatar={selectedAvatar}
+        onSelectAvatar={handleSelectAvatar}
       />
     </div>
   );

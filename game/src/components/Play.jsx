@@ -134,6 +134,7 @@ import {
   ensureCasePortrait,
   readCaseRegenImage,
 } from '../lib/patientRegen.js';
+import { CASE_AVATAR_EVENT } from '../lib/caseAvatar.js';
 
 const LOCATIONS = {
   // LOCATION IMAGE SWAP: set image path here when each unit has a dedicated patient scene.
@@ -1299,6 +1300,15 @@ export default function Play({
     return () => {
       cancelled = true;
     };
+  }, [caseData?.id]);
+
+  useEffect(() => {
+    const onAvatar = (e) => {
+      if (String(e.detail?.caseId) !== String(caseData?.id)) return;
+      setPortraitReady((n) => n + 1);
+    };
+    window.addEventListener(CASE_AVATAR_EVENT, onAvatar);
+    return () => window.removeEventListener(CASE_AVATAR_EVENT, onAvatar);
   }, [caseData?.id]);
 
   useEffect(() => {

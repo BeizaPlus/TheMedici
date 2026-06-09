@@ -16,7 +16,7 @@ import path from 'path';
 
 import { fileURLToPath } from 'url';
 
-import { formatOrdersForDisplay } from './parseCcsReviewOcr.mjs';
+import { formatOrdersForDisplay, parseCcsReviewOcr } from './parseCcsReviewOcr.mjs';
 
 
 
@@ -43,6 +43,25 @@ function stackTypeToStatus(type = '') {
 }
 
 
+
+function loadOcrCaseSummary(caseId) {
+  const ocrPath = path.join(CASE_DIR, `case_${caseId}_ocr.txt`);
+  if (!fs.existsSync(ocrPath)) return '';
+  try {
+    const parsed = parseCcsReviewOcr(fs.readFileSync(ocrPath, 'utf8'));
+    return String(parsed.caseSummary || '').trim();
+  } catch {
+    return '';
+  }
+}
+
+function resolveCaseSummary(row) {
+  const fromJson = String(row.case_summary || '').trim();
+  const fromOcr = loadOcrCaseSummary(row.id);
+  if (fromOcr && fromOcr.includes('Differential:')) return fromOcr;
+  if (fromJson) return fromJson;
+  return fromOcr;
+}
 
 function caseJsonToReview(row) {
 
@@ -100,9 +119,9 @@ function caseJsonToReview(row) {
 
 
 
-  const caseSummary = row.case_summary || '';
+  const caseSummary = resolveCaseSummary(row);
 
-  const hasReview = Boolean(historyParts.length || orders.length);
+  const hasReview = Boolean(historyParts.length || orders.length || caseSummary);
 
 
 

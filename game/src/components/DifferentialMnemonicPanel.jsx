@@ -9,7 +9,7 @@ import {
   writeCaseMemoryText,
 } from '../lib/differentialCaseMemory.js';
 
-export default function DifferentialMnemonicPanel({ caseId }) {
+export default function DifferentialMnemonicPanel({ caseId, embedded = false }) {
   const [text, setText] = useState(() => readCaseMemoryMeta(caseId).text);
   const [imageUrl, setImageUrl] = useState('');
   const [hasImage, setHasImage] = useState(() => readCaseMemoryMeta(caseId).hasImage);
@@ -103,65 +103,77 @@ export default function DifferentialMnemonicPanel({ caseId }) {
     });
   };
 
+  const body = (
+    <div className={`diff-mnemonic-body${embedded ? ' diff-mnemonic-body--embedded' : ''}`}>
+      <p className="diff-mnemonic-hint">
+        Type or dictate a mnemonic. Paste or upload an image to rehearse this case&apos;s differentials.
+      </p>
+      <div className="diff-mnemonic-actions">
+        <CaseRecordButton
+          recording={dictation.recording}
+          busy={false}
+          transcribing={dictation.recording}
+          toggleRecording={dictation.toggle}
+          compact
+        />
+        <button
+          type="button"
+          className="diff-mnemonic-img-btn"
+          onClick={() => fileRef.current?.click()}
+        >
+          Add image
+        </button>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          hidden
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) void loadImageFile(file);
+            e.target.value = '';
+          }}
+        />
+      </div>
+      {dictation.livePreview && (
+        <p className="diff-voice-live" aria-live="polite">
+          Hearing: {dictation.livePreview}
+        </p>
+      )}
+      {dictError && <p className="diff-voice-error">{dictError}</p>}
+      <textarea
+        className="diff-mnemonic-input clinical-text-block"
+        value={text}
+        onChange={onTextChange}
+        onPaste={onPaste}
+        placeholder="e.g. BAD Gallstones — Biliary, Appendicitis, Diverticulitis…"
+        rows={embedded ? 5 : 3}
+      />
+      {imageUrl && (
+        <div className="diff-mnemonic-preview">
+          <img src={imageUrl} alt={`Memory hook for case ${caseId}`} />
+          <button type="button" className="diff-mnemonic-clear-img" onClick={() => void onRemoveImage()}>
+            Remove image
+          </button>
+        </div>
+      )}
+    </div>
+  );
+
+  if (embedded) {
+    return (
+      <div className="diff-mnemonic diff-mnemonic--embedded" aria-label="Memory hook for this case">
+        {body}
+      </div>
+    );
+  }
+
   return (
     <details className="diff-mnemonic" aria-label="Memory hook for this case">
       <summary className="diff-mnemonic-summary">
         Memory hook · {hasImage ? 'image + ' : ''}notes
       </summary>
-      <div className="diff-mnemonic-body">
-        <p className="diff-mnemonic-hint">
-          Type or dictate a mnemonic. Paste or upload an image to rehearse this case&apos;s differentials.
-        </p>
-        <div className="diff-mnemonic-actions">
-          <CaseRecordButton
-            recording={dictation.recording}
-            busy={false}
-            transcribing={dictation.recording}
-            toggleRecording={dictation.toggle}
-            compact
-          />
-          <button
-            type="button"
-            className="diff-mnemonic-img-btn"
-            onClick={() => fileRef.current?.click()}
-          >
-            Add image
-          </button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            hidden
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) void loadImageFile(file);
-              e.target.value = '';
-            }}
-          />
-        </div>
-        {dictation.livePreview && (
-          <p className="diff-voice-live" aria-live="polite">
-            Hearing: {dictation.livePreview}
-          </p>
-        )}
-        {dictError && <p className="diff-voice-error">{dictError}</p>}
-        <textarea
-          className="diff-mnemonic-input"
-          value={text}
-          onChange={onTextChange}
-          onPaste={onPaste}
-          placeholder="e.g. BAD Gallstones — Biliary, Appendicitis, Diverticulitis…"
-          rows={3}
-        />
-        {imageUrl && (
-          <div className="diff-mnemonic-preview">
-            <img src={imageUrl} alt={`Memory hook for case ${caseId}`} />
-            <button type="button" className="diff-mnemonic-clear-img" onClick={() => void onRemoveImage()}>
-              Remove image
-            </button>
-          </div>
-        )}
-      </div>
+      {body}
     </details>
   );
 }

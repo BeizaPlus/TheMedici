@@ -11,6 +11,7 @@ import {
 } from '../lib/patientImage.js';
 import { getPresentationHistory } from '../lib/casePresentation.js';
 import { clearCaseRegenImage, ensureCasePortrait, readCaseRegenImage } from '../lib/patientRegen.js';
+import { CASE_AVATAR_EVENT } from '../lib/caseAvatar.js';
 import CasePortraitBriefPanel from './CasePortraitBriefPanel.jsx';
 import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
@@ -111,6 +112,16 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
       cancelled = true;
     };
   }, [caseData]);
+
+  useEffect(() => {
+    const onAvatar = (e) => {
+      if (String(e.detail?.caseId) !== String(caseData?.id)) return;
+      const url = e.detail?.url;
+      if (url) setRegenSrc(url);
+    };
+    window.addEventListener(CASE_AVATAR_EVENT, onAvatar);
+    return () => window.removeEventListener(CASE_AVATAR_EVENT, onAvatar);
+  }, [caseData?.id]);
 
   useEffect(() => () => stopCaseReader(), []);
 

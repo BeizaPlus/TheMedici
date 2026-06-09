@@ -1,12 +1,9 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import '../styles/differential-practice.css';
 import bank from '../data/differentialBank.json';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import MicWaveform from './MicWaveform.jsx';
-import { IconPlayerPause, IconPlayerPlay } from './sceneToolbar/SceneToolbarIcons.jsx';
-import DifferentialRecordingsList from './DifferentialRecordingsList.jsx';
-import DifferentialMnemonicPanel from './DifferentialMnemonicPanel.jsx';
+import { IconPlayerPause, IconPlayerPlay, IconShuffle } from './sceneToolbar/SceneToolbarIcons.jsx';
 import {
   readStackerPrefs,
   STACKER_FIRST_PARSE_SECONDS,
@@ -44,12 +41,33 @@ import {
 } from '../lib/casePresentation.js';
 import { getBriefingHpi } from '../lib/caseBriefing.js';
 import AudioVolumeControl from './AudioVolumeControl.jsx';
+import ClinicalFontControls from './ClinicalFontControls.jsx';
+import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { prefetchMonitorAudio, startIcuMonitor, unlockAmbience } from '../lib/audio.js';
 import { practiceCaseHeadline } from '../lib/differentialHeadline.js';
 
 function pickInitial() {
-  return Math.floor(Math.random() * bank.length);
+  return pickRandomIndex(-1);
 }
+
+function pickRandomIndex(excludeIdx) {
+  if (bank.length < 2) return 0;
+  let next = excludeIdx;
+  while (next === excludeIdx) {
+    next = Math.floor(Math.random() * bank.length);
+  }
+  return next;
+}
+
+function buildBankIndexByCaseId() {
+  const map = new Map();
+  bank.forEach((entry, idx) => {
+    map.set(Number(entry.caseId), idx);
+  });
+  return map;
+}
+
+const bankIndexByCaseId = buildBankIndexByCaseId();
 
 function scoreAttempt(guesses, diagnoses) {
   const dxSet = new Set(diagnoses.map((d) => d.toLowerCase().trim()));
@@ -104,10 +122,14 @@ export default function DifferentialPractice({ onBack }) {
   const [stacker, setStacker] = useState(() => readStackerPrefs());
   const [stackerPhase, setStackerPhase] = useState('practice');
   const [stackerPaused, setStackerPaused] = useState(false);
+  const [textPrefs, setTextPrefs] = useState(() => readClinicalTextPrefs());
+  const clinicalStyle = useMemo(() => clinicalTextStyle(textPrefs), [textPrefs]);
   const [secondsLeft, setSecondsLeft] = useState(() => readStackerPrefs().seconds);
   const [sessionComplete, setSessionComplete] = useState(false);
   const [apiOk, setApiOk] = useState(null);
   const [settingsTick, setSettingsTick] = useState(0);
+  const [caseJumpInput, setCaseJumpInput] = useState('');
+  const [caseJumpError, setCaseJumpError] = useState('');
   const inputRef = useRef(null);
   const voiceFocusRef = useRef(null);
   const loggedRoundRef = useRef(false);
@@ -115,6 +137,10 @@ export default function DifferentialPractice({ onBack }) {
   const stackerBusyRef = useRef(false);
   const onStackerExpireRef = useRef(() => {});
   const prefinalMarksRef = useRef(new Set());
+  const cardIdxRef = useRef(0);
+  const caseHistoryRef = useRef([]);
+  const stackerSeenRef = useRef(new Set());
+  const stackerEnabledRef = useRef(false);
 
   useEffect(() => {
     prefetchMonitorAudio();
@@ -145,6 +171,8 @@ export default function DifferentialPractice({ onBack }) {
   }, []);
 
   const entry = bank[cardIdx];
+  cardIdxRef.current = cardIdx;
+  stackerEnabledRef.current = stacker.enabled;
   const audienceProfile = useMemo(() => readAudienceProfile(), [settingsTick]);
 
   const caseData = useMemo(
@@ -423,6 +451,9 @@ export default function DifferentialPractice({ onBack }) {
   );
 
   const resolveGuessesForScore = useCallback(async () => {
+    if (voice.recording) {
+      await voice.stopRecordingAsync();
+    }
     const hearingTranscript = voice.livePreview || '';
     const finalized = await voice.finalizeTranscript();
     const diagnoses = finalized?.diagnoses?.length
@@ -451,7 +482,10 @@ export default function DifferentialPractice({ onBack }) {
       writeStackerPrefs(next);
       if (next.enabled) {
         setSessionComplete(false);
-        setCardIdx(0);
+        caseHistoryRef.current = [];
+        const start = pickRandomIndex(-1);
+        stackerSeenRef.current = new Set([start]);
+        setCardIdx(start);
         voice.stopRecording();
         voice.resetVoiceState();
         resetRound();
@@ -524,11 +558,19 @@ export default function DifferentialPractice({ onBack }) {
   }, [stacker.enabled, stackerPhase, stackerPaused]);
 
   const goToIndex = useCallback(
-    (nextIdx) => {
+    (nextIdx, { recordHistory = true } = {}) => {
       if (!revealed) flushAttempt(false);
       voice.stopRecording();
       voice.resetVoiceState();
-      setCardIdx(((nextIdx % bank.length) + bank.length) % bank.length);
+      const normalized = ((nextIdx % bank.length) + bank.length) % bank.length;
+      const current = cardIdxRef.current;
+      if (recordHistory && current !== normalized) {
+        caseHistoryRef.current.push(current);
+      }
+      if (stackerEnabledRef.current) {
+        stackerSeenRef.current.add(normalized);
+      }
+      setCardIdx(normalized);
       resetRound();
       setStackerPhase('practice');
       setStackerPaused(false);
@@ -537,16 +579,31 @@ export default function DifferentialPractice({ onBack }) {
     [flushAttempt, revealed, resetRound, voice],
   );
 
+  useEffect(() => {
+    setCaseJumpInput(String(entry.caseId));
+    setCaseJumpError('');
+  }, [entry.caseId]);
+
   const goNext = useCallback(() => {
-    goToIndex(cardIdx + 1);
-  }, [cardIdx, goToIndex]);
+    goToIndex(pickRandomIndex(cardIdxRef.current));
+  }, [goToIndex]);
 
   const goPrev = useCallback(() => {
-    goToIndex(cardIdx - 1);
-  }, [cardIdx, goToIndex]);
+    const prev = caseHistoryRef.current.pop();
+    if (prev == null) {
+      goToIndex(pickRandomIndex(cardIdxRef.current), { recordHistory: false });
+      return;
+    }
+    goToIndex(prev, { recordHistory: false });
+  }, [goToIndex]);
 
   const stackerAdvance = useCallback(() => {
-    if (cardIdx >= bank.length - 1) {
+    stackerSeenRef.current.add(cardIdxRef.current);
+    const remaining = [];
+    for (let i = 0; i < bank.length; i += 1) {
+      if (!stackerSeenRef.current.has(i)) remaining.push(i);
+    }
+    if (!remaining.length) {
       setSessionComplete(true);
       setStacker((s) => {
         const off = { ...s, enabled: false };
@@ -555,8 +612,9 @@ export default function DifferentialPractice({ onBack }) {
       });
       return;
     }
-    goToIndex(cardIdx + 1);
-  }, [cardIdx, goToIndex]);
+    const next = remaining[Math.floor(Math.random() * remaining.length)];
+    goToIndex(next, { recordHistory: false });
+  }, [goToIndex]);
 
   onStackerExpireRef.current = async () => {
     if (!stacker.enabled || stackerBusyRef.current) return;
@@ -570,6 +628,9 @@ export default function DifferentialPractice({ onBack }) {
       if (stackerPhase === 'practice') {
         setStackerPaused(false);
         setStackerPhase('processing');
+        if (voice.recording) {
+          await voice.stopRecordingAsync();
+        }
         const resolved = await resolveGuessesForScore();
         if (resolved.diagnoses.length) {
           await scoreReveal(resolved.diagnoses, {
@@ -607,19 +668,39 @@ export default function DifferentialPractice({ onBack }) {
   }, [flushAttempt, revealed, resetRound, stacker.enabled, stacker.seconds, voice, focusVoiceMode]);
 
   const shuffleCase = useCallback(() => {
-    if (!revealed) flushAttempt(false);
     if (bank.length < 2) return;
-    let next = cardIdx;
-    while (next === cardIdx) {
-      next = Math.floor(Math.random() * bank.length);
-    }
-    voice.stopRecording();
-    voice.resetVoiceState();
-    setCardIdx(next);
-    resetRound();
-    setStackerPaused(false);
-    prefinalMarksRef.current.clear();
-  }, [cardIdx, flushAttempt, revealed, resetRound, voice]);
+    goToIndex(pickRandomIndex(cardIdxRef.current));
+  }, [goToIndex]);
+
+  const goToCaseId = useCallback(
+    (raw) => {
+      const trimmed = String(raw ?? '').trim().replace(/^#/, '');
+      if (!trimmed) {
+        setCaseJumpError('Enter a case number');
+        return false;
+      }
+      const caseId = Number.parseInt(trimmed, 10);
+      if (!Number.isFinite(caseId) || caseId < 1) {
+        setCaseJumpError('Enter a valid case number');
+        return false;
+      }
+      const idx = bankIndexByCaseId.get(caseId);
+      if (idx === undefined) {
+        setCaseJumpError(`Case ${caseId} is not in this deck`);
+        return false;
+      }
+      setCaseJumpError('');
+      setCaseJumpInput(String(caseId));
+      if (idx === cardIdx) {
+        refreshCase();
+      } else {
+        goToIndex(idx);
+      }
+      focusVoiceMode();
+      return true;
+    },
+    [cardIdx, goToIndex, refreshCase, focusVoiceMode],
+  );
 
   const handleBack = useCallback(() => {
     if (!revealed) flushAttempt(false);
@@ -695,6 +776,7 @@ export default function DifferentialPractice({ onBack }) {
   return (
     <div
       className={`diff-practice${revealed ? ' diff-practice--revealed' : ''}`}
+      style={clinicalStyle}
       ref={voiceFocusRef}
       tabIndex={-1}
       aria-label="Differential practice — Space starts microphone"
@@ -750,8 +832,47 @@ export default function DifferentialPractice({ onBack }) {
           >
             Export log
           </button>
+          <form
+            className="diff-case-jump"
+            onSubmit={(e) => {
+              e.preventDefault();
+              goToCaseId(caseJumpInput);
+            }}
+            title="Type a CCS case number and press Enter"
+          >
+            <label className="diff-case-jump-label" htmlFor="diff-case-jump-input">
+              Case
+            </label>
+            <input
+              id="diff-case-jump-input"
+              type="text"
+              inputMode="numeric"
+              className={`diff-case-jump-input${caseJumpError ? ' diff-case-jump-input--error' : ''}`}
+              value={caseJumpInput}
+              onChange={(e) => {
+                setCaseJumpInput(e.target.value);
+                if (caseJumpError) setCaseJumpError('');
+              }}
+              aria-label="Go to case number"
+              aria-invalid={caseJumpError ? 'true' : undefined}
+              aria-describedby={caseJumpError ? 'diff-case-jump-error' : undefined}
+              autoComplete="off"
+              spellCheck={false}
+            />
+            <button type="submit" className="diff-case-jump-btn">
+              Go
+            </button>
+          </form>
+          {caseJumpError ? (
+            <span id="diff-case-jump-error" className="diff-case-jump-error" role="alert">
+              {caseJumpError}
+            </span>
+          ) : null}
           <span className="diff-counter">
-            Case {entry.caseId} · {cardIdx + 1} / {bank.length}
+            Case {entry.caseId}
+            {stacker.enabled
+              ? ` · ${stackerSeenRef.current.size}/${bank.length} seen`
+              : ` · ${bank.length} in deck`}
           </span>
         </div>
       </header>
@@ -769,17 +890,6 @@ export default function DifferentialPractice({ onBack }) {
 
       <div className="diff-card">
         <div className="diff-cycle-bar" aria-label="Current case">
-          {revealed && (
-            <button
-              type="button"
-              className="diff-case-cycle-btn"
-              onClick={goPrev}
-              aria-label={`Previous case (${cardIdx} of ${bank.length})`}
-              title="Previous case"
-            >
-              <FiChevronLeft aria-hidden />
-            </button>
-          )}
           <div className="diff-cycle-center">
             <p className="diff-case-id">CCS Case {entry.caseId}</p>
             <h2 className="diff-topic-label">Chief Complaint</h2>
@@ -787,17 +897,6 @@ export default function DifferentialPractice({ onBack }) {
               <span className="diff-topic-line">{caseHeadline}</span>
             </h1>
           </div>
-          {revealed && (
-            <button
-              type="button"
-              className="diff-case-cycle-btn"
-              onClick={goNext}
-              aria-label={`Next case (${cardIdx + 2} of ${bank.length})`}
-              title="Next case"
-            >
-              <FiChevronRight aria-hidden />
-            </button>
-          )}
         </div>
 
         {apiOk === false && (
@@ -806,25 +905,11 @@ export default function DifferentialPractice({ onBack }) {
           </p>
         )}
 
-        {stacker.enabled && (
-          <p className="diff-stacker-hint">
-            Stacker — <kbd>Space</kbd> start/stop mic · Pause freezes timer · Resume auto-starts mic ·
-            Corrected at {STACKER_FIRST_PARSE_SECONDS}s then every {STACKER_INCREMENTAL_SECONDS}s
-          </p>
-        )}
-        {!stacker.enabled && (
-          <p className="diff-stacker-hint">
-            <kbd>Space</kbd> — start/stop microphone
-          </p>
-        )}
-
         {stacker.enabled && stackerPhase === 'processing' && (
           <p className="diff-stacker-processing" role="status">
             Finishing smart review…
           </p>
         )}
-
-        <DifferentialMnemonicPanel caseId={entry.caseId} />
 
         {(!revealed || stacker.enabled) && (
           <div className="diff-voice-block">
@@ -906,8 +991,6 @@ export default function DifferentialPractice({ onBack }) {
             </button>
           </div>
         )}
-
-        <DifferentialRecordingsList caseId={entry.caseId} version={recordingsVersion} />
 
         {(revealed || voiceBelongsToCase || tagGuesses.length > 0) && (
           <div className="diff-compare" aria-label="Compare your differential to the answer key">
@@ -1015,29 +1098,6 @@ export default function DifferentialPractice({ onBack }) {
               )}
               <span className="diff-score-saved"> · saved to practice log</span>
             </div>
-            <nav className="diff-case-cycle-inline" aria-label="Cycle cases">
-              <button
-                type="button"
-                className="diff-case-cycle-btn"
-                onClick={goPrev}
-                aria-label="Previous case"
-                title="Previous case (←)"
-              >
-                <FiChevronLeft aria-hidden />
-              </button>
-              <span className="diff-case-cycle-label">
-                {cardIdx + 1} / {bank.length}
-              </span>
-              <button
-                type="button"
-                className="diff-case-cycle-btn diff-case-cycle-btn--next"
-                onClick={goNext}
-                aria-label="Next case"
-                title="Next case (→)"
-              >
-                <FiChevronRight aria-hidden />
-              </button>
-            </nav>
           </div>
         )}
 
@@ -1063,54 +1123,60 @@ export default function DifferentialPractice({ onBack }) {
           }}
         />
 
-        <div className="diff-nav">
-          <button type="button" className="diff-nav-btn" onClick={goPrev}>
+        <div className="diff-case-foot">
+          {stacker.enabled ? (
+            <p className="diff-stacker-hint">
+              Stacker — <kbd>Space</kbd> start/stop mic · Pause freezes timer · Resume auto-starts mic ·
+              Corrected at {STACKER_FIRST_PARSE_SECONDS}s then every {STACKER_INCREMENTAL_SECONDS}s
+            </p>
+          ) : (
+            <p className="diff-stacker-hint">
+              <kbd>Space</kbd> — start/stop microphone
+            </p>
+          )}
+
+          <div className="diff-nav">
+          <button
+            type="button"
+            className="diff-nav-btn"
+            onClick={goPrev}
+            title="Previous case (or random if none)"
+          >
             ‹ Prev
           </button>
           <button type="button" className="diff-nav-btn" onClick={refreshCase}>
             ↻ Refresh
           </button>
-          {!stacker.enabled && (
-            <button type="button" className="diff-nav-btn" onClick={shuffleCase}>
-              Shuffle
-            </button>
-          )}
-          <button type="button" className="diff-nav-btn diff-nav-btn--primary" onClick={goNext}>
+          <button
+            type="button"
+            className="diff-nav-btn diff-nav-btn--shuffle"
+            onClick={shuffleCase}
+            disabled={bank.length < 2}
+            title="Random case"
+            aria-label="Shuffle — random case"
+          >
+            <IconShuffle className="toolbar-icon" aria-hidden />
+            Shuffle
+          </button>
+          <button
+            type="button"
+            className="diff-nav-btn diff-nav-btn--primary"
+            onClick={goNext}
+            title="Random next case"
+          >
             Next ›
           </button>
+          </div>
         </div>
       </div>
 
-      {revealed && (
-        <nav className="diff-case-cycle-bar" aria-label="Previous or next case">
-          <button
-            type="button"
-            className="diff-case-cycle-btn"
-            onClick={goPrev}
-            aria-label="Previous case"
-            title="Previous case (←)"
-          >
-            <FiChevronLeft aria-hidden />
-          </button>
-          <div className="diff-case-cycle-meta">
-            <span className="diff-case-cycle-dir">Case {entry.caseId}</span>
-            <span className="diff-case-cycle-pos">
-              {cardIdx + 1} / {bank.length}
-            </span>
-          </div>
-          <button
-            type="button"
-            className="diff-case-cycle-btn diff-case-cycle-btn--next"
-            onClick={goNext}
-            aria-label="Next case"
-            title="Next case (→)"
-          >
-            <FiChevronRight aria-hidden />
-          </button>
-        </nav>
-      )}
-
-      <aside className="diff-ambience-dock" aria-label="ICU monitor ambience">
+      <aside className="diff-ambience-dock" aria-label="Text size and ICU monitor">
+        <ClinicalFontControls
+          prefs={textPrefs}
+          onChange={setTextPrefs}
+          compact
+          showLabel={false}
+        />
         <AudioVolumeControl label="ICU monitor" />
       </aside>
     </div>

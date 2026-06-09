@@ -42,11 +42,14 @@ import {
   realWorldAvailable,
   realWorldProvider,
 } from './realWorldProvider.js';
+import { fetchYoutubeTranscript } from './youtubeTranscript.js';
 import {
   buildPortraitAnalysis,
   buildPortraitPersona,
   buildPortraitPrompt,
+  buildVideoAvatarPrompt,
   extractPersonaFromPortraitImage,
+  fetchYouTubeThumbnailBase64,
   formatPersonaForChat,
   generatePortraitWithOpenAI,
   portraitPublicUrl,
@@ -544,7 +547,7 @@ async function generateSceneWithOpenAI({ imageBase64, mimeType, prompt }) {
   form.append('model', 'gpt-image-1');
   form.append('prompt', prompt);
   form.append('size', '1024x1024');
-  form.append('response_format', 'b64_json');
+  // gpt-image-1 /images/edits rejects response_format; b64_json is returned by default.
   form.append('image', new Blob([Buffer.from(imageBase64, 'base64')], { type: mimeType }), 'patient.png');
 
   const r = await fetch('https://api.openai.com/v1/images/edits', {
@@ -1280,6 +1283,7 @@ app.get('/api/case-portrait/:caseId', async (req, res) => {
       analysis: cached.meta?.analysis || null,
       persona: cached.meta?.persona || cached.meta?.analysis?.persona || null,
       provider: cached.meta?.provider || 'openai',
+      sourceVideo: cached.meta?.sourceVideo || null,
     });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
@@ -1437,6 +1441,71 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       provider: 'openai',
       analysis,
       persona,
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/case-avatar/from-video', async (req, res) => {
+  if (!process.env.OPENAI_API_KEY) {
+    return res.status(400).json({ error: 'OPENAI_API_KEY not configured in MeWorld/.env' });
+  }
+
+  const {
+    caseId,
+    youtubeId,
+    title = '',
+    patientName = '',
+    storyId = null,
+    caseContext = null,
+  } = req.body || {};
+  const id = caseId ?? caseContext?.id ?? caseContext?.ccsNumber;
+  if (!id) return res.status(400).json({ error: 'Missing caseId' });
+  if (!youtubeId) return res.status(400).json({ error: 'Missing youtubeId' });
+
+  try {
+    const thumb = await fetchYouTubeThumbnailBase64(youtubeId);
+    const ctx = caseContext && typeof caseContext === 'object' ? caseContext : { id };
+    const prompt = buildVideoAvatarPrompt(ctx, { patientName, videoTitle: title });
+    const outB64 = await generatePortraitWithOpenAI({
+      imageBase64: thumb.base64,
+      mimeType: thumb.mimeType,
+      prompt,
+    });
+
+    let visionPersona = null;
+    try {
+      visionPersona = await extractPersonaFromPortraitImage(outB64);
+    } catch (visionErr) {
+      console.warn('[case-avatar] vision persona skipped:', visionErr.message);
+    }
+    const persona = buildPortraitPersona(ctx, visionPersona);
+    const analysis = buildPortraitAnalysis(ctx, persona);
+    const sourceVideo = {
+      youtubeId: String(youtubeId).trim(),
+      title: String(title || '').trim() || null,
+      patientName: String(patientName || '').trim() || null,
+      storyId: storyId || null,
+      thumbnailUrl: thumb.thumbnailUrl,
+      selectedAt: new Date().toISOString(),
+    };
+
+    await writePortraitCache(CASE_PORTRAIT_DIR, id, outB64, {
+      analysis,
+      persona,
+      sourceVideo,
+      avatarSource: 'real_world_video',
+    });
+
+    const url = portraitPublicUrl(id, PORT);
+    return res.json({
+      ok: true,
+      caseId: id,
+      url,
+      dataUrl: url,
+      persona,
+      sourceVideo,
     });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
@@ -1607,6 +1676,20 @@ app.post('/api/capture-screenshot', async (req, res) => {
     });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.get('/api/youtube-transcript/:videoId', async (req, res) => {
+  try {
+    const result = await fetchYoutubeTranscript(req.params.videoId);
+    return res.json({
+      ok: true,
+      transcript: result.text,
+      cues: result.cues || [],
+      language: result.language,
+    });
+  } catch (e) {
+    return res.status(404).json({ error: String(e.message || e) });
   }
 });
 

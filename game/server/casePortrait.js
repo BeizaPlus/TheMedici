@@ -234,6 +234,47 @@ ${custom}
 Match the described age, body size, ethnicity, pose, distress, clothing, and who is in frame. Keep dignified clinical ED photography — no gore, watermarks, or text.`;
 }
 
+/** Best-effort YouTube still for Real World avatar source (public thumbnail CDN). */
+export async function fetchYouTubeThumbnailBase64(youtubeId) {
+  const id = String(youtubeId || '').trim();
+  if (!id || id.includes(' ')) throw new Error('Invalid YouTube id');
+
+  const urls = [
+    `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+    `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
+    `https://img.youtube.com/vi/${id}/mqdefault.jpg`,
+  ];
+
+  for (const url of urls) {
+    try {
+      const r = await fetch(url);
+      if (!r.ok) continue;
+      const buf = Buffer.from(await r.arrayBuffer());
+      if (buf.length < 1200) continue;
+      return {
+        base64: buf.toString('base64'),
+        mimeType: 'image/jpeg',
+        thumbnailUrl: url,
+      };
+    } catch {
+      /* try next */
+    }
+  }
+  throw new Error('Could not fetch YouTube thumbnail for avatar');
+}
+
+/** Likeness portrait from a Real World patient still + case JSON. */
+export function buildVideoAvatarPrompt(caseContext = {}, { patientName = '', videoTitle = '' } = {}) {
+  const base = buildPortraitPrompt(caseContext);
+  const who = [patientName, videoTitle].filter(Boolean).join(' — ');
+  return `${base}
+
+REAL PATIENT REFERENCE (from public patient story video${who ? `: ${who}` : ''}):
+Preserve this person's facial likeness, apparent age, skin tone, and identity.
+Place them in the same 3D-style ED hospital bed scene as other case portraits — dignified clinical training photo.
+Single patient in hospital gown on stretcher, monitor cables visible, wide bedside framing.`;
+}
+
 export function buildPortraitAnalysis(caseContext = {}, persona = null) {
   const facts = caseContext.patientFacts || {};
   const base = {
@@ -292,7 +333,7 @@ export async function generatePortraitWithOpenAI({ imageBase64, mimeType, prompt
   form.append('model', 'gpt-image-1');
   form.append('prompt', prompt);
   form.append('size', '1024x1024');
-  form.append('response_format', 'b64_json');
+  // gpt-image-1 /images/edits rejects response_format; b64_json is returned by default.
   form.append('image', new Blob([Buffer.from(imageBase64, 'base64')], { type: mimeType }), 'patient.png');
 
   const r = await fetch('https://api.openai.com/v1/images/edits', {
