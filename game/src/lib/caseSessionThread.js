@@ -1,4 +1,5 @@
 import { readCaseNotes } from '../lib/caseNotes.js';
+import { listCaseYoutubeTranscripts } from '../lib/caseYoutubeTranscripts.js';
 
 /** Split journal blob into display blocks (voice + manual notes). */
 export function parseCaseNoteBlocks(caseId) {
@@ -71,6 +72,21 @@ export function mergeSessionThread(chatMessages = [], caseId) {
       content: block.header ? `**${block.header}**\n${content}` : content,
       source: 'notes',
     });
+  }
+
+  for (const video of listCaseYoutubeTranscripts(caseId)) {
+    const body = String(video.text || '').trim();
+    if (!body) continue;
+    const header = `YouTube transcript · ${video.title || video.youtubeId}`;
+    const preview = body.length > 600 ? `${body.slice(0, 600)}…` : body;
+    const content = `**${header}**\n${preview}`;
+    const plain = notePlain(preview);
+    if (!plain || seenNoteText.has(plain)) continue;
+    const key = `youtube:${video.youtubeId}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    seenNoteText.add(plain);
+    rows.push({ id: key, role: 'note', content, source: 'youtube' });
   }
 
   return rows;

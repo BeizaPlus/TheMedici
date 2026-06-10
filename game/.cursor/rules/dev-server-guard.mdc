@@ -1,0 +1,78 @@
+---
+description: Dev server launch — free ports 3001/5173, one Vite instance, build + session smoke before "done"
+globs: package.json,scripts/*.mjs,server/**/*
+alwaysApply: true
+---
+
+# Dev server guard (Schoonmaker / MeWorld game)
+
+## The bugs (2026-06-10)
+
+| Symptom | Cause |
+|---------|--------|
+| **"Not launching"** / API crash | Port **3001** already in use (`EADDRINUSE`) |
+| Game on **5178**, styles/API broken | Zombie Vite on **5173–5177** — new `npm run dev` picks next port; user still opens **5173** |
+| **Blank white page** (entire app) | JS parse error (e.g. duplicate `const` in `caseDiscussionContext.js`) — bundle never mounts React |
+| White differential only | CSS guard issue — see `component-css-guard.mdc` |
+
+## Canonical URLs (only these)
+
+| Service | URL |
+|---------|-----|
+| **Game** | http://localhost:5173/ |
+| **API** | http://127.0.0.1:3001 |
+
+**Never** tell Steve to use 5174, 5178, etc. If Vite prints another port, **stop and free ports** — do not proceed.
+
+## Before starting dev (agents)
+
+```powershell
+Set-Location C:\Users\steve\MeWorld\game
+npm run dev
+```
+
+`npm run dev` runs **`free-dev-ports`** first (kills listeners on 3001 + 5173), then `predev` (build:data + smoke-test), then API + Vite.
+
+**Do not** spawn extra `node server/index.js` or bare `vite` in parallel — one `npm run dev` only.
+
+Manual free if needed:
+
+```powershell
+node scripts/free-dev-ports.mjs
+```
+
+## Before telling Steve UI is ready (mandatory)
+
+`npm run dev` **will not keep serving** unless every gate passes:
+
+| Phase | Script | When |
+|-------|--------|------|
+| **predev** | `build:data` + `smoke-test.mjs` + `smoke-pre-serve.mjs` | Before any server starts |
+| **pre-serve** | CSS audit + `vite build` | Catches JS errors → white screen |
+| **live API** | `validate-diff-smoke.mjs` | After API up, before Vite |
+| **live UI** | `smoke-differential-session.mjs` | After Vite up — Playwright + screenshots |
+
+If any phase fails, **`start-dev.mjs` kills servers and exits 1** — nothing is left running on a broken build.
+
+Manual re-check (servers must already be up for live phases):
+
+```powershell
+npm run smoke:pre-serve
+npm run smoke:differential
+npm run smoke:differential-session
+```
+
+## After killing stale processes
+
+Background terminal tasks may show exit code **4294967295** — expected when clearing zombie node. Verify live servers:
+
+```powershell
+Invoke-WebRequest http://127.0.0.1:3001/api/health -UseBasicParsing
+Invoke-WebRequest http://localhost:5173/ -UseBasicParsing
+```
+
+Both must return **200** before asking Steve to refresh.
+
+## Steve launch
+
+`C:\Users\steve\MeWorld\START-GAME.bat` → `npm run dev` (includes port free).

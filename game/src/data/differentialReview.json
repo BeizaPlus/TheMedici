@@ -1,10 +1,10 @@
 {
-  "builtAt": "2026-06-10T10:00:00.384Z",
+  "builtAt": "2026-06-10T11:17:48.533Z",
   "sourceDir": "C:\\Users\\steve\\MeWorld\\data\\cases",
   "source": "MeWorld/data/cases/case_N.json",
   "count": 181,
   "completeCount": 181,
-  "withOrders": 150,
+  "withOrders": 151,
   "cases": {
     "1": {
       "caseId": 1,
@@ -14121,24 +14121,60 @@
     "129": {
       "caseId": 129,
       "title": "Facial Pain",
-      "diagnosis": "Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)",
-      "chiefComplaint": "",
+      "diagnosis": "Trigeminal Neuralgia",
+      "chiefComplaint": "Sudden severe electric shock-like facial pain",
       "patientSex": "",
-      "specialty": "",
-      "location": "",
+      "specialty": "Neurology",
+      "location": "Office",
       "scores": null,
-      "caseSummary": "",
-      "hpiNarrative": "",
-      "orders": [],
-      "intro": "Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)",
-      "history": "",
-      "ordersText": "",
-      "hasReview": false,
-      "structuredBy": "preparedCases+fmgmatch+mistral",
+      "caseSummary": "Differential: Acute herpes zoster, Painful post-traumatic trigeminal neuropathy, Idiopathic painful trigeminal \nneuropathy, postherpetic trigeminal neuropathy.\nThe patient has classic Trigeminal neuralgia. The most common cause of trigeminal neuralgia is compression \nof the trigeminal nerve root (80-90% of cases). The compression is typically caused by a vascular loop. \nThe criteria to diagnose trigeminal neuralgia include: having recurrent episodes of facial pain in one area of \nthe trigeminal nerve; pain lasting seconds to 2 minutes; severe intensity; sharp/electric pain which can be \nprecipitated by innocuous stimuli within the affected trigeminal distribution. \nMRI/CT scan should be done to rule out lesions such as tumor or neurovascular compression. The first line \ntreatment for trigeminal neuralgia is Carbamazepine or Oxcarbazepine. Gabapentin can also be used, but this \nis second line. Surgery does not need to be consulted as medical treatment should occur and fail prior to \ninvolving surgery. The patient may improve over time and may not require surgical intervention. In this case, \nthe patient will improve on Carbamazepine or Oxcarbazepine, and the case will end.\nBack To Case List\nReview Later",
+      "hpiNarrative": "{{patient_name}} presents with classic trigeminal neuralgia — recurrent episodes of severe, sharp, electric shock-like facial pain in one area of the trigeminal nerve distribution, lasting seconds to two minutes, often precipitated by innocuous stimuli (light touch, chewing, wind). The most common cause is compression of the trigeminal nerve root (80–90% of cases), typically by a vascular loop.\n\nDifferential: acute herpes zoster, painful post-traumatic trigeminal neuropathy, idiopathic painful trigeminal neuropathy, postherpetic trigeminal neuropathy.\n\nWorkup: neurologic exam including cranial nerves; CBC to exclude infection; BMP/CMP; MRI or CT head to exclude tumor or neurovascular compression.\n\nFirst-line treatment is carbamazepine or oxcarbazepine; gabapentin/pregabalin are second line. Surgery is not indicated until medical therapy fails.",
+      "orders": [
+        {
+          "status": "correct",
+          "order": "Physical Exam: General Appearance",
+          "reason": "It would be a good idea to take a general look at the patient to see how ill the patient looks."
+        },
+        {
+          "status": "correct",
+          "order": "Physical Exam: Neuro / Psych",
+          "reason": "This is the chief complaint of the patient, so this should be examined."
+        },
+        {
+          "status": "correct",
+          "order": "CBC with differential",
+          "reason": "This should be drawn to rule out any acute infection that could be causing the symptoms of the patient."
+        },
+        {
+          "status": "correct",
+          "order": "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium",
+          "reason": "MRI/CT scan should be done to rule out lesions such as tumor or neurovascular compression."
+        },
+        {
+          "status": "correct",
+          "order": "Basic metabolic profile / Comprehensive metabolic profile",
+          "reason": "Chemistries are important to get to rule out other conditions."
+        },
+        {
+          "status": "correct",
+          "order": "Carbamazepine, therapy / Oxcarbazepine / Gabapentin / Pregabalin",
+          "reason": "The first line treatment for trigeminal neuralgia is Carbamazepine or Oxcarbazepine."
+        },
+        {
+          "status": "avoided",
+          "order": "Immediate neurosurgical intervention before medical therapy",
+          "reason": "Surgery does not need to be consulted as medical treatment should occur and fail prior to involving surgery."
+        }
+      ],
+      "intro": "Sudden severe electric shock-like facial pain",
+      "history": "{{patient_name}} presents with classic trigeminal neuralgia — recurrent episodes of severe, sharp, electric shock-like facial pain in one area of the trigeminal nerve distribution, lasting seconds to two minutes, often precipitated by innocuous stimuli (light touch, chewing, wind). The most common cause is compression of the trigeminal nerve root (80–90% of cases), typically by a vascular loop.\n\nDifferential: acute herpes zoster, painful post-traumatic trigeminal neuropathy, idiopathic painful trigeminal neuropathy, postherpetic trigeminal neuropathy.\n\nWorkup: neurologic exam including cranial nerves; CBC to exclude infection; BMP/CMP; MRI or CT head to exclude tumor or neurovascular compression.\n\nFirst-line treatment is carbamazepine or oxcarbazepine; gabapentin/pregabalin are second line. Surgery is not indicated until medical therapy fails.\n\nDifferential: Acute herpes zoster, Painful post-traumatic trigeminal neuropathy, Idiopathic painful trigeminal neuropathy, postherpetic trigeminal neuropathy.\n\nThe patient has classic Trigeminal neuralgia. The most common cause of trigeminal neuralgia is compression of the trigeminal nerve root (80-90% of cases). The compression is typically caused by a vascular loop.\n\nThe criteria to diagnose trigeminal neuralgia include: having recurrent episodes of facial pain in one area of the trigeminal nerve; pain lasting seconds to 2 minutes; severe intensity; sharp/electric pain which can be precipitated by innocuous stimuli within the affected trigeminal distribution.\n\nMRI/CT scan should be done to rule out lesions such as tumor or neurovascular compression. The first line treatment for trigeminal neuralgia is Carbamazepine or Oxcarbazepine. Gabapentin can also be used, but this is second line. Surgery does not need to be consulted as medical treatment should occur and fail prior to involving surgery.",
+      "ordersText": "[OK] Physical Exam: General Appearance\n   It would be a good idea to take a general look at the patient to see how ill the patient looks.\n\n[OK] Physical Exam: Neuro / Psych\n   This is the chief complaint of the patient, so this should be examined.\n\n[OK] CBC with differential\n   This should be drawn to rule out any acute infection that could be causing the symptoms of the patient.\n\n[OK] CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium\n   MRI/CT scan should be done to rule out lesions such as tumor or neurovascular compression.\n\n[OK] Basic metabolic profile / Comprehensive metabolic profile\n   Chemistries are important to get to rule out other conditions.\n\n[OK] Carbamazepine, therapy / Oxcarbazepine / Gabapentin / Pregabalin\n   The first line treatment for trigeminal neuralgia is Carbamazepine or Oxcarbazepine.\n\n[Avoid] Immediate neurosurgical intervention before medical therapy\n   Surgery does not need to be consulted as medical treatment should occur and fail prior to involving surgery.",
+      "hasReview": true,
+      "structuredBy": "ccs_review_pdf",
       "parseQuality": "good",
-      "ordersSource": "none",
+      "ordersSource": "json",
       "complete": true,
-      "confidence": "inferred"
+      "confidence": 95
     },
     "130": {
       "caseId": 130,

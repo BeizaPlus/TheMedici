@@ -9,6 +9,7 @@ import {
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { mergeSessionThread, parseNoteBubbleContent } from '../lib/caseSessionThread.js';
+import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import CaseThreadCaseRail from './CaseThreadCaseRail.jsx';
@@ -31,15 +32,6 @@ function writeCollapsed(key, value) {
   } catch {
     /* ignore */
   }
-}
-
-function looksLikeChatQuestion(text) {
-  const t = String(text || '').trim();
-  if (!t) return false;
-  if (t.endsWith('?')) return true;
-  return /^(what|why|how|when|where|who|is|are|does|do|can|should|could|would|explain|tell me|describe|review)\b/i.test(
-    t,
-  );
 }
 
 function ThreadNoteBubble({ content }) {
@@ -85,6 +77,9 @@ export default function CaseSessionThread({
   notesVersion = 0,
   onTimelineNote,
   fillTab = false,
+  suppressHeader = false,
+  patientMode = false,
+  onPatientModeChange,
   onTimelineChat,
 }) {
   const {
@@ -157,21 +152,34 @@ export default function CaseSessionThread({
     const text = draft.trim();
     if (!text || busy) return;
     setDraft('');
-    if (looksLikeChatQuestion(text)) {
-      await sendMessage(text);
-      onTimelineChat?.(text);
+
+    const cmd = parseChatModeCommand(text);
+    let body = text;
+    let asPatient = patientMode;
+
+    if (cmd) {
+      asPatient = cmd.patientMode;
+      onPatientModeChange?.(cmd.patientMode);
+      body = cmd.remainder;
+      if (!body) return;
+    }
+
+    if (asPatient) {
+      await sendMessage(body);
+      onTimelineChat?.(body);
       return;
     }
-    await appendNoteEntry(text);
-  }, [draft, busy, sendMessage, appendNoteEntry, onTimelineChat]);
+    await appendNoteEntry(body);
+  }, [draft, busy, patientMode, onPatientModeChange, sendMessage, appendNoteEntry, onTimelineChat]);
 
-  const expanded = fillTab || !collapsed;
+  const expanded = suppressHeader || fillTab || !collapsed;
 
   return (
     <div
-      className={`case-session-thread case-chat-panel case-chat-panel--embedded${fillTab ? ' case-chat-panel--fill-tab' : ''}${collapsed ? ' is-collapsed' : ''}`}
+      className={`case-session-thread case-chat-panel case-chat-panel--embedded${fillTab ? ' case-chat-panel--fill-tab' : ''}${suppressHeader ? ' case-session-thread--body-only' : ''}${collapsed ? ' is-collapsed' : ''}`}
       aria-label="Case chat"
     >
+      {!suppressHeader && (
       <header className="case-chat-head">
         {fillTab ? (
           <div className="case-session-thread-head-btn case-chat-head-text case-session-thread-head-static">
@@ -200,6 +208,7 @@ export default function CaseSessionThread({
           </div>
         )}
       </header>
+      )}
 
       {expanded && (
         <>
@@ -222,6 +231,12 @@ export default function CaseSessionThread({
             </p>
           )}
           {error && <p className="case-chat-banner bad">{error}</p>}
+
+          {patientMode && (
+            <p className="case-chat-banner case-chat-banner--patient">
+              Patient mode — patient will reply. Type <code>/ch</code> for notes only.
+            </p>
+          )}
 
           <div className="case-chat-messages selectable-text" ref={listRef}>
             {!historyLoaded && <p className="case-chat-tab-empty">Loading…</p>}
@@ -300,7 +315,7 @@ export default function CaseSessionThread({
                   className="case-chat-cmd-input"
                   value={draft}
                   onChange={(e) => setDraft(e.target.value)}
-                  placeholder="Ask the patient or jot a note…"
+                  placeholder={patientMode ? 'Ask the patient…' : 'Jot a case note…'}
                   aria-label="Add to case thread"
                   disabled={busy}
                 />
@@ -313,11 +328,29 @@ export default function CaseSessionThread({
               >
                 <FiSend aria-hidden />
               </button>
+              <p className="case-chat-mode-hint" aria-live="polite">
+                {patientMode ? (
+                  <>
+                    <strong className="case-chat-mode-hint--on">Patient mode</strong> — talk to the
+                    patient; voice goes to the patient.{' '}
+                    <code>/ch</code> notes only · click stethoscope to turn off
+                  </>
+                ) : (
+                  <>
+                    <strong>Notes mode</strong> — saved to case journal; patient will not reply.{' '}
+                    <code>/pt</code> talk to patient · stethoscope turns{' '}
+                    <span className="case-chat-mode-hint--gold">gold</span> when patient mode is on
+                  </>
+                )}
+              </p>
             </div>
           </form>
           {caseRecording?.transcribing && (
             <p className="case-notes-live-hint case-session-thread-live-hint" aria-live="polite">
-              Transcribing voice…{available !== false ? ' sending to case chat' : ''}
+              Transcribing voice…
+              {patientMode && available !== false
+                ? ' sending to patient'
+                : ' saving to case notes'}
             </p>
           )}
         </>

@@ -37,11 +37,36 @@ Or `npm run build:differential-review` (included in `build:data` / `predev`).
 
 ## Study panel tabs
 
-`DifferentialStudyPanel.jsx` — three tabs:
+`DifferentialStudyPanel.jsx` — **text labels** (not icons): Review · Timeline · Case · Notes · Real World.
 
-1. **Timeline** — practice attempt history
-2. **Case** — `DifferentialReviewPanel`: Case Summary + **numbered Orders** (1, 2, 3… workflow)
-3. **Real World** — up to 2 curated patient stories + YouTube iframes + search fallback
+1. **Review** — bookmark queue jump list
+2. **Timeline** — practice attempt history + voice notes
+3. **Case** — `DifferentialReviewPanel`: Case Summary + **numbered Orders** (1, 2, 3… workflow)
+4. **Notes** — shared case journal (same store as immersive play)
+5. **Real World** — up to 2 curated patient stories + YouTube iframes + search fallback
+
+## Preflight — enforced on every `npm run dev`
+
+**Do not bypass.** `npm run dev` runs this chain automatically; servers **stop** if any step fails:
+
+| Step | What |
+|------|------|
+| 1 | `build:data` + `smoke-test.mjs` (data + queue logic) |
+| 2 | `smoke-pre-serve.mjs` (CSS audit + **`vite build`**) |
+| 3 | Free ports → start API → **`smoke:differential`** |
+| 4 | Start Vite → **`smoke:differential-session`** (screenshots) |
+| 5 | Only then: keep serving at http://localhost:5173/ |
+
+Pass criteria:
+- **`vite build`** exits 0 (JS syntax/duplicate `const` → blank white app)
+- CSS audit clean
+- `GET /api/voice-note/status` → **`batch: true`**, **`merge: true`**
+- Session smoke: `.diff-practice` **rgb(12, 12, 16)**, record button visible
+- Screenshots: `docs/smoke-screenshots/<date>/`
+
+**URLs:** http://localhost:5173/ only — if Vite would bind elsewhere, port free failed; fix before serving.
+
+If voice-note fails: fix `game/server/voiceNoteTranscribe.js` — dev will not stay up until green.
 
 ## Patient names
 
@@ -62,22 +87,32 @@ Or `npm run build:differential-review` (included in `build:data` / `predev`).
 
 On tab open: `POST /api/differential/real-world` → `server/realWorldProvider.js`
 
+**Default stack (no Gemini billing):**
+
+| Layer | Provider | Env |
+|-------|----------|-----|
+| **Stories** | **DeepSeek** | `REAL_WORLD_PROVIDER=deepseek` + `DEEPSEEK_API_KEY` |
+| **YouTube videos** | **YouTube Data API** (if `YOUTUBE_API_KEY`) or **yt-search** | `REAL_WORLD_VIDEO_PROVIDER=youtube-api` (auto when key set) |
+
+Do **not** use Gemini for Real World unless Steve explicitly opts in — free tier is 20 req/day.
+
 | Provider | When | Strength |
 |----------|------|----------|
-| **Gemini** (default if `GEMINI_API_KEY`) | `geminiRealWorld.js` | **Google Search grounding** — finds real patients + YouTube URLs |
-| **DeepSeek** (fallback) | `deepseekRealWorld.js` | Good story text, no web search — videos via `youtubeSearchRepair.js` |
+| **DeepSeek** (default) | `deepseekRealWorld.js` | Good story text; videos via yt-search |
+| **Gemini** (optional) | `REAL_WORLD_PROVIDER=gemini` + `REAL_WORLD_VIDEO_PROVIDER=auto` | Google Search grounding — quota limited |
 
 Env (`MeWorld/.env`):
-- `GEMINI_API_KEY` — free tier at [Google AI Studio](https://aistudio.google.com/apikey) (preferred)
-- `DEEPSEEK_API_KEY` — fallback stories only
-- `REAL_WORLD_PROVIDER=deepseek` — force DeepSeek
-- `REAL_WORLD_VIDEO_PROVIDER=yt-search` — skip Gemini video repair
+- `DEEPSEEK_API_KEY` — stories (required for Real World tab)
+- `REAL_WORLD_PROVIDER=deepseek`
+- `REAL_WORLD_VIDEO_PROVIDER=yt-search` — **default**; never hits Gemini quota
+- `GEMINI_API_KEY` — optional; ignored for video when `yt-search` is set
+- `REAL_WORLD_VIDEO_PROVIDER=auto` — only if Steve wants Gemini video repair (paid/quota)
 
 **Two tiers per case (always aim for both):**
 1. **`direct`** — real patient matching CCS diagnosis (e.g. Alex Lewis / TSS)
 2. **`adjacent`** — broader real public story teaching around the topic (e.g. Michael Phelps mental health for drowning Case 113)
 
-Video plug-in: `youtubeSearchRepair.js` — Gemini repair when key set, else `yt-search` npm (free, weaker). Scoring is stricter for `direct`, looser for `adjacent`. Cache: `game/.real-world-cache/case_N.json` — use Refresh in UI or `refresh: true` after rule changes.
+Video plug-in: `youtubeSearchRepair.js` — **yt-search** by default (free). Optional Gemini when `REAL_WORLD_VIDEO_PROVIDER=auto|gemini`. Scoring is stricter for `direct`, looser for `adjacent`. Cache: `game/.real-world-cache/case_N.json` — use Refresh in UI or `refresh: true` after rule changes.
 
 **Curated:** `src/data/realWorldCases.json` — hand-verified `tier` + `match.caseIds`. UI merges curated + API via `mergeStoriesByTier`.
 

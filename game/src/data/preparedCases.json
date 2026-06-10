@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "builtAt": "2026-06-10T10:00:00.011Z",
+  "builtAt": "2026-06-10T11:17:48.424Z",
   "totalCases": 181,
   "caseBankMerged": 181,
   "caseBankSource": "ollama-case-bank",
@@ -5043,9 +5043,14 @@
       "category": "Neurology",
       "presentationKey": "Facial Pain",
       "playbookKey": "case-bank-129",
-      "diagnosis": "Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)",
+      "diagnosis": "Trigeminal Neuralgia",
+      "patient_voice": {
+        "chief_complaint": "Sudden severe electric shock-like facial pain",
+        "history": "The pain comes in bursts — like a shock in my face. Brushing my teeth or a breeze can set it off.",
+        "pain": "Sharp, electric facial pain lasting seconds — triggered by touch or chewing."
+      },
       "caseBankSource": "deepseek_direct",
-      "hasSourceIntro": false,
+      "hasSourceIntro": true,
       "vitals": {
         "sbp": 148,
         "dbp": 88,
@@ -5067,7 +5072,7 @@
       "exam": [
         [
           "General",
-          "Facial Pain — exam tailored to chief complaint on arrival."
+          "Acutely ill appearance consistent with facial pain."
         ],
         [
           "Cardiovascular",
@@ -5091,72 +5096,64 @@
         ]
       ],
       "patientSex": "unknown",
+      "hpi_narrative": "{{patient_name}} presents with classic trigeminal neuralgia — recurrent episodes of severe, sharp, electric shock-like facial pain in one area of the trigeminal nerve distribution, lasting seconds to two minutes, often precipitated by innocuous stimuli (light touch, chewing, wind). The most common cause is compression of the trigeminal nerve root (80–90% of cases), typically by a vascular loop.\n\nDifferential: acute herpes zoster, painful post-traumatic trigeminal neuropathy, idiopathic painful trigeminal neuropathy, postherpetic trigeminal neuropathy.\n\nWorkup: neurologic exam including cranial nerves; CBC to exclude infection; BMP/CMP; MRI or CT head to exclude tumor or neurovascular compression.\n\nFirst-line treatment is carbamazepine or oxcarbazepine; gabapentin/pregabalin are second line. Surgery is not indicated until medical therapy fails.",
       "difficulty": "standard",
-      "clinical_tip": "Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation) — follow CCS review orders.",
-      "objective": "Complete diagnosis and treatment orders for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation).",
+      "clinical_tip": "Trigeminal Neuralgia — follow CCS review orders.",
+      "objective": "Complete diagnosis and treatment orders for Trigeminal Neuralgia.",
       "interventionIds": [
-        "obtain-a-detailed-history-focusing-on-th",
-        "perform-a-neurological-examination-inclu",
-        "order-mri-or-ct-with-contrast-to-evaluat",
-        "consider-referral-to-a-neurologist-or-ne",
-        "initiate-pain-management-as-needed-such-",
-        "oxygen",
-        "iv-access-x2"
+        "physical-exam-general-appearance",
+        "physical-exam-neuro-psych",
+        "cbc-with-differential",
+        "ct-head-with-contrast-ct-of-head-without",
+        "basic-metabolic-profile-comprehensive-me",
+        "carbamazepine-therapy-oxcarbazepine-gaba"
       ],
       "interventions": [
         {
-          "id": "obtain-a-detailed-history-focusing-on-th",
-          "label": "Obtain a detailed history, focusing on the onset, duration, and characteristics of the pain",
+          "id": "physical-exam-general-appearance",
+          "label": "Physical Exam: General Appearance",
+          "correct_zone": "zone-custom-1",
+          "why": "It would be a good idea to take a general look at the patient to see how ill the patient looks.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-neuro-psych",
+          "label": "Physical Exam: Neuro / Psych",
           "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation): Obtain a detailed history, focusing on the onset, duration, and characteristics of the pain.",
+          "why": "This is the chief complaint of the patient, so this should be examined.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "perform-a-neurological-examination-inclu",
-          "label": "Perform a neurological examination, including cranial nerve evaluation",
-          "correct_zone": "zone-icu",
-          "why": "Targeted Perform a neurological examination, including cranial nerve evaluation exam supports the differential for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation).",
+          "id": "cbc-with-differential",
+          "label": "CBC with differential",
+          "correct_zone": "zone-blood",
+          "why": "This should be drawn to rule out any acute infection that could be causing the symptoms of the patient.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "order-mri-or-ct-with-contrast-to-evaluat",
-          "label": "Order MRI or CT with contrast to evaluate for any structural lesions in the trigeminal nerve region",
+          "id": "ct-head-with-contrast-ct-of-head-without",
+          "label": "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium",
           "correct_zone": "zone-monitor",
-          "why": "Appropriate CCS order for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation): Order MRI or CT with contrast to evaluate for any structural lesions in the trigeminal nerve region.",
+          "why": "MRI/CT scan should be done to rule out lesions such as tumor or neurovascular compression.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "consider-referral-to-a-neurologist-or-ne",
-          "label": "Consider referral to a neurologist or neurosurgeon for further evaluation and management if MRI/CT reveals abnormalities",
-          "correct_zone": "zone-monitor",
-          "why": "Targeted Consider referral to a neurologist or neurosurgeon for further evaluation and management if MRI/CT reveals abnormalities exam supports the differential for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation).",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "initiate-pain-management-as-needed-such-",
-          "label": "Initiate pain management as needed, such as carbamazepine or gabapentin, while awaiting specialist consultation",
-          "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation): Initiate pain management as needed, such as carbamazepine or gabapentin, while awaiting specialist consultation.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "oxygen",
-          "label": "Oxygen",
-          "correct_zone": "zone-monitor",
-          "why": "To provide immediate oxygen support for the patient experiencing facial pain.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "iv-access-x2",
-          "label": "IV access x2",
+          "id": "basic-metabolic-profile-comprehensive-me",
+          "label": "Basic metabolic profile / Comprehensive metabolic profile",
           "correct_zone": "zone-arm",
-          "why": "To establish large-bore IV access in preparation for fluid resuscitation and administration of medications.",
+          "why": "Chemistries are important to get to rule out other conditions.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "carbamazepine-therapy-oxcarbazepine-gaba",
+          "label": "Carbamazepine, therapy / Oxcarbazepine / Gabapentin / Pregabalin",
+          "correct_zone": "zone-icu",
+          "why": "The first line treatment for trigeminal neuralgia is Carbamazepine or Oxcarbazepine.",
           "guideline": "ACEP",
           "optional": false
         }
@@ -5164,56 +5161,56 @@
       "decoys": [
         {
           "id": "decoy-avoid-129-0",
-          "label": "Immediate surgical intervention without proper diagnostic workup",
-          "why": "Risk of unnecessary invasive procedure, potential complications, and suboptimal management",
+          "label": "Immediate neurosurgical intervention before medical therapy",
+          "why": "Surgery does not need to be consulted as medical treatment should occur and fail prior to involving surgery.",
           "correct_zone": "zone-icu"
         }
       ],
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Facial Pain — emergency presentation.",
-            "hpi": "Facial Pain — emergency presentation.",
+            "intro": "Sudden severe electric shock-like facial pain",
+            "hpi": "{{patient_name}} presents with classic trigeminal neuralgia — recurrent episodes of severe, sharp, electric shock-like facial pain in one area of the trigeminal nerve distribution, lasting seconds to two minutes, often precipitated by innocuous stimuli (light touch, chewing, wind). The most common cause is compression of the trigeminal nerve root (80–90% of cases), typically by a vascular loop. Differential: acute herpes zoster, painful post-traumatic trigeminal neuropathy, idiopathic painful trigeminal neuropathy, postherpetic trigeminal neuropathy. Workup: neurologic exam including cranial nerves; CBC to exclude infection; BMP/CMP; MRI or CT head to exclude tumor or neurovascular compression. First-line treatment is carbamazepine or oxcarbazepine; gabapentin/pregabalin are second line. Surgery is not indicated until medical therapy fails.",
             "vitalsText": "",
-            "clinicalTip": "Teaching hint: Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation) — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation). Start with stabilization, then targeted testing."
+            "clinicalTip": "Teaching hint: Trigeminal Neuralgia — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Trigeminal Neuralgia. Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Facial Pain — emergency presentation.",
-            "hpi": "Facial Pain — emergency presentation.",
+            "intro": "Sudden severe electric shock-like facial pain",
+            "hpi": "{{patient_name}} presents with classic trigeminal neuralgia — recurrent episodes of severe, sharp, electric shock-like facial pain in one area of the trigeminal nerve distribution, lasting seconds to two minutes, often precipitated by innocuous stimuli (light touch, chewing, wind). The most common cause is compression of the trigeminal nerve root (80–90% of cases), typically by a vascular loop. Differential: acute herpes zoster, painful post-traumatic trigeminal neuropathy, idiopathic painful trigeminal neuropathy, postherpetic trigeminal neuropathy. Workup: neurologic exam including cranial nerves; CBC to exclude infection; BMP/CMP; MRI or CT head to exclude tumor or neurovascular compression. First-line treatment is carbamazepine or oxcarbazepine; gabapentin/pregabalin are second line. Surgery is not indicated until medical therapy fails.",
             "vitalsText": "",
-            "clinicalTip": "Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation) — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)."
+            "clinicalTip": "Trigeminal Neuralgia — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Trigeminal Neuralgia."
           },
           "hard": {
-            "intro": "Facial Pain — emergency presentation.",
-            "hpi": "Facial Pain — emergency presentation.",
+            "intro": "Sudden severe electric shock-like facial pain",
+            "hpi": "{{patient_name}} presents with classic trigeminal neuralgia — recurrent episodes of severe, sharp, electric shock-like facial pain in one area of the trigeminal nerve distribution, lasting seconds to two minutes, often precipitated by innocuous stimuli (light touch, chewing, wind). The most common cause is compression of the trigeminal nerve root (80–90% of cases), typically by a vascular loop. Differential: acute herpes zoster, painful post-traumatic trigeminal neuropathy, idiopathic painful trigeminal neuropathy, postherpetic trigeminal neuropathy. Workup: neurologic exam including cranial nerves; CBC to exclude infection; BMP/CMP; MRI or CT head to exclude tumor or neurovascular compression. First-line treatment is carbamazepine or oxcarbazepine; gabapentin/pregabalin are second line. Surgery is not indicated until medical therapy fails.",
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Trigeminal Neuralgia."
           }
         },
         "patient": {
           "easy": {
-            "intro": "Facial Pain — emergency presentation.",
-            "hpi": "Facial Pain — emergency presentation.",
+            "intro": "Sudden severe electric shock-like facial pain",
+            "hpi": "{{patient_name}} presents with classic trigeminal neuralgia — recurrent episodes of severe, sharp, electric shock-like facial pain in one area of the trigeminal nerve distribution, lasting seconds to two minutes, often precipitated by innocuous stimuli (light touch, chewing, wind). The most common cause is compression of the trigeminal nerve root (80–90% of cases), typically by a vascular loop. Differential: acute herpes zoster, painful post-traumatic trigeminal neuropathy, idiopathic painful trigeminal neuropathy, postherpetic trigeminal neuropathy. Workup: neurologic exam including cranial nerves; CBC to exclude infection; BMP/CMP; MRI or CT head to exclude tumor or neurovascular compression. First-line treatment is carbamazepine or oxcarbazepine; gabapentin/pregabalin are second line. Surgery is not indicated until medical therapy fails.",
             "vitalsText": "",
-            "clinicalTip": "Teaching hint: Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation) — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation). Share your symptoms clearly with the team."
+            "clinicalTip": "Teaching hint: Trigeminal Neuralgia — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Trigeminal Neuralgia. Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Facial Pain — emergency presentation.",
-            "hpi": "Facial Pain — emergency presentation.",
+            "intro": "Sudden severe electric shock-like facial pain",
+            "hpi": "{{patient_name}} presents with classic trigeminal neuralgia — recurrent episodes of severe, sharp, electric shock-like facial pain in one area of the trigeminal nerve distribution, lasting seconds to two minutes, often precipitated by innocuous stimuli (light touch, chewing, wind). The most common cause is compression of the trigeminal nerve root (80–90% of cases), typically by a vascular loop. Differential: acute herpes zoster, painful post-traumatic trigeminal neuropathy, idiopathic painful trigeminal neuropathy, postherpetic trigeminal neuropathy. Workup: neurologic exam including cranial nerves; CBC to exclude infection; BMP/CMP; MRI or CT head to exclude tumor or neurovascular compression. First-line treatment is carbamazepine or oxcarbazepine; gabapentin/pregabalin are second line. Surgery is not indicated until medical therapy fails.",
             "vitalsText": "",
-            "clinicalTip": "Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation) — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)."
+            "clinicalTip": "Trigeminal Neuralgia — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Trigeminal Neuralgia."
           },
           "hard": {
-            "intro": "Facial Pain — emergency presentation.",
-            "hpi": "Facial Pain — emergency presentation.",
+            "intro": "Sudden severe electric shock-like facial pain",
+            "hpi": "{{patient_name}} presents with classic trigeminal neuralgia — recurrent episodes of severe, sharp, electric shock-like facial pain in one area of the trigeminal nerve distribution, lasting seconds to two minutes, often precipitated by innocuous stimuli (light touch, chewing, wind). The most common cause is compression of the trigeminal nerve root (80–90% of cases), typically by a vascular loop. Differential: acute herpes zoster, painful post-traumatic trigeminal neuropathy, idiopathic painful trigeminal neuropathy, postherpetic trigeminal neuropathy. Workup: neurologic exam including cranial nerves; CBC to exclude infection; BMP/CMP; MRI or CT head to exclude tumor or neurovascular compression. First-line treatment is carbamazepine or oxcarbazepine; gabapentin/pregabalin are second line. Surgery is not indicated until medical therapy fails.",
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Trigeminal Neuralgia."
           }
         }
       }

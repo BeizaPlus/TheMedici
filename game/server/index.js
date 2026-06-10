@@ -42,6 +42,7 @@ import {
   realWorldAvailable,
   realWorldProvider,
 } from './realWorldProvider.js';
+import { realWorldVideoProvider } from './youtubeSearchRepair.js';
 import { fetchYoutubeTranscript } from './youtubeTranscript.js';
 import {
   buildPortraitAnalysis,
@@ -233,6 +234,12 @@ function formatCaseDiscussionForChat(discussion) {
     for (const m of discussion.priorPatientChat) {
       const who = m.role === 'assistant' ? 'Patient' : 'Learner';
       lines.push(`- [${m.at || ''}] ${who}: ${m.content}`);
+    }
+  }
+  if (discussion.youtubeTranscripts?.length) {
+    lines.push('Real-world YouTube clips the learner saved for this case (reference only — not the simulated patient):');
+    for (const v of discussion.youtubeTranscripts) {
+      lines.push(`- ${v.title || v.youtubeId}: ${v.transcript}`);
     }
   }
   if (discussion.learnerNotes) {
@@ -593,6 +600,7 @@ app.get('/api/health', (_req, res) => {
     gemini: Boolean(process.env.GEMINI_API_KEY),
     realWorld: realWorldAvailable(),
     realWorldProvider: realWorldProvider(),
+    realWorldVideoProvider: realWorldVideoProvider(),
     chatProvider: provider,
     chatModel: chatModel(),
     fal: Boolean(process.env.FAL_KEY),
@@ -830,7 +838,7 @@ app.post('/api/differential/parse-transcript', async (req, res) => {
 app.post('/api/differential/real-world', async (req, res) => {
   if (!realWorldAvailable()) {
     return res.status(400).json({
-      error: 'Add GEMINI_API_KEY to MeWorld/.env (preferred — Google Search for stories + videos). Fallback: DEEPSEEK_API_KEY',
+      error: 'Add DEEPSEEK_API_KEY to MeWorld/.env (stories). Videos use free yt-search — set REAL_WORLD_VIDEO_PROVIDER=yt-search',
     });
   }
 

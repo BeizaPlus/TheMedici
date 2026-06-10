@@ -13,11 +13,14 @@ export async function parseDifferentialTranscript({
   caseId,
   final = false,
 }) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 45_000);
   let r;
   try {
     r = await fetch(`${API}/api/differential/parse-transcript`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
       body: JSON.stringify({
         rawTranscript,
         topic,
@@ -25,8 +28,13 @@ export async function parseDifferentialTranscript({
         final,
       }),
     });
-  } catch {
+  } catch (e) {
+    if (e?.name === 'AbortError') {
+      throw new Error('Transcript parse timed out — try again');
+    }
     throw new Error('API server not running — run npm run dev in MeWorld/game');
+  } finally {
+    clearTimeout(timer);
   }
   const data = await r.json().catch(() => ({}));
   if (!r.ok) {

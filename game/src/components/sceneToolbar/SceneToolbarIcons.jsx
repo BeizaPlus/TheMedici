@@ -269,6 +269,38 @@ export function IconCopy(props) {
   );
 }
 
+/** Tabler: bookmark — review queue — https://tabler.io/icons/icon/bookmark */
+export function IconBookmark(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M18 7v14l-6 -4l-6 4v-14a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4z" />
+    </svg>
+  );
+}
+
+/** Tabler: timeline — practice log — https://tabler.io/icons/icon/timeline */
+export function IconTimeline(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M4 16l6 -6l4 4l8 -8" />
+      <path d="M4 20h16" />
+    </svg>
+  );
+}
+
+/** Tabler: world — real-world stories — https://tabler.io/icons/icon/world */
+export function IconWorld(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+      <path d="M3.6 9h16.8" />
+      <path d="M3.6 15h16.8" />
+      <path d="M11.5 3a17 17 0 0 0 0 18" />
+      <path d="M12.5 3a17 17 0 0 1 0 18" />
+    </svg>
+  );
+}
+
 export function IconSettings(props) {
   return (
     <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>

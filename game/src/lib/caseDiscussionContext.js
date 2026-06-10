@@ -3,6 +3,7 @@ import { readLocalChatHistory } from './caseUserLog.js';
 import { readCaseMemoryMeta } from './differentialCaseMemory.js';
 import { getAttemptsForCase, readCaseTranscriptArchive } from './differentialPracticeLog.js';
 import { listLocalDifferentialRecordings } from './differentialVoiceStorage.js';
+import { listCaseYoutubeTranscripts } from './caseYoutubeTranscripts.js';
 
 const MAX_VOICE = 12;
 const MAX_DIFF_ATTEMPTS = 10;
@@ -86,6 +87,18 @@ export function buildCaseDiscussionContext(caseId) {
     }));
 
   const learnerNotes = clip(readCaseNotes(id), MAX_NOTE_CHARS);
+  const memoryHook =
+    memory.text && memory.text !== learnerNotes ? clip(memory.text, 500) : null;
+
+  const youtubeTranscripts = listCaseYoutubeTranscripts(id)
+    .slice(-6)
+    .map((v) => ({
+      youtubeId: v.youtubeId,
+      title: v.title || 'YouTube',
+      transcript: clip(v.text, 1200),
+      savedAt: v.savedAt || null,
+    }))
+    .filter((v) => v.transcript);
 
   const voiceTranscripts = uniqueTranscriptRows(
     [
@@ -116,14 +129,16 @@ export function buildCaseDiscussionContext(caseId) {
     voiceTranscripts.length ||
     diffAttempts.length ||
     priorChat.length ||
-    learnerNotes;
+    learnerNotes ||
+    youtubeTranscripts.length;
 
   if (!hasContent) return null;
 
   return {
     caseId: id,
-    memoryHook: memory.text ? clip(memory.text, 500) : null,
+    memoryHook,
     voiceTranscripts,
+    youtubeTranscripts,
     differentialAttempts: diffAttempts,
     priorPatientChat: priorChat,
     learnerNotes: learnerNotes || null,
@@ -140,8 +155,10 @@ export function discussionCacheKey(discussion) {
       c: discussion.priorPatientChat?.length || 0,
       m: discussion.memoryHook || '',
       n: (discussion.learnerNotes || '').length,
+      y: discussion.youtubeTranscripts?.length || 0,
       lastVoice: discussion.voiceTranscripts?.at(-1)?.at || null,
       lastChat: discussion.priorPatientChat?.at(-1)?.at || null,
+      lastYoutube: discussion.youtubeTranscripts?.at(-1)?.savedAt || null,
     });
   } catch {
     return '';

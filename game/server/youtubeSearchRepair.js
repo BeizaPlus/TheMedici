@@ -2,6 +2,25 @@ import yts from 'yt-search';
 import { youtubeVideoAvailable } from './youtubeUtils.js';
 import { fetchRepairVideosWithGemini, geminiRealWorldAvailable } from './geminiRealWorld.js';
 
+/** youtube-api when YOUTUBE_API_KEY set; else yt-search. Gemini only if REAL_WORLD_VIDEO_PROVIDER=gemini|auto */
+export function realWorldVideoProvider() {
+  const forced = String(process.env.REAL_WORLD_VIDEO_PROVIDER || '').toLowerCase();
+  if (forced) return forced;
+  if (String(process.env.YOUTUBE_API_KEY || '').trim()) return 'youtube-api';
+  return 'yt-search';
+}
+
+function youtubeDataApiKey() {
+  return String(process.env.YOUTUBE_API_KEY || '').trim();
+}
+
+function useGeminiVideoRepair() {
+  const mode = realWorldVideoProvider();
+  if (mode === 'yt-search' || mode === 'youtube-api') return false;
+  if (mode === 'gemini' || mode === 'auto') return geminiRealWorldAvailable();
+  return false;
+}
+
 const MEDICAL_HINT =
   /patient|medical|disease|syndrome|documentary|hospital|diagnos|condition|rare|health|doctor|icu|emergency|genetic|endocrin|pediatric/i;
 
@@ -270,16 +289,72 @@ async function searchWithYtScrape(ctx, max) {
   return found;
 }
 
+async function searchWithYouTubeDataApi(ctx, max) {
+  const key = youtubeDataApiKey();
+  if (!key) return [];
+
+  const queries = buildQueries(ctx);
+  const candidates = [];
+  const seen = new Set();
+
+  for (const query of queries) {
+    try {
+      const params = new URLSearchParams({
+        part: 'snippet',
+        type: 'video',
+        maxResults: '8',
+        q: query,
+        key,
+        safeSearch: 'moderate',
+        videoEmbeddable: 'true',
+      });
+      const r = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`, {
+        signal: AbortSignal.timeout(12000),
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        console.warn('[youtube-api]', query, data?.error?.message || r.status);
+        continue;
+      }
+      for (const row of data?.items || []) {
+        const id = String(row?.id?.videoId || '').trim();
+        if (!id || seen.has(id)) continue;
+        seen.add(id);
+        const title = String(row?.snippet?.title || 'YouTube').trim();
+        const score = videoRelevanceScore(title, ctx);
+        if (score < minRelevanceScore(ctx)) continue;
+        candidates.push({
+          title,
+          url: `https://www.youtube.com/watch?v=${id}`,
+          youtubeId: id,
+          score,
+        });
+      }
+    } catch (err) {
+      console.warn('[youtube-api]', query, err?.message || err);
+    }
+  }
+
+  candidates.sort((a, b) => b.score - a.score);
+  const found = [];
+  for (const row of candidates) {
+    if (found.length >= max) break;
+    if (!(await youtubeVideoAvailable(row.youtubeId))) continue;
+    found.push({
+      title: row.title,
+      url: row.url,
+      youtubeId: row.youtubeId,
+    });
+  }
+  return found;
+}
+
 /**
  * Find embeddable YouTube videos for a real-world story.
- * Tries Gemini + Google Search grounding when GEMINI_API_KEY is set; falls back to yt-search.
+ * Default: YouTube Data API when YOUTUBE_API_KEY set, else yt-search (free).
  */
 export async function searchWorkingYouTubeVideos(ctx = {}, max = 2) {
-  const useGemini =
-    geminiRealWorldAvailable() &&
-    String(process.env.REAL_WORLD_VIDEO_PROVIDER || 'auto').toLowerCase() !== 'yt-search';
-
-  if (useGemini) {
+  if (useGeminiVideoRepair()) {
     try {
       const gemini = await fetchRepairVideosWithGemini({
         patientName: ctx.patientName,
@@ -296,6 +371,13 @@ export async function searchWorkingYouTubeVideos(ctx = {}, max = 2) {
     } catch (err) {
       console.warn('[youtube-search] Gemini repair failed:', err?.message || err);
     }
+  }
+
+  const mode = realWorldVideoProvider();
+  if (mode === 'youtube-api') {
+    const apiHits = await searchWithYouTubeDataApi(ctx, max);
+    if (apiHits.length) return apiHits;
+    console.warn('[youtube-search] YouTube API returned no hits — falling back to yt-search');
   }
 
   return searchWithYtScrape(ctx, max);

@@ -13,6 +13,9 @@ export default function PlayChatNotesTabPanel({
   notesVersion,
   onTimelineNote,
   onTimelineChat,
+  suppressHeader = false,
+  patientMode = false,
+  onPatientModeChange,
 }) {
   return (
     <CaseSessionThread
@@ -23,11 +26,14 @@ export default function PlayChatNotesTabPanel({
       caseRailItems={caseRailItems}
       threadViewCaseId={threadViewCaseId}
       onSelectThreadCase={onSelectThreadCase}
-      caseRecording={caseRecording}
+      caseRecording={suppressHeader ? null : caseRecording}
       notesVersion={notesVersion}
       onTimelineNote={onTimelineNote}
       onTimelineChat={onTimelineChat}
       fillTab
+      suppressHeader={suppressHeader}
+      patientMode={patientMode}
+      onPatientModeChange={onPatientModeChange}
     />
   );
 }

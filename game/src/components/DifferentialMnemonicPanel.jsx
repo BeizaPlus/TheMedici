@@ -9,7 +9,7 @@ import {
   writeCaseMemoryText,
 } from '../lib/differentialCaseMemory.js';
 
-export default function DifferentialMnemonicPanel({ caseId, embedded = false }) {
+export default function DifferentialMnemonicPanel({ caseId, embedded = false, notesVersion = 0, onChanged }) {
   const [text, setText] = useState(() => readCaseMemoryMeta(caseId).text);
   const [imageUrl, setImageUrl] = useState('');
   const [hasImage, setHasImage] = useState(() => readCaseMemoryMeta(caseId).hasImage);
@@ -20,8 +20,9 @@ export default function DifferentialMnemonicPanel({ caseId, embedded = false }) 
   const persistText = useCallback(
     (value) => {
       writeCaseMemoryText(caseId, value);
+      onChanged?.();
     },
-    [caseId],
+    [caseId, onChanged],
   );
 
   const dictation = useSpeechDictation({
@@ -59,8 +60,8 @@ export default function DifferentialMnemonicPanel({ caseId, embedded = false }) 
       cancelled = true;
       if (revoked) URL.revokeObjectURL(revoked);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- case change only
-  }, [caseId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- case change + external note sync
+  }, [caseId, notesVersion]);
 
   const onTextChange = (e) => {
     const value = e.target.value;
@@ -106,7 +107,7 @@ export default function DifferentialMnemonicPanel({ caseId, embedded = false }) 
   const body = (
     <div className={`diff-mnemonic-body${embedded ? ' diff-mnemonic-body--embedded' : ''}`}>
       <p className="diff-mnemonic-hint">
-        Type or dictate a mnemonic. Paste or upload an image to rehearse this case&apos;s differentials.
+        Shared case journal — same notes in immersive play and differential practice for Case {caseId}.
       </p>
       <div className="diff-mnemonic-actions">
         <CaseRecordButton

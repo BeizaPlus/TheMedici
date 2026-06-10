@@ -42,6 +42,8 @@ export default function DifferentialStudyPanel({
   timelineFocusVersion = 0,
   studyTabRequest = null,
   reviewQueueTick = 0,
+  notesVersion = 0,
+  onCaseNotesChanged,
 }) {
   const [tab, setTab] = useState('case');
   const [expanded, setExpanded] = useState(false);
@@ -119,29 +121,30 @@ export default function DifferentialStudyPanel({
     if (!timelineFocusVersion) return;
     setTab('timeline');
     setExpanded(true);
-  }, [timelineFocusVersion]);
+    onPauseForStudy?.();
+  }, [timelineFocusVersion, onPauseForStudy]);
 
   useEffect(() => {
     if (!studyTabRequest?.version || !studyTabRequest.tab) return;
     setTab(studyTabRequest.tab);
     setExpanded(true);
-    if (studyTabRequest.tab === 'case') onPauseForStudy?.();
+    onPauseForStudy?.();
   }, [studyTabRequest, onPauseForStudy]);
 
-  const pauseIfCaseDeepDive = useCallback(() => {
-    onPauseForStudy?.();
-  }, [onPauseForStudy]);
-
-  const toggleTab = useCallback((id) => {
-    if (expanded && tab === id) {
-      setExpanded(false);
-      return;
-    }
-    setTab(id);
-    setExpanded(true);
-    if (id === 'case') onPauseForStudy?.();
-    if (id === 'realworld') onStudyTabOpen?.(id);
-  }, [expanded, tab, onStudyTabOpen, onPauseForStudy]);
+  const toggleTab = useCallback(
+    (id) => {
+      if (expanded && tab === id) {
+        setExpanded(false);
+        return;
+      }
+      const openingFromCollapsed = !expanded;
+      setTab(id);
+      setExpanded(true);
+      if (openingFromCollapsed) onPauseForStudy?.();
+      if (id === 'realworld') onStudyTabOpen?.(id);
+    },
+    [expanded, tab, onStudyTabOpen, onPauseForStudy],
+  );
 
   const showTimeline = timelineItems > 0;
   const showCase = hasReviewText || hasCaseData;
@@ -212,7 +215,7 @@ export default function DifferentialStudyPanel({
           )}
 
           {tab === 'case' && (
-            <div className="diff-study-case-panel" onClick={pauseIfCaseDeepDive}>
+            <div className="diff-study-case-panel">
               {caseRef && (
                 <div className="diff-study-case-actions">
                   <button
@@ -228,7 +231,6 @@ export default function DifferentialStudyPanel({
                 <DifferentialReviewPanel
                   review={ccsReview}
                   className="diff-case-review"
-                  onInteract={pauseIfCaseDeepDive}
                 />
               ) : hasCaseData ? (
                 <CasePresentationPanel
@@ -245,7 +247,14 @@ export default function DifferentialStudyPanel({
             </div>
           )}
 
-          {tab === 'notes' && <DifferentialMnemonicPanel caseId={caseId} embedded />}
+          {tab === 'notes' && (
+            <DifferentialMnemonicPanel
+              caseId={caseId}
+              embedded
+              notesVersion={notesVersion}
+              onChanged={onCaseNotesChanged}
+            />
+          )}
 
           {tab === 'realworld' && (
             <DifferentialRealWorldPanel
@@ -259,6 +268,7 @@ export default function DifferentialStudyPanel({
               caseSummaryText={caseSummaryText}
               active={expanded && tab === 'realworld'}
               prefetchParams={realWorldSearchParams}
+              onTranscriptSaved={onCaseNotesChanged}
             />
           )}
         </div>

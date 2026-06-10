@@ -193,6 +193,14 @@
   pointer-events: auto;
 }
 
+.diff-dock-actions-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
 .diff-ambience-dock .diff-dock-bookmark-btn.case-review-flag-btn {
   margin: 0;
   padding: 0;
@@ -202,10 +210,16 @@
   height: 28px;
   justify-content: center;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  background: transparent;
   text-transform: none;
   letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.diff-ambience-dock .diff-dock-bookmark-btn:hover {
+  color: #ddd;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .diff-ambience-dock .diff-dock-bookmark-btn .case-review-bookmark-icon {
@@ -214,9 +228,129 @@
 }
 
 .diff-ambience-dock .diff-dock-bookmark-btn.active {
-  border-color: rgba(120, 180, 255, 0.65);
+  border: none;
   color: #9ec5ff;
   background: rgba(120, 180, 255, 0.12);
+}
+
+.diff-dock-chat-btn {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  min-width: 28px;
+  min-height: 28px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+}
+
+.diff-dock-chat-btn .toolbar-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.diff-dock-chat-btn:hover {
+  color: #ddd;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.diff-dock-chat-btn.active {
+  border: none;
+  color: var(--gold, #e8b84b);
+  background: rgba(232, 184, 75, 0.12);
+}
+
+.diff-dock-chat-btn--patient:not(.active) {
+  color: var(--gold, #e8b84b);
+}
+
+.case-chat-patient-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  transition: color 0.15s, background 0.15s;
+}
+
+.case-chat-patient-btn .toolbar-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.case-chat-patient-btn:hover {
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.case-chat-patient-btn.is-active {
+  color: var(--gold, #e8b84b);
+  background: rgba(232, 184, 75, 0.18);
+}
+
+.case-chat-banner--patient {
+  color: var(--gold, #e8b84b);
+  background: rgba(232, 184, 75, 0.1);
+  border-bottom: 1px solid rgba(232, 184, 75, 0.22);
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+}
+
+.diff-dock-chat-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 14px;
+  text-align: center;
+  background: rgba(232, 184, 75, 0.9);
+  color: #1a1408;
+}
+
+.diff-floating-chat {
+  z-index: 72;
+}
+
+.diff-floating-chat-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.diff-floating-chat-body .case-session-thread--body-only {
+  flex: 1 1 auto;
+  min-height: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.diff-floating-chat-body .case-chat-messages {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .diff-ambience-dock .clinical-font-controls-wrap {
@@ -1369,6 +1503,30 @@
 
 .diff-study-body:has(.diff-rw-panel--fit) {
   overflow: hidden;
+}
+
+.diff-study-body:has(.diff-study-chat-wrap) {
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  max-height: min(52vh, 520px);
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+.diff-study-chat-wrap {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.diff-study-chat-wrap .case-chat-panel--fill-tab {
+  flex: 1;
+  min-height: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
 }
 
 .diff-study-empty {

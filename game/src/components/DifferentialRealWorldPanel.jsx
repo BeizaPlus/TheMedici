@@ -17,6 +17,7 @@ import {
   avatarPickMatches,
 } from '../lib/caseAvatar.js';
 import { fetchYoutubeTranscript } from '../lib/fetchYoutubeTranscript.js';
+import { saveCaseYoutubeTranscript } from '../lib/caseYoutubeTranscripts.js';
 import CcsCaseSummaryBody from './CcsCaseSummaryBody.jsx';
 
 function AvatarIconButton({ selected, busy, onClick, title = 'Use as case avatar' }) {
@@ -368,7 +369,15 @@ function TranscriptCueList({ cues = [], activeStart = null, onSeek }) {
   );
 }
 
-function StoryReadPanel({ story, youtubeId = null, caseSummaryText = '', onSeekVideo }) {
+function StoryReadPanel({
+  story,
+  youtubeId = null,
+  caseId = null,
+  videoTitle = '',
+  caseSummaryText = '',
+  onSeekVideo,
+  onTranscriptSaved,
+}) {
   const [expanded, setExpanded] = useState(false);
   const [mode, setMode] = useState('summary');
   const [transcriptCues, setTranscriptCues] = useState([]);
@@ -393,6 +402,15 @@ function StoryReadPanel({ story, youtubeId = null, caseSummaryText = '', onSeekV
         if (cancelled) return;
         setTranscriptCues(data.cues || []);
         setTranscriptState('ready');
+        if (caseId && data.text) {
+          saveCaseYoutubeTranscript(caseId, {
+            youtubeId,
+            title: videoTitle || story?.headline || story?.name || 'YouTube',
+            text: data.text,
+            cues: data.cues,
+          });
+          onTranscriptSaved?.();
+        }
       })
       .catch(() => {
         if (cancelled) return;
@@ -497,6 +515,8 @@ function StoryStage({
   active,
   onOpenFullView,
   caseSummaryText = '',
+  caseId = null,
+  onTranscriptSaved,
 }) {
   const videoIframeRef = useRef(null);
   const primary = primaryVideoForStory(story);
@@ -542,8 +562,11 @@ function StoryStage({
       <StoryReadPanel
         story={story}
         youtubeId={primary?.youtubeId || null}
+        caseId={caseId}
+        videoTitle={primary?.title || story.headline || story.name}
         caseSummaryText={caseSummaryText}
         onSeekVideo={handleSeekVideo}
+        onTranscriptSaved={onTranscriptSaved}
       />
       <StoryVideos
         videos={story.videos}
@@ -567,6 +590,7 @@ export default function DifferentialRealWorldPanel({
   caseSummaryText = '',
   active = false,
   prefetchParams = null,
+  onTranscriptSaved,
 }) {
   const [remoteStories, setRemoteStories] = useState([]);
   const [storyIndex, setStoryIndex] = useState(0);
@@ -839,6 +863,8 @@ export default function DifferentialRealWorldPanel({
               active={storyIndex === index}
               onOpenFullView={openLightboxAt}
               caseSummaryText={caseSummaryText}
+              caseId={caseId}
+              onTranscriptSaved={onTranscriptSaved}
             />
           ))}
         </div>

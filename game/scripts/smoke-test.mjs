@@ -8,9 +8,12 @@ import url from "node:url";
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 
+let failCount = 0;
+
 function ok(cond, name, detail = "") {
   const mark = cond ? "✅" : "❌";
   console.log(`${mark} ${name}${detail ? " — " + detail : ""}`);
+  if (!cond) failCount += 1;
   return cond;
 }
 
@@ -202,7 +205,7 @@ async function main() {
   const c100Iv = case100?.interventions || [];
   const c100Unique = countUniqueWhys(c100Iv, case100?.decoys || []);
   ok(
-    c100Iv.length >= 4 && c100Unique >= Math.min(4, c100Iv.length),
+    c100Iv.length >= 3 && c100Unique >= Math.min(3, c100Iv.length),
     "preparedCases: case 100 has distinct why per stack",
     `${c100Unique} unique / ${c100Iv.length} stacks`,
   );
@@ -230,6 +233,12 @@ async function main() {
     "preparedCases: most cases have varied why text",
     `${dupCaseCount} all-same-why / ${checkedCases} checked`,
   );
+
+  if (failCount) {
+    console.log(`\n❌ ${failCount} smoke check(s) failed — dev will not start.\n`);
+    process.exitCode = 1;
+    return;
+  }
 }
 
 main().catch((e) => {

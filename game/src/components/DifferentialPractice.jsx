@@ -3,7 +3,12 @@ import '../styles/differential-practice.css';
 import bank from '../data/differentialBank.json';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import MicWaveform from './MicWaveform.jsx';
-import { IconPlayerPause, IconPlayerPlay, IconShuffle } from './sceneToolbar/SceneToolbarIcons.jsx';
+import {
+  IconMessage,
+  IconPlayerPause,
+  IconPlayerPlay,
+  IconShuffle,
+} from './sceneToolbar/SceneToolbarIcons.jsx';
 import {
   readStackerPrefs,
   STACKER_FIRST_PARSE_SECONDS,
@@ -26,6 +31,7 @@ import {
 } from '../lib/differentialAiScore.js';
 import { parseDiagnosisList } from '../lib/differentialGuessParse.js';
 import DifferentialStudyPanel from './DifferentialStudyPanel.jsx';
+import DifferentialFloatingChat from './DifferentialFloatingChat.jsx';
 import { getCaseById } from '../data/useCcsCatalog.js';
 import {
   getDifferentialReview,
@@ -47,6 +53,9 @@ import { prefetchMonitorAudio, startIcuMonitor, unlockAmbience } from '../lib/au
 import { practiceCaseHeadline } from '../lib/differentialHeadline.js';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 import { normalizeCaseProgressId } from '../data/caseProgress.js';
+import { useCaseChat } from '../hooks/useCaseChat.js';
+import { useCaseRecording } from '../hooks/useCaseRecording.js';
+import { startPlaySession } from '../lib/caseUserLog.js';
 
 function pickInitial() {
   return pickRandomIndex(-1);
@@ -118,6 +127,11 @@ export default function DifferentialPractice({ onBack }) {
   const [recordingsVersion, setRecordingsVersion] = useState(0);
   const [timelineFocusVersion, setTimelineFocusVersion] = useState(0);
   const [studyTabRequest, setStudyTabRequest] = useState(null);
+  const [notesVersion, setNotesVersion] = useState(0);
+  const [chatDockOpen, setChatDockOpen] = useState(false);
+  const [chatPatientMode, setChatPatientMode] = useState(false);
+  const chatPatientModeRef = useRef(false);
+  const diffPlaySessionRef = useRef(null);
   const [reviewQueueTick, setReviewQueueTick] = useState(0);
   const [voiceError, setVoiceError] = useState('');
   const [aiScore, setAiScore] = useState(null);
@@ -229,6 +243,64 @@ export default function DifferentialPractice({ onBack }) {
     () => (caseData ? getBriefingHpi(caseData, null, '') : ''),
     [caseData],
   );
+
+  const chatCaseData = useMemo(() => {
+    if (caseData) return caseData;
+    if (!ccsReview) return null;
+    return {
+      id: entry.caseId,
+      ccsNumber: entry.caseId,
+      title: ccsReview.title || entry.title,
+      chief_complaint: ccsReview.chiefComplaint || entry.topic,
+      hpi_narrative: ccsReview.hpiNarrative || ccsReview.history || fallbackHistory,
+      patientSex: ccsReview.patientSex,
+      playRole: audienceProfile?.playRole,
+      sessionDifficulty: audienceProfile?.difficulty,
+    };
+  }, [caseData, ccsReview, entry.caseId, entry.title, entry.topic, fallbackHistory, audienceProfile]);
+
+  useEffect(() => {
+    diffPlaySessionRef.current = null;
+  }, [entry.caseId]);
+
+  const ensureDiffPlaySession = useCallback(async () => {
+    if (diffPlaySessionRef.current) return diffPlaySessionRef.current;
+    const sid = await startPlaySession(entry.caseId, { mode: 'differential_practice' });
+    diffPlaySessionRef.current = sid;
+    return sid;
+  }, [entry.caseId]);
+
+  const toggleChatDock = useCallback(() => {
+    setChatDockOpen((open) => !open);
+  }, []);
+
+  const openChatDock = useCallback(() => {
+    setChatDockOpen(true);
+  }, []);
+
+  useEffect(() => {
+    chatPatientModeRef.current = chatPatientMode;
+  }, [chatPatientMode]);
+
+  useEffect(() => {
+    setChatDockOpen(false);
+    setChatPatientMode(false);
+  }, [entry.caseId]);
+
+  const caseChat = useCaseChat({
+    caseData: chatCaseData,
+    playSessionId: diffPlaySessionRef.current,
+    portraitVersion: notesVersion + recordingsVersion,
+    getSessionContext: useCallback(
+      () => ({
+        mode: 'differential_practice',
+        topic: entry.topic,
+        revealed,
+        guesses: flattenGuessList(guesses),
+      }),
+      [entry.topic, revealed, guesses],
+    ),
+  });
 
   const applyParsedDiagnoses = useCallback((parts) => {
     if (!parts?.length) return;
@@ -527,15 +599,47 @@ export default function DifferentialPractice({ onBack }) {
     }
   }, [stackerPhase, voice]);
 
+  const pauseStackerTimer = useCallback(() => {
+    setStackerPaused(true);
+  }, []);
+
   const pauseStacker = useCallback(() => {
     setStackerPaused(true);
     voice.stopRecording();
   }, [voice]);
 
+  const caseRecording = useCaseRecording({
+    caseId: entry.caseId,
+    sessionId: diffPlaySessionRef.current,
+    promptHint: [entry.title, entry.topic, entry.diagnosis].filter(Boolean).join(' — '),
+    ensureSession: ensureDiffPlaySession,
+    onSaved: () => {
+      setRecordingsVersion((v) => v + 1);
+      setNotesVersion((v) => v + 1);
+    },
+    onError: (e) => setVoiceError(e?.message || 'Voice note failed'),
+    onRecordingStart: () => {
+      if (stacker.enabled && !stackerPaused) pauseStacker();
+      openChatDock();
+    },
+    onNotesChanged: () => setNotesVersion((v) => v + 1),
+    onTranscriptReady: (text) => {
+      if (!text) return;
+      if (!chatPatientModeRef.current) {
+        void caseChat.appendNote?.(text, { header: 'Voice note' });
+        setNotesVersion((v) => v + 1);
+        return;
+      }
+      if (caseChat.available !== false) {
+        void caseChat.sendMessage(text);
+      }
+    },
+  });
+
   const toggleStackerPause = useCallback(() => {
     if (stackerPaused) resumeStacker();
-    else pauseStacker();
-  }, [stackerPaused, resumeStacker, pauseStacker]);
+    else pauseStackerTimer();
+  }, [stackerPaused, resumeStacker, pauseStackerTimer]);
 
   const handleSpaceMic = useCallback(() => {
     if (voice.disabled) return;
@@ -652,6 +756,11 @@ export default function DifferentialPractice({ onBack }) {
         setStackerPhase('review');
         setSecondsLeft(STACKER_REVIEW_SECONDS);
       }
+    } catch (e) {
+      setVoiceError(e?.message || 'Smart review failed — showing answer key');
+      setRevealed(true);
+      setStackerPhase('review');
+      setSecondsLeft(STACKER_REVIEW_SECONDS);
     } finally {
       stackerBusyRef.current = false;
     }
@@ -1136,21 +1245,37 @@ export default function DifferentialPractice({ onBack }) {
           timelineFocusVersion={timelineFocusVersion}
           studyTabRequest={studyTabRequest}
           reviewQueueTick={reviewQueueTick + statsTick}
+          notesVersion={notesVersion}
+          onCaseNotesChanged={() => setNotesVersion((v) => v + 1)}
           onJumpToCase={goToCaseId}
           onPauseForStudy={() => {
-            if (stacker.enabled && !stackerPaused) pauseStacker();
+            if (stacker.enabled && !stackerPaused) pauseStackerTimer();
           }}
           onStudyTabOpen={(tabId) => {
-            if (tabId === 'realworld' && stacker.enabled && !stackerPaused) {
-              pauseStacker();
+            if (tabId === 'realworld') {
+              /* prefetch handled in panel; timer pause only on first expand */
             }
           }}
+        />
+
+        <DifferentialFloatingChat
+          open={chatDockOpen}
+          onClose={toggleChatDock}
+          chat={caseChat}
+          caseData={chatCaseData}
+          caseId={entry.caseId}
+          caseRecording={caseRecording}
+          notesVersion={notesVersion}
+          patientMode={chatPatientMode}
+          onPatientModeChange={setChatPatientMode}
+          onNotesChanged={() => setNotesVersion((v) => v + 1)}
         />
 
         <div className="diff-case-foot">
           {stacker.enabled ? (
             <p className="diff-stacker-hint">
-              Stacker — <kbd>Space</kbd> start/stop mic · Case tab auto-pauses · Resume auto-starts mic ·
+              Stacker — <kbd>Space</kbd> start/stop mic · Opening study panel pauses timer (mic keeps going) ·
+              Resume continues timer + mic ·
               Corrected at {STACKER_FIRST_PARSE_SECONDS}s then every {STACKER_INCREMENTAL_SECONDS}s
             </p>
           ) : (
@@ -1194,17 +1319,35 @@ export default function DifferentialPractice({ onBack }) {
         </div>
       </div>
 
-      <aside className="diff-ambience-dock" aria-label="Bookmark, text size, and ICU monitor">
-        <CaseReviewFlagButton
-          caseId={flagCaseId}
-          iconOnly
-          className="diff-dock-bookmark-btn"
-          onChange={(flagged) => {
-            setReviewQueueTick((t) => t + 1);
-            setFlagToast(flagged ? 'Bookmarked for review later' : 'Bookmark removed');
-            window.setTimeout(() => setFlagToast(''), 2400);
-          }}
-        />
+      <aside className="diff-ambience-dock" aria-label="Bookmark, case chat, text size, and ICU monitor">
+        <div className="diff-dock-actions-row">
+          <CaseReviewFlagButton
+            caseId={flagCaseId}
+            iconOnly
+            className="diff-dock-bookmark-btn"
+            onChange={(flagged) => {
+              setReviewQueueTick((t) => t + 1);
+              setFlagToast(flagged ? 'Bookmarked for review later' : 'Bookmark removed');
+              window.setTimeout(() => setFlagToast(''), 2400);
+            }}
+          />
+          <button
+            type="button"
+            className={`diff-dock-chat-btn${chatDockOpen ? ' active' : ''}${chatPatientMode ? ' diff-dock-chat-btn--patient' : ''}`}
+            onClick={toggleChatDock}
+            aria-label="Case chat"
+            aria-pressed={chatDockOpen}
+            title={chatDockOpen ? 'Hide case chat' : 'Case chat — ask the patient'}
+          >
+            <IconMessage className="toolbar-icon" aria-hidden />
+            {(caseChat?.messages?.filter((m) => m.role === 'user' || m.role === 'assistant').length ||
+              0) > 0 && (
+              <span className="diff-dock-chat-badge" aria-hidden>
+                {caseChat.messages.filter((m) => m.role === 'user' || m.role === 'assistant').length}
+              </span>
+            )}
+          </button>
+        </div>
         <ClinicalFontControls
           prefs={textPrefs}
           onChange={setTextPrefs}

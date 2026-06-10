@@ -43,6 +43,7 @@ export const STORAGE = {
   caseBriefMarkdown: 'schoonmaker_case_brief_markdown',
   differentialVoiceIndex: 'schoonmaker_differential_voice_index',
   differentialCaseMemory: 'schoonmaker_differential_case_memory',
+  caseYoutubeTranscripts: 'schoonmaker_case_youtube_transcripts',
   differentialStackerPrefs: 'schoonmaker_differential_stacker_prefs',
 };
 

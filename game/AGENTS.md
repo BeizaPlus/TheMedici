@@ -17,7 +17,8 @@ Or: `C:\Users\steve\MeWorld\START-GAME.bat` / `START-MEWORLD.bat`
 
 - Web: http://localhost:5173 (Vite)
 - API: http://localhost:3001 (Express)
-- `predev` runs `build:data` + smoke test (20 checks) — must pass before dev starts
+- `predev` runs `build:data` + `smoke-test.mjs` + `smoke-pre-serve.mjs` (CSS audit + vite build) — must pass before dev starts
+- `npm run dev` uses `start-dev.mjs`: API → `smoke:differential` → Vite → `smoke:differential-session` — **servers exit if live smoke fails**
 
 If ports are busy, kill old node processes or use the alternate Vite port shown in the terminal.
 
@@ -84,6 +85,8 @@ Key files: `src/components/Play.jsx`, `src/hooks/usePlayDockLayout.js`, `src/com
 | Smoke test expected 80% completion | `scripts/smoke-test.mjs` reads `gameConfig.json` threshold (99) |
 | Blank welcome screen (TDZ) | `WelcomeScreen.jsx` — declare `panel` state before `useMemo` that uses it |
 | **White unstyled full-page mode** (Differentials, etc.) | Orphan CSS in `index.css` + lazy route without CSS in main bundle. Fix: `src/styles/differential-practice.css`, import in `main.jsx` + component, eager import in `Home.jsx`. Guard: `node scripts/audit-component-css.mjs` (in `predev`) |
+| **Full-app blank white page** | JS won't compile (duplicate `const`, syntax). Run **`npm run build`** before "done". Example fix: `src/lib/caseDiscussionContext.js` |
+| **Port 3001/5173 in use, Vite on 5178** | Run **`npm run dev`** (auto `free-dev-ports`) or `node scripts/free-dev-ports.mjs`. Rule: `dev-server-guard.mdc` |
 | **Differential compare + AI score** | Split scroll columns: yours (left) vs answer key (right). `POST /api/differential/score` uses DeepSeek/OpenAI from `.env`. Client: `src/lib/differentialAiScore.js` |
 
 ---

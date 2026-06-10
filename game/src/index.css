@@ -7337,6 +7337,37 @@ button {
   color: rgba(232, 184, 75, 0.72);
 }
 
+.case-chat-mode-hint {
+  grid-column: 1 / -1;
+  margin: 2px 0 0;
+  padding: 0 2px;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.case-chat-mode-hint strong {
+  color: rgba(255, 255, 255, 0.78);
+  font-weight: 600;
+}
+
+.case-chat-mode-hint--on {
+  color: var(--gold, #e8b84b);
+}
+
+.case-chat-mode-hint--gold {
+  color: var(--gold, #e8b84b);
+  font-weight: 600;
+}
+
+.case-chat-mode-hint code {
+  font-size: 0.68rem;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(232, 184, 75, 0.95);
+}
+
 /* â”€â”€ floating chat resize handles â”€â”€ */
 .chat-resize-handle {
   position: absolute;

@@ -24,11 +24,14 @@ alwaysApply: true
 ## Before finishing any UI task — mandatory checks
 
 1. Run `node scripts/audit-component-css.mjs` (also runs in `npm run dev` via smoke-test)
-2. Confirm the feature root class exists in CSS (e.g. `.diff-practice { background: #0c0c10; }`)
-3. Confirm `main.jsx` imports the feature stylesheet
-4. If adding a new full-page mode, add a row to `FEATURE_STYLE_CONTRACTS` in `scripts/audit-component-css.mjs`
-5. **Never** append large new feature blocks to the end of `index.css` — use `src/styles/<feature>.css`
-6. After editing `index.css`, verify the file ends on a clean closing `}` with no stray property lines
+2. Run **`npm run build`** — any JS syntax/duplicate-declaration error causes a **full-app white screen** (React never mounts)
+3. With dev up: **`npm run smoke:differential-session`** — Playwright screenshots + dark `.diff-practice` check
+4. Confirm the feature root class exists in CSS (e.g. `.diff-practice { background: #0c0c10; }`)
+5. Confirm `main.jsx` imports the feature stylesheet
+6. If adding a new full-page mode, add a row to `FEATURE_STYLE_CONTRACTS` in `scripts/audit-component-css.mjs`
+7. **Never** append large new feature blocks to the end of `index.css` — use `src/styles/<feature>.css`
+8. After editing `index.css`, verify the file ends on a clean closing `}` with no stray property lines
+9. **Dev ports:** only http://localhost:5173 + API :3001 — see `dev-server-guard.mdc`; `npm run dev` frees ports first
 
 ## Do not
 

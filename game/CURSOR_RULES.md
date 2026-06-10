@@ -127,6 +127,21 @@ Once something works on the demo/proof page, do not leave it as a one-off:
 
 ---
 
+## DEV SERVER GUARD (NON-NEGOTIABLE)
+
+**Bugs (2026-06-10):** zombie Node on **3001/5173** → API crash or Vite on **5178**; user opens wrong URL. JS compile error → **entire app white** (React never mounts).
+
+**Rules:**
+1. **One launch:** `npm run dev` or `START-GAME.bat` only — never parallel bare `vite` / `node server/index.js`
+2. **`npm run dev`** = smoke-gated: predev → free ports → API → live smoke → Vite → session smoke → serve (or exit 1)
+3. **Canonical URLs:** http://localhost:5173/ + API http://127.0.0.1:3001 — never tell Steve to use 5174+
+4. Agents must not skip smoke or start servers manually without the gate
+5. Exit code **4294967295** on old terminals = killed zombie process — verify live health endpoints return 200
+
+**Rule file:** `game/.cursor/rules/dev-server-guard.mdc`
+
+---
+
 ## NEVER DO THESE THINGS
 - Never rebuild the UI from scratch
 - Never create a parallel version of the app

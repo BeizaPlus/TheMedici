@@ -84,14 +84,20 @@ export default function WelcomeScreen({
   const brand = getBranding();
   const plateSrc = brand.welcomePlate || '/welcome-plate.png';
   const plateVideoSrc = brand.welcomePlateVideo || '';
-  const plateVideoLoop = brand.welcomePlateVideoLoop !== false;
+  const plateVideoLoop =
+    brand.welcomePlateVideoHoldLastFrame === false ? brand.welcomePlateVideoLoop !== false : false;
+  const holdLastFrame = brand.welcomePlateVideoHoldLastFrame !== false;
   const plateVideoIdleMs = Number(brand.welcomePlateVideoIdleMs) > 0 ? Number(brand.welcomePlateVideoIdleMs) : 3000;
   const welcomeVideoRef = useRef(null);
   const idleTimerRef = useRef(null);
+  const replayLockRef = useRef(false);
   const [videoFailed, setVideoFailed] = useState(false);
   const [idleVideoTriggered, setIdleVideoTriggered] = useState(false);
   const [videoPlaying, setVideoPlaying] = useState(false);
+  const [videoAtEnd, setVideoAtEnd] = useState(false);
+  const [lastFrameSrc, setLastFrameSrc] = useState('');
   const hasPlateVideo = Boolean(plateVideoSrc) && !videoFailed;
+  const plateStillSrc = lastFrameSrc || plateSrc;
 
   useEffect(() => {
     void endSessionMonitor({ fadeMs: 400 });
@@ -105,19 +111,61 @@ export default function WelcomeScreen({
     el.defaultMuted = true;
   }, []);
 
+  const captureWelcomeLastFrame = useCallback(() => {
+    const el = welcomeVideoRef.current;
+    if (!el || el.videoWidth <= 0) return;
+    const dur = el.duration;
+    if (Number.isFinite(dur) && dur > 0) {
+      el.currentTime = Math.max(0, dur - 0.05);
+    }
+    el.pause();
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = el.videoWidth;
+      canvas.height = el.videoHeight;
+      canvas.getContext('2d')?.drawImage(el, 0, 0);
+      setLastFrameSrc(canvas.toDataURL('image/jpeg', 0.92));
+    } catch {
+      /* same-origin asset — ignore capture failures */
+    }
+    setVideoPlaying(false);
+    setVideoAtEnd(true);
+  }, []);
+
+  const replayWelcomeVideo = useCallback(() => {
+    const el = welcomeVideoRef.current;
+    if (!el || replayLockRef.current) return;
+    replayLockRef.current = true;
+    setVideoAtEnd(false);
+    setVideoPlaying(true);
+    el.currentTime = 0;
+    silenceWelcomeVideo();
+    void el.play().catch(() => setVideoFailed(true));
+    window.setTimeout(() => {
+      replayLockRef.current = false;
+    }, 1500);
+  }, [silenceWelcomeVideo]);
+
   useEffect(() => {
-    if (!hasPlateVideo || idleVideoTriggered) return undefined;
+    if (!hasPlateVideo) return undefined;
 
     const armIdleTimer = () => {
+      if (videoAtEnd || idleVideoTriggered) return;
       if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
       idleTimerRef.current = window.setTimeout(() => {
         setIdleVideoTriggered(true);
       }, plateVideoIdleMs);
     };
 
-    armIdleTimer();
+    const onActivity = () => {
+      if (videoAtEnd) {
+        replayWelcomeVideo();
+        return;
+      }
+      armIdleTimer();
+    };
 
-    const onActivity = () => armIdleTimer();
+    armIdleTimer();
     const events = ['mousemove', 'pointerdown', 'keydown', 'touchstart', 'wheel'];
     events.forEach((eventName) => window.addEventListener(eventName, onActivity, { passive: true }));
 
@@ -125,7 +173,13 @@ export default function WelcomeScreen({
       if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
       events.forEach((eventName) => window.removeEventListener(eventName, onActivity));
     };
-  }, [hasPlateVideo, idleVideoTriggered, plateVideoIdleMs]);
+  }, [
+    hasPlateVideo,
+    idleVideoTriggered,
+    plateVideoIdleMs,
+    videoAtEnd,
+    replayWelcomeVideo,
+  ]);
 
   useEffect(() => {
     if (!idleVideoTriggered || !hasPlateVideo) return undefined;
@@ -426,7 +480,7 @@ export default function WelcomeScreen({
     <main className="welcome-screen" aria-label="Welcome">
       <img
         className={`welcome-plate-img${videoPlaying ? ' welcome-plate-img--faded' : ''}`}
-        src={plateSrc}
+        src={plateStillSrc}
         alt=""
         draggable={false}
       />
@@ -435,18 +489,22 @@ export default function WelcomeScreen({
           ref={welcomeVideoRef}
           className={`welcome-plate-img welcome-plate-video${videoPlaying ? ' welcome-plate-video--visible' : ''}`}
           src={plateVideoSrc}
-          poster={plateSrc}
+          poster={plateStillSrc}
           muted
           defaultMuted
           playsInline
           loop={plateVideoLoop}
-          preload={idleVideoTriggered ? 'auto' : 'metadata'}
+          preload={idleVideoTriggered || videoAtEnd ? 'auto' : 'metadata'}
           draggable={false}
           aria-hidden
           onLoadedMetadata={silenceWelcomeVideo}
           onPlaying={() => {
             silenceWelcomeVideo();
             setVideoPlaying(true);
+            setVideoAtEnd(false);
+          }}
+          onEnded={() => {
+            if (holdLastFrame) captureWelcomeLastFrame();
           }}
           onError={() => setVideoFailed(true)}
         />

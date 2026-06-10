@@ -1,4 +1,5 @@
 import { STORAGE } from './storageKeys.js';
+import { readCaseNotes, writeCaseNotes } from './caseNotes.js';
 
 const DB_NAME = 'schoonmaker_diff_memory';
 const STORE = 'images';
@@ -35,10 +36,21 @@ function writeIndex(map) {
 }
 
 export function readCaseMemoryMeta(caseId) {
-  const row = readIndex()[String(caseId)];
-  if (!row) return { text: '', hasImage: false, updatedAt: null };
+  const id = String(caseId);
+  const row = readIndex()[id] || {};
+  let text = readCaseNotes(id).trim();
+  // One-time migrate legacy differential-only mnemonic text into shared case notes.
+  if (!text && row.text?.trim()) {
+    text = row.text.trim();
+    writeCaseNotes(id, text);
+    const index = readIndex();
+    if (index[id]) {
+      index[id] = { ...index[id], text: '', updatedAt: new Date().toISOString() };
+      writeIndex(index);
+    }
+  }
   return {
-    text: row.text || '',
+    text,
     hasImage: Boolean(row.imageId),
     updatedAt: row.updatedAt || null,
   };
@@ -46,11 +58,13 @@ export function readCaseMemoryMeta(caseId) {
 
 export function writeCaseMemoryText(caseId, text) {
   const id = String(caseId);
+  const body = String(text || '');
+  writeCaseNotes(id, body);
   const index = readIndex();
   const prev = index[id] || {};
   index[id] = {
     ...prev,
-    text: String(text || ''),
+    text: '',
     updatedAt: new Date().toISOString(),
   };
   writeIndex(index);
