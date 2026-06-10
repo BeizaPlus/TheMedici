@@ -116,7 +116,9 @@ export default function DifferentialStudyPanel({
   useEffect(() => {
     setExpanded(false);
     setTab(timelineItems ? 'timeline' : hasReviewText || hasCaseData ? 'case' : 'timeline');
-  }, [caseId, timelineItems, hasReviewText, hasCaseData]);
+    // Only reset tab when switching cases — not when timeline count updates (chat voice, etc.)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseId]);
 
   useEffect(() => {
     if (!timelineFocusVersion) return;
