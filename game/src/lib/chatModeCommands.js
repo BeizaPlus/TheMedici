@@ -1,5 +1,5 @@
 /**
- * Slash commands in case chat: /pt = patient mode, /ch = notes (no patient reply).
+ * Slash commands in case chat: /pt = patient mode, /ch = tutor (or note if text follows).
  * @returns {{ patientMode: boolean, remainder: string } | null}
  */
 export function parseChatModeCommand(text) {

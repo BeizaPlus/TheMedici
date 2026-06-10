@@ -625,14 +625,13 @@ export default function DifferentialPractice({ onBack }) {
     onNotesChanged: () => setNotesVersion((v) => v + 1),
     onTranscriptReady: (text) => {
       if (!text) return;
-      if (!chatPatientModeRef.current) {
+      if (caseChat.available === false) {
         void caseChat.appendNote?.(text, { header: 'Voice note' });
         setNotesVersion((v) => v + 1);
         return;
       }
-      if (caseChat.available !== false) {
-        void caseChat.sendMessage(text);
-      }
+      const chatMode = chatPatientModeRef.current ? 'patient_sim' : 'tutor';
+      void caseChat.sendMessage(text, { chatMode });
     },
   });
 
@@ -1251,6 +1250,9 @@ export default function DifferentialPractice({ onBack }) {
           onPauseForStudy={() => {
             if (stacker.enabled && !stackerPaused) pauseStackerTimer();
           }}
+          onResumeFromStudy={() => {
+            if (stacker.enabled && stackerPaused) resumeStacker();
+          }}
           onStudyTabOpen={(tabId) => {
             if (tabId === 'realworld') {
               /* prefetch handled in panel; timer pause only on first expand */
@@ -1267,6 +1269,7 @@ export default function DifferentialPractice({ onBack }) {
           caseRecording={caseRecording}
           notesVersion={notesVersion}
           patientMode={chatPatientMode}
+          defaultChatTarget="tutor"
           onPatientModeChange={setChatPatientMode}
           onNotesChanged={() => setNotesVersion((v) => v + 1)}
         />
@@ -1274,8 +1277,8 @@ export default function DifferentialPractice({ onBack }) {
         <div className="diff-case-foot">
           {stacker.enabled ? (
             <p className="diff-stacker-hint">
-              Stacker — <kbd>Space</kbd> start/stop mic · Opening study panel pauses timer (mic keeps going) ·
-              Resume continues timer + mic ·
+              Stacker — <kbd>Space</kbd> start/stop mic · Study panel pauses timer (mic keeps going) ·
+              Collapse tab resumes timer ·
               Corrected at {STACKER_FIRST_PARSE_SECONDS}s then every {STACKER_INCREMENTAL_SECONDS}s
             </p>
           ) : (
@@ -1337,7 +1340,13 @@ export default function DifferentialPractice({ onBack }) {
             onClick={toggleChatDock}
             aria-label="Case chat"
             aria-pressed={chatDockOpen}
-            title={chatDockOpen ? 'Hide case chat' : 'Case chat — ask the patient'}
+            title={
+              chatDockOpen
+                ? 'Hide case chat'
+                : chatPatientMode
+                  ? 'Case chat — patient mode'
+                  : 'Case chat — tutor (LLM)'
+            }
           >
             <IconMessage className="toolbar-icon" aria-hidden />
             {(caseChat?.messages?.filter((m) => m.role === 'user' || m.role === 'assistant').length ||

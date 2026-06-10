@@ -38,6 +38,7 @@ export default function DifferentialStudyPanel({
   recordingsVersion = 0,
   onStudyTabOpen,
   onPauseForStudy,
+  onResumeFromStudy,
   onJumpToCase,
   timelineFocusVersion = 0,
   studyTabRequest = null,
@@ -131,10 +132,15 @@ export default function DifferentialStudyPanel({
     onPauseForStudy?.();
   }, [studyTabRequest, onPauseForStudy]);
 
+  const collapseStudy = useCallback(() => {
+    setExpanded(false);
+    onResumeFromStudy?.();
+  }, [onResumeFromStudy]);
+
   const toggleTab = useCallback(
     (id) => {
       if (expanded && tab === id) {
-        setExpanded(false);
+        collapseStudy();
         return;
       }
       const openingFromCollapsed = !expanded;
@@ -143,7 +149,7 @@ export default function DifferentialStudyPanel({
       if (openingFromCollapsed) onPauseForStudy?.();
       if (id === 'realworld') onStudyTabOpen?.(id);
     },
-    [expanded, tab, onStudyTabOpen, onPauseForStudy],
+    [expanded, tab, collapseStudy, onStudyTabOpen, onPauseForStudy],
   );
 
   const showTimeline = timelineItems > 0;

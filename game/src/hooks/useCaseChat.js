@@ -134,16 +134,13 @@ export function useCaseChat({
   }, [caseId, caseData]);
 
   const sendMessage = useCallback(
-    async (text, { notesMode = false } = {}) => {
+    async (text, { notesMode = false, chatMode = 'patient_sim' } = {}) => {
       const trimmed = String(text || '').trim();
       if (!trimmed || busy) return null;
       setError('');
 
-      let sid = sessionId;
-      if (!sid) {
-        sid = await ensureCaseChatSession(caseData);
-        setSessionId(sid);
-      }
+      const sid = await ensureCaseChatSession(caseData, { chatMode });
+      if (sid !== sessionId) setSessionId(sid);
 
       setMessages((prev) => [...prev, { role: 'user', content: trimmed }]);
       persistMessage('user', trimmed);

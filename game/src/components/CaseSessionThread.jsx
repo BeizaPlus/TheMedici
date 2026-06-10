@@ -79,6 +79,7 @@ export default function CaseSessionThread({
   fillTab = false,
   suppressHeader = false,
   patientMode = false,
+  defaultChatTarget = 'notes',
   onPatientModeChange,
   onTimelineChat,
 }) {
@@ -158,21 +159,44 @@ export default function CaseSessionThread({
     let asPatient = patientMode;
 
     if (cmd) {
-      asPatient = cmd.patientMode;
-      onPatientModeChange?.(cmd.patientMode);
-      body = cmd.remainder;
-      if (!body) return;
+      if (cmd.patientMode) {
+        asPatient = true;
+        onPatientModeChange?.(true);
+        body = cmd.remainder;
+        if (!body) return;
+      } else if (cmd.remainder) {
+        await appendNoteEntry(cmd.remainder);
+        return;
+      } else {
+        onPatientModeChange?.(false);
+        return;
+      }
     }
 
     if (asPatient) {
-      await sendMessage(body);
+      await sendMessage(body, { chatMode: 'patient_sim' });
+      onTimelineChat?.(body);
+      return;
+    }
+    if (defaultChatTarget === 'tutor') {
+      await sendMessage(body, { chatMode: 'tutor' });
       onTimelineChat?.(body);
       return;
     }
     await appendNoteEntry(body);
-  }, [draft, busy, patientMode, onPatientModeChange, sendMessage, appendNoteEntry, onTimelineChat]);
+  }, [
+    draft,
+    busy,
+    patientMode,
+    defaultChatTarget,
+    onPatientModeChange,
+    sendMessage,
+    appendNoteEntry,
+    onTimelineChat,
+  ]);
 
   const expanded = suppressHeader || fillTab || !collapsed;
+  const quietChatChrome = defaultChatTarget === 'tutor';
 
   return (
     <div
@@ -232,7 +256,7 @@ export default function CaseSessionThread({
           )}
           {error && <p className="case-chat-banner bad">{error}</p>}
 
-          {patientMode && (
+          {patientMode && !quietChatChrome && (
             <p className="case-chat-banner case-chat-banner--patient">
               Patient mode — patient will reply. Type <code>/ch</code> for notes only.
             </p>
@@ -240,7 +264,7 @@ export default function CaseSessionThread({
 
           <div className="case-chat-messages selectable-text" ref={listRef}>
             {!historyLoaded && <p className="case-chat-tab-empty">Loading…</p>}
-            {historyLoaded && thread.length === 0 && !busy && (
+            {historyLoaded && thread.length === 0 && !busy && !quietChatChrome && (
               <p className="case-chat-tab-empty">
                 Talk to the patient — ask age, travel, smoking, symptoms — or jot a clinical note.
               </p>
@@ -315,7 +339,13 @@ export default function CaseSessionThread({
                   className="case-chat-cmd-input"
                   value={draft}
                   onChange={(e) => setDraft(e.target.value)}
-                  placeholder={patientMode ? 'Ask the patient…' : 'Jot a case note…'}
+                  placeholder={
+                    patientMode
+                      ? 'Ask the patient…'
+                      : defaultChatTarget === 'tutor'
+                        ? 'Ask the tutor…'
+                        : 'Jot a case note…'
+                  }
                   aria-label="Add to case thread"
                   disabled={busy}
                 />
@@ -328,29 +358,32 @@ export default function CaseSessionThread({
               >
                 <FiSend aria-hidden />
               </button>
-              <p className="case-chat-mode-hint" aria-live="polite">
-                {patientMode ? (
-                  <>
-                    <strong className="case-chat-mode-hint--on">Patient mode</strong> — talk to the
-                    patient; voice goes to the patient.{' '}
-                    <code>/ch</code> notes only · click stethoscope to turn off
-                  </>
-                ) : (
-                  <>
-                    <strong>Notes mode</strong> — saved to case journal; patient will not reply.{' '}
-                    <code>/pt</code> talk to patient · stethoscope turns{' '}
-                    <span className="case-chat-mode-hint--gold">gold</span> when patient mode is on
-                  </>
-                )}
-              </p>
+              {!quietChatChrome && (
+                <p className="case-chat-mode-hint" aria-live="polite">
+                  {patientMode ? (
+                    <>
+                      <strong className="case-chat-mode-hint--on">Patient mode</strong> — talk to the
+                      patient; voice goes to the patient.{' '}
+                      <code>/ch</code> notes only · click stethoscope to turn off
+                    </>
+                  ) : (
+                    <>
+                      <strong>Notes mode</strong> — saved to case journal; patient will not reply.{' '}
+                      <code>/pt</code> talk to patient · stethoscope turns{' '}
+                      <span className="case-chat-mode-hint--gold">gold</span> when patient mode is on
+                    </>
+                  )}
+                </p>
+              )}
             </div>
           </form>
           {caseRecording?.transcribing && (
             <p className="case-notes-live-hint case-session-thread-live-hint" aria-live="polite">
               Transcribing voice…
-              {patientMode && available !== false
-                ? ' sending to patient'
-                : ' saving to case notes'}
+              {!quietChatChrome &&
+                (patientMode && available !== false
+                  ? ' sending to patient'
+                  : ' saving to case notes')}
             </p>
           )}
         </>

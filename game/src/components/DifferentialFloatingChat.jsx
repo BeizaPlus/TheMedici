@@ -17,6 +17,7 @@ export default function DifferentialFloatingChat({
   caseRecording,
   notesVersion = 0,
   patientMode = false,
+  defaultChatTarget = 'notes',
   onPatientModeChange,
   onNotesChanged,
 }) {
@@ -135,8 +136,10 @@ export default function DifferentialFloatingChat({
             className={`case-chat-patient-btn${patientMode ? ' is-active' : ''}`}
             title={
               patientMode
-                ? 'Patient mode ON — /ch for notes only'
-                : 'Notes mode — click for patient mode or type /pt'
+                ? 'Patient mode ON — simulated patient replies'
+                : defaultChatTarget === 'tutor'
+                  ? 'Tutor chat — click for patient interview mode'
+                  : 'Notes mode — click for patient mode or type /pt'
             }
             aria-label={patientMode ? 'Patient mode on' : 'Turn on patient mode'}
             aria-pressed={patientMode}
@@ -168,6 +171,7 @@ export default function DifferentialFloatingChat({
           notesVersion={notesVersion}
           suppressHeader
           patientMode={patientMode}
+          defaultChatTarget={defaultChatTarget}
           onPatientModeChange={onPatientModeChange}
           onTimelineNote={() => onNotesChanged?.()}
         />

@@ -20,6 +20,7 @@ export function buildCaseChatContext(caseData, {
   patientPersona = null,
   caseDiscussion = null,
   caseBriefMarkdown = null,
+  chatMode = 'patient_sim',
 } = {}) {
   const flow = getCaseFlow(caseData);
   const prepared = getPreparedCase(caseData?.id);
@@ -45,7 +46,7 @@ export function buildCaseChatContext(caseData, {
     timeLimit: caseData?.timeLimit,
     playRole: caseData?.playRole || 'doctor',
     sessionDifficulty: caseData?.sessionDifficulty || 'standard',
-    chatMode: 'patient_sim',
+    chatMode: chatMode === 'patient_sim' ? 'patient_sim' : 'tutor',
     simulationCreativity,
     patientName: resolvePatientName(caseData),
     patientFacts,
@@ -195,14 +196,15 @@ export async function fetchChatModelLabel() {
   }
 }
 
-/** One chat session per case — case JSON + portrait persona in the system prompt. */
-export async function ensureCaseChatSession(caseData) {
+/** One chat session per case + mode — case JSON + portrait persona in the system prompt. */
+export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim' } = {}) {
   const caseId = String(caseData?.id || '');
   if (!caseId) throw new Error('Missing case id');
+  const mode = chatMode === 'patient_sim' ? 'patient_sim' : 'tutor';
 
   const patientPersona = await resolvePatientPersona(caseData);
   const caseDiscussion = buildCaseDiscussionContext(caseId);
-  const draftContext = buildCaseChatContext(caseData, { patientPersona, caseDiscussion });
+  const draftContext = buildCaseChatContext(caseData, { patientPersona, caseDiscussion, chatMode: mode });
   const caseBriefMarkdown = await resolveCaseBriefMarkdown(caseId, {
     caseDiscussion,
     caseContext: draftContext,
@@ -212,6 +214,7 @@ export async function ensureCaseChatSession(caseData) {
     patientPersona,
     caseDiscussion,
     caseBriefMarkdown,
+    chatMode: mode,
   });
   const personaKey = personaCacheKey(patientPersona);
   const demographicsKey = demographicsCacheKey(caseContext.patientDemographics);
@@ -221,6 +224,7 @@ export async function ensureCaseChatSession(caseData) {
 
   if (
     cached?.sessionId &&
+    cached.chatMode === mode &&
     cached.creativity === caseContext.simulationCreativity &&
     cached.personaKey === personaKey &&
     cached.demographicsKey === demographicsKey &&
@@ -243,6 +247,7 @@ export async function ensureCaseChatSession(caseData) {
   sessions.set(caseId, {
     sessionId: data.sessionId,
     caseId,
+    chatMode: mode,
     creativity: caseContext.simulationCreativity,
     personaKey,
     demographicsKey,
