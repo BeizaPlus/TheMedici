@@ -1,60 +1,181 @@
 {
   "id": 43,
-  "topic": "Knee Pain, Internal Medicine",
-  "diagnosis": "Septic Arthritis (Bacterial Arthritis)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Knee Pain",
+  "title": "Knee Pain",
+  "diagnosis": "Septic Arthritis (Disseminated Gonococcal Infection)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Blood Cultures",
-    "CBC",
-    "IV Fluids",
-    "Pain Management",
-    "Joint Aspiration",
-    "MRI of the Knee"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Extremities / Knee",
+    "Arthrocentesis + synovial fluid analysis",
+    "CBC with differential",
+    "Blood cultures",
+    "CT/GC NAAT (cervix, urethra, rectum, pharynx)",
+    "Ceftriaxone 1g IV daily",
+    "Joint drainage (serial aspiration vs arthroscopy)",
+    "Treat sexual partners"
   ],
-  "should_avoid": [
-    "CT of the Abdomen"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Blood Cultures": "Laboratory testing when systemic illness or severity warrants labs in Septic Arthritis (Bacterial Arthritis).",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Septic Arthritis (Bacterial Arthritis).",
-    "IV Fluids": "Appropriate CCS order for Septic Arthritis (Bacterial Arthritis): IV Fluids.",
-    "Pain Management": "Appropriate CCS order for Septic Arthritis (Bacterial Arthritis): Pain Management.",
-    "Joint Aspiration": "Appropriate CCS order for Septic Arthritis (Bacterial Arthritis): Joint Aspiration.",
-    "MRI of the Knee": "Appropriate CCS order for Septic Arthritis (Bacterial Arthritis): MRI of the Knee.",
-    "CT of the Abdomen": "Advanced imaging is not indicated early for Septic Arthritis (Bacterial Arthritis) when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Febrile, appears ill.",
+    "Physical Exam: Chest / Lungs": "Fever — screen lungs.",
+    "Physical Exam: Heart / Cardiovascular": "Fever — screen heart.",
+    "Physical Exam: Extremities / Knee": "Monoarticular: hot, swollen, erythematous, tender. Limited ROM. DGI: tenosynovitis + pustular skin lesions + migratory arthralgia.",
+    "Arthrocentesis + synovial fluid analysis": "WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+    "CBC with differential": "Leukocytosis.",
+    "Blood cultures": "Bacteremia in DGI.",
+    "CT/GC NAAT (cervix, urethra, rectum, pharynx)": "Screen all sites — often primary infection asymptomatic.",
+    "Ceftriaxone 1g IV daily": "First-line for DGI. Switch to PO after clinical improvement.",
+    "Joint drainage (serial aspiration vs arthroscopy)": "Remove purulent material. May need repeated aspirations.",
+    "Treat sexual partners": "Partner notification and treatment essential."
   },
-  "hpi": "This case highlights the importance of recognizing septic arthritis in patients presenting with joint pain and swelling. Early diagnosis and treatment are crucial to prevent joint damage. Key considerations include obtaining joint fluid for analysis and starting appropriate antibiotics. The differential diagnosis should include other causes of joint pain, such as gout and trauma.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with acute monoarticular knee pain, fever, and chills. The knee is warm, swollen, erythematous, and exquisitely tender with limited range of motion. Disseminated gonococcal infection (DGI) is the most common cause of septic arthritis in sexually active young adults. Classic triad: tenosynovitis, dermatitis (pustular or vesiculopustular lesions), and migratory polyarthralgia progressing to monoarticular septic arthritis. Most commonly affects knee. Diagnosis: arthrocentesis with synovial fluid analysis (WBC >50,000, Gram stain may show Gram-negative diplococci, culture positive in only 50%). Also culture cervix, urethra, rectum, pharynx for N. gonorrhoeae. NAAT on synovial fluid. Treatment: ceftriaxone 1g IV daily initially, then switch to oral cefixime or fluoroquinolone based on sensitivities. If chlamydia co-infection possible (common), add doxycycline or azithromycin. Joint drainage (serial aspiration or arthroscopy). Partner treatment essential.",
+  "hpi_narrative": "{{patient_name}} presents with acute monoarticular knee pain, fever, and chills. The knee is warm, swollen, erythematous, and exquisitely tender with limited range of motion. Disseminated gonococcal infection (DGI) is the most common cause of septic arthritis in sexually active young adults. Classic triad: tenosynovitis, dermatitis (pustular or vesiculopustular lesions), and migratory polyarthralgia progressing to monoarticular septic arthritis. Most commonly affects knee. Diagnosis: arthrocentesis with synovial fluid analysis (WBC >50,000, Gram stain may show Gram-negative diplococci, culture positive in only 50%). Also culture cervix, urethra, rectum, pharynx for N. gonorrhoeae. NAAT on synovial fluid. Treatment: ceftriaxone 1g IV daily initially, then switch to oral cefixime or fluoroquinolone based on sensitivities. If chlamydia co-infection possible (common), add doxycycline or azithromycin. Joint drainage (serial aspiration or arthroscopy). Partner treatment essential.",
+  "physical_exam": [
+    [
+      "General",
+      "Febrile."
+    ],
+    [
+      "Skin",
+      "Pustular/vesiculopustular lesions on extremities — DGI dermatitis."
+    ],
+    [
+      "Musculoskeletal",
+      "Knee: hot, swollen, erythematous, exquisitely tender. Limited ROM. Tenosynovitis in hands/wrists."
+    ],
+    [
+      "Genitourinary",
+      "Cervical motion tenderness. Purulent discharge possible. Often asymptomatic at primary site."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my knee. It hurts so much.",
-    "history": "I can't move it well. It started hurting suddenly.",
-    "pain": "It feels sharp and throbbing."
+    "chief_complaint": "Acute knee pain, fever, chills",
+    "history": "{{patient_name}} presents with acute monoarticular knee pain, fever, and chills. The knee is warm, swollen, erythematous, and exquisitely tender with limited range of motion. Disseminated gonococcal …",
+    "pain": "Acute knee pain, fever, chills"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "This case highlights the importance of recognizing septic arthritis in patients presenting with joint pain and swelling. Early diagnosis and treatment are crucial to prevent joint damage. Key considerations include obtaining joint fluid for analysis and starting appropriate antibiotics. The differential diagnosis should include other causes of joint pain, such as gout and trauma.",
+  "ccs_category": "Internal Medicine / Infectious Disease",
+  "chief_complaint": "Acute knee pain, fever, chills",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Blood Cultures",
-    "CBC",
-    "IV Fluids",
-    "Pain Management",
-    "Joint Aspiration"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Febrile, appears ill.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Fever — screen lungs.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Fever — screen heart.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Knee",
+      "type": "correctlyOrdered",
+      "finding": "Monoarticular: hot, swollen, erythematous, tender. Limited ROM. DGI: tenosynovitis + pustular skin lesions + migratory arthralgia.",
+      "aliases": [
+        "Joint exam"
+      ]
+    },
+    {
+      "label": "Arthrocentesis + synovial fluid analysis",
+      "type": "correctlyOrdered",
+      "finding": "WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+      "aliases": [
+        "Joint aspiration"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Blood cultures",
+      "type": "correctlyOrdered",
+      "finding": "Bacteremia in DGI.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "CT/GC NAAT (cervix, urethra, rectum, pharynx)",
+      "type": "correctlyOrdered",
+      "finding": "Screen all sites — often primary infection asymptomatic.",
+      "aliases": [
+        "GC/CT testing"
+      ]
+    },
+    {
+      "label": "Ceftriaxone 1g IV daily",
+      "type": "correctlyOrdered",
+      "finding": "First-line for DGI. Switch to PO after clinical improvement.",
+      "aliases": [
+        "Rocephin"
+      ]
+    },
+    {
+      "label": "Joint drainage (serial aspiration vs arthroscopy)",
+      "type": "correctlyOrdered",
+      "finding": "Remove purulent material. May need repeated aspirations.",
+      "aliases": [
+        "Joint drainage"
+      ]
+    },
+    {
+      "label": "Treat sexual partners",
+      "type": "correctlyOrdered",
+      "finding": "Partner notification and treatment essential.",
+      "aliases": [
+        "Partner treatment"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Extremities / Knee",
+    "Arthrocentesis + synovial fluid analysis",
+    "CBC with differential",
+    "Blood cultures",
+    "CT/GC NAAT (cervix, urethra, rectum, pharynx)",
+    "Ceftriaxone 1g IV daily",
+    "Joint drainage (serial aspiration vs arthroscopy)",
+    "Treat sexual partners"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Septic Arthritis (Disseminated Gonococcal Infection)."
 }

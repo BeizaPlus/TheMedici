@@ -1,64 +1,324 @@
 {
   "id": 15,
   "topic": "Chest Pain",
-  "diagnosis": "Pericarditis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Chest Pain",
+  "diagnosis": "Acute Pericarditis (Idiopathic)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
     "Physical Exam: Abdomen",
-    "Physical Exam: Cardiovascular",
-    "Physical Exam: Respiratory",
-    "Physical Exam: Extremities",
-    "Physical Exam: Neurological",
-    "Cardiac Enzymes",
-    "Echocardiogram",
-    "Chest X-ray"
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: HEENT / Neck",
+    "Pulse oximetry",
+    "CBC with differential",
+    "ECG, 12 lead",
+    "Cardiac troponin I, serum",
+    "Echocardiography (transthoracic)",
+    "TSH, serum",
+    "Chest X-ray",
+    "ANA, serum",
+    "Rheumatoid factor",
+    "BMP / CMP / LFTs",
+    "NSAIDs (Ibuprofen / Naproxen / Aspirin)",
+    "Colchicine",
+    "PPI / H2 blocker (Omeprazole / Famotidine)",
+    "Advise patient, rest at home"
   ],
   "should_avoid": [
-    "CT Angiogram"
+    "Echocardiography, transesophageal",
+    "Pericardiocentesis",
+    "Transesophageal echocardiography",
+    "NSAIDs alone (without colchicine)",
+    "Glucocorticoids as first-line"
   ],
   "rationale": {
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with chest pain.",
-    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
-    "Physical Exam: Respiratory": "Evaluate chest and lungs as part of the initial exam for chest pain.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Pericarditis.",
-    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Pericarditis.",
-    "Cardiac Enzymes": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
-    "Echocardiogram": "Appropriate CCS order for Pericarditis: Echocardiogram.",
-    "Chest X-ray": "Evaluate chest and lungs as part of the initial exam for chest pain.",
-    "CT Angiogram": "Advanced imaging is not indicated early for Pericarditis when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Gauge how sick the patient may be.",
+    "Physical Exam: Chest / Lungs": "Investigate for lung pathology. Pleuritic pain may have pulmonary origin.",
+    "Physical Exam: Heart / Cardiovascular": "Cardiac pathology often causes chest pain — must examine. Listen for pericardial friction rub.",
+    "Physical Exam: Abdomen": "Pain radiating to back — abdominal exam needed.",
+    "Physical Exam: Extremities / Spine": "Look for edema or pathology guiding workup.",
+    "Physical Exam: HEENT / Neck": "GERD or esophageal pathology could cause symptoms.",
+    "Pulse oximetry": "Check oxygenation if concerned about circulation.",
+    "CBC with differential": "Good screening tool.",
+    "ECG, 12 lead": "ECG on every chest pain patient. Will show diffuse ST elevation in pericarditis (not territorial like MI).",
+    "Cardiac troponin I, serum": "Must rule out MI in chest pain. Negative in pericarditis.",
+    "Echocardiography (transthoracic)": "TTE shows small pericardial effusion. Transthoracic is sufficient — TEE is unnecessary and invasive.",
+    "TSH, serum": "Hypothyroidism can cause pericardial effusion.",
+    "Chest X-ray": "Rule out other causes of chest pain.",
+    "ANA, serum": "Autoimmune etiology is one cause of pericarditis.",
+    "Rheumatoid factor": "Autoimmune screening for pericarditis etiology.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "Echocardiography, transesophageal": "TTE is more than sufficient. TEE is invasive and unnecessary for small pericardial effusion — points lost for ordering.",
+    "NSAIDs (Ibuprofen / Naproxen / Aspirin)": "NSAIDs are treatment of choice for acute pericarditis.",
+    "Colchicine": "Added to NSAID therapy — reduces symptoms AND decreases rate of recurrent pericarditis. Well tolerated. Should be added for first-episode acute pericarditis.",
+    "PPI / H2 blocker (Omeprazole / Famotidine)": "High-dose NSAID therapy requires GI protection with PPI or H2 blocker.",
+    "Pericardiocentesis": "Only small effusion — will resolve on its own. Pericardiocentesis only for moderate/large effusions (>2 cm) or tamponade.",
+    "Advise patient, rest at home": "Activity may trigger recurrence. Rest until symptoms resolve.",
+    "Transesophageal echocardiography": "Invasive and unnecessary. TTE is sufficient to evaluate pericardial effusion. Ordering TEE loses points.",
+    "NSAIDs alone (without colchicine)": "Colchicine should be added to NSAID therapy for first-episode acute pericarditis — it reduces recurrence rate and improves symptom resolution.",
+    "Glucocorticoids as first-line": "Steroids are reserved for refractory pericarditis unresponsive to NSAIDs/colchicine, or autoimmune-associated pericarditis."
   },
-  "hpi": "Initially, the patient presents with chest pain. The history is pertinent for recent viral illness. Develops chest pain with exertion. EKG shows ST elevation in leads II, III, and aVF. Troponin is elevated. The patient is diagnosed with pericarditis. The challenges in this case include differentiating between pericarditis and myocardial infarction, especially in a young patient with a viral history.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a man with no significant past medical history who presents with acute chest pain that is pleuritic (worse with inspiration) and positional (relieved by leaning forward). He has no history of recent viral infection, making this likely idiopathic pericarditis. ECG shows diffuse ST elevation. Echocardiogram reveals a small pericardial effusion — no tamponade physiology. Troponin is negative, ruling out MI. First-line treatment: NSAIDs (ibuprofen/naproxen) PLUS colchicine — colchicine reduces symptoms and decreases rate of recurrent pericarditis. Add a PPI/H2 blocker for GI protection with high-dose NSAID therapy. Rest until symptoms resolve — activity can trigger recurrence. Pericardiocentesis is NOT indicated for small, asymptomatic effusions (only for moderate/large effusions > 2 cm or tamponade). Transesophageal echo is unnecessary — transthoracic echo is sufficient.",
+  "hpi_narrative": "{{patient_name}} is a man with no significant past medical history who presents with acute chest pain that is pleuritic (worse with inspiration) and positional (relieved by leaning forward). He has no history of recent viral infection, making this likely idiopathic pericarditis. ECG shows diffuse ST elevation. Echocardiogram reveals a small pericardial effusion — no tamponade physiology. Troponin is negative, ruling out MI. First-line treatment: NSAIDs (ibuprofen/naproxen) PLUS colchicine — colchicine reduces symptoms and decreases rate of recurrent pericarditis. Add a PPI/H2 blocker for GI protection with high-dose NSAID therapy. Rest until symptoms resolve — activity can trigger recurrence. Pericardiocentesis is NOT indicated for small, asymptomatic effusions (only for moderate/large effusions > 2 cm or tamponade). Transesophageal echo is unnecessary — transthoracic echo is sufficient.",
+  "physical_exam": [
+    [
+      "General",
+      "Chest pain, appears uncomfortable."
+    ],
+    [
+      "Cardiovascular",
+      "Pericardial friction rub may be present (pathognomonic but not always). No muffled heart sounds (no tamponade)."
+    ],
+    [
+      "Respiratory",
+      "Pleuritic component — pain worse with inspiration."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My chest hurts a lot.",
-    "history": "I had a cold last week, and now my chest feels tight.",
-    "pain": "It feels sharp and gets worse when I breathe."
+    "chief_complaint": "Pleuritic chest pain, relieved by leaning forward",
+    "history": "{{patient_name}} is a man with no significant past medical history who presents with acute chest pain that is pleuritic (worse with inspiration) and positional (relieved by leaning forward). He has n…",
+    "pain": "Pleuritic chest pain, relieved by leaning forward"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "Initially, the patient presents with chest pain. The history is pertinent for recent viral illness. Develops chest pain with exertion. EKG shows ST elevation in leads II, III, and aVF. Troponin is elevated. The patient is diagnosed with pericarditis. The challenges in this case include differentiating between pericarditis and myocardial infarction, especially in a young patient with a viral history.",
+  "ccs_category": "Emergency Medicine / Cardiology",
+  "chief_complaint": "Pleuritic chest pain, relieved by leaning forward",
+  "case_summary": "Idiopathic acute pericarditis. Pleuritic chest pain + diffuse ST elevation + small effusion on echo. NSAIDs + colchicine + PPI. Avoid pericardiocentesis and TEE. ER then outpatient management with rest.",
+  "decoys": [
+    {
+      "label": "Pericardiocentesis",
+      "reason_wrong": "Small effusion resolves on its own. Pericardiocentesis is only indicated for moderate/large effusions (>2 cm) or cardiac tamponade."
+    },
+    {
+      "label": "Transesophageal echocardiography",
+      "reason_wrong": "Invasive and unnecessary. TTE is sufficient to evaluate pericardial effusion. Ordering TEE loses points."
+    },
+    {
+      "label": "NSAIDs alone (without colchicine)",
+      "reason_wrong": "Colchicine should be added to NSAID therapy for first-episode acute pericarditis — it reduces recurrence rate and improves symptom resolution."
+    },
+    {
+      "label": "Glucocorticoids as first-line",
+      "reason_wrong": "Steroids are reserved for refractory pericarditis unresponsive to NSAIDs/colchicine, or autoimmune-associated pericarditis."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exam",
-    "Time Advanced 10 minutes",
-    "Ordered Electrocardiogram",
-    "Ordered Cardiac troponin I, 12 lead"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Gauge how sick the patient may be.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for lung pathology. Pleuritic pain may have pulmonary origin.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Cardiac pathology often causes chest pain — must examine. Listen for pericardial friction rub.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Pain radiating to back — abdominal exam needed.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "type": "correctlyOrdered",
+      "finding": "Look for edema or pathology guiding workup.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "correctlyOrdered",
+      "finding": "GERD or esophageal pathology could cause symptoms.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "shouldHaveOrdered",
+      "finding": "Check oxygenation if concerned about circulation.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Good screening tool.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "ECG, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "ECG on every chest pain patient. Will show diffuse ST elevation in pericarditis (not territorial like MI).",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Cardiac troponin I, serum",
+      "type": "correctlyOrdered",
+      "finding": "Must rule out MI in chest pain. Negative in pericarditis.",
+      "aliases": [
+        "Troponin"
+      ]
+    },
+    {
+      "label": "Echocardiography (transthoracic)",
+      "type": "correctlyOrdered",
+      "finding": "TTE shows small pericardial effusion. Transthoracic is sufficient — TEE is unnecessary and invasive.",
+      "aliases": [
+        "TTE",
+        "Echo"
+      ]
+    },
+    {
+      "label": "TSH, serum",
+      "type": "shouldHaveOrdered",
+      "finding": "Hypothyroidism can cause pericardial effusion.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Rule out other causes of chest pain.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "ANA, serum",
+      "type": "correctlyOrdered",
+      "finding": "Autoimmune etiology is one cause of pericarditis.",
+      "aliases": [
+        "ANA"
+      ]
+    },
+    {
+      "label": "Rheumatoid factor",
+      "type": "shouldHaveOrdered",
+      "finding": "Autoimmune screening for pericarditis etiology.",
+      "aliases": [
+        "RF"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "Echocardiography, transesophageal",
+      "type": "correctlyAvoided",
+      "finding": "TTE is more than sufficient. TEE is invasive and unnecessary for small pericardial effusion — points lost for ordering.",
+      "aliases": [
+        "TEE"
+      ]
+    },
+    {
+      "label": "NSAIDs (Ibuprofen / Naproxen / Aspirin)",
+      "type": "correctlyOrdered",
+      "finding": "NSAIDs are treatment of choice for acute pericarditis.",
+      "aliases": [
+        "Ibuprofen",
+        "Naproxen"
+      ]
+    },
+    {
+      "label": "Colchicine",
+      "type": "shouldHaveOrdered",
+      "finding": "Added to NSAID therapy — reduces symptoms AND decreases rate of recurrent pericarditis. Well tolerated. Should be added for first-episode acute pericarditis.",
+      "aliases": [
+        "Colcrys"
+      ]
+    },
+    {
+      "label": "PPI / H2 blocker (Omeprazole / Famotidine)",
+      "type": "shouldHaveOrdered",
+      "finding": "High-dose NSAID therapy requires GI protection with PPI or H2 blocker.",
+      "aliases": [
+        "Omeprazole",
+        "Famotidine"
+      ]
+    },
+    {
+      "label": "Pericardiocentesis",
+      "type": "correctlyAvoided",
+      "finding": "Only small effusion — will resolve on its own. Pericardiocentesis only for moderate/large effusions (>2 cm) or tamponade.",
+      "aliases": [
+        "Pericardial drain"
+      ]
+    },
+    {
+      "label": "Advise patient, rest at home",
+      "type": "shouldHaveOrdered",
+      "finding": "Activity may trigger recurrence. Rest until symptoms resolve.",
+      "aliases": [
+        "Rest"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: HEENT / Neck",
+    "Pulse oximetry",
+    "CBC with differential",
+    "ECG, 12 lead",
+    "Cardiac troponin I, serum",
+    "Echocardiography (transthoracic)",
+    "TSH, serum",
+    "Chest X-ray",
+    "ANA, serum",
+    "Rheumatoid factor",
+    "BMP / CMP / LFTs",
+    "NSAIDs (Ibuprofen / Naproxen / Aspirin)",
+    "Colchicine",
+    "PPI / H2 blocker (Omeprazole / Famotidine)",
+    "Advise patient, rest at home"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Acute Pericarditis (Idiopathic)."
 }

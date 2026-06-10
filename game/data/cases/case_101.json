@@ -1,72 +1,99 @@
 {
   "id": 101,
-  "topic": "Fever - Pediatrics",
+  "topic": "Fever",
+  "title": "Fever",
   "diagnosis": "Epiglottitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Assessment",
-    "Physical Exam: Chest/Lungs",
-    "Physical Exam: Cardiac exam",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Extremities",
-    "Blood cultures x2",
-    "Respiratory viral panel",
-    "Influenza PCR",
-    "CXR",
-    "CBC"
+    "Physical Exam: Observation only",
+    "Lateral neck X-ray",
+    "Controlled airway (OR / ENT / Anesthesia)",
+    "Ceftriaxone + Vancomycin",
+    "Dexamethasone"
   ],
-  "should_avoid": [
-    "Unnecessary CT scan",
-    "Unnecessary MRI",
-    "Unnecessary lumbar puncture"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Assessment": "Appropriate CCS order for Epiglottitis: Physical Exam: General Assessment.",
-    "Physical Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for fever - pediatrics.",
-    "Physical Exam: Cardiac exam": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to fever - pediatrics.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with fever - pediatrics.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Epiglottitis.",
-    "Blood cultures x2": "Laboratory testing when systemic illness or severity warrants labs in Epiglottitis.",
-    "Respiratory viral panel": "Evaluate chest and lungs as part of the initial exam for fever - pediatrics.",
-    "Influenza PCR": "Appropriate CCS order for Epiglottitis: Influenza PCR.",
-    "CXR": "Appropriate CCS order for Epiglottitis: CXR.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Epiglottitis.",
-    "Unnecessary CT scan": "Advanced imaging is not indicated early for Epiglottitis when the diagnosis is clinical.",
-    "Unnecessary MRI": "Advanced imaging is not indicated early for Epiglottitis when the diagnosis is clinical.",
-    "Unnecessary lumbar puncture": "Advanced imaging is not indicated early for Epiglottitis when the diagnosis is clinical."
+    "Physical Exam: Observation only": "Tripod position, drooling, stridor. Do NOT examine throat.",
+    "Lateral neck X-ray": "Thumbprint sign. Do NOT send child unattended.",
+    "Controlled airway (OR / ENT / Anesthesia)": "Awake fiberoptic intubation. Keep child calm.",
+    "Ceftriaxone + Vancomycin": "IV antibiotics.",
+    "Dexamethasone": "Reduce airway edema."
   },
-  "hpi": "You were in the wrong location (Emergency Department) at estimated time: 0 Days, 00 Hours, 13 Minutes. Correct location at this time was: Intensive Care Unit. Reason: If patient is unstable, they may need to be transferred to the ICU for further evaluation.",
+  "hpi": "{{patient_name}} presents with acute onset high fever, severe sore throat, drooling, muffled 'hot potato' voice, stridor, and tripod positioning (leaning forward, chin thrust out). Epiglottitis is a life-threatening airway emergency. Historically caused by H. influenzae type B (now rare due to Hib vaccine) — now more commonly Group A Strep, S. pneumoniae, Staph. Do NOT examine the throat or agitate the child — can trigger complete airway obstruction! Let the child remain in position of comfort. Immediate management: keep child calm, avoid invasive exam, arrange for controlled airway management in OR by anesthesia/ENT (awake fiberoptic intubation). Croup (laryngotracheitis) is viral, slower onset, barky cough — epiglottitis is rapid, toxic-appearing, no cough. Lateral neck X-ray shows 'thumbprint sign' (swollen epiglottis) but do NOT send child to radiology unattended. Treatment: IV antibiotics (ceftriaxone + vancomycin), steroids (dexamethasone).",
+  "hpi_narrative": "{{patient_name}} presents with acute onset high fever, severe sore throat, drooling, muffled 'hot potato' voice, stridor, and tripod positioning (leaning forward, chin thrust out). Epiglottitis is a life-threatening airway emergency. Historically caused by H. influenzae type B (now rare due to Hib vaccine) — now more commonly Group A Strep, S. pneumoniae, Staph. Do NOT examine the throat or agitate the child — can trigger complete airway obstruction! Let the child remain in position of comfort. Immediate management: keep child calm, avoid invasive exam, arrange for controlled airway management in OR by anesthesia/ENT (awake fiberoptic intubation). Croup (laryngotracheitis) is viral, slower onset, barky cough — epiglottitis is rapid, toxic-appearing, no cough. Lateral neck X-ray shows 'thumbprint sign' (swollen epiglottis) but do NOT send child to radiology unattended. Treatment: IV antibiotics (ceftriaxone + vancomycin), steroids (dexamethasone).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My throat hurts a lot.",
-    "history": "I had a fever and trouble breathing.",
-    "pain": "It feels like my throat is closing up."
+    "chief_complaint": "High fever, sore throat, drooling, stridor, tripod position",
+    "history": "{{patient_name}} presents with acute onset high fever, severe sore throat, drooling, muffled 'hot potato' voice, stridor, and tripod positioning (leaning forward, chin thrust out). Epiglottitis is a …",
+    "pain": "High fever, sore throat, drooling, stridor, tripod position"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "You were in the wrong location (Emergency Department) at estimated time: 0 Days, 00 Hours, 13 Minutes. Correct location at this time was: Intensive Care Unit. Reason: If patient is unstable, they may need to be transferred to the ICU for further evaluation.",
+  "ccs_category": "Pediatrics / ENT / Emergency Medicine",
+  "chief_complaint": "High fever, sore throat, drooling, stridor, tripod position",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Physical Exam: General Assessment",
-    "Physical Exam: Chest/Lungs",
-    "Physical Exam: Cardiac exam",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Extremities"
+    {
+      "label": "Physical Exam: Observation only",
+      "type": "correctlyOrdered",
+      "finding": "Tripod position, drooling, stridor. Do NOT examine throat.",
+      "aliases": [
+        "Observe"
+      ]
+    },
+    {
+      "label": "Lateral neck X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Thumbprint sign. Do NOT send child unattended.",
+      "aliases": [
+        "Neck X-ray"
+      ]
+    },
+    {
+      "label": "Controlled airway (OR / ENT / Anesthesia)",
+      "type": "correctlyOrdered",
+      "finding": "Awake fiberoptic intubation. Keep child calm.",
+      "aliases": [
+        "Airway"
+      ]
+    },
+    {
+      "label": "Ceftriaxone + Vancomycin",
+      "type": "correctlyOrdered",
+      "finding": "IV antibiotics.",
+      "aliases": [
+        "Rocephin",
+        "Vanc"
+      ]
+    },
+    {
+      "label": "Dexamethasone",
+      "type": "correctlyOrdered",
+      "finding": "Reduce airway edema.",
+      "aliases": [
+        "Decadron"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Observation only",
+    "Lateral neck X-ray",
+    "Controlled airway (OR / ENT / Anesthesia)",
+    "Ceftriaxone + Vancomycin",
+    "Dexamethasone"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Epiglottitis."
 }

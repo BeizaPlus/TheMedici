@@ -1,62 +1,278 @@
 {
   "id": 26,
-  "topic": "Severe Abdominal Pain",
-  "diagnosis": "Acute Appendicitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Shortness of Breath",
+  "title": "Shortness of Breath",
+  "diagnosis": "Cystic Fibrosis",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "CT Abdomen/Pelvis",
-    "IV Fluids",
-    "Pain Management",
-    "Surgical Consult",
-    "CBC",
-    "Electrolytes",
-    "Urinalysis"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: HEENT / Neck",
+    "Physical Exam: Extremities",
+    "Physical Exam: Abdomen",
+    "CBC with differential",
+    "Chest X-ray",
+    "Pulse oximetry",
+    "Sweat chloride test",
+    "CFTR genetic testing",
+    "BMP / CMP / LFTs",
+    "Sputum culture",
+    "Pancreatic elastase, stool",
+    "Pulmonary function tests",
+    "Pancreatic enzyme replacement",
+    "Fat-soluble vitamins (ADEK)",
+    "Airway clearance therapy",
+    "Albuterol / Hypertonic saline nebulizer",
+    "Consult, pediatric pulmonology"
   ],
   "should_avoid": [
-    "MRI Abdomen"
+    "Asthma diagnosis without further workup"
   ],
   "rationale": {
-    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with severe abdominal pain.",
-    "IV Fluids": "Appropriate CCS order for Acute Appendicitis: IV Fluids.",
-    "Pain Management": "Appropriate CCS order for Acute Appendicitis: Pain Management.",
-    "Surgical Consult": "Appropriate CCS order for Acute Appendicitis: Surgical Consult.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Acute Appendicitis.",
-    "Electrolytes": "Appropriate CCS order for Acute Appendicitis: Electrolytes.",
-    "Urinalysis": "Appropriate CCS order for Acute Appendicitis: Urinalysis.",
-    "MRI Abdomen": "Advanced imaging is not indicated early for Acute Appendicitis when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Full pediatric exam for chronic disease.",
+    "Physical Exam: Chest / Lungs": "Respiratory symptoms — thorough lung exam. Crackles, wheezes.",
+    "Physical Exam: HEENT / Neck": "Nasal polyps common in CF.",
+    "Physical Exam: Extremities": "Digital clubbing from chronic hypoxia.",
+    "Physical Exam: Abdomen": "Assess for hepatosplenomegaly, failure to thrive.",
+    "CBC with differential": "Screening.",
+    "Chest X-ray": "Hyperinflation, bronchiectasis, peribronchial thickening.",
+    "Pulse oximetry": "Assess oxygenation — chronic hypoxemia possible.",
+    "Sweat chloride test": "Gold standard for CF diagnosis. >60 mEq/L = positive.",
+    "CFTR genetic testing": "Confirms mutation. ΔF508 most common.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "Sputum culture": "Pseudomonas aeruginosa, S. aureus, H. influenzae common in CF.",
+    "Pancreatic elastase, stool": "Assess pancreatic insufficiency — common in CF.",
+    "Pulmonary function tests": "Obstructive pattern. FEV1 monitoring guides therapy.",
+    "Pancreatic enzyme replacement": "CREON or similar — replaces digestive enzymes for malabsorption.",
+    "Fat-soluble vitamins (ADEK)": "Supplementation required due to fat malabsorption.",
+    "Airway clearance therapy": "Chest physiotherapy, PEP valve, vest therapy.",
+    "Albuterol / Hypertonic saline nebulizer": "Bronchodilator + mucolytic for airway clearance.",
+    "Consult, pediatric pulmonology": "CF center referral for multidisciplinary care.",
+    "Asthma diagnosis without further workup": "Chronic respiratory symptoms + failure to thrive + clubbing = not typical asthma. CF must be ruled out with sweat chloride test."
   },
-  "hpi": "This case illustrates the importance of timely diagnosis and management of acute appendicitis. The patient presented with classic symptoms, and appropriate imaging and surgical consultation were critical in the management plan. Early intervention can prevent complications such as perforation.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a child presenting with chronic cough, recurrent respiratory infections, shortness of breath, and failure to thrive. Exam reveals nasal polyps, clubbing, and diffuse crackles. Cystic fibrosis is an autosomal recessive disorder caused by a mutation in the CFTR gene on chromosome 7. The defect in chloride transport leads to thick, viscous secretions affecting the lungs, pancreas, GI tract, and reproductive system. Diagnosis is made by elevated sweat chloride test (>60 mEq/L). CXR shows hyperinflation and bronchiectasis. Management includes pancreatic enzyme replacement, fat-soluble vitamin supplementation, airway clearance techniques, and aggressive treatment of pulmonary infections.",
+  "hpi_narrative": "{{patient_name}} is a child presenting with chronic cough, recurrent respiratory infections, shortness of breath, and failure to thrive. Exam reveals nasal polyps, clubbing, and diffuse crackles. Cystic fibrosis is an autosomal recessive disorder caused by a mutation in the CFTR gene on chromosome 7. The defect in chloride transport leads to thick, viscous secretions affecting the lungs, pancreas, GI tract, and reproductive system. Diagnosis is made by elevated sweat chloride test (>60 mEq/L). CXR shows hyperinflation and bronchiectasis. Management includes pancreatic enzyme replacement, fat-soluble vitamin supplementation, airway clearance techniques, and aggressive treatment of pulmonary infections.",
+  "physical_exam": [
+    [
+      "General",
+      "Poor growth, low BMI — failure to thrive."
+    ],
+    [
+      "Respiratory",
+      "Diffuse crackles, wheezes. Chronic productive cough."
+    ],
+    [
+      "Heent",
+      "Nasal polyps. Chronic sinusitis."
+    ],
+    [
+      "Musculoskeletal",
+      "Digital clubbing."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm in so much pain, it hurts to move.",
-    "history": "I felt a sharp pain in my lower right abdomen. It started suddenly.",
-    "pain": "It feels like a stabbing pain in my side."
+    "chief_complaint": "Chronic cough, dyspnea, recurrent infections, poor growth",
+    "history": "{{patient_name}} is a child presenting with chronic cough, recurrent respiratory infections, shortness of breath, and failure to thrive. Exam reveals nasal polyps, clubbing, and diffuse crackles. Cys…",
+    "pain": "Chronic cough, dyspnea, recurrent infections, poor growth"
   },
-  "ccs_category": "Surgery",
-  "case_summary": "This case illustrates the importance of timely diagnosis and management of acute appendicitis. The patient presented with classic symptoms, and appropriate imaging and surgical consultation were critical in the management plan. Early intervention can prevent complications such as perforation.",
+  "ccs_category": "Pediatrics / Pulmonology",
+  "chief_complaint": "Chronic cough, dyspnea, recurrent infections, poor growth",
+  "case_summary": "CF in child. Chronic cough + recurrent infections + failure to thrive + clubbing + nasal polyps. Sweat chloride >60 confirms. CFTR testing. Pancreatic enzymes + ADEK vitamins + airway clearance + pulm referral.",
+  "decoys": [
+    {
+      "label": "Asthma diagnosis without further workup",
+      "reason_wrong": "Chronic respiratory symptoms + failure to thrive + clubbing = not typical asthma. CF must be ruled out with sweat chloride test."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "CT Abdomen/Pelvis",
-    "IV Fluids",
-    "Pain Management",
-    "Surgical Consult",
-    "CBC"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "shouldHaveOrdered",
+      "finding": "Full pediatric exam for chronic disease.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "shouldHaveOrdered",
+      "finding": "Respiratory symptoms — thorough lung exam. Crackles, wheezes.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "shouldHaveOrdered",
+      "finding": "Nasal polyps common in CF.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities",
+      "type": "shouldHaveOrdered",
+      "finding": "Digital clubbing from chronic hypoxia.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess for hepatosplenomegaly, failure to thrive.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Hyperinflation, bronchiectasis, peribronchial thickening.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "correctlyOrdered",
+      "finding": "Assess oxygenation — chronic hypoxemia possible.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Sweat chloride test",
+      "type": "correctlyOrdered",
+      "finding": "Gold standard for CF diagnosis. >60 mEq/L = positive.",
+      "aliases": [
+        "Sweat test"
+      ]
+    },
+    {
+      "label": "CFTR genetic testing",
+      "type": "correctlyOrdered",
+      "finding": "Confirms mutation. ΔF508 most common.",
+      "aliases": [
+        "CFTR gene"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Sputum culture",
+      "type": "correctlyOrdered",
+      "finding": "Pseudomonas aeruginosa, S. aureus, H. influenzae common in CF.",
+      "aliases": [
+        "Sputum culture"
+      ]
+    },
+    {
+      "label": "Pancreatic elastase, stool",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess pancreatic insufficiency — common in CF.",
+      "aliases": [
+        "Fecal elastase"
+      ]
+    },
+    {
+      "label": "Pulmonary function tests",
+      "type": "correctlyOrdered",
+      "finding": "Obstructive pattern. FEV1 monitoring guides therapy.",
+      "aliases": [
+        "PFTs"
+      ]
+    },
+    {
+      "label": "Pancreatic enzyme replacement",
+      "type": "shouldHaveOrdered",
+      "finding": "CREON or similar — replaces digestive enzymes for malabsorption.",
+      "aliases": [
+        "Pancreatic enzymes",
+        "CREON"
+      ]
+    },
+    {
+      "label": "Fat-soluble vitamins (ADEK)",
+      "type": "shouldHaveOrdered",
+      "finding": "Supplementation required due to fat malabsorption.",
+      "aliases": [
+        "Vitamins ADEK"
+      ]
+    },
+    {
+      "label": "Airway clearance therapy",
+      "type": "correctlyOrdered",
+      "finding": "Chest physiotherapy, PEP valve, vest therapy.",
+      "aliases": [
+        "Chest PT"
+      ]
+    },
+    {
+      "label": "Albuterol / Hypertonic saline nebulizer",
+      "type": "correctlyOrdered",
+      "finding": "Bronchodilator + mucolytic for airway clearance.",
+      "aliases": [
+        "Nebulizer"
+      ]
+    },
+    {
+      "label": "Consult, pediatric pulmonology",
+      "type": "correctlyOrdered",
+      "finding": "CF center referral for multidisciplinary care.",
+      "aliases": [
+        "Pulmonary consult"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: HEENT / Neck",
+    "Physical Exam: Extremities",
+    "Physical Exam: Abdomen",
+    "CBC with differential",
+    "Chest X-ray",
+    "Pulse oximetry",
+    "Sweat chloride test",
+    "CFTR genetic testing",
+    "BMP / CMP / LFTs",
+    "Sputum culture",
+    "Pancreatic elastase, stool",
+    "Pulmonary function tests",
+    "Pancreatic enzyme replacement",
+    "Fat-soluble vitamins (ADEK)",
+    "Airway clearance therapy",
+    "Albuterol / Hypertonic saline nebulizer",
+    "Consult, pediatric pulmonology"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs were not present in the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Cystic Fibrosis."
 }

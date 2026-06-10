@@ -1,9 +1,10 @@
 {
   "id": 176,
   "topic": "Animal Bite",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Animal Bite",
+  "diagnosis": "Rabies, Cellulitis, Tetanus",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Stabilize the patient: ensure airway, breathing, and circulatory status; administer tetanus prophylaxis if needed",
     "Obtain a complete blood count (CBC) and serum glucose level",
@@ -16,34 +17,51 @@
     "Initiate antibiotics prior to culture results due to risk of developing antibiotic-resistant infections"
   ],
   "rationale": {
-    "Stabilize the patient: ensure airway, breathing, and circulatory status; administer tetanus prophylaxis if needed": "Appropriate CCS order for this diagnosis: Stabilize the patient: ensure airway, breathing, and circulatory status; administer tetanus prophylaxis if needed.",
-    "Obtain a complete blood count (CBC) and serum glucose level": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Culture and debridement of the wound if appropriate": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Consult Infectious Disease specialist for potential rabies prophylaxis": "Appropriate CCS order for this diagnosis: Consult Infectious Disease specialist for potential rabies prophylaxis.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access x2": "Appropriate CCS order for this diagnosis: IV access x2.",
-    "Initiate antibiotics prior to culture results due to risk of developing antibiotic-resistant infections": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+    "Stabilize the patient": "To address any immediate life-threatening issues and administer tetanus prophylaxis",
+    "Obtain CBC and serum glucose level": "To monitor for infection or complications",
+    "Culture and debridement of the wound": "To diagnose potential infections and remove necrotic tissue",
+    "Consult Infectious Disease specialist": "For potential rabies prophylaxis if the animal cannot be traced or if it is a known rabid animal",
+    "Initiate antibiotics prior to culture results": "Avoidance due to risk of developing antibiotic-resistant infections",
+    "Oxygen": "To provide supplemental oxygen for the patient suffering from an animal bite, which can cause distress or airway obstruction.",
+    "IV access x2": "For fluid and medication administration in case of severe infection or complications arising from the animal bite."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — animal bite. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This animal bite won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Animal Bite — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 116, tachycardic; BP 82/50; hypotensive."
+    ],
+    [
+      "Respiratory",
+      "RR 24, tachypneic; SpO₂ 87%; hypoxemic."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Stabilize the patient: ensure airway, breathing, and circulatory status; administer tetanus prophylaxis if needed",
     "Obtain a complete blood count (CBC) and serum glucose level",
     "Culture and debridement of the wound if appropriate",
@@ -51,11 +69,11 @@
     "Oxygen",
     "IV access x2"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

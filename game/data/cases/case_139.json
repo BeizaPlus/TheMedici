@@ -1,58 +1,76 @@
 {
   "id": 139,
   "topic": "Lip Lesion",
+  "title": "Lip Lesion",
   "diagnosis": "Squamous Cell Carcinoma of the Lip",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Skin",
-    "CBC with differential",
-    "Biopsy, oral lesion (cavity) / Biopsy, skin / Biopsy, skin lesion, excisional",
-    "Basic metabolic profile / Comprehensive metabolic profile"
+    "Biopsy (shave/punch)",
+    "Surgical excision (Mohs if indicated)",
+    "Sun protection / Smoking cessation"
   ],
-  "should_avoid": [
-    "No inappropriate invasive orders were administer to the patient during this case."
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for lip lesion.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Squamous Cell Carcinoma of the Lip.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Squamous Cell Carcinoma of the Lip.",
-    "Biopsy, oral lesion (cavity) / Biopsy, skin / Biopsy, skin lesion, excisional": "Skin exam may show rashes or systemic signs relevant to Squamous Cell Carcinoma of the Lip.",
-    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Squamous Cell Carcinoma of the Lip.",
-    "No inappropriate invasive orders were administer to the patient during this case.": "CCS review: avoid this order for Squamous Cell Carcinoma of the Lip — it does not change acute management."
+    "Biopsy (shave/punch)": "Invasive SCC — keratin pearls, atypical squamous cells.",
+    "Surgical excision (Mohs if indicated)": "Clear margins.",
+    "Sun protection / Smoking cessation": "Prevention."
   },
-  "hpi": "The patient has squamous cell carcinoma of the lip. This is a fairly straight forward case. You diagnose by a biopsy and then remove the tumor by consulting dermatology to perform Mohs surgery. Mohs surgery tends to be the gold standard for removing facial tumors as it minimizes tissue loss. The Mohs surgeon will remove a layer where the tumor was located and take the tissue, dye it, and look at the histology of the removed tissue. If there are still cancer cells in the specimen, the Mohs surgeon will go back and remove more of the lesion and then there is no more cancer. The patient will wait in the office while the Mohs surgeon looks at the tissue, so that the surgeon can remove more tissue if necessary. Mohs surgery will preserve the most tissue and have the best cosmetic outcome which is important to most patients. Mohs surgery is an outpatient procedure and can be done with local anesthetic. Once the surgery is completed, the case will end.",
+  "hpi": "{{patient_name}} presents with a non-healing, ulcerated, crusted lesion on the lower lip (sun-exposed area). Risk factors: chronic sun exposure, fair skin, smoking, immunosuppression. Actinic cheilitis is a premalignant condition — persistent scaling, crusting of lower lip. Progression to SCC: firm, ulcerated, bleeding lesion. Diagnosis: biopsy (shave or punch) — shows keratin pearls, atypical squamous cells. Treatment: surgical excision with clear margins (Mohs micrographic surgery for cosmetically sensitive areas). Prevention: sun protection, lip balm with SPF, smoking cessation. Monitor for regional lymph node involvement.",
+  "hpi_narrative": "{{patient_name}} presents with a non-healing, ulcerated, crusted lesion on the lower lip (sun-exposed area). Risk factors: chronic sun exposure, fair skin, smoking, immunosuppression. Actinic cheilitis is a premalignant condition — persistent scaling, crusting of lower lip. Progression to SCC: firm, ulcerated, bleeding lesion. Diagnosis: biopsy (shave or punch) — shows keratin pearls, atypical squamous cells. Treatment: surgical excision with clear margins (Mohs micrographic surgery for cosmetically sensitive areas). Prevention: sun protection, lip balm with SPF, smoking cessation. Monitor for regional lymph node involvement.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about this lip lesion. What if it's serious?",
-    "history": "I noticed a bump on my lip that hasn't gone away. It looks different.",
-    "pain": "It feels tender and sometimes itchy."
+    "chief_complaint": "Non-healing ulcerated lesion on lower lip",
+    "history": "{{patient_name}} presents with a non-healing, ulcerated, crusted lesion on the lower lip (sun-exposed area). Risk factors: chronic sun exposure, fair skin, smoking, immunosuppression. Actinic cheilit…",
+    "pain": "Non-healing ulcerated lesion on lower lip"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "The patient has squamous cell carcinoma of the lip. This is a fairly straight forward case. You diagnose by a biopsy and then remove the tumor by consulting dermatology to perform Mohs surgery. Mohs surgery tends to be the gold standard for removing facial tumors as it minimizes tissue loss. The Mohs surgeon will remove a layer where the tumor was located and take the tissue, dye it, and look at the histology of the removed tissue. If there are still cancer cells in the specimen, the Mohs surgeon will go back and remove more of the lesion and then there is no more cancer. The patient will wait in the office while the Mohs surgeon looks at the tissue, so that the surgeon can remove more tissue if necessary. Mohs surgery will preserve the most tissue and have the best cosmetic outcome which is important to most patients. Mohs surgery is an outpatient procedure and can be done with local anesthetic. Once the surgery is completed, the case will end.",
+  "ccs_category": "Dermatology",
+  "chief_complaint": "Non-healing ulcerated lesion on lower lip",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lung, Cardiovascular, Abdomen, Genital, Extremities and Spine, Neurological and Psychologic",
-    "Ordered: Biopsy, skin",
-    "Ordered: CBC with differential",
-    "Ordered: Comprehensive metabolic profile"
+    {
+      "label": "Biopsy (shave/punch)",
+      "type": "correctlyOrdered",
+      "finding": "Invasive SCC — keratin pearls, atypical squamous cells.",
+      "aliases": [
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "Surgical excision (Mohs if indicated)",
+      "type": "correctlyOrdered",
+      "finding": "Clear margins.",
+      "aliases": [
+        "Excision"
+      ]
+    },
+    {
+      "label": "Sun protection / Smoking cessation",
+      "type": "correctlyOrdered",
+      "finding": "Prevention.",
+      "aliases": [
+        "Prevention"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Biopsy (shave/punch)",
+    "Surgical excision (Mohs if indicated)",
+    "Sun protection / Smoking cessation"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Squamous Cell Carcinoma of the Lip."
 }

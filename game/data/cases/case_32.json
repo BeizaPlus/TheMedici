@@ -1,62 +1,235 @@
 {
   "id": 32,
   "topic": "Abdominal Pain",
+  "title": "Abdominal Pain",
   "diagnosis": "Acute Cholecystitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "IV FLUIDS",
-    "PAIN MANAGEMENT",
-    "LABS",
-    "IMAGING",
-    "SURGERY CONSULT",
-    "ULTRASOUND",
-    "CT ABDOMEN"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "CBC with differential",
+    "BMP / CMP / LFTs",
+    "Lipase / Amylase",
+    "RUQ Ultrasound",
+    {
+      "order": "HIDA scan",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "If US equivocal. Non-filling of gallbladder = cystic duct obstruction."
+    },
+    "IV fluids (NS / LR)",
+    "Diet, NPO",
+    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)",
+    "Analgesia (Ketorolac / Morphine / Hydromorphone)",
+    "Surgery consult / Laparoscopic cholecystectomy"
   ],
   "should_avoid": [
-    "UNNECESSARY MEDICATIONS"
+    "ER discharge without surgery consult"
   ],
   "rationale": {
-    "IV FLUIDS": "Appropriate CCS order for Acute Cholecystitis: IV FLUIDS.",
-    "PAIN MANAGEMENT": "Appropriate CCS order for Acute Cholecystitis: PAIN MANAGEMENT.",
-    "LABS": "Appropriate CCS order for Acute Cholecystitis: LABS.",
-    "IMAGING": "Appropriate CCS order for Acute Cholecystitis: IMAGING.",
-    "SURGERY CONSULT": "Appropriate CCS order for Acute Cholecystitis: SURGERY CONSULT.",
-    "ULTRASOUND": "Appropriate CCS order for Acute Cholecystitis: ULTRASOUND.",
-    "CT ABDOMEN": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
-    "UNNECESSARY MEDICATIONS": "CCS review: avoid this order for Acute Cholecystitis — it does not change acute management."
+    "Physical Exam: General Appearance": "Assess severity — febrile, appears ill.",
+    "Physical Exam: Chest / Lungs": "Investigate for lung pathology.",
+    "Physical Exam: Heart / Cardiovascular": "Tachycardia from fever/pain.",
+    "Physical Exam: Abdomen": "RUQ tenderness. Murphy's sign positive.",
+    "CBC with differential": "Leukocytosis supports infection.",
+    "BMP / CMP / LFTs": "Mildly elevated AST/ALT/ALP/bilirubin.",
+    "Lipase / Amylase": "Rule out concurrent pancreatitis (gallstone pancreatitis).",
+    "RUQ Ultrasound": "First-line imaging. Gallstones, wall thickening >4mm, pericholecystic fluid, sonographic Murphy's sign.",
+    "HIDA scan": "If US equivocal. Non-filling of gallbladder = cystic duct obstruction.",
+    "IV fluids (NS / LR)": "Nausea/vomiting — IV hydration. NPO.",
+    "Diet, NPO": "Bowel rest — patient will need surgery.",
+    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)": "Cover enteric gram-negatives + anaerobes.",
+    "Analgesia (Ketorolac / Morphine / Hydromorphone)": "Pain management.",
+    "Surgery consult / Laparoscopic cholecystectomy": "Definitive treatment within 24-72 hours.",
+    "ER discharge without surgery consult": "Acute cholecystitis requires surgical admission and cholecystectomy within 24-72 hours. Discharge risks complications: gangrenous cholecystitis, perforation, sepsis."
   },
-  "hpi": "This case highlights the importance of timely diagnosis and management of acute cholecystitis. The patient presented with classic symptoms, and appropriate imaging and surgical consultation were critical in the management plan. Early intervention can significantly improve outcomes in such cases.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with acute RUQ abdominal pain, nausea, vomiting, and fever. Pain may radiate to right shoulder or scapula. Exam reveals RUQ tenderness and positive Murphy's sign (arrest of inspiration with deep palpation of RUQ — pathognomonic). Risk factors: female, forty, fertile, fat (the 4 F's). Most commonly caused by gallstone impaction in the cystic duct. RUQ ultrasound is first-line imaging — shows gallstones, gallbladder wall thickening >4mm, pericholecystic fluid, and sonographic Murphy's sign. HIDA scan if US equivocal. Labs: leukocytosis, mildly elevated LFTs, possible elevated amylase/lipase if concurrent pancreatitis. Treatment: NPO, IV fluids, IV antibiotics (cover enteric gram-negatives + anaerobes — ceftriaxone + metronidazole or pip-tazo), analgesics. Definitive: laparoscopic cholecystectomy (within 24-72 hours).",
+  "hpi_narrative": "{{patient_name}} presents with acute RUQ abdominal pain, nausea, vomiting, and fever. Pain may radiate to right shoulder or scapula. Exam reveals RUQ tenderness and positive Murphy's sign (arrest of inspiration with deep palpation of RUQ — pathognomonic). Risk factors: female, forty, fertile, fat (the 4 F's). Most commonly caused by gallstone impaction in the cystic duct. RUQ ultrasound is first-line imaging — shows gallstones, gallbladder wall thickening >4mm, pericholecystic fluid, and sonographic Murphy's sign. HIDA scan if US equivocal. Labs: leukocytosis, mildly elevated LFTs, possible elevated amylase/lipase if concurrent pancreatitis. Treatment: NPO, IV fluids, IV antibiotics (cover enteric gram-negatives + anaerobes — ceftriaxone + metronidazole or pip-tazo), analgesics. Definitive: laparoscopic cholecystectomy (within 24-72 hours).",
+  "physical_exam": [
+    [
+      "General",
+      "Febrile, appears ill, in pain."
+    ],
+    [
+      "Cardiovascular",
+      "Tachycardic from pain/fever."
+    ],
+    [
+      "Abdominal",
+      "RUQ tenderness. Murphy's sign: inspiratory arrest on RUQ palpation — pathognomonic. No peritoneal signs."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I have severe pain in my abdomen. I'm really scared.",
-    "history": "It started suddenly, and it hurts a lot. I can't eat anything.",
-    "pain": "The pain is sharp and constant."
+    "chief_complaint": "RUQ pain, nausea, vomiting, fever",
+    "history": "{{patient_name}} presents with acute RUQ abdominal pain, nausea, vomiting, and fever. Pain may radiate to right shoulder or scapula. Exam reveals RUQ tenderness and positive Murphy's sign (arrest of …",
+    "pain": "RUQ pain, nausea, vomiting, fever"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "This case highlights the importance of timely diagnosis and management of acute cholecystitis. The patient presented with classic symptoms, and appropriate imaging and surgical consultation were critical in the management plan. Early intervention can significantly improve outcomes in such cases.",
+  "ccs_category": "Emergency Medicine / General Surgery",
+  "chief_complaint": "RUQ pain, nausea, vomiting, fever",
+  "case_summary": "Acute cholecystitis. RUQ pain + Murphy's sign + US shows gallstones and wall thickening. NPO + IVF + IV abx + laparoscopic cholecystectomy.",
+  "decoys": [
+    {
+      "label": "ER discharge without surgery consult",
+      "reason_wrong": "Acute cholecystitis requires surgical admission and cholecystectomy within 24-72 hours. Discharge risks complications: gangrenous cholecystitis, perforation, sepsis."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Labs Ordered",
-    "Imaging Ordered",
-    "Surgery Consult",
-    "Pain Management"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess severity — febrile, appears ill.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for lung pathology.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Tachycardia from fever/pain.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "RUQ tenderness. Murphy's sign positive.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis supports infection.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Mildly elevated AST/ALT/ALP/bilirubin.",
+      "aliases": [
+        "BMP",
+        "LFTs"
+      ]
+    },
+    {
+      "label": "Lipase / Amylase",
+      "type": "correctlyOrdered",
+      "finding": "Rule out concurrent pancreatitis (gallstone pancreatitis).",
+      "aliases": [
+        "Lipase"
+      ]
+    },
+    {
+      "label": "RUQ Ultrasound",
+      "type": "correctlyOrdered",
+      "finding": "First-line imaging. Gallstones, wall thickening >4mm, pericholecystic fluid, sonographic Murphy's sign.",
+      "aliases": [
+        "RUQ US",
+        "Gallbladder US"
+      ]
+    },
+    {
+      "label": "HIDA scan",
+      "type": "optional",
+      "finding": "If US equivocal. Non-filling of gallbladder = cystic duct obstruction.",
+      "aliases": [
+        "HIDA"
+      ]
+    },
+    {
+      "label": "IV fluids (NS / LR)",
+      "type": "correctlyOrdered",
+      "finding": "Nausea/vomiting — IV hydration. NPO.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "Diet, NPO",
+      "type": "correctlyOrdered",
+      "finding": "Bowel rest — patient will need surgery.",
+      "aliases": [
+        "NPO"
+      ]
+    },
+    {
+      "label": "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)",
+      "type": "correctlyOrdered",
+      "finding": "Cover enteric gram-negatives + anaerobes.",
+      "aliases": [
+        "Ceftriaxone",
+        "Flagyl",
+        "Zosyn"
+      ]
+    },
+    {
+      "label": "Analgesia (Ketorolac / Morphine / Hydromorphone)",
+      "type": "correctlyOrdered",
+      "finding": "Pain management.",
+      "aliases": [
+        "Pain medication"
+      ]
+    },
+    {
+      "label": "Surgery consult / Laparoscopic cholecystectomy",
+      "type": "correctlyOrdered",
+      "finding": "Definitive treatment within 24-72 hours.",
+      "aliases": [
+        "Surgery",
+        "Cholecystectomy"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "CBC with differential",
+    "BMP / CMP / LFTs",
+    "Lipase / Amylase",
+    "RUQ Ultrasound",
+    {
+      "order": "HIDA scan",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "If US equivocal. Non-filling of gallbladder = cystic duct obstruction."
+    },
+    "IV fluids (NS / LR)",
+    "Diet, NPO",
+    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)",
+    "Analgesia (Ketorolac / Morphine / Hydromorphone)",
+    "Surgery consult / Laparoscopic cholecystectomy"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Acute Cholecystitis."
 }

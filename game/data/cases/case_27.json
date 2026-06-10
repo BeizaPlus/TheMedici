@@ -1,9 +1,10 @@
 {
   "id": 27,
   "topic": "Fatigue",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Fatigue",
+  "diagnosis": "A comprehensive workup is necessary due to the unknown cause of fatigue.",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain complete blood count (CBC) and metabolic panel",
     "Consider additional testing based on initial findings such as thyroid function tests, vitamin B12/Folate levels, and comprehensive metabolic panel with liver enzymes",
@@ -15,44 +16,60 @@
     "Prescribe medication for fatigue without a confirmed diagnosis"
   ],
   "rationale": {
-    "Obtain complete blood count (CBC) and metabolic panel": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Consider additional testing based on initial findings such as thyroid function tests, vitamin B12/Folate levels, and comprehensive metabolic panel with liver enzymes": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
-    "Glucose check": "Appropriate CCS order for this diagnosis: Glucose check.",
-    "Prescribe medication for fatigue without a confirmed diagnosis": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Obtain complete blood count (CBC) and metabolic panel": "These tests are useful in identifying anemia, electrolyte imbalances, or kidney dysfunction that could cause fatigue.",
+    "Prescribe medication for fatigue without a confirmed diagnosis": "It is important to first establish a diagnosis before starting any specific treatment for fatigue.",
+    "Oxygen": "Patient presents with fatigue, which could be a symptom of multiple conditions including hypoglycemia. Oxygen is crucial to support patient's respiration.",
+    "IV access ×2": "To administer necessary fluids and medications promptly.",
+    "Glucose check": "Fatigue can also be a symptom of low blood sugar."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — fatigue. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This fatigue won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Fatigue — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 114, tachycardic; BP 119/76."
+    ],
+    [
+      "Respiratory",
+      "RR 23, tachypneic; SpO₂ 99%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain complete blood count (CBC) and metabolic panel",
     "Consider additional testing based on initial findings such as thyroid function tests, vitamin B12/Folate levels, and comprehensive metabolic panel with liver enzymes",
     "Oxygen",
     "IV access ×2",
     "Glucose check"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

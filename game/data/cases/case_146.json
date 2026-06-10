@@ -1,74 +1,87 @@
 {
   "id": 146,
   "topic": "Found Unconscious",
-  "diagnosis": "CCS review page",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Found Unconscious",
+  "diagnosis": "Cyanide Poisoning",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Obtain vital signs and initiate basic life support if necessary.",
-    "Obtain a detailed history including mechanism of injury, LOC, Glasgow Coma Scale (GCS), past medical history, medications, and allergies.",
-    "Obtain physical examination focusing on neurological assessment.",
-    "Immediate imaging studies: Non-contrast head CT to assess for intracranial hemorrhage or other structural abnormalities.",
-    "Consult Neurosurgery if GCS is less than 15, signs of increased ICP, or if there are associated skull fractures.",
-    "Obtain labs such as complete blood count (CBC), coagulation profile, electrolytes, and glucose.",
-    "Admit to an intensive care unit for close monitoring.",
-    "order1",
-    "Oxygen",
-    "IV access ×2"
+    "ABG / Lactate / BMP",
+    "Hydroxocobalamin IV",
+    "100% O2 + supportive care",
+    "Admit to ICU"
   ],
-  "should_avoid": [
-    "order1",
-    "Elective procedures or medications that could alter the patient's mental status."
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Obtain vital signs and initiate basic life support if necessary.": "Vital signs establish baseline stability before further orders.",
-    "Obtain a detailed history including mechanism of injury, LOC, Glasgow Coma Scale (GCS), past medical history, medications, and allergies.": "Appropriate CCS order for CCS review page: Obtain a detailed history including mechanism of injury, LOC, Glasgow Coma Scale (GCS), past medical history, medications, and allergies..",
-    "Obtain physical examination focusing on neurological assessment.": "Targeted Obtain physical examination focusing on neurological assessment. exam supports the differential for CCS review page.",
-    "Immediate imaging studies: Non-contrast head CT to assess for intracranial hemorrhage or other structural abnormalities.": "Appropriate CCS order for CCS review page: Immediate imaging studies: Non-contrast head CT to assess for intracranial hemorrhage or other structural abnormalities..",
-    "Consult Neurosurgery if GCS is less than 15, signs of increased ICP, or if there are associated skull fractures.": "Targeted Consult Neurosurgery if GCS is less than 15, signs of increased ICP, or if there are associated skull fractures. exam supports the differential for CCS review page.",
-    "Obtain labs such as complete blood count (CBC), coagulation profile, electrolytes, and glucose.": "Laboratory testing when systemic illness or severity warrants labs in CCS review page.",
-    "Admit to an intensive care unit for close monitoring.": "Appropriate CCS order for CCS review page: Admit to an intensive care unit for close monitoring..",
-    "order1": "CCS review: avoid this order for CCS review page — it does not change acute management.",
-    "Oxygen": "Appropriate CCS order for CCS review page: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for CCS review page: IV access ×2.",
-    "Elective procedures or medications that could alter the patient's mental status.": "Advanced imaging is not indicated early for CCS review page when the diagnosis is clinical."
+    "ABG / Lactate / BMP": "High AG metabolic acidosis, elevated lactate.",
+    "Hydroxocobalamin IV": "First-line. Binds cyanide.",
+    "100% O2 + supportive care": "Maximize O2 delivery.",
+    "Admit to ICU": "Critical care monitoring."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents found unconscious with cherry-red skin, bitter almond breath odor (only 40% can detect), high anion gap metabolic acidosis, and elevated lactate. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks oxidative phosphorylation → cells cannot use oxygen → tissue hypoxia despite normal PaO2 → anaerobic metabolism → lactic acidosis. Sources: smoke inhalation (burning plastics/wool), industrial exposure, sodium nitroprusside infusion. Treatment: hydroxocobalamin (Cyanokit — first-line, binds cyanide to form cyanocobalamin which is renally excreted). Alternative: sodium nitrite + sodium thiosulfate (older regimen, risk of methemoglobinemia). Supportive: 100% oxygen, airway management, IVF, vasopressors if needed. Admit to ICU.",
+  "hpi_narrative": "{{patient_name}} presents found unconscious with cherry-red skin, bitter almond breath odor (only 40% can detect), high anion gap metabolic acidosis, and elevated lactate. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks oxidative phosphorylation → cells cannot use oxygen → tissue hypoxia despite normal PaO2 → anaerobic metabolism → lactic acidosis. Sources: smoke inhalation (burning plastics/wool), industrial exposure, sodium nitroprusside infusion. Treatment: hydroxocobalamin (Cyanokit — first-line, binds cyanide to form cyanocobalamin which is renally excreted). Alternative: sodium nitrite + sodium thiosulfate (older regimen, risk of methemoglobinemia). Supportive: 100% oxygen, airway management, IVF, vasopressors if needed. Admit to ICU.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — found unconscious. I'm really scared.",
-    "history": "It's been getting worse. They said something about ccs review page. ...",
-    "pain": "This found unconscious won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Found unconscious, cherry-red skin, metabolic acidosis",
+    "history": "{{patient_name}} presents found unconscious with cherry-red skin, bitter almond breath odor (only 40% can detect), high anion gap metabolic acidosis, and elevated lactate. Cyanide inhibits cytochrome…",
+    "pain": "Found unconscious, cherry-red skin, metabolic acidosis"
   },
-  "ccs_category": null,
+  "ccs_category": "Toxicology / Critical Care",
+  "chief_complaint": "Found unconscious, cherry-red skin, metabolic acidosis",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Obtain vital signs and initiate basic life support if necessary.",
-    "Obtain a detailed history including mechanism of injury, LOC, Glasgow Coma Scale (GCS), past medical history, medications, and allergies.",
-    "Obtain physical examination focusing on neurological assessment.",
-    "Immediate imaging studies: Non-contrast head CT to assess for intracranial hemorrhage or other structural abnormalities.",
-    "Consult Neurosurgery if GCS is less than 15, signs of increased ICP, or if there are associated skull fractures.",
-    "Obtain labs such as complete blood count (CBC), coagulation profile, electrolytes, and glucose.",
-    "Admit to an intensive care unit for close monitoring.",
-    "order1",
-    "Oxygen",
-    "IV access ×2"
+    {
+      "label": "ABG / Lactate / BMP",
+      "type": "correctlyOrdered",
+      "finding": "High AG metabolic acidosis, elevated lactate.",
+      "aliases": [
+        "ABG"
+      ]
+    },
+    {
+      "label": "Hydroxocobalamin IV",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Binds cyanide.",
+      "aliases": [
+        "Cyanokit"
+      ]
+    },
+    {
+      "label": "100% O2 + supportive care",
+      "type": "correctlyOrdered",
+      "finding": "Maximize O2 delivery.",
+      "aliases": [
+        "O2"
+      ]
+    },
+    {
+      "label": "Admit to ICU",
+      "type": "correctlyOrdered",
+      "finding": "Critical care monitoring.",
+      "aliases": [
+        "ICU"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "ABG / Lactate / BMP",
+    "Hydroxocobalamin IV",
+    "100% O2 + supportive care",
+    "Admit to ICU"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Cyanide Poisoning."
 }

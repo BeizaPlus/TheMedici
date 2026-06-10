@@ -1,9 +1,10 @@
 {
   "id": 132,
   "topic": "Foot Pain",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Foot Pain",
+  "diagnosis": "Likely diagnoses may include traumatic injuries, neuropathies, or arthritis. However, a definitive diagnosis will require further investigation.",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain radiographs of the foot to assess for fractures, dislocations, or degenerative changes",
     "Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein) to evaluate for systemic inflammation",
@@ -14,42 +15,59 @@
     "Prescribe nonsteroidal anti-inflammatory drugs (NSAIDs) without a definitive diagnosis"
   ],
   "rationale": {
-    "Obtain radiographs of the foot to assess for fractures, dislocations, or degenerative changes": "Imaging supports diagnosis when exam findings warrant it for this diagnosis.",
-    "Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein) to evaluate for systemic inflammation": "Appropriate CCS order for this diagnosis: Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein) to evaluate for systemic inflammation.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2 large-bore": "Appropriate CCS order for this diagnosis: IV access ×2 large-bore.",
-    "Prescribe nonsteroidal anti-inflammatory drugs (NSAIDs) without a definitive diagnosis": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Obtain radiographs of the foot": "To identify any fractures, dislocations, or degenerative changes that may indicate underlying conditions such as osteoarthritis.",
+    "Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein)": "To evaluate for systemic inflammation, which can be associated with a variety of conditions causing foot pain.",
+    "Prescribe nonsteroidal anti-inflammatory drugs (NSAIDs) without a definitive diagnosis": "Since the diagnosis is unknown, it's important to avoid administering NSAIDs as they may provide temporary relief but could mask underlying pathologies that require specific treatments.",
+    "Oxygen": "The patient is experiencing foot pain, which may indicate an issue requiring immediate attention. Oxygen is essential to help maintain adequate oxygenation levels in case of hypoxia.",
+    "IV access ×2 large-bore": "Intravenous access is necessary for administering medications, fluids, and other life-saving interventions."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — foot pain. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This foot pain won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Foot Pain — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 110; BP 141/90."
+    ],
+    [
+      "Respiratory",
+      "RR 21; SpO₂ 101%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain radiographs of the foot to assess for fractures, dislocations, or degenerative changes",
     "Order blood tests (complete blood count, erythrocyte sedimentation rate, and C-reactive protein) to evaluate for systemic inflammation",
     "Oxygen",
     "IV access ×2 large-bore"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

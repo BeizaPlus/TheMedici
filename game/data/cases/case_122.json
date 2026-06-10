@@ -1,61 +1,87 @@
 {
   "id": 122,
-  "topic": "Painful Rash - Pediatrics",
+  "topic": "Painful Rash",
+  "title": "Painful Rash",
   "diagnosis": "Stevens-Johnson Syndrome",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Skin",
-    "Physical Exam: HEENT / Neck",
-    "CBC with differential",
-    "Basic metabolic profile / Comprehensive metabolic profile",
-    "Streptococci, mycoplasma",
-    "Bacterial culture, wound / bacterial culture, skin",
-    "Cyclosporine"
+    "Physical Exam: Full skin exam",
+    "DISCONTINUE offending drug",
+    "Admit to Burn ICU",
+    "Supportive care (fluids, wound care, nutrition)"
   ],
   "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for painful rash - pediatrics.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Stevens-Johnson Syndrome.",
-    "Physical Exam: HEENT / Neck": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Stevens-Johnson Syndrome.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Stevens-Johnson Syndrome.",
-    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Stevens-Johnson Syndrome.",
-    "Streptococci, mycoplasma": "Appropriate CCS order for Stevens-Johnson Syndrome: Streptococci, mycoplasma.",
-    "Bacterial culture, wound / bacterial culture, skin": "Skin exam may show rashes or systemic signs relevant to Stevens-Johnson Syndrome.",
-    "Cyclosporine": "Appropriate CCS order for Stevens-Johnson Syndrome: Cyclosporine."
+    "Physical Exam: Full skin exam": "Target lesions, bullae, mucosal involvement, Nikolsky sign.",
+    "DISCONTINUE offending drug": "Most important intervention.",
+    "Admit to Burn ICU": "SJS/TEN = burn unit management.",
+    "Supportive care (fluids, wound care, nutrition)": "Mainstay. Ophthalmology for eye involvement."
   },
-  "hpi": "Differentiate systemic symptoms from Stevens-Johnson syndrome versus other illness elements. The patient should be monitored closely for signs of infection. The patient should be admitted to the ICU and the treatment should include the use of supportive care and possible immunosuppressive therapy.",
+  "hpi": "{{patient_name}} presents with acute onset fever, widespread painful target-like lesions, bullae, epidermal detachment (<10% BSA = SJS, 10-30% = SJS/TEN overlap, >30% = TEN), and mucosal involvement (oral, ocular, genital). Nikolsky sign positive (epidermis sloughs with gentle pressure). Most commonly triggered by medications: sulfa antibiotics, anti-epileptics (lamotrigine, phenytoin, carbamazepine), allopurinol, NSAIDs, within 1-8 weeks of exposure. This is a medical emergency. Immediately discontinue offending drug. Admit to burn ICU. Supportive care: fluid/electrolyte management, wound care, infection prevention, nutritional support, ophthalmology consult. Systemic steroids controversial — not universally recommended. IVIG or cyclosporine may be considered. SCORTEN score for prognosis.",
+  "hpi_narrative": "{{patient_name}} presents with acute onset fever, widespread painful target-like lesions, bullae, epidermal detachment (<10% BSA = SJS, 10-30% = SJS/TEN overlap, >30% = TEN), and mucosal involvement (oral, ocular, genital). Nikolsky sign positive (epidermis sloughs with gentle pressure). Most commonly triggered by medications: sulfa antibiotics, anti-epileptics (lamotrigine, phenytoin, carbamazepine), allopurinol, NSAIDs, within 1-8 weeks of exposure. This is a medical emergency. Immediately discontinue offending drug. Admit to burn ICU. Supportive care: fluid/electrolyte management, wound care, infection prevention, nutritional support, ophthalmology consult. Systemic steroids controversial — not universally recommended. IVIG or cyclosporine may be considered. SCORTEN score for prognosis.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared because my rash hurts a lot. I don't know what's happening.",
-    "history": "I had a fever and then the rash started. It feels really painful.",
-    "pain": "It hurts all over my body, especially where the rash is."
+    "chief_complaint": "Fever, widespread painful rash, mucosal involvement",
+    "history": "{{patient_name}} presents with acute onset fever, widespread painful target-like lesions, bullae, epidermal detachment (<10% BSA = SJS, 10-30% = SJS/TEN overlap, >30% = TEN), and mucosal involvement …",
+    "pain": "Fever, widespread painful rash, mucosal involvement"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "Differentiate systemic symptoms from Stevens-Johnson syndrome versus other illness elements. The patient should be monitored closely for signs of infection. The patient should be admitted to the ICU and the treatment should include the use of supportive care and possible immunosuppressive therapy.",
+  "ccs_category": "Dermatology / Burn ICU",
+  "chief_complaint": "Fever, widespread painful rash, mucosal involvement",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam: General Appearance",
-    "Ordered: Comprehensive metabolic profile",
-    "Ordered: CBC with differential",
-    "Ordered: Cefepime"
+    {
+      "label": "Physical Exam: Full skin exam",
+      "type": "correctlyOrdered",
+      "finding": "Target lesions, bullae, mucosal involvement, Nikolsky sign.",
+      "aliases": [
+        "Skin Exam"
+      ]
+    },
+    {
+      "label": "DISCONTINUE offending drug",
+      "type": "correctlyOrdered",
+      "finding": "Most important intervention.",
+      "aliases": [
+        "Stop drug"
+      ]
+    },
+    {
+      "label": "Admit to Burn ICU",
+      "type": "correctlyOrdered",
+      "finding": "SJS/TEN = burn unit management.",
+      "aliases": [
+        "ICU"
+      ]
+    },
+    {
+      "label": "Supportive care (fluids, wound care, nutrition)",
+      "type": "correctlyOrdered",
+      "finding": "Mainstay. Ophthalmology for eye involvement.",
+      "aliases": [
+        "Supportive care"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Full skin exam",
+    "DISCONTINUE offending drug",
+    "Admit to Burn ICU",
+    "Supportive care (fluids, wound care, nutrition)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Stevens-Johnson Syndrome."
 }

@@ -1,60 +1,154 @@
 {
   "id": 66,
-  "topic": "English Internal Medicine",
+  "topic": "Cough",
+  "title": "Cough",
   "diagnosis": "Tuberculosis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Ordered the following: Physical Exam",
-    "Ordered the following: Vitals",
-    "Ordered the following: CBC",
-    "Ordered the following: Chest X-ray",
-    "Ordered the following: Sputum Culture",
-    "Should have ordered: TB Skin Test"
+    "Physical Exam: Chest / Lungs",
+    "Chest X-ray",
+    "Sputum AFB smear + culture",
+    "NAAT (PCR) for TB",
+    "IGRA / PPD",
+    "CBC / BMP / LFTs",
+    "Airborne isolation",
+    "RIPE therapy",
+    "Vitamin B6 (pyridoxine)",
+    "Public health reporting"
   ],
-  "should_avoid": [
-    "Correctly avoided: MRI"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Ordered the following: Physical Exam": "Appropriate CCS order for Tuberculosis: Ordered the following: Physical Exam.",
-    "Ordered the following: Vitals": "Vital signs establish baseline stability before further orders.",
-    "Ordered the following: CBC": "Laboratory testing when systemic illness or severity warrants labs in Tuberculosis.",
-    "Ordered the following: Chest X-ray": "Evaluate chest and lungs as part of the initial exam for english internal medicine.",
-    "Ordered the following: Sputum Culture": "Laboratory testing when systemic illness or severity warrants labs in Tuberculosis.",
-    "Should have ordered: TB Skin Test": "Skin exam may show rashes or systemic signs relevant to Tuberculosis.",
-    "Correctly avoided: MRI": "Advanced imaging is not indicated early for Tuberculosis when the diagnosis is clinical."
+    "Physical Exam: Chest / Lungs": "Apical crackles.",
+    "Chest X-ray": "Apical infiltrates ± cavitary lesions.",
+    "Sputum AFB smear + culture": "AFB positive. Culture = gold standard.",
+    "NAAT (PCR) for TB": "Rapid confirmation + rifampin resistance.",
+    "IGRA / PPD": "Positive in active + latent TB.",
+    "CBC / BMP / LFTs": "Baseline before RIPE.",
+    "Airborne isolation": "Negative pressure, N95.",
+    "RIPE therapy": "Rifampin + INH + PZA + EMB x 2mo, then INH + RIF x 4mo. DOT.",
+    "Vitamin B6 (pyridoxine)": "Prevent INH-induced peripheral neuropathy.",
+    "Public health reporting": "Reportable disease. Contact tracing."
   },
-  "hpi": "This case highlights the importance of recognizing the signs and symptoms of tuberculosis in patients presenting with respiratory complaints. Early diagnosis and appropriate treatment are crucial in managing this infectious disease. The case also emphasizes the need for thorough history taking and physical examination to guide diagnostic testing.",
+  "hpi": "{{patient_name}} presents with chronic cough >3 weeks, hemoptysis, night sweats, weight loss, fever, and fatigue. Risk factors: immigration from endemic area, HIV, homelessness, incarceration, healthcare exposure. TB is caused by Mycobacterium tuberculosis — acid-fast bacillus. CXR: apical infiltrates, cavitary lesions (reactivation TB), hilar lymphadenopathy, Ghon complex (primary). Diagnosis: sputum AFB smear (rapid, less sensitive), NAAT (PCR), mycobacterial culture (gold standard, results in weeks). IGRA (QuantiFERON) or PPD for latent TB screening — positive in active and latent. Airborne isolation (negative pressure room, N95). Treatment: RIPE therapy — Rifampin, Isoniazid, Pyrazinamide, Ethambutol for 2 months then INH + rifampin for 4 months. Directly observed therapy (DOT) preferred. Monitor LFTs (hepatotoxicity), vision (ethambutol → optic neuritis). Vitamin B6 (pyridoxine) with INH to prevent neuropathy. Report to public health.",
+  "hpi_narrative": "{{patient_name}} presents with chronic cough >3 weeks, hemoptysis, night sweats, weight loss, fever, and fatigue. Risk factors: immigration from endemic area, HIV, homelessness, incarceration, healthcare exposure. TB is caused by Mycobacterium tuberculosis — acid-fast bacillus. CXR: apical infiltrates, cavitary lesions (reactivation TB), hilar lymphadenopathy, Ghon complex (primary). Diagnosis: sputum AFB smear (rapid, less sensitive), NAAT (PCR), mycobacterial culture (gold standard, results in weeks). IGRA (QuantiFERON) or PPD for latent TB screening — positive in active and latent. Airborne isolation (negative pressure room, N95). Treatment: RIPE therapy — Rifampin, Isoniazid, Pyrazinamide, Ethambutol for 2 months then INH + rifampin for 4 months. Directly observed therapy (DOT) preferred. Monitor LFTs (hepatotoxicity), vision (ethambutol → optic neuritis). Vitamin B6 (pyridoxine) with INH to prevent neuropathy. Report to public health.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I was feeling really weak and had a bad cough. I was scared something serious was wrong.",
-    "history": "I have been coughing for weeks and losing weight. I didn't know what to do.",
-    "pain": "My chest hurts when I cough."
+    "chief_complaint": "Chronic cough >3w, hemoptysis, night sweats, weight loss",
+    "history": "{{patient_name}} presents with chronic cough >3 weeks, hemoptysis, night sweats, weight loss, fever, and fatigue. Risk factors: immigration from endemic area, HIV, homelessness, incarceration, health…",
+    "pain": "Chronic cough >3w, hemoptysis, night sweats, weight loss"
   },
-  "ccs_category": "Tuberculosis",
-  "case_summary": "This case highlights the importance of recognizing the signs and symptoms of tuberculosis in patients presenting with respiratory complaints. Early diagnosis and appropriate treatment are crucial in managing this infectious disease. The case also emphasizes the need for thorough history taking and physical examination to guide diagnostic testing.",
+  "ccs_category": "Infectious Disease / Pulmonology",
+  "chief_complaint": "Chronic cough >3w, hemoptysis, night sweats, weight loss",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Ordered the following: Physical Exam",
-    "Ordered the following: Vitals",
-    "Ordered the following: CBC",
-    "Ordered the following: Chest X-ray",
-    "Ordered the following: Sputum Culture"
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Apical crackles.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Apical infiltrates ± cavitary lesions.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "Sputum AFB smear + culture",
+      "type": "correctlyOrdered",
+      "finding": "AFB positive. Culture = gold standard.",
+      "aliases": [
+        "AFB",
+        "TB culture"
+      ]
+    },
+    {
+      "label": "NAAT (PCR) for TB",
+      "type": "correctlyOrdered",
+      "finding": "Rapid confirmation + rifampin resistance.",
+      "aliases": [
+        "TB PCR"
+      ]
+    },
+    {
+      "label": "IGRA / PPD",
+      "type": "correctlyOrdered",
+      "finding": "Positive in active + latent TB.",
+      "aliases": [
+        "QuantiFERON"
+      ]
+    },
+    {
+      "label": "CBC / BMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Baseline before RIPE.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Airborne isolation",
+      "type": "correctlyOrdered",
+      "finding": "Negative pressure, N95.",
+      "aliases": [
+        "Isolation"
+      ]
+    },
+    {
+      "label": "RIPE therapy",
+      "type": "correctlyOrdered",
+      "finding": "Rifampin + INH + PZA + EMB x 2mo, then INH + RIF x 4mo. DOT.",
+      "aliases": [
+        "RIPE"
+      ]
+    },
+    {
+      "label": "Vitamin B6 (pyridoxine)",
+      "type": "correctlyOrdered",
+      "finding": "Prevent INH-induced peripheral neuropathy.",
+      "aliases": [
+        "B6"
+      ]
+    },
+    {
+      "label": "Public health reporting",
+      "type": "correctlyOrdered",
+      "finding": "Reportable disease. Contact tracing.",
+      "aliases": [
+        "Public health"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Chest / Lungs",
+    "Chest X-ray",
+    "Sputum AFB smear + culture",
+    "NAAT (PCR) for TB",
+    "IGRA / PPD",
+    "CBC / BMP / LFTs",
+    "Airborne isolation",
+    "RIPE therapy",
+    "Vitamin B6 (pyridoxine)",
+    "Public health reporting"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Tuberculosis."
 }

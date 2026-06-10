@@ -1,60 +1,109 @@
 {
   "id": 137,
   "topic": "Wrist and Ankle Pain",
+  "title": "Wrist and Ankle Pain",
   "diagnosis": "Rheumatoid Arthritis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: Extremities",
-    "Physical Exam: Neuro",
-    "Physical Exam: Skin",
-    "CXR: Anterior-Posterior",
-    "CT Abdomen: Without Contrast",
-    "2D Echocardiogram"
+    "Joint exam",
+    "RF / Anti-CCP / ESR / CRP",
+    "X-ray hands/wrists",
+    "Methotrexate",
+    "Prednisone bridge",
+    "Refer rheumatology"
   ],
-  "should_avoid": [
-    "History: summary"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Rheumatoid Arthritis.",
-    "Physical Exam: Neuro": "Targeted Physical Exam: Neuro exam supports the differential for Rheumatoid Arthritis.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Rheumatoid Arthritis.",
-    "CXR: Anterior-Posterior": "Appropriate CCS order for Rheumatoid Arthritis: CXR: Anterior-Posterior.",
-    "CT Abdomen: Without Contrast": "Abdominal exam helps exclude alternative causes in a patient with wrist and ankle pain.",
-    "2D Echocardiogram": "Appropriate CCS order for Rheumatoid Arthritis: 2D Echocardiogram.",
-    "History: summary": "CCS review: avoid this order for Rheumatoid Arthritis — it does not change acute management."
+    "Joint exam": "Symmetric MCP/PIP/wrist swelling and tenderness.",
+    "RF / Anti-CCP / ESR / CRP": "Anti-CCP very specific >95%.",
+    "X-ray hands/wrists": "Periarticular osteopenia, erosions.",
+    "Methotrexate": "First-line DMARD. Folic acid supplementation.",
+    "Prednisone bridge": "Short-term for symptom control.",
+    "Refer rheumatology": "Early aggressive treatment prevents joint damage."
   },
-  "hpi": "This case illustrates the importance of considering the differential diagnosis for joint pain in a patient with known rheumatoid arthritis. The clinician should be aware of the potential for complications related to the disease and the need for appropriate imaging and laboratory studies to guide management.",
+  "hpi": "{{patient_name}} presents with symmetric polyarthritis involving small joints of hands (MCP, PIP), wrists, and ankles. Morning stiffness >1 hour. Joints are warm, swollen, tender. RA is a chronic autoimmune inflammatory arthritis. Key features: symmetric, polyarticular, involves hands/feet, spares DIP joints (distinguishes from osteoarthritis which involves DIP/PIP, Heberden/Bouchard nodes). Extra-articular: rheumatoid nodules, interstitial lung disease, pericarditis, vasculitis, Felty's syndrome. Labs: RF (rheumatoid factor — 80% sensitive), anti-CCP (anti-citrullinated peptide — very specific >95%), elevated ESR/CRP. X-ray: periarticular osteopenia, joint space narrowing, marginal erosions. Treatment: early aggressive DMARDs — methotrexate first-line. Plus short-term prednisone bridge. If MTX inadequate → add biologic (TNF inhibitor — etanercept, adalimumab). Refer to rheumatology. Physical and occupational therapy.",
+  "hpi_narrative": "{{patient_name}} presents with symmetric polyarthritis involving small joints of hands (MCP, PIP), wrists, and ankles. Morning stiffness >1 hour. Joints are warm, swollen, tender. RA is a chronic autoimmune inflammatory arthritis. Key features: symmetric, polyarticular, involves hands/feet, spares DIP joints (distinguishes from osteoarthritis which involves DIP/PIP, Heberden/Bouchard nodes). Extra-articular: rheumatoid nodules, interstitial lung disease, pericarditis, vasculitis, Felty's syndrome. Labs: RF (rheumatoid factor — 80% sensitive), anti-CCP (anti-citrullinated peptide — very specific >95%), elevated ESR/CRP. X-ray: periarticular osteopenia, joint space narrowing, marginal erosions. Treatment: early aggressive DMARDs — methotrexate first-line. Plus short-term prednisone bridge. If MTX inadequate → add biologic (TNF inhibitor — etanercept, adalimumab). Refer to rheumatology. Physical and occupational therapy.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my wrist and ankle pain. It hurts so much!",
-    "history": "I've had this pain for a while now, and it's getting worse.",
-    "pain": "The pain is sharp and makes it hard to move."
+    "chief_complaint": "Symmetric hand/wrist swelling, morning stiffness",
+    "history": "{{patient_name}} presents with symmetric polyarthritis involving small joints of hands (MCP, PIP), wrists, and ankles. Morning stiffness >1 hour. Joints are warm, swollen, tender. RA is a chronic aut…",
+    "pain": "Symmetric hand/wrist swelling, morning stiffness"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "This case illustrates the importance of considering the differential diagnosis for joint pain in a patient with known rheumatoid arthritis. The clinician should be aware of the potential for complications related to the disease and the need for appropriate imaging and laboratory studies to guide management.",
+  "ccs_category": "Rheumatology",
+  "chief_complaint": "Symmetric hand/wrist swelling, morning stiffness",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "CXR: Anterior-Posterior",
-    "CT Abdomen: Without Contrast",
-    "2D Echocardiogram"
+    {
+      "label": "Joint exam",
+      "type": "correctlyOrdered",
+      "finding": "Symmetric MCP/PIP/wrist swelling and tenderness.",
+      "aliases": [
+        "Joint exam"
+      ]
+    },
+    {
+      "label": "RF / Anti-CCP / ESR / CRP",
+      "type": "correctlyOrdered",
+      "finding": "Anti-CCP very specific >95%.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "X-ray hands/wrists",
+      "type": "correctlyOrdered",
+      "finding": "Periarticular osteopenia, erosions.",
+      "aliases": [
+        "X-ray"
+      ]
+    },
+    {
+      "label": "Methotrexate",
+      "type": "correctlyOrdered",
+      "finding": "First-line DMARD. Folic acid supplementation.",
+      "aliases": [
+        "MTX"
+      ]
+    },
+    {
+      "label": "Prednisone bridge",
+      "type": "correctlyOrdered",
+      "finding": "Short-term for symptom control.",
+      "aliases": [
+        "Prednisone"
+      ]
+    },
+    {
+      "label": "Refer rheumatology",
+      "type": "correctlyOrdered",
+      "finding": "Early aggressive treatment prevents joint damage.",
+      "aliases": [
+        "Rheumatology referral"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Joint exam",
+    "RF / Anti-CCP / ESR / CRP",
+    "X-ray hands/wrists",
+    "Methotrexate",
+    "Prednisone bridge",
+    "Refer rheumatology"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Rheumatoid Arthritis."
 }

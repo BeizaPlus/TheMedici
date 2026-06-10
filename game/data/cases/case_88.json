@@ -1,62 +1,109 @@
 {
   "id": 88,
   "topic": "Frequency of Urination",
+  "title": "Frequency of Urination",
   "diagnosis": "Prostate Cancer",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "U.S. prostate / MRI abdomen/pelvis, with gadolinium",
-    "Cystoscopy, prostate biopsy / Free needle aspiration, prostate",
-    "Physical Exam: Heart / Cardiovascular",
-    "Physical Exam: Abdomen",
-    "Physical Exam: General",
-    "Adenosine, soluble, specific, serum / PSA, total/free"
+    "DRE",
+    "PSA",
+    "TRUS + prostate biopsy",
+    "MRI prostate",
+    "CT / Bone scan",
+    "Refer urology / oncology"
   ],
-  "should_avoid": [
-    "order1",
-    "Immediate catheterization without proper diagnostics"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "U.S. prostate / MRI abdomen/pelvis, with gadolinium": "Abdominal exam helps exclude alternative causes in a patient with frequency of urination.",
-    "Cystoscopy, prostate biopsy / Free needle aspiration, prostate": "Diagnostic report or tissue diagnosis clarifies the cause of frequency of urination.",
-    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to frequency of urination.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with frequency of urination.",
-    "Physical Exam: General": "Appropriate CCS order for Prostate Cancer: Physical Exam: General.",
-    "Adenosine, soluble, specific, serum / PSA, total/free": "Appropriate CCS order for Prostate Cancer: Adenosine, soluble, specific, serum / PSA, total/free.",
-    "order1": "CCS review: avoid this order for Prostate Cancer — it does not change acute management.",
-    "Immediate catheterization without proper diagnostics": "CCS review: avoid this order for Prostate Cancer — it does not change acute management."
+    "DRE": "Hard, irregular, nodular prostate.",
+    "PSA": "Elevated.",
+    "TRUS + prostate biopsy": "Definitive diagnosis. Gleason score.",
+    "MRI prostate": "Identify suspicious lesions.",
+    "CT / Bone scan": "Staging — lymph nodes, bone mets.",
+    "Refer urology / oncology": "Active surveillance vs surgery vs radiation."
   },
-  "hpi": "Clinical indications include: malignancy suspicion. Medical history includes: urinary symptoms. Patient presents with urinary frequency and is being evaluated for prostate cancer. Wearing the catheter provides important insights.",
+  "hpi": "{{patient_name}} presents with urinary frequency, hesitancy, weak stream, nocturia — similar to BPH. DRE reveals a hard, irregular, nodular prostate (vs smooth and enlarged in BPH). PSA is elevated. Diagnosis: prostate biopsy (transrectal ultrasound-guided — TRUS biopsy). Gleason score from biopsy determines grade. MRI prostate can help identify suspicious lesions. Staging: CT abdomen/pelvis, bone scan (bone mets common). Treatment depends on risk stratification: low-risk → active surveillance. Intermediate/high → radical prostatectomy or radiation therapy (external beam or brachytherapy). Metastatic → androgen deprivation therapy (GnRH agonists, anti-androgens). Most prostate cancers are adenocarcinomas. Screening: PSA screening controversial — shared decision-making.",
+  "hpi_narrative": "{{patient_name}} presents with urinary frequency, hesitancy, weak stream, nocturia — similar to BPH. DRE reveals a hard, irregular, nodular prostate (vs smooth and enlarged in BPH). PSA is elevated. Diagnosis: prostate biopsy (transrectal ultrasound-guided — TRUS biopsy). Gleason score from biopsy determines grade. MRI prostate can help identify suspicious lesions. Staging: CT abdomen/pelvis, bone scan (bone mets common). Treatment depends on risk stratification: low-risk → active surveillance. Intermediate/high → radical prostatectomy or radiation therapy (external beam or brachytherapy). Metastatic → androgen deprivation therapy (GnRH agonists, anti-androgens). Most prostate cancers are adenocarcinomas. Screening: PSA screening controversial — shared decision-making.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my frequent urination. What could it mean?",
-    "history": "I've been having trouble going to the bathroom. It feels urgent.",
-    "pain": "Sometimes I feel a sharp pain when I try to go."
+    "chief_complaint": "Urinary frequency, weak stream, nocturia",
+    "history": "{{patient_name}} presents with urinary frequency, hesitancy, weak stream, nocturia — similar to BPH. DRE reveals a hard, irregular, nodular prostate (vs smooth and enlarged in BPH). PSA is elevated. …",
+    "pain": "Urinary frequency, weak stream, nocturia"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Clinical indications include: malignancy suspicion. Medical history includes: urinary symptoms. Patient presents with urinary frequency and is being evaluated for prostate cancer. Wearing the catheter provides important insights.",
+  "ccs_category": "Urology / Oncology",
+  "chief_complaint": "Urinary frequency, weak stream, nocturia",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Laboratory Tests",
-    "Imaging Ordered",
-    "Consults Ordered"
+    {
+      "label": "DRE",
+      "type": "correctlyOrdered",
+      "finding": "Hard, irregular, nodular prostate.",
+      "aliases": [
+        "DRE"
+      ]
+    },
+    {
+      "label": "PSA",
+      "type": "correctlyOrdered",
+      "finding": "Elevated.",
+      "aliases": [
+        "PSA"
+      ]
+    },
+    {
+      "label": "TRUS + prostate biopsy",
+      "type": "correctlyOrdered",
+      "finding": "Definitive diagnosis. Gleason score.",
+      "aliases": [
+        "Prostate biopsy"
+      ]
+    },
+    {
+      "label": "MRI prostate",
+      "type": "correctlyOrdered",
+      "finding": "Identify suspicious lesions.",
+      "aliases": [
+        "Prostate MRI"
+      ]
+    },
+    {
+      "label": "CT / Bone scan",
+      "type": "correctlyOrdered",
+      "finding": "Staging — lymph nodes, bone mets.",
+      "aliases": [
+        "Staging"
+      ]
+    },
+    {
+      "label": "Refer urology / oncology",
+      "type": "correctlyOrdered",
+      "finding": "Active surveillance vs surgery vs radiation.",
+      "aliases": [
+        "Referral"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "DRE",
+    "PSA",
+    "TRUS + prostate biopsy",
+    "MRI prostate",
+    "CT / Bone scan",
+    "Refer urology / oncology"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Prostate Cancer."
 }

@@ -1,60 +1,88 @@
 {
   "id": 130,
   "topic": "Cough",
-  "diagnosis": "Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Cough",
+  "diagnosis": "Legionella Pneumonia (Legionnaires Disease)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "History and Physical Exam",
-    "Physical Exam: Heart / Cardiovascular",
-    "Physical Exam: Lungs / Respiratory",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Extremities",
-    "Renal Ultrasound"
+    "CXR",
+    "Urinary antigen (Legionella)",
+    "CBC / BMP (hyponatremia) / LFTs",
+    "Azithromycin / Levofloxacin"
   ],
-  "should_avoid": [
-    "CT scan, abdomen"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "History and Physical Exam": "Appropriate CCS order for Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia): History and Physical Exam.",
-    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to cough.",
-    "Physical Exam: Lungs / Respiratory": "Evaluate chest and lungs as part of the initial exam for cough.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with cough.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia).",
-    "Renal Ultrasound": "Appropriate CCS order for Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia): Renal Ultrasound.",
-    "CT scan, abdomen": "Advanced imaging is not indicated early for Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia) when the diagnosis is clinical."
+    "CXR": "Lobar or multilobar infiltrates.",
+    "Urinary antigen (Legionella)": "Serogroup 1 most common. Rapid.",
+    "CBC / BMP (hyponatremia) / LFTs": "Hyponatremia is classic.",
+    "Azithromycin / Levofloxacin": "First-line. 7-14 day course."
   },
-  "hpi": "Legionella pneumonia is a type of atypical pneumonia that is caused by the bacterium Legionella pneumophila. It is important to recognize this condition as it can lead to severe illness and requires specific treatment.",
+  "hpi": "{{patient_name}} presents with high fever, cough (initially dry then productive), dyspnea, pleuritic chest pain, and extrapulmonary symptoms: GI (nausea, vomiting, diarrhea, abdominal pain), hyponatremia (classic lab finding), confusion/AMS, relative bradycardia. History: exposure to contaminated water sources (hot tubs, cooling towers, hotel, cruise ship). Legionella is an atypical pneumonia — intracellular pathogen not seen on Gram stain. Diagnosis: urinary antigen test (detects L. pneumophila serogroup 1 — most common, rapid), sputum culture on specialized media (BCYE agar), PCR. Severe cases require hospitalization. Treatment: macrolides (azithromycin) or respiratory fluoroquinolones (levofloxacin, moxifloxacin). Doxycycline as alternative. Treatment duration 7-14 days (longer if immunocompromised). Report to public health (Legionnaires disease is reportable).",
+  "hpi_narrative": "{{patient_name}} presents with high fever, cough (initially dry then productive), dyspnea, pleuritic chest pain, and extrapulmonary symptoms: GI (nausea, vomiting, diarrhea, abdominal pain), hyponatremia (classic lab finding), confusion/AMS, relative bradycardia. History: exposure to contaminated water sources (hot tubs, cooling towers, hotel, cruise ship). Legionella is an atypical pneumonia — intracellular pathogen not seen on Gram stain. Diagnosis: urinary antigen test (detects L. pneumophila serogroup 1 — most common, rapid), sputum culture on specialized media (BCYE agar), PCR. Severe cases require hospitalization. Treatment: macrolides (azithromycin) or respiratory fluoroquinolones (levofloxacin, moxifloxacin). Doxycycline as alternative. Treatment duration 7-14 days (longer if immunocompromised). Report to public health (Legionnaires disease is reportable).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. I can't stop coughing.",
-    "history": "I was feeling fine until a few days ago. Then I started coughing and felt really weak.",
-    "pain": "It hurts to breathe deeply."
+    "chief_complaint": "High fever, cough, GI symptoms, hyponatremia",
+    "history": "{{patient_name}} presents with high fever, cough (initially dry then productive), dyspnea, pleuritic chest pain, and extrapulmonary symptoms: GI (nausea, vomiting, diarrhea, abdominal pain), hyponatr…",
+    "pain": "High fever, cough, GI symptoms, hyponatremia"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Legionella pneumonia is a type of atypical pneumonia that is caused by the bacterium Legionella pneumophila. It is important to recognize this condition as it can lead to severe illness and requires specific treatment.",
+  "ccs_category": "Infectious Disease / Pulmonology",
+  "chief_complaint": "High fever, cough, GI symptoms, hyponatremia",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "History and Physical Exam",
-    "Laboratory Tests",
-    "Imaging"
+    {
+      "label": "CXR",
+      "type": "correctlyOrdered",
+      "finding": "Lobar or multilobar infiltrates.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "Urinary antigen (Legionella)",
+      "type": "correctlyOrdered",
+      "finding": "Serogroup 1 most common. Rapid.",
+      "aliases": [
+        "Legionella Ag"
+      ]
+    },
+    {
+      "label": "CBC / BMP (hyponatremia) / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Hyponatremia is classic.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Azithromycin / Levofloxacin",
+      "type": "correctlyOrdered",
+      "finding": "First-line. 7-14 day course.",
+      "aliases": [
+        "Zithromax",
+        "Levaquin"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "CXR",
+    "Urinary antigen (Legionella)",
+    "CBC / BMP (hyponatremia) / LFTs",
+    "Azithromycin / Levofloxacin"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Legionella Pneumonia (Legionnaires Disease)."
 }

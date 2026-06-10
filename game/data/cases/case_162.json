@@ -1,59 +1,76 @@
 {
   "id": 162,
   "topic": "Pain During Urination",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Pain During Urination",
+  "diagnosis": "Acute Cystitis (Uncomplicated UTI)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Laboratory tests: Urinalysis, Urine Culture and Sensitivity",
-    "Imaging studies: Ultrasound of the kidneys, ureters, and bladder (US KUB) if patient's condition warrants imaging",
-    "order1",
-    "CMP/BMP",
-    "UA"
+    "UA (dipstick + microscopy)",
+    "Nitrofurantoin 100mg BID x5d",
+    "Urine culture (if indicated)"
   ],
-  "should_avoid": [
-    "order1",
-    "Urinary catheterization unless clinically indicated for severe symptoms or failure to pass urine"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Laboratory tests: Urinalysis, Urine Culture and Sensitivity": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Imaging studies: Ultrasound of the kidneys, ureters, and bladder (US KUB) if patient's condition warrants imaging": "Appropriate CCS order for this diagnosis: Imaging studies: Ultrasound of the kidneys, ureters, and bladder (US KUB) if patient's condition warrants imaging.",
-    "order1": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "CMP/BMP": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "UA": "Appropriate CCS order for this diagnosis: UA.",
-    "Urinary catheterization unless clinically indicated for severe symptoms or failure to pass urine": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "UA (dipstick + microscopy)": "LE+, nitrites+, pyuria, bacteriuria.",
+    "Nitrofurantoin 100mg BID x5d": "First-line. Avoid FQs for uncomplicated cystitis.",
+    "Urine culture (if indicated)": "Not routine for uncomplicated. If recurrent or risk factors."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with dysuria, urinary frequency, urgency, suprapubic pain, and no vaginal discharge or irritation. No systemic symptoms (fever, CVA tenderness → rules out pyelo). Uncomplicated UTI in healthy premenopausal non-pregnant woman. Most common: E. coli (80%). Diagnosis: UA — positive leukocyte esterase, nitrites, pyuria, bacteriuria. Urine culture not routinely needed for uncomplicated cystitis (treat empirically). Treatment: nitrofurantoin 100mg PO BID x 5d (first-line), TMP-SMX DS PO BID x 3d (if local resistance <20%), fosfomycin 3g PO once. Avoid fluoroquinolones for uncomplicated cystitis (FDA warnings). Counsel: void after intercourse, adequate hydration, cranberry products (limited evidence). If recurrent → postcoital or continuous prophylaxis.",
+  "hpi_narrative": "{{patient_name}} presents with dysuria, urinary frequency, urgency, suprapubic pain, and no vaginal discharge or irritation. No systemic symptoms (fever, CVA tenderness → rules out pyelo). Uncomplicated UTI in healthy premenopausal non-pregnant woman. Most common: E. coli (80%). Diagnosis: UA — positive leukocyte esterase, nitrites, pyuria, bacteriuria. Urine culture not routinely needed for uncomplicated cystitis (treat empirically). Treatment: nitrofurantoin 100mg PO BID x 5d (first-line), TMP-SMX DS PO BID x 3d (if local resistance <20%), fosfomycin 3g PO once. Avoid fluoroquinolones for uncomplicated cystitis (FDA warnings). Counsel: void after intercourse, adequate hydration, cranberry products (limited evidence). If recurrent → postcoital or continuous prophylaxis.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — pain during urination. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This pain during urination won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Dysuria, frequency, urgency, suprapubic pain",
+    "history": "{{patient_name}} presents with dysuria, urinary frequency, urgency, suprapubic pain, and no vaginal discharge or irritation. No systemic symptoms (fever, CVA tenderness → rules out pyelo). Uncomplica…",
+    "pain": "Dysuria, frequency, urgency, suprapubic pain"
   },
-  "ccs_category": null,
+  "ccs_category": "Internal Medicine",
+  "chief_complaint": "Dysuria, frequency, urgency, suprapubic pain",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Laboratory tests: Urinalysis, Urine Culture and Sensitivity",
-    "Imaging studies: Ultrasound of the kidneys, ureters, and bladder (US KUB) if patient's condition warrants imaging",
-    "order1",
-    "CMP/BMP",
-    "UA"
+    {
+      "label": "UA (dipstick + microscopy)",
+      "type": "correctlyOrdered",
+      "finding": "LE+, nitrites+, pyuria, bacteriuria.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Nitrofurantoin 100mg BID x5d",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Avoid FQs for uncomplicated cystitis.",
+      "aliases": [
+        "Macrobid"
+      ]
+    },
+    {
+      "label": "Urine culture (if indicated)",
+      "type": "correctlyOrdered",
+      "finding": "Not routine for uncomplicated. If recurrent or risk factors.",
+      "aliases": [
+        "Urine culture"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "UA (dipstick + microscopy)",
+    "Nitrofurantoin 100mg BID x5d",
+    "Urine culture (if indicated)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Acute Cystitis (Uncomplicated UTI)."
 }

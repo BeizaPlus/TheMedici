@@ -1,60 +1,110 @@
 {
   "id": 82,
-  "topic": "Acute Bacterial Gastroenteritis",
+  "topic": "Abdominal Pain",
+  "title": "Abdominal Pain",
   "diagnosis": "Acute Bacterial Gastroenteritis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Chest/Lungs",
     "Physical Exam: Abdomen",
-    "Laboratory: Urinalysis",
-    "Laboratory: Stool Result",
-    "Fluid resuscitation: model Fluid 1st 24 hours"
+    "CBC / BMP",
+    "Stool culture (if indicated)",
+    "Oral rehydration / IV fluids",
+    "Antiemetic (Ondansetron)"
   ],
-  "should_avoid": [
-    "Antibiotics: Reassess, if patient still has severe diarrhea and abdominal pain"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for acute bacterial gastroenteritis.",
-    "Physical Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for acute bacterial gastroenteritis.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with acute bacterial gastroenteritis.",
-    "Laboratory: Urinalysis": "Appropriate CCS order for Acute Bacterial Gastroenteritis: Laboratory: Urinalysis.",
-    "Laboratory: Stool Result": "Appropriate CCS order for Acute Bacterial Gastroenteritis: Laboratory: Stool Result.",
-    "Fluid resuscitation: model Fluid 1st 24 hours": "Appropriate CCS order for Acute Bacterial Gastroenteritis: Fluid resuscitation: model Fluid 1st 24 hours.",
-    "Antibiotics: Reassess, if patient still has severe diarrhea and abdominal pain": "CCS review: avoid this order for Acute Bacterial Gastroenteritis — it does not change acute management."
+    "Physical Exam: General Appearance": "Assess volume status.",
+    "Physical Exam: Abdomen": "Diffuse tenderness, hyperactive BS.",
+    "CBC / BMP": "Hemoconcentration if dehydrated. AKI from volume loss.",
+    "Stool culture (if indicated)": "Bloody, severe, immunocompromised, >3d, recent Abx.",
+    "Oral rehydration / IV fluids": "Mainstay. ORS preferred if able to tolerate PO.",
+    "Antiemetic (Ondansetron)": "Symptom relief."
   },
-  "hpi": "The patient is a 5-year-old male who presents with abdominal pain, vomiting, and diarrhea. He has a history of recent travel and exposure to contaminated water. The patient is noted to be dehydrated and has a fever. Initial laboratory tests confirm the diagnosis of acute bacterial gastroenteritis. The management plan includes rehydration and monitoring. Antibiotics are not routinely indicated unless there is severe illness or specific bacterial infection identified.",
+  "hpi": "{{patient_name}} presents with acute onset nausea, vomiting, diffuse abdominal cramping, watery diarrhea, and low-grade fever. History reveals recent consumption of undercooked food or potential contaminated source. Most common causes: S. aureus (preformed toxin, 1-6h onset), B. cereus, C. perfringens, Salmonella, Campylobacter, Shigella, E. coli. Most cases are self-limited (viral or toxin-mediated). Key: assess hydration status. Stool culture if: bloody diarrhea, severe illness, immunocompromised, >3 days, recent antibiotics or hospitalization. Treatment: supportive — oral rehydration (or IV fluids if severe). Antiemetics (ondansetron), loperamide if non-bloody diarrhea and no fever (avoid in dysentery — can prolong illness). Empiric antibiotics only for severe cases, bloody diarrhea, immunocompromised (fluoroquinolone or azithromycin).",
+  "hpi_narrative": "{{patient_name}} presents with acute onset nausea, vomiting, diffuse abdominal cramping, watery diarrhea, and low-grade fever. History reveals recent consumption of undercooked food or potential contaminated source. Most common causes: S. aureus (preformed toxin, 1-6h onset), B. cereus, C. perfringens, Salmonella, Campylobacter, Shigella, E. coli. Most cases are self-limited (viral or toxin-mediated). Key: assess hydration status. Stool culture if: bloody diarrhea, severe illness, immunocompromised, >3 days, recent antibiotics or hospitalization. Treatment: supportive — oral rehydration (or IV fluids if severe). Antiemetics (ondansetron), loperamide if non-bloody diarrhea and no fever (avoid in dysentery — can prolong illness). Empiric antibiotics only for severe cases, bloody diarrhea, immunocompromised (fluoroquinolone or azithromycin).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared because my stomach hurts a lot and I keep throwing up.",
-    "history": "I was playing outside and then I got really sick. I think I drank some bad water.",
-    "pain": "It hurts in my belly, and I feel like I need to go to the bathroom a lot."
+    "chief_complaint": "Acute vomiting, diarrhea, abdominal cramps",
+    "history": "{{patient_name}} presents with acute onset nausea, vomiting, diffuse abdominal cramping, watery diarrhea, and low-grade fever. History reveals recent consumption of undercooked food or potential cont…",
+    "pain": "Acute vomiting, diarrhea, abdominal cramps"
   },
   "ccs_category": "Internal Medicine",
-  "case_summary": "The patient is a 5-year-old male who presents with abdominal pain, vomiting, and diarrhea. He has a history of recent travel and exposure to contaminated water. The patient is noted to be dehydrated and has a fever. Initial laboratory tests confirm the diagnosis of acute bacterial gastroenteritis. The management plan includes rehydration and monitoring. Antibiotics are not routinely indicated unless there is severe illness or specific bacterial infection identified.",
+  "chief_complaint": "Acute vomiting, diarrhea, abdominal cramps",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exams for patient: patient’s General Appearance",
-    "Ordered: CBC with differential",
-    "Ordered: Comprehensive metabolic profile",
-    "Ordered: Sediment"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess volume status.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Diffuse tenderness, hyperactive BS.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "CBC / BMP",
+      "type": "correctlyOrdered",
+      "finding": "Hemoconcentration if dehydrated. AKI from volume loss.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Stool culture (if indicated)",
+      "type": "correctlyOrdered",
+      "finding": "Bloody, severe, immunocompromised, >3d, recent Abx.",
+      "aliases": [
+        "Stool culture"
+      ]
+    },
+    {
+      "label": "Oral rehydration / IV fluids",
+      "type": "correctlyOrdered",
+      "finding": "Mainstay. ORS preferred if able to tolerate PO.",
+      "aliases": [
+        "IV fluids",
+        "ORS"
+      ]
+    },
+    {
+      "label": "Antiemetic (Ondansetron)",
+      "type": "correctlyOrdered",
+      "finding": "Symptom relief.",
+      "aliases": [
+        "Zofran"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "CBC / BMP",
+    "Stool culture (if indicated)",
+    "Oral rehydration / IV fluids",
+    "Antiemetic (Ondansetron)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Acute Bacterial Gastroenteritis."
 }

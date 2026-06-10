@@ -1,60 +1,132 @@
 {
   "id": 69,
   "topic": "Leg Pain",
+  "title": "Leg Pain",
   "diagnosis": "Cellulitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Cardiac / Lungs",
-    "Physical Exam: Abdominal",
-    "Physical Exam: Extremities",
-    "Physical Exam: Skin"
+    "Physical Exam: Skin / Extremities",
+    "CBC",
+    "Blood cultures",
+    "BMP",
+    "Oral antibiotics (Cephalexin / Clindamycin)",
+    "IV antibiotics (Cefazolin / Vancomycin)",
+    "Elevate limb"
   ],
-  "should_avoid": [
-    "order2",
-    "Starting anticoagulation therapy before a definitive diagnosis is made"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for leg pain.",
-    "Physical Exam: Cardiac / Lungs": "Evaluate chest and lungs as part of the initial exam for leg pain.",
-    "Physical Exam: Abdominal": "Appropriate CCS order for Cellulitis: Physical Exam: Abdominal.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Cellulitis.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Cellulitis.",
-    "order2": "CCS review: avoid this order for Cellulitis — it does not change acute management.",
-    "Starting anticoagulation therapy before a definitive diagnosis is made": "CCS review: avoid this order for Cellulitis — it does not change acute management."
+    "Physical Exam: General Appearance": "Febrile, may appear ill.",
+    "Physical Exam: Skin / Extremities": "Poorly demarcated erythema, warmth, edema. Mark borders.",
+    "CBC": "Leukocytosis.",
+    "Blood cultures": "If systemic symptoms.",
+    "BMP": "Screening.",
+    "Oral antibiotics (Cephalexin / Clindamycin)": "Mild-moderate: PO cephalexin or dicloxacillin.",
+    "IV antibiotics (Cefazolin / Vancomycin)": "Severe/systemic: IV cefazolin. Vancomycin if MRSA risk.",
+    "Elevate limb": "Reduce edema."
   },
-  "hpi": "Enthusiasm for patient care must be high. Deep venous thrombosis (DVT), pulmonary embolism (PE), renal failure, cardiac arrest, sepsis, and other life-threatening conditions must be considered. The patient is a diabetic, potentially high-risk patient, and the physician must be vigilant in assessing for these conditions. The patient must be educated on the importance of seeking medical attention for any concerning symptoms. The patient should be advised to follow up with their primary care physician within 1-2 weeks.",
+  "hpi": "{{patient_name}} presents with acute onset unilateral leg pain, erythema, warmth, swelling, and fever. The affected area shows poorly demarcated erythema, warmth, and edema. Cellulitis is an infection of the deep dermis and subcutaneous tissue — most commonly caused by beta-hemolytic Streptococci (Group A Strep) and S. aureus. Differentiate from erysipelas (more superficial, well-demarcated, raised borders). Risk factors: skin breaks, tinea pedis, lymphedema, venous stasis, diabetes, immunocompromise. Portal of entry must be identified. Mark the borders of erythema to monitor progression. Treatment: oral antibiotics for mild-moderate (cephalexin, dicloxacillin, clindamycin if penicillin-allergic). IV antibiotics for severe/systemic symptoms (cefazolin, nafcillin, vancomycin if MRSA risk). Elevate affected limb. Treat underlying predisposing conditions.",
+  "hpi_narrative": "{{patient_name}} presents with acute onset unilateral leg pain, erythema, warmth, swelling, and fever. The affected area shows poorly demarcated erythema, warmth, and edema. Cellulitis is an infection of the deep dermis and subcutaneous tissue — most commonly caused by beta-hemolytic Streptococci (Group A Strep) and S. aureus. Differentiate from erysipelas (more superficial, well-demarcated, raised borders). Risk factors: skin breaks, tinea pedis, lymphedema, venous stasis, diabetes, immunocompromise. Portal of entry must be identified. Mark the borders of erythema to monitor progression. Treatment: oral antibiotics for mild-moderate (cephalexin, dicloxacillin, clindamycin if penicillin-allergic). IV antibiotics for severe/systemic symptoms (cefazolin, nafcillin, vancomycin if MRSA risk). Elevate affected limb. Treat underlying predisposing conditions.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my leg pain. It feels so swollen and warm.",
-    "history": "I have diabetes and I noticed my leg getting worse over the last few days.",
-    "pain": "It hurts a lot, especially when I try to walk."
+    "chief_complaint": "Unilateral leg pain, erythema, warmth, swelling, fever",
+    "history": "{{patient_name}} presents with acute onset unilateral leg pain, erythema, warmth, swelling, and fever. The affected area shows poorly demarcated erythema, warmth, and edema. Cellulitis is an infectio…",
+    "pain": "Unilateral leg pain, erythema, warmth, swelling, fever"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Enthusiasm for patient care must be high. Deep venous thrombosis (DVT), pulmonary embolism (PE), renal failure, cardiac arrest, sepsis, and other life-threatening conditions must be considered. The patient is a diabetic, potentially high-risk patient, and the physician must be vigilant in assessing for these conditions. The patient must be educated on the importance of seeking medical attention for any concerning symptoms. The patient should be advised to follow up with their primary care physician within 1-2 weeks.",
+  "ccs_category": "Internal Medicine / Infectious Disease",
+  "chief_complaint": "Unilateral leg pain, erythema, warmth, swelling, fever",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "shouldHaveOrdered",
+      "finding": "Febrile, may appear ill.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Skin / Extremities",
+      "type": "shouldHaveOrdered",
+      "finding": "Poorly demarcated erythema, warmth, edema. Mark borders.",
+      "aliases": [
+        "Skin Exam"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Blood cultures",
+      "type": "correctlyOrdered",
+      "finding": "If systemic symptoms.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "BMP",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Oral antibiotics (Cephalexin / Clindamycin)",
+      "type": "correctlyOrdered",
+      "finding": "Mild-moderate: PO cephalexin or dicloxacillin.",
+      "aliases": [
+        "Keflex"
+      ]
+    },
+    {
+      "label": "IV antibiotics (Cefazolin / Vancomycin)",
+      "type": "correctlyOrdered",
+      "finding": "Severe/systemic: IV cefazolin. Vancomycin if MRSA risk.",
+      "aliases": [
+        "IV Ancef",
+        "Vanc"
+      ]
+    },
+    {
+      "label": "Elevate limb",
+      "type": "correctlyOrdered",
+      "finding": "Reduce edema.",
+      "aliases": [
+        "Elevation"
+      ]
+    }
+  ],
+  "order_sets": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Cardiac / Lungs",
-    "Physical Exam: Abdominal",
-    "Physical Exam: Extremities",
-    "Physical Exam: Skin"
+    "Physical Exam: Skin / Extremities",
+    "CBC",
+    "Blood cultures",
+    "BMP",
+    "Oral antibiotics (Cephalexin / Clindamycin)",
+    "IV antibiotics (Cefazolin / Vancomycin)",
+    "Elevate limb"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Cellulitis."
 }

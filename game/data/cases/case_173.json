@@ -1,74 +1,98 @@
 {
   "id": 173,
   "topic": "Sexual Assault",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Sexual Assault",
+  "diagnosis": "Male Sexual Assault",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Obtain a detailed history, including description of the assault, any injuries, and risk for STIs or pregnancy.",
-    "Perform a comprehensive physical exam focusing on genitourinary and rectal examination.",
-    "Collect forensic evidence (rape kit) if appropriate and with patient's consent.",
-    "Order laboratory tests: hepatitis B and C serology, HIV test, RPR for syphilis, gonorrhea and chlamydia cultures/nucleic acid amplification testing (NAAT).",
-    "Consult Sexual Assault Forensic Examiner (SAFE) team or Sexual Assault Nurse Examiner (SANE) for comprehensive care and support.",
-    "Provide psychosocial support, including referral to mental health services.",
-    "order1",
-    "Oxygen",
-    "IV access ×2 large-bore"
+    "Medical stabilization + SANE exam (with consent)",
+    "STI testing + prophylaxis (CTX+Doxy+Metro)",
+    "HIV PEP (if <72h)",
+    "Hepatitis B vaccine",
+    "Crisis counseling + Safe discharge"
   ],
-  "should_avoid": [
-    "order2",
-    "order3",
-    "Prescribe prophylactic antibiotics without confirming a bacterial STI"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Obtain a detailed history, including description of the assault, any injuries, and risk for STIs or pregnancy.": "Appropriate CCS order for this diagnosis: Obtain a detailed history, including description of the assault, any injuries, and risk for STIs or pregnancy..",
-    "Perform a comprehensive physical exam focusing on genitourinary and rectal examination.": "Appropriate CCS order for this diagnosis: Perform a comprehensive physical exam focusing on genitourinary and rectal examination..",
-    "Collect forensic evidence (rape kit) if appropriate and with patient's consent.": "Appropriate CCS order for this diagnosis: Collect forensic evidence (rape kit) if appropriate and with patient's consent..",
-    "Order laboratory tests: hepatitis B and C serology, HIV test, RPR for syphilis, gonorrhea and chlamydia cultures/nucleic acid amplification testing (NAAT).": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Consult Sexual Assault Forensic Examiner (SAFE) team or Sexual Assault Nurse Examiner (SANE) for comprehensive care and support.": "Appropriate CCS order for this diagnosis: Consult Sexual Assault Forensic Examiner (SAFE) team or Sexual Assault Nurse Examiner (SANE) for comprehensive care and support..",
-    "Provide psychosocial support, including referral to mental health services.": "Appropriate CCS order for this diagnosis: Provide psychosocial support, including referral to mental health services..",
-    "order1": "Appropriate CCS order for this diagnosis: order1.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2 large-bore": "Appropriate CCS order for this diagnosis: IV access ×2 large-bore.",
-    "order2": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "order3": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "Prescribe prophylactic antibiotics without confirming a bacterial STI": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+    "Medical stabilization + SANE exam (with consent)": "Document injuries, forensic evidence.",
+    "STI testing + prophylaxis (CTX+Doxy+Metro)": "Empiric.",
+    "HIV PEP (if <72h)": "28-day course.",
+    "Hepatitis B vaccine": "If not immune.",
+    "Crisis counseling + Safe discharge": "Trauma-informed. Psychiatry follow-up."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents after sexual assault. Management: trauma-informed, multidisciplinary approach. Medical stabilization first, then forensic examination with consent. SANE examination if available. Forensic evidence collection (rape kit) within 72h. Document injuries. Labs: STI testing (CT, GC, HIV, syphilis, hepatitis B/C), toxicology if concern for drug-facilitated assault. Empiric STI prophylaxis: ceftriaxone + doxycycline + metronidazole. HIV PEP if exposure within 72h (28-day course). Hepatitis B vaccine if not immune. Mental health crisis counseling. Report to law enforcement (with patient consent). Safe discharge planning. Follow-up: STI re-testing, counseling.",
+  "hpi_narrative": "{{patient_name}} presents after sexual assault. Management: trauma-informed, multidisciplinary approach. Medical stabilization first, then forensic examination with consent. SANE examination if available. Forensic evidence collection (rape kit) within 72h. Document injuries. Labs: STI testing (CT, GC, HIV, syphilis, hepatitis B/C), toxicology if concern for drug-facilitated assault. Empiric STI prophylaxis: ceftriaxone + doxycycline + metronidazole. HIV PEP if exposure within 72h (28-day course). Hepatitis B vaccine if not immune. Mental health crisis counseling. Report to law enforcement (with patient consent). Safe discharge planning. Follow-up: STI re-testing, counseling.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — sexual assault. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This sexual assault won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Sexual assault victim",
+    "history": "{{patient_name}} presents after sexual assault. Management: trauma-informed, multidisciplinary approach. Medical stabilization first, then forensic examination with consent. SANE examination if avail…",
+    "pain": "Sexual assault victim"
   },
-  "ccs_category": null,
+  "ccs_category": "Emergency Medicine / Forensic",
+  "chief_complaint": "Sexual assault victim",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Obtain a detailed history, including description of the assault, any injuries, and risk for STIs or pregnancy.",
-    "Perform a comprehensive physical exam focusing on genitourinary and rectal examination.",
-    "Collect forensic evidence (rape kit) if appropriate and with patient's consent.",
-    "Order laboratory tests: hepatitis B and C serology, HIV test, RPR for syphilis, gonorrhea and chlamydia cultures/nucleic acid amplification testing (NAAT).",
-    "Consult Sexual Assault Forensic Examiner (SAFE) team or Sexual Assault Nurse Examiner (SANE) for comprehensive care and support.",
-    "Provide psychosocial support, including referral to mental health services.",
-    "order1",
-    "Oxygen",
-    "IV access ×2 large-bore"
+    {
+      "label": "Medical stabilization + SANE exam (with consent)",
+      "type": "correctlyOrdered",
+      "finding": "Document injuries, forensic evidence.",
+      "aliases": [
+        "Forensic exam"
+      ]
+    },
+    {
+      "label": "STI testing + prophylaxis (CTX+Doxy+Metro)",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ]
+    },
+    {
+      "label": "HIV PEP (if <72h)",
+      "type": "correctlyOrdered",
+      "finding": "28-day course.",
+      "aliases": [
+        "HIV PEP"
+      ]
+    },
+    {
+      "label": "Hepatitis B vaccine",
+      "type": "correctlyOrdered",
+      "finding": "If not immune.",
+      "aliases": [
+        "HBV vaccine"
+      ]
+    },
+    {
+      "label": "Crisis counseling + Safe discharge",
+      "type": "correctlyOrdered",
+      "finding": "Trauma-informed. Psychiatry follow-up.",
+      "aliases": [
+        "Support"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Medical stabilization + SANE exam (with consent)",
+    "STI testing + prophylaxis (CTX+Doxy+Metro)",
+    "HIV PEP (if <72h)",
+    "Hepatitis B vaccine",
+    "Crisis counseling + Safe discharge"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Male Sexual Assault."
 }

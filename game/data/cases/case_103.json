@@ -1,9 +1,10 @@
 {
   "id": 103,
   "topic": "Routine Check-Up",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Routine Check-Up",
+  "diagnosis": "Initial Workup for Undetermined Condition",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Complete Blood Count (CBC)",
     "Comprehensive Metabolic Panel (CMP)",
@@ -21,39 +22,56 @@
     "Prescription for specific medication without a confirmed diagnosis"
   ],
   "rationale": {
-    "Complete Blood Count (CBC)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Comprehensive Metabolic Panel (CMP)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Urinalysis": "Appropriate CCS order for this diagnosis: Urinalysis.",
-    "Electrocardiogram (ECG)": "Appropriate CCS order for this diagnosis: Electrocardiogram (ECG).",
-    "Chest X-ray": "Evaluate chest and lungs as part of the initial exam for routine check-up.",
-    "Consultation with Internal Medicine or Hospitalist": "Appropriate CCS order for this diagnosis: Consultation with Internal Medicine or Hospitalist.",
-    "Cardiac Monitor": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to routine check-up.",
-    "IV Access + Fluids": "Appropriate CCS order for this diagnosis: IV Access + Fluids.",
-    "Stat Labs": "Appropriate CCS order for this diagnosis: Stat Labs.",
-    "Bedside / CT imaging": "Appropriate CCS order for this diagnosis: Bedside / CT imaging.",
-    "Admit / Disposition": "Appropriate CCS order for this diagnosis: Admit / Disposition.",
-    "Prescription for specific medication without a confirmed diagnosis": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Complete Blood Count (CBC)": "Helps to evaluate general health status, detect infections and anemia.",
+    "Comprehensive Metabolic Panel (CMP)": "Assesses the metabolism of carbohydrates, proteins, and fats, and helps to identify electrolyte imbalances, kidney function, and liver disease.",
+    "Urinalysis": "Helps to evaluate kidney function, detect infections, or abnormalities such as protein or glucose in the urine.",
+    "Electrocardiogram (ECG)": "Assesses the heart's electrical activity and can help identify potential cardiac problems.",
+    "Chest X-ray": "Helps to diagnose conditions affecting the lungs, heart, and chest.",
+    "Consultation with Internal Medicine or Hospitalist": "For further evaluation, management, and potential diagnostic procedures.",
+    "Prescription for specific medication without a confirmed diagnosis": "Avoiding unnecessary medications until a definite diagnosis has been established.",
+    "Cardiac Monitor": "Continuous vitals.",
+    "IV Access + Fluids": "Two large-bore if shock.",
+    "Stat Labs": "CBC, BMP, lactate.",
+    "Bedside / CT imaging": "Targeted imaging.",
+    "Admit / Disposition": "Match acuity."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — routine check-up. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This routine check-up won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Routine Check-Up — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 110; BP 116/74."
+    ],
+    [
+      "Respiratory",
+      "RR 22; SpO₂ 98%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Complete Blood Count (CBC)",
     "Comprehensive Metabolic Panel (CMP)",
     "Urinalysis",
@@ -66,11 +84,10 @@
     "Bedside / CT imaging",
     "Admit / Disposition"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

@@ -1,64 +1,131 @@
 {
   "id": 58,
   "topic": "Shortness of Breath",
+  "title": "Shortness of Breath",
   "diagnosis": "Croup (Laryngotracheitis)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
     "Physical Exam: Chest / Lungs",
     "Physical Exam: Heart / Cardiovascular",
-    "Physical Exam: Abdomen",
+    "Chest X-ray (AP)",
     "Pulse oximetry",
-    "Dexamethasone / Prednisone / Budesonide",
-    "Nebulized epinephrine therapy"
+    "Dexamethasone 0.6 mg/kg PO/IM once",
+    "Nebulized racemic epinephrine",
+    "Keep child calm / minimize agitation"
   ],
-  "should_avoid": [
-    "X-ray, neck, soft tissue",
-    "Intravenous access / Intravenous fluids, caped"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for shortness of breath.",
-    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
-    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with shortness of breath.",
-    "Pulse oximetry": "Pulse oximetry documents oxygenation in the initial assessment.",
-    "Dexamethasone / Prednisone / Budesonide": "Treatment aligned with CCS management for Croup (Laryngotracheitis).",
-    "Nebulized epinephrine therapy": "Treatment aligned with CCS management for Croup (Laryngotracheitis).",
-    "X-ray, neck, soft tissue": "This imaging is not required for the expected CCS pathway in Croup (Laryngotracheitis).",
-    "Intravenous access / Intravenous fluids, caped": "IV fluids/access are not indicated unless the patient is unstable or cannot tolerate PO."
+    "Physical Exam: General Appearance": "Assess severity — stridor at rest?",
+    "Physical Exam: Chest / Lungs": "Chief complaint — stridor vs wheezing.",
+    "Physical Exam: Heart / Cardiovascular": "Tachycardia from distress.",
+    "Chest X-ray (AP)": "Steeple sign — subglottic narrowing.",
+    "Pulse oximetry": "Assess oxygenation.",
+    "Dexamethasone 0.6 mg/kg PO/IM once": "First-line. Reduces airway edema. Single dose.",
+    "Nebulized racemic epinephrine": "For moderate-severe stridor at rest. Temporary relief. Observe 2-4h for rebound.",
+    "Keep child calm / minimize agitation": "Agitation worsens stridor."
   },
-  "hpi": "Differential: Bacterial tracheitis, Epiglottitis, Measles, Pertussis, Bronchopneumonia, abscess, foreign body aspiration, anaphylaxis.\n\nThis patient has croup (laryngotracheitis) that most likely stems from respiratory distress. She has the classic findings of croup including a barking cough and respiratory stridor in the setting of recent upper respiratory symptoms. Based on the history and physical exam, she likely has viral croup and is not in respiratory distress. Therefore, further diagnostic testing does not need to be done. In the ED, the patient should receive nebulized epinephrine, dexamethasone (or M.C.M. if whether the patient can tolerate IV access when you are administering IV fluids). Once the patient is given the epinephrine and dexamethasone, the patient will be reevaluated before discharge.",
+  "hpi": "{{patient_name}} is a child (6 months - 3 years) presenting with acute onset barky cough, inspiratory stridor, hoarseness, and respiratory distress, worse at night. Often preceded by viral URI (parainfluenza virus type 1 most common). Croup is inflammation of the larynx and subglottic airway. Westley croup score assesses severity based on stridor, retractions, air entry, cyanosis, and level of consciousness. Classic CXR finding: steeple sign (subglottic narrowing on AP view). Treatment: mild (no stridor at rest) = supportive care, cool mist. Moderate to severe = dexamethasone 0.6 mg/kg PO/IM once ± nebulized racemic epinephrine. Dexamethasone reduces airway edema. Racemic epinephrine is for temporary relief only — observe 2-4 hours after administration for rebound. Hospitalize if requiring racemic epinephrine, stridor at rest, hypoxia, or dehydration. Avoid unnecessary agitation — keep child calm.",
+  "hpi_narrative": "{{patient_name}} is a child (6 months - 3 years) presenting with acute onset barky cough, inspiratory stridor, hoarseness, and respiratory distress, worse at night. Often preceded by viral URI (parainfluenza virus type 1 most common). Croup is inflammation of the larynx and subglottic airway. Westley croup score assesses severity based on stridor, retractions, air entry, cyanosis, and level of consciousness. Classic CXR finding: steeple sign (subglottic narrowing on AP view). Treatment: mild (no stridor at rest) = supportive care, cool mist. Moderate to severe = dexamethasone 0.6 mg/kg PO/IM once ± nebulized racemic epinephrine. Dexamethasone reduces airway edema. Racemic epinephrine is for temporary relief only — observe 2-4 hours after administration for rebound. Hospitalize if requiring racemic epinephrine, stridor at rest, hypoxia, or dehydration. Avoid unnecessary agitation — keep child calm.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. I can't breathe well.",
-    "history": "I had a cold before. Now my throat hurts and I can't stop coughing.",
-    "pain": "It hurts when I cough."
+    "chief_complaint": "Barky cough, inspiratory stridor, respiratory distress",
+    "history": "{{patient_name}} is a child (6 months - 3 years) presenting with acute onset barky cough, inspiratory stridor, hoarseness, and respiratory distress, worse at night. Often preceded by viral URI (parai…",
+    "pain": "Barky cough, inspiratory stridor, respiratory distress"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "Differential: Bacterial tracheitis, Epiglottitis, Measles, Pertussis, Bronchopneumonia, abscess, foreign body aspiration, anaphylaxis.\n\nThis patient has croup (laryngotracheitis) that most likely stems from respiratory distress. She has the classic findings of croup including a barking cough and respiratory stridor in the setting of recent upper respiratory symptoms. Based on the history and physical exam, she likely has viral croup and is not in respiratory distress. Therefore, further diagnostic testing does not need to be done. In the ED, the patient should receive nebulized epinephrine, dexamethasone (or M.C.M. if whether the patient can tolerate IV access when you are administering IV fluids). Once the patient is given the epinephrine and dexamethasone, the patient will be reevaluated before discharge.",
+  "ccs_category": "Pediatrics / Emergency Medicine",
+  "chief_complaint": "Barky cough, inspiratory stridor, respiratory distress",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lung, Cardiovascular, Abdomen, General, Extremities and Simple, Neurological and Psychological",
-    "Time Advanced 15 minutes",
-    "Patient location changed to Emergency Department",
-    "Ordered: Pulse oximetry"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess severity — stridor at rest?",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Chief complaint — stridor vs wheezing.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Tachycardia from distress.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Chest X-ray (AP)",
+      "type": "correctlyOrdered",
+      "finding": "Steeple sign — subglottic narrowing.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "correctlyOrdered",
+      "finding": "Assess oxygenation.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Dexamethasone 0.6 mg/kg PO/IM once",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Reduces airway edema. Single dose.",
+      "aliases": [
+        "Decadron"
+      ]
+    },
+    {
+      "label": "Nebulized racemic epinephrine",
+      "type": "correctlyOrdered",
+      "finding": "For moderate-severe stridor at rest. Temporary relief. Observe 2-4h for rebound.",
+      "aliases": [
+        "Nebulized epinephrine"
+      ]
+    },
+    {
+      "label": "Keep child calm / minimize agitation",
+      "type": "correctlyOrdered",
+      "finding": "Agitation worsens stridor.",
+      "aliases": [
+        "Calm"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Chest X-ray (AP)",
+    "Pulse oximetry",
+    "Dexamethasone 0.6 mg/kg PO/IM once",
+    "Nebulized racemic epinephrine",
+    "Keep child calm / minimize agitation"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Croup (Laryngotracheitis)."
 }

@@ -1,60 +1,524 @@
 {
   "id": 16,
-  "topic": "Intra Abdominal Hypertension",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Cough",
+  "title": "Cough",
+  "diagnosis": "PCP Pneumonia (HIV/AIDS)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "CT Abdomen/Pelvis",
-    "Fluid Resuscitation",
-    "Lactate",
-    "CBC",
-    "Type and Crossmatch",
-    "Abdominal Ultrasound"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Breasts",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Lymph Nodes",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Rectal",
+    "Physical Exam: Skin",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Genitalia",
+    "Physical Exam: HEENT / Neck",
+    "Pulse oximetry",
+    "Arterial blood gases",
+    "CBC with differential",
+    "ECG, 12 lead",
+    "KOH prep / vaginal wet mount",
+    "Hepatitis panel",
+    "Bacterial culture, blood",
+    "Gram stain, sputum",
+    "AFB stain / Mycobacterial culture, sputum",
+    "Bacterial culture, sputum",
+    "Pneumocystis stain / Fungal culture, sputum",
+    "Urinalysis",
+    "LDH, serum",
+    "HIV PCR / viral load",
+    "CD4 count / T-cell profile",
+    "BMP / CMP / LFTs",
+    "Chest X-ray / CT chest",
+    "IV fluids (NS / LR)",
+    "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine",
+    "Oxygen",
+    "Consult, infectious disease",
+    "Topical antifungal (Clotrimazole / Miconazole / Terconazole) / Fluconazole",
+    {
+      "order": "Intravenous access",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Good practice for IV fluids/meds."
+    },
+    "Refer patient, public health",
+    "Instruct patient, smoking cessation",
+    "Pneumococcal vaccine",
+    "Papanicolaou smear / HPV DNA test"
   ],
   "should_avoid": [
-    "CT Chest"
+    "Prednisone before TMP-SMX",
+    "IV Pentamidine as first-line"
   ],
   "rationale": {
-    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with intra abdominal hypertension.",
-    "Fluid Resuscitation": "Appropriate CCS order for this diagnosis: Fluid Resuscitation.",
-    "Lactate": "Appropriate CCS order for this diagnosis: Lactate.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Type and Crossmatch": "Appropriate CCS order for this diagnosis: Type and Crossmatch.",
-    "Abdominal Ultrasound": "Appropriate CCS order for this diagnosis: Abdominal Ultrasound.",
-    "CT Chest": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Full exam in HIV patient with broad differential.",
+    "Physical Exam: Breasts": "Full exam in HIV patient.",
+    "Physical Exam: Heart / Cardiovascular": "Full exam.",
+    "Physical Exam: Chest / Lungs": "Cough + dyspnea — lung exam essential.",
+    "Physical Exam: Abdomen": "Full exam.",
+    "Physical Exam: Lymph Nodes": "HIV — assess for lymphadenopathy.",
+    "Physical Exam: Neuro / Psych": "Full exam.",
+    "Physical Exam: Rectal": "Full exam.",
+    "Physical Exam: Skin": "Full exam.",
+    "Physical Exam: Extremities / Spine": "Full exam.",
+    "Physical Exam: Genitalia": "Vulvovaginal candidiasis — genital exam.",
+    "Physical Exam: HEENT / Neck": "Full exam. Assess for oral thrush.",
+    "Pulse oximetry": "HIV patient with cough — check oxygenation.",
+    "Arterial blood gases": "ABG in hypoxemic patient. PaO2 guides TMP-SMX route (PO if >70).",
+    "CBC with differential": "Screening in all patients.",
+    "ECG, 12 lead": "Rule out cardiac causes.",
+    "KOH prep / vaginal wet mount": "Yeast infection — KOH prep reveals hyphae/budding yeast in 50-70%.",
+    "Hepatitis panel": "Symptomatic HIV — screen for co-occurring diseases.",
+    "Bacterial culture, blood": "Immunocompromised — blood culture warranted.",
+    "Gram stain, sputum": "Rule out bacterial infection.",
+    "AFB stain / Mycobacterial culture, sputum": "TB often seen in immunocompromised patients — must rule out.",
+    "Bacterial culture, sputum": "Rule out bacterial pneumonia.",
+    "Pneumocystis stain / Fungal culture, sputum": "HIV + unknown CD4 — PCP testing confirms diagnosis.",
+    "Urinalysis": "Perineal pruritis — UA for GU etiology.",
+    "LDH, serum": "Elevated LDH in HIV + respiratory symptoms suggests PCP. Rising LDH despite treatment = poor prognosis.",
+    "HIV PCR / viral load": "Know viral load for management.",
+    "CD4 count / T-cell profile": "CD4 guides prophylaxis and OI risk. <200 = PCP prophylaxis indicated.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "Chest X-ray / CT chest": "Classic PCP: diffuse central perihilar interstitial infiltrates. CXR sufficient — CT only if equivocal.",
+    "IV fluids (NS / LR)": "IV fluids for sick patient.",
+    "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine": "First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+    "Oxygen": "Low oxygen — supplemental O2.",
+    "Consult, infectious disease": "ID consult for HIV management and OI treatment recommendations.",
+    "Topical antifungal (Clotrimazole / Miconazole / Terconazole) / Fluconazole": "First-line: topical clotrimazole/miconazole/terconazole for candida vulvovaginitis. Oral fluconazole if recurrent.",
+    "Intravenous access": "Good practice for IV fluids/meds.",
+    "Refer patient, public health": "Report positive HIV result to Department of Health.",
+    "Instruct patient, smoking cessation": "Excellent opportunity to address smoking.",
+    "Pneumococcal vaccine": "HIV is an indication for pneumococcal vaccination.",
+    "Papanicolaou smear / HPV DNA test": "No recent pap smear — should be done.",
+    "Prednisone before TMP-SMX": "Prednisone indicated only if PaO2 <70. This patient has PaO2 >70 — start TMP-SMX directly.",
+    "IV Pentamidine as first-line": "IV Pentamidine reserved for severe disease with sulfa allergy, not first-line."
   },
-  "hpi": "Intra-abdominal hypertension (IAH) is defined as an intra-abdominal pressure (IAP) greater than 12 mmHg. It is a common complication in critically ill patients, particularly those with trauma, sepsis, or abdominal surgery. IAH can lead to abdominal compartment syndrome (ACS), which can cause organ dysfunction and failure. Early recognition and management of IAH are crucial to prevent progression to ACS. Treatment options include fluid resuscitation, decompression, and monitoring of intra-abdominal pressure.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is an HIV-positive woman with unknown CD4 count who presents with cough, dyspnea, and hypoxemia. She has concurrent candida vulvovaginitis from poorly controlled HIV. CD4 is likely <200 given the presentation with Pneumocystis jirovecii pneumonia — the most common respiratory infection in HIV patients not on prophylaxis. CXR shows classic diffuse bilateral perihilar interstitial infiltrates. Elevated LDH supports the diagnosis (though not specific). ABG shows hypoxemia with PaO2 >70, so oral TMP-SMX is first-line. Screen for TB, bacterial pneumonia, and other OIs. Start ART based on viral load and CD4. Admit to inpatient/ICU. PCP prophylaxis indicated when CD4 <200.",
+  "hpi_narrative": "{{patient_name}} is an HIV-positive woman with unknown CD4 count who presents with cough, dyspnea, and hypoxemia. She has concurrent candida vulvovaginitis from poorly controlled HIV. CD4 is likely <200 given the presentation with Pneumocystis jirovecii pneumonia — the most common respiratory infection in HIV patients not on prophylaxis. CXR shows classic diffuse bilateral perihilar interstitial infiltrates. Elevated LDH supports the diagnosis (though not specific). ABG shows hypoxemia with PaO2 >70, so oral TMP-SMX is first-line. Screen for TB, bacterial pneumonia, and other OIs. Start ART based on viral load and CD4. Admit to inpatient/ICU. PCP prophylaxis indicated when CD4 <200.",
+  "physical_exam": [
+    [
+      "General",
+      "Ill-appearing, febrile, dyspneic."
+    ],
+    [
+      "Respiratory",
+      "Dyspnea, hypoxemia. Bilateral crackles."
+    ],
+    [
+      "Heent",
+      "Assess for oral thrush (common in HIV)."
+    ],
+    [
+      "Genitourinary",
+      "Perineal pruritis — vulvovaginal candidiasis."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm feeling a lot of pressure in my abdomen. It's really uncomfortable.",
-    "history": "I had a car accident and now my stomach hurts. I can't breathe well.",
-    "pain": "It feels like a tight band around my belly."
+    "chief_complaint": "Cough, dyspnea, hypoxemia with HIV",
+    "history": "{{patient_name}} is an HIV-positive woman with unknown CD4 count who presents with cough, dyspnea, and hypoxemia. She has concurrent candida vulvovaginitis from poorly controlled HIV. CD4 is likely <…",
+    "pain": "Cough, dyspnea, hypoxemia with HIV"
   },
-  "ccs_category": "PTT Trauma",
-  "case_summary": "Intra-abdominal hypertension (IAH) is defined as an intra-abdominal pressure (IAP) greater than 12 mmHg. It is a common complication in critically ill patients, particularly those with trauma, sepsis, or abdominal surgery. IAH can lead to abdominal compartment syndrome (ACS), which can cause organ dysfunction and failure. Early recognition and management of IAH are crucial to prevent progression to ACS. Treatment options include fluid resuscitation, decompression, and monitoring of intra-abdominal pressure.",
+  "ccs_category": "Internal Medicine / Infectious Disease / HIV",
+  "chief_complaint": "Cough, dyspnea, hypoxemia with HIV",
+  "case_summary": "PCP pneumonia in HIV/AIDS (CD4 <200). CXR: bilateral perihilar infiltrates. TMP-SMX PO (PaO2 >70). Treat candidiasis. Start ART. PCP prophylaxis. Admit.",
+  "decoys": [
+    {
+      "label": "Prednisone before TMP-SMX",
+      "reason_wrong": "Prednisone indicated only if PaO2 <70. This patient has PaO2 >70 — start TMP-SMX directly."
+    },
+    {
+      "label": "IV Pentamidine as first-line",
+      "reason_wrong": "IV Pentamidine reserved for severe disease with sulfa allergy, not first-line."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "CT Abdomen/Pelvis",
-    "Fluid Resuscitation",
-    "Lactate",
-    "CBC",
-    "Type and Crossmatch"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam in HIV patient with broad differential.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Breasts",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam in HIV patient.",
+      "aliases": [
+        "Breast Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "shouldHaveOrdered",
+      "finding": "Cough + dyspnea — lung exam essential.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Lymph Nodes",
+      "type": "shouldHaveOrdered",
+      "finding": "HIV — assess for lymphadenopathy.",
+      "aliases": [
+        "Lymph Node Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Rectal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Skin",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Skin Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Genitalia",
+      "type": "shouldHaveOrdered",
+      "finding": "Vulvovaginal candidiasis — genital exam.",
+      "aliases": [
+        "Genital Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam. Assess for oral thrush.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "shouldHaveOrdered",
+      "finding": "HIV patient with cough — check oxygenation.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Arterial blood gases",
+      "type": "shouldHaveOrdered",
+      "finding": "ABG in hypoxemic patient. PaO2 guides TMP-SMX route (PO if >70).",
+      "aliases": [
+        "ABG"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "shouldHaveOrdered",
+      "finding": "Screening in all patients.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "ECG, 12 lead",
+      "type": "shouldHaveOrdered",
+      "finding": "Rule out cardiac causes.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "KOH prep / vaginal wet mount",
+      "type": "shouldHaveOrdered",
+      "finding": "Yeast infection — KOH prep reveals hyphae/budding yeast in 50-70%.",
+      "aliases": [
+        "Wet mount",
+        "KOH prep"
+      ]
+    },
+    {
+      "label": "Hepatitis panel",
+      "type": "shouldHaveOrdered",
+      "finding": "Symptomatic HIV — screen for co-occurring diseases.",
+      "aliases": [
+        "Hepatitis serology"
+      ]
+    },
+    {
+      "label": "Bacterial culture, blood",
+      "type": "shouldHaveOrdered",
+      "finding": "Immunocompromised — blood culture warranted.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "Gram stain, sputum",
+      "type": "shouldHaveOrdered",
+      "finding": "Rule out bacterial infection.",
+      "aliases": [
+        "Sputum Gram stain"
+      ]
+    },
+    {
+      "label": "AFB stain / Mycobacterial culture, sputum",
+      "type": "shouldHaveOrdered",
+      "finding": "TB often seen in immunocompromised patients — must rule out.",
+      "aliases": [
+        "AFB",
+        "TB culture"
+      ]
+    },
+    {
+      "label": "Bacterial culture, sputum",
+      "type": "shouldHaveOrdered",
+      "finding": "Rule out bacterial pneumonia.",
+      "aliases": [
+        "Sputum culture"
+      ]
+    },
+    {
+      "label": "Pneumocystis stain / Fungal culture, sputum",
+      "type": "shouldHaveOrdered",
+      "finding": "HIV + unknown CD4 — PCP testing confirms diagnosis.",
+      "aliases": [
+        "PCP stain",
+        "Fungal culture"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "shouldHaveOrdered",
+      "finding": "Perineal pruritis — UA for GU etiology.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "LDH, serum",
+      "type": "shouldHaveOrdered",
+      "finding": "Elevated LDH in HIV + respiratory symptoms suggests PCP. Rising LDH despite treatment = poor prognosis.",
+      "aliases": [
+        "LDH"
+      ]
+    },
+    {
+      "label": "HIV PCR / viral load",
+      "type": "correctlyOrdered",
+      "finding": "Know viral load for management.",
+      "aliases": [
+        "HIV viral load"
+      ]
+    },
+    {
+      "label": "CD4 count / T-cell profile",
+      "type": "correctlyOrdered",
+      "finding": "CD4 guides prophylaxis and OI risk. <200 = PCP prophylaxis indicated.",
+      "aliases": [
+        "CD4",
+        "T-cell subset"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "shouldHaveOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP",
+        "CMP",
+        "LFTs"
+      ]
+    },
+    {
+      "label": "Chest X-ray / CT chest",
+      "type": "correctlyOrdered",
+      "finding": "Classic PCP: diffuse central perihilar interstitial infiltrates. CXR sufficient — CT only if equivocal.",
+      "aliases": [
+        "CXR",
+        "Chest CT"
+      ]
+    },
+    {
+      "label": "IV fluids (NS / LR)",
+      "type": "shouldHaveOrdered",
+      "finding": "IV fluids for sick patient.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine",
+      "type": "correctlyOrdered",
+      "finding": "First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+      "aliases": [
+        "Bactrim",
+        "TMP-SMX"
+      ]
+    },
+    {
+      "label": "Oxygen",
+      "type": "shouldHaveOrdered",
+      "finding": "Low oxygen — supplemental O2.",
+      "aliases": [
+        "O2"
+      ]
+    },
+    {
+      "label": "Consult, infectious disease",
+      "type": "shouldHaveOrdered",
+      "finding": "ID consult for HIV management and OI treatment recommendations.",
+      "aliases": [
+        "ID consult"
+      ]
+    },
+    {
+      "label": "Topical antifungal (Clotrimazole / Miconazole / Terconazole) / Fluconazole",
+      "type": "shouldHaveOrdered",
+      "finding": "First-line: topical clotrimazole/miconazole/terconazole for candida vulvovaginitis. Oral fluconazole if recurrent.",
+      "aliases": [
+        "Antifungal",
+        "Clotrimazole"
+      ]
+    },
+    {
+      "label": "Intravenous access",
+      "type": "optional",
+      "finding": "Good practice for IV fluids/meds.",
+      "aliases": [
+        "IV access"
+      ]
+    },
+    {
+      "label": "Refer patient, public health",
+      "type": "shouldHaveOrdered",
+      "finding": "Report positive HIV result to Department of Health.",
+      "aliases": [
+        "Public health referral"
+      ]
+    },
+    {
+      "label": "Instruct patient, smoking cessation",
+      "type": "shouldHaveOrdered",
+      "finding": "Excellent opportunity to address smoking.",
+      "aliases": [
+        "Smoking cessation"
+      ]
+    },
+    {
+      "label": "Pneumococcal vaccine",
+      "type": "shouldHaveOrdered",
+      "finding": "HIV is an indication for pneumococcal vaccination.",
+      "aliases": [
+        "Pneumovax"
+      ]
+    },
+    {
+      "label": "Papanicolaou smear / HPV DNA test",
+      "type": "shouldHaveOrdered",
+      "finding": "No recent pap smear — should be done.",
+      "aliases": [
+        "Pap smear"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Breasts",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Lymph Nodes",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Rectal",
+    "Physical Exam: Skin",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Genitalia",
+    "Physical Exam: HEENT / Neck",
+    "Pulse oximetry",
+    "Arterial blood gases",
+    "CBC with differential",
+    "ECG, 12 lead",
+    "KOH prep / vaginal wet mount",
+    "Hepatitis panel",
+    "Bacterial culture, blood",
+    "Gram stain, sputum",
+    "AFB stain / Mycobacterial culture, sputum",
+    "Bacterial culture, sputum",
+    "Pneumocystis stain / Fungal culture, sputum",
+    "Urinalysis",
+    "LDH, serum",
+    "HIV PCR / viral load",
+    "CD4 count / T-cell profile",
+    "BMP / CMP / LFTs",
+    "Chest X-ray / CT chest",
+    "IV fluids (NS / LR)",
+    "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine",
+    "Oxygen",
+    "Consult, infectious disease",
+    "Topical antifungal (Clotrimazole / Miconazole / Terconazole) / Fluconazole",
+    {
+      "order": "Intravenous access",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Good practice for IV fluids/meds."
+    },
+    "Refer patient, public health",
+    "Instruct patient, smoking cessation",
+    "Pneumococcal vaccine",
+    "Papanicolaou smear / HPV DNA test"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: PCP Pneumonia (HIV/AIDS)."
 }

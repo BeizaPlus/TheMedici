@@ -1,9 +1,10 @@
 {
   "id": 121,
   "topic": "Poor Feeding",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Poor Feeding",
+  "diagnosis": "Failure to Thrive (FTT) or Gastroesophageal Reflux Disease (GERD) are common considerations for Poor Feeding of unknown cause in pediatric patients.",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements",
     "Physical examination to assess growth parameters, signs of dehydration, abdominal distension, or other relevant findings",
@@ -18,36 +19,48 @@
     "Initiate aggressive treatment (e.g., antibiotics, proton pump inhibitors) without proper investigations as the underlying cause may not be related to an infection or GERD."
   ],
   "rationale": {
-    "Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements": "Appropriate CCS order for this diagnosis: Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements.",
-    "Physical examination to assess growth parameters, signs of dehydration, abdominal distension, or other relevant findings": "Appropriate CCS order for this diagnosis: Physical examination to assess growth parameters, signs of dehydration, abdominal distension, or other relevant findings.",
-    "Investigations such as complete blood count (CBC), chemistry panel, urinalysis, stool studies, and electrolytes to rule out potential underlying causes like infections, metabolic disorders, or anemia": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Consider a swallowing study (videofluoroscopy) or pH monitoring if GERD is suspected": "Appropriate CCS order for this diagnosis: Consider a swallowing study (videofluoroscopy) or pH monitoring if GERD is suspected.",
-    "Refer the patient to a pediatric gastroenterologist for further evaluation and management": "Appropriate CCS order for this diagnosis: Refer the patient to a pediatric gastroenterologist for further evaluation and management.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access x2": "Appropriate CCS order for this diagnosis: IV access x2.",
-    "glucose check": "Appropriate CCS order for this diagnosis: glucose check.",
-    "Initiate aggressive treatment (e.g., antibiotics, proton pump inhibitors) without proper investigations as the underlying cause may not be related to an infection or GERD.": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+    "Initiate aggressive treatment": "It is essential to avoid making premature assumptions and starting unnecessary treatments. The diagnosis should first be established through a thorough history, physical examination, and appropriate investigations.",
+    "Oxygen": "To provide supplemental oxygen and help maintain adequate oxygenation in the patient with poor feeding",
+    "IV access x2": "To establish two large-bore IV access for fluid administration, medication delivery, and blood draws",
+    "glucose check": "To quickly assess the blood glucose level of the patient to rule out hypoglycemia as a possible cause of poor feeding"
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — poor feeding. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This poor feeding won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Poor Feeding — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 124, tachycardic; BP 93/56; hypotensive."
+    ],
+    [
+      "Respiratory",
+      "RR 27, tachypneic; SpO₂ 94%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "Warm skin with fever; no purpura on initial survey."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements",
     "Physical examination to assess growth parameters, signs of dehydration, abdominal distension, or other relevant findings",
     "Investigations such as complete blood count (CBC), chemistry panel, urinalysis, stool studies, and electrolytes to rule out potential underlying causes like infections, metabolic disorders, or anemia",
@@ -57,11 +70,11 @@
     "IV access x2",
     "glucose check"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

@@ -1,59 +1,76 @@
 {
   "id": 168,
   "topic": "Fatigue",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Fatigue",
+  "diagnosis": "Obstructive Sleep Apnea",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Complete blood count (CBC) including hemoglobin, hematocrit, and mean corpuscular volume (MCV)",
-    "Metabolic panel including glucose, electrolytes, liver function tests, and creatinine",
-    "order1",
-    "Oxygen",
-    "IV access ×2"
+    "Polysomnography",
+    "CPAP",
+    "Weight loss"
   ],
-  "should_avoid": [
-    "order1",
-    "CT scan or MRI without specific symptoms suggestive of neurological or systemic disease"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Complete blood count (CBC) including hemoglobin, hematocrit, and mean corpuscular volume (MCV)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Metabolic panel including glucose, electrolytes, liver function tests, and creatinine": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "order1": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
-    "CT scan or MRI without specific symptoms suggestive of neurological or systemic disease": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+    "Polysomnography": "AHI >15 = moderate OSA.",
+    "CPAP": "First-line for mod-severe OSA.",
+    "Weight loss": "Most important lifestyle intervention."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with excessive daytime sleepiness, loud snoring, witnessed apneas, morning headaches, and fatigue. Risk factors: obesity, large neck circumference, male, retrognathia. OSA = repetitive upper airway collapse during sleep → apnea/hypopnea → oxygen desaturation → sympathetic surge → disrupted sleep. STOP-BANG screening questionnaire. Complications: hypertension, atrial fibrillation, pulmonary hypertension, cor pulmonale, metabolic syndrome, motor vehicle accidents. Diagnosis: polysomnography (sleep study) — AHI (apnea-hypopnea index) >5 = OSA. Mild 5-15, moderate 15-30, severe >30. Treatment: CPAP (first-line for moderate-severe). Weight loss (most important lifestyle). Oral appliance for mild-mod. Positional therapy. Surgical (UPPP) if CPAP intolerant.",
+  "hpi_narrative": "{{patient_name}} presents with excessive daytime sleepiness, loud snoring, witnessed apneas, morning headaches, and fatigue. Risk factors: obesity, large neck circumference, male, retrognathia. OSA = repetitive upper airway collapse during sleep → apnea/hypopnea → oxygen desaturation → sympathetic surge → disrupted sleep. STOP-BANG screening questionnaire. Complications: hypertension, atrial fibrillation, pulmonary hypertension, cor pulmonale, metabolic syndrome, motor vehicle accidents. Diagnosis: polysomnography (sleep study) — AHI (apnea-hypopnea index) >5 = OSA. Mild 5-15, moderate 15-30, severe >30. Treatment: CPAP (first-line for moderate-severe). Weight loss (most important lifestyle). Oral appliance for mild-mod. Positional therapy. Surgical (UPPP) if CPAP intolerant.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — fatigue. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This fatigue won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Daytime sleepiness, loud snoring, witnessed apneas",
+    "history": "{{patient_name}} presents with excessive daytime sleepiness, loud snoring, witnessed apneas, morning headaches, and fatigue. Risk factors: obesity, large neck circumference, male, retrognathia. OSA =…",
+    "pain": "Daytime sleepiness, loud snoring, witnessed apneas"
   },
-  "ccs_category": null,
+  "ccs_category": "Sleep Medicine / Pulmonology",
+  "chief_complaint": "Daytime sleepiness, loud snoring, witnessed apneas",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Complete blood count (CBC) including hemoglobin, hematocrit, and mean corpuscular volume (MCV)",
-    "Metabolic panel including glucose, electrolytes, liver function tests, and creatinine",
-    "order1",
-    "Oxygen",
-    "IV access ×2"
+    {
+      "label": "Polysomnography",
+      "type": "correctlyOrdered",
+      "finding": "AHI >15 = moderate OSA.",
+      "aliases": [
+        "Sleep study"
+      ]
+    },
+    {
+      "label": "CPAP",
+      "type": "correctlyOrdered",
+      "finding": "First-line for mod-severe OSA.",
+      "aliases": [
+        "CPAP"
+      ]
+    },
+    {
+      "label": "Weight loss",
+      "type": "correctlyOrdered",
+      "finding": "Most important lifestyle intervention.",
+      "aliases": [
+        "Weight loss"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Polysomnography",
+    "CPAP",
+    "Weight loss"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Obstructive Sleep Apnea."
 }

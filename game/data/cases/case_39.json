@@ -1,68 +1,229 @@
 {
   "id": 39,
-  "topic": "Epigastric pain",
+  "topic": "Epigastric Pain",
+  "title": "Epigastric Pain",
   "diagnosis": "Acute Pancreatitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "IV fluids",
-    "NPO",
-    "Pain management",
-    "CBC",
-    "LFTs",
-    "Amylase",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "BMP / CMP / LFTs",
     "Lipase",
-    "CT abdomen",
-    "Electrolytes",
-    "Urinalysis"
+    "RUQ ultrasound",
+    "CT abdomen/pelvis with IV contrast",
+    "IV fluids (Lactated Ringer preferred)",
+    "Diet, NPO",
+    "IV analgesics (Morphine / Hydromorphone)",
+    "Antiemetic (Ondansetron / Metoclopramide)"
   ],
   "should_avoid": [
-    "Antibiotics"
+    "Prophylactic antibiotics in all pancreatitis"
   ],
   "rationale": {
-    "IV fluids": "Appropriate CCS order for Acute Pancreatitis: IV fluids.",
-    "NPO": "Appropriate CCS order for Acute Pancreatitis: NPO.",
-    "Pain management": "Appropriate CCS order for Acute Pancreatitis: Pain management.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Acute Pancreatitis.",
-    "LFTs": "Appropriate CCS order for Acute Pancreatitis: LFTs.",
-    "Amylase": "Appropriate CCS order for Acute Pancreatitis: Amylase.",
-    "Lipase": "Appropriate CCS order for Acute Pancreatitis: Lipase.",
-    "CT abdomen": "Abdominal exam helps exclude alternative causes in a patient with epigastric pain.",
-    "Electrolytes": "Appropriate CCS order for Acute Pancreatitis: Electrolytes.",
-    "Urinalysis": "Appropriate CCS order for Acute Pancreatitis: Urinalysis.",
-    "Antibiotics": "CCS review: avoid this order for Acute Pancreatitis — it does not change acute management."
+    "Physical Exam: General Appearance": "Assess severity — may appear very ill.",
+    "Physical Exam: Chest / Lungs": "Pleural effusion possible (sympathetic).",
+    "Physical Exam: Heart / Cardiovascular": "Tachycardia from pain, hypovolemia.",
+    "Physical Exam: Abdomen": "Epigastric tenderness + guarding. Grey Turner (flank) / Cullen (periumbilical) in severe hemorrhagic pancreatitis.",
+    "Physical Exam: HEENT / Neck": "Jaundiced sclera — suggests gallstone etiology.",
+    "CBC with differential": "Leukocytosis. Hemoconcentration (high Hct = poor prognosis).",
+    "BMP / CMP / LFTs": "Elevated AST/ALT/ALP/bilirubin if gallstone etiology. Elevated BUN ≥20 at 48h = poor prognosis.",
+    "Lipase": ">3x ULN = diagnostic. More sensitive and specific than amylase.",
+    "RUQ ultrasound": "Check for gallstones — most common cause.",
+    "CT abdomen/pelvis with IV contrast": "At 48-72h if not improving. Assess for necrosis, pseudocyst, abscess.",
+    "IV fluids (Lactated Ringer preferred)": "Aggressive resuscitation. LR preferred over NS — reduces systemic inflammation. 250-500 mL/hr initially.",
+    "Diet, NPO": "Initially NPO for bowel rest. Advance to clear liquids as pain improves.",
+    "IV analgesics (Morphine / Hydromorphone)": "Pain management. Morphine is acceptable — does NOT worsen pancreatitis (old teaching was incorrect).",
+    "Antiemetic (Ondansetron / Metoclopramide)": "Nausea/vomiting management.",
+    "Prophylactic antibiotics in all pancreatitis": "Antibiotics NOT indicated for sterile pancreatic necrosis. Only for confirmed infected necrosis or concurrent infection. Prophylaxis does not improve outcomes."
   },
-  "hpi": "Acute pancreatitis is a common condition that can present with epigastric pain. It is important to assess the patient's history and perform appropriate imaging to confirm the diagnosis. Management typically includes supportive care, including IV fluids and pain control. In cases of severe pancreatitis, further interventions may be necessary.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with acute severe epigastric pain radiating to the back, nausea, vomiting, and low-grade fever. Exam reveals epigastric tenderness with guarding, jaundiced sclera, and possibly Grey Turner/Cullen signs in severe cases. Most common causes: gallstones (GET SMASHED mnemonic — Gallstones, Ethanol, Trauma, Steroids, Mumps, Autoimmune, Scorpion stings, Hypercalcemia/Hypertriglyceridemia, ERCP, Drugs). Diagnosis requires 2 of 3: (1) characteristic epigastric pain, (2) lipase/amylase >3x upper limit, (3) CT findings. Lipase is more sensitive and specific than amylase (especially in delayed presentation). Ranson criteria and BISAP score for severity. Management: aggressive IV fluid resuscitation (LR preferred over NS), NPO initially, IV analgesics (morphine OK), antiemetics. Early enteral nutrition within 24-48h (NG or NJ feeds). ERCP within 24h if gallstone pancreatitis with cholangitis or obstruction. CT with contrast at 48-72h if not improving to assess for necrosis/complications.",
+  "hpi_narrative": "{{patient_name}} presents with acute severe epigastric pain radiating to the back, nausea, vomiting, and low-grade fever. Exam reveals epigastric tenderness with guarding, jaundiced sclera, and possibly Grey Turner/Cullen signs in severe cases. Most common causes: gallstones (GET SMASHED mnemonic — Gallstones, Ethanol, Trauma, Steroids, Mumps, Autoimmune, Scorpion stings, Hypercalcemia/Hypertriglyceridemia, ERCP, Drugs). Diagnosis requires 2 of 3: (1) characteristic epigastric pain, (2) lipase/amylase >3x upper limit, (3) CT findings. Lipase is more sensitive and specific than amylase (especially in delayed presentation). Ranson criteria and BISAP score for severity. Management: aggressive IV fluid resuscitation (LR preferred over NS), NPO initially, IV analgesics (morphine OK), antiemetics. Early enteral nutrition within 24-48h (NG or NJ feeds). ERCP within 24h if gallstone pancreatitis with cholangitis or obstruction. CT with contrast at 48-72h if not improving to assess for necrosis/complications.",
+  "physical_exam": [
+    [
+      "General",
+      "In severe pain, febrile, diaphoretic."
+    ],
+    [
+      "Cardiovascular",
+      "Tachycardic (pain + hypovolemia)."
+    ],
+    [
+      "Respiratory",
+      "May have decreased breath sounds (pleural effusion)."
+    ],
+    [
+      "Abdominal",
+      "Epigastric tenderness with guarding. Assess for Grey Turner (flank ecchymosis) and Cullen (periumbilical ecchymosis) — retroperitoneal hemorrhage."
+    ],
+    [
+      "Heent",
+      "Scleral icterus — suggests gallstone pancreatitis."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My stomach hurts so much.",
-    "history": "I had a big meal before this pain started. It feels sharp and constant.",
-    "pain": "It hurts right in the middle of my stomach."
+    "chief_complaint": "Severe epigastric pain radiating to back, nausea, vomiting",
+    "history": "{{patient_name}} presents with acute severe epigastric pain radiating to the back, nausea, vomiting, and low-grade fever. Exam reveals epigastric tenderness with guarding, jaundiced sclera, and possi…",
+    "pain": "Severe epigastric pain radiating to back, nausea, vomiting"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "Acute pancreatitis is a common condition that can present with epigastric pain. It is important to assess the patient's history and perform appropriate imaging to confirm the diagnosis. Management typically includes supportive care, including IV fluids and pain control. In cases of severe pancreatitis, further interventions may be necessary.",
+  "ccs_category": "Emergency Medicine / Gastroenterology",
+  "chief_complaint": "Severe epigastric pain radiating to back, nausea, vomiting",
+  "case_summary": "Acute pancreatitis (likely gallstone). Epigastric pain radiating to back + jaundice + lipase >3x ULN. Aggressive LR IV fluids + NPO + pain control. RUQ US → CT at 48-72h if not improving.",
+  "decoys": [
+    {
+      "label": "Prophylactic antibiotics in all pancreatitis",
+      "reason_wrong": "Antibiotics NOT indicated for sterile pancreatic necrosis. Only for confirmed infected necrosis or concurrent infection. Prophylaxis does not improve outcomes."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "IV fluids",
-    "NPO",
-    "Pain management",
-    "CBC",
-    "LFTs"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess severity — may appear very ill.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Pleural effusion possible (sympathetic).",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Tachycardia from pain, hypovolemia.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Epigastric tenderness + guarding. Grey Turner (flank) / Cullen (periumbilical) in severe hemorrhagic pancreatitis.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "correctlyOrdered",
+      "finding": "Jaundiced sclera — suggests gallstone etiology.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis. Hemoconcentration (high Hct = poor prognosis).",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Elevated AST/ALT/ALP/bilirubin if gallstone etiology. Elevated BUN ≥20 at 48h = poor prognosis.",
+      "aliases": [
+        "BMP",
+        "LFTs"
+      ]
+    },
+    {
+      "label": "Lipase",
+      "type": "correctlyOrdered",
+      "finding": ">3x ULN = diagnostic. More sensitive and specific than amylase.",
+      "aliases": [
+        "Lipase"
+      ]
+    },
+    {
+      "label": "RUQ ultrasound",
+      "type": "correctlyOrdered",
+      "finding": "Check for gallstones — most common cause.",
+      "aliases": [
+        "RUQ US"
+      ]
+    },
+    {
+      "label": "CT abdomen/pelvis with IV contrast",
+      "type": "correctlyOrdered",
+      "finding": "At 48-72h if not improving. Assess for necrosis, pseudocyst, abscess.",
+      "aliases": [
+        "CT abdomen"
+      ]
+    },
+    {
+      "label": "IV fluids (Lactated Ringer preferred)",
+      "type": "correctlyOrdered",
+      "finding": "Aggressive resuscitation. LR preferred over NS — reduces systemic inflammation. 250-500 mL/hr initially.",
+      "aliases": [
+        "IV fluids",
+        "LR"
+      ]
+    },
+    {
+      "label": "Diet, NPO",
+      "type": "correctlyOrdered",
+      "finding": "Initially NPO for bowel rest. Advance to clear liquids as pain improves.",
+      "aliases": [
+        "NPO"
+      ]
+    },
+    {
+      "label": "IV analgesics (Morphine / Hydromorphone)",
+      "type": "correctlyOrdered",
+      "finding": "Pain management. Morphine is acceptable — does NOT worsen pancreatitis (old teaching was incorrect).",
+      "aliases": [
+        "Morphine",
+        "Pain medication"
+      ]
+    },
+    {
+      "label": "Antiemetic (Ondansetron / Metoclopramide)",
+      "type": "correctlyOrdered",
+      "finding": "Nausea/vomiting management.",
+      "aliases": [
+        "Zofran"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "BMP / CMP / LFTs",
+    "Lipase",
+    "RUQ ultrasound",
+    "CT abdomen/pelvis with IV contrast",
+    "IV fluids (Lactated Ringer preferred)",
+    "Diet, NPO",
+    "IV analgesics (Morphine / Hydromorphone)",
+    "Antiemetic (Ondansetron / Metoclopramide)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs were missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Acute Pancreatitis."
 }

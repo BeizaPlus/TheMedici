@@ -1,9 +1,10 @@
 {
   "id": 59,
   "topic": "Shortness of Breath",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Shortness of Breath",
+  "diagnosis": "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain vital signs",
     "Chest X-ray",
@@ -20,38 +21,46 @@
     "Ordering immediate invasive procedures such as thoracentesis or cardiac catheterization without further diagnostics"
   ],
   "rationale": {
-    "Obtain vital signs": "Vital signs establish baseline stability before further orders.",
-    "Chest X-ray": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
-    "Arterial Blood Gases (ABG)": "Appropriate CCS order for this diagnosis: Arterial Blood Gases (ABG).",
-    "Electrocardiogram (ECG)": "Appropriate CCS order for this diagnosis: Electrocardiogram (ECG).",
-    "Pulse oximetry": "Pulse oximetry documents oxygenation in the initial assessment.",
-    "Complete blood count (CBC)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "B-type Natriuretic Peptide (BNP) or Brain natriuretic peptide (BNP) and N-terminal pro B-type natriuretic peptide (NT-proBNP)": "Appropriate CCS order for this diagnosis: B-type Natriuretic Peptide (BNP) or Brain natriuretic peptide (BNP) and N-terminal pro B-type natriuretic peptide (NT-proBNP).",
-    "Chest CT if indications arise": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
-    "Consult Internal Medicine/Cardiology": "Appropriate CCS order for this diagnosis: Consult Internal Medicine/Cardiology.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "Ordering immediate invasive procedures such as thoracentesis or cardiac catheterization without further diagnostics": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Ordering immediate invasive procedures": "Without a clear diagnosis, it is not advisable to perform invasive procedures initially. These should be considered after the results of initial diagnostic tests are available.",
+    "Oxygen": "The patient is experiencing shortness of breath, indicating potential respiratory distress. Oxygen is the first life-saving intervention that must be ordered immediately in this case."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — shortness of breath. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This shortness of breath won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Dyspneic, speaking in short phrases if severe"
+    ],
+    [
+      "Cardiovascular",
+      "HR 112, tachycardic; BP 98/62."
+    ],
+    [
+      "Respiratory",
+      "RR 24, tachypneic; SpO₂ 91%; hypoxemic."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended"
+    ],
+    [
+      "Neuro",
+      "Alert unless hypercapnic or hypoxic"
+    ],
+    [
+      "Skin",
+      "Cyanosis absent unless critical hypoxemia"
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain vital signs",
     "Chest X-ray",
     "Arterial Blood Gases (ABG)",
@@ -63,11 +72,11 @@
     "Consult Internal Medicine/Cardiology",
     "Oxygen"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

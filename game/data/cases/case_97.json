@@ -1,76 +1,109 @@
 {
   "id": 97,
-  "topic": "Dyspareunia - OB/GYN",
-  "diagnosis": "Menopause",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Dyspareunia",
+  "title": "Dyspareunia",
+  "diagnosis": "Menopause (Genitourinary Syndrome)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General appearance",
-    "Physical Exam: Chest / Lung",
-    "Physical Exam: Cardiovascular",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Genital",
-    "CBC with differential",
-    "Hormone, follicle stimulating, serum",
-    "Iron studies, serum",
-    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
-    "Dihydrotestosterone"
+    "FSH / Estradiol",
+    "TSH",
+    "Vaginal estrogen (cream/ring/tablet)",
+    "Lubricants / Moisturizers",
+    "HRT discussion (if vasomotor)",
+    "Calcium + Vitamin D + DEXA"
   ],
-  "should_avoid": [
-    "Hormone therapy, conjugated estrogens / Estradiol therapy",
-    "Chlamydia, gonorrhea, and trichomonas testing",
-    "Urine culture",
-    "Pap smear",
-    "Urine pregnancy test"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General appearance": "Assess how ill the patient appears before focused testing for dyspareunia - ob/gyn.",
-    "Physical Exam: Chest / Lung": "Evaluate chest and lungs as part of the initial exam for dyspareunia - ob/gyn.",
-    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to dyspareunia - ob/gyn.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with dyspareunia - ob/gyn.",
-    "Physical Exam: Genital": "Pelvic/cervical evaluation is central for Menopause and localizes the source of dyspareunia - ob/gyn.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Menopause.",
-    "Hormone, follicle stimulating, serum": "Patient education and counseling are part of definitive care for Menopause.",
-    "Iron studies, serum": "Appropriate CCS order for Menopause: Iron studies, serum.",
-    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Menopause.",
-    "Dihydrotestosterone": "Appropriate CCS order for Menopause: Dihydrotestosterone.",
-    "Hormone therapy, conjugated estrogens / Estradiol therapy": "CCS review: avoid this order for Menopause — it does not change acute management.",
-    "Chlamydia, gonorrhea, and trichomonas testing": "CCS review: avoid this order for Menopause — it does not change acute management.",
-    "Urine culture": "CCS review: avoid this order for Menopause — it does not change acute management.",
-    "Pap smear": "CCS review: avoid this order for Menopause — it does not change acute management.",
-    "Urine pregnancy test": "CCS review: avoid this order for Menopause — it does not change acute management."
+    "FSH / Estradiol": "FSH >40, low E2.",
+    "TSH": "Rule out thyroid.",
+    "Vaginal estrogen (cream/ring/tablet)": "For GU symptoms. Minimal systemic absorption.",
+    "Lubricants / Moisturizers": "Non-hormonal options.",
+    "HRT discussion (if vasomotor)": "Shortest duration, lowest dose. Screen for contraindications.",
+    "Calcium + Vitamin D + DEXA": "Osteoporosis prevention."
   },
-  "hpi": "Differential diagnosis: Hypoestrogenism, Menopause, Psychogenic, Pseudocyesis, Psychosis, Anxiety or Panic Disorder. This patient is experiencing discomfort for this reason and associated with other physical and psychosocial problems. In this case, the patient is experiencing dyspareunia. Menopause is defined as the cessation of menses for 12 months and is associated with a variety of symptoms including vaginal dryness and dyspareunia. The patient should be evaluated for other causes of dyspareunia, including infections, pelvic organ prolapse, and vulvar disorders. If the patient has significant symptoms, hormone replacement therapy should be discussed with the patient. Some patients may benefit from the support of a therapist.",
+  "hpi": "{{patient_name}} presents with vaginal dryness, dyspareunia, hot flashes, night sweats, mood changes, and irregular menses/amenorrhea. FSH is elevated (>40), estradiol is low. Menopause = 12 months of amenorrhea. Genitourinary syndrome of menopause (atrophic vaginitis): thinning and drying of vaginal mucosa from estrogen loss → dyspareunia, pruritus, increased UTIs. Treatment: for vasomotor symptoms (hot flashes) — systemic HRT (estrogen ± progestin) for shortest duration at lowest dose. Contraindications: breast cancer, VTE, stroke. For GU symptoms only — vaginal estrogen (cream, ring, tablet). Non-hormonal: lubricants, moisturizers, SSRIs/SNRIs for hot flashes. Osteoporosis prevention: calcium, vitamin D, weight-bearing exercise, screening DEXA.",
+  "hpi_narrative": "{{patient_name}} presents with vaginal dryness, dyspareunia, hot flashes, night sweats, mood changes, and irregular menses/amenorrhea. FSH is elevated (>40), estradiol is low. Menopause = 12 months of amenorrhea. Genitourinary syndrome of menopause (atrophic vaginitis): thinning and drying of vaginal mucosa from estrogen loss → dyspareunia, pruritus, increased UTIs. Treatment: for vasomotor symptoms (hot flashes) — systemic HRT (estrogen ± progestin) for shortest duration at lowest dose. Contraindications: breast cancer, VTE, stroke. For GU symptoms only — vaginal estrogen (cream, ring, tablet). Non-hormonal: lubricants, moisturizers, SSRIs/SNRIs for hot flashes. Osteoporosis prevention: calcium, vitamin D, weight-bearing exercise, screening DEXA.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about the pain during intercourse. It feels unbearable sometimes.",
-    "history": "I've been feeling discomfort for a while now. It started after my periods stopped.",
-    "pain": "The pain is sharp and makes me anxious."
+    "chief_complaint": "Vaginal dryness, dyspareunia, hot flashes",
+    "history": "{{patient_name}} presents with vaginal dryness, dyspareunia, hot flashes, night sweats, mood changes, and irregular menses/amenorrhea. FSH is elevated (>40), estradiol is low. Menopause = 12 months o…",
+    "pain": "Vaginal dryness, dyspareunia, hot flashes"
   },
   "ccs_category": "OB/GYN",
-  "case_summary": "Differential diagnosis: Hypoestrogenism, Menopause, Psychogenic, Pseudocyesis, Psychosis, Anxiety or Panic Disorder. This patient is experiencing discomfort for this reason and associated with other physical and psychosocial problems. In this case, the patient is experiencing dyspareunia. Menopause is defined as the cessation of menses for 12 months and is associated with a variety of symptoms including vaginal dryness and dyspareunia. The patient should be evaluated for other causes of dyspareunia, including infections, pelvic organ prolapse, and vulvar disorders. If the patient has significant symptoms, hormone replacement therapy should be discussed with the patient. Some patients may benefit from the support of a therapist.",
+  "chief_complaint": "Vaginal dryness, dyspareunia, hot flashes",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Hormone, follicle stimulating",
-    "Hormone, estrogen stimulating",
-    "Hormone"
+    {
+      "label": "FSH / Estradiol",
+      "type": "correctlyOrdered",
+      "finding": "FSH >40, low E2.",
+      "aliases": [
+        "FSH"
+      ]
+    },
+    {
+      "label": "TSH",
+      "type": "correctlyOrdered",
+      "finding": "Rule out thyroid.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Vaginal estrogen (cream/ring/tablet)",
+      "type": "correctlyOrdered",
+      "finding": "For GU symptoms. Minimal systemic absorption.",
+      "aliases": [
+        "Estrogen cream"
+      ]
+    },
+    {
+      "label": "Lubricants / Moisturizers",
+      "type": "correctlyOrdered",
+      "finding": "Non-hormonal options.",
+      "aliases": [
+        "Lubricants"
+      ]
+    },
+    {
+      "label": "HRT discussion (if vasomotor)",
+      "type": "correctlyOrdered",
+      "finding": "Shortest duration, lowest dose. Screen for contraindications.",
+      "aliases": [
+        "HRT"
+      ]
+    },
+    {
+      "label": "Calcium + Vitamin D + DEXA",
+      "type": "shouldHaveOrdered",
+      "finding": "Osteoporosis prevention.",
+      "aliases": [
+        "Bone health"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "FSH / Estradiol",
+    "TSH",
+    "Vaginal estrogen (cream/ring/tablet)",
+    "Lubricants / Moisturizers",
+    "HRT discussion (if vasomotor)",
+    "Calcium + Vitamin D + DEXA"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Menopause (Genitourinary Syndrome)."
 }

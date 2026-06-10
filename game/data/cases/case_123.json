@@ -1,65 +1,99 @@
 {
   "id": 123,
-  "topic": "Leg Pain - Internal Medicine",
+  "topic": "Leg Pain",
+  "title": "Leg Pain",
   "diagnosis": "Deep Venous Thrombosis (DVT)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "PT/PTT / Fibrin thromboplastin time AND PT/INR",
-    "Doppler: lower extremities, venous / Duplex ultrasonography, lower extremities, venous",
-    "Physical Exam: Skin",
-    "Basic metabolic profile / Comprehensive metabolic profile",
-    "Instruction patient, smoking cessation",
-    "Diet: Calories restricted"
+    "Wells criteria",
+    "D-dimer (if low Wells)",
+    "Compression US (if high Wells or + D-dimer)",
+    "DOAC (Rivaroxaban / Apixaban)",
+    "Compression stockings"
   ],
-  "should_avoid": [
-    "order1",
-    "Immediate surgery without proper diagnostic workup",
-    "Prescribing specific medications without identifying the underlying cause"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for leg pain - internal medicine.",
-    "PT/PTT / Fibrin thromboplastin time AND PT/INR": "Appropriate CCS order for Deep Venous Thrombosis (DVT): PT/PTT / Fibrin thromboplastin time AND PT/INR.",
-    "Doppler: lower extremities, venous / Duplex ultrasonography, lower extremities, venous": "Targeted Doppler: lower extremities, venous / Duplex ultrasonography, lower extremities, venous exam supports the differential for Deep Venous Thrombosis (DVT).",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Deep Venous Thrombosis (DVT).",
-    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Deep Venous Thrombosis (DVT).",
-    "Instruction patient, smoking cessation": "Appropriate CCS order for Deep Venous Thrombosis (DVT): Instruction patient, smoking cessation.",
-    "Diet: Calories restricted": "Appropriate CCS order for Deep Venous Thrombosis (DVT): Diet: Calories restricted.",
-    "order1": "CCS review: avoid this order for Deep Venous Thrombosis (DVT) — it does not change acute management.",
-    "Immediate surgery without proper diagnostic workup": "CCS review: avoid this order for Deep Venous Thrombosis (DVT) — it does not change acute management.",
-    "Prescribing specific medications without identifying the underlying cause": "CCS review: avoid this order for Deep Venous Thrombosis (DVT) — it does not change acute management."
+    "Wells criteria": "Pretest probability.",
+    "D-dimer (if low Wells)": "High sensitivity, low specificity.",
+    "Compression US (if high Wells or + D-dimer)": "Diagnostic.",
+    "DOAC (Rivaroxaban / Apixaban)": "First-line. 3-12 month duration.",
+    "Compression stockings": "Symptom relief."
   },
-  "hpi": "The patient has classical symptoms of DVT. The risk factors for DVT include: obesity, tenderness at area of interest, pitting edema, calf swelling 3cm larger than the other leg, and distal swelling of the leg. Use of the Wells Score.\n\nThe D-Dimer results will be elevated in DVT, but this would be a high probability due to risk factors including a positive PVT. A calf ultrasound (duplex) should be done to confirm the diagnosis. The patient should be put on anticoagulants. The options for anticoagulants for DVT are: LMWH heparin (Lovenox) / Warfarin (Coumadin) CR Lovenox / dalteparin CR Lovenox / edoxaban OR Rivaroxaban monotherapy OR Apixaban Monotherapy.",
+  "hpi": "{{patient_name}} presents with unilateral leg swelling, pain, warmth, and erythema. Risk factors: Virchow's triad — stasis (immobilization, long travel), hypercoagulability (malignancy, OCPs, pregnancy, thrombophilia), endothelial injury (surgery, trauma). Exam: Homan's sign unreliable. Measure leg circumference difference. Wells criteria determines pretest probability. If low probability → D-dimer. If D-dimer elevated or high probability → compression ultrasound (proximal DVT). Treatment: most DVT → anticoagulation with DOAC (rivaroxaban, apixaban) or LMWH bridge to warfarin. Duration: provoked = 3 months, unprovoked = 6-12 months or indefinite. NO routine thrombectomy or IVC filter unless anticoagulation contraindicated. Compression stockings for symptom relief and post-thrombotic syndrome prevention.",
+  "hpi_narrative": "{{patient_name}} presents with unilateral leg swelling, pain, warmth, and erythema. Risk factors: Virchow's triad — stasis (immobilization, long travel), hypercoagulability (malignancy, OCPs, pregnancy, thrombophilia), endothelial injury (surgery, trauma). Exam: Homan's sign unreliable. Measure leg circumference difference. Wells criteria determines pretest probability. If low probability → D-dimer. If D-dimer elevated or high probability → compression ultrasound (proximal DVT). Treatment: most DVT → anticoagulation with DOAC (rivaroxaban, apixaban) or LMWH bridge to warfarin. Duration: provoked = 3 months, unprovoked = 6-12 months or indefinite. NO routine thrombectomy or IVC filter unless anticoagulation contraindicated. Compression stockings for symptom relief and post-thrombotic syndrome prevention.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about this leg pain. It feels swollen and heavy.",
-    "history": "I noticed the pain getting worse over the last few days. It started as a small ache.",
-    "pain": "It hurts a lot, especially when I try to walk."
+    "chief_complaint": "Unilateral leg swelling, pain, warmth",
+    "history": "{{patient_name}} presents with unilateral leg swelling, pain, warmth, and erythema. Risk factors: Virchow's triad — stasis (immobilization, long travel), hypercoagulability (malignancy, OCPs, pregnan…",
+    "pain": "Unilateral leg swelling, pain, warmth"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "The patient has classical symptoms of DVT. The risk factors for DVT include: obesity, tenderness at area of interest, pitting edema, calf swelling 3cm larger than the other leg, and distal swelling of the leg. Use of the Wells Score.\n\nThe D-Dimer results will be elevated in DVT, but this would be a high probability due to risk factors including a positive PVT. A calf ultrasound (duplex) should be done to confirm the diagnosis. The patient should be put on anticoagulants. The options for anticoagulants for DVT are: LMWH heparin (Lovenox) / Warfarin (Coumadin) CR Lovenox / dalteparin CR Lovenox / edoxaban OR Rivaroxaban monotherapy OR Apixaban Monotherapy.",
+  "ccs_category": "Internal Medicine / Vascular",
+  "chief_complaint": "Unilateral leg swelling, pain, warmth",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exams and/or patient updates: General Appearance, Chest and lung, Cardiovascular, Extremities and Spine, Neurologic and Psychologic",
-    "Doppler: lower extremities, arterial",
-    "Ordered: Monitor, arterial"
+    {
+      "label": "Wells criteria",
+      "type": "correctlyOrdered",
+      "finding": "Pretest probability.",
+      "aliases": [
+        "Wells"
+      ]
+    },
+    {
+      "label": "D-dimer (if low Wells)",
+      "type": "correctlyOrdered",
+      "finding": "High sensitivity, low specificity.",
+      "aliases": [
+        "D-dimer"
+      ]
+    },
+    {
+      "label": "Compression US (if high Wells or + D-dimer)",
+      "type": "correctlyOrdered",
+      "finding": "Diagnostic.",
+      "aliases": [
+        "Venous Doppler"
+      ]
+    },
+    {
+      "label": "DOAC (Rivaroxaban / Apixaban)",
+      "type": "correctlyOrdered",
+      "finding": "First-line. 3-12 month duration.",
+      "aliases": [
+        "Xarelto",
+        "Eliquis"
+      ]
+    },
+    {
+      "label": "Compression stockings",
+      "type": "correctlyOrdered",
+      "finding": "Symptom relief.",
+      "aliases": [
+        "Stockings"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Wells criteria",
+    "D-dimer (if low Wells)",
+    "Compression US (if high Wells or + D-dimer)",
+    "DOAC (Rivaroxaban / Apixaban)",
+    "Compression stockings"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Deep Venous Thrombosis (DVT)."
 }

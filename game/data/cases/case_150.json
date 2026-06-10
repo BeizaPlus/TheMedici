@@ -1,64 +1,109 @@
 {
   "id": 150,
   "topic": "Back Pain and Fatigue",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Back Pain and Fatigue",
+  "diagnosis": "Multiple Myeloma",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Office or ward",
-    "CBC",
-    "BMP with calcium",
-    "Serum protein electrophoresis",
-    "Urine protein electrophoresis (UPEP)",
-    "Skeletal survey",
-    "Bisphosphonates",
-    "Hematology / oncology referral"
+    "SPEP / Immunofixation / UPEP",
+    "Serum free light chains",
+    "CBC / BMP / Ca",
+    "Skeletal survey / PET-CT",
+    "Bone marrow biopsy",
+    "Refer oncology"
   ],
   "should_avoid": [],
   "rationale": {
-    "Office or ward": "Appropriate CCS order for this diagnosis: Office or ward.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "BMP with calcium": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Serum protein electrophoresis": "Appropriate CCS order for this diagnosis: Serum protein electrophoresis.",
-    "Urine protein electrophoresis (UPEP)": "Appropriate CCS order for this diagnosis: Urine protein electrophoresis (UPEP).",
-    "Skeletal survey": "Appropriate CCS order for this diagnosis: Skeletal survey.",
-    "Bisphosphonates": "Appropriate CCS order for this diagnosis: Bisphosphonates.",
-    "Hematology / oncology referral": "Appropriate CCS order for this diagnosis: Hematology / oncology referral."
+    "SPEP / Immunofixation / UPEP": "M spike, monoclonal Ig. Bence Jones protein.",
+    "Serum free light chains": "Abnormal kappa/lambda ratio.",
+    "CBC / BMP / Ca": "Anemia, elevated Cr, hypercalcemia.",
+    "Skeletal survey / PET-CT": "Lytic lesions, compression fractures.",
+    "Bone marrow biopsy": ">10% plasma cells.",
+    "Refer oncology": "VRd induction +/- transplant."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with persistent back pain (pathologic vertebral compression fractures), fatigue (normocytic anemia), and possibly hypercalcemia. Multiple myeloma is a malignant proliferation of plasma cells in bone marrow → monoclonal immunoglobulin (M protein) production. Classic CRAB criteria: hyperCalcemia, Renal insufficiency, Anemia, Bone lesions (lytic lesions on X-ray/skeletal survey). Labs: elevated total protein with globulin gap, M spike on SPEP, immunofixation confirms monoclonal Ig (IgG most common), elevated kappa/lambda free light chains with abnormal ratio, Bence Jones protein in urine (UPEP). Bone marrow biopsy: >10% clonal plasma cells. Skeletal survey: lytic punched-out lesions. Treatment: induction (bortezomib + lenalidomide + dexamethasone), +/- autologous stem cell transplant if eligible. Bisphosphonates (zoledronic acid) for bone disease.",
+  "hpi_narrative": "{{patient_name}} presents with persistent back pain (pathologic vertebral compression fractures), fatigue (normocytic anemia), and possibly hypercalcemia. Multiple myeloma is a malignant proliferation of plasma cells in bone marrow → monoclonal immunoglobulin (M protein) production. Classic CRAB criteria: hyperCalcemia, Renal insufficiency, Anemia, Bone lesions (lytic lesions on X-ray/skeletal survey). Labs: elevated total protein with globulin gap, M spike on SPEP, immunofixation confirms monoclonal Ig (IgG most common), elevated kappa/lambda free light chains with abnormal ratio, Bence Jones protein in urine (UPEP). Bone marrow biopsy: >10% clonal plasma cells. Skeletal survey: lytic punched-out lesions. Treatment: induction (bortezomib + lenalidomide + dexamethasone), +/- autologous stem cell transplant if eligible. Bisphosphonates (zoledronic acid) for bone disease.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — back pain and fatigue. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This back pain and fatigue won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Back pain, fatigue, possible fractures",
+    "history": "{{patient_name}} presents with persistent back pain (pathologic vertebral compression fractures), fatigue (normocytic anemia), and possibly hypercalcemia. Multiple myeloma is a malignant proliferatio…",
+    "pain": "Back pain, fatigue, possible fractures"
   },
-  "ccs_category": null,
+  "ccs_category": "Hematology-Oncology",
+  "chief_complaint": "Back pain, fatigue, possible fractures",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Office or ward",
-    "CBC",
-    "BMP with calcium",
-    "Serum protein electrophoresis",
-    "Urine protein electrophoresis (UPEP)",
-    "Skeletal survey",
-    "Bisphosphonates",
-    "Hematology / oncology referral"
+    {
+      "label": "SPEP / Immunofixation / UPEP",
+      "type": "correctlyOrdered",
+      "finding": "M spike, monoclonal Ig. Bence Jones protein.",
+      "aliases": [
+        "SPEP"
+      ]
+    },
+    {
+      "label": "Serum free light chains",
+      "type": "correctlyOrdered",
+      "finding": "Abnormal kappa/lambda ratio.",
+      "aliases": [
+        "FLC"
+      ]
+    },
+    {
+      "label": "CBC / BMP / Ca",
+      "type": "correctlyOrdered",
+      "finding": "Anemia, elevated Cr, hypercalcemia.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Skeletal survey / PET-CT",
+      "type": "correctlyOrdered",
+      "finding": "Lytic lesions, compression fractures.",
+      "aliases": [
+        "Skeletal survey"
+      ]
+    },
+    {
+      "label": "Bone marrow biopsy",
+      "type": "correctlyOrdered",
+      "finding": ">10% plasma cells.",
+      "aliases": [
+        "BMBx"
+      ]
+    },
+    {
+      "label": "Refer oncology",
+      "type": "correctlyOrdered",
+      "finding": "VRd induction +/- transplant.",
+      "aliases": [
+        "Oncology referral"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "SPEP / Immunofixation / UPEP",
+    "Serum free light chains",
+    "CBC / BMP / Ca",
+    "Skeletal survey / PET-CT",
+    "Bone marrow biopsy",
+    "Refer oncology"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Multiple Myeloma."
 }

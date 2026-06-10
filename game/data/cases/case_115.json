@@ -1,62 +1,110 @@
 {
   "id": 115,
-  "topic": "Agitation - Psychiatry",
+  "topic": "Agitation",
+  "title": "Agitation",
   "diagnosis": "Acute Agitation",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Neuro / Psych",
-    "CBC with differential",
-    "Basic metabolic profile / Comprehensive metabolic profile",
-    "Droperidol / Olanzapine / Haloperidol / Ziprasidone",
-    "Consult: Psychiatry",
-    "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long"
+    "Vitals / Glucose / SpO2",
+    "Verbal de-escalation",
+    "PO Lorazepam / Olanzapine",
+    "IM Midazolam + Haloperidol (if severe)",
+    "CBC / BMP / Tox / CT head",
+    "Psychiatry consult"
   ],
-  "should_avoid": [
-    "Diphenhydramine hydrochloride / Benztropine mesylate"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for agitation - psychiatry.",
-    "Physical Exam: Neuro / Psych": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Acute Agitation.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Acute Agitation.",
-    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Acute Agitation.",
-    "Droperidol / Olanzapine / Haloperidol / Ziprasidone": "Appropriate CCS order for Acute Agitation: Droperidol / Olanzapine / Haloperidol / Ziprasidone.",
-    "Consult: Psychiatry": "Appropriate CCS order for Acute Agitation: Consult: Psychiatry.",
-    "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
-    "Diphenhydramine hydrochloride / Benztropine mesylate": "CCS review: avoid this order for Acute Agitation — it does not change acute management."
+    "Vitals / Glucose / SpO2": "Rule out medical cause.",
+    "Verbal de-escalation": "First-line. Safe, calm environment.",
+    "PO Lorazepam / Olanzapine": "PO preferred. Lorazepam or olanzapine.",
+    "IM Midazolam + Haloperidol (if severe)": "If patient refuses PO.",
+    "CBC / BMP / Tox / CT head": "Rule out medical causes.",
+    "Psychiatry consult": "Determine disposition."
   },
-  "hpi": "Differential diagnosis: Substance induced psychotic disorder, Schizophrenia, Psychosis secondary to a medical condition, Delirium, Epileptic seizures, Electrolyte disturbance\n\nThis case is similar to the schizophrenia cases, but this case focuses just on correctly treating acute agitation which is a common occurrence in most emergency departments. As the patient has already assaulted a staff member, IV medication is needed for rapid medication onset to be effective. A typical regimen is colloquially called the 5-2-1 regimen 5 mg of Halidol (Haloperidol), 2 mg of IM Ativan (Lorazepam), and 1 mg of IM Cogentin. As Cogentin is key here, an alternative is 2.5 mg of Halidol, 2 mg of IM Ativan (Lorazepam), and 5 mg of IM Benadryl (Diphenhydramine). Droperidol has its limitations as it is not the best choice. Once the patient is treated, the vital signs can be completed. There can be medical causes of acute agitation which should be ruled out, but given the age of the patient and his history in the hospital, it is unlikely that a medical diagnosis will be determined in this case.\n\nOther second-generation antipsychotics are available for the distressed patient including: IM Olanzapine (Zyprexa), IM Aripiprazole (Abilify), or IM Ziprasidone (Geodon). Halidol is the most commonly administered in hospital emergency settings due to the availability of IM administration along with Lorazepam (Ativan) along with Cogentin or Benadryl to avoid a potential EPS (Extrapyramidal Syndrome) and dyskinesias. This is an area which is being studied as newer antipsychotics will treat agitation as well as psychosis.",
+  "hpi": "{{patient_name}} presents with acute agitation, aggression, psychomotor activation, and possible threatening behavior. Priority: ensure safety of patient and staff. Determine etiology: psychiatric (schizophrenia, bipolar mania, psychosis) vs substance-induced (stimulants, PCP, alcohol withdrawal) vs medical (hypoglycemia, hypoxia, head injury, sepsis, encephalopathy). Rapid assessment: vital signs, fingerstick glucose, pulse oximetry, brief neuro exam. Verbal de-escalation first-line. If pharmacologic needed: PO preferred over IM if patient willing — lorazepam (benzo) or olanzapine (antipsychotic). If IM required: midazolam + haloperidol or olanzapine IM. Avoid physical restraints unless absolutely necessary — can worsen agitation and cause rhabdomyolysis. If restraints used: 1:1 observation, frequent monitoring. Once stabilized → workup for underlying cause (tox screen, CT head, labs). Psychiatry consult.",
+  "hpi_narrative": "{{patient_name}} presents with acute agitation, aggression, psychomotor activation, and possible threatening behavior. Priority: ensure safety of patient and staff. Determine etiology: psychiatric (schizophrenia, bipolar mania, psychosis) vs substance-induced (stimulants, PCP, alcohol withdrawal) vs medical (hypoglycemia, hypoxia, head injury, sepsis, encephalopathy). Rapid assessment: vital signs, fingerstick glucose, pulse oximetry, brief neuro exam. Verbal de-escalation first-line. If pharmacologic needed: PO preferred over IM if patient willing — lorazepam (benzo) or olanzapine (antipsychotic). If IM required: midazolam + haloperidol or olanzapine IM. Avoid physical restraints unless absolutely necessary — can worsen agitation and cause rhabdomyolysis. If restraints used: 1:1 observation, frequent monitoring. Once stabilized → workup for underlying cause (tox screen, CT head, labs). Psychiatry consult.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I feel really out of control and scared. I don't know what's happening to me.",
-    "history": "I was just sitting there, and then everything got overwhelming.",
-    "pain": "I feel like my head is spinning and my heart is racing."
+    "chief_complaint": "Acute agitation, aggression, threatening behavior",
+    "history": "{{patient_name}} presents with acute agitation, aggression, psychomotor activation, and possible threatening behavior. Priority: ensure safety of patient and staff. Determine etiology: psychiatric (s…",
+    "pain": "Acute agitation, aggression, threatening behavior"
   },
-  "ccs_category": "Psychiatry",
-  "case_summary": "Differential diagnosis: Substance induced psychotic disorder, Schizophrenia, Psychosis secondary to a medical condition, Delirium, Epileptic seizures, Electrolyte disturbance\n\nThis case is similar to the schizophrenia cases, but this case focuses just on correctly treating acute agitation which is a common occurrence in most emergency departments. As the patient has already assaulted a staff member, IV medication is needed for rapid medication onset to be effective. A typical regimen is colloquially called the 5-2-1 regimen 5 mg of Halidol (Haloperidol), 2 mg of IM Ativan (Lorazepam), and 1 mg of IM Cogentin. As Cogentin is key here, an alternative is 2.5 mg of Halidol, 2 mg of IM Ativan (Lorazepam), and 5 mg of IM Benadryl (Diphenhydramine). Droperidol has its limitations as it is not the best choice. Once the patient is treated, the vital signs can be completed. There can be medical causes of acute agitation which should be ruled out, but given the age of the patient and his history in the hospital, it is unlikely that a medical diagnosis will be determined in this case.\n\nOther second-generation antipsychotics are available for the distressed patient including: IM Olanzapine (Zyprexa), IM Aripiprazole (Abilify), or IM Ziprasidone (Geodon). Halidol is the most commonly administered in hospital emergency settings due to the availability of IM administration along with Lorazepam (Ativan) along with Cogentin or Benadryl to avoid a potential EPS (Extrapyramidal Syndrome) and dyskinesias. This is an area which is being studied as newer antipsychotics will treat agitation as well as psychosis.",
+  "ccs_category": "Psychiatry / Emergency Medicine",
+  "chief_complaint": "Acute agitation, aggression, threatening behavior",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered: Haloperidol",
-    "Ordered: Lorazepam",
-    "Ordered: Benztropine mesylate",
-    "Virtual Time Advanced 60 minutes"
+    {
+      "label": "Vitals / Glucose / SpO2",
+      "type": "correctlyOrdered",
+      "finding": "Rule out medical cause.",
+      "aliases": [
+        "ABCs"
+      ]
+    },
+    {
+      "label": "Verbal de-escalation",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Safe, calm environment.",
+      "aliases": [
+        "De-escalation"
+      ]
+    },
+    {
+      "label": "PO Lorazepam / Olanzapine",
+      "type": "correctlyOrdered",
+      "finding": "PO preferred. Lorazepam or olanzapine.",
+      "aliases": [
+        "Ativan",
+        "Zyprexa"
+      ]
+    },
+    {
+      "label": "IM Midazolam + Haloperidol (if severe)",
+      "type": "correctlyOrdered",
+      "finding": "If patient refuses PO.",
+      "aliases": [
+        "IM meds"
+      ]
+    },
+    {
+      "label": "CBC / BMP / Tox / CT head",
+      "type": "correctlyOrdered",
+      "finding": "Rule out medical causes.",
+      "aliases": [
+        "Workup"
+      ]
+    },
+    {
+      "label": "Psychiatry consult",
+      "type": "correctlyOrdered",
+      "finding": "Determine disposition.",
+      "aliases": [
+        "Psych consult"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Vitals / Glucose / SpO2",
+    "Verbal de-escalation",
+    "PO Lorazepam / Olanzapine",
+    "IM Midazolam + Haloperidol (if severe)",
+    "CBC / BMP / Tox / CT head",
+    "Psychiatry consult"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Acute Agitation."
 }

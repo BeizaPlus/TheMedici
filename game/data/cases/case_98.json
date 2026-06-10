@@ -1,64 +1,87 @@
 {
   "id": 98,
-  "topic": "Back Pain - Neurology",
-  "diagnosis": "Lumbar Disk Herniation",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Back Pain",
+  "title": "Back Pain",
+  "diagnosis": "Lumbar Disc Herniation",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
-    "Physical Exam: Extremity / Spine",
-    "CBC with differential",
-    "Celiac study / Dihydrocodeine / Eperisone / Ibuprofen / Indomethacin / Ketorolac / Meloxicam / Naproxen / Oxycodone / Proxomol / Sulindac / Tizanidine / Aspirin, therapy",
-    "Physical Exam: Cardiovascular",
-    "Hormone, thyroid stimulating serum / Hormone, thyroid stimulating, serum"
+    "Physical Exam: Neuro / SLR",
+    "MRI lumbar spine",
+    "NSAIDs / Acetaminophen",
+    "Physical therapy"
   ],
-  "should_avoid": [
-    "order2",
-    "Ordering imaging studies such as an MRI or CT scan initially unless there are red flags indicating potential serious pathology (e.g., severe trauma, age >50, history of cancer, fever, significant neurological deficits, or progressive symptoms)"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for back pain - neurology.",
-    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for back pain - neurology.",
-    "Physical Exam: Extremity / Spine": "Targeted Physical Exam: Extremity / Spine exam supports the differential for Lumbar Disk Herniation.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Lumbar Disk Herniation.",
-    "Celiac study / Dihydrocodeine / Eperisone / Ibuprofen / Indomethacin / Ketorolac / Meloxicam / Naproxen / Oxycodone / Proxomol / Sulindac / Tizanidine / Aspirin, therapy": "Appropriate CCS order for Lumbar Disk Herniation: Celiac study / Dihydrocodeine / Eperisone / Ibuprofen / Indomethacin / Ketorolac / Meloxicam / Naproxen / Oxycodone / Proxomol / Sulindac / Tizanidine / Aspirin, therapy.",
-    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to back pain - neurology.",
-    "Hormone, thyroid stimulating serum / Hormone, thyroid stimulating, serum": "Patient education and counseling are part of definitive care for Lumbar Disk Herniation.",
-    "order2": "CCS review: avoid this order for Lumbar Disk Herniation — it does not change acute management.",
-    "Ordering imaging studies such as an MRI or CT scan initially unless there are red flags indicating potential serious pathology (e.g., severe trauma, age >50, history of cancer, fever, significant neurological deficits, or progressive symptoms)": "Advanced imaging is not indicated early for Lumbar Disk Herniation when the diagnosis is clinical."
+    "Physical Exam: Neuro / SLR": "Positive SLR. Assess for red flags (cauda equina).",
+    "MRI lumbar spine": "Gold standard. If neuro deficit or not improving.",
+    "NSAIDs / Acetaminophen": "First-line analgesia.",
+    "Physical therapy": "Core strengthening. Continue activity. No bed rest."
   },
-  "hpi": "Differential: Cauda equina syndrome. Compression herniation. This patient has a short history of NASS and has not had neurological deficits. He is at risk for a herniated disk and should be monitored closely. If he develops neurological deficits, he should be evaluated for surgical intervention.",
+  "hpi": "{{patient_name}} presents with acute low back pain radiating down the leg (sciatica) following lifting/twisting injury. Pain follows dermatomal distribution — most commonly L4-L5 or L5-S1. Exam: positive straight leg raise test (pain <70° elevation). Neurologic exam to identify affected root: L4 (patellar reflex, medial leg), L5 (foot drop, great toe dorsiflexion, dorsal foot), S1 (Achilles reflex, plantar flexion, lateral foot). Cauda equina RED FLAGS: bilateral sciatica, saddle anesthesia, urinary retention/incontinence, fecal incontinence — surgical emergency. Conservative management for uncomplicated herniation: NSAIDs, physical therapy, continue activity as tolerated (bed rest NOT recommended). Most resolve in 6 weeks. MRI if not improving or neurologic deficit (not urgent CT/bone scan — but MRI is gold standard). Epidural steroid injection for radicular pain. Surgery (microdiscectomy) if severe deficit, cauda equina, or failed 6+ weeks conservative.",
+  "hpi_narrative": "{{patient_name}} presents with acute low back pain radiating down the leg (sciatica) following lifting/twisting injury. Pain follows dermatomal distribution — most commonly L4-L5 or L5-S1. Exam: positive straight leg raise test (pain <70° elevation). Neurologic exam to identify affected root: L4 (patellar reflex, medial leg), L5 (foot drop, great toe dorsiflexion, dorsal foot), S1 (Achilles reflex, plantar flexion, lateral foot). Cauda equina RED FLAGS: bilateral sciatica, saddle anesthesia, urinary retention/incontinence, fecal incontinence — surgical emergency. Conservative management for uncomplicated herniation: NSAIDs, physical therapy, continue activity as tolerated (bed rest NOT recommended). Most resolve in 6 weeks. MRI if not improving or neurologic deficit (not urgent CT/bone scan — but MRI is gold standard). Epidural steroid injection for radicular pain. Surgery (microdiscectomy) if severe deficit, cauda equina, or failed 6+ weeks conservative.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my back pain. It hurts so much.",
-    "history": "I felt fine until yesterday. Now, I can't move without pain.",
-    "pain": "It's a sharp pain in my lower back."
+    "chief_complaint": "Acute low back pain with sciatica",
+    "history": "{{patient_name}} presents with acute low back pain radiating down the leg (sciatica) following lifting/twisting injury. Pain follows dermatomal distribution — most commonly L4-L5 or L5-S1. Exam: posi…",
+    "pain": "Acute low back pain with sciatica"
   },
-  "ccs_category": "Neurology",
-  "case_summary": "Differential: Cauda equina syndrome. Compression herniation. This patient has a short history of NASS and has not had neurological deficits. He is at risk for a herniated disk and should be monitored closely. If he develops neurological deficits, he should be evaluated for surgical intervention.",
+  "ccs_category": "Neurology / Spine",
+  "chief_complaint": "Acute low back pain with sciatica",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Celiac study / Dihydrocodeine / Eperisone / Ibuprofen / Indomethacin / Ketorolac / Meloxicam / Naproxen / Oxycodone / Proxomol / Sulindac / Tizanidine / Aspirin, therapy",
-    "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs"
+    {
+      "label": "Physical Exam: Neuro / SLR",
+      "type": "correctlyOrdered",
+      "finding": "Positive SLR. Assess for red flags (cauda equina).",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "MRI lumbar spine",
+      "type": "correctlyOrdered",
+      "finding": "Gold standard. If neuro deficit or not improving.",
+      "aliases": [
+        "MRI"
+      ]
+    },
+    {
+      "label": "NSAIDs / Acetaminophen",
+      "type": "correctlyOrdered",
+      "finding": "First-line analgesia.",
+      "aliases": [
+        "NSAIDs"
+      ]
+    },
+    {
+      "label": "Physical therapy",
+      "type": "correctlyOrdered",
+      "finding": "Core strengthening. Continue activity. No bed rest.",
+      "aliases": [
+        "PT"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Neuro / SLR",
+    "MRI lumbar spine",
+    "NSAIDs / Acetaminophen",
+    "Physical therapy"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Lumbar Disc Herniation."
 }

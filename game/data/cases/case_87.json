@@ -1,64 +1,111 @@
 {
   "id": 87,
   "topic": "Abdominal Pain",
+  "title": "Abdominal Pain",
   "diagnosis": "Ulcerative Colitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Report of General Appearance",
-    "Report of Blood Stool",
-    "Stool for Occult Blood",
-    "History, Review and Physical Exam",
-    "Colonoscopy / Sigmoidoscopy",
-    "Complete Blood Count",
-    "Stool for C. difficile"
+    "Colonoscopy + biopsy",
+    "CBC / CRP / ESR / Fecal calprotectin",
+    "p-ANCA",
+    "5-ASA (Mesalamine)",
+    "Prednisone / Biologic",
+    "Colon cancer surveillance"
   ],
-  "should_avoid": [
-    "Urinalysis",
-    "CT Abdomen/Pelvis"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Report of General Appearance": "Assess how ill the patient appears before focused testing for abdominal pain.",
-    "Report of Blood Stool": "Diagnostic report or tissue diagnosis clarifies the cause of abdominal pain.",
-    "Stool for Occult Blood": "Appropriate CCS order for Ulcerative Colitis: Stool for Occult Blood.",
-    "History, Review and Physical Exam": "Appropriate CCS order for Ulcerative Colitis: History, Review and Physical Exam.",
-    "Colonoscopy / Sigmoidoscopy": "Appropriate CCS order for Ulcerative Colitis: Colonoscopy / Sigmoidoscopy.",
-    "Complete Blood Count": "Appropriate CCS order for Ulcerative Colitis: Complete Blood Count.",
-    "Stool for C. difficile": "Appropriate CCS order for Ulcerative Colitis: Stool for C. difficile.",
-    "Urinalysis": "CCS review: avoid this order for Ulcerative Colitis — it does not change acute management.",
-    "CT Abdomen/Pelvis": "Advanced imaging is not indicated early for Ulcerative Colitis when the diagnosis is clinical."
+    "Colonoscopy + biopsy": "Continuous inflammation from rectum, crypt abscesses.",
+    "CBC / CRP / ESR / Fecal calprotectin": "Anemia, elevated inflammatory markers.",
+    "p-ANCA": "Serologic marker — supports UC over Crohn's.",
+    "5-ASA (Mesalamine)": "First-line for mild-mod UC. Topical + PO.",
+    "Prednisone / Biologic": "Moderate-severe. Infliximab if refractory.",
+    "Colon cancer surveillance": "Beginning 8yr after diagnosis."
   },
-  "hpi": "Patients often present with abdominal pain, diarrhea, and weight loss. The differential diagnosis includes inflammatory bowel disease, infections, and malignancies. It is important to assess the severity of the disease and rule out other causes of the patient's chronic diarrhea.",
+  "hpi": "{{patient_name}} presents with chronic bloody diarrhea, LLQ abdominal cramping, tenesmus, urgency, and weight loss. UC is an inflammatory bowel disease limited to the colon and rectum — inflammation is continuous from the rectum proximally (unlike Crohn's skip lesions), limited to mucosa/submucosa (unlike Crohn's transmural). Extraintestinal manifestations: PSC (most specific), arthritis (axial/peripheral), uveitis, erythema nodosum, pyoderma gangrenosum. Diagnosis: colonoscopy with biopsy — continuous inflammation from rectum, friable mucosa, loss of haustra (lead pipe colon on barium enema), crypt abscesses, crypt distortion. Labs: anemia, elevated CRP/ESR, fecal calprotectin, p-ANCA positive. Severity determines treatment: mild → 5-ASA (mesalamine) topical or PO. Moderate → 5-ASA + steroids (prednisone or budesonide MMX). Severe → IV steroids, if refractory → biologics (anti-TNF — infliximab) or JAK inhibitor (tofacitinib). Fulminant/toxic megacolon → cyclosporine or colectomy. Increased colon cancer risk → surveillance colonoscopy starting 8 years after diagnosis.",
+  "hpi_narrative": "{{patient_name}} presents with chronic bloody diarrhea, LLQ abdominal cramping, tenesmus, urgency, and weight loss. UC is an inflammatory bowel disease limited to the colon and rectum — inflammation is continuous from the rectum proximally (unlike Crohn's skip lesions), limited to mucosa/submucosa (unlike Crohn's transmural). Extraintestinal manifestations: PSC (most specific), arthritis (axial/peripheral), uveitis, erythema nodosum, pyoderma gangrenosum. Diagnosis: colonoscopy with biopsy — continuous inflammation from rectum, friable mucosa, loss of haustra (lead pipe colon on barium enema), crypt abscesses, crypt distortion. Labs: anemia, elevated CRP/ESR, fecal calprotectin, p-ANCA positive. Severity determines treatment: mild → 5-ASA (mesalamine) topical or PO. Moderate → 5-ASA + steroids (prednisone or budesonide MMX). Severe → IV steroids, if refractory → biologics (anti-TNF — infliximab) or JAK inhibitor (tofacitinib). Fulminant/toxic megacolon → cyclosporine or colectomy. Increased colon cancer risk → surveillance colonoscopy starting 8 years after diagnosis.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my stomach pain. It just won't go away.",
-    "history": "I've been having diarrhea and losing weight. It's been really tough.",
-    "pain": "It hurts a lot, especially after I eat."
+    "chief_complaint": "Chronic bloody diarrhea, LLQ pain, tenesmus",
+    "history": "{{patient_name}} presents with chronic bloody diarrhea, LLQ abdominal cramping, tenesmus, urgency, and weight loss. UC is an inflammatory bowel disease limited to the colon and rectum — inflammation …",
+    "pain": "Chronic bloody diarrhea, LLQ pain, tenesmus"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Patients often present with abdominal pain, diarrhea, and weight loss. The differential diagnosis includes inflammatory bowel disease, infections, and malignancies. It is important to assess the severity of the disease and rule out other causes of the patient's chronic diarrhea.",
+  "ccs_category": "Gastroenterology",
+  "chief_complaint": "Chronic bloody diarrhea, LLQ pain, tenesmus",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "History, Review and Physical Exam",
-    "Ordered Ambulatory Follow-up",
-    "Ordered Rapid Pain test",
-    "Ordered Ambulatory discharge"
+    {
+      "label": "Colonoscopy + biopsy",
+      "type": "correctlyOrdered",
+      "finding": "Continuous inflammation from rectum, crypt abscesses.",
+      "aliases": [
+        "Colonoscopy"
+      ]
+    },
+    {
+      "label": "CBC / CRP / ESR / Fecal calprotectin",
+      "type": "correctlyOrdered",
+      "finding": "Anemia, elevated inflammatory markers.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "p-ANCA",
+      "type": "shouldHaveOrdered",
+      "finding": "Serologic marker — supports UC over Crohn's.",
+      "aliases": [
+        "pANCA"
+      ]
+    },
+    {
+      "label": "5-ASA (Mesalamine)",
+      "type": "correctlyOrdered",
+      "finding": "First-line for mild-mod UC. Topical + PO.",
+      "aliases": [
+        "Mesalamine",
+        "Asacol"
+      ]
+    },
+    {
+      "label": "Prednisone / Biologic",
+      "type": "correctlyOrdered",
+      "finding": "Moderate-severe. Infliximab if refractory.",
+      "aliases": [
+        "Steroids",
+        "Remicade"
+      ]
+    },
+    {
+      "label": "Colon cancer surveillance",
+      "type": "shouldHaveOrdered",
+      "finding": "Beginning 8yr after diagnosis.",
+      "aliases": [
+        "Surveillance colonoscopy"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Colonoscopy + biopsy",
+    "CBC / CRP / ESR / Fecal calprotectin",
+    "p-ANCA",
+    "5-ASA (Mesalamine)",
+    "Prednisone / Biologic",
+    "Colon cancer surveillance"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Ulcerative Colitis."
 }

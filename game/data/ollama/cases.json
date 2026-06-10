@@ -6955,19 +6955,39 @@
     {
       "id": 149,
       "title": "Chronic Diarrhea",
-      "specialty": null,
-      "diagnosis": "Acute Myocardial Ischemia",
+      "specialty": "Gastroenterology / Endocrinology",
+      "diagnosis": "Zollinger-Ellison Syndrome (Gastrinoma)",
       "correct_orders": [
-        "Aspirin 325mg",
-        "Atenolol 25 mg",
-        "Clopidogrel 75 mg",
-        "Tirofiban 2.5 mcg/kg/min"
+        "Physical Exam: General Appearance",
+        "Physical Exam: Heart / Cardiovascular",
+        "Physical Exam: Abdomen",
+        "Physical Exam: Rectal",
+        "CBC with differential",
+        "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
+        "Endoscopy, upper gastrointestinal",
+        "Gastrin, serum",
+        "CT, abdomen/pelvis, with contrast / CT, abdomen/pelvis, without contrast / MRI, abdomen/pelvis, with gadolinium / MRI, abdomen/pelvis, without gadolinium / Scan, PET, whole body",
+        "+ Esomeprazole / Lansoprazole / Omeprazole / Pantoprazole sodium / Rabeprazole sodium",
+        "PT/PTT / Partial thromboplastin time AND PT/INR",
+        "Type and screen, blood / Type and Rh factor, blood",
+        "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long",
+        "Consult, surgery, general / Laparotomy / Laparoscopy",
+        "Instruct patient, smoking cessation",
+        "Ionized calcium, serum",
+        "Parathormone, serum",
+        "Prolactin, serum",
+        {
+          "order": "X-ray, upper gastrointestinal series / X-ray, small bowel",
+          "optional": true,
+          "affects_grade": false,
+          "section": "treatment_optional"
+        }
       ],
       "correctly_avoided": [
-        "Magnesium Sulfate 324mg"
+        "+ Ranitidine / Famotidine / Cimetidine / Nizatidine"
       ],
-      "case_summary": "A patient presents with chest pain and is diagnosed with Acute Myocardial Ischemia (AMI). The review page shows that the healthcare provider should have ordered aspirin, atenolol, clopidogrel, and tirofiban to manage the condition. Magnesium sulfate was inappropriately ordered, and nitroglycerine should be avoided.",
-      "hpi": "A patient presents with chest pain and is diagnosed with Acute Myocardial Ischemia (AMI). The review page shows that the healthcare provider should have ordered aspirin, atenolol, clopidogrel, and tirofiban to manage the condition. Magnesium sulfate was inappropriately ordered, and nitroglycerine should be avoided.",
+      "case_summary": "Differential: Antral G-cell hyperplasia, Retained gastric antrum, Gastric outlet obstruction, Renal failure, idiopathic gastroesophageal reflux, peptic ulcer disease, Helicobacter pylori infection.\n\nThe patient has Zollinger-Ellison Syndrome which is caused by a gastrin secreting tumor located in the duodenum or pancreas. Men are more likely to be diagnosed with Zollinger-Ellison Syndrome than women. Most of these tumors occur spontaneously, but some come from those with MEN type I (Multiple endocrine neoplasia type I).\n\nDiarrhea is one of the most common symptoms of Zollinger-Ellison Syndrome. Excess gastrin concentrations inhibit the absorption of water and sodium by the small intestine which causes diarrhea. Other common symptoms of Zollinger-Ellison Syndrome are: abdominal pain, heartburn, nausea, vomiting, weight loss, and bleeding.\n\nA serum gastrin value greater than 10 times the upper limit of normal (1000 pg/ml) is diagnostic of Zollinger-Ellison syndrome. The patient in this case has gastrin levels of 1,200 pg/mL.\n\nAn upper-GI should be done to look for the tumor and to get a biopsy sample. A CT scan can be done to look for metastasis as gastrinomas can be malignant. Surgery should be consulted to remove the gastrinoma as spontaneous gastrinomas can be cured by surgical removal of the tumor. The patient should be started on a PPI (ie. omeprazole) to limit complications of peptic ulcer disease.\n\nOnce the tumor is removed, the patient should be followed up by routine CT scans to check for any further occurrences. Screenings for parathormone levels, ionized calcium levels, and prolactin levels should be done to screen for MEN1 tumors. The patient should also be counseled to stop smoking.",
+      "hpi": "A patient presents with severe, refractory peptic ulcer disease, chronic watery diarrhea, abdominal pain, and GI bleeding. Multiple ulcers in atypical locations (distal duodenum, jejunum). ZES is caused by a gastrin-secreting neuroendocrine tumor (gastrinoma) \u2014 most commonly in the duodenum or pancreas \u2192 massive gastric acid hypersecretion \u2192 severe PUD and diarrhea (acid inactivates pancreatic enzymes + damages mucosa). Often associated with MEN1. Diagnosis: fasting serum gastrin level \u2014 markedly elevated (>1000 pg/mL or >10x normal). If borderline \u2192 secretin stimulation test (paradoxical increase in gastrin in ZES). Localize tumor: somatostatin receptor scintigraphy (Octreoscan), CT/MRI, EUS. Treatment: high-dose PPI (omeprazole, pantoprazole) to control acid hypersecretion. Surgical resection if localized. If metastatic or unresectable \u2192 long-term PPI + octreotide.",
       "physical_exam": {},
       "vitals": {
         "hr": null,
@@ -6980,16 +7000,22 @@
         "lactate": null
       },
       "patient_voice": {
-        "chief_complaint": "I need help \u2014 chronic diarrhea. I'm really scared.",
-        "history": "It's been getting worse. They said something about acute myocardial ischemia. A patient presents with chest pain and is diagnosed with Acute Myocardial Ischem...",
-        "pain": "This chronic diarrhea won't let up and I'm afraid something bad is happening."
+        "chief_complaint": "I need help \u2014 chronic diarrhea and severe abdominal pain. I'm really scared.",
+        "history": "The diarrhea has been going on for weeks and now the abdominal pain is unbearable. They said something about ulcers and gastrin levels...",
+        "pain": "This burning pain in my stomach and the constant diarrhea won't let up. I'm afraid something bad is happening."
       },
       "stacks": [
-        "Aspirin 325mg",
-        "Atenolol 25 mg"
+        "Vitals Ordered",
+        "Ordered: Physical Exam: General Appearance, Heart/Cardiovascular, Abdomen, Rectal",
+        "Ordered: CBC with differential",
+        "Ordered: Basic metabolic profile",
+        "Time Advanced 5 minutes",
+        "Ordered: Gastrin, serum",
+        "Ordered: Endoscopy, upper gastrointestinal",
+        "Ordered: CT, abdomen/pelvis, with contrast"
       ],
-      "incomplete": true,
-      "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+      "incomplete": false,
+      "extraction_notes": "Re-transcribed from game/ccs_screenshots/case_149_Chronic_Diarrhea.png. Full review page with diagnosis orders and treatment orders. Correct diagnosis is Zollinger-Ellison Syndrome (Gastrinoma)."
     },
     {
       "id": 150,

@@ -1,9 +1,10 @@
 {
   "id": 155,
   "topic": "Shortness of breath",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Shortness of breath",
+  "diagnosis": "Acute respiratory distress syndrome (ARDS) or pulmonary edema as potential causes of shortness of breath in an undiagnosed patient",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain vital signs, including oxygen saturation and blood pressure",
     "Perform chest X-ray to evaluate lung fields",
@@ -19,37 +20,53 @@
     "Discharging the patient without a clear diagnosis or stabilization"
   ],
   "rationale": {
-    "Obtain vital signs, including oxygen saturation and blood pressure": "Vital signs establish baseline stability before further orders.",
-    "Perform chest X-ray to evaluate lung fields": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
-    "Order arterial blood gas (ABG) analysis for oxygenation status and acid-base balance": "Appropriate CCS order for this diagnosis: Order arterial blood gas (ABG) analysis for oxygenation status and acid-base balance.",
-    "Administer supplemental oxygen as needed to maintain oxygen saturation above 90%": "Appropriate CCS order for this diagnosis: Administer supplemental oxygen as needed to maintain oxygen saturation above 90%.",
-    "Initiate diuretics if signs of heart failure are present or pulmonary edema is suspected": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
-    "Consider obtaining echocardiogram to assess cardiac function": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
-    "Consult Internal Medicine, Pulmonology, and Intensive Care Unit (ICU) as needed based on the patient's condition": "Appropriate CCS order for this diagnosis: Consult Internal Medicine, Pulmonology, and Intensive Care Unit (ICU) as needed based on the patient's condition.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2 large-bore": "Appropriate CCS order for this diagnosis: IV access ×2 large-bore.",
-    "Discharging the patient without a clear diagnosis or stabilization": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Obtain vital signs, including oxygen saturation and blood pressure": "Essential for initial assessment of patient's condition",
+    "Perform chest X-ray to evaluate lung fields": "Useful in identifying potential causes such as pneumonia, pleural effusion, or pulmonary edema",
+    "Order arterial blood gas (ABG) analysis for oxygenation status and acid-base balance": "Critical for assessing the patient's respiratory and metabolic status",
+    "Administer supplemental oxygen as needed to maintain oxygen saturation above 90%": "Important for preventing further deterioration in the patient's respiratory status",
+    "Initiate diuretics if signs of heart failure are present or pulmonary edema is suspected": "Helps manage fluid overload and reduce symptoms associated with pulmonary edema",
+    "Consider obtaining echocardiogram to assess cardiac function": "Helpful in ruling out cardiogenic causes of dyspnea",
+    "Discharging the patient without a clear diagnosis or stabilization": "Potentially dangerous as it could lead to further complications or worsening of the patient's condition",
+    "Oxygen": "The patient is experiencing shortness of breath, making oxygen a necessary intervention.",
+    "IV access ×2 large-bore": "In cases where the patient's condition may worsen rapidly or require emergency treatment, having large-bore IV access is crucial."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — shortness of breath. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This shortness of breath won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Dyspneic, speaking in short phrases if severe"
+    ],
+    [
+      "Cardiovascular",
+      "HR 104; BP 92/58; hypotensive."
+    ],
+    [
+      "Respiratory",
+      "RR 22; SpO₂ 89%; hypoxemic."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended"
+    ],
+    [
+      "Neuro",
+      "Alert unless hypercapnic or hypoxic"
+    ],
+    [
+      "Skin",
+      "Cyanosis absent unless critical hypoxemia"
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain vital signs, including oxygen saturation and blood pressure",
     "Perform chest X-ray to evaluate lung fields",
     "Order arterial blood gas (ABG) analysis for oxygenation status and acid-base balance",
@@ -60,11 +77,11 @@
     "Oxygen",
     "IV access ×2 large-bore"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

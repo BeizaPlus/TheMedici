@@ -1,68 +1,98 @@
 {
   "id": 109,
   "topic": "Unresponsive",
-  "diagnosis": "Diazepam Overdose",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Unresponsive",
+  "diagnosis": "Benzodiazepine Overdose (Diazepam)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Neuro",
-    "Physical Exam: Skin",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Extremities",
-    "Laboratory: CBC",
-    "Laboratory: BMP",
-    "Laboratory: Tox Screen",
-    "Laboratory: Coags",
-    "Laboratory: Urine Drug Screen"
+    "Airway / respiratory support",
+    "Toxicology screen",
+    "CBC / BMP / LFTs",
+    "Supportive care / Observation",
+    "Psychiatry consult"
   ],
-  "should_avoid": [
-    "Discharge Instructions: No follow-up"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for unresponsive.",
-    "Physical Exam: Neuro": "Targeted Physical Exam: Neuro exam supports the differential for Diazepam Overdose.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Diazepam Overdose.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with unresponsive.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Diazepam Overdose.",
-    "Laboratory: CBC": "Laboratory testing when systemic illness or severity warrants labs in Diazepam Overdose.",
-    "Laboratory: BMP": "Laboratory testing when systemic illness or severity warrants labs in Diazepam Overdose.",
-    "Laboratory: Tox Screen": "Appropriate CCS order for Diazepam Overdose: Laboratory: Tox Screen.",
-    "Laboratory: Coags": "Appropriate CCS order for Diazepam Overdose: Laboratory: Coags.",
-    "Laboratory: Urine Drug Screen": "Appropriate CCS order for Diazepam Overdose: Laboratory: Urine Drug Screen.",
-    "Discharge Instructions: No follow-up": "Advanced imaging is not indicated early for Diazepam Overdose when the diagnosis is clinical."
+    "Airway / respiratory support": "Intubate if GCS depressed.",
+    "Toxicology screen": "Confirm benzos, rule out co-ingestants.",
+    "CBC / BMP / LFTs": "Screening.",
+    "Supportive care / Observation": "Mainstay. Avoid flumazenil — risk of seizures.",
+    "Psychiatry consult": "Intentional overdose."
   },
-  "hpi": "The patient was brought in for an overdose of diazepam. The case was complicated by the patient's history of substance use disorder and the need for careful monitoring. The patient was stabilized and treated appropriately, but the case highlights the importance of thorough assessment and monitoring in overdose situations.",
+  "hpi": "{{patient_name}} presents unresponsive with respiratory depression, CNS depression, and hypotonia. Pupils may be normal or slightly constricted (unlike opioid pinpoint). History of diazepam use confirmed. Benzo overdose alone rarely causes death unless mixed with other sedatives (alcohol, opioids). Flumazenil is a competitive benzodiazepine antagonist — but use with EXTREME CAUTION. Flumazenil can precipitate acute withdrawal seizures, especially in chronic benzo users or mixed overdose with TCAs. Generally NOT recommended for routine use. Treatment: supportive care — airway protection (intubate if needed), respiratory support, IV fluids, observation. Decontamination with activated charcoal if recent ingestion (<1h) and airway protected. Full recovery expected with supportive care alone for isolated benzo overdose. Toxicology screen to rule out co-ingestants. Psychiatry consult for intentional overdose.",
+  "hpi_narrative": "{{patient_name}} presents unresponsive with respiratory depression, CNS depression, and hypotonia. Pupils may be normal or slightly constricted (unlike opioid pinpoint). History of diazepam use confirmed. Benzo overdose alone rarely causes death unless mixed with other sedatives (alcohol, opioids). Flumazenil is a competitive benzodiazepine antagonist — but use with EXTREME CAUTION. Flumazenil can precipitate acute withdrawal seizures, especially in chronic benzo users or mixed overdose with TCAs. Generally NOT recommended for routine use. Treatment: supportive care — airway protection (intubate if needed), respiratory support, IV fluids, observation. Decontamination with activated charcoal if recent ingestion (<1h) and airway protected. Full recovery expected with supportive care alone for isolated benzo overdose. Toxicology screen to rule out co-ingestants. Psychiatry consult for intentional overdose.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I can't remember what happened. I just feel so out of it.",
-    "history": "I took some pills... I don't know how many.",
-    "pain": "I don't feel pain, just really confused."
+    "chief_complaint": "Unresponsive, respiratory depression",
+    "history": "{{patient_name}} presents unresponsive with respiratory depression, CNS depression, and hypotonia. Pupils may be normal or slightly constricted (unlike opioid pinpoint). History of diazepam use confi…",
+    "pain": "Unresponsive, respiratory depression"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "The patient was brought in for an overdose of diazepam. The case was complicated by the patient's history of substance use disorder and the need for careful monitoring. The patient was stabilized and treated appropriately, but the case highlights the importance of thorough assessment and monitoring in overdose situations.",
+  "ccs_category": "Toxicology / Emergency Medicine",
+  "chief_complaint": "Unresponsive, respiratory depression",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam: General Appearance",
-    "Physical Exam: Neuro",
-    "Physical Exam: Skin",
-    "Physical Exam: Abdomen"
+    {
+      "label": "Airway / respiratory support",
+      "type": "correctlyOrdered",
+      "finding": "Intubate if GCS depressed.",
+      "aliases": [
+        "Airway"
+      ]
+    },
+    {
+      "label": "Toxicology screen",
+      "type": "correctlyOrdered",
+      "finding": "Confirm benzos, rule out co-ingestants.",
+      "aliases": [
+        "Tox screen"
+      ]
+    },
+    {
+      "label": "CBC / BMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Supportive care / Observation",
+      "type": "correctlyOrdered",
+      "finding": "Mainstay. Avoid flumazenil — risk of seizures.",
+      "aliases": [
+        "Supportive care"
+      ]
+    },
+    {
+      "label": "Psychiatry consult",
+      "type": "correctlyOrdered",
+      "finding": "Intentional overdose.",
+      "aliases": [
+        "Psych consult"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Airway / respiratory support",
+    "Toxicology screen",
+    "CBC / BMP / LFTs",
+    "Supportive care / Observation",
+    "Psychiatry consult"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Benzodiazepine Overdose (Diazepam)."
 }

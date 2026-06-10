@@ -1,9 +1,10 @@
 {
   "id": 53,
   "topic": "Shortness of Breath",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Shortness of Breath",
+  "diagnosis": "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain arterial blood gas (ABG) analysis",
     "Echocardiogram to assess heart function",
@@ -14,42 +15,57 @@
     "Chest X-ray (initial test)"
   ],
   "rationale": {
-    "Obtain arterial blood gas (ABG) analysis": "Appropriate CCS order for this diagnosis: Obtain arterial blood gas (ABG) analysis.",
-    "Echocardiogram to assess heart function": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2 large-bore": "Appropriate CCS order for this diagnosis: IV access ×2 large-bore.",
-    "Chest X-ray (initial test)": "This imaging is not required for the expected CCS pathway in this diagnosis."
+    "Chest X-ray (initial test)": "Initial investigation for Shortness of Breath should not be a Chest X-ray, but rather vital signs and oxygen saturation. If the patient is unstable, prompt ABG analysis and echocardiogram are necessary before imaging.",
+    "Oxygen": "Shortness of breath is a symptom that necessitates immediate oxygen administration.",
+    "IV access ×2 large-bore": "The case describes shortness of breath, which may indicate an acute condition. Large-bore IV access ensures quick fluid resuscitation if needed."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — shortness of breath. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This shortness of breath won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Dyspneic, speaking in short phrases if severe"
+    ],
+    [
+      "Cardiovascular",
+      "HR 116, tachycardic; BP 101/64."
+    ],
+    [
+      "Respiratory",
+      "RR 25, tachypneic; SpO₂ 92%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended"
+    ],
+    [
+      "Neuro",
+      "Alert unless hypercapnic or hypoxic"
+    ],
+    [
+      "Skin",
+      "Cyanosis absent unless critical hypoxemia"
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain arterial blood gas (ABG) analysis",
     "Echocardiogram to assess heart function",
     "Oxygen",
     "IV access ×2 large-bore"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

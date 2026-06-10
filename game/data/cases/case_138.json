@@ -1,63 +1,98 @@
 {
   "id": 138,
   "topic": "Fatigue",
-  "diagnosis": "End Stage Renal Failure",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Fatigue",
+  "diagnosis": "End Stage Renal Disease",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Calcium chloride / Calcium gluconate",
-    "Hemodialysis",
-    "Consult, nephrology",
-    "Kidney transplant",
-    "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
-    "Physical Exam: Heart / Neuro / Psych",
-    "Physical Exam: Extremities / Spine",
-    "CBC with differential"
+    "BMP / Ca / Phos / Albumin",
+    "CBC",
+    "Renal US",
+    "Dialysis (if AEIOU indications)",
+    "Refer nephrology / AV fistula"
   ],
   "should_avoid": [],
   "rationale": {
-    "Calcium chloride / Calcium gluconate": "Appropriate CCS order for End Stage Renal Failure: Calcium chloride / Calcium gluconate.",
-    "Hemodialysis": "Appropriate CCS order for End Stage Renal Failure: Hemodialysis.",
-    "Consult, nephrology": "Appropriate CCS order for End Stage Renal Failure: Consult, nephrology.",
-    "Kidney transplant": "Appropriate CCS order for End Stage Renal Failure: Kidney transplant.",
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for fatigue.",
-    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for fatigue.",
-    "Physical Exam: Heart / Neuro / Psych": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to fatigue.",
-    "Physical Exam: Extremities / Spine": "Targeted Physical Exam: Extremities / Spine exam supports the differential for End Stage Renal Failure.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in End Stage Renal Failure."
+    "BMP / Ca / Phos / Albumin": "BUN/Cr elevated, hyperK, hypoCa, hyperP.",
+    "CBC": "Normocytic anemia (low EPO).",
+    "Renal US": "Small shrunken kidneys.",
+    "Dialysis (if AEIOU indications)": "AEIOU: Acidosis, Electrolytes, Intoxication, Overload, Uremia.",
+    "Refer nephrology / AV fistula": "Permanent access planning."
   },
-  "hpi": "Differential: Acute Kidney Disease, Autosomal Dominant Polycystic Kidney Disease (ADPKD), Medullary Cystic Kidney Disease, IgA Nephropathy, Focal Segmental Glomerulosclerosis, Fabry disease.\n\nThe patient has end stage renal failure likely from diabetes mellitus and hypertension. The patient is not active with a creatinine of 9.4. The patient has primary metabolic acidosis with an increased anion gap with full exploratory compensation. The patient has too many metabolic abnormalities to be treated as an outpatient (including a possibility of 6), the patient will require inpatient hospitalization and dialysis.\n\nNephrology should be consulted to help with the management of the patient. A kidney transplant will be needed as a long-term solution.\n\nIndications for dialysis include needing nutritional status, fatigue, muscle mass, and cognitive impairment, hyperkalemia, refractory acidosis. The patient in this case easily meets these criteria.\n\nOnce the patient is put on dialysis, the patient will begin to feel better, and the case will end.\n\nWe have received emails regarding why this patient requires hemodialysis. The patient is symptomatic and has a creatinine of 9.4. The calculated eGFR based on a 60-year-old would be mL/min/1.73m2. The patient is having memory problems. Your doctor, and is very well right; the patient will require dialysis. Dialysis indications are the following - eGFR is < 15 mL/min/1.73m2, uremic encephalopathy (the patient has been having episodes of confusion which is likely due to uremic encephalopathy), cognitive impairment, hyperkalemia, fatigue and malaise, persistent volume overload, and declining nutritional status. The patient clearly meets these criteria. Efforts to treat the hyperkalemia with various medications prior to hemodialysis are not needed as hemodialysis will treat the hyperkalemia and other metabolic problems.",
+  "hpi": "{{patient_name}} presents with progressive fatigue, weakness, anorexia, nausea, pruritus, edema, and oliguria. Labs: markedly elevated BUN/Cr, hyperkalemia, metabolic acidosis, anemia (low EPO), hypocalcemia, hyperphosphatemia, secondary hyperparathyroidism. ESRD is irreversible loss of renal function (GFR <15). Most common causes: diabetes, hypertension, glomerulonephritis. Management: renal replacement therapy — hemodialysis, peritoneal dialysis, or kidney transplant. Urgent indications for dialysis: AEIOU — Acidosis, Electrolytes (hyperkalemia), Intoxication (toxins), Overload (volume), Uremia (pericarditis, encephalopathy). Treat anemia (EPO), manage mineral bone disease (phosphate binders, vitamin D, calcimimetics). Refer for AV fistula creation. Nephrology referral.",
+  "hpi_narrative": "{{patient_name}} presents with progressive fatigue, weakness, anorexia, nausea, pruritus, edema, and oliguria. Labs: markedly elevated BUN/Cr, hyperkalemia, metabolic acidosis, anemia (low EPO), hypocalcemia, hyperphosphatemia, secondary hyperparathyroidism. ESRD is irreversible loss of renal function (GFR <15). Most common causes: diabetes, hypertension, glomerulonephritis. Management: renal replacement therapy — hemodialysis, peritoneal dialysis, or kidney transplant. Urgent indications for dialysis: AEIOU — Acidosis, Electrolytes (hyperkalemia), Intoxication (toxins), Overload (volume), Uremia (pericarditis, encephalopathy). Treat anemia (EPO), manage mineral bone disease (phosphate binders, vitamin D, calcimimetics). Refer for AV fistula creation. Nephrology referral.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really tired all the time and I feel weak. I'm scared about what's happening to me.",
-    "history": "I have diabetes and high blood pressure. I don't feel like myself anymore.",
-    "pain": "I feel a lot of fatigue and sometimes my muscles ache."
+    "chief_complaint": "Fatigue, nausea, oliguria",
+    "history": "{{patient_name}} presents with progressive fatigue, weakness, anorexia, nausea, pruritus, edema, and oliguria. Labs: markedly elevated BUN/Cr, hyperkalemia, metabolic acidosis, anemia (low EPO), hypo…",
+    "pain": "Fatigue, nausea, oliguria"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Differential: Acute Kidney Disease, Autosomal Dominant Polycystic Kidney Disease (ADPKD), Medullary Cystic Kidney Disease, IgA Nephropathy, Focal Segmental Glomerulosclerosis, Fabry disease.\n\nThe patient has end stage renal failure likely from diabetes mellitus and hypertension. The patient is not active with a creatinine of 9.4. The patient has primary metabolic acidosis with an increased anion gap with full exploratory compensation. The patient has too many metabolic abnormalities to be treated as an outpatient (including a possibility of 6), the patient will require inpatient hospitalization and dialysis.\n\nNephrology should be consulted to help with the management of the patient. A kidney transplant will be needed as a long-term solution.\n\nIndications for dialysis include needing nutritional status, fatigue, muscle mass, and cognitive impairment, hyperkalemia, refractory acidosis. The patient in this case easily meets these criteria.\n\nOnce the patient is put on dialysis, the patient will begin to feel better, and the case will end.\n\nWe have received emails regarding why this patient requires hemodialysis. The patient is symptomatic and has a creatinine of 9.4. The calculated eGFR based on a 60-year-old would be mL/min/1.73m2. The patient is having memory problems. Your doctor, and is very well right; the patient will require dialysis. Dialysis indications are the following - eGFR is < 15 mL/min/1.73m2, uremic encephalopathy (the patient has been having episodes of confusion which is likely due to uremic encephalopathy), cognitive impairment, hyperkalemia, fatigue and malaise, persistent volume overload, and declining nutritional status. The patient clearly meets these criteria. Efforts to treat the hyperkalemia with various medications prior to hemodialysis are not needed as hemodialysis will treat the hyperkalemia and other metabolic problems.",
+  "ccs_category": "Nephrology",
+  "chief_complaint": "Fatigue, nausea, oliguria",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Monitor, cardiac / Monitor, cardiac",
-    "Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long",
-    "Hemoglobin A1C, blood",
-    "CBC with differential",
-    "Physical Exam: Extremities / Spine"
+    {
+      "label": "BMP / Ca / Phos / Albumin",
+      "type": "correctlyOrdered",
+      "finding": "BUN/Cr elevated, hyperK, hypoCa, hyperP.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Normocytic anemia (low EPO).",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Renal US",
+      "type": "correctlyOrdered",
+      "finding": "Small shrunken kidneys.",
+      "aliases": [
+        "Renal US"
+      ]
+    },
+    {
+      "label": "Dialysis (if AEIOU indications)",
+      "type": "correctlyOrdered",
+      "finding": "AEIOU: Acidosis, Electrolytes, Intoxication, Overload, Uremia.",
+      "aliases": [
+        "Dialysis"
+      ]
+    },
+    {
+      "label": "Refer nephrology / AV fistula",
+      "type": "correctlyOrdered",
+      "finding": "Permanent access planning.",
+      "aliases": [
+        "Referral"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "BMP / Ca / Phos / Albumin",
+    "CBC",
+    "Renal US",
+    "Dialysis (if AEIOU indications)",
+    "Refer nephrology / AV fistula"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: End Stage Renal Disease."
 }

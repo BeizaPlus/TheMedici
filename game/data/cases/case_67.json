@@ -1,64 +1,133 @@
 {
   "id": 67,
   "topic": "Frequency of Urination",
-  "diagnosis": "Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Frequency of Urination",
+  "diagnosis": "Benign Prostatic Hyperplasia",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Survey",
-    "Physical Exam: Cardiovascular",
-    "Physical Exam: Respiratory",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Extremities",
-    "A urinalysis",
-    "Vaccines (influenza and pneumococcal)",
-    "A prostate-specific antigen (PSA) test"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Rectal (DRE)",
+    "Urinalysis",
+    "BMP (Cr)",
+    "PSA",
+    "AUA symptom score",
+    "Alpha-blocker (Tamsulosin)",
+    "5-ARI (Finasteride / Dutasteride)"
   ],
-  "should_avoid": [
-    "order1"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Survey": "Appropriate CCS order for Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy): Physical Exam: General Survey.",
-    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to frequency of urination.",
-    "Physical Exam: Respiratory": "Evaluate chest and lungs as part of the initial exam for frequency of urination.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with frequency of urination.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy).",
-    "A urinalysis": "Appropriate CCS order for Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy): A urinalysis.",
-    "Vaccines (influenza and pneumococcal)": "Appropriate CCS order for Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy): Vaccines (influenza and pneumococcal).",
-    "A prostate-specific antigen (PSA) test": "Appropriate CCS order for Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy): A prostate-specific antigen (PSA) test.",
-    "order1": "CCS review: avoid this order for Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy) — it does not change acute management."
+    "Physical Exam: General Appearance": "Assess.",
+    "Physical Exam: Rectal (DRE)": "Enlarged, smooth, symmetric, non-tender prostate.",
+    "Urinalysis": "Rule out UTI.",
+    "BMP (Cr)": "Renal function.",
+    "PSA": "Age-appropriate screening.",
+    "AUA symptom score": "Quantify severity.",
+    "Alpha-blocker (Tamsulosin)": "First-line. Rapid symptom relief. Relaxes prostatic smooth muscle.",
+    "5-ARI (Finasteride / Dutasteride)": "If significant enlargement. Shrinks prostate, reduces retention risk."
   },
-  "hpi": "Benign prostatic hyperplasia (BPH) is the most common benign tumor in men. It is important to recognize that BPH is not a precursor to prostate cancer, although it can lead to urinary symptoms that may mimic those of prostate cancer. The diagnosis of BPH is made clinically, and treatment is based on the severity of symptoms. Patients with mild symptoms may be managed with watchful waiting, while those with moderate to severe symptoms may require medical or surgical intervention.",
+  "hpi": "{{patient_name}} presents with urinary frequency, urgency, nocturia, weak stream, hesitancy, straining, and sensation of incomplete bladder emptying — classic LUTS (lower urinary tract symptoms) in an older man. DRE reveals enlarged, smooth, non-tender prostate. BPH is caused by benign proliferation of prostatic stromal and epithelial tissue, causing urethral compression. AUA symptom score quantifies severity. Labs: UA (rule out UTI), BMP (Cr — assess for obstructive nephropathy), PSA (age-appropriate screening). If mild: watchful waiting, lifestyle modifications. If moderate-severe: medical therapy — alpha-blockers (tamsulosin, alfuzosin — relax smooth muscle, rapid onset) ± 5-alpha reductase inhibitors (finasteride, dutasteride — shrink prostate, slow onset, reduce risk of urinary retention and surgery). Combination therapy for significant symptoms. Surgery (TURP) if refractory. Avoid anticholinergics and decongestants.",
+  "hpi_narrative": "{{patient_name}} presents with urinary frequency, urgency, nocturia, weak stream, hesitancy, straining, and sensation of incomplete bladder emptying — classic LUTS (lower urinary tract symptoms) in an older man. DRE reveals enlarged, smooth, non-tender prostate. BPH is caused by benign proliferation of prostatic stromal and epithelial tissue, causing urethral compression. AUA symptom score quantifies severity. Labs: UA (rule out UTI), BMP (Cr — assess for obstructive nephropathy), PSA (age-appropriate screening). If mild: watchful waiting, lifestyle modifications. If moderate-severe: medical therapy — alpha-blockers (tamsulosin, alfuzosin — relax smooth muscle, rapid onset) ± 5-alpha reductase inhibitors (finasteride, dutasteride — shrink prostate, slow onset, reduce risk of urinary retention and surgery). Combination therapy for significant symptoms. Surgery (TURP) if refractory. Avoid anticholinergics and decongestants.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really worried about my frequent urination. It’s affecting my daily life.",
-    "history": "I've been going to the bathroom a lot, especially at night.",
-    "pain": "I feel discomfort sometimes, but it's mostly just the urgency."
+    "chief_complaint": "Urinary frequency, urgency, nocturia, weak stream",
+    "history": "{{patient_name}} presents with urinary frequency, urgency, nocturia, weak stream, hesitancy, straining, and sensation of incomplete bladder emptying — classic LUTS (lower urinary tract symptoms) in a…",
+    "pain": "Urinary frequency, urgency, nocturia, weak stream"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Benign prostatic hyperplasia (BPH) is the most common benign tumor in men. It is important to recognize that BPH is not a precursor to prostate cancer, although it can lead to urinary symptoms that may mimic those of prostate cancer. The diagnosis of BPH is made clinically, and treatment is based on the severity of symptoms. Patients with mild symptoms may be managed with watchful waiting, while those with moderate to severe symptoms may require medical or surgical intervention.",
+  "ccs_category": "Urology / Internal Medicine",
+  "chief_complaint": "Urinary frequency, urgency, nocturia, weak stream",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Physical Exam: General Survey",
-    "Physical Exam: Cardiovascular",
-    "Physical Exam: Respiratory",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Extremities"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Rectal (DRE)",
+      "type": "correctlyOrdered",
+      "finding": "Enlarged, smooth, symmetric, non-tender prostate.",
+      "aliases": [
+        "DRE"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "correctlyOrdered",
+      "finding": "Rule out UTI.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "BMP (Cr)",
+      "type": "correctlyOrdered",
+      "finding": "Renal function.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "PSA",
+      "type": "correctlyOrdered",
+      "finding": "Age-appropriate screening.",
+      "aliases": [
+        "PSA"
+      ]
+    },
+    {
+      "label": "AUA symptom score",
+      "type": "correctlyOrdered",
+      "finding": "Quantify severity.",
+      "aliases": [
+        "AUA score"
+      ]
+    },
+    {
+      "label": "Alpha-blocker (Tamsulosin)",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Rapid symptom relief. Relaxes prostatic smooth muscle.",
+      "aliases": [
+        "Flomax",
+        "Tamsulosin"
+      ]
+    },
+    {
+      "label": "5-ARI (Finasteride / Dutasteride)",
+      "type": "shouldHaveOrdered",
+      "finding": "If significant enlargement. Shrinks prostate, reduces retention risk.",
+      "aliases": [
+        "Finasteride",
+        "Avodart"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Rectal (DRE)",
+    "Urinalysis",
+    "BMP (Cr)",
+    "PSA",
+    "AUA symptom score",
+    "Alpha-blocker (Tamsulosin)",
+    "5-ARI (Finasteride / Dutasteride)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Benign Prostatic Hyperplasia."
 }

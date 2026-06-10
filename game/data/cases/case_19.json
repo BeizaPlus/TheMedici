@@ -1,66 +1,308 @@
 {
   "id": 19,
   "topic": "Abdominal Pain",
-  "diagnosis": "Acute Diverticulitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Abdominal Pain",
+  "diagnosis": "Acute Diverticulitis (Complicated, with small abscess)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam Assistance",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
     "Physical Exam: Abdomen",
-    "Physical Exam: General",
-    "Physical Exam: CV",
-    "Physical Exam: Neuro",
-    "IV fluids, Lactated Ringer's",
-    "NPO",
-    "CT Abdomen/Pelvis, w/ contrast"
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    "Urinalysis",
+    "Bacterial culture, blood",
+    "Bacterial culture, urine",
+    "Abdominal X-ray (acute series / AP)",
+    "CT abdomen/pelvis with contrast",
+    {
+      "order": "Occult blood, stool",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Good screening. Can be gathered from DRE."
+    },
+    "BMP / CMP / LFTs",
+    "IV fluids (NS / LR / D5LR)",
+    "Diet, NPO",
+    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+    {
+      "order": "Intravenous access",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Good practice for IV fluids/medications."
+    },
+    "Colonoscopy / Sigmoidoscopy / Barium enema",
+    "Diet, high fiber"
   ],
   "should_avoid": [
-    "Surgical consult",
-    "Antibiotics"
+    "Colonoscopy / Barium enema",
+    "Percutaneous drainage for 2 cm abscess"
   ],
   "rationale": {
-    "Physical Exam Assistance": "Appropriate CCS order for Acute Diverticulitis: Physical Exam Assistance.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
-    "Physical Exam: General": "Appropriate CCS order for Acute Diverticulitis: Physical Exam: General.",
-    "Physical Exam: CV": "Appropriate CCS order for Acute Diverticulitis: Physical Exam: CV.",
-    "Physical Exam: Neuro": "Targeted Physical Exam: Neuro exam supports the differential for Acute Diverticulitis.",
-    "IV fluids, Lactated Ringer's": "Appropriate CCS order for Acute Diverticulitis: IV fluids, Lactated Ringer's.",
-    "NPO": "Appropriate CCS order for Acute Diverticulitis: NPO.",
-    "CT Abdomen/Pelvis, w/ contrast": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
-    "Surgical consult": "CCS review: avoid this order for Acute Diverticulitis — it does not change acute management.",
-    "Antibiotics": "CCS review: avoid this order for Acute Diverticulitis — it does not change acute management."
+    "Physical Exam: General Appearance": "Determine how sick the patient looks.",
+    "Physical Exam: Chest / Lungs": "Investigate for lung pathology.",
+    "Physical Exam: Heart / Cardiovascular": "Investigate for cardiovascular pathology.",
+    "Physical Exam: Abdomen": "Chief complaint — LLQ tenderness. Assess for peritoneal signs.",
+    "Physical Exam: Rectal": "Could be source of symptoms — DRE.",
+    "CBC with differential": "Leukocytosis supports infection. SIRS: WBC >12K + fever >100.4°F.",
+    "Urinalysis": "GU pathology can present as abdominal pain.",
+    "Bacterial culture, blood": "Meets SIRS criteria — blood cultures warranted.",
+    "Bacterial culture, urine": "Abdominal pain + fever + elevated WBC — urine culture may determine cause.",
+    "Abdominal X-ray (acute series / AP)": "Good start. Rule out free air (perforation).",
+    "CT abdomen/pelvis with contrast": "Gold standard for definitive diagnosis. Will show 2 cm abscess — complicated diverticulitis.",
+    "Occult blood, stool": "Good screening. Can be gathered from DRE.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "IV fluids (NS / LR / D5LR)": "Nausea and vomiting — IV fluids for hydration.",
+    "Diet, NPO": "Bowel rest — essential in acute diverticulitis.",
+    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+    "Intravenous access": "Good practice for IV fluids/medications.",
+    "Colonoscopy / Sigmoidoscopy / Barium enema": "COLONOSCOPY AND BARIUM ENEMA ARE CONTRAINDICATED in acute diverticulitis — risk of perforation of inflamed bowel.",
+    "Diet, high fiber": "High-fiber diet at discharge to prevent further occurrences. Gradually advance from low to high residue.",
+    "Colonoscopy / Barium enema": "ABSOLUTELY CONTRAINDICATED in acute diverticulitis. Risk of bowel perforation from inflamed, friable tissue. Colonoscopy only after diverticulitis completely resolves (to rule out malignancy).",
+    "Percutaneous drainage for 2 cm abscess": "Abscesses <3-4 cm can be managed with antibiotics alone. Drainage indicated for abscesses >4 cm."
   },
-  "hpi": "The patient is a 65-year-old male with abdominal pain. The patient has a history of diverticulitis and presents with fever and leukocytosis. The patient was treated with IV fluids and antibiotics. The patient was admitted for further management. The patient improved with conservative management and was discharged home on a clear liquid diet. Follow-up was arranged with the primary care physician.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with the classic triad of diverticulitis: LLQ pain, low-grade fever, and leukocytosis. He has changes in bowel habits with nausea and vomiting. He meets SIRS criteria (fever >100.4°F, WBC >12,000). CT abdomen/pelvis with IV and oral contrast is the gold standard — findings include bowel wall thickening, pericolic fat stranding, and a 2 cm abscess (complicated diverticulitis). Abscesses <3-4 cm can be managed conservatively with antibiotics alone without percutaneous drainage. Colonoscopy and barium enema are CONTRAINDICATED in acute diverticulitis due to risk of perforation. Treatment: NPO for bowel rest, IV fluids, IV antibiotics (cefazolin + metronidazole, cefuroxime + metronidazole, ceftriaxone + metronidazole, or ampicillin/sulbactam). High-fiber diet at discharge for prevention.",
+  "hpi_narrative": "{{patient_name}} presents with the classic triad of diverticulitis: LLQ pain, low-grade fever, and leukocytosis. He has changes in bowel habits with nausea and vomiting. He meets SIRS criteria (fever >100.4°F, WBC >12,000). CT abdomen/pelvis with IV and oral contrast is the gold standard — findings include bowel wall thickening, pericolic fat stranding, and a 2 cm abscess (complicated diverticulitis). Abscesses <3-4 cm can be managed conservatively with antibiotics alone without percutaneous drainage. Colonoscopy and barium enema are CONTRAINDICATED in acute diverticulitis due to risk of perforation. Treatment: NPO for bowel rest, IV fluids, IV antibiotics (cefazolin + metronidazole, cefuroxime + metronidazole, ceftriaxone + metronidazole, or ampicillin/sulbactam). High-fiber diet at discharge for prevention.",
+  "physical_exam": [
+    [
+      "General",
+      "Febrile, appears ill."
+    ],
+    [
+      "Cardiovascular",
+      "Tachycardic (SIRS)."
+    ],
+    [
+      "Abdominal",
+      "LLQ tenderness. Assess for peritoneal signs, guarding, rebound."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared because my stomach hurts a lot. I don't know what's wrong.",
-    "history": "I have had this pain before. It feels worse now.",
-    "pain": "It hurts really bad in my lower abdomen."
+    "chief_complaint": "LLQ pain, fever, nausea, vomiting",
+    "history": "{{patient_name}} presents with the classic triad of diverticulitis: LLQ pain, low-grade fever, and leukocytosis. He has changes in bowel habits with nausea and vomiting. He meets SIRS criteria (fever…",
+    "pain": "LLQ pain, fever, nausea, vomiting"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "The patient is a 65-year-old male with abdominal pain. The patient has a history of diverticulitis and presents with fever and leukocytosis. The patient was treated with IV fluids and antibiotics. The patient was admitted for further management. The patient improved with conservative management and was discharged home on a clear liquid diet. Follow-up was arranged with the primary care physician.",
+  "ccs_category": "Emergency Medicine / General Surgery",
+  "chief_complaint": "LLQ pain, fever, nausea, vomiting",
+  "case_summary": "Complicated acute diverticulitis with 2 cm abscess. LLQ pain + fever + leukocytosis (SIRS). CT confirms. NPO + IV fluids + IV ceftriaxone/metronidazole. No drainage needed (<3-4 cm). Avoid colonoscopy. High-fiber diet at discharge.",
+  "decoys": [
+    {
+      "label": "Colonoscopy / Barium enema",
+      "reason_wrong": "ABSOLUTELY CONTRAINDICATED in acute diverticulitis. Risk of bowel perforation from inflamed, friable tissue. Colonoscopy only after diverticulitis completely resolves (to rule out malignancy)."
+    },
+    {
+      "label": "Percutaneous drainage for 2 cm abscess",
+      "reason_wrong": "Abscesses <3-4 cm can be managed with antibiotics alone. Drainage indicated for abscesses >4 cm."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "IV Access",
-    "Labs Ordered",
-    "Medications Ordered"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Determine how sick the patient looks.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for lung pathology.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for cardiovascular pathology.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Chief complaint — LLQ tenderness. Assess for peritoneal signs.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "correctlyOrdered",
+      "finding": "Could be source of symptoms — DRE.",
+      "aliases": [
+        "Rectal Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis supports infection. SIRS: WBC >12K + fever >100.4°F.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "correctlyOrdered",
+      "finding": "GU pathology can present as abdominal pain.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Bacterial culture, blood",
+      "type": "correctlyOrdered",
+      "finding": "Meets SIRS criteria — blood cultures warranted.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "Bacterial culture, urine",
+      "type": "shouldHaveOrdered",
+      "finding": "Abdominal pain + fever + elevated WBC — urine culture may determine cause.",
+      "aliases": [
+        "Urine culture"
+      ]
+    },
+    {
+      "label": "Abdominal X-ray (acute series / AP)",
+      "type": "correctlyOrdered",
+      "finding": "Good start. Rule out free air (perforation).",
+      "aliases": [
+        "KUB",
+        "Abdominal X-ray"
+      ]
+    },
+    {
+      "label": "CT abdomen/pelvis with contrast",
+      "type": "shouldHaveOrdered",
+      "finding": "Gold standard for definitive diagnosis. Will show 2 cm abscess — complicated diverticulitis.",
+      "aliases": [
+        "CT abdomen/pelvis"
+      ]
+    },
+    {
+      "label": "Occult blood, stool",
+      "type": "optional",
+      "finding": "Good screening. Can be gathered from DRE.",
+      "aliases": [
+        "FOBT"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "IV fluids (NS / LR / D5LR)",
+      "type": "correctlyOrdered",
+      "finding": "Nausea and vomiting — IV fluids for hydration.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "Diet, NPO",
+      "type": "correctlyOrdered",
+      "finding": "Bowel rest — essential in acute diverticulitis.",
+      "aliases": [
+        "NPO"
+      ]
+    },
+    {
+      "label": "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+      "type": "shouldHaveOrdered",
+      "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+      "aliases": [
+        "Antibiotics",
+        "Ceftriaxone",
+        "Flagyl"
+      ]
+    },
+    {
+      "label": "Intravenous access",
+      "type": "optional",
+      "finding": "Good practice for IV fluids/medications.",
+      "aliases": [
+        "IV access"
+      ]
+    },
+    {
+      "label": "Colonoscopy / Sigmoidoscopy / Barium enema",
+      "type": "shouldHaveAvoided",
+      "finding": "COLONOSCOPY AND BARIUM ENEMA ARE CONTRAINDICATED in acute diverticulitis — risk of perforation of inflamed bowel.",
+      "aliases": [
+        "Colonoscopy",
+        "Barium enema"
+      ]
+    },
+    {
+      "label": "Diet, high fiber",
+      "type": "shouldHaveOrdered",
+      "finding": "High-fiber diet at discharge to prevent further occurrences. Gradually advance from low to high residue.",
+      "aliases": [
+        "High fiber diet"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    "Urinalysis",
+    "Bacterial culture, blood",
+    "Bacterial culture, urine",
+    "Abdominal X-ray (acute series / AP)",
+    "CT abdomen/pelvis with contrast",
+    {
+      "order": "Occult blood, stool",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Good screening. Can be gathered from DRE."
+    },
+    "BMP / CMP / LFTs",
+    "IV fluids (NS / LR / D5LR)",
+    "Diet, NPO",
+    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+    {
+      "order": "Intravenous access",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Good practice for IV fluids/medications."
+    },
+    "Colonoscopy / Sigmoidoscopy / Barium enema",
+    "Diet, high fiber"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Acute Diverticulitis (Complicated, with small abscess)."
 }

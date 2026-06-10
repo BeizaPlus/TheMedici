@@ -1,74 +1,303 @@
 {
   "id": 12,
   "topic": "Burning During Urination",
-  "diagnosis": "Chlamydia",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Burning During Urination",
+  "diagnosis": "Chlamydia Urethritis",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Pelvic Exam: Cervical Assessment",
-    "Chlamydia",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia",
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    "Toxicology screen, urine",
     "Urinalysis",
-    "Urine Culture",
-    "CBC with Differential",
-    "Pelvic Exam: Other Issues",
-    "Pelvic Exam: Lymphadenopathy",
-    "Antibiotic Sensitivity",
-    "Urinalysis: Other Tests",
-    "Urine Culture: Other Tests"
+    "Chlamydia testing (NAAT / DNA probe / culture)",
+    "Gonorrhea testing (NAAT / DNA probe / culture)",
+    "HIV testing (antibody/antigen / PCR / rapid test)",
+    "Hepatitis C antibody / PCR",
+    "Hepatitis B panel (HBsAg / HBcAb / HBeAg)",
+    "BMP / CMP / LFTs",
+    "Azithromycin 1g PO once / Doxycycline 100mg BID x 7d",
+    "NSAIDs / Acetaminophen for fever/pain",
+    "Advise patient, safe sex techniques",
+    "Advise patient, no illegal drug use",
+    "Advise patient, sexual partner needs treatment",
+    "Instruct patient, smoking cessation"
   ],
   "should_avoid": [
-    "Antibiotic: Azithromycin",
-    "Antibiotic: Doxycycline",
-    "Antibiotic: Other",
-    "Antibiotic: Other",
-    "Antibiotic: Other"
+    "Ciprofloxacin / Levofloxacin alone",
+    "Treat without STI panel"
   ],
   "rationale": {
-    "Pelvic Exam: Cervical Assessment": "Pelvic/cervical evaluation is central for Chlamydia and localizes the source of burning during urination.",
-    "Chlamydia": "Appropriate CCS order for Chlamydia: Chlamydia.",
-    "Urinalysis": "Appropriate CCS order for Chlamydia: Urinalysis.",
-    "Urine Culture": "Laboratory testing when systemic illness or severity warrants labs in Chlamydia.",
-    "CBC with Differential": "Laboratory testing when systemic illness or severity warrants labs in Chlamydia.",
-    "Pelvic Exam: Other Issues": "Pelvic/cervical evaluation is central for Chlamydia and localizes the source of burning during urination.",
-    "Pelvic Exam: Lymphadenopathy": "Targeted Pelvic Exam: Lymphadenopathy exam supports the differential for Chlamydia.",
-    "Antibiotic Sensitivity": "Appropriate CCS order for Chlamydia: Antibiotic Sensitivity.",
-    "Urinalysis: Other Tests": "Appropriate CCS order for Chlamydia: Urinalysis: Other Tests.",
-    "Urine Culture: Other Tests": "Laboratory testing when systemic illness or severity warrants labs in Chlamydia.",
-    "Antibiotic: Azithromycin": "CCS review: avoid this order for Chlamydia — it does not change acute management.",
-    "Antibiotic: Doxycycline": "CCS review: avoid this order for Chlamydia — it does not change acute management.",
-    "Antibiotic: Other": "CCS review: avoid this order for Chlamydia — it does not change acute management."
+    "Physical Exam: General Appearance": "Determine how sick the patient looks.",
+    "Physical Exam: Chest / Lungs": "Investigate for lung pathology.",
+    "Physical Exam: Heart / Cardiovascular": "Investigate for cardiac pathology.",
+    "Physical Exam: Abdomen": "Urinary pathologies can present in abdominal exam.",
+    "Physical Exam: Genitalia": "Chief complaint — genital exam essential. Purulent urethral discharge.",
+    "Physical Exam: Rectal": "Should be examined — may contribute to symptoms.",
+    "CBC with differential": "Good screening tool.",
+    "Toxicology screen, urine": "Patient admits to illicit drug use — toxicology screen to identify substances.",
+    "Urinalysis": "Dysuria — UA is first-line. Pyuria without bacteria on Gram stain suggests urethritis.",
+    "Chlamydia testing (NAAT / DNA probe / culture)": "Clinches the diagnosis. NAAT on first-catch urine is first-line.",
+    "Gonorrhea testing (NAAT / DNA probe / culture)": "Co-infection with gonorrhea is common (20-40%). Empiric treatment recommended.",
+    "HIV testing (antibody/antigen / PCR / rapid test)": "One STI → screen for all STIs. HIV testing essential.",
+    "Hepatitis C antibody / PCR": "Screen for all STIs including hepatitis C.",
+    "Hepatitis B panel (HBsAg / HBcAb / HBeAg)": "Screen for all STIs including hepatitis B.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "Azithromycin 1g PO once / Doxycycline 100mg BID x 7d": "Azithromycin single dose or doxycycline x 7 days treats chlamydia. Also covers gonorrhea empirically.",
+    "NSAIDs / Acetaminophen for fever/pain": "Mild low-grade fever and pain — symptomatic management.",
+    "Advise patient, safe sex techniques": "STI treatment → must review safe sex practices.",
+    "Advise patient, no illegal drug use": "Patient admits to illicit substances — educate on dangers.",
+    "Advise patient, sexual partner needs treatment": "Partner likely infected — must be treated to prevent reinfection.",
+    "Instruct patient, smoking cessation": "Excellent opportunity to address smoking.",
+    "Ciprofloxacin / Levofloxacin alone": "Fluoroquinolones are NOT first-line for chlamydia. Azithromycin or doxycycline is the treatment of choice.",
+    "Treat without STI panel": "Co-infection with gonorrhea, HIV, hepatitis B/C, and syphilis is common. Full STI screening is mandatory."
   },
-  "hpi": "The patient presented with burning during urination, which is a common symptom of a urinary tract infection or sexually transmitted infection. A thorough history and physical examination are essential to determine the underlying cause. Appropriate diagnostic tests, including a urinalysis and culture, should be performed to confirm the diagnosis and guide treatment. In this case, chlamydia was identified as the causative agent, and appropriate antibiotic therapy was initiated. Education on safe sexual practices and follow-up care is also important.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a sexually active young adult who presents with dysuria, purulent urethral discharge, and scrotal swelling. The patient admits to illicit drug use and risky sexual practices. Chlamydia trachomatis is the most common bacterial STI — an obligate intracellular pathogen. Co-infection with gonorrhea is common (40% of women, 20% of men), so empiric treatment for both is recommended even if only chlamydia is confirmed. Most cases are asymptomatic (80% women, 50% men), making the presence of overt urethritis clinically useful. First-line diagnosis is NAAT (DNA probe) on first-catch urine. Treatment: azithromycin 1g PO single dose OR doxycycline 100mg PO BID x 7 days. Sexual partners must be treated. Screen for all STIs (gonorrhea, HIV, hepatitis B/C, syphilis, HSV).",
+  "hpi_narrative": "{{patient_name}} is a sexually active young adult who presents with dysuria, purulent urethral discharge, and scrotal swelling. The patient admits to illicit drug use and risky sexual practices. Chlamydia trachomatis is the most common bacterial STI — an obligate intracellular pathogen. Co-infection with gonorrhea is common (40% of women, 20% of men), so empiric treatment for both is recommended even if only chlamydia is confirmed. Most cases are asymptomatic (80% women, 50% men), making the presence of overt urethritis clinically useful. First-line diagnosis is NAAT (DNA probe) on first-catch urine. Treatment: azithromycin 1g PO single dose OR doxycycline 100mg PO BID x 7 days. Sexual partners must be treated. Screen for all STIs (gonorrhea, HIV, hepatitis B/C, syphilis, HSV).",
+  "physical_exam": [
+    [
+      "General",
+      "Mildly febrile."
+    ],
+    [
+      "Genitourinary",
+      "Purulent urethral discharge. Dysuria. Scrotal swelling. No CVA tenderness (rules out pyelo)."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared because it hurts when I urinate. I don't know what's wrong.",
-    "history": "I’ve been feeling this way for a few days. I’m worried it might be serious.",
-    "pain": "It feels like a burning sensation every time I go to the bathroom."
+    "chief_complaint": "Dysuria, purulent urethral discharge, scrotal swelling",
+    "history": "{{patient_name}} is a sexually active young adult who presents with dysuria, purulent urethral discharge, and scrotal swelling. The patient admits to illicit drug use and risky sexual practices. Chla…",
+    "pain": "Dysuria, purulent urethral discharge, scrotal swelling"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "The patient presented with burning during urination, which is a common symptom of a urinary tract infection or sexually transmitted infection. A thorough history and physical examination are essential to determine the underlying cause. Appropriate diagnostic tests, including a urinalysis and culture, should be performed to confirm the diagnosis and guide treatment. In this case, chlamydia was identified as the causative agent, and appropriate antibiotic therapy was initiated. Education on safe sexual practices and follow-up care is also important.",
+  "ccs_category": "Internal Medicine / Infectious Disease",
+  "chief_complaint": "Dysuria, purulent urethral discharge, scrotal swelling",
+  "case_summary": "Chlamydia urethritis — most common bacterial STI. NAAT on urine confirms. Azithromycin 1g PO once. Partner treated. Full STI panel. Office management.",
+  "decoys": [
+    {
+      "label": "Ciprofloxacin / Levofloxacin alone",
+      "reason_wrong": "Fluoroquinolones are NOT first-line for chlamydia. Azithromycin or doxycycline is the treatment of choice."
+    },
+    {
+      "label": "Treat without STI panel",
+      "reason_wrong": "Co-infection with gonorrhea, HIV, hepatitis B/C, and syphilis is common. Full STI screening is mandatory."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Ordered CBC with Differential",
-    "Ordered Bacterial Culture",
-    "Ordered Chlamydia"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Determine how sick the patient looks.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "shouldHaveOrdered",
+      "finding": "Investigate for lung pathology.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "shouldHaveOrdered",
+      "finding": "Investigate for cardiac pathology.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Urinary pathologies can present in abdominal exam.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Genitalia",
+      "type": "correctlyOrdered",
+      "finding": "Chief complaint — genital exam essential. Purulent urethral discharge.",
+      "aliases": [
+        "Genital Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "correctlyOrdered",
+      "finding": "Should be examined — may contribute to symptoms.",
+      "aliases": [
+        "Rectal Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Good screening tool.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Toxicology screen, urine",
+      "type": "shouldHaveOrdered",
+      "finding": "Patient admits to illicit drug use — toxicology screen to identify substances.",
+      "aliases": [
+        "Urine tox"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "correctlyOrdered",
+      "finding": "Dysuria — UA is first-line. Pyuria without bacteria on Gram stain suggests urethritis.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Chlamydia testing (NAAT / DNA probe / culture)",
+      "type": "correctlyOrdered",
+      "finding": "Clinches the diagnosis. NAAT on first-catch urine is first-line.",
+      "aliases": [
+        "Chlamydia DNA probe",
+        "Chlamydia NAAT"
+      ]
+    },
+    {
+      "label": "Gonorrhea testing (NAAT / DNA probe / culture)",
+      "type": "shouldHaveOrdered",
+      "finding": "Co-infection with gonorrhea is common (20-40%). Empiric treatment recommended.",
+      "aliases": [
+        "GC test",
+        "Gonorrhea NAAT"
+      ]
+    },
+    {
+      "label": "HIV testing (antibody/antigen / PCR / rapid test)",
+      "type": "shouldHaveOrdered",
+      "finding": "One STI → screen for all STIs. HIV testing essential.",
+      "aliases": [
+        "HIV test"
+      ]
+    },
+    {
+      "label": "Hepatitis C antibody / PCR",
+      "type": "shouldHaveOrdered",
+      "finding": "Screen for all STIs including hepatitis C.",
+      "aliases": [
+        "HCV test"
+      ]
+    },
+    {
+      "label": "Hepatitis B panel (HBsAg / HBcAb / HBeAg)",
+      "type": "shouldHaveOrdered",
+      "finding": "Screen for all STIs including hepatitis B.",
+      "aliases": [
+        "HBV panel"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "Azithromycin 1g PO once / Doxycycline 100mg BID x 7d",
+      "type": "shouldHaveOrdered",
+      "finding": "Azithromycin single dose or doxycycline x 7 days treats chlamydia. Also covers gonorrhea empirically.",
+      "aliases": [
+        "Azithromycin",
+        "Doxycycline",
+        "Zithromax"
+      ]
+    },
+    {
+      "label": "NSAIDs / Acetaminophen for fever/pain",
+      "type": "correctlyOrdered",
+      "finding": "Mild low-grade fever and pain — symptomatic management.",
+      "aliases": [
+        "Ibuprofen",
+        "Tylenol"
+      ]
+    },
+    {
+      "label": "Advise patient, safe sex techniques",
+      "type": "shouldHaveOrdered",
+      "finding": "STI treatment → must review safe sex practices.",
+      "aliases": [
+        "Safe sex counseling"
+      ]
+    },
+    {
+      "label": "Advise patient, no illegal drug use",
+      "type": "shouldHaveOrdered",
+      "finding": "Patient admits to illicit substances — educate on dangers.",
+      "aliases": [
+        "Drug counseling"
+      ]
+    },
+    {
+      "label": "Advise patient, sexual partner needs treatment",
+      "type": "shouldHaveOrdered",
+      "finding": "Partner likely infected — must be treated to prevent reinfection.",
+      "aliases": [
+        "Partner treatment"
+      ]
+    },
+    {
+      "label": "Instruct patient, smoking cessation",
+      "type": "shouldHaveOrdered",
+      "finding": "Excellent opportunity to address smoking.",
+      "aliases": [
+        "Smoking cessation"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia",
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    "Toxicology screen, urine",
+    "Urinalysis",
+    "Chlamydia testing (NAAT / DNA probe / culture)",
+    "Gonorrhea testing (NAAT / DNA probe / culture)",
+    "HIV testing (antibody/antigen / PCR / rapid test)",
+    "Hepatitis C antibody / PCR",
+    "Hepatitis B panel (HBsAg / HBcAb / HBeAg)",
+    "BMP / CMP / LFTs",
+    "Azithromycin 1g PO once / Doxycycline 100mg BID x 7d",
+    "NSAIDs / Acetaminophen for fever/pain",
+    "Advise patient, safe sex techniques",
+    "Advise patient, no illegal drug use",
+    "Advise patient, sexual partner needs treatment",
+    "Instruct patient, smoking cessation"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Chlamydia Urethritis."
 }

@@ -1,65 +1,88 @@
 {
   "id": 127,
-  "topic": "Rash - Pediatrics",
+  "topic": "Rash",
+  "title": "Rash",
   "diagnosis": "Immune Thrombocytopenia (ITP)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Skin",
-    "Physical Exam: HEENT / Neck",
-    "CBC with differential",
-    "Basic metabolic profile / Comprehensive metabolic profile",
-    "Immune globulin / Rho (D) immune globulin / Dexamethasone / Prednisone / Methylprednisolone / Prednisolone",
-    "Advise patient, no sports",
-    "Advise patient, no NSAIDs",
-    "Advise patient, no aspirin"
+    "CBC + Peripheral smear",
+    "Observation (if platelets >20K, no bleeding)",
+    "Prednisone / IVIG (if <10K or bleeding)",
+    "Avoid contact sports, NSAIDs, IM injections"
   ],
-  "should_avoid": [
-    "Celecoxib / Diclofenac sodium / Etodolac / Fenoprofen / Ibuprofen / Indomethacin / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Mefenamic acid / Nabumetone / Naproxen / Choline / Aspirin / Salicylate / Tetanus / therapy / Aspirin, therapy"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for rash - pediatrics.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Immune Thrombocytopenia (ITP).",
-    "Physical Exam: HEENT / Neck": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Immune Thrombocytopenia (ITP).",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Immune Thrombocytopenia (ITP).",
-    "Basic metabolic profile / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Immune Thrombocytopenia (ITP).",
-    "Immune globulin / Rho (D) immune globulin / Dexamethasone / Prednisone / Methylprednisolone / Prednisolone": "Treatment aligned with CCS management for Immune Thrombocytopenia (ITP).",
-    "Advise patient, no sports": "Appropriate CCS order for Immune Thrombocytopenia (ITP): Advise patient, no sports.",
-    "Advise patient, no NSAIDs": "Appropriate CCS order for Immune Thrombocytopenia (ITP): Advise patient, no NSAIDs.",
-    "Advise patient, no aspirin": "Appropriate CCS order for Immune Thrombocytopenia (ITP): Advise patient, no aspirin.",
-    "Celecoxib / Diclofenac sodium / Etodolac / Fenoprofen / Ibuprofen / Indomethacin / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Mefenamic acid / Nabumetone / Naproxen / Choline / Aspirin / Salicylate / Tetanus / therapy / Aspirin, therapy": "CCS review: avoid this order for Immune Thrombocytopenia (ITP) — it does not change acute management."
+    "CBC + Peripheral smear": "Isolated thrombocytopenia. Normal Hb, WBC.",
+    "Observation (if platelets >20K, no bleeding)": "Most resolve spontaneously.",
+    "Prednisone / IVIG (if <10K or bleeding)": "First-line treatment.",
+    "Avoid contact sports, NSAIDs, IM injections": "Bleeding precautions."
   },
-  "hpi": "This patient in this case has immune thrombocytopenia (ITP). The patient most likely developed ITP after having a recent viral infection. ITP patients will have platelet counts less than 100,000/microl, with a normal white blood cell count and hemoglobin. The majority of children develop ITP after a recent viral illness. The patient has gingival bleeding and petechiae. This would classify the patient as a grade I/IV between moderate and severe. The patient will require treatment with either glucocorticoids, IVIG or both. \n\nThe patient at risk for potentially severe bleeding if injured, so the patient should be counseled to avoid contact sports as well as to avoid antiplatelet medications like Aspirin and NSAIDs. Depending on the treatment choice, the patient can be treated either inpatient or outpatient. Once the patient gets treatment, he will improve.",
+  "hpi": "{{patient_name}} presents with sudden onset petechiae, purpura, epistaxis, gum bleeding, and possibly mucosal bleeding in an otherwise well-appearing child. No lymphadenopathy, no hepatosplenomegaly, no fever, no bone pain — distinguishes from leukemia. ITP is an autoimmune destruction of platelets (antibodies against GPIIb/IIIa). Often preceded by viral URI or vaccination 1-4 weeks prior. Labs: ISOLATED thrombocytopenia (platelets <100K, often <20K). Normal Hb, normal WBC, normal peripheral smear (except low platelets). Bone marrow biopsy NOT needed in typical childhood ITP. Treatment: most children (>80%) recover spontaneously within 6 months. If platelets >20K and no bleeding → observation only. If <10K or significant bleeding → prednisone 2-4 mg/kg/day or IVIG or anti-D (if Rh+). Avoid IM injections, contact sports, NSAIDs/aspirin.",
+  "hpi_narrative": "{{patient_name}} presents with sudden onset petechiae, purpura, epistaxis, gum bleeding, and possibly mucosal bleeding in an otherwise well-appearing child. No lymphadenopathy, no hepatosplenomegaly, no fever, no bone pain — distinguishes from leukemia. ITP is an autoimmune destruction of platelets (antibodies against GPIIb/IIIa). Often preceded by viral URI or vaccination 1-4 weeks prior. Labs: ISOLATED thrombocytopenia (platelets <100K, often <20K). Normal Hb, normal WBC, normal peripheral smear (except low platelets). Bone marrow biopsy NOT needed in typical childhood ITP. Treatment: most children (>80%) recover spontaneously within 6 months. If platelets >20K and no bleeding → observation only. If <10K or significant bleeding → prednisone 2-4 mg/kg/day or IVIG or anti-D (if Rh+). Avoid IM injections, contact sports, NSAIDs/aspirin.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my bleeding. I don't want to get hurt.",
-    "history": "I had a virus recently, and now I have these spots and bleeding.",
-    "pain": "My gums bleed when I brush my teeth."
+    "chief_complaint": "Petechiae, purpura, easy bruising in well child",
+    "history": "{{patient_name}} presents with sudden onset petechiae, purpura, epistaxis, gum bleeding, and possibly mucosal bleeding in an otherwise well-appearing child. No lymphadenopathy, no hepatosplenomegaly,…",
+    "pain": "Petechiae, purpura, easy bruising in well child"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "This patient in this case has immune thrombocytopenia (ITP). The patient most likely developed ITP after having a recent viral infection. ITP patients will have platelet counts less than 100,000/microl, with a normal white blood cell count and hemoglobin. The majority of children develop ITP after a recent viral illness. The patient has gingival bleeding and petechiae. This would classify the patient as a grade I/IV between moderate and severe. The patient will require treatment with either glucocorticoids, IVIG or both. \n\nThe patient at risk for potentially severe bleeding if injured, so the patient should be counseled to avoid contact sports as well as to avoid antiplatelet medications like Aspirin and NSAIDs. Depending on the treatment choice, the patient can be treated either inpatient or outpatient. Once the patient gets treatment, he will improve.",
+  "ccs_category": "Pediatrics / Hematology",
+  "chief_complaint": "Petechiae, purpura, easy bruising in well child",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lung, Cardiovascular, Abdomen, Genital, Rectal, Extremities and Spine, Neurological and Psychological",
-    "Ordered: CBC with differential",
-    "Ordered: Comprehensive profile"
+    {
+      "label": "CBC + Peripheral smear",
+      "type": "correctlyOrdered",
+      "finding": "Isolated thrombocytopenia. Normal Hb, WBC.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Observation (if platelets >20K, no bleeding)",
+      "type": "correctlyOrdered",
+      "finding": "Most resolve spontaneously.",
+      "aliases": [
+        "Observation"
+      ]
+    },
+    {
+      "label": "Prednisone / IVIG (if <10K or bleeding)",
+      "type": "correctlyOrdered",
+      "finding": "First-line treatment.",
+      "aliases": [
+        "Steroids",
+        "IVIG"
+      ]
+    },
+    {
+      "label": "Avoid contact sports, NSAIDs, IM injections",
+      "type": "correctlyOrdered",
+      "finding": "Bleeding precautions.",
+      "aliases": [
+        "Precautions"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "CBC + Peripheral smear",
+    "Observation (if platelets >20K, no bleeding)",
+    "Prednisone / IVIG (if <10K or bleeding)",
+    "Avoid contact sports, NSAIDs, IM injections"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Immune Thrombocytopenia (ITP)."
 }

@@ -1,76 +1,248 @@
 {
   "id": 40,
-  "topic": "Chest Pain - Psychiatry",
-  "diagnosis": "Panic Attack",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Chest Pain",
+  "title": "Chest Pain",
+  "diagnosis": "Panic Attack / Panic Disorder",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: Appearance",
-    "Physical Exam: Lung",
-    "Physical Exam: Cardiovascular",
-    "Physical Exam: Neurological",
-    "Physical Exam: Skin",
-    "HCG (Beta) Qualitative",
-    "CBC (Complete Blood Count)",
-    "Electrolytes",
-    "Troponin",
-    "D-dimer"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities",
+    "ECG, 12 lead",
+    "Cardiac troponin",
+    "Chest X-ray",
+    "CBC",
+    "TSH",
+    "Toxicology screen, urine",
+    "BMP / CMP",
+    "Reassure patient / Psychoeducation",
+    "SSRI (Sertraline / Paroxetine / Escitalopram)",
+    "Refer to psychiatry / CBT"
   ],
   "should_avoid": [
-    "CT Chest",
-    "MRI Brain",
-    "Echocardiogram",
-    "Cardiac Stress Test",
-    "Cardiac Catheterization"
+    "Benzodiazepines as sole long-term treatment",
+    "Discharge without cardiac workup"
   ],
   "rationale": {
-    "Physical Exam: Appearance": "Appropriate CCS order for Panic Attack: Physical Exam: Appearance.",
-    "Physical Exam: Lung": "Evaluate chest and lungs as part of the initial exam for chest pain - psychiatry.",
-    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain - psychiatry.",
-    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Panic Attack.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Panic Attack.",
-    "HCG (Beta) Qualitative": "Appropriate CCS order for Panic Attack: HCG (Beta) Qualitative.",
-    "CBC (Complete Blood Count)": "Laboratory testing when systemic illness or severity warrants labs in Panic Attack.",
-    "Electrolytes": "Appropriate CCS order for Panic Attack: Electrolytes.",
-    "Troponin": "Appropriate CCS order for Panic Attack: Troponin.",
-    "D-dimer": "Appropriate CCS order for Panic Attack: D-dimer.",
-    "CT Chest": "Advanced imaging is not indicated early for Panic Attack when the diagnosis is clinical.",
-    "MRI Brain": "Advanced imaging is not indicated early for Panic Attack when the diagnosis is clinical.",
-    "Echocardiogram": "CCS review: avoid this order for Panic Attack — it does not change acute management.",
-    "Cardiac Stress Test": "CCS review: avoid this order for Panic Attack — it does not change acute management.",
-    "Cardiac Catheterization": "CCS review: avoid this order for Panic Attack — it does not change acute management."
+    "Physical Exam: General Appearance": "Appears anxious, diaphoretic, hyperventilating.",
+    "Physical Exam: Chest / Lungs": "Shortness of breath — assess lungs.",
+    "Physical Exam: Heart / Cardiovascular": "Chest pain — assess cardiac. Tachycardia common in panic.",
+    "Physical Exam: Abdomen": "Nausea — examine.",
+    "Physical Exam: Extremities": "Clues to etiology.",
+    "ECG, 12 lead": "Rule out MI/arrhythmia — may show sinus tachycardia only.",
+    "Cardiac troponin": "Rule out MI — must be negative to differentiate from ACS.",
+    "Chest X-ray": "Rule out pulmonary causes.",
+    "CBC": "Screening.",
+    "TSH": "Hyperthyroidism can mimic panic attacks.",
+    "Toxicology screen, urine": "Rule out substance-induced anxiety (cocaine, amphetamines, PCP).",
+    "BMP / CMP": "Screening.",
+    "Reassure patient / Psychoeducation": "Explain diagnosis — panic attacks are real physiological events but not dangerous. Education is therapeutic.",
+    "SSRI (Sertraline / Paroxetine / Escitalopram)": "First-line for panic disorder. Start low, titrate slow.",
+    "Refer to psychiatry / CBT": "CBT is gold standard psychotherapy for panic disorder. Psychiatry follow-up for medication management.",
+    "Benzodiazepines as sole long-term treatment": "Benzos are for short-term acute management only (risk of dependence, tolerance, withdrawal). SSRIs are first-line for long-term panic disorder. CBT is essential.",
+    "Discharge without cardiac workup": "Must rule out MI, PE, arrhythmia, hyperthyroidism, and substance-induced anxiety. Panic attack is a diagnosis of exclusion in the ED."
   },
-  "hpi": "In this case, the patient is a 30-year-old female presenting with chest pain and a history of anxiety. The patient describes the pain as sharp and intermittent, with associated symptoms of palpitations and shortness of breath. The initial assessment should focus on ruling out any serious cardiac conditions, given the presentation. However, the patient's history of anxiety and panic attacks is significant and should be considered in the management plan. The appropriate workup includes a thorough physical exam and relevant laboratory tests to assess for any underlying issues. The patient should be monitored closely, and if the symptoms are consistent with a panic attack, appropriate interventions should be initiated.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with acute onset chest pain, palpitations, shortness of breath, diaphoresis, nausea, and sense of impending doom. Symptoms peak within minutes and occur in discrete episodes. The patient has a history of similar episodes and significant anxiety about future attacks (anticipatory anxiety). This is a panic attack — a psychiatric diagnosis but one that requires thorough medical evaluation because patients often present to the ED with cardiac concerns. Key: rule out MI, PE, arrhythmia, hyperthyroidism, pheochromocytoma, and substance-induced anxiety. ECG, troponin, CXR, TSH, and toxicology screen are appropriate. If negative and history consistent, panic disorder is the diagnosis. Treatment: SSRIs (first-line: sertraline, paroxetine, escitalopram) + CBT. Benzodiazepines for short-term acute management only (risk of dependence). Reassurance and psychoeducation are therapeutic.",
+  "hpi_narrative": "{{patient_name}} presents with acute onset chest pain, palpitations, shortness of breath, diaphoresis, nausea, and sense of impending doom. Symptoms peak within minutes and occur in discrete episodes. The patient has a history of similar episodes and significant anxiety about future attacks (anticipatory anxiety). This is a panic attack — a psychiatric diagnosis but one that requires thorough medical evaluation because patients often present to the ED with cardiac concerns. Key: rule out MI, PE, arrhythmia, hyperthyroidism, pheochromocytoma, and substance-induced anxiety. ECG, troponin, CXR, TSH, and toxicology screen are appropriate. If negative and history consistent, panic disorder is the diagnosis. Treatment: SSRIs (first-line: sertraline, paroxetine, escitalopram) + CBT. Benzodiazepines for short-term acute management only (risk of dependence). Reassurance and psychoeducation are therapeutic.",
+  "physical_exam": [
+    [
+      "General",
+      "Anxious, diaphoretic, tachypneic (hyperventilating)."
+    ],
+    [
+      "Cardiovascular",
+      "Sinus tachycardia."
+    ],
+    [
+      "Respiratory",
+      "Clear to auscultation."
+    ],
+    [
+      "Abdominal",
+      "Non-tender."
+    ],
+    [
+      "Skin",
+      "Diaphoretic."
+    ],
+    [
+      "Psychiatric",
+      "Sense of impending doom. Fear of dying, losing control. Anticipatory anxiety about future attacks."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My chest hurts and I can't breathe.",
-    "history": "I've had anxiety for years. This pain feels different, though.",
-    "pain": "It feels sharp and comes and goes."
+    "chief_complaint": "Acute chest pain, palpitations, SOB, sense of impending doom",
+    "history": "{{patient_name}} presents with acute onset chest pain, palpitations, shortness of breath, diaphoresis, nausea, and sense of impending doom. Symptoms peak within minutes and occur in discrete episodes…",
+    "pain": "Acute chest pain, palpitations, SOB, sense of impending doom"
   },
-  "ccs_category": "Psychiatry",
-  "case_summary": "In this case, the patient is a 30-year-old female presenting with chest pain and a history of anxiety. The patient describes the pain as sharp and intermittent, with associated symptoms of palpitations and shortness of breath. The initial assessment should focus on ruling out any serious cardiac conditions, given the presentation. However, the patient's history of anxiety and panic attacks is significant and should be considered in the management plan. The appropriate workup includes a thorough physical exam and relevant laboratory tests to assess for any underlying issues. The patient should be monitored closely, and if the symptoms are consistent with a panic attack, appropriate interventions should be initiated.",
+  "ccs_category": "Psychiatry / Emergency Medicine",
+  "chief_complaint": "Acute chest pain, palpitations, SOB, sense of impending doom",
+  "case_summary": "Panic attack. Chest pain + palpitations + SOB + impending doom. ECG/troponin/CXR/TSH all normal. Reassurance + SSRIs + CBT referral. Rule out cardiac before diagnosing panic.",
+  "decoys": [
+    {
+      "label": "Benzodiazepines as sole long-term treatment",
+      "reason_wrong": "Benzos are for short-term acute management only (risk of dependence, tolerance, withdrawal). SSRIs are first-line for long-term panic disorder. CBT is essential."
+    },
+    {
+      "label": "Discharge without cardiac workup",
+      "reason_wrong": "Must rule out MI, PE, arrhythmia, hyperthyroidism, and substance-induced anxiety. Panic attack is a diagnosis of exclusion in the ED."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "History Taken",
-    "Labs Ordered",
-    "Medications Administered"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Appears anxious, diaphoretic, hyperventilating.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Shortness of breath — assess lungs.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Chest pain — assess cardiac. Tachycardia common in panic.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Nausea — examine.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities",
+      "type": "correctlyOrdered",
+      "finding": "Clues to etiology.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "ECG, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "Rule out MI/arrhythmia — may show sinus tachycardia only.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Cardiac troponin",
+      "type": "correctlyOrdered",
+      "finding": "Rule out MI — must be negative to differentiate from ACS.",
+      "aliases": [
+        "Troponin"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Rule out pulmonary causes.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "TSH",
+      "type": "correctlyOrdered",
+      "finding": "Hyperthyroidism can mimic panic attacks.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Toxicology screen, urine",
+      "type": "correctlyOrdered",
+      "finding": "Rule out substance-induced anxiety (cocaine, amphetamines, PCP).",
+      "aliases": [
+        "Urine tox"
+      ]
+    },
+    {
+      "label": "BMP / CMP",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Reassure patient / Psychoeducation",
+      "type": "correctlyOrdered",
+      "finding": "Explain diagnosis — panic attacks are real physiological events but not dangerous. Education is therapeutic.",
+      "aliases": [
+        "Reassurance"
+      ]
+    },
+    {
+      "label": "SSRI (Sertraline / Paroxetine / Escitalopram)",
+      "type": "shouldHaveOrdered",
+      "finding": "First-line for panic disorder. Start low, titrate slow.",
+      "aliases": [
+        "SSRI"
+      ]
+    },
+    {
+      "label": "Refer to psychiatry / CBT",
+      "type": "shouldHaveOrdered",
+      "finding": "CBT is gold standard psychotherapy for panic disorder. Psychiatry follow-up for medication management.",
+      "aliases": [
+        "Psychiatry referral",
+        "CBT"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities",
+    "ECG, 12 lead",
+    "Cardiac troponin",
+    "Chest X-ray",
+    "CBC",
+    "TSH",
+    "Toxicology screen, urine",
+    "BMP / CMP",
+    "Reassure patient / Psychoeducation",
+    "SSRI (Sertraline / Paroxetine / Escitalopram)",
+    "Refer to psychiatry / CBT"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Panic Attack / Panic Disorder."
 }

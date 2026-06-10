@@ -1,64 +1,294 @@
 {
   "id": 21,
   "topic": "Abdominal Pain",
+  "title": "Abdominal Pain",
   "diagnosis": "Irritable Bowel Syndrome",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Complete blood count",
-    "Electrolytes",
-    "Liver function tests",
-    "Abdominal ultrasound",
-    "CT abdomen/pelvis",
-    "Stool studies",
-    "H. pylori testing",
-    "Thyroid function tests"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    "Sedimentation rate, erythrocyte",
+    "C-reactive protein, serum",
+    "Urinalysis",
+    "Abdominal X-ray",
+    "Ova and parasites, stool",
+    "Celiac serology (anti-tTG / anti-gliadin / anti-endomysial)",
+    "C. difficile toxin assay, stool",
+    "BMP / CMP / LFTs",
+    "Loperamide / Antispasmodic (hyoscyamine / dicyclomine)",
+    "Colonoscopy / Sigmoidoscopy",
+    "High fiber diet / Nutrition consult",
+    "Exercise program",
+    "Smoking cessation",
+    "Limit alcohol",
+    "Tdap vaccine"
   ],
   "should_avoid": [
-    "Endoscopy"
+    "Colonoscopy / Sigmoidoscopy"
   ],
   "rationale": {
-    "Complete blood count": "Appropriate CCS order for Irritable Bowel Syndrome: Complete blood count.",
-    "Electrolytes": "Appropriate CCS order for Irritable Bowel Syndrome: Electrolytes.",
-    "Liver function tests": "Appropriate CCS order for Irritable Bowel Syndrome: Liver function tests.",
-    "Abdominal ultrasound": "Appropriate CCS order for Irritable Bowel Syndrome: Abdominal ultrasound.",
-    "CT abdomen/pelvis": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
-    "Stool studies": "Appropriate CCS order for Irritable Bowel Syndrome: Stool studies.",
-    "H. pylori testing": "Appropriate CCS order for Irritable Bowel Syndrome: H. pylori testing.",
-    "Thyroid function tests": "Appropriate CCS order for Irritable Bowel Syndrome: Thyroid function tests.",
-    "Endoscopy": "CCS review: avoid this order for Irritable Bowel Syndrome — it does not change acute management."
+    "Physical Exam: General Appearance": "Determine how sick the patient looks.",
+    "Physical Exam: Chest / Lungs": "Investigate for lung pathology.",
+    "Physical Exam: Heart / Cardiovascular": "Investigate for cardiovascular pathology.",
+    "Physical Exam: Abdomen": "Chief complaint — abdominal exam.",
+    "Physical Exam: Rectal": "Symptoms warrant DRE.",
+    "CBC with differential": "Screening. No IDA (rules out right colon cancer).",
+    "Sedimentation rate, erythrocyte": "ESR and CRP normal in IBS — elevated in intestinal inflammation (IBD).",
+    "C-reactive protein, serum": "Normal CRP supports IBS over IBD.",
+    "Urinalysis": "Abdominal pain — rule out urological causes.",
+    "Abdominal X-ray": "Assess stool accumulation severity in constipation.",
+    "Ova and parasites, stool": "Rule out parasitic infection.",
+    "Celiac serology (anti-tTG / anti-gliadin / anti-endomysial)": "Celiac disease can mimic IBS. Anti-tTG and anti-endomysial most specific.",
+    "C. difficile toxin assay, stool": "Quick rule-out for C. diff diarrhea.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "Loperamide / Antispasmodic (hyoscyamine / dicyclomine)": "Loperamide PRN for diarrhea. Antispasmodic PRN for cramps. Conservative — trial diet/exercise first.",
+    "Colonoscopy / Sigmoidoscopy": "NOT appropriate in 29yo with normal labs, no alarm symptoms. Treat conservatively first. Invasive testing loses points.",
+    "High fiber diet / Nutrition consult": "High fiber diet helps IBS. Lactose-free trial if lactose intolerance suspected.",
+    "Exercise program": "Exercise helps IBS symptoms.",
+    "Smoking cessation": "Smoking cessation improves all aspects of health.",
+    "Limit alcohol": "Excess alcohol worsens IBS.",
+    "Tdap vaccine": "Tdap every 10 years."
   },
-  "hpi": "This patient presents with abdominal pain. History reveals chronic symptoms. Exam findings are unremarkable. Labs and imaging are performed to rule out other causes. The diagnosis of irritable bowel syndrome is made based on clinical criteria.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a 29-year-old who presents with alternating diarrhea and constipation, abdominal pain relieved by defecation, and bloating — meeting Rome IV criteria for IBS (recurrent abdominal pain + ≥2 of: improvement with defecation, change in stool frequency, change in stool appearance). ESR and CRP are normal, ruling out inflammatory bowel disease. Stool studies are negative for infectious etiology. IBS is a diagnosis of exclusion after ruling out celiac disease (anti-tTG, anti-endomysial antibodies), C. difficile, parasites, and colorectal cancer. Conservative management is key: high-fiber diet, lactose-free trial, exercise, trigger food avoidance. Loperamide PRN for diarrhea, antispasmodics (dicyclomine/hyoscyamine) PRN. Colonoscopy/sigmoidoscopy is NOT appropriate — invasive testing loses points in stable patients with normal screening labs. TCA/SSRI for refractory cases at follow-up.",
+  "hpi_narrative": "{{patient_name}} is a 29-year-old who presents with alternating diarrhea and constipation, abdominal pain relieved by defecation, and bloating — meeting Rome IV criteria for IBS (recurrent abdominal pain + ≥2 of: improvement with defecation, change in stool frequency, change in stool appearance). ESR and CRP are normal, ruling out inflammatory bowel disease. Stool studies are negative for infectious etiology. IBS is a diagnosis of exclusion after ruling out celiac disease (anti-tTG, anti-endomysial antibodies), C. difficile, parasites, and colorectal cancer. Conservative management is key: high-fiber diet, lactose-free trial, exercise, trigger food avoidance. Loperamide PRN for diarrhea, antispasmodics (dicyclomine/hyoscyamine) PRN. Colonoscopy/sigmoidoscopy is NOT appropriate — invasive testing loses points in stable patients with normal screening labs. TCA/SSRI for refractory cases at follow-up.",
+  "physical_exam": [
+    [
+      "General",
+      "Well-appearing 29yo, stable."
+    ],
+    [
+      "Abdominal",
+      "Diffuse tenderness, no peritoneal signs. Bloating."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about this pain in my stomach. It just won't go away.",
-    "history": "I've had this pain for a long time. It comes and goes, and sometimes it's really bad.",
-    "pain": "It feels like a cramp, and it hurts a lot."
+    "chief_complaint": "Alternating diarrhea/constipation, abdominal pain relieved by defecation",
+    "history": "{{patient_name}} is a 29-year-old who presents with alternating diarrhea and constipation, abdominal pain relieved by defecation, and bloating — meeting Rome IV criteria for IBS (recurrent abdominal …",
+    "pain": "Alternating diarrhea/constipation, abdominal pain relieved by defecation"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "This patient presents with abdominal pain. History reveals chronic symptoms. Exam findings are unremarkable. Labs and imaging are performed to rule out other causes. The diagnosis of irritable bowel syndrome is made based on clinical criteria.",
+  "ccs_category": "Internal Medicine / Gastroenterology",
+  "chief_complaint": "Alternating diarrhea/constipation, abdominal pain relieved by defecation",
+  "case_summary": "IBS diagnosis of exclusion in 29yo. Rome IV criteria met. Normal ESR/CRP, no alarm symptoms. Conservative management: diet + exercise + loperamide PRN. Avoid colonoscopy.",
+  "decoys": [
+    {
+      "label": "Colonoscopy / Sigmoidoscopy",
+      "reason_wrong": "Invasive testing inappropriate in 29yo with normal labs and no alarm symptoms (IDA, weight loss, bleeding). Treat conservatively. Endoscopy/EGD also loses points."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Ordered CBC",
-    "Ordered Electrolytes",
-    "Ordered Abdominal ultrasound"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Determine how sick the patient looks.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for lung pathology.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for cardiovascular pathology.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Chief complaint — abdominal exam.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "correctlyOrdered",
+      "finding": "Symptoms warrant DRE.",
+      "aliases": [
+        "Rectal Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Screening. No IDA (rules out right colon cancer).",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Sedimentation rate, erythrocyte",
+      "type": "correctlyOrdered",
+      "finding": "ESR and CRP normal in IBS — elevated in intestinal inflammation (IBD).",
+      "aliases": [
+        "ESR"
+      ]
+    },
+    {
+      "label": "C-reactive protein, serum",
+      "type": "correctlyOrdered",
+      "finding": "Normal CRP supports IBS over IBD.",
+      "aliases": [
+        "CRP"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "shouldHaveOrdered",
+      "finding": "Abdominal pain — rule out urological causes.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Abdominal X-ray",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess stool accumulation severity in constipation.",
+      "aliases": [
+        "KUB"
+      ]
+    },
+    {
+      "label": "Ova and parasites, stool",
+      "type": "shouldHaveOrdered",
+      "finding": "Rule out parasitic infection.",
+      "aliases": [
+        "O&P"
+      ]
+    },
+    {
+      "label": "Celiac serology (anti-tTG / anti-gliadin / anti-endomysial)",
+      "type": "shouldHaveOrdered",
+      "finding": "Celiac disease can mimic IBS. Anti-tTG and anti-endomysial most specific.",
+      "aliases": [
+        "Celiac panel"
+      ]
+    },
+    {
+      "label": "C. difficile toxin assay, stool",
+      "type": "shouldHaveOrdered",
+      "finding": "Quick rule-out for C. diff diarrhea.",
+      "aliases": [
+        "C diff"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "Loperamide / Antispasmodic (hyoscyamine / dicyclomine)",
+      "type": "shouldHaveOrdered",
+      "finding": "Loperamide PRN for diarrhea. Antispasmodic PRN for cramps. Conservative — trial diet/exercise first.",
+      "aliases": [
+        "Imodium",
+        "Bentyl",
+        "Levsin"
+      ]
+    },
+    {
+      "label": "Colonoscopy / Sigmoidoscopy",
+      "type": "shouldHaveAvoided",
+      "finding": "NOT appropriate in 29yo with normal labs, no alarm symptoms. Treat conservatively first. Invasive testing loses points.",
+      "aliases": [
+        "Colonoscopy"
+      ]
+    },
+    {
+      "label": "High fiber diet / Nutrition consult",
+      "type": "shouldHaveOrdered",
+      "finding": "High fiber diet helps IBS. Lactose-free trial if lactose intolerance suspected.",
+      "aliases": [
+        "Diet",
+        "Fiber"
+      ]
+    },
+    {
+      "label": "Exercise program",
+      "type": "shouldHaveOrdered",
+      "finding": "Exercise helps IBS symptoms.",
+      "aliases": [
+        "Exercise"
+      ]
+    },
+    {
+      "label": "Smoking cessation",
+      "type": "shouldHaveOrdered",
+      "finding": "Smoking cessation improves all aspects of health.",
+      "aliases": [
+        "Smoking"
+      ]
+    },
+    {
+      "label": "Limit alcohol",
+      "type": "shouldHaveOrdered",
+      "finding": "Excess alcohol worsens IBS.",
+      "aliases": [
+        "Alcohol"
+      ]
+    },
+    {
+      "label": "Tdap vaccine",
+      "type": "shouldHaveOrdered",
+      "finding": "Tdap every 10 years.",
+      "aliases": [
+        "Tdap"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    "Sedimentation rate, erythrocyte",
+    "C-reactive protein, serum",
+    "Urinalysis",
+    "Abdominal X-ray",
+    "Ova and parasites, stool",
+    "Celiac serology (anti-tTG / anti-gliadin / anti-endomysial)",
+    "C. difficile toxin assay, stool",
+    "BMP / CMP / LFTs",
+    "Loperamide / Antispasmodic (hyoscyamine / dicyclomine)",
+    "Colonoscopy / Sigmoidoscopy",
+    "High fiber diet / Nutrition consult",
+    "Exercise program",
+    "Smoking cessation",
+    "Limit alcohol",
+    "Tdap vaccine"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Irritable Bowel Syndrome."
 }

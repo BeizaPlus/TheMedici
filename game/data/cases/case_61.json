@@ -1,68 +1,99 @@
 {
   "id": 61,
-  "topic": "Tension Headache",
+  "topic": "Headache",
+  "title": "Headache",
   "diagnosis": "Tension Headache",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Extremities / Spine",
     "Physical Exam: Neuro / Psych",
-    "MRI head, with gadolinium / MR, head, without gadolinium / MRA, cerebral arteries",
-    "Celecoxib / Dextrose sodium / Excedrin / Ibuprofen / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Metolazone / Naproxen / Oxycodone / Prochlorperazine / Sulindac / Tolmetin / Aspirin, therapy / acetaminophen, therapy",
-    "Vaccine, diphtheria/tetanus/pertussis / Vaccine, diphtheria/tetanus/pertussis/HIB",
-    "Pap smear / Human papillomavirus DNA probe test, cervix"
+    "NSAIDs / Acetaminophen",
+    "Amitriptyline (if frequent/prophylaxis needed)",
+    "Reassurance / Trigger avoidance"
   ],
-  "should_avoid": [
-    "order1",
-    "Discharge the patient without further evaluation"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for tension headache.",
-    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for tension headache.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with tension headache.",
-    "Physical Exam: Extremities / Spine": "Targeted Physical Exam: Extremities / Spine exam supports the differential for Tension Headache.",
-    "Physical Exam: Neuro / Psych": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Tension Headache.",
-    "MRI head, with gadolinium / MR, head, without gadolinium / MRA, cerebral arteries": "Appropriate CCS order for Tension Headache: MRI head, with gadolinium / MR, head, without gadolinium / MRA, cerebral arteries.",
-    "Celecoxib / Dextrose sodium / Excedrin / Ibuprofen / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Metolazone / Naproxen / Oxycodone / Prochlorperazine / Sulindac / Tolmetin / Aspirin, therapy / acetaminophen, therapy": "Appropriate CCS order for Tension Headache: Celecoxib / Dextrose sodium / Excedrin / Ibuprofen / Ketoprofen / Ketorolac tromethamine / Meclofenamate sodium / Metolazone / Naproxen / Oxycodone / Prochlorperazine / Sulindac / Tolmetin / Aspirin, therapy / acetaminophen, therapy.",
-    "Vaccine, diphtheria/tetanus/pertussis / Vaccine, diphtheria/tetanus/pertussis/HIB": "Appropriate CCS order for Tension Headache: Vaccine, diphtheria/tetanus/pertussis / Vaccine, diphtheria/tetanus/pertussis/HIB.",
-    "Pap smear / Human papillomavirus DNA probe test, cervix": "Appropriate CCS order for Tension Headache: Pap smear / Human papillomavirus DNA probe test, cervix.",
-    "order1": "CCS review: avoid this order for Tension Headache — it does not change acute management.",
-    "Discharge the patient without further evaluation": "CCS review: avoid this order for Tension Headache — it does not change acute management."
+    "Physical Exam: General Appearance": "Assess severity.",
+    "Physical Exam: Neuro / Psych": "Normal neuro exam — no focal deficits.",
+    "NSAIDs / Acetaminophen": "First-line acute. Ibuprofen or naproxen.",
+    "Amitriptyline (if frequent/prophylaxis needed)": "TCA first-line for tension headache prophylaxis.",
+    "Reassurance / Trigger avoidance": "Stress management, relaxation techniques."
   },
-  "hpi": "Differential: Cluster headache, Intracranial neoplasm, Meningitis, Migraine headache, Pseudotumor cerebri, Sinusitis, Tension headache.\n\nThe purpose of this case is to have the user identify a benign condition and restrain from doing unnecessary, dangerous procedures. This patient has a simple tension headache, a very common condition that can be diagnosed clinically and treated as an outpatient. The patient describes certain features including mild to moderate pain which is supported by the physical finding of pericranial and neck muscle tenderness. Otherwise, the exam and vital signs are normal. The user should recognize that unnecessary tests, such as \"understanding\" identity and acute stress, neurologic deficits, nausea/vomiting, or wanting to sleep in the next hour are not helpful diagnostic to ascertain whether this is a tension headache or not. A CT, MRI, or lumbar puncture is not necessary for tension headaches because the patient has no red flags, as stress is a contributing factor in many patients. The patient will get better with simple NSAID therapy. Alternative treatments for tension headaches include relaxation techniques and trigger point injections. However, there are no restrictive treatments and should only be used after the patient has failed these measures.",
+  "hpi": "{{patient_name}} presents with bilateral, pressing/tightening (non-pulsating), mild to moderate intensity headache without nausea, vomiting, photophobia, or phonophobia. No aura. Not aggravated by routine physical activity. Duration 30 min to 7 days. Tension headache is the most common primary headache disorder — bilateral, band-like pressure. Distinguish from migraine (unilateral, pulsating, moderate-severe, nausea/photophobia, aggravated by activity) and cluster (unilateral with autonomic features). No imaging needed if history/neuro exam normal. Treatment: acute — NSAIDs (ibuprofen, naproxen) or acetaminophen. Avoid opioid and butalbital-containing analgesics (rebound headache risk). Prophylaxis if frequent: amitriptyline, nortriptyline (TCAs first-line). Non-pharmacologic: stress management, trigger avoidance, relaxation techniques, biofeedback.",
+  "hpi_narrative": "{{patient_name}} presents with bilateral, pressing/tightening (non-pulsating), mild to moderate intensity headache without nausea, vomiting, photophobia, or phonophobia. No aura. Not aggravated by routine physical activity. Duration 30 min to 7 days. Tension headache is the most common primary headache disorder — bilateral, band-like pressure. Distinguish from migraine (unilateral, pulsating, moderate-severe, nausea/photophobia, aggravated by activity) and cluster (unilateral with autonomic features). No imaging needed if history/neuro exam normal. Treatment: acute — NSAIDs (ibuprofen, naproxen) or acetaminophen. Avoid opioid and butalbital-containing analgesics (rebound headache risk). Prophylaxis if frequent: amitriptyline, nortriptyline (TCAs first-line). Non-pharmacologic: stress management, trigger avoidance, relaxation techniques, biofeedback.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My head hurts so much.",
-    "history": "I've had headaches before, but this one feels different.",
-    "pain": "It feels like a tight band around my head."
+    "chief_complaint": "Bilateral pressing headache, mild-mod intensity",
+    "history": "{{patient_name}} presents with bilateral, pressing/tightening (non-pulsating), mild to moderate intensity headache without nausea, vomiting, photophobia, or phonophobia. No aura. Not aggravated by ro…",
+    "pain": "Bilateral pressing headache, mild-mod intensity"
   },
   "ccs_category": "Neurology",
-  "case_summary": "Differential: Cluster headache, Intracranial neoplasm, Meningitis, Migraine headache, Pseudotumor cerebri, Sinusitis, Tension headache.\n\nThe purpose of this case is to have the user identify a benign condition and restrain from doing unnecessary, dangerous procedures. This patient has a simple tension headache, a very common condition that can be diagnosed clinically and treated as an outpatient. The patient describes certain features including mild to moderate pain which is supported by the physical finding of pericranial and neck muscle tenderness. Otherwise, the exam and vital signs are normal. The user should recognize that unnecessary tests, such as \"understanding\" identity and acute stress, neurologic deficits, nausea/vomiting, or wanting to sleep in the next hour are not helpful diagnostic to ascertain whether this is a tension headache or not. A CT, MRI, or lumbar puncture is not necessary for tension headaches because the patient has no red flags, as stress is a contributing factor in many patients. The patient will get better with simple NSAID therapy. Alternative treatments for tension headaches include relaxation techniques and trigger point injections. However, there are no restrictive treatments and should only be used after the patient has failed these measures.",
+  "chief_complaint": "Bilateral pressing headache, mild-mod intensity",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess severity.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Normal neuro exam — no focal deficits.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "NSAIDs / Acetaminophen",
+      "type": "correctlyOrdered",
+      "finding": "First-line acute. Ibuprofen or naproxen.",
+      "aliases": [
+        "Ibuprofen",
+        "Tylenol"
+      ]
+    },
+    {
+      "label": "Amitriptyline (if frequent/prophylaxis needed)",
+      "type": "shouldHaveOrdered",
+      "finding": "TCA first-line for tension headache prophylaxis.",
+      "aliases": [
+        "Elavil"
+      ]
+    },
+    {
+      "label": "Reassurance / Trigger avoidance",
+      "type": "correctlyOrdered",
+      "finding": "Stress management, relaxation techniques.",
+      "aliases": [
+        "Counseling"
+      ]
+    }
+  ],
+  "order_sets": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Skin, Breast, Lymph Node, HEENT, Chest and Lungs",
-    "Ordered: following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lungs",
-    "Ordered: Hormone, thyroid stimulating"
+    "Physical Exam: Neuro / Psych",
+    "NSAIDs / Acetaminophen",
+    "Amitriptyline (if frequent/prophylaxis needed)",
+    "Reassurance / Trigger avoidance"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Tension Headache."
 }

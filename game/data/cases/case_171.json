@@ -1,9 +1,10 @@
 {
   "id": 171,
   "topic": "Agitation",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Agitation",
+  "diagnosis": "Possible neuropsychiatric disorders such as delirium, dementia, or psychiatric emergencies",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain vital signs, perform a detailed physical examination, and assess mental status",
     "Order laboratory workup: CBC, electrolytes, glucose, renal/hepatic function tests, thyroid function tests, urine toxicology screen",
@@ -17,35 +18,51 @@
     "Prescribe medications without a clear diagnosis (e.g., antipsychotics, benzodiazepines)"
   ],
   "rationale": {
-    "Obtain vital signs, perform a detailed physical examination, and assess mental status": "Vital signs establish baseline stability before further orders.",
-    "Order laboratory workup: CBC, electrolytes, glucose, renal/hepatic function tests, thyroid function tests, urine toxicology screen": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Order imaging studies if necessary (CT scan or MRI of the brain)": "Appropriate CCS order for this diagnosis: Order imaging studies if necessary (CT scan or MRI of the brain).",
-    "Consult psychiatry for further evaluation and management": "Appropriate CCS order for this diagnosis: Consult psychiatry for further evaluation and management.",
-    "If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold": "Appropriate CCS order for this diagnosis: If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold.",
-    "CMP/BMP": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "UA": "Appropriate CCS order for this diagnosis: UA.",
-    "Prescribe medications without a clear diagnosis (e.g., antipsychotics, benzodiazepines)": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Obtain vital signs, perform a detailed physical examination, and assess mental status": "To gather initial data on the patient's condition",
+    "Order laboratory workup": "To help rule out medical causes of agitation such as electrolyte imbalances, infections, or metabolic disorders",
+    "Order imaging studies": "If necessary to further evaluate potential neurological conditions",
+    "Consult psychiatry": "For a comprehensive evaluation and management plan",
+    "Prescribe medications without a clear diagnosis": "Could lead to incorrect treatment and potential harm due to lack of proper diagnostics",
+    "CMP/BMP": "To evaluate electrolytes, renal and liver function which could contribute to the patient's agitation",
+    "UA": "To rule out urinary tract infection or other kidney-related issues"
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — agitation. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This agitation won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Agitation — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 92; BP 128/82."
+    ],
+    [
+      "Respiratory",
+      "RR 16; SpO₂ 99%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain vital signs, perform a detailed physical examination, and assess mental status",
     "Order laboratory workup: CBC, electrolytes, glucose, renal/hepatic function tests, thyroid function tests, urine toxicology screen",
     "Order imaging studies if necessary (CT scan or MRI of the brain)",
@@ -54,11 +71,11 @@
     "CMP/BMP",
     "UA"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

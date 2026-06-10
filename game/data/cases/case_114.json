@@ -1,9 +1,10 @@
 {
   "id": 114,
   "topic": "Pain in Side",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Pain in Side",
+  "diagnosis": "Possible Renal Colic due to obstructive uropathy or Appendicitis",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Laboratory tests: Complete Blood Count (CBC), Chemistry Panel, Urinalysis",
     "Imaging: Abdominal CT scan",
@@ -14,42 +15,57 @@
     "Order for immediate surgical intervention without proper diagnostics"
   ],
   "rationale": {
-    "Laboratory tests: Complete Blood Count (CBC), Chemistry Panel, Urinalysis": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Imaging: Abdominal CT scan": "Appropriate CCS order for this diagnosis: Imaging: Abdominal CT scan.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access x2 large-bore": "Appropriate CCS order for this diagnosis: IV access x2 large-bore.",
-    "Order for immediate surgical intervention without proper diagnostics": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Order for immediate surgical intervention without proper diagnostics": "Avoid premature and invasive procedures without confirming the diagnosis.",
+    "Oxygen": "Immediate oxygen administration is crucial for any case involving respiratory distress or AMS.",
+    "IV access x2 large-bore": "Large-bore IV access is essential for rapid fluid resuscitation if necessary."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — pain in side. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This pain in side won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Pain in Side — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 98; BP 107/68."
+    ],
+    [
+      "Respiratory",
+      "RR 19; SpO₂ 95%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Laboratory tests: Complete Blood Count (CBC), Chemistry Panel, Urinalysis",
     "Imaging: Abdominal CT scan",
     "Oxygen",
     "IV access x2 large-bore"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

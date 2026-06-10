@@ -1,68 +1,99 @@
 {
   "id": 118,
   "topic": "Muscle Pain",
+  "title": "Muscle Pain",
   "diagnosis": "Rhabdomyolysis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Limbs/Spine",
-    "Basic metabolic profile / Liver function panel",
-    "Saline solution: CAVS / Lactated Ringer solution / Saline solution, normal",
-    "Physical Exam: Neuro/Psych",
-    "Creatine phosphokinase levels/serum / Creatine phosphokinase, serum, total",
-    "Urinalysis",
-    "Sodium bicarbonate therapy"
+    "CK, serum",
+    "BMP / UA / Ca / Phos",
+    "ECG",
+    "Aggressive IV fluids",
+    "Treat hyperkalemia"
   ],
-  "should_avoid": [
-    "Myoglobin, serum, quantitative",
-    "Myoglobin, urine, qualitative",
-    "Myoglobin, serum"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for muscle pain.",
-    "Physical Exam: Limbs/Spine": "Appropriate CCS order for Rhabdomyolysis: Physical Exam: Limbs/Spine.",
-    "Basic metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Rhabdomyolysis.",
-    "Saline solution: CAVS / Lactated Ringer solution / Saline solution, normal": "Appropriate CCS order for Rhabdomyolysis: Saline solution: CAVS / Lactated Ringer solution / Saline solution, normal.",
-    "Physical Exam: Neuro/Psych": "Targeted Physical Exam: Neuro/Psych exam supports the differential for Rhabdomyolysis.",
-    "Creatine phosphokinase levels/serum / Creatine phosphokinase, serum, total": "Appropriate CCS order for Rhabdomyolysis: Creatine phosphokinase levels/serum / Creatine phosphokinase, serum, total.",
-    "Urinalysis": "Appropriate CCS order for Rhabdomyolysis: Urinalysis.",
-    "Sodium bicarbonate therapy": "Appropriate CCS order for Rhabdomyolysis: Sodium bicarbonate therapy.",
-    "Myoglobin, serum, quantitative": "CCS review: avoid this order for Rhabdomyolysis — it does not change acute management.",
-    "Myoglobin, urine, qualitative": "CCS review: avoid this order for Rhabdomyolysis — it does not change acute management.",
-    "Myoglobin, serum": "CCS review: avoid this order for Rhabdomyolysis — it does not change acute management."
+    "CK, serum": "Markedly elevated >5,000.",
+    "BMP / UA / Ca / Phos": "AKI, hyperK, hyperP, hypoCa. UA: blood+, no RBCs.",
+    "ECG": "HyperK → peaked T, wide QRS.",
+    "Aggressive IV fluids": "1-2L bolus, then 200-300mL/h. Goal UOP 200-300mL/h.",
+    "Treat hyperkalemia": "Calcium gluconate, insulin+glucose, bicarb if severe."
   },
-  "hpi": "Rhabdomyolysis is a condition characterized by the breakdown of muscle tissue, leading to the release of muscle fiber contents into the bloodstream. This can result in serious complications, including acute kidney injury. The management of rhabdomyolysis involves identifying the underlying cause, providing supportive care, and monitoring for complications. It is important to maintain adequate hydration and to monitor renal function closely. In some cases, additional treatments such as bicarbonate therapy may be indicated to prevent kidney injury.",
+  "hpi": "{{patient_name}} presents with diffuse muscle pain, weakness, dark cola-colored urine (myoglobinuria), and fatigue following prolonged immobilization, crush injury, extreme exertion, or medication reaction. Labs: markedly elevated CK (often >5,000, can be >100,000), elevated Cr (AKI from myoglobin), hyperkalemia, hyperphosphatemia, hypocalcemia. UA positive for blood on dipstick but no RBCs on microscopy (myoglobinuria). Rhabdomyolysis = skeletal muscle breakdown → release of intracellular contents (K, phosphate, myoglobin, CK) into bloodstream. Biggest risk: acute kidney injury from myoglobin pigment nephropathy. Management: AGGRESSIVE IV crystalloid resuscitation (NS or LR, 1-2L bolus then 200-300 mL/hr titrated to urine output >200-300 mL/hr). Monitor urine output, renal function, electrolytes (hyperkalemia → cardiac arrhythmia). Alkalinization with bicarb generally NOT recommended. Treat underlying cause.",
+  "hpi_narrative": "{{patient_name}} presents with diffuse muscle pain, weakness, dark cola-colored urine (myoglobinuria), and fatigue following prolonged immobilization, crush injury, extreme exertion, or medication reaction. Labs: markedly elevated CK (often >5,000, can be >100,000), elevated Cr (AKI from myoglobin), hyperkalemia, hyperphosphatemia, hypocalcemia. UA positive for blood on dipstick but no RBCs on microscopy (myoglobinuria). Rhabdomyolysis = skeletal muscle breakdown → release of intracellular contents (K, phosphate, myoglobin, CK) into bloodstream. Biggest risk: acute kidney injury from myoglobin pigment nephropathy. Management: AGGRESSIVE IV crystalloid resuscitation (NS or LR, 1-2L bolus then 200-300 mL/hr titrated to urine output >200-300 mL/hr). Monitor urine output, renal function, electrolytes (hyperkalemia → cardiac arrhythmia). Alkalinization with bicarb generally NOT recommended. Treat underlying cause.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My muscles hurt so much.",
-    "history": "I felt weak and my muscles started to ache.",
-    "pain": "It feels like a deep ache in my muscles."
+    "chief_complaint": "Diffuse muscle pain, dark urine, weakness",
+    "history": "{{patient_name}} presents with diffuse muscle pain, weakness, dark cola-colored urine (myoglobinuria), and fatigue following prolonged immobilization, crush injury, extreme exertion, or medication re…",
+    "pain": "Diffuse muscle pain, dark urine, weakness"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Rhabdomyolysis is a condition characterized by the breakdown of muscle tissue, leading to the release of muscle fiber contents into the bloodstream. This can result in serious complications, including acute kidney injury. The management of rhabdomyolysis involves identifying the underlying cause, providing supportive care, and monitoring for complications. It is important to maintain adequate hydration and to monitor renal function closely. In some cases, additional treatments such as bicarbonate therapy may be indicated to prevent kidney injury.",
+  "ccs_category": "Internal Medicine / Nephrology",
+  "chief_complaint": "Diffuse muscle pain, dark urine, weakness",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam: General Appearance",
-    "Physical Exam: Limbs/Spine",
-    "Basic metabolic profile / Liver function panel",
-    "Saline solution: CAVS / Lactated Ringer solution / Saline solution, normal"
+    {
+      "label": "CK, serum",
+      "type": "correctlyOrdered",
+      "finding": "Markedly elevated >5,000.",
+      "aliases": [
+        "CK",
+        "CPK"
+      ]
+    },
+    {
+      "label": "BMP / UA / Ca / Phos",
+      "type": "correctlyOrdered",
+      "finding": "AKI, hyperK, hyperP, hypoCa. UA: blood+, no RBCs.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "HyperK → peaked T, wide QRS.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Aggressive IV fluids",
+      "type": "correctlyOrdered",
+      "finding": "1-2L bolus, then 200-300mL/h. Goal UOP 200-300mL/h.",
+      "aliases": [
+        "IVF"
+      ]
+    },
+    {
+      "label": "Treat hyperkalemia",
+      "type": "correctlyOrdered",
+      "finding": "Calcium gluconate, insulin+glucose, bicarb if severe.",
+      "aliases": [
+        "HyperK management"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "CK, serum",
+    "BMP / UA / Ca / Phos",
+    "ECG",
+    "Aggressive IV fluids",
+    "Treat hyperkalemia"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Rhabdomyolysis."
 }

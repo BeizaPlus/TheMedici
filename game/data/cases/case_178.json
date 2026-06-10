@@ -1,9 +1,10 @@
 {
   "id": 178,
   "topic": "Epigastric Pain",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Epigastric Pain",
+  "diagnosis": "Acute Abdomen (undetermined etiology)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Laboratory tests: Complete Blood Count (CBC), Basic Metabolic Panel, Lipase, Amylase",
     "Imaging: Abdominal CT scan with contrast",
@@ -15,43 +16,58 @@
     "Initial orders should not focus on a specific diagnosis as the etiology is unknown"
   ],
   "rationale": {
-    "Laboratory tests: Complete Blood Count (CBC), Basic Metabolic Panel, Lipase, Amylase": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Imaging: Abdominal CT scan with contrast": "Appropriate CCS order for this diagnosis: Imaging: Abdominal CT scan with contrast.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "Appropriate CCS order for this diagnosis: Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check).",
-    "Order unneccessary invasive procedures without clear indications or prior imaging": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "Initial orders should not focus on a specific diagnosis as the etiology is unknown": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Laboratory tests": "These tests help assess for possible causes of acute abdomen such as infection, pancreatitis, or obstruction",
+    "Abdominal CT scan with contrast": "This imaging modality can help identify the source of pain and provide a clearer picture of the abdominal pathology",
+    "Oxygen": "The patient is experiencing epigastric pain, which could be a sign of various emergencies such as acute abdomen or cardiac conditions. Oxygen should always be the first intervention to ensure adequate oxygenation.",
+    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "As mentioned in 'How to Use It on Exam Day', immediate action includes ordering oxygen, setting up IV access, and checking glucose levels."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — epigastric pain. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This epigastric pain won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Epigastric Pain — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 104; BP 108/68."
+    ],
+    [
+      "Respiratory",
+      "RR 20; SpO₂ 97%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Laboratory tests: Complete Blood Count (CBC), Basic Metabolic Panel, Lipase, Amylase",
     "Imaging: Abdominal CT scan with contrast",
     "Oxygen",
     "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

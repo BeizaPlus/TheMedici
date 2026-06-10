@@ -1,62 +1,211 @@
 {
   "id": 45,
-  "topic": "Unresponsive - Emergency Medicine",
+  "topic": "Unresponsive",
+  "title": "Unresponsive",
   "diagnosis": "Opioid Overdose",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Administer Naloxone",
-    "Obtain IV access",
-    "Monitor vital signs",
-    "Administer oxygen",
-    "Obtain blood glucose",
-    "Obtain ECG",
-    "Administer activated charcoal"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Neuro / Psych",
+    "Pulse oximetry",
+    "Bag-valve-mask ventilation / Airway management",
+    "Naloxone IV/IM/IN",
+    "Glucose, fingerstick",
+    "ECG",
+    "CBC / BMP",
+    "Toxicology screen, urine/serum",
+    "CT head",
+    "Admit for observation"
   ],
-  "should_avoid": [
-    "Administer Flumazenil"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Administer Naloxone": "Appropriate CCS order for Opioid Overdose: Administer Naloxone.",
-    "Obtain IV access": "Appropriate CCS order for Opioid Overdose: Obtain IV access.",
-    "Monitor vital signs": "Vital signs establish baseline stability before further orders.",
-    "Administer oxygen": "Appropriate CCS order for Opioid Overdose: Administer oxygen.",
-    "Obtain blood glucose": "Appropriate CCS order for Opioid Overdose: Obtain blood glucose.",
-    "Obtain ECG": "Appropriate CCS order for Opioid Overdose: Obtain ECG.",
-    "Administer activated charcoal": "Appropriate CCS order for Opioid Overdose: Administer activated charcoal.",
-    "Administer Flumazenil": "CCS review: avoid this order for Opioid Overdose — it does not change acute management."
+    "Physical Exam: General Appearance": "Unresponsive — assess severity.",
+    "Physical Exam: Chest / Lungs": "Emergency — evaluate lungs.",
+    "Physical Exam: Heart / Cardiovascular": "Emergency — focused cardiac exam.",
+    "Physical Exam: Neuro / Psych": "Pinpoint pupils + decreased RR + unresponsive = opioid toxidrome.",
+    "Pulse oximetry": "Hypoxemia from respiratory depression.",
+    "Bag-valve-mask ventilation / Airway management": "Support ventilation. Intubate if naloxone ineffective.",
+    "Naloxone IV/IM/IN": "0.4-2mg q2-3min, max 10mg. Reverses respiratory depression. May precipitate withdrawal.",
+    "Glucose, fingerstick": "Coma cocktail — rule out hypoglycemia.",
+    "ECG": "QT prolongation with methadone.",
+    "CBC / BMP": "Screening. Rhabdomyolysis risk (CK).",
+    "Toxicology screen, urine/serum": "Confirm opioids, screen for co-ingestants (APAP, ASA).",
+    "CT head": "Unwitnessed — rule out head trauma.",
+    "Admit for observation": "Naloxone half-life < many opioids → re-sedation risk. Observe 4-6h minimum."
   },
-  "hpi": "This case highlights the importance of recognizing and managing opioid overdose in the emergency setting. Key interventions include administering naloxone, monitoring vital signs, and ensuring airway protection. It is crucial to avoid the use of flumazenil due to the risk of seizures in poly-drug overdoses. Continuous monitoring and supportive care are essential for patient recovery.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is found unresponsive with pinpoint pupils, respiratory depression (RR <12), and decreased bowel sounds — the classic opioid toxidrome. There may be needle track marks. Immediate management: airway protection, bag-valve-mask ventilation, naloxone 0.4-2mg IV/IM/IN (repeat q2-3min, up to 10mg if no response). Naloxone is a pure opioid antagonist — rapidly reverses respiratory depression but can precipitate acute withdrawal (agitation, vomiting, diarrhea, piloerection). Short half-life (30-90 min) compared to many opioids → patient may become re-sedated → need for observation or naloxone infusion. Check glucose (coma cocktail). ECG (QT prolongation with methadone). Acetaminophen and salicylate levels if polysubstance ingestion suspected. After stabilization: screen for other substances, assess for aspiration pneumonitis, evaluate for rhabdomyolysis (prolonged down time). Offer substance use disorder resources and naloxone prescription for harm reduction. Psychiatry/addiction medicine consult.",
+  "hpi_narrative": "{{patient_name}} is found unresponsive with pinpoint pupils, respiratory depression (RR <12), and decreased bowel sounds — the classic opioid toxidrome. There may be needle track marks. Immediate management: airway protection, bag-valve-mask ventilation, naloxone 0.4-2mg IV/IM/IN (repeat q2-3min, up to 10mg if no response). Naloxone is a pure opioid antagonist — rapidly reverses respiratory depression but can precipitate acute withdrawal (agitation, vomiting, diarrhea, piloerection). Short half-life (30-90 min) compared to many opioids → patient may become re-sedated → need for observation or naloxone infusion. Check glucose (coma cocktail). ECG (QT prolongation with methadone). Acetaminophen and salicylate levels if polysubstance ingestion suspected. After stabilization: screen for other substances, assess for aspiration pneumonitis, evaluate for rhabdomyolysis (prolonged down time). Offer substance use disorder resources and naloxone prescription for harm reduction. Psychiatry/addiction medicine consult.",
+  "physical_exam": [
+    [
+      "General",
+      "Unresponsive, respiratory depression."
+    ],
+    [
+      "Respiratory",
+      "Bradypnea (<12), hypoxia."
+    ],
+    [
+      "Abdominal",
+      "Decreased bowel sounds — classic opioid effect."
+    ],
+    [
+      "Neurological",
+      "Pinpoint pupils (miosis). CNS depression."
+    ],
+    [
+      "Skin",
+      "Needle track marks on extremities."
+    ],
+    [
+      "Psychiatric",
+      "Substance use disorder."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "bp": null,
+    "rr": "<12",
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I can't breathe and feel really dizzy.",
-    "history": "I was at a party and took something. I don't remember much.",
-    "pain": "I feel pressure in my chest."
+    "chief_complaint": "Found unresponsive",
+    "history": "{{patient_name}} is found unresponsive with pinpoint pupils, respiratory depression (RR <12), and decreased bowel sounds — the classic opioid toxidrome. There may be needle track marks. Immediate man…",
+    "pain": "Found unresponsive"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "This case highlights the importance of recognizing and managing opioid overdose in the emergency setting. Key interventions include administering naloxone, monitoring vital signs, and ensuring airway protection. It is crucial to avoid the use of flumazenil due to the risk of seizures in poly-drug overdoses. Continuous monitoring and supportive care are essential for patient recovery.",
+  "ccs_category": "Emergency Medicine / Toxicology",
+  "chief_complaint": "Found unresponsive",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Administer Naloxone",
-    "Obtain IV access",
-    "Monitor vital signs",
-    "Administer oxygen",
-    "Obtain blood glucose"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Unresponsive — assess severity.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Emergency — evaluate lungs.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Emergency — focused cardiac exam.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Pinpoint pupils + decreased RR + unresponsive = opioid toxidrome.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "correctlyOrdered",
+      "finding": "Hypoxemia from respiratory depression.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Bag-valve-mask ventilation / Airway management",
+      "type": "correctlyOrdered",
+      "finding": "Support ventilation. Intubate if naloxone ineffective.",
+      "aliases": [
+        "BVM"
+      ]
+    },
+    {
+      "label": "Naloxone IV/IM/IN",
+      "type": "correctlyOrdered",
+      "finding": "0.4-2mg q2-3min, max 10mg. Reverses respiratory depression. May precipitate withdrawal.",
+      "aliases": [
+        "Narcan"
+      ]
+    },
+    {
+      "label": "Glucose, fingerstick",
+      "type": "correctlyOrdered",
+      "finding": "Coma cocktail — rule out hypoglycemia.",
+      "aliases": [
+        "Glucose"
+      ]
+    },
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "QT prolongation with methadone.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "CBC / BMP",
+      "type": "correctlyOrdered",
+      "finding": "Screening. Rhabdomyolysis risk (CK).",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Toxicology screen, urine/serum",
+      "type": "correctlyOrdered",
+      "finding": "Confirm opioids, screen for co-ingestants (APAP, ASA).",
+      "aliases": [
+        "Urine tox"
+      ]
+    },
+    {
+      "label": "CT head",
+      "type": "correctlyOrdered",
+      "finding": "Unwitnessed — rule out head trauma.",
+      "aliases": [
+        "Head CT"
+      ]
+    },
+    {
+      "label": "Admit for observation",
+      "type": "correctlyOrdered",
+      "finding": "Naloxone half-life < many opioids → re-sedation risk. Observe 4-6h minimum.",
+      "aliases": [
+        "Admit"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Neuro / Psych",
+    "Pulse oximetry",
+    "Bag-valve-mask ventilation / Airway management",
+    "Naloxone IV/IM/IN",
+    "Glucose, fingerstick",
+    "ECG",
+    "CBC / BMP",
+    "Toxicology screen, urine/serum",
+    "CT head",
+    "Admit for observation"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Opioid Overdose."
 }

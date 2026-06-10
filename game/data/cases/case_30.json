@@ -1,60 +1,195 @@
 {
   "id": 30,
   "topic": "Pain in Right Arm",
-  "diagnosis": "Colles' Fracture of Right Arm Due to Domestic Abuse",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Pain in Right Arm",
+  "diagnosis": "Colles' Fracture of Right Arm / Domestic Abuse",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Repeat Physical Exam",
-    "Repeat Physical Exam",
-    "Repeat Physical Exam",
-    "Repeat Physical Exam",
-    "Repeat Physical Exam",
-    "X-ray of the Right Arm",
-    "Pain Management",
-    "Consult Orthopedics"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Skin",
+    "X-ray, right wrist/forearm",
+    "CBC",
+    "BMP / CMP",
+    "Closed reduction + casting/splinting",
+    "Analgesia (NSAIDs / Acetaminophen / Opioids PRN)",
+    "Orthopedic follow-up",
+    "Social work consult / Domestic violence screening",
+    "Reassure patient / Counseling"
   ],
   "should_avoid": [
-    "Repeat Physical Exam",
-    "Repeat Physical Exam"
+    "Surgical fixation (ORIF) first-line for Colles'"
   ],
   "rationale": {
-    "Repeat Physical Exam": "CCS review: avoid this order for Colles' Fracture of Right Arm Due to Domestic Abuse — it does not change acute management.",
-    "X-ray of the Right Arm": "Imaging supports diagnosis when exam findings warrant it for Colles' Fracture of Right Arm Due to Domestic Abuse.",
-    "Pain Management": "Appropriate CCS order for Colles' Fracture of Right Arm Due to Domestic Abuse: Pain Management.",
-    "Consult Orthopedics": "Appropriate CCS order for Colles' Fracture of Right Arm Due to Domestic Abuse: Consult Orthopedics."
+    "Physical Exam: General Appearance": "Assess for other injuries, fearfulness, withdrawn behavior.",
+    "Physical Exam: Extremities / Spine": "Right wrist: dinner fork deformity, swelling, tenderness. Neurovascular exam (median nerve at risk).",
+    "Physical Exam: Skin": "Look for bruises in various stages of healing — sign of ongoing abuse.",
+    "X-ray, right wrist/forearm": "Colles' fracture: distal radius with dorsal angulation. May have associated ulnar styloid fracture.",
+    "CBC": "Screening.",
+    "BMP / CMP": "Screening.",
+    "Closed reduction + casting/splinting": "Colles' fracture management: closed reduction under hematoma block or sedation, then immobilization in sugar-tong splint or short arm cast.",
+    "Analgesia (NSAIDs / Acetaminophen / Opioids PRN)": "Pain control.",
+    "Orthopedic follow-up": "Serial X-rays to ensure reduction maintained.",
+    "Social work consult / Domestic violence screening": "Suspected domestic abuse. Screen privately. Document findings. Refer to social services. Safety planning.",
+    "Reassure patient / Counseling": "Create safe, non-judgmental space. Provide domestic violence resources.",
+    "Surgical fixation (ORIF) first-line for Colles'": "Closed reduction and casting is first-line for Colles' fracture. Surgery reserved for intra-articular fractures, significant comminution, or failed closed reduction."
   },
-  "hpi": "Subjective: Patient presents with pain in the right arm after a fall. Objective: Patient has tenderness and swelling in the right wrist. Assessment: Colles' fracture of the right arm due to domestic abuse. Plan: Order X-ray, consult orthopedics, and manage pain.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with right wrist pain, swelling, and deformity after a reported fall. X-ray reveals a Colles' fracture — distal radius fracture with dorsal angulation (dinner fork deformity). However, the mechanism of injury and clinical presentation raise concern for domestic abuse. The physician must recognize red flags: inconsistent history, delay in seeking care, pattern of injuries in various stages of healing, and accompanying fearfulness or avoidance. Management: closed reduction and casting/splinting for the fracture. But equally important: a safety assessment, documentation of injuries, and referral to social work or appropriate support services. Domestic violence screening should be done privately and sensitively.",
+  "hpi_narrative": "{{patient_name}} presents with right wrist pain, swelling, and deformity after a reported fall. X-ray reveals a Colles' fracture — distal radius fracture with dorsal angulation (dinner fork deformity). However, the mechanism of injury and clinical presentation raise concern for domestic abuse. The physician must recognize red flags: inconsistent history, delay in seeking care, pattern of injuries in various stages of healing, and accompanying fearfulness or avoidance. Management: closed reduction and casting/splinting for the fracture. But equally important: a safety assessment, documentation of injuries, and referral to social work or appropriate support services. Domestic violence screening should be done privately and sensitively.",
+  "physical_exam": [
+    [
+      "General",
+      "Assess for distress, fearfulness, withdrawn behavior."
+    ],
+    [
+      "Neurological",
+      "Median nerve function assessment."
+    ],
+    [
+      "Skin",
+      "Inspect for bruises in various stages of healing — concern for ongoing abuse."
+    ],
+    [
+      "Musculoskeletal",
+      "Right wrist: dorsal angulation (dinner fork deformity), swelling, tenderness, limited ROM."
+    ],
+    [
+      "Psychiatric",
+      "Screen for domestic violence privately and sensitively."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my arm. It hurts so much.",
-    "history": "I fell and hit my arm. It was painful right away.",
-    "pain": "It feels sharp and throbbing."
+    "chief_complaint": "Right wrist pain, swelling, and deformity after fall",
+    "history": "{{patient_name}} presents with right wrist pain, swelling, and deformity after a reported fall. X-ray reveals a Colles' fracture — distal radius fracture with dorsal angulation (dinner fork deformity…",
+    "pain": "Right wrist pain, swelling, and deformity after fall"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Subjective: Patient presents with pain in the right arm after a fall. Objective: Patient has tenderness and swelling in the right wrist. Assessment: Colles' fracture of the right arm due to domestic abuse. Plan: Order X-ray, consult orthopedics, and manage pain.",
+  "ccs_category": "Emergency Medicine / Orthopedics",
+  "chief_complaint": "Right wrist pain, swelling, and deformity after fall",
+  "case_summary": "Colles' fracture (dinner fork deformity) in setting of suspected domestic abuse. Closed reduction + casting. Social work consult + DV screening. Ortho follow-up.",
+  "decoys": [
+    {
+      "label": "Surgical fixation (ORIF) first-line for Colles'",
+      "reason_wrong": "Closed reduction and casting is first-line for Colles' fracture. Surgery reserved for intra-articular fractures, significant comminution, or failed closed reduction."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "X-ray Ordered",
-    "Consult Orthopedics",
-    "Pain Management"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess for other injuries, fearfulness, withdrawn behavior.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "type": "correctlyOrdered",
+      "finding": "Right wrist: dinner fork deformity, swelling, tenderness. Neurovascular exam (median nerve at risk).",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Skin",
+      "type": "correctlyOrdered",
+      "finding": "Look for bruises in various stages of healing — sign of ongoing abuse.",
+      "aliases": [
+        "Skin Exam"
+      ]
+    },
+    {
+      "label": "X-ray, right wrist/forearm",
+      "type": "correctlyOrdered",
+      "finding": "Colles' fracture: distal radius with dorsal angulation. May have associated ulnar styloid fracture.",
+      "aliases": [
+        "Wrist X-ray"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "BMP / CMP",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Closed reduction + casting/splinting",
+      "type": "correctlyOrdered",
+      "finding": "Colles' fracture management: closed reduction under hematoma block or sedation, then immobilization in sugar-tong splint or short arm cast.",
+      "aliases": [
+        "Reduction",
+        "Casting"
+      ]
+    },
+    {
+      "label": "Analgesia (NSAIDs / Acetaminophen / Opioids PRN)",
+      "type": "correctlyOrdered",
+      "finding": "Pain control.",
+      "aliases": [
+        "Pain medication"
+      ]
+    },
+    {
+      "label": "Orthopedic follow-up",
+      "type": "correctlyOrdered",
+      "finding": "Serial X-rays to ensure reduction maintained.",
+      "aliases": [
+        "Ortho follow-up"
+      ]
+    },
+    {
+      "label": "Social work consult / Domestic violence screening",
+      "type": "shouldHaveOrdered",
+      "finding": "Suspected domestic abuse. Screen privately. Document findings. Refer to social services. Safety planning.",
+      "aliases": [
+        "Social work",
+        "DV screening"
+      ]
+    },
+    {
+      "label": "Reassure patient / Counseling",
+      "type": "shouldHaveOrdered",
+      "finding": "Create safe, non-judgmental space. Provide domestic violence resources.",
+      "aliases": [
+        "Reassurance"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Skin",
+    "X-ray, right wrist/forearm",
+    "CBC",
+    "BMP / CMP",
+    "Closed reduction + casting/splinting",
+    "Analgesia (NSAIDs / Acetaminophen / Opioids PRN)",
+    "Orthopedic follow-up",
+    "Social work consult / Domestic violence screening",
+    "Reassure patient / Counseling"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Colles' Fracture of Right Arm / Domestic Abuse."
 }

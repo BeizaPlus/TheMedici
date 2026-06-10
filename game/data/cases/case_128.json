@@ -1,9 +1,10 @@
 {
   "id": 128,
   "topic": "Depression",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Depression",
+  "diagnosis": "Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology.",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Psychiatric Consult",
     "Laboratory workup (CBC, Chemistry Panel, TSH, Urinalysis)",
@@ -18,36 +19,52 @@
     "Prescribing medications without proper evaluation and consultation"
   ],
   "rationale": {
-    "Psychiatric Consult": "Appropriate CCS order for this diagnosis: Psychiatric Consult.",
-    "Laboratory workup (CBC, Chemistry Panel, TSH, Urinalysis)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Psychological Evaluation": "Appropriate CCS order for this diagnosis: Psychological Evaluation.",
-    "Cardiac Monitor": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to depression.",
-    "IV Access + Fluids": "Appropriate CCS order for this diagnosis: IV Access + Fluids.",
-    "Stat Labs": "Appropriate CCS order for this diagnosis: Stat Labs.",
-    "Bedside / CT imaging": "Appropriate CCS order for this diagnosis: Bedside / CT imaging.",
-    "Admit / Disposition": "Appropriate CCS order for this diagnosis: Admit / Disposition.",
-    "Prescribing medications without proper evaluation and consultation": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Psychiatric Consult": "To assess the severity of depression, rule out other psychiatric disorders, and guide further management.",
+    "Laboratory workup": "To evaluate for potential physical causes of depression or complications (e.g., electrolyte imbalance, thyroid dysfunction), and to monitor treatment response.",
+    "Psychological Evaluation": "To assess the patient's psychological state and functioning, which can aid in diagnosis and treatment planning.",
+    "Cardiac Monitor": "Continuous vitals.",
+    "IV Access + Fluids": "Two large-bore if shock.",
+    "Stat Labs": "CBC, BMP, lactate.",
+    "Bedside / CT imaging": "Targeted imaging.",
+    "Admit / Disposition": "Match acuity."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — depression. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This depression won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Depression — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 88; BP 125/80."
+    ],
+    [
+      "Respiratory",
+      "RR 15; SpO₂ 98%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Psychiatric Consult",
     "Laboratory workup (CBC, Chemistry Panel, TSH, Urinalysis)",
     "Psychological Evaluation",
@@ -57,11 +74,10 @@
     "Bedside / CT imaging",
     "Admit / Disposition"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

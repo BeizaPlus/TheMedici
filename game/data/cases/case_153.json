@@ -1,61 +1,98 @@
 {
   "id": 153,
   "topic": "Skin Lesions",
-  "diagnosis": "Not possible to determine from the image",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Skin Lesions",
+  "diagnosis": "Porphyria Cutanea Tarda",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Office / clinic",
-    "Urine porphyrin screen",
-    "Serum ferritin / iron studies",
-    "Hepatitis C screening",
-    "Phlebotomy or hydroxychloroquine",
-    "Sun protection counseling",
-    "Alcohol cessation counseling"
+    "Urine porphyrins",
+    "Plasma porphyrins",
+    "HCV / HIV / Iron studies",
+    "Phlebotomy",
+    "Sun protection / Avoid alcohol"
   ],
   "should_avoid": [],
   "rationale": {
-    "Office / clinic": "Appropriate CCS order for Not possible to determine from the image: Office / clinic.",
-    "Urine porphyrin screen": "Appropriate CCS order for Not possible to determine from the image: Urine porphyrin screen.",
-    "Serum ferritin / iron studies": "Appropriate CCS order for Not possible to determine from the image: Serum ferritin / iron studies.",
-    "Hepatitis C screening": "Appropriate CCS order for Not possible to determine from the image: Hepatitis C screening.",
-    "Phlebotomy or hydroxychloroquine": "Appropriate CCS order for Not possible to determine from the image: Phlebotomy or hydroxychloroquine.",
-    "Sun protection counseling": "Patient education and counseling are part of definitive care for Not possible to determine from the image.",
-    "Alcohol cessation counseling": "Patient education and counseling are part of definitive care for Not possible to determine from the image."
+    "Urine porphyrins": "Elevated uroporphyrins.",
+    "Plasma porphyrins": "Peak at 620nm — diagnostic.",
+    "HCV / HIV / Iron studies": "Screen for PCT triggers.",
+    "Phlebotomy": "First-line. Target ferritin low-normal.",
+    "Sun protection / Avoid alcohol": "Photosensitivity management."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
+  "hpi_narrative": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — skin lesions. I'm really scared.",
-    "history": "It's been getting worse. They said something about not possible to determine from the image. ...",
-    "pain": "This skin lesions won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Fragile, blistering skin on sun-exposed areas",
+    "history": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused b…",
+    "pain": "Fragile, blistering skin on sun-exposed areas"
   },
-  "ccs_category": null,
+  "ccs_category": "Dermatology / Hepatology",
+  "chief_complaint": "Fragile, blistering skin on sun-exposed areas",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Office / clinic",
-    "Urine porphyrin screen",
-    "Serum ferritin / iron studies",
-    "Hepatitis C screening",
-    "Phlebotomy or hydroxychloroquine",
-    "Sun protection counseling",
-    "Alcohol cessation counseling"
+    {
+      "label": "Urine porphyrins",
+      "type": "correctlyOrdered",
+      "finding": "Elevated uroporphyrins.",
+      "aliases": [
+        "Porphyrins"
+      ]
+    },
+    {
+      "label": "Plasma porphyrins",
+      "type": "correctlyOrdered",
+      "finding": "Peak at 620nm — diagnostic.",
+      "aliases": [
+        "Plasma porphyrins"
+      ]
+    },
+    {
+      "label": "HCV / HIV / Iron studies",
+      "type": "correctlyOrdered",
+      "finding": "Screen for PCT triggers.",
+      "aliases": [
+        "Screen"
+      ]
+    },
+    {
+      "label": "Phlebotomy",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Target ferritin low-normal.",
+      "aliases": [
+        "Phlebotomy"
+      ]
+    },
+    {
+      "label": "Sun protection / Avoid alcohol",
+      "type": "correctlyOrdered",
+      "finding": "Photosensitivity management.",
+      "aliases": [
+        "Sun avoidance"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Urine porphyrins",
+    "Plasma porphyrins",
+    "HCV / HIV / Iron studies",
+    "Phlebotomy",
+    "Sun protection / Avoid alcohol"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Porphyria Cutanea Tarda."
 }

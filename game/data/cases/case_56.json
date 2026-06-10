@@ -1,68 +1,153 @@
 {
   "id": 56,
   "topic": "Abdominal Pain",
-  "diagnosis": "Glucose-6-Phosphate-Dehydrogenase Deficiency",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Abdominal Pain",
+  "diagnosis": "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "NPO",
-    "IV Fluids",
-    "Ordered: Antibiotics, unknown specific list",
-    "Ordered: Treatment: Dextrose, normal saline",
-    "Ordered: CBC with differential",
-    "Physical Exam: General appearance",
-    "Physical Exam: Abdominal exam",
-    "Physical Exam: Neurological exam",
-    "Physical Exam: Skin exam",
-    "Physical Exam: Extremities exam"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "CBC with differential + reticulocyte count",
+    "Peripheral blood smear",
+    "LDH, haptoglobin, bilirubin",
+    "G6PD enzyme assay",
+    "BMP / CMP",
+    "IV fluids",
+    "Blood transfusion (if severe anemia)",
+    "Remove trigger / Avoid oxidative drugs"
   ],
-  "should_avoid": [
-    "Glucose-6-Phosphate-Dehydrogenase: Does not affect grade"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "NPO": "Appropriate CCS order for Glucose-6-Phosphate-Dehydrogenase Deficiency: NPO.",
-    "IV Fluids": "Appropriate CCS order for Glucose-6-Phosphate-Dehydrogenase Deficiency: IV Fluids.",
-    "Ordered: Antibiotics, unknown specific list": "Appropriate CCS order for Glucose-6-Phosphate-Dehydrogenase Deficiency: Ordered: Antibiotics, unknown specific list.",
-    "Ordered: Treatment: Dextrose, normal saline": "Appropriate CCS order for Glucose-6-Phosphate-Dehydrogenase Deficiency: Ordered: Treatment: Dextrose, normal saline.",
-    "Ordered: CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Glucose-6-Phosphate-Dehydrogenase Deficiency.",
-    "Physical Exam: General appearance": "Assess how ill the patient appears before focused testing for abdominal pain.",
-    "Physical Exam: Abdominal exam": "Appropriate CCS order for Glucose-6-Phosphate-Dehydrogenase Deficiency: Physical Exam: Abdominal exam.",
-    "Physical Exam: Neurological exam": "Targeted Physical Exam: Neurological exam exam supports the differential for Glucose-6-Phosphate-Dehydrogenase Deficiency.",
-    "Physical Exam: Skin exam": "Skin exam may show rashes or systemic signs relevant to Glucose-6-Phosphate-Dehydrogenase Deficiency.",
-    "Physical Exam: Extremities exam": "Targeted Physical Exam: Extremities exam exam supports the differential for Glucose-6-Phosphate-Dehydrogenase Deficiency.",
-    "Glucose-6-Phosphate-Dehydrogenase: Does not affect grade": "Advanced imaging is not indicated early for Glucose-6-Phosphate-Dehydrogenase Deficiency when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Assess severity — may be jaundiced, ill.",
+    "Physical Exam: Abdomen": "Abdominal pain from hemolysis.",
+    "CBC with differential + reticulocyte count": "Acute anemia, elevated retics.",
+    "Peripheral blood smear": "Bite cells, blister cells, Heinz bodies.",
+    "LDH, haptoglobin, bilirubin": "Elevated LDH, low haptoglobin, indirect hyperbilirubinemia = hemolysis.",
+    "G6PD enzyme assay": "Definitive diagnosis. Check 4-6 weeks after acute hemolysis (reticulocytes have higher G6PD).",
+    "BMP / CMP": "Assess renal function — hemoglobinuria can cause AKI.",
+    "IV fluids": "Maintain renal perfusion, prevent AKI from hemoglobinuria.",
+    "Blood transfusion (if severe anemia)": "Packed RBCs for symptomatic anemia.",
+    "Remove trigger / Avoid oxidative drugs": "Lifelong avoidance: sulfa, dapsone, primaquine, nitrofurantoin, fava beans."
   },
-  "hpi": "Patient: 26-year-old male, presents with abdominal pain. The important medical history includes hypertension. The patient has a history of G6PD deficiency. The patient was given IV fluids and antibiotics. The patient was also monitored for any signs of hemolysis. The patient was discharged with instructions to follow up with his primary care physician. The important teaching points include the management of G6PD deficiency and the importance of avoiding triggers.",
+  "hpi": "{{patient_name}} presents with acute abdominal/back pain, fatigue, jaundice, and dark urine (hemoglobinuria) following exposure to an oxidative stressor (fava beans, infection, certain drugs: sulfa, primaquine, dapsone, nitrofurantoin, rasburicase). Labs show acute hemolytic anemia (low Hb, elevated LDH, low haptoglobin, elevated reticulocyte count, indirect hyperbilirubinemia). Peripheral smear shows bite cells, blister cells, and Heinz bodies. G6PD deficiency is the most common enzymopathy worldwide — X-linked recessive. G6PD protects RBCs from oxidative stress. Trigger → oxidative damage → intravascular + extravascular hemolysis. Diagnosis: G6PD enzyme assay (do NOT check during acute hemolysis — reticulocytes have higher G6PD). Treatment: supportive — remove trigger, IV fluids, transfuse if severe anemia. Avoid oxidative drugs lifelong. Screen family members (X-linked).",
+  "hpi_narrative": "{{patient_name}} presents with acute abdominal/back pain, fatigue, jaundice, and dark urine (hemoglobinuria) following exposure to an oxidative stressor (fava beans, infection, certain drugs: sulfa, primaquine, dapsone, nitrofurantoin, rasburicase). Labs show acute hemolytic anemia (low Hb, elevated LDH, low haptoglobin, elevated reticulocyte count, indirect hyperbilirubinemia). Peripheral smear shows bite cells, blister cells, and Heinz bodies. G6PD deficiency is the most common enzymopathy worldwide — X-linked recessive. G6PD protects RBCs from oxidative stress. Trigger → oxidative damage → intravascular + extravascular hemolysis. Diagnosis: G6PD enzyme assay (do NOT check during acute hemolysis — reticulocytes have higher G6PD). Treatment: supportive — remove trigger, IV fluids, transfuse if severe anemia. Avoid oxidative drugs lifelong. Screen family members (X-linked).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about this pain in my stomach. I don't know what's happening.",
-    "history": "I have a history of G6PD deficiency. I was fine until now.",
-    "pain": "It hurts a lot, especially when I move."
+    "chief_complaint": "Acute abdominal pain, jaundice, dark urine",
+    "history": "{{patient_name}} presents with acute abdominal/back pain, fatigue, jaundice, and dark urine (hemoglobinuria) following exposure to an oxidative stressor (fava beans, infection, certain drugs: sulfa, …",
+    "pain": "Acute abdominal pain, jaundice, dark urine"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "Patient: 26-year-old male, presents with abdominal pain. The important medical history includes hypertension. The patient has a history of G6PD deficiency. The patient was given IV fluids and antibiotics. The patient was also monitored for any signs of hemolysis. The patient was discharged with instructions to follow up with his primary care physician. The important teaching points include the management of G6PD deficiency and the importance of avoiding triggers.",
+  "ccs_category": "Emergency Medicine / Hematology",
+  "chief_complaint": "Acute abdominal pain, jaundice, dark urine",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Ordered: Antibiotics, unknown specific list",
-    "Ordered: Treatment: Dextrose, normal saline",
-    "Ordered: CBC with differential"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess severity — may be jaundiced, ill.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Abdominal pain from hemolysis.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential + reticulocyte count",
+      "type": "correctlyOrdered",
+      "finding": "Acute anemia, elevated retics.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Peripheral blood smear",
+      "type": "correctlyOrdered",
+      "finding": "Bite cells, blister cells, Heinz bodies.",
+      "aliases": [
+        "Smear"
+      ]
+    },
+    {
+      "label": "LDH, haptoglobin, bilirubin",
+      "type": "correctlyOrdered",
+      "finding": "Elevated LDH, low haptoglobin, indirect hyperbilirubinemia = hemolysis.",
+      "aliases": [
+        "Hemolysis labs"
+      ]
+    },
+    {
+      "label": "G6PD enzyme assay",
+      "type": "correctlyOrdered",
+      "finding": "Definitive diagnosis. Check 4-6 weeks after acute hemolysis (reticulocytes have higher G6PD).",
+      "aliases": [
+        "G6PD"
+      ]
+    },
+    {
+      "label": "BMP / CMP",
+      "type": "correctlyOrdered",
+      "finding": "Assess renal function — hemoglobinuria can cause AKI.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "IV fluids",
+      "type": "correctlyOrdered",
+      "finding": "Maintain renal perfusion, prevent AKI from hemoglobinuria.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "Blood transfusion (if severe anemia)",
+      "type": "correctlyOrdered",
+      "finding": "Packed RBCs for symptomatic anemia.",
+      "aliases": [
+        "Transfusion"
+      ]
+    },
+    {
+      "label": "Remove trigger / Avoid oxidative drugs",
+      "type": "correctlyOrdered",
+      "finding": "Lifelong avoidance: sulfa, dapsone, primaquine, nitrofurantoin, fava beans.",
+      "aliases": [
+        "Trigger avoidance"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "CBC with differential + reticulocyte count",
+    "Peripheral blood smear",
+    "LDH, haptoglobin, bilirubin",
+    "G6PD enzyme assay",
+    "BMP / CMP",
+    "IV fluids",
+    "Blood transfusion (if severe anemia)",
+    "Remove trigger / Avoid oxidative drugs"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis."
 }

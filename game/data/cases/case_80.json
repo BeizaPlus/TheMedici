@@ -1,68 +1,109 @@
 {
   "id": 80,
   "topic": "Vomiting",
-  "diagnosis": "Malrotation with Volvulus",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Vomiting",
+  "diagnosis": "Malrotation with Midgut Volvulus",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "X-ray, abdomen, acute series / X-ray, abdomen, AP",
-    "US, abdomen / X-ray, upper gastrointestinal series",
-    "Consult, pediatric surgery",
     "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
     "Physical Exam: Abdomen",
-    "CBC with differential",
-    "Saline solution, normal / Lactated Ringer solution / Dextrose 5% in 0.45% saline solution / Dextrose 5% in Lactated Ringer solution / Dextrose 5% in normal saline solution",
-    "Nasogastric tube with saline lavage"
+    "Abdominal X-ray",
+    "Upper GI series",
+    "NPO + NG tube",
+    "EMERGENCY surgical consult / Ladd procedure"
   ],
-  "should_avoid": [
-    "CT abdomen/pelvis with contrast",
-    "Intravenous access / intravenous line, capped"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "X-ray, abdomen, acute series / X-ray, abdomen, AP": "Abdominal exam helps exclude alternative causes in a patient with vomiting.",
-    "US, abdomen / X-ray, upper gastrointestinal series": "Abdominal exam helps exclude alternative causes in a patient with vomiting.",
-    "Consult, pediatric surgery": "Appropriate CCS order for Malrotation with Volvulus: Consult, pediatric surgery.",
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for vomiting.",
-    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for vomiting.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with vomiting.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Malrotation with Volvulus.",
-    "Saline solution, normal / Lactated Ringer solution / Dextrose 5% in 0.45% saline solution / Dextrose 5% in Lactated Ringer solution / Dextrose 5% in normal saline solution": "Appropriate CCS order for Malrotation with Volvulus: Saline solution, normal / Lactated Ringer solution / Dextrose 5% in 0.45% saline solution / Dextrose 5% in Lactated Ringer solution / Dextrose 5% in normal saline solution.",
-    "Nasogastric tube with saline lavage": "Appropriate CCS order for Malrotation with Volvulus: Nasogastric tube with saline lavage.",
-    "CT abdomen/pelvis with contrast": "Advanced imaging is not indicated early for Malrotation with Volvulus when the diagnosis is clinical.",
-    "Intravenous access / intravenous line, capped": "IV fluids/access are not indicated unless the patient is unstable or cannot tolerate PO."
+    "Physical Exam: General Appearance": "Assess — may be in extremis.",
+    "Physical Exam: Abdomen": "Distension, tenderness.",
+    "Abdominal X-ray": "Double bubble, gasless abdomen.",
+    "Upper GI series": "DJJ right of midline, corkscrew duodenum = malrotation with volvulus.",
+    "NPO + NG tube": "Decompression. IV fluids resuscitation.",
+    "EMERGENCY surgical consult / Ladd procedure": "Time-critical. Ladd procedure reduces volvulus."
   },
-  "hpi": "This case is a great illustration of the goal with a diagnosis of malrotation. Malrotation occurs as a result of an abnormality of the intestinal gut during embryogenesis. Volvulus occurs when the small bowel twists around itself, causing obstruction. This can lead to ischemia and obstruction. In this case, obstruction was seen by X-rays showing the intestinal loops, and potentially leading to dehydration and necrosis due to the vessels supplying blood to the bowel being cut off. The patient's slow rise in vital signs can lead to severe dehydration as potential hemorrhagic components. The important part of this case is to diagnose the problem quickly and ensure that the diagnosis is made, after which the patient should be stabilized with NG tube decompression and IV fluid resuscitation prior to surgery.",
+  "hpi": "{{patient_name}} is a neonate/infant presenting with bilious (green) vomiting — a surgical emergency until proven otherwise. Bilious vomiting in a newborn = malrotation with volvulus. Malrotation occurs when the midgut fails to complete its normal 270° counterclockwise rotation during fetal development, resulting in a narrow mesenteric base. This predisposes to volvulus — twisting of the midgut around the superior mesenteric artery → intestinal ischemia and necrosis. Diagnosis: upper GI series (gold standard) showing DJJ (duodenojejunal junction) to the RIGHT of midline and spiral/corkscrew duodenum. Abdominal X-ray may show double bubble sign or gasless abdomen. Treatment: EMERGENCY surgical exploration (Ladd procedure). NPO, NG tube decompression, IV fluids. Time-critical — delay leads to bowel necrosis and short gut syndrome.",
+  "hpi_narrative": "{{patient_name}} is a neonate/infant presenting with bilious (green) vomiting — a surgical emergency until proven otherwise. Bilious vomiting in a newborn = malrotation with volvulus. Malrotation occurs when the midgut fails to complete its normal 270° counterclockwise rotation during fetal development, resulting in a narrow mesenteric base. This predisposes to volvulus — twisting of the midgut around the superior mesenteric artery → intestinal ischemia and necrosis. Diagnosis: upper GI series (gold standard) showing DJJ (duodenojejunal junction) to the RIGHT of midline and spiral/corkscrew duodenum. Abdominal X-ray may show double bubble sign or gasless abdomen. Treatment: EMERGENCY surgical exploration (Ladd procedure). NPO, NG tube decompression, IV fluids. Time-critical — delay leads to bowel necrosis and short gut syndrome.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared because I keep throwing up. I don't know what's wrong.",
-    "history": "I felt fine, then suddenly I was sick. My stomach hurts a lot.",
-    "pain": "It hurts in my belly, and I feel really nauseous."
+    "chief_complaint": "Bilious vomiting in newborn",
+    "history": "{{patient_name}} is a neonate/infant presenting with bilious (green) vomiting — a surgical emergency until proven otherwise. Bilious vomiting in a newborn = malrotation with volvulus. Malrotation occ…",
+    "pain": "Bilious vomiting in newborn"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "This case is a great illustration of the goal with a diagnosis of malrotation. Malrotation occurs as a result of an abnormality of the intestinal gut during embryogenesis. Volvulus occurs when the small bowel twists around itself, causing obstruction. This can lead to ischemia and obstruction. In this case, obstruction was seen by X-rays showing the intestinal loops, and potentially leading to dehydration and necrosis due to the vessels supplying blood to the bowel being cut off. The patient's slow rise in vital signs can lead to severe dehydration as potential hemorrhagic components. The important part of this case is to diagnose the problem quickly and ensure that the diagnosis is made, after which the patient should be stabilized with NG tube decompression and IV fluid resuscitation prior to surgery.",
+  "ccs_category": "Pediatric Surgery",
+  "chief_complaint": "Bilious vomiting in newborn",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered: Consult, pediatric surgery",
-    "Ordered: X-ray, abdomen, acute series",
-    "Results Reported for X-ray, abdomen, acute series",
-    "Ordered: X-ray, upper gastrointestinal series"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess — may be in extremis.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Distension, tenderness.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Abdominal X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Double bubble, gasless abdomen.",
+      "aliases": [
+        "KUB"
+      ]
+    },
+    {
+      "label": "Upper GI series",
+      "type": "correctlyOrdered",
+      "finding": "DJJ right of midline, corkscrew duodenum = malrotation with volvulus.",
+      "aliases": [
+        "UGI"
+      ]
+    },
+    {
+      "label": "NPO + NG tube",
+      "type": "correctlyOrdered",
+      "finding": "Decompression. IV fluids resuscitation.",
+      "aliases": [
+        "NG tube"
+      ]
+    },
+    {
+      "label": "EMERGENCY surgical consult / Ladd procedure",
+      "type": "correctlyOrdered",
+      "finding": "Time-critical. Ladd procedure reduces volvulus.",
+      "aliases": [
+        "Pediatric surgery"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "Abdominal X-ray",
+    "Upper GI series",
+    "NPO + NG tube",
+    "EMERGENCY surgical consult / Ladd procedure"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Malrotation with Midgut Volvulus."
 }

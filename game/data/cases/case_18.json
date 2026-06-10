@@ -1,70 +1,318 @@
 {
   "id": 18,
   "topic": "Constipation and Malaise",
+  "title": "Constipation and Malaise",
   "diagnosis": "Colon Cancer (Adenocarcinoma)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Respiratory",
-    "Physical Exam: Lungs",
-    "Physical Exam: Cardiovascular",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
     "Physical Exam: Abdomen",
-    "CT Abdomen and Pelvis",
-    "MRI Abdomen and Pelvis",
-    "Ultrasound Abdomen",
-    "Endoscopy",
-    "Colonoscopy"
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    {
+      "order": "Occult blood, stool",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Important screening — will be positive. Can be gathered from DRE."
+    },
+    "Colonoscopy",
+    "CT abdomen/pelvis with contrast",
+    "Chest X-ray / CT chest",
+    "CEA, serum",
+    "BMP / CMP / LFTs",
+    "ECG, 12 lead",
+    "PT/PTT / INR",
+    "Type and screen / Type and Rh",
+    "Diet, NPO",
+    "Consult, colorectal surgery / Laparotomy",
+    {
+      "order": "Consult, hematology/oncology",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Post-surgery chemo/radiation. Optional — can wait for pathology results."
+    },
+    "Informed consent for procedure",
+    "Counsel patient, cancer diagnosis"
   ],
   "should_avoid": [
-    "Laparoscopy, exploratory",
-    "Endoscopic biopsy"
+    "Flexible sigmoidoscopy",
+    "PET scan as solo staging"
   ],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for constipation and malaise.",
-    "Physical Exam: Respiratory": "Evaluate chest and lungs as part of the initial exam for constipation and malaise.",
-    "Physical Exam: Lungs": "Evaluate chest and lungs as part of the initial exam for constipation and malaise.",
-    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to constipation and malaise.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with constipation and malaise.",
-    "CT Abdomen and Pelvis": "Abdominal exam helps exclude alternative causes in a patient with constipation and malaise.",
-    "MRI Abdomen and Pelvis": "Abdominal exam helps exclude alternative causes in a patient with constipation and malaise.",
-    "Ultrasound Abdomen": "Abdominal exam helps exclude alternative causes in a patient with constipation and malaise.",
-    "Endoscopy": "Appropriate CCS order for Colon Cancer (Adenocarcinoma): Endoscopy.",
-    "Colonoscopy": "Appropriate CCS order for Colon Cancer (Adenocarcinoma): Colonoscopy.",
-    "Laparoscopy, exploratory": "CCS review: avoid this order for Colon Cancer (Adenocarcinoma) — it does not change acute management.",
-    "Endoscopic biopsy": "CCS review: avoid this order for Colon Cancer (Adenocarcinoma) — it does not change acute management."
+    "Physical Exam: General Appearance": "Determine how sick the patient looks.",
+    "Physical Exam: Chest / Lungs": "Investigate for lung pathology.",
+    "Physical Exam: Heart / Cardiovascular": "Investigate for cardiac pathology.",
+    "Physical Exam: Abdomen": "Chief complaint — abdominal exam.",
+    "Physical Exam: Rectal": "Constipation, nausea, vomiting — DRE essential.",
+    "CBC with differential": "Screening. May show iron deficiency anemia (right colon cancer).",
+    "Occult blood, stool": "Important screening — will be positive. Can be gathered from DRE.",
+    "Colonoscopy": "Full colonoscopy needed (NOT sigmoidoscopy). Biopsy of mass for diagnosis. Sigmoidoscopy does not cover enough colon to verify polyps/cancer.",
+    "CT abdomen/pelvis with contrast": "CT chest/abdomen/pelvis with contrast is gold standard for colorectal cancer metastasis screening.",
+    "Chest X-ray / CT chest": "Assess for pulmonary metastases once cancer diagnosed.",
+    "CEA, serum": "Carcinoembryonic antigen — pre-op prognostic marker and monitors recurrence. Post-op CEA <2-3 = good prognosis.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "ECG, 12 lead": "Pre-op — ensure no cardiac arrhythmias that may complicate surgery.",
+    "PT/PTT / INR": "Pre-op labs.",
+    "Type and screen / Type and Rh": "Pre-op labs — prepare for surgery.",
+    "Diet, NPO": "Pre-op — NPO for surgery.",
+    "Consult, colorectal surgery / Laparotomy": "Colectomy for excision of cancerous mass. Adjuvant chemo if lymph node positive.",
+    "Consult, hematology/oncology": "Post-surgery chemo/radiation. Optional — can wait for pathology results.",
+    "Informed consent for procedure": "Serious operation — patient must understand risks/benefits.",
+    "Counsel patient, cancer diagnosis": "Important to counsel regarding cancer diagnosis and next steps.",
+    "Flexible sigmoidoscopy": "Does not cover enough colon to verify absence of polyps/cancer. Full colonoscopy is required before surgery for colon cancer.",
+    "PET scan as solo staging": "CT chest/abdomen/pelvis with contrast is gold standard for metastasis screening. PET provides no supplemental information beyond CT."
   },
-  "hpi": "This case illustrates the importance of thorough evaluation and management of patients presenting with gastrointestinal symptoms. It is critical to consider the possibility of serious underlying conditions, such as malignancy, in patients with unexplained symptoms. The case also highlights the need for appropriate imaging studies to determine the cause of the patient's symptoms and to guide further management.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with constipation, malaise, nausea, and vomiting. Occult blood is positive. Colon cancer is the third most common cancer and third most common cause of cancer mortality in the US. Left colon masses present with obstructive symptoms (constipation, decreased stool caliber); right colon masses present with iron deficiency anemia from occult bleeding. Workup: colonoscopy with biopsy for diagnosis (NOT just flexible sigmoidoscopy — must examine entire colon). CT chest/abdomen/pelvis with contrast for staging (gold standard for metastasis screening). CEA level pre-op for prognosis and recurrence monitoring. Pre-op clearance: ECG, PT/PTT, type and screen, NPO. Treatment: surgical resection (colectomy) by colorectal surgery. If lymph node positive → adjuvant chemotherapy. Follow-up: CEA q3-6mo, CT annually x 5yr, colonoscopy at 1yr then q3yr.",
+  "hpi_narrative": "{{patient_name}} presents with constipation, malaise, nausea, and vomiting. Occult blood is positive. Colon cancer is the third most common cancer and third most common cause of cancer mortality in the US. Left colon masses present with obstructive symptoms (constipation, decreased stool caliber); right colon masses present with iron deficiency anemia from occult bleeding. Workup: colonoscopy with biopsy for diagnosis (NOT just flexible sigmoidoscopy — must examine entire colon). CT chest/abdomen/pelvis with contrast for staging (gold standard for metastasis screening). CEA level pre-op for prognosis and recurrence monitoring. Pre-op clearance: ECG, PT/PTT, type and screen, NPO. Treatment: surgical resection (colectomy) by colorectal surgery. If lymph node positive → adjuvant chemotherapy. Follow-up: CEA q3-6mo, CT annually x 5yr, colonoscopy at 1yr then q3yr.",
+  "physical_exam": [
+    [
+      "General",
+      "Malaise, appears chronically ill."
+    ],
+    [
+      "Abdominal",
+      "May have mass on palpation. Distension possible with obstruction."
+    ],
+    [
+      "Skin",
+      "Pallor if iron deficiency anemia present."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my symptoms. I don't know what's wrong with me.",
-    "history": "I've been feeling really unwell for a while now. My stomach hurts a lot.",
-    "pain": "It feels like a sharp pain in my belly."
+    "chief_complaint": "Constipation, malaise, nausea, vomiting",
+    "history": "{{patient_name}} presents with constipation, malaise, nausea, and vomiting. Occult blood is positive. Colon cancer is the third most common cancer and third most common cause of cancer mortality in t…",
+    "pain": "Constipation, malaise, nausea, vomiting"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "This case illustrates the importance of thorough evaluation and management of patients presenting with gastrointestinal symptoms. It is critical to consider the possibility of serious underlying conditions, such as malignancy, in patients with unexplained symptoms. The case also highlights the need for appropriate imaging studies to determine the cause of the patient's symptoms and to guide further management.",
+  "ccs_category": "Internal Medicine / Gastroenterology / Colorectal Surgery",
+  "chief_complaint": "Constipation, malaise, nausea, vomiting",
+  "case_summary": "Colon adenocarcinoma. Constipation + malaise + positive FOBT. Colonoscopy with biopsy → CT staging → CEA → pre-op labs → NPO → colectomy. Office → surgery. 90% recurrences within 3 years — close follow-up essential.",
+  "decoys": [
+    {
+      "label": "Flexible sigmoidoscopy",
+      "reason_wrong": "Does not cover enough colon to verify absence of polyps/cancer. Full colonoscopy is required before surgery for colon cancer."
+    },
+    {
+      "label": "PET scan as solo staging",
+      "reason_wrong": "CT chest/abdomen/pelvis with contrast is gold standard for metastasis screening. PET provides no supplemental information beyond CT."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exam: General Appearance, Abdomen",
-    "Ordered the following Physical Exam: Respiratory, Cardiovascular, Lungs",
-    "Ordered the following Physical Exam: Abdomen",
-    "Ordered the following Physical Exam: General Appearance"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Determine how sick the patient looks.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for lung pathology.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for cardiac pathology.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Chief complaint — abdominal exam.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "correctlyOrdered",
+      "finding": "Constipation, nausea, vomiting — DRE essential.",
+      "aliases": [
+        "Rectal Exam",
+        "DRE"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Screening. May show iron deficiency anemia (right colon cancer).",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Occult blood, stool",
+      "type": "optional",
+      "finding": "Important screening — will be positive. Can be gathered from DRE.",
+      "aliases": [
+        "FOBT"
+      ]
+    },
+    {
+      "label": "Colonoscopy",
+      "type": "shouldHaveOrdered",
+      "finding": "Full colonoscopy needed (NOT sigmoidoscopy). Biopsy of mass for diagnosis. Sigmoidoscopy does not cover enough colon to verify polyps/cancer.",
+      "aliases": [
+        "Colonoscopy"
+      ]
+    },
+    {
+      "label": "CT abdomen/pelvis with contrast",
+      "type": "shouldHaveOrdered",
+      "finding": "CT chest/abdomen/pelvis with contrast is gold standard for colorectal cancer metastasis screening.",
+      "aliases": [
+        "CT abdomen/pelvis"
+      ]
+    },
+    {
+      "label": "Chest X-ray / CT chest",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess for pulmonary metastases once cancer diagnosed.",
+      "aliases": [
+        "CXR",
+        "CT chest"
+      ]
+    },
+    {
+      "label": "CEA, serum",
+      "type": "shouldHaveOrdered",
+      "finding": "Carcinoembryonic antigen — pre-op prognostic marker and monitors recurrence. Post-op CEA <2-3 = good prognosis.",
+      "aliases": [
+        "CEA"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "ECG, 12 lead",
+      "type": "shouldHaveOrdered",
+      "finding": "Pre-op — ensure no cardiac arrhythmias that may complicate surgery.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "PT/PTT / INR",
+      "type": "shouldHaveOrdered",
+      "finding": "Pre-op labs.",
+      "aliases": [
+        "Coags"
+      ]
+    },
+    {
+      "label": "Type and screen / Type and Rh",
+      "type": "shouldHaveOrdered",
+      "finding": "Pre-op labs — prepare for surgery.",
+      "aliases": [
+        "Blood type"
+      ]
+    },
+    {
+      "label": "Diet, NPO",
+      "type": "shouldHaveOrdered",
+      "finding": "Pre-op — NPO for surgery.",
+      "aliases": [
+        "NPO"
+      ]
+    },
+    {
+      "label": "Consult, colorectal surgery / Laparotomy",
+      "type": "shouldHaveOrdered",
+      "finding": "Colectomy for excision of cancerous mass. Adjuvant chemo if lymph node positive.",
+      "aliases": [
+        "Surgery consult",
+        "Colectomy"
+      ]
+    },
+    {
+      "label": "Consult, hematology/oncology",
+      "type": "optional",
+      "finding": "Post-surgery chemo/radiation. Optional — can wait for pathology results.",
+      "aliases": [
+        "Heme/Onc consult"
+      ]
+    },
+    {
+      "label": "Informed consent for procedure",
+      "type": "shouldHaveOrdered",
+      "finding": "Serious operation — patient must understand risks/benefits.",
+      "aliases": [
+        "Consent"
+      ]
+    },
+    {
+      "label": "Counsel patient, cancer diagnosis",
+      "type": "shouldHaveOrdered",
+      "finding": "Important to counsel regarding cancer diagnosis and next steps.",
+      "aliases": [
+        "Cancer counseling"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    {
+      "order": "Occult blood, stool",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Important screening — will be positive. Can be gathered from DRE."
+    },
+    "Colonoscopy",
+    "CT abdomen/pelvis with contrast",
+    "Chest X-ray / CT chest",
+    "CEA, serum",
+    "BMP / CMP / LFTs",
+    "ECG, 12 lead",
+    "PT/PTT / INR",
+    "Type and screen / Type and Rh",
+    "Diet, NPO",
+    "Consult, colorectal surgery / Laparotomy",
+    {
+      "order": "Consult, hematology/oncology",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Post-surgery chemo/radiation. Optional — can wait for pathology results."
+    },
+    "Informed consent for procedure",
+    "Counsel patient, cancer diagnosis"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Colon Cancer (Adenocarcinoma)."
 }

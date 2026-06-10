@@ -1,68 +1,120 @@
 {
   "id": 78,
   "topic": "Generalized Weakness",
-  "diagnosis": "Rental Cell Carcinoma",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Generalized Weakness",
+  "diagnosis": "Renal Cell Carcinoma",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Skin",
-    "Physical Exam: Neurological",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Extremities",
-    "PT/INR",
-    "CT Abdomen/Pelvis"
-  ],
-  "should_avoid": [
-    "Tylenol",
-    "CXR",
+    "Physical Exam: Abdomen / Flank",
+    "UA",
     "CBC",
-    "Comprehensive metabolic panel"
+    "BMP / Calcium",
+    "CT abdomen/pelvis with IV contrast",
+    "Renal US",
+    "Refer urology / oncology"
   ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for generalized weakness.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Rental Cell Carcinoma.",
-    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Rental Cell Carcinoma.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with generalized weakness.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Rental Cell Carcinoma.",
-    "PT/INR": "Appropriate CCS order for Rental Cell Carcinoma: PT/INR.",
-    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with generalized weakness.",
-    "Tylenol": "CCS review: avoid this order for Rental Cell Carcinoma — it does not change acute management.",
-    "CXR": "CCS review: avoid this order for Rental Cell Carcinoma — it does not change acute management.",
-    "CBC": "CBC is not needed for uncomplicated Rental Cell Carcinoma without fever, systemic symptoms, or abnormal vitals.",
-    "Comprehensive metabolic panel": "CCS review: avoid this order for Rental Cell Carcinoma — it does not change acute management."
+    "Physical Exam: Abdomen / Flank": "Palpable flank mass.",
+    "UA": "Microscopic or gross hematuria.",
+    "CBC": "Polycythemia (EPO) or anemia.",
+    "BMP / Calcium": "Hypercalcemia (PTHrP).",
+    "CT abdomen/pelvis with IV contrast": "Enhancing renal mass. Staging.",
+    "Renal US": "Solid vs cystic mass.",
+    "Refer urology / oncology": "Partial or radical nephrectomy. Systemic therapy if metastatic."
   },
-  "hpi": "Missed a critical diagnosis of renal cell carcinoma. This patient presented with generalized weakness and had multiple risk factors for malignancy. The initial workup did not include imaging to evaluate for possible malignancy, which led to a delay in diagnosis. This case highlights the importance of considering malignancy in patients with unexplained symptoms.",
+  "hpi": "{{patient_name}} presents with generalized weakness, fatigue, weight loss, fever, and flank pain. Classic triad of RCC: flank pain + palpable flank mass + hematuria. However, triad present only in 10% — most present with incidental finding or paraneoplastic syndromes. RCC is an adenocarcinoma of the renal cortex, most common type: clear cell carcinoma. Paraneoplastic syndromes: hypercalcemia (PTHrP), polycythemia (EPO), hypertension (renin), Stauffer syndrome (hepatic dysfunction without liver mets). Diagnosis: CT abdomen/pelvis with IV contrast — enhancing renal mass. Renal US differentiates solid vs cystic. No biopsy needed before surgery if resectable. Treatment: localized → partial or radical nephrectomy. Metastatic → systemic therapy (immunotherapy — checkpoint inhibitors, targeted therapy — VEGF/TKI inhibitors). Cytoreductive nephrectomy in select metastatic patients. Refer urology/oncology.",
+  "hpi_narrative": "{{patient_name}} presents with generalized weakness, fatigue, weight loss, fever, and flank pain. Classic triad of RCC: flank pain + palpable flank mass + hematuria. However, triad present only in 10% — most present with incidental finding or paraneoplastic syndromes. RCC is an adenocarcinoma of the renal cortex, most common type: clear cell carcinoma. Paraneoplastic syndromes: hypercalcemia (PTHrP), polycythemia (EPO), hypertension (renin), Stauffer syndrome (hepatic dysfunction without liver mets). Diagnosis: CT abdomen/pelvis with IV contrast — enhancing renal mass. Renal US differentiates solid vs cystic. No biopsy needed before surgery if resectable. Treatment: localized → partial or radical nephrectomy. Metastatic → systemic therapy (immunotherapy — checkpoint inhibitors, targeted therapy — VEGF/TKI inhibitors). Cytoreductive nephrectomy in select metastatic patients. Refer urology/oncology.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm feeling really weak and tired all the time. It's scary not knowing what's wrong.",
-    "history": "I just can't seem to get out of bed. I used to be active, but now I feel exhausted.",
-    "pain": "I have this dull ache in my side that won't go away."
+    "chief_complaint": "Generalized weakness, weight loss, flank pain, hematuria",
+    "history": "{{patient_name}} presents with generalized weakness, fatigue, weight loss, fever, and flank pain. Classic triad of RCC: flank pain + palpable flank mass + hematuria. However, triad present only in 10…",
+    "pain": "Generalized weakness, weight loss, flank pain, hematuria"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Missed a critical diagnosis of renal cell carcinoma. This patient presented with generalized weakness and had multiple risk factors for malignancy. The initial workup did not include imaging to evaluate for possible malignancy, which led to a delay in diagnosis. This case highlights the importance of considering malignancy in patients with unexplained symptoms.",
+  "ccs_category": "Urology / Oncology",
+  "chief_complaint": "Generalized weakness, weight loss, flank pain, hematuria",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Ordered: Comprehensive metabolic panel",
-    "Ordered: CT abdomen/pelvis, without contrast",
-    "Ordered: CBC"
+    {
+      "label": "Physical Exam: Abdomen / Flank",
+      "type": "correctlyOrdered",
+      "finding": "Palpable flank mass.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "UA",
+      "type": "correctlyOrdered",
+      "finding": "Microscopic or gross hematuria.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Polycythemia (EPO) or anemia.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "BMP / Calcium",
+      "type": "correctlyOrdered",
+      "finding": "Hypercalcemia (PTHrP).",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "CT abdomen/pelvis with IV contrast",
+      "type": "correctlyOrdered",
+      "finding": "Enhancing renal mass. Staging.",
+      "aliases": [
+        "CT"
+      ]
+    },
+    {
+      "label": "Renal US",
+      "type": "correctlyOrdered",
+      "finding": "Solid vs cystic mass.",
+      "aliases": [
+        "Renal US"
+      ]
+    },
+    {
+      "label": "Refer urology / oncology",
+      "type": "correctlyOrdered",
+      "finding": "Partial or radical nephrectomy. Systemic therapy if metastatic.",
+      "aliases": [
+        "Urology referral"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Abdomen / Flank",
+    "UA",
+    "CBC",
+    "BMP / Calcium",
+    "CT abdomen/pelvis with IV contrast",
+    "Renal US",
+    "Refer urology / oncology"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Renal Cell Carcinoma."
 }

@@ -1,60 +1,370 @@
 {
   "id": 24,
-  "topic": "Burning During Urination",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Shortness of Breath",
+  "title": "Shortness of Breath",
+  "diagnosis": "Congestive Heart Failure (Systolic Dysfunction)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Obtain urine sample for culture and sensitivity",
-    "Prescribe broad-spectrum antibiotics pending culture results",
-    "order1",
-    "CMP/BMP",
-    "UA (Urinalysis ± culture)"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: HEENT / Neck",
+    "CBC",
+    "TSH",
+    "Pulse oximetry",
+    "ECG",
+    "Cardiac troponin",
+    {
+      "order": "BNP",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Elevated in CHF."
+    },
+    "Chest X-ray",
+    "Echocardiography",
+    "HbA1c / Glucose",
+    "BMP / CMP / LFTs",
+    "Furosemide (Lasix)",
+    "Nitroglycerin",
+    "I/O monitoring",
+    "Beta-blocker (Carvedilol preferred)",
+    "Low sodium diet",
+    "Smoking cessation",
+    "Limit alcohol",
+    "Pneumococcal vaccine",
+    "Tdap",
+    "Herpes zoster vaccine"
   ],
   "should_avoid": [
-    "order2",
-    "Order imaging studies such as CT or MRI, as they are not indicated in a patient presenting with burning during urination."
+    "Stress test",
+    "Stress test during exacerbation"
   ],
   "rationale": {
-    "Obtain urine sample for culture and sensitivity": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Prescribe broad-spectrum antibiotics pending culture results": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "order1": "Appropriate CCS order for this diagnosis: order1.",
-    "CMP/BMP": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "UA (Urinalysis ± culture)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "order2": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "Order imaging studies such as CT or MRI, as they are not indicated in a patient presenting with burning during urination.": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Determine severity.",
+    "Physical Exam: Chest / Lungs": "Dyspnea — lung exam for crackles.",
+    "Physical Exam: Heart / Cardiovascular": "S3 gallop, JVD.",
+    "Physical Exam: Extremities / Spine": "Bilateral LE pitting edema.",
+    "Physical Exam: HEENT / Neck": "JVD.",
+    "CBC": "Screening.",
+    "TSH": "Thyroid pathology may precipitate HF.",
+    "Pulse oximetry": "Dyspnea — check oxygenation.",
+    "ECG": "Arrhythmias precipitate HF.",
+    "Cardiac troponin": "Rule out superimposed ischemia.",
+    "BNP": "Elevated in CHF.",
+    "Chest X-ray": "Pulmonary edema + cardiomegaly.",
+    "Echocardiography": "Reduced EF — confirms systolic dysfunction.",
+    "HbA1c / Glucose": "DM precipitates HF.",
+    "BMP / CMP / LFTs": "Screening.",
+    "Stress test": "Contraindicated during acute HF exacerbation.",
+    "Furosemide (Lasix)": "Volume overload — IV loop diuretic.",
+    "Nitroglycerin": "Afterload reduction + coronary dilation.",
+    "I/O monitoring": "Monitor fluid status during diuresis.",
+    "Beta-blocker (Carvedilol preferred)": "Start after diuresis, before discharge. Carvedilol per COMET trial.",
+    "Low sodium diet": "Lifestyle modification.",
+    "Smoking cessation": "CHF precipitant.",
+    "Limit alcohol": "Alcohol precipitates CHF.",
+    "Pneumococcal vaccine": "CHF + smoker = indication.",
+    "Tdap": "Every 10 years.",
+    "Herpes zoster vaccine": "Age >50 — Shingrix.",
+    "Stress test during exacerbation": "Contraindicated until CHF resolved."
   },
-  "hpi": null,
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is an older man with history of prior myocardial infarction and hypertension on lisinopril who presents with progressive dyspnea, orthopnea, PND, and bilateral lower extremity pitting edema. Exam reveals JVD, S3 gallop, pulmonary crackles, and expiratory wheezing. CXR shows pulmonary edema and cardiomegaly. Echo confirms reduced ejection fraction — systolic dysfunction. BNP is elevated. NYHA Class III-IV. Treatment: IV loop diuretic (furosemide) for volume overload, continue ACEI, add nitroglycerin. Once acute exacerbation resolves and patient is euvolemic, start beta-blocker (carvedilol preferred). Digoxin for symptom control if needed. No stress tests until recovered. Admit to inpatient unit. Discharge: low-sodium diet, smoking cessation, alcohol avoidance, pneumococcal and zoster vaccines, Tdap.",
+  "hpi_narrative": "{{patient_name}} is an older man with history of prior myocardial infarction and hypertension on lisinopril who presents with progressive dyspnea, orthopnea, PND, and bilateral lower extremity pitting edema. Exam reveals JVD, S3 gallop, pulmonary crackles, and expiratory wheezing. CXR shows pulmonary edema and cardiomegaly. Echo confirms reduced ejection fraction — systolic dysfunction. BNP is elevated. NYHA Class III-IV. Treatment: IV loop diuretic (furosemide) for volume overload, continue ACEI, add nitroglycerin. Once acute exacerbation resolves and patient is euvolemic, start beta-blocker (carvedilol preferred). Digoxin for symptom control if needed. No stress tests until recovered. Admit to inpatient unit. Discharge: low-sodium diet, smoking cessation, alcohol avoidance, pneumococcal and zoster vaccines, Tdap.",
+  "physical_exam": [
+    [
+      "General",
+      "Dyspneic."
+    ],
+    [
+      "Cardiovascular",
+      "S3 gallop, JVD."
+    ],
+    [
+      "Respiratory",
+      "Pulmonary crackles, wheezing."
+    ],
+    [
+      "Heent",
+      "JVD."
+    ],
+    [
+      "Musculoskeletal",
+      "Bilateral LE pitting edema."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I don't feel right. Something's wrong.",
-    "history": "It started... I don't know when.",
-    "pain": "Everything hurts."
+    "chief_complaint": "Progressive dyspnea, orthopnea, PND, LE edema",
+    "history": "{{patient_name}} is an older man with history of prior myocardial infarction and hypertension on lisinopril who presents with progressive dyspnea, orthopnea, PND, and bilateral lower extremity pittin…",
+    "pain": "Progressive dyspnea, orthopnea, PND, LE edema"
   },
-  "ccs_category": null,
-  "case_summary": null,
+  "ccs_category": "Internal Medicine / Cardiology",
+  "chief_complaint": "Progressive dyspnea, orthopnea, PND, LE edema",
+  "case_summary": "Systolic CHF exacerbation. Prior MI + HTN. Echo: reduced EF. IV Lasix + NTG + lisinopril. Carvedilol before discharge. Inpatient admission.",
+  "decoys": [
+    {
+      "label": "Stress test during exacerbation",
+      "reason_wrong": "Contraindicated until CHF resolved."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Obtain urine sample for culture and sensitivity",
-    "Prescribe broad-spectrum antibiotics pending culture results",
-    "order1",
-    "CMP/BMP",
-    "UA (Urinalysis ± culture)"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Determine severity.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Dyspnea — lung exam for crackles.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "S3 gallop, JVD.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "type": "correctlyOrdered",
+      "finding": "Bilateral LE pitting edema.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "correctlyOrdered",
+      "finding": "JVD.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "TSH",
+      "type": "shouldHaveOrdered",
+      "finding": "Thyroid pathology may precipitate HF.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "shouldHaveOrdered",
+      "finding": "Dyspnea — check oxygenation.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "Arrhythmias precipitate HF.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Cardiac troponin",
+      "type": "shouldHaveOrdered",
+      "finding": "Rule out superimposed ischemia.",
+      "aliases": [
+        "Troponin"
+      ]
+    },
+    {
+      "label": "BNP",
+      "type": "optional",
+      "finding": "Elevated in CHF.",
+      "aliases": [
+        "BNP"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Pulmonary edema + cardiomegaly.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "Echocardiography",
+      "type": "correctlyOrdered",
+      "finding": "Reduced EF — confirms systolic dysfunction.",
+      "aliases": [
+        "Echo"
+      ]
+    },
+    {
+      "label": "HbA1c / Glucose",
+      "type": "shouldHaveOrdered",
+      "finding": "DM precipitates HF.",
+      "aliases": [
+        "HbA1c"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Stress test",
+      "type": "correctlyAvoided",
+      "finding": "Contraindicated during acute HF exacerbation.",
+      "aliases": [
+        "Stress echo"
+      ]
+    },
+    {
+      "label": "Furosemide (Lasix)",
+      "type": "correctlyOrdered",
+      "finding": "Volume overload — IV loop diuretic.",
+      "aliases": [
+        "Lasix",
+        "Diuretic"
+      ]
+    },
+    {
+      "label": "Nitroglycerin",
+      "type": "shouldHaveOrdered",
+      "finding": "Afterload reduction + coronary dilation.",
+      "aliases": [
+        "NTG"
+      ]
+    },
+    {
+      "label": "I/O monitoring",
+      "type": "shouldHaveOrdered",
+      "finding": "Monitor fluid status during diuresis.",
+      "aliases": [
+        "I/Os"
+      ]
+    },
+    {
+      "label": "Beta-blocker (Carvedilol preferred)",
+      "type": "shouldHaveOrdered",
+      "finding": "Start after diuresis, before discharge. Carvedilol per COMET trial.",
+      "aliases": [
+        "Coreg"
+      ]
+    },
+    {
+      "label": "Low sodium diet",
+      "type": "shouldHaveOrdered",
+      "finding": "Lifestyle modification.",
+      "aliases": [
+        "Low salt"
+      ]
+    },
+    {
+      "label": "Smoking cessation",
+      "type": "shouldHaveOrdered",
+      "finding": "CHF precipitant.",
+      "aliases": [
+        "Smoking"
+      ]
+    },
+    {
+      "label": "Limit alcohol",
+      "type": "shouldHaveOrdered",
+      "finding": "Alcohol precipitates CHF.",
+      "aliases": [
+        "Alcohol"
+      ]
+    },
+    {
+      "label": "Pneumococcal vaccine",
+      "type": "shouldHaveOrdered",
+      "finding": "CHF + smoker = indication.",
+      "aliases": [
+        "Pneumovax"
+      ]
+    },
+    {
+      "label": "Tdap",
+      "type": "shouldHaveOrdered",
+      "finding": "Every 10 years.",
+      "aliases": [
+        "Tdap"
+      ]
+    },
+    {
+      "label": "Herpes zoster vaccine",
+      "type": "shouldHaveOrdered",
+      "finding": "Age >50 — Shingrix.",
+      "aliases": [
+        "Shingrix"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: HEENT / Neck",
+    "CBC",
+    "TSH",
+    "Pulse oximetry",
+    "ECG",
+    "Cardiac troponin",
+    {
+      "order": "BNP",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Elevated in CHF."
+    },
+    "Chest X-ray",
+    "Echocardiography",
+    "HbA1c / Glucose",
+    "BMP / CMP / LFTs",
+    "Furosemide (Lasix)",
+    "Nitroglycerin",
+    "I/O monitoring",
+    "Beta-blocker (Carvedilol preferred)",
+    "Low sodium diet",
+    "Smoking cessation",
+    "Limit alcohol",
+    "Pneumococcal vaccine",
+    "Tdap",
+    "Herpes zoster vaccine"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Screenshot file is identical to case 23; re-capture needed."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Congestive Heart Failure (Systolic Dysfunction)."
 }

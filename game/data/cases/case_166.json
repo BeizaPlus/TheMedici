@@ -1,58 +1,99 @@
 {
   "id": 166,
-  "topic": "Oral Bleeding",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Easy Bruising / Bleeding",
+  "title": "Easy Bruising / Bleeding",
+  "diagnosis": "Hemophilia A (Factor VIII Deficiency)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "ED or ward",
-    "CBC",
-    "PTT",
+    "PT/PTT / Platelets",
+    "Mixing study",
     "Factor VIII assay",
-    "Factor VIII replacement",
-    "Avoid NSAIDs / IM injections"
+    "Factor VIII concentrate / DDAVP",
+    "Avoid ASA/NSAIDs/IM injections"
   ],
   "should_avoid": [],
   "rationale": {
-    "ED or ward": "Appropriate CCS order for this diagnosis: ED or ward.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "PTT": "Appropriate CCS order for this diagnosis: PTT.",
-    "Factor VIII assay": "Appropriate CCS order for this diagnosis: Factor VIII assay.",
-    "Factor VIII replacement": "Appropriate CCS order for this diagnosis: Factor VIII replacement.",
-    "Avoid NSAIDs / IM injections": "Appropriate CCS order for this diagnosis: Avoid NSAIDs / IM injections."
+    "PT/PTT / Platelets": "PTT prolonged, PT normal, Plt normal.",
+    "Mixing study": "PTT corrects — excludes inhibitor.",
+    "Factor VIII assay": "Low FVIII — confirms diagnosis.",
+    "Factor VIII concentrate / DDAVP": "Replacement or desmopressin for mild.",
+    "Avoid ASA/NSAIDs/IM injections": "Bleeding precautions."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
+  "hpi_narrative": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — oral bleeding. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This oral bleeding won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Joint bleeding, easy bruising, prolonged PTT",
+    "history": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet …",
+    "pain": "Joint bleeding, easy bruising, prolonged PTT"
   },
-  "ccs_category": null,
+  "ccs_category": "Hematology",
+  "chief_complaint": "Joint bleeding, easy bruising, prolonged PTT",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "ED or ward",
-    "CBC",
-    "PTT",
+    {
+      "label": "PT/PTT / Platelets",
+      "type": "correctlyOrdered",
+      "finding": "PTT prolonged, PT normal, Plt normal.",
+      "aliases": [
+        "Coags"
+      ]
+    },
+    {
+      "label": "Mixing study",
+      "type": "correctlyOrdered",
+      "finding": "PTT corrects — excludes inhibitor.",
+      "aliases": [
+        "Mixing study"
+      ]
+    },
+    {
+      "label": "Factor VIII assay",
+      "type": "correctlyOrdered",
+      "finding": "Low FVIII — confirms diagnosis.",
+      "aliases": [
+        "FVIII"
+      ]
+    },
+    {
+      "label": "Factor VIII concentrate / DDAVP",
+      "type": "correctlyOrdered",
+      "finding": "Replacement or desmopressin for mild.",
+      "aliases": [
+        "FVIII",
+        "DDAVP"
+      ]
+    },
+    {
+      "label": "Avoid ASA/NSAIDs/IM injections",
+      "type": "correctlyOrdered",
+      "finding": "Bleeding precautions.",
+      "aliases": [
+        "Precautions"
+      ]
+    }
+  ],
+  "order_sets": [
+    "PT/PTT / Platelets",
+    "Mixing study",
     "Factor VIII assay",
-    "Factor VIII replacement",
-    "Avoid NSAIDs / IM injections"
+    "Factor VIII concentrate / DDAVP",
+    "Avoid ASA/NSAIDs/IM injections"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Hemophilia A (Factor VIII Deficiency)."
 }

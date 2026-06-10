@@ -1,66 +1,131 @@
 {
   "id": 74,
   "topic": "Persistent Cough",
+  "title": "Persistent Cough",
   "diagnosis": "Lung Cancer (Adenocarcinoma)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Ordered the following: CT scan",
-    "Ordered the following: Chest X-ray",
-    "Ordered the following: Pulmonary consult",
-    "Ordered the following: CBC",
-    "Ordered the following: Comprehensive metabolic panel",
-    "Considered: Bronchoscopy",
-    "Considered: Sputum culture",
-    "Considered: Pulmonary function tests"
+    "Physical Exam: Chest / Lungs",
+    "CXR",
+    "CT chest with IV contrast",
+    "Biopsy (bronchoscopic / CT-guided / surgical)",
+    "PET/CT / Brain MRI",
+    "PFTs",
+    "Refer oncology / thoracic surgery",
+    "Smoking cessation"
   ],
-  "should_avoid": [
-    "Avoided: Antibiotics",
-    "Avoided: Steroids"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Ordered the following: CT scan": "Appropriate CCS order for Lung Cancer (Adenocarcinoma): Ordered the following: CT scan.",
-    "Ordered the following: Chest X-ray": "Evaluate chest and lungs as part of the initial exam for persistent cough.",
-    "Ordered the following: Pulmonary consult": "Appropriate CCS order for Lung Cancer (Adenocarcinoma): Ordered the following: Pulmonary consult.",
-    "Ordered the following: CBC": "Laboratory testing when systemic illness or severity warrants labs in Lung Cancer (Adenocarcinoma).",
-    "Ordered the following: Comprehensive metabolic panel": "Laboratory testing when systemic illness or severity warrants labs in Lung Cancer (Adenocarcinoma).",
-    "Considered: Bronchoscopy": "Appropriate CCS order for Lung Cancer (Adenocarcinoma): Considered: Bronchoscopy.",
-    "Considered: Sputum culture": "Laboratory testing when systemic illness or severity warrants labs in Lung Cancer (Adenocarcinoma).",
-    "Considered: Pulmonary function tests": "Appropriate CCS order for Lung Cancer (Adenocarcinoma): Considered: Pulmonary function tests.",
-    "Avoided: Antibiotics": "CCS review: avoid this order for Lung Cancer (Adenocarcinoma) — it does not change acute management.",
-    "Avoided: Steroids": "CCS review: avoid this order for Lung Cancer (Adenocarcinoma) — it does not change acute management."
+    "Physical Exam: Chest / Lungs": "Localized wheeze, decreased breath sounds.",
+    "CXR": "Solitary pulmonary nodule/mass.",
+    "CT chest with IV contrast": "Characterize mass. Lymphadenopathy.",
+    "Biopsy (bronchoscopic / CT-guided / surgical)": "Tissue diagnosis. NSCLC vs SCLC. Molecular testing (EGFR, ALK, ROS1, PD-L1).",
+    "PET/CT / Brain MRI": "Staging — metastases.",
+    "PFTs": "Operability assessment.",
+    "Refer oncology / thoracic surgery": "Multidisciplinary management.",
+    "Smoking cessation": "Essential."
   },
-  "hpi": "This case highlights the importance of thorough evaluation in patients presenting with persistent cough. The differential diagnosis can be broad, and appropriate imaging and consultations are crucial in guiding management. In this case, the diagnosis of lung cancer was established through imaging and further evaluation, emphasizing the need for timely intervention.",
+  "hpi": "{{patient_name}} presents with persistent cough >3 weeks, hemoptysis, weight loss, chest pain, dyspnea, and fatigue. History of smoking (most common risk factor). CXR shows a solitary pulmonary nodule or mass — may have spiculated borders, pleural effusion, hilar lymphadenopathy. CT chest with IV contrast for characterization. Tissue diagnosis: bronchoscopy with biopsy, CT-guided needle biopsy, or surgical biopsy. NSCLC (adenocarcinoma most common in non-smokers, also squamous, large cell) vs SCLC (almost exclusively smokers, aggressive, central). NSCLC staging: PET/CT, brain MRI. Treatment: NSCLC stage I-II: surgical resection (lobectomy). Stage III: chemoradiation. Stage IV: systemic therapy (targeted therapy if EGFR/ALK/ROS1/Pd-L1 positive; immunotherapy; chemo). SCLC: limited → chemoradiation; extensive → chemo + immunotherapy. Palliative care. Smoking cessation.",
+  "hpi_narrative": "{{patient_name}} presents with persistent cough >3 weeks, hemoptysis, weight loss, chest pain, dyspnea, and fatigue. History of smoking (most common risk factor). CXR shows a solitary pulmonary nodule or mass — may have spiculated borders, pleural effusion, hilar lymphadenopathy. CT chest with IV contrast for characterization. Tissue diagnosis: bronchoscopy with biopsy, CT-guided needle biopsy, or surgical biopsy. NSCLC (adenocarcinoma most common in non-smokers, also squamous, large cell) vs SCLC (almost exclusively smokers, aggressive, central). NSCLC staging: PET/CT, brain MRI. Treatment: NSCLC stage I-II: surgical resection (lobectomy). Stage III: chemoradiation. Stage IV: systemic therapy (targeted therapy if EGFR/ALK/ROS1/Pd-L1 positive; immunotherapy; chemo). SCLC: limited → chemoradiation; extensive → chemo + immunotherapy. Palliative care. Smoking cessation.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about this cough that won't go away. I don't know what's wrong.",
-    "history": "I've been coughing for weeks. It feels worse at night.",
-    "pain": "It hurts when I cough."
+    "chief_complaint": "Persistent cough, hemoptysis, weight loss",
+    "history": "{{patient_name}} presents with persistent cough >3 weeks, hemoptysis, weight loss, chest pain, dyspnea, and fatigue. History of smoking (most common risk factor). CXR shows a solitary pulmonary nodul…",
+    "pain": "Persistent cough, hemoptysis, weight loss"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "This case highlights the importance of thorough evaluation in patients presenting with persistent cough. The differential diagnosis can be broad, and appropriate imaging and consultations are crucial in guiding management. In this case, the diagnosis of lung cancer was established through imaging and further evaluation, emphasizing the need for timely intervention.",
+  "ccs_category": "Pulmonology / Oncology",
+  "chief_complaint": "Persistent cough, hemoptysis, weight loss",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following: CT scan",
-    "Ordered the following: Chest X-ray",
-    "Ordered the following: Pulmonary consult",
-    "Ordered the following: CBC"
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Localized wheeze, decreased breath sounds.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "CXR",
+      "type": "correctlyOrdered",
+      "finding": "Solitary pulmonary nodule/mass.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "CT chest with IV contrast",
+      "type": "correctlyOrdered",
+      "finding": "Characterize mass. Lymphadenopathy.",
+      "aliases": [
+        "CT chest"
+      ]
+    },
+    {
+      "label": "Biopsy (bronchoscopic / CT-guided / surgical)",
+      "type": "correctlyOrdered",
+      "finding": "Tissue diagnosis. NSCLC vs SCLC. Molecular testing (EGFR, ALK, ROS1, PD-L1).",
+      "aliases": [
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "PET/CT / Brain MRI",
+      "type": "correctlyOrdered",
+      "finding": "Staging — metastases.",
+      "aliases": [
+        "PET"
+      ]
+    },
+    {
+      "label": "PFTs",
+      "type": "correctlyOrdered",
+      "finding": "Operability assessment.",
+      "aliases": [
+        "PFTs"
+      ]
+    },
+    {
+      "label": "Refer oncology / thoracic surgery",
+      "type": "correctlyOrdered",
+      "finding": "Multidisciplinary management.",
+      "aliases": [
+        "Referral"
+      ]
+    },
+    {
+      "label": "Smoking cessation",
+      "type": "correctlyOrdered",
+      "finding": "Essential.",
+      "aliases": [
+        "Smoking"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Chest / Lungs",
+    "CXR",
+    "CT chest with IV contrast",
+    "Biopsy (bronchoscopic / CT-guided / surgical)",
+    "PET/CT / Brain MRI",
+    "PFTs",
+    "Refer oncology / thoracic surgery",
+    "Smoking cessation"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Lung Cancer (Adenocarcinoma)."
 }

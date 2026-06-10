@@ -1,67 +1,131 @@
 {
   "id": 62,
   "topic": "Altered Mental Status",
-  "diagnosis": "Grand Mal Seizure (Complex Tonic-Clonic Seizure)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Altered Mental Status",
+  "diagnosis": "Grand Mal Seizure (Generalized Tonic-Clonic)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
-    "Physical Exam: Abdominal",
-    "Physical Exam: Extremities / Skin",
-    "CBC with differential",
-    "Lumbar puncture",
-    "Thyroid panel, urine",
-    "Magnesium level",
-    "Urinalysis",
-    "Electrolytes"
+    "Physical Exam: Neuro / Psych",
+    "CT/MRI brain",
+    "EEG",
+    "CBC / BMP / Mg / Ca / glucose",
+    "Toxicology screen",
+    "LP (if infection suspected)",
+    "Driving restrictions",
+    "Neurology follow-up"
   ],
-  "should_avoid": [
-    "Lumbar puncture"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for altered mental status.",
-    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for altered mental status.",
-    "Physical Exam: Abdominal": "Appropriate CCS order for Grand Mal Seizure (Complex Tonic-Clonic Seizure): Physical Exam: Abdominal.",
-    "Physical Exam: Extremities / Skin": "Skin exam may show rashes or systemic signs relevant to Grand Mal Seizure (Complex Tonic-Clonic Seizure).",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Grand Mal Seizure (Complex Tonic-Clonic Seizure).",
-    "Lumbar puncture": "Advanced imaging is not indicated early for Grand Mal Seizure (Complex Tonic-Clonic Seizure) when the diagnosis is clinical.",
-    "Thyroid panel, urine": "Appropriate CCS order for Grand Mal Seizure (Complex Tonic-Clonic Seizure): Thyroid panel, urine.",
-    "Magnesium level": "Appropriate CCS order for Grand Mal Seizure (Complex Tonic-Clonic Seizure): Magnesium level.",
-    "Urinalysis": "Appropriate CCS order for Grand Mal Seizure (Complex Tonic-Clonic Seizure): Urinalysis.",
-    "Electrolytes": "Appropriate CCS order for Grand Mal Seizure (Complex Tonic-Clonic Seizure): Electrolytes."
+    "Physical Exam: Neuro / Psych": "Post-ictal confusion. Tongue laceration.",
+    "CT/MRI brain": "Rule out structural lesion, hemorrhage, mass.",
+    "EEG": "Epileptiform discharges. Classify seizure type.",
+    "CBC / BMP / Mg / Ca / glucose": "Metabolic/electrolyte triggers.",
+    "Toxicology screen": "Drug-induced seizure.",
+    "LP (if infection suspected)": "Febrile, meningismus, immunocompromised.",
+    "Driving restrictions": "Per state law — mandatory reporting.",
+    "Neurology follow-up": "Outpatient EEG and management."
   },
-  "hpi": "Identifying the potential underlying cause of the patient's seizure is critical. The patient should be monitored closely for any further seizures. The history of this patient suggests that this should be considered.",
+  "hpi": "{{patient_name}} presents with witnessed generalized tonic-clonic seizure: sudden loss of consciousness, tonic phase (stiffening), clonic phase (rhythmic jerking), post-ictal confusion/drowsiness. Tongue laceration and urinary incontinence are common. First unprovoked seizure requires thorough workup: CT/MRI brain (structural lesion), EEG (epileptiform discharges, classify seizure type), labs (CBC, BMP, glucose, tox screen, LP if infection suspected). Alcohol withdrawal, electrolyte abnormalities (hypoNa, hypoMg, hypoCa), hypoglycemia, and CNS infection are common triggers. Do NOT start anti-epileptic drugs after single unprovoked seizure unless high risk (abnormal EEG, structural lesion, family history). Driving restrictions per state law. If recurrent seizures or high risk → start AED (levetiracetam, lamotrigine, valproic acid). Status epilepticus: >5 min of continuous seizure or recurrent without return to baseline = medical emergency (IV lorazepam/diazepam).",
+  "hpi_narrative": "{{patient_name}} presents with witnessed generalized tonic-clonic seizure: sudden loss of consciousness, tonic phase (stiffening), clonic phase (rhythmic jerking), post-ictal confusion/drowsiness. Tongue laceration and urinary incontinence are common. First unprovoked seizure requires thorough workup: CT/MRI brain (structural lesion), EEG (epileptiform discharges, classify seizure type), labs (CBC, BMP, glucose, tox screen, LP if infection suspected). Alcohol withdrawal, electrolyte abnormalities (hypoNa, hypoMg, hypoCa), hypoglycemia, and CNS infection are common triggers. Do NOT start anti-epileptic drugs after single unprovoked seizure unless high risk (abnormal EEG, structural lesion, family history). Driving restrictions per state law. If recurrent seizures or high risk → start AED (levetiracetam, lamotrigine, valproic acid). Status epilepticus: >5 min of continuous seizure or recurrent without return to baseline = medical emergency (IV lorazepam/diazepam).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I was really scared when I had the seizure. I didn't know what was happening.",
-    "history": "I have had seizures before, but this one felt different.",
-    "pain": "I felt a strange sensation before it happened."
+    "chief_complaint": "Witnessed generalized tonic-clonic seizure",
+    "history": "{{patient_name}} presents with witnessed generalized tonic-clonic seizure: sudden loss of consciousness, tonic phase (stiffening), clonic phase (rhythmic jerking), post-ictal confusion/drowsiness. To…",
+    "pain": "Witnessed generalized tonic-clonic seizure"
   },
   "ccs_category": "Neurology",
-  "case_summary": "Identifying the potential underlying cause of the patient's seizure is critical. The patient should be monitored closely for any further seizures. The history of this patient suggests that this should be considered.",
+  "chief_complaint": "Witnessed generalized tonic-clonic seizure",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Ordered: CBC with differential",
-    "Ordered: Electroencephalography",
-    "Ordered: CT Head without contrast / MRI"
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Post-ictal confusion. Tongue laceration.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "CT/MRI brain",
+      "type": "correctlyOrdered",
+      "finding": "Rule out structural lesion, hemorrhage, mass.",
+      "aliases": [
+        "Brain imaging"
+      ]
+    },
+    {
+      "label": "EEG",
+      "type": "correctlyOrdered",
+      "finding": "Epileptiform discharges. Classify seizure type.",
+      "aliases": [
+        "EEG"
+      ]
+    },
+    {
+      "label": "CBC / BMP / Mg / Ca / glucose",
+      "type": "correctlyOrdered",
+      "finding": "Metabolic/electrolyte triggers.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Toxicology screen",
+      "type": "correctlyOrdered",
+      "finding": "Drug-induced seizure.",
+      "aliases": [
+        "Tox screen"
+      ]
+    },
+    {
+      "label": "LP (if infection suspected)",
+      "type": "correctlyOrdered",
+      "finding": "Febrile, meningismus, immunocompromised.",
+      "aliases": [
+        "LP"
+      ]
+    },
+    {
+      "label": "Driving restrictions",
+      "type": "correctlyOrdered",
+      "finding": "Per state law — mandatory reporting.",
+      "aliases": [
+        "Driving safety"
+      ]
+    },
+    {
+      "label": "Neurology follow-up",
+      "type": "correctlyOrdered",
+      "finding": "Outpatient EEG and management.",
+      "aliases": [
+        "Neurology"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Neuro / Psych",
+    "CT/MRI brain",
+    "EEG",
+    "CBC / BMP / Mg / Ca / glucose",
+    "Toxicology screen",
+    "LP (if infection suspected)",
+    "Driving restrictions",
+    "Neurology follow-up"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Grand Mal Seizure (Generalized Tonic-Clonic)."
 }

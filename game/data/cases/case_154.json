@@ -1,58 +1,77 @@
 {
   "id": 154,
   "topic": "Vaginal Discharge",
-  "diagnosis": "None specified",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Vaginal Discharge",
+  "diagnosis": "Trichomoniasis",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Clinic",
-    "Wet mount",
-    "Vaginal pH",
-    "HIV, RPR, chlamydia/gonorrhea NAAT",
-    "Oral metronidazole",
-    "Treat sexual partner"
+    "Pelvic exam",
+    "Wet mount / NAAT",
+    "Metronidazole 2g PO once"
   ],
   "should_avoid": [],
   "rationale": {
-    "Clinic": "Appropriate CCS order for None specified: Clinic.",
-    "Wet mount": "Appropriate CCS order for None specified: Wet mount.",
-    "Vaginal pH": "Appropriate CCS order for None specified: Vaginal pH.",
-    "HIV, RPR, chlamydia/gonorrhea NAAT": "Appropriate CCS order for None specified: HIV, RPR, chlamydia/gonorrhea NAAT.",
-    "Oral metronidazole": "Appropriate CCS order for None specified: Oral metronidazole.",
-    "Treat sexual partner": "Appropriate CCS order for None specified: Treat sexual partner."
+    "Pelvic exam": "Strawberry cervix, frothy discharge.",
+    "Wet mount / NAAT": "Motile trichomonads. Vaginal pH >4.5.",
+    "Metronidazole 2g PO once": "First-line. Treat partners. Avoid alcohol."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with profuse, frothy, yellow-green malodorous vaginal discharge, vulvar irritation, dysuria, and dyspareunia. Exam reveals strawberry cervix (punctate hemorrhages) and vaginal erythema. Caused by Trichomonas vaginalis — flagellated protozoan. Diagnosis: wet mount shows motile trichomonads (flagellated organisms). Vaginal pH >4.5. Whiff test may be positive. NAAT (PCR) is gold standard — more sensitive than wet mount. Treatment: metronidazole 2g PO once or tinidazole 2g PO once. Treat sexual partners (even if asymptomatic). Avoid alcohol during treatment and for 24h after metronidazole (disulfiram-like reaction). Screen for other STIs.",
+  "hpi_narrative": "{{patient_name}} presents with profuse, frothy, yellow-green malodorous vaginal discharge, vulvar irritation, dysuria, and dyspareunia. Exam reveals strawberry cervix (punctate hemorrhages) and vaginal erythema. Caused by Trichomonas vaginalis — flagellated protozoan. Diagnosis: wet mount shows motile trichomonads (flagellated organisms). Vaginal pH >4.5. Whiff test may be positive. NAAT (PCR) is gold standard — more sensitive than wet mount. Treatment: metronidazole 2g PO once or tinidazole 2g PO once. Treat sexual partners (even if asymptomatic). Avoid alcohol during treatment and for 24h after metronidazole (disulfiram-like reaction). Screen for other STIs.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — vaginal discharge. I'm really scared.",
-    "history": "It's been getting worse. They said something about none specified. ...",
-    "pain": "This vaginal discharge won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Profuse frothy yellow-green vaginal discharge",
+    "history": "{{patient_name}} presents with profuse, frothy, yellow-green malodorous vaginal discharge, vulvar irritation, dysuria, and dyspareunia. Exam reveals strawberry cervix (punctate hemorrhages) and vagin…",
+    "pain": "Profuse frothy yellow-green vaginal discharge"
   },
-  "ccs_category": null,
+  "ccs_category": "OB/GYN / ID",
+  "chief_complaint": "Profuse frothy yellow-green vaginal discharge",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Clinic",
-    "Wet mount",
-    "Vaginal pH",
-    "HIV, RPR, chlamydia/gonorrhea NAAT",
-    "Oral metronidazole",
-    "Treat sexual partner"
+    {
+      "label": "Pelvic exam",
+      "type": "correctlyOrdered",
+      "finding": "Strawberry cervix, frothy discharge.",
+      "aliases": [
+        "Pelvic Exam"
+      ]
+    },
+    {
+      "label": "Wet mount / NAAT",
+      "type": "correctlyOrdered",
+      "finding": "Motile trichomonads. Vaginal pH >4.5.",
+      "aliases": [
+        "Wet mount",
+        "Trich NAAT"
+      ]
+    },
+    {
+      "label": "Metronidazole 2g PO once",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Treat partners. Avoid alcohol.",
+      "aliases": [
+        "Flagyl"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Pelvic exam",
+    "Wet mount / NAAT",
+    "Metronidazole 2g PO once"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Trichomoniasis."
 }

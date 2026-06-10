@@ -3,95 +3,166 @@
   "topic": "Short Stature",
   "title": "Short Stature",
   "diagnosis": "Turner syndrome with coarctation of the aorta",
-  "differential": [
-    "Hypopituitarism",
-    "Noonan syndrome",
-    "Constitutional growth delay",
-    "Familial short stature"
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Cardiovascular",
+    "Electrocardiography (12-lead ECG)",
+    "Chest X-ray",
+    "Echocardiography",
+    "Chromosome analysis, karyotype",
+    "Consult, cardiothoracic surgery",
+    "Consult, pediatric endocrinology"
   ],
-  "chief_complaint": "Short stature — mother concerned about growth and weight",
+  "should_avoid": [
+    "Oxygen"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess stature, weight distribution, and Turner stigmata (webbed neck, shield chest, wide-spaced nipples).",
+    "Physical Exam: Heart / Cardiovascular": "Systolic murmur and four-extremity blood pressures — key for coarctation of the aorta.",
+    "Electrocardiography (12-lead ECG)": "Evaluate murmur and cardiac strain.",
+    "Chest X-ray": "Initial cardiac screening; may show rib notching or the 3-sign in coarctation.",
+    "Echocardiography": "Gold standard for coarctation of the aorta — stenosis and left ventricular hypertrophy.",
+    "Chromosome analysis, karyotype": "Turner syndrome 45,X genotype; 5–15% of girls with coarctation have Turner syndrome.",
+    "Consult, cardiothoracic surgery": "Surgical repair of coarctation of the aorta.",
+    "Consult, pediatric endocrinology": "Growth hormone therapy and long-term follow-up for Turner syndrome.",
+    "Oxygen": "Stable office visit — patient is not in respiratory distress."
+  },
+  "hpi": "{{patient_name}} is a 6-year-old girl who presents to your office with her mother for short stature. Her mother reports she is the shortest girl in her class and is concerned about her growth. The patient has a good appetite and eats more than others her age; her mother is also worried about her weight. She is doing well in school, is active, and her mother has no other concerns. Born at term (40 weeks) via uncomplicated vaginal delivery; APGAR scores 10 and 10. No hospitalizations or medical problems. Vaccinations up to date. Family history is unremarkable.",
   "hpi_narrative": "{{patient_name}} is a 6-year-old girl who presents to your office with her mother for short stature. Her mother reports she is the shortest girl in her class and is concerned about her growth. The patient has a good appetite and eats more than others her age; her mother is also worried about her weight. She is doing well in school, is active, and her mother has no other concerns. Born at term (40 weeks) via uncomplicated vaginal delivery; APGAR scores 10 and 10. No hospitalizations or medical problems. Vaccinations up to date. Family history is unremarkable.",
-  "case_summary": "Differential: Hypopituitarism, Noonan syndrome.\n\nThe patient has Turner syndrome with coarctation of the aorta. Turner syndrome is a genetic abnormality (45,X genotype). Features include short stature, webbed neck, wide-spaced nipples, and shield chest. Coarctation of the aorta is common. Physical exam typically reveals a systolic murmur and differing systolic blood pressure between upper and lower extremities. Initial screening includes chest X-ray and ECG, with echocardiography as the gold standard for coarctation. Chromosome analysis (karyotype) confirms Turner syndrome. Management includes cardiothoracic surgery for coarctation and pediatric endocrinology for growth hormone therapy. Growth hormone levels are usually normal but not utilized correctly; estradiol replacement may be needed for ovarian failure.",
-  "patient_sex": "female",
-  "patient_age_years": 6,
-  "location": "Office",
-  "specialty": "Pediatrics / Endocrinology",
-  "case_introduction": "Case Introduction\n\nDay 1 @ 9:00\nOffice\nA 6-year-old girl presents to your office due to short stature.",
-  "vitals": "Temperature:\n36.1 C (97.0 degrees F)\nPulse:\n85 beats/min, Regular\nRespiratory rate:\n16/minute\nBlood pressure, systolic:\n100 mm Hg\nBlood pressure, diastolic:\n60 mm Hg\nHeight:\n109.2 cm (43.0 in)\nWeight:\n25.0 kg (55.0 lb)\nBody Mass Index:\n10th percentile for Height. 90th percentile for weight.",
   "physical_exam": [
-    ["General", "Well-appearing 6-year-old girl; height 10th percentile, weight 90th percentile. Possible Turner stigmata: short stature, webbed neck, shield chest, widely spaced nipples."],
-    ["HEENT", "Negative on review of systems."],
-    ["Cardiovascular", "Systolic murmur on auscultation; compare systolic blood pressure in upper and lower extremities for coarctation."],
-    ["Respiratory", "Negative on review of systems."],
-    ["Abdomen", "Negative on review of systems."],
-    ["Genitourinary", "Negative on review of systems."],
-    ["Neuropsychiatric", "Negative on review of systems; doing well in school."]
+    [
+      "General",
+      "Well-appearing 6-year-old girl; height 10th percentile, weight 90th percentile. Possible Turner stigmata: short stature, webbed neck, shield chest, widely spaced nipples."
+    ],
+    [
+      "HEENT",
+      "Negative on review of systems."
+    ],
+    [
+      "Cardiovascular",
+      "Systolic murmur on auscultation; compare systolic blood pressure in upper and lower extremities for coarctation."
+    ],
+    [
+      "Respiratory",
+      "Negative on review of systems."
+    ],
+    [
+      "Abdomen",
+      "Negative on review of systems."
+    ],
+    [
+      "Genitourinary",
+      "Negative on review of systems."
+    ],
+    [
+      "Neuropsychiatric",
+      "Negative on review of systems; doing well in school."
+    ]
   ],
+  "vitals": "Temperature:\n36.1 C (97.0 degrees F)\nPulse:\n85 beats/min, Regular\nRespiratory rate:\n16/minute\nBlood pressure, systolic:\n100 mm Hg\nBlood pressure, diastolic:\n60 mm Hg\nHeight:\n109.2 cm (43.0 in)\nWeight:\n25.0 kg (55.0 lb)\nBody Mass Index:\n10th percentile for Height. 90th percentile for weight.",
   "patient_voice": {
     "chief_complaint": "My mom says I'm the shortest in my class.",
     "history": "My mom brought me because I'm small. I eat a lot and I'm doing fine at school. I like to play outside.",
     "pain": "I don't hurt anywhere."
   },
-  "stacks": [
-    {
-      "label": "Physical Exam: General Appearance",
-      "type": "correctlyOrdered",
-      "finding": "Assess stature, weight distribution, and Turner stigmata (webbed neck, shield chest, wide-spaced nipples).",
-      "aliases": ["General appearance", "General exam"]
-    },
-    {
-      "label": "Physical Exam: Heart / Cardiovascular",
-      "type": "correctlyOrdered",
-      "finding": "Systolic murmur and four-extremity blood pressures — key for coarctation of the aorta.",
-      "aliases": ["Cardiovascular exam", "Cardiac exam"]
-    },
-    {
-      "label": "Electrocardiography (12-lead ECG)",
-      "type": "correctlyOrdered",
-      "finding": "Evaluate murmur and cardiac strain.",
-      "aliases": ["ECG", "EKG"]
-    },
-    {
-      "label": "Chest X-ray",
-      "type": "correctlyOrdered",
-      "finding": "Initial cardiac screening; may show rib notching or the 3-sign in coarctation.",
-      "aliases": ["CXR"]
-    },
-    {
-      "label": "Echocardiography",
-      "type": "correctlyOrdered",
-      "finding": "Gold standard for coarctation of the aorta — stenosis and left ventricular hypertrophy.",
-      "aliases": ["Echo", "TTE"]
-    },
-    {
-      "label": "Chromosome analysis, karyotype",
-      "type": "correctlyOrdered",
-      "finding": "Turner syndrome 45,X genotype; 5–15% of girls with coarctation have Turner syndrome.",
-      "aliases": ["Karyotype", "Genetic testing"]
-    },
-    {
-      "label": "Consult, cardiothoracic surgery",
-      "type": "correctlyOrdered",
-      "finding": "Surgical repair of coarctation of the aorta.",
-      "aliases": ["CT surgery consult"]
-    },
-    {
-      "label": "Consult, pediatric endocrinology",
-      "type": "correctlyOrdered",
-      "finding": "Growth hormone therapy and long-term follow-up for Turner syndrome.",
-      "aliases": ["Endocrine consult"]
-    }
-  ],
+  "ccs_category": "Pediatrics / Endocrinology",
+  "chief_complaint": "Short stature — mother concerned about growth and weight",
+  "case_summary": "Differential: Hypopituitarism, Noonan syndrome.\n\nThe patient has Turner syndrome with coarctation of the aorta. Turner syndrome is a genetic abnormality (45,X genotype). Features include short stature, webbed neck, wide-spaced nipples, and shield chest. Coarctation of the aorta is common. Physical exam typically reveals a systolic murmur and differing systolic blood pressure between upper and lower extremities. Initial screening includes chest X-ray and ECG, with echocardiography as the gold standard for coarctation. Chromosome analysis (karyotype) confirms Turner syndrome. Management includes cardiothoracic surgery for coarctation and pediatric endocrinology for growth hormone therapy. Growth hormone levels are usually normal but not utilized correctly; estradiol replacement may be needed for ovarian failure.",
   "decoys": [
     {
       "label": "Oxygen",
       "reason_wrong": "Stable office visit — patient is not in respiratory distress."
     }
   ],
-  "confidence": 95,
-  "source": "ccs_source_manual",
-  "extraction_method": "ccs_source_manual",
+  "distractors": [],
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess stature, weight distribution, and Turner stigmata (webbed neck, shield chest, wide-spaced nipples).",
+      "aliases": [
+        "General appearance",
+        "General exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Systolic murmur and four-extremity blood pressures — key for coarctation of the aorta.",
+      "aliases": [
+        "Cardiovascular exam",
+        "Cardiac exam"
+      ]
+    },
+    {
+      "label": "Electrocardiography (12-lead ECG)",
+      "type": "correctlyOrdered",
+      "finding": "Evaluate murmur and cardiac strain.",
+      "aliases": [
+        "ECG",
+        "EKG"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Initial cardiac screening; may show rib notching or the 3-sign in coarctation.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "Echocardiography",
+      "type": "correctlyOrdered",
+      "finding": "Gold standard for coarctation of the aorta — stenosis and left ventricular hypertrophy.",
+      "aliases": [
+        "Echo",
+        "TTE"
+      ]
+    },
+    {
+      "label": "Chromosome analysis, karyotype",
+      "type": "correctlyOrdered",
+      "finding": "Turner syndrome 45,X genotype; 5–15% of girls with coarctation have Turner syndrome.",
+      "aliases": [
+        "Karyotype",
+        "Genetic testing"
+      ]
+    },
+    {
+      "label": "Consult, cardiothoracic surgery",
+      "type": "correctlyOrdered",
+      "finding": "Surgical repair of coarctation of the aorta.",
+      "aliases": [
+        "CT surgery consult"
+      ]
+    },
+    {
+      "label": "Consult, pediatric endocrinology",
+      "type": "correctlyOrdered",
+      "finding": "Growth hormone therapy and long-term follow-up for Turner syndrome.",
+      "aliases": [
+        "Endocrine consult"
+      ]
+    }
+  ],
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Cardiovascular",
+    "Electrocardiography (12-lead ECG)",
+    "Chest X-ray",
+    "Echocardiography",
+    "Chromosome analysis, karyotype",
+    "Consult, cardiothoracic surgery",
+    "Consult, pediatric endocrinology"
+  ],
   "complete": true,
-  "screenshot_processed": true,
-  "enrichment_sources": ["ccs_source_manual", "ccs_review_screenshot"]
+  "extraction_method": "deepseek_direct",
+  "enrichment_sources": [
+    "ccs_source_manual",
+    "ccs_review_screenshot"
+  ],
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Turner syndrome with coarctation of the aorta."
 }

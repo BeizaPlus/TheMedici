@@ -1,62 +1,121 @@
 {
   "id": 94,
   "topic": "Rash with Joint Pain",
+  "title": "Rash with Joint Pain",
   "diagnosis": "Systemic Lupus Erythematosus",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Labs: CBC with differential",
-    "Labs: CMP",
-    "Labs: ESR",
-    "Labs: Urinalysis",
-    "Labs: ANA",
-    "Labs: Anti-dsDNA",
-    "Labs: Complement levels"
+    "ANA",
+    "Anti-dsDNA / Anti-Smith",
+    "CBC / BMP / UA",
+    "Complement C3/C4",
+    "Hydroxychloroquine",
+    "Prednisone (if moderate/severe)",
+    "Sun protection"
   ],
-  "should_avoid": [
-    "Labs: Blood cultures"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Labs: CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Systemic Lupus Erythematosus.",
-    "Labs: CMP": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: CMP.",
-    "Labs: ESR": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: ESR.",
-    "Labs: Urinalysis": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: Urinalysis.",
-    "Labs: ANA": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: ANA.",
-    "Labs: Anti-dsDNA": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: Anti-dsDNA.",
-    "Labs: Complement levels": "Appropriate CCS order for Systemic Lupus Erythematosus: Labs: Complement levels.",
-    "Labs: Blood cultures": "CCS review: avoid this order for Systemic Lupus Erythematosus — it does not change acute management."
+    "ANA": "Positive — required for diagnosis.",
+    "Anti-dsDNA / Anti-Smith": "Specific for SLE.",
+    "CBC / BMP / UA": "Cytopenias, nephritis screen.",
+    "Complement C3/C4": "Low = active disease.",
+    "Hydroxychloroquine": "All SLE patients. Reduces flares and mortality.",
+    "Prednisone (if moderate/severe)": "For flares. Taper to lowest effective dose.",
+    "Sun protection": "Photosensitivity management."
   },
-  "hpi": "This case illustrates the importance of recognizing the clinical features of systemic lupus erythematosus (SLE) in a patient presenting with joint pain and rash. The diagnosis can be challenging due to the variability of symptoms and the need for specific laboratory tests to confirm the diagnosis. Early recognition and appropriate management are crucial to prevent complications associated with SLE.",
+  "hpi": "{{patient_name}} presents with malar (butterfly) rash across cheeks (sparing nasolabial folds), photosensitivity, polyarthritis, fatigue, and fever. SLE is a multisystem autoimmune disease with autoantibodies against nuclear antigens. Diagnosis per ACR/EULAR criteria: ANA positivity is required (sensitive but not specific). Anti-dsDNA and anti-Smith are specific for SLE. Other features: oral ulcers, serositis (pleuritis/pericarditis), nephritis (proteinuria, RBC casts), neurologic (seizures/psychosis), hematologic (anemia, leukopenia, lymphopenia, thrombocytopenia). Monitor: CBC, BMP, UA (proteinuria), complement C3/C4 (low = active disease), anti-dsDNA titers (correlates with disease activity). Treatment: mild (skin/joints) → hydroxychloroquine (ALL SLE patients) + NSAIDs. Moderate: add steroids (prednisone). Severe (nephritis, CNS) → high-dose steroids + immunosuppression (mycophenolate mofetil or cyclophosphamide). Sun protection.",
+  "hpi_narrative": "{{patient_name}} presents with malar (butterfly) rash across cheeks (sparing nasolabial folds), photosensitivity, polyarthritis, fatigue, and fever. SLE is a multisystem autoimmune disease with autoantibodies against nuclear antigens. Diagnosis per ACR/EULAR criteria: ANA positivity is required (sensitive but not specific). Anti-dsDNA and anti-Smith are specific for SLE. Other features: oral ulcers, serositis (pleuritis/pericarditis), nephritis (proteinuria, RBC casts), neurologic (seizures/psychosis), hematologic (anemia, leukopenia, lymphopenia, thrombocytopenia). Monitor: CBC, BMP, UA (proteinuria), complement C3/C4 (low = active disease), anti-dsDNA titers (correlates with disease activity). Treatment: mild (skin/joints) → hydroxychloroquine (ALL SLE patients) + NSAIDs. Moderate: add steroids (prednisone). Severe (nephritis, CNS) → high-dose steroids + immunosuppression (mycophenolate mofetil or cyclophosphamide). Sun protection.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about this rash and my joint pain. It hurts a lot.",
-    "history": "I've been feeling unwell for a while. The rash started a few days ago.",
-    "pain": "My joints are aching, especially in my hands and knees."
+    "chief_complaint": "Malar rash, polyarthritis, fatigue, fever",
+    "history": "{{patient_name}} presents with malar (butterfly) rash across cheeks (sparing nasolabial folds), photosensitivity, polyarthritis, fatigue, and fever. SLE is a multisystem autoimmune disease with autoa…",
+    "pain": "Malar rash, polyarthritis, fatigue, fever"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "This case illustrates the importance of recognizing the clinical features of systemic lupus erythematosus (SLE) in a patient presenting with joint pain and rash. The diagnosis can be challenging due to the variability of symptoms and the need for specific laboratory tests to confirm the diagnosis. Early recognition and appropriate management are crucial to prevent complications associated with SLE.",
+  "ccs_category": "Rheumatology",
+  "chief_complaint": "Malar rash, polyarthritis, fatigue, fever",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Created the following Patient Case",
-    "Ordered Consults",
-    "Ordered CBC with differential",
-    "Ordered CMP",
-    "Ordered ESR"
+    {
+      "label": "ANA",
+      "type": "correctlyOrdered",
+      "finding": "Positive — required for diagnosis.",
+      "aliases": [
+        "ANA"
+      ]
+    },
+    {
+      "label": "Anti-dsDNA / Anti-Smith",
+      "type": "correctlyOrdered",
+      "finding": "Specific for SLE.",
+      "aliases": [
+        "dsDNA",
+        "Smith"
+      ]
+    },
+    {
+      "label": "CBC / BMP / UA",
+      "type": "correctlyOrdered",
+      "finding": "Cytopenias, nephritis screen.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Complement C3/C4",
+      "type": "correctlyOrdered",
+      "finding": "Low = active disease.",
+      "aliases": [
+        "Complement"
+      ]
+    },
+    {
+      "label": "Hydroxychloroquine",
+      "type": "correctlyOrdered",
+      "finding": "All SLE patients. Reduces flares and mortality.",
+      "aliases": [
+        "Plaquenil"
+      ]
+    },
+    {
+      "label": "Prednisone (if moderate/severe)",
+      "type": "correctlyOrdered",
+      "finding": "For flares. Taper to lowest effective dose.",
+      "aliases": [
+        "Prednisone"
+      ]
+    },
+    {
+      "label": "Sun protection",
+      "type": "correctlyOrdered",
+      "finding": "Photosensitivity management.",
+      "aliases": [
+        "Sunscreen"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "ANA",
+    "Anti-dsDNA / Anti-Smith",
+    "CBC / BMP / UA",
+    "Complement C3/C4",
+    "Hydroxychloroquine",
+    "Prednisone (if moderate/severe)",
+    "Sun protection"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Systemic Lupus Erythematosus."
 }

@@ -1,64 +1,109 @@
 {
   "id": 140,
   "topic": "Headache",
+  "title": "Headache",
   "diagnosis": "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
-    "Physical Exam: Cardiovascular",
-    "Physical Exam: Neuro / Psych",
-    "Physical Exam: HEENT / Neck",
-    "Acetazolamide / Topiramate / Methazolamide",
-    "A detailed ophthalmologic exam"
+    "Fundoscopy",
+    "MRI/MRV brain",
+    "LP (opening pressure)",
+    "Weight loss",
+    "Acetazolamide",
+    "Ophthalmology follow-up"
   ],
-  "should_avoid": [
-    "order1",
-    "Order contrast CT head without clinical indication as it increases risk of adverse effects"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for headache.",
-    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for headache.",
-    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to headache.",
-    "Physical Exam: Neuro / Psych": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Idiopathic Intracranial Hypertension (Pseudotumor Cerebri).",
-    "Physical Exam: HEENT / Neck": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Idiopathic Intracranial Hypertension (Pseudotumor Cerebri).",
-    "Acetazolamide / Topiramate / Methazolamide": "Appropriate CCS order for Idiopathic Intracranial Hypertension (Pseudotumor Cerebri): Acetazolamide / Topiramate / Methazolamide.",
-    "A detailed ophthalmologic exam": "Appropriate CCS order for Idiopathic Intracranial Hypertension (Pseudotumor Cerebri): A detailed ophthalmologic exam.",
-    "order1": "CCS review: avoid this order for Idiopathic Intracranial Hypertension (Pseudotumor Cerebri) — it does not change acute management.",
-    "Order contrast CT head without clinical indication as it increases risk of adverse effects": "Advanced imaging is not indicated early for Idiopathic Intracranial Hypertension (Pseudotumor Cerebri) when the diagnosis is clinical."
+    "Fundoscopy": "Bilateral papilledema.",
+    "MRI/MRV brain": "Normal — rules out mass, VST.",
+    "LP (opening pressure)": ">25 cm H2O, normal CSF.",
+    "Weight loss": "Most important intervention.",
+    "Acetazolamide": "Reduces CSF production.",
+    "Ophthalmology follow-up": "Visual fields, OCT."
   },
-  "hpi": "The patient is a 30-year-old female with a history of headaches and visual disturbances. She presents with worsening headaches and transient visual obscurations. The diagnosis of idiopathic intracranial hypertension is made based on clinical findings and imaging studies. Treatment options include weight loss and medications to reduce intracranial pressure. A referral to ophthalmology is also warranted for further evaluation of her visual symptoms.",
+  "hpi": "{{patient_name}} presents with chronic daily headache (worse in morning, with Valsalva), transient visual obscurations, pulsatile tinnitus, and diplopia (CN VI palsy from increased ICP). Fundoscopy: bilateral papilledema. IIH is elevated ICP without mass lesion or hydrocephalus, typically in obese women of childbearing age. Risk factors: obesity, recent weight gain, vitamin A excess, tetracyclines, OCPs, steroids. Diagnosis: MRI/MRV brain (normal — rules out mass, venous sinus thrombosis). LP: elevated opening pressure (>25 cm H2O) with normal CSF composition. Treatment: weight loss (most important), acetazolamide (carbonic anhydrase inhibitor — reduces CSF production). Serial ophthalmology: visual fields, optic nerve exam. If vision threatened: optic nerve sheath fenestration or CSF shunting (VP or LP shunt). Discontinue causative medications.",
+  "hpi_narrative": "{{patient_name}} presents with chronic daily headache (worse in morning, with Valsalva), transient visual obscurations, pulsatile tinnitus, and diplopia (CN VI palsy from increased ICP). Fundoscopy: bilateral papilledema. IIH is elevated ICP without mass lesion or hydrocephalus, typically in obese women of childbearing age. Risk factors: obesity, recent weight gain, vitamin A excess, tetracyclines, OCPs, steroids. Diagnosis: MRI/MRV brain (normal — rules out mass, venous sinus thrombosis). LP: elevated opening pressure (>25 cm H2O) with normal CSF composition. Treatment: weight loss (most important), acetazolamide (carbonic anhydrase inhibitor — reduces CSF production). Serial ophthalmology: visual fields, optic nerve exam. If vision threatened: optic nerve sheath fenestration or CSF shunting (VP or LP shunt). Discontinue causative medications.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my headaches. They just keep getting worse.",
-    "history": "I've had these headaches for a while now. Sometimes my vision goes blurry.",
-    "pain": "It feels like a pressure in my head, and it gets really bad."
+    "chief_complaint": "Chronic headache, transient visual loss, pulsatile tinnitus",
+    "history": "{{patient_name}} presents with chronic daily headache (worse in morning, with Valsalva), transient visual obscurations, pulsatile tinnitus, and diplopia (CN VI palsy from increased ICP). Fundoscopy: …",
+    "pain": "Chronic headache, transient visual loss, pulsatile tinnitus"
   },
-  "ccs_category": "Neurology",
-  "case_summary": "The patient is a 30-year-old female with a history of headaches and visual disturbances. She presents with worsening headaches and transient visual obscurations. The diagnosis of idiopathic intracranial hypertension is made based on clinical findings and imaging studies. Treatment options include weight loss and medications to reduce intracranial pressure. A referral to ophthalmology is also warranted for further evaluation of her visual symptoms.",
+  "ccs_category": "Neurology / Ophthalmology",
+  "chief_complaint": "Chronic headache, transient visual loss, pulsatile tinnitus",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
-    "Physical Exam: Cardiovascular",
-    "Physical Exam: Neuro / Psych",
-    "Physical Exam: HEENT / Neck"
+    {
+      "label": "Fundoscopy",
+      "type": "correctlyOrdered",
+      "finding": "Bilateral papilledema.",
+      "aliases": [
+        "Fundoscopy"
+      ]
+    },
+    {
+      "label": "MRI/MRV brain",
+      "type": "correctlyOrdered",
+      "finding": "Normal — rules out mass, VST.",
+      "aliases": [
+        "MRI"
+      ]
+    },
+    {
+      "label": "LP (opening pressure)",
+      "type": "correctlyOrdered",
+      "finding": ">25 cm H2O, normal CSF.",
+      "aliases": [
+        "LP"
+      ]
+    },
+    {
+      "label": "Weight loss",
+      "type": "correctlyOrdered",
+      "finding": "Most important intervention.",
+      "aliases": [
+        "Weight loss"
+      ]
+    },
+    {
+      "label": "Acetazolamide",
+      "type": "correctlyOrdered",
+      "finding": "Reduces CSF production.",
+      "aliases": [
+        "Diamox"
+      ]
+    },
+    {
+      "label": "Ophthalmology follow-up",
+      "type": "correctlyOrdered",
+      "finding": "Visual fields, OCT.",
+      "aliases": [
+        "Ophtho"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Fundoscopy",
+    "MRI/MRV brain",
+    "LP (opening pressure)",
+    "Weight loss",
+    "Acetazolamide",
+    "Ophthalmology follow-up"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)."
 }

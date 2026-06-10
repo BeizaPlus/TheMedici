@@ -1,62 +1,143 @@
 {
   "id": 85,
   "topic": "Amenorrhea",
+  "title": "Amenorrhea",
   "diagnosis": "Polycystic Ovary Syndrome (PCOS)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Prepare Dean's List: Amenorrhea",
-    "Prepare Dean's List: PCOS",
-    "Prepare Dean's List: Endocrinology",
-    "Prepare Dean's List: Gynecology",
-    "Prepare Dean's List: Hormones",
-    "Lipid panel",
-    "Endometrial biopsy"
+    "FSH/LH",
+    "Testosterone (free + total) / DHEA-S",
+    "17-OH progesterone",
+    "TSH / Prolactin",
+    "Pelvic US",
+    "Glucose / HbA1c / OGTT",
+    "Weight loss + lifestyle",
+    "Combined OCPs",
+    "Metformin"
   ],
-  "should_avoid": [
-    "Jade's test: Hysteroscopy"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Prepare Dean's List: Amenorrhea": "Appropriate CCS order for Polycystic Ovary Syndrome (PCOS): Prepare Dean's List: Amenorrhea.",
-    "Prepare Dean's List: PCOS": "Appropriate CCS order for Polycystic Ovary Syndrome (PCOS): Prepare Dean's List: PCOS.",
-    "Prepare Dean's List: Endocrinology": "Appropriate CCS order for Polycystic Ovary Syndrome (PCOS): Prepare Dean's List: Endocrinology.",
-    "Prepare Dean's List: Gynecology": "Appropriate CCS order for Polycystic Ovary Syndrome (PCOS): Prepare Dean's List: Gynecology.",
-    "Prepare Dean's List: Hormones": "Patient education and counseling are part of definitive care for Polycystic Ovary Syndrome (PCOS).",
-    "Lipid panel": "Appropriate CCS order for Polycystic Ovary Syndrome (PCOS): Lipid panel.",
-    "Endometrial biopsy": "Diagnostic report or tissue diagnosis clarifies the cause of amenorrhea.",
-    "Jade's test: Hysteroscopy": "CCS review: avoid this order for Polycystic Ovary Syndrome (PCOS) — it does not change acute management."
+    "FSH/LH": "LH:FSH >2:1 supports PCOS.",
+    "Testosterone (free + total) / DHEA-S": "Elevated androgens.",
+    "17-OH progesterone": "Rule out late-onset CAH.",
+    "TSH / Prolactin": "Rule out thyroid, prolactin causes.",
+    "Pelvic US": "Polycystic ovaries — ≥12 follicles.",
+    "Glucose / HbA1c / OGTT": "Screen for insulin resistance/DM.",
+    "Weight loss + lifestyle": "First-line. Improves all parameters.",
+    "Combined OCPs": "Regulate cycles, reduce hyperandrogenism.",
+    "Metformin": "Insulin sensitizer."
   },
-  "hpi": "This patient presents with amenorrhea, likely secondary to polycystic ovary syndrome (PCOS). She has a history of irregular menstrual cycles, obesity, and insulin resistance. The management of PCOS includes lifestyle modifications, hormonal therapy, and monitoring for potential complications such as endometrial hyperplasia. It is important to address the patient's concerns regarding fertility and provide education on the condition. Follow-up should include regular monitoring of metabolic parameters and menstrual cycle regulation.",
+  "hpi": "{{patient_name}} presents with oligomenorrhea/amenorrhea, hirsutism, acne, obesity, and infertility. PCOS is the most common endocrine disorder in reproductive-age women. Rotterdam criteria (need 2 of 3): (1) oligo/anovulation, (2) clinical or biochemical hyperandrogenism (hirsutism, acne, elevated free testosterone), (3) polycystic ovaries on ultrasound (≥12 follicles 2-9mm per ovary or ovarian volume >10mL). Other causes of hyperandrogenism must be ruled out: late-onset CAH (check 17-OH progesterone), androgen-secreting tumor (rapid virilization, very high testosterone), Cushing's, hyperprolactinemia. Labs: LH:FSH ratio >2:1 is classic but not diagnostic. Associated with insulin resistance → screen for diabetes (glucose, HbA1c, OGTT). Treatment: weight loss (first-line, improves all parameters), combined OCPs (regulate cycles, reduce hyperandrogenism), metformin (insulin sensitizer, improves ovulation), spironolactone (anti-androgen for hirsutism). Clomiphene or letrozole for ovulation induction if fertility desired.",
+  "hpi_narrative": "{{patient_name}} presents with oligomenorrhea/amenorrhea, hirsutism, acne, obesity, and infertility. PCOS is the most common endocrine disorder in reproductive-age women. Rotterdam criteria (need 2 of 3): (1) oligo/anovulation, (2) clinical or biochemical hyperandrogenism (hirsutism, acne, elevated free testosterone), (3) polycystic ovaries on ultrasound (≥12 follicles 2-9mm per ovary or ovarian volume >10mL). Other causes of hyperandrogenism must be ruled out: late-onset CAH (check 17-OH progesterone), androgen-secreting tumor (rapid virilization, very high testosterone), Cushing's, hyperprolactinemia. Labs: LH:FSH ratio >2:1 is classic but not diagnostic. Associated with insulin resistance → screen for diabetes (glucose, HbA1c, OGTT). Treatment: weight loss (first-line, improves all parameters), combined OCPs (regulate cycles, reduce hyperandrogenism), metformin (insulin sensitizer, improves ovulation), spironolactone (anti-androgen for hirsutism). Clomiphene or letrozole for ovulation induction if fertility desired.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really worried about my missed periods. It's been months.",
-    "history": "I have always had irregular cycles, but this is different. I feel so confused.",
-    "pain": "I don't have pain, but I'm scared about what this means for my health."
+    "chief_complaint": "Irregular periods, hirsutism, acne, difficulty conceiving",
+    "history": "{{patient_name}} presents with oligomenorrhea/amenorrhea, hirsutism, acne, obesity, and infertility. PCOS is the most common endocrine disorder in reproductive-age women. Rotterdam criteria (need 2 o…",
+    "pain": "Irregular periods, hirsutism, acne, difficulty conceiving"
   },
-  "ccs_category": "OB/GYN",
-  "case_summary": "This patient presents with amenorrhea, likely secondary to polycystic ovary syndrome (PCOS). She has a history of irregular menstrual cycles, obesity, and insulin resistance. The management of PCOS includes lifestyle modifications, hormonal therapy, and monitoring for potential complications such as endometrial hyperplasia. It is important to address the patient's concerns regarding fertility and provide education on the condition. Follow-up should include regular monitoring of metabolic parameters and menstrual cycle regulation.",
+  "ccs_category": "OB/GYN / Endocrinology",
+  "chief_complaint": "Irregular periods, hirsutism, acne, difficulty conceiving",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following: Physical exam",
-    "Ordered: Hormones, follicle stimulating",
-    "Ordered: Insulin, thyroid stimulating",
-    "Ordered: HCG, CBC"
+    {
+      "label": "FSH/LH",
+      "type": "correctlyOrdered",
+      "finding": "LH:FSH >2:1 supports PCOS.",
+      "aliases": [
+        "FSH",
+        "LH"
+      ]
+    },
+    {
+      "label": "Testosterone (free + total) / DHEA-S",
+      "type": "correctlyOrdered",
+      "finding": "Elevated androgens.",
+      "aliases": [
+        "Androgens"
+      ]
+    },
+    {
+      "label": "17-OH progesterone",
+      "type": "correctlyOrdered",
+      "finding": "Rule out late-onset CAH.",
+      "aliases": [
+        "17-OHP"
+      ]
+    },
+    {
+      "label": "TSH / Prolactin",
+      "type": "correctlyOrdered",
+      "finding": "Rule out thyroid, prolactin causes.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Pelvic US",
+      "type": "correctlyOrdered",
+      "finding": "Polycystic ovaries — ≥12 follicles.",
+      "aliases": [
+        "Pelvic US"
+      ]
+    },
+    {
+      "label": "Glucose / HbA1c / OGTT",
+      "type": "correctlyOrdered",
+      "finding": "Screen for insulin resistance/DM.",
+      "aliases": [
+        "Glucose"
+      ]
+    },
+    {
+      "label": "Weight loss + lifestyle",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Improves all parameters.",
+      "aliases": [
+        "Weight loss"
+      ]
+    },
+    {
+      "label": "Combined OCPs",
+      "type": "correctlyOrdered",
+      "finding": "Regulate cycles, reduce hyperandrogenism.",
+      "aliases": [
+        "OCPs"
+      ]
+    },
+    {
+      "label": "Metformin",
+      "type": "shouldHaveOrdered",
+      "finding": "Insulin sensitizer.",
+      "aliases": [
+        "Metformin"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "FSH/LH",
+    "Testosterone (free + total) / DHEA-S",
+    "17-OH progesterone",
+    "TSH / Prolactin",
+    "Pelvic US",
+    "Glucose / HbA1c / OGTT",
+    "Weight loss + lifestyle",
+    "Combined OCPs",
+    "Metformin"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Polycystic Ovary Syndrome (PCOS)."
 }

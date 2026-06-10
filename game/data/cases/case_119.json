@@ -1,61 +1,76 @@
 {
   "id": 119,
   "topic": "Sore Throat",
+  "title": "Sore Throat",
   "diagnosis": "Viral Pharyngitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
-    "Physical Exam: Skin",
-    "Physical Exam: HEENT / Neck",
-    "Streptococcal culture, throat, rapid",
-    "acetaminophen, therapy / Ibuprofen",
-    "Saline gargle"
+    "Physical Exam: HEENT / Throat",
+    "Centor criteria",
+    "Supportive care"
   ],
-  "should_avoid": [
-    "Penicillin V / Penicillin G procaine / Penicillin G benzathine / Amoxicillin and potassium clavulanate / Cephalexin monohydrate / Cefadroxil / cefuroxime sodium / Ceclor / Cefixime / Azithromycin / therapy"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for sore throat.",
-    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for sore throat.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Viral Pharyngitis.",
-    "Physical Exam: HEENT / Neck": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Viral Pharyngitis.",
-    "Streptococcal culture, throat, rapid": "Laboratory testing when systemic illness or severity warrants labs in Viral Pharyngitis.",
-    "acetaminophen, therapy / Ibuprofen": "Appropriate CCS order for Viral Pharyngitis: acetaminophen, therapy / Ibuprofen.",
-    "Saline gargle": "Appropriate CCS order for Viral Pharyngitis: Saline gargle.",
-    "Penicillin V / Penicillin G procaine / Penicillin G benzathine / Amoxicillin and potassium clavulanate / Cephalexin monohydrate / Cefadroxil / cefuroxime sodium / Ceclor / Cefixime / Azithromycin / therapy": "CCS review: avoid this order for Viral Pharyngitis — it does not change acute management."
+    "Physical Exam: HEENT / Throat": "Erythema without exudates.",
+    "Centor criteria": "Cough, no fever, no exudates, no LAN = viral.",
+    "Supportive care": "Acetaminophen, fluids, rest. NO antibiotics."
   },
-  "hpi": "Differential: Group A Streptococcal Pharyngitis, Retropharyngeal abscess, Epiglottitis, Lemierre Syndrome, Lateral Pharyngeal Abscess, Other Bacterial pharyngitis. This patient has viral pharyngitis. The exact virus will not be determined in the case as it typically is not determined in real life. The main point of the case is to not over-treat. It is important to rule out a Group A Streptococcal infection by doing a rapid group A strep test. If negative, give only symptomatic relief with pain medications (ibuprofen or Acetaminophen) along with salt water gargles which has been shown to help. No other interventions are necessary in this case. In time, the patient will begin to feel better. If you give antibiotics, you would fail the case. Antibiotics can cause harm in viral infections do not help and have led to antibiotic resistance.",
+  "hpi": "{{patient_name}} presents with sore throat, cough, rhinorrhea, hoarseness, conjunctivitis, and low-grade fever. Viral features (cough, rhinorrhea, conjunctivitis) make strep less likely. Centor criteria: no tonsillar exudates, no tender anterior cervical LAN, cough present, no fever → score 0-1 = no testing needed. Most pharyngitis is viral (adenovirus, rhinovirus, EBV, influenza). Management: supportive care — acetaminophen/NSAIDs, fluids, rest, throat lozenges, salt water gargles. NO antibiotics. Avoid unnecessary antibiotic prescribing — contributes to resistance. If Centor criteria score ≥3 → rapid strep test. If positive → treat as GAS pharyngitis. If negative → supportive only.",
+  "hpi_narrative": "{{patient_name}} presents with sore throat, cough, rhinorrhea, hoarseness, conjunctivitis, and low-grade fever. Viral features (cough, rhinorrhea, conjunctivitis) make strep less likely. Centor criteria: no tonsillar exudates, no tender anterior cervical LAN, cough present, no fever → score 0-1 = no testing needed. Most pharyngitis is viral (adenovirus, rhinovirus, EBV, influenza). Management: supportive care — acetaminophen/NSAIDs, fluids, rest, throat lozenges, salt water gargles. NO antibiotics. Avoid unnecessary antibiotic prescribing — contributes to resistance. If Centor criteria score ≥3 → rapid strep test. If positive → treat as GAS pharyngitis. If negative → supportive only.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared because my throat hurts a lot. I don't want to be sick.",
-    "history": "I have a sore throat and it hurts to swallow. I feel tired.",
-    "pain": "It really hurts when I swallow."
+    "chief_complaint": "Sore throat, cough, rhinorrhea",
+    "history": "{{patient_name}} presents with sore throat, cough, rhinorrhea, hoarseness, conjunctivitis, and low-grade fever. Viral features (cough, rhinorrhea, conjunctivitis) make strep less likely. Centor crite…",
+    "pain": "Sore throat, cough, rhinorrhea"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "Differential: Group A Streptococcal Pharyngitis, Retropharyngeal abscess, Epiglottitis, Lemierre Syndrome, Lateral Pharyngeal Abscess, Other Bacterial pharyngitis. This patient has viral pharyngitis. The exact virus will not be determined in the case as it typically is not determined in real life. The main point of the case is to not over-treat. It is important to rule out a Group A Streptococcal infection by doing a rapid group A strep test. If negative, give only symptomatic relief with pain medications (ibuprofen or Acetaminophen) along with salt water gargles which has been shown to help. No other interventions are necessary in this case. In time, the patient will begin to feel better. If you give antibiotics, you would fail the case. Antibiotics can cause harm in viral infections do not help and have led to antibiotic resistance.",
+  "ccs_category": "Pediatrics / Internal Medicine",
+  "chief_complaint": "Sore throat, cough, rhinorrhea",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lung, Cardiovascular, Abdomen, Genital, Extremities and Spine, Neurological and Psychologic",
-    "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lung, Cardiovascular, Abdomen, Genital, Extremities and Spine, Neurological and Psychologic",
-    "Patient location check Department"
+    {
+      "label": "Physical Exam: HEENT / Throat",
+      "type": "correctlyOrdered",
+      "finding": "Erythema without exudates.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "Centor criteria",
+      "type": "correctlyOrdered",
+      "finding": "Cough, no fever, no exudates, no LAN = viral.",
+      "aliases": [
+        "Centor"
+      ]
+    },
+    {
+      "label": "Supportive care",
+      "type": "correctlyOrdered",
+      "finding": "Acetaminophen, fluids, rest. NO antibiotics.",
+      "aliases": [
+        "Symptomatic care"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: HEENT / Throat",
+    "Centor criteria",
+    "Supportive care"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Viral Pharyngitis."
 }

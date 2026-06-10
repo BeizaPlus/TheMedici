@@ -1,58 +1,87 @@
 {
   "id": 151,
   "topic": "Found Unconscious",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Found Unconscious",
+  "diagnosis": "Carbon Monoxide Poisoning",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Emergency Department",
-    "100% O₂ non-rebreather",
-    "Carboxyhemoglobin level",
-    "IV access",
-    "Cardiac monitor",
-    "Neurologic checks"
+    "ABG with COHb",
+    "100% O2 non-rebreather",
+    "Hyperbaric O2 (if severe)",
+    "Monitor for neurologic sequelae"
   ],
   "should_avoid": [],
   "rationale": {
-    "Emergency Department": "Appropriate CCS order for this diagnosis: Emergency Department.",
-    "100% O₂ non-rebreather": "Appropriate CCS order for this diagnosis: 100% O₂ non-rebreather.",
-    "Carboxyhemoglobin level": "Appropriate CCS order for this diagnosis: Carboxyhemoglobin level.",
-    "IV access": "Appropriate CCS order for this diagnosis: IV access.",
-    "Cardiac monitor": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to found unconscious.",
-    "Neurologic checks": "Targeted Neurologic checks exam supports the differential for this diagnosis."
+    "ABG with COHb": "COHb >25%. Normal PaO2.",
+    "100% O2 non-rebreather": "Decrease COHb half-life to 1h.",
+    "Hyperbaric O2 (if severe)": "COHb >25%, LOC, neuro, cardiac, pregnancy.",
+    "Monitor for neurologic sequelae": "Delayed onset possible."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
+  "hpi_narrative": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — found unconscious. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This found unconscious won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Found unconscious, cherry-red skin",
+    "history": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x…",
+    "pain": "Found unconscious, cherry-red skin"
   },
-  "ccs_category": null,
+  "ccs_category": "Toxicology / Hyperbaric Medicine",
+  "chief_complaint": "Found unconscious, cherry-red skin",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Emergency Department",
-    "100% O₂ non-rebreather",
-    "Carboxyhemoglobin level",
-    "IV access",
-    "Cardiac monitor",
-    "Neurologic checks"
+    {
+      "label": "ABG with COHb",
+      "type": "correctlyOrdered",
+      "finding": "COHb >25%. Normal PaO2.",
+      "aliases": [
+        "CO level"
+      ]
+    },
+    {
+      "label": "100% O2 non-rebreather",
+      "type": "correctlyOrdered",
+      "finding": "Decrease COHb half-life to 1h.",
+      "aliases": [
+        "O2"
+      ]
+    },
+    {
+      "label": "Hyperbaric O2 (if severe)",
+      "type": "correctlyOrdered",
+      "finding": "COHb >25%, LOC, neuro, cardiac, pregnancy.",
+      "aliases": [
+        "HBO"
+      ]
+    },
+    {
+      "label": "Monitor for neurologic sequelae",
+      "type": "correctlyOrdered",
+      "finding": "Delayed onset possible.",
+      "aliases": [
+        "Observation"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "ABG with COHb",
+    "100% O2 non-rebreather",
+    "Hyperbaric O2 (if severe)",
+    "Monitor for neurologic sequelae"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Carbon Monoxide Poisoning."
 }

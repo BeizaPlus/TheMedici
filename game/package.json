@@ -5,7 +5,8 @@
   "scripts": {
     "build:catalog": "node scripts/build-ccs-catalog.mjs",
     "import:ollama": "node scripts/import-ollama-cases.mjs",
-    "build:cases": "node scripts/import-ollama-cases.mjs && node scripts/build-prepared-cases.mjs",
+    "convert:deepseek": "node scripts/convert-deepseek-cases.mjs",
+    "build:cases": "node scripts/convert-deepseek-cases.mjs && node scripts/import-ollama-cases.mjs && node scripts/build-prepared-cases.mjs",
     "build:differential-review": "node scripts/build-differential-review.mjs",
     "generate:name-banks": "node scripts/generate-patient-name-banks.mjs",
     "seed:case-playbooks": "node scripts/seed-case-specific-playbooks.mjs",

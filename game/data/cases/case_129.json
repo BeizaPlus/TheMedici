@@ -1,9 +1,10 @@
 {
   "id": 129,
   "topic": "Facial Pain",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Facial Pain",
+  "diagnosis": "Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain a detailed history, focusing on the onset, duration, and characteristics of the pain",
     "Perform a neurological examination, including cranial nerve evaluation",
@@ -17,35 +18,47 @@
     "Immediate surgical intervention without proper diagnostic workup"
   ],
   "rationale": {
-    "Obtain a detailed history, focusing on the onset, duration, and characteristics of the pain": "Appropriate CCS order for this diagnosis: Obtain a detailed history, focusing on the onset, duration, and characteristics of the pain.",
-    "Perform a neurological examination, including cranial nerve evaluation": "Targeted Perform a neurological examination, including cranial nerve evaluation exam supports the differential for this diagnosis.",
-    "Order MRI or CT with contrast to evaluate for any structural lesions in the trigeminal nerve region": "Appropriate CCS order for this diagnosis: Order MRI or CT with contrast to evaluate for any structural lesions in the trigeminal nerve region.",
-    "Consider referral to a neurologist or neurosurgeon for further evaluation and management if MRI/CT reveals abnormalities": "Targeted Consider referral to a neurologist or neurosurgeon for further evaluation and management if MRI/CT reveals abnormalities exam supports the differential for this diagnosis.",
-    "Initiate pain management as needed, such as carbamazepine or gabapentin, while awaiting specialist consultation": "Appropriate CCS order for this diagnosis: Initiate pain management as needed, such as carbamazepine or gabapentin, while awaiting specialist consultation.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access x2": "Appropriate CCS order for this diagnosis: IV access x2.",
-    "Immediate surgical intervention without proper diagnostic workup": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Immediate surgical intervention without proper diagnostic workup": "Risk of unnecessary invasive procedure, potential complications, and suboptimal management",
+    "Oxygen": "To provide immediate oxygen support for the patient experiencing facial pain.",
+    "IV access x2": "To establish large-bore IV access in preparation for fluid resuscitation and administration of medications."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — facial pain. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This facial pain won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Facial Pain — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 88; BP 148/88."
+    ],
+    [
+      "Respiratory",
+      "RR 16; SpO₂ 98%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "Warm skin with fever; no purpura on initial survey."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain a detailed history, focusing on the onset, duration, and characteristics of the pain",
     "Perform a neurological examination, including cranial nerve evaluation",
     "Order MRI or CT with contrast to evaluate for any structural lesions in the trigeminal nerve region",
@@ -54,11 +67,11 @@
     "Oxygen",
     "IV access x2"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

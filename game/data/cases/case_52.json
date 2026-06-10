@@ -1,62 +1,209 @@
 {
   "id": 52,
   "topic": "Chest Pain",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Chest Pain",
+  "diagnosis": "Unstable Angina",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "ECG Ordered",
-    "Chest X-Ray Ordered",
-    "Troponin Ordered",
-    "Aspirin Ordered",
-    "Nitroglycerin Ordered",
-    "Cardiac Enzymes Ordered",
-    "Beta Blocker Ordered"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "CBC",
+    "ECG, 12 lead",
+    "Cardiac troponin (serial)",
+    "PT/PTT",
+    "BMP / Mg",
+    "Aspirin 325mg chew",
+    "P2Y12 inhibitor (Ticagrelor / Clopidogrel)",
+    "Anticoagulation (UFH / LMWH / Fondaparinux)",
+    "Beta-blocker (Metoprolol)",
+    "Nitroglycerin",
+    "High-intensity statin",
+    "Cardiac catheterization within 24h"
   ],
-  "should_avoid": [
-    "CT Chest Ordered"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "ECG Ordered": "Appropriate CCS order for this diagnosis: ECG Ordered.",
-    "Chest X-Ray Ordered": "Evaluate chest and lungs as part of the initial exam for chest pain.",
-    "Troponin Ordered": "Appropriate CCS order for this diagnosis: Troponin Ordered.",
-    "Aspirin Ordered": "Appropriate CCS order for this diagnosis: Aspirin Ordered.",
-    "Nitroglycerin Ordered": "Appropriate CCS order for this diagnosis: Nitroglycerin Ordered.",
-    "Cardiac Enzymes Ordered": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
-    "Beta Blocker Ordered": "Appropriate CCS order for this diagnosis: Beta Blocker Ordered.",
-    "CT Chest Ordered": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Focused exam — emergency.",
+    "Physical Exam: Chest / Lungs": "Focused exam.",
+    "Physical Exam: Heart / Cardiovascular": "Focused cardiac exam. S4? New murmur?",
+    "CBC": "Screening.",
+    "ECG, 12 lead": "ST depression / TWI — ischemia. No ST elevation.",
+    "Cardiac troponin (serial)": "Negative = USA (no infarction).",
+    "PT/PTT": "Pre-procedure — likely cath.",
+    "BMP / Mg": "Mg in cardiac patients. Cr for contrast.",
+    "Aspirin 325mg chew": "Immediate antiplatelet.",
+    "P2Y12 inhibitor (Ticagrelor / Clopidogrel)": "Dual antiplatelet therapy.",
+    "Anticoagulation (UFH / LMWH / Fondaparinux)": "Antithrombotic.",
+    "Beta-blocker (Metoprolol)": "Reduce O2 demand.",
+    "Nitroglycerin": "Symptom relief, vasodilation.",
+    "High-intensity statin": "Plaque stabilization.",
+    "Cardiac catheterization within 24h": "Early invasive strategy for high-risk USA."
   },
-  "hpi": "Chest pain is a common complaint in the emergency department. It is important to differentiate between cardiac and non-cardiac causes. A thorough history and physical examination, along with appropriate diagnostic testing, are essential in the management of these patients.",
+  "hpi": "{{patient_name}} presents with new-onset chest pain at rest lasting >20 minutes, or accelerating pattern of previously stable exertional angina. ECG shows ischemic ST depression or T-wave inversion — no ST elevation (distinguishes from STEMI). Troponin is negative or minimally elevated (distinguishes from NSTEMI). UA is part of the acute coronary syndrome spectrum: USA = ischemia without infarction. Pathophysiology: atherosclerotic plaque rupture → subtotal thrombus → decreased coronary flow but not complete occlusion. Management: anti-ischemic therapy (oxygen if hypoxic, nitroglycerin, morphine), antiplatelet (aspirin 325mg chew + P2Y12 inhibitor — ticagrelor or clopidogrel), anticoagulation (UFH or LMWH or fondaparinux), beta-blocker (unless contraindicated), high-intensity statin, ACE inhibitor. Risk stratify: TIMI or GRACE score. Early invasive strategy (cardiac catheterization within 24h) for high-risk features. Admit to monitored bed.",
+  "hpi_narrative": "{{patient_name}} presents with new-onset chest pain at rest lasting >20 minutes, or accelerating pattern of previously stable exertional angina. ECG shows ischemic ST depression or T-wave inversion — no ST elevation (distinguishes from STEMI). Troponin is negative or minimally elevated (distinguishes from NSTEMI). UA is part of the acute coronary syndrome spectrum: USA = ischemia without infarction. Pathophysiology: atherosclerotic plaque rupture → subtotal thrombus → decreased coronary flow but not complete occlusion. Management: anti-ischemic therapy (oxygen if hypoxic, nitroglycerin, morphine), antiplatelet (aspirin 325mg chew + P2Y12 inhibitor — ticagrelor or clopidogrel), anticoagulation (UFH or LMWH or fondaparinux), beta-blocker (unless contraindicated), high-intensity statin, ACE inhibitor. Risk stratify: TIMI or GRACE score. Early invasive strategy (cardiac catheterization within 24h) for high-risk features. Admit to monitored bed.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My chest hurts a lot.",
-    "history": "I felt a tightness in my chest. It started suddenly.",
-    "pain": "It feels like a heavy weight on my chest."
+    "chief_complaint": "Chest pain at rest, ischemic ECG, negative troponin",
+    "history": "{{patient_name}} presents with new-onset chest pain at rest lasting >20 minutes, or accelerating pattern of previously stable exertional angina. ECG shows ischemic ST depression or T-wave inversion —…",
+    "pain": "Chest pain at rest, ischemic ECG, negative troponin"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "Chest pain is a common complaint in the emergency department. It is important to differentiate between cardiac and non-cardiac causes. A thorough history and physical examination, along with appropriate diagnostic testing, are essential in the management of these patients.",
+  "ccs_category": "Cardiology / Emergency Medicine",
+  "chief_complaint": "Chest pain at rest, ischemic ECG, negative troponin",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "ECG Ordered",
-    "Chest X-Ray Ordered",
-    "Troponin Ordered",
-    "Aspirin Ordered",
-    "Nitroglycerin Ordered"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Focused exam — emergency.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Focused exam.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Focused cardiac exam. S4? New murmur?",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "ECG, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "ST depression / TWI — ischemia. No ST elevation.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Cardiac troponin (serial)",
+      "type": "correctlyOrdered",
+      "finding": "Negative = USA (no infarction).",
+      "aliases": [
+        "Troponin"
+      ]
+    },
+    {
+      "label": "PT/PTT",
+      "type": "correctlyOrdered",
+      "finding": "Pre-procedure — likely cath.",
+      "aliases": [
+        "Coags"
+      ]
+    },
+    {
+      "label": "BMP / Mg",
+      "type": "correctlyOrdered",
+      "finding": "Mg in cardiac patients. Cr for contrast.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Aspirin 325mg chew",
+      "type": "correctlyOrdered",
+      "finding": "Immediate antiplatelet.",
+      "aliases": [
+        "ASA"
+      ]
+    },
+    {
+      "label": "P2Y12 inhibitor (Ticagrelor / Clopidogrel)",
+      "type": "correctlyOrdered",
+      "finding": "Dual antiplatelet therapy.",
+      "aliases": [
+        "Brilinta",
+        "Plavix"
+      ]
+    },
+    {
+      "label": "Anticoagulation (UFH / LMWH / Fondaparinux)",
+      "type": "correctlyOrdered",
+      "finding": "Antithrombotic.",
+      "aliases": [
+        "Heparin"
+      ]
+    },
+    {
+      "label": "Beta-blocker (Metoprolol)",
+      "type": "correctlyOrdered",
+      "finding": "Reduce O2 demand.",
+      "aliases": [
+        "Metoprolol"
+      ]
+    },
+    {
+      "label": "Nitroglycerin",
+      "type": "correctlyOrdered",
+      "finding": "Symptom relief, vasodilation.",
+      "aliases": [
+        "NTG"
+      ]
+    },
+    {
+      "label": "High-intensity statin",
+      "type": "correctlyOrdered",
+      "finding": "Plaque stabilization.",
+      "aliases": [
+        "Atorvastatin"
+      ]
+    },
+    {
+      "label": "Cardiac catheterization within 24h",
+      "type": "correctlyOrdered",
+      "finding": "Early invasive strategy for high-risk USA.",
+      "aliases": [
+        "Cath"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "CBC",
+    "ECG, 12 lead",
+    "Cardiac troponin (serial)",
+    "PT/PTT",
+    "BMP / Mg",
+    "Aspirin 325mg chew",
+    "P2Y12 inhibitor (Ticagrelor / Clopidogrel)",
+    "Anticoagulation (UFH / LMWH / Fondaparinux)",
+    "Beta-blocker (Metoprolol)",
+    "Nitroglycerin",
+    "High-intensity statin",
+    "Cardiac catheterization within 24h"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Unstable Angina."
 }

@@ -1,9 +1,10 @@
 {
   "id": 117,
   "topic": "Chest Pain",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Chest Pain",
+  "diagnosis": "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "EKG: To evaluate for signs of ischemia or rhythm abnormalities",
     "Troponin level: For diagnosis and monitoring of ACS, including myocardial infarction",
@@ -18,36 +19,53 @@
     "Ordering unnecessary tests or interventions without a specific clinical indication"
   ],
   "rationale": {
-    "EKG: To evaluate for signs of ischemia or rhythm abnormalities": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
-    "Troponin level: For diagnosis and monitoring of ACS, including myocardial infarction": "Appropriate CCS order for this diagnosis: Troponin level: For diagnosis and monitoring of ACS, including myocardial infarction.",
-    "Chest X-ray: May help identify conditions such as pneumonia, pulmonary edema, or aortic dissection": "Evaluate chest and lungs as part of the initial exam for chest pain.",
-    "Cardiology consult: For further evaluation, management, and potential intervention": "Appropriate CCS order for this diagnosis: Cardiology consult: For further evaluation, management, and potential intervention.",
-    "Pain management: Administration of pain relievers appropriate for acute chest pain": "Evaluate chest and lungs as part of the initial exam for chest pain.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
-    "order: time-sensitive interventions first": "Appropriate CCS order for this diagnosis: order: time-sensitive interventions first.",
-    "Ordering unnecessary tests or interventions without a specific clinical indication": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "EKG": "To evaluate for signs of ischemia or rhythm abnormalities that may indicate acute coronary syndrome",
+    "Troponin level": "For diagnosis and monitoring of ACS, including myocardial infarction",
+    "Chest X-ray": "May help identify conditions such as pneumonia, pulmonary edema, or aortic dissection that can present with chest pain",
+    "Cardiology consult": "For further evaluation, management, and potential intervention in cases of suspected cardiac disease",
+    "Pain management": "To provide relief for acute chest pain while other tests are being performed",
+    "Ordering unnecessary tests or interventions": "Can lead to increased cost, potential harm, and delays in appropriate care",
+    "Oxygen": "Chest pain can be a symptom of various conditions, including cardiac ischemia, and oxygen should be provided immediately.",
+    "IV access ×2": "To administer fluids, medications, and blood products if needed.",
+    "order: time-sensitive interventions first": "Stabilizing the patient's vital signs is crucial in managing chest pain cases."
   },
-  "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — chest pain. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This chest pain won't let up and I'm afraid something bad is happening."
-  },
+  "hpi": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance’s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Chest Pain — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 120, tachycardic; BP 100/60."
+    ],
+    [
+      "Respiratory",
+      "RR 34, tachypneic; SpO₂ 96%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": "Initial Vital Signs Day 1 @ 16:00 Temperature: 37.0 C (98.6 degrees F) Pulse: 120 beats/min, Weak Respiratory rate: 34 /minute Blood pressure, systolic: 100 mm Hg Blood pressure, diastolic: 60 mm Hg Height: 183cm (72.0 in) Weight: 97.5 kg (215 lb) Body Mass Index: 29.1 kg/m2",
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "EKG: To evaluate for signs of ischemia or rhythm abnormalities",
     "Troponin level: For diagnosis and monitoring of ACS, including myocardial infarction",
     "Chest X-ray: May help identify conditions such as pneumonia, pulmonary edema, or aortic dissection",
@@ -57,11 +75,11 @@
     "IV access ×2",
     "order: time-sensitive interventions first"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

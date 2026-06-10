@@ -1,62 +1,293 @@
 {
   "id": 6,
-  "topic": "Rash and Lethargy - Pediatrics",
+  "topic": "Rash and Lethargy",
+  "title": "Rash and Lethargy",
   "diagnosis": "Mononucleosis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: Abdominal",
-    "CBC with differential",
-    "Public transport",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Lymph Nodes",
+    "Physical Exam: Neuro / Psych",
     "Physical Exam: Skin",
-    "Physical Exam: Lymph nodes",
-    "vaccination: MMR / Dtap"
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "Pulse oximetry",
+    {
+      "order": "Sedimentation rate, erythrocyte",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Not required, but ESR would be elevated in EBV."
+    },
+    "Mononucleosis screening / EBV serology",
+    "Basic metabolic profile / LFTs",
+    "Acetaminophen / Ibuprofen",
+    "Advise patient, no aspirin"
   ],
   "should_avoid": [
-    "Acute therapy",
-    "Aminoglycoside and penicillin combination"
+    "Aspirin, therapy",
+    "Amoxicillin / Ampicillin",
+    "Aspirin",
+    "CT abdomen"
   ],
   "rationale": {
-    "Physical Exam: Abdominal": "Appropriate CCS order for Mononucleosis: Physical Exam: Abdominal.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Mononucleosis.",
-    "Public transport": "Appropriate CCS order for Mononucleosis: Public transport.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Mononucleosis.",
-    "Physical Exam: Lymph nodes": "Targeted Physical Exam: Lymph nodes exam supports the differential for Mononucleosis.",
-    "vaccination: MMR / Dtap": "Appropriate CCS order for Mononucleosis: vaccination: MMR / Dtap.",
-    "Acute therapy": "CCS review: avoid this order for Mononucleosis — it does not change acute management.",
-    "Aminoglycoside and penicillin combination": "CCS review: avoid this order for Mononucleosis — it does not change acute management."
+    "Physical Exam: General Appearance": "Full examination in a pediatric patient with broad differential.",
+    "Physical Exam: Chest / Lungs": "Full exam in a child with broad differential.",
+    "Physical Exam: Heart / Cardiovascular": "Full exam in a child with broad differential.",
+    "Physical Exam: Abdomen": "Full exam — assess for splenomegaly (classic EBV finding).",
+    "Physical Exam: Lymph Nodes": "Assess for posterior cervical adenopathy — hallmark of mononucleosis.",
+    "Physical Exam: Neuro / Psych": "Full exam in a child with broad differential.",
+    "Physical Exam: Skin": "Characterize the rash — maculopapular eruption is classic in EBV infection.",
+    "Physical Exam: Extremities / Spine": "Full exam in a child with broad differential.",
+    "Physical Exam: HEENT / Neck": "Assess pharynx for palatal petechiae and tonsillar exudates.",
+    "CBC with differential": "CBC should be ordered on all patients with fever. Will show atypical lymphocytosis in EBV.",
+    "Pulse oximetry": "Always important to verify oxygenation in a febrile patient.",
+    "Sedimentation rate, erythrocyte": "Not required, but ESR would be elevated in EBV.",
+    "Mononucleosis screening / EBV serology": "Heterophil antibody (Monospot) or EBV-specific serology confirms the diagnosis.",
+    "Basic metabolic profile / LFTs": "BMPs are excellent screening tools. LFTs may show elevated transaminases in EBV hepatitis.",
+    "Acetaminophen / Ibuprofen": "Tylenol or ibuprofen for fever reduction. Symptomatic management.",
+    "Aspirin, therapy": "Administering aspirin to a febrile child is associated with Reye's syndrome. Contraindicated.",
+    "Amoxicillin / Ampicillin": "In EBV, amoxicillin and ampicillin cause a characteristic morbilliform rash. Viral infection — antibiotics ineffective. Especially avoid these two.",
+    "Advise patient, no aspirin": "Important to tell caregiver not to give aspirin to the febrile child.",
+    "Aspirin": "Associated with Reye's syndrome in febrile children. Use acetaminophen or ibuprofen instead.",
+    "CT abdomen": "Splenomegaly diagnosis is clinical. CT not indicated unless splenic rupture suspected."
   },
-  "hpi": "This case is a child with a broad differential. A full examination should be done. The patient is always excellent for learning to help with differential diagnosis.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a 6-year-old child who presents with fever, sore throat, malaise, and generalized rash. Exam reveals posterior cervical lymphadenopathy, palatal petechiae, and splenomegaly. The combination of pharyngitis, lymphadenopathy, fever, and the characteristic maculopapular rash is classic for infectious mononucleosis caused by Epstein-Barr virus. The differential includes other viral infections (CMV, acute HIV), streptococcal pharyngitis, and toxoplasmosis. Key management considerations: avoid amoxicillin/ampicillin (causes characteristic EBV rash), avoid aspirin (Reye syndrome risk in febrile children), and in older patients, restrict contact sports to prevent splenic rupture.",
+  "hpi_narrative": "{{patient_name}} is a 6-year-old child who presents with fever, sore throat, malaise, and generalized rash. Exam reveals posterior cervical lymphadenopathy, palatal petechiae, and splenomegaly. The combination of pharyngitis, lymphadenopathy, fever, and the characteristic maculopapular rash is classic for infectious mononucleosis caused by Epstein-Barr virus. The differential includes other viral infections (CMV, acute HIV), streptococcal pharyngitis, and toxoplasmosis. Key management considerations: avoid amoxicillin/ampicillin (causes characteristic EBV rash), avoid aspirin (Reye syndrome risk in febrile children), and in older patients, restrict contact sports to prevent splenic rupture.",
+  "physical_exam": [
+    [
+      "General",
+      "Febrile, lethargic child. Sore throat, malaise."
+    ],
+    [
+      "Abdominal",
+      "Splenomegaly — classic finding in mononucleosis. Palpable spleen tip."
+    ],
+    [
+      "Skin",
+      "Maculopapular rash — characteristic of EBV infection."
+    ],
+    [
+      "Heent",
+      "Posterior cervical lymphadenopathy. Palatal petechiae. Pharyngeal erythema with tonsillar exudates."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. I feel so tired and my skin is breaking out.",
-    "history": "I had a rash for a few days. My mom says I look pale.",
-    "pain": "It hurts when I touch my stomach."
+    "chief_complaint": "Fever, rash, and lethargy",
+    "history": "{{patient_name}} is a 6-year-old child who presents with fever, sore throat, malaise, and generalized rash. Exam reveals posterior cervical lymphadenopathy, palatal petechiae, and splenomegaly. The c…",
+    "pain": "Fever, rash, and lethargy"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "This case is a child with a broad differential. A full examination should be done. The patient is always excellent for learning to help with differential diagnosis.",
+  "ccs_category": "Pediatrics / Infectious Disease",
+  "chief_complaint": "Fever, rash, and lethargy",
+  "case_summary": "Classic pediatric mononucleosis. Fever + pharyngitis + lymphadenopathy + splenomegaly. Monospot/EBV serology confirms. Symptomatic treatment: acetaminophen, rest. Avoid aspirin (Reye's) and amoxicillin/ampicillin (drug rash). Office management.",
+  "decoys": [
+    {
+      "label": "Amoxicillin / Ampicillin",
+      "reason_wrong": "Causes characteristic morbilliform rash in EBV infection. Viral — antibiotics ineffective."
+    },
+    {
+      "label": "Aspirin",
+      "reason_wrong": "Associated with Reye's syndrome in febrile children. Use acetaminophen or ibuprofen instead."
+    },
+    {
+      "label": "CT abdomen",
+      "reason_wrong": "Splenomegaly diagnosis is clinical. CT not indicated unless splenic rupture suspected."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Laboratory Tests",
-    "Patient Education",
-    "Consultation"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Full examination in a pediatric patient with broad differential.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Full exam in a child with broad differential.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Full exam in a child with broad differential.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Full exam — assess for splenomegaly (classic EBV finding).",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Lymph Nodes",
+      "type": "correctlyOrdered",
+      "finding": "Assess for posterior cervical adenopathy — hallmark of mononucleosis.",
+      "aliases": [
+        "Lymph Node Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Full exam in a child with broad differential.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Skin",
+      "type": "correctlyOrdered",
+      "finding": "Characterize the rash — maculopapular eruption is classic in EBV infection.",
+      "aliases": [
+        "Skin Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "type": "correctlyOrdered",
+      "finding": "Full exam in a child with broad differential.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "correctlyOrdered",
+      "finding": "Assess pharynx for palatal petechiae and tonsillar exudates.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "CBC should be ordered on all patients with fever. Will show atypical lymphocytosis in EBV.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "correctlyOrdered",
+      "finding": "Always important to verify oxygenation in a febrile patient.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Sedimentation rate, erythrocyte",
+      "type": "optional",
+      "finding": "Not required, but ESR would be elevated in EBV.",
+      "aliases": [
+        "ESR"
+      ]
+    },
+    {
+      "label": "Mononucleosis screening / EBV serology",
+      "type": "correctlyOrdered",
+      "finding": "Heterophil antibody (Monospot) or EBV-specific serology confirms the diagnosis.",
+      "aliases": [
+        "Monospot",
+        "EBV titer",
+        "Heterophil antibody"
+      ]
+    },
+    {
+      "label": "Basic metabolic profile / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "BMPs are excellent screening tools. LFTs may show elevated transaminases in EBV hepatitis.",
+      "aliases": [
+        "BMP",
+        "CMP",
+        "LFTs"
+      ]
+    },
+    {
+      "label": "Acetaminophen / Ibuprofen",
+      "type": "shouldHaveOrdered",
+      "finding": "Tylenol or ibuprofen for fever reduction. Symptomatic management.",
+      "aliases": [
+        "Tylenol",
+        "Fever reducer"
+      ]
+    },
+    {
+      "label": "Aspirin, therapy",
+      "type": "correctlyAvoided",
+      "finding": "Administering aspirin to a febrile child is associated with Reye's syndrome. Contraindicated.",
+      "aliases": [
+        "ASA"
+      ]
+    },
+    {
+      "label": "Amoxicillin / Ampicillin",
+      "type": "correctlyAvoided",
+      "finding": "In EBV, amoxicillin and ampicillin cause a characteristic morbilliform rash. Viral infection — antibiotics ineffective. Especially avoid these two.",
+      "aliases": [
+        "Amoxicillin",
+        "Ampicillin",
+        "Augmentin"
+      ]
+    },
+    {
+      "label": "Advise patient, no aspirin",
+      "type": "shouldHaveOrdered",
+      "finding": "Important to tell caregiver not to give aspirin to the febrile child.",
+      "aliases": [
+        "Aspirin counseling"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Lymph Nodes",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Skin",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "Pulse oximetry",
+    {
+      "order": "Sedimentation rate, erythrocyte",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Not required, but ESR would be elevated in EBV."
+    },
+    "Mononucleosis screening / EBV serology",
+    "Basic metabolic profile / LFTs",
+    "Acetaminophen / Ibuprofen",
+    "Advise patient, no aspirin"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Mononucleosis."
 }

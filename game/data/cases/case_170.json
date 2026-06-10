@@ -1,58 +1,87 @@
 {
   "id": 170,
   "topic": "Fall",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Fall",
+  "diagnosis": "Orthostatic Hypotension",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Office or home (not ED)",
     "Orthostatic vital signs",
-    "EKG",
-    "BMP and CBC",
-    "IV fluid bolus if acutely symptomatic",
-    "Stop offending diuretics / antihypertensives"
+    "Medication review",
+    "CBC / BMP",
+    "Non-pharmacologic measures"
   ],
   "should_avoid": [],
   "rationale": {
-    "Office or home (not ED)": "Appropriate CCS order for this diagnosis: Office or home (not ED).",
-    "Orthostatic vital signs": "Vital signs establish baseline stability before further orders.",
-    "EKG": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
-    "BMP and CBC": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "IV fluid bolus if acutely symptomatic": "Appropriate CCS order for this diagnosis: IV fluid bolus if acutely symptomatic.",
-    "Stop offending diuretics / antihypertensives": "Appropriate CCS order for this diagnosis: Stop offending diuretics / antihypertensives."
+    "Orthostatic vital signs": "SBP drop ≥20, DBP drop ≥10 within 3min standing.",
+    "Medication review": "Review antihypertensives, diuretics, alpha-blockers.",
+    "CBC / BMP": "Anemia, dehydration, electrolyte abnormalities.",
+    "Non-pharmacologic measures": "Fluid/salt, compression stockings, slow position changes."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with recurrent falls, dizziness, lightheadedness, and near-syncope upon standing (within 3 min of standing). Orthostatic hypotension = drop in SBP ≥20mmHg or DBP ≥10mmHg within 3 min of standing. Causes: medications (antihypertensives — especially alpha-blockers, diuretics, nitrates, TCAs, dopaminergics), hypovolemia, autonomic neuropathy (DM, Parkinson's), prolonged bed rest. Workup: orthostatic vital signs, medication review, CBC (anemia), BMP (dehydration, electrolyte), EKG, consider autonomic testing. Treatment: review and adjust medications. Non-pharmacologic: increase fluid/salt intake (if no CHF), compression stockings, elevate head of bed, slow position changes, avoid prolonged standing. If needed: fludrocortisone (mineralocorticoid — expand volume) or midodrine (alpha-1 agonist).",
+  "hpi_narrative": "{{patient_name}} presents with recurrent falls, dizziness, lightheadedness, and near-syncope upon standing (within 3 min of standing). Orthostatic hypotension = drop in SBP ≥20mmHg or DBP ≥10mmHg within 3 min of standing. Causes: medications (antihypertensives — especially alpha-blockers, diuretics, nitrates, TCAs, dopaminergics), hypovolemia, autonomic neuropathy (DM, Parkinson's), prolonged bed rest. Workup: orthostatic vital signs, medication review, CBC (anemia), BMP (dehydration, electrolyte), EKG, consider autonomic testing. Treatment: review and adjust medications. Non-pharmacologic: increase fluid/salt intake (if no CHF), compression stockings, elevate head of bed, slow position changes, avoid prolonged standing. If needed: fludrocortisone (mineralocorticoid — expand volume) or midodrine (alpha-1 agonist).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — fall. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This fall won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Recurrent falls, dizziness on standing",
+    "history": "{{patient_name}} presents with recurrent falls, dizziness, lightheadedness, and near-syncope upon standing (within 3 min of standing). Orthostatic hypotension = drop in SBP ≥20mmHg or DBP ≥10mmHg wit…",
+    "pain": "Recurrent falls, dizziness on standing"
   },
-  "ccs_category": null,
+  "ccs_category": "Internal Medicine / Geriatrics",
+  "chief_complaint": "Recurrent falls, dizziness on standing",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Office or home (not ED)",
+    {
+      "label": "Orthostatic vital signs",
+      "type": "correctlyOrdered",
+      "finding": "SBP drop ≥20, DBP drop ≥10 within 3min standing.",
+      "aliases": [
+        "Orthostatics"
+      ]
+    },
+    {
+      "label": "Medication review",
+      "type": "correctlyOrdered",
+      "finding": "Review antihypertensives, diuretics, alpha-blockers.",
+      "aliases": [
+        "Med review"
+      ]
+    },
+    {
+      "label": "CBC / BMP",
+      "type": "correctlyOrdered",
+      "finding": "Anemia, dehydration, electrolyte abnormalities.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Non-pharmacologic measures",
+      "type": "correctlyOrdered",
+      "finding": "Fluid/salt, compression stockings, slow position changes.",
+      "aliases": [
+        "Lifestyle"
+      ]
+    }
+  ],
+  "order_sets": [
     "Orthostatic vital signs",
-    "EKG",
-    "BMP and CBC",
-    "IV fluid bolus if acutely symptomatic",
-    "Stop offending diuretics / antihypertensives"
+    "Medication review",
+    "CBC / BMP",
+    "Non-pharmacologic measures"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Orthostatic Hypotension."
 }

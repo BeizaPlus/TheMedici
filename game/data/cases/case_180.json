@@ -1,9 +1,10 @@
 {
   "id": 180,
   "topic": "Headache",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Headache",
+  "diagnosis": "Primary Headache (Tentative) or Secondary Headache (Suspected)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain a detailed history and perform a physical examination",
     "Order relevant laboratory investigations (e.g., complete blood count, electrolytes, glucose, thyroid function tests, and lumbar puncture if necessary)",
@@ -17,35 +18,50 @@
     "Prescribing medication without proper diagnostic workup to establish the cause of the headache"
   ],
   "rationale": {
-    "Obtain a detailed history and perform a physical examination": "Appropriate CCS order for this diagnosis: Obtain a detailed history and perform a physical examination.",
-    "Order relevant laboratory investigations (e.g., complete blood count, electrolytes, glucose, thyroid function tests, and lumbar puncture if necessary)": "Appropriate CCS order for this diagnosis: Order relevant laboratory investigations (e.g., complete blood count, electrolytes, glucose, thyroid function tests, and lumbar puncture if necessary).",
-    "Request imaging studies such as CT or MRI of the brain": "Appropriate CCS order for this diagnosis: Request imaging studies such as CT or MRI of the brain.",
-    "Consult with a neurologist for further evaluation and management": "Targeted Consult with a neurologist for further evaluation and management exam supports the differential for this diagnosis.",
-    "If the patient's condition is stable, consider admitting the patient for observation": "Appropriate CCS order for this diagnosis: If the patient's condition is stable, consider admitting the patient for observation.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
-    "Prescribing medication without proper diagnostic workup to establish the cause of the headache": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Obtaining a detailed history and performing a physical examination": "To gather information that may help in determining the cause of the headache",
+    "Ordering relevant laboratory investigations and requesting imaging studies": "To rule out potential secondary causes of the headache such as meningitis, subarachnoid hemorrhage, or brain tumors",
+    "Consulting with a neurologist": "For further evaluation and management of the patient",
+    "Admitting the patient for observation (if stable)": "To monitor the patient's condition closely and ensure timely intervention if needed",
+    "Oxygen": "The case presents with a headache, which could be indicative of various conditions, some of which may require immediate oxygen therapy.",
+    "IV access ×2": "In any medical emergency, establishing two large-bore IV access is crucial for administration of fluids and medications."
   },
-  "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — headache. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This headache won't let up and I'm afraid something bad is happening."
-  },
+  "hpi": "Initial History\n\nReason(s) for visit: Headache\nHistory of present Illness:\nA 55-year-old female with a past medical history of hypertension presents to your office with a an occipital headache, mild vertigo, and a tendency to fall when walking for 6 days. She states that she never had any problems walking or being off-balance. Eight days ago, she stated that she had a pink rash on her arms and torso and felt feverish. The rash improved after a couple days, but the headache and tendency to fall persisted. She had nausea, but she denied any vomiting. She feels weak and \"under the weather.\"  She denies travel, but went hiking 2 weeks ago nearby her house which she routinely does every summer. She denies any history of migraines. She will occasionally get a tension headache which she will treat with Ibuprofen. She has never had a headache that has lasted this long. She denies any trauma to her head. She denies any sick contacts. She denies any recent antibiotic use.  She is very concerned about her symptoms.\n\nPMH:\nPast Medical History: Hypertension. The patient recently had a colonoscopy screening which was normal. \nCurrent medications: HCTZ 25mg PO daily\nAllergies: None\nVaccinations: Received Childhood vaccinations.\nWomen's health: The patient cannot remember when her last pap smear was done.\nFamily History:\nHer father has a history of Hypertension and died of a stroke. Her mother has no health problems and is still living.\n\nSocial History:\nMarital/Family: She is married with one child. She lives in Gaithersburg, Maryland.\nPersonal habits: The patient denies smoking. She lives an active lifestyle. She drinks alcohol socially. She denies use of illegal drugs or misuse of medications.\nOccupation/educational: She works as a public relations specialist. She is a college graduate with a BS in communication.\nRecreational: The patient enjoys to bike and hike. She loves the outdoors and spends as much time as she is able.\n\nReview of systems:\nGeneral: See HPI\nSkin: See HPI\nHEENT: Negative\nCardiorespiratory: Negative\nGastrointestinal: See HPI\nGenitourinary: Negative\nNeuropsychiatric: See HPI\n\n--- Chart tabs ---\n\n* Chart: Progress Notes → presentation_5_Headache_chart_Progress_Notes.png\n* Chart: Vital Signs → presentation_5_Headache_chart_Vital_Signs.png",
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "presents to your office with a an occipital headache, mild vertigo, and a tendency to fall when walking for 6 days."
+    ],
+    [
+      "Cardiovascular",
+      "HR 88; BP 118/70."
+    ],
+    [
+      "Respiratory",
+      "RR 18; SpO₂ 96%."
+    ],
+    [
+      "Abdomen",
+      "Abdominal tenderness pattern matches history; no rigid abdomen documented yet."
+    ],
+    [
+      "Neuro",
+      "Mental status intact; cranial nerves and neck stiffness assessed."
+    ],
+    [
+      "Skin",
+      "Skin rash morphology and distribution documented."
+    ]
+  ],
+  "vitals": "Initial Vital Signs Day 1 @ 9:00 Temperature: 38.3 C (101.0 degrees F) Pulse: 88 beats/min. Regular rhythm Respiratory rate: 18 /minute Blood pressure, systolic: 118 mm Hg Blood pressure, diastolic: 70 mm Hg Height: 175.3 cm (69.0 in) Weight: 65.8 kg (145 lb) Body Mass Index: 21.4 kg/m2",
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain a detailed history and perform a physical examination",
     "Order relevant laboratory investigations (e.g., complete blood count, electrolytes, glucose, thyroid function tests, and lumbar puncture if necessary)",
     "Request imaging studies such as CT or MRI of the brain",
@@ -54,11 +70,11 @@
     "Oxygen",
     "IV access ×2"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

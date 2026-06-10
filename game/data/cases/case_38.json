@@ -1,64 +1,215 @@
 {
   "id": 38,
   "topic": "Yellowing of Eyes",
+  "title": "Yellowing of Eyes",
   "diagnosis": "Pancreatic Adenocarcinoma",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Abdominal Exam",
-    "Physical Exam: HEENT",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
     "Physical Exam: Extremities",
-    "Physical Exam: Neurological Exam",
-    "Magnesium, serum",
-    "Liver, serum",
-    "Lipid panel"
+    "CBC with differential",
+    "BMP / CMP / LFTs",
+    "CA 19-9",
+    "CT abdomen/pelvis with IV contrast (pancreatic protocol)",
+    "EUS with FNA",
+    "ERCP / MRCP",
+    "Consult, oncology / Surgical oncology",
+    "Refer to palliative care"
   ],
   "should_avoid": [
-    "CT, abdomen / pelvis"
+    "MRI as first-line for pancreatic mass"
   ],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for yellowing of eyes.",
-    "Physical Exam: Abdominal Exam": "Appropriate CCS order for Pancreatic Adenocarcinoma: Physical Exam: Abdominal Exam.",
-    "Physical Exam: HEENT": "Targeted Physical Exam: HEENT exam supports the differential for Pancreatic Adenocarcinoma.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Pancreatic Adenocarcinoma.",
-    "Physical Exam: Neurological Exam": "Targeted Physical Exam: Neurological Exam exam supports the differential for Pancreatic Adenocarcinoma.",
-    "Magnesium, serum": "Appropriate CCS order for Pancreatic Adenocarcinoma: Magnesium, serum.",
-    "Liver, serum": "Appropriate CCS order for Pancreatic Adenocarcinoma: Liver, serum.",
-    "Lipid panel": "Appropriate CCS order for Pancreatic Adenocarcinoma: Lipid panel.",
-    "CT, abdomen / pelvis": "Advanced imaging is not indicated early for Pancreatic Adenocarcinoma when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Cachectic? Jaundiced.",
+    "Physical Exam: Chest / Lungs": "Screening for mets.",
+    "Physical Exam: Heart / Cardiovascular": "Screening.",
+    "Physical Exam: Abdomen": "Courvoisier's sign: palpable non-tender gallbladder in jaundiced patient. RUQ mass.",
+    "Physical Exam: Extremities": "Edema from malnutrition/hypoalbuminemia.",
+    "CBC with differential": "Anemia of chronic disease.",
+    "BMP / CMP / LFTs": "Obstructive pattern: elevated ALP, GGT, direct bilirubin. AST/ALT mildly elevated.",
+    "CA 19-9": "Tumor marker. Prognostic + monitors treatment response. Not diagnostic (false positives in cholangitis, pancreatitis).",
+    "CT abdomen/pelvis with IV contrast (pancreatic protocol)": "Dual-phase CT for pancreatic mass, vascular involvement, liver mets. Most important staging study.",
+    "EUS with FNA": "Tissue diagnosis. Endoscopic ultrasound with fine needle aspiration of pancreatic mass.",
+    "ERCP / MRCP": "Imaging of biliary tree. Therapeutic: biliary stent if obstruction.",
+    "Consult, oncology / Surgical oncology": "Multidisciplinary decision: resectable (Whipple) vs palliative chemotherapy.",
+    "Refer to palliative care": "Pancreatic cancer has poor prognosis — early palliative care improves QOL.",
+    "MRI as first-line for pancreatic mass": "CT with pancreatic protocol (dual-phase, IV contrast) is first-line. MRI is second-line when CT is equivocal or patient cannot receive contrast."
   },
-  "hpi": "Review the case of a patient with pancreatic cancer along with other disorders that affect the patient's ability to respond to therapy. If the patient does not have dependent edema, prednisolone may be used to aid in the treatment process.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with painless jaundice, dark urine, clay-colored stools, pruritus, and weight loss — classic for malignant biliary obstruction. Courvoisier's sign: palpable, non-tender gallbladder in a jaundiced patient = malignancy until proven otherwise (most commonly pancreatic head adenocarcinoma). Pancreatic cancer most commonly arises in the head of the pancreas (70%), causing early obstructive jaundice. Late presentation is the rule — most are unresectable at diagnosis. Workup: CT abdomen/pelvis with IV contrast (pancreatic protocol — dual-phase) for staging. CA 19-9 tumor marker (not diagnostic but prognostic and monitors recurrence). ERCP/MRCP for biliary drainage if needed. Biopsy via EUS-FNA. If resectable (localized, no vascular involvement, no mets): pancreaticoduodenectomy (Whipple procedure). If unresectable: palliative biliary stenting, chemotherapy (gemcitabine + nab-paclitaxel or FOLFIRINOX). Poor prognosis — 5-year survival <10%.",
+  "hpi_narrative": "{{patient_name}} presents with painless jaundice, dark urine, clay-colored stools, pruritus, and weight loss — classic for malignant biliary obstruction. Courvoisier's sign: palpable, non-tender gallbladder in a jaundiced patient = malignancy until proven otherwise (most commonly pancreatic head adenocarcinoma). Pancreatic cancer most commonly arises in the head of the pancreas (70%), causing early obstructive jaundice. Late presentation is the rule — most are unresectable at diagnosis. Workup: CT abdomen/pelvis with IV contrast (pancreatic protocol — dual-phase) for staging. CA 19-9 tumor marker (not diagnostic but prognostic and monitors recurrence). ERCP/MRCP for biliary drainage if needed. Biopsy via EUS-FNA. If resectable (localized, no vascular involvement, no mets): pancreaticoduodenectomy (Whipple procedure). If unresectable: palliative biliary stenting, chemotherapy (gemcitabine + nab-paclitaxel or FOLFIRINOX). Poor prognosis — 5-year survival <10%.",
+  "physical_exam": [
+    [
+      "General",
+      "Jaundiced, cachectic, temporal wasting."
+    ],
+    [
+      "Abdominal",
+      "Courvoisier's sign: palpable, non-tender gallbladder. Epigastric mass possible. Hepatomegaly from biliary obstruction."
+    ],
+    [
+      "Skin",
+      "Jaundice (icterus). Excoriations from pruritus."
+    ],
+    [
+      "Heent",
+      "Scleral icterus (yellowing of eyes)."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my yellowing eyes. What does it mean?",
-    "history": "I noticed my eyes changing color. I feel tired and worried.",
-    "pain": "I have some discomfort in my abdomen."
+    "chief_complaint": "Painless jaundice, weight loss, dark urine, clay-colored stools",
+    "history": "{{patient_name}} presents with painless jaundice, dark urine, clay-colored stools, pruritus, and weight loss — classic for malignant biliary obstruction. Courvoisier's sign: palpable, non-tender gall…",
+    "pain": "Painless jaundice, weight loss, dark urine, clay-colored stools"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Review the case of a patient with pancreatic cancer along with other disorders that affect the patient's ability to respond to therapy. If the patient does not have dependent edema, prednisolone may be used to aid in the treatment process.",
+  "ccs_category": "Internal Medicine / Oncology / Gastroenterology",
+  "chief_complaint": "Painless jaundice, weight loss, dark urine, clay-colored stools",
+  "case_summary": "Pancreatic head adenocarcinoma. Painless jaundice + Courvoisier's sign. CT pancreatic protocol + EUS-FNA → Whipple if resectable, palliative chemo/stent if not. Poor prognosis. Early palliative care.",
+  "decoys": [
+    {
+      "label": "MRI as first-line for pancreatic mass",
+      "reason_wrong": "CT with pancreatic protocol (dual-phase, IV contrast) is first-line. MRI is second-line when CT is equivocal or patient cannot receive contrast."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Laboratory Tests",
-    "Imaging Ordered",
-    "Consults Ordered"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Cachectic? Jaundiced.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Screening for mets.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Courvoisier's sign: palpable non-tender gallbladder in jaundiced patient. RUQ mass.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities",
+      "type": "correctlyOrdered",
+      "finding": "Edema from malnutrition/hypoalbuminemia.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Anemia of chronic disease.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Obstructive pattern: elevated ALP, GGT, direct bilirubin. AST/ALT mildly elevated.",
+      "aliases": [
+        "BMP",
+        "LFTs"
+      ]
+    },
+    {
+      "label": "CA 19-9",
+      "type": "correctlyOrdered",
+      "finding": "Tumor marker. Prognostic + monitors treatment response. Not diagnostic (false positives in cholangitis, pancreatitis).",
+      "aliases": [
+        "CA19-9"
+      ]
+    },
+    {
+      "label": "CT abdomen/pelvis with IV contrast (pancreatic protocol)",
+      "type": "correctlyOrdered",
+      "finding": "Dual-phase CT for pancreatic mass, vascular involvement, liver mets. Most important staging study.",
+      "aliases": [
+        "CT abdomen",
+        "Pancreatic CT"
+      ]
+    },
+    {
+      "label": "EUS with FNA",
+      "type": "correctlyOrdered",
+      "finding": "Tissue diagnosis. Endoscopic ultrasound with fine needle aspiration of pancreatic mass.",
+      "aliases": [
+        "EUS",
+        "Endoscopic biopsy"
+      ]
+    },
+    {
+      "label": "ERCP / MRCP",
+      "type": "correctlyOrdered",
+      "finding": "Imaging of biliary tree. Therapeutic: biliary stent if obstruction.",
+      "aliases": [
+        "ERCP",
+        "MRCP"
+      ]
+    },
+    {
+      "label": "Consult, oncology / Surgical oncology",
+      "type": "correctlyOrdered",
+      "finding": "Multidisciplinary decision: resectable (Whipple) vs palliative chemotherapy.",
+      "aliases": [
+        "Oncology consult"
+      ]
+    },
+    {
+      "label": "Refer to palliative care",
+      "type": "shouldHaveOrdered",
+      "finding": "Pancreatic cancer has poor prognosis — early palliative care improves QOL.",
+      "aliases": [
+        "Palliative care"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Extremities",
+    "CBC with differential",
+    "BMP / CMP / LFTs",
+    "CA 19-9",
+    "CT abdomen/pelvis with IV contrast (pancreatic protocol)",
+    "EUS with FNA",
+    "ERCP / MRCP",
+    "Consult, oncology / Surgical oncology",
+    "Refer to palliative care"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Pancreatic Adenocarcinoma."
 }

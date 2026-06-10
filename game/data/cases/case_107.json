@@ -1,64 +1,99 @@
 {
   "id": 107,
-  "topic": "Paranoia - Psychiatry",
+  "topic": "Paranoia",
+  "title": "Paranoia",
   "diagnosis": "Schizophrenia",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Patient History",
-    "Mental Status Exam",
-    "Crisis Assessment",
-    "Risk Assessment: Suicide Risk",
-    "Psychiatric History",
-    "Medication Adherence",
-    "Substance Use History"
+    "Physical Exam / Neuro",
+    "CBC / BMP / TSH / LFTs / Tox screen",
+    "CT/MRI brain (if indicated)",
+    "Antipsychotic (Risperidone / Olanzapine)",
+    "Psychiatry admission / safety assessment"
   ],
-  "should_avoid": [
-    "CT Head: Non-Contrast"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for paranoia - psychiatry.",
-    "Patient History": "Appropriate CCS order for Schizophrenia: Patient History.",
-    "Mental Status Exam": "Appropriate CCS order for Schizophrenia: Mental Status Exam.",
-    "Crisis Assessment": "Appropriate CCS order for Schizophrenia: Crisis Assessment.",
-    "Risk Assessment: Suicide Risk": "Appropriate CCS order for Schizophrenia: Risk Assessment: Suicide Risk.",
-    "Psychiatric History": "Appropriate CCS order for Schizophrenia: Psychiatric History.",
-    "Medication Adherence": "Appropriate CCS order for Schizophrenia: Medication Adherence.",
-    "Substance Use History": "Appropriate CCS order for Schizophrenia: Substance Use History.",
-    "CT Head: Non-Contrast": "Advanced imaging is not indicated early for Schizophrenia when the diagnosis is clinical."
+    "Physical Exam / Neuro": "Rule out medical cause.",
+    "CBC / BMP / TSH / LFTs / Tox screen": "Rule out medical causes, substance-induced.",
+    "CT/MRI brain (if indicated)": "New-onset psychosis → rule out CNS lesion.",
+    "Antipsychotic (Risperidone / Olanzapine)": "Second-gen preferred. Monitor metabolic effects.",
+    "Psychiatry admission / safety assessment": "Evaluate for suicidal/homicidal ideation."
   },
-  "hpi": "In this case, the patient presented with psychiatric concerns that all advisory be resolved sooner. The patient was not able to provide a clear history of their symptoms. It is important to gather a thorough psychiatric history to understand the patient's condition. The patient was also assessed for risk factors, including suicidal ideation, which is critical in managing psychiatric emergencies. The importance of medication adherence and substance use history was also highlighted in the case.",
+  "hpi": "{{patient_name}} presents with paranoia, auditory hallucinations (hearing voices), disorganized speech/behavior, negative symptoms (flat affect, social withdrawal, avolition), and functional decline >6 months. Schizophrenia is a chronic psychiatric disorder — symptoms for ≥6 months with ≥1 month of active symptoms. Must rule out substance-induced psychosis, medical causes (CNS tumor, infection, autoimmune encephalitis, thyroid), and other psychiatric disorders (bipolar with psychosis, schizoaffective). Diagnosis is clinical — no diagnostic test. Collateral history crucial. Treatment: antipsychotics (second-generation: risperidone, olanzapine, quetiapine, aripiprazole — fewer EPS than first-gen like haloperidol). Clozapine for treatment-resistant. Monitor for metabolic syndrome (weight, glucose, lipids). Long-acting injectables for non-adherence. Psychosocial interventions: CBT, family therapy, supported employment. Safety assessment for self-harm/aggression.",
+  "hpi_narrative": "{{patient_name}} presents with paranoia, auditory hallucinations (hearing voices), disorganized speech/behavior, negative symptoms (flat affect, social withdrawal, avolition), and functional decline >6 months. Schizophrenia is a chronic psychiatric disorder — symptoms for ≥6 months with ≥1 month of active symptoms. Must rule out substance-induced psychosis, medical causes (CNS tumor, infection, autoimmune encephalitis, thyroid), and other psychiatric disorders (bipolar with psychosis, schizoaffective). Diagnosis is clinical — no diagnostic test. Collateral history crucial. Treatment: antipsychotics (second-generation: risperidone, olanzapine, quetiapine, aripiprazole — fewer EPS than first-gen like haloperidol). Clozapine for treatment-resistant. Monitor for metabolic syndrome (weight, glucose, lipids). Long-acting injectables for non-adherence. Psychosocial interventions: CBT, family therapy, supported employment. Safety assessment for self-harm/aggression.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared and don't know what's happening to me.",
-    "history": "I feel like everyone is out to get me. I can't trust anyone.",
-    "pain": "It's like a heavy weight on my chest."
+    "chief_complaint": "Paranoia, auditory hallucinations, disorganized behavior",
+    "history": "{{patient_name}} presents with paranoia, auditory hallucinations (hearing voices), disorganized speech/behavior, negative symptoms (flat affect, social withdrawal, avolition), and functional decline …",
+    "pain": "Paranoia, auditory hallucinations, disorganized behavior"
   },
   "ccs_category": "Psychiatry",
-  "case_summary": "In this case, the patient presented with psychiatric concerns that all advisory be resolved sooner. The patient was not able to provide a clear history of their symptoms. It is important to gather a thorough psychiatric history to understand the patient's condition. The patient was also assessed for risk factors, including suicidal ideation, which is critical in managing psychiatric emergencies. The importance of medication adherence and substance use history was also highlighted in the case.",
+  "chief_complaint": "Paranoia, auditory hallucinations, disorganized behavior",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Patient History",
-    "Mental Status Exam",
-    "Crisis Assessment"
+    {
+      "label": "Physical Exam / Neuro",
+      "type": "correctlyOrdered",
+      "finding": "Rule out medical cause.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "CBC / BMP / TSH / LFTs / Tox screen",
+      "type": "correctlyOrdered",
+      "finding": "Rule out medical causes, substance-induced.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "CT/MRI brain (if indicated)",
+      "type": "correctlyOrdered",
+      "finding": "New-onset psychosis → rule out CNS lesion.",
+      "aliases": [
+        "Brain imaging"
+      ]
+    },
+    {
+      "label": "Antipsychotic (Risperidone / Olanzapine)",
+      "type": "correctlyOrdered",
+      "finding": "Second-gen preferred. Monitor metabolic effects.",
+      "aliases": [
+        "Risperdal",
+        "Zyprexa"
+      ]
+    },
+    {
+      "label": "Psychiatry admission / safety assessment",
+      "type": "correctlyOrdered",
+      "finding": "Evaluate for suicidal/homicidal ideation.",
+      "aliases": [
+        "Psych admission"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam / Neuro",
+    "CBC / BMP / TSH / LFTs / Tox screen",
+    "CT/MRI brain (if indicated)",
+    "Antipsychotic (Risperidone / Olanzapine)",
+    "Psychiatry admission / safety assessment"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Schizophrenia."
 }

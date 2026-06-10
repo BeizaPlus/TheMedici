@@ -1,64 +1,351 @@
 {
   "id": 5,
   "topic": "Headache",
+  "title": "Headache",
   "diagnosis": "West Nile Encephalitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "CT Head",
-    "Physical Exam",
-    "Labs",
-    "IV Fluids",
-    "Neuro Consult",
-    "MRI, with and without contrast",
-    "LP, if indicated"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Skin",
+    "CBC with differential",
+    "Chest X-ray",
+    "Urinalysis",
+    "Toxicology screen, urine",
+    "Bacterial culture, blood",
+    "MRI/CT head",
+    "Lumbar puncture",
+    "Protein, cerebrospinal fluid",
+    "Fungal culture, cerebrospinal fluid",
+    "Viral culture, cerebrospinal fluid",
+    "Bacterial culture, cerebrospinal fluid",
+    "Glucose, cerebrospinal fluid",
+    "Cell count, cerebrospinal fluid",
+    "West Nile virus antibody, CSF/serum",
+    "HSV PCR, CSF/serum",
+    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
+    "Tdap vaccine",
+    "Papanicolaou smear",
+    "Mammography"
   ],
   "should_avoid": [
-    "CT Abdomen and Pelvis",
-    "Toxicology Screen"
+    "Empiric antibiotics without LP",
+    "Corticosteroids",
+    "Discharge from office"
   ],
   "rationale": {
-    "CT Head": "Appropriate CCS order for West Nile Encephalitis: CT Head.",
-    "Physical Exam": "Appropriate CCS order for West Nile Encephalitis: Physical Exam.",
-    "Labs": "Appropriate CCS order for West Nile Encephalitis: Labs.",
-    "IV Fluids": "Appropriate CCS order for West Nile Encephalitis: IV Fluids.",
-    "Neuro Consult": "Targeted Neuro Consult exam supports the differential for West Nile Encephalitis.",
-    "MRI, with and without contrast": "Appropriate CCS order for West Nile Encephalitis: MRI, with and without contrast.",
-    "LP, if indicated": "Appropriate CCS order for West Nile Encephalitis: LP, if indicated.",
-    "CT Abdomen and Pelvis": "Advanced imaging is not indicated early for West Nile Encephalitis when the diagnosis is clinical.",
-    "Toxicology Screen": "CCS review: avoid this order for West Nile Encephalitis — it does not change acute management."
+    "Physical Exam: General Appearance": "The general examination is extremely useful to determine how sick the patient looks.",
+    "Physical Exam: Chest / Lungs": "Important to look for lung pathology in a febrile patient.",
+    "Physical Exam: Abdomen": "Important to look for abdominal pathology in a febrile patient.",
+    "Physical Exam: Neuro / Psych": "This is the patient's chief complaint — neurologic exam is essential.",
+    "Physical Exam: Skin": "This will reveal pink macular lesions on the left thigh — characteristic rash.",
+    "CBC with differential": "Important to order a CBC with differential in a patient with fever.",
+    "Chest X-ray": "Important to get a chest X-ray to rule out pneumonia and other causes of fever.",
+    "Urinalysis": "Important to get urinalysis to rule out bacterial infection and other causes of fever.",
+    "Toxicology screen, urine": "Urine tox screen is important as illicit drugs can cause fever.",
+    "Bacterial culture, blood": "Blood culture will aid in localizing the source of infection.",
+    "MRI/CT head": "Ataxia should lead to consideration of neurological infection or stroke. Brain imaging to rule out stroke or tumor. MRI preferred (more sensitive for West Nile abnormalities) but CT acceptable.",
+    "Lumbar puncture": "Lumbar puncture is essential for evaluation of patient with ataxia and fever.",
+    "Protein, cerebrospinal fluid": "CSF analysis is important in patient with fever and neurological signs.",
+    "Fungal culture, cerebrospinal fluid": "Important to culture CSF for viral, bacterial, and fungal etiologies.",
+    "Viral culture, cerebrospinal fluid": "Important to culture CSF. Note: West Nile virus is frequently negative in viral culture.",
+    "Bacterial culture, cerebrospinal fluid": "Important to culture CSF for bacterial etiologies.",
+    "Glucose, cerebrospinal fluid": "CSF glucose points toward fungal, viral, or bacterial picture. Normal glucose suggests viral (not bacterial) etiology.",
+    "Cell count, cerebrospinal fluid": "CSF cell count consistent with aseptic meningitis. Lymphocytic predominance suggests viral etiology.",
+    "West Nile virus antibody, CSF/serum": "Confirms aseptic meningitis is from West Nile virus.",
+    "HSV PCR, CSF/serum": "Aseptic meningitis workup should include herpes simplex screening.",
+    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel": "Chemistries are an important screening tool and should be done in nearly every non-emergent patient.",
+    "Tdap vaccine": "Tdap should be given every 10 years. No history given — should be administered.",
+    "Papanicolaou smear": "HPV DNA test every 3 years for women ≥30 with normal cytology. No history given — should be scheduled.",
+    "Mammography": "USPSTF recommends mammogram screening every 2 years for patients ages 50-69.",
+    "Empiric antibiotics without LP": "Bacterial meningitis is on the differential and requires CSF culture before antibiotics. But this is viral encephalitis — LP is diagnostic, not empiric.",
+    "Corticosteroids": "No evidence for steroids in West Nile encephalitis. Supportive care is the mainstay.",
+    "Discharge from office": "Patient with encephalitis requires inpatient monitoring. West Nile can progress to flaccid paralysis and respiratory failure."
   },
-  "hpi": "West Nile Virus is a neurotropic virus that can cause viral meningitis and encephalitis. The most common symptoms are fever, headache, and altered mental status. Most patients will have a mild illness, but some will develop severe neurological disease. The diagnosis is made clinically, and supportive care is the mainstay of treatment.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a 55-year-old woman who presents with fever, headache, and progressive ataxia. She has developed pink macular lesions on the left thigh. Neurological examination reveals cerebellar signs. The combination of fever, neurological symptoms, and characteristic rash in the appropriate season raises concern for arboviral encephalitis. West Nile virus is the leading consideration among mosquito-borne neuroinvasive diseases. Diagnostic workup must include brain imaging to rule out stroke or mass lesion, followed by lumbar puncture for CSF analysis.",
+  "hpi_narrative": "{{patient_name}} is a 55-year-old woman who presents with fever, headache, and progressive ataxia. She has developed pink macular lesions on the left thigh. Neurological examination reveals cerebellar signs. The combination of fever, neurological symptoms, and characteristic rash in the appropriate season raises concern for arboviral encephalitis. West Nile virus is the leading consideration among mosquito-borne neuroinvasive diseases. Diagnostic workup must include brain imaging to rule out stroke or mass lesion, followed by lumbar puncture for CSF analysis.",
+  "physical_exam": [
+    [
+      "General",
+      "Febrile, appears ill."
+    ],
+    [
+      "Neurological",
+      "Ataxia — cerebellar findings. Fever with neurological signs = CNS infection until proven otherwise. Assess for nuchal rigidity, photophobia, focal deficits."
+    ],
+    [
+      "Skin",
+      "Pink macular lesions on left thigh — characteristic of West Nile virus exanthem."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I have a terrible headache and feel really weak. I'm scared something is wrong.",
-    "history": "I was outside a lot last week. I started feeling sick with a fever and headache.",
-    "pain": "My head hurts so much, it feels like it's pounding."
+    "chief_complaint": "Fever, headache, and ataxia",
+    "history": "{{patient_name}} is a 55-year-old woman who presents with fever, headache, and progressive ataxia. She has developed pink macular lesions on the left thigh. Neurological examination reveals cerebella…",
+    "pain": "Fever, headache, and ataxia"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "West Nile Virus is a neurotropic virus that can cause viral meningitis and encephalitis. The most common symptoms are fever, headache, and altered mental status. Most patients will have a mild illness, but some will develop severe neurological disease. The diagnosis is made clinically, and supportive care is the mainstay of treatment.",
+  "ccs_category": "Internal Medicine / Infectious Disease",
+  "chief_complaint": "Fever, headache, and ataxia",
+  "case_summary": "Difficult diagnostic case — West Nile encephalitis. Fever + ataxia + maculopapular rash. CT/MRI to rule out stroke/mass → LP with CSF analysis (lymphocytic pleocytosis, normal glucose, elevated protein = viral) → WNV antibody confirms. Little treatment — supportive care. Preventive health: Pap, mammogram, Tdap.",
+  "decoys": [
+    {
+      "label": "Empiric antibiotics without LP",
+      "reason_wrong": "Bacterial meningitis is on the differential and requires CSF culture before antibiotics. But this is viral encephalitis — LP is diagnostic, not empiric."
+    },
+    {
+      "label": "Corticosteroids",
+      "reason_wrong": "No evidence for steroids in West Nile encephalitis. Supportive care is the mainstay."
+    },
+    {
+      "label": "Discharge from office",
+      "reason_wrong": "Patient with encephalitis requires inpatient monitoring. West Nile can progress to flaccid paralysis and respiratory failure."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Labs",
-    "CT Head",
-    "Neuro Consult"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "The general examination is extremely useful to determine how sick the patient looks.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Important to look for lung pathology in a febrile patient.",
+      "aliases": [
+        "Chest Exam",
+        "Lung Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Important to look for abdominal pathology in a febrile patient.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "This is the patient's chief complaint — neurologic exam is essential.",
+      "aliases": [
+        "Neurologic Exam",
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Skin",
+      "type": "correctlyOrdered",
+      "finding": "This will reveal pink macular lesions on the left thigh — characteristic rash.",
+      "aliases": [
+        "Skin Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Important to order a CBC with differential in a patient with fever.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Important to get a chest X-ray to rule out pneumonia and other causes of fever.",
+      "aliases": [
+        "X-ray, chest, PA/lateral",
+        "CXR"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "correctlyOrdered",
+      "finding": "Important to get urinalysis to rule out bacterial infection and other causes of fever.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Toxicology screen, urine",
+      "type": "shouldHaveOrdered",
+      "finding": "Urine tox screen is important as illicit drugs can cause fever.",
+      "aliases": [
+        "Urine tox",
+        "Drug screen"
+      ]
+    },
+    {
+      "label": "Bacterial culture, blood",
+      "type": "shouldHaveOrdered",
+      "finding": "Blood culture will aid in localizing the source of infection.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "MRI/CT head",
+      "type": "correctlyOrdered",
+      "finding": "Ataxia should lead to consideration of neurological infection or stroke. Brain imaging to rule out stroke or tumor. MRI preferred (more sensitive for West Nile abnormalities) but CT acceptable.",
+      "aliases": [
+        "MRI, head, with/without gadolinium",
+        "CT of head without contrast",
+        "MRA, cerebral arteries"
+      ]
+    },
+    {
+      "label": "Lumbar puncture",
+      "type": "correctlyOrdered",
+      "finding": "Lumbar puncture is essential for evaluation of patient with ataxia and fever.",
+      "aliases": [
+        "LP",
+        "Spinal tap"
+      ]
+    },
+    {
+      "label": "Protein, cerebrospinal fluid",
+      "type": "correctlyOrdered",
+      "finding": "CSF analysis is important in patient with fever and neurological signs.",
+      "aliases": [
+        "CSF protein"
+      ]
+    },
+    {
+      "label": "Fungal culture, cerebrospinal fluid",
+      "type": "correctlyOrdered",
+      "finding": "Important to culture CSF for viral, bacterial, and fungal etiologies.",
+      "aliases": [
+        "CSF fungal culture"
+      ]
+    },
+    {
+      "label": "Viral culture, cerebrospinal fluid",
+      "type": "correctlyOrdered",
+      "finding": "Important to culture CSF. Note: West Nile virus is frequently negative in viral culture.",
+      "aliases": [
+        "CSF viral culture"
+      ]
+    },
+    {
+      "label": "Bacterial culture, cerebrospinal fluid",
+      "type": "correctlyOrdered",
+      "finding": "Important to culture CSF for bacterial etiologies.",
+      "aliases": [
+        "CSF bacterial culture"
+      ]
+    },
+    {
+      "label": "Glucose, cerebrospinal fluid",
+      "type": "shouldHaveOrdered",
+      "finding": "CSF glucose points toward fungal, viral, or bacterial picture. Normal glucose suggests viral (not bacterial) etiology.",
+      "aliases": [
+        "CSF glucose"
+      ]
+    },
+    {
+      "label": "Cell count, cerebrospinal fluid",
+      "type": "correctlyOrdered",
+      "finding": "CSF cell count consistent with aseptic meningitis. Lymphocytic predominance suggests viral etiology.",
+      "aliases": [
+        "CSF cell count"
+      ]
+    },
+    {
+      "label": "West Nile virus antibody, CSF/serum",
+      "type": "correctlyOrdered",
+      "finding": "Confirms aseptic meningitis is from West Nile virus.",
+      "aliases": [
+        "WNV antibody",
+        "West Nile serology"
+      ]
+    },
+    {
+      "label": "HSV PCR, CSF/serum",
+      "type": "correctlyOrdered",
+      "finding": "Aseptic meningitis workup should include herpes simplex screening.",
+      "aliases": [
+        "Herpes PCR",
+        "HSV PCR"
+      ]
+    },
+    {
+      "label": "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
+      "type": "correctlyOrdered",
+      "finding": "Chemistries are an important screening tool and should be done in nearly every non-emergent patient.",
+      "aliases": [
+        "BMP",
+        "CMP",
+        "LFTs"
+      ]
+    },
+    {
+      "label": "Tdap vaccine",
+      "type": "correctlyOrdered",
+      "finding": "Tdap should be given every 10 years. No history given — should be administered.",
+      "aliases": [
+        "Tetanus/Diphtheria/Pertussis vaccine"
+      ]
+    },
+    {
+      "label": "Papanicolaou smear",
+      "type": "shouldHaveOrdered",
+      "finding": "HPV DNA test every 3 years for women ≥30 with normal cytology. No history given — should be scheduled.",
+      "aliases": [
+        "Pap smear"
+      ]
+    },
+    {
+      "label": "Mammography",
+      "type": "shouldHaveOrdered",
+      "finding": "USPSTF recommends mammogram screening every 2 years for patients ages 50-69.",
+      "aliases": [
+        "Mammogram"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Skin",
+    "CBC with differential",
+    "Chest X-ray",
+    "Urinalysis",
+    "Toxicology screen, urine",
+    "Bacterial culture, blood",
+    "MRI/CT head",
+    "Lumbar puncture",
+    "Protein, cerebrospinal fluid",
+    "Fungal culture, cerebrospinal fluid",
+    "Viral culture, cerebrospinal fluid",
+    "Bacterial culture, cerebrospinal fluid",
+    "Glucose, cerebrospinal fluid",
+    "Cell count, cerebrospinal fluid",
+    "West Nile virus antibody, CSF/serum",
+    "HSV PCR, CSF/serum",
+    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
+    "Tdap vaccine",
+    "Papanicolaou smear",
+    "Mammography"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: West Nile Encephalitis."
 }

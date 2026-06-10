@@ -1,60 +1,109 @@
 {
   "id": 105,
   "topic": "Abdominal Pain",
-  "diagnosis": "Hemoperitoneum from a Ruptured Ovarian Cyst",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Abdominal Pain",
+  "diagnosis": "Hemoperitoneum from Ruptured Ovarian Cyst",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam General",
-    "Physical Exam Abdominal",
-    "Physical Exam GYN",
-    "CBC with differential",
-    "CT abdomen/pelvis",
-    "Transvaginal ultrasound"
+    "HCG",
+    "TVUS",
+    "CBC + Type and screen",
+    "IV fluids",
+    "Serial Hct / Observation",
+    "Surgical consult (if unstable)"
   ],
-  "should_avoid": [
-    "Laparoscopy"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam General": "Appropriate CCS order for Hemoperitoneum from a Ruptured Ovarian Cyst: Physical Exam General.",
-    "Physical Exam Abdominal": "Appropriate CCS order for Hemoperitoneum from a Ruptured Ovarian Cyst: Physical Exam Abdominal.",
-    "Physical Exam GYN": "Appropriate CCS order for Hemoperitoneum from a Ruptured Ovarian Cyst: Physical Exam GYN.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Hemoperitoneum from a Ruptured Ovarian Cyst.",
-    "CT abdomen/pelvis": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
-    "Transvaginal ultrasound": "Appropriate CCS order for Hemoperitoneum from a Ruptured Ovarian Cyst: Transvaginal ultrasound.",
-    "Laparoscopy": "CCS review: avoid this order for Hemoperitoneum from a Ruptured Ovarian Cyst — it does not change acute management."
+    "HCG": "Negative — rules out ectopic.",
+    "TVUS": "Free fluid, ruptured cyst, adnexal mass.",
+    "CBC + Type and screen": "Assess anemia, prepare for transfusion.",
+    "IV fluids": "Resuscitation.",
+    "Serial Hct / Observation": "If stable — conservative.",
+    "Surgical consult (if unstable)": "Laparoscopy for hemostasis if ongoing bleeding."
   },
-  "hpi": "Patient diagnosed with ruptured ovarian cyst, which ultimately requires surgical intervention. The patient was in a stable condition and was treated appropriately. The patient was likely to have surgery, so getting pre-surgery labs is important. Unclear whether the patient was treated in the correct location.",
+  "hpi": "{{patient_name}} presents with acute onset severe unilateral pelvic/abdominal pain following activity (intercourse, exercise). May have vaginal bleeding. Exam reveals peritoneal signs, adnexal tenderness, possible palpable mass. Ruptured ovarian cyst → bleeding into peritoneal cavity → hemoperitoneum → hypovolemia and acute abdomen. Most common: ruptured corpus luteum cyst. Differential: ectopic pregnancy (MUST rule out — HCG), PID, appendicitis, ovarian torsion. Diagnosis: HCG negative (rules out ectopic). Transvaginal ultrasound shows free fluid in pelvis/abdomen, ruptured cyst, possible adnexal mass. CBC for anemia from blood loss. Type and screen. Management: stable → observation, analgesia, serial hematocrit. Unstable/hypotensive → IV fluids, blood transfusion if needed, surgical consult (laparoscopy vs laparotomy for hemostasis). If on anticoagulation → reverse.",
+  "hpi_narrative": "{{patient_name}} presents with acute onset severe unilateral pelvic/abdominal pain following activity (intercourse, exercise). May have vaginal bleeding. Exam reveals peritoneal signs, adnexal tenderness, possible palpable mass. Ruptured ovarian cyst → bleeding into peritoneal cavity → hemoperitoneum → hypovolemia and acute abdomen. Most common: ruptured corpus luteum cyst. Differential: ectopic pregnancy (MUST rule out — HCG), PID, appendicitis, ovarian torsion. Diagnosis: HCG negative (rules out ectopic). Transvaginal ultrasound shows free fluid in pelvis/abdomen, ruptured cyst, possible adnexal mass. CBC for anemia from blood loss. Type and screen. Management: stable → observation, analgesia, serial hematocrit. Unstable/hypotensive → IV fluids, blood transfusion if needed, surgical consult (laparoscopy vs laparotomy for hemostasis). If on anticoagulation → reverse.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared and in a lot of pain. I don't know what's happening.",
-    "history": "I felt a sudden pain in my abdomen. It got worse quickly.",
-    "pain": "It hurts a lot, especially on my left side."
+    "chief_complaint": "Acute severe pelvic pain, possible vaginal bleeding",
+    "history": "{{patient_name}} presents with acute onset severe unilateral pelvic/abdominal pain following activity (intercourse, exercise). May have vaginal bleeding. Exam reveals peritoneal signs, adnexal tender…",
+    "pain": "Acute severe pelvic pain, possible vaginal bleeding"
   },
-  "ccs_category": "OB/GYN",
-  "case_summary": "Patient diagnosed with ruptured ovarian cyst, which ultimately requires surgical intervention. The patient was in a stable condition and was treated appropriately. The patient was likely to have surgery, so getting pre-surgery labs is important. Unclear whether the patient was treated in the correct location.",
+  "ccs_category": "OB/GYN / Emergency Medicine",
+  "chief_complaint": "Acute severe pelvic pain, possible vaginal bleeding",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam General",
-    "Physical Exam Abdominal",
-    "Physical Exam GYN",
-    "Laboratory Ordered"
+    {
+      "label": "HCG",
+      "type": "correctlyOrdered",
+      "finding": "Negative — rules out ectopic.",
+      "aliases": [
+        "Pregnancy test"
+      ]
+    },
+    {
+      "label": "TVUS",
+      "type": "correctlyOrdered",
+      "finding": "Free fluid, ruptured cyst, adnexal mass.",
+      "aliases": [
+        "Pelvic US"
+      ]
+    },
+    {
+      "label": "CBC + Type and screen",
+      "type": "correctlyOrdered",
+      "finding": "Assess anemia, prepare for transfusion.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "IV fluids",
+      "type": "correctlyOrdered",
+      "finding": "Resuscitation.",
+      "aliases": [
+        "IVF"
+      ]
+    },
+    {
+      "label": "Serial Hct / Observation",
+      "type": "correctlyOrdered",
+      "finding": "If stable — conservative.",
+      "aliases": [
+        "Observation"
+      ]
+    },
+    {
+      "label": "Surgical consult (if unstable)",
+      "type": "correctlyOrdered",
+      "finding": "Laparoscopy for hemostasis if ongoing bleeding.",
+      "aliases": [
+        "Surgery"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "HCG",
+    "TVUS",
+    "CBC + Type and screen",
+    "IV fluids",
+    "Serial Hct / Observation",
+    "Surgical consult (if unstable)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Quick 3-case build from existing app case bank JSON."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Hemoperitoneum from Ruptured Ovarian Cyst."
 }

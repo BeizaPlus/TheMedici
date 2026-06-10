@@ -1,62 +1,111 @@
 {
   "id": 77,
   "topic": "Chest Pain",
+  "title": "Chest Pain",
   "diagnosis": "Atrial Fibrillation",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "12 Lead EKG",
-    "Cardiac Enzymes",
-    "Chest X-Ray",
-    "CBC",
-    "Basic Metabolic Panel",
-    "Troponin",
-    "D-Dimer"
+    "ECG",
+    "CBC / BMP / TSH / Mg",
+    "Echo",
+    "Rate control (Metoprolol / Diltiazem)",
+    "Anticoagulation (DOAC / Warfarin)",
+    "Cardioversion if symptomatic"
   ],
-  "should_avoid": [
-    "CT Chest"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "12 Lead EKG": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
-    "Cardiac Enzymes": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
-    "Chest X-Ray": "Evaluate chest and lungs as part of the initial exam for chest pain.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Atrial Fibrillation.",
-    "Basic Metabolic Panel": "Laboratory testing when systemic illness or severity warrants labs in Atrial Fibrillation.",
-    "Troponin": "Appropriate CCS order for Atrial Fibrillation: Troponin.",
-    "D-Dimer": "Appropriate CCS order for Atrial Fibrillation: D-Dimer.",
-    "CT Chest": "Advanced imaging is not indicated early for Atrial Fibrillation when the diagnosis is clinical."
+    "ECG": "No P waves, irregularly irregular, narrow QRS. AFib.",
+    "CBC / BMP / TSH / Mg": "Electrolytes, TSH — hyperthyroidism screen.",
+    "Echo": "Valvular disease, LA size, LV function.",
+    "Rate control (Metoprolol / Diltiazem)": "Beta-blocker or CCB. Target HR <110.",
+    "Anticoagulation (DOAC / Warfarin)": "Per CHA2DS2-VASc. DOAC preferred over warfarin.",
+    "Cardioversion if symptomatic": "If <48h → cardiovert. If >48h → TEE first or 3 weeks AC first."
   },
-  "hpi": "This case involves a patient presenting with chest pain and a history of atrial fibrillation. The appropriate diagnostic orders were placed, but some critical tests were missed. The patient was stabilized, and further management was discussed. It is essential to recognize the signs of atrial fibrillation and the need for timely intervention.",
+  "hpi": "{{patient_name}} presents with palpitations, irregularly irregular pulse, dizziness, fatigue, and chest discomfort. ECG shows no P waves, irregularly irregular R-R intervals with narrow QRS. May have rapid ventricular response (RVR). AFib is the most common sustained cardiac arrhythmia. Causes: HTN, CAD, valvular disease, CHF, hyperthyroidism, alcohol, PE, post-op, lone AFib. Classification: paroxysmal (<7d), persistent (>7d), long-standing persistent (>1yr), permanent. Management priorities: (1) Rate control: beta-blocker (metoprolol) or CCB (diltiazem/verapamil), target HR <110. (2) Anticoagulation: CHA2DS2-VASc score — if ≥2 in men or ≥3 in women → anticoagulation (DOAC preferred over warfarin). If <2, no anticoagulation. (3) Rhythm control if symptomatic despite rate control: cardioversion (electrical or pharmacological — flecainide, amiodarone). If AFib <48h → safe to cardiovert. If >48h or unknown → TEE to rule out LAA thrombus first, or anticoagulate x3 weeks before cardioversion. Anticoagulate x4 weeks post-cardioversion.",
+  "hpi_narrative": "{{patient_name}} presents with palpitations, irregularly irregular pulse, dizziness, fatigue, and chest discomfort. ECG shows no P waves, irregularly irregular R-R intervals with narrow QRS. May have rapid ventricular response (RVR). AFib is the most common sustained cardiac arrhythmia. Causes: HTN, CAD, valvular disease, CHF, hyperthyroidism, alcohol, PE, post-op, lone AFib. Classification: paroxysmal (<7d), persistent (>7d), long-standing persistent (>1yr), permanent. Management priorities: (1) Rate control: beta-blocker (metoprolol) or CCB (diltiazem/verapamil), target HR <110. (2) Anticoagulation: CHA2DS2-VASc score — if ≥2 in men or ≥3 in women → anticoagulation (DOAC preferred over warfarin). If <2, no anticoagulation. (3) Rhythm control if symptomatic despite rate control: cardioversion (electrical or pharmacological — flecainide, amiodarone). If AFib <48h → safe to cardiovert. If >48h or unknown → TEE to rule out LAA thrombus first, or anticoagulate x3 weeks before cardioversion. Anticoagulate x4 weeks post-cardioversion.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My chest hurts a lot.",
-    "history": "I have a history of heart problems. This pain started suddenly.",
-    "pain": "It feels like a tight pressure in my chest."
+    "chief_complaint": "Palpitations, irregular pulse, dizziness",
+    "history": "{{patient_name}} presents with palpitations, irregularly irregular pulse, dizziness, fatigue, and chest discomfort. ECG shows no P waves, irregularly irregular R-R intervals with narrow QRS. May have…",
+    "pain": "Palpitations, irregular pulse, dizziness"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "This case involves a patient presenting with chest pain and a history of atrial fibrillation. The appropriate diagnostic orders were placed, but some critical tests were missed. The patient was stabilized, and further management was discussed. It is essential to recognize the signs of atrial fibrillation and the need for timely intervention.",
+  "ccs_category": "Cardiology / Emergency Medicine",
+  "chief_complaint": "Palpitations, irregular pulse, dizziness",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "12 Lead EKG",
-    "Cardiac Enzymes",
-    "Chest X-Ray"
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "No P waves, irregularly irregular, narrow QRS. AFib.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "CBC / BMP / TSH / Mg",
+      "type": "correctlyOrdered",
+      "finding": "Electrolytes, TSH — hyperthyroidism screen.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Echo",
+      "type": "correctlyOrdered",
+      "finding": "Valvular disease, LA size, LV function.",
+      "aliases": [
+        "Echo"
+      ]
+    },
+    {
+      "label": "Rate control (Metoprolol / Diltiazem)",
+      "type": "correctlyOrdered",
+      "finding": "Beta-blocker or CCB. Target HR <110.",
+      "aliases": [
+        "Metoprolol",
+        "Cardizem"
+      ]
+    },
+    {
+      "label": "Anticoagulation (DOAC / Warfarin)",
+      "type": "correctlyOrdered",
+      "finding": "Per CHA2DS2-VASc. DOAC preferred over warfarin.",
+      "aliases": [
+        "Eliquis",
+        "Xarelto"
+      ]
+    },
+    {
+      "label": "Cardioversion if symptomatic",
+      "type": "correctlyOrdered",
+      "finding": "If <48h → cardiovert. If >48h → TEE first or 3 weeks AC first.",
+      "aliases": [
+        "Cardioversion"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "ECG",
+    "CBC / BMP / TSH / Mg",
+    "Echo",
+    "Rate control (Metoprolol / Diltiazem)",
+    "Anticoagulation (DOAC / Warfarin)",
+    "Cardioversion if symptomatic"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Atrial Fibrillation."
 }

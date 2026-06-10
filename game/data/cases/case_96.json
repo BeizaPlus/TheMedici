@@ -1,68 +1,100 @@
 {
   "id": 96,
-  "topic": "Nausea and Vomiting - Emergency Medicine",
+  "topic": "Nausea and Vomiting",
+  "title": "Nausea and Vomiting",
   "diagnosis": "Toxic Shock Syndrome",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Urinalysis",
-    "CBC with differential",
-    "Bacterial culture, cervix",
-    "Ordered: Comprehensive metabolic profile / liver function panel",
-    "Physical Exam: Chest, Lungs",
-    "CXR",
-    "Blood cultures",
-    "Saline solution: Normal / Localized Rehydration",
-    "Vancomycin / Ceftriaxone / Clindamycin AND Metronidazole"
+    "Blood cultures x2 + source cultures",
+    "CBC / BMP / LFTs / Coags",
+    "IV fluids + Norepinephrine",
+    "Vancomycin + Clindamycin",
+    "Remove source (tampon / wound)"
   ],
-  "should_avoid": [
-    "Ciprofloxacin"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for nausea and vomiting - emergency medicine.",
-    "Urinalysis": "Appropriate CCS order for Toxic Shock Syndrome: Urinalysis.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Toxic Shock Syndrome.",
-    "Bacterial culture, cervix": "Laboratory testing when systemic illness or severity warrants labs in Toxic Shock Syndrome.",
-    "Ordered: Comprehensive metabolic profile / liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Toxic Shock Syndrome.",
-    "Physical Exam: Chest, Lungs": "Evaluate chest and lungs as part of the initial exam for nausea and vomiting - emergency medicine.",
-    "CXR": "Appropriate CCS order for Toxic Shock Syndrome: CXR.",
-    "Blood cultures": "Laboratory testing when systemic illness or severity warrants labs in Toxic Shock Syndrome.",
-    "Saline solution: Normal / Localized Rehydration": "Appropriate CCS order for Toxic Shock Syndrome: Saline solution: Normal / Localized Rehydration.",
-    "Vancomycin / Ceftriaxone / Clindamycin AND Metronidazole": "Appropriate CCS order for Toxic Shock Syndrome: Vancomycin / Ceftriaxone / Clindamycin AND Metronidazole.",
-    "Ciprofloxacin": "CCS review: avoid this order for Toxic Shock Syndrome — it does not change acute management."
+    "Blood cultures x2 + source cultures": "Before antibiotics.",
+    "CBC / BMP / LFTs / Coags": "Multisystem involvement.",
+    "IV fluids + Norepinephrine": "Resuscitation. MAP ≥65.",
+    "Vancomycin + Clindamycin": "Vanc covers MRSA. Clindamycin suppresses toxin production.",
+    "Remove source (tampon / wound)": "Eliminate toxin source."
   },
-  "hpi": "Differential diagnoses include but are not limited to acute gastroenteritis, bacterial infection, and surgical issues. As such, most important is to ensure that the patient is stable. Toxic shock syndrome presents with fever, rash, and hypotension. The patient should receive appropriate antibiotics and fluids to stabilize their condition.",
+  "hpi": "{{patient_name}} presents with acute onset fever, hypotension, diffuse erythematous rash (sunburn-like with desquamation 1-2 weeks later), and multisystem involvement (GI: nausea/vomiting/diarrhea, renal, hepatic, CNS, hematologic). Caused by TSST-1 superantigen from S. aureus (menstrual — tampon use) or Group A Strep. TSS diagnosis: fever + hypotension + rash + ≥3 organ systems. Remove source (tampon, wound packing). Blood cultures, wound cultures. Treatment: aggressive IV fluids, vasopressors if needed, empiric IV antibiotics (vancomycin + clindamycin — clindamycin suppresses toxin production). IVIG may be considered in severe cases. Admit to ICU.",
+  "hpi_narrative": "{{patient_name}} presents with acute onset fever, hypotension, diffuse erythematous rash (sunburn-like with desquamation 1-2 weeks later), and multisystem involvement (GI: nausea/vomiting/diarrhea, renal, hepatic, CNS, hematologic). Caused by TSST-1 superantigen from S. aureus (menstrual — tampon use) or Group A Strep. TSS diagnosis: fever + hypotension + rash + ≥3 organ systems. Remove source (tampon, wound packing). Blood cultures, wound cultures. Treatment: aggressive IV fluids, vasopressors if needed, empiric IV antibiotics (vancomycin + clindamycin — clindamycin suppresses toxin production). IVIG may be considered in severe cases. Admit to ICU.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm feeling really sick and scared. I can't stop throwing up.",
-    "history": "I was fine earlier, but then I started feeling nauseous and dizzy.",
-    "pain": "My stomach hurts a lot."
+    "chief_complaint": "Fever, hypotension, diffuse rash, nausea/vomiting",
+    "history": "{{patient_name}} presents with acute onset fever, hypotension, diffuse erythematous rash (sunburn-like with desquamation 1-2 weeks later), and multisystem involvement (GI: nausea/vomiting/diarrhea, r…",
+    "pain": "Fever, hypotension, diffuse rash, nausea/vomiting"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "Differential diagnoses include but are not limited to acute gastroenteritis, bacterial infection, and surgical issues. As such, most important is to ensure that the patient is stable. Toxic shock syndrome presents with fever, rash, and hypotension. The patient should receive appropriate antibiotics and fluids to stabilize their condition.",
+  "ccs_category": "Critical Care",
+  "chief_complaint": "Fever, hypotension, diffuse rash, nausea/vomiting",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exams and patient updates: General Appearance, Skin, Abdomen, General",
-    "Ordered: CBC with differential",
-    "Ordered: Bacterial culture, cervix",
-    "Ordered: Comprehensive metabolic profile / liver function panel"
+    {
+      "label": "Blood cultures x2 + source cultures",
+      "type": "correctlyOrdered",
+      "finding": "Before antibiotics.",
+      "aliases": [
+        "Cultures"
+      ]
+    },
+    {
+      "label": "CBC / BMP / LFTs / Coags",
+      "type": "correctlyOrdered",
+      "finding": "Multisystem involvement.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "IV fluids + Norepinephrine",
+      "type": "correctlyOrdered",
+      "finding": "Resuscitation. MAP ≥65.",
+      "aliases": [
+        "IVF",
+        "Levophed"
+      ]
+    },
+    {
+      "label": "Vancomycin + Clindamycin",
+      "type": "correctlyOrdered",
+      "finding": "Vanc covers MRSA. Clindamycin suppresses toxin production.",
+      "aliases": [
+        "Vanc",
+        "Clinda"
+      ]
+    },
+    {
+      "label": "Remove source (tampon / wound)",
+      "type": "correctlyOrdered",
+      "finding": "Eliminate toxin source.",
+      "aliases": [
+        "Source control"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Blood cultures x2 + source cultures",
+    "CBC / BMP / LFTs / Coags",
+    "IV fluids + Norepinephrine",
+    "Vancomycin + Clindamycin",
+    "Remove source (tampon / wound)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Toxic Shock Syndrome."
 }

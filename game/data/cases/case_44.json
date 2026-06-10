@@ -1,66 +1,185 @@
 {
   "id": 44,
   "topic": "Diarrhea",
+  "title": "Diarrhea",
   "diagnosis": "Giardiasis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: Lungs",
-    "Physical Exam: Cardiovascular",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
     "Physical Exam: Abdomen",
-    "Physical Exam: Extremities",
-    "Physical Exam: Skin",
-    "Hormone, thyroid stimulating serum / Hormone, thyroid stimulating serum",
-    "Antibody, Hepatitis A, IgM serum / Hepatitis panel",
-    "Urinalysis"
+    "TSH",
+    "Hepatitis A panel",
+    "Stool culture",
+    "Stool O&P (ova and parasites)",
+    "Stool Giardia antigen (ELISA)",
+    "CBC",
+    "BMP / CMP",
+    "Tinidazole 2g PO once / Metronidazole 250mg TID x 5-7d"
   ],
-  "should_avoid": [
-    "order1",
-    "Unnecessary imaging studies unless red flags are present such as fever, abdominal pain or bloody diarrhea"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: Lungs": "Evaluate chest and lungs as part of the initial exam for diarrhea.",
-    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to diarrhea.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with diarrhea.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Giardiasis.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Giardiasis.",
-    "Hormone, thyroid stimulating serum / Hormone, thyroid stimulating serum": "Patient education and counseling are part of definitive care for Giardiasis.",
-    "Antibody, Hepatitis A, IgM serum / Hepatitis panel": "Appropriate CCS order for Giardiasis: Antibody, Hepatitis A, IgM serum / Hepatitis panel.",
-    "Urinalysis": "Appropriate CCS order for Giardiasis: Urinalysis.",
-    "order1": "CCS review: avoid this order for Giardiasis — it does not change acute management.",
-    "Unnecessary imaging studies unless red flags are present such as fever, abdominal pain or bloody diarrhea": "CCS review: avoid this order for Giardiasis — it does not change acute management."
+    "Physical Exam: General Appearance": "Weight loss, possible malnutrition.",
+    "Physical Exam: Chest / Lungs": "Screening.",
+    "Physical Exam: Heart / Cardiovascular": "Screening.",
+    "Physical Exam: Abdomen": "Diffuse tenderness, bloating.",
+    "TSH": "Hyperthyroidism causes diarrhea — screen.",
+    "Hepatitis A panel": "HAV can cause diarrhea and abdominal pain.",
+    "Stool culture": "Rule out bacterial pathogens.",
+    "Stool O&P (ova and parasites)": "Giardia trophozoites/cysts. Multiple samples increase yield.",
+    "Stool Giardia antigen (ELISA)": "More sensitive than O&P. Detects Giardia-specific antigen.",
+    "CBC": "Eosinophilia may be absent.",
+    "BMP / CMP": "Electrolyte abnormalities from diarrhea.",
+    "Tinidazole 2g PO once / Metronidazole 250mg TID x 5-7d": "Tinidazole: single dose, higher cure rate. Metronidazole: 5-7 days. Nitazoxanide for children. Paromomycin in pregnancy."
   },
-  "hpi": "Case Summary: Giardiasis is an infection caused by the parasite Giardia lamblia. It is important to consider this diagnosis in patients presenting with diarrhea, especially if they have traveled recently or have been exposed to contaminated water. The treatment of choice is metronidazole, but other antiparasitic agents will kill Giardia as well. It is also important to ensure that the patient is hydrated, as dehydration can be a significant concern with diarrhea. Additionally, educating the patient about the importance of proper hygiene and avoiding contaminated food and water sources is crucial in preventing future infections.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with chronic foul-smelling, greasy diarrhea (steatorrhea), bloating, abdominal cramps, and weight loss. History reveals recent camping/hiking trip drinking untreated stream water. Giardia lamblia is a flagellated protozoan transmitted via fecal-oral route through contaminated water (common in hikers/campers — 'beaver fever'). Cysts are chlorine-resistant. Diagnosis: stool O&P (ova and parasites) — multiple samples needed (shedding intermittent). Stool Giardia antigen ELISA is more sensitive. String test (Entero-Test) if stool studies negative. Treatment: tinidazole (single dose) or metronidazole (5-7 days). Nitazoxanide for children. Paromomycin in pregnancy. Treat close contacts. Boil or filter water when camping.",
+  "hpi_narrative": "{{patient_name}} presents with chronic foul-smelling, greasy diarrhea (steatorrhea), bloating, abdominal cramps, and weight loss. History reveals recent camping/hiking trip drinking untreated stream water. Giardia lamblia is a flagellated protozoan transmitted via fecal-oral route through contaminated water (common in hikers/campers — 'beaver fever'). Cysts are chlorine-resistant. Diagnosis: stool O&P (ova and parasites) — multiple samples needed (shedding intermittent). Stool Giardia antigen ELISA is more sensitive. String test (Entero-Test) if stool studies negative. Treatment: tinidazole (single dose) or metronidazole (5-7 days). Nitazoxanide for children. Paromomycin in pregnancy. Treat close contacts. Boil or filter water when camping.",
+  "physical_exam": [
+    [
+      "General",
+      "Weight loss, possible dehydration."
+    ],
+    [
+      "Abdominal",
+      "Diffuse tenderness, bloating, hyperactive bowel sounds."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared because I've been having diarrhea for days.",
-    "history": "I traveled recently and drank some water that didn't seem clean.",
-    "pain": "My stomach hurts a lot."
+    "chief_complaint": "Chronic foul-smelling greasy diarrhea, bloating, weight loss",
+    "history": "{{patient_name}} presents with chronic foul-smelling, greasy diarrhea (steatorrhea), bloating, abdominal cramps, and weight loss. History reveals recent camping/hiking trip drinking untreated stream …",
+    "pain": "Chronic foul-smelling greasy diarrhea, bloating, weight loss"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Case Summary: Giardiasis is an infection caused by the parasite Giardia lamblia. It is important to consider this diagnosis in patients presenting with diarrhea, especially if they have traveled recently or have been exposed to contaminated water. The treatment of choice is metronidazole, but other antiparasitic agents will kill Giardia as well. It is also important to ensure that the patient is hydrated, as dehydration can be a significant concern with diarrhea. Additionally, educating the patient about the importance of proper hygiene and avoiding contaminated food and water sources is crucial in preventing future infections.",
+  "ccs_category": "Internal Medicine / Infectious Disease",
+  "chief_complaint": "Chronic foul-smelling greasy diarrhea, bloating, weight loss",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "General Appearance, Skin, Lymph Node, HEENT, General, Rectal Examinations",
-    "Ordered: Vibrio species culture, stool",
-    "Ordered: Bacterial culture, stool",
-    "Ordered: Polymerase Chain Reaction (PCR) for stool"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Weight loss, possible malnutrition.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Diffuse tenderness, bloating.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "TSH",
+      "type": "shouldHaveOrdered",
+      "finding": "Hyperthyroidism causes diarrhea — screen.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Hepatitis A panel",
+      "type": "shouldHaveOrdered",
+      "finding": "HAV can cause diarrhea and abdominal pain.",
+      "aliases": [
+        "Hepatitis panel"
+      ]
+    },
+    {
+      "label": "Stool culture",
+      "type": "correctlyOrdered",
+      "finding": "Rule out bacterial pathogens.",
+      "aliases": [
+        "Stool culture"
+      ]
+    },
+    {
+      "label": "Stool O&P (ova and parasites)",
+      "type": "correctlyOrdered",
+      "finding": "Giardia trophozoites/cysts. Multiple samples increase yield.",
+      "aliases": [
+        "O&P"
+      ]
+    },
+    {
+      "label": "Stool Giardia antigen (ELISA)",
+      "type": "correctlyOrdered",
+      "finding": "More sensitive than O&P. Detects Giardia-specific antigen.",
+      "aliases": [
+        "Giardia Ag"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Eosinophilia may be absent.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "BMP / CMP",
+      "type": "correctlyOrdered",
+      "finding": "Electrolyte abnormalities from diarrhea.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Tinidazole 2g PO once / Metronidazole 250mg TID x 5-7d",
+      "type": "correctlyOrdered",
+      "finding": "Tinidazole: single dose, higher cure rate. Metronidazole: 5-7 days. Nitazoxanide for children. Paromomycin in pregnancy.",
+      "aliases": [
+        "Tinidazole",
+        "Flagyl"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "TSH",
+    "Hepatitis A panel",
+    "Stool culture",
+    "Stool O&P (ova and parasites)",
+    "Stool Giardia antigen (ELISA)",
+    "CBC",
+    "BMP / CMP",
+    "Tinidazole 2g PO once / Metronidazole 250mg TID x 5-7d"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Giardiasis."
 }

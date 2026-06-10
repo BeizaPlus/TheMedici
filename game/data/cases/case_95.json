@@ -1,68 +1,131 @@
 {
   "id": 95,
   "topic": "Vaginal Bleeding",
-  "diagnosis": "Spontaneous Abortion",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Vaginal Bleeding",
+  "diagnosis": "Spontaneous Abortion (Miscarriage)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Type and screen, blood",
-    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
-    "US pelvis, transabdominal / Doppler, fetal heart rate / Non-stress test / Maternal, fetal check",
-    "Hydrocodone / Methadone",
-    "Multivitamin with minerals",
-    "Physical Exam: General Appearance",
-    "Physical Exam: Heart / Lungs",
-    "Physical Exam: Abdominal",
-    "CBC with differential"
+    "Physical Exam: Pelvic / Speculum / Bimanual",
+    "HCG (quantitative)",
+    "Transvaginal US",
+    "Rh type / Antibody screen",
+    "CBC",
+    "Rhogam (if Rh-negative)",
+    "Expectant vs Misoprostol vs D&C",
+    "Emotional support / Counseling"
   ],
-  "should_avoid": [
-    "order1",
-    "Surgical Procedures: Dilatation and Curettage (D&C) without a clear indication based on diagnostic results"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Type and screen, blood": "Appropriate CCS order for Spontaneous Abortion: Type and screen, blood.",
-    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Spontaneous Abortion.",
-    "US pelvis, transabdominal / Doppler, fetal heart rate / Non-stress test / Maternal, fetal check": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to vaginal bleeding.",
-    "Hydrocodone / Methadone": "Appropriate CCS order for Spontaneous Abortion: Hydrocodone / Methadone.",
-    "Multivitamin with minerals": "Appropriate CCS order for Spontaneous Abortion: Multivitamin with minerals.",
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for vaginal bleeding.",
-    "Physical Exam: Heart / Lungs": "Evaluate chest and lungs as part of the initial exam for vaginal bleeding.",
-    "Physical Exam: Abdominal": "Appropriate CCS order for Spontaneous Abortion: Physical Exam: Abdominal.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Spontaneous Abortion.",
-    "order1": "CCS review: avoid this order for Spontaneous Abortion — it does not change acute management.",
-    "Surgical Procedures: Dilatation and Curettage (D&C) without a clear indication based on diagnostic results": "CCS review: avoid this order for Spontaneous Abortion — it does not change acute management."
+    "Physical Exam: Pelvic / Speculum / Bimanual": "Assess os status, bleeding, tissue.",
+    "HCG (quantitative)": "Confirm pregnancy. Serial for viability.",
+    "Transvaginal US": "Fetal cardiac activity, GS, retained products.",
+    "Rh type / Antibody screen": "If Rh-negative → Rhogam.",
+    "CBC": "Assess blood loss.",
+    "Rhogam (if Rh-negative)": "Prevent Rh alloimmunization.",
+    "Expectant vs Misoprostol vs D&C": "Depends on type/patient preference.",
+    "Emotional support / Counseling": "Pregnancy loss support."
   },
-  "hpi": "Case Summary: This case highlights the importance of thorough evaluation and management of patients presenting with vaginal bleeding in early pregnancy. Understanding the differential diagnosis and appropriate interventions is crucial in ensuring patient safety and optimal outcomes.",
+  "hpi": "{{patient_name}} presents with vaginal bleeding, cramping lower abdominal pain, and passage of tissue in early pregnancy (<20 weeks). Types: threatened (bleeding, closed os, viable fetus), inevitable (bleeding, open os), incomplete (partial passage of tissue, open os), complete (all tissue passed, os closed), missed (fetal demise without expulsion). Diagnosis: HCG positive, transvaginal ultrasound to assess fetal cardiac activity, gestational sac, and retained products. Serial HCG levels: normally doubles every 48h in early pregnancy — falling or plateauing suggests nonviable pregnancy. If Rh-negative → Rhogam (anti-D immune globulin) to prevent alloimmunization. Treatment: threatened → expectant management, pelvic rest. Inevitable/incomplete: expectant (allow to pass), medical (misoprostol), or surgical (D&C). Complete → confirm with US, no further treatment needed. Emotional support and counseling.",
+  "hpi_narrative": "{{patient_name}} presents with vaginal bleeding, cramping lower abdominal pain, and passage of tissue in early pregnancy (<20 weeks). Types: threatened (bleeding, closed os, viable fetus), inevitable (bleeding, open os), incomplete (partial passage of tissue, open os), complete (all tissue passed, os closed), missed (fetal demise without expulsion). Diagnosis: HCG positive, transvaginal ultrasound to assess fetal cardiac activity, gestational sac, and retained products. Serial HCG levels: normally doubles every 48h in early pregnancy — falling or plateauing suggests nonviable pregnancy. If Rh-negative → Rhogam (anti-D immune globulin) to prevent alloimmunization. Treatment: threatened → expectant management, pelvic rest. Inevitable/incomplete: expectant (allow to pass), medical (misoprostol), or surgical (D&C). Complete → confirm with US, no further treatment needed. Emotional support and counseling.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about the bleeding. I don't know what's happening.",
-    "history": "I didn't expect this to happen. I thought everything was fine.",
-    "pain": "It feels like cramping and I'm worried."
+    "chief_complaint": "Vaginal bleeding + cramping in early pregnancy",
+    "history": "{{patient_name}} presents with vaginal bleeding, cramping lower abdominal pain, and passage of tissue in early pregnancy (<20 weeks). Types: threatened (bleeding, closed os, viable fetus), inevitable…",
+    "pain": "Vaginal bleeding + cramping in early pregnancy"
   },
   "ccs_category": "OB/GYN",
-  "case_summary": "Case Summary: This case highlights the importance of thorough evaluation and management of patients presenting with vaginal bleeding in early pregnancy. Understanding the differential diagnosis and appropriate interventions is crucial in ensuring patient safety and optimal outcomes.",
+  "chief_complaint": "Vaginal bleeding + cramping in early pregnancy",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Consider, psychiatry",
-    "Vaginal bleeding, OB/GYN",
-    "US pelvis, transabdominal / Doppler, fetal heart rate / Non-stress test / Maternal, fetal check",
-    "Hydrocodone / Methadone",
-    "Multivitamin with minerals"
+    {
+      "label": "Physical Exam: Pelvic / Speculum / Bimanual",
+      "type": "correctlyOrdered",
+      "finding": "Assess os status, bleeding, tissue.",
+      "aliases": [
+        "Pelvic Exam"
+      ]
+    },
+    {
+      "label": "HCG (quantitative)",
+      "type": "correctlyOrdered",
+      "finding": "Confirm pregnancy. Serial for viability.",
+      "aliases": [
+        "HCG"
+      ]
+    },
+    {
+      "label": "Transvaginal US",
+      "type": "correctlyOrdered",
+      "finding": "Fetal cardiac activity, GS, retained products.",
+      "aliases": [
+        "TVUS"
+      ]
+    },
+    {
+      "label": "Rh type / Antibody screen",
+      "type": "correctlyOrdered",
+      "finding": "If Rh-negative → Rhogam.",
+      "aliases": [
+        "Blood type"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Assess blood loss.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Rhogam (if Rh-negative)",
+      "type": "correctlyOrdered",
+      "finding": "Prevent Rh alloimmunization.",
+      "aliases": [
+        "RhoGAM"
+      ]
+    },
+    {
+      "label": "Expectant vs Misoprostol vs D&C",
+      "type": "correctlyOrdered",
+      "finding": "Depends on type/patient preference.",
+      "aliases": [
+        "Management"
+      ]
+    },
+    {
+      "label": "Emotional support / Counseling",
+      "type": "correctlyOrdered",
+      "finding": "Pregnancy loss support.",
+      "aliases": [
+        "Support"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Pelvic / Speculum / Bimanual",
+    "HCG (quantitative)",
+    "Transvaginal US",
+    "Rh type / Antibody screen",
+    "CBC",
+    "Rhogam (if Rh-negative)",
+    "Expectant vs Misoprostol vs D&C",
+    "Emotional support / Counseling"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and vital signs."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Spontaneous Abortion (Miscarriage)."
 }

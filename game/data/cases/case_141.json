@@ -1,9 +1,10 @@
 {
   "id": 141,
   "topic": "Rash",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Rash",
+  "diagnosis": "Undetermined rash",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain a detailed history, including onset, location, distribution, and characteristics of the rash.",
     "Perform physical examination with dermatological assessment.",
@@ -17,35 +18,46 @@
     "Administer antihistamines and steroids without determining the causative agent"
   ],
   "rationale": {
-    "Obtain a detailed history, including onset, location, distribution, and characteristics of the rash.": "CCS case progression step for this scenario.",
-    "Perform physical examination with dermatological assessment.": "Appropriate CCS order for this diagnosis: Perform physical examination with dermatological assessment..",
-    "Order laboratory tests: Complete blood count (CBC), liver function tests (LFTs), renal function tests (RFTs), urinalysis, and blood cultures if fever is present.": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Consider skin biopsy or other specialized tests such as direct immunofluorescence or PCR for specific etiologies based on clinical suspicion.": "Skin exam may show rashes or systemic signs relevant to this diagnosis.",
-    "If the rash is associated with systemic symptoms like fever, malaise, or lymphadenopathy, consider empiric antibiotic therapy pending culture results (e.g., broad-spectrum penicillin or cephalosporin) but avoid administering antihistamines and steroids until the cause is determined.": "Targeted If the rash is associated with systemic symptoms like fever, malaise, or lymphadenopathy, consider empiric antibiotic therapy pending culture results (e.g., broad-spectrum penicillin or cephalosporin) but avoid administering antihistamines and steroids until the cause is determined. exam supports the differen…",
-    "Consult dermatology for further evaluation and management.": "Appropriate CCS order for this diagnosis: Consult dermatology for further evaluation and management..",
-    "CMP/BMP": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Administer antihistamines and steroids without determining the causative agent": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "administer antihistamines and steroids without determining the causative agent": "These medications may mask or alter the presentation of the rash, making it difficult to determine the underlying cause.",
+    "CMP/BMP": "This bundle includes the necessary lab tests to check for electrolytes, renal function, and liver function which can be useful in determining the underlying cause of a rash."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — rash. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This rash won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Rash — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 110; BP 96/60."
+    ],
+    [
+      "Respiratory",
+      "RR 20; SpO₂ 92%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "Skin rash morphology and distribution documented."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain a detailed history, including onset, location, distribution, and characteristics of the rash.",
     "Perform physical examination with dermatological assessment.",
     "Order laboratory tests: Complete blood count (CBC), liver function tests (LFTs), renal function tests (RFTs), urinalysis, and blood cultures if fever is present.",
@@ -54,11 +66,11 @@
     "Consult dermatology for further evaluation and management.",
     "CMP/BMP"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

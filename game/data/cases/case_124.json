@@ -3,106 +3,75 @@
   "topic": "Chest Pain",
   "title": "Chest Pain",
   "diagnosis": "Inferior myocardial infarction (STEMI)",
-  "differential": [
-    "Acute aortic dissection",
-    "Pulmonary embolism",
-    "Pericardial tamponade",
-    "Esophageal rupture"
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Cardiovascular",
+    "Electrocardiography, 12 lead",
+    "Monitor, cardiac",
+    "CBC with differential",
+    "Cardiac troponin I, serum",
+    "Basic metabolic profile",
+    "Aspirin, therapy",
+    "Atorvastatin",
+    "Ticagrelor",
+    "Consult, cardiology",
+    "Angioplasty with stent placement, coronary artery"
   ],
-  "chief_complaint": "Acute chest pain — evaluate for STEMI",
+  "should_avoid": [
+    "Simvastatin",
+    "Consult, interventional radiology",
+    "Reteplase, recombinant",
+    "Alteplase, recombinant"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess how ill the patient looks.",
+    "Physical Exam: Heart / Cardiovascular": "Chest pain — cardiovascular exam warranted.",
+    "Electrocardiography, 12 lead": "EKG shows inferior STEMI — treat urgently.",
+    "Monitor, cardiac": "Continuous cardiac monitoring required.",
+    "CBC with differential": "Baseline hematocrit and screening labs.",
+    "Cardiac troponin I, serum": "Confirm myocardial injury in suspected MI.",
+    "Basic metabolic profile": "Chemistries to rule out other conditions and assess renal function before contrast/PCI.",
+    "Aspirin, therapy": "Immediate aspirin — cornerstone of STEMI DAPT.",
+    "Atorvastatin": "High-intensity statin mandated in acute STEMI per ACC/AHA.",
+    "Ticagrelor": "P2Y12 inhibitor for DAPT with aspirin in STEMI.",
+    "Consult, cardiology": "Cardiology consult for emergent reperfusion.",
+    "Angioplasty with stent placement, coronary artery": "PCI is preferred reperfusion strategy over fibrinolysis in USMLE CCS.",
+    "Simvastatin": "Not acceptable high-intensity statin for acute STEMI — use atorvastatin or rosuvastatin only.",
+    "Consult, interventional radiology": "IR does not perform coronary PCI for STEMI — cardiology/interventional cardiology required.",
+    "Reteplase, recombinant": "Fibrinolysis gives only partial credit when immediate PCI is available and preferred.",
+    "Alteplase, recombinant": "Thrombolytics are inferior to PCI for STEMI when PCI is immediately available."
+  },
+  "hpi": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
   "hpi_narrative": "{{patient_name}} presents to the emergency department with acute chest pain. ECG shows ST-segment elevation in leads II, III, and aVF consistent with an inferior STEMI. Initiate ACS protocol: aspirin, P2Y12 inhibitor, high-intensity statin, cardiology consult, and emergent PCI.",
-  "case_summary": "Differential: Acute Aortic Dissection, Pulmonary embolism, Pericardial tamponade, Esophageal rupture.\n\nThe patient has an ST-elevated inferior myocardial infarction (STEMI). ST elevations will be present in leads II, III, and aVF. The patient should immediately be started on dual antiplatelet therapy (DAPT): Aspirin plus a P2Y12 inhibitor (Ticagrelor is preferred; Clopidogrel is also accepted). A beta blocker and atorvastatin should also be initiated. Cardiology should be consulted and percutaneous coronary intervention (PCI) — angioplasty with stent placement — should be performed, as this is the preferred reperfusion strategy.\n\nIn the USMLE, immediate PCI is available, so fibrinolytic therapy is not required. If fibrinolysis is ordered, partial credit will be awarded, but full credit requires PCI as the preferred approach. Ticagrelor and Prasugrel are the preferred P2Y12 agents; Clopidogrel is acceptable for full credit. Heparin is optional in STEMI going to cath lab.",
-  "patient_sex": "male",
-  "patient_age_years": null,
-  "location": "Emergency Department",
-  "specialty": "Emergency Medicine",
-  "case_introduction": "Case Introduction\n\nChest Pain — Emergency Medicine\nA patient presents with acute chest pain requiring rapid ACS evaluation.",
-  "vitals": null,
   "physical_exam": [
-    ["General", "Assess how ill the patient appears — diaphoresis, distress."],
-    ["Cardiovascular", "Chest pain — examine heart; assess for signs of ischemia or hemodynamic compromise."],
-    ["Chest / Lungs", "Evaluate for alternative causes of chest pain and respiratory compromise."],
-    ["Neuro", "Alert unless perfusion compromised."]
+    [
+      "General",
+      "Assess how ill the patient appears — diaphoresis, distress."
+    ],
+    [
+      "Cardiovascular",
+      "Chest pain — examine heart; assess for signs of ischemia or hemodynamic compromise."
+    ],
+    [
+      "Chest / Lungs",
+      "Evaluate for alternative causes of chest pain and respiratory compromise."
+    ],
+    [
+      "Neuro",
+      "Alert unless perfusion compromised."
+    ]
   ],
+  "vitals": null,
   "patient_voice": {
     "chief_complaint": "My chest hurts so bad — it came on suddenly and won't stop.",
     "history": "I've never had pain like this before. It feels like pressure and it's making me sweaty and scared.",
     "pain": "Heavy pressure in my chest, maybe an 8 out of 10."
   },
-  "stacks": [
-    {
-      "label": "Physical Exam: General Appearance",
-      "type": "correctlyOrdered",
-      "finding": "Assess how ill the patient looks.",
-      "aliases": ["General appearance"]
-    },
-    {
-      "label": "Physical Exam: Heart / Cardiovascular",
-      "type": "correctlyOrdered",
-      "finding": "Chest pain — cardiovascular exam warranted.",
-      "aliases": ["Cardiovascular exam"]
-    },
-    {
-      "label": "Electrocardiography, 12 lead",
-      "type": "correctlyOrdered",
-      "finding": "EKG shows inferior STEMI — treat urgently.",
-      "aliases": ["EKG", "ECG", "Electrocardiography, rhythm strip, long"]
-    },
-    {
-      "label": "Monitor, cardiac",
-      "type": "correctlyOrdered",
-      "finding": "Continuous cardiac monitoring required.",
-      "aliases": ["Monitor, cardiac, check", "Telemetry"]
-    },
-    {
-      "label": "CBC with differential",
-      "type": "correctlyOrdered",
-      "finding": "Baseline hematocrit and screening labs.",
-      "aliases": ["CBC"]
-    },
-    {
-      "label": "Cardiac troponin I, serum",
-      "type": "correctlyOrdered",
-      "finding": "Confirm myocardial injury in suspected MI.",
-      "aliases": ["Cardiac enzymes, serum", "Troponin"]
-    },
-    {
-      "label": "Basic metabolic profile",
-      "type": "correctlyOrdered",
-      "finding": "Chemistries to rule out other conditions and assess renal function before contrast/PCI.",
-      "aliases": ["Comprehensive metabolic profile", "CMP", "BMP"]
-    },
-    {
-      "label": "Aspirin, therapy",
-      "type": "correctlyOrdered",
-      "finding": "Immediate aspirin — cornerstone of STEMI DAPT.",
-      "aliases": ["Aspirin"]
-    },
-    {
-      "label": "Atorvastatin",
-      "type": "correctlyOrdered",
-      "finding": "High-intensity statin mandated in acute STEMI per ACC/AHA.",
-      "aliases": ["Rosuvastatin"]
-    },
-    {
-      "label": "Ticagrelor",
-      "type": "correctlyOrdered",
-      "finding": "P2Y12 inhibitor for DAPT with aspirin in STEMI.",
-      "aliases": ["Clopidogrel bisulfate", "Clopidogrel"]
-    },
-    {
-      "label": "Consult, cardiology",
-      "type": "correctlyOrdered",
-      "finding": "Cardiology consult for emergent reperfusion.",
-      "aliases": ["Cardiology consult"]
-    },
-    {
-      "label": "Angioplasty with stent placement, coronary artery",
-      "type": "correctlyOrdered",
-      "finding": "PCI is preferred reperfusion strategy over fibrinolysis in USMLE CCS.",
-      "aliases": ["Percutaneous coronary intervention", "PCI", "Angiocardiography, right and left heart"]
-    }
-  ],
+  "ccs_category": "Emergency Medicine",
+  "chief_complaint": "Acute chest pain — evaluate for STEMI",
+  "case_summary": "Differential: Acute Aortic Dissection, Pulmonary embolism, Pericardial tamponade, Esophageal rupture.\n\nThe patient has an ST-elevated inferior myocardial infarction (STEMI). ST elevations will be present in leads II, III, and aVF. The patient should immediately be started on dual antiplatelet therapy (DAPT): Aspirin plus a P2Y12 inhibitor (Ticagrelor is preferred; Clopidogrel is also accepted). A beta blocker and atorvastatin should also be initiated. Cardiology should be consulted and percutaneous coronary intervention (PCI) — angioplasty with stent placement — should be performed, as this is the preferred reperfusion strategy.\n\nIn the USMLE, immediate PCI is available, so fibrinolytic therapy is not required. If fibrinolysis is ordered, partial credit will be awarded, but full credit requires PCI as the preferred approach. Ticagrelor and Prasugrel are the preferred P2Y12 agents; Clopidogrel is acceptable for full credit. Heparin is optional in STEMI going to cath lab.",
   "decoys": [
     {
       "label": "Simvastatin",
@@ -121,7 +90,115 @@
       "reason_wrong": "Thrombolytics are inferior to PCI for STEMI when PCI is immediately available."
     }
   ],
-  "correct_orders": [
+  "distractors": [],
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess how ill the patient looks.",
+      "aliases": [
+        "General appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Chest pain — cardiovascular exam warranted.",
+      "aliases": [
+        "Cardiovascular exam"
+      ]
+    },
+    {
+      "label": "Electrocardiography, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "EKG shows inferior STEMI — treat urgently.",
+      "aliases": [
+        "EKG",
+        "ECG",
+        "Electrocardiography, rhythm strip, long"
+      ]
+    },
+    {
+      "label": "Monitor, cardiac",
+      "type": "correctlyOrdered",
+      "finding": "Continuous cardiac monitoring required.",
+      "aliases": [
+        "Monitor, cardiac, check",
+        "Telemetry"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Baseline hematocrit and screening labs.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Cardiac troponin I, serum",
+      "type": "correctlyOrdered",
+      "finding": "Confirm myocardial injury in suspected MI.",
+      "aliases": [
+        "Cardiac enzymes, serum",
+        "Troponin"
+      ]
+    },
+    {
+      "label": "Basic metabolic profile",
+      "type": "correctlyOrdered",
+      "finding": "Chemistries to rule out other conditions and assess renal function before contrast/PCI.",
+      "aliases": [
+        "Comprehensive metabolic profile",
+        "CMP",
+        "BMP"
+      ]
+    },
+    {
+      "label": "Aspirin, therapy",
+      "type": "correctlyOrdered",
+      "finding": "Immediate aspirin — cornerstone of STEMI DAPT.",
+      "aliases": [
+        "Aspirin"
+      ]
+    },
+    {
+      "label": "Atorvastatin",
+      "type": "correctlyOrdered",
+      "finding": "High-intensity statin mandated in acute STEMI per ACC/AHA.",
+      "aliases": [
+        "Rosuvastatin"
+      ]
+    },
+    {
+      "label": "Ticagrelor",
+      "type": "correctlyOrdered",
+      "finding": "P2Y12 inhibitor for DAPT with aspirin in STEMI.",
+      "aliases": [
+        "Clopidogrel bisulfate",
+        "Clopidogrel"
+      ]
+    },
+    {
+      "label": "Consult, cardiology",
+      "type": "correctlyOrdered",
+      "finding": "Cardiology consult for emergent reperfusion.",
+      "aliases": [
+        "Cardiology consult"
+      ]
+    },
+    {
+      "label": "Angioplasty with stent placement, coronary artery",
+      "type": "correctlyOrdered",
+      "finding": "PCI is preferred reperfusion strategy over fibrinolysis in USMLE CCS.",
+      "aliases": [
+        "Percutaneous coronary intervention",
+        "PCI",
+        "Angiocardiography, right and left heart"
+      ]
+    }
+  ],
+  "order_sets": [
     "Physical Exam: General Appearance",
     "Physical Exam: Heart / Cardiovascular",
     "Electrocardiography, 12 lead",
@@ -135,14 +212,11 @@
     "Consult, cardiology",
     "Angioplasty with stent placement, coronary artery"
   ],
-  "should_avoid": [
-    "Simvastatin",
-    "Consult, interventional radiology"
-  ],
-  "confidence": 95,
-  "source": "ccs_source_manual",
-  "extraction_method": "ccs_source_manual",
   "complete": true,
-  "screenshot_processed": true,
-  "enrichment_sources": ["ccs_source_manual", "ccs_review_pdf"]
+  "extraction_method": "deepseek_direct",
+  "enrichment_sources": [
+    "ccs_source_manual",
+    "ccs_review_pdf"
+  ],
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Inferior myocardial infarction (STEMI)."
 }

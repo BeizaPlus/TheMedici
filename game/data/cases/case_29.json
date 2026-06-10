@@ -1,70 +1,204 @@
 {
   "id": 29,
   "topic": "Vaginal Bleeding",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Vaginal Bleeding",
+  "diagnosis": "Dysfunctional Uterine Bleeding (Anovulatory)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Ordered: Vitals",
-    "Ordered: Physical Exam",
-    "Ordered: Labs",
-    "Ordered: Imaging",
-    "Ordered: Treatment",
-    "Should Have Ordered: IV fluids",
-    "Should Have Ordered: Transfusion",
-    "Should Have Ordered: Consult GYN",
-    "Should Have Ordered: Medications",
-    "Should Have Ordered: Additional labs"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia / Pelvic / Speculum",
+    "HCG, beta (pregnancy test)",
+    "CBC with differential",
+    "TSH / Prolactin",
+    "PT/PTT / INR",
+    "Pelvic ultrasound (transvaginal)",
+    "Endometrial biopsy",
+    "BMP / CMP / LFTs",
+    "Combined oral contraceptives",
+    "Iron supplementation"
   ],
   "should_avoid": [
-    "Amoxicillin",
-    "Ciprofloxacin"
+    "Hysterectomy as first-line"
   ],
   "rationale": {
-    "Ordered: Vitals": "Vital signs establish baseline stability before further orders.",
-    "Ordered: Physical Exam": "Appropriate CCS order for this diagnosis: Ordered: Physical Exam.",
-    "Ordered: Labs": "Appropriate CCS order for this diagnosis: Ordered: Labs.",
-    "Ordered: Imaging": "Appropriate CCS order for this diagnosis: Ordered: Imaging.",
-    "Ordered: Treatment": "Appropriate CCS order for this diagnosis: Ordered: Treatment.",
-    "Should Have Ordered: IV fluids": "Appropriate CCS order for this diagnosis: Should Have Ordered: IV fluids.",
-    "Should Have Ordered: Transfusion": "Appropriate CCS order for this diagnosis: Should Have Ordered: Transfusion.",
-    "Should Have Ordered: Consult GYN": "Appropriate CCS order for this diagnosis: Should Have Ordered: Consult GYN.",
-    "Should Have Ordered: Medications": "Appropriate CCS order for this diagnosis: Should Have Ordered: Medications.",
-    "Should Have Ordered: Additional labs": "Appropriate CCS order for this diagnosis: Should Have Ordered: Additional labs.",
-    "Amoxicillin": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "Ciprofloxacin": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Physical Exam: General Appearance": "Assess for pallor, hemodynamic stability.",
+    "Physical Exam: Abdomen": "Assess for pelvic mass or tenderness.",
+    "Physical Exam: Genitalia / Pelvic / Speculum": "Visualize source of bleeding. Bimanual exam for uterine size, adnexal masses.",
+    "HCG, beta (pregnancy test)": "MUST rule out pregnancy — ectopic, miscarriage, molar pregnancy can all present with vaginal bleeding.",
+    "CBC with differential": "Assess degree of anemia from blood loss. Platelet count.",
+    "TSH / Prolactin": "Thyroid dysfunction and hyperprolactinemia cause anovulatory bleeding.",
+    "PT/PTT / INR": "Screen for coagulopathy (von Willebrand disease can present with menorrhagia).",
+    "Pelvic ultrasound (transvaginal)": "Rule out fibroids, polyps, adenomyosis, ovarian masses. Assess endometrial thickness.",
+    "Endometrial biopsy": "Indicated if age >45, unopposed estrogen exposure, or risk factors for endometrial hyperplasia/cancer.",
+    "BMP / CMP / LFTs": "Screening labs. Iron studies if anemic.",
+    "Combined oral contraceptives": "Hormonal regulation. Estrogen-progestin combination stabilizes endometrium and regulates cycles.",
+    "Iron supplementation": "Treat iron deficiency anemia from chronic blood loss.",
+    "Hysterectomy as first-line": "DUB responds to medical management (OCPs, cyclic progestins). Surgery reserved for failed medical therapy or completed childbearing."
   },
-  "hpi": "In this case, the patient presented with vaginal bleeding. The assessment and management of vaginal bleeding can be complex, and it is important to consider the patient's history, physical examination, and laboratory findings. The differential diagnosis for vaginal bleeding includes a variety of conditions, and appropriate management is crucial to ensure patient safety. In this case, the patient required further evaluation and treatment to address the underlying cause of the bleeding.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a reproductive-age woman presenting with irregular, heavy vaginal bleeding without identifiable structural or systemic cause. This is dysfunctional uterine bleeding (DUB), most commonly anovulatory — unopposed estrogen stimulation leads to endometrial hyperplasia and irregular shedding. Diagnosis of exclusion after ruling out pregnancy, structural lesions (fibroids, polyps), thyroid dysfunction, coagulopathy, and malignancy. Workup: HCG (rule out pregnancy/complications), CBC (assess anemia from blood loss), TSH/prolactin, pelvic ultrasound (rule out structural causes), endometrial biopsy if age >45 or risk factors. Treatment depends on severity and fertility goals: hormonal regulation with combined OCPs or cyclic progestins. If acute heavy bleeding: high-dose estrogen or IV conjugated estrogens. Iron supplementation for anemia.",
+  "hpi_narrative": "{{patient_name}} is a reproductive-age woman presenting with irregular, heavy vaginal bleeding without identifiable structural or systemic cause. This is dysfunctional uterine bleeding (DUB), most commonly anovulatory — unopposed estrogen stimulation leads to endometrial hyperplasia and irregular shedding. Diagnosis of exclusion after ruling out pregnancy, structural lesions (fibroids, polyps), thyroid dysfunction, coagulopathy, and malignancy. Workup: HCG (rule out pregnancy/complications), CBC (assess anemia from blood loss), TSH/prolactin, pelvic ultrasound (rule out structural causes), endometrial biopsy if age >45 or risk factors. Treatment depends on severity and fertility goals: hormonal regulation with combined OCPs or cyclic progestins. If acute heavy bleeding: high-dose estrogen or IV conjugated estrogens. Iron supplementation for anemia.",
+  "physical_exam": [
+    [
+      "General",
+      "Assess for pallor (anemia), hemodynamic stability."
+    ],
+    [
+      "Abdominal",
+      "No masses. Uterus normal size."
+    ],
+    [
+      "Skin",
+      "Pallor if significant anemia."
+    ],
+    [
+      "Genitourinary",
+      "Vaginal bleeding on speculum. No cervical lesions. Bimanual: normal uterus, no adnexal masses."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about this bleeding. I don't know what's happening.",
-    "history": "I've been bleeding for a few days now, and it's getting worse.",
-    "pain": "It feels like a lot of pressure and cramping."
+    "chief_complaint": "Irregular heavy vaginal bleeding",
+    "history": "{{patient_name}} is a reproductive-age woman presenting with irregular, heavy vaginal bleeding without identifiable structural or systemic cause. This is dysfunctional uterine bleeding (DUB), most co…",
+    "pain": "Irregular heavy vaginal bleeding"
   },
   "ccs_category": "OB/GYN",
-  "case_summary": "In this case, the patient presented with vaginal bleeding. The assessment and management of vaginal bleeding can be complex, and it is important to consider the patient's history, physical examination, and laboratory findings. The differential diagnosis for vaginal bleeding includes a variety of conditions, and appropriate management is crucial to ensure patient safety. In this case, the patient required further evaluation and treatment to address the underlying cause of the bleeding.",
+  "chief_complaint": "Irregular heavy vaginal bleeding",
+  "case_summary": "Anovulatory DUB. HCG negative, normal pelvic US, normal TSH. CBC shows iron deficiency anemia. OCPs for cycle regulation + iron supplementation. EM biopsy if indicated by age/risk.",
+  "decoys": [
+    {
+      "label": "Hysterectomy as first-line",
+      "reason_wrong": "DUB responds to medical management (OCPs, cyclic progestins). Surgery reserved for failed medical therapy or completed childbearing."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Ordered: Vitals",
-    "Ordered: Physical Exam",
-    "Ordered: Labs",
-    "Ordered: Imaging",
-    "Ordered: Treatment"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess for pallor, hemodynamic stability.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Assess for pelvic mass or tenderness.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Genitalia / Pelvic / Speculum",
+      "type": "correctlyOrdered",
+      "finding": "Visualize source of bleeding. Bimanual exam for uterine size, adnexal masses.",
+      "aliases": [
+        "Pelvic Exam"
+      ]
+    },
+    {
+      "label": "HCG, beta (pregnancy test)",
+      "type": "correctlyOrdered",
+      "finding": "MUST rule out pregnancy — ectopic, miscarriage, molar pregnancy can all present with vaginal bleeding.",
+      "aliases": [
+        "Pregnancy test"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Assess degree of anemia from blood loss. Platelet count.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "TSH / Prolactin",
+      "type": "correctlyOrdered",
+      "finding": "Thyroid dysfunction and hyperprolactinemia cause anovulatory bleeding.",
+      "aliases": [
+        "TSH",
+        "Prolactin"
+      ]
+    },
+    {
+      "label": "PT/PTT / INR",
+      "type": "correctlyOrdered",
+      "finding": "Screen for coagulopathy (von Willebrand disease can present with menorrhagia).",
+      "aliases": [
+        "Coags"
+      ]
+    },
+    {
+      "label": "Pelvic ultrasound (transvaginal)",
+      "type": "correctlyOrdered",
+      "finding": "Rule out fibroids, polyps, adenomyosis, ovarian masses. Assess endometrial thickness.",
+      "aliases": [
+        "Pelvic US",
+        "TVUS"
+      ]
+    },
+    {
+      "label": "Endometrial biopsy",
+      "type": "shouldHaveOrdered",
+      "finding": "Indicated if age >45, unopposed estrogen exposure, or risk factors for endometrial hyperplasia/cancer.",
+      "aliases": [
+        "EMB"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs. Iron studies if anemic.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Combined oral contraceptives",
+      "type": "correctlyOrdered",
+      "finding": "Hormonal regulation. Estrogen-progestin combination stabilizes endometrium and regulates cycles.",
+      "aliases": [
+        "OCPs",
+        "Birth control"
+      ]
+    },
+    {
+      "label": "Iron supplementation",
+      "type": "shouldHaveOrdered",
+      "finding": "Treat iron deficiency anemia from chronic blood loss.",
+      "aliases": [
+        "Iron",
+        "Ferrous sulfate"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia / Pelvic / Speculum",
+    "HCG, beta (pregnancy test)",
+    "CBC with differential",
+    "TSH / Prolactin",
+    "PT/PTT / INR",
+    "Pelvic ultrasound (transvaginal)",
+    "Endometrial biopsy",
+    "BMP / CMP / LFTs",
+    "Combined oral contraceptives",
+    "Iron supplementation"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Dysfunctional Uterine Bleeding (Anovulatory)."
 }

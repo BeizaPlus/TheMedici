@@ -1,59 +1,110 @@
 {
   "id": 91,
   "topic": "Lump in Breast",
-  "diagnosis": "Breast Cancer",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Lump in Breast",
+  "diagnosis": "Breast Cancer (Invasive Ductal Carcinoma)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
-    "Physical Exam: Heart / Cardiovascular",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Skin",
-    "Consult: surgery, general / Consult: thoracic surgery",
-    "Consult: radiation therapy"
+    "Physical Exam: Breasts / Axillae",
+    "Diagnostic mammogram + US",
+    "Core needle biopsy",
+    "BRCA testing (if indicated)",
+    "Staging (CT / bone scan)",
+    "Refer breast surgery / oncology"
   ],
   "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for lump in breast.",
-    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for lump in breast.",
-    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to lump in breast.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with lump in breast.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Breast Cancer.",
-    "Consult: surgery, general / Consult: thoracic surgery": "Appropriate CCS order for Breast Cancer: Consult: surgery, general / Consult: thoracic surgery.",
-    "Consult: radiation therapy": "Appropriate CCS order for Breast Cancer: Consult: radiation therapy."
+    "Physical Exam: Breasts / Axillae": "Firm, non-tender, immobile lump. Skin dimpling. Axillary LAN.",
+    "Diagnostic mammogram + US": "BIRADS classification.",
+    "Core needle biopsy": "ER, PR, HER2/neu status.",
+    "BRCA testing (if indicated)": "Family history, young age, TNBC.",
+    "Staging (CT / bone scan)": "Metastases.",
+    "Refer breast surgery / oncology": "Lumpectomy + XRT or mastectomy + SLNB. Adjuvant therapy."
   },
-  "hpi": "The patient in this case has breast cancer, specifically invasive lobular carcinoma. This is discovered first by doing imaging such as a mammogram or breast ultrasound followed by a needle biopsy. Once the diagnosis is made, the patient should be referred to oncology, general surgery for tumor removal, and radiation. Once the curative has been made, the case will need to initiate chemotherapy regimens.",
+  "hpi": "{{patient_name}} presents with a firm, non-tender, immobile breast lump with irregular borders, possible skin dimpling (peau d'orange), nipple retraction, or axillary lymphadenopathy. Breast cancer is the most common cancer in women. Most are invasive ductal carcinoma (IDC). Workup: diagnostic mammogram + breast ultrasound. If suspicious (BIRADS 4-5) → core needle biopsy for tissue diagnosis. Hormone receptor status: ER, PR, HER2/neu — guides treatment. Genetic testing: BRCA1/2 if family history, triple-negative, bilateral, or young age. Staging: CT chest/abdomen/pelvis, bone scan, PET/CT if advanced. Treatment: surgery (lumpectomy + radiation vs mastectomy) + sentinel lymph node biopsy. Adjuvant therapy per receptor status: endocrine therapy (tamoxifen/AI) if ER+, HER2-directed therapy (trastuzumab) if HER2+, chemotherapy per Oncotype DX or stage.",
+  "hpi_narrative": "{{patient_name}} presents with a firm, non-tender, immobile breast lump with irregular borders, possible skin dimpling (peau d'orange), nipple retraction, or axillary lymphadenopathy. Breast cancer is the most common cancer in women. Most are invasive ductal carcinoma (IDC). Workup: diagnostic mammogram + breast ultrasound. If suspicious (BIRADS 4-5) → core needle biopsy for tissue diagnosis. Hormone receptor status: ER, PR, HER2/neu — guides treatment. Genetic testing: BRCA1/2 if family history, triple-negative, bilateral, or young age. Staging: CT chest/abdomen/pelvis, bone scan, PET/CT if advanced. Treatment: surgery (lumpectomy + radiation vs mastectomy) + sentinel lymph node biopsy. Adjuvant therapy per receptor status: endocrine therapy (tamoxifen/AI) if ER+, HER2-directed therapy (trastuzumab) if HER2+, chemotherapy per Oncotype DX or stage.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about this lump in my breast. I don't know what it means.",
-    "history": "I found a lump and it feels different. I just want to know if it's serious.",
-    "pain": "It doesn't hurt, but I'm worried it might be something bad."
+    "chief_complaint": "Firm, non-tender breast lump, possible skin changes",
+    "history": "{{patient_name}} presents with a firm, non-tender, immobile breast lump with irregular borders, possible skin dimpling (peau d'orange), nipple retraction, or axillary lymphadenopathy. Breast cancer i…",
+    "pain": "Firm, non-tender breast lump, possible skin changes"
   },
-  "ccs_category": "OB/GYN",
-  "case_summary": "The patient in this case has breast cancer, specifically invasive lobular carcinoma. This is discovered first by doing imaging such as a mammogram or breast ultrasound followed by a needle biopsy. Once the diagnosis is made, the patient should be referred to oncology, general surgery for tumor removal, and radiation. Once the curative has been made, the case will need to initiate chemotherapy regimens.",
+  "ccs_category": "OB/GYN / Oncology / Breast Surgery",
+  "chief_complaint": "Firm, non-tender breast lump, possible skin changes",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
-    "Physical Exam: Heart / Cardiovascular",
-    "Physical Exam: Abdomen"
+    {
+      "label": "Physical Exam: Breasts / Axillae",
+      "type": "correctlyOrdered",
+      "finding": "Firm, non-tender, immobile lump. Skin dimpling. Axillary LAN.",
+      "aliases": [
+        "Breast Exam"
+      ]
+    },
+    {
+      "label": "Diagnostic mammogram + US",
+      "type": "correctlyOrdered",
+      "finding": "BIRADS classification.",
+      "aliases": [
+        "Mammogram",
+        "Breast US"
+      ]
+    },
+    {
+      "label": "Core needle biopsy",
+      "type": "correctlyOrdered",
+      "finding": "ER, PR, HER2/neu status.",
+      "aliases": [
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "BRCA testing (if indicated)",
+      "type": "correctlyOrdered",
+      "finding": "Family history, young age, TNBC.",
+      "aliases": [
+        "BRCA"
+      ]
+    },
+    {
+      "label": "Staging (CT / bone scan)",
+      "type": "correctlyOrdered",
+      "finding": "Metastases.",
+      "aliases": [
+        "Staging"
+      ]
+    },
+    {
+      "label": "Refer breast surgery / oncology",
+      "type": "correctlyOrdered",
+      "finding": "Lumpectomy + XRT or mastectomy + SLNB. Adjuvant therapy.",
+      "aliases": [
+        "Referral"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Breasts / Axillae",
+    "Diagnostic mammogram + US",
+    "Core needle biopsy",
+    "BRCA testing (if indicated)",
+    "Staging (CT / bone scan)",
+    "Refer breast surgery / oncology"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Breast Cancer (Invasive Ductal Carcinoma)."
 }

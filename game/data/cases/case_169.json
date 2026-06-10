@@ -1,61 +1,87 @@
 {
   "id": 169,
   "topic": "Somnolence",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Somnolence",
+  "diagnosis": "Hypercalcemia Secondary to Malignancy",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Emergency Department",
-    "Continuous IV access",
-    "Ionized calcium, PTH, PTHrp",
-    "BMP",
-    "Chest X-ray",
-    "Normal saline IV hydration",
-    "IV zoledronic acid"
+    "Ca / PTH / PTHrP",
+    "ECG",
+    "Aggressive IV NS",
+    "IV Zoledronic acid / Pamidronate"
   ],
   "should_avoid": [],
   "rationale": {
-    "Emergency Department": "Appropriate CCS order for this diagnosis: Emergency Department.",
-    "Continuous IV access": "Appropriate CCS order for this diagnosis: Continuous IV access.",
-    "Ionized calcium, PTH, PTHrp": "Appropriate CCS order for this diagnosis: Ionized calcium, PTH, PTHrp.",
-    "BMP": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Chest X-ray": "Evaluate chest and lungs as part of the initial exam for somnolence.",
-    "Normal saline IV hydration": "Appropriate CCS order for this diagnosis: Normal saline IV hydration.",
-    "IV zoledronic acid": "Appropriate CCS order for this diagnosis: IV zoledronic acid."
+    "Ca / PTH / PTHrP": "High Ca, low PTH, elevated PTHrP = malignancy.",
+    "ECG": "Short QT.",
+    "Aggressive IV NS": "3-4L/day. Promote calciuresis.",
+    "IV Zoledronic acid / Pamidronate": "Bisphosphonate. Inhibit osteoclasts."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with progressive somnolence, confusion, fatigue, constipation, polyuria, polydipsia, and nausea. Labs: elevated calcium (>11), low PTH (rules out primary hyperparathyroidism), elevated PTHrP. Hypercalcemia of malignancy is the most common cause of hypercalcemia in hospitalized patients. Mechanisms: PTHrP secretion (squamous cell cancers — lung, head/neck), osteolytic bone metastases (breast, multiple myeloma), excess 1,25-vitamin D (lymphoma). Treatment: aggressive IV normal saline (3-4L/day) to promote calciuresis. Then IV bisphosphonates (zoledronic acid or pamidronate — inhibit osteoclast activity). Calcitonin for rapid short-term reduction. Denosumab if refractory. Treat underlying malignancy. Monitor for arrhythmias (shortened QT on ECG).",
+  "hpi_narrative": "{{patient_name}} presents with progressive somnolence, confusion, fatigue, constipation, polyuria, polydipsia, and nausea. Labs: elevated calcium (>11), low PTH (rules out primary hyperparathyroidism), elevated PTHrP. Hypercalcemia of malignancy is the most common cause of hypercalcemia in hospitalized patients. Mechanisms: PTHrP secretion (squamous cell cancers — lung, head/neck), osteolytic bone metastases (breast, multiple myeloma), excess 1,25-vitamin D (lymphoma). Treatment: aggressive IV normal saline (3-4L/day) to promote calciuresis. Then IV bisphosphonates (zoledronic acid or pamidronate — inhibit osteoclast activity). Calcitonin for rapid short-term reduction. Denosumab if refractory. Treat underlying malignancy. Monitor for arrhythmias (shortened QT on ECG).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — somnolence. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This somnolence won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Somnolence, confusion, polyuria, constipation",
+    "history": "{{patient_name}} presents with progressive somnolence, confusion, fatigue, constipation, polyuria, polydipsia, and nausea. Labs: elevated calcium (>11), low PTH (rules out primary hyperparathyroidism…",
+    "pain": "Somnolence, confusion, polyuria, constipation"
   },
-  "ccs_category": null,
+  "ccs_category": "Oncology / Endocrinology",
+  "chief_complaint": "Somnolence, confusion, polyuria, constipation",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Emergency Department",
-    "Continuous IV access",
-    "Ionized calcium, PTH, PTHrp",
-    "BMP",
-    "Chest X-ray",
-    "Normal saline IV hydration",
-    "IV zoledronic acid"
+    {
+      "label": "Ca / PTH / PTHrP",
+      "type": "correctlyOrdered",
+      "finding": "High Ca, low PTH, elevated PTHrP = malignancy.",
+      "aliases": [
+        "Calcium"
+      ]
+    },
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "Short QT.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Aggressive IV NS",
+      "type": "correctlyOrdered",
+      "finding": "3-4L/day. Promote calciuresis.",
+      "aliases": [
+        "IVF"
+      ]
+    },
+    {
+      "label": "IV Zoledronic acid / Pamidronate",
+      "type": "correctlyOrdered",
+      "finding": "Bisphosphonate. Inhibit osteoclasts.",
+      "aliases": [
+        "Zometa"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Ca / PTH / PTHrP",
+    "ECG",
+    "Aggressive IV NS",
+    "IV Zoledronic acid / Pamidronate"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Hypercalcemia Secondary to Malignancy."
 }

@@ -1,69 +1,110 @@
 {
   "id": 84,
   "topic": "Abdominal Pain",
+  "title": "Abdominal Pain",
   "diagnosis": "Ischemic Colitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Assessment",
-    "CT Abdomen/Pelvis, without contrast",
-    "CT Abdomen/Pelvis, with contrast",
-    "Surgical consult",
-    "X-ray, abdomen, acute series",
-    "Physical Exam: Chief Complaint",
-    "IV Fluid Resuscitation",
-    "Lactate",
-    "Abdominal ultrasound",
-    "History and Physical"
+    "Physical Exam: Abdomen",
+    "CBC / BMP / Lactate",
+    "CT abdomen/pelvis with IV contrast",
+    "Colonoscopy",
+    "NPO + IV fluids",
+    "Broad-spectrum Abx (if severe)"
   ],
-  "should_avoid": [
-    "CT Abdomen/Pelvis, with contrast",
-    "MRI, consultation, without sedation"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Assessment": "Appropriate CCS order for Ischemic Colitis: Physical Exam: General Assessment.",
-    "CT Abdomen/Pelvis, without contrast": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
-    "CT Abdomen/Pelvis, with contrast": "Advanced imaging is not indicated early for Ischemic Colitis when the diagnosis is clinical.",
-    "Surgical consult": "Appropriate CCS order for Ischemic Colitis: Surgical consult.",
-    "X-ray, abdomen, acute series": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
-    "Physical Exam: Chief Complaint": "Appropriate CCS order for Ischemic Colitis: Physical Exam: Chief Complaint.",
-    "IV Fluid Resuscitation": "Appropriate CCS order for Ischemic Colitis: IV Fluid Resuscitation.",
-    "Lactate": "Appropriate CCS order for Ischemic Colitis: Lactate.",
-    "Abdominal ultrasound": "Appropriate CCS order for Ischemic Colitis: Abdominal ultrasound.",
-    "History and Physical": "Appropriate CCS order for Ischemic Colitis: History and Physical.",
-    "MRI, consultation, without sedation": "Advanced imaging is not indicated early for Ischemic Colitis when the diagnosis is clinical."
+    "Physical Exam: Abdomen": "LLQ tenderness, no peritoneal signs.",
+    "CBC / BMP / Lactate": "Leukocytosis. Elevated lactate if transmural infarction.",
+    "CT abdomen/pelvis with IV contrast": "Segmental wall thickening, thumbprinting.",
+    "Colonoscopy": "Segmental erythema, ulceration. Biopsy to rule out other causes.",
+    "NPO + IV fluids": "Bowel rest, resuscitation.",
+    "Broad-spectrum Abx (if severe)": "Cover gram-neg + anaerobes."
   },
-  "hpi": "The patient is a 67-year-old female who presents with abdominal pain that has been persistent for the last 24 hours. She has a history of hypertension and hyperlipidemia. The patient reports that the pain is located in the lower abdomen and is associated with nausea and vomiting. On examination, the patient appears to be in moderate distress. Initial laboratory tests reveal elevated white blood cell count and lactate levels. Imaging studies confirm the diagnosis of ischemic colitis. The patient was admitted for further management and surgical consultation was obtained. It is important to recognize the signs and symptoms of ischemic colitis as it can lead to significant morbidity if not treated promptly.",
+  "hpi": "{{patient_name}} is an elderly patient with cardiovascular risk factors who presents with acute LLQ abdominal pain and bloody diarrhea following a meal (postprandial pain). Ischemic colitis is the most common form of GI ischemia — caused by non-occlusive hypoperfusion of the watershed areas (splenic flexure = Griffith's point, rectosigmoid = Sudeck's point). Differentiate from acute mesenteric ischemia (small bowel — embolic, more severe, pain out of proportion). CT abdomen/pelvis with IV contrast shows segmental colonic wall thickening, thumbprinting (submucosal edema/hemorrhage). Colonoscopy confirms with segmental erythema, ulceration. Most cases are self-limited and resolve with supportive care: bowel rest (NPO), IV fluids, broad-spectrum antibiotics (cover gram-neg + anaerobes if severe). Surgery only if transmural infarction, perforation, peritonitis, or stricture.",
+  "hpi_narrative": "{{patient_name}} is an elderly patient with cardiovascular risk factors who presents with acute LLQ abdominal pain and bloody diarrhea following a meal (postprandial pain). Ischemic colitis is the most common form of GI ischemia — caused by non-occlusive hypoperfusion of the watershed areas (splenic flexure = Griffith's point, rectosigmoid = Sudeck's point). Differentiate from acute mesenteric ischemia (small bowel — embolic, more severe, pain out of proportion). CT abdomen/pelvis with IV contrast shows segmental colonic wall thickening, thumbprinting (submucosal edema/hemorrhage). Colonoscopy confirms with segmental erythema, ulceration. Most cases are self-limited and resolve with supportive care: bowel rest (NPO), IV fluids, broad-spectrum antibiotics (cover gram-neg + anaerobes if severe). Surgery only if transmural infarction, perforation, peritonitis, or stricture.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My stomach hurts so much.",
-    "history": "I’ve been feeling pain for a day. It just won’t go away.",
-    "pain": "It hurts in my lower belly."
+    "chief_complaint": "Acute LLQ pain, bloody diarrhea postprandially",
+    "history": "{{patient_name}} is an elderly patient with cardiovascular risk factors who presents with acute LLQ abdominal pain and bloody diarrhea following a meal (postprandial pain). Ischemic colitis is the mo…",
+    "pain": "Acute LLQ pain, bloody diarrhea postprandially"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "The patient is a 67-year-old female who presents with abdominal pain that has been persistent for the last 24 hours. She has a history of hypertension and hyperlipidemia. The patient reports that the pain is located in the lower abdomen and is associated with nausea and vomiting. On examination, the patient appears to be in moderate distress. Initial laboratory tests reveal elevated white blood cell count and lactate levels. Imaging studies confirm the diagnosis of ischemic colitis. The patient was admitted for further management and surgical consultation was obtained. It is important to recognize the signs and symptoms of ischemic colitis as it can lead to significant morbidity if not treated promptly.",
+  "ccs_category": "Internal Medicine / Gastroenterology",
+  "chief_complaint": "Acute LLQ pain, bloody diarrhea postprandially",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Ordered: CT abdomen/pelvis, without contrast",
-    "Ordered: CT abdomen/pelvis, with contrast",
-    "Ordered: Surgical consult"
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "LLQ tenderness, no peritoneal signs.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "CBC / BMP / Lactate",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis. Elevated lactate if transmural infarction.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "CT abdomen/pelvis with IV contrast",
+      "type": "correctlyOrdered",
+      "finding": "Segmental wall thickening, thumbprinting.",
+      "aliases": [
+        "CT"
+      ]
+    },
+    {
+      "label": "Colonoscopy",
+      "type": "correctlyOrdered",
+      "finding": "Segmental erythema, ulceration. Biopsy to rule out other causes.",
+      "aliases": [
+        "Colonoscopy"
+      ]
+    },
+    {
+      "label": "NPO + IV fluids",
+      "type": "correctlyOrdered",
+      "finding": "Bowel rest, resuscitation.",
+      "aliases": [
+        "NPO",
+        "IVF"
+      ]
+    },
+    {
+      "label": "Broad-spectrum Abx (if severe)",
+      "type": "correctlyOrdered",
+      "finding": "Cover gram-neg + anaerobes.",
+      "aliases": [
+        "Antibiotics"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Abdomen",
+    "CBC / BMP / Lactate",
+    "CT abdomen/pelvis with IV contrast",
+    "Colonoscopy",
+    "NPO + IV fluids",
+    "Broad-spectrum Abx (if severe)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Ischemic Colitis."
 }

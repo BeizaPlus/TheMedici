@@ -1,64 +1,120 @@
 {
   "id": 93,
   "topic": "Altered Mental Status",
+  "title": "Altered Mental Status",
   "diagnosis": "Septic Shock",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Head CT",
-    "CBC",
-    "Lactate",
-    "Blood Cultures",
-    "IV Fluids",
-    "Urinalysis",
-    "Electrolytes",
-    "Chest X-ray"
+    "CBC / BMP / LFTs / Lactate / Coags",
+    "Blood cultures x2 + urine culture",
+    "CXR",
+    "IV crystalloid bolus 30 mL/kg",
+    "Empiric broad-spectrum Abx within 1h",
+    "Norepinephrine",
+    "Admit to ICU"
   ],
-  "should_avoid": [
-    "CT Abdomen/Pelvis"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Head CT": "Appropriate CCS order for Septic Shock: Head CT.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Septic Shock.",
-    "Lactate": "Appropriate CCS order for Septic Shock: Lactate.",
-    "Blood Cultures": "Laboratory testing when systemic illness or severity warrants labs in Septic Shock.",
-    "IV Fluids": "Appropriate CCS order for Septic Shock: IV Fluids.",
-    "Urinalysis": "Appropriate CCS order for Septic Shock: Urinalysis.",
-    "Electrolytes": "Appropriate CCS order for Septic Shock: Electrolytes.",
-    "Chest X-ray": "Evaluate chest and lungs as part of the initial exam for altered mental status.",
-    "CT Abdomen/Pelvis": "Advanced imaging is not indicated early for Septic Shock when the diagnosis is clinical."
+    "CBC / BMP / LFTs / Lactate / Coags": "Lactate >2, AKI, LFTs, coagulopathy.",
+    "Blood cultures x2 + urine culture": "Before antibiotics.",
+    "CXR": "Pneumonia source.",
+    "IV crystalloid bolus 30 mL/kg": "Initial resuscitation.",
+    "Empiric broad-spectrum Abx within 1h": "Vancomycin + Pip-Tazo or Cefepime + Metronidazole.",
+    "Norepinephrine": "First-line vasopressor. Target MAP ≥65.",
+    "Admit to ICU": "Septic shock requires ICU."
   },
-  "hpi": "This case illustrates the importance of recognizing septic shock in a patient with altered mental status. Early identification and treatment are crucial for improving outcomes. Key interventions include fluid resuscitation, broad-spectrum antibiotics, and monitoring for organ dysfunction.",
+  "hpi": "{{patient_name}} presents with altered mental status, fever (or hypothermia), tachycardia, tachypnea, and hypotension unresponsive to fluid resuscitation — requiring vasopressors to maintain MAP ≥65. Lactate is elevated (>2 mmol/L) indicating tissue hypoperfusion. Sepsis = SIRS + infection. Septic shock = sepsis + persistent hypotension despite fluids + lactate >2. Source must be identified: blood cultures x2, urine culture, CXR, and cultures from any suspected site (sputum, wound, CSF). Empiric broad-spectrum antibiotics within 1 HOUR of recognition — every hour delay increases mortality 7-8%. Initial resuscitation: 30 mL/kg IV crystalloid bolus. If still hypotensive → start vasopressors (norepinephrine first-line). Monitor lactate clearance (goal >20% decrease). Measure ScvO2. Admit to ICU. Source control: remove lines, drain abscess, debridement if needed.",
+  "hpi_narrative": "{{patient_name}} presents with altered mental status, fever (or hypothermia), tachycardia, tachypnea, and hypotension unresponsive to fluid resuscitation — requiring vasopressors to maintain MAP ≥65. Lactate is elevated (>2 mmol/L) indicating tissue hypoperfusion. Sepsis = SIRS + infection. Septic shock = sepsis + persistent hypotension despite fluids + lactate >2. Source must be identified: blood cultures x2, urine culture, CXR, and cultures from any suspected site (sputum, wound, CSF). Empiric broad-spectrum antibiotics within 1 HOUR of recognition — every hour delay increases mortality 7-8%. Initial resuscitation: 30 mL/kg IV crystalloid bolus. If still hypotensive → start vasopressors (norepinephrine first-line). Monitor lactate clearance (goal >20% decrease). Measure ScvO2. Admit to ICU. Source control: remove lines, drain abscess, debridement if needed.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I feel really confused and scared. I don't know what's happening to me.",
-    "history": "I was fine earlier, but then everything got blurry. I can't remember much.",
-    "pain": "It hurts a bit in my stomach."
+    "chief_complaint": "AMS, fever, hypotension, tachycardia",
+    "history": "{{patient_name}} presents with altered mental status, fever (or hypothermia), tachycardia, tachypnea, and hypotension unresponsive to fluid resuscitation — requiring vasopressors to maintain MAP ≥65.…",
+    "pain": "AMS, fever, hypotension, tachycardia"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "This case illustrates the importance of recognizing septic shock in a patient with altered mental status. Early identification and treatment are crucial for improving outcomes. Key interventions include fluid resuscitation, broad-spectrum antibiotics, and monitoring for organ dysfunction.",
+  "ccs_category": "Critical Care / Emergency Medicine",
+  "chief_complaint": "AMS, fever, hypotension, tachycardia",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Head CT",
-    "CBC",
-    "Lactate",
-    "Blood Cultures"
+    {
+      "label": "CBC / BMP / LFTs / Lactate / Coags",
+      "type": "correctlyOrdered",
+      "finding": "Lactate >2, AKI, LFTs, coagulopathy.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Blood cultures x2 + urine culture",
+      "type": "correctlyOrdered",
+      "finding": "Before antibiotics.",
+      "aliases": [
+        "Cultures"
+      ]
+    },
+    {
+      "label": "CXR",
+      "type": "correctlyOrdered",
+      "finding": "Pneumonia source.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "IV crystalloid bolus 30 mL/kg",
+      "type": "correctlyOrdered",
+      "finding": "Initial resuscitation.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "Empiric broad-spectrum Abx within 1h",
+      "type": "correctlyOrdered",
+      "finding": "Vancomycin + Pip-Tazo or Cefepime + Metronidazole.",
+      "aliases": [
+        "Antibiotics"
+      ]
+    },
+    {
+      "label": "Norepinephrine",
+      "type": "correctlyOrdered",
+      "finding": "First-line vasopressor. Target MAP ≥65.",
+      "aliases": [
+        "Levophed"
+      ]
+    },
+    {
+      "label": "Admit to ICU",
+      "type": "correctlyOrdered",
+      "finding": "Septic shock requires ICU.",
+      "aliases": [
+        "ICU"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "CBC / BMP / LFTs / Lactate / Coags",
+    "Blood cultures x2 + urine culture",
+    "CXR",
+    "IV crystalloid bolus 30 mL/kg",
+    "Empiric broad-spectrum Abx within 1h",
+    "Norepinephrine",
+    "Admit to ICU"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Septic Shock."
 }

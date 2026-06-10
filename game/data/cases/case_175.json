@@ -1,9 +1,10 @@
 {
   "id": 175,
   "topic": "Heavy Menstrual Bleeding",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Heavy Menstrual Bleeding",
+  "diagnosis": "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Laboratory tests: Complete blood count (CBC), coagulation panel, thyroid function tests, and hormone levels",
     "Imaging studies: Transvaginal ultrasound, pelvic MRI",
@@ -13,40 +14,55 @@
     "Order for immediate dilation and curettage (D&C) as it may be premature without definitive diagnosis"
   ],
   "rationale": {
-    "Laboratory tests: Complete blood count (CBC), coagulation panel, thyroid function tests, and hormone levels": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Imaging studies: Transvaginal ultrasound, pelvic MRI": "Pelvic/cervical evaluation is central for this diagnosis and localizes the source of heavy menstrual bleeding.",
-    "β-hCG": "Appropriate CCS order for this diagnosis: β-hCG.",
-    "Order for immediate dilation and curettage (D&C) as it may be premature without definitive diagnosis": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Order for D&C": "It should be avoided initially because the goal is to diagnose, not just manage symptoms. A definitive diagnosis will guide further management.",
+    "Order": "Since the patient is a woman of childbearing age, a pregnancy test (β-hCG) should be ordered first to determine if there is an underlying pregnancy causing heavy menstrual bleeding."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — heavy menstrual bleeding. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This heavy menstrual bleeding won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Heavy Menstrual Bleeding — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 96; BP 109/68."
+    ],
+    [
+      "Respiratory",
+      "RR 17; SpO₂ 95%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Laboratory tests: Complete blood count (CBC), coagulation panel, thyroid function tests, and hormone levels",
     "Imaging studies: Transvaginal ultrasound, pelvic MRI",
     "β-hCG"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

@@ -1,66 +1,131 @@
 {
   "id": 75,
   "topic": "Chest Pain",
-  "diagnosis": "Aortic Dissection",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Chest Pain",
+  "diagnosis": "Aortic Dissection (Stanford Type A)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Rapid Bedside Clinical Appearance",
-    "Physical Exam: Cardiac",
-    "Physical Exam: Extremities/Neuro",
-    "CT Angiogram",
-    "IV Access: Peripheral",
-    "Cardiac Enzymes",
-    "Type and Crossmatch",
-    "Electrolytes"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Cardiovascular",
+    "CXR",
+    "CT angiography chest/abd/pelvis",
+    "TEE",
+    "ECG",
+    "IV beta-blocker (Esmolol)",
+    "Cardiothoracic surgery consult"
   ],
-  "should_avoid": [
-    "Aspirin",
-    "Anticoagulation"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Rapid Bedside Clinical Appearance": "Appropriate CCS order for Aortic Dissection: Rapid Bedside Clinical Appearance.",
-    "Physical Exam: Cardiac": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
-    "Physical Exam: Extremities/Neuro": "Targeted Physical Exam: Extremities/Neuro exam supports the differential for Aortic Dissection.",
-    "CT Angiogram": "Appropriate CCS order for Aortic Dissection: CT Angiogram.",
-    "IV Access: Peripheral": "Appropriate CCS order for Aortic Dissection: IV Access: Peripheral.",
-    "Cardiac Enzymes": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
-    "Type and Crossmatch": "Appropriate CCS order for Aortic Dissection: Type and Crossmatch.",
-    "Electrolytes": "Appropriate CCS order for Aortic Dissection: Electrolytes.",
-    "Aspirin": "CCS review: avoid this order for Aortic Dissection — it does not change acute management.",
-    "Anticoagulation": "CCS review: avoid this order for Aortic Dissection — it does not change acute management."
+    "Physical Exam: General Appearance": "Severe distress.",
+    "Physical Exam: Heart / Cardiovascular": "BP in both arms — differential >20mmHg. Aortic regurgitation murmur. Pulse deficit.",
+    "CXR": "Widened mediastinum (>8cm).",
+    "CT angiography chest/abd/pelvis": "Diagnostic. Identifies dissection flap, extent, branch involvement.",
+    "TEE": "Bedside alternative.",
+    "ECG": "Rule out MI. May show LVH from HTN.",
+    "IV beta-blocker (Esmolol)": "First: reduce HR/dP/dt. Then vasodilator. Target HR 60, SBP 100-120.",
+    "Cardiothoracic surgery consult": "Type A = surgical emergency. OR now."
   },
-  "hpi": "This case illustrates the importance of recognizing aortic dissection as a potential cause of chest pain. The patient presented with classic symptoms, and timely imaging and intervention are critical for a favorable outcome. Understanding the risk factors and clinical presentation can aid in prompt diagnosis and management.",
+  "hpi": "{{patient_name}} presents with acute onset severe tearing/ripping chest pain radiating to the back between the scapulae. Pain is maximal at onset (unlike MI which builds). Exam reveals differential BP between arms (>20mmHg), pulse deficit, new aortic regurgitation murmur. May have neurologic deficits if dissection involves carotid arteries. Risk factors: hypertension (most common), connective tissue disorders (Marfan, Ehlers-Danlos), bicuspid aortic valve, cocaine, pregnancy. CXR shows widened mediastinum (>8cm). CT angiography of chest/abdomen/pelvis is diagnostic. TEE can be done at bedside. Stanford type A (ascending aorta) = SURGICAL EMERGENCY. Stanford type B (descending aorta only) = medical management (BP control). Start IV beta-blocker (esmolol first — lowers dP/dt) then add vasodilator (nitroprusside or nicardipine). Target HR 60 and SBP 100-120. Consult cardiothoracic surgery immediately.",
+  "hpi_narrative": "{{patient_name}} presents with acute onset severe tearing/ripping chest pain radiating to the back between the scapulae. Pain is maximal at onset (unlike MI which builds). Exam reveals differential BP between arms (>20mmHg), pulse deficit, new aortic regurgitation murmur. May have neurologic deficits if dissection involves carotid arteries. Risk factors: hypertension (most common), connective tissue disorders (Marfan, Ehlers-Danlos), bicuspid aortic valve, cocaine, pregnancy. CXR shows widened mediastinum (>8cm). CT angiography of chest/abdomen/pelvis is diagnostic. TEE can be done at bedside. Stanford type A (ascending aorta) = SURGICAL EMERGENCY. Stanford type B (descending aorta only) = medical management (BP control). Start IV beta-blocker (esmolol first — lowers dP/dt) then add vasodilator (nitroprusside or nicardipine). Target HR 60 and SBP 100-120. Consult cardiothoracic surgery immediately.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My chest hurts a lot.",
-    "history": "I felt a sudden sharp pain in my chest. It was like nothing I've ever felt before.",
-    "pain": "It feels like a heavy pressure in my chest."
+    "chief_complaint": "Severe tearing chest pain radiating to back, maximal at onset",
+    "history": "{{patient_name}} presents with acute onset severe tearing/ripping chest pain radiating to the back between the scapulae. Pain is maximal at onset (unlike MI which builds). Exam reveals differential B…",
+    "pain": "Severe tearing chest pain radiating to back, maximal at onset"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "This case illustrates the importance of recognizing aortic dissection as a potential cause of chest pain. The patient presented with classic symptoms, and timely imaging and intervention are critical for a favorable outcome. Understanding the risk factors and clinical presentation can aid in prompt diagnosis and management.",
+  "ccs_category": "Emergency Medicine / Cardiothoracic Surgery",
+  "chief_complaint": "Severe tearing chest pain radiating to back, maximal at onset",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Laboratory Tests",
-    "Imaging Ordered",
-    "Medications Ordered"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Severe distress.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "BP in both arms — differential >20mmHg. Aortic regurgitation murmur. Pulse deficit.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "CXR",
+      "type": "correctlyOrdered",
+      "finding": "Widened mediastinum (>8cm).",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "CT angiography chest/abd/pelvis",
+      "type": "correctlyOrdered",
+      "finding": "Diagnostic. Identifies dissection flap, extent, branch involvement.",
+      "aliases": [
+        "CTA"
+      ]
+    },
+    {
+      "label": "TEE",
+      "type": "correctlyOrdered",
+      "finding": "Bedside alternative.",
+      "aliases": [
+        "TEE"
+      ]
+    },
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "Rule out MI. May show LVH from HTN.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "IV beta-blocker (Esmolol)",
+      "type": "correctlyOrdered",
+      "finding": "First: reduce HR/dP/dt. Then vasodilator. Target HR 60, SBP 100-120.",
+      "aliases": [
+        "Esmolol"
+      ]
+    },
+    {
+      "label": "Cardiothoracic surgery consult",
+      "type": "correctlyOrdered",
+      "finding": "Type A = surgical emergency. OR now.",
+      "aliases": [
+        "CT surgery"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Cardiovascular",
+    "CXR",
+    "CT angiography chest/abd/pelvis",
+    "TEE",
+    "ECG",
+    "IV beta-blocker (Esmolol)",
+    "Cardiothoracic surgery consult"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Aortic Dissection (Stanford Type A)."
 }

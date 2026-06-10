@@ -1,68 +1,165 @@
 {
   "id": 60,
-  "topic": "Abdominal Pain - Emergency Medicine",
+  "topic": "Abdominal Pain",
+  "title": "Abdominal Pain",
   "diagnosis": "Nephrolithiasis (Kidney Stone)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: Supine",
-    "Physical Exam: Lying",
-    "Physical Exam: Sitting",
-    "Physical Exam: General",
-    "Physical Exam: Abdominal",
-    "Magnesium serum",
-    "Pregnancy test",
-    "Ultrasound"
-  ],
-  "should_avoid": [
-    "CT Abdomen/Pelvis",
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "Urinalysis",
+    "CBC",
+    "BMP / CMP (Cr, Ca)",
+    "Non-contrast CT abdomen/pelvis",
     "IV fluids",
-    "Urinalysis"
+    "Analgesia (Ketorolac / Morphine)",
+    "Antiemetic (Ondansetron)",
+    "Tamsulosin (medical expulsive therapy)",
+    "Strain urine / Stone analysis"
   ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: Supine": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Physical Exam: Supine.",
-    "Physical Exam: Lying": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Physical Exam: Lying.",
-    "Physical Exam: Sitting": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Physical Exam: Sitting.",
-    "Physical Exam: General": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Physical Exam: General.",
-    "Physical Exam: Abdominal": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Physical Exam: Abdominal.",
-    "Magnesium serum": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Magnesium serum.",
-    "Pregnancy test": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Pregnancy test.",
-    "Ultrasound": "Appropriate CCS order for Nephrolithiasis (Kidney Stone): Ultrasound.",
-    "CT Abdomen/Pelvis": "Advanced imaging is not indicated early for Nephrolithiasis (Kidney Stone) when the diagnosis is clinical.",
-    "IV fluids": "IV fluids/access are not indicated unless the patient is unstable or cannot tolerate PO.",
-    "Urinalysis": "CCS review: avoid this order for Nephrolithiasis (Kidney Stone) — it does not change acute management."
+    "Physical Exam: General Appearance": "In severe pain — colicky.",
+    "Physical Exam: Abdomen": "Flank/CVA tenderness.",
+    "Urinalysis": "Micro/gross hematuria.",
+    "CBC": "Screening. Leukocytosis may suggest infection.",
+    "BMP / CMP (Cr, Ca)": "Renal function. Hypercalcemia screen.",
+    "Non-contrast CT abdomen/pelvis": "Gold standard for stone diagnosis. Shows size, location, hydronephrosis.",
+    "IV fluids": "Hydration for nausea/vomiting.",
+    "Analgesia (Ketorolac / Morphine)": "Pain management. Ketorolac very effective for renal colic.",
+    "Antiemetic (Ondansetron)": "Nausea/vomiting.",
+    "Tamsulosin (medical expulsive therapy)": "For distal ureteral stones <10mm. Relaxes ureteral smooth muscle.",
+    "Strain urine / Stone analysis": "Capture stone for analysis. Metabolic workup if recurrent."
   },
-  "hpi": "Emergency Department Disposition: Nephrolithiasis, Discharge with prescriptions for pain management and follow-up. Patient education provided regarding hydration and dietary modifications.",
+  "hpi": "{{patient_name}} presents with acute severe unilateral flank pain radiating to the groin, associated with nausea, vomiting, and hematuria. Pain is colicky — comes in waves as the stone passes. Non-contrast CT abdomen/pelvis is the gold standard for diagnosis. Ultrasound can be used in pregnancy/children. UA shows microscopic or gross hematuria. Most stones are calcium oxalate. Treatment depends on size and location: <5-10mm stones at UVJ or distal ureter → medical expulsive therapy (tamsulosin) + analgesia + IV fluids. Larger stones or proximal location → urology consult for lithotripsy or ureteroscopy. Strain urine and send stone for analysis. Metabolic workup if recurrent. Prevention: increase fluid intake (>2L/day), dietary modifications based on stone type.",
+  "hpi_narrative": "{{patient_name}} presents with acute severe unilateral flank pain radiating to the groin, associated with nausea, vomiting, and hematuria. Pain is colicky — comes in waves as the stone passes. Non-contrast CT abdomen/pelvis is the gold standard for diagnosis. Ultrasound can be used in pregnancy/children. UA shows microscopic or gross hematuria. Most stones are calcium oxalate. Treatment depends on size and location: <5-10mm stones at UVJ or distal ureter → medical expulsive therapy (tamsulosin) + analgesia + IV fluids. Larger stones or proximal location → urology consult for lithotripsy or ureteroscopy. Strain urine and send stone for analysis. Metabolic workup if recurrent. Prevention: increase fluid intake (>2L/day), dietary modifications based on stone type.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared because my stomach hurts so much.",
-    "history": "I have had this pain for a few hours now, and it feels sharp.",
-    "pain": "It hurts really bad in my side."
+    "chief_complaint": "Severe unilateral flank pain radiating to groin, hematuria",
+    "history": "{{patient_name}} presents with acute severe unilateral flank pain radiating to the groin, associated with nausea, vomiting, and hematuria. Pain is colicky — comes in waves as the stone passes. Non-co…",
+    "pain": "Severe unilateral flank pain radiating to groin, hematuria"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "Emergency Department Disposition: Nephrolithiasis, Discharge with prescriptions for pain management and follow-up. Patient education provided regarding hydration and dietary modifications.",
+  "ccs_category": "Emergency Medicine / Urology",
+  "chief_complaint": "Severe unilateral flank pain radiating to groin, hematuria",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Patient Update Reported",
-    "Physical Exam",
-    "Ordered IV fluids",
-    "Ordered Ultrasound"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "In severe pain — colicky.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Flank/CVA tenderness.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "correctlyOrdered",
+      "finding": "Micro/gross hematuria.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Screening. Leukocytosis may suggest infection.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "BMP / CMP (Cr, Ca)",
+      "type": "correctlyOrdered",
+      "finding": "Renal function. Hypercalcemia screen.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Non-contrast CT abdomen/pelvis",
+      "type": "correctlyOrdered",
+      "finding": "Gold standard for stone diagnosis. Shows size, location, hydronephrosis.",
+      "aliases": [
+        "CT KUB"
+      ]
+    },
+    {
+      "label": "IV fluids",
+      "type": "correctlyOrdered",
+      "finding": "Hydration for nausea/vomiting.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "Analgesia (Ketorolac / Morphine)",
+      "type": "correctlyOrdered",
+      "finding": "Pain management. Ketorolac very effective for renal colic.",
+      "aliases": [
+        "Toradol",
+        "Morphine"
+      ]
+    },
+    {
+      "label": "Antiemetic (Ondansetron)",
+      "type": "correctlyOrdered",
+      "finding": "Nausea/vomiting.",
+      "aliases": [
+        "Zofran"
+      ]
+    },
+    {
+      "label": "Tamsulosin (medical expulsive therapy)",
+      "type": "correctlyOrdered",
+      "finding": "For distal ureteral stones <10mm. Relaxes ureteral smooth muscle.",
+      "aliases": [
+        "Flomax"
+      ]
+    },
+    {
+      "label": "Strain urine / Stone analysis",
+      "type": "correctlyOrdered",
+      "finding": "Capture stone for analysis. Metabolic workup if recurrent.",
+      "aliases": [
+        "Stone strain"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "Urinalysis",
+    "CBC",
+    "BMP / CMP (Cr, Ca)",
+    "Non-contrast CT abdomen/pelvis",
+    "IV fluids",
+    "Analgesia (Ketorolac / Morphine)",
+    "Antiemetic (Ondansetron)",
+    "Tamsulosin (medical expulsive therapy)",
+    "Strain urine / Stone analysis"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Nephrolithiasis (Kidney Stone)."
 }

@@ -1,64 +1,122 @@
 {
   "id": 71,
-  "topic": "Question: Internal Medicine",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Diarrhea",
+  "title": "Diarrhea",
+  "diagnosis": "Celiac Disease",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Complete Blood Count",
-    "Basic Metabolic Panel",
-    "Liver Function Tests",
-    "Coagulation Studies",
-    "Urinalysis",
-    "Thyroid Function Tests",
-    "Lipid Panel"
+    "Physical Exam: General Appearance",
+    "IgA anti-tTG + Total IgA",
+    "IgG anti-tTG / anti-DGP (if IgA deficient)",
+    "CBC / Iron studies / B12 / Folate",
+    "BMP / CMP / Vitamin D",
+    "Duodenal biopsy (EGD)",
+    "Strict lifelong gluten-free diet"
   ],
-  "should_avoid": [
-    "CT Scan of the Abdomen",
-    "MRI of the Brain"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Complete Blood Count": "Appropriate CCS order for this diagnosis: Complete Blood Count.",
-    "Basic Metabolic Panel": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Liver Function Tests": "Appropriate CCS order for this diagnosis: Liver Function Tests.",
-    "Coagulation Studies": "Appropriate CCS order for this diagnosis: Coagulation Studies.",
-    "Urinalysis": "Appropriate CCS order for this diagnosis: Urinalysis.",
-    "Thyroid Function Tests": "Appropriate CCS order for this diagnosis: Thyroid Function Tests.",
-    "Lipid Panel": "Appropriate CCS order for this diagnosis: Lipid Panel.",
-    "CT Scan of the Abdomen": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical.",
-    "MRI of the Brain": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Weight loss, cachexia.",
+    "IgA anti-tTG + Total IgA": "First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+    "IgG anti-tTG / anti-DGP (if IgA deficient)": "If IgA deficiency (false-negative IgA tTG).",
+    "CBC / Iron studies / B12 / Folate": "Iron deficiency anemia. Nutritional deficiencies.",
+    "BMP / CMP / Vitamin D": "Nutritional assessment.",
+    "Duodenal biopsy (EGD)": "Gold standard: villous atrophy, crypt hyperplasia, IELs. BEFORE gluten-free diet.",
+    "Strict lifelong gluten-free diet": "Eliminate wheat, barley, rye. Consult dietician."
   },
-  "hpi": "You should have ordered Thyroid Function Tests and a Lipid Panel. This is important for evaluating the patient's metabolic state. You also should have considered the patient's symptoms and history when making your decisions.",
+  "hpi": "{{patient_name}} presents with chronic diarrhea, steatorrhea, bloating, abdominal pain, weight loss, fatigue, and iron deficiency anemia. Celiac disease is an autoimmune enteropathy triggered by gluten in genetically susceptible individuals (HLA-DQ2/DQ8). Gliadin peptides are deamidated by tissue transglutaminase (tTG) → immune response → small intestinal villous atrophy. Classic extra-intestinal manifestations: dermatitis herpetiformis (pruritic vesicles on extensor surfaces), iron deficiency anemia, osteoporosis, peripheral neuropathy. Diagnosis: IgA anti-tTG antibody (first-line serology) + total IgA level (rule out IgA deficiency, which causes false-negative tTG). If IgA deficient, use IgG anti-tTG or anti-DGP. Confirm with duodenal biopsy showing villous atrophy, crypt hyperplasia, intraepithelial lymphocytosis (gold standard). DO NOT start gluten-free diet before biopsy. Treatment: lifelong strict gluten-free diet. Monitor nutritional deficiencies (iron, B12, folate, vitamin D, calcium).",
+  "hpi_narrative": "{{patient_name}} presents with chronic diarrhea, steatorrhea, bloating, abdominal pain, weight loss, fatigue, and iron deficiency anemia. Celiac disease is an autoimmune enteropathy triggered by gluten in genetically susceptible individuals (HLA-DQ2/DQ8). Gliadin peptides are deamidated by tissue transglutaminase (tTG) → immune response → small intestinal villous atrophy. Classic extra-intestinal manifestations: dermatitis herpetiformis (pruritic vesicles on extensor surfaces), iron deficiency anemia, osteoporosis, peripheral neuropathy. Diagnosis: IgA anti-tTG antibody (first-line serology) + total IgA level (rule out IgA deficiency, which causes false-negative tTG). If IgA deficient, use IgG anti-tTG or anti-DGP. Confirm with duodenal biopsy showing villous atrophy, crypt hyperplasia, intraepithelial lymphocytosis (gold standard). DO NOT start gluten-free diet before biopsy. Treatment: lifelong strict gluten-free diet. Monitor nutritional deficiencies (iron, B12, folate, vitamin D, calcium).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really worried about my health. I feel so tired all the time.",
-    "history": "I've been feeling off for weeks. I can't focus and just want to sleep.",
-    "pain": "I have this dull ache in my back that won't go away."
+    "chief_complaint": "Chronic diarrhea, weight loss, bloating, fatigue",
+    "history": "{{patient_name}} presents with chronic diarrhea, steatorrhea, bloating, abdominal pain, weight loss, fatigue, and iron deficiency anemia. Celiac disease is an autoimmune enteropathy triggered by glut…",
+    "pain": "Chronic diarrhea, weight loss, bloating, fatigue"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "You should have ordered Thyroid Function Tests and a Lipid Panel. This is important for evaluating the patient's metabolic state. You also should have considered the patient's symptoms and history when making your decisions.",
+  "ccs_category": "Gastroenterology",
+  "chief_complaint": "Chronic diarrhea, weight loss, bloating, fatigue",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Complete Blood Count",
-    "Basic Metabolic Panel",
-    "Liver Function Tests",
-    "Coagulation Studies",
-    "Urinalysis"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Weight loss, cachexia.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "IgA anti-tTG + Total IgA",
+      "type": "correctlyOrdered",
+      "finding": "First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+      "aliases": [
+        "tTG",
+        "Celiac panel"
+      ]
+    },
+    {
+      "label": "IgG anti-tTG / anti-DGP (if IgA deficient)",
+      "type": "correctlyOrdered",
+      "finding": "If IgA deficiency (false-negative IgA tTG).",
+      "aliases": [
+        "IgG celiac tests"
+      ]
+    },
+    {
+      "label": "CBC / Iron studies / B12 / Folate",
+      "type": "correctlyOrdered",
+      "finding": "Iron deficiency anemia. Nutritional deficiencies.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "BMP / CMP / Vitamin D",
+      "type": "correctlyOrdered",
+      "finding": "Nutritional assessment.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Duodenal biopsy (EGD)",
+      "type": "correctlyOrdered",
+      "finding": "Gold standard: villous atrophy, crypt hyperplasia, IELs. BEFORE gluten-free diet.",
+      "aliases": [
+        "EGD",
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "Strict lifelong gluten-free diet",
+      "type": "correctlyOrdered",
+      "finding": "Eliminate wheat, barley, rye. Consult dietician.",
+      "aliases": [
+        "GFD"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "IgA anti-tTG + Total IgA",
+    "IgG anti-tTG / anti-DGP (if IgA deficient)",
+    "CBC / Iron studies / B12 / Folate",
+    "BMP / CMP / Vitamin D",
+    "Duodenal biopsy (EGD)",
+    "Strict lifelong gluten-free diet"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Celiac Disease."
 }

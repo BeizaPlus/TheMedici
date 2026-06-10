@@ -1,62 +1,426 @@
 {
   "id": 23,
-  "topic": "Congestive Heart Failure",
-  "diagnosis": "Congestive Heart Failure",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Shortness of Breath",
+  "title": "Shortness of Breath",
+  "diagnosis": "Congestive Heart Failure (Systolic Dysfunction)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Patient Education",
-    "Diuretics Ordered",
-    "Cardiology Consult",
-    "Labs Ordered",
-    "IV Fluids Ordered",
-    "Chest X-Ray",
-    "EKG"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "TSH",
+    "Pulse oximetry",
+    "ECG, 12 lead",
+    "Cardiac troponin",
+    {
+      "order": "BNP, serum",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Elevated in CHF — supports diagnosis."
+    },
+    "Chest X-ray",
+    "Echocardiography",
+    "HbA1c / Glucose",
+    {
+      "order": "Foley catheter",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Monitor I/Os during diuresis."
+    },
+    "BMP / CMP / LFTs",
+    "Furosemide (Lasix) / Bumetanide / Torsemide",
+    {
+      "order": "Digoxin",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Helps symptoms, not outcomes. For moderate-severe CHF (NYHA III-IV) as adjunct."
+    },
+    "Input and output monitoring",
+    "Nitroglycerin",
+    "Beta-blocker (Carvedilol / Metoprolol / Bisoprolol)",
+    "Low sodium diet",
+    "Smoking cessation",
+    "Limit alcohol",
+    "Pneumococcal vaccine",
+    "Tdap vaccine",
+    "Herpes zoster vaccine"
   ],
   "should_avoid": [
-    "CT Scan"
+    "Stress test / Stress echo",
+    "Stress test during acute exacerbation",
+    "Beta-blocker BEFORE diuresis"
   ],
   "rationale": {
-    "Patient Education": "Patient education and counseling are part of definitive care for Congestive Heart Failure.",
-    "Diuretics Ordered": "Appropriate CCS order for Congestive Heart Failure: Diuretics Ordered.",
-    "Cardiology Consult": "Appropriate CCS order for Congestive Heart Failure: Cardiology Consult.",
-    "Labs Ordered": "Appropriate CCS order for Congestive Heart Failure: Labs Ordered.",
-    "IV Fluids Ordered": "Appropriate CCS order for Congestive Heart Failure: IV Fluids Ordered.",
-    "Chest X-Ray": "Evaluate chest and lungs as part of the initial exam for congestive heart failure.",
-    "EKG": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
-    "CT Scan": "Advanced imaging is not indicated early for Congestive Heart Failure when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Determine severity.",
+    "Physical Exam: Chest / Lungs": "Dyspnea — lung exam for crackles/wheezes.",
+    "Physical Exam: Heart / Cardiovascular": "Dyspnea + cardiac history — S3 gallop, JVD.",
+    "Physical Exam: Extremities / Spine": "Pitting edema — hallmark of R-sided HF.",
+    "Physical Exam: HEENT / Neck": "JVD — elevated filling pressures.",
+    "CBC with differential": "Screening.",
+    "TSH": "Thyroid pathology associated with arrhythmias precipitating HF.",
+    "Pulse oximetry": "Dyspnea — check oxygenation.",
+    "ECG, 12 lead": "Arrhythmias associated with HF development.",
+    "Cardiac troponin": "Superimposed ischemia/infarction is common cause of HF exacerbation.",
+    "BNP, serum": "Elevated in CHF — supports diagnosis.",
+    "Chest X-ray": "Pulmonary edema + cardiomegaly. Rule out other causes of dyspnea.",
+    "Echocardiography": "Confirms CHF — reduced ejection fraction (systolic dysfunction).",
+    "HbA1c / Glucose": "Uncontrolled DM precipitates HF.",
+    "Foley catheter": "Monitor I/Os during diuresis.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "Stress test / Stress echo": "NO stress tests until patient recovers from acute HF exacerbation.",
+    "Furosemide (Lasix) / Bumetanide / Torsemide": "Volume overloaded — loop diuretic for rapid symptom improvement.",
+    "Digoxin": "Helps symptoms, not outcomes. For moderate-severe CHF (NYHA III-IV) as adjunct.",
+    "Input and output monitoring": "Monitor fluid status during diuresis.",
+    "Nitroglycerin": "Dilates coronary arteries — reduces afterload and improves coronary flow.",
+    "Beta-blocker (Carvedilol / Metoprolol / Bisoprolol)": "Start after diuresis, prior to discharge. Carvedilol preferred (COMET trial: 17% survival benefit over metoprolol). All 3 accepted.",
+    "Low sodium diet": "Lifestyle modification — limit Na intake.",
+    "Smoking cessation": "Precipitating factor for CHF.",
+    "Limit alcohol": "Alcohol precipitates CHF.",
+    "Pneumococcal vaccine": "CHF + smoker — indication for PPSV23.",
+    "Tdap vaccine": "Tdap every 10 years.",
+    "Herpes zoster vaccine": "Age >50 — Shingrix (recombinant zoster vaccine) recommended.",
+    "Stress test during acute exacerbation": "Stress tests contraindicated until acute CHF exacerbation resolves. Risk of decompensation.",
+    "Beta-blocker BEFORE diuresis": "Beta-blocker should be started after patient is euvolemic (post-diuresis), before discharge. Starting during acute volume overload can worsen hemodynamics."
   },
-  "hpi": "The patient was experiencing shortness of breath and edema. The treatment plan included diuretics and monitoring fluid status. Education on heart failure management was provided. Follow-up with cardiology was recommended.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is an older man with history of prior myocardial infarction and hypertension on lisinopril who presents with progressive dyspnea, orthopnea, PND, and bilateral lower extremity pitting edema. Exam reveals JVD, S3 gallop, pulmonary crackles, and expiratory wheezing. CXR shows pulmonary edema and cardiomegaly. Echo confirms reduced ejection fraction — systolic dysfunction. BNP is elevated. The most common cause of systolic HF is ischemic heart disease. NYHA Class III-IV (symptoms with minimal activity). Treatment: IV loop diuretic (furosemide) for volume overload, continue ACEI, add nitroglycerin for afterload reduction. Once acute exacerbation resolves and patient is euvolemic, start beta-blocker (carvedilol preferred per COMET trial — 17% survival benefit over metoprolol, though bisoprolol and metoprolol succinate also accepted). Digoxin for symptom control if needed. No stress tests until recovered. Admit to inpatient unit. Discharge: low-sodium diet, smoking cessation, alcohol avoidance, pneumococcal and zoster vaccines, Tdap.",
+  "hpi_narrative": "{{patient_name}} is an older man with history of prior myocardial infarction and hypertension on lisinopril who presents with progressive dyspnea, orthopnea, PND, and bilateral lower extremity pitting edema. Exam reveals JVD, S3 gallop, pulmonary crackles, and expiratory wheezing. CXR shows pulmonary edema and cardiomegaly. Echo confirms reduced ejection fraction — systolic dysfunction. BNP is elevated. The most common cause of systolic HF is ischemic heart disease. NYHA Class III-IV (symptoms with minimal activity). Treatment: IV loop diuretic (furosemide) for volume overload, continue ACEI, add nitroglycerin for afterload reduction. Once acute exacerbation resolves and patient is euvolemic, start beta-blocker (carvedilol preferred per COMET trial — 17% survival benefit over metoprolol, though bisoprolol and metoprolol succinate also accepted). Digoxin for symptom control if needed. No stress tests until recovered. Admit to inpatient unit. Discharge: low-sodium diet, smoking cessation, alcohol avoidance, pneumococcal and zoster vaccines, Tdap.",
+  "physical_exam": [
+    [
+      "General",
+      "Dyspneic, orthopneic."
+    ],
+    [
+      "Cardiovascular",
+      "S3 gallop. JVD present. Prior MI history."
+    ],
+    [
+      "Respiratory",
+      "Pulmonary crackles (rales), expiratory wheezing — pulmonary edema."
+    ],
+    [
+      "Heent",
+      "JVD."
+    ],
+    [
+      "Musculoskeletal",
+      "Bilateral LE pitting edema."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. I can't breathe well and my legs are swollen.",
-    "history": "I have a history of heart problems. I feel so tired and weak.",
-    "pain": "It feels like there's pressure in my chest."
+    "chief_complaint": "Progressive dyspnea, orthopnea, PND, LE edema",
+    "history": "{{patient_name}} is an older man with history of prior myocardial infarction and hypertension on lisinopril who presents with progressive dyspnea, orthopnea, PND, and bilateral lower extremity pittin…",
+    "pain": "Progressive dyspnea, orthopnea, PND, LE edema"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "The patient was experiencing shortness of breath and edema. The treatment plan included diuretics and monitoring fluid status. Education on heart failure management was provided. Follow-up with cardiology was recommended.",
+  "ccs_category": "Internal Medicine / Cardiology",
+  "chief_complaint": "Progressive dyspnea, orthopnea, PND, LE edema",
+  "case_summary": "Systolic CHF exacerbation (NYHA III-IV). Prior MI + HTN. IV Lasix → NTG → continue lisinopril → add carvedilol before discharge. Admit to inpatient. Lifestyle: low Na, smoking cessation, vaccines.",
+  "decoys": [
+    {
+      "label": "Stress test during acute exacerbation",
+      "reason_wrong": "Stress tests contraindicated until acute CHF exacerbation resolves. Risk of decompensation."
+    },
+    {
+      "label": "Beta-blocker BEFORE diuresis",
+      "reason_wrong": "Beta-blocker should be started after patient is euvolemic (post-diuresis), before discharge. Starting during acute volume overload can worsen hemodynamics."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Patient Education",
-    "Diuretics Ordered",
-    "Cardiology Consult",
-    "Labs Ordered",
-    "IV Fluids Ordered"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Determine severity.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Dyspnea — lung exam for crackles/wheezes.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Dyspnea + cardiac history — S3 gallop, JVD.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "type": "correctlyOrdered",
+      "finding": "Pitting edema — hallmark of R-sided HF.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "correctlyOrdered",
+      "finding": "JVD — elevated filling pressures.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "TSH",
+      "type": "shouldHaveOrdered",
+      "finding": "Thyroid pathology associated with arrhythmias precipitating HF.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "shouldHaveOrdered",
+      "finding": "Dyspnea — check oxygenation.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "ECG, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "Arrhythmias associated with HF development.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Cardiac troponin",
+      "type": "shouldHaveOrdered",
+      "finding": "Superimposed ischemia/infarction is common cause of HF exacerbation.",
+      "aliases": [
+        "Troponin"
+      ]
+    },
+    {
+      "label": "BNP, serum",
+      "type": "optional",
+      "finding": "Elevated in CHF — supports diagnosis.",
+      "aliases": [
+        "BNP"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Pulmonary edema + cardiomegaly. Rule out other causes of dyspnea.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "Echocardiography",
+      "type": "correctlyOrdered",
+      "finding": "Confirms CHF — reduced ejection fraction (systolic dysfunction).",
+      "aliases": [
+        "Echo",
+        "TTE"
+      ]
+    },
+    {
+      "label": "HbA1c / Glucose",
+      "type": "shouldHaveOrdered",
+      "finding": "Uncontrolled DM precipitates HF.",
+      "aliases": [
+        "HbA1c"
+      ]
+    },
+    {
+      "label": "Foley catheter",
+      "type": "optional",
+      "finding": "Monitor I/Os during diuresis.",
+      "aliases": [
+        "Foley"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "Stress test / Stress echo",
+      "type": "correctlyAvoided",
+      "finding": "NO stress tests until patient recovers from acute HF exacerbation.",
+      "aliases": [
+        "Stress test"
+      ]
+    },
+    {
+      "label": "Furosemide (Lasix) / Bumetanide / Torsemide",
+      "type": "correctlyOrdered",
+      "finding": "Volume overloaded — loop diuretic for rapid symptom improvement.",
+      "aliases": [
+        "Lasix",
+        "Diuretic"
+      ]
+    },
+    {
+      "label": "Digoxin",
+      "type": "optional",
+      "finding": "Helps symptoms, not outcomes. For moderate-severe CHF (NYHA III-IV) as adjunct.",
+      "aliases": [
+        "Digoxin"
+      ]
+    },
+    {
+      "label": "Input and output monitoring",
+      "type": "shouldHaveOrdered",
+      "finding": "Monitor fluid status during diuresis.",
+      "aliases": [
+        "I/Os"
+      ]
+    },
+    {
+      "label": "Nitroglycerin",
+      "type": "shouldHaveOrdered",
+      "finding": "Dilates coronary arteries — reduces afterload and improves coronary flow.",
+      "aliases": [
+        "NTG"
+      ]
+    },
+    {
+      "label": "Beta-blocker (Carvedilol / Metoprolol / Bisoprolol)",
+      "type": "shouldHaveOrdered",
+      "finding": "Start after diuresis, prior to discharge. Carvedilol preferred (COMET trial: 17% survival benefit over metoprolol). All 3 accepted.",
+      "aliases": [
+        "Coreg",
+        "Metoprolol",
+        "Bisoprolol"
+      ]
+    },
+    {
+      "label": "Low sodium diet",
+      "type": "shouldHaveOrdered",
+      "finding": "Lifestyle modification — limit Na intake.",
+      "aliases": [
+        "Low salt diet"
+      ]
+    },
+    {
+      "label": "Smoking cessation",
+      "type": "shouldHaveOrdered",
+      "finding": "Precipitating factor for CHF.",
+      "aliases": [
+        "Smoking"
+      ]
+    },
+    {
+      "label": "Limit alcohol",
+      "type": "shouldHaveOrdered",
+      "finding": "Alcohol precipitates CHF.",
+      "aliases": [
+        "Alcohol"
+      ]
+    },
+    {
+      "label": "Pneumococcal vaccine",
+      "type": "shouldHaveOrdered",
+      "finding": "CHF + smoker — indication for PPSV23.",
+      "aliases": [
+        "Pneumovax"
+      ]
+    },
+    {
+      "label": "Tdap vaccine",
+      "type": "shouldHaveOrdered",
+      "finding": "Tdap every 10 years.",
+      "aliases": [
+        "Tdap"
+      ]
+    },
+    {
+      "label": "Herpes zoster vaccine",
+      "type": "shouldHaveOrdered",
+      "finding": "Age >50 — Shingrix (recombinant zoster vaccine) recommended.",
+      "aliases": [
+        "Shingrix"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "TSH",
+    "Pulse oximetry",
+    "ECG, 12 lead",
+    "Cardiac troponin",
+    {
+      "order": "BNP, serum",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Elevated in CHF — supports diagnosis."
+    },
+    "Chest X-ray",
+    "Echocardiography",
+    "HbA1c / Glucose",
+    {
+      "order": "Foley catheter",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Monitor I/Os during diuresis."
+    },
+    "BMP / CMP / LFTs",
+    "Furosemide (Lasix) / Bumetanide / Torsemide",
+    {
+      "order": "Digoxin",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Helps symptoms, not outcomes. For moderate-severe CHF (NYHA III-IV) as adjunct."
+    },
+    "Input and output monitoring",
+    "Nitroglycerin",
+    "Beta-blocker (Carvedilol / Metoprolol / Bisoprolol)",
+    "Low sodium diet",
+    "Smoking cessation",
+    "Limit alcohol",
+    "Pneumococcal vaccine",
+    "Tdap vaccine",
+    "Herpes zoster vaccine"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Congestive Heart Failure (Systolic Dysfunction)."
 }

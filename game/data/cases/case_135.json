@@ -1,64 +1,109 @@
 {
   "id": 135,
   "topic": "Muscle Weakness",
-  "diagnosis": "Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Muscle Weakness",
+  "diagnosis": "Hyperkalemic Emergency secondary to ACE Inhibitor + NSAID",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General / Appearance",
-    "Physical Exam: Neuro / Psych",
-    "CBC with differential",
-    "Basic metabolic profile / Electrolytes, serum / Comprehensive metabolic profile",
-    "Calcium chloride / Calcium gluconate",
-    "Monitor, cardiac / Monitor, cardiac check",
-    "Albuterol / Insulin, regular AND Dextrose: 10% in normal saline solution / Insulin, regular AND Dextrose: 10% in water / Insulin, regular AND Dextrose: 25% in normal saline solution / Insulin, regular AND Dextrose: 5% in normal saline solution / Insulin, regular AND Dextrose: 50% in water",
-    "Potassium-restricted diet / Diet, low potassium"
+    "ECG",
+    "BMP (K+)",
+    "IV Calcium gluconate",
+    "IV Insulin + Glucose / Albuterol / Bicarb",
+    "Furosemide / Dialysis",
+    "DISCONTINUE ACEI + NSAIDs"
   ],
-  "should_avoid": [
-    "Dialysis"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General / Appearance": "Assess how ill the patient appears before focused testing for muscle weakness.",
-    "Physical Exam: Neuro / Psych": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use.",
-    "Basic metabolic profile / Electrolytes, serum / Comprehensive metabolic profile": "Laboratory testing when systemic illness or severity warrants labs in Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use.",
-    "Calcium chloride / Calcium gluconate": "Appropriate CCS order for Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use: Calcium chloride / Calcium gluconate.",
-    "Monitor, cardiac / Monitor, cardiac check": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to muscle weakness.",
-    "Albuterol / Insulin, regular AND Dextrose: 10% in normal saline solution / Insulin, regular AND Dextrose: 10% in water / Insulin, regular AND Dextrose: 25% in normal saline solution / Insulin, regular AND Dextrose: 5% in normal saline solution / Insulin, regular AND Dextrose: 50% in water": "Appropriate CCS order for Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use: Albuterol / Insulin, regular AND Dextrose: 10% in normal saline solution / Insulin, regular AND Dextrose: 10% in water / Insulin, regular AND Dextrose: 25% in normal saline solution / Insulin, regular AND Dextrose: 5% in normal …",
-    "Potassium-restricted diet / Diet, low potassium": "Appropriate CCS order for Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use: Potassium-restricted diet / Diet, low potassium.",
-    "Dialysis": "CCS review: avoid this order for Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use — it does not change acute management."
+    "ECG": "Peaked T, loss of P, wide QRS = severe hyperK.",
+    "BMP (K+)": "K >6.5 mEq/L.",
+    "IV Calcium gluconate": "Membrane stabilization — FIRST.",
+    "IV Insulin + Glucose / Albuterol / Bicarb": "Shift K+ intracellularly.",
+    "Furosemide / Dialysis": "Eliminate K+.",
+    "DISCONTINUE ACEI + NSAIDs": "Remove cause."
   },
-  "hpi": "Calcium chloride, insulin, hyperkalemia, potassium predisposition. Patients with hyperkalemic emergencies due to NSAID and ACE inhibitor use should be treated with calcium, insulin, and dextrose. These patients will exhibit signs of hyperkalemia. Cardiac status is very important in these patients. Dialysis can be attempted first, and if the patient continues to be refractory from initial treatment, then dialysis can be considered.",
+  "hpi": "{{patient_name}} presents with progressive muscle weakness, fatigue, and palpitations. ECG shows peaked T waves, loss of P waves, widened QRS. Labs reveal severe hyperkalemia (K+ >6.5). Medication history: on ACE inhibitor for HTN and recently started NSAIDs for joint pain. ACEI reduces aldosterone → decreased renal K+ excretion. NSAIDs reduce renal blood flow → further decrease K+ excretion. Combined → dangerous hyperkalemia. Management: IMMEDIATE cardiac membrane stabilization — IV calcium gluconate or calcium chloride (does NOT lower K+, PROTECTS the heart). Then shift K+ intracellularly: IV regular insulin + glucose, beta-agonist (albuterol nebulized), sodium bicarbonate if acidotic. Then eliminate K+: furosemide (if renal function adequate), sodium polystyrene sulfonate (Kayexalate), patiromer, or hemodialysis if refractory. Discontinue ACEI and NSAIDs.",
+  "hpi_narrative": "{{patient_name}} presents with progressive muscle weakness, fatigue, and palpitations. ECG shows peaked T waves, loss of P waves, widened QRS. Labs reveal severe hyperkalemia (K+ >6.5). Medication history: on ACE inhibitor for HTN and recently started NSAIDs for joint pain. ACEI reduces aldosterone → decreased renal K+ excretion. NSAIDs reduce renal blood flow → further decrease K+ excretion. Combined → dangerous hyperkalemia. Management: IMMEDIATE cardiac membrane stabilization — IV calcium gluconate or calcium chloride (does NOT lower K+, PROTECTS the heart). Then shift K+ intracellularly: IV regular insulin + glucose, beta-agonist (albuterol nebulized), sodium bicarbonate if acidotic. Then eliminate K+: furosemide (if renal function adequate), sodium polystyrene sulfonate (Kayexalate), patiromer, or hemodialysis if refractory. Discontinue ACEI and NSAIDs.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm feeling really weak and scared. I don't know what's happening to me.",
-    "history": "I have been taking medication for my heart. I feel so tired and weak.",
-    "pain": "My muscles feel heavy and I can't move them well."
+    "chief_complaint": "Muscle weakness, palpitations",
+    "history": "{{patient_name}} presents with progressive muscle weakness, fatigue, and palpitations. ECG shows peaked T waves, loss of P waves, widened QRS. Labs reveal severe hyperkalemia (K+ >6.5). Medication hi…",
+    "pain": "Muscle weakness, palpitations"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Calcium chloride, insulin, hyperkalemia, potassium predisposition. Patients with hyperkalemic emergencies due to NSAID and ACE inhibitor use should be treated with calcium, insulin, and dextrose. These patients will exhibit signs of hyperkalemia. Cardiac status is very important in these patients. Dialysis can be attempted first, and if the patient continues to be refractory from initial treatment, then dialysis can be considered.",
+  "ccs_category": "Emergency Medicine / Nephrology",
+  "chief_complaint": "Muscle weakness, palpitations",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "CBC with differential",
-    "Basic metabolic profile / Electrolytes, serum / Comprehensive metabolic profile",
-    "Calcium chloride / Calcium gluconate"
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "Peaked T, loss of P, wide QRS = severe hyperK.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "BMP (K+)",
+      "type": "correctlyOrdered",
+      "finding": "K >6.5 mEq/L.",
+      "aliases": [
+        "K+"
+      ]
+    },
+    {
+      "label": "IV Calcium gluconate",
+      "type": "correctlyOrdered",
+      "finding": "Membrane stabilization — FIRST.",
+      "aliases": [
+        "Calcium"
+      ]
+    },
+    {
+      "label": "IV Insulin + Glucose / Albuterol / Bicarb",
+      "type": "correctlyOrdered",
+      "finding": "Shift K+ intracellularly.",
+      "aliases": [
+        "Shift K"
+      ]
+    },
+    {
+      "label": "Furosemide / Dialysis",
+      "type": "correctlyOrdered",
+      "finding": "Eliminate K+.",
+      "aliases": [
+        "Eliminate K"
+      ]
+    },
+    {
+      "label": "DISCONTINUE ACEI + NSAIDs",
+      "type": "correctlyOrdered",
+      "finding": "Remove cause.",
+      "aliases": [
+        "Stop meds"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "ECG",
+    "BMP (K+)",
+    "IV Calcium gluconate",
+    "IV Insulin + Glucose / Albuterol / Bicarb",
+    "Furosemide / Dialysis",
+    "DISCONTINUE ACEI + NSAIDs"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Hyperkalemic Emergency secondary to ACE Inhibitor + NSAID."
 }

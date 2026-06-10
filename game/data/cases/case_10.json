@@ -1,68 +1,319 @@
 {
   "id": 10,
-  "topic": "Pain in Leg",
-  "diagnosis": "Intermittent Claudication (Peripheral Vascular Disease)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Pain in Legs",
+  "title": "Pain in Legs",
+  "diagnosis": "Intermittent Claudication (Peripheral Artery Disease)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam and Diagnostic",
-    "Laboratory Studies",
-    "Imaging Studies",
-    "Consultation",
-    "Medication",
-    "Invasive Studies",
-    "Additional Imaging",
-    "Additional Laboratory Studies",
-    "Referral",
-    "Patient Education"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Neuro / Psych",
+    "CBC with differential",
+    "ECG, 12 lead",
+    "Hemoglobin A1C, blood",
+    "Lipid profile",
+    "Microalbumin, urine (24-hour or spot)",
+    "Basic metabolic profile / Comprehensive metabolic profile / LFTs",
+    "Ankle-brachial index / Arterial Doppler, lower extremities",
+    "Metformin",
+    "ACE inhibitor (Lisinopril / Enalapril / Ramipril) or ARB",
+    "Statin (Atorvastatin / Rosuvastatin / Simvastatin)",
+    "Aspirin, therapy",
+    "Instruct patient, smoking cessation",
+    "Diet modification (calorie-restricted / diabetic / DASH)",
+    "Instruct patient, diabetes",
+    "Advise patient, exercise program"
   ],
   "should_avoid": [
-    "Inappropriate consultation"
+    "Angiography, lower extremity",
+    "Angiography / Arteriography",
+    "Surgical bypass / Angioplasty",
+    "CT angiography"
   ],
   "rationale": {
-    "Physical Exam and Diagnostic": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Physical Exam and Diagnostic.",
-    "Laboratory Studies": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Laboratory Studies.",
-    "Imaging Studies": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Imaging Studies.",
-    "Consultation": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Consultation.",
-    "Medication": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Medication.",
-    "Invasive Studies": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Invasive Studies.",
-    "Additional Imaging": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Additional Imaging.",
-    "Additional Laboratory Studies": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Additional Laboratory Studies.",
-    "Referral": "Appropriate CCS order for Intermittent Claudication (Peripheral Vascular Disease): Referral.",
-    "Patient Education": "Patient education and counseling are part of definitive care for Intermittent Claudication (Peripheral Vascular Disease).",
-    "Inappropriate consultation": "CCS review: avoid this order for Intermittent Claudication (Peripheral Vascular Disease) — it does not change acute management."
+    "Physical Exam: General Appearance": "Determine how sick the patient looks.",
+    "Physical Exam: Chest / Lungs": "Investigate for lung pathology.",
+    "Physical Exam: Heart / Cardiovascular": "Cardiac pathology could cause leg pain — cardiovascular exam essential.",
+    "Physical Exam: Extremities / Spine": "Chief complaint — examine extremities for pulses, skin changes, temperature.",
+    "Physical Exam: Neuro / Psych": "Neurological issues on differential for leg pain — neuro exam needed.",
+    "CBC with differential": "Good screening tool.",
+    "ECG, 12 lead": "Rule out cardiac causes of leg pain. PAD patients often have concomitant CAD.",
+    "Hemoglobin A1C, blood": "All patients with possible PVD should be evaluated for diabetes.",
+    "Lipid profile": "Lipids contribute to atherosclerosis — check and treat if abnormal. Goal LDL < 100 in PAD.",
+    "Microalbumin, urine (24-hour or spot)": "Newly diagnosed type 2 diabetes — screen for early glomerular disease.",
+    "Basic metabolic profile / Comprehensive metabolic profile / LFTs": "Chemistries are important screening tool.",
+    "Ankle-brachial index / Arterial Doppler, lower extremities": "ABI is the main diagnostic tool. ABI < 0.7 = claudication. Normal ≥ 1.0. Non-invasive, first-line.",
+    "Angiography, lower extremity": "Invasive test with contrast risks. Conservative management first for intermittent claudication, not rest pain.",
+    "Metformin": "First-line therapy for type 2 diabetes. Start at diagnosis.",
+    "ACE inhibitor (Lisinopril / Enalapril / Ramipril) or ARB": "ACE inhibitors are first-line for hypertensive diabetics — nephroprotective. ARB if ACEI intolerant.",
+    "Statin (Atorvastatin / Rosuvastatin / Simvastatin)": "Statin for hyperlipidemia — prevents worsening of PVD. Goal LDL < 100 mg/dL.",
+    "Aspirin, therapy": "Antiplatelet therapy indicated for PAD. Aspirin is most common and most tested. Reduces cardiovascular events.",
+    "Instruct patient, smoking cessation": "One of the most important interventions — smoking accelerates PVD.",
+    "Diet modification (calorie-restricted / diabetic / DASH)": "Weight loss to control diabetes and hypertension. DASH diet for hypertension.",
+    "Instruct patient, diabetes": "Diabetes education increases compliance and improves outcomes.",
+    "Advise patient, exercise program": "Exercise is excellent for weight loss, glucose control, and collateral circulation development. Supervised walking programs improve claudication symptoms.",
+    "Angiography / Arteriography": "Invasive, uses contrast (nephrotoxic, allergic reactions), expensive. Conservative management with risk factor modification is first-line for intermittent claudication. Only for rest pain or failed medical therapy.",
+    "Surgical bypass / Angioplasty": "Not indicated for intermittent claudication. Reserved for rest pain, tissue loss, or disabling symptoms refractory to conservative therapy.",
+    "CT angiography": "Radiation + iodinated contrast exposure. Duplex ultrasound or ABI is preferred non-invasive screening."
   },
-  "hpi": "Intermittent claudication is a condition characterized by pain, cramping, or heaviness in the legs during physical activity, which is relieved by rest. It is caused by insufficient blood flow to the muscles due to arterial occlusion. The patient should be evaluated for risk factors, and appropriate management should be initiated, including lifestyle modifications and possibly revascularization procedures. It is important to assess the severity of the disease and the patient's functional status.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a middle-aged man with multiple cardiovascular risk factors — hypertension, hyperlipidemia, newly diagnosed type 2 diabetes, and smoking — who presents with bilateral leg pain on exertion that is relieved by rest (intermittent claudication). He has diminished peripheral pulses and cool extremities. The ankle-brachial index is less than 0.7, consistent with moderate PAD (normal ≥ 1.0, claudication < 0.7, rest pain < 0.4). Importantly, he has intermittent claudication rather than rest pain, which means conservative management is appropriate rather than invasive intervention. The 6 P's of peripheral artery disease are: Pulselessness, Pain, Pallor, Poikilothermia, Paresthesia, and Paralysis.",
+  "hpi_narrative": "{{patient_name}} is a middle-aged man with multiple cardiovascular risk factors — hypertension, hyperlipidemia, newly diagnosed type 2 diabetes, and smoking — who presents with bilateral leg pain on exertion that is relieved by rest (intermittent claudication). He has diminished peripheral pulses and cool extremities. The ankle-brachial index is less than 0.7, consistent with moderate PAD (normal ≥ 1.0, claudication < 0.7, rest pain < 0.4). Importantly, he has intermittent claudication rather than rest pain, which means conservative management is appropriate rather than invasive intervention. The 6 P's of peripheral artery disease are: Pulselessness, Pain, Pallor, Poikilothermia, Paresthesia, and Paralysis.",
+  "physical_exam": [
+    [
+      "General",
+      "Overweight, multiple cardiometabolic risk factors."
+    ],
+    [
+      "Cardiovascular",
+      "Diminished peripheral pulses. Assess for bruits (carotid, femoral). Hypertension."
+    ],
+    [
+      "Neurological",
+      "Rule out neurogenic claudication (spinal stenosis) vs vascular claudication. Vascular: pain with exertion, relieved quickly by rest. Neurogenic: pain with standing/walking, relieved by sitting/leaning forward."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about the pain in my leg. It hurts so much when I walk.",
-    "history": "I have been feeling this pain for a while now. It gets worse when I walk.",
-    "pain": "The pain is sharp and comes in waves."
+    "chief_complaint": "Bilateral leg pain on exertion, relieved by rest",
+    "history": "{{patient_name}} is a middle-aged man with multiple cardiovascular risk factors — hypertension, hyperlipidemia, newly diagnosed type 2 diabetes, and smoking — who presents with bilateral leg pain on …",
+    "pain": "Bilateral leg pain on exertion, relieved by rest"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Intermittent claudication is a condition characterized by pain, cramping, or heaviness in the legs during physical activity, which is relieved by rest. It is caused by insufficient blood flow to the muscles due to arterial occlusion. The patient should be evaluated for risk factors, and appropriate management should be initiated, including lifestyle modifications and possibly revascularization procedures. It is important to assess the severity of the disease and the patient's functional status.",
+  "ccs_category": "Internal Medicine / Vascular Medicine",
+  "chief_complaint": "Bilateral leg pain on exertion, relieved by rest",
+  "case_summary": "PAD with intermittent claudication. Multiple risk factors: HTN, HLD, DM2, smoking. ABI < 0.7 confirms. Conservative management: aspirin, statin, ACEI, metformin, smoking cessation, diet, exercise. Avoid invasive angiography. Follow-up in 7 days. Prognosis: good with risk factor control.",
+  "decoys": [
+    {
+      "label": "Angiography / Arteriography",
+      "reason_wrong": "Invasive, uses contrast (nephrotoxic, allergic reactions), expensive. Conservative management with risk factor modification is first-line for intermittent claudication. Only for rest pain or failed medical therapy."
+    },
+    {
+      "label": "Surgical bypass / Angioplasty",
+      "reason_wrong": "Not indicated for intermittent claudication. Reserved for rest pain, tissue loss, or disabling symptoms refractory to conservative therapy."
+    },
+    {
+      "label": "CT angiography",
+      "reason_wrong": "Radiation + iodinated contrast exposure. Duplex ultrasound or ABI is preferred non-invasive screening."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Laboratory Studies",
-    "Imaging Studies",
-    "Consultation"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Determine how sick the patient looks.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for lung pathology.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Cardiac pathology could cause leg pain — cardiovascular exam essential.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "type": "correctlyOrdered",
+      "finding": "Chief complaint — examine extremities for pulses, skin changes, temperature.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Neurological issues on differential for leg pain — neuro exam needed.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Good screening tool.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "ECG, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "Rule out cardiac causes of leg pain. PAD patients often have concomitant CAD.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Hemoglobin A1C, blood",
+      "type": "shouldHaveOrdered",
+      "finding": "All patients with possible PVD should be evaluated for diabetes.",
+      "aliases": [
+        "HbA1c"
+      ]
+    },
+    {
+      "label": "Lipid profile",
+      "type": "shouldHaveOrdered",
+      "finding": "Lipids contribute to atherosclerosis — check and treat if abnormal. Goal LDL < 100 in PAD.",
+      "aliases": [
+        "Cholesterol",
+        "LDL",
+        "HDL"
+      ]
+    },
+    {
+      "label": "Microalbumin, urine (24-hour or spot)",
+      "type": "shouldHaveOrdered",
+      "finding": "Newly diagnosed type 2 diabetes — screen for early glomerular disease.",
+      "aliases": [
+        "Urine microalbumin"
+      ]
+    },
+    {
+      "label": "Basic metabolic profile / Comprehensive metabolic profile / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Chemistries are important screening tool.",
+      "aliases": [
+        "BMP",
+        "CMP",
+        "LFTs"
+      ]
+    },
+    {
+      "label": "Ankle-brachial index / Arterial Doppler, lower extremities",
+      "type": "correctlyOrdered",
+      "finding": "ABI is the main diagnostic tool. ABI < 0.7 = claudication. Normal ≥ 1.0. Non-invasive, first-line.",
+      "aliases": [
+        "ABI",
+        "Doppler",
+        "Impedance plethysmography"
+      ]
+    },
+    {
+      "label": "Angiography, lower extremity",
+      "type": "correctlyAvoided",
+      "finding": "Invasive test with contrast risks. Conservative management first for intermittent claudication, not rest pain.",
+      "aliases": [
+        "Arteriography",
+        "Angiogram"
+      ]
+    },
+    {
+      "label": "Metformin",
+      "type": "shouldHaveOrdered",
+      "finding": "First-line therapy for type 2 diabetes. Start at diagnosis.",
+      "aliases": [
+        "Glucophage"
+      ]
+    },
+    {
+      "label": "ACE inhibitor (Lisinopril / Enalapril / Ramipril) or ARB",
+      "type": "shouldHaveOrdered",
+      "finding": "ACE inhibitors are first-line for hypertensive diabetics — nephroprotective. ARB if ACEI intolerant.",
+      "aliases": [
+        "Lisinopril",
+        "ACEI",
+        "ARB"
+      ]
+    },
+    {
+      "label": "Statin (Atorvastatin / Rosuvastatin / Simvastatin)",
+      "type": "shouldHaveOrdered",
+      "finding": "Statin for hyperlipidemia — prevents worsening of PVD. Goal LDL < 100 mg/dL.",
+      "aliases": [
+        "Statins",
+        "Lipitor",
+        "Crestor"
+      ]
+    },
+    {
+      "label": "Aspirin, therapy",
+      "type": "shouldHaveOrdered",
+      "finding": "Antiplatelet therapy indicated for PAD. Aspirin is most common and most tested. Reduces cardiovascular events.",
+      "aliases": [
+        "ASA",
+        "Antiplatelet"
+      ]
+    },
+    {
+      "label": "Instruct patient, smoking cessation",
+      "type": "shouldHaveOrdered",
+      "finding": "One of the most important interventions — smoking accelerates PVD.",
+      "aliases": [
+        "Smoking cessation"
+      ]
+    },
+    {
+      "label": "Diet modification (calorie-restricted / diabetic / DASH)",
+      "type": "correctlyOrdered",
+      "finding": "Weight loss to control diabetes and hypertension. DASH diet for hypertension.",
+      "aliases": [
+        "Diet",
+        "Weight loss"
+      ]
+    },
+    {
+      "label": "Instruct patient, diabetes",
+      "type": "shouldHaveOrdered",
+      "finding": "Diabetes education increases compliance and improves outcomes.",
+      "aliases": [
+        "Diabetes education"
+      ]
+    },
+    {
+      "label": "Advise patient, exercise program",
+      "type": "shouldHaveOrdered",
+      "finding": "Exercise is excellent for weight loss, glucose control, and collateral circulation development. Supervised walking programs improve claudication symptoms.",
+      "aliases": [
+        "Exercise"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Neuro / Psych",
+    "CBC with differential",
+    "ECG, 12 lead",
+    "Hemoglobin A1C, blood",
+    "Lipid profile",
+    "Microalbumin, urine (24-hour or spot)",
+    "Basic metabolic profile / Comprehensive metabolic profile / LFTs",
+    "Ankle-brachial index / Arterial Doppler, lower extremities",
+    "Metformin",
+    "ACE inhibitor (Lisinopril / Enalapril / Ramipril) or ARB",
+    "Statin (Atorvastatin / Rosuvastatin / Simvastatin)",
+    "Aspirin, therapy",
+    "Instruct patient, smoking cessation",
+    "Diet modification (calorie-restricted / diabetic / DASH)",
+    "Instruct patient, diabetes",
+    "Advise patient, exercise program"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Intermittent Claudication (Peripheral Artery Disease)."
 }

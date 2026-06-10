@@ -1,66 +1,77 @@
 {
   "id": 165,
   "topic": "Postcoital Bleeding",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Postcoital Bleeding",
+  "diagnosis": "Cervical Cancer (Squamous Cell Carcinoma)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Obtain medical history including menstrual cycle, sexual activity, contraceptive use, and any known bleeding disorders",
-    "Complete a pelvic examination and ultrasound to assess the uterus and adnexa",
-    "Coagulation panel for patients with a history of bleeding disorder or if abnormal coagulation cannot be ruled out clinically",
-    "Transvaginal ultrasound may be necessary in cases where pelvic examination is inconclusive",
-    "Consult Obstetrics and Gynecology if uterine pathology suspected, and Hematology if coagulopathy suspected",
-    "order1",
-    "pregnancy test"
+    "Speculum + bimanual exam",
+    "Colposcopy + cervical biopsy",
+    "Refer GYN oncology"
   ],
-  "should_avoid": [
-    "order2",
-    "D&C (dilation and curettage) should be avoided until a diagnosis is established to avoid unnecessary procedures"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Obtain medical history including menstrual cycle, sexual activity, contraceptive use, and any known bleeding disorders": "Appropriate CCS order for this diagnosis: Obtain medical history including menstrual cycle, sexual activity, contraceptive use, and any known bleeding disorders.",
-    "Complete a pelvic examination and ultrasound to assess the uterus and adnexa": "Pelvic/cervical evaluation is central for this diagnosis and localizes the source of postcoital bleeding.",
-    "Coagulation panel for patients with a history of bleeding disorder or if abnormal coagulation cannot be ruled out clinically": "Appropriate CCS order for this diagnosis: Coagulation panel for patients with a history of bleeding disorder or if abnormal coagulation cannot be ruled out clinically.",
-    "Transvaginal ultrasound may be necessary in cases where pelvic examination is inconclusive": "Pelvic/cervical evaluation is central for this diagnosis and localizes the source of postcoital bleeding.",
-    "Consult Obstetrics and Gynecology if uterine pathology suspected, and Hematology if coagulopathy suspected": "Diagnostic report or tissue diagnosis clarifies the cause of postcoital bleeding.",
-    "order1": "Appropriate CCS order for this diagnosis: order1.",
-    "pregnancy test": "Appropriate CCS order for this diagnosis: pregnancy test.",
-    "order2": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "D&C (dilation and curettage) should be avoided until a diagnosis is established to avoid unnecessary procedures": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Speculum + bimanual exam": "Friable cervical lesion.",
+    "Colposcopy + cervical biopsy": "SCC confirmed.",
+    "Refer GYN oncology": "Hysterectomy vs chemoradiation per stage."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with postcoital (after intercourse) vaginal bleeding, intermenstrual bleeding, and possibly malodorous discharge. Speculum exam reveals a friable, exophytic, or ulcerated cervical lesion. Cervical cancer is the most common GYN cancer worldwide — SCC most common. Caused by persistent high-risk HPV infection (16, 18 most common). Risk factors: multiple sexual partners, early sexual activity, immunosuppression, smoking, lack of Pap screening. Diagnosis: cervical biopsy (colposcopy-directed). Staging: clinical (FIGO). Treatment: early stage (IA-IB1) → radical hysterectomy or fertility-sparing cone biopsy. Locally advanced (IB2-IVA) → chemoradiation. Metastatic → systemic therapy. Prevention: HPV vaccination, routine Pap/HPV co-testing.",
+  "hpi_narrative": "{{patient_name}} presents with postcoital (after intercourse) vaginal bleeding, intermenstrual bleeding, and possibly malodorous discharge. Speculum exam reveals a friable, exophytic, or ulcerated cervical lesion. Cervical cancer is the most common GYN cancer worldwide — SCC most common. Caused by persistent high-risk HPV infection (16, 18 most common). Risk factors: multiple sexual partners, early sexual activity, immunosuppression, smoking, lack of Pap screening. Diagnosis: cervical biopsy (colposcopy-directed). Staging: clinical (FIGO). Treatment: early stage (IA-IB1) → radical hysterectomy or fertility-sparing cone biopsy. Locally advanced (IB2-IVA) → chemoradiation. Metastatic → systemic therapy. Prevention: HPV vaccination, routine Pap/HPV co-testing.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — postcoital bleeding. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This postcoital bleeding won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Postcoital bleeding, intermenstrual bleeding",
+    "history": "{{patient_name}} presents with postcoital (after intercourse) vaginal bleeding, intermenstrual bleeding, and possibly malodorous discharge. Speculum exam reveals a friable, exophytic, or ulcerated ce…",
+    "pain": "Postcoital bleeding, intermenstrual bleeding"
   },
-  "ccs_category": null,
+  "ccs_category": "OB/GYN / Gynecologic Oncology",
+  "chief_complaint": "Postcoital bleeding, intermenstrual bleeding",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Obtain medical history including menstrual cycle, sexual activity, contraceptive use, and any known bleeding disorders",
-    "Complete a pelvic examination and ultrasound to assess the uterus and adnexa",
-    "Coagulation panel for patients with a history of bleeding disorder or if abnormal coagulation cannot be ruled out clinically",
-    "Transvaginal ultrasound may be necessary in cases where pelvic examination is inconclusive",
-    "Consult Obstetrics and Gynecology if uterine pathology suspected, and Hematology if coagulopathy suspected",
-    "order1",
-    "pregnancy test"
+    {
+      "label": "Speculum + bimanual exam",
+      "type": "correctlyOrdered",
+      "finding": "Friable cervical lesion.",
+      "aliases": [
+        "Pelvic Exam"
+      ]
+    },
+    {
+      "label": "Colposcopy + cervical biopsy",
+      "type": "correctlyOrdered",
+      "finding": "SCC confirmed.",
+      "aliases": [
+        "Colposcopy",
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "Refer GYN oncology",
+      "type": "correctlyOrdered",
+      "finding": "Hysterectomy vs chemoradiation per stage.",
+      "aliases": [
+        "Referral"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Speculum + bimanual exam",
+    "Colposcopy + cervical biopsy",
+    "Refer GYN oncology"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Cervical Cancer (Squamous Cell Carcinoma)."
 }

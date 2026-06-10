@@ -1,62 +1,120 @@
 {
   "id": 112,
   "topic": "Found Unconscious",
-  "diagnosis": "Rape victim",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Found Unconscious",
+  "diagnosis": "Sexual Assault (Rape)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "HIV Test Consent Agreement",
-    "Urine Drug Screen",
-    "CT Head",
-    "CBC",
-    "Type and Cross",
-    "Pelvic examination",
-    "CT abdomen/pelvis"
+    "Physical Exam: Full body (with consent)",
+    "Pregnancy test",
+    "STI testing + toxicology screen",
+    "STI prophylaxis (CTX + Doxy + Metro)",
+    "Emergency contraception",
+    "HIV PEP (if <72h)",
+    "Crisis counseling / SANE / Safe discharge"
   ],
-  "should_avoid": [
-    "Cardiac monitoring"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "HIV Test Consent Agreement": "Appropriate CCS order for Rape victim: HIV Test Consent Agreement.",
-    "Urine Drug Screen": "Appropriate CCS order for Rape victim: Urine Drug Screen.",
-    "CT Head": "Appropriate CCS order for Rape victim: CT Head.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Rape victim.",
-    "Type and Cross": "Appropriate CCS order for Rape victim: Type and Cross.",
-    "Pelvic examination": "Pelvic/cervical evaluation is central for Rape victim and localizes the source of found unconscious.",
-    "CT abdomen/pelvis": "Abdominal exam helps exclude alternative causes in a patient with found unconscious.",
-    "Cardiac monitoring": "CCS review: avoid this order for Rape victim — it does not change acute management."
+    "Physical Exam: Full body (with consent)": "Document injuries. Photographs. Forensic evidence.",
+    "Pregnancy test": "Rule out pregnancy.",
+    "STI testing + toxicology screen": "CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+    "STI prophylaxis (CTX + Doxy + Metro)": "Empiric.",
+    "Emergency contraception": "Levonorgestrel 1.5mg PO once.",
+    "HIV PEP (if <72h)": "28-day course.",
+    "Crisis counseling / SANE / Safe discharge": "Trauma-informed. Psychiatry referral."
   },
-  "hpi": "This case illustrates the importance of timely evaluation and management of patients who present with altered mental status. The patient was found unconscious and required immediate stabilization and assessment. It is crucial to consider potential causes of altered mental status, including substance use, trauma, and medical conditions. In this case, appropriate imaging and laboratory studies were essential to guide further management.",
+  "hpi": "{{patient_name}} presents found unconscious with signs of physical struggle (bruises, abrasions, torn clothing). Management requires a multidisciplinary, trauma-informed approach. Priorities: medical stabilization first (ABCs), then forensic examination. Obtain consent before any exam. Sexual Assault Nurse Examiner (SANE) if available. Forensic evidence collection (rape kit): clothing, swabs, fingernail scrapings, hair samples — ideally within 72h. Document injuries with photographs. Labs: STI testing (chlamydia, gonorrhea, HIV, syphilis, hepatitis), pregnancy test, toxicology screen (drug-facilitated assault —GHB, benzodiazepines, ketamine). Empiric treatment: ceftriaxone + doxycycline + metronidazole for STI prophylaxis. Emergency contraception (levonorgestrel 1.5mg PO once). HIV PEP if within 72h. Report to law enforcement (with consent). Arrange safe discharge and follow-up. Psychiatry/crisis counseling referral.",
+  "hpi_narrative": "{{patient_name}} presents found unconscious with signs of physical struggle (bruises, abrasions, torn clothing). Management requires a multidisciplinary, trauma-informed approach. Priorities: medical stabilization first (ABCs), then forensic examination. Obtain consent before any exam. Sexual Assault Nurse Examiner (SANE) if available. Forensic evidence collection (rape kit): clothing, swabs, fingernail scrapings, hair samples — ideally within 72h. Document injuries with photographs. Labs: STI testing (chlamydia, gonorrhea, HIV, syphilis, hepatitis), pregnancy test, toxicology screen (drug-facilitated assault —GHB, benzodiazepines, ketamine). Empiric treatment: ceftriaxone + doxycycline + metronidazole for STI prophylaxis. Emergency contraception (levonorgestrel 1.5mg PO once). HIV PEP if within 72h. Report to law enforcement (with consent). Arrange safe discharge and follow-up. Psychiatry/crisis counseling referral.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I don't remember what happened. I just woke up here.",
-    "history": "I was at a party, and then everything is a blur.",
-    "pain": "I feel really confused and scared."
+    "chief_complaint": "Found unconscious with signs of physical assault",
+    "history": "{{patient_name}} presents found unconscious with signs of physical struggle (bruises, abrasions, torn clothing). Management requires a multidisciplinary, trauma-informed approach. Priorities: medical…",
+    "pain": "Found unconscious with signs of physical assault"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "This case illustrates the importance of timely evaluation and management of patients who present with altered mental status. The patient was found unconscious and required immediate stabilization and assessment. It is crucial to consider potential causes of altered mental status, including substance use, trauma, and medical conditions. In this case, appropriate imaging and laboratory studies were essential to guide further management.",
+  "ccs_category": "Emergency Medicine / Forensic",
+  "chief_complaint": "Found unconscious with signs of physical assault",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered Physical Exam",
-    "Ordered CBC with differential",
-    "Ordered Urine drug screen collection",
-    "Ordered CT Head"
+    {
+      "label": "Physical Exam: Full body (with consent)",
+      "type": "correctlyOrdered",
+      "finding": "Document injuries. Photographs. Forensic evidence.",
+      "aliases": [
+        "Exam"
+      ]
+    },
+    {
+      "label": "Pregnancy test",
+      "type": "correctlyOrdered",
+      "finding": "Rule out pregnancy.",
+      "aliases": [
+        "HCG"
+      ]
+    },
+    {
+      "label": "STI testing + toxicology screen",
+      "type": "correctlyOrdered",
+      "finding": "CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "STI prophylaxis (CTX + Doxy + Metro)",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ]
+    },
+    {
+      "label": "Emergency contraception",
+      "type": "correctlyOrdered",
+      "finding": "Levonorgestrel 1.5mg PO once.",
+      "aliases": [
+        "Plan B"
+      ]
+    },
+    {
+      "label": "HIV PEP (if <72h)",
+      "type": "correctlyOrdered",
+      "finding": "28-day course.",
+      "aliases": [
+        "HIV PEP"
+      ]
+    },
+    {
+      "label": "Crisis counseling / SANE / Safe discharge",
+      "type": "correctlyOrdered",
+      "finding": "Trauma-informed. Psychiatry referral.",
+      "aliases": [
+        "Support"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Full body (with consent)",
+    "Pregnancy test",
+    "STI testing + toxicology screen",
+    "STI prophylaxis (CTX + Doxy + Metro)",
+    "Emergency contraception",
+    "HIV PEP (if <72h)",
+    "Crisis counseling / SANE / Safe discharge"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Sexual Assault (Rape)."
 }

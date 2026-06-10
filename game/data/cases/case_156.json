@@ -1,46 +1,87 @@
 {
   "id": 156,
   "topic": "Generalized Swelling",
-  "diagnosis": "Renal Stone",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Generalized Swelling",
+  "diagnosis": "Nephrotic Syndrome (Minimal Change Disease)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Ultrafiltration"
+    "UA / 24h urine protein",
+    "CBC / BMP / Albumin / Lipids",
+    "Prednisone 2mg/kg/day",
+    "Salt/fluid restriction + Diuretics"
   ],
-  "should_avoid": [
-    "Bowel Decompression"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Ultrafiltration": "Appropriate CCS order for Renal Stone: Ultrafiltration.",
-    "Bowel Decompression": "CCS review: avoid this order for Renal Stone — it does not change acute management."
+    "UA / 24h urine protein": "3-4+ protein, oval fat bodies. Nephrotic range >40mg/m2/hr.",
+    "CBC / BMP / Albumin / Lipids": "Hypoalbuminemia, hyperlipidemia.",
+    "Prednisone 2mg/kg/day": "Response confirms MCD.",
+    "Salt/fluid restriction + Diuretics": "Symptom management."
   },
-  "hpi": "12-year-old with hematuria, proteinuria and microhematuria. CBC reveals a R/C ratio of 20. Bone scan was ordered in the past and is not indicated by the results available.",
+  "hpi": "{{patient_name}} is a child presenting with generalized edema (periorbital — worse in morning, then leg/scrotal), weight gain, frothy urine (proteinuria), and fatigue. Nephrotic syndrome: massive proteinuria (>3.5g/day or >40mg/m2/hr in children), hypoalbuminemia (<2.5), edema, hyperlipidemia. Most common cause in children: minimal change disease (MCD) — 80-90%. Often preceded by viral URI. Diagnosis: UA — 3-4+ protein, oval fat bodies. 24h urine protein confirms nephrotic range. Renal biopsy NOT routinely needed in children (MCD most common and responds to steroids). Treatment: prednisone 2mg/kg/day (response = remission in 2-4 weeks confirms MCD). Salt/fluid restriction. Diuretics for severe edema. If steroid-resistant or frequently relapsing: consider biopsy, alternative immunosuppression (cyclophosphamide, cyclosporine). Vaccinate before immunosuppression (pneumococcal). Monitor for complications: infection (loss of immunoglobulins), thrombosis (loss of antithrombin III).",
+  "hpi_narrative": "{{patient_name}} is a child presenting with generalized edema (periorbital — worse in morning, then leg/scrotal), weight gain, frothy urine (proteinuria), and fatigue. Nephrotic syndrome: massive proteinuria (>3.5g/day or >40mg/m2/hr in children), hypoalbuminemia (<2.5), edema, hyperlipidemia. Most common cause in children: minimal change disease (MCD) — 80-90%. Often preceded by viral URI. Diagnosis: UA — 3-4+ protein, oval fat bodies. 24h urine protein confirms nephrotic range. Renal biopsy NOT routinely needed in children (MCD most common and responds to steroids). Treatment: prednisone 2mg/kg/day (response = remission in 2-4 weeks confirms MCD). Salt/fluid restriction. Diuretics for severe edema. If steroid-resistant or frequently relapsing: consider biopsy, alternative immunosuppression (cyclophosphamide, cyclosporine). Vaccinate before immunosuppression (pneumococcal). Monitor for complications: infection (loss of immunoglobulins), thrombosis (loss of antithrombin III).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — generalized swelling. I'm really scared.",
-    "history": "It's been getting worse. They said something about renal stone. 12-year-old with hematuria, proteinuria and microhematuria. CBC reveals a R/C ra...",
-    "pain": "This generalized swelling won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Generalized edema, frothy urine, weight gain",
+    "history": "{{patient_name}} is a child presenting with generalized edema (periorbital — worse in morning, then leg/scrotal), weight gain, frothy urine (proteinuria), and fatigue. Nephrotic syndrome: massive pro…",
+    "pain": "Generalized edema, frothy urine, weight gain"
   },
-  "ccs_category": null,
-  "case_summary": "12-year-old with hematuria, proteinuria and microhematuria. CBC reveals a R/C ratio of 20. Bone scan was ordered in the past and is not indicated by the results available.",
+  "ccs_category": "Pediatric Nephrology",
+  "chief_complaint": "Generalized edema, frothy urine, weight gain",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Ultrafiltration"
+    {
+      "label": "UA / 24h urine protein",
+      "type": "correctlyOrdered",
+      "finding": "3-4+ protein, oval fat bodies. Nephrotic range >40mg/m2/hr.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "CBC / BMP / Albumin / Lipids",
+      "type": "correctlyOrdered",
+      "finding": "Hypoalbuminemia, hyperlipidemia.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Prednisone 2mg/kg/day",
+      "type": "correctlyOrdered",
+      "finding": "Response confirms MCD.",
+      "aliases": [
+        "Prednisone"
+      ]
+    },
+    {
+      "label": "Salt/fluid restriction + Diuretics",
+      "type": "correctlyOrdered",
+      "finding": "Symptom management.",
+      "aliases": [
+        "Supportive"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "UA / 24h urine protein",
+    "CBC / BMP / Albumin / Lipids",
+    "Prednisone 2mg/kg/day",
+    "Salt/fluid restriction + Diuretics"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Nephrotic Syndrome (Minimal Change Disease)."
 }

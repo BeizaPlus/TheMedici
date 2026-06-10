@@ -1,61 +1,87 @@
 {
   "id": 99,
-  "topic": "Back Pain - Neurology",
+  "topic": "Back Pain",
+  "title": "Back Pain",
   "diagnosis": "Cauda Equina Syndrome",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Chest / Lungs",
-    "Physical Exam: Heart / Cardiovascular",
-    "Physical Exam: Extremities / Spine",
-    "Physical Exam: Rectal",
-    "CBC with differential",
-    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel",
-    "MRI, spine, thoracic / MRI, spine, lumbar / C1, spine, lumbar / C1 and myelogram, spine, lumbar / Myelography, spine, lumbar"
+    "Physical Exam: Neuro / Rectal tone",
+    "EMERGENCY MRI lumbar spine",
+    "Post-void residual",
+    "EMERGENCY neurosurgery consult"
   ],
   "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for back pain - neurology.",
-    "Physical Exam: Chest / Lungs": "Evaluate chest and lungs as part of the initial exam for back pain - neurology.",
-    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to back pain - neurology.",
-    "Physical Exam: Extremities / Spine": "Targeted Physical Exam: Extremities / Spine exam supports the differential for Cauda Equina Syndrome.",
-    "Physical Exam: Rectal": "Appropriate CCS order for Cauda Equina Syndrome: Physical Exam: Rectal.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Cauda Equina Syndrome.",
-    "Basic metabolic profile / Comprehensive metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Cauda Equina Syndrome.",
-    "MRI, spine, thoracic / MRI, spine, lumbar / C1, spine, lumbar / C1 and myelogram, spine, lumbar / Myelography, spine, lumbar": "Appropriate CCS order for Cauda Equina Syndrome: MRI, spine, thoracic / MRI, spine, lumbar / C1, spine, lumbar / C1 and myelogram, spine, lumbar / Myelography, spine, lumbar."
+    "Physical Exam: Neuro / Rectal tone": "Saddle anesthesia, decreased rectal tone, bilateral weakness.",
+    "EMERGENCY MRI lumbar spine": "Do not delay. Confirm cauda equina compression.",
+    "Post-void residual": ">200mL supports diagnosis.",
+    "EMERGENCY neurosurgery consult": "Surgical decompression within 24-48h. Time-critical."
   },
-  "hpi": "Differential: Compression fracture, facet joint degenerative disease, lumbar disk herniation, spinal stenosis, malignancy of the spine.\n\nThis patient has cauda equina syndrome. Cauda equina is characterized by the disruption of the cauda equina, the most distal portion of the spinal cord. It typically presents as low back pain that radiates down the leg with perianal and periphrastic numbness and/or loss of bowel and bladder function. Cauda equina syndrome is a medical emergency requiring prompt surgical intervention. Patients suspected of having cauda equina should receive a STAT MRI and neurosurgery consult for spinal decompression. The key to this case is a fast diagnosis with a STAT MRI and a fast consult to neurosurgery. The case will end after neurosurgery sees the patient.",
+  "hpi": "{{patient_name}} presents with severe low back pain, bilateral leg weakness and numbness, saddle anesthesia (perineal numbness), urinary retention/incontinence, fecal incontinence, and decreased rectal tone. These are the RED FLAG symptoms of cauda equina syndrome — compression of the cauda equina nerve roots below the conus medullaris. This is a SURGICAL EMERGENCY. Delay in decompression leads to permanent paralysis, incontinence, and sexual dysfunction. Most common cause: massive central disc herniation. Other causes: trauma, tumor, abscess, hematoma. Diagnosis: EMERGENCY MRI of lumbar spine (do NOT wait). Post-void residual (PVR) >200mL supports diagnosis. Treatment: EMERGENCY neurosurgical decompression (laminectomy + discectomy) within 24-48 hours of symptom onset.",
+  "hpi_narrative": "{{patient_name}} presents with severe low back pain, bilateral leg weakness and numbness, saddle anesthesia (perineal numbness), urinary retention/incontinence, fecal incontinence, and decreased rectal tone. These are the RED FLAG symptoms of cauda equina syndrome — compression of the cauda equina nerve roots below the conus medullaris. This is a SURGICAL EMERGENCY. Delay in decompression leads to permanent paralysis, incontinence, and sexual dysfunction. Most common cause: massive central disc herniation. Other causes: trauma, tumor, abscess, hematoma. Diagnosis: EMERGENCY MRI of lumbar spine (do NOT wait). Post-void residual (PVR) >200mL supports diagnosis. Treatment: EMERGENCY neurosurgical decompression (laminectomy + discectomy) within 24-48 hours of symptom onset.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared. My back hurts so much and I can't feel my legs.",
-    "history": "I had this pain for a while. It got worse and now I feel numb.",
-    "pain": "It feels like a sharp pain in my lower back."
+    "chief_complaint": "Bilateral leg weakness, saddle anesthesia, urinary retention",
+    "history": "{{patient_name}} presents with severe low back pain, bilateral leg weakness and numbness, saddle anesthesia (perineal numbness), urinary retention/incontinence, fecal incontinence, and decreased rect…",
+    "pain": "Bilateral leg weakness, saddle anesthesia, urinary retention"
   },
-  "ccs_category": "Neurology",
-  "case_summary": "Differential: Compression fracture, facet joint degenerative disease, lumbar disk herniation, spinal stenosis, malignancy of the spine.\n\nThis patient has cauda equina syndrome. Cauda equina is characterized by the disruption of the cauda equina, the most distal portion of the spinal cord. It typically presents as low back pain that radiates down the leg with perianal and periphrastic numbness and/or loss of bowel and bladder function. Cauda equina syndrome is a medical emergency requiring prompt surgical intervention. Patients suspected of having cauda equina should receive a STAT MRI and neurosurgery consult for spinal decompression. The key to this case is a fast diagnosis with a STAT MRI and a fast consult to neurosurgery. The case will end after neurosurgery sees the patient.",
+  "ccs_category": "Neurosurgery / Emergency Medicine",
+  "chief_complaint": "Bilateral leg weakness, saddle anesthesia, urinary retention",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exams and/or patient updates: General Appearance, Skin, Breast, Lymph Node, HEENT, Chest and Lung, Cardiovascular, Abdomen, Genital, Rectal, Extremities and Spine, Neurologic and Psychologic",
-    "Ordered: CBC with differential",
-    "Ordered: Comprehensive metabolic profile",
-    "Ordered: US. pelvis"
+    {
+      "label": "Physical Exam: Neuro / Rectal tone",
+      "type": "correctlyOrdered",
+      "finding": "Saddle anesthesia, decreased rectal tone, bilateral weakness.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "EMERGENCY MRI lumbar spine",
+      "type": "correctlyOrdered",
+      "finding": "Do not delay. Confirm cauda equina compression.",
+      "aliases": [
+        "MRI"
+      ]
+    },
+    {
+      "label": "Post-void residual",
+      "type": "correctlyOrdered",
+      "finding": ">200mL supports diagnosis.",
+      "aliases": [
+        "PVR"
+      ]
+    },
+    {
+      "label": "EMERGENCY neurosurgery consult",
+      "type": "correctlyOrdered",
+      "finding": "Surgical decompression within 24-48h. Time-critical.",
+      "aliases": [
+        "Neurosurgery"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Neuro / Rectal tone",
+    "EMERGENCY MRI lumbar spine",
+    "Post-void residual",
+    "EMERGENCY neurosurgery consult"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Cauda Equina Syndrome."
 }

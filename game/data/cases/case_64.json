@@ -1,70 +1,143 @@
 {
   "id": 64,
-  "topic": "Abdominal Pain - Pediatrics",
+  "topic": "Abdominal Pain",
+  "title": "Abdominal Pain",
   "diagnosis": "Lead Intoxication with Encephalopathy",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: Abdomen",
-    "Physical Exam: Neurological",
-    "Physical Exam: Skin",
-    "Physical Exam: Extremities",
-    "Physical Exam: General",
-    "Urine drug screen",
-    "Magnesium level",
-    "Lead level",
-    "X-ray, abdomen, acute",
-    "Consultation: Pediatric Neurology"
+    "Physical Exam: Neuro / Psych",
+    "CBC + peripheral smear",
+    "Blood lead level",
+    {
+      "order": "Free erythrocyte protoporphyrin (FEP)",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Would be elevated."
+    },
+    "BMP / Mg",
+    "Abdominal X-ray",
+    "Chelation therapy (Succimer / EDTA + BAL)",
+    "Remove lead source"
   ],
-  "should_avoid": [
-    "CT Head, without contrast",
-    "Consultation: Pediatric Infectious Disease"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain - pediatrics.",
-    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Lead Intoxication with Encephalopathy.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Lead Intoxication with Encephalopathy.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Lead Intoxication with Encephalopathy.",
-    "Physical Exam: General": "Appropriate CCS order for Lead Intoxication with Encephalopathy: Physical Exam: General.",
-    "Urine drug screen": "Appropriate CCS order for Lead Intoxication with Encephalopathy: Urine drug screen.",
-    "Magnesium level": "Appropriate CCS order for Lead Intoxication with Encephalopathy: Magnesium level.",
-    "Lead level": "Appropriate CCS order for Lead Intoxication with Encephalopathy: Lead level.",
-    "X-ray, abdomen, acute": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain - pediatrics.",
-    "Consultation: Pediatric Neurology": "Targeted Consultation: Pediatric Neurology exam supports the differential for Lead Intoxication with Encephalopathy.",
-    "CT Head, without contrast": "Advanced imaging is not indicated early for Lead Intoxication with Encephalopathy when the diagnosis is clinical.",
-    "Consultation: Pediatric Infectious Disease": "Advanced imaging is not indicated early for Lead Intoxication with Encephalopathy when the diagnosis is clinical."
+    "Physical Exam: Neuro / Psych": "Ataxia, cognitive changes, encephalopathy.",
+    "CBC + peripheral smear": "Microcytic anemia + basophilic stippling.",
+    "Blood lead level": ">70 mcg/dL = medical emergency requiring chelation.",
+    "Free erythrocyte protoporphyrin (FEP)": "Would be elevated.",
+    "BMP / Mg": "Electrolyte assessment.",
+    "Abdominal X-ray": "May show lead flecks in GI tract if recent ingestion.",
+    "Chelation therapy (Succimer / EDTA + BAL)": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+    "Remove lead source": "Home lead abatement. Public health reporting."
   },
-  "hpi": "Children with lead toxicity may present with abdominal pain, vomiting, and altered mental status. The diagnosis is made by measuring blood lead levels. Treatment includes chelation therapy for severe cases. It is important to consider lead exposure in children with unexplained symptoms, especially in those with known risk factors.",
+  "hpi": "{{patient_name}} is a child presenting with abdominal pain, constipation, irritability, lethargy, ataxia, and cognitive changes. History reveals exposure to lead-based paint in older home (built <1978). Lead intoxication causes microcytic anemia with basophilic stippling on peripheral smear. Elevated free erythrocyte protoporphyrin (FEP). Definitive diagnosis: blood lead level (BLL) >5 mcg/dL is elevated. >45 mcg/dL requires chelation. >70 mcg/dL is a medical emergency. Chronic lead exposure affects: nervous system (encephalopathy, developmental delay), kidneys (Fanconi syndrome), bone marrow (anemia), GI (colic). Treatment: remove source (lead abatement). Chelation therapy: succimer (DMSA) PO for BLL >45, or IV edetate calcium disodium (EDTA) + dimercaprol (BAL) for lead encephalopathy (BLL >70). Iron supplementation for anemia. Report to public health.",
+  "hpi_narrative": "{{patient_name}} is a child presenting with abdominal pain, constipation, irritability, lethargy, ataxia, and cognitive changes. History reveals exposure to lead-based paint in older home (built <1978). Lead intoxication causes microcytic anemia with basophilic stippling on peripheral smear. Elevated free erythrocyte protoporphyrin (FEP). Definitive diagnosis: blood lead level (BLL) >5 mcg/dL is elevated. >45 mcg/dL requires chelation. >70 mcg/dL is a medical emergency. Chronic lead exposure affects: nervous system (encephalopathy, developmental delay), kidneys (Fanconi syndrome), bone marrow (anemia), GI (colic). Treatment: remove source (lead abatement). Chelation therapy: succimer (DMSA) PO for BLL >45, or IV edetate calcium disodium (EDTA) + dimercaprol (BAL) for lead encephalopathy (BLL >70). Iron supplementation for anemia. Report to public health.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared. My stomach hurts and I feel really dizzy.",
-    "history": "I was playing outside and found some old paint. I think I might have touched it.",
-    "pain": "It hurts a lot in my belly."
+    "chief_complaint": "Abdominal pain, constipation, irritability, ataxia",
+    "history": "{{patient_name}} is a child presenting with abdominal pain, constipation, irritability, lethargy, ataxia, and cognitive changes. History reveals exposure to lead-based paint in older home (built <197…",
+    "pain": "Abdominal pain, constipation, irritability, ataxia"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "Children with lead toxicity may present with abdominal pain, vomiting, and altered mental status. The diagnosis is made by measuring blood lead levels. Treatment includes chelation therapy for severe cases. It is important to consider lead exposure in children with unexplained symptoms, especially in those with known risk factors.",
+  "ccs_category": "Pediatrics / Toxicology",
+  "chief_complaint": "Abdominal pain, constipation, irritability, ataxia",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Ordered: Lead, blood, quantitative",
-    "Ordered: CBC, with differential",
-    "Ordered: Magnesium"
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Ataxia, cognitive changes, encephalopathy.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "CBC + peripheral smear",
+      "type": "correctlyOrdered",
+      "finding": "Microcytic anemia + basophilic stippling.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Blood lead level",
+      "type": "correctlyOrdered",
+      "finding": ">70 mcg/dL = medical emergency requiring chelation.",
+      "aliases": [
+        "Lead level"
+      ]
+    },
+    {
+      "label": "Free erythrocyte protoporphyrin (FEP)",
+      "type": "optional",
+      "finding": "Would be elevated.",
+      "aliases": [
+        "FEP"
+      ]
+    },
+    {
+      "label": "BMP / Mg",
+      "type": "shouldHaveOrdered",
+      "finding": "Electrolyte assessment.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Abdominal X-ray",
+      "type": "correctlyOrdered",
+      "finding": "May show lead flecks in GI tract if recent ingestion.",
+      "aliases": [
+        "KUB"
+      ]
+    },
+    {
+      "label": "Chelation therapy (Succimer / EDTA + BAL)",
+      "type": "correctlyOrdered",
+      "finding": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+      "aliases": [
+        "Chelation"
+      ]
+    },
+    {
+      "label": "Remove lead source",
+      "type": "correctlyOrdered",
+      "finding": "Home lead abatement. Public health reporting.",
+      "aliases": [
+        "Lead abatement"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Neuro / Psych",
+    "CBC + peripheral smear",
+    "Blood lead level",
+    {
+      "order": "Free erythrocyte protoporphyrin (FEP)",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Would be elevated."
+    },
+    "BMP / Mg",
+    "Abdominal X-ray",
+    "Chelation therapy (Succimer / EDTA + BAL)",
+    "Remove lead source"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Lead Intoxication with Encephalopathy."
 }

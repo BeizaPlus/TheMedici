@@ -1,62 +1,109 @@
 {
   "id": 104,
   "topic": "Back Pain",
-  "diagnosis": "Osteomyelitis in Lumbar Spine",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Back Pain",
+  "diagnosis": "Vertebral Osteomyelitis (Lumbar Spine)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Cardiac",
-    "Physical Exam: Respiratory",
-    "Physical Exam: Abdominal",
-    "Physical Exam: Neurological",
-    "Imaging: CT Head",
-    "Imaging: MRI Spine"
+    "Physical Exam: Spine / Neuro",
+    "MRI spine with contrast",
+    "Blood cultures x2",
+    "CBC / ESR / CRP",
+    "Biopsy (if cultures negative)",
+    "IV Vancomycin + Ceftriaxone x 6 weeks"
   ],
-  "should_avoid": [
-    "Optional Order - Not Required - Does not affect grade"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for back pain.",
-    "Physical Exam: Cardiac": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to back pain.",
-    "Physical Exam: Respiratory": "Evaluate chest and lungs as part of the initial exam for back pain.",
-    "Physical Exam: Abdominal": "Appropriate CCS order for Osteomyelitis in Lumbar Spine: Physical Exam: Abdominal.",
-    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Osteomyelitis in Lumbar Spine.",
-    "Imaging: CT Head": "Appropriate CCS order for Osteomyelitis in Lumbar Spine: Imaging: CT Head.",
-    "Imaging: MRI Spine": "Appropriate CCS order for Osteomyelitis in Lumbar Spine: Imaging: MRI Spine.",
-    "Optional Order - Not Required - Does not affect grade": "Advanced imaging is not indicated early for Osteomyelitis in Lumbar Spine when the diagnosis is clinical."
+    "Physical Exam: Spine / Neuro": "Point tenderness, localized pain.",
+    "MRI spine with contrast": "Gold standard. Discitis/osteomyelitis changes.",
+    "Blood cultures x2": "Identify organism. Positive in 50%.",
+    "CBC / ESR / CRP": "Elevated inflammatory markers.",
+    "Biopsy (if cultures negative)": "CT-guided or open for culture.",
+    "IV Vancomycin + Ceftriaxone x 6 weeks": "Empiric until cultures. Tailor to organism."
   },
-  "hpi": "Despite the patient’s history of back pain, the initial evaluation did not include imaging studies. The patient was later found to have osteomyelitis. It is important to consider imaging in patients with back pain, especially when there are red flags such as fever, neurological deficits, or significant pain. The patient should have been evaluated with imaging studies to rule out serious underlying conditions.",
+  "hpi": "{{patient_name}} presents with localized lower back pain, fever, chills, malaise, and point tenderness over the affected vertebrae. Vertebral osteomyelitis is a bacterial infection of the vertebral body — most commonly S. aureus. Risk factors: IV drug use, recent bacteremia, indwelling catheters, DM, immunocompromised. Diagnosis: MRI spine with contrast (gold standard — high sensitivity). Plain X-ray may be normal early (need 30-50% bone loss to see). Blood cultures x2 (positive in 50%). If blood cultures negative → CT-guided or open biopsy for culture. ESR and CRP elevated. Treatment: IV antibiotics (empiric: vancomycin + ceftriaxone or cefepime — cover MRSA and gram-negatives) x 6 weeks minimum, tailored to culture results. Surgical debridement if abscess, neurologic deficit, spinal instability, or failure of medical therapy.",
+  "hpi_narrative": "{{patient_name}} presents with localized lower back pain, fever, chills, malaise, and point tenderness over the affected vertebrae. Vertebral osteomyelitis is a bacterial infection of the vertebral body — most commonly S. aureus. Risk factors: IV drug use, recent bacteremia, indwelling catheters, DM, immunocompromised. Diagnosis: MRI spine with contrast (gold standard — high sensitivity). Plain X-ray may be normal early (need 30-50% bone loss to see). Blood cultures x2 (positive in 50%). If blood cultures negative → CT-guided or open biopsy for culture. ESR and CRP elevated. Treatment: IV antibiotics (empiric: vancomycin + ceftriaxone or cefepime — cover MRSA and gram-negatives) x 6 weeks minimum, tailored to culture results. Surgical debridement if abscess, neurologic deficit, spinal instability, or failure of medical therapy.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my back pain. It hurts so much.",
-    "history": "I've had this pain for a while now. It just keeps getting worse.",
-    "pain": "It feels sharp and sometimes it radiates down my legs."
+    "chief_complaint": "Localized lower back pain, fever, chills, malaise",
+    "history": "{{patient_name}} presents with localized lower back pain, fever, chills, malaise, and point tenderness over the affected vertebrae. Vertebral osteomyelitis is a bacterial infection of the vertebral b…",
+    "pain": "Localized lower back pain, fever, chills, malaise"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Despite the patient’s history of back pain, the initial evaluation did not include imaging studies. The patient was later found to have osteomyelitis. It is important to consider imaging in patients with back pain, especially when there are red flags such as fever, neurological deficits, or significant pain. The patient should have been evaluated with imaging studies to rule out serious underlying conditions.",
+  "ccs_category": "Infectious Disease / Spine",
+  "chief_complaint": "Localized lower back pain, fever, chills, malaise",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Ordered: CBC with differential",
-    "Ordered: Comprehensive metabolic panel",
-    "Ordered: MRI Spine"
+    {
+      "label": "Physical Exam: Spine / Neuro",
+      "type": "correctlyOrdered",
+      "finding": "Point tenderness, localized pain.",
+      "aliases": [
+        "Spine Exam"
+      ]
+    },
+    {
+      "label": "MRI spine with contrast",
+      "type": "correctlyOrdered",
+      "finding": "Gold standard. Discitis/osteomyelitis changes.",
+      "aliases": [
+        "MRI"
+      ]
+    },
+    {
+      "label": "Blood cultures x2",
+      "type": "correctlyOrdered",
+      "finding": "Identify organism. Positive in 50%.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "CBC / ESR / CRP",
+      "type": "correctlyOrdered",
+      "finding": "Elevated inflammatory markers.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Biopsy (if cultures negative)",
+      "type": "correctlyOrdered",
+      "finding": "CT-guided or open for culture.",
+      "aliases": [
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "IV Vancomycin + Ceftriaxone x 6 weeks",
+      "type": "correctlyOrdered",
+      "finding": "Empiric until cultures. Tailor to organism.",
+      "aliases": [
+        "IV Abx"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Spine / Neuro",
+    "MRI spine with contrast",
+    "Blood cultures x2",
+    "CBC / ESR / CRP",
+    "Biopsy (if cultures negative)",
+    "IV Vancomycin + Ceftriaxone x 6 weeks"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Vertebral Osteomyelitis (Lumbar Spine)."
 }

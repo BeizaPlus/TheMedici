@@ -1,74 +1,87 @@
 {
   "id": 172,
   "topic": "Hanging",
-  "diagnosis": "N/A",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Hanging",
+  "diagnosis": "Near Hanging (Attempted Suicide)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Obtain vital signs and perform a complete physical examination",
-    "Laboratory studies: CBC, electrolytes, glucose, BUN, creatinine, liver function tests, urinalysis, toxicology screen",
-    "Imaging studies: CT head to rule out traumatic brain injury or other complications",
-    "Psychiatric consult for evaluation and management of suicidal ideation",
-    "Nursing assessment for suicide risk and psycho-social support",
-    "order1",
-    "Oxygen",
-    "IV access ×2",
-    "Monitor",
-    "Pulse ox"
+    "ABCs / C-spine / Airway",
+    "CT neck + CT head",
+    "Admit ICU",
+    "Psychiatry consult / 1:1 observation"
   ],
-  "should_avoid": [
-    "order1",
-    "Initiate specific treatment for hangman's fracture (as the diagnosis is unknown and may not be the cause)"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Obtain vital signs and perform a complete physical examination": "Vital signs establish baseline stability before further orders.",
-    "Laboratory studies: CBC, electrolytes, glucose, BUN, creatinine, liver function tests, urinalysis, toxicology screen": "Laboratory testing when systemic illness or severity warrants labs in N/A.",
-    "Imaging studies: CT head to rule out traumatic brain injury or other complications": "Appropriate CCS order for N/A: Imaging studies: CT head to rule out traumatic brain injury or other complications.",
-    "Psychiatric consult for evaluation and management of suicidal ideation": "Appropriate CCS order for N/A: Psychiatric consult for evaluation and management of suicidal ideation.",
-    "Nursing assessment for suicide risk and psycho-social support": "Appropriate CCS order for N/A: Nursing assessment for suicide risk and psycho-social support.",
-    "order1": "CCS review: avoid this order for N/A — it does not change acute management.",
-    "Oxygen": "Appropriate CCS order for N/A: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for N/A: IV access ×2.",
-    "Monitor": "Appropriate CCS order for N/A: Monitor.",
-    "Pulse ox": "Pulse oximetry documents oxygenation in the initial assessment.",
-    "Initiate specific treatment for hangman's fracture (as the diagnosis is unknown and may not be the cause)": "Advanced imaging is not indicated early for N/A when the diagnosis is clinical."
+    "ABCs / C-spine / Airway": "Laryngeal injury risk. C-spine immobilization.",
+    "CT neck + CT head": "Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+    "Admit ICU": "Close monitoring.",
+    "Psychiatry consult / 1:1 observation": "Suicide attempt. Safety assessment."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents after attempted hanging. Initial priorities: ABCs — airway management critical (laryngeal injury, edema, fracture). C-spine immobilization (associated cervical spine injury from hanging drop/jerk). Assess for: ligature marks on neck, stridor, dysphonia, subcutaneous emphysema. CT neck + CT head: laryngeal fracture, hyoid fracture, cervical spine injury, anoxic brain injury. Vascular: carotid dissection, jugular venous injury. Admit to ICU. After medical stabilization: psychiatry consult for suicide attempt. Safety assessment, 1:1 observation, suicide precautions.",
+  "hpi_narrative": "{{patient_name}} presents after attempted hanging. Initial priorities: ABCs — airway management critical (laryngeal injury, edema, fracture). C-spine immobilization (associated cervical spine injury from hanging drop/jerk). Assess for: ligature marks on neck, stridor, dysphonia, subcutaneous emphysema. CT neck + CT head: laryngeal fracture, hyoid fracture, cervical spine injury, anoxic brain injury. Vascular: carotid dissection, jugular venous injury. Admit to ICU. After medical stabilization: psychiatry consult for suicide attempt. Safety assessment, 1:1 observation, suicide precautions.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — hanging. I'm really scared.",
-    "history": "It's been getting worse. They said something about n/a. ...",
-    "pain": "This hanging won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Attempted hanging, ligature marks on neck",
+    "history": "{{patient_name}} presents after attempted hanging. Initial priorities: ABCs — airway management critical (laryngeal injury, edema, fracture). C-spine immobilization (associated cervical spine injury …",
+    "pain": "Attempted hanging, ligature marks on neck"
   },
-  "ccs_category": null,
+  "ccs_category": "Trauma / Psychiatry",
+  "chief_complaint": "Attempted hanging, ligature marks on neck",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Obtain vital signs and perform a complete physical examination",
-    "Laboratory studies: CBC, electrolytes, glucose, BUN, creatinine, liver function tests, urinalysis, toxicology screen",
-    "Imaging studies: CT head to rule out traumatic brain injury or other complications",
-    "Psychiatric consult for evaluation and management of suicidal ideation",
-    "Nursing assessment for suicide risk and psycho-social support",
-    "order1",
-    "Oxygen",
-    "IV access ×2",
-    "Monitor",
-    "Pulse ox"
+    {
+      "label": "ABCs / C-spine / Airway",
+      "type": "shouldHaveOrdered",
+      "finding": "Laryngeal injury risk. C-spine immobilization.",
+      "aliases": [
+        "Airway"
+      ]
+    },
+    {
+      "label": "CT neck + CT head",
+      "type": "shouldHaveOrdered",
+      "finding": "Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+      "aliases": [
+        "CT"
+      ]
+    },
+    {
+      "label": "Admit ICU",
+      "type": "shouldHaveOrdered",
+      "finding": "Close monitoring.",
+      "aliases": [
+        "ICU"
+      ]
+    },
+    {
+      "label": "Psychiatry consult / 1:1 observation",
+      "type": "shouldHaveOrdered",
+      "finding": "Suicide attempt. Safety assessment.",
+      "aliases": [
+        "Psych consult"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "ABCs / C-spine / Airway",
+    "CT neck + CT head",
+    "Admit ICU",
+    "Psychiatry consult / 1:1 observation"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Near Hanging (Attempted Suicide)."
 }

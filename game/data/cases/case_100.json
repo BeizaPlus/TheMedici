@@ -1,60 +1,76 @@
 {
   "id": 100,
   "topic": "Vaginal Itching",
+  "title": "Vaginal Itching",
   "diagnosis": "Atrophic Vaginitis (Genitourinary Syndrome of Menopause)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: General Appearance",
-    "Physical Exam: Lungs",
-    "Physical Exam: Heart/Cardiovascular",
-    "Physical Exam: Abdomen",
-    "Physical Exam: Skin",
-    "Cervical exam report"
+    "Physical Exam: Pelvic",
+    "Wet mount / KOH prep",
+    "Vaginal estrogen (cream/ring/tablet)"
   ],
-  "should_avoid": [
-    "CBC with differential"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for vaginal itching.",
-    "Physical Exam: Lungs": "Evaluate chest and lungs as part of the initial exam for vaginal itching.",
-    "Physical Exam: Heart/Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to vaginal itching.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with vaginal itching.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Atrophic Vaginitis (Genitourinary Syndrome of Menopause).",
-    "Cervical exam report": "Pelvic/cervical evaluation is central for Atrophic Vaginitis (Genitourinary Syndrome of Menopause) and localizes the source of vaginal itching.",
-    "CBC with differential": "CBC is not needed for uncomplicated Atrophic Vaginitis (Genitourinary Syndrome of Menopause) without fever, systemic symptoms, or abnormal vitals."
+    "Physical Exam: Pelvic": "Pale, thin vaginal mucosa, loss of rugae.",
+    "Wet mount / KOH prep": "Rule out candidiasis, BV, trich.",
+    "Vaginal estrogen (cream/ring/tablet)": "First-line for GU symptoms. Minimal systemic absorption."
   },
-  "hpi": "The patient is a 60-year-old female with vaginal itching. Atrophic vaginitis is a common condition in postmenopausal women. It is important to consider the underlying causes of vaginal symptoms. This patient should be educated on the use of vaginal moisturizers and lubricants to help with sexual intercourse due to vaginal atrophy. Hormonal therapy may also be considered if the vaginal atrophy is more severe.",
+  "hpi": "{{patient_name}} presents with vaginal itching, dryness, burning, dyspareunia, and increased urinary frequency. Postmenopausal. Exam reveals pale, thin vaginal mucosa with loss of rugae. Atrophic vaginitis results from estrogen deficiency → thinning of vaginal epithelium → decreased glycogen → loss of lactobacilli → increased vaginal pH → susceptibility to infection and irritation. Diagnosis is clinical. Wet mount may show increased WBCs and parabasal cells. Rule out other causes: candidiasis, bacterial vaginosis, trichomoniasis, STIs. Treatment: vaginal estrogen therapy (cream, ring, or tablet — first-line, minimal systemic absorption). Non-hormonal moisturizers and lubricants. If systemic vasomotor symptoms also present → consider systemic HRT.",
+  "hpi_narrative": "{{patient_name}} presents with vaginal itching, dryness, burning, dyspareunia, and increased urinary frequency. Postmenopausal. Exam reveals pale, thin vaginal mucosa with loss of rugae. Atrophic vaginitis results from estrogen deficiency → thinning of vaginal epithelium → decreased glycogen → loss of lactobacilli → increased vaginal pH → susceptibility to infection and irritation. Diagnosis is clinical. Wet mount may show increased WBCs and parabasal cells. Rule out other causes: candidiasis, bacterial vaginosis, trichomoniasis, STIs. Treatment: vaginal estrogen therapy (cream, ring, or tablet — first-line, minimal systemic absorption). Non-hormonal moisturizers and lubricants. If systemic vasomotor symptoms also present → consider systemic HRT.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about this vaginal itching. It's been bothering me a lot.",
-    "history": "I never had this issue before. It started after menopause.",
-    "pain": "It feels uncomfortable and itchy down there."
+    "chief_complaint": "Vaginal itching, dryness, dyspareunia",
+    "history": "{{patient_name}} presents with vaginal itching, dryness, burning, dyspareunia, and increased urinary frequency. Postmenopausal. Exam reveals pale, thin vaginal mucosa with loss of rugae. Atrophic vag…",
+    "pain": "Vaginal itching, dryness, dyspareunia"
   },
   "ccs_category": "OB/GYN",
-  "case_summary": "The patient is a 60-year-old female with vaginal itching. Atrophic vaginitis is a common condition in postmenopausal women. It is important to consider the underlying causes of vaginal symptoms. This patient should be educated on the use of vaginal moisturizers and lubricants to help with sexual intercourse due to vaginal atrophy. Hormonal therapy may also be considered if the vaginal atrophy is more severe.",
+  "chief_complaint": "Vaginal itching, dryness, dyspareunia",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam: General Appearance",
-    "Time Advanced 5 minutes",
-    "Ordered the following Physical Exams and/or patient complaints: General: Genital, Extremities",
-    "Ordered: Counsel patient: hormone"
+    {
+      "label": "Physical Exam: Pelvic",
+      "type": "correctlyOrdered",
+      "finding": "Pale, thin vaginal mucosa, loss of rugae.",
+      "aliases": [
+        "Pelvic Exam"
+      ]
+    },
+    {
+      "label": "Wet mount / KOH prep",
+      "type": "correctlyOrdered",
+      "finding": "Rule out candidiasis, BV, trich.",
+      "aliases": [
+        "Wet mount"
+      ]
+    },
+    {
+      "label": "Vaginal estrogen (cream/ring/tablet)",
+      "type": "correctlyOrdered",
+      "finding": "First-line for GU symptoms. Minimal systemic absorption.",
+      "aliases": [
+        "Estrogen cream"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Pelvic",
+    "Wet mount / KOH prep",
+    "Vaginal estrogen (cream/ring/tablet)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Quick 3-case build from existing app case bank JSON."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Atrophic Vaginitis (Genitourinary Syndrome of Menopause)."
 }

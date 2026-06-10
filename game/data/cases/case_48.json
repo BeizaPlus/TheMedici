@@ -1,62 +1,186 @@
 {
   "id": 48,
   "topic": "Cough",
+  "title": "Cough",
   "diagnosis": "Community Acquired Pneumonia",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "CXR Ordered",
-    "CBC Ordered",
-    "BMP Ordered",
-    "Blood Cultures Ordered",
-    "Sputum Culture Ordered",
-    "Influenza Testing",
-    "COVID Testing"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "ECG",
+    "Chest X-ray",
+    "Pulse oximetry",
+    "Blood cultures (if inpatient)",
+    "Sputum Gram stain + culture",
+    "BMP / CMP",
+    "Antibiotics per CAP guidelines"
   ],
-  "should_avoid": [
-    "CT Chest"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "CXR Ordered": "Appropriate CCS order for Community Acquired Pneumonia: CXR Ordered.",
-    "CBC Ordered": "Laboratory testing when systemic illness or severity warrants labs in Community Acquired Pneumonia.",
-    "BMP Ordered": "Laboratory testing when systemic illness or severity warrants labs in Community Acquired Pneumonia.",
-    "Blood Cultures Ordered": "Laboratory testing when systemic illness or severity warrants labs in Community Acquired Pneumonia.",
-    "Sputum Culture Ordered": "Laboratory testing when systemic illness or severity warrants labs in Community Acquired Pneumonia.",
-    "Influenza Testing": "Appropriate CCS order for Community Acquired Pneumonia: Influenza Testing.",
-    "COVID Testing": "Appropriate CCS order for Community Acquired Pneumonia: COVID Testing.",
-    "CT Chest": "Advanced imaging is not indicated early for Community Acquired Pneumonia when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Assess severity.",
+    "Physical Exam: Chest / Lungs": "Chief complaint — crackles, bronchial breath sounds.",
+    "Physical Exam: Heart / Cardiovascular": "Cough can be cardiac — screen.",
+    "Physical Exam: Abdomen": "Screen.",
+    "Physical Exam: HEENT / Neck": "Screen.",
+    "CBC with differential": "Leukocytosis.",
+    "ECG": "Screen cardiac in febrile patient.",
+    "Chest X-ray": "Lobar consolidation — confirms CAP.",
+    "Pulse oximetry": "Assess oxygenation.",
+    "Blood cultures (if inpatient)": "Before antibiotics.",
+    "Sputum Gram stain + culture": "Identify pathogen.",
+    "BMP / CMP": "CURB-65: BUN >19 = 1 point.",
+    "Antibiotics per CAP guidelines": "Outpatient: amoxicillin or doxycycline or azithromycin. With comorbidities: levofloxacin or amox-clav + macrolide."
   },
-  "hpi": "This case illustrates the importance of appropriate diagnostic testing in a patient presenting with cough and fever. The patient was diagnosed with community-acquired pneumonia and appropriate antibiotics were initiated. It is crucial to consider viral testing in cases of pneumonia, especially during flu season.",
+  "hpi": "{{patient_name}} presents with acute productive cough, fever, dyspnea, and pleuritic chest pain. Exam reveals crackles and bronchial breath sounds over the affected lobe. CXR shows lobar consolidation. CAP severity assessed by CURB-65 or PORT score to determine outpatient vs inpatient treatment. Most common pathogens: S. pneumoniae (most common), H. influenzae, M. catarrhalis, atypical bacteria (Mycoplasma, Chlamydia, Legionella). Outpatient treatment (no comorbidities): amoxicillin or doxycycline or macrolide (azithromycin). Outpatient with comorbidities: respiratory fluoroquinolone (levofloxacin) or beta-lactam + macrolide. Inpatient non-ICU: beta-lactam (ceftriaxone) + macrolide. Inpatient ICU: beta-lactam + macrolide OR beta-lactam + fluoroquinolone. Add vancomycin if MRSA risk. Blood cultures and sputum cultures BEFORE antibiotics if inpatient. Smoking cessation counseling. Pneumococcal vaccine if indicated.",
+  "hpi_narrative": "{{patient_name}} presents with acute productive cough, fever, dyspnea, and pleuritic chest pain. Exam reveals crackles and bronchial breath sounds over the affected lobe. CXR shows lobar consolidation. CAP severity assessed by CURB-65 or PORT score to determine outpatient vs inpatient treatment. Most common pathogens: S. pneumoniae (most common), H. influenzae, M. catarrhalis, atypical bacteria (Mycoplasma, Chlamydia, Legionella). Outpatient treatment (no comorbidities): amoxicillin or doxycycline or macrolide (azithromycin). Outpatient with comorbidities: respiratory fluoroquinolone (levofloxacin) or beta-lactam + macrolide. Inpatient non-ICU: beta-lactam (ceftriaxone) + macrolide. Inpatient ICU: beta-lactam + macrolide OR beta-lactam + fluoroquinolone. Add vancomycin if MRSA risk. Blood cultures and sputum cultures BEFORE antibiotics if inpatient. Smoking cessation counseling. Pneumococcal vaccine if indicated.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. I can't stop coughing and I feel so weak.",
-    "history": "I've had this cough for days. It started with a fever and now I can barely breathe.",
-    "pain": "It hurts to take a deep breath."
+    "chief_complaint": "Cough, fever, dyspnea, pleuritic pain",
+    "history": "{{patient_name}} presents with acute productive cough, fever, dyspnea, and pleuritic chest pain. Exam reveals crackles and bronchial breath sounds over the affected lobe. CXR shows lobar consolidatio…",
+    "pain": "Cough, fever, dyspnea, pleuritic pain"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "This case illustrates the importance of appropriate diagnostic testing in a patient presenting with cough and fever. The patient was diagnosed with community-acquired pneumonia and appropriate antibiotics were initiated. It is crucial to consider viral testing in cases of pneumonia, especially during flu season.",
+  "ccs_category": "Internal Medicine / Pulmonology",
+  "chief_complaint": "Cough, fever, dyspnea, pleuritic pain",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "CXR Ordered",
-    "CBC Ordered",
-    "BMP Ordered",
-    "Blood Cultures Ordered"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess severity.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "shouldHaveOrdered",
+      "finding": "Chief complaint — crackles, bronchial breath sounds.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "shouldHaveOrdered",
+      "finding": "Cough can be cardiac — screen.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Screen.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "shouldHaveOrdered",
+      "finding": "Screen.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "Screen cardiac in febrile patient.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Lobar consolidation — confirms CAP.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "correctlyOrdered",
+      "finding": "Assess oxygenation.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Blood cultures (if inpatient)",
+      "type": "correctlyOrdered",
+      "finding": "Before antibiotics.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "Sputum Gram stain + culture",
+      "type": "correctlyOrdered",
+      "finding": "Identify pathogen.",
+      "aliases": [
+        "Sputum"
+      ]
+    },
+    {
+      "label": "BMP / CMP",
+      "type": "correctlyOrdered",
+      "finding": "CURB-65: BUN >19 = 1 point.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Antibiotics per CAP guidelines",
+      "type": "correctlyOrdered",
+      "finding": "Outpatient: amoxicillin or doxycycline or azithromycin. With comorbidities: levofloxacin or amox-clav + macrolide.",
+      "aliases": [
+        "Antibiotics"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "ECG",
+    "Chest X-ray",
+    "Pulse oximetry",
+    "Blood cultures (if inpatient)",
+    "Sputum Gram stain + culture",
+    "BMP / CMP",
+    "Antibiotics per CAP guidelines"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Community Acquired Pneumonia."
 }

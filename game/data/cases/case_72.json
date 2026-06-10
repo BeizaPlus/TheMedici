@@ -1,9 +1,10 @@
 {
   "id": 72,
   "topic": "Routine Check-Up",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Routine Check-Up",
+  "diagnosis": "Pending further diagnostic results",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Complete Blood Count (CBC)",
     "Chemistry Panel",
@@ -15,34 +16,51 @@
   ],
   "should_avoid": [],
   "rationale": {
-    "Complete Blood Count (CBC)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Chemistry Panel": "Appropriate CCS order for this diagnosis: Chemistry Panel.",
-    "Urinalysis": "Appropriate CCS order for this diagnosis: Urinalysis.",
-    "Electrocardiogram (ECG)": "Appropriate CCS order for this diagnosis: Electrocardiogram (ECG).",
-    "Imaging studies (X-ray, CT, MRI as necessary)": "Imaging supports diagnosis when exam findings warrant it for this diagnosis.",
-    "Universal Labs (CBC, CMP, UA)": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "EKG + CXR if indicated": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate."
+    "Complete Blood Count (CBC)": "To evaluate the patient's overall health and detect potential issues with red blood cells, white blood cells, and platelets.",
+    "Chemistry Panel": "To assess kidney function, liver function, electrolyte levels, and glucose levels.",
+    "Urinalysis": "To evaluate kidney function, detect urinary tract infections or other abnormalities.",
+    "Electrocardiogram (ECG)": "To evaluate the patient's heart rhythm and cardiac health.",
+    "Imaging studies (X-ray, CT, MRI as necessary)": "To visualize internal organs and structures for potential abnormalities.",
+    "Universal Labs (CBC, CMP, UA)": "Establishing baseline renal, liver, and electrolyte functions, as well as urinalysis results is essential for a comprehensive workup.",
+    "EKG + CXR if indicated": "An EKG can help in detecting cardiac abnormalities while a chest X-ray can aid in identifying lung pathologies."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — routine check-up. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This routine check-up won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Routine Check-Up — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 98; BP 107/68."
+    ],
+    [
+      "Respiratory",
+      "RR 19; SpO₂ 95%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Complete Blood Count (CBC)",
     "Chemistry Panel",
     "Urinalysis",
@@ -51,11 +69,11 @@
     "Universal Labs (CBC, CMP, UA)",
     "EKG + CXR if indicated"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

@@ -1,62 +1,480 @@
 {
   "id": 22,
-  "topic": "Tearful 8-year-old with abdominal pain",
-  "diagnosis": "Acute appendicitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Found Unconscious",
+  "title": "Found Unconscious",
+  "diagnosis": "Tricyclic Antidepressant (TCA) Overdose",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "IV Fluids",
-    "CT Abdomen/Pelvis",
-    "CBC",
-    "Electrolytes",
-    "Pain Management",
-    "Appendectomy",
-    "Consult Surgery"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Heart / Cardiovascular",
+    "Pulse oximetry",
+    "Glucose, blood, random by glucometer",
+    "CBC with differential",
+    "ECG, 12 lead",
+    "Cardiac monitor",
+    {
+      "order": "TSH",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Hypothyroidism may present similarly — rule out."
+    },
+    "Urinalysis",
+    "Acetaminophen level / Toxicology screen",
+    "Arterial blood gases",
+    "CT head without contrast",
+    "CPK, serum",
+    "HCG, beta (pregnancy test)",
+    "BMP / CMP / LFTs",
+    "Toxicology screen, urine / serum",
+    "Ethanol / Toxic alcohol panel",
+    "Salicylate level",
+    "TCA level, serum",
+    "Oxygen",
+    {
+      "order": "Thiamine (Vitamin B1)",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Coma cocktail — thiamine before D50 to prevent Wernicke-Korsakoff."
+    },
+    {
+      "order": "Dextrose 50%",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Coma cocktail — if hypoglycemic. Give thiamine first."
+    },
+    "Naloxone",
+    "IV fluids (NS / LR)",
+    "Nasogastric tube with suction",
+    "Activated charcoal",
+    "Intubation, endotracheal",
+    "Mechanical ventilation",
+    "Sodium bicarbonate",
+    "Consult, psychiatry",
+    {
+      "order": "IV access",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Good practice for IV fluids/meds."
+    }
   ],
   "should_avoid": [
-    "Unnecessary Imaging"
+    "Activated charcoal WITHOUT securing airway",
+    "Flumazenil"
   ],
   "rationale": {
-    "IV Fluids": "Appropriate CCS order for Acute appendicitis: IV Fluids.",
-    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with tearful 8-year-old with abdominal pain.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Acute appendicitis.",
-    "Electrolytes": "Appropriate CCS order for Acute appendicitis: Electrolytes.",
-    "Pain Management": "Appropriate CCS order for Acute appendicitis: Pain Management.",
-    "Appendectomy": "Appropriate CCS order for Acute appendicitis: Appendectomy.",
-    "Consult Surgery": "Appropriate CCS order for Acute appendicitis: Consult Surgery.",
-    "Unnecessary Imaging": "CCS review: avoid this order for Acute appendicitis — it does not change acute management."
+    "Physical Exam: General Appearance": "Assess how sick the patient is — obtunded.",
+    "Physical Exam: Neuro / Psych": "Obtunded — neuro exam to determine impairment.",
+    "Physical Exam: Heart / Cardiovascular": "Emergency — focused cardiac exam for arrhythmia.",
+    "Pulse oximetry": "RR low — monitor oxygenation.",
+    "Glucose, blood, random by glucometer": "Hypo/hyperglycemia common reversible cause of AMS — check first.",
+    "CBC with differential": "Screening.",
+    "ECG, 12 lead": "Widened QRS + prolonged QT = TCA cardiotoxicity.",
+    "Cardiac monitor": "ECG shows arrhythmia — continuous monitoring needed.",
+    "TSH": "Hypothyroidism may present similarly — rule out.",
+    "Urinalysis": "Good screening tool.",
+    "Acetaminophen level / Toxicology screen": "Overdose presentation — check acetaminophen (common co-ingestant).",
+    "Arterial blood gases": "Decreased RR — ABG essential.",
+    "CT head without contrast": "Unwitnessed — rule out head trauma causing obtundation.",
+    "CPK, serum": "Unknown down time — rhabdomyolysis risk. Prevent AKI.",
+    "HCG, beta (pregnancy test)": "Child-bearing woman — pregnancy test before radiation. Ectopic can cause this presentation.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "Toxicology screen, urine / serum": "Drug screen in any overdose.",
+    "Ethanol / Toxic alcohol panel": "History suggests ethanol abuse — common co-ingestant.",
+    "Salicylate level": "Aspirin is common co-ingestant in overdose.",
+    "TCA level, serum": "Urine/serum positive for TCA — quantify level.",
+    "Oxygen": "Low SpO2 — supplemental O2 before intubation.",
+    "Thiamine (Vitamin B1)": "Coma cocktail — thiamine before D50 to prevent Wernicke-Korsakoff.",
+    "Dextrose 50%": "Coma cocktail — if hypoglycemic. Give thiamine first.",
+    "Naloxone": "Give in any overdose to rule out reversible opioid overdose.",
+    "IV fluids (NS / LR)": "TCA overdose → hypotension from alpha-1 blockade. IV fluids for BP.",
+    "Nasogastric tube with suction": "Prevent aspiration (intubated). Required for GI decontamination and activated charcoal.",
+    "Activated charcoal": "GI decontamination if within 2 hours of ingestion. Only after airway secured. Via NG tube.",
+    "Intubation, endotracheal": "Respiratory depression — airway protection required.",
+    "Mechanical ventilation": "Respiratory depression — ventilatory support.",
+    "Sodium bicarbonate": "For TCA cardiac toxicity (QRS >100ms, ventricular arrhythmia). Alkalinize to pH 7.45-7.55. Increases extracellular Na+ and favors non-ionized TCA.",
+    "Consult, psychiatry": "Potential suicide attempt — psychiatry consult after medical stabilization.",
+    "IV access": "Good practice for IV fluids/meds.",
+    "Activated charcoal WITHOUT securing airway": "NEVER give charcoal without secure airway (ETT). Risk of aspiration pneumonitis. Intubate first, then charcoal via NG.",
+    "Flumazenil": "Flumazenil is contraindicated in overdose of unknown etiology — can precipitate seizures, especially with TCA co-ingestion."
   },
-  "hpi": "This case illustrates the importance of timely diagnosis and intervention in pediatric patients presenting with abdominal pain. The classic presentation of appendicitis can sometimes be atypical, and a high index of suspicion is necessary. Early surgical consultation and intervention can prevent complications.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a young woman found unconscious with respiratory depression, hypotension, and altered mental status. ECG shows widened QRS, prolonged QT — classic TCA cardiotoxicity. The 'Three C's' of TCA poisoning: Coma, Convulsions, Cardiac arrhythmias. Management priorities: ABCs — intubate for airway protection (GCS depressed), mechanical ventilation. IV fluids for hypotension (TCA blocks alpha-1 receptors → vasodilation). Sodium bicarbonate for cardiac toxicity (QRS >100ms or ventricular arrhythmia) — alkalinization to pH 7.45-7.55 favors non-ionized TCA, reducing sodium channel blockade. Activated charcoal via NG tube if within 2 hours of ingestion (airway must be secured first). 'Coma cocktail': check glucose, give thiamine before D50. Naloxone for possible opioid co-ingestion. CT head to rule out trauma (unwitnessed). Aspirin and acetaminophen levels for common co-ingestants. Psychiatry consult after stabilization for suicide attempt.",
+  "hpi_narrative": "{{patient_name}} is a young woman found unconscious with respiratory depression, hypotension, and altered mental status. ECG shows widened QRS, prolonged QT — classic TCA cardiotoxicity. The 'Three C's' of TCA poisoning: Coma, Convulsions, Cardiac arrhythmias. Management priorities: ABCs — intubate for airway protection (GCS depressed), mechanical ventilation. IV fluids for hypotension (TCA blocks alpha-1 receptors → vasodilation). Sodium bicarbonate for cardiac toxicity (QRS >100ms or ventricular arrhythmia) — alkalinization to pH 7.45-7.55 favors non-ionized TCA, reducing sodium channel blockade. Activated charcoal via NG tube if within 2 hours of ingestion (airway must be secured first). 'Coma cocktail': check glucose, give thiamine before D50. Naloxone for possible opioid co-ingestion. CT head to rule out trauma (unwitnessed). Aspirin and acetaminophen levels for common co-ingestants. Psychiatry consult after stabilization for suicide attempt.",
+  "physical_exam": [
+    [
+      "General",
+      "Obtunded, respiratory depression, hypotensive."
+    ],
+    [
+      "Cardiovascular",
+      "Widened QRS, prolonged QT on ECG. Tachycardia (anticholinergic). Hypotension (alpha-1 blockade)."
+    ],
+    [
+      "Respiratory",
+      "Depressed — requires intubation and mechanical ventilation."
+    ],
+    [
+      "Neurological",
+      "Obtunded, GCS depressed. Coma — one of the 'Three C's'."
+    ],
+    [
+      "Psychiatric",
+      "Suicide attempt — psychiatry consult after stabilization."
+    ]
+  ],
   "vitals": {
     "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "spo2": "75%",
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared and my tummy hurts a lot.",
-    "history": "I felt fine this morning, but then my stomach started hurting.",
-    "pain": "It hurts really bad in my belly."
+    "chief_complaint": "Found unconscious, respiratory depression, suspected overdose",
+    "history": "{{patient_name}} is a young woman found unconscious with respiratory depression, hypotension, and altered mental status. ECG shows widened QRS, prolonged QT — classic TCA cardiotoxicity. The 'Three C…",
+    "pain": "Found unconscious, respiratory depression, suspected overdose"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "This case illustrates the importance of timely diagnosis and intervention in pediatric patients presenting with abdominal pain. The classic presentation of appendicitis can sometimes be atypical, and a high index of suspicion is necessary. Early surgical consultation and intervention can prevent complications.",
+  "ccs_category": "Emergency Medicine / Toxicology / Psychiatry",
+  "chief_complaint": "Found unconscious, respiratory depression, suspected overdose",
+  "case_summary": "TCA overdose (suicide attempt). Obtunded + widened QRS + hypotension. Intubate → bicarb → charcoal → ICU. Psych consult after stabilization.",
+  "decoys": [
+    {
+      "label": "Activated charcoal WITHOUT securing airway",
+      "reason_wrong": "NEVER give charcoal without secure airway (ETT). Risk of aspiration pneumonitis. Intubate first, then charcoal via NG."
+    },
+    {
+      "label": "Flumazenil",
+      "reason_wrong": "Flumazenil is contraindicated in overdose of unknown etiology — can precipitate seizures, especially with TCA co-ingestion."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "IV Fluids",
-    "CT Abdomen/Pelvis",
-    "CBC",
-    "Electrolytes",
-    "Pain Management"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess how sick the patient is — obtunded.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Obtunded — neuro exam to determine impairment.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Emergency — focused cardiac exam for arrhythmia.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "shouldHaveOrdered",
+      "finding": "RR low — monitor oxygenation.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Glucose, blood, random by glucometer",
+      "type": "shouldHaveOrdered",
+      "finding": "Hypo/hyperglycemia common reversible cause of AMS — check first.",
+      "aliases": [
+        "Fingerstick glucose"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "ECG, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "Widened QRS + prolonged QT = TCA cardiotoxicity.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Cardiac monitor",
+      "type": "shouldHaveOrdered",
+      "finding": "ECG shows arrhythmia — continuous monitoring needed.",
+      "aliases": [
+        "Cardiac monitor"
+      ]
+    },
+    {
+      "label": "TSH",
+      "type": "optional",
+      "finding": "Hypothyroidism may present similarly — rule out.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "correctlyOrdered",
+      "finding": "Good screening tool.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Acetaminophen level / Toxicology screen",
+      "type": "correctlyOrdered",
+      "finding": "Overdose presentation — check acetaminophen (common co-ingestant).",
+      "aliases": [
+        "APAP level"
+      ]
+    },
+    {
+      "label": "Arterial blood gases",
+      "type": "shouldHaveOrdered",
+      "finding": "Decreased RR — ABG essential.",
+      "aliases": [
+        "ABG"
+      ]
+    },
+    {
+      "label": "CT head without contrast",
+      "type": "correctlyOrdered",
+      "finding": "Unwitnessed — rule out head trauma causing obtundation.",
+      "aliases": [
+        "Head CT"
+      ]
+    },
+    {
+      "label": "CPK, serum",
+      "type": "correctlyOrdered",
+      "finding": "Unknown down time — rhabdomyolysis risk. Prevent AKI.",
+      "aliases": [
+        "CK"
+      ]
+    },
+    {
+      "label": "HCG, beta (pregnancy test)",
+      "type": "correctlyOrdered",
+      "finding": "Child-bearing woman — pregnancy test before radiation. Ectopic can cause this presentation.",
+      "aliases": [
+        "Pregnancy test"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "Toxicology screen, urine / serum",
+      "type": "correctlyOrdered",
+      "finding": "Drug screen in any overdose.",
+      "aliases": [
+        "Urine tox"
+      ]
+    },
+    {
+      "label": "Ethanol / Toxic alcohol panel",
+      "type": "correctlyOrdered",
+      "finding": "History suggests ethanol abuse — common co-ingestant.",
+      "aliases": [
+        "EtOH"
+      ]
+    },
+    {
+      "label": "Salicylate level",
+      "type": "correctlyOrdered",
+      "finding": "Aspirin is common co-ingestant in overdose.",
+      "aliases": [
+        "ASA level"
+      ]
+    },
+    {
+      "label": "TCA level, serum",
+      "type": "shouldHaveOrdered",
+      "finding": "Urine/serum positive for TCA — quantify level.",
+      "aliases": [
+        "TCA level"
+      ]
+    },
+    {
+      "label": "Oxygen",
+      "type": "shouldHaveOrdered",
+      "finding": "Low SpO2 — supplemental O2 before intubation.",
+      "aliases": [
+        "O2"
+      ]
+    },
+    {
+      "label": "Thiamine (Vitamin B1)",
+      "type": "optional",
+      "finding": "Coma cocktail — thiamine before D50 to prevent Wernicke-Korsakoff.",
+      "aliases": [
+        "Thiamine"
+      ]
+    },
+    {
+      "label": "Dextrose 50%",
+      "type": "optional",
+      "finding": "Coma cocktail — if hypoglycemic. Give thiamine first.",
+      "aliases": [
+        "D50"
+      ]
+    },
+    {
+      "label": "Naloxone",
+      "type": "shouldHaveOrdered",
+      "finding": "Give in any overdose to rule out reversible opioid overdose.",
+      "aliases": [
+        "Narcan"
+      ]
+    },
+    {
+      "label": "IV fluids (NS / LR)",
+      "type": "correctlyOrdered",
+      "finding": "TCA overdose → hypotension from alpha-1 blockade. IV fluids for BP.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "Nasogastric tube with suction",
+      "type": "shouldHaveOrdered",
+      "finding": "Prevent aspiration (intubated). Required for GI decontamination and activated charcoal.",
+      "aliases": [
+        "NG tube"
+      ]
+    },
+    {
+      "label": "Activated charcoal",
+      "type": "shouldHaveOrdered",
+      "finding": "GI decontamination if within 2 hours of ingestion. Only after airway secured. Via NG tube.",
+      "aliases": [
+        "Charcoal"
+      ]
+    },
+    {
+      "label": "Intubation, endotracheal",
+      "type": "shouldHaveOrdered",
+      "finding": "Respiratory depression — airway protection required.",
+      "aliases": [
+        "Intubation"
+      ]
+    },
+    {
+      "label": "Mechanical ventilation",
+      "type": "correctlyOrdered",
+      "finding": "Respiratory depression — ventilatory support.",
+      "aliases": [
+        "Ventilator"
+      ]
+    },
+    {
+      "label": "Sodium bicarbonate",
+      "type": "correctlyOrdered",
+      "finding": "For TCA cardiac toxicity (QRS >100ms, ventricular arrhythmia). Alkalinize to pH 7.45-7.55. Increases extracellular Na+ and favors non-ionized TCA.",
+      "aliases": [
+        "Bicarb",
+        "NaHCO3"
+      ]
+    },
+    {
+      "label": "Consult, psychiatry",
+      "type": "correctlyOrdered",
+      "finding": "Potential suicide attempt — psychiatry consult after medical stabilization.",
+      "aliases": [
+        "Psych consult"
+      ]
+    },
+    {
+      "label": "IV access",
+      "type": "optional",
+      "finding": "Good practice for IV fluids/meds.",
+      "aliases": [
+        "IV"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Heart / Cardiovascular",
+    "Pulse oximetry",
+    "Glucose, blood, random by glucometer",
+    "CBC with differential",
+    "ECG, 12 lead",
+    "Cardiac monitor",
+    {
+      "order": "TSH",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Hypothyroidism may present similarly — rule out."
+    },
+    "Urinalysis",
+    "Acetaminophen level / Toxicology screen",
+    "Arterial blood gases",
+    "CT head without contrast",
+    "CPK, serum",
+    "HCG, beta (pregnancy test)",
+    "BMP / CMP / LFTs",
+    "Toxicology screen, urine / serum",
+    "Ethanol / Toxic alcohol panel",
+    "Salicylate level",
+    "TCA level, serum",
+    "Oxygen",
+    {
+      "order": "Thiamine (Vitamin B1)",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Coma cocktail — thiamine before D50 to prevent Wernicke-Korsakoff."
+    },
+    {
+      "order": "Dextrose 50%",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Coma cocktail — if hypoglycemic. Give thiamine first."
+    },
+    "Naloxone",
+    "IV fluids (NS / LR)",
+    "Nasogastric tube with suction",
+    "Activated charcoal",
+    "Intubation, endotracheal",
+    "Mechanical ventilation",
+    "Sodium bicarbonate",
+    "Consult, psychiatry",
+    {
+      "order": "IV access",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Good practice for IV fluids/meds."
+    }
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Tricyclic Antidepressant (TCA) Overdose."
 }

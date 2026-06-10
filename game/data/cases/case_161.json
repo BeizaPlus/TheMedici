@@ -1,70 +1,87 @@
 {
   "id": 161,
   "topic": "Headache",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Headache",
+  "diagnosis": "Pheochromocytoma",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Obtain urgent CT head with contrast",
-    "Order lumbar puncture for cerebrospinal fluid analysis if CT is negative or inconclusive",
-    "Evaluate for secondary causes of headache (e.g., hypertension, diabetes mellitus, thyroid disorder)",
-    "Consult Neurology and Neurosurgery as necessary",
-    "order1",
-    "Oxygen",
-    "IV access ×2 large-bore"
+    "Plasma free metanephrines / 24h urine metanephrines",
+    "CT/MRI abdomen",
+    "Alpha blockade FIRST (Phenoxybenzamine)",
+    "Surgical resection (Adrenalectomy)"
   ],
-  "should_avoid": [
-    "order2",
-    "order3",
-    "order4",
-    "Prescribe pain medication without diagnostic workup unless for immediate symptom relief"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Obtain urgent CT head with contrast": "Appropriate CCS order for this diagnosis: Obtain urgent CT head with contrast.",
-    "Order lumbar puncture for cerebrospinal fluid analysis if CT is negative or inconclusive": "Appropriate CCS order for this diagnosis: Order lumbar puncture for cerebrospinal fluid analysis if CT is negative or inconclusive.",
-    "Evaluate for secondary causes of headache (e.g., hypertension, diabetes mellitus, thyroid disorder)": "Appropriate CCS order for this diagnosis: Evaluate for secondary causes of headache (e.g., hypertension, diabetes mellitus, thyroid disorder).",
-    "Consult Neurology and Neurosurgery as necessary": "Targeted Consult Neurology and Neurosurgery as necessary exam supports the differential for this diagnosis.",
-    "order1": "Appropriate CCS order for this diagnosis: order1.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2 large-bore": "Appropriate CCS order for this diagnosis: IV access ×2 large-bore.",
-    "order2": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "order3": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "order4": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "Prescribe pain medication without diagnostic workup unless for immediate symptom relief": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Plasma free metanephrines / 24h urine metanephrines": "Elevated catecholamines, metanephrines.",
+    "CT/MRI abdomen": "Adrenal mass.",
+    "Alpha blockade FIRST (Phenoxybenzamine)": "Before beta-blocker. 10-14 days pre-op.",
+    "Surgical resection (Adrenalectomy)": "Curative."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with episodic severe headaches, palpitations, diaphoresis (classic triad), and paroxysmal hypertension. Pheochromocytoma is a catecholamine-secreting tumor of the adrenal medulla chromaffin cells. Rule of 10's: 10% bilateral, 10% extra-adrenal (paraganglioma), 10% malignant, 10% familial (MEN2, VHL, NF1). Diagnosis: plasma free metanephrines or 24h urine fractionated metanephrines and catecholamines (elevated). CT/MRI abdomen — adrenal mass. Pre-operative alpha-blockade (phenoxybenzamine or doxazosin) BEFORE beta-blockade (beta-blockade alone → unopposed alpha agonism → hypertensive crisis). Adequate alpha blockade for 10-14 days before surgery. Then add beta-blocker if tachycardia. Surgical resection (adrenalectomy) is curative.",
+  "hpi_narrative": "{{patient_name}} presents with episodic severe headaches, palpitations, diaphoresis (classic triad), and paroxysmal hypertension. Pheochromocytoma is a catecholamine-secreting tumor of the adrenal medulla chromaffin cells. Rule of 10's: 10% bilateral, 10% extra-adrenal (paraganglioma), 10% malignant, 10% familial (MEN2, VHL, NF1). Diagnosis: plasma free metanephrines or 24h urine fractionated metanephrines and catecholamines (elevated). CT/MRI abdomen — adrenal mass. Pre-operative alpha-blockade (phenoxybenzamine or doxazosin) BEFORE beta-blockade (beta-blockade alone → unopposed alpha agonism → hypertensive crisis). Adequate alpha blockade for 10-14 days before surgery. Then add beta-blocker if tachycardia. Surgical resection (adrenalectomy) is curative.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — headache. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This headache won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Episodic headache, palpitations, sweating, hypertension",
+    "history": "{{patient_name}} presents with episodic severe headaches, palpitations, diaphoresis (classic triad), and paroxysmal hypertension. Pheochromocytoma is a catecholamine-secreting tumor of the adrenal me…",
+    "pain": "Episodic headache, palpitations, sweating, hypertension"
   },
-  "ccs_category": null,
+  "ccs_category": "Endocrinology / Surgery",
+  "chief_complaint": "Episodic headache, palpitations, sweating, hypertension",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Obtain urgent CT head with contrast",
-    "Order lumbar puncture for cerebrospinal fluid analysis if CT is negative or inconclusive",
-    "Evaluate for secondary causes of headache (e.g., hypertension, diabetes mellitus, thyroid disorder)",
-    "Consult Neurology and Neurosurgery as necessary",
-    "order1",
-    "Oxygen",
-    "IV access ×2 large-bore"
+    {
+      "label": "Plasma free metanephrines / 24h urine metanephrines",
+      "type": "correctlyOrdered",
+      "finding": "Elevated catecholamines, metanephrines.",
+      "aliases": [
+        "Metanephrines"
+      ]
+    },
+    {
+      "label": "CT/MRI abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Adrenal mass.",
+      "aliases": [
+        "Adrenal CT"
+      ]
+    },
+    {
+      "label": "Alpha blockade FIRST (Phenoxybenzamine)",
+      "type": "correctlyOrdered",
+      "finding": "Before beta-blocker. 10-14 days pre-op.",
+      "aliases": [
+        "Phenoxybenzamine"
+      ]
+    },
+    {
+      "label": "Surgical resection (Adrenalectomy)",
+      "type": "correctlyOrdered",
+      "finding": "Curative.",
+      "aliases": [
+        "Adrenalectomy"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Plasma free metanephrines / 24h urine metanephrines",
+    "CT/MRI abdomen",
+    "Alpha blockade FIRST (Phenoxybenzamine)",
+    "Surgical resection (Adrenalectomy)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Pheochromocytoma."
 }

@@ -1,62 +1,89 @@
 {
   "id": 125,
   "topic": "Chest Pain",
+  "title": "Chest Pain",
   "diagnosis": "Right Ventricular Myocardial Infarction",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam - General Appearance",
-    "Physical Exam - Heart: Cardiac Exam",
-    "Physical Exam - Chest: Auscultation",
-    "Cardiac Enzymes: Troponin",
-    "Cardiac Catheterization: Angiography",
-    "Blood pressure monitoring: non-invasive",
-    "CXR: Chest X-ray"
+    "ECG with right-sided leads (V4R)",
+    "IV fluids (aggressive)",
+    "Aspirin + P2Y12 + Anticoagulation",
+    "Emergent PCI"
   ],
-  "should_avoid": [
-    "Phlebotomy"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam - General Appearance": "Assess how ill the patient appears before focused testing for chest pain.",
-    "Physical Exam - Heart: Cardiac Exam": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
-    "Physical Exam - Chest: Auscultation": "Evaluate chest and lungs as part of the initial exam for chest pain.",
-    "Cardiac Enzymes: Troponin": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
-    "Cardiac Catheterization: Angiography": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
-    "Blood pressure monitoring: non-invasive": "Appropriate CCS order for Right Ventricular Myocardial Infarction: Blood pressure monitoring: non-invasive.",
-    "CXR: Chest X-ray": "Evaluate chest and lungs as part of the initial exam for chest pain.",
-    "Phlebotomy": "CCS review: avoid this order for Right Ventricular Myocardial Infarction — it does not change acute management."
+    "ECG with right-sided leads (V4R)": "Inferior STEMI + V4R elevation = RV infarction.",
+    "IV fluids (aggressive)": "RV is preload-dependent. AVOID nitrates/diuretics.",
+    "Aspirin + P2Y12 + Anticoagulation": "Standard ACS antiplatelet.",
+    "Emergent PCI": "Reperfusion."
   },
-  "hpi": "This case illustrates that patients with chest pain can have a variety of presentations, and it is important to recognize the potential for serious conditions such as myocardial infarction. The importance of timely intervention cannot be overstated, as delays can lead to significant morbidity and mortality. In this case, the patient presented with silent ischemia, which can be particularly challenging to diagnose. It is crucial to maintain a high index of suspicion and to utilize appropriate diagnostic tools to ensure timely treatment.",
+  "hpi": "{{patient_name}} presents with chest pain, hypotension, clear lung fields, elevated JVP, and Kussmaul's sign. ECG shows ST elevation in inferior leads (II, III, aVF) with ST elevation in V1 > V3 and ST elevation in V4R (right-sided leads) — indicating RV involvement. RV infarction occurs in ~30% of inferior MIs (usually RCA occlusion). RV is preload-dependent — nitroglycerin and morphine can cause dangerous hypotension because they reduce preload. Treatment: AVOID nitrates and diuretics (reduce preload → worsen RV output). Give IV fluids aggressively to maintain RV preload. Aspirin, P2Y12 inhibitor, anticoagulation. REPERFUSION: emergent PCI (preferred) or fibrinolysis. If hypotensive despite fluids: dobutamine (inotrope). Atropine for bradycardia. Admit to CCU.",
+  "hpi_narrative": "{{patient_name}} presents with chest pain, hypotension, clear lung fields, elevated JVP, and Kussmaul's sign. ECG shows ST elevation in inferior leads (II, III, aVF) with ST elevation in V1 > V3 and ST elevation in V4R (right-sided leads) — indicating RV involvement. RV infarction occurs in ~30% of inferior MIs (usually RCA occlusion). RV is preload-dependent — nitroglycerin and morphine can cause dangerous hypotension because they reduce preload. Treatment: AVOID nitrates and diuretics (reduce preload → worsen RV output). Give IV fluids aggressively to maintain RV preload. Aspirin, P2Y12 inhibitor, anticoagulation. REPERFUSION: emergent PCI (preferred) or fibrinolysis. If hypotensive despite fluids: dobutamine (inotrope). Atropine for bradycardia. Admit to CCU.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My chest hurts a lot.",
-    "history": "I felt a tightness in my chest. It came on suddenly.",
-    "pain": "It feels like a heavy weight on my chest."
+    "chief_complaint": "Chest pain, hypotension, clear lungs, elevated JVP",
+    "history": "{{patient_name}} presents with chest pain, hypotension, clear lung fields, elevated JVP, and Kussmaul's sign. ECG shows ST elevation in inferior leads (II, III, aVF) with ST elevation in V1 > V3 and …",
+    "pain": "Chest pain, hypotension, clear lungs, elevated JVP"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "This case illustrates that patients with chest pain can have a variety of presentations, and it is important to recognize the potential for serious conditions such as myocardial infarction. The importance of timely intervention cannot be overstated, as delays can lead to significant morbidity and mortality. In this case, the patient presented with silent ischemia, which can be particularly challenging to diagnose. It is crucial to maintain a high index of suspicion and to utilize appropriate diagnostic tools to ensure timely treatment.",
+  "ccs_category": "Cardiology",
+  "chief_complaint": "Chest pain, hypotension, clear lungs, elevated JVP",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exam and/or patient updates: General Appearance, Skin, Heart, Lungs, Abdomen, Extremities, Neurological, and Mental Status.",
-    "Ordered: Cardiac enzymes, serum",
-    "Ordered: Echocardiography",
-    "Ordered: Troponin"
+    {
+      "label": "ECG with right-sided leads (V4R)",
+      "type": "correctlyOrdered",
+      "finding": "Inferior STEMI + V4R elevation = RV infarction.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "IV fluids (aggressive)",
+      "type": "correctlyOrdered",
+      "finding": "RV is preload-dependent. AVOID nitrates/diuretics.",
+      "aliases": [
+        "IVF"
+      ]
+    },
+    {
+      "label": "Aspirin + P2Y12 + Anticoagulation",
+      "type": "correctlyOrdered",
+      "finding": "Standard ACS antiplatelet.",
+      "aliases": [
+        "ASA",
+        "DAPT"
+      ]
+    },
+    {
+      "label": "Emergent PCI",
+      "type": "correctlyOrdered",
+      "finding": "Reperfusion.",
+      "aliases": [
+        "PCI",
+        "Cath"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "ECG with right-sided leads (V4R)",
+    "IV fluids (aggressive)",
+    "Aspirin + P2Y12 + Anticoagulation",
+    "Emergent PCI"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Right Ventricular Myocardial Infarction."
 }

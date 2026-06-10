@@ -1,60 +1,474 @@
 {
   "id": 25,
-  "topic": "Semivoluntary Pull - Pediatric",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Generalized Pain",
+  "title": "Generalized Pain",
+  "diagnosis": "Sickle Cell Anemia with Acute Chest Syndrome and Pneumonia",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Family Defined",
-    "Vitals Ordered",
-    "History Obtained",
-    "Physical Exam",
-    "Correctly Documented",
-    "Additional Testing"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Breasts",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Lymph Nodes",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Rectal",
+    "Physical Exam: Skin",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Genitalia",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    {
+      "order": "Peripheral smear, blood",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Shows sickled cells. Hb electrophoresis is REQUIRED — smear alone insufficient for definitive diagnosis."
+    },
+    "Hemoglobin electrophoresis",
+    "Chest X-ray",
+    "Pulse oximetry",
+    "Urinalysis",
+    "Bacterial culture, blood",
+    "PT/PTT / INR",
+    "BMP / CMP / LFTs",
+    "Oxygen",
+    "IV fluids (NS / LR / D5NS / D5½NS)",
+    "IV opioids (Morphine / Fentanyl / Hydromorphone)",
+    "Type and screen",
+    "Hydroxyurea",
+    "IV Ceftriaxone / Cefotaxime (CAP treatment)",
+    "Folic acid",
+    "Penicillin V prophylaxis",
+    "Consult, pediatric hematology/oncology",
+    "PRBC transfusion / Exchange transfusion",
+    {
+      "order": "IV access",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Good practice."
+    },
+    "Medication compliance counseling",
+    "Meningococcal vaccine"
   ],
   "should_avoid": [
-    "Unnecessary Medications"
+    "Hemoglobin electrophoresis not ordered (smear only)"
   ],
   "rationale": {
-    "Family Defined": "Appropriate CCS order for this diagnosis: Family Defined.",
-    "Vitals Ordered": "Vital signs establish baseline stability before further orders.",
-    "History Obtained": "Appropriate CCS order for this diagnosis: History Obtained.",
-    "Physical Exam": "Appropriate CCS order for this diagnosis: Physical Exam.",
-    "Correctly Documented": "Appropriate CCS order for this diagnosis: Correctly Documented.",
-    "Additional Testing": "Appropriate CCS order for this diagnosis: Additional Testing.",
-    "Unnecessary Medications": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Physical Exam: General Appearance": "Full exam — pain all over.",
+    "Physical Exam: Breasts": "Full exam.",
+    "Physical Exam: Heart / Cardiovascular": "Full exam.",
+    "Physical Exam: Chest / Lungs": "Respiratory distress — lung exam.",
+    "Physical Exam: Abdomen": "Full exam — assess for splenomegaly.",
+    "Physical Exam: Lymph Nodes": "Full exam.",
+    "Physical Exam: Neuro / Psych": "Full exam.",
+    "Physical Exam: Rectal": "Full exam.",
+    "Physical Exam: Skin": "Full exam.",
+    "Physical Exam: Extremities / Spine": "Pain all over — exam extremities. Dactylitis possible.",
+    "Physical Exam: Genitalia": "Full exam.",
+    "Physical Exam: HEENT / Neck": "Full exam.",
+    "CBC with differential": "Anemia present. Leukocytosis from infection.",
+    "Peripheral smear, blood": "Shows sickled cells. Hb electrophoresis is REQUIRED — smear alone insufficient for definitive diagnosis.",
+    "Hemoglobin electrophoresis": "REQUIRED for diagnosis. Differentiates HbSS from thalassemias and other hemoglobinopathies. HbS confirmed.",
+    "Chest X-ray": "Sickle cell patients prone to infection — screen. May show infiltrates (pneumonia/ACS).",
+    "Pulse oximetry": "ACS vs pulmonary infection — oxygenation guides management.",
+    "Urinalysis": "Fever + pain — UA for GU source.",
+    "Bacterial culture, blood": "SIRS criteria met — blood cultures before antibiotics.",
+    "PT/PTT / INR": "Low Hb — rule out coagulopathy as cause.",
+    "BMP / CMP / LFTs": "Screening.",
+    "Oxygen": "Low SpO2 — supplemental O2.",
+    "IV fluids (NS / LR / D5NS / D5½NS)": "Dehydration precipitates sickling — IV fluids promptly.",
+    "IV opioids (Morphine / Fentanyl / Hydromorphone)": "Sickle cell crisis is incredibly painful — pain medication is essential.",
+    "Type and screen": "Will likely need transfusion — type and screen pre-emptively.",
+    "Hydroxyurea": "Stimulates fetal hemoglobin (HbF) production — improves symptoms long-term.",
+    "IV Ceftriaxone / Cefotaxime (CAP treatment)": "Community-acquired pneumonia — IV cephalosporin. Blood culture shows H. influenzae B.",
+    "Folic acid": "Supports erythropoiesis — standard in sickle cell disease.",
+    "Penicillin V prophylaxis": "Penicillin prophylaxis for encapsulated organisms. Lifelong if history of severe infection (H. influenzae). Debate about stopping at age 5 without infection history.",
+    "Consult, pediatric hematology/oncology": "New diagnosis — hematology for disease education and ongoing management.",
+    "PRBC transfusion / Exchange transfusion": "ACS with hypoxia unresponsive to O2 — transfusion to dilute HbS. Goal HbS <30%.",
+    "IV access": "Good practice.",
+    "Medication compliance counseling": "Essential to prevent future crises.",
+    "Meningococcal vaccine": "Functional asplenia → vulnerable to encapsulated organisms. Give early (normally age 11-12).",
+    "Hemoglobin electrophoresis not ordered (smear only)": "Peripheral smear suggestive but NOT definitive. Hb electrophoresis is REQUIRED to differentiate HbSS from thalassemias and other hemoglobinopathies. Points deducted if not done."
   },
-  "hpi": "This case highlights the importance of thorough history taking and physical examination in pediatric patients. It emphasizes the need for appropriate documentation and the avoidance of unnecessary interventions.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a 6-year-old boy with previously undiagnosed sickle cell disease (HbSS) who presents with generalized body pain, fever, and respiratory distress consistent with acute vaso-occlusive crisis complicated by acute chest syndrome and lobar pneumonia (H. influenzae B). CBC shows anemia. Peripheral smear demonstrates sickled cells. Hemoglobin electrophoresis is REQUIRED for definitive diagnosis — it differentiates HbSS from other thalassemias. Sickle cell disease is autosomal recessive: single amino acid substitution (valine for glutamic acid) on beta-globin chain → HbS. Does not present before 6 months due to protective HbF. Patients are functionally asplenic by age 8 from repeated splenic infarction → susceptible to encapsulated organisms (S. pneumoniae, H. influenzae B, Salmonella). Management: IV fluids (dehydration precipitates sickling), IV opioids (morphine) for severe pain, oxygen for hypoxia, IV ceftriaxone (CAP treatment), blood transfusion if acute chest syndrome with hypoxia unresponsive to O2. Hydroxyurea stimulates HbF production. Penicillin prophylaxis (lifelong if severe infection history). Consult pediatric hematology. Admit to inpatient. Meningococcal vaccine early (asplenia risk).",
+  "hpi_narrative": "{{patient_name}} is a 6-year-old boy with previously undiagnosed sickle cell disease (HbSS) who presents with generalized body pain, fever, and respiratory distress consistent with acute vaso-occlusive crisis complicated by acute chest syndrome and lobar pneumonia (H. influenzae B). CBC shows anemia. Peripheral smear demonstrates sickled cells. Hemoglobin electrophoresis is REQUIRED for definitive diagnosis — it differentiates HbSS from other thalassemias. Sickle cell disease is autosomal recessive: single amino acid substitution (valine for glutamic acid) on beta-globin chain → HbS. Does not present before 6 months due to protective HbF. Patients are functionally asplenic by age 8 from repeated splenic infarction → susceptible to encapsulated organisms (S. pneumoniae, H. influenzae B, Salmonella). Management: IV fluids (dehydration precipitates sickling), IV opioids (morphine) for severe pain, oxygen for hypoxia, IV ceftriaxone (CAP treatment), blood transfusion if acute chest syndrome with hypoxia unresponsive to O2. Hydroxyurea stimulates HbF production. Penicillin prophylaxis (lifelong if severe infection history). Consult pediatric hematology. Admit to inpatient. Meningococcal vaccine early (asplenia risk).",
+  "physical_exam": [
+    [
+      "General",
+      "In severe pain, febrile, fatigued."
+    ],
+    [
+      "Cardiovascular",
+      "Tachycardic (pain, anemia, infection)."
+    ],
+    [
+      "Respiratory",
+      "Dyspneic — acute chest syndrome with pneumonia."
+    ],
+    [
+      "Skin",
+      "Pallor from anemia. Dactylitis possible (hand-foot syndrome)."
+    ],
+    [
+      "Musculoskeletal",
+      "Generalized pain — vaso-occlusive crisis."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I was really scared when I came in. I didn't know what was happening.",
-    "history": "I felt weak and dizzy. My parents were worried.",
-    "pain": "It hurt a lot in my stomach."
+    "chief_complaint": "Generalized pain, fever, respiratory distress, fatigue",
+    "history": "{{patient_name}} is a 6-year-old boy with previously undiagnosed sickle cell disease (HbSS) who presents with generalized body pain, fever, and respiratory distress consistent with acute vaso-occlusi…",
+    "pain": "Generalized pain, fever, respiratory distress, fatigue"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "This case highlights the importance of thorough history taking and physical examination in pediatric patients. It emphasizes the need for appropriate documentation and the avoidance of unnecessary interventions.",
+  "ccs_category": "Pediatrics / Hematology-Oncology",
+  "chief_complaint": "Generalized pain, fever, respiratory distress, fatigue",
+  "case_summary": "New diagnosis sickle cell disease (HbSS) at age 6. Vaso-occlusive crisis + acute chest syndrome + H. influenzae pneumonia. IVF + morphine + O2 + IV ceftriaxone + hydroxyurea + penicillin. Transfusion for ACS. Admit.",
+  "decoys": [
+    {
+      "label": "Hemoglobin electrophoresis not ordered (smear only)",
+      "reason_wrong": "Peripheral smear suggestive but NOT definitive. Hb electrophoresis is REQUIRED to differentiate HbSS from thalassemias and other hemoglobinopathies. Points deducted if not done."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Family Defined",
-    "Vitals Ordered",
-    "History Obtained",
-    "Physical Exam",
-    "Correctly Documented"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Full exam — pain all over.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Breasts",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Breast Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Respiratory distress — lung exam.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Full exam — assess for splenomegaly.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Lymph Nodes",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Lymph Node Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Rectal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Skin",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Skin Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "type": "correctlyOrdered",
+      "finding": "Pain all over — exam extremities. Dactylitis possible.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Genitalia",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Genital Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Anemia present. Leukocytosis from infection.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Peripheral smear, blood",
+      "type": "optional",
+      "finding": "Shows sickled cells. Hb electrophoresis is REQUIRED — smear alone insufficient for definitive diagnosis.",
+      "aliases": [
+        "Peripheral smear"
+      ]
+    },
+    {
+      "label": "Hemoglobin electrophoresis",
+      "type": "shouldHaveOrdered",
+      "finding": "REQUIRED for diagnosis. Differentiates HbSS from thalassemias and other hemoglobinopathies. HbS confirmed.",
+      "aliases": [
+        "Hb electrophoresis",
+        "Sickle cell prep"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "shouldHaveOrdered",
+      "finding": "Sickle cell patients prone to infection — screen. May show infiltrates (pneumonia/ACS).",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "shouldHaveOrdered",
+      "finding": "ACS vs pulmonary infection — oxygenation guides management.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "correctlyOrdered",
+      "finding": "Fever + pain — UA for GU source.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Bacterial culture, blood",
+      "type": "correctlyOrdered",
+      "finding": "SIRS criteria met — blood cultures before antibiotics.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "PT/PTT / INR",
+      "type": "correctlyOrdered",
+      "finding": "Low Hb — rule out coagulopathy as cause.",
+      "aliases": [
+        "Coags"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "Oxygen",
+      "type": "correctlyOrdered",
+      "finding": "Low SpO2 — supplemental O2.",
+      "aliases": [
+        "O2"
+      ]
+    },
+    {
+      "label": "IV fluids (NS / LR / D5NS / D5½NS)",
+      "type": "correctlyOrdered",
+      "finding": "Dehydration precipitates sickling — IV fluids promptly.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "IV opioids (Morphine / Fentanyl / Hydromorphone)",
+      "type": "correctlyOrdered",
+      "finding": "Sickle cell crisis is incredibly painful — pain medication is essential.",
+      "aliases": [
+        "Morphine",
+        "Dilaudid"
+      ]
+    },
+    {
+      "label": "Type and screen",
+      "type": "correctlyOrdered",
+      "finding": "Will likely need transfusion — type and screen pre-emptively.",
+      "aliases": [
+        "Blood type"
+      ]
+    },
+    {
+      "label": "Hydroxyurea",
+      "type": "shouldHaveOrdered",
+      "finding": "Stimulates fetal hemoglobin (HbF) production — improves symptoms long-term.",
+      "aliases": [
+        "Hydrea"
+      ]
+    },
+    {
+      "label": "IV Ceftriaxone / Cefotaxime (CAP treatment)",
+      "type": "shouldHaveOrdered",
+      "finding": "Community-acquired pneumonia — IV cephalosporin. Blood culture shows H. influenzae B.",
+      "aliases": [
+        "Ceftriaxone",
+        "Rocephin"
+      ]
+    },
+    {
+      "label": "Folic acid",
+      "type": "shouldHaveOrdered",
+      "finding": "Supports erythropoiesis — standard in sickle cell disease.",
+      "aliases": [
+        "Folate"
+      ]
+    },
+    {
+      "label": "Penicillin V prophylaxis",
+      "type": "shouldHaveOrdered",
+      "finding": "Penicillin prophylaxis for encapsulated organisms. Lifelong if history of severe infection (H. influenzae). Debate about stopping at age 5 without infection history.",
+      "aliases": [
+        "Penicillin"
+      ]
+    },
+    {
+      "label": "Consult, pediatric hematology/oncology",
+      "type": "correctlyOrdered",
+      "finding": "New diagnosis — hematology for disease education and ongoing management.",
+      "aliases": [
+        "Heme/Onc consult"
+      ]
+    },
+    {
+      "label": "PRBC transfusion / Exchange transfusion",
+      "type": "shouldHaveOrdered",
+      "finding": "ACS with hypoxia unresponsive to O2 — transfusion to dilute HbS. Goal HbS <30%.",
+      "aliases": [
+        "Blood transfusion"
+      ]
+    },
+    {
+      "label": "IV access",
+      "type": "optional",
+      "finding": "Good practice.",
+      "aliases": [
+        "IV"
+      ]
+    },
+    {
+      "label": "Medication compliance counseling",
+      "type": "shouldHaveOrdered",
+      "finding": "Essential to prevent future crises.",
+      "aliases": [
+        "Medication adherence"
+      ]
+    },
+    {
+      "label": "Meningococcal vaccine",
+      "type": "shouldHaveOrdered",
+      "finding": "Functional asplenia → vulnerable to encapsulated organisms. Give early (normally age 11-12).",
+      "aliases": [
+        "Meningitis vaccine"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Breasts",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Lymph Nodes",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Rectal",
+    "Physical Exam: Skin",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Genitalia",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    {
+      "order": "Peripheral smear, blood",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Shows sickled cells. Hb electrophoresis is REQUIRED — smear alone insufficient for definitive diagnosis."
+    },
+    "Hemoglobin electrophoresis",
+    "Chest X-ray",
+    "Pulse oximetry",
+    "Urinalysis",
+    "Bacterial culture, blood",
+    "PT/PTT / INR",
+    "BMP / CMP / LFTs",
+    "Oxygen",
+    "IV fluids (NS / LR / D5NS / D5½NS)",
+    "IV opioids (Morphine / Fentanyl / Hydromorphone)",
+    "Type and screen",
+    "Hydroxyurea",
+    "IV Ceftriaxone / Cefotaxime (CAP treatment)",
+    "Folic acid",
+    "Penicillin V prophylaxis",
+    "Consult, pediatric hematology/oncology",
+    "PRBC transfusion / Exchange transfusion",
+    {
+      "order": "IV access",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Good practice."
+    },
+    "Medication compliance counseling",
+    "Meningococcal vaccine"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Sickle Cell Anemia with Acute Chest Syndrome and Pneumonia."
 }

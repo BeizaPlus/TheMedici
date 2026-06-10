@@ -1,65 +1,77 @@
 {
   "id": 181,
   "topic": "Nocturnal Enuresis",
-  "diagnosis": "Not specified",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Nocturnal Enuresis",
+  "diagnosis": "Severe Obstructive Sleep Apnea with Secondary Nocturnal Enuresis",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Obtain a thorough history and physical examination",
-    "Urinalysis (to rule out underlying UTI or other renal issues)",
-    "order1",
-    "Oxygen",
-    "IV access ×2",
-    "Monitor",
-    "Pulse ox"
+    "Polysomnography",
+    "ENT evaluation",
+    "Adenotonsillectomy / CPAP"
   ],
-  "should_avoid": [
-    "order1",
-    "Direct imaging studies like MRI or CT scan, as they are not indicated for initial evaluation of Nocturnal Enuresis"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Obtain a thorough history and physical examination": "Appropriate CCS order for Not specified: Obtain a thorough history and physical examination.",
-    "Urinalysis (to rule out underlying UTI or other renal issues)": "Appropriate CCS order for Not specified: Urinalysis (to rule out underlying UTI or other renal issues).",
-    "order1": "CCS review: avoid this order for Not specified — it does not change acute management.",
-    "Oxygen": "Appropriate CCS order for Not specified: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for Not specified: IV access ×2.",
-    "Monitor": "Appropriate CCS order for Not specified: Monitor.",
-    "Pulse ox": "Pulse oximetry documents oxygenation in the initial assessment.",
-    "Direct imaging studies like MRI or CT scan, as they are not indicated for initial evaluation of Nocturnal Enuresis": "Advanced imaging is not indicated early for Not specified when the diagnosis is clinical."
+    "Polysomnography": "Severe OSA (AHI >30).",
+    "ENT evaluation": "Assess for adenotonsillar hypertrophy.",
+    "Adenotonsillectomy / CPAP": "Treat underlying OSA → enuresis resolves."
   },
-  "hpi": "Not specified",
+  "hpi": "{{patient_name}} presents with primary or secondary nocturnal enuresis (bedwetting), loud snoring, restless sleep, daytime fatigue, and behavioral issues. Severe OSA causes nocturnal enuresis through: (1) increased intra-abdominal pressure during apnea → increased venous return → ANP/BNP release → increased nocturnal urine production; (2) disrupted sleep architecture → decreased arousal to bladder distention. Polysomnography confirms severe OSA (AHI >30). Treatment: CPAP or adenotonsillectomy if large tonsils/adenoids. Treating the OSA often resolves the enuresis. Do NOT treat enuresis in isolation without evaluating for sleep-disordered breathing.",
+  "hpi_narrative": "{{patient_name}} presents with primary or secondary nocturnal enuresis (bedwetting), loud snoring, restless sleep, daytime fatigue, and behavioral issues. Severe OSA causes nocturnal enuresis through: (1) increased intra-abdominal pressure during apnea → increased venous return → ANP/BNP release → increased nocturnal urine production; (2) disrupted sleep architecture → decreased arousal to bladder distention. Polysomnography confirms severe OSA (AHI >30). Treatment: CPAP or adenotonsillectomy if large tonsils/adenoids. Treating the OSA often resolves the enuresis. Do NOT treat enuresis in isolation without evaluating for sleep-disordered breathing.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — nocturnal enuresis. I'm really scared.",
-    "history": "It's been getting worse. They said something about not specified. Not specified...",
-    "pain": "This nocturnal enuresis won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Nocturnal enuresis, loud snoring, daytime fatigue",
+    "history": "{{patient_name}} presents with primary or secondary nocturnal enuresis (bedwetting), loud snoring, restless sleep, daytime fatigue, and behavioral issues. Severe OSA causes nocturnal enuresis through…",
+    "pain": "Nocturnal enuresis, loud snoring, daytime fatigue"
   },
-  "ccs_category": null,
-  "case_summary": "Not specified",
+  "ccs_category": "Pediatrics / Sleep Medicine",
+  "chief_complaint": "Nocturnal enuresis, loud snoring, daytime fatigue",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Obtain a thorough history and physical examination",
-    "Urinalysis (to rule out underlying UTI or other renal issues)",
-    "order1",
-    "Oxygen",
-    "IV access ×2",
-    "Monitor",
-    "Pulse ox"
+    {
+      "label": "Polysomnography",
+      "type": "correctlyOrdered",
+      "finding": "Severe OSA (AHI >30).",
+      "aliases": [
+        "Sleep study"
+      ]
+    },
+    {
+      "label": "ENT evaluation",
+      "type": "correctlyOrdered",
+      "finding": "Assess for adenotonsillar hypertrophy.",
+      "aliases": [
+        "ENT"
+      ]
+    },
+    {
+      "label": "Adenotonsillectomy / CPAP",
+      "type": "correctlyOrdered",
+      "finding": "Treat underlying OSA → enuresis resolves.",
+      "aliases": [
+        "T&A",
+        "CPAP"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Polysomnography",
+    "ENT evaluation",
+    "Adenotonsillectomy / CPAP"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Severe Obstructive Sleep Apnea with Secondary Nocturnal Enuresis."
 }

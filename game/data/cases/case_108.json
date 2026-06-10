@@ -1,9 +1,10 @@
 {
   "id": 108,
   "topic": "Abdominal Pain",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Abdominal Pain",
+  "diagnosis": "Acute Abdomen (undetermined etiology)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Immediate abdominal examination and resuscitation",
     "Laboratory tests: Complete Blood Count (CBC), Chemistry panel, Lipase, Amylase",
@@ -18,36 +19,52 @@
     "Unnecessary surgeries until a definitive diagnosis is made"
   ],
   "rationale": {
-    "Immediate abdominal examination and resuscitation": "Appropriate CCS order for this diagnosis: Immediate abdominal examination and resuscitation.",
-    "Laboratory tests: Complete Blood Count (CBC), Chemistry panel, Lipase, Amylase": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Imaging: Non-contrast CT Abdomen/Pelvis or Ultrasound Abdomen": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain.",
-    "Consults: General Surgery and Emergency Medicine": "Appropriate CCS order for this diagnosis: Consults: General Surgery and Emergency Medicine.",
-    "Further diagnostic workup based on imaging results": "Appropriate CCS order for this diagnosis: Further diagnostic workup based on imaging results.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
-    "Placement of patient in appropriate location (ER → ICU vs floor)": "CCS case progression step for this scenario.",
-    "Unnecessary surgeries until a definitive diagnosis is made": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Immediate abdominal examination and resuscitation": "To stabilize the patient and assess vital signs, level of consciousness, and physical findings.",
+    "Laboratory tests": "To check for leukocytosis, metabolic acidosis, or elevated liver enzymes, which may indicate an inflammatory process.",
+    "Imaging": "To help identify potential causes such as appendicitis, cholecystitis, mesenteric ischemia, or perforated ulcer.",
+    "Consults": "To ensure appropriate management and intervention by specialists experienced in handling acute abdominal conditions.",
+    "Unnecessary surgeries": "Avoiding surgery without a definitive diagnosis helps prevent unnecessary procedures and potential complications.",
+    "Oxygen": "To provide adequate oxygenation for the patient experiencing abdominal pain.",
+    "IV access ×2": "For fluid resuscitation and potential administration of medications.",
+    "Placement of patient in appropriate location (ER → ICU vs floor)": "Based on the nature and severity of the abdominal pain."
   },
-  "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — abdominal pain. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This abdominal pain won't let up and I'm afraid something bad is happening."
-  },
+  "hpi": "Initial History\n\nReason(s) for visit: Abdominal Pain\nHistory of present Illness:\nA 22-year-old female presents to the emergency room with abdominal pain, lethargy, and vomiting x2 days. Her vomiting is non-bloody. Her abdominal pain is diffuse, which she rates as a 6/10. She also claims to have had an increased appetite prior to having these symptoms. She also claims that she’s been developing blurry vision, dizziness, and drowsiness. She also states that she is having increased urination\n\nPast Medical History\n\nPast Medical History: None\nCurrent medications: Birth control\nAllergies: None\nVaccinations: The patient received her childhood vaccinations. She has never received any HPV vaccines.\nWomen's health: The patient cannot remember when her last pap smear was done.\nFamily History: The patient has a brother with Diabetes. \n\nSocial History:\nMarital/Family: Single. She is an undergraduate student at a local university.\nPersonal habits: The patient denies smoking. She drinks socially. She smoked marijuana \"a few times\" with her friends. She denies other illicit drugs or misuse of medications. Occupation/educational: She is a student at a local university\nRecreational: She plays the piano and sings in a band. \n\nReview of systems:\nGeneral: See HPI\nSkin: Her skin is dry. \nHEENT: Her throat is dry. \nCardiorespiratory: She feels that her heart is beating faster.\nGastrointestinal: See HPI\nGenitourinary: See HPI\nNeuropsychiatric: See HPI\n\n--- Chart tabs ---\n\n* Chart: Progress Notes → presentation_4_Abdominal_Pain_chart_Progress_Notes.png\n* Chart: Vital Signs → presentation_4_Abdominal_Pain_chart_Vital_Signs.png",
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "presents to the emergency room with abdominal pain, lethargy, and vomiting x2 days."
+    ],
+    [
+      "Cardiovascular",
+      "HR 106; BP 114/79."
+    ],
+    [
+      "Respiratory",
+      "RR 20; SpO₂ 96%."
+    ],
+    [
+      "Abdomen",
+      "Abdominal tenderness pattern matches history; no rigid abdomen documented yet."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": "Initial Vital Signs Day 1 @ 18:00 Temperature: 37.2 C (98.9 degrees F) Pulse: 106 beat/min, Tachycardic Respiratory rate: 20 /minute Blood pressure, systolic: 114 mm Hg Blood pressure, diastolic: 79 mm Hg Height: 160.0 cm (63.0 in) Weight: 80.5 kg (177.4 lb) Body Mass Index: 31.4 kg/m2",
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Immediate abdominal examination and resuscitation",
     "Laboratory tests: Complete Blood Count (CBC), Chemistry panel, Lipase, Amylase",
     "Imaging: Non-contrast CT Abdomen/Pelvis or Ultrasound Abdomen",
@@ -57,11 +74,11 @@
     "IV access ×2",
     "Placement of patient in appropriate location (ER → ICU vs floor)"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

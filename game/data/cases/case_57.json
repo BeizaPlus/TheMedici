@@ -1,68 +1,153 @@
 {
   "id": 57,
-  "topic": "Abdominal Pain - Pediatrics",
+  "topic": "Abdominal Pain",
+  "title": "Abdominal Pain",
   "diagnosis": "Intussusception",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "CBC with differential",
-    "X-ray, abdomen, acute series: KUB, abdomen, AP",
-    "Lactate metabolic profile / Comprehensive metabolic profile / Liver function panel",
-    "Saline solution, normal / Lactated Ringer solution / Dextrose 5% in lactated Ringer solution / Dextrose 5% in normal saline solution",
-    "Physical Exam: Lungs",
-    "Physical Exam: Heart / Cardiovascular",
-    "U.S. abdomen / Intussusception reduction, imaging guided",
-    "Barium enema / Intussusception reduction, imaging guided / Barium / Enema without contrast"
+    "Physical Exam: Abdomen",
+    "Abdominal ultrasound",
+    "Abdominal X-ray",
+    "CBC",
+    "BMP",
+    "IV fluids (NS/LR bolus)",
+    "NG tube",
+    "Air/contrast enema",
+    "Pediatric surgery consult"
   ],
-  "should_avoid": [
-    "NPO / Nothing by mouth except ice chips",
-    "Nasogastric tube with feeding strategy / Nasogastric tube with suction"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for abdominal pain - pediatrics.",
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Intussusception.",
-    "X-ray, abdomen, acute series: KUB, abdomen, AP": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain - pediatrics.",
-    "Lactate metabolic profile / Comprehensive metabolic profile / Liver function panel": "Laboratory testing when systemic illness or severity warrants labs in Intussusception.",
-    "Saline solution, normal / Lactated Ringer solution / Dextrose 5% in lactated Ringer solution / Dextrose 5% in normal saline solution": "Appropriate CCS order for Intussusception: Saline solution, normal / Lactated Ringer solution / Dextrose 5% in lactated Ringer solution / Dextrose 5% in normal saline solution.",
-    "Physical Exam: Lungs": "Evaluate chest and lungs as part of the initial exam for abdominal pain - pediatrics.",
-    "Physical Exam: Heart / Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to abdominal pain - pediatrics.",
-    "U.S. abdomen / Intussusception reduction, imaging guided": "Abdominal exam helps exclude alternative causes in a patient with abdominal pain - pediatrics.",
-    "Barium enema / Intussusception reduction, imaging guided / Barium / Enema without contrast": "Appropriate CCS order for Intussusception: Barium enema / Intussusception reduction, imaging guided / Barium / Enema without contrast.",
-    "NPO / Nothing by mouth except ice chips": "CCS review: avoid this order for Intussusception — it does not change acute management.",
-    "Nasogastric tube with feeding strategy / Nasogastric tube with suction": "Advanced imaging is not indicated early for Intussusception when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Episodic pain — may appear well between episodes.",
+    "Physical Exam: Abdomen": "Sausage-shaped mass in RLQ. Episodic pain with drawing up of knees.",
+    "Abdominal ultrasound": "Target/doughnut sign. Diagnostic test of choice.",
+    "Abdominal X-ray": "Rule out perforation (free air) before enema. May show signs of obstruction.",
+    "CBC": "Screening.",
+    "BMP": "Electrolytes, hydration.",
+    "IV fluids (NS/LR bolus)": "Resuscitation. NPO.",
+    "NG tube": "Decompression.",
+    "Air/contrast enema": "Therapeutic reduction. 80-90% success. Do NOT attempt if perforation.",
+    "Pediatric surgery consult": "If enema fails or perforation → surgical reduction."
   },
-  "hpi": "Differential: Metabolic acidosis, Intestinal obstruction, Gastroenteritis, Sepsis, Intussusception. This patient has been vomiting lately due to his bowel obstruction and is showing signs of dehydration (lethargy), so he needs to be resuscitated with fluids.",
+  "hpi": "{{patient_name}} is a child (commonly 6 months - 3 years) presenting with acute severe colicky abdominal pain occurring in episodes, with drawing up of knees, and currant jelly stools (blood and mucus). Between episodes the child may appear normal. A sausage-shaped mass may be palpable in the RLQ (intussusception of terminal ileum into cecum — most common type). Intussusception is the most common cause of intestinal obstruction in children <2 years. Peak incidence 6-12 months. Often preceded by viral illness (rotavirus, adenovirus). Diagnostic test of choice: abdominal ultrasound (target sign/doughnut sign on transverse view). Treatment: therapeutic air or contrast enema (reduces the intussusception in 80-90%). Do NOT attempt enema if perforation (free air on X-ray). Surgical reduction if enema fails or perforation present. NPO and NG tube for decompression. IV fluids for resuscitation.",
+  "hpi_narrative": "{{patient_name}} is a child (commonly 6 months - 3 years) presenting with acute severe colicky abdominal pain occurring in episodes, with drawing up of knees, and currant jelly stools (blood and mucus). Between episodes the child may appear normal. A sausage-shaped mass may be palpable in the RLQ (intussusception of terminal ileum into cecum — most common type). Intussusception is the most common cause of intestinal obstruction in children <2 years. Peak incidence 6-12 months. Often preceded by viral illness (rotavirus, adenovirus). Diagnostic test of choice: abdominal ultrasound (target sign/doughnut sign on transverse view). Treatment: therapeutic air or contrast enema (reduces the intussusception in 80-90%). Do NOT attempt enema if perforation (free air on X-ray). Surgical reduction if enema fails or perforation present. NPO and NG tube for decompression. IV fluids for resuscitation.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm scared because my stomach hurts a lot. I feel really weak.",
-    "history": "I have been throwing up and my belly feels really bad.",
-    "pain": "It hurts so much in my belly."
+    "chief_complaint": "Colicky abdominal pain, currant jelly stools",
+    "history": "{{patient_name}} is a child (commonly 6 months - 3 years) presenting with acute severe colicky abdominal pain occurring in episodes, with drawing up of knees, and currant jelly stools (blood and mucu…",
+    "pain": "Colicky abdominal pain, currant jelly stools"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "Differential: Metabolic acidosis, Intestinal obstruction, Gastroenteritis, Sepsis, Intussusception. This patient has been vomiting lately due to his bowel obstruction and is showing signs of dehydration (lethargy), so he needs to be resuscitated with fluids.",
+  "ccs_category": "Pediatrics / Pediatric Surgery",
+  "chief_complaint": "Colicky abdominal pain, currant jelly stools",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Episodic pain — may appear well between episodes.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Sausage-shaped mass in RLQ. Episodic pain with drawing up of knees.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Abdominal ultrasound",
+      "type": "correctlyOrdered",
+      "finding": "Target/doughnut sign. Diagnostic test of choice.",
+      "aliases": [
+        "Abd US"
+      ]
+    },
+    {
+      "label": "Abdominal X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Rule out perforation (free air) before enema. May show signs of obstruction.",
+      "aliases": [
+        "KUB"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "BMP",
+      "type": "correctlyOrdered",
+      "finding": "Electrolytes, hydration.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "IV fluids (NS/LR bolus)",
+      "type": "correctlyOrdered",
+      "finding": "Resuscitation. NPO.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "NG tube",
+      "type": "correctlyOrdered",
+      "finding": "Decompression.",
+      "aliases": [
+        "NG tube"
+      ]
+    },
+    {
+      "label": "Air/contrast enema",
+      "type": "correctlyOrdered",
+      "finding": "Therapeutic reduction. 80-90% success. Do NOT attempt if perforation.",
+      "aliases": [
+        "Enema reduction"
+      ]
+    },
+    {
+      "label": "Pediatric surgery consult",
+      "type": "correctlyOrdered",
+      "finding": "If enema fails or perforation → surgical reduction.",
+      "aliases": [
+        "Surgery consult"
+      ]
+    }
+  ],
+  "order_sets": [
     "Physical Exam: General Appearance",
-    "CBC with differential",
-    "X-ray, abdomen, acute series: KUB, abdomen, AP",
-    "Lactate metabolic profile / Comprehensive metabolic profile / Liver function panel"
+    "Physical Exam: Abdomen",
+    "Abdominal ultrasound",
+    "Abdominal X-ray",
+    "CBC",
+    "BMP",
+    "IV fluids (NS/LR bolus)",
+    "NG tube",
+    "Air/contrast enema",
+    "Pediatric surgery consult"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vitals are missing."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Intussusception."
 }

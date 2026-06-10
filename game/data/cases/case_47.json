@@ -1,9 +1,10 @@
 {
   "id": 47,
   "topic": "Chest Pain",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Chest Pain",
+  "diagnosis": "Acute Coronary Syndrome (ACS)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain electrocardiogram (ECG)",
     "Obtain cardiac enzymes (troponin and CK-MB)",
@@ -13,43 +14,60 @@
   ],
   "should_avoid": [],
   "rationale": {
-    "Obtain electrocardiogram (ECG)": "Appropriate CCS order for this diagnosis: Obtain electrocardiogram (ECG).",
-    "Obtain cardiac enzymes (troponin and CK-MB)": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to chest pain.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
-    "Glucose check": "Appropriate CCS order for this diagnosis: Glucose check."
+    "Obtain ECG": "To evaluate for signs of ischemia or arrhythmias",
+    "Obtain cardiac enzymes": "To assess myocardial injury in ACS",
+    "Oxygen": "Chest pain could indicate a variety of conditions, including cardiac issues that may require immediate oxygen therapy.",
+    "IV access ×2": "To administer necessary fluids and medications quickly.",
+    "Glucose check": "Hypoglycemia can cause symptoms similar to chest pain."
   },
-  "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — chest pain. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This chest pain won't let up and I'm afraid something bad is happening."
-  },
+  "hpi": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance’s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Chest Pain — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 120, tachycardic; BP 100/60."
+    ],
+    [
+      "Respiratory",
+      "RR 34, tachypneic; SpO₂ 96%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": "Initial Vital Signs Day 1 @ 16:00 Temperature: 37.0 C (98.6 degrees F) Pulse: 120 beats/min, Weak Respiratory rate: 34 /minute Blood pressure, systolic: 100 mm Hg Blood pressure, diastolic: 60 mm Hg Height: 183cm (72.0 in) Weight: 97.5 kg (215 lb) Body Mass Index: 29.1 kg/m2",
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain electrocardiogram (ECG)",
     "Obtain cardiac enzymes (troponin and CK-MB)",
     "Oxygen",
     "IV access ×2",
     "Glucose check"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

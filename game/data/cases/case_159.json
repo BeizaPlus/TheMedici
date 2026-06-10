@@ -1,50 +1,88 @@
 {
   "id": 159,
   "topic": "Abnormal Behavior",
-  "diagnosis": "Hepatitis B",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Abnormal Behavior",
+  "diagnosis": "Bipolar I Disorder (Manic Episode)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Hepatitis A",
-    "Hepatitis B",
-    "Hepatitis C"
+    "TSH / Tox screen / BMP",
+    "Lithium / Valproate",
+    "Olanzapine / Risperidone",
+    "Hospitalization (if severe/psychotic)"
   ],
-  "should_avoid": [
-    "Hepatitis A"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Hepatitis A": "CCS review: avoid this order for Hepatitis B — it does not change acute management.",
-    "Hepatitis B": "Appropriate CCS order for Hepatitis B: Hepatitis B.",
-    "Hepatitis C": "Appropriate CCS order for Hepatitis B: Hepatitis C."
+    "TSH / Tox screen / BMP": "Rule out medical/substance causes.",
+    "Lithium / Valproate": "Gold standard mood stabilizer. Monitor levels.",
+    "Olanzapine / Risperidone": "Atypical antipsychotic for acute mania.",
+    "Hospitalization (if severe/psychotic)": "Safety assessment."
   },
-  "hpi": "This case involves a patient who was administered Hepatitis B before Hepatitis A. While the first dose is important for immunity, the sequence of vaccinations should ideally be followed to ensure maximum protection against hepatitis and other related infections.",
+  "hpi": "{{patient_name}} presents with abnormally elevated/irritable mood for ≥1 week, grandiosity, decreased need for sleep, pressured speech, flight of ideas, distractibility, increased goal-directed activity/psychomotor agitation, and risky behaviors (spending, sexual indiscretions). Manic episode = marked functional impairment. Bipolar I = at least one manic episode (depression not required for diagnosis, though most have both). Must rule out: substance-induced (stimulants, steroids), medical (hyperthyroidism, Cushing's, CNS lesion, delirium). Treatment: acute mania — mood stabilizer (lithium — gold standard, valproate, carbamazepine) + atypical antipsychotic (olanzapine, risperidone, quetiapine). Lithium requires monitoring (levels 0.6-1.2, renal, thyroid). For severe/psychotic → hospitalization. Long-term: mood stabilizer maintenance, psychotherapy. Screen for suicide risk.",
+  "hpi_narrative": "{{patient_name}} presents with abnormally elevated/irritable mood for ≥1 week, grandiosity, decreased need for sleep, pressured speech, flight of ideas, distractibility, increased goal-directed activity/psychomotor agitation, and risky behaviors (spending, sexual indiscretions). Manic episode = marked functional impairment. Bipolar I = at least one manic episode (depression not required for diagnosis, though most have both). Must rule out: substance-induced (stimulants, steroids), medical (hyperthyroidism, Cushing's, CNS lesion, delirium). Treatment: acute mania — mood stabilizer (lithium — gold standard, valproate, carbamazepine) + atypical antipsychotic (olanzapine, risperidone, quetiapine). Lithium requires monitoring (levels 0.6-1.2, renal, thyroid). For severe/psychotic → hospitalization. Long-term: mood stabilizer maintenance, psychotherapy. Screen for suicide risk.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — abnormal behavior. I'm really scared.",
-    "history": "It's been getting worse. They said something about hepatitis b. This case involves a patient who was administered Hepatitis B before Hepatitis A...",
-    "pain": "This abnormal behavior won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Elevated mood, decreased sleep, pressured speech, grandiosity",
+    "history": "{{patient_name}} presents with abnormally elevated/irritable mood for ≥1 week, grandiosity, decreased need for sleep, pressured speech, flight of ideas, distractibility, increased goal-directed activ…",
+    "pain": "Elevated mood, decreased sleep, pressured speech, grandiosity"
   },
-  "ccs_category": null,
-  "case_summary": "This case involves a patient who was administered Hepatitis B before Hepatitis A. While the first dose is important for immunity, the sequence of vaccinations should ideally be followed to ensure maximum protection against hepatitis and other related infections.",
+  "ccs_category": "Psychiatry",
+  "chief_complaint": "Elevated mood, decreased sleep, pressured speech, grandiosity",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Hepatitis A",
-    "Hepatitis B"
+    {
+      "label": "TSH / Tox screen / BMP",
+      "type": "correctlyOrdered",
+      "finding": "Rule out medical/substance causes.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Lithium / Valproate",
+      "type": "correctlyOrdered",
+      "finding": "Gold standard mood stabilizer. Monitor levels.",
+      "aliases": [
+        "Lithium",
+        "Depakote"
+      ]
+    },
+    {
+      "label": "Olanzapine / Risperidone",
+      "type": "correctlyOrdered",
+      "finding": "Atypical antipsychotic for acute mania.",
+      "aliases": [
+        "Zyprexa"
+      ]
+    },
+    {
+      "label": "Hospitalization (if severe/psychotic)",
+      "type": "correctlyOrdered",
+      "finding": "Safety assessment.",
+      "aliases": [
+        "Admission"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "TSH / Tox screen / BMP",
+    "Lithium / Valproate",
+    "Olanzapine / Risperidone",
+    "Hospitalization (if severe/psychotic)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Bipolar I Disorder (Manic Episode)."
 }

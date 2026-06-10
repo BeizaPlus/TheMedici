@@ -1,53 +1,98 @@
 {
   "id": 149,
   "topic": "Chronic Diarrhea",
-  "diagnosis": "Acute Myocardial Ischemia",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Chronic Diarrhea",
+  "diagnosis": "Zollinger-Ellison Syndrome (Gastrinoma)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Aspirin 325mg",
-    "Atenolol 25 mg",
-    "Clopidogrel 75 mg",
-    "Tirofiban 2.5 mcg/kg/min"
+    "Fasting gastrin level",
+    "Secretin stimulation test",
+    "Octreoscan / CT / EUS",
+    "High-dose PPI",
+    "Surgical consult (resection)"
   ],
-  "should_avoid": [
-    "Magnesium Sulfate 324mg"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Aspirin 325mg": "Appropriate CCS order for Acute Myocardial Ischemia: Aspirin 325mg.",
-    "Atenolol 25 mg": "Appropriate CCS order for Acute Myocardial Ischemia: Atenolol 25 mg.",
-    "Clopidogrel 75 mg": "Appropriate CCS order for Acute Myocardial Ischemia: Clopidogrel 75 mg.",
-    "Tirofiban 2.5 mcg/kg/min": "Appropriate CCS order for Acute Myocardial Ischemia: Tirofiban 2.5 mcg/kg/min.",
-    "Magnesium Sulfate 324mg": "CCS review: avoid this order for Acute Myocardial Ischemia — it does not change acute management."
+    "Fasting gastrin level": "Markedly elevated >1000 pg/mL.",
+    "Secretin stimulation test": "Paradoxical gastrin increase = ZES.",
+    "Octreoscan / CT / EUS": "Tumor localization.",
+    "High-dose PPI": "Acid control.",
+    "Surgical consult (resection)": "Curative if localized."
   },
-  "hpi": "A patient presents with chest pain and is diagnosed with Acute Myocardial Ischemia (AMI). The review page shows that the healthcare provider should have ordered aspirin, atenolol, clopidogrel, and tirofiban to manage the condition. Magnesium sulfate was inappropriately ordered, and nitroglycerine should be avoided.",
+  "hpi": "{{patient_name}} presents with severe, refractory peptic ulcer disease, chronic watery diarrhea, abdominal pain, and GI bleeding. Multiple ulcers in atypical locations (distal duodenum, jejunum). ZES is caused by a gastrin-secreting neuroendocrine tumor (gastrinoma) — most commonly in the duodenum or pancreas → massive gastric acid hypersecretion → severe PUD and diarrhea (acid inactivates pancreatic enzymes + damages mucosa). Often associated with MEN1. Diagnosis: fasting serum gastrin level — markedly elevated (>1000 pg/mL or >10x normal). If borderline → secretin stimulation test (paradoxical increase in gastrin in ZES). Localize tumor: somatostatin receptor scintigraphy (Octreoscan), CT/MRI, EUS. Treatment: high-dose PPI (omeprazole, pantoprazole) to control acid hypersecretion. Surgical resection if localized. If metastatic or unresectable → long-term PPI + octreotide.",
+  "hpi_narrative": "{{patient_name}} presents with severe, refractory peptic ulcer disease, chronic watery diarrhea, abdominal pain, and GI bleeding. Multiple ulcers in atypical locations (distal duodenum, jejunum). ZES is caused by a gastrin-secreting neuroendocrine tumor (gastrinoma) — most commonly in the duodenum or pancreas → massive gastric acid hypersecretion → severe PUD and diarrhea (acid inactivates pancreatic enzymes + damages mucosa). Often associated with MEN1. Diagnosis: fasting serum gastrin level — markedly elevated (>1000 pg/mL or >10x normal). If borderline → secretin stimulation test (paradoxical increase in gastrin in ZES). Localize tumor: somatostatin receptor scintigraphy (Octreoscan), CT/MRI, EUS. Treatment: high-dose PPI (omeprazole, pantoprazole) to control acid hypersecretion. Surgical resection if localized. If metastatic or unresectable → long-term PPI + octreotide.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — chronic diarrhea. I'm really scared.",
-    "history": "It's been getting worse. They said something about acute myocardial ischemia. A patient presents with chest pain and is diagnosed with Acute Myocardial Ischem...",
-    "pain": "This chronic diarrhea won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Severe PUD, chronic diarrhea, abdominal pain",
+    "history": "{{patient_name}} presents with severe, refractory peptic ulcer disease, chronic watery diarrhea, abdominal pain, and GI bleeding. Multiple ulcers in atypical locations (distal duodenum, jejunum). ZES…",
+    "pain": "Severe PUD, chronic diarrhea, abdominal pain"
   },
-  "ccs_category": null,
-  "case_summary": "A patient presents with chest pain and is diagnosed with Acute Myocardial Ischemia (AMI). The review page shows that the healthcare provider should have ordered aspirin, atenolol, clopidogrel, and tirofiban to manage the condition. Magnesium sulfate was inappropriately ordered, and nitroglycerine should be avoided.",
+  "ccs_category": "Gastroenterology / Endocrinology",
+  "chief_complaint": "Severe PUD, chronic diarrhea, abdominal pain",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Aspirin 325mg",
-    "Atenolol 25 mg"
+    {
+      "label": "Fasting gastrin level",
+      "type": "correctlyOrdered",
+      "finding": "Markedly elevated >1000 pg/mL.",
+      "aliases": [
+        "Gastrin"
+      ]
+    },
+    {
+      "label": "Secretin stimulation test",
+      "type": "correctlyOrdered",
+      "finding": "Paradoxical gastrin increase = ZES.",
+      "aliases": [
+        "Secretin test"
+      ]
+    },
+    {
+      "label": "Octreoscan / CT / EUS",
+      "type": "correctlyOrdered",
+      "finding": "Tumor localization.",
+      "aliases": [
+        "Imaging"
+      ]
+    },
+    {
+      "label": "High-dose PPI",
+      "type": "correctlyOrdered",
+      "finding": "Acid control.",
+      "aliases": [
+        "Omeprazole"
+      ]
+    },
+    {
+      "label": "Surgical consult (resection)",
+      "type": "correctlyOrdered",
+      "finding": "Curative if localized.",
+      "aliases": [
+        "Surgery"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Fasting gastrin level",
+    "Secretin stimulation test",
+    "Octreoscan / CT / EUS",
+    "High-dose PPI",
+    "Surgical consult (resection)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Zollinger-Ellison Syndrome (Gastrinoma)."
 }

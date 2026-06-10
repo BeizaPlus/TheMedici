@@ -1,70 +1,272 @@
 {
   "id": 20,
   "topic": "Palpitations",
-  "diagnosis": "3rd Degree Heart Block",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Palpitations",
+  "diagnosis": "Complete (3rd Degree) AV Heart Block",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Chest/Lungs",
-    "Physical Exam: Heart/ Cardiovascular",
-    "Physical Exam: Abdominal Exam",
-    "Physical Exam: Extremities/ Skin",
-    "Electrolytes",
-    "Cardiac Ischemia Panel",
-    "Sodium, Serum",
-    "Sodium, Urine",
-    "Synchronized cardioversion, epinephrine"
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Extremities / Spine",
+    "CBC with differential",
+    "TSH, serum",
+    "Lipid profile",
+    "Lyme serology",
+    "Cardiac troponin I, serum",
+    "ESR",
+    "ECG, 12 lead / Cardiac monitor",
+    "BMP / CMP / LFTs",
+    "Consult, cardiology / Permanent pacemaker",
+    "Temporary pacemaker (transcutaneous / transvenous)",
+    "Diet, NPO",
+    "Monitor, cardiac",
+    "PT/PTT / INR",
+    "Type and screen / Type and Rh"
   ],
   "should_avoid": [
-    "Electrocardiography, 12 Lead",
-    "Transesophageal Echocardiography, Ambulatory Electrocardiography, Rhythm Strip, Holter Monitor, Cardiac Ultrasound, etc."
+    "Atropine as sole therapy",
+    "Discharge on oral medications"
   ],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for palpitations.",
-    "Physical Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for palpitations.",
-    "Physical Exam: Heart/ Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to palpitations.",
-    "Physical Exam: Abdominal Exam": "Appropriate CCS order for 3rd Degree Heart Block: Physical Exam: Abdominal Exam.",
-    "Physical Exam: Extremities/ Skin": "Skin exam may show rashes or systemic signs relevant to 3rd Degree Heart Block.",
-    "Electrolytes": "Appropriate CCS order for 3rd Degree Heart Block: Electrolytes.",
-    "Cardiac Ischemia Panel": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to palpitations.",
-    "Sodium, Serum": "Appropriate CCS order for 3rd Degree Heart Block: Sodium, Serum.",
-    "Sodium, Urine": "Appropriate CCS order for 3rd Degree Heart Block: Sodium, Urine.",
-    "Synchronized cardioversion, epinephrine": "Treatment aligned with CCS management for 3rd Degree Heart Block.",
-    "Electrocardiography, 12 Lead": "Advanced imaging is not indicated early for 3rd Degree Heart Block when the diagnosis is clinical.",
-    "Transesophageal Echocardiography, Ambulatory Electrocardiography, Rhythm Strip, Holter Monitor, Cardiac Ultrasound, etc.": "Advanced imaging is not indicated early for 3rd Degree Heart Block when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Determine how sick the patient looks.",
+    "Physical Exam: Chest / Lungs": "Investigate for lung pathology.",
+    "Physical Exam: Heart / Cardiovascular": "Palpitations — cardiovascular exam essential. Bradycardia likely.",
+    "Physical Exam: Extremities / Spine": "Cardiovascular problems — examine extremities.",
+    "CBC with differential": "Screening.",
+    "TSH, serum": "Hypo/hyperthyroidism associated with arrhythmias including heart block.",
+    "Lipid profile": "Risk stratification for heart disease.",
+    "Lyme serology": "Lyme disease is associated with heart block — must screen.",
+    "Cardiac troponin I, serum": "Rule out MI — most common cause of 3rd degree AV block is coronary ischemia.",
+    "ESR": "Rule out inflammatory conditions causing heart block.",
+    "ECG, 12 lead / Cardiac monitor": "ECG shows complete AV dissociation — P and QRS with no relationship. Diagnostic.",
+    "BMP / CMP / LFTs": "Screening labs. Check potassium (hyperkalemia can cause AV block).",
+    "Consult, cardiology / Permanent pacemaker": "Symptomatic complete heart block requires permanent pacemaker. Cardiology consult for placement.",
+    "Temporary pacemaker (transcutaneous / transvenous)": "Temporary pacing first to stabilize, then permanent pacemaker placement.",
+    "Diet, NPO": "NPO for pacemaker placement procedure.",
+    "Monitor, cardiac": "Heart not beating appropriately — continuous cardiac monitoring essential.",
+    "PT/PTT / INR": "Pre-op labs for pacemaker surgery.",
+    "Type and screen / Type and Rh": "Pre-op labs for surgery.",
+    "Atropine as sole therapy": "Atropine is ineffective in 3rd degree heart block (infranodal). Definitive treatment is pacing.",
+    "Discharge on oral medications": "Symptomatic complete heart block requires permanent pacemaker. Cannot be managed medically."
   },
-  "hpi": "The patient presented with palpitations. The patient was found to have a 3rd degree heart block. It is important to recognize this condition as it can lead to significant morbidity and mortality. The management of this condition includes monitoring and potential pacing. It is crucial to assess for reversible causes of the heart block.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is an older woman with hypertension on hydrochlorothiazide who presents with palpitations, syncope, dizziness, and hypotension. ECG demonstrates complete heart block (3rd degree AV block) — complete dissociation between P waves and QRS complexes with no relationship. This is a bradycardic rhythm. Third-degree AV block has an extensive differential: coronary ischemia (most common), fibrosis/sclerosis of conduction system (Lenegre/Lev disease — likely in this patient given age and HTN), Lyme disease, sarcoidosis, hyperkalemia, thyroid disorders, iatrogenic (AV nodal blockers), and congenital (unlikely — 90% symptomatic by age 30). TSH normal, troponin negative, chemistries normal, ESR normal, CBC normal — infectious and inflammatory causes unlikely. Most likely: fibrous degeneration of conduction system from aging + hypertension. Management: temporary transcutaneous/transvenous pacemaker, then permanent pacemaker placement.",
+  "hpi_narrative": "{{patient_name}} is an older woman with hypertension on hydrochlorothiazide who presents with palpitations, syncope, dizziness, and hypotension. ECG demonstrates complete heart block (3rd degree AV block) — complete dissociation between P waves and QRS complexes with no relationship. This is a bradycardic rhythm. Third-degree AV block has an extensive differential: coronary ischemia (most common), fibrosis/sclerosis of conduction system (Lenegre/Lev disease — likely in this patient given age and HTN), Lyme disease, sarcoidosis, hyperkalemia, thyroid disorders, iatrogenic (AV nodal blockers), and congenital (unlikely — 90% symptomatic by age 30). TSH normal, troponin negative, chemistries normal, ESR normal, CBC normal — infectious and inflammatory causes unlikely. Most likely: fibrous degeneration of conduction system from aging + hypertension. Management: temporary transcutaneous/transvenous pacemaker, then permanent pacemaker placement.",
+  "physical_exam": [
+    [
+      "General",
+      "Symptomatic — syncope, dizziness, hypotension."
+    ],
+    [
+      "Cardiovascular",
+      "Bradycardic rhythm. Regular but slow. No relationship between atrial and ventricular contractions. Cannon A waves may be present in JVP."
+    ],
+    [
+      "Neurological",
+      "Syncope from cerebral hypoperfusion."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I felt my heart racing and it scared me. I didn't know what was happening.",
-    "history": "I've had some episodes of feeling my heart skip beats.",
-    "pain": "I felt a tightness in my chest."
+    "chief_complaint": "Palpitations, syncope, dizziness, hypotension",
+    "history": "{{patient_name}} is an older woman with hypertension on hydrochlorothiazide who presents with palpitations, syncope, dizziness, and hypotension. ECG demonstrates complete heart block (3rd degree AV b…",
+    "pain": "Palpitations, syncope, dizziness, hypotension"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "The patient presented with palpitations. The patient was found to have a 3rd degree heart block. It is important to recognize this condition as it can lead to significant morbidity and mortality. The management of this condition includes monitoring and potential pacing. It is crucial to assess for reversible causes of the heart block.",
+  "ccs_category": "Emergency Medicine / Cardiology",
+  "chief_complaint": "Palpitations, syncope, dizziness, hypotension",
+  "case_summary": "Complete (3rd degree) AV block — likely fibrotic degeneration from aging + HTN. ECG: P and QRS dissociation. Troponin negative, TSH normal, chemistries normal, ESR normal — infectious/inflammatory unlikely. Temporary pacer → permanent pacemaker. ER → ICU/inpatient.",
+  "decoys": [
+    {
+      "label": "Atropine as sole therapy",
+      "reason_wrong": "Atropine is ineffective in 3rd degree heart block (infranodal). Definitive treatment is pacing."
+    },
+    {
+      "label": "Discharge on oral medications",
+      "reason_wrong": "Symptomatic complete heart block requires permanent pacemaker. Cannot be managed medically."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Ordered Electrocardiography, 12 Lead",
-    "Ordered Cardiac Ischemia Panel",
-    "Ordered Electrolytes"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Determine how sick the patient looks.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for lung pathology.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Palpitations — cardiovascular exam essential. Bradycardia likely.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "type": "correctlyOrdered",
+      "finding": "Cardiovascular problems — examine extremities.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "TSH, serum",
+      "type": "shouldHaveOrdered",
+      "finding": "Hypo/hyperthyroidism associated with arrhythmias including heart block.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Lipid profile",
+      "type": "shouldHaveOrdered",
+      "finding": "Risk stratification for heart disease.",
+      "aliases": [
+        "Lipids"
+      ]
+    },
+    {
+      "label": "Lyme serology",
+      "type": "shouldHaveOrdered",
+      "finding": "Lyme disease is associated with heart block — must screen.",
+      "aliases": [
+        "Lyme test"
+      ]
+    },
+    {
+      "label": "Cardiac troponin I, serum",
+      "type": "shouldHaveOrdered",
+      "finding": "Rule out MI — most common cause of 3rd degree AV block is coronary ischemia.",
+      "aliases": [
+        "Troponin"
+      ]
+    },
+    {
+      "label": "ESR",
+      "type": "shouldHaveOrdered",
+      "finding": "Rule out inflammatory conditions causing heart block.",
+      "aliases": [
+        "Sed rate"
+      ]
+    },
+    {
+      "label": "ECG, 12 lead / Cardiac monitor",
+      "type": "correctlyOrdered",
+      "finding": "ECG shows complete AV dissociation — P and QRS with no relationship. Diagnostic.",
+      "aliases": [
+        "EKG",
+        "Cardiac monitor"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs. Check potassium (hyperkalemia can cause AV block).",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "Consult, cardiology / Permanent pacemaker",
+      "type": "correctlyOrdered",
+      "finding": "Symptomatic complete heart block requires permanent pacemaker. Cardiology consult for placement.",
+      "aliases": [
+        "Cardiology consult",
+        "PPM"
+      ]
+    },
+    {
+      "label": "Temporary pacemaker (transcutaneous / transvenous)",
+      "type": "shouldHaveOrdered",
+      "finding": "Temporary pacing first to stabilize, then permanent pacemaker placement.",
+      "aliases": [
+        "Temporary pacer",
+        "Transcutaneous pacing"
+      ]
+    },
+    {
+      "label": "Diet, NPO",
+      "type": "shouldHaveOrdered",
+      "finding": "NPO for pacemaker placement procedure.",
+      "aliases": [
+        "NPO"
+      ]
+    },
+    {
+      "label": "Monitor, cardiac",
+      "type": "shouldHaveOrdered",
+      "finding": "Heart not beating appropriately — continuous cardiac monitoring essential.",
+      "aliases": [
+        "Cardiac monitor"
+      ]
+    },
+    {
+      "label": "PT/PTT / INR",
+      "type": "correctlyOrdered",
+      "finding": "Pre-op labs for pacemaker surgery.",
+      "aliases": [
+        "Coags"
+      ]
+    },
+    {
+      "label": "Type and screen / Type and Rh",
+      "type": "correctlyOrdered",
+      "finding": "Pre-op labs for surgery.",
+      "aliases": [
+        "Blood type"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Extremities / Spine",
+    "CBC with differential",
+    "TSH, serum",
+    "Lipid profile",
+    "Lyme serology",
+    "Cardiac troponin I, serum",
+    "ESR",
+    "ECG, 12 lead / Cardiac monitor",
+    "BMP / CMP / LFTs",
+    "Consult, cardiology / Permanent pacemaker",
+    "Temporary pacemaker (transcutaneous / transvenous)",
+    "Diet, NPO",
+    "Monitor, cardiac",
+    "PT/PTT / INR",
+    "Type and screen / Type and Rh"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Complete (3rd Degree) AV Heart Block."
 }

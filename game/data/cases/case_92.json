@@ -1,9 +1,10 @@
 {
   "id": 92,
   "topic": "Vaginal Bleeding",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Vaginal Bleeding",
+  "diagnosis": "Vaginal bleeding could be due to various causes such as endometrial cancer, cervical cancer, uterine fibroids, vaginitis, or trauma. Given the uncertainty of diagnosis, a comprehensive workup is required.",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Laboratory tests: Complete blood count (CBC), coagulation panel, urinalysis, and pregnancy test",
     "Imaging studies: Transvaginal ultrasound, pelvic MRI (if available)",
@@ -15,44 +16,59 @@
     "Exploratory laparotomy"
   ],
   "rationale": {
-    "Laboratory tests: Complete blood count (CBC), coagulation panel, urinalysis, and pregnancy test": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Imaging studies: Transvaginal ultrasound, pelvic MRI (if available)": "Pelvic/cervical evaluation is central for this diagnosis and localizes the source of vaginal bleeding.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2 large-bore": "Appropriate CCS order for this diagnosis: IV access ×2 large-bore.",
-    "pregnancy test (β-hCG)": "Appropriate CCS order for this diagnosis: pregnancy test (β-hCG).",
-    "Exploratory laparotomy": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Exploratory laparotomy": "This invasive procedure should be avoided as it is a major surgery and the diagnosis is currently unknown. It's best to perform less invasive diagnostics first.",
+    "Oxygen": "Vaginal bleeding can be a symptom of various conditions, including pregnancy. Oxygen and IV access are essential life-saving interventions.",
+    "IV access ×2 large-bore": "For potential blood loss assessment and fluid resuscitation if necessary.",
+    "pregnancy test (β-hCG)": "Vaginal bleeding is a common symptom in pregnancy. A β-hCG test will help determine the stage of pregnancy or possible ectopic pregnancy."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — vaginal bleeding. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This vaginal bleeding won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Vaginal Bleeding — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 100; BP 112/70."
+    ],
+    [
+      "Respiratory",
+      "RR 18; SpO₂ 96%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Laboratory tests: Complete blood count (CBC), coagulation panel, urinalysis, and pregnancy test",
     "Imaging studies: Transvaginal ultrasound, pelvic MRI (if available)",
     "Oxygen",
     "IV access ×2 large-bore",
     "pregnancy test (β-hCG)"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

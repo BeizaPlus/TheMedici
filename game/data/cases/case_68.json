@@ -1,68 +1,143 @@
 {
   "id": 68,
   "topic": "Muscle Weakness",
-  "diagnosis": "Myopathy due to Simvastatin and Gemfibrozil",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Muscle Weakness",
+  "diagnosis": "Statin-Induced Myopathy (Simvastatin + Gemfibrozil interaction)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Extremities",
-    "Physical Exam: Neurological",
-    "Physical Exam: Cardiovascular",
-    "Physical Exam: Abdominal",
-    "Remove Statin therapy",
+    "Physical Exam: Neuro / Extremities",
+    "CK, serum",
+    "BMP / CMP",
+    "UA",
     "TSH",
-    "Sodium levels",
-    "Electrolytes",
-    "Consider possible causes of CKD"
+    "DISCONTINUE simvastatin + gemfibrozil",
+    "Aggressive IV fluids",
+    "Switch to atorvastatin / rosuvastatin / ezetimibe"
   ],
-  "should_avoid": [
-    "CT Abdomen/Pelvis"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for muscle weakness.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Myopathy due to Simvastatin and Gemfibrozil.",
-    "Physical Exam: Neurological": "Targeted Physical Exam: Neurological exam supports the differential for Myopathy due to Simvastatin and Gemfibrozil.",
-    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to muscle weakness.",
-    "Physical Exam: Abdominal": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: Physical Exam: Abdominal.",
-    "Remove Statin therapy": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: Remove Statin therapy.",
-    "TSH": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: TSH.",
-    "Sodium levels": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: Sodium levels.",
-    "Electrolytes": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: Electrolytes.",
-    "Consider possible causes of CKD": "Appropriate CCS order for Myopathy due to Simvastatin and Gemfibrozil: Consider possible causes of CKD.",
-    "CT Abdomen/Pelvis": "Advanced imaging is not indicated early for Myopathy due to Simvastatin and Gemfibrozil when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Weak, may be in distress.",
+    "Physical Exam: Neuro / Extremities": "Proximal muscle weakness, tenderness.",
+    "CK, serum": "Markedly elevated (>10x ULN).",
+    "BMP / CMP": "Elevated Cr (AKI risk), hyperkalemia from rhabdo.",
+    "UA": "Myoglobinuria.",
+    "TSH": "Rule out hypothyroid myopathy.",
+    "DISCONTINUE simvastatin + gemfibrozil": "Contraindicated combination. Discontinue immediately.",
+    "Aggressive IV fluids": "Prevent pigment nephropathy from rhabdomyolysis.",
+    "Switch to atorvastatin / rosuvastatin / ezetimibe": "Alternative lipid management after recovery. Fenofibrate (not gemfibrozil) if fibrate needed."
   },
-  "hpi": "The patient is a 68-year-old female with a history of hyperlipidemia and diabetes who presented with muscle weakness. She was started on Simvastatin and Gemfibrozil for her hyperlipidemia. After a few weeks, she developed muscle weakness and was found to have elevated creatine kinase levels. The case highlights the importance of monitoring for myopathy in patients on statins, especially when combined with other medications that can increase the risk of muscle injury.",
+  "hpi": "{{patient_name}} presents with progressive proximal muscle weakness, myalgias, and fatigue. History reveals concurrent use of simvastatin and gemfibrozil — a CONTRAINDICATED combination. Gemfibrozil inhibits CYP2C8 and OATP1B1, dramatically increasing simvastatin levels → myotoxicity. Labs show markedly elevated CK (often >10x ULN). UA shows myoglobinuria (risk of AKI). Differentiate from other causes: hypothyroidism, polymyositis, alcohol myopathy, steroid myopathy. Management: IMMEDIATELY discontinue simvastatin and gemfibrozil. Aggressive IV fluids to prevent pigment nephropathy from rhabdomyolysis. Monitor renal function and electrolytes (hyperkalemia risk from muscle breakdown). Alternative lipid management after recovery: atorvastatin or rosuvastatin (metabolized differently, less interaction risk), ezetimibe, PCSK9 inhibitor. Fenofibrate (not gemfibrozil) can be used with statins with caution.",
+  "hpi_narrative": "{{patient_name}} presents with progressive proximal muscle weakness, myalgias, and fatigue. History reveals concurrent use of simvastatin and gemfibrozil — a CONTRAINDICATED combination. Gemfibrozil inhibits CYP2C8 and OATP1B1, dramatically increasing simvastatin levels → myotoxicity. Labs show markedly elevated CK (often >10x ULN). UA shows myoglobinuria (risk of AKI). Differentiate from other causes: hypothyroidism, polymyositis, alcohol myopathy, steroid myopathy. Management: IMMEDIATELY discontinue simvastatin and gemfibrozil. Aggressive IV fluids to prevent pigment nephropathy from rhabdomyolysis. Monitor renal function and electrolytes (hyperkalemia risk from muscle breakdown). Alternative lipid management after recovery: atorvastatin or rosuvastatin (metabolized differently, less interaction risk), ezetimibe, PCSK9 inhibitor. Fenofibrate (not gemfibrozil) can be used with statins with caution.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My muscles feel weak and I can't do things I used to.",
-    "history": "I started feeling weak after taking my new medication. I didn't think it would affect me like this.",
-    "pain": "It feels like my legs are heavy and I can't lift them."
+    "chief_complaint": "Progressive proximal muscle weakness, myalgias",
+    "history": "{{patient_name}} presents with progressive proximal muscle weakness, myalgias, and fatigue. History reveals concurrent use of simvastatin and gemfibrozil — a CONTRAINDICATED combination. Gemfibrozil …",
+    "pain": "Progressive proximal muscle weakness, myalgias"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "The patient is a 68-year-old female with a history of hyperlipidemia and diabetes who presented with muscle weakness. She was started on Simvastatin and Gemfibrozil for her hyperlipidemia. After a few weeks, she developed muscle weakness and was found to have elevated creatine kinase levels. The case highlights the importance of monitoring for myopathy in patients on statins, especially when combined with other medications that can increase the risk of muscle injury.",
+  "ccs_category": "Internal Medicine / Cardiology",
+  "chief_complaint": "Progressive proximal muscle weakness, myalgias",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Laboratory Tests",
-    "Imaging",
-    "Consultation"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Weak, may be in distress.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Extremities",
+      "type": "correctlyOrdered",
+      "finding": "Proximal muscle weakness, tenderness.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "CK, serum",
+      "type": "correctlyOrdered",
+      "finding": "Markedly elevated (>10x ULN).",
+      "aliases": [
+        "CK",
+        "CPK"
+      ]
+    },
+    {
+      "label": "BMP / CMP",
+      "type": "correctlyOrdered",
+      "finding": "Elevated Cr (AKI risk), hyperkalemia from rhabdo.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "UA",
+      "type": "correctlyOrdered",
+      "finding": "Myoglobinuria.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "TSH",
+      "type": "correctlyOrdered",
+      "finding": "Rule out hypothyroid myopathy.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "DISCONTINUE simvastatin + gemfibrozil",
+      "type": "correctlyOrdered",
+      "finding": "Contraindicated combination. Discontinue immediately.",
+      "aliases": [
+        "Stop meds"
+      ]
+    },
+    {
+      "label": "Aggressive IV fluids",
+      "type": "correctlyOrdered",
+      "finding": "Prevent pigment nephropathy from rhabdomyolysis.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "Switch to atorvastatin / rosuvastatin / ezetimibe",
+      "type": "correctlyOrdered",
+      "finding": "Alternative lipid management after recovery. Fenofibrate (not gemfibrozil) if fibrate needed.",
+      "aliases": [
+        "Alternative statin"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Neuro / Extremities",
+    "CK, serum",
+    "BMP / CMP",
+    "UA",
+    "TSH",
+    "DISCONTINUE simvastatin + gemfibrozil",
+    "Aggressive IV fluids",
+    "Switch to atorvastatin / rosuvastatin / ezetimibe"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Statin-Induced Myopathy (Simvastatin + Gemfibrozil interaction)."
 }

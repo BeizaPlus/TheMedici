@@ -1,70 +1,109 @@
 {
   "id": 136,
   "topic": "Shortness of Breath",
+  "title": "Shortness of Breath",
   "diagnosis": "Sarcoidosis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam (General)",
-    "Pulmonary Function Tests",
-    "Chest X-ray, PA & Lateral",
-    "CBC with Differential",
-    "Comprehensive metabolic panel",
-    "Vitamin D Level",
-    "Antinuclear Antibody (ANA) test",
-    "Arterial Blood Gas (ABG) study",
-    "Sputum Culture",
-    "Bronchoscopy"
+    "CXR",
+    "CT chest",
+    "Biopsy (EBUS / bronchoscopic)",
+    "ACE level / Ca / Vitamin D",
+    "PFTs",
+    "Prednisone (if symptomatic)"
   ],
-  "should_avoid": [
-    "CT Chest",
-    "MRI Brain"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam (General)": "Appropriate CCS order for Sarcoidosis: Physical Exam (General).",
-    "Pulmonary Function Tests": "Appropriate CCS order for Sarcoidosis: Pulmonary Function Tests.",
-    "Chest X-ray, PA & Lateral": "Evaluate chest and lungs as part of the initial exam for shortness of breath.",
-    "CBC with Differential": "Laboratory testing when systemic illness or severity warrants labs in Sarcoidosis.",
-    "Comprehensive metabolic panel": "Laboratory testing when systemic illness or severity warrants labs in Sarcoidosis.",
-    "Vitamin D Level": "Appropriate CCS order for Sarcoidosis: Vitamin D Level.",
-    "Antinuclear Antibody (ANA) test": "Appropriate CCS order for Sarcoidosis: Antinuclear Antibody (ANA) test.",
-    "Arterial Blood Gas (ABG) study": "Appropriate CCS order for Sarcoidosis: Arterial Blood Gas (ABG) study.",
-    "Sputum Culture": "Laboratory testing when systemic illness or severity warrants labs in Sarcoidosis.",
-    "Bronchoscopy": "Appropriate CCS order for Sarcoidosis: Bronchoscopy.",
-    "CT Chest": "Advanced imaging is not indicated early for Sarcoidosis when the diagnosis is clinical.",
-    "MRI Brain": "Advanced imaging is not indicated early for Sarcoidosis when the diagnosis is clinical."
+    "CXR": "Bilateral hilar lymphadenopathy ± parenchymal infiltrates.",
+    "CT chest": "Mediastinal/hilar LAN, perilymphatic nodules.",
+    "Biopsy (EBUS / bronchoscopic)": "Non-caseating granulomas.",
+    "ACE level / Ca / Vitamin D": "Elevated ACE, hypercalcemia.",
+    "PFTs": "Restrictive pattern.",
+    "Prednisone (if symptomatic)": "First-line. Taper to lowest effective dose."
   },
-  "hpi": "The patient has sarcoidosis. Sarcoidosis can present with respiratory symptoms and is often diagnosed by imaging studies. Research on the clinical management of sarcoidosis suggests that initial treatment is typically corticosteroids, and this is primarily for those with significant respiratory symptoms. The results from imaging studies should be reviewed, as they can provide information on the extent of the disease. The case summary highlights the importance of considering sarcoidosis in patients presenting with respiratory symptoms and the need for appropriate diagnostic studies to confirm the diagnosis.",
+  "hpi": "{{patient_name}} presents with progressive dyspnea, dry cough, fatigue, and bilateral hilar lymphadenopathy on CXR. May have erythema nodosum (painful red nodules on shins), uveitis, parotid enlargement, lupus pernio (purplish facial plaques). Sarcoidosis is a multisystem granulomatous disease of unknown etiology — more common in African Americans. Non-caseating granulomas are the pathologic hallmark. CXR staging: I (BHL only), II (BHL + parenchymal infiltrates), III (parenchymal only), IV (fibrosis). Labs: elevated ACE level (supports but not diagnostic), hypercalcemia/hypercalciuria (increased 1,25-vitamin D from activated macrophages in granulomas). Diagnosis: biopsy showing non-caseating granulomas + exclusion of other causes (TB, fungal, berylliosis). PFTs: restrictive pattern. Treatment: many resolve spontaneously (stage I). If symptomatic or progressive → corticosteroids (prednisone 0.5 mg/kg/day). Methotrexate or azathioprine for steroid-sparing. Anti-TNF for refractory. Monitor for TB reactivation before immunosuppression.",
+  "hpi_narrative": "{{patient_name}} presents with progressive dyspnea, dry cough, fatigue, and bilateral hilar lymphadenopathy on CXR. May have erythema nodosum (painful red nodules on shins), uveitis, parotid enlargement, lupus pernio (purplish facial plaques). Sarcoidosis is a multisystem granulomatous disease of unknown etiology — more common in African Americans. Non-caseating granulomas are the pathologic hallmark. CXR staging: I (BHL only), II (BHL + parenchymal infiltrates), III (parenchymal only), IV (fibrosis). Labs: elevated ACE level (supports but not diagnostic), hypercalcemia/hypercalciuria (increased 1,25-vitamin D from activated macrophages in granulomas). Diagnosis: biopsy showing non-caseating granulomas + exclusion of other causes (TB, fungal, berylliosis). PFTs: restrictive pattern. Treatment: many resolve spontaneously (stage I). If symptomatic or progressive → corticosteroids (prednisone 0.5 mg/kg/day). Methotrexate or azathioprine for steroid-sparing. Anti-TNF for refractory. Monitor for TB reactivation before immunosuppression.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared because I can't breathe well. It feels like I'm suffocating.",
-    "history": "I have been feeling short of breath for a while now. It gets worse at night.",
-    "pain": "I feel tightness in my chest, especially when I try to take a deep breath."
+    "chief_complaint": "Progressive dyspnea, dry cough, bilateral hilar adenopathy",
+    "history": "{{patient_name}} presents with progressive dyspnea, dry cough, fatigue, and bilateral hilar lymphadenopathy on CXR. May have erythema nodosum (painful red nodules on shins), uveitis, parotid enlargem…",
+    "pain": "Progressive dyspnea, dry cough, bilateral hilar adenopathy"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "The patient has sarcoidosis. Sarcoidosis can present with respiratory symptoms and is often diagnosed by imaging studies. Research on the clinical management of sarcoidosis suggests that initial treatment is typically corticosteroids, and this is primarily for those with significant respiratory symptoms. The results from imaging studies should be reviewed, as they can provide information on the extent of the disease. The case summary highlights the importance of considering sarcoidosis in patients presenting with respiratory symptoms and the need for appropriate diagnostic studies to confirm the diagnosis.",
+  "ccs_category": "Pulmonology",
+  "chief_complaint": "Progressive dyspnea, dry cough, bilateral hilar adenopathy",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered the following Physical Exams",
-    "Ordered: CBC with differential",
-    "Ordered: Comprehensive metabolic panel",
-    "Ordered: X-ray, chest"
+    {
+      "label": "CXR",
+      "type": "correctlyOrdered",
+      "finding": "Bilateral hilar lymphadenopathy ± parenchymal infiltrates.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "CT chest",
+      "type": "correctlyOrdered",
+      "finding": "Mediastinal/hilar LAN, perilymphatic nodules.",
+      "aliases": [
+        "CT"
+      ]
+    },
+    {
+      "label": "Biopsy (EBUS / bronchoscopic)",
+      "type": "correctlyOrdered",
+      "finding": "Non-caseating granulomas.",
+      "aliases": [
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "ACE level / Ca / Vitamin D",
+      "type": "correctlyOrdered",
+      "finding": "Elevated ACE, hypercalcemia.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "PFTs",
+      "type": "correctlyOrdered",
+      "finding": "Restrictive pattern.",
+      "aliases": [
+        "PFTs"
+      ]
+    },
+    {
+      "label": "Prednisone (if symptomatic)",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Taper to lowest effective dose.",
+      "aliases": [
+        "Prednisone"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "CXR",
+    "CT chest",
+    "Biopsy (EBUS / bronchoscopic)",
+    "ACE level / Ca / Vitamin D",
+    "PFTs",
+    "Prednisone (if symptomatic)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Sarcoidosis."
 }

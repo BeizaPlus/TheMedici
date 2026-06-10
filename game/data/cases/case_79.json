@@ -1,64 +1,132 @@
 {
   "id": 79,
   "topic": "Back Pain",
+  "title": "Back Pain",
   "diagnosis": "Acute Pyelonephritis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
+    "CBC",
     "Urinalysis",
-    "Physical Exam: General",
-    "Physical Exam: Chest/Lungs",
-    "Physical Exam: Heart/Cardiovascular",
-    "Physical Exam: Abdomen",
-    "CT Abdomen/Pelvis",
-    "Ultrasound"
+    "Urine culture",
+    "Blood cultures",
+    "BMP",
+    "CT abdomen/pelvis",
+    "IV Ceftriaxone / Ciprofloxacin",
+    "IV fluids + Antiemetics"
   ],
-  "should_avoid": [
-    "Narcotics",
-    "Fluids"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Urinalysis": "Appropriate CCS order for Acute Pyelonephritis: Urinalysis.",
-    "Physical Exam: General": "Appropriate CCS order for Acute Pyelonephritis: Physical Exam: General.",
-    "Physical Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for back pain.",
-    "Physical Exam: Heart/Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to back pain.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with back pain.",
-    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with back pain.",
-    "Ultrasound": "Appropriate CCS order for Acute Pyelonephritis: Ultrasound.",
-    "Narcotics": "CCS review: avoid this order for Acute Pyelonephritis — it does not change acute management.",
-    "Fluids": "CCS review: avoid this order for Acute Pyelonephritis — it does not change acute management."
+    "CBC": "Leukocytosis.",
+    "Urinalysis": "Pyuria, leukocyte esterase, nitrites, WBC casts.",
+    "Urine culture": "Identify organism + sensitivities.",
+    "Blood cultures": "If severe/septic.",
+    "BMP": "Renal function.",
+    "CT abdomen/pelvis": "If complicated or not responding to Abx.",
+    "IV Ceftriaxone / Ciprofloxacin": "IV if severe/vomiting/pregnant. PO if mild and stable.",
+    "IV fluids + Antiemetics": "Nausea/vomiting."
   },
-  "hpi": "This patient presents with classic symptoms and findings highly suggestive of an infection of the urinary tract. Evaluation and treatment should be done. The patient is at risk for developing sepsis due to renal impairment, and if this patient presents with simple therapy, the results may remain misleading.",
+  "hpi": "{{patient_name}} presents with fever, chills, unilateral flank pain/CVA tenderness, nausea, vomiting, and lower urinary tract symptoms (dysuria, frequency, urgency). Acute pyelonephritis is an ascending bacterial infection of the renal parenchyma — most commonly E. coli (80%). Risk factors: female, sexual activity, pregnancy, urinary tract obstruction, catheterization, DM, immunosuppression. UA shows pyuria, leukocyte esterase, nitrites, WBC casts. Urine culture for confirmation + sensitivities. Blood cultures if severe/septic. CT abdomen/pelvis if complicated (abscess, obstruction, stone) or not responding to 48-72h of antibiotics. Treatment: outpatient (mild, stable): PO fluoroquinolone (ciprofloxacin) or TMP-SMX. Inpatient (severe, vomiting, pregnant, immunocompromised): IV ceftriaxone or fluoroquinolone. Switch to PO after clinical improvement. Total course 7-14 days. Repeat urine culture after treatment to confirm clearance.",
+  "hpi_narrative": "{{patient_name}} presents with fever, chills, unilateral flank pain/CVA tenderness, nausea, vomiting, and lower urinary tract symptoms (dysuria, frequency, urgency). Acute pyelonephritis is an ascending bacterial infection of the renal parenchyma — most commonly E. coli (80%). Risk factors: female, sexual activity, pregnancy, urinary tract obstruction, catheterization, DM, immunosuppression. UA shows pyuria, leukocyte esterase, nitrites, WBC casts. Urine culture for confirmation + sensitivities. Blood cultures if severe/septic. CT abdomen/pelvis if complicated (abscess, obstruction, stone) or not responding to 48-72h of antibiotics. Treatment: outpatient (mild, stable): PO fluoroquinolone (ciprofloxacin) or TMP-SMX. Inpatient (severe, vomiting, pregnant, immunocompromised): IV ceftriaxone or fluoroquinolone. Switch to PO after clinical improvement. Total course 7-14 days. Repeat urine culture after treatment to confirm clearance.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. My back hurts so much and I feel so sick.",
-    "history": "I have been feeling unwell for a few days. It started with back pain and then I felt feverish.",
-    "pain": "The pain in my back is sharp and it makes it hard to move."
+    "chief_complaint": "Fever, unilateral flank pain, dysuria",
+    "history": "{{patient_name}} presents with fever, chills, unilateral flank pain/CVA tenderness, nausea, vomiting, and lower urinary tract symptoms (dysuria, frequency, urgency). Acute pyelonephritis is an ascend…",
+    "pain": "Fever, unilateral flank pain, dysuria"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "This patient presents with classic symptoms and findings highly suggestive of an infection of the urinary tract. Evaluation and treatment should be done. The patient is at risk for developing sepsis due to renal impairment, and if this patient presents with simple therapy, the results may remain misleading.",
+  "ccs_category": "Internal Medicine / Infectious Disease",
+  "chief_complaint": "Fever, unilateral flank pain, dysuria",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam: General",
-    "Physical Exam: Chest/Lungs",
-    "Physical Exam: Heart/Cardiovascular",
-    "Physical Exam: Abdomen"
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "correctlyOrdered",
+      "finding": "Pyuria, leukocyte esterase, nitrites, WBC casts.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Urine culture",
+      "type": "correctlyOrdered",
+      "finding": "Identify organism + sensitivities.",
+      "aliases": [
+        "Urine culture"
+      ]
+    },
+    {
+      "label": "Blood cultures",
+      "type": "correctlyOrdered",
+      "finding": "If severe/septic.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "BMP",
+      "type": "correctlyOrdered",
+      "finding": "Renal function.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "CT abdomen/pelvis",
+      "type": "correctlyOrdered",
+      "finding": "If complicated or not responding to Abx.",
+      "aliases": [
+        "CT"
+      ]
+    },
+    {
+      "label": "IV Ceftriaxone / Ciprofloxacin",
+      "type": "correctlyOrdered",
+      "finding": "IV if severe/vomiting/pregnant. PO if mild and stable.",
+      "aliases": [
+        "Rocephin",
+        "Cipro"
+      ]
+    },
+    {
+      "label": "IV fluids + Antiemetics",
+      "type": "correctlyOrdered",
+      "finding": "Nausea/vomiting.",
+      "aliases": [
+        "IV fluids"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "CBC",
+    "Urinalysis",
+    "Urine culture",
+    "Blood cultures",
+    "BMP",
+    "CT abdomen/pelvis",
+    "IV Ceftriaxone / Ciprofloxacin",
+    "IV fluids + Antiemetics"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Acute Pyelonephritis."
 }

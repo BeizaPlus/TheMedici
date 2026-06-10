@@ -1,66 +1,99 @@
 {
   "id": 81,
-  "topic": "Diarrhea - Internal Medicine",
+  "topic": "Diarrhea",
+  "title": "Diarrhea",
   "diagnosis": "Crohn's Disease",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Physical Exam: Chief Complaint",
-    "Plan: Team Care/Change",
-    "Plan: Patient Education",
-    "Plan: Patient Follow-Up",
-    "Stool studies",
-    "Electrolytes",
-    "Complete blood count (CBC), renal, electrolytes, creatinine",
-    "Stool culture",
-    "Stool for C. difficile"
+    "Colonoscopy + biopsy",
+    "CT/MR enterography",
+    "CBC / CRP / ESR / Fecal calprotectin",
+    "Budesonide / Prednisone",
+    "Azathioprine / Biologic"
   ],
-  "should_avoid": [
-    "Antibiotics"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Physical Exam: Chief Complaint": "Appropriate CCS order for Crohn's Disease: Physical Exam: Chief Complaint.",
-    "Plan: Team Care/Change": "Appropriate CCS order for Crohn's Disease: Plan: Team Care/Change.",
-    "Plan: Patient Education": "Patient education and counseling are part of definitive care for Crohn's Disease.",
-    "Plan: Patient Follow-Up": "Appropriate CCS order for Crohn's Disease: Plan: Patient Follow-Up.",
-    "Stool studies": "Appropriate CCS order for Crohn's Disease: Stool studies.",
-    "Electrolytes": "Appropriate CCS order for Crohn's Disease: Electrolytes.",
-    "Complete blood count (CBC), renal, electrolytes, creatinine": "Laboratory testing when systemic illness or severity warrants labs in Crohn's Disease.",
-    "Stool culture": "Laboratory testing when systemic illness or severity warrants labs in Crohn's Disease.",
-    "Stool for C. difficile": "Appropriate CCS order for Crohn's Disease: Stool for C. difficile.",
-    "Antibiotics": "CCS review: avoid this order for Crohn's Disease — it does not change acute management."
+    "Colonoscopy + biopsy": "Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+    "CT/MR enterography": "Small bowel evaluation.",
+    "CBC / CRP / ESR / Fecal calprotectin": "Anemia, elevated inflammatory markers.",
+    "Budesonide / Prednisone": "Induction. Budesonide for TI/right colon.",
+    "Azathioprine / Biologic": "Maintenance. Anti-TNF (infliximab)."
   },
-  "hpi": "Crohn's disease is a chronic inflammatory bowel disease that can affect any part of the gastrointestinal tract. Symptoms can include abdominal pain, diarrhea, weight loss, and fatigue. Diagnosis is often made through a combination of clinical evaluation, laboratory tests, and imaging studies. Treatment typically involves medications to reduce inflammation and manage symptoms. In some cases, surgery may be necessary to remove affected portions of the intestine.",
+  "hpi": "{{patient_name}} presents with chronic diarrhea (often non-bloody), RLQ abdominal pain, weight loss, fatigue, and fever. Crohn's disease is a transmural granulomatous inflammatory bowel disease that can affect any part of the GI tract from mouth to anus — most commonly terminal ileum. Skip lesions (areas of inflammation between normal mucosa), cobblestoning, creeping fat, strictures, and fistulas are characteristic. Extraintestinal manifestations: arthritis, uveitis, erythema nodosum, pyoderma gangrenosum, PSC. Diagnosis: colonoscopy with terminal ileum intubation and biopsy (transmural inflammation, non-caseating granulomas). CT/MR enterography for small bowel evaluation. Labs: anemia, elevated CRP/ESR, fecal calprotectin. Treatment: mild-mod → budesonide (terminal ileal/right colon) or prednisone for induction. Maintenance: immunomodulators (azathioprine, MTX), biologics (anti-TNF — infliximab, adalimumab). Surgery for complications (strictures, fistulas, abscess) — NOT curative (disease recurs).",
+  "hpi_narrative": "{{patient_name}} presents with chronic diarrhea (often non-bloody), RLQ abdominal pain, weight loss, fatigue, and fever. Crohn's disease is a transmural granulomatous inflammatory bowel disease that can affect any part of the GI tract from mouth to anus — most commonly terminal ileum. Skip lesions (areas of inflammation between normal mucosa), cobblestoning, creeping fat, strictures, and fistulas are characteristic. Extraintestinal manifestations: arthritis, uveitis, erythema nodosum, pyoderma gangrenosum, PSC. Diagnosis: colonoscopy with terminal ileum intubation and biopsy (transmural inflammation, non-caseating granulomas). CT/MR enterography for small bowel evaluation. Labs: anemia, elevated CRP/ESR, fecal calprotectin. Treatment: mild-mod → budesonide (terminal ileal/right colon) or prednisone for induction. Maintenance: immunomodulators (azathioprine, MTX), biologics (anti-TNF — infliximab, adalimumab). Surgery for complications (strictures, fistulas, abscess) — NOT curative (disease recurs).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my diarrhea. It just won't stop.",
-    "history": "I've been feeling awful for weeks. My stomach hurts a lot.",
-    "pain": "It feels like a sharp pain in my belly."
+    "chief_complaint": "Chronic diarrhea, RLQ pain, weight loss",
+    "history": "{{patient_name}} presents with chronic diarrhea (often non-bloody), RLQ abdominal pain, weight loss, fatigue, and fever. Crohn's disease is a transmural granulomatous inflammatory bowel disease that …",
+    "pain": "Chronic diarrhea, RLQ pain, weight loss"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "Crohn's disease is a chronic inflammatory bowel disease that can affect any part of the gastrointestinal tract. Symptoms can include abdominal pain, diarrhea, weight loss, and fatigue. Diagnosis is often made through a combination of clinical evaluation, laboratory tests, and imaging studies. Treatment typically involves medications to reduce inflammation and manage symptoms. In some cases, surgery may be necessary to remove affected portions of the intestine.",
+  "ccs_category": "Gastroenterology",
+  "chief_complaint": "Chronic diarrhea, RLQ pain, weight loss",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered Sedimentation rate, erythrocyte",
-    "Ordered Stool studies",
-    "Ordered Complete blood count (CBC), renal, electrolytes, creatinine",
-    "Ordered Sigmoidoscopy, flexible"
+    {
+      "label": "Colonoscopy + biopsy",
+      "type": "correctlyOrdered",
+      "finding": "Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+      "aliases": [
+        "Colonoscopy"
+      ]
+    },
+    {
+      "label": "CT/MR enterography",
+      "type": "correctlyOrdered",
+      "finding": "Small bowel evaluation.",
+      "aliases": [
+        "CTE/MRE"
+      ]
+    },
+    {
+      "label": "CBC / CRP / ESR / Fecal calprotectin",
+      "type": "correctlyOrdered",
+      "finding": "Anemia, elevated inflammatory markers.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Budesonide / Prednisone",
+      "type": "correctlyOrdered",
+      "finding": "Induction. Budesonide for TI/right colon.",
+      "aliases": [
+        "Steroids"
+      ]
+    },
+    {
+      "label": "Azathioprine / Biologic",
+      "type": "correctlyOrdered",
+      "finding": "Maintenance. Anti-TNF (infliximab).",
+      "aliases": [
+        "Imuran",
+        "Remicade"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Colonoscopy + biopsy",
+    "CT/MR enterography",
+    "CBC / CRP / ESR / Fecal calprotectin",
+    "Budesonide / Prednisone",
+    "Azathioprine / Biologic"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Crohn's Disease."
 }

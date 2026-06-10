@@ -1,64 +1,365 @@
 {
   "id": 17,
   "topic": "Weight Loss and Night Sweats",
+  "title": "Weight Loss and Night Sweats",
   "diagnosis": "Hodgkin's Lymphoma",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Breasts",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Lymph Nodes",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Rectal",
+    "Physical Exam: Skin",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Genitalia",
+    "Physical Exam: HEENT / Neck",
     "CBC with differential",
-    "Comprehensive metabolic panel",
-    "Lactate dehydrogenase",
+    "ECG, 12 lead",
     "HIV test",
+    "EBV titer",
     "Chest X-ray",
-    "CT scan of the chest",
-    "Bone marrow biopsy"
+    {
+      "order": "CT abdomen/pelvis",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "PET scan preferred over CT. CT if PET unavailable."
+    },
+    "Urinalysis",
+    "Pulse oximetry",
+    "Biopsy, lymph node (excisional)",
+    "BMP / CMP / LFTs",
+    "Albumin, serum",
+    "CT chest / PET whole body",
+    "Consult, hematology/oncology",
+    "Counsel patient, cancer diagnosis"
   ],
   "should_avoid": [
-    "Urinalysis",
-    "Pregnancy test"
+    "Fine-needle aspiration (FNA)"
   ],
   "rationale": {
-    "CBC with differential": "Laboratory testing when systemic illness or severity warrants labs in Hodgkin's Lymphoma.",
-    "Comprehensive metabolic panel": "Laboratory testing when systemic illness or severity warrants labs in Hodgkin's Lymphoma.",
-    "Lactate dehydrogenase": "Appropriate CCS order for Hodgkin's Lymphoma: Lactate dehydrogenase.",
-    "HIV test": "Appropriate CCS order for Hodgkin's Lymphoma: HIV test.",
-    "Chest X-ray": "Evaluate chest and lungs as part of the initial exam for weight loss and night sweats.",
-    "CT scan of the chest": "Evaluate chest and lungs as part of the initial exam for weight loss and night sweats.",
-    "Bone marrow biopsy": "Diagnostic report or tissue diagnosis clarifies the cause of weight loss and night sweats.",
-    "Urinalysis": "CCS review: avoid this order for Hodgkin's Lymphoma — it does not change acute management.",
-    "Pregnancy test": "CCS review: avoid this order for Hodgkin's Lymphoma — it does not change acute management."
+    "Physical Exam: General Appearance": "Full exam — symptoms concerning for malignancy.",
+    "Physical Exam: Breasts": "Full exam for malignancy workup.",
+    "Physical Exam: Heart / Cardiovascular": "Full exam.",
+    "Physical Exam: Chest / Lungs": "Full exam.",
+    "Physical Exam: Abdomen": "Full exam — assess for splenomegaly.",
+    "Physical Exam: Lymph Nodes": "Painless cervical lymphadenopathy — key finding.",
+    "Physical Exam: Neuro / Psych": "Full exam.",
+    "Physical Exam: Rectal": "Full exam.",
+    "Physical Exam: Skin": "Full exam.",
+    "Physical Exam: Extremities / Spine": "Full exam.",
+    "Physical Exam: Genitalia": "Full exam.",
+    "Physical Exam: HEENT / Neck": "Cervical lymphadenopathy — examine and characterize.",
+    "CBC with differential": "Screening tool.",
+    "ECG, 12 lead": "Quick screen for cardiac abnormalities.",
+    "HIV test": "HIV can present with lymphadenopathy and weight loss — must screen.",
+    "EBV titer": "EBV can cause enlarged lymph nodes and night sweats.",
+    "Chest X-ray": "Good initial screening tool. May show mediastinal lymphadenopathy.",
+    "CT abdomen/pelvis": "PET scan preferred over CT. CT if PET unavailable.",
+    "Urinalysis": "Good screening tool — cheap, easy, useful info.",
+    "Pulse oximetry": "Complete vital sign picture.",
+    "Biopsy, lymph node (excisional)": "Excisional biopsy is required — NOT FNA. Need surrounding architecture for immunophenotyping and cytogenetics. Reed-Sternberg cells: CD15+, CD30+.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "Albumin, serum": "Albumin is a prognostic indicator in Hodgkin's lymphoma.",
+    "CT chest / PET whole body": "CT chest/abdomen/pelvis with contrast for staging. PET provides metabolic information.",
+    "Consult, hematology/oncology": "Once diagnosis reached, consult heme/onc for treatment: ABVD chemotherapy ± radiation.",
+    "Counsel patient, cancer diagnosis": "Cancer diagnosis is devastating — go over next steps and what to expect.",
+    "Fine-needle aspiration (FNA)": "FNA is insufficient for lymphoma diagnosis. Excisional biopsy is required — need intact architecture for Reed-Sternberg identification, immunophenotyping (CD15/CD30), and cytogenetics."
   },
-  "hpi": "This case illustrates the importance of considering hematologic malignancies in patients presenting with weight loss and night sweats. A thorough workup including imaging and laboratory tests is essential for accurate diagnosis and management.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with painless cervical lymphadenopathy and constitutional B-symptoms (weight loss, night sweats, fever). Hodgkin's lymphoma is a B-cell malignancy defined by Reed-Sternberg cells — 'owl-eyed' nucleoli with clear cytoplasm, CD15+ and CD30+. Excisional lymph node biopsy (NOT FNA) is required for diagnosis to preserve architecture for immunophenotyping and cytogenetics. CXR is initial screening. PET/CT for staging: Stage I (single node), II (≥2 nodes same side of diaphragm), III (both sides), IV (extranodal). Treatment: ABVD chemotherapy (Adriamycin, Bleomycin, Vinblastine, Dacarbazine) ± radiation for early stage. Check albumin as prognostic indicator. Screen for HIV and EBV, which can mimic lymphoma.",
+  "hpi_narrative": "{{patient_name}} presents with painless cervical lymphadenopathy and constitutional B-symptoms (weight loss, night sweats, fever). Hodgkin's lymphoma is a B-cell malignancy defined by Reed-Sternberg cells — 'owl-eyed' nucleoli with clear cytoplasm, CD15+ and CD30+. Excisional lymph node biopsy (NOT FNA) is required for diagnosis to preserve architecture for immunophenotyping and cytogenetics. CXR is initial screening. PET/CT for staging: Stage I (single node), II (≥2 nodes same side of diaphragm), III (both sides), IV (extranodal). Treatment: ABVD chemotherapy (Adriamycin, Bleomycin, Vinblastine, Dacarbazine) ± radiation for early stage. Check albumin as prognostic indicator. Screen for HIV and EBV, which can mimic lymphoma.",
+  "physical_exam": [
+    [
+      "General",
+      "Weight loss, night sweats — constitutional B-symptoms."
+    ],
+    [
+      "Abdominal",
+      "Assess for splenomegaly."
+    ],
+    [
+      "Heent",
+      "Painless cervical lymphadenopathy — firm, rubbery, non-tender."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about my weight loss and these night sweats.",
-    "history": "I've been losing weight without trying and sweating a lot at night.",
-    "pain": "I don't have any specific pain, just feel really weak."
+    "chief_complaint": "Painless cervical lymphadenopathy, weight loss, night sweats",
+    "history": "{{patient_name}} presents with painless cervical lymphadenopathy and constitutional B-symptoms (weight loss, night sweats, fever). Hodgkin's lymphoma is a B-cell malignancy defined by Reed-Sternberg …",
+    "pain": "Painless cervical lymphadenopathy, weight loss, night sweats"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "This case illustrates the importance of considering hematologic malignancies in patients presenting with weight loss and night sweats. A thorough workup including imaging and laboratory tests is essential for accurate diagnosis and management.",
+  "ccs_category": "Internal Medicine / Hematology-Oncology",
+  "chief_complaint": "Painless cervical lymphadenopathy, weight loss, night sweats",
+  "case_summary": "Classic Hodgkin's lymphoma: painless cervical lymphadenopathy + B-symptoms. Excisional biopsy → Reed-Sternberg cells (CD15+/CD30+). PET/CT for staging. ABVD chemotherapy. Office diagnosis → heme/onc referral.",
+  "decoys": [
+    {
+      "label": "Fine-needle aspiration (FNA)",
+      "reason_wrong": "FNA is insufficient for lymphoma diagnosis. Excisional biopsy is required — need intact architecture for Reed-Sternberg identification, immunophenotyping (CD15/CD30), and cytogenetics."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Full exam — symptoms concerning for malignancy.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Breasts",
+      "type": "correctlyOrdered",
+      "finding": "Full exam for malignancy workup.",
+      "aliases": [
+        "Breast Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Full exam — assess for splenomegaly.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Lymph Nodes",
+      "type": "correctlyOrdered",
+      "finding": "Painless cervical lymphadenopathy — key finding.",
+      "aliases": [
+        "Lymph Node Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Rectal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Skin",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Skin Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Extremities / Spine",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Extremity Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Genitalia",
+      "type": "correctlyOrdered",
+      "finding": "Full exam.",
+      "aliases": [
+        "Genital Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "correctlyOrdered",
+      "finding": "Cervical lymphadenopathy — examine and characterize.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Screening tool.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "ECG, 12 lead",
+      "type": "shouldHaveOrdered",
+      "finding": "Quick screen for cardiac abnormalities.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "HIV test",
+      "type": "shouldHaveOrdered",
+      "finding": "HIV can present with lymphadenopathy and weight loss — must screen.",
+      "aliases": [
+        "HIV test"
+      ]
+    },
+    {
+      "label": "EBV titer",
+      "type": "shouldHaveOrdered",
+      "finding": "EBV can cause enlarged lymph nodes and night sweats.",
+      "aliases": [
+        "EBV serology"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Good initial screening tool. May show mediastinal lymphadenopathy.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "CT abdomen/pelvis",
+      "type": "optional",
+      "finding": "PET scan preferred over CT. CT if PET unavailable.",
+      "aliases": [
+        "CT"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "shouldHaveOrdered",
+      "finding": "Good screening tool — cheap, easy, useful info.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "shouldHaveOrdered",
+      "finding": "Complete vital sign picture.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Biopsy, lymph node (excisional)",
+      "type": "shouldHaveOrdered",
+      "finding": "Excisional biopsy is required — NOT FNA. Need surrounding architecture for immunophenotyping and cytogenetics. Reed-Sternberg cells: CD15+, CD30+.",
+      "aliases": [
+        "Lymph node biopsy",
+        "Excisional biopsy"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "Albumin, serum",
+      "type": "correctlyOrdered",
+      "finding": "Albumin is a prognostic indicator in Hodgkin's lymphoma.",
+      "aliases": [
+        "Albumin"
+      ]
+    },
+    {
+      "label": "CT chest / PET whole body",
+      "type": "shouldHaveOrdered",
+      "finding": "CT chest/abdomen/pelvis with contrast for staging. PET provides metabolic information.",
+      "aliases": [
+        "CT chest",
+        "PET scan"
+      ]
+    },
+    {
+      "label": "Consult, hematology/oncology",
+      "type": "correctlyOrdered",
+      "finding": "Once diagnosis reached, consult heme/onc for treatment: ABVD chemotherapy ± radiation.",
+      "aliases": [
+        "Heme/Onc consult"
+      ]
+    },
+    {
+      "label": "Counsel patient, cancer diagnosis",
+      "type": "correctlyOrdered",
+      "finding": "Cancer diagnosis is devastating — go over next steps and what to expect.",
+      "aliases": [
+        "Cancer counseling"
+      ]
+    }
+  ],
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Breasts",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Lymph Nodes",
+    "Physical Exam: Neuro / Psych",
+    "Physical Exam: Rectal",
+    "Physical Exam: Skin",
+    "Physical Exam: Extremities / Spine",
+    "Physical Exam: Genitalia",
+    "Physical Exam: HEENT / Neck",
     "CBC with differential",
-    "Comprehensive metabolic panel",
-    "Lactate dehydrogenase"
+    "ECG, 12 lead",
+    "HIV test",
+    "EBV titer",
+    "Chest X-ray",
+    {
+      "order": "CT abdomen/pelvis",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "PET scan preferred over CT. CT if PET unavailable."
+    },
+    "Urinalysis",
+    "Pulse oximetry",
+    "Biopsy, lymph node (excisional)",
+    "BMP / CMP / LFTs",
+    "Albumin, serum",
+    "CT chest / PET whole body",
+    "Consult, hematology/oncology",
+    "Counsel patient, cancer diagnosis"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Hodgkin's Lymphoma."
 }

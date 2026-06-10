@@ -1,68 +1,144 @@
 {
   "id": 54,
-  "topic": "Breast Feeding Neonatal Jaundice",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Yellow Baby",
+  "title": "Yellow Baby",
+  "diagnosis": "Breastfeeding Neonatal Jaundice (Unconjugated Hyperbilirubinemia)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Proposal sent: Admin",
-    "Proposal sent: Infant / Cardivascular",
-    "Proposal sent: Infant / Lungs",
-    "Proposal sent: Infant / Head",
-    "Proposal sent: Infant / Skin",
-    "Physical Exam: Infant / Cardivascular",
-    "Physical Exam: Infant / Lungs",
-    "Physical Exam: Infant / Head",
-    "Physical Exam: Infant / Skin",
-    "Physical Exam: Infant / Appearance"
+    "Physical Exam: Abdomen",
+    "CBC with differential + reticulocyte count",
+    "Total + direct bilirubin",
+    "Direct Coombs test",
+    {
+      "order": "G6PD screen",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Unconjugated hyperbilirubinemia — G6PD screening suggested."
+    },
+    "TSH",
+    "Optimize breastfeeding / Lactation consultation",
+    "Phototherapy (if exceeds Bhutani threshold)"
   ],
-  "should_avoid": [
-    "Proposal sent: Infant / Blank"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Proposal sent: Admin": "Appropriate CCS order for this diagnosis: Proposal sent: Admin.",
-    "Proposal sent: Infant / Cardivascular": "Appropriate CCS order for this diagnosis: Proposal sent: Infant / Cardivascular.",
-    "Proposal sent: Infant / Lungs": "Evaluate chest and lungs as part of the initial exam for breast feeding neonatal jaundice.",
-    "Proposal sent: Infant / Head": "Appropriate CCS order for this diagnosis: Proposal sent: Infant / Head.",
-    "Proposal sent: Infant / Skin": "Skin exam may show rashes or systemic signs relevant to this diagnosis.",
-    "Physical Exam: Infant / Cardivascular": "Appropriate CCS order for this diagnosis: Physical Exam: Infant / Cardivascular.",
-    "Physical Exam: Infant / Lungs": "Evaluate chest and lungs as part of the initial exam for breast feeding neonatal jaundice.",
-    "Physical Exam: Infant / Head": "Appropriate CCS order for this diagnosis: Physical Exam: Infant / Head.",
-    "Physical Exam: Infant / Skin": "Skin exam may show rashes or systemic signs relevant to this diagnosis.",
-    "Physical Exam: Infant / Appearance": "Appropriate CCS order for this diagnosis: Physical Exam: Infant / Appearance.",
-    "Proposal sent: Infant / Blank": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Physical Exam: Abdomen": "Full exam — assess for hepatosplenomegaly.",
+    "CBC with differential + reticulocyte count": "Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
+    "Total + direct bilirubin": "Unconjugated > conjugated. Plot on Bhutani nomogram.",
+    "Direct Coombs test": "Rule out immune-mediated hemolysis (ABO/Rh incompatibility).",
+    "G6PD screen": "Unconjugated hyperbilirubinemia — G6PD screening suggested.",
+    "TSH": "Congenital hypothyroidism causes prolonged jaundice.",
+    "Optimize breastfeeding / Lactation consultation": "Increase feeding frequency. Improve milk transfer.",
+    "Phototherapy (if exceeds Bhutani threshold)": "Per Bhutani nomogram for GA and risk factors."
   },
-  "hpi": "Differential diagnosis by the pediatrician. Physiology of hyperbilirubinemia, Gilbert's syndrome, weight, breast milk jaundice, hemolytic disease of the newborn (ABO incompatibility), biliary atresia and G6PD deficiency. The key is to ensure that the baby is feeding well and that the mother is not overfeeding the baby. Although bilirubin levels can be obtained in the laboratory, it is essential for the pediatrician to determine if the infant is feeding well. This is important because if the infant continues to be breastfed the bilirubin levels may continue to rise. It is also important that breastfeeding is encouraged.",
+  "hpi": "{{patient_name}} is a term newborn presenting with jaundice appearing after day 3-5 of life, clinically well-appearing, feeding well, gaining weight appropriately. Breastfeeding jaundice is the most common cause of prolonged neonatal unconjugated hyperbilirubinemia. Pathophysiology: inadequate breastfeeding intake → decreased stooling → increased enterohepatic circulation of bilirubin. Must distinguish from pathologic causes: hemolysis (ABO/Rh incompatibility, G6PD deficiency), sepsis, biliary atresia (conjugated), hypothyroidism. Key labs: total and direct bilirubin (unconjugated > conjugated by definition), CBC with reticulocyte count (anemia? hemolysis?), direct Coombs (immune hemolysis), G6PD screen. Plot on Bhutani nomogram for phototherapy threshold. Management: optimize breastfeeding (increase frequency, lactation consultation). Phototherapy if bilirubin exceeds threshold for gestational age and risk factors. Exchange transfusion if signs of bilirubin encephalopathy or failed phototherapy.",
+  "hpi_narrative": "{{patient_name}} is a term newborn presenting with jaundice appearing after day 3-5 of life, clinically well-appearing, feeding well, gaining weight appropriately. Breastfeeding jaundice is the most common cause of prolonged neonatal unconjugated hyperbilirubinemia. Pathophysiology: inadequate breastfeeding intake → decreased stooling → increased enterohepatic circulation of bilirubin. Must distinguish from pathologic causes: hemolysis (ABO/Rh incompatibility, G6PD deficiency), sepsis, biliary atresia (conjugated), hypothyroidism. Key labs: total and direct bilirubin (unconjugated > conjugated by definition), CBC with reticulocyte count (anemia? hemolysis?), direct Coombs (immune hemolysis), G6PD screen. Plot on Bhutani nomogram for phototherapy threshold. Management: optimize breastfeeding (increase frequency, lactation consultation). Phototherapy if bilirubin exceeds threshold for gestational age and risk factors. Exchange transfusion if signs of bilirubin encephalopathy or failed phototherapy.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really worried about my baby's jaundice. It looks so yellow.",
-    "history": "I noticed my baby was getting yellower each day. I’m scared it might be serious.",
-    "pain": "I just want to make sure my baby is okay."
+    "chief_complaint": "Jaundice in otherwise well-appearing term newborn",
+    "history": "{{patient_name}} is a term newborn presenting with jaundice appearing after day 3-5 of life, clinically well-appearing, feeding well, gaining weight appropriately. Breastfeeding jaundice is the most …",
+    "pain": "Jaundice in otherwise well-appearing term newborn"
   },
-  "ccs_category": "Pediatrics",
-  "case_summary": "Differential diagnosis by the pediatrician. Physiology of hyperbilirubinemia, Gilbert's syndrome, weight, breast milk jaundice, hemolytic disease of the newborn (ABO incompatibility), biliary atresia and G6PD deficiency. The key is to ensure that the baby is feeding well and that the mother is not overfeeding the baby. Although bilirubin levels can be obtained in the laboratory, it is essential for the pediatrician to determine if the infant is feeding well. This is important because if the infant continues to be breastfed the bilirubin levels may continue to rise. It is also important that breastfeeding is encouraged.",
+  "ccs_category": "Pediatrics / Neonatology",
+  "chief_complaint": "Jaundice in otherwise well-appearing term newborn",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Proposal sent: Admin",
-    "Proposal sent: Infant / Cardivascular",
-    "Proposal sent: Infant / Lungs",
-    "Proposal sent: Infant / Head",
-    "Proposal sent: Infant / Skin"
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam — assess for hepatosplenomegaly.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential + reticulocyte count",
+      "type": "shouldHaveOrdered",
+      "finding": "Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Total + direct bilirubin",
+      "type": "shouldHaveOrdered",
+      "finding": "Unconjugated > conjugated. Plot on Bhutani nomogram.",
+      "aliases": [
+        "Bilirubin"
+      ]
+    },
+    {
+      "label": "Direct Coombs test",
+      "type": "shouldHaveOrdered",
+      "finding": "Rule out immune-mediated hemolysis (ABO/Rh incompatibility).",
+      "aliases": [
+        "DAT",
+        "Coombs"
+      ]
+    },
+    {
+      "label": "G6PD screen",
+      "type": "optional",
+      "finding": "Unconjugated hyperbilirubinemia — G6PD screening suggested.",
+      "aliases": [
+        "G6PD"
+      ]
+    },
+    {
+      "label": "TSH",
+      "type": "correctlyOrdered",
+      "finding": "Congenital hypothyroidism causes prolonged jaundice.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Optimize breastfeeding / Lactation consultation",
+      "type": "correctlyOrdered",
+      "finding": "Increase feeding frequency. Improve milk transfer.",
+      "aliases": [
+        "Lactation consult"
+      ]
+    },
+    {
+      "label": "Phototherapy (if exceeds Bhutani threshold)",
+      "type": "correctlyOrdered",
+      "finding": "Per Bhutani nomogram for GA and risk factors.",
+      "aliases": [
+        "Bili lights"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Abdomen",
+    "CBC with differential + reticulocyte count",
+    "Total + direct bilirubin",
+    "Direct Coombs test",
+    {
+      "order": "G6PD screen",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "Unconjugated hyperbilirubinemia — G6PD screening suggested."
+    },
+    "TSH",
+    "Optimize breastfeeding / Lactation consultation",
+    "Phototherapy (if exceeds Bhutani threshold)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Breastfeeding Neonatal Jaundice (Unconjugated Hyperbilirubinemia)."
 }

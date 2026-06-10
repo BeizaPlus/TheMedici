@@ -1,46 +1,99 @@
 {
   "id": 145,
   "topic": "Facial Pain",
-  "diagnosis": "Bronchitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Facial Pain",
+  "diagnosis": "Postherpetic Neuralgia (Trigeminal Distribution)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "A"
+    "Physical Exam: Facial sensation",
+    "Gabapentin / Pregabalin",
+    "Amitriptyline / Nortriptyline",
+    "Lidocaine patch 5%",
+    "Shingrix vaccine (prevention)"
   ],
-  "should_avoid": [
-    "B"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "A": "Appropriate CCS order for Bronchitis: A.",
-    "B": "CCS review: avoid this order for Bronchitis — it does not change acute management."
+    "Physical Exam: Facial sensation": "Allodynia in V1 distribution. Prior vesicular rash scars.",
+    "Gabapentin / Pregabalin": "First-line for neuropathic pain.",
+    "Amitriptyline / Nortriptyline": "TCA for neuropathic pain.",
+    "Lidocaine patch 5%": "Topical — localized pain.",
+    "Shingrix vaccine (prevention)": "For age ≥50."
   },
-  "hpi": "The image shows a CCS review page with a clinical scenario presented. The user's score is -1, indicating that the order chosen was not correct according to the guidelines of CCS (the Centers for Medicare & Medicaid Services). There are two options available: A and B. Option A is marked as correctly ordered, with a rationale provided, while option B is marked as inappropriate due to an error in selection. Option C is not shown in the image. The average score of all users on this question is also -1.",
+  "hpi": "{{patient_name}} presents with persistent, severe, burning/shooting pain in the trigeminal nerve distribution (V1 most common) following a recent herpes zoster (shingles) outbreak with characteristic vesicular rash in the same distribution. Postherpetic neuralgia is the most common complication of HZ — pain persisting >90 days after rash resolution. Risk increases with age (>60). Caused by viral damage to sensory ganglia → neuropathic pain. Treatment: first-line — gabapentin or pregabalin, TCAs (amitriptyline, nortriptyline), lidocaine patch 5% (localized pain). Opioids NOT first-line. Prevention: recombinant zoster vaccine (Shingrix) for adults ≥50 — reduces HZ risk by >90% and PHN risk. VZV is reactivation of latent varicella virus in dorsal root ganglia.",
+  "hpi_narrative": "{{patient_name}} presents with persistent, severe, burning/shooting pain in the trigeminal nerve distribution (V1 most common) following a recent herpes zoster (shingles) outbreak with characteristic vesicular rash in the same distribution. Postherpetic neuralgia is the most common complication of HZ — pain persisting >90 days after rash resolution. Risk increases with age (>60). Caused by viral damage to sensory ganglia → neuropathic pain. Treatment: first-line — gabapentin or pregabalin, TCAs (amitriptyline, nortriptyline), lidocaine patch 5% (localized pain). Opioids NOT first-line. Prevention: recombinant zoster vaccine (Shingrix) for adults ≥50 — reduces HZ risk by >90% and PHN risk. VZV is reactivation of latent varicella virus in dorsal root ganglia.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — facial pain. I'm really scared.",
-    "history": "It's been getting worse. They said something about bronchitis. The image shows a CCS review page with a clinical scenario presented. The user's...",
-    "pain": "This facial pain won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Burning facial pain after shingles rash",
+    "history": "{{patient_name}} presents with persistent, severe, burning/shooting pain in the trigeminal nerve distribution (V1 most common) following a recent herpes zoster (shingles) outbreak with characteristic…",
+    "pain": "Burning facial pain after shingles rash"
   },
-  "ccs_category": null,
-  "case_summary": "The image shows a CCS review page with a clinical scenario presented. The user's score is -1, indicating that the order chosen was not correct according to the guidelines of CCS (the Centers for Medicare & Medicaid Services). There are two options available: A and B. Option A is marked as correctly ordered, with a rationale provided, while option B is marked as inappropriate due to an error in selection. Option C is not shown in the image. The average score of all users on this question is also -1.",
+  "ccs_category": "Neurology / Pain",
+  "chief_complaint": "Burning facial pain after shingles rash",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "A"
+    {
+      "label": "Physical Exam: Facial sensation",
+      "type": "correctlyOrdered",
+      "finding": "Allodynia in V1 distribution. Prior vesicular rash scars.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "Gabapentin / Pregabalin",
+      "type": "correctlyOrdered",
+      "finding": "First-line for neuropathic pain.",
+      "aliases": [
+        "Neurontin",
+        "Lyrica"
+      ]
+    },
+    {
+      "label": "Amitriptyline / Nortriptyline",
+      "type": "correctlyOrdered",
+      "finding": "TCA for neuropathic pain.",
+      "aliases": [
+        "Elavil"
+      ]
+    },
+    {
+      "label": "Lidocaine patch 5%",
+      "type": "correctlyOrdered",
+      "finding": "Topical — localized pain.",
+      "aliases": [
+        "Lidoderm"
+      ]
+    },
+    {
+      "label": "Shingrix vaccine (prevention)",
+      "type": "correctlyOrdered",
+      "finding": "For age ≥50.",
+      "aliases": [
+        "Zoster vaccine"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: Facial sensation",
+    "Gabapentin / Pregabalin",
+    "Amitriptyline / Nortriptyline",
+    "Lidocaine patch 5%",
+    "Shingrix vaccine (prevention)"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Postherpetic Neuralgia (Trigeminal Distribution)."
 }

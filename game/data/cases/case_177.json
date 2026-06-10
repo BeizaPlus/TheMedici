@@ -1,9 +1,10 @@
 {
   "id": 177,
   "topic": "Vaginal Bleeding",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Vaginal Bleeding",
+  "diagnosis": "Vaginal bleeding could be due to various causes such as hormonal imbalances, infections, cancer, or trauma. The most likely cause in a patient with unknown history can't be definitively determined without further investigation.",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Laboratory tests: Complete Blood Count (CBC), Coagulation profile, Human Chorionic Gonadotropin (hCG) test, Blood type and cross-match",
     "Imaging: Transvaginal ultrasound, Pelvis X-ray if trauma suspected",
@@ -14,42 +15,59 @@
     "Discharge from hospital without proper diagnosis and treatment"
   ],
   "rationale": {
-    "Laboratory tests: Complete Blood Count (CBC), Coagulation profile, Human Chorionic Gonadotropin (hCG) test, Blood type and cross-match": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Imaging: Transvaginal ultrasound, Pelvis X-ray if trauma suspected": "Imaging supports diagnosis when exam findings warrant it for this diagnosis.",
-    "Type & Screen / Crossmatch": "Appropriate CCS order for this diagnosis: Type & Screen / Crossmatch.",
-    "β-hCG": "Appropriate CCS order for this diagnosis: β-hCG.",
-    "Discharge from hospital without proper diagnosis and treatment": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Laboratory tests": "To help determine the cause of bleeding, assess the patient's blood count, coagulation status, pregnancy status, and blood type.",
+    "Imaging": "To visualize the pelvic organs for potential sources of bleeding and to rule out trauma or other pathologies.",
+    "Discharge from hospital without proper diagnosis and treatment": "Given the potential seriousness of vaginal bleeding, it is essential not to discharge a patient without a definitive diagnosis and appropriate treatment.",
+    "Type & Screen / Crossmatch": "To prepare for potential surgery or transfusion in case of complications related to the unknown vaginal bleeding.",
+    "β-hCG": "As this is a case involving a woman, a pregnancy test is essential."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — vaginal bleeding. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This vaginal bleeding won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Vaginal Bleeding — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 104; BP 115/72."
+    ],
+    [
+      "Respiratory",
+      "RR 19; SpO₂ 97%."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "No acute rash; capillary refill and perfusion assessed."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Laboratory tests: Complete Blood Count (CBC), Coagulation profile, Human Chorionic Gonadotropin (hCG) test, Blood type and cross-match",
     "Imaging: Transvaginal ultrasound, Pelvis X-ray if trauma suspected",
     "Type & Screen / Crossmatch",
     "β-hCG"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

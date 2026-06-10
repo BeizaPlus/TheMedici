@@ -1,60 +1,241 @@
 {
   "id": 28,
-  "topic": "Pelvic Inflammatory Disease",
+  "topic": "Pelvic Pain",
+  "title": "Pelvic Pain",
   "diagnosis": "Pelvic Inflammatory Disease",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "CBC",
-    "Urinalysis",
-    "Pregnancy Test",
-    "Pelvic Exam",
-    "Culture",
-    "CT Abdomen/Pelvis"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia / Pelvic",
+    "CBC with differential",
+    "Urinalysis / Urine culture",
+    "Chlamydia / Gonorrhea NAAT",
+    "HCG, beta (pregnancy test)",
+    "Pelvic ultrasound",
+    "HIV / Syphilis / Hepatitis screening",
+    "BMP / CMP",
+    "Ceftriaxone 250mg IM once",
+    "Doxycycline 100mg PO BID x 14 days",
+    "Metronidazole 500mg PO BID x 14 days",
+    "Analgesia (NSAIDs / Acetaminophen)",
+    "Advise patient, safe sex techniques",
+    "Advise patient, sexual partner needs treatment"
   ],
   "should_avoid": [
-    "MRI"
+    "Doxycycline x 7 days only"
   ],
   "rationale": {
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Pelvic Inflammatory Disease.",
-    "Urinalysis": "Appropriate CCS order for Pelvic Inflammatory Disease: Urinalysis.",
-    "Pregnancy Test": "Appropriate CCS order for Pelvic Inflammatory Disease: Pregnancy Test.",
-    "Pelvic Exam": "Pelvic/cervical evaluation is central for Pelvic Inflammatory Disease and localizes the source of pelvic inflammatory disease.",
-    "Culture": "Laboratory testing when systemic illness or severity warrants labs in Pelvic Inflammatory Disease.",
-    "CT Abdomen/Pelvis": "Abdominal exam helps exclude alternative causes in a patient with pelvic inflammatory disease.",
-    "MRI": "Advanced imaging is not indicated early for Pelvic Inflammatory Disease when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Assess severity.",
+    "Physical Exam: Abdomen": "Bilateral lower abdominal tenderness.",
+    "Physical Exam: Genitalia / Pelvic": "Cervical motion tenderness + adnexal tenderness + purulent discharge = classic PID.",
+    "CBC with differential": "Leukocytosis supports infection.",
+    "Urinalysis / Urine culture": "Rule out UTI/pyelo — dysuria can overlap.",
+    "Chlamydia / Gonorrhea NAAT": "Identify causative organisms. NAAT on cervical swab or urine.",
+    "HCG, beta (pregnancy test)": "MUST rule out ectopic pregnancy — can mimic PID.",
+    "Pelvic ultrasound": "Rule out tubo-ovarian abscess. Transvaginal preferred.",
+    "HIV / Syphilis / Hepatitis screening": "One STI → screen for all.",
+    "BMP / CMP": "Screening.",
+    "Ceftriaxone 250mg IM once": "Covers gonorrhea. Single IM dose.",
+    "Doxycycline 100mg PO BID x 14 days": "Covers chlamydia. 14-day course for PID (not 7-day like uncomplicated CT).",
+    "Metronidazole 500mg PO BID x 14 days": "Anaerobic coverage for PID.",
+    "Analgesia (NSAIDs / Acetaminophen)": "Pain management.",
+    "Advise patient, safe sex techniques": "STI prevention counseling.",
+    "Advise patient, sexual partner needs treatment": "Partner treatment essential to prevent reinfection.",
+    "Doxycycline x 7 days only": "PID requires 14-day course, not the 7-day course used for uncomplicated chlamydia. Inadequate duration risks treatment failure and complications."
   },
-  "hpi": "This case illustrates the importance of considering pelvic inflammatory disease in women of childbearing age presenting with abdominal pain. The diagnosis can often be made based on clinical findings and appropriate laboratory tests. Treatment typically involves antibiotics, and in some cases, surgical intervention may be necessary. It is crucial to rule out other potential causes of abdominal pain, including ectopic pregnancy and appendicitis.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a sexually active young woman presenting with bilateral lower abdominal/pelvic pain, cervical motion tenderness, adnexal tenderness, purulent cervical discharge, fever, and leukocytosis. Pelvic inflammatory disease is an ascending infection from the lower genital tract — commonly Chlamydia trachomatis and Neisseria gonorrhoeae, though polymicrobial. Diagnosis is clinical based on CDC criteria: uterine/adnexal tenderness + cervical motion tenderness (minimum). Complications: tubo-ovarian abscess, infertility, ectopic pregnancy, chronic pelvic pain. Treatment: empiric broad-spectrum antibiotics covering chlamydia, gonorrhea, and anaerobes — ceftriaxone 250mg IM once + doxycycline 100mg PO BID x 14 days + metronidazole 500mg PO BID x 14 days. Partner treatment essential. Screen for other STIs. Admit if severe, TOA, pregnant, or failed outpatient treatment.",
+  "hpi_narrative": "{{patient_name}} is a sexually active young woman presenting with bilateral lower abdominal/pelvic pain, cervical motion tenderness, adnexal tenderness, purulent cervical discharge, fever, and leukocytosis. Pelvic inflammatory disease is an ascending infection from the lower genital tract — commonly Chlamydia trachomatis and Neisseria gonorrhoeae, though polymicrobial. Diagnosis is clinical based on CDC criteria: uterine/adnexal tenderness + cervical motion tenderness (minimum). Complications: tubo-ovarian abscess, infertility, ectopic pregnancy, chronic pelvic pain. Treatment: empiric broad-spectrum antibiotics covering chlamydia, gonorrhea, and anaerobes — ceftriaxone 250mg IM once + doxycycline 100mg PO BID x 14 days + metronidazole 500mg PO BID x 14 days. Partner treatment essential. Screen for other STIs. Admit if severe, TOA, pregnant, or failed outpatient treatment.",
+  "physical_exam": [
+    [
+      "General",
+      "Febrile, appears uncomfortable."
+    ],
+    [
+      "Abdominal",
+      "Bilateral lower quadrant tenderness. No peritoneal signs."
+    ],
+    [
+      "Genitourinary",
+      "Cervical motion tenderness. Adnexal tenderness (bilateral). Purulent cervical discharge. Uterine tenderness."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared. I have this terrible pain in my lower abdomen.",
-    "history": "I felt fine until yesterday. The pain started suddenly and got worse.",
-    "pain": "It hurts a lot, especially when I move."
+    "chief_complaint": "Bilateral pelvic pain, fever, purulent discharge",
+    "history": "{{patient_name}} is a sexually active young woman presenting with bilateral lower abdominal/pelvic pain, cervical motion tenderness, adnexal tenderness, purulent cervical discharge, fever, and leukoc…",
+    "pain": "Bilateral pelvic pain, fever, purulent discharge"
   },
-  "ccs_category": null,
-  "case_summary": "This case illustrates the importance of considering pelvic inflammatory disease in women of childbearing age presenting with abdominal pain. The diagnosis can often be made based on clinical findings and appropriate laboratory tests. Treatment typically involves antibiotics, and in some cases, surgical intervention may be necessary. It is crucial to rule out other potential causes of abdominal pain, including ectopic pregnancy and appendicitis.",
+  "ccs_category": "OB/GYN / Infectious Disease",
+  "chief_complaint": "Bilateral pelvic pain, fever, purulent discharge",
+  "case_summary": "PID diagnosed clinically. Cervical motion tenderness + adnexal tenderness + fever + discharge. Ceftriaxone IM + doxycycline x14d + metronidazole x14d. Rule out ectopic. Partner treatment.",
+  "decoys": [
+    {
+      "label": "Doxycycline x 7 days only",
+      "reason_wrong": "PID requires 14-day course, not the 7-day course used for uncomplicated chlamydia. Inadequate duration risks treatment failure and complications."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "CBC Ordered",
-    "Urinalysis Ordered",
-    "Pregnancy Test Ordered",
-    "Pelvic Exam Ordered",
-    "Culture Ordered"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess severity.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Bilateral lower abdominal tenderness.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Genitalia / Pelvic",
+      "type": "correctlyOrdered",
+      "finding": "Cervical motion tenderness + adnexal tenderness + purulent discharge = classic PID.",
+      "aliases": [
+        "Pelvic Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis supports infection.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Urinalysis / Urine culture",
+      "type": "correctlyOrdered",
+      "finding": "Rule out UTI/pyelo — dysuria can overlap.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Chlamydia / Gonorrhea NAAT",
+      "type": "correctlyOrdered",
+      "finding": "Identify causative organisms. NAAT on cervical swab or urine.",
+      "aliases": [
+        "CT/GC testing"
+      ]
+    },
+    {
+      "label": "HCG, beta (pregnancy test)",
+      "type": "correctlyOrdered",
+      "finding": "MUST rule out ectopic pregnancy — can mimic PID.",
+      "aliases": [
+        "Pregnancy test"
+      ]
+    },
+    {
+      "label": "Pelvic ultrasound",
+      "type": "correctlyOrdered",
+      "finding": "Rule out tubo-ovarian abscess. Transvaginal preferred.",
+      "aliases": [
+        "Pelvic US",
+        "TVUS"
+      ]
+    },
+    {
+      "label": "HIV / Syphilis / Hepatitis screening",
+      "type": "shouldHaveOrdered",
+      "finding": "One STI → screen for all.",
+      "aliases": [
+        "STI panel"
+      ]
+    },
+    {
+      "label": "BMP / CMP",
+      "type": "correctlyOrdered",
+      "finding": "Screening.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Ceftriaxone 250mg IM once",
+      "type": "correctlyOrdered",
+      "finding": "Covers gonorrhea. Single IM dose.",
+      "aliases": [
+        "Rocephin"
+      ]
+    },
+    {
+      "label": "Doxycycline 100mg PO BID x 14 days",
+      "type": "correctlyOrdered",
+      "finding": "Covers chlamydia. 14-day course for PID (not 7-day like uncomplicated CT).",
+      "aliases": [
+        "Doxycycline"
+      ]
+    },
+    {
+      "label": "Metronidazole 500mg PO BID x 14 days",
+      "type": "correctlyOrdered",
+      "finding": "Anaerobic coverage for PID.",
+      "aliases": [
+        "Flagyl"
+      ]
+    },
+    {
+      "label": "Analgesia (NSAIDs / Acetaminophen)",
+      "type": "shouldHaveOrdered",
+      "finding": "Pain management.",
+      "aliases": [
+        "Pain medication"
+      ]
+    },
+    {
+      "label": "Advise patient, safe sex techniques",
+      "type": "shouldHaveOrdered",
+      "finding": "STI prevention counseling.",
+      "aliases": [
+        "Safe sex"
+      ]
+    },
+    {
+      "label": "Advise patient, sexual partner needs treatment",
+      "type": "shouldHaveOrdered",
+      "finding": "Partner treatment essential to prevent reinfection.",
+      "aliases": [
+        "Partner treatment"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia / Pelvic",
+    "CBC with differential",
+    "Urinalysis / Urine culture",
+    "Chlamydia / Gonorrhea NAAT",
+    "HCG, beta (pregnancy test)",
+    "Pelvic ultrasound",
+    "HIV / Syphilis / Hepatitis screening",
+    "BMP / CMP",
+    "Ceftriaxone 250mg IM once",
+    "Doxycycline 100mg PO BID x 14 days",
+    "Metronidazole 500mg PO BID x 14 days",
+    "Analgesia (NSAIDs / Acetaminophen)",
+    "Advise patient, safe sex techniques",
+    "Advise patient, sexual partner needs treatment"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and numeric vitals are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Pelvic Inflammatory Disease."
 }

@@ -1,70 +1,308 @@
 {
   "id": 8,
   "topic": "Burning During Urination",
-  "diagnosis": "Prostatitis",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Burning During Urination",
+  "diagnosis": "Prostatitis (E. coli)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Genitourinary",
-    "Physical Exam: Rectal Exam",
-    "Physical Exam: Abdominal Exam",
-    "Physical Exam: Skin",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia",
+    "Physical Exam: Rectal",
     "Urinalysis",
-    "Stool culture",
-    "CT abdomen/pelvis",
-    "Urine culture",
-    "Urine toxicology"
+    "Gram stain, urine, unspun",
+    "Chlamydia testing (DNA probe / DFA / culture)",
+    "Gonorrhea testing (DNA probe / culture)",
+    "Bacterial culture, urine",
+    "CBC with differential",
+    "Pulse oximetry",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Ciprofloxacin / TMP-SMX / Levofloxacin",
+    "Advise patient, drive with seat belt",
+    "Advise patient, safe sex techniques",
+    "Reassure patient",
+    "Tdap vaccine",
+    "Meningococcal vaccine"
   ],
   "should_avoid": [
-    "Fluids only",
-    "Pain control"
+    "Blood culture",
+    "Vigorous prostate massage",
+    "Ceftriaxone as sole therapy"
   ],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for burning during urination.",
-    "Physical Exam: Genitourinary": "Appropriate CCS order for Prostatitis: Physical Exam: Genitourinary.",
-    "Physical Exam: Rectal Exam": "Appropriate CCS order for Prostatitis: Physical Exam: Rectal Exam.",
-    "Physical Exam: Abdominal Exam": "Appropriate CCS order for Prostatitis: Physical Exam: Abdominal Exam.",
-    "Physical Exam: Skin": "Skin exam may show rashes or systemic signs relevant to Prostatitis.",
-    "Urinalysis": "Appropriate CCS order for Prostatitis: Urinalysis.",
-    "Stool culture": "Laboratory testing when systemic illness or severity warrants labs in Prostatitis.",
-    "CT abdomen/pelvis": "Abdominal exam helps exclude alternative causes in a patient with burning during urination.",
-    "Urine culture": "Laboratory testing when systemic illness or severity warrants labs in Prostatitis.",
-    "Urine toxicology": "Appropriate CCS order for Prostatitis: Urine toxicology.",
-    "Fluids only": "CCS review: avoid this order for Prostatitis — it does not change acute management.",
-    "Pain control": "CCS review: avoid this order for Prostatitis — it does not change acute management."
+    "Physical Exam: General Appearance": "Determine how sick the patient looks.",
+    "Physical Exam: Chest / Lungs": "Investigate for lung pathology.",
+    "Physical Exam: Heart / Cardiovascular": "Investigate for cardiac pathology.",
+    "Physical Exam: Abdomen": "Urinary problems could be caused by abdominal pathology.",
+    "Physical Exam: Genitalia": "Chief complaint — genital exam essential.",
+    "Physical Exam: Rectal": "Edematous, tender prostate on DRE — key finding that localizes infection to prostate.",
+    "Urinalysis": "Quick diagnostic tool. Shows pyuria, bacteriuria.",
+    "Gram stain, urine, unspun": "Guides antibiotic treatment by identifying organism class (gram-negative rods = E. coli).",
+    "Chlamydia testing (DNA probe / DFA / culture)": "In any suspected prostatitis, rule out STIs — Chlamydia must be excluded.",
+    "Gonorrhea testing (DNA probe / culture)": "In any suspected urethritis/prostatitis, rule out gonorrhea.",
+    "Bacterial culture, urine": "Before antibiotic treatment, always get urine culture. Confirms organism and sensitivities.",
+    "CBC with differential": "CBC important in febrile patient. Leukocytosis expected.",
+    "Pulse oximetry": "In any febrile patient, know oxygenation status.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "BMPs are excellent screening tools.",
+    "Ciprofloxacin / TMP-SMX / Levofloxacin": "Fluoroquinolones are first-line for prostatitis — excellent penetration of inflamed prostate. TMP-SMX is alternative. Treat 14-28 days for chronic bacterial prostatitis.",
+    "Advise patient, drive with seat belt": "Emphasize seat belt use — common cause of death in young adults.",
+    "Advise patient, safe sex techniques": "Patient has history of risky sexual practices — review safe sex to prevent future STIs.",
+    "Reassure patient": "Reassuring the patient is good medicine.",
+    "Tdap vaccine": "Tdap every 10 years. No history given — should be administered.",
+    "Meningococcal vaccine": "College-age patient should receive meningitis vaccine.",
+    "Blood culture": "Patient does not meet SIRS criteria. Blood cultures not necessary for uncomplicated prostatitis without sepsis.",
+    "Vigorous prostate massage": "Can cause bacteremia. Gentle DRE is sufficient for diagnosis.",
+    "Ceftriaxone as sole therapy": "Ceftriaxone does not adequately penetrate the prostate. Fluoroquinolones are the treatment of choice."
   },
-  "hpi": "A 45-year-old male presents with burning during urination. He has a history of recurrent urinary tract infections and is concerned about his prostate health. A quick diagnosis could guide treatment to avoid antibiotics and a urine culture.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a 19-year-old sexually active man who presents with dysuria, fevers, and chills. Rectal exam reveals an edematous, tender prostate — the key finding that localizes the infection to the prostate rather than the bladder or urethra alone. He denies flank pain or CVA tenderness (making pyelonephritis less likely). The differential includes cystitis, urethritis, pyelonephritis, and sexually transmitted infections (Chlamydia, gonorrhea). E. coli accounts for approximately one-third of prostatitis cases. Fluoroquinolones are the treatment of choice due to their ability to penetrate the inflamed prostate.",
+  "hpi_narrative": "{{patient_name}} is a 19-year-old sexually active man who presents with dysuria, fevers, and chills. Rectal exam reveals an edematous, tender prostate — the key finding that localizes the infection to the prostate rather than the bladder or urethra alone. He denies flank pain or CVA tenderness (making pyelonephritis less likely). The differential includes cystitis, urethritis, pyelonephritis, and sexually transmitted infections (Chlamydia, gonorrhea). E. coli accounts for approximately one-third of prostatitis cases. Fluoroquinolones are the treatment of choice due to their ability to penetrate the inflamed prostate.",
+  "physical_exam": [
+    [
+      "General",
+      "Febrile, appears ill."
+    ],
+    [
+      "Abdominal",
+      "Suprapubic tenderness may be present. No CVA tenderness (rules out pyelonephritis)."
+    ],
+    [
+      "Genitourinary",
+      "Dysuria. Urethral discharge absent. Testicular exam normal."
+    ],
+    [
+      "Rectal",
+      "Edematous, tender prostate on digital rectal exam — pathognomonic for prostatitis. CAUTION: do not perform vigorous prostate massage — risk of bacteremia."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really scared about this burning when I urinate. It feels awful.",
-    "history": "I've had this issue before, and it keeps coming back. I don't know what to do.",
-    "pain": "It hurts a lot when I try to go."
+    "chief_complaint": "Dysuria, fevers, chills",
+    "history": "{{patient_name}} is a 19-year-old sexually active man who presents with dysuria, fevers, and chills. Rectal exam reveals an edematous, tender prostate — the key finding that localizes the infection t…",
+    "pain": "Dysuria, fevers, chills"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "A 45-year-old male presents with burning during urination. He has a history of recurrent urinary tract infections and is concerned about his prostate health. A quick diagnosis could guide treatment to avoid antibiotics and a urine culture.",
+  "ccs_category": "Internal Medicine / Urology",
+  "chief_complaint": "Dysuria, fevers, chills",
+  "case_summary": "Acute bacterial prostatitis in sexually active 19-year-old. DRE: tender, edematous prostate. Urine gram stain: gram-negative rods (E. coli). UA + urine culture + STI panel + CBC → ciprofloxacin 14-28 days. Office management. Prevention: Tdap, meningococcal vaccine, safe sex counseling.",
+  "decoys": [
+    {
+      "label": "Blood culture",
+      "reason_wrong": "Patient does not meet SIRS criteria. Blood cultures not necessary for uncomplicated prostatitis without sepsis."
+    },
+    {
+      "label": "Vigorous prostate massage",
+      "reason_wrong": "Can cause bacteremia. Gentle DRE is sufficient for diagnosis."
+    },
+    {
+      "label": "Ceftriaxone as sole therapy",
+      "reason_wrong": "Ceftriaxone does not adequately penetrate the prostate. Fluoroquinolones are the treatment of choice."
+    }
+  ],
+  "distractors": [],
   "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Determine how sick the patient looks.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for lung pathology.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for cardiac pathology.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Urinary problems could be caused by abdominal pathology.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Genitalia",
+      "type": "correctlyOrdered",
+      "finding": "Chief complaint — genital exam essential.",
+      "aliases": [
+        "Genital Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "correctlyOrdered",
+      "finding": "Edematous, tender prostate on DRE — key finding that localizes infection to prostate.",
+      "aliases": [
+        "Rectal Exam",
+        "DRE"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "shouldHaveOrdered",
+      "finding": "Quick diagnostic tool. Shows pyuria, bacteriuria.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "Gram stain, urine, unspun",
+      "type": "shouldHaveOrdered",
+      "finding": "Guides antibiotic treatment by identifying organism class (gram-negative rods = E. coli).",
+      "aliases": [
+        "Urine Gram stain"
+      ]
+    },
+    {
+      "label": "Chlamydia testing (DNA probe / DFA / culture)",
+      "type": "correctlyOrdered",
+      "finding": "In any suspected prostatitis, rule out STIs — Chlamydia must be excluded.",
+      "aliases": [
+        "Chlamydia DNA probe",
+        "Chlamydia test"
+      ]
+    },
+    {
+      "label": "Gonorrhea testing (DNA probe / culture)",
+      "type": "correctlyOrdered",
+      "finding": "In any suspected urethritis/prostatitis, rule out gonorrhea.",
+      "aliases": [
+        "GC test",
+        "Gonorrhea DNA probe"
+      ]
+    },
+    {
+      "label": "Bacterial culture, urine",
+      "type": "correctlyOrdered",
+      "finding": "Before antibiotic treatment, always get urine culture. Confirms organism and sensitivities.",
+      "aliases": [
+        "Urine culture"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "CBC important in febrile patient. Leukocytosis expected.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "shouldHaveOrdered",
+      "finding": "In any febrile patient, know oxygenation status.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Basic metabolic profile / Comprehensive metabolic profile",
+      "type": "correctlyOrdered",
+      "finding": "BMPs are excellent screening tools.",
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
+    },
+    {
+      "label": "Ciprofloxacin / TMP-SMX / Levofloxacin",
+      "type": "correctlyOrdered",
+      "finding": "Fluoroquinolones are first-line for prostatitis — excellent penetration of inflamed prostate. TMP-SMX is alternative. Treat 14-28 days for chronic bacterial prostatitis.",
+      "aliases": [
+        "Cipro",
+        "Bactrim",
+        "Levaquin",
+        "Cephalexin",
+        "Ceftriaxone"
+      ]
+    },
+    {
+      "label": "Advise patient, drive with seat belt",
+      "type": "shouldHaveOrdered",
+      "finding": "Emphasize seat belt use — common cause of death in young adults.",
+      "aliases": [
+        "Seat belt counseling"
+      ]
+    },
+    {
+      "label": "Advise patient, safe sex techniques",
+      "type": "correctlyOrdered",
+      "finding": "Patient has history of risky sexual practices — review safe sex to prevent future STIs.",
+      "aliases": [
+        "Safe sex counseling"
+      ]
+    },
+    {
+      "label": "Reassure patient",
+      "type": "shouldHaveOrdered",
+      "finding": "Reassuring the patient is good medicine.",
+      "aliases": [
+        "Reassurance"
+      ]
+    },
+    {
+      "label": "Tdap vaccine",
+      "type": "shouldHaveOrdered",
+      "finding": "Tdap every 10 years. No history given — should be administered.",
+      "aliases": [
+        "Tdap"
+      ]
+    },
+    {
+      "label": "Meningococcal vaccine",
+      "type": "shouldHaveOrdered",
+      "finding": "College-age patient should receive meningitis vaccine.",
+      "aliases": [
+        "Meningitis vaccine"
+      ]
+    }
+  ],
+  "order_sets": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Genitourinary",
-    "Physical Exam: Rectal Exam",
-    "Physical Exam: Abdominal Exam",
-    "Physical Exam: Skin"
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia",
+    "Physical Exam: Rectal",
+    "Urinalysis",
+    "Gram stain, urine, unspun",
+    "Chlamydia testing (DNA probe / DFA / culture)",
+    "Gonorrhea testing (DNA probe / culture)",
+    "Bacterial culture, urine",
+    "CBC with differential",
+    "Pulse oximetry",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Ciprofloxacin / TMP-SMX / Levofloxacin",
+    "Advise patient, drive with seat belt",
+    "Advise patient, safe sex techniques",
+    "Reassure patient",
+    "Tdap vaccine",
+    "Meningococcal vaccine"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Prostatitis (E. coli)."
 }

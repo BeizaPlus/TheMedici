@@ -1,9 +1,10 @@
 {
   "id": 70,
   "topic": "Fever",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Fever",
+  "diagnosis": "Infectious workup including sepsis, meningitis, or pneumonia are potential considerations due to the fever being of unknown origin.",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Obtain blood cultures before starting antibiotics",
     "Perform complete blood count (CBC), comprehensive metabolic panel (CMP), and urinalysis",
@@ -17,35 +18,47 @@
     "Immediately starting broad-spectrum antibiotics without obtaining blood cultures"
   ],
   "rationale": {
-    "Obtain blood cultures before starting antibiotics": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Perform complete blood count (CBC), comprehensive metabolic panel (CMP), and urinalysis": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Consider obtaining lumbar puncture (LP) for cerebrospinal fluid analysis in cases where meningitis is suspected": "Appropriate CCS order for this diagnosis: Consider obtaining lumbar puncture (LP) for cerebrospinal fluid analysis in cases where meningitis is suspected.",
-    "Obtain a chest X-ray or consider computed tomography (CT) scan if pneumonia is suspected": "Evaluate chest and lungs as part of the initial exam for fever.",
-    "Start empiric broad-spectrum antibiotics after obtaining blood cultures": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "IV access ×2": "Appropriate CCS order for this diagnosis: IV access ×2.",
-    "Immediately starting broad-spectrum antibiotics without obtaining blood cultures": "Advanced imaging is not indicated early for this diagnosis when the diagnosis is clinical."
+    "starting antibiotics before blood cultures": "Avoid starting antibiotics immediately to preserve culture sensitivity, allowing for more accurate identification of the pathogen.",
+    "Oxygen": "Fever is a symptom that could indicate an infection, and the patient may be in distress. Oxygen should be administered immediately.",
+    "IV access ×2": "Intravenous access is essential for administering fluids, medications, and other lifesaving interventions."
   },
   "hpi": null,
-  "physical_exam": [],
-  "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
-    "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
-  },
-  "patient_voice": {
-    "chief_complaint": "I need help — fever. I'm really scared.",
-    "history": "It's been getting worse. They said something about i don't know what's wrong. ...",
-    "pain": "This fever won't let up and I'm afraid something bad is happening."
-  },
+  "hpi_narrative": null,
+  "physical_exam": [
+    [
+      "General",
+      "Fever — exam tailored to chief complaint on arrival."
+    ],
+    [
+      "Cardiovascular",
+      "HR 106; BP 93/58; hypotensive."
+    ],
+    [
+      "Respiratory",
+      "RR 19; SpO₂ 91%; hypoxemic."
+    ],
+    [
+      "Abdomen",
+      "Soft, non-distended, no focal peritoneal signs on initial exam."
+    ],
+    [
+      "Neuro",
+      "Alert and oriented unless perfusion or metabolic derangement present."
+    ],
+    [
+      "Skin",
+      "Warm skin with fever; no purpura on initial survey."
+    ]
+  ],
+  "vitals": null,
+  "patient_voice": null,
   "ccs_category": null,
+  "chief_complaint": null,
   "case_summary": null,
-  "stacks": [
+  "decoys": [],
+  "distractors": [],
+  "stacks": [],
+  "order_sets": [
     "Obtain blood cultures before starting antibiotics",
     "Perform complete blood count (CBC), comprehensive metabolic panel (CMP), and urinalysis",
     "Consider obtaining lumbar puncture (LP) for cerebrospinal fluid analysis in cases where meningitis is suspected",
@@ -54,11 +67,11 @@
     "Oxygen",
     "IV access ×2"
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "fmgmatch",
+    "mistral"
   ],
-  "extraction_notes": "No screenshot in source folder. To be filled from Crush Step 3 CCS book."
+  "extraction_notes": "Pass-through DeepSeek/converted case."
 }

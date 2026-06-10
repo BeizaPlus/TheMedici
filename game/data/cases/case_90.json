@@ -1,73 +1,120 @@
 {
   "id": 90,
-  "topic": "Prenatal followup",
-  "diagnosis": "Pregnancy Induced Hypertension (Gestational hypertension)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Prenatal Followup",
+  "title": "Prenatal Followup",
+  "diagnosis": "Gestational Hypertension (Pregnancy-Induced Hypertension)",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Ordered: Nifedipine",
-    "Ordered: Magnesium sulfate",
-    "Ordered: Intravenous access",
-    "Ordered: Methyldopa",
-    "Ordered: Nifedipine",
     "Physical Exam: General Appearance",
-    "Physical Exam: Chest/Lungs",
-    "Physical Exam: Cardiovascular",
-    "Physical Exam: Abdominal",
-    "Physical Exam: Extremities"
+    "BP monitoring (serial)",
+    "UA / 24h urine protein",
+    "CBC / BMP / LFTs",
+    "Fetal US / NST",
+    "Labetalol / Nifedipine ER",
+    "Low-dose aspirin 81mg"
   ],
-  "should_avoid": [
-    "CMP/BMP (Metabolic Panel): CMP/BMP (Metabolic Panel): Electrolytes, renal/liver status; UA ± culture; UTI, sepsis workup",
-    "Never forget: Never forget: pregnancy test; in women of childbearing age.",
-    "order1",
-    "Premature delivery prevention medications"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Ordered: Nifedipine": "Appropriate CCS order for Pregnancy Induced Hypertension (Gestational hypertension): Ordered: Nifedipine.",
-    "Ordered: Magnesium sulfate": "Appropriate CCS order for Pregnancy Induced Hypertension (Gestational hypertension): Ordered: Magnesium sulfate.",
-    "Ordered: Intravenous access": "Appropriate CCS order for Pregnancy Induced Hypertension (Gestational hypertension): Ordered: Intravenous access.",
-    "Ordered: Methyldopa": "Appropriate CCS order for Pregnancy Induced Hypertension (Gestational hypertension): Ordered: Methyldopa.",
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for prenatal followup.",
-    "Physical Exam: Chest/Lungs": "Evaluate chest and lungs as part of the initial exam for prenatal followup.",
-    "Physical Exam: Cardiovascular": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to prenatal followup.",
-    "Physical Exam: Abdominal": "Appropriate CCS order for Pregnancy Induced Hypertension (Gestational hypertension): Physical Exam: Abdominal.",
-    "Physical Exam: Extremities": "Targeted Physical Exam: Extremities exam supports the differential for Pregnancy Induced Hypertension (Gestational hypertension).",
-    "CMP/BMP (Metabolic Panel): CMP/BMP (Metabolic Panel): Electrolytes, renal/liver status; UA ± culture; UTI, sepsis workup": "Advanced imaging is not indicated early for Pregnancy Induced Hypertension (Gestational hypertension) when the diagnosis is clinical.",
-    "Never forget: Never forget: pregnancy test; in women of childbearing age.": "CCS review: avoid this order for Pregnancy Induced Hypertension (Gestational hypertension) — it does not change acute management.",
-    "order1": "CCS review: avoid this order for Pregnancy Induced Hypertension (Gestational hypertension) — it does not change acute management.",
-    "Premature delivery prevention medications": "CCS review: avoid this order for Pregnancy Induced Hypertension (Gestational hypertension) — it does not change acute management."
+    "Physical Exam: General Appearance": "Assess.",
+    "BP monitoring (serial)": ">140/90 on 2 occasions.",
+    "UA / 24h urine protein": "Rule out proteinuria (pre-eclampsia).",
+    "CBC / BMP / LFTs": "Screen for HELLP, renal function.",
+    "Fetal US / NST": "Fetal well-being.",
+    "Labetalol / Nifedipine ER": "If BP >160/110. NO ACEI/ARBs.",
+    "Low-dose aspirin 81mg": "Pre-eclampsia prevention."
   },
-  "hpi": "Obstetric/Gestational Hypertension: Clinical Presentation and Management. Gestational hypertension is defined as new-onset hypertension after 20 weeks of gestation. The patient should be monitored closely for signs of preeclampsia. The treatment for gestational hypertension includes monitoring blood pressure and, if necessary, initiating antihypertensive therapy. It is important to note that the patient should be counseled regarding the potential risks associated with gestational hypertension and the need for close follow-up. The management of gestational hypertension may include lifestyle modifications and, in some cases, medication.",
+  "hpi": "{{patient_name}} is a pregnant woman >20 weeks gestation with elevated BP (>140/90 on two occasions at least 4 hours apart) and no proteinuria and no end-organ damage. This is gestational hypertension (PIH) — distinguished from pre-eclampsia by absence of proteinuria and end-organ dysfunction. Risk factors: nulliparity, advanced maternal age, obesity, family history, multiple gestation. Must monitor closely for progression to pre-eclampsia (up to 25% progress). Management: if BP >160/110 → antihypertensive treatment (labetalol, nifedipine ER, methyldopa). If BP 140-159/90-109 → conservative monitoring, no medication needed but close surveillance. ACEI/ARBs CONTRAINDICATED in pregnancy. Serial monitoring: BP checks, UA for protein, fetal growth US, NST/BPP starting at 32 weeks. Delivery at 37 weeks (no later than term). If develops pre-eclampsia features → manage as pre-eclampsia. Low-dose aspirin 81mg for pre-eclampsia prevention in high-risk women (started at 12-28 weeks).",
+  "hpi_narrative": "{{patient_name}} is a pregnant woman >20 weeks gestation with elevated BP (>140/90 on two occasions at least 4 hours apart) and no proteinuria and no end-organ damage. This is gestational hypertension (PIH) — distinguished from pre-eclampsia by absence of proteinuria and end-organ dysfunction. Risk factors: nulliparity, advanced maternal age, obesity, family history, multiple gestation. Must monitor closely for progression to pre-eclampsia (up to 25% progress). Management: if BP >160/110 → antihypertensive treatment (labetalol, nifedipine ER, methyldopa). If BP 140-159/90-109 → conservative monitoring, no medication needed but close surveillance. ACEI/ARBs CONTRAINDICATED in pregnancy. Serial monitoring: BP checks, UA for protein, fetal growth US, NST/BPP starting at 32 weeks. Delivery at 37 weeks (no later than term). If develops pre-eclampsia features → manage as pre-eclampsia. Low-dose aspirin 81mg for pre-eclampsia prevention in high-risk women (started at 12-28 weeks).",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": ">140/90",
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm really worried about my blood pressure. It feels so high.",
-    "history": "I didn't have high blood pressure before. Now I'm scared.",
-    "pain": "I feel a tightness in my chest sometimes."
+    "chief_complaint": "Elevated BP >20 weeks, no proteinuria",
+    "history": "{{patient_name}} is a pregnant woman >20 weeks gestation with elevated BP (>140/90 on two occasions at least 4 hours apart) and no proteinuria and no end-organ damage. This is gestational hypertensio…",
+    "pain": "Elevated BP >20 weeks, no proteinuria"
   },
   "ccs_category": "OB/GYN",
-  "case_summary": "Obstetric/Gestational Hypertension: Clinical Presentation and Management. Gestational hypertension is defined as new-onset hypertension after 20 weeks of gestation. The patient should be monitored closely for signs of preeclampsia. The treatment for gestational hypertension includes monitoring blood pressure and, if necessary, initiating antihypertensive therapy. It is important to note that the patient should be counseled regarding the potential risks associated with gestational hypertension and the need for close follow-up. The management of gestational hypertension may include lifestyle modifications and, in some cases, medication.",
+  "chief_complaint": "Elevated BP >20 weeks, no proteinuria",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Ordered: Nifedipine",
-    "Ordered: Magnesium sulfate",
-    "Ordered: Intravenous access",
-    "Ordered: Methyldopa"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "BP monitoring (serial)",
+      "type": "correctlyOrdered",
+      "finding": ">140/90 on 2 occasions.",
+      "aliases": [
+        "BP"
+      ]
+    },
+    {
+      "label": "UA / 24h urine protein",
+      "type": "correctlyOrdered",
+      "finding": "Rule out proteinuria (pre-eclampsia).",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "CBC / BMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screen for HELLP, renal function.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Fetal US / NST",
+      "type": "correctlyOrdered",
+      "finding": "Fetal well-being.",
+      "aliases": [
+        "Obstetric US"
+      ]
+    },
+    {
+      "label": "Labetalol / Nifedipine ER",
+      "type": "correctlyOrdered",
+      "finding": "If BP >160/110. NO ACEI/ARBs.",
+      "aliases": [
+        "Labetalol"
+      ]
+    },
+    {
+      "label": "Low-dose aspirin 81mg",
+      "type": "correctlyOrdered",
+      "finding": "Pre-eclampsia prevention.",
+      "aliases": [
+        "Aspirin"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "BP monitoring (serial)",
+    "UA / 24h urine protein",
+    "CBC / BMP / LFTs",
+    "Fetal US / NST",
+    "Labetalol / Nifedipine ER",
+    "Low-dose aspirin 81mg"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Missing HPI, physical exam findings, and numeric vitals."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Gestational Hypertension (Pregnancy-Induced Hypertension)."
 }

@@ -1,69 +1,175 @@
 {
   "id": 49,
-  "topic": "Headache",
-  "diagnosis": "Unknown",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "topic": "Cough",
+  "title": "Cough",
+  "diagnosis": "Community Acquired Pneumonia",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Obtain a detailed history, including family history of headaches, trigger factors, and associated symptoms",
-    "Perform a physical examination focusing on the neurological system",
-    "Order appropriate laboratory tests (CBC, ESR, glucose, electrolytes, thyroid function tests) to rule out secondary causes if necessary",
-    "Consider imaging studies such as CT or MRI of the brain if symptoms persist, worsen, or are atypical",
-    "If no secondary cause is identified and headaches meet criteria for migraine or tension-type headache, initiate appropriate treatment (e.g., analgesics, antiemetics, antimigraine drugs)",
-    "Refer the patient to a neurologist for further evaluation and management if necessary",
-    "Oxygen",
-    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: HEENT",
+    "CBC",
+    "ECG",
+    "Chest X-ray",
+    "Pulse oximetry",
+    "Blood/sputum cultures",
+    "BMP",
+    "Antibiotics per CAP guidelines"
   ],
-  "should_avoid": [
-    "order1",
-    "Initiate treatment with strong narcotics or corticosteroids without first attempting non-pharmacologic treatments, obtaining a proper diagnosis, and ruling out secondary causes"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Obtain a detailed history, including family history of headaches, trigger factors, and associated symptoms": "Appropriate CCS order for this diagnosis: Obtain a detailed history, including family history of headaches, trigger factors, and associated symptoms.",
-    "Perform a physical examination focusing on the neurological system": "Targeted Perform a physical examination focusing on the neurological system exam supports the differential for this diagnosis.",
-    "Order appropriate laboratory tests (CBC, ESR, glucose, electrolytes, thyroid function tests) to rule out secondary causes if necessary": "Laboratory testing when systemic illness or severity warrants labs in this diagnosis.",
-    "Consider imaging studies such as CT or MRI of the brain if symptoms persist, worsen, or are atypical": "Appropriate CCS order for this diagnosis: Consider imaging studies such as CT or MRI of the brain if symptoms persist, worsen, or are atypical.",
-    "If no secondary cause is identified and headaches meet criteria for migraine or tension-type headache, initiate appropriate treatment (e.g., analgesics, antiemetics, antimigraine drugs)": "Appropriate CCS order for this diagnosis: If no secondary cause is identified and headaches meet criteria for migraine or tension-type headache, initiate appropriate treatment (e.g., analgesics, antiemetics, antimigraine drugs).",
-    "Refer the patient to a neurologist for further evaluation and management if necessary": "Targeted Refer the patient to a neurologist for further evaluation and management if necessary exam supports the differential for this diagnosis.",
-    "Oxygen": "Appropriate CCS order for this diagnosis: Oxygen.",
-    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "Appropriate CCS order for this diagnosis: Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check).",
-    "order1": "CCS review: avoid this order for this diagnosis — it does not change acute management.",
-    "Initiate treatment with strong narcotics or corticosteroids without first attempting non-pharmacologic treatments, obtaining a proper diagnosis, and ruling out secondary causes": "CCS review: avoid this order for this diagnosis — it does not change acute management."
+    "Physical Exam: General Appearance": "Assess severity.",
+    "Physical Exam: Chest / Lungs": "Crackles, bronchial breath sounds.",
+    "Physical Exam: Heart / Cardiovascular": "Screen cardiac.",
+    "Physical Exam: Abdomen": "Screen.",
+    "Physical Exam: HEENT": "Screen.",
+    "CBC": "Leukocytosis.",
+    "ECG": "Screen cardiac.",
+    "Chest X-ray": "Lobar consolidation.",
+    "Pulse oximetry": "Oxygenation.",
+    "Blood/sputum cultures": "Before antibiotics.",
+    "BMP": "CURB-65.",
+    "Antibiotics per CAP guidelines": "Amoxicillin/doxycycline/azithromycin outpatient."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with acute productive cough, fever, dyspnea, and pleuritic chest pain. Exam reveals crackles and bronchial breath sounds over the affected lobe. CXR shows lobar consolidation. CAP severity: CURB-65 or PORT score. Most common: S. pneumoniae. Outpatient: amoxicillin or doxycycline or azithromycin. With comorbidities: respiratory fluoroquinolone or beta-lactam + macrolide. Inpatient: ceftriaxone + macrolide. Blood and sputum cultures before antibiotics. Smoking cessation. Pneumococcal vaccine.",
+  "hpi_narrative": "{{patient_name}} presents with acute productive cough, fever, dyspnea, and pleuritic chest pain. Exam reveals crackles and bronchial breath sounds over the affected lobe. CXR shows lobar consolidation. CAP severity: CURB-65 or PORT score. Most common: S. pneumoniae. Outpatient: amoxicillin or doxycycline or azithromycin. With comorbidities: respiratory fluoroquinolone or beta-lactam + macrolide. Inpatient: ceftriaxone + macrolide. Blood and sputum cultures before antibiotics. Smoking cessation. Pneumococcal vaccine.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I don't feel right. Something's wrong.",
-    "history": "It started... I don't know when.",
-    "pain": "Everything hurts."
+    "chief_complaint": "Cough, fever, dyspnea",
+    "history": "{{patient_name}} presents with acute productive cough, fever, dyspnea, and pleuritic chest pain. Exam reveals crackles and bronchial breath sounds over the affected lobe. CXR shows lobar consolidatio…",
+    "pain": "Cough, fever, dyspnea"
   },
-  "ccs_category": null,
+  "ccs_category": "Internal Medicine / Pulmonology",
+  "chief_complaint": "Cough, fever, dyspnea",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Obtain a detailed history, including family history of headaches, trigger factors, and associated symptoms",
-    "Perform a physical examination focusing on the neurological system",
-    "Order appropriate laboratory tests (CBC, ESR, glucose, electrolytes, thyroid function tests) to rule out secondary causes if necessary",
-    "Consider imaging studies such as CT or MRI of the brain if symptoms persist, worsen, or are atypical",
-    "If no secondary cause is identified and headaches meet criteria for migraine or tension-type headache, initiate appropriate treatment (e.g., analgesics, antiemetics, antimigraine drugs)",
-    "Refer the patient to a neurologist for further evaluation and management if necessary",
-    "Oxygen",
-    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess severity.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "shouldHaveOrdered",
+      "finding": "Crackles, bronchial breath sounds.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "shouldHaveOrdered",
+      "finding": "Screen cardiac.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Screen.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: HEENT",
+      "type": "shouldHaveOrdered",
+      "finding": "Screen.",
+      "aliases": [
+        "HEENT"
+      ]
+    },
+    {
+      "label": "CBC",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "Screen cardiac.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Lobar consolidation.",
+      "aliases": [
+        "CXR"
+      ]
+    },
+    {
+      "label": "Pulse oximetry",
+      "type": "correctlyOrdered",
+      "finding": "Oxygenation.",
+      "aliases": [
+        "SpO2"
+      ]
+    },
+    {
+      "label": "Blood/sputum cultures",
+      "type": "correctlyOrdered",
+      "finding": "Before antibiotics.",
+      "aliases": [
+        "Cultures"
+      ]
+    },
+    {
+      "label": "BMP",
+      "type": "correctlyOrdered",
+      "finding": "CURB-65.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "Antibiotics per CAP guidelines",
+      "type": "correctlyOrdered",
+      "finding": "Amoxicillin/doxycycline/azithromycin outpatient.",
+      "aliases": [
+        "Antibiotics"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: HEENT",
+    "CBC",
+    "ECG",
+    "Chest X-ray",
+    "Pulse oximetry",
+    "Blood/sputum cultures",
+    "BMP",
+    "Antibiotics per CAP guidelines"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Screenshot file is identical to case 48; re-capture needed."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Community Acquired Pneumonia."
 }

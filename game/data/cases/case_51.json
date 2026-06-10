@@ -1,64 +1,187 @@
 {
   "id": 51,
   "topic": "Altered Mental Status",
+  "title": "Altered Mental Status",
   "diagnosis": "Transient Ischemic Attack (TIA)",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "CT Head",
-    "CBC",
-    "BMP",
-    "PT/INR",
-    "PTT",
-    "MRI Brain",
-    "Carotid Doppler",
-    "Echocardiogram"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Neuro / Psych",
+    "CT head without contrast",
+    "Carotid duplex ultrasound",
+    "ECG",
+    "Echocardiogram",
+    "MRI brain with DWI",
+    "CBC / BMP / Lipids / HbA1c",
+    "Aspirin + Clopidogrel (DAPT x21d)",
+    "High-intensity statin (Atorvastatin 80mg)",
+    "Admit for expedited TIA workup"
   ],
-  "should_avoid": [
-    "LP"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "CT Head": "Appropriate CCS order for Transient Ischemic Attack (TIA): CT Head.",
-    "CBC": "Laboratory testing when systemic illness or severity warrants labs in Transient Ischemic Attack (TIA).",
-    "BMP": "Laboratory testing when systemic illness or severity warrants labs in Transient Ischemic Attack (TIA).",
-    "PT/INR": "Appropriate CCS order for Transient Ischemic Attack (TIA): PT/INR.",
-    "PTT": "Appropriate CCS order for Transient Ischemic Attack (TIA): PTT.",
-    "MRI Brain": "Appropriate CCS order for Transient Ischemic Attack (TIA): MRI Brain.",
-    "Carotid Doppler": "Appropriate CCS order for Transient Ischemic Attack (TIA): Carotid Doppler.",
-    "Echocardiogram": "Appropriate CCS order for Transient Ischemic Attack (TIA): Echocardiogram.",
-    "LP": "CCS review: avoid this order for Transient Ischemic Attack (TIA) — it does not change acute management."
+    "Physical Exam: General Appearance": "Neurological emergency.",
+    "Physical Exam: Chest / Lungs": "Screen.",
+    "Physical Exam: Heart / Cardiovascular": "Carotid bruit — right carotid. AFib auscultation.",
+    "Physical Exam: Neuro / Psych": "Focal deficits (may have resolved by exam). NIHSS.",
+    "CT head without contrast": "Rule out hemorrhage. May be normal in TIA.",
+    "Carotid duplex ultrasound": "Identify carotid stenosis. Bruit on right.",
+    "ECG": "AFib screen.",
+    "Echocardiogram": "Cardioembolic source.",
+    "MRI brain with DWI": "May show small infarcts.",
+    "CBC / BMP / Lipids / HbA1c": "Risk factor assessment.",
+    "Aspirin + Clopidogrel (DAPT x21d)": "Dual antiplatelet for 21 days then single agent.",
+    "High-intensity statin (Atorvastatin 80mg)": "Aggressive LDL lowering.",
+    "Admit for expedited TIA workup": "High stroke risk in first 48h."
   },
-  "hpi": "A 70-year-old male with a history of hypertension and diabetes presented with sudden onset of confusion and difficulty speaking. He was evaluated for a possible TIA. Initial imaging and lab work were performed, and the patient was monitored closely. The importance of timely intervention in TIA cases was emphasized.",
+  "hpi": "{{patient_name}} presents with transient focal neurological deficit (unilateral weakness, aphasia, visual field defect) resolving completely within 24 hours (typically <1 hour). Exam reveals carotid bruit on the right. TIA is a neurological emergency — 10-15% risk of stroke within 90 days, highest in first 48 hours. ABCD2 score predicts stroke risk. Workup: non-contrast head CT (rule out hemorrhage), carotid duplex ultrasound (identify stenosis — this patient has right carotid bruit), ECG (atrial fibrillation is common cause), echocardiogram (cardioembolic source), MRI brain (DWI for ischemia). Labs: CBC, BMP, lipids, HbA1c, PT/PTT. Treatment: antiplatelet therapy — aspirin 81-325mg + clopidogrel (dual antiplatelet for 21 days then single agent), or aspirin + dipyridamole. If carotid stenosis >70%: CEA (carotid endarterectomy). If atrial fibrillation: anticoagulation (DOAC or warfarin). Aggressive risk factor management: statin, BP control, diabetes control, smoking cessation. Admit for expedited workup.",
+  "hpi_narrative": "{{patient_name}} presents with transient focal neurological deficit (unilateral weakness, aphasia, visual field defect) resolving completely within 24 hours (typically <1 hour). Exam reveals carotid bruit on the right. TIA is a neurological emergency — 10-15% risk of stroke within 90 days, highest in first 48 hours. ABCD2 score predicts stroke risk. Workup: non-contrast head CT (rule out hemorrhage), carotid duplex ultrasound (identify stenosis — this patient has right carotid bruit), ECG (atrial fibrillation is common cause), echocardiogram (cardioembolic source), MRI brain (DWI for ischemia). Labs: CBC, BMP, lipids, HbA1c, PT/PTT. Treatment: antiplatelet therapy — aspirin 81-325mg + clopidogrel (dual antiplatelet for 21 days then single agent), or aspirin + dipyridamole. If carotid stenosis >70%: CEA (carotid endarterectomy). If atrial fibrillation: anticoagulation (DOAC or warfarin). Aggressive risk factor management: statin, BP control, diabetes control, smoking cessation. Admit for expedited workup.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I was so confused and couldn't speak right. It scared me.",
-    "history": "I have high blood pressure and diabetes. This just happened suddenly.",
-    "pain": "I didn't feel any pain, just confusion."
+    "chief_complaint": "Transient focal neurological deficit, resolves within hours",
+    "history": "{{patient_name}} presents with transient focal neurological deficit (unilateral weakness, aphasia, visual field defect) resolving completely within 24 hours (typically <1 hour). Exam reveals carotid …",
+    "pain": "Transient focal neurological deficit, resolves within hours"
   },
-  "ccs_category": "Emergency Medicine",
-  "case_summary": "A 70-year-old male with a history of hypertension and diabetes presented with sudden onset of confusion and difficulty speaking. He was evaluated for a possible TIA. Initial imaging and lab work were performed, and the patient was monitored closely. The importance of timely intervention in TIA cases was emphasized.",
+  "ccs_category": "Neurology / Vascular Neurology",
+  "chief_complaint": "Transient focal neurological deficit, resolves within hours",
+  "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "CT Head",
-    "CBC",
-    "BMP",
-    "PT/INR",
-    "PTT"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Neurological emergency.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Screen.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Carotid bruit — right carotid. AFib auscultation.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Focal deficits (may have resolved by exam). NIHSS.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "CT head without contrast",
+      "type": "correctlyOrdered",
+      "finding": "Rule out hemorrhage. May be normal in TIA.",
+      "aliases": [
+        "Head CT"
+      ]
+    },
+    {
+      "label": "Carotid duplex ultrasound",
+      "type": "correctlyOrdered",
+      "finding": "Identify carotid stenosis. Bruit on right.",
+      "aliases": [
+        "Carotid US"
+      ]
+    },
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "AFib screen.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Echocardiogram",
+      "type": "correctlyOrdered",
+      "finding": "Cardioembolic source.",
+      "aliases": [
+        "Echo"
+      ]
+    },
+    {
+      "label": "MRI brain with DWI",
+      "type": "correctlyOrdered",
+      "finding": "May show small infarcts.",
+      "aliases": [
+        "MRI"
+      ]
+    },
+    {
+      "label": "CBC / BMP / Lipids / HbA1c",
+      "type": "correctlyOrdered",
+      "finding": "Risk factor assessment.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Aspirin + Clopidogrel (DAPT x21d)",
+      "type": "correctlyOrdered",
+      "finding": "Dual antiplatelet for 21 days then single agent.",
+      "aliases": [
+        "ASA",
+        "Plavix"
+      ]
+    },
+    {
+      "label": "High-intensity statin (Atorvastatin 80mg)",
+      "type": "correctlyOrdered",
+      "finding": "Aggressive LDL lowering.",
+      "aliases": [
+        "Statin"
+      ]
+    },
+    {
+      "label": "Admit for expedited TIA workup",
+      "type": "correctlyOrdered",
+      "finding": "High stroke risk in first 48h.",
+      "aliases": [
+        "Admit"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Neuro / Psych",
+    "CT head without contrast",
+    "Carotid duplex ultrasound",
+    "ECG",
+    "Echocardiogram",
+    "MRI brain with DWI",
+    "CBC / BMP / Lipids / HbA1c",
+    "Aspirin + Clopidogrel (DAPT x21d)",
+    "High-intensity statin (Atorvastatin 80mg)",
+    "Admit for expedited TIA workup"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs were missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Transient Ischemic Attack (TIA)."
 }

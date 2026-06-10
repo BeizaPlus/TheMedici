@@ -1,60 +1,228 @@
 {
   "id": 31,
   "topic": "Dizziness and Fatigue",
-  "diagnosis": "Duodenal Ulcer",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Dizziness and Fatigue",
+  "diagnosis": "Duodenal Ulcer with Iron Deficiency Anemia",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "Physical Exam: Cardiac Exam",
-    "Physical Exam: Lung Exam",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
     "Physical Exam: Abdomen",
-    "Consultation: Gastroenterology",
-    "Fluid resuscitation in patients with hypovolemia"
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    "Iron studies (ferritin, serum iron, TIBC)",
+    "Occult blood, stool",
+    "H. pylori testing (stool antigen / urea breath test / serology)",
+    "BMP / CMP / LFTs",
+    "PPI (Omeprazole / Pantoprazole)",
+    "H. pylori eradication (triple/quadruple therapy)",
+    "Iron supplementation",
+    "Discontinue NSAIDs / Aspirin"
   ],
   "should_avoid": [
-    "Consultation: Infectious Disease"
+    "EGD before H. pylori testing"
   ],
   "rationale": {
-    "Physical Exam: General Appearance": "Assess how ill the patient appears before focused testing for dizziness and fatigue.",
-    "Physical Exam: Cardiac Exam": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to dizziness and fatigue.",
-    "Physical Exam: Lung Exam": "Evaluate chest and lungs as part of the initial exam for dizziness and fatigue.",
-    "Physical Exam: Abdomen": "Abdominal exam helps exclude alternative causes in a patient with dizziness and fatigue.",
-    "Consultation: Gastroenterology": "Appropriate CCS order for Duodenal Ulcer: Consultation: Gastroenterology.",
-    "Fluid resuscitation in patients with hypovolemia": "Appropriate CCS order for Duodenal Ulcer: Fluid resuscitation in patients with hypovolemia.",
-    "Consultation: Infectious Disease": "Advanced imaging is not indicated early for Duodenal Ulcer when the diagnosis is clinical."
+    "Physical Exam: General Appearance": "Assess severity — pallor suggests anemia.",
+    "Physical Exam: Chest / Lungs": "Investigating for lung pathology.",
+    "Physical Exam: Heart / Cardiovascular": "Tachycardia from anemia. Flow murmur possible.",
+    "Physical Exam: Abdomen": "Epigastric tenderness. No peritoneal signs.",
+    "Physical Exam: Rectal": "DRE for melena — rule out GI bleeding.",
+    "CBC with differential": "Microcytic hypochromic anemia — iron deficiency.",
+    "Iron studies (ferritin, serum iron, TIBC)": "Low ferritin, low iron, high TIBC = iron deficiency anemia.",
+    "Occult blood, stool": "Positive — chronic GI blood loss from ulcer.",
+    "H. pylori testing (stool antigen / urea breath test / serology)": "Duodenal ulcers strongly associated with H. pylori. Eradication prevents recurrence.",
+    "BMP / CMP / LFTs": "Screening labs.",
+    "PPI (Omeprazole / Pantoprazole)": "Acid suppression for ulcer healing. 4-8 week course.",
+    "H. pylori eradication (triple/quadruple therapy)": "Clarithromycin triple therapy or bismuth quadruple if resistance concern.",
+    "Iron supplementation": "Oral ferrous sulfate for IDA.",
+    "Discontinue NSAIDs / Aspirin": "NSAIDs impair gastric mucosal defense.",
+    "EGD before H. pylori testing": "EGD reserved for alarm symptoms (weight loss, bleeding, >55yo with new dyspepsia). Test for H. pylori and treat empirically in young patients without alarm symptoms."
   },
-  "hpi": "This case highlights the importance of recognizing the signs and symptoms of gastrointestinal bleeding. The patient presented with dizziness and fatigue, which can be indicative of significant blood loss. It is crucial to perform a thorough evaluation to determine the underlying cause of the patient's symptoms, especially in cases where there is a potential for serious pathology.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} presents with progressive fatigue, dizziness, and dyspnea on exertion. Exam reveals pallor and epigastric tenderness. Labs show iron deficiency anemia. History reveals NSAID use and epigastric pain relieved by food — classic for duodenal ulcer. Duodenal ulcers are more common than gastric ulcers and pain classically improves with meals (food buffers acid). H. pylori testing is essential. Treatment: PPI, H. pylori eradication if positive, discontinue NSAIDs. Iron supplementation for anemia. If alarm symptoms (weight loss, bleeding, early satiety) → endoscopy. Avoid invasive testing in stable patient with classic history.",
+  "hpi_narrative": "{{patient_name}} presents with progressive fatigue, dizziness, and dyspnea on exertion. Exam reveals pallor and epigastric tenderness. Labs show iron deficiency anemia. History reveals NSAID use and epigastric pain relieved by food — classic for duodenal ulcer. Duodenal ulcers are more common than gastric ulcers and pain classically improves with meals (food buffers acid). H. pylori testing is essential. Treatment: PPI, H. pylori eradication if positive, discontinue NSAIDs. Iron supplementation for anemia. If alarm symptoms (weight loss, bleeding, early satiety) → endoscopy. Avoid invasive testing in stable patient with classic history.",
+  "physical_exam": [
+    [
+      "General",
+      "Fatigued, pallor present."
+    ],
+    [
+      "Cardiovascular",
+      "Tachycardic (anemia)."
+    ],
+    [
+      "Abdominal",
+      "Epigastric tenderness. No guarding/rebound."
+    ],
+    [
+      "Skin",
+      "Pallor."
+    ],
+    [
+      "Heent",
+      "Pale conjunctivae."
+    ]
+  ],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I'm feeling really dizzy and tired all the time. It's scary.",
-    "history": "I just can't shake this feeling. I thought it was just stress.",
-    "pain": "I have this nagging pain in my stomach."
+    "chief_complaint": "Fatigue, dizziness, dyspnea on exertion",
+    "history": "{{patient_name}} presents with progressive fatigue, dizziness, and dyspnea on exertion. Exam reveals pallor and epigastric tenderness. Labs show iron deficiency anemia. History reveals NSAID use and …",
+    "pain": "Fatigue, dizziness, dyspnea on exertion"
   },
-  "ccs_category": "Internal Medicine",
-  "case_summary": "This case highlights the importance of recognizing the signs and symptoms of gastrointestinal bleeding. The patient presented with dizziness and fatigue, which can be indicative of significant blood loss. It is crucial to perform a thorough evaluation to determine the underlying cause of the patient's symptoms, especially in cases where there is a potential for serious pathology.",
+  "ccs_category": "Internal Medicine / Gastroenterology",
+  "chief_complaint": "Fatigue, dizziness, dyspnea on exertion",
+  "case_summary": "Duodenal ulcer + IDA from chronic blood loss. Epigastric pain relieved by food + FOBT positive + microcytic anemia. H. pylori test → PPI + eradication + iron. Stop NSAIDs.",
+  "decoys": [
+    {
+      "label": "EGD before H. pylori testing",
+      "reason_wrong": "EGD reserved for alarm symptoms (weight loss, bleeding, >55yo with new dyspepsia). Test for H. pylori and treat empirically in young patients without alarm symptoms."
+    }
+  ],
+  "distractors": [],
   "stacks": [
-    "Vitals Ordered",
-    "Physical Exam",
-    "Consultation: Gastroenterology",
-    "Laboratory Tests",
-    "Imaging Studies"
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess severity — pallor suggests anemia.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Investigating for lung pathology.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Tachycardia from anemia. Flow murmur possible.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "correctlyOrdered",
+      "finding": "Epigastric tenderness. No peritoneal signs.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Rectal",
+      "type": "correctlyOrdered",
+      "finding": "DRE for melena — rule out GI bleeding.",
+      "aliases": [
+        "Rectal Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Microcytic hypochromic anemia — iron deficiency.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Iron studies (ferritin, serum iron, TIBC)",
+      "type": "correctlyOrdered",
+      "finding": "Low ferritin, low iron, high TIBC = iron deficiency anemia.",
+      "aliases": [
+        "Iron panel"
+      ]
+    },
+    {
+      "label": "Occult blood, stool",
+      "type": "correctlyOrdered",
+      "finding": "Positive — chronic GI blood loss from ulcer.",
+      "aliases": [
+        "FOBT"
+      ]
+    },
+    {
+      "label": "H. pylori testing (stool antigen / urea breath test / serology)",
+      "type": "correctlyOrdered",
+      "finding": "Duodenal ulcers strongly associated with H. pylori. Eradication prevents recurrence.",
+      "aliases": [
+        "H pylori"
+      ]
+    },
+    {
+      "label": "BMP / CMP / LFTs",
+      "type": "correctlyOrdered",
+      "finding": "Screening labs.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "PPI (Omeprazole / Pantoprazole)",
+      "type": "correctlyOrdered",
+      "finding": "Acid suppression for ulcer healing. 4-8 week course.",
+      "aliases": [
+        "PPI",
+        "Omeprazole"
+      ]
+    },
+    {
+      "label": "H. pylori eradication (triple/quadruple therapy)",
+      "type": "shouldHaveOrdered",
+      "finding": "Clarithromycin triple therapy or bismuth quadruple if resistance concern.",
+      "aliases": [
+        "H pylori treatment"
+      ]
+    },
+    {
+      "label": "Iron supplementation",
+      "type": "correctlyOrdered",
+      "finding": "Oral ferrous sulfate for IDA.",
+      "aliases": [
+        "Iron",
+        "Ferrous sulfate"
+      ]
+    },
+    {
+      "label": "Discontinue NSAIDs / Aspirin",
+      "type": "correctlyOrdered",
+      "finding": "NSAIDs impair gastric mucosal defense.",
+      "aliases": [
+        "NSAID cessation"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Chest / Lungs",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Rectal",
+    "CBC with differential",
+    "Iron studies (ferritin, serum iron, TIBC)",
+    "Occult blood, stool",
+    "H. pylori testing (stool antigen / urea breath test / serology)",
+    "BMP / CMP / LFTs",
+    "PPI (Omeprazole / Pantoprazole)",
+    "H. pylori eradication (triple/quadruple therapy)",
+    "Iron supplementation",
+    "Discontinue NSAIDs / Aspirin"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "HPI, physical exam findings, and vital signs are missing from the screenshot."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Duodenal Ulcer with Iron Deficiency Anemia."
 }

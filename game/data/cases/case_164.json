@@ -1,50 +1,76 @@
 {
   "id": 164,
   "topic": "Pelvic Pain",
-  "diagnosis": "Pneumonia",
-  "confidence": "partial",
-  "source": "game/data/ollama/cases.json",
+  "title": "Pelvic Pain",
+  "diagnosis": "Ovarian Torsion",
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Breathe deeply, antibiotics",
-    "Chest X-ray, blood tests"
+    "Pelvic US with Doppler",
+    "HCG",
+    "EMERGENCY surgical exploration"
   ],
-  "should_avoid": [
-    "order1",
-    "Surgical exploration without adequate imaging to confirm a suspected appendicitis"
-  ],
+  "should_avoid": [],
   "rationale": {
-    "Breathe deeply, antibiotics": "Appropriate CCS order for Pneumonia: Breathe deeply, antibiotics.",
-    "Chest X-ray, blood tests": "Evaluate chest and lungs as part of the initial exam for pelvic pain.",
-    "order1": "CCS review: avoid this order for Pneumonia — it does not change acute management.",
-    "Surgical exploration without adequate imaging to confirm a suspected appendicitis": "Advanced imaging is not indicated early for Pneumonia when the diagnosis is clinical."
+    "Pelvic US with Doppler": "Enlarged ovary, decreased/absent flow. Normal Doppler doesn't exclude.",
+    "HCG": "Rule out ectopic pregnancy.",
+    "EMERGENCY surgical exploration": "Detorsion. Oophoropexy. Time-critical."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} presents with acute onset severe unilateral pelvic pain, nausea, vomiting, and possibly low-grade fever. Pain is sudden, severe, and may have occurred intermittently before (partial torsion). Ovarian torsion is a GYNECOLOGIC EMERGENCY — the ovary twists on its vascular pedicle → venous and lymphatic outflow obstruction → arterial compromise → ovarian ischemia and necrosis if not detorsed within hours. Risk: ovarian mass/cyst, pregnancy, ovulation induction. Diagnosis: pelvic ultrasound with Doppler — enlarged ovary, decreased/absent arterial and venous flow. However, normal Doppler does NOT exclude torsion (may be intermittent or only venous flow absent). Treatment: EMERGENCY surgical exploration with detorsion (preserve ovary if viable) ± oophoropexy. Do NOT delay surgery for imaging if high clinical suspicion.",
+  "hpi_narrative": "{{patient_name}} presents with acute onset severe unilateral pelvic pain, nausea, vomiting, and possibly low-grade fever. Pain is sudden, severe, and may have occurred intermittently before (partial torsion). Ovarian torsion is a GYNECOLOGIC EMERGENCY — the ovary twists on its vascular pedicle → venous and lymphatic outflow obstruction → arterial compromise → ovarian ischemia and necrosis if not detorsed within hours. Risk: ovarian mass/cyst, pregnancy, ovulation induction. Diagnosis: pelvic ultrasound with Doppler — enlarged ovary, decreased/absent arterial and venous flow. However, normal Doppler does NOT exclude torsion (may be intermittent or only venous flow absent). Treatment: EMERGENCY surgical exploration with detorsion (preserve ovary if viable) ± oophoropexy. Do NOT delay surgery for imaging if high clinical suspicion.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
-    "bp_systolic": null,
-    "bp_diastolic": null,
+    "bp": null,
     "rr": null,
-    "temp": null,
-    "map": null,
-    "lactate": null
+    "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "I need help — pelvic pain. I'm really scared.",
-    "history": "It's been getting worse. They said something about pneumonia. ...",
-    "pain": "This pelvic pain won't let up and I'm afraid something bad is happening."
+    "chief_complaint": "Acute severe unilateral pelvic pain, nausea",
+    "history": "{{patient_name}} presents with acute onset severe unilateral pelvic pain, nausea, vomiting, and possibly low-grade fever. Pain is sudden, severe, and may have occurred intermittently before (partial …",
+    "pain": "Acute severe unilateral pelvic pain, nausea"
   },
-  "ccs_category": null,
+  "ccs_category": "OB/GYN",
+  "chief_complaint": "Acute severe unilateral pelvic pain, nausea",
   "case_summary": null,
+  "decoys": [],
+  "distractors": [],
   "stacks": [
-    "Breathe deeply, antibiotics"
+    {
+      "label": "Pelvic US with Doppler",
+      "type": "correctlyOrdered",
+      "finding": "Enlarged ovary, decreased/absent flow. Normal Doppler doesn't exclude.",
+      "aliases": [
+        "Pelvic US"
+      ]
+    },
+    {
+      "label": "HCG",
+      "type": "correctlyOrdered",
+      "finding": "Rule out ectopic pregnancy.",
+      "aliases": [
+        "Pregnancy test"
+      ]
+    },
+    {
+      "label": "EMERGENCY surgical exploration",
+      "type": "correctlyOrdered",
+      "finding": "Detorsion. Oophoropexy. Time-critical.",
+      "aliases": [
+        "Surgery"
+      ]
+    }
   ],
-  "order_sets": [],
-  "complete": false,
-  "extraction_method": "screenshot+ollama",
+  "order_sets": [
+    "Pelvic US with Doppler",
+    "HCG",
+    "EMERGENCY surgical exploration"
+  ],
+  "complete": true,
+  "extraction_method": "deepseek_direct",
   "enrichment_sources": [
-    "ollama"
+    "deepseek"
   ],
-  "extraction_notes": "Extracted via local Ollama from review screenshot. HPI, PE, vitals not on review page."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Ovarian Torsion."
 }
