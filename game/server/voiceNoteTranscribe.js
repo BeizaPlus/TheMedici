@@ -8,31 +8,34 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const GAME_ROOT = path.join(__dirname, '..');
 const WHISPER_SCRIPT = path.join(GAME_ROOT, 'tools', 'whisper', 'transcribe.py');
 
-const DEEPSEEK_CHAT_MODEL = process.env.DEEPSEEK_CHAT_MODEL || 'deepseek-chat';
-const OPENAI_CHAT_MODEL = process.env.OPENAI_CHAT_MODEL || 'gpt-4o-mini';
-const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || '';
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
-const WHISPER_MODE = String(process.env.WHISPER_MODE || 'auto').toLowerCase();
-const WHISPER_MODEL = process.env.WHISPER_MODEL || 'small.en';
-const WHISPER_PYTHON =
-  process.env.WHISPER_PYTHON ||
-  process.env.CHATTERBOX_PYTHON ||
-  (process.platform === 'win32' ? 'python' : 'python3');
+function deepseekKey() { return process.env.DEEPSEEK_API_KEY || ''; }
+function openaiKey() { return process.env.OPENAI_API_KEY || ''; }
+function whisperMode() { return String(process.env.WHISPER_MODE || 'auto').toLowerCase(); }
+function whisperModel() { return process.env.WHISPER_MODEL || 'small.en'; }
+function whisperPython() {
+  return (
+    process.env.WHISPER_PYTHON ||
+    process.env.CHATTERBOX_PYTHON ||
+    (process.platform === 'win32' ? 'python' : 'python3')
+  );
+}
+function deepseekModel() { return process.env.DEEPSEEK_CHAT_MODEL || 'deepseek-chat'; }
+function openaiModel() { return process.env.OPENAI_CHAT_MODEL || 'gpt-4o-mini'; }
 
 let localWhisperReady = null;
 
 function chatProvider() {
-  if (DEEPSEEK_API_KEY) return 'deepseek';
-  if (OPENAI_API_KEY) return 'openai';
+  if (deepseekKey()) return 'deepseek';
+  if (openaiKey()) return 'openai';
   return null;
 }
 
 function chatModel() {
-  return chatProvider() === 'deepseek' ? DEEPSEEK_CHAT_MODEL : OPENAI_CHAT_MODEL;
+  return chatProvider() === 'deepseek' ? deepseekModel() : openaiModel();
 }
 
 function chatApiKey() {
-  return DEEPSEEK_API_KEY || OPENAI_API_KEY || null;
+  return deepseekKey() || openaiKey() || null;
 }
 
 async function callChatCompletion(key, messages, { maxTokens = 900, temperature = 0.2 } = {}) {
@@ -70,7 +73,7 @@ function whisperScriptExists() {
 
 function runPythonCheck(args) {
   return new Promise((resolve) => {
-    const child = spawn(WHISPER_PYTHON, args, {
+    const child = spawn(whisperPython(), args, {
       windowsHide: true,
       env: { ...process.env, PYTHONUNBUFFERED: '1' },
     });
@@ -83,17 +86,21 @@ function runPythonCheck(args) {
       stderr += String(d);
     });
     child.on('error', () => resolve(false));
-    child.on('close', (code) => resolve(code === 0 && !stderr.trim()));
+    child.on('close', (code) => resolve(code === 0 && /ok/i.test(stdout.trim())));
   });
 }
 
+let probePromise = null;
+
 export async function probeLocalWhisper() {
   if (localWhisperReady != null) return localWhisperReady;
+  if (probePromise) return probePromise;
   if (!whisperScriptExists()) {
     localWhisperReady = false;
     return false;
   }
-  const ok = await runPythonCheck(['-c', 'import faster_whisper; print("ok")']);
+  probePromise = runPythonCheck(['-c', 'import faster_whisper; print("ok")']);
+  const ok = await probePromise;
   localWhisperReady = ok;
   return ok;
 }
@@ -103,12 +110,12 @@ export function voiceNoteMergeAvailable() {
 }
 
 export function voiceNoteWhisperAvailable() {
-  return Boolean(OPENAI_API_KEY);
+  return Boolean(openaiKey());
 }
 
 export async function voiceNoteBatchAvailable() {
-  if (WHISPER_MODE === 'openai') return voiceNoteWhisperAvailable();
-  if (WHISPER_MODE === 'local') return probeLocalWhisper();
+  if (whisperMode() === 'openai') return voiceNoteWhisperAvailable();
+  if (whisperMode() === 'local') return probeLocalWhisper();
   return (await probeLocalWhisper()) || voiceNoteWhisperAvailable();
 }
 
@@ -116,9 +123,9 @@ export async function voiceNoteStatus() {
   const local = await probeLocalWhisper();
   const openai = voiceNoteWhisperAvailable();
   let mode = 'browser';
-  if (WHISPER_MODE === 'local' && local) mode = 'local';
-  else if (WHISPER_MODE === 'openai' && openai) mode = 'openai';
-  else if (WHISPER_MODE === 'auto') {
+  if (whisperMode() === 'local' && local) mode = 'local';
+  else if (whisperMode() === 'openai' && openai) mode = 'openai';
+  else if (whisperMode() === 'auto') {
     if (local) mode = 'local';
     else if (openai) mode = 'openai';
   }
@@ -129,8 +136,8 @@ export async function voiceNoteStatus() {
     mode,
     local,
     openai,
-    model: WHISPER_MODEL,
-    python: WHISPER_PYTHON,
+    model: whisperModel(),
+    python: whisperPython(),
     script: whisperScriptExists() ? WHISPER_SCRIPT : null,
   };
 }
@@ -182,12 +189,12 @@ function runLocalWhisper(buffer, mimeType, promptHint = '') {
     const args = [WHISPER_SCRIPT, audioPath];
     if (promptHint) args.push(promptHint);
 
-    const child = spawn(WHISPER_PYTHON, args, {
+    const child = spawn(whisperPython(), args, {
       windowsHide: true,
       env: {
         ...process.env,
         PYTHONUNBUFFERED: '1',
-        WHISPER_MODEL,
+        WHISPER_MODEL: whisperModel(),
         WHISPER_DEVICE: process.env.WHISPER_DEVICE || 'cpu',
       },
     });
@@ -217,7 +224,7 @@ function runLocalWhisper(buffer, mimeType, promptHint = '') {
       try {
         const payload = JSON.parse(stdout.trim() || '{}');
         if (payload.ok && payload.text) {
-          resolve({ text: String(payload.text).trim(), provider: 'local', model: payload.model || WHISPER_MODEL });
+          resolve({ text: String(payload.text).trim(), provider: 'local', model: payload.model || whisperModel() });
           return;
         }
         reject(new Error(payload.error || stderr.trim() || 'Local Whisper failed'));
@@ -229,7 +236,7 @@ function runLocalWhisper(buffer, mimeType, promptHint = '') {
 }
 
 async function transcribeWithOpenAI(buffer, mimeType = 'audio/webm', promptHint = '') {
-  if (!OPENAI_API_KEY) return null;
+  if (!openaiKey()) return null;
   const ext = mimeToExt(mimeType);
   const blob = new Blob([buffer], { type: mimeType || 'audio/webm' });
   const form = new FormData();
@@ -240,7 +247,7 @@ async function transcribeWithOpenAI(buffer, mimeType = 'audio/webm', promptHint 
 
   const r = await fetch('https://api.openai.com/v1/audio/transcriptions', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${OPENAI_API_KEY}` },
+    headers: { Authorization: `Bearer ${openaiKey()}` },
     body: form,
   });
   if (!r.ok) {
@@ -257,14 +264,14 @@ async function transcribeWithOpenAI(buffer, mimeType = 'audio/webm', promptHint 
 
 async function transcribeAudioBuffer(buffer, mimeType = 'audio/webm', promptHint = '') {
   const hint = String(promptHint || '').trim();
-  const preferLocal = WHISPER_MODE === 'local' || (WHISPER_MODE === 'auto' && (await probeLocalWhisper()));
-  const preferOpenai = WHISPER_MODE === 'openai' || (WHISPER_MODE === 'auto' && !preferLocal);
+  const preferLocal = whisperMode() === 'local' || (whisperMode() === 'auto' && (await probeLocalWhisper()));
+  const preferOpenai = whisperMode() === 'openai' || (whisperMode() === 'auto' && !preferLocal);
 
   if (preferLocal) {
     try {
       return await runLocalWhisper(buffer, mimeType, hint);
     } catch (localErr) {
-      if (WHISPER_MODE === 'local' || !voiceNoteWhisperAvailable()) throw localErr;
+      if (whisperMode() === 'local' || !voiceNoteWhisperAvailable()) throw localErr;
     }
   }
 
@@ -295,3 +302,7 @@ export async function transcribeFullAudio(buffer, mimeType = 'audio/webm', { pro
     raw: text,
   };
 }
+
+// Warm faster-whisper import in background so first API call isn't slow.
+// Use a timer to ensure .env is already loaded by the time it runs.
+setTimeout(() => { probeLocalWhisper().catch(() => {}); }, 200);

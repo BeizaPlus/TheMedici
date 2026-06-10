@@ -6,12 +6,16 @@
     "diagnosis": "Tension Pneumothorax",
     "diagnoses": [
       "Tension Pneumothorax",
-      "Pericarditis",
-      "Aortic Dissection",
+      "Acute Pericarditis (Idiopathic)",
+      "Panic Attack / Panic Disorder",
+      "Acute Coronary Syndrome (ACS)",
+      "Unstable Angina",
+      "Aortic Dissection (Stanford Type A)",
       "Atrial Fibrillation",
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
       "Inferior myocardial infarction (STEMI)",
       "Right Ventricular Myocardial Infarction",
-      "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)"
+      "Post-MI Pericarditis (Dressler Syndrome)"
     ]
   },
   {
@@ -23,17 +27,19 @@
       "Subdural Hematoma",
       "Normal Pressure Hydrocephalus",
       "Transient Ischemic Attack (TIA)",
-      "Grand Mal Seizure (Complex Tonic-Clonic Seizure)",
+      "Grand Mal Seizure (Generalized Tonic-Clonic)",
       "Septic Shock"
     ]
   },
   {
     "caseId": 3,
-    "topic": "Pelvic Pain - OB/GYN",
-    "title": "Pelvic Pain - OB/GYN",
+    "topic": "Pelvic Pain",
+    "title": "Pelvic Pain",
     "diagnosis": "Endometrioma",
     "diagnoses": [
-      "Endometrioma"
+      "Endometrioma",
+      "Pelvic Inflammatory Disease",
+      "Ovarian Torsion"
     ]
   },
   {
@@ -43,15 +49,24 @@
     "diagnosis": "Diabetic Ketoacidosis",
     "diagnoses": [
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
@@ -62,13 +77,20 @@
     "diagnoses": [
       "West Nile Encephalitis",
       "Hypertensive Emergency",
-      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)"
+      "Bacterial Meningitis (Meningococcal)",
+      "Cluster Headache",
+      "Tension Headache",
+      "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
+      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
+      "Carbon Monoxide Poisoning",
+      "Pheochromocytoma",
+      "Primary Headache (Tentative) or Secondary Headache (Suspected)"
     ]
   },
   {
     "caseId": 6,
-    "topic": "Rash and Lethargy - Pediatrics",
-    "title": "Rash and Lethargy - Pediatrics",
+    "topic": "Rash and Lethargy",
+    "title": "Rash and Lethargy",
     "diagnosis": "Mononucleosis",
     "diagnoses": [
       "Mononucleosis"
@@ -76,92 +98,130 @@
   },
   {
     "caseId": 7,
-    "topic": "Myasthenia Gravis",
-    "title": "Myasthenia Gravis",
-    "diagnosis": "Myasthenia Gravis",
+    "topic": "Generalized Weakness",
+    "title": "Generalized Weakness",
+    "diagnosis": "Myasthenia Gravis with Thymoma",
     "diagnoses": [
-      "Myasthenia Gravis"
+      "Myasthenia Gravis with Thymoma",
+      "Poststreptococcal Glomerulonephritis",
+      "Renal Cell Carcinoma",
+      "Insulinoma"
     ]
   },
   {
     "caseId": 8,
     "topic": "Burning During Urination",
     "title": "Burning During Urination",
-    "diagnosis": "Prostatitis",
+    "diagnosis": "Prostatitis (E. coli)",
     "diagnoses": [
-      "Prostatitis",
-      "Chlamydia"
+      "Prostatitis (E. coli)",
+      "Chlamydia Urethritis"
     ]
   },
   {
     "caseId": 9,
     "topic": "Abdominal Pain",
     "title": "Abdominal Pain",
-    "diagnosis": "Abdominal Abscess",
+    "diagnosis": "Intra-abdominal Abscess (post-appendectomy)",
     "diagnoses": [
-      "Abdominal Abscess",
+      "Intra-abdominal Abscess (post-appendectomy)",
       "Diabetic Ketoacidosis",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
     "caseId": 10,
-    "topic": "Pain in Leg",
-    "title": "Pain in Leg",
-    "diagnosis": "Intermittent Claudication (Peripheral Vascular Disease)",
+    "topic": "Pain in Legs",
+    "title": "Pain in Legs",
+    "diagnosis": "Intermittent Claudication (Peripheral Artery Disease)",
     "diagnoses": [
-      "Intermittent Claudication (Peripheral Vascular Disease)"
+      "Intermittent Claudication (Peripheral Artery Disease)"
     ]
   },
   {
     "caseId": 11,
-    "topic": "Abdominal Pain - Emergency Medicine",
-    "title": "Abdominal Pain - Emergency Medicine",
-    "diagnosis": "Hepatitis A",
+    "topic": "Abdominal Pain",
+    "title": "Abdominal Pain",
+    "diagnosis": "Hepatitis A with Aspiration Pneumonia",
     "diagnoses": [
-      "Hepatitis A",
-      "Nephrolithiasis (Kidney Stone)"
+      "Hepatitis A with Aspiration Pneumonia",
+      "Diabetic Ketoacidosis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
+      "Irritable Bowel Syndrome",
+      "Acute Cholecystitis",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
+      "Ischemic Colitis",
+      "Ulcerative Colitis",
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
     "caseId": 12,
     "topic": "Burning During Urination",
     "title": "Burning During Urination",
-    "diagnosis": "Chlamydia",
+    "diagnosis": "Chlamydia Urethritis",
     "diagnoses": [
-      "Chlamydia",
-      "Prostatitis"
+      "Chlamydia Urethritis",
+      "Prostatitis (E. coli)"
     ]
   },
   {
     "caseId": 13,
     "topic": "Abdominal Pain",
     "title": "Abdominal Pain",
-    "diagnosis": "Acute Gastritis",
+    "diagnosis": "Acute Gastritis (NSAID-induced)",
     "diagnoses": [
-      "Acute Gastritis",
+      "Acute Gastritis (NSAID-induced)",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
     "caseId": 14,
-    "topic": "Acute and Upper Extremity Edema",
-    "title": "Acute and Upper Extremity Edema",
+    "topic": "Facial and Upper Extremity Edema",
+    "title": "Facial and Upper Extremity Edema",
     "diagnosis": "Pre-Eclampsia with Severe Features",
     "diagnoses": [
       "Pre-Eclampsia with Severe Features"
@@ -171,24 +231,31 @@
     "caseId": 15,
     "topic": "Chest Pain",
     "title": "Chest Pain",
-    "diagnosis": "Pericarditis",
+    "diagnosis": "Acute Pericarditis (Idiopathic)",
     "diagnoses": [
-      "Pericarditis",
+      "Acute Pericarditis (Idiopathic)",
       "Tension Pneumothorax",
-      "Aortic Dissection",
+      "Panic Attack / Panic Disorder",
+      "Acute Coronary Syndrome (ACS)",
+      "Unstable Angina",
+      "Aortic Dissection (Stanford Type A)",
       "Atrial Fibrillation",
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
       "Inferior myocardial infarction (STEMI)",
       "Right Ventricular Myocardial Infarction",
-      "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)"
+      "Post-MI Pericarditis (Dressler Syndrome)"
     ]
   },
   {
     "caseId": 16,
-    "topic": "Intra Abdominal Hypertension",
-    "title": "Intra Abdominal Hypertension",
-    "diagnosis": null,
+    "topic": "Cough",
+    "title": "Cough",
+    "diagnosis": "PCP Pneumonia (HIV/AIDS)",
     "diagnoses": [
-      "Unknown"
+      "PCP Pneumonia (HIV/AIDS)",
+      "Community Acquired Pneumonia",
+      "Tuberculosis",
+      "Legionella Pneumonia (Legionnaires Disease)"
     ]
   },
   {
@@ -213,27 +280,36 @@
     "caseId": 19,
     "topic": "Abdominal Pain",
     "title": "Abdominal Pain",
-    "diagnosis": "Acute Diverticulitis",
+    "diagnosis": "Acute Diverticulitis (Complicated, with small abscess)",
     "diagnoses": [
-      "Acute Diverticulitis",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
     "caseId": 20,
     "topic": "Palpitations",
     "title": "Palpitations",
-    "diagnosis": "3rd Degree Heart Block",
+    "diagnosis": "Complete (3rd Degree) AV Heart Block",
     "diagnoses": [
-      "3rd Degree Heart Block"
+      "Complete (3rd Degree) AV Heart Block"
     ]
   },
   {
@@ -244,106 +320,149 @@
     "diagnoses": [
       "Irritable Bowel Syndrome",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
     "caseId": 22,
-    "topic": "Tearful 8-year-old with abdominal pain",
-    "title": "Tearful 8-year-old with abdominal pain",
-    "diagnosis": "Acute appendicitis",
+    "topic": "Found Unconscious",
+    "title": "Found Unconscious",
+    "diagnosis": "Tricyclic Antidepressant (TCA) Overdose",
     "diagnoses": [
-      "Acute appendicitis"
+      "Tricyclic Antidepressant (TCA) Overdose",
+      "Sexual Assault (Rape)",
+      "Cyanide Poisoning",
+      "Carbon Monoxide Poisoning"
     ]
   },
   {
     "caseId": 23,
-    "topic": "Congestive Heart Failure",
-    "title": "Congestive Heart Failure",
-    "diagnosis": "Congestive Heart Failure",
+    "topic": "Shortness of Breath",
+    "title": "Shortness of Breath",
+    "diagnosis": "Congestive Heart Failure (Systolic Dysfunction)",
     "diagnoses": [
-      "Congestive Heart Failure"
+      "Congestive Heart Failure (Systolic Dysfunction)",
+      "Cystic Fibrosis",
+      "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+      "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
+      "Croup (Laryngotracheitis)",
+      "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
+      "Fat Embolism Syndrome",
+      "Non-ST Elevation Myocardial Infarction (NSTEMI)",
+      "Sarcoidosis"
     ]
   },
   {
     "caseId": 24,
-    "topic": "Burning During Urination",
-    "title": "Burning During Urination",
-    "diagnosis": null,
+    "topic": "Shortness of Breath",
+    "title": "Shortness of Breath",
+    "diagnosis": "Congestive Heart Failure (Systolic Dysfunction)",
     "diagnoses": [
-      "Prostatitis",
-      "Chlamydia"
+      "Congestive Heart Failure (Systolic Dysfunction)",
+      "Cystic Fibrosis",
+      "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+      "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
+      "Croup (Laryngotracheitis)",
+      "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
+      "Fat Embolism Syndrome",
+      "Non-ST Elevation Myocardial Infarction (NSTEMI)",
+      "Sarcoidosis"
     ]
   },
   {
     "caseId": 25,
-    "topic": "Semivoluntary Pull - Pediatric",
-    "title": "Semivoluntary Pull - Pediatric",
-    "diagnosis": null,
+    "topic": "Generalized Pain",
+    "title": "Generalized Pain",
+    "diagnosis": "Sickle Cell Anemia with Acute Chest Syndrome and Pneumonia",
     "diagnoses": [
-      "Unknown"
+      "Sickle Cell Anemia with Acute Chest Syndrome and Pneumonia"
     ]
   },
   {
     "caseId": 26,
-    "topic": "Severe Abdominal Pain",
-    "title": "Severe Abdominal Pain",
-    "diagnosis": "Acute Appendicitis",
+    "topic": "Shortness of Breath",
+    "title": "Shortness of Breath",
+    "diagnosis": "Cystic Fibrosis",
     "diagnoses": [
-      "Acute Appendicitis"
+      "Cystic Fibrosis",
+      "Congestive Heart Failure (Systolic Dysfunction)",
+      "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+      "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
+      "Croup (Laryngotracheitis)",
+      "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
+      "Fat Embolism Syndrome",
+      "Non-ST Elevation Myocardial Infarction (NSTEMI)",
+      "Sarcoidosis"
     ]
   },
   {
     "caseId": 27,
     "topic": "Fatigue",
     "title": "Fatigue",
-    "diagnosis": null,
+    "diagnosis": "A comprehensive workup is necessary due to the unknown cause of fatigue.",
     "diagnoses": [
+      "A comprehensive workup is necessary due to the unknown cause of fatigue.",
+      "Unknown fatigue could be caused by a wide range of conditions including metabolic disorders, infectious diseases, autoimmune disorders, neurological disorders, and psychological issues. Initial workup should focus on common causes.",
       "Neutropenic Fever",
-      "End Stage Renal Failure"
+      "End Stage Renal Disease",
+      "Obstructive Sleep Apnea"
     ]
   },
   {
     "caseId": 28,
-    "topic": "Pelvic Inflammatory Disease",
-    "title": "Pelvic Inflammatory Disease",
+    "topic": "Pelvic Pain",
+    "title": "Pelvic Pain",
     "diagnosis": "Pelvic Inflammatory Disease",
     "diagnoses": [
-      "Pelvic Inflammatory Disease"
+      "Pelvic Inflammatory Disease",
+      "Endometrioma",
+      "Ovarian Torsion"
     ]
   },
   {
     "caseId": 29,
     "topic": "Vaginal Bleeding",
     "title": "Vaginal Bleeding",
-    "diagnosis": null,
+    "diagnosis": "Dysfunctional Uterine Bleeding (Anovulatory)",
     "diagnoses": [
-      "Spontaneous Abortion"
+      "Dysfunctional Uterine Bleeding (Anovulatory)",
+      "Vaginal bleeding could be due to various causes such as endometrial cancer, cervical cancer, uterine fibroids, vaginitis, or trauma. Given the uncertainty of diagnosis, a comprehensive workup is required.",
+      "Spontaneous Abortion (Miscarriage)",
+      "Vaginal bleeding could be due to various causes such as hormonal imbalances, infections, cancer, or trauma. The most likely cause in a patient with unknown history can't be definitively determined without further investigation."
     ]
   },
   {
     "caseId": 30,
     "topic": "Pain in Right Arm",
     "title": "Pain in Right Arm",
-    "diagnosis": "Colles' Fracture of Right Arm Due to Domestic Abuse",
+    "diagnosis": "Colles' Fracture of Right Arm / Domestic Abuse",
     "diagnoses": [
-      "Colles' Fracture of Right Arm Due to Domestic Abuse"
+      "Colles' Fracture of Right Arm / Domestic Abuse"
     ]
   },
   {
     "caseId": 31,
     "topic": "Dizziness and Fatigue",
     "title": "Dizziness and Fatigue",
-    "diagnosis": "Duodenal Ulcer",
+    "diagnosis": "Duodenal Ulcer with Iron Deficiency Anemia",
     "diagnoses": [
-      "Duodenal Ulcer"
+      "Duodenal Ulcer with Iron Deficiency Anemia"
     ]
   },
   {
@@ -354,14 +473,23 @@
     "diagnoses": [
       "Acute Cholecystitis",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
@@ -373,7 +501,7 @@
       "Normal Pressure Hydrocephalus",
       "Subdural Hematoma",
       "Transient Ischemic Attack (TIA)",
-      "Grand Mal Seizure (Complex Tonic-Clonic Seizure)",
+      "Grand Mal Seizure (Generalized Tonic-Clonic)",
       "Septic Shock"
     ]
   },
@@ -385,35 +513,54 @@
     "diagnoses": [
       "Hypertensive Emergency",
       "West Nile Encephalitis",
-      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)"
+      "Bacterial Meningitis (Meningococcal)",
+      "Cluster Headache",
+      "Tension Headache",
+      "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
+      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
+      "Carbon Monoxide Poisoning",
+      "Pheochromocytoma",
+      "Primary Headache (Tentative) or Secondary Headache (Suspected)"
     ]
   },
   {
     "caseId": 35,
-    "topic": "Alcohol Withdrawal - Delirium Tremens",
-    "title": "Alcohol Withdrawal - Delirium Tremens",
-    "diagnosis": "Alcohol Withdrawal - Delirium Tremens",
+    "topic": "Seizure",
+    "title": "Seizure",
+    "diagnosis": "Alcohol Withdrawal / Delirium Tremens",
     "diagnoses": [
-      "Alcohol Withdrawal - Delirium Tremens"
+      "Alcohol Withdrawal / Delirium Tremens"
     ]
   },
   {
     "caseId": 36,
-    "topic": "Headache - Emergency Nutrition",
-    "title": "Headache - Emergency Nutrition",
-    "diagnosis": "Bacterial Meningitis",
+    "topic": "Headache",
+    "title": "Headache",
+    "diagnosis": "Bacterial Meningitis (Meningococcal)",
     "diagnoses": [
-      "Bacterial Meningitis"
+      "Bacterial Meningitis (Meningococcal)",
+      "West Nile Encephalitis",
+      "Hypertensive Emergency",
+      "Cluster Headache",
+      "Tension Headache",
+      "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
+      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
+      "Carbon Monoxide Poisoning",
+      "Pheochromocytoma",
+      "Primary Headache (Tentative) or Secondary Headache (Suspected)"
     ]
   },
   {
     "caseId": 37,
     "topic": "Fatigue",
     "title": "Fatigue",
-    "diagnosis": null,
+    "diagnosis": "Unknown fatigue could be caused by a wide range of conditions including metabolic disorders, infectious diseases, autoimmune disorders, neurological disorders, and psychological issues. Initial workup should focus on common causes.",
     "diagnoses": [
+      "Unknown fatigue could be caused by a wide range of conditions including metabolic disorders, infectious diseases, autoimmune disorders, neurological disorders, and psychological issues. Initial workup should focus on common causes.",
+      "A comprehensive workup is necessary due to the unknown cause of fatigue.",
       "Neutropenic Fever",
-      "End Stage Renal Failure"
+      "End Stage Renal Disease",
+      "Obstructive Sleep Apnea"
     ]
   },
   {
@@ -427,29 +574,43 @@
   },
   {
     "caseId": 39,
-    "topic": "Epigastric pain",
-    "title": "Epigastric pain",
+    "topic": "Epigastric Pain",
+    "title": "Epigastric Pain",
     "diagnosis": "Acute Pancreatitis",
     "diagnoses": [
-      "Acute Pancreatitis"
+      "Acute Pancreatitis",
+      "Acute Abdomen (undetermined etiology)"
     ]
   },
   {
     "caseId": 40,
-    "topic": "Chest Pain - Psychiatry",
-    "title": "Chest Pain - Psychiatry",
-    "diagnosis": "Panic Attack",
+    "topic": "Chest Pain",
+    "title": "Chest Pain",
+    "diagnosis": "Panic Attack / Panic Disorder",
     "diagnoses": [
-      "Panic Attack"
+      "Panic Attack / Panic Disorder",
+      "Tension Pneumothorax",
+      "Acute Pericarditis (Idiopathic)",
+      "Acute Coronary Syndrome (ACS)",
+      "Unstable Angina",
+      "Aortic Dissection (Stanford Type A)",
+      "Atrial Fibrillation",
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
+      "Inferior myocardial infarction (STEMI)",
+      "Right Ventricular Myocardial Infarction",
+      "Post-MI Pericarditis (Dressler Syndrome)"
     ]
   },
   {
     "caseId": 41,
-    "topic": "Weakness - Pediatrics",
-    "title": "Weakness - Pediatrics",
+    "topic": "Generalized Weakness",
+    "title": "Generalized Weakness",
     "diagnosis": "Poststreptococcal Glomerulonephritis",
     "diagnoses": [
-      "Poststreptococcal Glomerulonephritis"
+      "Poststreptococcal Glomerulonephritis",
+      "Myasthenia Gravis with Thymoma",
+      "Renal Cell Carcinoma",
+      "Insulinoma"
     ]
   },
   {
@@ -458,16 +619,20 @@
     "title": "Knee Pain",
     "diagnosis": "Acute Gout",
     "diagnoses": [
-      "Acute Gout"
+      "Acute Gout",
+      "Septic Arthritis (Disseminated Gonococcal Infection)",
+      "Proximal Tibiofibular Joint Sprain, Patellofemoral Pain Syndrome, or Meniscal Tear (common causes of knee pain)"
     ]
   },
   {
     "caseId": 43,
-    "topic": "Knee Pain, Internal Medicine",
-    "title": "Knee Pain, Internal Medicine",
-    "diagnosis": "Septic Arthritis (Bacterial Arthritis)",
+    "topic": "Knee Pain",
+    "title": "Knee Pain",
+    "diagnosis": "Septic Arthritis (Disseminated Gonococcal Infection)",
     "diagnoses": [
-      "Septic Arthritis (Bacterial Arthritis)"
+      "Septic Arthritis (Disseminated Gonococcal Infection)",
+      "Acute Gout",
+      "Proximal Tibiofibular Joint Sprain, Patellofemoral Pain Syndrome, or Meniscal Tear (common causes of knee pain)"
     ]
   },
   {
@@ -476,40 +641,47 @@
     "title": "Diarrhea",
     "diagnosis": "Giardiasis",
     "diagnoses": [
-      "Giardiasis"
+      "Giardiasis",
+      "Celiac Disease",
+      "Crohn's Disease"
     ]
   },
   {
     "caseId": 45,
-    "topic": "Unresponsive - Emergency Medicine",
-    "title": "Unresponsive - Emergency Medicine",
+    "topic": "Unresponsive",
+    "title": "Unresponsive",
     "diagnosis": "Opioid Overdose",
     "diagnoses": [
-      "Opioid Overdose"
+      "Opioid Overdose",
+      "Benzodiazepine Overdose (Diazepam)"
     ]
   },
   {
     "caseId": 46,
-    "topic": "Guillain-Barré Syndrome",
-    "title": "Guillain-Barré Syndrome",
-    "diagnosis": "Guillain-Barré Syndrome",
+    "topic": "Weakness in Extremities",
+    "title": "Weakness in Extremities",
+    "diagnosis": "Guillain-Barre Syndrome",
     "diagnoses": [
-      "Guillain-Barré Syndrome"
+      "Guillain-Barre Syndrome"
     ]
   },
   {
     "caseId": 47,
     "topic": "Chest Pain",
     "title": "Chest Pain",
-    "diagnosis": null,
+    "diagnosis": "Acute Coronary Syndrome (ACS)",
     "diagnoses": [
+      "Acute Coronary Syndrome (ACS)",
       "Tension Pneumothorax",
-      "Pericarditis",
-      "Aortic Dissection",
+      "Acute Pericarditis (Idiopathic)",
+      "Panic Attack / Panic Disorder",
+      "Unstable Angina",
+      "Aortic Dissection (Stanford Type A)",
       "Atrial Fibrillation",
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
       "Inferior myocardial infarction (STEMI)",
       "Right Ventricular Myocardial Infarction",
-      "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)"
+      "Post-MI Pericarditis (Dressler Syndrome)"
     ]
   },
   {
@@ -519,27 +691,39 @@
     "diagnosis": "Community Acquired Pneumonia",
     "diagnoses": [
       "Community Acquired Pneumonia",
-      "Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia)"
+      "PCP Pneumonia (HIV/AIDS)",
+      "Tuberculosis",
+      "Legionella Pneumonia (Legionnaires Disease)"
     ]
   },
   {
     "caseId": 49,
-    "topic": "Headache",
-    "title": "Headache",
-    "diagnosis": null,
+    "topic": "Cough",
+    "title": "Cough",
+    "diagnosis": "Community Acquired Pneumonia",
     "diagnoses": [
-      "West Nile Encephalitis",
-      "Hypertensive Emergency",
-      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)"
+      "Community Acquired Pneumonia",
+      "PCP Pneumonia (HIV/AIDS)",
+      "Tuberculosis",
+      "Legionella Pneumonia (Legionnaires Disease)"
     ]
   },
   {
     "caseId": 50,
-    "topic": "Cluster Headache",
-    "title": "Cluster Headache",
-    "diagnosis": null,
+    "topic": "Headache",
+    "title": "Headache",
+    "diagnosis": "Cluster Headache",
     "diagnoses": [
-      "Unknown"
+      "Cluster Headache",
+      "West Nile Encephalitis",
+      "Hypertensive Emergency",
+      "Bacterial Meningitis (Meningococcal)",
+      "Tension Headache",
+      "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
+      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
+      "Carbon Monoxide Poisoning",
+      "Pheochromocytoma",
+      "Primary Headache (Tentative) or Secondary Headache (Suspected)"
     ]
   },
   {
@@ -551,7 +735,7 @@
       "Transient Ischemic Attack (TIA)",
       "Subdural Hematoma",
       "Normal Pressure Hydrocephalus",
-      "Grand Mal Seizure (Complex Tonic-Clonic Seizure)",
+      "Grand Mal Seizure (Generalized Tonic-Clonic)",
       "Septic Shock"
     ]
   },
@@ -559,24 +743,33 @@
     "caseId": 52,
     "topic": "Chest Pain",
     "title": "Chest Pain",
-    "diagnosis": null,
+    "diagnosis": "Unstable Angina",
     "diagnoses": [
+      "Unstable Angina",
       "Tension Pneumothorax",
-      "Pericarditis",
-      "Aortic Dissection",
+      "Acute Pericarditis (Idiopathic)",
+      "Panic Attack / Panic Disorder",
+      "Acute Coronary Syndrome (ACS)",
+      "Aortic Dissection (Stanford Type A)",
       "Atrial Fibrillation",
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
       "Inferior myocardial infarction (STEMI)",
       "Right Ventricular Myocardial Infarction",
-      "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)"
+      "Post-MI Pericarditis (Dressler Syndrome)"
     ]
   },
   {
     "caseId": 53,
     "topic": "Shortness of Breath",
     "title": "Shortness of Breath",
-    "diagnosis": null,
+    "diagnosis": "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
     "diagnoses": [
+      "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+      "Congestive Heart Failure (Systolic Dysfunction)",
+      "Cystic Fibrosis",
+      "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
       "Croup (Laryngotracheitis)",
+      "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
       "Fat Embolism Syndrome",
       "Non-ST Elevation Myocardial Infarction (NSTEMI)",
       "Sarcoidosis"
@@ -584,20 +777,25 @@
   },
   {
     "caseId": 54,
-    "topic": "Breast Feeding Neonatal Jaundice",
-    "title": "Breast Feeding Neonatal Jaundice",
-    "diagnosis": null,
+    "topic": "Yellow Baby",
+    "title": "Yellow Baby",
+    "diagnosis": "Breastfeeding Neonatal Jaundice (Unconjugated Hyperbilirubinemia)",
     "diagnoses": [
-      "Unknown"
+      "Breastfeeding Neonatal Jaundice (Unconjugated Hyperbilirubinemia)"
     ]
   },
   {
     "caseId": 55,
     "topic": "Shortness of Breath",
     "title": "Shortness of Breath",
-    "diagnosis": null,
+    "diagnosis": "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
     "diagnoses": [
+      "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
+      "Congestive Heart Failure (Systolic Dysfunction)",
+      "Cystic Fibrosis",
+      "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
       "Croup (Laryngotracheitis)",
+      "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
       "Fat Embolism Syndrome",
       "Non-ST Elevation Myocardial Infarction (NSTEMI)",
       "Sarcoidosis"
@@ -607,28 +805,54 @@
     "caseId": 56,
     "topic": "Abdominal Pain",
     "title": "Abdominal Pain",
-    "diagnosis": "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+    "diagnosis": "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
     "diagnoses": [
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
     "caseId": 57,
-    "topic": "Abdominal Pain - Pediatrics",
-    "title": "Abdominal Pain - Pediatrics",
+    "topic": "Abdominal Pain",
+    "title": "Abdominal Pain",
     "diagnosis": "Intussusception",
     "diagnoses": [
       "Intussusception",
-      "Lead Intoxication with Encephalopathy"
+      "Diabetic Ketoacidosis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
+      "Irritable Bowel Syndrome",
+      "Acute Cholecystitis",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
+      "Ischemic Colitis",
+      "Ulcerative Colitis",
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
@@ -638,6 +862,11 @@
     "diagnosis": "Croup (Laryngotracheitis)",
     "diagnoses": [
       "Croup (Laryngotracheitis)",
+      "Congestive Heart Failure (Systolic Dysfunction)",
+      "Cystic Fibrosis",
+      "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+      "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
+      "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
       "Fat Embolism Syndrome",
       "Non-ST Elevation Myocardial Infarction (NSTEMI)",
       "Sarcoidosis"
@@ -647,8 +876,13 @@
     "caseId": 59,
     "topic": "Shortness of Breath",
     "title": "Shortness of Breath",
-    "diagnosis": null,
+    "diagnosis": "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
     "diagnoses": [
+      "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
+      "Congestive Heart Failure (Systolic Dysfunction)",
+      "Cystic Fibrosis",
+      "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+      "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
       "Croup (Laryngotracheitis)",
       "Fat Embolism Syndrome",
       "Non-ST Elevation Myocardial Infarction (NSTEMI)",
@@ -657,30 +891,56 @@
   },
   {
     "caseId": 60,
-    "topic": "Abdominal Pain - Emergency Medicine",
-    "title": "Abdominal Pain - Emergency Medicine",
+    "topic": "Abdominal Pain",
+    "title": "Abdominal Pain",
     "diagnosis": "Nephrolithiasis (Kidney Stone)",
     "diagnoses": [
       "Nephrolithiasis (Kidney Stone)",
-      "Hepatitis A"
+      "Diabetic Ketoacidosis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
+      "Irritable Bowel Syndrome",
+      "Acute Cholecystitis",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
+      "Ischemic Colitis",
+      "Ulcerative Colitis",
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
     "caseId": 61,
-    "topic": "Tension Headache",
-    "title": "Tension Headache",
+    "topic": "Headache",
+    "title": "Headache",
     "diagnosis": "Tension Headache",
     "diagnoses": [
-      "Tension Headache"
+      "Tension Headache",
+      "West Nile Encephalitis",
+      "Hypertensive Emergency",
+      "Bacterial Meningitis (Meningococcal)",
+      "Cluster Headache",
+      "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
+      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
+      "Carbon Monoxide Poisoning",
+      "Pheochromocytoma",
+      "Primary Headache (Tentative) or Secondary Headache (Suspected)"
     ]
   },
   {
     "caseId": 62,
     "topic": "Altered Mental Status",
     "title": "Altered Mental Status",
-    "diagnosis": "Grand Mal Seizure (Complex Tonic-Clonic Seizure)",
+    "diagnosis": "Grand Mal Seizure (Generalized Tonic-Clonic)",
     "diagnoses": [
-      "Grand Mal Seizure (Complex Tonic-Clonic Seizure)",
+      "Grand Mal Seizure (Generalized Tonic-Clonic)",
       "Subdural Hematoma",
       "Normal Pressure Hydrocephalus",
       "Transient Ischemic Attack (TIA)",
@@ -689,8 +949,8 @@
   },
   {
     "caseId": 63,
-    "topic": "Ovarian Cancer",
-    "title": "Ovarian Cancer",
+    "topic": "Malaise",
+    "title": "Malaise",
     "diagnosis": "Ovarian Cancer",
     "diagnoses": [
       "Ovarian Cancer"
@@ -698,12 +958,29 @@
   },
   {
     "caseId": 64,
-    "topic": "Abdominal Pain - Pediatrics",
-    "title": "Abdominal Pain - Pediatrics",
+    "topic": "Abdominal Pain",
+    "title": "Abdominal Pain",
     "diagnosis": "Lead Intoxication with Encephalopathy",
     "diagnoses": [
       "Lead Intoxication with Encephalopathy",
-      "Intussusception"
+      "Diabetic Ketoacidosis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
+      "Irritable Bowel Syndrome",
+      "Acute Cholecystitis",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
+      "Ischemic Colitis",
+      "Ulcerative Colitis",
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
@@ -713,42 +990,40 @@
     "diagnosis": "Graves' hyperthyroidism",
     "diagnoses": [
       "Graves' hyperthyroidism",
-      "Anxiety",
-      "Atrial fibrillation",
-      "Early menopause",
-      "Mitral valve prolapse",
-      "Panic attack",
-      "Withdrawal syndrome",
-      "Stimulant intoxication"
+      "Generalized Anxiety Disorder"
     ]
   },
   {
     "caseId": 66,
-    "topic": "English Internal Medicine",
-    "title": "English Internal Medicine",
+    "topic": "Cough",
+    "title": "Cough",
     "diagnosis": "Tuberculosis",
     "diagnoses": [
-      "Tuberculosis"
+      "Tuberculosis",
+      "PCP Pneumonia (HIV/AIDS)",
+      "Community Acquired Pneumonia",
+      "Legionella Pneumonia (Legionnaires Disease)"
     ]
   },
   {
     "caseId": 67,
     "topic": "Frequency of Urination",
     "title": "Frequency of Urination",
-    "diagnosis": "Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy)",
+    "diagnosis": "Benign Prostatic Hyperplasia",
     "diagnoses": [
-      "Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy)",
-      "Prostate Cancer"
+      "Benign Prostatic Hyperplasia",
+      "Prostate Cancer",
+      "Diabetes Insipidus (Central)"
     ]
   },
   {
     "caseId": 68,
     "topic": "Muscle Weakness",
     "title": "Muscle Weakness",
-    "diagnosis": "Myopathy due to Simvastatin and Gemfibrozil",
+    "diagnosis": "Statin-Induced Myopathy (Simvastatin + Gemfibrozil interaction)",
     "diagnoses": [
-      "Myopathy due to Simvastatin and Gemfibrozil",
-      "Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use"
+      "Statin-Induced Myopathy (Simvastatin + Gemfibrozil interaction)",
+      "Hyperkalemic Emergency secondary to ACE Inhibitor + NSAID"
     ]
   },
   {
@@ -757,40 +1032,45 @@
     "title": "Leg Pain",
     "diagnosis": "Cellulitis",
     "diagnoses": [
-      "Cellulitis"
+      "Cellulitis",
+      "Deep Venous Thrombosis (DVT)"
     ]
   },
   {
     "caseId": 70,
     "topic": "Fever",
     "title": "Fever",
-    "diagnosis": null,
+    "diagnosis": "Infectious workup including sepsis, meningitis, or pneumonia are potential considerations due to the fever being of unknown origin.",
     "diagnoses": [
-      "Unknown"
+      "Infectious workup including sepsis, meningitis, or pneumonia are potential considerations due to the fever being of unknown origin.",
+      "Epiglottitis"
     ]
   },
   {
     "caseId": 71,
-    "topic": "Question: Internal Medicine",
-    "title": "Question: Internal Medicine",
-    "diagnosis": null,
+    "topic": "Diarrhea",
+    "title": "Diarrhea",
+    "diagnosis": "Celiac Disease",
     "diagnoses": [
-      "Unknown"
+      "Celiac Disease",
+      "Giardiasis",
+      "Crohn's Disease"
     ]
   },
   {
     "caseId": 72,
     "topic": "Routine Check-Up",
     "title": "Routine Check-Up",
-    "diagnosis": null,
+    "diagnosis": "Pending further diagnostic results",
     "diagnoses": [
-      "Unknown"
+      "Pending further diagnostic results",
+      "Initial Workup for Undetermined Condition"
     ]
   },
   {
     "caseId": 73,
-    "topic": "Memory Loss - Neurology",
-    "title": "Memory Loss - Neurology",
+    "topic": "Memory Loss",
+    "title": "Memory Loss",
     "diagnosis": "Alzheimer's Disease",
     "diagnoses": [
       "Alzheimer's Disease"
@@ -809,24 +1089,28 @@
     "caseId": 75,
     "topic": "Chest Pain",
     "title": "Chest Pain",
-    "diagnosis": "Aortic Dissection",
+    "diagnosis": "Aortic Dissection (Stanford Type A)",
     "diagnoses": [
-      "Aortic Dissection",
+      "Aortic Dissection (Stanford Type A)",
       "Tension Pneumothorax",
-      "Pericarditis",
+      "Acute Pericarditis (Idiopathic)",
+      "Panic Attack / Panic Disorder",
+      "Acute Coronary Syndrome (ACS)",
+      "Unstable Angina",
       "Atrial Fibrillation",
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
       "Inferior myocardial infarction (STEMI)",
       "Right Ventricular Myocardial Infarction",
-      "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)"
+      "Post-MI Pericarditis (Dressler Syndrome)"
     ]
   },
   {
     "caseId": 76,
-    "topic": "Fever and Rash - Pediatrics",
-    "title": "Fever and Rash - Pediatrics",
-    "diagnosis": "Roseola Infantum (Exanthem Subitum)",
+    "topic": "Fever and Rash",
+    "title": "Fever and Rash",
+    "diagnosis": "Scarlet Fever",
     "diagnoses": [
-      "Roseola Infantum (Exanthem Subitum)"
+      "Scarlet Fever"
     ]
   },
   {
@@ -837,20 +1121,26 @@
     "diagnoses": [
       "Atrial Fibrillation",
       "Tension Pneumothorax",
-      "Pericarditis",
-      "Aortic Dissection",
+      "Acute Pericarditis (Idiopathic)",
+      "Panic Attack / Panic Disorder",
+      "Acute Coronary Syndrome (ACS)",
+      "Unstable Angina",
+      "Aortic Dissection (Stanford Type A)",
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
       "Inferior myocardial infarction (STEMI)",
       "Right Ventricular Myocardial Infarction",
-      "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)"
+      "Post-MI Pericarditis (Dressler Syndrome)"
     ]
   },
   {
     "caseId": 78,
     "topic": "Generalized Weakness",
     "title": "Generalized Weakness",
-    "diagnosis": "Rental Cell Carcinoma",
+    "diagnosis": "Renal Cell Carcinoma",
     "diagnoses": [
-      "Rental Cell Carcinoma",
+      "Renal Cell Carcinoma",
+      "Myasthenia Gravis with Thymoma",
+      "Poststreptococcal Glomerulonephritis",
       "Insulinoma"
     ]
   },
@@ -861,7 +1151,9 @@
     "diagnosis": "Acute Pyelonephritis",
     "diagnoses": [
       "Acute Pyelonephritis",
-      "Osteomyelitis in Lumbar Spine",
+      "Lumbar Disc Herniation",
+      "Cauda Equina Syndrome",
+      "Vertebral Osteomyelitis (Lumbar Spine)",
       "Ankylosing Spondylitis"
     ]
   },
@@ -869,45 +1161,74 @@
     "caseId": 80,
     "topic": "Vomiting",
     "title": "Vomiting",
-    "diagnosis": "Malrotation with Volvulus",
+    "diagnosis": "Malrotation with Midgut Volvulus",
     "diagnoses": [
-      "Malrotation with Volvulus"
+      "Malrotation with Midgut Volvulus"
     ]
   },
   {
     "caseId": 81,
-    "topic": "Diarrhea - Internal Medicine",
-    "title": "Diarrhea - Internal Medicine",
+    "topic": "Diarrhea",
+    "title": "Diarrhea",
     "diagnosis": "Crohn's Disease",
     "diagnoses": [
-      "Crohn's Disease"
+      "Crohn's Disease",
+      "Giardiasis",
+      "Celiac Disease"
     ]
   },
   {
     "caseId": 82,
-    "topic": "Acute Bacterial Gastroenteritis",
-    "title": "Acute Bacterial Gastroenteritis",
+    "topic": "Abdominal Pain",
+    "title": "Abdominal Pain",
     "diagnosis": "Acute Bacterial Gastroenteritis",
     "diagnoses": [
-      "Acute Bacterial Gastroenteritis"
+      "Acute Bacterial Gastroenteritis",
+      "Diabetic Ketoacidosis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
+      "Irritable Bowel Syndrome",
+      "Acute Cholecystitis",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Abdomen - Undetermined etiology",
+      "Ischemic Colitis",
+      "Ulcerative Colitis",
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
     "caseId": 83,
     "topic": "Abdominal Pain",
     "title": "Abdominal Pain",
-    "diagnosis": null,
+    "diagnosis": "Acute Abdomen - Undetermined etiology",
     "diagnoses": [
+      "Acute Abdomen - Undetermined etiology",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
@@ -918,14 +1239,23 @@
     "diagnoses": [
       "Ischemic Colitis",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
@@ -954,14 +1284,23 @@
     "diagnoses": [
       "Ulcerative Colitis",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
@@ -971,7 +1310,8 @@
     "diagnosis": "Prostate Cancer",
     "diagnoses": [
       "Prostate Cancer",
-      "Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy)"
+      "Benign Prostatic Hyperplasia",
+      "Diabetes Insipidus (Central)"
     ]
   },
   {
@@ -985,29 +1325,32 @@
   },
   {
     "caseId": 90,
-    "topic": "Prenatal followup",
-    "title": "Prenatal followup",
-    "diagnosis": "Pregnancy Induced Hypertension (Gestational hypertension)",
+    "topic": "Prenatal Followup",
+    "title": "Prenatal Followup",
+    "diagnosis": "Gestational Hypertension (Pregnancy-Induced Hypertension)",
     "diagnoses": [
-      "Pregnancy Induced Hypertension (Gestational hypertension)"
+      "Gestational Hypertension (Pregnancy-Induced Hypertension)"
     ]
   },
   {
     "caseId": 91,
     "topic": "Lump in Breast",
     "title": "Lump in Breast",
-    "diagnosis": "Breast Cancer",
+    "diagnosis": "Breast Cancer (Invasive Ductal Carcinoma)",
     "diagnoses": [
-      "Breast Cancer"
+      "Breast Cancer (Invasive Ductal Carcinoma)"
     ]
   },
   {
     "caseId": 92,
     "topic": "Vaginal Bleeding",
     "title": "Vaginal Bleeding",
-    "diagnosis": null,
+    "diagnosis": "Vaginal bleeding could be due to various causes such as endometrial cancer, cervical cancer, uterine fibroids, vaginitis, or trauma. Given the uncertainty of diagnosis, a comprehensive workup is required.",
     "diagnoses": [
-      "Spontaneous Abortion"
+      "Vaginal bleeding could be due to various causes such as endometrial cancer, cervical cancer, uterine fibroids, vaginitis, or trauma. Given the uncertainty of diagnosis, a comprehensive workup is required.",
+      "Dysfunctional Uterine Bleeding (Anovulatory)",
+      "Spontaneous Abortion (Miscarriage)",
+      "Vaginal bleeding could be due to various causes such as hormonal imbalances, infections, cancer, or trauma. The most likely cause in a patient with unknown history can't be definitively determined without further investigation."
     ]
   },
   {
@@ -1020,7 +1363,7 @@
       "Subdural Hematoma",
       "Normal Pressure Hydrocephalus",
       "Transient Ischemic Attack (TIA)",
-      "Grand Mal Seizure (Complex Tonic-Clonic Seizure)"
+      "Grand Mal Seizure (Generalized Tonic-Clonic)"
     ]
   },
   {
@@ -1036,47 +1379,57 @@
     "caseId": 95,
     "topic": "Vaginal Bleeding",
     "title": "Vaginal Bleeding",
-    "diagnosis": "Spontaneous Abortion",
+    "diagnosis": "Spontaneous Abortion (Miscarriage)",
     "diagnoses": [
-      "Spontaneous Abortion"
+      "Spontaneous Abortion (Miscarriage)",
+      "Dysfunctional Uterine Bleeding (Anovulatory)",
+      "Vaginal bleeding could be due to various causes such as endometrial cancer, cervical cancer, uterine fibroids, vaginitis, or trauma. Given the uncertainty of diagnosis, a comprehensive workup is required.",
+      "Vaginal bleeding could be due to various causes such as hormonal imbalances, infections, cancer, or trauma. The most likely cause in a patient with unknown history can't be definitively determined without further investigation."
     ]
   },
   {
     "caseId": 96,
-    "topic": "Nausea and Vomiting - Emergency Medicine",
-    "title": "Nausea and Vomiting - Emergency Medicine",
+    "topic": "Nausea and Vomiting",
+    "title": "Nausea and Vomiting",
     "diagnosis": "Toxic Shock Syndrome",
     "diagnoses": [
-      "Toxic Shock Syndrome"
+      "Toxic Shock Syndrome",
+      "Diabetic Gastroparesis"
     ]
   },
   {
     "caseId": 97,
-    "topic": "Dyspareunia - OB/GYN",
-    "title": "Dyspareunia - OB/GYN",
-    "diagnosis": "Menopause",
+    "topic": "Dyspareunia",
+    "title": "Dyspareunia",
+    "diagnosis": "Menopause (Genitourinary Syndrome)",
     "diagnoses": [
-      "Menopause"
+      "Menopause (Genitourinary Syndrome)"
     ]
   },
   {
     "caseId": 98,
-    "topic": "Back Pain - Neurology",
-    "title": "Back Pain - Neurology",
-    "diagnosis": "Lumbar Disk Herniation",
+    "topic": "Back Pain",
+    "title": "Back Pain",
+    "diagnosis": "Lumbar Disc Herniation",
     "diagnoses": [
-      "Lumbar Disk Herniation",
-      "Cauda Equina Syndrome"
+      "Lumbar Disc Herniation",
+      "Acute Pyelonephritis",
+      "Cauda Equina Syndrome",
+      "Vertebral Osteomyelitis (Lumbar Spine)",
+      "Ankylosing Spondylitis"
     ]
   },
   {
     "caseId": 99,
-    "topic": "Back Pain - Neurology",
-    "title": "Back Pain - Neurology",
+    "topic": "Back Pain",
+    "title": "Back Pain",
     "diagnosis": "Cauda Equina Syndrome",
     "diagnoses": [
       "Cauda Equina Syndrome",
-      "Lumbar Disk Herniation"
+      "Acute Pyelonephritis",
+      "Lumbar Disc Herniation",
+      "Vertebral Osteomyelitis (Lumbar Spine)",
+      "Ankylosing Spondylitis"
     ]
   },
   {
@@ -1090,11 +1443,12 @@
   },
   {
     "caseId": 101,
-    "topic": "Fever - Pediatrics",
-    "title": "Fever - Pediatrics",
+    "topic": "Fever",
+    "title": "Fever",
     "diagnosis": "Epiglottitis",
     "diagnoses": [
-      "Epiglottitis"
+      "Epiglottitis",
+      "Infectious workup including sepsis, meningitis, or pneumonia are potential considerations due to the fever being of unknown origin."
     ]
   },
   {
@@ -1104,26 +1458,31 @@
     "diagnosis": "Insulinoma",
     "diagnoses": [
       "Insulinoma",
-      "Rental Cell Carcinoma"
+      "Myasthenia Gravis with Thymoma",
+      "Poststreptococcal Glomerulonephritis",
+      "Renal Cell Carcinoma"
     ]
   },
   {
     "caseId": 103,
     "topic": "Routine Check-Up",
     "title": "Routine Check-Up",
-    "diagnosis": null,
+    "diagnosis": "Initial Workup for Undetermined Condition",
     "diagnoses": [
-      "Unknown"
+      "Initial Workup for Undetermined Condition",
+      "Pending further diagnostic results"
     ]
   },
   {
     "caseId": 104,
     "topic": "Back Pain",
     "title": "Back Pain",
-    "diagnosis": "Osteomyelitis in Lumbar Spine",
+    "diagnosis": "Vertebral Osteomyelitis (Lumbar Spine)",
     "diagnoses": [
-      "Osteomyelitis in Lumbar Spine",
+      "Vertebral Osteomyelitis (Lumbar Spine)",
       "Acute Pyelonephritis",
+      "Lumbar Disc Herniation",
+      "Cauda Equina Syndrome",
       "Ankylosing Spondylitis"
     ]
   },
@@ -1131,18 +1490,27 @@
     "caseId": 105,
     "topic": "Abdominal Pain",
     "title": "Abdominal Pain",
-    "diagnosis": "Hemoperitoneum from a Ruptured Ovarian Cyst",
+    "diagnosis": "Hemoperitoneum from Ruptured Ovarian Cyst",
     "diagnoses": [
-      "Hemoperitoneum from a Ruptured Ovarian Cyst",
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
-      "Ulcerative Colitis"
+      "Ulcerative Colitis",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
@@ -1152,13 +1520,16 @@
     "diagnosis": "Neutropenic Fever",
     "diagnoses": [
       "Neutropenic Fever",
-      "End Stage Renal Failure"
+      "A comprehensive workup is necessary due to the unknown cause of fatigue.",
+      "Unknown fatigue could be caused by a wide range of conditions including metabolic disorders, infectious diseases, autoimmune disorders, neurological disorders, and psychological issues. Initial workup should focus on common causes.",
+      "End Stage Renal Disease",
+      "Obstructive Sleep Apnea"
     ]
   },
   {
     "caseId": 107,
-    "topic": "Paranoia - Psychiatry",
-    "title": "Paranoia - Psychiatry",
+    "topic": "Paranoia",
+    "title": "Paranoia",
     "diagnosis": "Schizophrenia",
     "diagnoses": [
       "Schizophrenia"
@@ -1168,27 +1539,37 @@
     "caseId": 108,
     "topic": "Abdominal Pain",
     "title": "Abdominal Pain",
-    "diagnosis": null,
+    "diagnosis": "Acute Abdomen (undetermined etiology)",
     "diagnoses": [
+      "Acute Abdomen (undetermined etiology)",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute abdomen (non-specific)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
     "caseId": 109,
     "topic": "Unresponsive",
     "title": "Unresponsive",
-    "diagnosis": "Diazepam Overdose",
+    "diagnosis": "Benzodiazepine Overdose (Diazepam)",
     "diagnoses": [
-      "Diazepam Overdose"
+      "Benzodiazepine Overdose (Diazepam)",
+      "Opioid Overdose"
     ]
   },
   {
@@ -1197,7 +1578,9 @@
     "title": "Rash",
     "diagnosis": "Syphilis",
     "diagnoses": [
-      "Syphilis"
+      "Syphilis",
+      "Immune Thrombocytopenia (ITP)",
+      "Undetermined rash"
     ]
   },
   {
@@ -1207,7 +1590,12 @@
     "diagnosis": "Fat Embolism Syndrome",
     "diagnoses": [
       "Fat Embolism Syndrome",
+      "Congestive Heart Failure (Systolic Dysfunction)",
+      "Cystic Fibrosis",
+      "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+      "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
       "Croup (Laryngotracheitis)",
+      "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
       "Non-ST Elevation Myocardial Infarction (NSTEMI)",
       "Sarcoidosis"
     ]
@@ -1216,63 +1604,77 @@
     "caseId": 112,
     "topic": "Found Unconscious",
     "title": "Found Unconscious",
-    "diagnosis": "Rape victim",
+    "diagnosis": "Sexual Assault (Rape)",
     "diagnoses": [
-      "Rape victim",
-      "CCS review page"
+      "Sexual Assault (Rape)",
+      "Tricyclic Antidepressant (TCA) Overdose",
+      "Cyanide Poisoning",
+      "Carbon Monoxide Poisoning"
     ]
   },
   {
     "caseId": 113,
     "topic": "Drowning",
     "title": "Drowning",
-    "diagnosis": null,
+    "diagnosis": "Drowning (Near-Drowning)",
     "diagnoses": [
-      "Unknown"
+      "Drowning (Near-Drowning)"
     ]
   },
   {
     "caseId": 114,
     "topic": "Pain in Side",
     "title": "Pain in Side",
-    "diagnosis": null,
+    "diagnosis": "Possible Renal Colic due to obstructive uropathy or Appendicitis",
     "diagnoses": [
-      "Unknown"
+      "Possible Renal Colic due to obstructive uropathy or Appendicitis"
     ]
   },
   {
     "caseId": 115,
-    "topic": "Agitation - Psychiatry",
-    "title": "Agitation - Psychiatry",
+    "topic": "Agitation",
+    "title": "Agitation",
     "diagnosis": "Acute Agitation",
     "diagnoses": [
-      "Acute Agitation"
+      "Acute Agitation",
+      "Possible neuropsychiatric disorders such as delirium, dementia, or psychiatric emergencies"
     ]
   },
   {
     "caseId": 116,
     "topic": "Headache",
     "title": "Headache",
-    "diagnosis": null,
+    "diagnosis": "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
     "diagnoses": [
+      "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
       "West Nile Encephalitis",
       "Hypertensive Emergency",
-      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)"
+      "Bacterial Meningitis (Meningococcal)",
+      "Cluster Headache",
+      "Tension Headache",
+      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
+      "Carbon Monoxide Poisoning",
+      "Pheochromocytoma",
+      "Primary Headache (Tentative) or Secondary Headache (Suspected)"
     ]
   },
   {
     "caseId": 117,
     "topic": "Chest Pain",
     "title": "Chest Pain",
-    "diagnosis": null,
+    "diagnosis": "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
     "diagnoses": [
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
       "Tension Pneumothorax",
-      "Pericarditis",
-      "Aortic Dissection",
+      "Acute Pericarditis (Idiopathic)",
+      "Panic Attack / Panic Disorder",
+      "Acute Coronary Syndrome (ACS)",
+      "Unstable Angina",
+      "Aortic Dissection (Stanford Type A)",
       "Atrial Fibrillation",
       "Inferior myocardial infarction (STEMI)",
       "Right Ventricular Myocardial Infarction",
-      "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)"
+      "Post-MI Pericarditis (Dressler Syndrome)"
     ]
   },
   {
@@ -1308,15 +1710,16 @@
     "caseId": 121,
     "topic": "Poor Feeding",
     "title": "Poor Feeding",
-    "diagnosis": null,
+    "diagnosis": "Failure to Thrive (FTT) or Gastroesophageal Reflux Disease (GERD) are common considerations for Poor Feeding of unknown cause in pediatric patients.",
     "diagnoses": [
+      "Failure to Thrive (FTT) or Gastroesophageal Reflux Disease (GERD) are common considerations for Poor Feeding of unknown cause in pediatric patients.",
       "Galactosemia"
     ]
   },
   {
     "caseId": 122,
-    "topic": "Painful Rash - Pediatrics",
-    "title": "Painful Rash - Pediatrics",
+    "topic": "Painful Rash",
+    "title": "Painful Rash",
     "diagnosis": "Stevens-Johnson Syndrome",
     "diagnoses": [
       "Stevens-Johnson Syndrome"
@@ -1324,11 +1727,12 @@
   },
   {
     "caseId": 123,
-    "topic": "Leg Pain - Internal Medicine",
-    "title": "Leg Pain - Internal Medicine",
+    "topic": "Leg Pain",
+    "title": "Leg Pain",
     "diagnosis": "Deep Venous Thrombosis (DVT)",
     "diagnoses": [
-      "Deep Venous Thrombosis (DVT)"
+      "Deep Venous Thrombosis (DVT)",
+      "Cellulitis"
     ]
   },
   {
@@ -1339,15 +1743,15 @@
     "diagnoses": [
       "Inferior myocardial infarction (STEMI)",
       "Tension Pneumothorax",
-      "Pericarditis",
-      "Aortic Dissection",
+      "Acute Pericarditis (Idiopathic)",
+      "Panic Attack / Panic Disorder",
+      "Acute Coronary Syndrome (ACS)",
+      "Unstable Angina",
+      "Aortic Dissection (Stanford Type A)",
       "Atrial Fibrillation",
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
       "Right Ventricular Myocardial Infarction",
-      "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)",
-      "Acute aortic dissection",
-      "Pulmonary embolism",
-      "Pericardial tamponade",
-      "Esophageal rupture"
+      "Post-MI Pericarditis (Dressler Syndrome)"
     ]
   },
   {
@@ -1358,11 +1762,15 @@
     "diagnoses": [
       "Right Ventricular Myocardial Infarction",
       "Tension Pneumothorax",
-      "Pericarditis",
-      "Aortic Dissection",
+      "Acute Pericarditis (Idiopathic)",
+      "Panic Attack / Panic Disorder",
+      "Acute Coronary Syndrome (ACS)",
+      "Unstable Angina",
+      "Aortic Dissection (Stanford Type A)",
       "Atrial Fibrillation",
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
       "Inferior myocardial infarction (STEMI)",
-      "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)"
+      "Post-MI Pericarditis (Dressler Syndrome)"
     ]
   },
   {
@@ -1372,78 +1780,92 @@
     "diagnosis": "Non-ST Elevation Myocardial Infarction (NSTEMI)",
     "diagnoses": [
       "Non-ST Elevation Myocardial Infarction (NSTEMI)",
+      "Congestive Heart Failure (Systolic Dysfunction)",
+      "Cystic Fibrosis",
+      "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+      "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
       "Croup (Laryngotracheitis)",
+      "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
       "Fat Embolism Syndrome",
-      "Sarcoidosis",
-      "ST Elevation Myocardial Infarction",
-      "Acute Aortic Dissection",
-      "Pulmonary Embolism",
-      "Pericardial Tamponade",
-      "Esophageal Rupture"
+      "Sarcoidosis"
     ]
   },
   {
     "caseId": 127,
-    "topic": "Rash - Pediatrics",
-    "title": "Rash - Pediatrics",
+    "topic": "Rash",
+    "title": "Rash",
     "diagnosis": "Immune Thrombocytopenia (ITP)",
     "diagnoses": [
-      "Immune Thrombocytopenia (ITP)"
+      "Immune Thrombocytopenia (ITP)",
+      "Syphilis",
+      "Undetermined rash"
     ]
   },
   {
     "caseId": 128,
     "topic": "Depression",
     "title": "Depression",
-    "diagnosis": null,
+    "diagnosis": "Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology.",
     "diagnoses": [
-      "Unknown"
+      "Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology."
     ]
   },
   {
     "caseId": 129,
     "topic": "Facial Pain",
     "title": "Facial Pain",
-    "diagnosis": null,
+    "diagnosis": "Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)",
     "diagnoses": [
-      "Bronchitis"
+      "Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)",
+      "Postherpetic Neuralgia (Trigeminal Distribution)"
     ]
   },
   {
     "caseId": 130,
     "topic": "Cough",
     "title": "Cough",
-    "diagnosis": "Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia)",
+    "diagnosis": "Legionella Pneumonia (Legionnaires Disease)",
     "diagnoses": [
-      "Legionella Pneumonia / Legionnaires Disease (Atypical pneumonia)",
-      "Community Acquired Pneumonia"
+      "Legionella Pneumonia (Legionnaires Disease)",
+      "PCP Pneumonia (HIV/AIDS)",
+      "Community Acquired Pneumonia",
+      "Tuberculosis"
     ]
   },
   {
     "caseId": 131,
     "topic": "Abdominal Pain",
     "title": "Abdominal Pain",
-    "diagnosis": null,
+    "diagnosis": "Acute abdomen (non-specific)",
     "diagnoses": [
+      "Acute abdomen (non-specific)",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (unspecified etiology)"
     ]
   },
   {
     "caseId": 132,
     "topic": "Foot Pain",
     "title": "Foot Pain",
-    "diagnosis": null,
+    "diagnosis": "Likely diagnoses may include traumatic injuries, neuropathies, or arthritis. However, a definitive diagnosis will require further investigation.",
     "diagnoses": [
-      "Unknown"
+      "Likely diagnoses may include traumatic injuries, neuropathies, or arthritis. However, a definitive diagnosis will require further investigation."
     ]
   },
   {
@@ -1454,7 +1876,9 @@
     "diagnoses": [
       "Ankylosing Spondylitis",
       "Acute Pyelonephritis",
-      "Osteomyelitis in Lumbar Spine"
+      "Lumbar Disc Herniation",
+      "Cauda Equina Syndrome",
+      "Vertebral Osteomyelitis (Lumbar Spine)"
     ]
   },
   {
@@ -1470,10 +1894,10 @@
     "caseId": 135,
     "topic": "Muscle Weakness",
     "title": "Muscle Weakness",
-    "diagnosis": "Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use",
+    "diagnosis": "Hyperkalemic Emergency secondary to ACE Inhibitor + NSAID",
     "diagnoses": [
-      "Hyperkalemic Emergency Secondary to ACE Inhibitor and NSAID Use",
-      "Myopathy due to Simvastatin and Gemfibrozil"
+      "Hyperkalemic Emergency secondary to ACE Inhibitor + NSAID",
+      "Statin-Induced Myopathy (Simvastatin + Gemfibrozil interaction)"
     ]
   },
   {
@@ -1483,7 +1907,12 @@
     "diagnosis": "Sarcoidosis",
     "diagnoses": [
       "Sarcoidosis",
+      "Congestive Heart Failure (Systolic Dysfunction)",
+      "Cystic Fibrosis",
+      "Pulmonary Edema or Cardiogenic Pulmonary Edema (most likely diagnosis in a patient presenting with Shortness of Breath)",
+      "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
       "Croup (Laryngotracheitis)",
+      "Shortness of Breath could be due to various conditions such as Congestive Heart Failure, Pneumonia, COPD exacerbation, Pulmonary Edema, or Asthma. However, since the diagnosis is unknown, a thorough workup is necessary.",
       "Fat Embolism Syndrome",
       "Non-ST Elevation Myocardial Infarction (NSTEMI)"
     ]
@@ -1501,10 +1930,13 @@
     "caseId": 138,
     "topic": "Fatigue",
     "title": "Fatigue",
-    "diagnosis": "End Stage Renal Failure",
+    "diagnosis": "End Stage Renal Disease",
     "diagnoses": [
-      "End Stage Renal Failure",
-      "Neutropenic Fever"
+      "End Stage Renal Disease",
+      "A comprehensive workup is necessary due to the unknown cause of fatigue.",
+      "Unknown fatigue could be caused by a wide range of conditions including metabolic disorders, infectious diseases, autoimmune disorders, neurological disorders, and psychological issues. Initial workup should focus on common causes.",
+      "Neutropenic Fever",
+      "Obstructive Sleep Apnea"
     ]
   },
   {
@@ -1524,22 +1956,31 @@
     "diagnoses": [
       "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
       "West Nile Encephalitis",
-      "Hypertensive Emergency"
+      "Hypertensive Emergency",
+      "Bacterial Meningitis (Meningococcal)",
+      "Cluster Headache",
+      "Tension Headache",
+      "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
+      "Carbon Monoxide Poisoning",
+      "Pheochromocytoma",
+      "Primary Headache (Tentative) or Secondary Headache (Suspected)"
     ]
   },
   {
     "caseId": 141,
     "topic": "Rash",
     "title": "Rash",
-    "diagnosis": null,
+    "diagnosis": "Undetermined rash",
     "diagnoses": [
-      "Syphilis"
+      "Undetermined rash",
+      "Syphilis",
+      "Immune Thrombocytopenia (ITP)"
     ]
   },
   {
     "caseId": 142,
-    "topic": "Seizures - Pediatrics",
-    "title": "Seizures - Pediatrics",
+    "topic": "Seizures",
+    "title": "Seizures",
     "diagnosis": "Maple Syrup Urine Disease (MSUD)",
     "diagnoses": [
       "Maple Syrup Urine Disease (MSUD)"
@@ -1551,7 +1992,8 @@
     "title": "Poor Feeding",
     "diagnosis": "Galactosemia",
     "diagnoses": [
-      "Galactosemia"
+      "Galactosemia",
+      "Failure to Thrive (FTT) or Gastroesophageal Reflux Disease (GERD) are common considerations for Poor Feeding of unknown cause in pediatric patients."
     ]
   },
   {
@@ -1560,52 +2002,55 @@
     "title": "Short Stature",
     "diagnosis": "Turner syndrome with coarctation of the aorta",
     "diagnoses": [
-      "Turner syndrome with coarctation of the aorta",
-      "Hypopituitarism",
-      "Noonan syndrome",
-      "Constitutional growth delay",
-      "Familial short stature"
+      "Turner syndrome with coarctation of the aorta"
     ]
   },
   {
     "caseId": 145,
     "topic": "Facial Pain",
     "title": "Facial Pain",
-    "diagnosis": "Bronchitis",
+    "diagnosis": "Postherpetic Neuralgia (Trigeminal Distribution)",
     "diagnoses": [
-      "Bronchitis"
+      "Postherpetic Neuralgia (Trigeminal Distribution)",
+      "Trigeminal neuralgia or other neuropathic facial pain (due to facial pain presentation)"
     ]
   },
   {
     "caseId": 146,
     "topic": "Found Unconscious",
     "title": "Found Unconscious",
-    "diagnosis": "CCS review page",
+    "diagnosis": "Cyanide Poisoning",
     "diagnoses": [
-      "CCS review page",
-      "Rape victim"
+      "Cyanide Poisoning",
+      "Tricyclic Antidepressant (TCA) Overdose",
+      "Sexual Assault (Rape)",
+      "Carbon Monoxide Poisoning"
     ]
   },
   {
     "caseId": 147,
     "topic": "Heart Palpitations",
     "title": "Heart Palpitations",
-    "diagnosis": null,
+    "diagnosis": "Possible cardiac arrhythmia or other underlying heart condition",
     "diagnoses": [
-      "Unknown"
+      "Possible cardiac arrhythmia or other underlying heart condition"
     ]
   },
   {
     "caseId": 148,
     "topic": "Chest Pain",
     "title": "Chest Pain",
-    "diagnosis": "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)",
+    "diagnosis": "Post-MI Pericarditis (Dressler Syndrome)",
     "diagnoses": [
-      "Post Myocardial Infarction Pericarditis (Peri-infarct Pericarditis) (Post MI Syndrome)",
+      "Post-MI Pericarditis (Dressler Syndrome)",
       "Tension Pneumothorax",
-      "Pericarditis",
-      "Aortic Dissection",
+      "Acute Pericarditis (Idiopathic)",
+      "Panic Attack / Panic Disorder",
+      "Acute Coronary Syndrome (ACS)",
+      "Unstable Angina",
+      "Aortic Dissection (Stanford Type A)",
       "Atrial Fibrillation",
+      "Acute Coronary Syndrome (ACS) or other cardiac conditions are the most likely diagnoses for a patient presenting with unknown chest pain.",
       "Inferior myocardial infarction (STEMI)",
       "Right Ventricular Myocardial Infarction"
     ]
@@ -1614,84 +2059,94 @@
     "caseId": 149,
     "topic": "Chronic Diarrhea",
     "title": "Chronic Diarrhea",
-    "diagnosis": "Acute Myocardial Ischemia",
+    "diagnosis": "Zollinger-Ellison Syndrome (Gastrinoma)",
     "diagnoses": [
-      "Acute Myocardial Ischemia"
+      "Zollinger-Ellison Syndrome (Gastrinoma)"
     ]
   },
   {
     "caseId": 150,
     "topic": "Back Pain and Fatigue",
     "title": "Back Pain and Fatigue",
-    "diagnosis": null,
+    "diagnosis": "Multiple Myeloma",
     "diagnoses": [
-      "Unknown"
+      "Multiple Myeloma"
     ]
   },
   {
     "caseId": 151,
     "topic": "Found Unconscious",
     "title": "Found Unconscious",
-    "diagnosis": null,
+    "diagnosis": "Carbon Monoxide Poisoning",
     "diagnoses": [
-      "Rape victim",
-      "CCS review page"
+      "Carbon Monoxide Poisoning",
+      "Tricyclic Antidepressant (TCA) Overdose",
+      "Sexual Assault (Rape)",
+      "Cyanide Poisoning"
     ]
   },
   {
     "caseId": 152,
     "topic": "Headache",
     "title": "Headache",
-    "diagnosis": null,
+    "diagnosis": "Carbon Monoxide Poisoning",
     "diagnoses": [
+      "Carbon Monoxide Poisoning",
       "West Nile Encephalitis",
       "Hypertensive Emergency",
-      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)"
+      "Bacterial Meningitis (Meningococcal)",
+      "Cluster Headache",
+      "Tension Headache",
+      "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
+      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
+      "Pheochromocytoma",
+      "Primary Headache (Tentative) or Secondary Headache (Suspected)"
     ]
   },
   {
     "caseId": 153,
     "topic": "Skin Lesions",
     "title": "Skin Lesions",
-    "diagnosis": "Not possible to determine from the image",
+    "diagnosis": "Porphyria Cutanea Tarda",
     "diagnoses": [
-      "Not possible to determine from the image"
+      "Porphyria Cutanea Tarda"
     ]
   },
   {
     "caseId": 154,
     "topic": "Vaginal Discharge",
     "title": "Vaginal Discharge",
-    "diagnosis": "None specified",
+    "diagnosis": "Trichomoniasis",
     "diagnoses": [
-      "None specified"
+      "Trichomoniasis"
     ]
   },
   {
     "caseId": 155,
     "topic": "Shortness of breath",
     "title": "Shortness of breath",
-    "diagnosis": null,
+    "diagnosis": "Acute respiratory distress syndrome (ARDS) or pulmonary edema as potential causes of shortness of breath in an undiagnosed patient",
     "diagnoses": [
-      "Unknown"
+      "Acute respiratory distress syndrome (ARDS) or pulmonary edema as potential causes of shortness of breath in an undiagnosed patient"
     ]
   },
   {
     "caseId": 156,
     "topic": "Generalized Swelling",
     "title": "Generalized Swelling",
-    "diagnosis": "Renal Stone",
+    "diagnosis": "Nephrotic Syndrome (Minimal Change Disease)",
     "diagnoses": [
-      "Renal Stone"
+      "Nephrotic Syndrome (Minimal Change Disease)"
     ]
   },
   {
     "caseId": 157,
     "topic": "Frequency of Urination",
     "title": "Frequency of Urination",
-    "diagnosis": null,
+    "diagnosis": "Diabetes Insipidus (Central)",
     "diagnoses": [
-      "Benign Prostatic Hyperplasia (formerly Benign Prostatic Hypertrophy)",
+      "Diabetes Insipidus (Central)",
+      "Benign Prostatic Hyperplasia",
       "Prostate Cancer"
     ]
   },
@@ -1699,26 +2154,29 @@
     "caseId": 158,
     "topic": "Knee Pain",
     "title": "Knee Pain",
-    "diagnosis": null,
+    "diagnosis": "Proximal Tibiofibular Joint Sprain, Patellofemoral Pain Syndrome, or Meniscal Tear (common causes of knee pain)",
     "diagnoses": [
-      "Acute Gout"
+      "Proximal Tibiofibular Joint Sprain, Patellofemoral Pain Syndrome, or Meniscal Tear (common causes of knee pain)",
+      "Acute Gout",
+      "Septic Arthritis (Disseminated Gonococcal Infection)"
     ]
   },
   {
     "caseId": 159,
     "topic": "Abnormal Behavior",
     "title": "Abnormal Behavior",
-    "diagnosis": "Hepatitis B",
+    "diagnosis": "Bipolar I Disorder (Manic Episode)",
     "diagnoses": [
-      "Hepatitis B"
+      "Bipolar I Disorder (Manic Episode)"
     ]
   },
   {
     "caseId": 160,
     "topic": "Anxiety",
     "title": "Anxiety",
-    "diagnosis": null,
+    "diagnosis": "Generalized Anxiety Disorder",
     "diagnoses": [
+      "Generalized Anxiety Disorder",
       "Graves' hyperthyroidism"
     ]
   },
@@ -1726,120 +2184,134 @@
     "caseId": 161,
     "topic": "Headache",
     "title": "Headache",
-    "diagnosis": null,
+    "diagnosis": "Pheochromocytoma",
     "diagnoses": [
+      "Pheochromocytoma",
       "West Nile Encephalitis",
       "Hypertensive Emergency",
-      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)"
+      "Bacterial Meningitis (Meningococcal)",
+      "Cluster Headache",
+      "Tension Headache",
+      "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
+      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
+      "Carbon Monoxide Poisoning",
+      "Primary Headache (Tentative) or Secondary Headache (Suspected)"
     ]
   },
   {
     "caseId": 162,
     "topic": "Pain During Urination",
     "title": "Pain During Urination",
-    "diagnosis": null,
+    "diagnosis": "Acute Cystitis (Uncomplicated UTI)",
     "diagnoses": [
-      "Unknown"
+      "Acute Cystitis (Uncomplicated UTI)"
     ]
   },
   {
     "caseId": 163,
     "topic": "Ear Pain",
     "title": "Ear Pain",
-    "diagnosis": null,
+    "diagnosis": "Acute Otitis Media",
     "diagnoses": [
-      "Unknown"
+      "Acute Otitis Media"
     ]
   },
   {
     "caseId": 164,
     "topic": "Pelvic Pain",
     "title": "Pelvic Pain",
-    "diagnosis": "Pneumonia",
+    "diagnosis": "Ovarian Torsion",
     "diagnoses": [
-      "Pneumonia"
+      "Ovarian Torsion",
+      "Endometrioma",
+      "Pelvic Inflammatory Disease"
     ]
   },
   {
     "caseId": 165,
     "topic": "Postcoital Bleeding",
     "title": "Postcoital Bleeding",
-    "diagnosis": null,
+    "diagnosis": "Cervical Cancer (Squamous Cell Carcinoma)",
     "diagnoses": [
-      "Unknown"
+      "Cervical Cancer (Squamous Cell Carcinoma)"
     ]
   },
   {
     "caseId": 166,
-    "topic": "Oral Bleeding",
-    "title": "Oral Bleeding",
-    "diagnosis": null,
+    "topic": "Easy Bruising / Bleeding",
+    "title": "Easy Bruising / Bleeding",
+    "diagnosis": "Hemophilia A (Factor VIII Deficiency)",
     "diagnoses": [
-      "Unknown"
+      "Hemophilia A (Factor VIII Deficiency)"
     ]
   },
   {
     "caseId": 167,
     "topic": "Nausea and Vomiting",
     "title": "Nausea and Vomiting",
-    "diagnosis": "No diagnosis provided",
+    "diagnosis": "Diabetic Gastroparesis",
     "diagnoses": [
-      "No diagnosis provided"
+      "Diabetic Gastroparesis",
+      "Toxic Shock Syndrome"
     ]
   },
   {
     "caseId": 168,
     "topic": "Fatigue",
     "title": "Fatigue",
-    "diagnosis": null,
+    "diagnosis": "Obstructive Sleep Apnea",
     "diagnoses": [
+      "Obstructive Sleep Apnea",
+      "A comprehensive workup is necessary due to the unknown cause of fatigue.",
+      "Unknown fatigue could be caused by a wide range of conditions including metabolic disorders, infectious diseases, autoimmune disorders, neurological disorders, and psychological issues. Initial workup should focus on common causes.",
       "Neutropenic Fever",
-      "End Stage Renal Failure"
+      "End Stage Renal Disease"
     ]
   },
   {
     "caseId": 169,
     "topic": "Somnolence",
     "title": "Somnolence",
-    "diagnosis": null,
+    "diagnosis": "Hypercalcemia Secondary to Malignancy",
     "diagnoses": [
-      "Unknown"
+      "Hypercalcemia Secondary to Malignancy"
     ]
   },
   {
     "caseId": 170,
     "topic": "Fall",
     "title": "Fall",
-    "diagnosis": null,
+    "diagnosis": "Orthostatic Hypotension",
     "diagnoses": [
-      "Unknown"
+      "Orthostatic Hypotension"
     ]
   },
   {
     "caseId": 171,
     "topic": "Agitation",
     "title": "Agitation",
-    "diagnosis": null,
+    "diagnosis": "Possible neuropsychiatric disorders such as delirium, dementia, or psychiatric emergencies",
     "diagnoses": [
-      "Unknown"
+      "Possible neuropsychiatric disorders such as delirium, dementia, or psychiatric emergencies",
+      "Acute Agitation"
     ]
   },
   {
     "caseId": 172,
     "topic": "Hanging",
     "title": "Hanging",
-    "diagnosis": "N/A",
+    "diagnosis": "Near Hanging (Attempted Suicide)",
     "diagnoses": [
-      "N/A"
+      "Near Hanging (Attempted Suicide)"
     ]
   },
   {
     "caseId": 173,
     "topic": "Sexual Assault",
     "title": "Sexual Assault",
-    "diagnosis": null,
+    "diagnosis": "Male Sexual Assault",
     "diagnoses": [
-      "Unknown"
+      "Male Sexual Assault"
     ]
   },
   {
@@ -1848,86 +2320,101 @@
     "title": "Hematemesis",
     "diagnosis": "Bleeding esophageal varices",
     "diagnoses": [
-      "Bleeding esophageal varices",
-      "Esophageal varices",
-      "Peptic ulcer disease",
-      "Mallory-Weiss tear",
-      "Gastric erosions",
-      "Malignancy"
+      "Bleeding esophageal varices"
     ]
   },
   {
     "caseId": 175,
     "topic": "Heavy Menstrual Bleeding",
     "title": "Heavy Menstrual Bleeding",
-    "diagnosis": null,
+    "diagnosis": "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.",
     "diagnoses": [
-      "Unknown"
+      "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary."
     ]
   },
   {
     "caseId": 176,
     "topic": "Animal Bite",
     "title": "Animal Bite",
-    "diagnosis": null,
+    "diagnosis": "Rabies, Cellulitis, Tetanus",
     "diagnoses": [
-      "Unknown"
+      "Rabies, Cellulitis, Tetanus"
     ]
   },
   {
     "caseId": 177,
     "topic": "Vaginal Bleeding",
     "title": "Vaginal Bleeding",
-    "diagnosis": null,
+    "diagnosis": "Vaginal bleeding could be due to various causes such as hormonal imbalances, infections, cancer, or trauma. The most likely cause in a patient with unknown history can't be definitively determined without further investigation.",
     "diagnoses": [
-      "Spontaneous Abortion"
+      "Vaginal bleeding could be due to various causes such as hormonal imbalances, infections, cancer, or trauma. The most likely cause in a patient with unknown history can't be definitively determined without further investigation.",
+      "Dysfunctional Uterine Bleeding (Anovulatory)",
+      "Vaginal bleeding could be due to various causes such as endometrial cancer, cervical cancer, uterine fibroids, vaginitis, or trauma. Given the uncertainty of diagnosis, a comprehensive workup is required.",
+      "Spontaneous Abortion (Miscarriage)"
     ]
   },
   {
     "caseId": 178,
     "topic": "Epigastric Pain",
     "title": "Epigastric Pain",
-    "diagnosis": null,
+    "diagnosis": "Acute Abdomen (undetermined etiology)",
     "diagnoses": [
-      "Unknown"
+      "Acute Abdomen (undetermined etiology)",
+      "Acute Pancreatitis"
     ]
   },
   {
     "caseId": 179,
     "topic": "Abdominal Pain",
     "title": "Abdominal Pain",
-    "diagnosis": null,
+    "diagnosis": "Acute abdomen (unspecified etiology)",
     "diagnoses": [
+      "Acute abdomen (unspecified etiology)",
       "Diabetic Ketoacidosis",
-      "Abdominal Abscess",
-      "Acute Gastritis",
-      "Acute Diverticulitis",
+      "Intra-abdominal Abscess (post-appendectomy)",
+      "Hepatitis A with Aspiration Pneumonia",
+      "Acute Gastritis (NSAID-induced)",
+      "Acute Diverticulitis (Complicated, with small abscess)",
       "Irritable Bowel Syndrome",
       "Acute Cholecystitis",
-      "Glucose-6-Phosphate-Dehydrogenase Deficiency",
+      "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+      "Intussusception",
+      "Nephrolithiasis (Kidney Stone)",
+      "Lead Intoxication with Encephalopathy",
+      "Acute Bacterial Gastroenteritis",
+      "Acute Abdomen - Undetermined etiology",
       "Ischemic Colitis",
       "Ulcerative Colitis",
-      "Hemoperitoneum from a Ruptured Ovarian Cyst"
+      "Hemoperitoneum from Ruptured Ovarian Cyst",
+      "Acute Abdomen (undetermined etiology)",
+      "Acute abdomen (non-specific)"
     ]
   },
   {
     "caseId": 180,
     "topic": "Headache",
     "title": "Headache",
-    "diagnosis": null,
+    "diagnosis": "Primary Headache (Tentative) or Secondary Headache (Suspected)",
     "diagnoses": [
+      "Primary Headache (Tentative) or Secondary Headache (Suspected)",
       "West Nile Encephalitis",
       "Hypertensive Emergency",
-      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)"
+      "Bacterial Meningitis (Meningococcal)",
+      "Cluster Headache",
+      "Tension Headache",
+      "Primary Headache (such as Migraine or Tension-type headache), although other serious conditions like Subarachnoid Hemorrhage cannot be ruled out",
+      "Idiopathic Intracranial Hypertension (Pseudotumor Cerebri)",
+      "Carbon Monoxide Poisoning",
+      "Pheochromocytoma"
     ]
   },
   {
     "caseId": 181,
     "topic": "Nocturnal Enuresis",
     "title": "Nocturnal Enuresis",
-    "diagnosis": "Not specified",
+    "diagnosis": "Severe Obstructive Sleep Apnea with Secondary Nocturnal Enuresis",
     "diagnoses": [
-      "Not specified"
+      "Severe Obstructive Sleep Apnea with Secondary Nocturnal Enuresis"
     ]
   }
 ]
