@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FiChevronUp } from 'react-icons/fi';
 import DifferentialAttemptHistory from './DifferentialAttemptHistory.jsx';
 import DifferentialReviewQueuePanel from './DifferentialReviewQueuePanel.jsx';
 import DifferentialReviewPanel from './DifferentialReviewPanel.jsx';
@@ -10,7 +11,6 @@ import { getRealWorldStories } from '../lib/realWorldCases.js';
 import { getRealWorldPrefetch, prefetchRealWorldStories, subscribeRealWorldPrefetch } from '../lib/realWorldPrefetch.js';
 import { listLocalDifferentialRecordings } from '../lib/differentialVoiceStorage.js';
 import { readCaseMemoryMeta } from '../lib/differentialCaseMemory.js';
-import { resolveCaseSummaryText } from '../lib/ccsCaseSummary.js';
 import { buildDifferentialReviewQueue } from '../lib/differentialReviewQueue.js';
 
 const TABS = [
@@ -69,8 +69,6 @@ export default function DifferentialStudyPanel({
 
   const hasRealWorld = realWorld.hasCurated;
 
-  const caseSummaryText = useMemo(() => resolveCaseSummaryText(ccsReview), [ccsReview]);
-
   const realWorldSearchParams = useMemo(
     () => ({
       caseId,
@@ -113,26 +111,36 @@ export default function DifferentialStudyPanel({
     [reviewQueueTick],
   );
 
+  const lastTimelineFocusRef = useRef(0);
+  const lastStudyTabRequestRef = useRef(0);
+  const onPauseForStudyRef = useRef(onPauseForStudy);
+  onPauseForStudyRef.current = onPauseForStudy;
+
   useEffect(() => {
     setExpanded(false);
     setTab(timelineItems ? 'timeline' : hasReviewText || hasCaseData ? 'case' : 'timeline');
+    lastTimelineFocusRef.current = 0;
+    lastStudyTabRequestRef.current = 0;
     // Only reset tab when switching cases — not when timeline count updates (chat voice, etc.)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseId]);
 
   useEffect(() => {
-    if (!timelineFocusVersion) return;
+    if (!timelineFocusVersion || lastTimelineFocusRef.current === timelineFocusVersion) return;
+    lastTimelineFocusRef.current = timelineFocusVersion;
     setTab('timeline');
     setExpanded(true);
-    onPauseForStudy?.();
-  }, [timelineFocusVersion, onPauseForStudy]);
+    onPauseForStudyRef.current?.();
+  }, [timelineFocusVersion]);
 
   useEffect(() => {
-    if (!studyTabRequest?.version || !studyTabRequest.tab) return;
+    const version = studyTabRequest?.version;
+    if (!version || !studyTabRequest.tab || lastStudyTabRequestRef.current === version) return;
+    lastStudyTabRequestRef.current = version;
     setTab(studyTabRequest.tab);
     setExpanded(true);
-    onPauseForStudy?.();
-  }, [studyTabRequest, onPauseForStudy]);
+    onPauseForStudyRef.current?.();
+  }, [studyTabRequest]);
 
   const collapseStudy = useCallback(() => {
     setExpanded(false);
@@ -194,6 +202,17 @@ export default function DifferentialStudyPanel({
             )}
           </button>
         ))}
+        {expanded && (
+          <button
+            type="button"
+            className="diff-study-collapse-btn"
+            onClick={collapseStudy}
+            aria-label="Collapse study panel and resume timer"
+            title="Collapse — resume timer"
+          >
+            <FiChevronUp aria-hidden />
+          </button>
+        )}
       </div>
 
       {expanded && (
@@ -273,7 +292,6 @@ export default function DifferentialStudyPanel({
               topic={topic}
               chiefComplaint={ccsReview?.chiefComplaint || ''}
               hpiSnippet={ccsReview?.hpiNarrative || ccsReview?.history || ''}
-              caseSummaryText={caseSummaryText}
               active={expanded && tab === 'realworld'}
               prefetchParams={realWorldSearchParams}
               onTranscriptSaved={onCaseNotesChanged}

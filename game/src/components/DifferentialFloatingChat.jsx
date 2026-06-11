@@ -24,8 +24,8 @@ export default function DifferentialFloatingChat({
   const panelRef = useRef(null);
   const [pos, setPos] = useState({ x: 24, y: 96 });
   const [size, setSize] = useState(() => ({
-    w: Math.min(400, window.innerWidth - 32),
-    h: Math.min(480, window.innerHeight - 160),
+    w: Math.min(420, window.innerWidth - 32),
+    h: Math.min(560, window.innerHeight - 120),
   }));
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(null);

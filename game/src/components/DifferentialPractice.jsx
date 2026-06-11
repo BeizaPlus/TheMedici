@@ -38,6 +38,10 @@ import {
   hasDifferentialReview,
   personalizeDifferentialReview,
 } from '../lib/differentialReview.js';
+import { buildDifferentialChatEnrichment } from '../lib/differentialChatEnrichment.js';
+import { appendDifferentialHearingNote, syncHistoricalHearingsToCaseNotes } from '../lib/differentialCaseNotes.js';
+import { clearCaseChatSession } from '../lib/caseChat.js';
+import { subscribeRealWorldPrefetch } from '../lib/realWorldPrefetch.js';
 import { readAudienceProfile } from '../lib/audienceProfile.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
@@ -128,6 +132,7 @@ export default function DifferentialPractice({ onBack }) {
   const [timelineFocusVersion, setTimelineFocusVersion] = useState(0);
   const [studyTabRequest, setStudyTabRequest] = useState(null);
   const [notesVersion, setNotesVersion] = useState(0);
+  const [realWorldTick, setRealWorldTick] = useState(0);
   const [chatDockOpen, setChatDockOpen] = useState(false);
   const [chatPatientMode, setChatPatientMode] = useState(false);
   const chatPatientModeRef = useRef(false);
@@ -152,6 +157,7 @@ export default function DifferentialPractice({ onBack }) {
   const inputRef = useRef(null);
   const voiceFocusRef = useRef(null);
   const loggedRoundRef = useRef(false);
+  const hearingNotesDumpedRef = useRef(false);
   const lastRecordingRef = useRef(null);
   const stackerBusyRef = useRef(false);
   const onStackerExpireRef = useRef(() => {});
@@ -244,20 +250,53 @@ export default function DifferentialPractice({ onBack }) {
     [caseData],
   );
 
+  useEffect(() => {
+    const id = String(entry.caseId);
+    return subscribeRealWorldPrefetch((key, hit) => {
+      if (key === id && (hit?.status === 'ready' || hit?.status === 'error')) {
+        setRealWorldTick((t) => t + 1);
+      }
+    });
+  }, [entry.caseId]);
+
+  const differentialStudyContext = useMemo(
+    () =>
+      buildDifferentialChatEnrichment({
+        caseId: entry.caseId,
+        bankEntry: entry,
+        ccsReview,
+        caseData,
+      }),
+    [entry, ccsReview, caseData, realWorldTick, notesVersion, recordingsVersion],
+  );
+
   const chatCaseData = useMemo(() => {
-    if (caseData) return caseData;
-    if (!ccsReview) return null;
-    return {
-      id: entry.caseId,
-      ccsNumber: entry.caseId,
-      title: ccsReview.title || entry.title,
-      chief_complaint: ccsReview.chiefComplaint || entry.topic,
-      hpi_narrative: ccsReview.hpiNarrative || ccsReview.history || fallbackHistory,
-      patientSex: ccsReview.patientSex,
-      playRole: audienceProfile?.playRole,
-      sessionDifficulty: audienceProfile?.difficulty,
-    };
-  }, [caseData, ccsReview, entry.caseId, entry.title, entry.topic, fallbackHistory, audienceProfile]);
+    const base = caseData
+      ? { ...caseData }
+      : ccsReview
+        ? {
+            id: entry.caseId,
+            ccsNumber: entry.caseId,
+            title: ccsReview.title || entry.title,
+            chief_complaint: ccsReview.chiefComplaint || entry.topic,
+            hpi_narrative: ccsReview.hpiNarrative || ccsReview.history || fallbackHistory,
+            patientSex: ccsReview.patientSex,
+            playRole: audienceProfile?.playRole,
+            sessionDifficulty: audienceProfile?.difficulty,
+          }
+        : null;
+    if (!base) return null;
+    return { ...base, differentialStudyContext };
+  }, [
+    caseData,
+    ccsReview,
+    entry.caseId,
+    entry.title,
+    entry.topic,
+    fallbackHistory,
+    audienceProfile,
+    differentialStudyContext,
+  ]);
 
   useEffect(() => {
     diffPlaySessionRef.current = null;
@@ -287,6 +326,14 @@ export default function DifferentialPractice({ onBack }) {
     setChatPatientMode(false);
   }, [entry.caseId]);
 
+  useEffect(() => {
+    const added = syncHistoricalHearingsToCaseNotes(entry.caseId);
+    if (added > 0) {
+      clearCaseChatSession(entry.caseId);
+      setNotesVersion((v) => v + 1);
+    }
+  }, [entry.caseId, statsTick, recordingsVersion]);
+
   const caseChat = useCaseChat({
     caseData: chatCaseData,
     playSessionId: diffPlaySessionRef.current,
@@ -297,8 +344,9 @@ export default function DifferentialPractice({ onBack }) {
         topic: entry.topic,
         revealed,
         guesses: flattenGuessList(guesses),
+        differentialStudyContext,
       }),
-      [entry.topic, revealed, guesses],
+      [entry.topic, revealed, guesses, differentialStudyContext],
     ),
   });
 
@@ -477,6 +525,7 @@ export default function DifferentialPractice({ onBack }) {
 
   const resetRound = useCallback(() => {
     loggedRoundRef.current = false;
+    hearingNotesDumpedRef.current = false;
     setGuesses([]);
     setInput('');
     setRevealed(false);
@@ -548,14 +597,35 @@ export default function DifferentialPractice({ onBack }) {
     };
   }, [voice, guesses, input]);
 
+  const dumpHearingToCaseNotes = useCallback(
+    (resolved) => {
+      if (hearingNotesDumpedRef.current) return;
+      const at = new Date().toISOString();
+      const syncKey = `live:${at}:${String(resolved?.cleanedTranscript || resolved?.hearingTranscript || '').slice(0, 48)}`;
+      const ok = appendDifferentialHearingNote(entry.caseId, {
+        cleaned: resolved?.cleanedTranscript,
+        raw: resolved?.hearingTranscript,
+        topic: entry.topic,
+        at,
+        syncKey,
+      });
+      if (!ok) return;
+      hearingNotesDumpedRef.current = true;
+      clearCaseChatSession(entry.caseId);
+      setNotesVersion((v) => v + 1);
+    },
+    [entry.caseId, entry.topic],
+  );
+
   const handleReveal = useCallback(async () => {
     const resolved = await resolveGuessesForScore();
+    dumpHearingToCaseNotes(resolved);
     if (!resolved.diagnoses.length) return;
     await scoreReveal(resolved.diagnoses, {
       hearingTranscript: resolved.hearingTranscript,
       cleanedTranscript: resolved.cleanedTranscript,
     });
-  }, [resolveGuessesForScore, scoreReveal]);
+  }, [resolveGuessesForScore, dumpHearingToCaseNotes, scoreReveal]);
 
   const toggleStacker = useCallback(() => {
     setStacker((prev) => {
@@ -669,6 +739,14 @@ export default function DifferentialPractice({ onBack }) {
     return () => window.clearInterval(id);
   }, [stacker.enabled, stackerPhase, stackerPaused]);
 
+  const pauseForStudy = useCallback(() => {
+    if (stacker.enabled && !stackerPaused) pauseStackerTimer();
+  }, [stacker.enabled, stackerPaused, pauseStackerTimer]);
+
+  const resumeFromStudy = useCallback(() => {
+    if (stacker.enabled && stackerPaused) resumeStacker();
+  }, [stacker.enabled, stackerPaused, resumeStacker]);
+
   const goToIndex = useCallback(
     (nextIdx, { recordHistory = true } = {}) => {
       if (!revealed) flushAttempt(false);
@@ -744,6 +822,7 @@ export default function DifferentialPractice({ onBack }) {
           await voice.stopRecordingAsync();
         }
         const resolved = await resolveGuessesForScore();
+        dumpHearingToCaseNotes(resolved);
         if (resolved.diagnoses.length) {
           await scoreReveal(resolved.diagnoses, {
             hearingTranscript: resolved.hearingTranscript,
@@ -1247,12 +1326,8 @@ export default function DifferentialPractice({ onBack }) {
           notesVersion={notesVersion}
           onCaseNotesChanged={() => setNotesVersion((v) => v + 1)}
           onJumpToCase={goToCaseId}
-          onPauseForStudy={() => {
-            if (stacker.enabled && !stackerPaused) pauseStackerTimer();
-          }}
-          onResumeFromStudy={() => {
-            if (stacker.enabled && stackerPaused) resumeStacker();
-          }}
+          onPauseForStudy={pauseForStudy}
+          onResumeFromStudy={resumeFromStudy}
           onStudyTabOpen={(tabId) => {
             if (tabId === 'realworld') {
               /* prefetch handled in panel; timer pause only on first expand */

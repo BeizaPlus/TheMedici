@@ -4367,9 +4367,15 @@ button {
   opacity: 0;
 }
 
+.welcome-plate-img--hold {
+  opacity: 1;
+  transition: none;
+}
+
 .welcome-plate-video {
   opacity: 0;
   z-index: 0;
+  transition: none;
 }
 
 .welcome-plate-video--visible {
@@ -7168,25 +7174,31 @@ button {
 
 .case-chat-messages {
   flex: 1;
+  overflow-x: hidden;
   overflow-y: auto;
   padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-width: 0;
 }
 
 .case-chat-bubble {
   max-width: 92%;
+  min-width: 0;
   padding: 12px 14px;
   border-radius: 14px;
   font-size: 0.88rem;
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
+  overflow-wrap: anywhere;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 6px;
+  box-sizing: border-box;
 }
 
 .case-chat-bubble.user {
@@ -7212,6 +7224,8 @@ button {
 .case-chat-bubble-text {
   flex: 1;
   min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
   user-select: text;
   -webkit-user-select: text;
   cursor: text;
@@ -7257,8 +7271,11 @@ button {
 
 .case-chat-form {
   flex-shrink: 0;
+  min-width: 0;
+  overflow-x: hidden;
   border-top: 1px solid var(--border, rgba(255, 255, 255, 0.12));
   padding: 10px 12px;
+  box-sizing: border-box;
 }
 
 /* â”€â”€ treatment-style command UI inside chat â”€â”€ */

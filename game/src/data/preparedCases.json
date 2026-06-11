@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "builtAt": "2026-06-10T11:17:48.424Z",
+  "builtAt": "2026-06-11T01:26:13.235Z",
   "totalCases": 181,
   "caseBankMerged": 181,
   "caseBankSource": "ollama-case-bank",
@@ -4853,8 +4853,13 @@
       "category": "Psychiatry & Social",
       "presentationKey": "Depression",
       "playbookKey": "case-bank-128",
-      "diagnosis": "Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology.",
-      "caseBankSource": "deepseek_direct",
+      "diagnosis": "Cushing Disease",
+      "patient_voice": {
+        "chief_complaint": "I've been depressed, tired, and gaining weight",
+        "history": "I haven't had a period in six months. My face looks puffy and I've been feeling down for months.",
+        "pain": "Fatigue and low mood — not focal pain"
+      },
+      "caseBankSource": "ccs_review_pdf",
       "hasSourceIntro": false,
       "vitals": {
         "sbp": 125,
@@ -4877,7 +4882,7 @@
       "exam": [
         [
           "General",
-          "Depression — exam tailored to chief complaint on arrival."
+          "presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months."
         ],
         [
           "Cardiovascular",
@@ -4893,7 +4898,7 @@
         ],
         [
           "Neuro",
-          "Alert and oriented unless perfusion or metabolic derangement present."
+          "Neurologic exam focused on mental status and focal deficits."
         ],
         [
           "Skin",
@@ -4901,81 +4906,100 @@
         ]
       ],
       "patientSex": "unknown",
+      "hpi_narrative": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder.\n\nWorkup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated.\n\nDefinitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
       "difficulty": "standard",
-      "clinical_tip": "Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology. — follow CCS review orders.",
-      "objective": "Complete diagnosis and treatment orders for Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology..",
+      "clinical_tip": "Cushing Disease — follow CCS review orders.",
+      "objective": "Complete diagnosis and treatment orders for Cushing Disease.",
       "interventionIds": [
-        "psychiatric-consult",
-        "laboratory-workup-cbc-chemistry-panel-ts",
-        "psychological-evaluation",
-        "cardiac-monitor",
-        "iv-access-fluids",
-        "stat-labs",
-        "bedside-ct-imaging",
-        "admit-disposition"
+        "physical-exam-general-appearance",
+        "physical-exam-neuro-psych",
+        "hcg-beta-urine-qualitative-hcg-beta-seru",
+        "dexamethasone-suppression-test-cortisol-",
+        "hormone-adrenocorticotropic-plasma",
+        "ct-head-with-contrast-ct-of-head-without",
+        "cbc-with-differential",
+        "basic-metabolic-profile-comprehensive-me",
+        "consult-surgery-neurologic",
+        "ssri-psychiatry-consult-for-depression-w"
       ],
       "interventions": [
         {
-          "id": "psychiatric-consult",
-          "label": "Psychiatric Consult",
-          "correct_zone": "zone-icu",
-          "why": "To assess the severity of depression, rule out other psychiatric disorders, and guide further management.",
+          "id": "physical-exam-general-appearance",
+          "label": "Physical Exam: General Appearance",
+          "correct_zone": "zone-custom-1",
+          "why": "Assess how ill the patient appears before focused testing for depression.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "laboratory-workup-cbc-chemistry-panel-ts",
-          "label": "Laboratory workup (CBC, Chemistry Panel, TSH, Urinalysis)",
+          "id": "physical-exam-neuro-psych",
+          "label": "Physical Exam: Neuro / Psych",
+          "correct_zone": "zone-icu",
+          "why": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Cushing Disease.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "hcg-beta-urine-qualitative-hcg-beta-seru",
+          "label": "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative",
           "correct_zone": "zone-blood",
-          "why": "Laboratory testing when systemic illness or severity warrants labs in Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology..",
+          "why": "Appropriate CCS order for Cushing Disease: HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "psychological-evaluation",
-          "label": "Psychological Evaluation",
-          "correct_zone": "zone-icu",
-          "why": "To assess the patient's psychological state and functioning, which can aid in diagnosis and treatment planning.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "cardiac-monitor",
-          "label": "Cardiac Monitor",
-          "correct_zone": "zone-monitor",
-          "why": "Continuous vitals.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "iv-access-fluids",
-          "label": "IV Access + Fluids",
+          "id": "dexamethasone-suppression-test-cortisol-",
+          "label": "Dexamethasone suppression test / Cortisol, 24-hour urine",
           "correct_zone": "zone-arm",
-          "why": "Two large-bore if shock.",
+          "why": "Treatment aligned with CCS management for Cushing Disease.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "stat-labs",
-          "label": "Stat Labs",
-          "correct_zone": "zone-blood",
-          "why": "CBC, BMP, lactate.",
+          "id": "hormone-adrenocorticotropic-plasma",
+          "label": "Hormone, adrenocorticotropic, plasma",
+          "correct_zone": "zone-arm",
+          "why": "Patient education and counseling are part of definitive care for Cushing Disease.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "bedside-ct-imaging",
-          "label": "Bedside / CT imaging",
+          "id": "ct-head-with-contrast-ct-of-head-without",
+          "label": "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium",
           "correct_zone": "zone-monitor",
-          "why": "Targeted imaging.",
+          "why": "Appropriate CCS order for Cushing Disease: CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "admit-disposition",
-          "label": "Admit / Disposition",
+          "id": "cbc-with-differential",
+          "label": "CBC with differential",
+          "correct_zone": "zone-blood",
+          "why": "Laboratory testing when systemic illness or severity warrants labs in Cushing Disease.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "basic-metabolic-profile-comprehensive-me",
+          "label": "Basic metabolic profile / Comprehensive metabolic profile",
+          "correct_zone": "zone-arm",
+          "why": "Laboratory testing when systemic illness or severity warrants labs in Cushing Disease.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "consult-surgery-neurologic",
+          "label": "Consult, surgery, neurologic",
           "correct_zone": "zone-icu",
-          "why": "Match acuity.",
+          "why": "Targeted Consult, surgery, neurologic exam supports the differential for Cushing Disease.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "ssri-psychiatry-consult-for-depression-w",
+          "label": "SSRI / Psychiatry consult for depression without endocrine workup",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Cushing Disease: SSRI / Psychiatry consult for depression without endocrine workup.",
           "guideline": "ACEP",
           "optional": false
         }
@@ -4983,56 +5007,56 @@
       "decoys": [
         {
           "id": "decoy-avoid-128-0",
-          "label": "Prescribing medications without proper evaluation and consultation",
-          "why": "CCS review: avoid this order for Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology. — it does not change acute management.",
-          "correct_zone": "zone-arm"
+          "label": "SSRI or psychiatry consult without diagnosing Cushing disease",
+          "why": "CCS review: avoid this order for Cushing Disease — it does not change acute management.",
+          "correct_zone": "zone-icu"
         }
       ],
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Depression — emergency presentation.",
-            "hpi": "Depression — emergency presentation.",
+            "intro": "Depression, weight gain, amenorrhea, fatigue",
+            "hpi": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder. Workup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated. Definitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
             "vitalsText": "",
-            "clinicalTip": "Teaching hint: Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology. — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology.. Start with stabilization, then targeted testing."
+            "clinicalTip": "Teaching hint: Cushing Disease — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Cushing Disease. Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Depression — emergency presentation.",
-            "hpi": "Depression — emergency presentation.",
+            "intro": "Depression, weight gain, amenorrhea, fatigue",
+            "hpi": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder. Workup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated. Definitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
             "vitalsText": "",
-            "clinicalTip": "Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology. — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology.."
+            "clinicalTip": "Cushing Disease — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Cushing Disease."
           },
           "hard": {
-            "intro": "Depression — emergency presentation.",
-            "hpi": "Depression — emergency presentation.",
+            "intro": "Depression, weight gain, amenorrhea, fatigue",
+            "hpi": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder. Workup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated. Definitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology.."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Cushing Disease."
           }
         },
         "patient": {
           "easy": {
-            "intro": "Depression — emergency presentation.",
-            "hpi": "Depression — emergency presentation.",
+            "intro": "Depression, weight gain, amenorrhea, fatigue",
+            "hpi": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder. Workup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated. Definitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
             "vitalsText": "",
-            "clinicalTip": "Teaching hint: Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology. — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology.. Share your symptoms clearly with the team."
+            "clinicalTip": "Teaching hint: Cushing Disease — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Cushing Disease. Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Depression — emergency presentation.",
-            "hpi": "Depression — emergency presentation.",
+            "intro": "Depression, weight gain, amenorrhea, fatigue",
+            "hpi": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder. Workup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated. Definitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
             "vitalsText": "",
-            "clinicalTip": "Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology. — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology.."
+            "clinicalTip": "Cushing Disease — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Cushing Disease."
           },
           "hard": {
-            "intro": "Depression — emergency presentation.",
-            "hpi": "Depression — emergency presentation.",
+            "intro": "Depression, weight gain, amenorrhea, fatigue",
+            "hpi": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder. Workup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated. Definitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology.."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Cushing Disease."
           }
         }
       }

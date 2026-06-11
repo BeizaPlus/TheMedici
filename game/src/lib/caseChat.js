@@ -8,6 +8,7 @@ import {
 import { resolvePatientName } from './patientName.js';
 import { briefCacheKey, resolveCaseBriefMarkdown } from './caseBrief.js';
 import { buildCaseDiscussionContext, discussionCacheKey } from './caseDiscussionContext.js';
+import { enrichmentCacheKey } from './differentialChatEnrichment.js';
 import { resolveSimulationCreativity } from './simulationCreativity.js';
 import { STORAGE } from './storageKeys.js';
 
@@ -92,6 +93,9 @@ export function buildCaseChatContext(caseData, {
   }
   if (caseBriefMarkdown && typeof caseBriefMarkdown === 'string') {
     ctx.caseBriefMarkdown = caseBriefMarkdown;
+  }
+  if (caseData?.differentialStudyContext && typeof caseData.differentialStudyContext === 'object') {
+    ctx.differentialStudyContext = caseData.differentialStudyContext;
   }
 
   return ctx;
@@ -220,6 +224,7 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
   const demographicsKey = demographicsCacheKey(caseContext.patientDemographics);
   const discussionKey = discussionCacheKey(caseDiscussion);
   const briefKey = briefCacheKey(caseBriefMarkdown);
+  const enrichKey = enrichmentCacheKey(caseData?.differentialStudyContext);
   const cached = sessions.get(caseId);
 
   if (
@@ -229,7 +234,8 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
     cached.personaKey === personaKey &&
     cached.demographicsKey === demographicsKey &&
     cached.discussionKey === discussionKey &&
-    cached.briefKey === briefKey
+    cached.briefKey === briefKey &&
+    cached.enrichKey === enrichKey
   ) {
     return cached.sessionId;
   }
@@ -253,6 +259,7 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
     demographicsKey,
     discussionKey,
     briefKey,
+    enrichKey,
   });
   return data.sessionId;
 }

@@ -18,7 +18,6 @@ import {
 } from '../lib/caseAvatar.js';
 import { fetchYoutubeTranscript } from '../lib/fetchYoutubeTranscript.js';
 import { saveCaseYoutubeTranscript } from '../lib/caseYoutubeTranscripts.js';
-import CcsCaseSummaryBody from './CcsCaseSummaryBody.jsx';
 
 function AvatarIconButton({ selected, busy, onClick, title = 'Use as case avatar' }) {
   return (
@@ -374,7 +373,6 @@ function StoryReadPanel({
   youtubeId = null,
   caseId = null,
   videoTitle = '',
-  caseSummaryText = '',
   onSeekVideo,
   onTranscriptSaved,
 }) {
@@ -384,11 +382,10 @@ function StoryReadPanel({
   const [activeCueStart, setActiveCueStart] = useState(null);
   const [transcriptState, setTranscriptState] = useState('idle');
 
-  const ccsSummary = String(caseSummaryText || '').trim();
-  const storySummary = story.summary || story.headline;
-  const preview = ccsSummary
-    ? ccsSummary.replace(/\s+/g, ' ').slice(0, 220) + (ccsSummary.length > 220 ? '…' : '')
-    : storySummary;
+  const storySummary = String(story.summary || story.headline || '').trim();
+  const preview = storySummary
+    ? storySummary.replace(/\s+/g, ' ').slice(0, 220) + (storySummary.length > 220 ? '…' : '')
+    : '';
   if (!preview && !youtubeId) return null;
 
   useEffect(() => {
@@ -428,7 +425,7 @@ function StoryReadPanel({
     setTranscriptCues([]);
     setActiveCueStart(null);
     setTranscriptState('idle');
-  }, [story.id, story.name, youtubeId, caseSummaryText]);
+  }, [story.id, story.name, youtubeId, story.summary, story.headline]);
 
   const handleSeekCue = useCallback(
     (seconds) => {
@@ -447,7 +444,7 @@ function StoryReadPanel({
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
         >
-          {expanded ? 'Collapse' : ccsSummary ? 'Read case summary' : 'Read full story'}
+          {expanded ? 'Collapse' : 'Read story summary'}
         </button>
         {expanded && (
           <div className="diff-rw-read-tabs" role="tablist" aria-label="Story text">
@@ -458,7 +455,7 @@ function StoryReadPanel({
               aria-selected={mode === 'summary'}
               onClick={() => setMode('summary')}
             >
-              {ccsSummary ? 'Case Summary' : 'Summary'}
+              Summary
             </button>
             <button
               type="button"
@@ -478,14 +475,8 @@ function StoryReadPanel({
         <p className="diff-rw-summary diff-rw-summary--preview">{preview}</p>
       ) : mode === 'summary' ? (
         <div className="diff-rw-read-body">
-          {ccsSummary ? (
-            <CcsCaseSummaryBody text={ccsSummary} className="diff-rw-summary diff-rw-summary--full" />
-          ) : (
-            <>
-              {story.headline && <p className="diff-rw-headline diff-rw-headline--body">{story.headline}</p>}
-              <p className="diff-rw-summary diff-rw-summary--full">{story.summary || '—'}</p>
-            </>
-          )}
+          {story.headline && <p className="diff-rw-headline diff-rw-headline--body">{story.headline}</p>}
+          <p className="diff-rw-summary diff-rw-summary--full">{story.summary || story.headline || '—'}</p>
         </div>
       ) : (
         <div className="diff-rw-read-body">
@@ -514,7 +505,6 @@ function StoryStage({
   diagnosis = '',
   active,
   onOpenFullView,
-  caseSummaryText = '',
   caseId = null,
   onTranscriptSaved,
 }) {
@@ -564,7 +554,6 @@ function StoryStage({
         youtubeId={primary?.youtubeId || null}
         caseId={caseId}
         videoTitle={primary?.title || story.headline || story.name}
-        caseSummaryText={caseSummaryText}
         onSeekVideo={handleSeekVideo}
         onTranscriptSaved={onTranscriptSaved}
       />
@@ -587,7 +576,6 @@ export default function DifferentialRealWorldPanel({
   topic = '',
   chiefComplaint = '',
   hpiSnippet = '',
-  caseSummaryText = '',
   active = false,
   prefetchParams = null,
   onTranscriptSaved,
@@ -862,7 +850,6 @@ export default function DifferentialRealWorldPanel({
               diagnosis={diagnosis}
               active={storyIndex === index}
               onOpenFullView={openLightboxAt}
-              caseSummaryText={caseSummaryText}
               caseId={caseId}
               onTranscriptSaved={onTranscriptSaved}
             />

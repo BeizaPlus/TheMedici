@@ -45,6 +45,8 @@ export const STORAGE = {
   differentialCaseMemory: 'schoonmaker_differential_case_memory',
   caseYoutubeTranscripts: 'schoonmaker_case_youtube_transcripts',
   differentialStackerPrefs: 'schoonmaker_differential_stacker_prefs',
+  differentialNotesSync: 'schoonmaker_differential_notes_sync',
+  casePictureNotesIndex: 'schoonmaker_case_picture_notes_index',
 };
 
 const LEGACY = {

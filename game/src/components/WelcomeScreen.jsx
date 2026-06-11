@@ -113,23 +113,44 @@ export default function WelcomeScreen({
 
   const captureWelcomeLastFrame = useCallback(() => {
     const el = welcomeVideoRef.current;
-    if (!el || el.videoWidth <= 0) return;
+    if (!el || el.videoWidth <= 0) {
+      setVideoPlaying(false);
+      setVideoAtEnd(true);
+      return;
+    }
+
+    const paintStill = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = el.videoWidth;
+        canvas.height = el.videoHeight;
+        canvas.getContext('2d')?.drawImage(el, 0, 0);
+        setLastFrameSrc(canvas.toDataURL('image/jpeg', 0.92));
+      } catch {
+        /* same-origin asset — ignore capture failures */
+      }
+      el.pause();
+      setVideoPlaying(false);
+      setVideoAtEnd(true);
+    };
+
+    // `ended` already leaves the decoder on the last frame — avoid seeking (causes flash).
+    if (el.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      paintStill();
+      return;
+    }
+
+    const onSeeked = () => {
+      el.removeEventListener('seeked', onSeeked);
+      paintStill();
+    };
+    el.addEventListener('seeked', onSeeked, { once: true });
     const dur = el.duration;
     if (Number.isFinite(dur) && dur > 0) {
-      el.currentTime = Math.max(0, dur - 0.05);
+      el.currentTime = Math.max(0, dur - 0.04);
+    } else {
+      paintStill();
     }
-    el.pause();
-    try {
-      const canvas = document.createElement('canvas');
-      canvas.width = el.videoWidth;
-      canvas.height = el.videoHeight;
-      canvas.getContext('2d')?.drawImage(el, 0, 0);
-      setLastFrameSrc(canvas.toDataURL('image/jpeg', 0.92));
-    } catch {
-      /* same-origin asset — ignore capture failures */
-    }
-    setVideoPlaying(false);
-    setVideoAtEnd(true);
   }, []);
 
   const replayWelcomeVideo = useCallback(() => {
@@ -137,6 +158,7 @@ export default function WelcomeScreen({
     if (!el || replayLockRef.current) return;
     replayLockRef.current = true;
     setVideoAtEnd(false);
+    setLastFrameSrc('');
     setVideoPlaying(true);
     el.currentTime = 0;
     silenceWelcomeVideo();
@@ -479,7 +501,7 @@ export default function WelcomeScreen({
   return (
     <main className="welcome-screen" aria-label="Welcome">
       <img
-        className={`welcome-plate-img${videoPlaying ? ' welcome-plate-img--faded' : ''}`}
+        className={`welcome-plate-img${videoPlaying ? ' welcome-plate-img--faded' : ''}${videoAtEnd && lastFrameSrc ? ' welcome-plate-img--hold' : ''}`}
         src={plateStillSrc}
         alt=""
         draggable={false}
@@ -489,7 +511,7 @@ export default function WelcomeScreen({
           ref={welcomeVideoRef}
           className={`welcome-plate-img welcome-plate-video${videoPlaying ? ' welcome-plate-video--visible' : ''}`}
           src={plateVideoSrc}
-          poster={plateStillSrc}
+          poster={plateSrc}
           muted
           defaultMuted
           playsInline
@@ -505,6 +527,7 @@ export default function WelcomeScreen({
           }}
           onEnded={() => {
             if (holdLastFrame) captureWelcomeLastFrame();
+            else setVideoPlaying(false);
           }}
           onError={() => setVideoFailed(true)}
         />

@@ -245,6 +245,17 @@ function formatCaseDiscussionForChat(discussion) {
   if (discussion.learnerNotes) {
     lines.push(`Learner notes (do not read aloud; use only if the learner asks what they wrote): ${discussion.learnerNotes}`);
   }
+  if (discussion.pictureNotes?.length) {
+    lines.push(
+      'Picture notes attached for this case (likeness / teach-in refs — metadata only; learner may use in case work):',
+    );
+    for (const p of discussion.pictureNotes) {
+      const bits = [p.role || 'reference'];
+      if (p.caption) bits.push(p.caption);
+      if (p.link) bits.push(p.link);
+      lines.push(`- [${p.at || ''}] ${bits.join(' · ')}`);
+    }
+  }
   return lines.join('\n');
 }
 
@@ -323,6 +334,7 @@ ${JSON.stringify(caseContext, null, 2)}`;
 Rules:
 - Keep answers concise and practical for emergency medicine training.
 - Do not invent labs, imaging results, or outcomes not present in the JSON unless clearly labeled as teaching speculation.
+- When differentialStudyContext is present, use it for CCS orders (ordersText/orders), treatmentStacks, answer-key differentials, realWorldStories, savedVideoTranscripts, and pictureNotes (likeness/teach-in attachments) — reference these when the learner asks about workup, treatment stack, Real World videos, or saved visual refs.
 - When the learner sends a message, it may include a SESSION SO FAR block with ordersTimeline and standardFlow (Teach Me compare). Use that live session data to explain placement mistakes, out-of-order steps, and what to do next — in addition to the static case JSON.
 
 CASE JSON:

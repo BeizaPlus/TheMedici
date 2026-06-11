@@ -27,10 +27,10 @@ export function writeCaseNotes(caseId, text) {
   localStorage.setItem(STORAGE.caseNotes, JSON.stringify(all));
 }
 
-export function appendCaseNotesBlock(caseId, text, { header = 'Note' } = {}) {
+export function appendCaseNotesBlock(caseId, text, { header = 'Note', at = null } = {}) {
   const body = String(text || '').trim();
   if (!body || caseId == null || caseId === '') return;
-  const stamp = new Date().toLocaleTimeString();
+  const stamp = at ? new Date(at).toLocaleString() : new Date().toLocaleTimeString();
   const existing = readCaseNotes(caseId);
   const entry = `\n\n---\n**${header} · ${stamp}**\n${body}\n`;
   writeCaseNotes(caseId, `${existing}${entry}`.trimStart());

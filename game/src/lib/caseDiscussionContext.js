@@ -1,4 +1,5 @@
 import { readCaseNotes } from './caseNotes.js';
+import { summarizePictureNotesForChat } from './casePictureNotes.js';
 import { readLocalChatHistory } from './caseUserLog.js';
 import { readCaseMemoryMeta } from './differentialCaseMemory.js';
 import { getAttemptsForCase, readCaseTranscriptArchive } from './differentialPracticeLog.js';
@@ -87,6 +88,7 @@ export function buildCaseDiscussionContext(caseId) {
     }));
 
   const learnerNotes = clip(readCaseNotes(id), MAX_NOTE_CHARS);
+  const pictureNotes = summarizePictureNotesForChat(id);
   const memoryHook =
     memory.text && memory.text !== learnerNotes ? clip(memory.text, 500) : null;
 
@@ -130,6 +132,7 @@ export function buildCaseDiscussionContext(caseId) {
     diffAttempts.length ||
     priorChat.length ||
     learnerNotes ||
+    pictureNotes.length ||
     youtubeTranscripts.length;
 
   if (!hasContent) return null;
@@ -142,6 +145,7 @@ export function buildCaseDiscussionContext(caseId) {
     differentialAttempts: diffAttempts,
     priorPatientChat: priorChat,
     learnerNotes: learnerNotes || null,
+    pictureNotes: pictureNotes.length ? pictureNotes : null,
     updatedAt: new Date().toISOString(),
   };
 }
@@ -155,6 +159,8 @@ export function discussionCacheKey(discussion) {
       c: discussion.priorPatientChat?.length || 0,
       m: discussion.memoryHook || '',
       n: (discussion.learnerNotes || '').length,
+      p: discussion.pictureNotes?.length || 0,
+      lastPic: discussion.pictureNotes?.at(-1)?.at || null,
       y: discussion.youtubeTranscripts?.length || 0,
       lastVoice: discussion.voiceTranscripts?.at(-1)?.at || null,
       lastChat: discussion.priorPatientChat?.at(-1)?.at || null,

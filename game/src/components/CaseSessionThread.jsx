@@ -6,7 +6,8 @@ import {
   IconPlayerStop,
   IconVolume2,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
-import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
+import ChatMessageContent from './ChatMessageContent.jsx';
+import CasePictureInline from './CasePictureInline.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { mergeSessionThread, parseNoteBubbleContent } from '../lib/caseSessionThread.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
@@ -14,6 +15,7 @@ import { getCaseById } from '../data/useCcsCatalog.js';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import CaseThreadCaseRail from './CaseThreadCaseRail.jsx';
 import { STORAGE } from '../lib/storageKeys.js';
+import { addCasePictureNote, casePictureLink } from '../lib/casePictureNotes.js';
 
 function readCollapsed(key, defaultValue = false) {
   try {
@@ -38,6 +40,9 @@ function ThreadNoteBubble({ content }) {
   const { header, body } = parseNoteBubbleContent(content);
   const [open, setOpen] = useState(false);
   const preview = body.split('\n')[0]?.slice(0, 72) || '';
+  const pictureMatch = body.match(/casepic:(pic-[^\s]+)/);
+  const pictureId = pictureMatch?.[1] || null;
+  const textOnlyPreview = preview.replace(/casepic:pic-[^\s]+/g, '').trim();
 
   return (
     <div className={`case-chat-bubble user case-thread-note${open ? ' is-expanded' : ''}`}>
@@ -48,18 +53,25 @@ function ThreadNoteBubble({ content }) {
         aria-expanded={open}
       >
         <span className="case-thread-note-label">{header}</span>
-        {!open && preview && body !== preview && (
-          <span className="case-thread-note-preview">{preview}…</span>
+        {!open && pictureId && (
+          <span className="case-thread-note-pic-preview">
+            <CasePictureInline pictureId={pictureId} className="case-thread-note-pic-thumb" />
+          </span>
         )}
-        {!open && preview && body === preview && (
-          <span className="case-thread-note-preview">{preview}</span>
+        {!open && textOnlyPreview && body !== preview && (
+          <span className="case-thread-note-preview">{textOnlyPreview}…</span>
+        )}
+        {!open && textOnlyPreview && body === preview && !pictureId && (
+          <span className="case-thread-note-preview">{textOnlyPreview}</span>
         )}
         <span className="case-thread-note-chevron" aria-hidden>
           {open ? '▴' : '▾'}
         </span>
       </button>
       {open && body && (
-        <span className="case-chat-bubble-text">{renderChatMarkdown(body)}</span>
+        <span className="case-chat-bubble-text">
+          <ChatMessageContent content={body} />
+        </span>
       )}
     </div>
   );
@@ -147,6 +159,31 @@ export default function CaseSessionThread({
       onTimelineNote?.(trimmed);
     },
     [appendNote, onTimelineNote],
+  );
+
+  const handlePicturePaste = useCallback(
+    async (e) => {
+      const item = [...(e.clipboardData?.items || [])].find((i) => i.type.startsWith('image/'));
+      if (!item) return;
+      e.preventDefault();
+      const file = item.getAsFile();
+      if (!file) return;
+      try {
+        const entry = await addCasePictureNote(caseId, file, {
+          role: 'reference',
+          appendJournal: false,
+        });
+        const link = ` ${casePictureLink(entry.id)} `;
+        setDraft((prev) => prev + link);
+        setTimeout(() => {
+          inputRef.current?.focus();
+          inputRef.current?.setSelectionRange(inputRef.current.value.length, inputRef.current.value.length);
+        }, 50);
+      } catch {
+        /* silently skip */
+      }
+    },
+    [caseId],
   );
 
   const submitDraft = useCallback(async () => {
@@ -278,7 +315,9 @@ export default function CaseSessionThread({
                   key={m.id || `${m.role}-${i}`}
                   className={`case-chat-bubble ${m.role}`}
                 >
-                  <span className="case-chat-bubble-text">{renderChatMarkdown(m.content)}</span>
+                  <span className="case-chat-bubble-text">
+                    <ChatMessageContent content={m.content} />
+                  </span>
                   {m.role === 'assistant' && (
                     <div className="case-chat-bubble-actions">
                       <button
@@ -325,6 +364,7 @@ export default function CaseSessionThread({
 
           <form
             className="case-chat-form"
+            onPaste={handlePicturePaste}
             onSubmit={(e) => {
               e.preventDefault();
               void submitDraft();

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FiSend, FiX } from 'react-icons/fi';
 import { IconCopy, IconFileMedical, IconNotes, IconPlayerStop, IconVolume2 } from './sceneToolbar/SceneToolbarIcons.jsx';
-import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
+import ChatMessageContent from './ChatMessageContent.jsx';
 import { resolveOrderAutocomplete } from '../lib/orderCommandAutocomplete.js';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { readCaseNotes, writeCaseNotes } from '../lib/caseNotes.js';
+import { addCasePictureNote, casePictureLink } from '../lib/casePictureNotes.js';
 
 function normCommandText(s) {
   return String(s || '')
@@ -252,6 +253,32 @@ export default function CaseChatPanel({
     }
   }, [busy, open]);
 
+  const handlePicturePaste = useCallback(
+    async (e) => {
+      const item = [...(e.clipboardData?.items || [])].find((i) => i.type.startsWith('image/'));
+      if (!item) return;
+      e.preventDefault();
+      const file = item.getAsFile();
+      if (!file) return;
+      try {
+        const entry = await addCasePictureNote(caseId, file, {
+          role: 'reference',
+          appendJournal: false,
+        });
+        const link = ` ${casePictureLink(entry.id)} `;
+        setInput((prev) => prev + link);
+        setTimeout(() => {
+          inputRef.current?.focus();
+          const len = inputRef.current?.value.length;
+          inputRef.current?.setSelectionRange(len, len);
+        }, 50);
+      } catch {
+        /* silently skip */
+      }
+    },
+    [caseId],
+  );
+
   if (!open) return null;
 
   return (
@@ -317,7 +344,9 @@ export default function CaseChatPanel({
         <div className="case-chat-messages selectable-text" ref={listRef}>
           {messages.map((m, i) => (
             <div key={`${m.role}-${i}-${m.content.slice(0, 24)}`} className={`case-chat-bubble ${m.role}`}>
-              <span className="case-chat-bubble-text">{renderChatMarkdown(m.content)}</span>
+              <span className="case-chat-bubble-text">
+                <ChatMessageContent content={m.content} />
+              </span>
               {m.role === 'assistant' && (
                 <div className="case-chat-bubble-actions">
                   <button
@@ -370,6 +399,7 @@ export default function CaseChatPanel({
         {/* ── treatment-style command form ── */}
         <form
           className="case-chat-form"
+          onPaste={handlePicturePaste}
           onSubmit={(e) => {
             e.preventDefault();
             void submit();

@@ -1698,6 +1698,7 @@
 .case-session-thread {
   flex: 1 1 auto;
   min-height: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1845,6 +1846,8 @@
 .case-chat-panel--embedded .case-chat-messages {
   flex: 1 1 auto;
   min-height: 0;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .case-chat-panel--embedded .case-chat-form {
