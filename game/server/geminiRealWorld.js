@@ -352,28 +352,10 @@ export async function ensureStoriesHaveWorkingVideos(stories = [], ctx = {}) {
   return { stories: out, repaired };
 }
 
-export function cachePath(cacheDir, caseId) {
-  return path.join(cacheDir, `case_${caseId}.json`);
-}
+import {
+  cachePath,
+  readRealWorldCache,
+  writeRealWorldCache,
+} from './realWorldCacheStore.js';
 
-export async function readRealWorldCache(cacheDir, caseId) {
-  const file = cachePath(cacheDir, caseId);
-  if (!fs.existsSync(file)) return null;
-  try {
-    const row = JSON.parse(await fsp.readFile(file, 'utf8'));
-    if (!row?.stories?.length) return null;
-    return row;
-  } catch {
-    return null;
-  }
-}
-
-export async function writeRealWorldCache(cacheDir, caseId, payload) {
-  await fsp.mkdir(cacheDir, { recursive: true });
-  const file = cachePath(cacheDir, caseId);
-  await fsp.writeFile(
-    file,
-    `${JSON.stringify({ ...payload, cachedAt: new Date().toISOString() }, null, 2)}\n`,
-    'utf8',
-  );
-}
+export { cachePath, readRealWorldCache, writeRealWorldCache };

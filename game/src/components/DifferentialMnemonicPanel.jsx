@@ -7,15 +7,12 @@ import { useSpeechDictation } from '../hooks/useSpeechDictation.js';
 import {
 
   addCasePictureNote,
-
   getCasePictureNoteUrl,
-
   listCasePictureNotes,
-
+  PICTURE_ROLE_OPTIONS,
+  pictureRoleLabel,
   removeCasePictureNote,
-
   updateCasePictureNoteRole,
-
 } from '../lib/casePictureNotes.js';
 
 import {
@@ -30,22 +27,10 @@ import {
 
 
 
-const ROLE_OPTIONS = [
-
-  { id: 'reference', label: 'Reference' },
-
-  { id: 'likeness', label: 'Likeness' },
-
-  { id: 'teach', label: 'Teach-in' },
-
-];
-
-
+const ROLE_OPTIONS = PICTURE_ROLE_OPTIONS;
 
 function roleLabel(role) {
-
-  return ROLE_OPTIONS.find((r) => r.id === role)?.label || 'Reference';
-
+  return pictureRoleLabel(role);
 }
 
 
@@ -394,32 +379,23 @@ export default function DifferentialMnemonicPanel({ caseId, embedded = false, no
 
                 )}
 
-                <div className="diff-picture-card-roles" role="group" aria-label="Picture type">
-
-                  {ROLE_OPTIONS.map((opt) => (
-
-                    <button
-
-                      key={opt.id}
-
-                      type="button"
-
-                      className={`diff-picture-card-role-btn diff-picture-card-role-btn--${opt.id}${pic.role === opt.id ? ' diff-picture-card-role-btn--active' : ''}`}
-
-                      onClick={() => void onChangePictureRole(pic.id, opt.id)}
-
-                      aria-pressed={pic.role === opt.id}
-
-                      title={`Mark as ${opt.label}`}
-
-                    >
-
-                      {opt.label}
-
-                    </button>
-
-                  ))}
-
+                <div className="diff-picture-card-role-wrap">
+                  <label className="diff-picture-card-role-label" htmlFor={`pic-card-role-${pic.id}`}>
+                    Image type
+                  </label>
+                  <select
+                    id={`pic-card-role-${pic.id}`}
+                    className="diff-picture-card-role-select"
+                    value={pic.role || 'reference'}
+                    onChange={(e) => void onChangePictureRole(pic.id, e.target.value)}
+                    aria-label="Select what this image is"
+                  >
+                    {ROLE_OPTIONS.map((opt) => (
+                      <option key={opt.id} value={opt.id}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <button

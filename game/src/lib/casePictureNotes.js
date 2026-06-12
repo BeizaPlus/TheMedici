@@ -8,6 +8,12 @@ const MAX_BYTES = 4 * 1024 * 1024;
 
 const ROLES = new Set(['likeness', 'teach', 'reference']);
 
+export const PICTURE_ROLE_OPTIONS = [
+  { id: 'reference', label: 'Reference' },
+  { id: 'teach', label: 'Teach-in' },
+  { id: 'likeness', label: 'Likeness' },
+];
+
 function openDb() {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, 1);
@@ -45,9 +51,62 @@ function normalizeRole(role) {
 }
 
 function roleLabel(role) {
-  if (role === 'likeness') return 'Likeness';
-  if (role === 'teach') return 'Teach-in';
-  return 'Reference';
+  const opt = PICTURE_ROLE_OPTIONS.find((o) => o.id === normalizeRole(role));
+  return opt?.label || 'Reference';
+}
+
+export { roleLabel as pictureRoleLabel };
+
+function readVideoClipRoleRoot() {
+  try {
+    const raw = localStorage.getItem(STORAGE.caseVideoClipRoles);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeVideoClipRoleRoot(root) {
+  try {
+    localStorage.setItem(STORAGE.caseVideoClipRoles, JSON.stringify(root));
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Tag a Real World YouTube clip (likeness / teach-in / reference). */
+export function readVideoClipRole(caseId, youtubeId) {
+  const caseKey = String(caseId || '');
+  const vid = String(youtubeId || '').trim();
+  if (!caseKey || !vid) return 'reference';
+  const role = readVideoClipRoleRoot()[caseKey]?.[vid];
+  return normalizeRole(role);
+}
+
+export function writeVideoClipRole(caseId, youtubeId, role) {
+  const caseKey = String(caseId || '');
+  const vid = String(youtubeId || '').trim();
+  if (!caseKey || !vid) return false;
+  const nextRole = normalizeRole(role);
+  const root = readVideoClipRoleRoot();
+  const bucket = { ...(root[caseKey] || {}) };
+  if (bucket[vid] === nextRole) return true;
+  bucket[vid] = nextRole;
+  root[caseKey] = bucket;
+  writeVideoClipRoleRoot(root);
+  return true;
+}
+
+/** Find picture metadata anywhere in the case index. */
+export function findPictureNoteById(pictureId) {
+  const pid = String(pictureId || '');
+  if (!pid) return null;
+  const root = readIndexRoot();
+  for (const [caseId, bucket] of Object.entries(root)) {
+    const pic = bucket?.pictures?.find((p) => p.id === pid);
+    if (pic) return { caseId, ...pic };
+  }
+  return null;
 }
 
 /** Lightweight manifest — blobs live in IndexedDB only. */

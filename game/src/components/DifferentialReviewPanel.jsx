@@ -5,6 +5,7 @@ import { resolveCaseSummaryText } from '../lib/ccsCaseSummary.js';
 const TABS = [
   { id: 'summary', label: 'Case Summary' },
   { id: 'orders', label: 'Orders' },
+  { id: 'should-order', label: 'Should Order' },
 ];
 
 const STATUS_LABEL = {
@@ -46,13 +47,19 @@ function OrdersFlowList({ orders = [] }) {
 }
 
 export default function DifferentialReviewPanel({ review, className = '', onInteract }) {
+  const shouldOrderItems = useMemo(
+    () => (review?.orders || []).filter((item) => item.status === 'missed'),
+    [review?.orders],
+  );
+
   const tabs = useMemo(() => {
     const list = [];
     const summaryText = resolveCaseSummaryText(review);
     if (summaryText || review?.history) list.push(TABS[0]);
     if (review?.ordersText || review?.orders?.length) list.push(TABS[1]);
-    return list.length ? list : TABS;
-  }, [review]);
+    if (shouldOrderItems.length) list.push(TABS[2]);
+    return list.length ? list : TABS.slice(0, 2);
+  }, [review, shouldOrderItems.length]);
 
   const [tab, setTab] = useState('summary');
 
@@ -73,7 +80,11 @@ export default function DifferentialReviewPanel({ review, className = '', onInte
           <button
             key={t.id}
             type="button"
-            className={activeTab === t.id ? 'case-info-tab active' : 'case-info-tab'}
+            className={
+              activeTab === t.id
+                ? `case-info-tab active${t.id === 'should-order' ? ' case-info-tab--should-order' : ''}`
+                : `case-info-tab${t.id === 'should-order' ? ' case-info-tab--should-order' : ''}`
+            }
             onClick={() => {
               onInteract?.();
               setTab(t.id);
@@ -92,6 +103,17 @@ export default function DifferentialReviewPanel({ review, className = '', onInte
             <p className="soap-body differential-review-text">
               {review?.ordersText || 'No orders in case reference.'}
             </p>
+          )
+        ) : activeTab === 'should-order' ? (
+          shouldOrderItems.length ? (
+            <>
+              <p className="diff-should-order-lead">
+                {shouldOrderItems.length} high-yield order{shouldOrderItems.length === 1 ? '' : 's'} you should know for this case.
+              </p>
+              <OrdersFlowList orders={shouldOrderItems} />
+            </>
+          ) : (
+            <p className="soap-body differential-review-text">No should-order items for this case.</p>
           )
         ) : (
           <CcsCaseSummaryBody text={summaryText || review?.history} />

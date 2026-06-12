@@ -81,9 +81,10 @@ export default function DifferentialStudyPanel({
   );
 
   useEffect(() => {
-    if (!caseId) return;
+    if (!caseId || realWorld.offlineReady) return;
+    if (import.meta.env.VITE_REAL_WORLD_OFFLINE === '1') return;
     void prefetchRealWorldStories(realWorldSearchParams);
-  }, [caseId, realWorldSearchParams]);
+  }, [caseId, realWorldSearchParams, realWorld.offlineReady]);
 
   const [remoteStoryCount, setRemoteStoryCount] = useState(() => {
     const hit = getRealWorldPrefetch(caseId);
@@ -288,6 +289,7 @@ export default function DifferentialStudyPanel({
               caseId={caseId}
               curatedStories={realWorld.stories}
               searchUrl={realWorld.searchUrl}
+              offlineReady={realWorld.offlineReady}
               diagnosis={diagnosis || ccsReview?.diagnosis || ''}
               topic={topic}
               chiefComplaint={ccsReview?.chiefComplaint || ''}

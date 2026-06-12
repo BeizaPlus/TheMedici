@@ -2602,6 +2602,18 @@
   background: rgba(239, 154, 154, 0.12);
 }
 
+.diff-should-order-lead {
+  margin: 0 0 12px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--muted, #888);
+}
+
+.differential-review-panel .case-info-tab--should-order.active {
+  border-color: rgba(240, 180, 41, 0.55);
+  color: #f0b429;
+}
+
 .diff-order-step--missed .diff-order-num {
   color: #f0b429;
   border-color: rgba(240, 180, 41, 0.35);
@@ -3547,6 +3559,33 @@
   border-radius: 6px;
 }
 
+.diff-picture-card-role-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.diff-picture-card-role-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted, #888);
+}
+
+.diff-picture-card-role-select {
+  flex: 1 1 auto;
+  min-width: 120px;
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 4px 24px 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  color: #eee;
+}
+
 .diff-picture-card-roles {
   display: flex;
   flex-direction: column;
@@ -3661,6 +3700,60 @@
   display: block;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-sizing: border-box;
+}
+
+.case-picture-inline {
+  display: block;
+  max-width: 100%;
+  margin: 8px 0;
+}
+
+.case-picture-inline--thumb {
+  display: inline-block;
+  margin: 0;
+}
+
+.case-picture-inline-role {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.case-picture-inline-role-label,
+.diff-rw-video-role-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted, #888);
+}
+
+.case-picture-inline-role-select,
+.diff-rw-video-role-select {
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 4px 28px 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  color: #eee;
+  cursor: pointer;
+}
+
+.case-picture-inline-role-select:hover,
+.diff-rw-video-role-select:hover {
+  border-color: rgba(212, 175, 55, 0.55);
+}
+
+.diff-rw-video-role {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  width: min(100%, 300px);
+  justify-self: end;
 }
 
 .case-thread-note-pic-preview {

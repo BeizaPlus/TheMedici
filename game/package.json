@@ -32,10 +32,13 @@
     "preview": "vite preview",
     "eval": "python scripts/self_eval.py --no-fix",
     "package:progress": "node scripts/package-progress-backup.mjs",
-    "restore:progress": "node scripts/restore-progress-backup.mjs"
+    "restore:progress": "node scripts/restore-progress-backup.mjs",
+    "export:real-world-baked": "node scripts/export-real-world-baked.mjs",
+    "seed:supabase-real-world": "node scripts/seed-supabase-real-world.mjs"
   },
   "dependencies": {
     "@interactjs/interact": "^1.10.27",
+    "@supabase/supabase-js": "^2.108.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
