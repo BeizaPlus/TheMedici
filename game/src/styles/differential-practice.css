@@ -640,6 +640,10 @@
   min-height: 0;
 }
 
+.diff-practice-compact {
+  display: contents;
+}
+
 .diff-study-tabs {
   display: flex;
   align-items: stretch;
@@ -3992,25 +3996,98 @@
   .diff-card {
     flex: 1 1 auto;
     min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 12px max(12px, env(safe-area-inset-left)) var(--diff-mobile-foot-h)
-      max(12px, env(safe-area-inset-right));
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 8px max(10px, env(safe-area-inset-left)) var(--diff-mobile-foot-h)
+      max(10px, env(safe-area-inset-right));
+    gap: 6px;
     align-items: stretch;
   }
 
-  .diff-topic {
-    font-size: 1.55rem;
-  }
-
-  .diff-topic-label {
-    font-size: 0.62rem;
+  .diff-practice-compact {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 6px;
+    width: 100%;
   }
 
   .diff-cycle-bar {
-    gap: 8px;
+    gap: 2px;
+    justify-content: flex-start;
+  }
+
+  .diff-cycle-center {
+    text-align: left;
+  }
+
+  .diff-case-id {
+    display: inline;
+    margin: 0;
+    font-size: 0.68rem;
+    color: var(--muted, #888);
+  }
+
+  .diff-case-id::after {
+    content: ' · ';
+    color: var(--muted, #666);
+  }
+
+  .diff-topic-label {
+    display: none;
+  }
+
+  .diff-topic {
+    display: inline;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .diff-cycle-center {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 4px;
+  }
+
+  .diff-voice-block {
+    margin: 0;
+  }
+
+  .diff-input-row {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .diff-input {
+    flex: 1 1 auto;
+    width: auto;
+    min-height: 40px;
+    font-size: 16px;
+    padding: 8px 10px;
+  }
+
+  .diff-add-btn {
+    width: auto;
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 8px 14px;
+  }
+
+  .diff-progress-head {
+    gap: 6px;
+  }
+
+  .diff-progress-title {
+    font-size: 0.72rem;
+  }
+
+  .diff-progress-track {
+    height: 6px;
   }
 
   .diff-voice-block,
@@ -4052,49 +4129,43 @@
     justify-content: center;
   }
 
-  .diff-input-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .diff-input,
-  .diff-add-btn {
-    width: 100%;
-    min-height: 48px;
-    font-size: 16px;
-  }
-
-  .diff-add-btn {
-    padding: 12px 16px;
-  }
-
   .diff-compare {
     grid-template-columns: 1fr;
     gap: 12px;
-  }
-
-  .diff-compare-scroll {
-    max-height: none;
-    flex: 1 1 auto;
-    min-height: 6rem;
-  }
-
-  .diff-compare {
     flex: 1 1 auto;
     min-height: 0;
   }
 
+  .diff-compare-scroll {
+    max-height: none;
+    min-height: 4rem;
+    overflow-y: auto;
+  }
+
   .diff-study-panel {
     flex: 1 1 auto;
-    min-height: 8rem;
+    min-height: 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  .diff-study-panel--collapsed {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .diff-study-panel--collapsed .diff-study-tabs {
+    margin-top: auto;
   }
 
   .diff-study-panel--expanded {
     max-height: none;
     flex: 1 1 auto;
-    min-height: 10rem;
+    min-height: 0;
   }
 
   .diff-study-panel--expanded .diff-study-body {
@@ -4102,6 +4173,7 @@
     flex: 1 1 auto;
     min-height: 0;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .diff-study-panel--expanded .diff-study-tabs {
@@ -4122,8 +4194,38 @@
     padding: 0 8px;
   }
 
+  .diff-study-case-panel,
+  .diff-study-body .differential-review-panel,
+  .diff-study-body .diff-case-presentation,
+  .diff-study-body .diff-mnemonic-panel {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .diff-case-presentation .soap-body,
+  .differential-review-text,
+  .differential-review-body,
+  .diff-orders-flow,
+  .diff-mnemonic-input,
+  .diff-study-body .clinical-text-block {
+    max-height: none;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
   .diff-study-body {
-    padding: 10px max(10px, env(safe-area-inset-left)) 12px max(10px, env(safe-area-inset-right));
+    padding: 6px max(8px, env(safe-area-inset-left)) 8px max(8px, env(safe-area-inset-right));
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .diff-study-case-panel {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
 
   .diff-study-body:has(.diff-rw-panel--fit) {

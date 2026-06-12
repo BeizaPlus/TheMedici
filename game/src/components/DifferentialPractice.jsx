@@ -1141,6 +1141,7 @@ export default function DifferentialPractice({ onBack }) {
       )}
 
       <div className="diff-card">
+        <div className="diff-practice-compact">
         <div className="diff-cycle-bar" aria-label="Current case">
           <div className="diff-cycle-center">
             <p className="diff-case-id">CCS Case {entry.caseId}</p>
@@ -1354,6 +1355,8 @@ export default function DifferentialPractice({ onBack }) {
             </div>
           </div>
         )}
+
+        </div>
 
         <DifferentialStudyPanel
           caseId={entry.caseId}

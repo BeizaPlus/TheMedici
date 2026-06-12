@@ -21,6 +21,10 @@ const TABS = [
   { id: 'realworld', label: 'Real World', shortLabel: 'Real' },
 ];
 
+function isMobileStudyViewport() {
+  return typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+}
+
 export default function DifferentialStudyPanel({
   caseId,
   clinicalStyle = {},
@@ -47,7 +51,7 @@ export default function DifferentialStudyPanel({
   onCaseNotesChanged,
 }) {
   const [tab, setTab] = useState('case');
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(() => isMobileStudyViewport());
 
   const recordingCount = useMemo(
     () => listLocalDifferentialRecordings(caseId).length,
@@ -118,8 +122,20 @@ export default function DifferentialStudyPanel({
   onPauseForStudyRef.current = onPauseForStudy;
 
   useEffect(() => {
-    setExpanded(false);
-    setTab(timelineItems ? 'timeline' : hasReviewText || hasCaseData ? 'case' : 'timeline');
+    const mobile = isMobileStudyViewport();
+    const nextTab = mobile
+      ? hasReviewText || hasCaseData
+        ? 'case'
+        : timelineItems
+          ? 'timeline'
+          : 'timeline'
+      : timelineItems
+        ? 'timeline'
+        : hasReviewText || hasCaseData
+          ? 'case'
+          : 'timeline';
+    setTab(nextTab);
+    setExpanded(mobile);
     lastTimelineFocusRef.current = 0;
     lastStudyTabRequestRef.current = 0;
     // Only reset tab when switching cases — not when timeline count updates (chat voice, etc.)
@@ -151,6 +167,7 @@ export default function DifferentialStudyPanel({
   const toggleTab = useCallback(
     (id) => {
       if (expanded && tab === id) {
+        if (isMobileStudyViewport()) return;
         collapseStudy();
         return;
       }
