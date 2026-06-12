@@ -19,11 +19,6 @@ import {
 import { fetchYoutubeTranscript } from '../lib/fetchYoutubeTranscript.js';
 import { saveCaseYoutubeTranscript } from '../lib/caseYoutubeTranscripts.js';
 import RealWorldSummaryRichText from './RealWorldSummaryRichText.jsx';
-import {
-  PICTURE_ROLE_OPTIONS,
-  readVideoClipRole,
-  writeVideoClipRole,
-} from '../lib/casePictureNotes.js';
 
 function AvatarIconButton({ selected, busy, onClick, title = 'Use as case avatar' }) {
   return (
@@ -218,8 +213,12 @@ function RealWorldVideoLightbox({
                 type="button"
                 className="diff-rw-lightbox-strip-btn"
                 onClick={() => step(-1)}
+                aria-label="Previous video"
               >
-                ‹ Prev
+                <span className="diff-nav-label diff-nav-label--long">‹ Prev</span>
+                <span className="diff-nav-label diff-nav-label--short" aria-hidden>
+                  ‹
+                </span>
               </button>
               <div className="diff-rw-lightbox-dots" role="tablist" aria-label="Case videos">
               {playlist.map((item, i) => (
@@ -238,8 +237,12 @@ function RealWorldVideoLightbox({
                 type="button"
                 className="diff-rw-lightbox-strip-btn"
                 onClick={() => step(1)}
+                aria-label="Next video"
               >
-                Next ›
+                <span className="diff-nav-label diff-nav-label--long">Next ›</span>
+                <span className="diff-nav-label diff-nav-label--short" aria-hidden>
+                  ›
+                </span>
               </button>
             </div>
           )}
@@ -262,24 +265,12 @@ function StoryVideos({
   videos = [],
   patientName = '',
   diagnosis = '',
-  caseId = null,
   onOpenFullView,
   videoIframeRef = null,
 }) {
   const [active, setActive] = useState(0);
-  const [clipRole, setClipRole] = useState('reference');
   const embeddable = (videos || []).filter((v) => v.youtubeId && !String(v.youtubeId).includes(' '));
   const searchUrl = buildYouTubeSearchUrl({ name: patientName, diagnosis });
-  const safeActive = embeddable.length ? Math.min(active, embeddable.length - 1) : 0;
-  const current = embeddable[safeActive] || null;
-
-  useEffect(() => {
-    if (!caseId || !current?.youtubeId) {
-      setClipRole('reference');
-      return;
-    }
-    setClipRole(readVideoClipRole(caseId, current.youtubeId));
-  }, [caseId, current?.youtubeId]);
 
   if (!embeddable.length) {
     return (
@@ -294,14 +285,9 @@ function StoryVideos({
     );
   }
 
+  const safeActive = Math.min(active, embeddable.length - 1);
+  const current = embeddable[safeActive];
   const openFull = () => onOpenFullView?.(current.youtubeId);
-
-  const onClipRoleChange = (event) => {
-    const nextRole = event.target.value;
-    if (!caseId || !current?.youtubeId) return;
-    writeVideoClipRole(caseId, current.youtubeId, nextRole);
-    setClipRole(nextRole);
-  };
 
   return (
     <div className="diff-rw-video-stage">
@@ -360,26 +346,6 @@ function StoryVideos({
           ⛶
         </button>
       </div>
-      {caseId && current?.youtubeId && (
-        <div className="diff-rw-video-role">
-          <label className="diff-rw-video-role-label" htmlFor={`rw-clip-role-${current.youtubeId}`}>
-            Clip type
-          </label>
-          <select
-            id={`rw-clip-role-${current.youtubeId}`}
-            className="diff-rw-video-role-select"
-            value={clipRole}
-            onChange={onClipRoleChange}
-            aria-label="Select what this clip is"
-          >
-            {PICTURE_ROLE_OPTIONS.map((opt) => (
-              <option key={opt.id} value={opt.id}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
     </div>
   );
 }
@@ -617,7 +583,6 @@ function StoryStage({
         videos={story.videos}
         patientName={story.name}
         diagnosis={diagnosis}
-        caseId={caseId}
         onOpenFullView={onOpenFullView}
         videoIframeRef={videoIframeRef}
       />

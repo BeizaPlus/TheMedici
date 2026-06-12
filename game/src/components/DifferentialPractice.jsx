@@ -1368,11 +1368,24 @@ export default function DifferentialPractice({ onBack }) {
             className="diff-nav-btn"
             onClick={goPrev}
             title="Previous case (or random if none)"
+            aria-label="Previous case"
           >
-            ‹ Prev
+            <span className="diff-nav-label diff-nav-label--long">‹ Prev</span>
+            <span className="diff-nav-label diff-nav-label--short" aria-hidden>
+              ‹
+            </span>
           </button>
-          <button type="button" className="diff-nav-btn" onClick={refreshCase}>
-            ↻ Refresh
+          <button
+            type="button"
+            className="diff-nav-btn"
+            onClick={refreshCase}
+            title="Refresh case"
+            aria-label="Refresh case"
+          >
+            <span className="diff-nav-label diff-nav-label--long">↻ Refresh</span>
+            <span className="diff-nav-label diff-nav-label--short" aria-hidden>
+              ↻
+            </span>
           </button>
           <button
             type="button"
@@ -1383,15 +1396,19 @@ export default function DifferentialPractice({ onBack }) {
             aria-label="Shuffle — random case"
           >
             <IconShuffle className="toolbar-icon" aria-hidden />
-            Shuffle
+            <span className="diff-nav-label diff-nav-label--long">Shuffle</span>
           </button>
           <button
             type="button"
             className="diff-nav-btn diff-nav-btn--primary"
             onClick={goNext}
             title="Random next case"
+            aria-label="Next random case"
           >
-            Next ›
+            <span className="diff-nav-label diff-nav-label--long">Next ›</span>
+            <span className="diff-nav-label diff-nav-label--short" aria-hidden>
+              ›
+            </span>
           </button>
           </div>
         </div>

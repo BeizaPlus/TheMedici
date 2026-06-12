@@ -57,46 +57,6 @@ function roleLabel(role) {
 
 export { roleLabel as pictureRoleLabel };
 
-function readVideoClipRoleRoot() {
-  try {
-    const raw = localStorage.getItem(STORAGE.caseVideoClipRoles);
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
-  }
-}
-
-function writeVideoClipRoleRoot(root) {
-  try {
-    localStorage.setItem(STORAGE.caseVideoClipRoles, JSON.stringify(root));
-  } catch {
-    /* ignore */
-  }
-}
-
-/** Tag a Real World YouTube clip (likeness / teach-in / reference). */
-export function readVideoClipRole(caseId, youtubeId) {
-  const caseKey = String(caseId || '');
-  const vid = String(youtubeId || '').trim();
-  if (!caseKey || !vid) return 'reference';
-  const role = readVideoClipRoleRoot()[caseKey]?.[vid];
-  return normalizeRole(role);
-}
-
-export function writeVideoClipRole(caseId, youtubeId, role) {
-  const caseKey = String(caseId || '');
-  const vid = String(youtubeId || '').trim();
-  if (!caseKey || !vid) return false;
-  const nextRole = normalizeRole(role);
-  const root = readVideoClipRoleRoot();
-  const bucket = { ...(root[caseKey] || {}) };
-  if (bucket[vid] === nextRole) return true;
-  bucket[vid] = nextRole;
-  root[caseKey] = bucket;
-  writeVideoClipRoleRoot(root);
-  return true;
-}
-
 /** Find picture metadata anywhere in the case index. */
 export function findPictureNoteById(pictureId) {
   const pid = String(pictureId || '');
