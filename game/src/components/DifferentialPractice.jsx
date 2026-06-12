@@ -1092,7 +1092,7 @@ export default function DifferentialPractice({ onBack }) {
 
   return (
     <div
-      className={`diff-practice${revealed ? ' diff-practice--revealed' : ''}`}
+      className={`diff-practice${revealed ? ' diff-practice--revealed' : ''}${stacker.enabled ? ' diff-practice--stacker' : ''}`}
       ref={voiceFocusRef}
       tabIndex={-1}
       aria-label="Differential practice — Space starts microphone"

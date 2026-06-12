@@ -7487,6 +7487,20 @@ button {
 }
 
 @media (max-width: 768px) {
+  html,
+  body,
+  #root {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+
+  .app--player:has(.diff-practice) {
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
   .game {
     grid-template-columns: 1fr;
     grid-template-rows: min(42vh, 360px) 1fr;

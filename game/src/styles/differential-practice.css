@@ -3826,16 +3826,30 @@
 
 @media (max-width: 768px) {
   .diff-practice {
+    --diff-mobile-foot-h: calc(52px + env(safe-area-inset-bottom, 0px));
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .diff-practice--stacker {
+    --diff-mobile-foot-h: calc(88px + env(safe-area-inset-bottom, 0px));
   }
 
   .diff-practice--revealed {
-    padding-bottom: calc(112px + env(safe-area-inset-bottom));
+    padding-bottom: 0;
   }
 
   .diff-progress {
+    flex-shrink: 0;
     padding: 8px max(12px, env(safe-area-inset-left)) 10px max(12px, env(safe-area-inset-right));
+  }
+
+  .diff-header {
+    flex-shrink: 0;
   }
 
   .diff-back .diff-nav-label--short {
@@ -3976,8 +3990,15 @@
   }
 
   .diff-card {
-    padding: 20px max(14px, env(safe-area-inset-left)) 24px max(14px, env(safe-area-inset-right));
-    gap: 16px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px max(12px, env(safe-area-inset-left)) var(--diff-mobile-foot-h)
+      max(12px, env(safe-area-inset-right));
+    gap: 12px;
+    align-items: stretch;
   }
 
   .diff-topic {
@@ -4053,18 +4074,27 @@
   }
 
   .diff-compare-scroll {
-    max-height: min(36vh, 280px);
+    max-height: none;
+    flex: 1 1 auto;
+    min-height: 6rem;
   }
 
-  .diff-case-presentation .soap-body,
-  .differential-review-text,
-  .diff-orders-flow,
-  .diff-rw-transcript-cues {
-    max-height: min(42vh, 360px);
+  .diff-compare {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .diff-study-panel {
+    flex: 1 1 auto;
+    min-height: 8rem;
+    display: flex;
+    flex-direction: column;
   }
 
   .diff-study-panel--expanded {
-    max-height: min(46dvh, 400px);
+    max-height: none;
+    flex: 1 1 auto;
+    min-height: 10rem;
   }
 
   .diff-study-panel--expanded .diff-study-body {
@@ -4121,7 +4151,7 @@
   .diff-rw-stage-wrap {
     order: 1;
     flex: 1 1 auto;
-    min-height: min(40dvh, 340px);
+    min-height: 8rem;
     overflow: auto;
     border: none;
     background: transparent;
@@ -4249,13 +4279,19 @@
   }
 
   .diff-case-foot {
-    position: sticky;
+    position: fixed;
+    left: 0;
+    right: 0;
     bottom: 0;
     z-index: 35;
-    margin-top: 8px;
-    padding: 4px 0 max(6px, env(safe-area-inset-bottom));
-    background: linear-gradient(180deg, transparent 0%, rgba(12, 12, 16, 0.92) 28%);
-    backdrop-filter: blur(8px);
+    margin-top: 0;
+    width: 100%;
+    max-width: none;
+    padding: 4px max(10px, env(safe-area-inset-left)) max(4px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-right));
+    background: rgba(12, 12, 16, 0.96);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
   }
 
   .diff-stacker-hint {
@@ -4311,7 +4347,7 @@
 
   .diff-ambience-dock {
     right: max(10px, env(safe-area-inset-right));
-    bottom: calc(58px + env(safe-area-inset-bottom));
+    bottom: calc(var(--diff-mobile-foot-h, 52px) + 6px);
     z-index: 36;
   }
 
