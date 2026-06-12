@@ -3834,7 +3834,7 @@
 
 @media (max-width: 768px) {
   .diff-practice {
-    --diff-mobile-foot-h: calc(96px + env(safe-area-inset-bottom, 0px));
+    --diff-mobile-foot-h: calc(58px + env(safe-area-inset-bottom, 0px));
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
     height: 100dvh;
@@ -3844,7 +3844,7 @@
   }
 
   .diff-practice--stacker {
-    --diff-mobile-foot-h: calc(132px + env(safe-area-inset-bottom, 0px));
+    --diff-mobile-foot-h: calc(96px + env(safe-area-inset-bottom, 0px));
   }
 
   .diff-practice--revealed {
@@ -4015,7 +4015,7 @@
     flex-shrink: 0;
     gap: 6px;
     width: 100%;
-    padding-bottom: var(--diff-mobile-foot-h, 96px);
+    padding-bottom: var(--diff-mobile-foot-h, 58px);
   }
 
   .diff-cycle-bar {
@@ -4398,43 +4398,9 @@
     display: none;
   }
 
+  /* diff-nav is replaced by diff-mobile-icon-strip on mobile */
   .diff-nav {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
-    max-width: none;
-  }
-
-  .diff-nav-label--long {
     display: none;
-  }
-
-  .diff-nav-label--short {
-    display: inline;
-  }
-
-  .diff-nav-btn {
-    min-height: 36px;
-    padding: 6px 4px;
-    font-size: 1.05rem;
-    border-radius: 8px;
-  }
-
-  .diff-nav-btn--shuffle {
-    font-size: 0;
-    gap: 0;
-    justify-content: center;
-  }
-
-  .diff-nav-btn--shuffle .toolbar-icon {
-    width: 18px;
-    height: 18px;
-  }
-
-  .diff-nav-btn--primary {
-    grid-column: auto;
-    font-size: 1.05rem;
-    font-weight: 600;
   }
 
   .diff-reveal-btn {
@@ -4449,7 +4415,7 @@
     display: none;
   }
 
-  /* ── Bottom bar: add a second row for bookmark + chat + font controls ── */
+  /* ── Bottom bar: single compact icon strip ── */
   .diff-case-foot {
     display: flex;
     flex-direction: column;
@@ -4460,40 +4426,119 @@
   .diff-mobile-dock {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
   }
 
-  /* Utility row: bookmark, chat, font controls, volume — sits above nav row */
-  .diff-mobile-utility-row {
+  /* ── Telegram-style single icon row ── */
+  .diff-mobile-icon-strip {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 4px;
-    padding: 4px 0 2px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .diff-mobile-utility-left {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .diff-mobile-utility-right {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     gap: 2px;
+    padding: 2px 0;
   }
 
-  /* Inline bookmark button in the utility row */
-  .diff-mobile-utility-row .diff-dock-bookmark-btn.case-review-flag-btn {
-    min-width: 32px;
-    min-height: 32px;
-    width: 32px;
-    height: 32px;
+  /* Button group: visually grouped with a subtle pill background */
+  .diff-icon-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+    padding: 3px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+
+  /* Nav group gets flex-1 so it fills remaining space evenly */
+  .diff-icon-group--nav {
+    flex: 1;
+    justify-content: space-around;
+    gap: 0;
+  }
+
+  /* Every icon button: uniform 36×36 square, icon-only */
+  .diff-icon-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: transparent;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.65);
+    transition: background 0.12s ease, color 0.12s ease;
+    position: relative;
+  }
+
+  .diff-icon-btn:hover,
+  .diff-icon-btn:active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+  }
+
+  .diff-icon-btn:active {
+    transform: scale(0.92);
+  }
+
+  .diff-icon-btn.active {
+    color: var(--gold, #e8b84b);
+    background: rgba(232, 184, 75, 0.1);
+  }
+
+  .diff-icon-btn--primary {
+    color: var(--green, #3ecf8e);
+    background: rgba(62, 207, 142, 0.08);
+  }
+
+  .diff-icon-btn--primary:hover {
+    background: rgba(62, 207, 142, 0.18);
+    color: var(--green, #3ecf8e);
+  }
+
+  .diff-icon-btn--muted {
+    color: rgba(255, 255, 255, 0.28);
+  }
+
+  .diff-icon-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* SVG icons inside icon buttons */
+  .diff-icon-btn .toolbar-icon {
+    width: 18px;
+    height: 18px;
+    display: block;
+    flex-shrink: 0;
+    color: currentColor;
+  }
+
+  /* Text glyphs (A−, A+, B, ‹, ›) inside icon buttons */
+  .diff-icon-text {
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1;
+    color: currentColor;
+    letter-spacing: -0.01em;
+  }
+
+  .diff-icon-text--bold {
+    font-weight: 700;
+  }
+
+  /* Bookmark button inside icon strip */
+  .diff-icon-btn.diff-dock-bookmark-btn.case-review-flag-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
     padding: 0;
     border-radius: 8px;
     border: none;
@@ -4504,64 +4549,45 @@
     justify-content: center;
   }
 
-  .diff-mobile-utility-row .diff-dock-bookmark-btn.active {
+  .diff-icon-btn.diff-dock-bookmark-btn.case-review-flag-btn .case-review-bookmark-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .diff-icon-btn.diff-dock-bookmark-btn.active {
     color: #9ec5ff;
-    background: rgba(120, 180, 255, 0.12);
+    background: rgba(120, 180, 255, 0.1);
   }
 
-  /* Inline chat button in the utility row */
-  .diff-mobile-utility-row .diff-dock-chat-btn {
-    min-width: 32px;
-    min-height: 32px;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+  /* Chat button inside icon strip */
+  .diff-icon-btn.diff-dock-chat-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
   }
 
-  /* Font controls inline in utility row */
-  .diff-mobile-utility-row .clinical-font-controls-wrap {
+  .diff-icon-btn.diff-dock-chat-btn .toolbar-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Chat badge */
+  .diff-icon-btn .diff-dock-chat-badge {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    min-width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    background: var(--gold, #e8b84b);
+    color: #000;
+    font-size: 0.55rem;
+    font-weight: 700;
+    display: flex;
     align-items: center;
-  }
-
-  .diff-mobile-utility-row .clinical-font-controls {
-    gap: 2px;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .diff-mobile-utility-row .clinical-font-btn {
-    min-width: 28px;
-    height: 28px;
-    padding: 0 5px;
-    font-size: 0.72rem;
-  }
-
-  .diff-mobile-utility-row .clinical-font-size-pill {
-    font-size: 0.62rem;
-    min-width: 2.2rem;
-    text-align: center;
-    color: var(--muted, #888);
-  }
-
-  /* Volume control inline */
-  .diff-mobile-utility-row .audio-volume-control {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none;
-    padding: 0 !important;
-    gap: 4px;
-  }
-
-  .diff-mobile-utility-row .audio-volume-mute {
-    background: transparent;
-    border: none;
-    min-width: 28px;
-    height: 28px;
-    padding: 0 4px;
-  }
-
-  .diff-mobile-utility-row .audio-volume-slider {
-    width: 52px;
+    justify-content: center;
+    padding: 0 2px;
+    pointer-events: none;
   }
 
   /* ── Study panel: bottom-sheet style ── */

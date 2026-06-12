@@ -7,7 +7,9 @@ import {
   IconMessage,
   IconPlayerPause,
   IconPlayerPlay,
+  IconRotate,
   IconShuffle,
+  IconVolume2,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import {
   readStackerPrefs,
@@ -53,8 +55,9 @@ import {
 import { getBriefingHpi } from '../lib/caseBriefing.js';
 import AudioVolumeControl from './AudioVolumeControl.jsx';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
-import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
-import { prefetchMonitorAudio, startIcuMonitor, unlockAmbience } from '../lib/audio.js';
+import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
+import { applyMonitorVolume, prefetchMonitorAudio, startIcuMonitor, subscribeAudioPrefs, unlockAmbience } from '../lib/audio.js';
+import { patchAudioPrefs, readAudioPrefs } from '../lib/audioPrefs.js';
 import { practiceCaseHeadline } from '../lib/differentialHeadline.js';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 import { normalizeCaseProgressId } from '../data/caseProgress.js';
@@ -161,6 +164,7 @@ export default function DifferentialPractice({ onBack }) {
   const [stackerPaused, setStackerPaused] = useState(false);
   const [textPrefs, setTextPrefs] = useState(() => readClinicalTextPrefs());
   const clinicalStyle = useMemo(() => clinicalTextStyle(textPrefs), [textPrefs]);
+  const [audioPrefs, setAudioPrefs] = useState(() => readAudioPrefs());
   const [secondsLeft, setSecondsLeft] = useState(() => readStackerPrefs().seconds);
   const [sessionComplete, setSessionComplete] = useState(false);
   const [apiOk, setApiOk] = useState(null);
@@ -185,6 +189,8 @@ export default function DifferentialPractice({ onBack }) {
     unlockAmbience();
     startIcuMonitor({ fadeMs: 1800 });
   }, []);
+
+  useEffect(() => subscribeAudioPrefs(setAudioPrefs), []);
 
   useEffect(() => {
     const bump = () => setSettingsTick((t) => t + 1);
@@ -1417,16 +1423,20 @@ export default function DifferentialPractice({ onBack }) {
             </p>
           )}
 
+          {/* ── Mobile icon strip (Telegram-style single row) ── */}
           <div className="diff-mobile-dock">
+            {/* Stacker cluster — only visible when stacker is on */}
             {renderStackerCluster('foot')}
 
-            {/* Utility row: bookmark + chat + font controls + volume — mobile only */}
-            <div className="diff-mobile-utility-row">
-              <div className="diff-mobile-utility-left">
+            {/* Single icon row: all controls same size, no labels */}
+            <div className="diff-mobile-icon-strip">
+
+              {/* Left group: bookmark + chat */}
+              <div className="diff-icon-group">
                 <CaseReviewFlagButton
                   caseId={flagCaseId}
                   iconOnly
-                  className="diff-dock-bookmark-btn"
+                  className="diff-icon-btn diff-dock-bookmark-btn"
                   onChange={(flagged) => {
                     setReviewQueueTick((t) => t + 1);
                     setFlagToast(flagged ? 'Bookmarked for review later' : 'Bookmark removed');
@@ -1435,13 +1445,13 @@ export default function DifferentialPractice({ onBack }) {
                 />
                 <button
                   type="button"
-                  className={`diff-dock-chat-btn${chatDockOpen ? ' active' : ''}${chatPatientMode ? ' diff-dock-chat-btn--patient' : ''}`}
+                  className={`diff-icon-btn diff-dock-chat-btn${chatDockOpen ? ' active' : ''}${chatPatientMode ? ' diff-dock-chat-btn--patient' : ''}`}
                   onClick={toggleChatDock}
                   aria-label="Case chat"
                   aria-pressed={chatDockOpen}
                   title={chatDockOpen ? 'Hide case chat' : chatPatientMode ? 'Case chat — patient mode' : 'Case chat — tutor (LLM)'}
                 >
-                  <IconMessage className="toolbar-icon" aria-hidden />
+                  <IconMessage aria-hidden />
                   {(caseChat?.messages?.filter((m) => m.role === 'user' || m.role === 'assistant').length || 0) > 0 && (
                     <span className="diff-dock-chat-badge" aria-hidden>
                       {caseChat.messages.filter((m) => m.role === 'user' || m.role === 'assistant').length}
@@ -1449,66 +1459,110 @@ export default function DifferentialPractice({ onBack }) {
                   )}
                 </button>
               </div>
-              <div className="diff-mobile-utility-right">
-                <ClinicalFontControls
-                  prefs={textPrefs}
-                  onChange={setTextPrefs}
-                  compact
-                  showLabel={false}
-                />
-                <AudioVolumeControl label="ICU monitor" />
-              </div>
-            </div>
 
-            <div className="diff-nav">
-          <button
-            type="button"
-            className="diff-nav-btn"
-            onClick={goPrev}
-            title="Previous case (or random if none)"
-            aria-label="Previous case"
-          >
-            <span className="diff-nav-label diff-nav-label--long">‹ Prev</span>
-            <span className="diff-nav-label diff-nav-label--short" aria-hidden>
-              ‹
-            </span>
-          </button>
-          <button
-            type="button"
-            className="diff-nav-btn"
-            onClick={refreshCase}
-            title="Refresh case"
-            aria-label="Refresh case"
-          >
-            <span className="diff-nav-label diff-nav-label--long">↻ Refresh</span>
-            <span className="diff-nav-label diff-nav-label--short" aria-hidden>
-              ↻
-            </span>
-          </button>
-          <button
-            type="button"
-            className="diff-nav-btn diff-nav-btn--shuffle"
-            onClick={shuffleCase}
-            disabled={bank.length < 2}
-            title="Random case"
-            aria-label="Shuffle — random case"
-          >
-            <IconShuffle className="toolbar-icon" aria-hidden />
-            <span className="diff-nav-label diff-nav-label--long">Shuffle</span>
-          </button>
-          <button
-            type="button"
-            className="diff-nav-btn diff-nav-btn--primary"
-            onClick={goNext}
-            title="Random next case"
-            aria-label="Next random case"
-          >
-            <span className="diff-nav-label diff-nav-label--long">Next ›</span>
-            <span className="diff-nav-label diff-nav-label--short" aria-hidden>
-              ›
-            </span>
-          </button>
-          </div>
+              {/* Centre group: font A− / A+ / B + mute */}
+              <div className="diff-icon-group">
+                <button
+                  type="button"
+                  className="diff-icon-btn"
+                  onClick={() => {
+                    const next = { ...textPrefs, fontScale: Math.max(0.9, Number((textPrefs.fontScale - 0.08).toFixed(2))) };
+                    writeClinicalTextPrefs(next);
+                    setTextPrefs(next);
+                  }}
+                  aria-label="Smaller text"
+                  title={`Smaller text (now ${Math.round(textPrefs.fontScale * 100)}%)`}
+                >
+                  <span className="diff-icon-text" aria-hidden>A−</span>
+                </button>
+                <button
+                  type="button"
+                  className="diff-icon-btn"
+                  onClick={() => {
+                    const next = { ...textPrefs, fontScale: Math.min(1.5, Number((textPrefs.fontScale + 0.08).toFixed(2))) };
+                    writeClinicalTextPrefs(next);
+                    setTextPrefs(next);
+                  }}
+                  aria-label="Larger text"
+                  title={`Larger text (now ${Math.round(textPrefs.fontScale * 100)}%)`}
+                >
+                  <span className="diff-icon-text" aria-hidden>A+</span>
+                </button>
+                <button
+                  type="button"
+                  className={`diff-icon-btn${textPrefs.weight === 700 ? ' active' : ''}`}
+                  onClick={() => {
+                    const next = { ...textPrefs, weight: textPrefs.weight === 700 ? 600 : 700 };
+                    writeClinicalTextPrefs(next);
+                    setTextPrefs(next);
+                  }}
+                  aria-label="Toggle bold text"
+                  title="Bold clinical text"
+                >
+                  <span className="diff-icon-text diff-icon-text--bold" aria-hidden>B</span>
+                </button>
+                <button
+                  type="button"
+                  className={`diff-icon-btn${audioPrefs.monitorMuted ? ' diff-icon-btn--muted' : ''}`}
+                  onClick={() => {
+                    const next = audioPrefs.monitorMuted
+                      ? { monitorMuted: false, monitorVolume: audioPrefs.monitorVolume > 0 ? audioPrefs.monitorVolume : 0.38 }
+                      : { monitorMuted: true };
+                    const updated = patchAudioPrefs(next);
+                    setAudioPrefs(updated);
+                    applyMonitorVolume();
+                    unlockAmbience();
+                  }}
+                  aria-label={audioPrefs.monitorMuted ? 'Unmute monitor' : 'Mute monitor'}
+                  aria-pressed={audioPrefs.monitorMuted}
+                  title={audioPrefs.monitorMuted ? 'Unmute ICU monitor' : 'Mute ICU monitor'}
+                >
+                  <IconVolume2 aria-hidden />
+                </button>
+              </div>
+
+              {/* Right group: prev / refresh / shuffle / next */}
+              <div className="diff-icon-group diff-icon-group--nav">
+                <button
+                  type="button"
+                  className="diff-icon-btn"
+                  onClick={goPrev}
+                  title="Previous case"
+                  aria-label="Previous case"
+                >
+                  <span className="diff-icon-text" aria-hidden>‹</span>
+                </button>
+                <button
+                  type="button"
+                  className="diff-icon-btn"
+                  onClick={refreshCase}
+                  title="Refresh case"
+                  aria-label="Refresh case"
+                >
+                  <IconRotate aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  className="diff-icon-btn"
+                  onClick={shuffleCase}
+                  disabled={bank.length < 2}
+                  title="Random case"
+                  aria-label="Shuffle — random case"
+                >
+                  <IconShuffle aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  className="diff-icon-btn diff-icon-btn--primary"
+                  onClick={goNext}
+                  title="Next case"
+                  aria-label="Next case"
+                >
+                  <span className="diff-icon-text" aria-hidden>›</span>
+                </button>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
