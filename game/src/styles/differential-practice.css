@@ -4682,3 +4682,175 @@
     padding: 4px 8px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE ACCORDION FEED — replaces the tab panel on ≤768px
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Base accordion styles (always present so desktop doesn't break) */
+.diff-mobile-feed {
+  display: none; /* hidden on desktop — shown via media query below */
+}
+
+.diff-accordion-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  width: 100%;
+}
+
+.diff-accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--muted, #888);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: color 0.15s;
+}
+
+.diff-accordion-section--open .diff-accordion-header {
+  color: var(--gold, #e8b84b);
+}
+
+.diff-accordion-header:active {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.diff-accordion-label {
+  flex: 1 1 auto;
+}
+
+.diff-accordion-badge {
+  flex-shrink: 0;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  background: rgba(232, 184, 75, 0.18);
+  color: var(--gold, #e8b84b);
+  border: 1px solid rgba(232, 184, 75, 0.3);
+}
+
+.diff-accordion-chevron {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: var(--muted, #666);
+  transition: color 0.15s;
+}
+
+.diff-accordion-section--open .diff-accordion-chevron {
+  color: var(--gold, #e8b84b);
+}
+
+.diff-accordion-body {
+  padding: 0 12px 16px;
+  /* Let content scroll naturally — no max-height constraint */
+}
+
+/* Real World panel inside accordion — remove fixed-height constraints */
+.diff-accordion-body .diff-rw-panel--fit {
+  max-height: none;
+  height: auto;
+  overflow: visible;
+}
+
+.diff-accordion-body .diff-rw-stage-wrap {
+  max-height: none;
+  height: auto;
+  overflow: visible;
+  border: none;
+  background: transparent;
+}
+
+.diff-accordion-body .diff-study-case-panel,
+.diff-accordion-body .differential-review-panel,
+.diff-accordion-body .diff-case-presentation,
+.diff-accordion-body .diff-mnemonic-panel {
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+.diff-accordion-body .differential-review-text,
+.diff-accordion-body .differential-review-body,
+.diff-accordion-body .diff-orders-flow,
+.diff-accordion-body .diff-mnemonic-input,
+.diff-accordion-body .clinical-text-block,
+.diff-accordion-body .soap-body {
+  max-height: none;
+  overflow: visible;
+}
+
+/* ─── Mobile scroll layout ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* The whole practice screen becomes a natural scroll container */
+  .diff-practice {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    /* Bottom padding so content isn't hidden behind the fixed dock */
+    padding-bottom: calc(var(--diff-mobile-foot-h, 58px) + env(safe-area-inset-bottom, 0px) + 8px);
+  }
+
+  /* diff-card no longer needs to be a fixed-height flex container */
+  .diff-card {
+    flex: 0 0 auto;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    padding: 8px max(10px, env(safe-area-inset-left)) 6px max(10px, env(safe-area-inset-right));
+    gap: 6px;
+    align-items: stretch;
+  }
+
+  /* diff-practice-compact: no longer needs bottom padding (handled by diff-practice) */
+  .diff-practice-compact {
+    padding-bottom: 0;
+  }
+
+  /* Show the mobile accordion feed, hide the desktop study panel */
+  .diff-mobile-feed {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  /* Hide the desktop tab panel on mobile */
+  .diff-study-panel {
+    display: none !important;
+  }
+
+  /* The compare grid can be auto height on mobile now */
+  .diff-compare {
+    flex: 0 0 auto;
+    min-height: 0;
+  }
+
+  .diff-compare-scroll {
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+}
