@@ -119,20 +119,29 @@ function RealWorldVideoLightbox({
   );
 
   useEffect(() => {
-    if (!open || !video?.youtubeId) return undefined;
+    if (!open) return undefined;
     const onKey = (e) => {
       if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowLeft') step(-1);
       if (e.key === 'ArrowRight') step(1);
     };
     document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open, onClose, step]);
+
+  useEffect(() => {
+    if (!open) {
+      document.body.style.removeProperty('overflow');
+      return undefined;
+    }
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
-      document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
     };
-  }, [open, video?.youtubeId, onClose, step]);
+  }, [open]);
 
   if (!open || !video?.youtubeId) return null;
 
@@ -691,6 +700,8 @@ export default function DifferentialRealWorldPanel({
     setLightboxOpen(false);
     setLightboxIndex(0);
     setStoryIndex(0);
+    setRemoteStories([]);
+    setError('');
   }, [caseId]);
 
   useEffect(() => {
@@ -893,6 +904,7 @@ export default function DifferentialRealWorldPanel({
       )}
 
       <RealWorldVideoLightbox
+        key={caseId}
         open={lightboxOpen}
         playlist={casePlaylist}
         index={lightboxIndex}

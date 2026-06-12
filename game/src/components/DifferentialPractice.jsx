@@ -765,6 +765,7 @@ export default function DifferentialPractice({ onBack }) {
       if (!revealed) flushAttempt(false);
       voice.stopRecording();
       voice.resetVoiceState();
+      document.body.style.removeProperty('overflow');
       const normalized = ((nextIdx % bank.length) + bank.length) % bank.length;
       const current = cardIdxRef.current;
       if (recordHistory && current !== normalized) {
@@ -785,6 +786,7 @@ export default function DifferentialPractice({ onBack }) {
   useEffect(() => {
     setCaseJumpInput(String(entry.caseId));
     setCaseJumpError('');
+    document.body.style.removeProperty('overflow');
   }, [entry.caseId]);
 
   const goNext = useCallback(() => {
