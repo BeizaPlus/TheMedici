@@ -4854,3 +4854,171 @@
     overflow-y: auto;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UNIFIED INPUT CARD + CASE TITLE SUBTITLE — mobile only
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Desktop: hide the mobile subtitle, show the desktop prefix */
+.diff-case-id--mobile {
+  display: none;
+}
+
+.diff-case-id--desktop {
+  display: inline; /* inherits existing diff-case-id inline style */
+}
+
+/* Desktop: input card is transparent — no visual card chrome */
+.diff-input-card {
+  display: contents;
+}
+
+.diff-input-card-toggle {
+  display: none;
+}
+
+.diff-voice-block--hidden {
+  display: none;
+}
+
+.diff-input-row--hidden {
+  display: none;
+}
+
+/* ─── Mobile overrides ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Case title: headline first, case number as subtitle */
+  .diff-case-id--desktop {
+    display: none !important;
+  }
+
+  .diff-case-id--mobile {
+    display: block;
+    margin: 4px 0 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted, #888);
+    font-weight: 400;
+  }
+
+  /* Make the headline stand alone (no inline prefix) */
+  .diff-cycle-center {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    text-align: left;
+  }
+
+  .diff-topic-label {
+    display: none;
+  }
+
+  .diff-topic {
+    display: block;
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  /* Unified input card chrome */
+  .diff-input-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    overflow: hidden;
+    gap: 0;
+  }
+
+  /* Mode toggle bar at the top of the card */
+  .diff-input-card-toggle {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .diff-input-mode-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--muted, #666);
+    transition: color 0.15s, background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .diff-input-mode-btn .toolbar-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .diff-input-mode-btn--active {
+    color: var(--gold, #e8b84b);
+    background: rgba(232, 184, 75, 0.08);
+  }
+
+  .diff-input-mode-btn:not(.diff-input-mode-btn--active):active {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Voice block inside card — remove outer margins */
+  .diff-voice-block--card {
+    margin: 0;
+    padding: 12px 12px 10px;
+  }
+
+  .diff-voice-block--card .diff-voice-controls {
+    justify-content: center;
+  }
+
+  /* Text input row inside card — flush, no outer border */
+  .diff-input-row--card {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+  }
+
+  .diff-input-row--card .diff-input {
+    flex: 1 1 auto;
+    width: auto;
+    min-height: 48px;
+    font-size: 16px;
+    padding: 12px 14px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    outline: none;
+    color: var(--text, #e0e0e0);
+  }
+
+  .diff-input-row--card .diff-add-btn {
+    width: auto;
+    flex: 0 0 auto;
+    min-height: 48px;
+    padding: 10px 18px;
+    border-radius: 0;
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(62, 207, 142, 0.08);
+    color: var(--green, #3ecf8e);
+    font-weight: 600;
+    font-size: 0.88rem;
+  }
+
+  .diff-input-row--card .diff-add-btn:disabled {
+    opacity: 0.35;
+  }
+}

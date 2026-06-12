@@ -5,6 +5,7 @@ import CaseRecordButton from './CaseRecordButton.jsx';
 import MicWaveform from './MicWaveform.jsx';
 import {
   IconMessage,
+  IconMicrophone,
   IconPlayerPause,
   IconPlayerPlay,
   IconRotate,
@@ -171,6 +172,8 @@ export default function DifferentialPractice({ onBack }) {
   const [settingsTick, setSettingsTick] = useState(0);
   const [caseJumpInput, setCaseJumpInput] = useState('');
   const [caseJumpError, setCaseJumpError] = useState('');
+  // Mobile unified input card: 'voice' | 'text'
+  const [mobileInputMode, setMobileInputMode] = useState('voice');
   const inputRef = useRef(null);
   const voiceFocusRef = useRef(null);
   const loggedRoundRef = useRef(false);
@@ -1152,11 +1155,14 @@ export default function DifferentialPractice({ onBack }) {
         <div className="diff-practice-compact">
         <div className="diff-cycle-bar" aria-label="Current case">
           <div className="diff-cycle-center">
-            <p className="diff-case-id">CCS Case {entry.caseId}</p>
+            {/* Desktop: case id prefix inline, then headline */}
+            <p className="diff-case-id diff-case-id--desktop">CCS Case {entry.caseId}</p>
             <h2 className="diff-topic-label">Chief Complaint</h2>
             <h1 className="diff-topic">
               <span className="diff-topic-line">{caseHeadline}</span>
             </h1>
+            {/* Mobile: case number as subtitle beneath headline */}
+            <p className="diff-case-id diff-case-id--mobile">CCS Case {entry.caseId}</p>
           </div>
         </div>
 
@@ -1172,88 +1178,118 @@ export default function DifferentialPractice({ onBack }) {
           </p>
         )}
 
-        {(!revealed || stacker.enabled) && (
-          <div className="diff-voice-block">
-            <div className="diff-voice-controls">
-              <CaseRecordButton
-                recording={voice.recording}
-                busy={voice.busy}
-                transcribing={voice.transcribing || voice.finalizing || voice.incrementalParsing}
-                disabled={voice.disabled}
-                toggleRecording={voice.toggleRecording}
-                compact
-              />
-              {stacker.enabled && stackerPhase !== 'processing' && (
-                <button
-                  type="button"
-                  className={`diff-stacker-pause-btn diff-stacker-pause-btn--voice${stackerPaused ? ' diff-stacker-pause-btn--on' : ''}`}
-                  onClick={toggleStackerPause}
-                  title={stackerPaused ? 'Resume stacker timer' : 'Pause timer for more review time'}
-                  aria-label={stackerPaused ? 'Resume timer' : 'Pause timer'}
-                >
-                  {stackerPaused ? <IconPlayerPlay /> : <IconPlayerPause />}
-                  <span className="diff-nav-label diff-nav-label--long">
-                    {stackerPaused ? 'Resume' : 'Pause'}
-                  </span>
-                </button>
-              )}
-            </div>
-            {voice.recording && voice.mediaStream && (
-              <MicWaveform
-                stream={voice.mediaStream}
-                active={voice.recording}
-                className="diff-mic-waveform"
-              />
-            )}
-            {voice.incrementalParsing && stacker.enabled && stackerPhase === 'practice' && (
-              <p className="diff-voice-live diff-voice-finalizing" aria-live="polite">
-                DeepSeek cleaning {STACKER_INCREMENTAL_SECONDS}s chunk…
-              </p>
-            )}
-            {voice.finalizing && stackerPhase !== 'practice' && (
-              <p className="diff-voice-live diff-voice-finalizing" aria-live="polite">
-                Smart reviewer cleaning your list…
-              </p>
-            )}
-            {stacker.enabled && voiceBelongsToCase && voice.cleanedPreview && (
-              <p className="diff-voice-live diff-voice-cleaned" aria-live="polite">
-                Corrected: {voice.cleanedPreview}
-              </p>
-            )}
-            {!voice.finalizing && voiceBelongsToCase && voice.livePreview && (
-              <p
-                className={`diff-voice-live${
-                  voice.livePreview === 'Recording…' || voice.livePreview === 'Transcribing…'
-                    ? ' diff-voice-live--status'
-                    : ''
-                }`}
-                aria-live="polite"
+        {/* ── Unified mobile input card ── */}
+        <div className="diff-input-card">
+          {/* Mode toggle: mic / keyboard */}
+          {!revealed && (
+            <div className="diff-input-card-toggle">
+              <button
+                type="button"
+                className={`diff-input-mode-btn${mobileInputMode === 'voice' ? ' diff-input-mode-btn--active' : ''}`}
+                onClick={() => setMobileInputMode('voice')}
+                aria-label="Voice input mode"
               >
-                {voice.livePreview === 'Recording…' || voice.livePreview === 'Transcribing…'
-                  ? voice.livePreview
-                  : `Hearing: ${voice.livePreview}`}
-              </p>
-            )}
-            {voiceError && <p className="diff-voice-error">{voiceError}</p>}
-          </div>
-        )}
+                <IconMicrophone className="toolbar-icon" aria-hidden />
+              </button>
+              <button
+                type="button"
+                className={`diff-input-mode-btn${mobileInputMode === 'text' ? ' diff-input-mode-btn--active' : ''}`}
+                onClick={() => {
+                  setMobileInputMode('text');
+                  window.setTimeout(() => inputRef.current?.focus(), 50);
+                }}
+                aria-label="Text input mode"
+              >
+                <svg className="toolbar-icon" aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+              </button>
+            </div>
+          )}
 
-        {!revealed && (
-          <div className="diff-input-row">
-            <input
-              ref={inputRef}
-              className="diff-input"
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKey}
-              placeholder="Type differentials — separate with commas (click here to type)"
-            />
-            <button className="diff-add-btn" type="button" onClick={addGuess} disabled={!input.trim()}>
-              Add
-            </button>
-          </div>
-        )}
+          {/* Voice mode content */}
+          {(!revealed || stacker.enabled) && (
+            <div className={`diff-voice-block diff-voice-block--card${mobileInputMode === 'voice' || revealed ? '' : ' diff-voice-block--hidden'}`}>
+              <div className="diff-voice-controls">
+                <CaseRecordButton
+                  recording={voice.recording}
+                  busy={voice.busy}
+                  transcribing={voice.transcribing || voice.finalizing || voice.incrementalParsing}
+                  disabled={voice.disabled}
+                  toggleRecording={voice.toggleRecording}
+                  compact
+                />
+                {stacker.enabled && stackerPhase !== 'processing' && (
+                  <button
+                    type="button"
+                    className={`diff-stacker-pause-btn diff-stacker-pause-btn--voice${stackerPaused ? ' diff-stacker-pause-btn--on' : ''}`}
+                    onClick={toggleStackerPause}
+                    title={stackerPaused ? 'Resume stacker timer' : 'Pause timer for more review time'}
+                    aria-label={stackerPaused ? 'Resume timer' : 'Pause timer'}
+                  >
+                    {stackerPaused ? <IconPlayerPlay /> : <IconPlayerPause />}
+                    <span className="diff-nav-label diff-nav-label--long">
+                      {stackerPaused ? 'Resume' : 'Pause'}
+                    </span>
+                  </button>
+                )}
+              </div>
+              {voice.recording && voice.mediaStream && (
+                <MicWaveform
+                  stream={voice.mediaStream}
+                  active={voice.recording}
+                  className="diff-mic-waveform"
+                />
+              )}
+              {voice.incrementalParsing && stacker.enabled && stackerPhase === 'practice' && (
+                <p className="diff-voice-live diff-voice-finalizing" aria-live="polite">
+                  DeepSeek cleaning {STACKER_INCREMENTAL_SECONDS}s chunk…
+                </p>
+              )}
+              {voice.finalizing && stackerPhase !== 'practice' && (
+                <p className="diff-voice-live diff-voice-finalizing" aria-live="polite">
+                  Smart reviewer cleaning your list…
+                </p>
+              )}
+              {stacker.enabled && voiceBelongsToCase && voice.cleanedPreview && (
+                <p className="diff-voice-live diff-voice-cleaned" aria-live="polite">
+                  Corrected: {voice.cleanedPreview}
+                </p>
+              )}
+              {!voice.finalizing && voiceBelongsToCase && voice.livePreview && (
+                <p
+                  className={`diff-voice-live${
+                    voice.livePreview === 'Recording…' || voice.livePreview === 'Transcribing…'
+                      ? ' diff-voice-live--status'
+                      : ''
+                  }`}
+                  aria-live="polite"
+                >
+                  {voice.livePreview === 'Recording…' || voice.livePreview === 'Transcribing…'
+                    ? voice.livePreview
+                    : `Hearing: ${voice.livePreview}`}
+                </p>
+              )}
+              {voiceError && <p className="diff-voice-error">{voiceError}</p>}
+            </div>
+          )}
+
+          {/* Text mode content */}
+          {!revealed && (
+            <div className={`diff-input-row diff-input-row--card${mobileInputMode === 'text' ? '' : ' diff-input-row--hidden'}`}>
+              <input
+                ref={inputRef}
+                className="diff-input"
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKey}
+                placeholder="Type differentials — separate with commas"
+              />
+              <button className="diff-add-btn" type="button" onClick={addGuess} disabled={!input.trim()}>
+                Add
+              </button>
+            </div>
+          )}
+        </div>
 
         {(revealed || voiceBelongsToCase || tagGuesses.length > 0) && (
           <div className="diff-compare" aria-label="Compare your differential to the answer key">
