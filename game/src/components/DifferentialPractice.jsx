@@ -174,6 +174,8 @@ export default function DifferentialPractice({ onBack }) {
   const [caseJumpError, setCaseJumpError] = useState('');
   // Mobile unified input card: 'voice' | 'text'
   const [mobileInputMode, setMobileInputMode] = useState('voice');
+  // Mobile study bottom sheet
+  const [mobileStudyOpen, setMobileStudyOpen] = useState(false);
   const inputRef = useRef(null);
   const voiceFocusRef = useRef(null);
   const loggedRoundRef = useRef(false);
@@ -1161,8 +1163,16 @@ export default function DifferentialPractice({ onBack }) {
             <h1 className="diff-topic">
               <span className="diff-topic-line">{caseHeadline}</span>
             </h1>
-            {/* Mobile: case number as subtitle beneath headline */}
-            <p className="diff-case-id diff-case-id--mobile">CCS Case {entry.caseId}</p>
+            {/* Mobile: case number as subtitle — tapping opens the study sheet */}
+            <button
+              type="button"
+              className="diff-case-id diff-case-id--mobile diff-case-id--trigger"
+              onClick={() => setMobileStudyOpen(true)}
+              aria-label="Open study panel"
+            >
+              CCS Case {entry.caseId}
+              <span className="diff-case-id-chevron" aria-hidden>›</span>
+            </button>
           </div>
         </div>
 
@@ -1402,35 +1412,60 @@ export default function DifferentialPractice({ onBack }) {
 
         </div>
 
-        <DifferentialStudyPanel
-          caseId={entry.caseId}
-          clinicalStyle={clinicalStyle}
-          caseStats={caseStats}
-          caseRef={caseRef}
-          hasReviewText={hasReviewText}
-          ccsReview={ccsReview}
-          presentationIntro={presentationIntro}
-          presentationHistory={presentationHistory}
-          presentationVitals={presentationVitals}
-          fallbackHistory={fallbackHistory}
-          hasCaseData={Boolean(caseData)}
-          diagnosis={entry.diagnosis || ccsReview?.diagnosis || ''}
-          topic={entry.topic || ''}
-          recordingsVersion={recordingsVersion}
-          timelineFocusVersion={timelineFocusVersion}
-          studyTabRequest={studyTabRequest}
-          reviewQueueTick={reviewQueueTick + statsTick}
-          notesVersion={notesVersion}
-          onCaseNotesChanged={() => setNotesVersion((v) => v + 1)}
-          onJumpToCase={goToCaseId}
-          onPauseForStudy={pauseForStudy}
-          onResumeFromStudy={resumeFromStudy}
-          onStudyTabOpen={(tabId) => {
-            if (tabId === 'realworld') {
-              /* prefetch handled in panel; timer pause only on first expand */
-            }
-          }}
-        />
+        {/* Mobile study bottom sheet — wraps the study panel */}
+        {mobileStudyOpen && (
+          <div
+            className="diff-study-sheet-overlay"
+            onClick={(e) => { if (e.target === e.currentTarget) setMobileStudyOpen(false); }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Study panel"
+          >
+            <div className="diff-study-sheet">
+              <div className="diff-study-sheet-handle" />
+              <div className="diff-study-sheet-header">
+                <span className="diff-study-sheet-title">CCS Case {entry.caseId}</span>
+                <button
+                  type="button"
+                  className="diff-study-sheet-close"
+                  onClick={() => setMobileStudyOpen(false)}
+                  aria-label="Close study panel"
+                >✕</button>
+              </div>
+              <div className="diff-study-sheet-body">
+                <DifferentialStudyPanel
+                  caseId={entry.caseId}
+                  clinicalStyle={clinicalStyle}
+                  caseStats={caseStats}
+                  caseRef={caseRef}
+                  hasReviewText={hasReviewText}
+                  ccsReview={ccsReview}
+                  presentationIntro={presentationIntro}
+                  presentationHistory={presentationHistory}
+                  presentationVitals={presentationVitals}
+                  fallbackHistory={fallbackHistory}
+                  hasCaseData={Boolean(caseData)}
+                  diagnosis={entry.diagnosis || ccsReview?.diagnosis || ''}
+                  topic={entry.topic || ''}
+                  recordingsVersion={recordingsVersion}
+                  timelineFocusVersion={timelineFocusVersion}
+                  studyTabRequest={studyTabRequest}
+                  reviewQueueTick={reviewQueueTick + statsTick}
+                  notesVersion={notesVersion}
+                  onCaseNotesChanged={() => setNotesVersion((v) => v + 1)}
+                  onJumpToCase={goToCaseId}
+                  onPauseForStudy={pauseForStudy}
+                  onResumeFromStudy={resumeFromStudy}
+                  onStudyTabOpen={(tabId) => {
+                    if (tabId === 'realworld') {
+                      /* prefetch handled in panel; timer pause only on first expand */
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         <DifferentialFloatingChat
           open={chatDockOpen}

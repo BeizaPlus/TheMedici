@@ -5022,3 +5022,169 @@
     opacity: 0.35;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE STUDY BOTTOM SHEET — triggered by tapping the case number subtitle
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Desktop: bottom sheet is never shown */
+.diff-study-sheet-overlay {
+  display: none;
+}
+
+/* Case subtitle trigger button — base (desktop: plain text, no button chrome) */
+.diff-case-id--trigger {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: default;
+  font: inherit;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.diff-case-id-chevron {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Hide the accordion feed from the main scroll — it lives in the sheet now */
+  .diff-mobile-feed {
+    display: none !important;
+  }
+
+  /* Also ensure the desktop study panel stays hidden */
+  .diff-study-panel {
+    display: none !important;
+  }
+
+  /* Case subtitle trigger — looks tappable on mobile */
+  .diff-case-id--trigger {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 6px 2px 0;
+    border-radius: 6px;
+    transition: color 0.15s;
+  }
+
+  .diff-case-id--trigger:active {
+    color: var(--gold, #e8b84b);
+  }
+
+  .diff-case-id-chevron {
+    display: inline;
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin-left: 2px;
+  }
+
+  /* ── Overlay backdrop ── */
+  .diff-study-sheet-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    background: rgba(0, 0, 0, 0.55);
+    /* Animate in */
+    animation: diffSheetFadeIn 0.18s ease forwards;
+  }
+
+  @keyframes diffSheetFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── Sheet panel ── */
+  .diff-study-sheet {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 88dvh;
+    background: var(--bg-card, #1a1a1a);
+    border-radius: 18px 18px 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: diffSheetSlideUp 0.22s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  }
+
+  @keyframes diffSheetSlideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  /* Drag handle pill */
+  .diff-study-sheet-handle {
+    flex-shrink: 0;
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.18);
+    margin: 10px auto 0;
+  }
+
+  /* Sheet header row */
+  .diff-study-sheet-header {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .diff-study-sheet-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted, #888);
+  }
+
+  .diff-study-sheet-close {
+    background: rgba(255, 255, 255, 0.07);
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--muted, #aaa);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .diff-study-sheet-close:active {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  /* Sheet body — scrollable */
+  .diff-study-sheet-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 0 0 env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Inside the sheet, the mobile accordion feed IS shown */
+  .diff-study-sheet-body .diff-mobile-feed {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  /* Inside the sheet, the desktop tab panel is still hidden */
+  .diff-study-sheet-body .diff-study-panel {
+    display: none !important;
+  }
+}
