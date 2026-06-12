@@ -110,7 +110,7 @@ Env (`MeWorld/.env`):
 
 **Two tiers per case (always aim for both):**
 1. **`direct`** — real patient matching CCS diagnosis (e.g. Alex Lewis / TSS)
-2. **`adjacent`** — broader real public story teaching around the topic (e.g. Michael Phelps mental health for drowning Case 113)
+2. **`adjacent`** — broader real public story teaching around the topic (e.g. water-safety advocacy for drowning Case 113). **Never default to Michael Phelps** on unrelated cases — DeepSeek anchor-biased on that example; use `realWorldStoryQuality.js` + `purge-phelps-real-world-cache.mjs`.
 
 Video plug-in: `youtubeSearchRepair.js` — **yt-search** by default (free). Optional Gemini when `REAL_WORLD_VIDEO_PROVIDER=auto|gemini`. Scoring is stricter for `direct`, looser for `adjacent`. Cache: `game/.real-world-cache/case_N.json` — use Refresh in UI or `refresh: true` after rule changes.
 

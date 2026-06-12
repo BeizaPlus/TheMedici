@@ -1,4 +1,5 @@
 import { searchWorkingYouTubeVideos } from './youtubeSearchRepair.js';
+import { sanitizeRealWorldStories } from './realWorldStoryQuality.js';
 
 const DEEPSEEK_API_KEY = () => process.env.DEEPSEEK_API_KEY || '';
 const DEEPSEEK_MODEL = process.env.DEEPSEEK_CHAT_MODEL || 'deepseek-chat';
@@ -19,9 +20,12 @@ Clinical context: ${(hpiSnippet || '').slice(0, 600)}
 Requirements:
 - Return EXACTLY 2 distinct real stories (not fictional).
 - Story 1 — tier "direct": a documented patient whose condition matches this CCS diagnosis/presentation (news, hospital feature, medical documentary).
-- Story 2 — tier "adjacent": a broader REAL public story that teaches AROUND the topic (e.g. Michael Phelps on post-Olympic depression for a drowning case; organ-donor story for sepsis). Public figures OK when the teaching link is explicit in the headline.
+- Story 2 — tier "adjacent": a broader REAL public story that teaches AROUND this specific topic (e.g. organ-donor advocacy for sepsis; water-safety campaign for drowning). Pick a figure or patient story that genuinely connects to THIS chief complaint — not a generic mental-health celebrity.
+- NEVER use Michael Phelps unless the case is drowning, near-drowning, submersion injury, or water-rescue (CCS ~113). Do not stretch unrelated cases to post-Olympic depression.
+- Do NOT reuse the same public figure across different medical topics. Adjacent must name a teaching link in the headline that fits THIS case.
 - Each story: what happened, key medical teaching point, organism/etiology if known.
 - Prefer famous direct teaching cases when they exist (e.g. Alex Lewis for strep TSS, Lauren Wasser for tampon-related TSS).
+- Write "summary" as a video-style guide: paragraphs + inline M:SS timestamps at key beats + a Highlights section (5–8 lines: TIMESTAMP then short relatable label). Example line: "2:59 The hike that changed everything"
 - Do NOT include video URLs — text only.
 - Only use cases you are confident are real public stories.
 
@@ -33,14 +37,14 @@ Return JSON only:
       "tier": "direct",
       "name": "Full name",
       "headline": "One line",
-      "summary": "2-5 sentences"
+      "summary": "Video guide with inline timestamps + Highlights section"
     },
     {
       "id": "adjacent-slug",
       "tier": "adjacent",
       "name": "Full name",
       "headline": "One line — teaching angle around the topic",
-      "summary": "2-5 sentences"
+      "summary": "Video guide with inline timestamps + Highlights section"
     }
   ]
 }`;
@@ -105,7 +109,7 @@ export async function fetchRealWorldWithDeepSeek(ctx) {
     },
     body: JSON.stringify({
       model: DEEPSEEK_MODEL,
-      max_tokens: 1200,
+      max_tokens: 2200,
       temperature: 0.35,
       messages: [
         {
@@ -124,8 +128,9 @@ export async function fetchRealWorldWithDeepSeek(ctx) {
   }
 
   const text = data?.choices?.[0]?.message?.content || '';
-  const stories = parseStoriesFromText(text);
-  const withVideos = await attachYouTubeVideos(stories, ctx);
+  const rawStories = parseStoriesFromText(text);
+  const { stories: cleaned } = sanitizeRealWorldStories(rawStories, ctx);
+  const withVideos = await attachYouTubeVideos(cleaned, ctx);
 
   return {
     stories: withVideos,

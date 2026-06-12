@@ -18,6 +18,7 @@ import {
 } from '../lib/caseAvatar.js';
 import { fetchYoutubeTranscript } from '../lib/fetchYoutubeTranscript.js';
 import { saveCaseYoutubeTranscript } from '../lib/caseYoutubeTranscripts.js';
+import RealWorldSummaryRichText from './RealWorldSummaryRichText.jsx';
 
 function AvatarIconButton({ selected, busy, onClick, title = 'Use as case avatar' }) {
   return (
@@ -118,7 +119,7 @@ function RealWorldVideoLightbox({
   );
 
   useEffect(() => {
-    if (!open) return undefined;
+    if (!open || !video?.youtubeId) return undefined;
     const onKey = (e) => {
       if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowLeft') step(-1);
@@ -131,7 +132,7 @@ function RealWorldVideoLightbox({
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
     };
-  }, [open, onClose, step]);
+  }, [open, video?.youtubeId, onClose, step]);
 
   if (!open || !video?.youtubeId) return null;
 
@@ -476,7 +477,20 @@ function StoryReadPanel({
       ) : mode === 'summary' ? (
         <div className="diff-rw-read-body">
           {story.headline && <p className="diff-rw-headline diff-rw-headline--body">{story.headline}</p>}
-          <p className="diff-rw-summary diff-rw-summary--full">{story.summary || story.headline || '—'}</p>
+          {youtubeId ? (
+            <>
+              <p className="diff-rw-summary-hint">
+                Timestamps link to the clip — click to jump.
+              </p>
+              <RealWorldSummaryRichText
+                summary={story.summary || story.headline || '—'}
+                activeSeconds={activeCueStart}
+                onSeek={handleSeekCue}
+              />
+            </>
+          ) : (
+            <p className="diff-rw-summary diff-rw-summary--full">{story.summary || story.headline || '—'}</p>
+          )}
         </div>
       ) : (
         <div className="diff-rw-read-body">
@@ -663,6 +677,12 @@ export default function DifferentialRealWorldPanel({
     },
     [applySearchResult, caseId, searchParams],
   );
+
+  useEffect(() => {
+    setLightboxOpen(false);
+    setLightboxIndex(0);
+    setStoryIndex(0);
+  }, [caseId]);
 
   useEffect(() => {
     if (!caseId) return undefined;

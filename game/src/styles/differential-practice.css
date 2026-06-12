@@ -42,6 +42,63 @@
   outline: none;
 }
 
+/* Scrollbars — same dark + gold chrome as the rest of differential UI */
+.diff-practice,
+.diff-floating-chat,
+.diff-rw-lightbox-panel {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232, 184, 75, 0.38) rgba(255, 255, 255, 0.06);
+}
+
+.diff-practice *,
+.diff-floating-chat *,
+.diff-rw-lightbox-panel * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232, 184, 75, 0.38) rgba(255, 255, 255, 0.06);
+}
+
+.diff-practice::-webkit-scrollbar,
+.diff-floating-chat::-webkit-scrollbar,
+.diff-rw-lightbox-panel::-webkit-scrollbar,
+.diff-practice *::-webkit-scrollbar,
+.diff-floating-chat *::-webkit-scrollbar,
+.diff-rw-lightbox-panel *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.diff-practice::-webkit-scrollbar-track,
+.diff-floating-chat::-webkit-scrollbar-track,
+.diff-rw-lightbox-panel::-webkit-scrollbar-track,
+.diff-practice *::-webkit-scrollbar-track,
+.diff-floating-chat *::-webkit-scrollbar-track,
+.diff-rw-lightbox-panel *::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+}
+
+.diff-practice::-webkit-scrollbar-thumb,
+.diff-floating-chat::-webkit-scrollbar-thumb,
+.diff-rw-lightbox-panel::-webkit-scrollbar-thumb,
+.diff-practice *::-webkit-scrollbar-thumb,
+.diff-floating-chat *::-webkit-scrollbar-thumb,
+.diff-rw-lightbox-panel *::-webkit-scrollbar-thumb {
+  background: rgba(232, 184, 75, 0.32);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.diff-practice::-webkit-scrollbar-thumb:hover,
+.diff-floating-chat::-webkit-scrollbar-thumb:hover,
+.diff-rw-lightbox-panel::-webkit-scrollbar-thumb:hover,
+.diff-practice *::-webkit-scrollbar-thumb:hover,
+.diff-floating-chat *::-webkit-scrollbar-thumb:hover,
+.diff-rw-lightbox-panel *::-webkit-scrollbar-thumb:hover {
+  background: rgba(232, 184, 75, 0.52);
+  background-clip: padding-box;
+}
+
 .diff-practice button,
 .diff-practice .diff-study-tab,
 .diff-practice .diff-rw-transcript-cue-btn,
@@ -179,6 +236,18 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.diff-stacker-cluster {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .diff-ambience-dock {
@@ -336,8 +405,19 @@
   color: #1a1408;
 }
 
-.diff-floating-chat {
-  z-index: 72;
+.case-chat-panel.diff-floating-chat {
+  z-index: 120;
+  isolation: isolate;
+  background: #12151c;
+}
+
+.diff-floating-chat .case-chat-head,
+.diff-floating-chat .case-chat-form {
+  background: #12151c;
+}
+
+.diff-floating-chat .chat-resize-handle {
+  z-index: 10;
 }
 
 .diff-floating-chat-body {
@@ -347,6 +427,17 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: #12151c;
+}
+
+.diff-floating-chat .case-chat-panel--embedded.case-chat-panel--fill-tab {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: #12151c;
+  border: none;
+  box-shadow: none;
 }
 
 .diff-floating-chat-body .case-session-thread--body-only {
@@ -354,7 +445,7 @@
   min-height: 0;
   border: none;
   border-radius: 0;
-  background: transparent;
+  background: #12151c;
   box-shadow: none;
 }
 
@@ -366,16 +457,22 @@
   overflow-y: auto;
   overscroll-behavior-y: contain;
   overscroll-behavior-x: none;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.diff-floating-chat-body .case-chat-messages::-webkit-scrollbar {
-  display: none;
+  background: #12151c;
 }
 
 .diff-floating-chat .case-chat-bubble.user {
   max-width: min(92%, 320px);
+  background: #3d3622;
+  border: 1px solid rgba(212, 175, 55, 0.58);
+}
+
+.diff-floating-chat .case-chat-bubble.user.case-thread-note {
+  background: #352f1e;
+}
+
+.diff-floating-chat .case-chat-bubble.assistant {
+  background: #2a2a2e;
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .diff-ambience-dock .clinical-font-controls-wrap {
@@ -530,7 +627,7 @@
   align-items: stretch;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
-  z-index: 80;
+  z-index: 1;
 }
 
 .diff-study-panel--collapsed .diff-study-tabs {
@@ -1212,6 +1309,123 @@
   font-size: 0.8rem;
   line-height: 1.45;
   color: #ccc;
+}
+
+.diff-rw-summary-hint {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  color: var(--muted, #888);
+  letter-spacing: 0.02em;
+}
+
+.diff-rw-summary-rich {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diff-rw-summary-heading {
+  margin: 10px 0 2px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold, #e8b84b);
+}
+
+.diff-rw-summary-para {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: #bbb;
+}
+
+.diff-rw-ts-link {
+  display: inline;
+  margin: 0 2px;
+  padding: 0 4px;
+  border: none;
+  border-radius: 4px;
+  background: rgba(232, 184, 75, 0.14);
+  color: var(--gold, #e8b84b);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  vertical-align: baseline;
+  transition: background 0.12s, color 0.12s;
+}
+
+.diff-rw-ts-link:hover {
+  background: rgba(232, 184, 75, 0.28);
+  color: #ffe08a;
+}
+
+.diff-rw-ts-link--active {
+  background: rgba(62, 207, 142, 0.22);
+  color: var(--green, #3ecf8e);
+}
+
+.diff-rw-highlights {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(232, 184, 75, 0.22);
+}
+
+.diff-rw-highlights-title {
+  margin: 0 0 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold, #e8b84b);
+}
+
+.diff-rw-highlights-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.diff-rw-highlight-btn {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid rgba(232, 184, 75, 0.18);
+  border-radius: 8px;
+  background: rgba(232, 184, 75, 0.06);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.diff-rw-highlight-btn:hover {
+  background: rgba(232, 184, 75, 0.14);
+  border-color: rgba(232, 184, 75, 0.35);
+}
+
+.diff-rw-highlight--active .diff-rw-highlight-btn {
+  background: rgba(62, 207, 142, 0.12);
+  border-color: rgba(62, 207, 142, 0.4);
+}
+
+.diff-rw-highlight--active .diff-rw-transcript-time {
+  color: var(--green, #3ecf8e);
+}
+
+.diff-rw-highlight-label {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #ddd;
+  font-weight: 600;
 }
 
 .diff-ccs-case-summary {
@@ -3310,7 +3524,7 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
   gap: 8px;
 }
 
@@ -3318,7 +3532,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 4px;
   padding: 6px;
   border-radius: 8px;
@@ -3331,6 +3545,45 @@
   height: 72px;
   object-fit: cover;
   border-radius: 6px;
+}
+
+.diff-picture-card-roles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.diff-picture-card-role-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted, #888);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.58rem;
+  line-height: 1.2;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+  width: 100%;
+}
+
+.diff-picture-card-role-btn--active {
+  border-color: var(--gold, #e8b84b);
+  color: var(--gold, #e8b84b);
+  background: rgba(232, 184, 75, 0.1);
+}
+
+.diff-picture-card-role-btn--active.diff-picture-card-role-btn--likeness {
+  border-color: #9ec5ff;
+  color: #9ec5ff;
+  background: rgba(120, 180, 255, 0.12);
+}
+
+.diff-picture-card-role-btn--active.diff-picture-card-role-btn--teach {
+  border-color: var(--gold, #e8b84b);
+  color: var(--gold, #e8b84b);
+  background: rgba(232, 184, 75, 0.1);
 }
 
 .diff-picture-badge {
@@ -3384,7 +3637,7 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  overflow-x: hidden;
+  overflow: visible;
   box-sizing: border-box;
 }
 
@@ -3393,7 +3646,9 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  overflow-x: hidden;
+  overflow: visible;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .case-chat-inline-pic {
@@ -3460,8 +3715,14 @@
     display: none;
   }
 
+  .diff-stacker-cluster {
+    flex: 1 1 100%;
+    order: 1;
+  }
+
   .diff-case-jump {
-    order: 2;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .diff-counter {

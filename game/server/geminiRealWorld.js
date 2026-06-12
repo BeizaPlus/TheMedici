@@ -3,6 +3,7 @@ import fsp from 'fs/promises';
 import path from 'path';
 import { filterWorkingVideos, youtubeIdFromUrl } from './youtubeUtils.js';
 import { isRelevantMedicalVideo, searchWorkingYouTubeVideos } from './youtubeSearchRepair.js';
+import { sanitizeRealWorldStories } from './realWorldStoryQuality.js';
 
 function geminiApiKey() {
   return process.env.GEMINI_API_KEY || '';
@@ -78,10 +79,21 @@ Clinical context: ${(hpiSnippet || '').slice(0, 600)}
 Requirements:
 - Return EXACTLY 2 distinct real stories (not fictional).
 - Story 1 — tier "direct": documented patient matching this CCS diagnosis/presentation.
-- Story 2 — tier "adjacent": broader REAL public story teaching AROUND the topic (public figure OK when link is explicit, e.g. Michael Phelps depression advocacy for drowning/rescue cases).
+- Story 2 — tier "adjacent": broader REAL public story teaching AROUND this specific topic (organ-donor for sepsis; water-safety for drowning). The teaching link must fit THIS chief complaint.
+- NEVER use Michael Phelps except drowning / near-drowning / submersion / water-rescue cases. Do not default to post-Olympic depression for unrelated presentations.
+- Do NOT reuse the same celebrity across different medical topics.
 - Each story: what happened, key medical teaching point, organism/etiology if known.
 - Prefer famous direct teaching cases when they exist (e.g. Alex Lewis for strep TSS/NF).
 - Include 1–2 YouTube watch URLs per story when available (interviews, documentaries).
+- For each story with a primary YouTube video, write "summary" as a rich video guide:
+  • Opening paragraph: patient story + teaching point.
+  • Section headings on their own line when useful (Treatment, Living with illness, Their message).
+  • Embed YouTube timestamps inline at key moments — format M:SS or H:MM:SS (from the linked video chapters/captions when possible).
+  • End with a Highlights block listing 5–8 relatable moments the student should jump to:
+    Highlights
+    0:29 First signs dismissed as allergies
+    2:59 The hike that changed everything
+    (one line per moment: TIMESTAMP then short label)
 - Only include YouTube URLs you found in Google Search — never invent or guess video IDs.
 - Direct-tier videos must match the patient/condition; adjacent-tier videos may teach the broader angle named in the headline.
 - Note common confusions (e.g. Strep vs Staph) when relevant.
@@ -94,7 +106,7 @@ Return JSON only:
       "tier": "direct",
       "name": "Full name",
       "headline": "One line",
-      "summary": "2-5 sentences",
+      "summary": "Multi-paragraph video guide with inline M:SS timestamps + Highlights section (see requirements)",
       "videos": [{ "title": "Video title", "url": "https://www.youtube.com/watch?v=..." }]
     },
     {
@@ -102,7 +114,7 @@ Return JSON only:
       "tier": "adjacent",
       "name": "Full name",
       "headline": "One line — teaching angle",
-      "summary": "2-5 sentences",
+      "summary": "Multi-paragraph video guide with inline M:SS timestamps + Highlights section (see requirements)",
       "videos": [{ "title": "Video title", "url": "https://www.youtube.com/watch?v=..." }]
     }
   ]
@@ -135,10 +147,11 @@ async function fetchRealWorldWithModel(ctx, model) {
   }
 
   const stories = parseStoriesFromGemini(data);
+  const { stories: cleaned } = sanitizeRealWorldStories(stories, ctx);
   const grounding = data?.candidates?.[0]?.groundingMetadata || null;
 
   return {
-    stories,
+    stories: cleaned,
     model,
     webSearchQueries: grounding?.webSearchQueries || [],
     groundingChunks: (grounding?.groundingChunks || []).slice(0, 8).map((c) => ({

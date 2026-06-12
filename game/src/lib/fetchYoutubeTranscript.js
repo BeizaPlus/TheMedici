@@ -1,9 +1,5 @@
 import { mergeTranscriptCues } from './youtubePlayer.js';
-
-const API =
-  typeof window !== 'undefined' && window.location?.hostname
-    ? ''
-    : 'http://127.0.0.1:3001';
+import { apiUrl } from './apiBase.js';
 
 const cache = new Map();
 
@@ -16,7 +12,7 @@ export async function fetchYoutubeTranscript(youtubeId, { merge = true } = {}) {
   const cacheKey = merge ? `${id}:merged` : id;
   if (cache.has(cacheKey)) return cache.get(cacheKey);
 
-  const promise = fetch(`${API}/api/youtube-transcript/${encodeURIComponent(id)}`)
+  const promise = fetch(apiUrl(`/api/youtube-transcript/${encodeURIComponent(id)}`))
     .then(async (r) => {
       const data = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(data.error || 'No transcript available');

@@ -7,6 +7,7 @@ import {
   FiUser,
   FiZap,
 } from 'react-icons/fi';
+import { apiUrl } from '../lib/apiBase.js';
 import { getCatalog, getCaseById } from '../data/useCcsCatalog.js';
 import { getBranding } from '../data/gameData.js';
 import {
@@ -307,7 +308,7 @@ export default function WelcomeScreen({
     let cancelled = false;
     (async () => {
       try {
-        const r = await fetch(`http://127.0.0.1:3001/api/magic/${encodeURIComponent(token)}`);
+        const r = await fetch(apiUrl(`/api/magic/${encodeURIComponent(token)}`));
         if (!r.ok) throw new Error('Magic link invalid or expired');
         const data = await r.json();
         const url = `data:${data.mimeType || 'image/png'};base64,${data.personalizedImageBase64}`;
@@ -469,7 +470,7 @@ export default function WelcomeScreen({
       });
       const imageBase64 = dataUrl.split(',')[1] || '';
       const mimeType = file.type || 'image/png';
-      const r = await fetch('http://127.0.0.1:3001/api/magic/create', {
+      const r = await fetch(apiUrl('/api/magic/create'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

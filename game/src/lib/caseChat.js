@@ -11,8 +11,7 @@ import { buildCaseDiscussionContext, discussionCacheKey } from './caseDiscussion
 import { enrichmentCacheKey } from './differentialChatEnrichment.js';
 import { resolveSimulationCreativity } from './simulationCreativity.js';
 import { STORAGE } from './storageKeys.js';
-
-const API = 'http://127.0.0.1:3001';
+import { apiUrl } from './apiBase.js';
 const sessions = new Map();
 /** Bump when portrait/demographics logic changes — clears stale localStorage personas. */
 const PORTRAIT_PERSONA_VERSION = 2;
@@ -151,7 +150,7 @@ export async function resolvePatientPersona(caseData) {
 
   try {
     const caseContext = buildCaseChatContext(caseData);
-    const r = await fetch(`${API}/api/case-persona`, {
+    const r = await fetch(apiUrl('/api/case-persona'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ caseContext }),
@@ -170,7 +169,7 @@ export async function resolvePatientPersona(caseData) {
 
 export async function checkCaseChatAvailable() {
   try {
-    const r = await fetch(`${API}/api/health`);
+    const r = await fetch(apiUrl('/api/health'));
     if (!r.ok) return false;
     const data = await r.json();
     return Boolean(data.openai || data.deepseek);
@@ -184,7 +183,7 @@ let _cachedModelLabel = null;
 export async function fetchChatModelLabel() {
   if (_cachedModelLabel) return _cachedModelLabel;
   try {
-    const r = await fetch(`${API}/api/health`);
+    const r = await fetch(apiUrl('/api/health'));
     if (!r.ok) return null;
     const data = await r.json();
     if (data.chatProvider === 'deepseek') {
@@ -241,7 +240,7 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
   }
 
   sessions.delete(caseId);
-  const r = await fetch(`${API}/api/case-chat/start`, {
+  const r = await fetch(apiUrl('/api/case-chat/start'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ caseContext }),
@@ -273,7 +272,7 @@ export function clearAllCaseChatSessions() {
 }
 
 export async function sendCaseChatMessage(sessionId, message, sessionContext = null) {
-  const r = await fetch(`${API}/api/case-chat/message`, {
+  const r = await fetch(apiUrl('/api/case-chat/message'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ sessionId, message, sessionContext }),

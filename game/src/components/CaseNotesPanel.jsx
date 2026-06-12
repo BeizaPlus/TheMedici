@@ -44,7 +44,7 @@ export default function CaseNotesPanel({
         });
       });
     }
-    rows.sort((a, b) => (b.slot || 0) - (a.slot || 0) || String(b.at).localeCompare(String(a.at)));
+    rows.sort((a, b) => String(a.at || '').localeCompare(String(b.at || '')) || (a.slot || 0) - (b.slot || 0));
     setRecordings(rows);
   }, [caseId]);
 

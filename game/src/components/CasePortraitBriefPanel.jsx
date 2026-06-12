@@ -6,8 +6,7 @@ import {
   writeCasePortraitBrief,
 } from '../lib/casePortraitBrief.js';
 import { regeneratePatientFromCase } from '../lib/patientRegen.js';
-
-const API = 'http://127.0.0.1:3001';
+import { apiUrl } from '../lib/apiBase.js';
 
 function clampZone(z) {
   const clamp01 = (v) => Math.max(0, Math.min(1, v));
@@ -35,7 +34,7 @@ async function detectZonesForDataUrl(dataUrl, sourceKey) {
   if (!dataUrl?.startsWith('data:')) return null;
   const base64 = dataUrl.split(',')[1] || '';
   const mimeType = dataUrl.slice(5, dataUrl.indexOf(';')) || 'image/png';
-  const r = await fetch(`${API}/api/detect-zones`, {
+  const r = await fetch(apiUrl('/api/detect-zones'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ imageBase64: base64, mimeType }),

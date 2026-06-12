@@ -27,6 +27,8 @@
     "dev": "node scripts/start-dev.mjs",
     "dev:studio": "node scripts/start-dev.mjs --studio",
     "build": "vite build",
+    "start": "node server/index.js",
+    "start:full": "SERVE_STATIC=1 node server/index.js",
     "preview": "vite preview",
     "eval": "python scripts/self_eval.py --no-fix",
     "package:progress": "node scripts/package-progress-backup.mjs",

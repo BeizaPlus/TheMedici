@@ -1,26 +1,7 @@
-import { readCaseNotes } from '../lib/caseNotes.js';
-import { listCaseYoutubeTranscripts } from '../lib/caseYoutubeTranscripts.js';
+import { parseCaseNoteBlocks } from './caseNotes.js';
+import { listCaseYoutubeTranscripts } from './caseYoutubeTranscripts.js';
 
-/** Split journal blob into display blocks (voice + manual notes). */
-export function parseCaseNoteBlocks(caseId) {
-  const raw = readCaseNotes(caseId).trim();
-  if (!raw) return [];
-  if (!raw.includes('\n---\n')) {
-    return [{ content: raw, header: 'Notes' }];
-  }
-  return raw
-    .split(/\n---\n/)
-    .map((chunk) => chunk.trim())
-    .filter(Boolean)
-    .map((chunk) => {
-      const headerMatch = chunk.match(/^\*\*(.+?)\*\*\s*\n?([\s\S]*)$/);
-      if (headerMatch) {
-        return { header: headerMatch[1], content: headerMatch[2].trim() };
-      }
-      return { header: 'Note', content: chunk };
-    })
-    .filter((b) => b.content);
-}
+export { parseCaseNoteBlocks } from './caseNotes.js';
 
 export function parseNoteBubbleContent(content) {
   const raw = String(content || '').trim();
@@ -32,7 +13,9 @@ export function parseNoteBubbleContent(content) {
 }
 
 export function mergeSessionThread(chatMessages = [], caseId) {
-  const rows = [];
+  const chatRows = [];
+  const noteRows = [];
+  const youtubeRows = [];
   const seen = new Set();
   const seenNoteText = new Set();
 
@@ -49,7 +32,7 @@ export function mergeSessionThread(chatMessages = [], caseId) {
     if (seen.has(key)) continue;
     seen.add(key);
     if (m.role === 'note') seenNoteText.add(notePlain(content));
-    rows.push({
+    chatRows.push({
       id: key,
       role: m.role === 'note' ? 'note' : m.role,
       content,
@@ -66,11 +49,12 @@ export function mergeSessionThread(chatMessages = [], caseId) {
     if (seen.has(key)) continue;
     seen.add(key);
     seenNoteText.add(plain);
-    rows.push({
+    noteRows.push({
       id: key,
       role: 'note',
       content: block.header ? `**${block.header}**\n${content}` : content,
       source: 'notes',
+      sortAt: block.sortAt ?? 0,
     });
   }
 
@@ -86,8 +70,11 @@ export function mergeSessionThread(chatMessages = [], caseId) {
     if (seen.has(key)) continue;
     seen.add(key);
     seenNoteText.add(plain);
-    rows.push({ id: key, role: 'note', content, source: 'youtube' });
+    youtubeRows.push({ id: key, role: 'note', content, source: 'youtube' });
   }
 
-  return rows;
+  noteRows.sort((a, b) => (a.sortAt ?? 0) - (b.sortAt ?? 0));
+
+  // Hearing / dictation journal blocks stay pinned at top; tutor + patient chat below.
+  return [...noteRows, ...youtubeRows, ...chatRows];
 }

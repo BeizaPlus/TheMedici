@@ -1,4 +1,4 @@
-import { appendCaseNotesBlock } from './caseNotes.js';
+import { appendCaseNotesBlock, reorderCaseNotesChronologically } from './caseNotes.js';
 import {
   readCaseTranscriptArchive,
   readDifferentialLog,
@@ -136,5 +136,6 @@ export function syncHistoricalHearingsToCaseNotes(caseId) {
     const ok = appendDifferentialHearingNote(caseId, row);
     if (ok) added += 1;
   }
+  reorderCaseNotesChronologically(caseId);
   return added;
 }

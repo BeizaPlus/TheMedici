@@ -1,8 +1,4 @@
-/** Browser uses same-origin /api (Vite proxy in dev). */
-const API =
-  typeof window !== 'undefined' && window.location?.hostname
-    ? ''
-    : 'http://127.0.0.1:3001';
+import { apiUrl } from './apiBase.js';
 
 /**
  * Send raw speech transcript to DeepSeek (or OpenAI fallback) for cleanup + diagnosis list.
@@ -17,7 +13,7 @@ export async function parseDifferentialTranscript({
   const timer = setTimeout(() => controller.abort(), 45_000);
   let r;
   try {
-    r = await fetch(`${API}/api/differential/parse-transcript`, {
+    r = await fetch(apiUrl('/api/differential/parse-transcript'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: controller.signal,

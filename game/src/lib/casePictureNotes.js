@@ -132,6 +132,29 @@ export async function addCasePictureNote(
   return entry;
 }
 
+/** Change role on an existing picture note (reference ↔ likeness ↔ teach-in). */
+export function updateCasePictureNoteRole(caseId, pictureId, role) {
+  const caseKey = String(caseId || '');
+  const pid = String(pictureId || '');
+  const nextRole = normalizeRole(role);
+  const root = readIndexRoot();
+  const bucket = root[caseKey];
+  if (!bucket?.pictures?.length) return false;
+
+  let changed = false;
+  const pictures = bucket.pictures.map((p) => {
+    if (p.id !== pid) return p;
+    if (p.role === nextRole) return p;
+    changed = true;
+    return { ...p, role: nextRole };
+  });
+  if (!changed) return false;
+
+  root[caseKey] = { ...bucket, pictures, updatedAt: new Date().toISOString() };
+  writeIndexRoot(root);
+  return true;
+}
+
 export async function removeCasePictureNote(caseId, pictureId) {
   const caseKey = String(caseId || '');
   const pid = String(pictureId || '');

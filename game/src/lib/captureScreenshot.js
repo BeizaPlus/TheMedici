@@ -1,6 +1,7 @@
 import { toPng } from 'html-to-image';
 
 import { STORAGE } from './storageKeys.js';
+import { apiUrl } from './apiBase.js';
 
 const ATTEMPT_KEY = STORAGE.captureAttempt;
 
@@ -46,7 +47,7 @@ export async function saveScreenshotToServer({
 }) {
   const dataUrl = await captureElementPng(element);
   const base64 = dataUrl.replace(/^data:image\/png;base64,/, '');
-  const resp = await fetch('/api/capture-screenshot', {
+  const resp = await fetch(apiUrl('/api/capture-screenshot'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

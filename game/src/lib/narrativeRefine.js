@@ -1,4 +1,5 @@
 import { STORAGE } from './storageKeys.js';
+import { apiUrl } from './apiBase.js';
 
 function caseKey(caseId) {
   return String(caseId || '').padStart(3, '0');
@@ -83,7 +84,7 @@ export async function refineNarrativeWithAI({
   clinicalTip = '',
   objective = '',
 }) {
-  const r = await fetch('http://127.0.0.1:3001/api/refine-narrative', {
+  const r = await fetch(apiUrl('/api/refine-narrative'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

@@ -43,6 +43,7 @@ import {
   realWorldProvider,
 } from './realWorldProvider.js';
 import { realWorldVideoProvider } from './youtubeSearchRepair.js';
+import { sanitizeRealWorldStories } from './realWorldStoryQuality.js';
 import { fetchYoutubeTranscript } from './youtubeTranscript.js';
 import {
   buildPortraitAnalysis,
@@ -70,13 +71,32 @@ import {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const GAME_ROOT = path.join(__dirname, '..');
 const REPO_ROOT = path.join(__dirname, '../..');
-const PORT = Number(process.env.SPORTMAKER_API_PORT || 3001);
+const PORT = Number(process.env.PORT || process.env.SPORTMAKER_API_PORT || 3001);
+
+function serverOrigin(req) {
+  if (process.env.PUBLIC_URL) return String(process.env.PUBLIC_URL).replace(/\/$/, '');
+  if (req) {
+    const proto = req.get('x-forwarded-proto') || req.protocol || 'https';
+    const host = req.get('x-forwarded-host') || req.get('host');
+    if (host) return `${proto}://${host}`;
+  }
+  return `http://127.0.0.1:${PORT}`;
+}
+
 dotenv.config({ path: path.join(GAME_ROOT, '.env') });
 // Parent MeWorld/.env wins for API keys (game/.env is for chatterbox-only overrides).
 dotenv.config({ path: path.join(REPO_ROOT, '.env'), override: true });
 
 const app = express();
-app.use(cors());
+const corsOrigins = (process.env.CORS_ORIGIN || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+if (corsOrigins.length) {
+  app.use(cors({ origin: corsOrigins, credentials: true }));
+} else {
+  app.use(cors());
+}
 app.use(express.json({ limit: '12mb' }));
 
 const SCENE_CACHE_DIR = path.join(GAME_ROOT, '.scene-cache');
@@ -886,43 +906,64 @@ app.post('/api/differential/real-world', async (req, res) => {
     });
   }
 
+  function qualityStories(stories) {
+    return sanitizeRealWorldStories(stories, ctx).stories;
+  }
+
   try {
     if (!refresh) {
       const cached = await readRealWorldCache(REAL_WORLD_CACHE_DIR, id);
       if (cached?.stories?.length) {
-        if (repairVideos) {
-          const fixed = await ensureStoriesHaveWorkingVideos(cached.stories, ctx);
-          if (fixed.repaired) {
-            await persistStories(fixed.stories, {
+        const cachedStories = qualityStories(cached.stories);
+        const cacheStale =
+          cachedStories.length !== cached.stories.length && cached.stories.length > 0;
+        if (cacheStale) {
+          if (cachedStories.length) {
+            await persistStories(cachedStories, {
               model: cached.model,
               webSearchQueries: cached.webSearchQueries,
               groundingChunks: cached.groundingChunks,
             });
+          } else {
+            // Bad cache (e.g. only Michael Phelps adjacent) — refetch below.
           }
+        }
+        if (cachedStories.length) {
+          if (repairVideos) {
+            const fixed = await ensureStoriesHaveWorkingVideos(cachedStories, ctx);
+            if (fixed.repaired) {
+              await persistStories(fixed.stories, {
+                model: cached.model,
+                webSearchQueries: cached.webSearchQueries,
+                groundingChunks: cached.groundingChunks,
+              });
+            }
+            return res.json({
+              ok: true,
+              stories: fixed.stories,
+              source: fixed.repaired ? 'cache-repaired' : 'cache',
+              cachedAt: cached.cachedAt,
+              webSearchQueries: cached.webSearchQueries || [],
+              videosRepaired: fixed.repaired,
+            });
+          }
+
           return res.json({
             ok: true,
-            stories: fixed.stories,
-            source: fixed.repaired ? 'cache-repaired' : 'cache',
+            stories: cachedStories,
+            source: cacheStale ? 'cache-sanitized' : 'cache',
             cachedAt: cached.cachedAt,
             webSearchQueries: cached.webSearchQueries || [],
-            videosRepaired: fixed.repaired,
           });
         }
-
-        return res.json({
-          ok: true,
-          stories: cached.stories,
-          source: 'cache',
-          cachedAt: cached.cachedAt,
-          webSearchQueries: cached.webSearchQueries || [],
-        });
       }
     }
 
     const result = await fetchRealWorldStories(ctx);
+    const qualified = qualityStories(result.stories);
     const fixed = repairVideos
-      ? await ensureStoriesHaveWorkingVideos(result.stories, ctx)
-      : { stories: result.stories, repaired: false };
+      ? await ensureStoriesHaveWorkingVideos(qualified, ctx)
+      : { stories: qualified, repaired: false };
 
     if (fixed.stories.length) {
       await persistStories(fixed.stories, {
@@ -1074,7 +1115,7 @@ app.post('/api/read-case', async (req, res) => {
   }
 
   const voiceRef = process.env.CHATTERBOX_VOICE_REF || '';
-  const apiOrigin = `http://127.0.0.1:${PORT}`;
+  const apiOrigin = serverOrigin(req);
 
   try {
     const { manifest, layout } = await buildOrLoadManifest({
@@ -1129,7 +1170,7 @@ app.get('/api/read-case/status', async (req, res) => {
     });
     syncManifestWithDisk(manifest, layout.chunksDir);
     const ready = countReadyChunks(manifest, layout.chunksDir);
-    const playlist = manifestToPlaylist(manifest, `http://127.0.0.1:${PORT}`);
+    const playlist = manifestToPlaylist(manifest, serverOrigin(req));
     return res.json({
       ready,
       total: manifest.chunks.length,
@@ -1293,7 +1334,7 @@ app.get('/api/case-portrait/:caseId', async (req, res) => {
     if (!cached.exists) {
       return res.json({ ok: true, exists: false, caseId });
     }
-    const url = portraitPublicUrl(caseId, PORT);
+    const url = portraitPublicUrl(caseId, serverOrigin(req));
     return res.json({
       ok: true,
       exists: true,
@@ -1310,10 +1351,10 @@ app.get('/api/case-portrait/:caseId', async (req, res) => {
   }
 });
 
-function caseBriefPublicUrl(caseId) {
+function caseBriefPublicUrl(caseId, req) {
   const fileName = caseBriefFileName(caseId);
   if (!fileName) return null;
-  return `http://127.0.0.1:${PORT}/case-briefs/${fileName}`;
+  return `${serverOrigin(req)}/case-briefs/${fileName}`;
 }
 
 async function buildOrLoadCaseBrief({
@@ -1321,6 +1362,7 @@ async function buildOrLoadCaseBrief({
   refresh = false,
   clientDiscussion = null,
   caseContext = null,
+  req = null,
 }) {
   const bundle = await loadCaseRawBundle({
     casesDir: MEWORLD_CASES_DIR,
@@ -1339,7 +1381,7 @@ async function buildOrLoadCaseBrief({
         cached: true,
         markdown: cached.markdown,
         sourceHash,
-        url: caseBriefPublicUrl(caseId),
+        url: caseBriefPublicUrl(caseId, req),
         cachedAt: cached.meta?.cachedAt || null,
       };
     }
@@ -1355,7 +1397,7 @@ async function buildOrLoadCaseBrief({
     cached: false,
     markdown,
     sourceHash,
-    url: caseBriefPublicUrl(caseId),
+    url: caseBriefPublicUrl(caseId, req),
     cachedAt: new Date().toISOString(),
   };
 }
@@ -1373,7 +1415,7 @@ app.get('/api/case-brief/:caseId', async (req, res) => {
       exists: true,
       caseId,
       markdown: cached.markdown,
-      url: caseBriefPublicUrl(caseId),
+      url: caseBriefPublicUrl(caseId, req),
       cachedAt: cached.meta?.cachedAt || null,
       sourceHash: cached.meta?.sourceHash || null,
     });
@@ -1396,6 +1438,7 @@ app.post('/api/case-brief/:caseId', async (req, res) => {
       refresh,
       clientDiscussion,
       caseContext,
+      req,
     });
     return res.json({ ok: true, caseId, ...result });
   } catch (e) {
@@ -1423,7 +1466,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
     if (!refresh) {
       const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId);
       if (cached.exists) {
-        const url = portraitPublicUrl(caseId, PORT);
+        const url = portraitPublicUrl(caseId, serverOrigin(req));
         const persona = cached.meta?.persona || cached.meta?.analysis?.persona || buildPortraitPersona(caseContext);
         return res.json({
           ok: true,
@@ -1452,7 +1495,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       persona,
       portraitBrief: String(portraitBrief || '').trim() || null,
     });
-    const url = portraitPublicUrl(caseId, PORT);
+    const url = portraitPublicUrl(caseId, serverOrigin(req));
     return res.json({
       ok: true,
       cached: false,
@@ -1518,7 +1561,7 @@ app.post('/api/case-avatar/from-video', async (req, res) => {
       avatarSource: 'real_world_video',
     });
 
-    const url = portraitPublicUrl(id, PORT);
+    const url = portraitPublicUrl(id, serverOrigin(req));
     return res.json({
       ok: true,
       caseId: id,
@@ -1548,7 +1591,7 @@ app.post('/api/generate-scene', async (req, res) => {
     const imageHash = crypto.createHash('sha256').update(imageBase64).digest('hex');
     const fileName = `${imageHash}-${unit.toLowerCase()}.png`;
     const outPath = path.join(SCENE_CACHE_DIR, fileName);
-    const publicUrl = `http://127.0.0.1:3001/scene-cache/${fileName}`;
+    const publicUrl = `${serverOrigin(req)}/scene-cache/${fileName}`;
 
     try {
       await fsp.access(outPath);
@@ -1734,4 +1777,29 @@ app.get('/api/ccs-screenshot/:caseNum', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Schoonmaker API → http://127.0.0.1:${PORT}`));
+if (process.env.SERVE_STATIC === '1') {
+  const distDir = path.join(GAME_ROOT, 'dist');
+  if (fs.existsSync(distDir)) {
+    app.use(express.static(distDir));
+    app.get('*', (req, res, next) => {
+      if (
+        req.path.startsWith('/api')
+        || req.path.startsWith('/case-tts')
+        || req.path.startsWith('/case-portraits')
+        || req.path.startsWith('/case-briefs')
+        || req.path.startsWith('/scene-cache')
+        || req.path.startsWith('/user-data')
+      ) {
+        return next();
+      }
+      res.sendFile(path.join(distDir, 'index.html'));
+    });
+  } else {
+    console.warn('SERVE_STATIC=1 but dist/ not found — run npm run build first');
+  }
+}
+
+app.listen(PORT, '0.0.0.0', () => {
+  const host = process.env.SERVE_STATIC === '1' ? '0.0.0.0' : '127.0.0.1';
+  console.log(`Schoonmaker API → http://${host}:${PORT}${process.env.SERVE_STATIC === '1' ? ' (static + API)' : ''}`);
+});

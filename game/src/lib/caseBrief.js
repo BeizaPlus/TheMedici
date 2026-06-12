@@ -1,6 +1,5 @@
 import { STORAGE } from './storageKeys.js';
-
-const API = 'http://127.0.0.1:3001';
+import { apiUrl } from './apiBase.js';
 
 function readBriefMap() {
   try {
@@ -52,7 +51,7 @@ export async function resolveCaseBriefMarkdown(
   if (refresh) clearLocalCaseBrief(caseId);
 
   try {
-    const r = await fetch(`${API}/api/case-brief/${encodeURIComponent(caseId)}`, {
+    const r = await fetch(apiUrl(`/api/case-brief/${encodeURIComponent(caseId)}`), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ refresh, clientDiscussion, caseContext }),

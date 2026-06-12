@@ -13,10 +13,15 @@ export function portraitFileName(caseId) {
   return slug ? `${slug}.png` : null;
 }
 
-export function portraitPublicUrl(caseId, port = Number(process.env.SPORTMAKER_API_PORT || 3001)) {
+export function portraitPublicUrl(caseId, origin) {
   const fileName = portraitFileName(caseId);
   if (!fileName) return null;
-  return `http://127.0.0.1:${port}/case-portraits/${fileName}`;
+  const port = Number(process.env.PORT || process.env.SPORTMAKER_API_PORT || 3001);
+  const base =
+    origin
+    || process.env.PUBLIC_URL?.replace(/\/$/, '')
+    || `http://127.0.0.1:${port}`;
+  return `${base}/case-portraits/${fileName}`;
 }
 
 function presentationCueForComplaint(cc) {

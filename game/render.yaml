@@ -1,0 +1,25 @@
+# Full-stack MeWorld — one URL serves Vite build + Express API.
+# Connect repo at https://dashboard.render.com → New Blueprint → point at MeWorld/game/render.yaml
+services:
+  - type: web
+    name: meworld
+    runtime: node
+    rootDir: game
+    buildCommand: npm ci && npm run build
+    startCommand: SERVE_STATIC=1 WHISPER_MODE=openai node server/index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: SERVE_STATIC
+        value: "1"
+      - key: WHISPER_MODE
+        value: openai
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: YOUTUBE_API_KEY
+        sync: false

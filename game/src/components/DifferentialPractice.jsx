@@ -25,6 +25,7 @@ import {
   getGlobalDifferentialProgress,
   logDifferentialAttempt,
 } from '../lib/differentialPracticeLog.js';
+import { apiUrl } from '../lib/apiBase.js';
 import {
   aiScoreToAttemptFields,
   scoreDifferentialWithAi,
@@ -60,18 +61,13 @@ import { normalizeCaseProgressId } from '../data/caseProgress.js';
 import { useCaseChat } from '../hooks/useCaseChat.js';
 import { useCaseRecording } from '../hooks/useCaseRecording.js';
 import { startPlaySession } from '../lib/caseUserLog.js';
+import {
+  pickDifferentialCaseIndex,
+  pickStackerCaseIndex,
+} from '../lib/differentialCasePick.js';
 
 function pickInitial() {
-  return pickRandomIndex(-1);
-}
-
-function pickRandomIndex(excludeIdx) {
-  if (bank.length < 2) return 0;
-  let next = excludeIdx;
-  while (next === excludeIdx) {
-    next = Math.floor(Math.random() * bank.length);
-  }
-  return next;
+  return pickDifferentialCaseIndex(bank, -1);
 }
 
 function buildBankIndexByCaseId() {
@@ -634,7 +630,7 @@ export default function DifferentialPractice({ onBack }) {
       if (next.enabled) {
         setSessionComplete(false);
         caseHistoryRef.current = [];
-        const start = pickRandomIndex(-1);
+        const start = pickDifferentialCaseIndex(bank, -1);
         stackerSeenRef.current = new Set([start]);
         setCardIdx(start);
         voice.stopRecording();
@@ -775,13 +771,13 @@ export default function DifferentialPractice({ onBack }) {
   }, [entry.caseId]);
 
   const goNext = useCallback(() => {
-    goToIndex(pickRandomIndex(cardIdxRef.current));
+    goToIndex(pickDifferentialCaseIndex(bank, cardIdxRef.current));
   }, [goToIndex]);
 
   const goPrev = useCallback(() => {
     const prev = caseHistoryRef.current.pop();
     if (prev == null) {
-      goToIndex(pickRandomIndex(cardIdxRef.current), { recordHistory: false });
+      goToIndex(pickDifferentialCaseIndex(bank, cardIdxRef.current), { recordHistory: false });
       return;
     }
     goToIndex(prev, { recordHistory: false });
@@ -802,7 +798,8 @@ export default function DifferentialPractice({ onBack }) {
       });
       return;
     }
-    const next = remaining[Math.floor(Math.random() * remaining.length)];
+    const next = pickStackerCaseIndex(bank, remaining, cardIdxRef.current);
+    if (next == null) return;
     goToIndex(next, { recordHistory: false });
   }, [goToIndex]);
 
@@ -865,7 +862,7 @@ export default function DifferentialPractice({ onBack }) {
 
   const shuffleCase = useCallback(() => {
     if (bank.length < 2) return;
-    goToIndex(pickRandomIndex(cardIdxRef.current));
+    goToIndex(pickDifferentialCaseIndex(bank, cardIdxRef.current));
   }, [goToIndex]);
 
   const goToCaseId = useCallback(
@@ -949,7 +946,7 @@ export default function DifferentialPractice({ onBack }) {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/api/health')
+    fetch(apiUrl('/api/health'))
       .then((r) => {
         if (!cancelled) setApiOk(r.ok);
       })
@@ -984,44 +981,83 @@ export default function DifferentialPractice({ onBack }) {
           ← Back
         </button>
         <div className="diff-header-actions">
-          <button
-            type="button"
-            className={`diff-stacker-btn${stacker.enabled ? ' diff-stacker-btn--on' : ''}`}
-            onClick={toggleStacker}
-            title="1-minute stacker — auto-advance through all cases"
-          >
-            {stacker.enabled ? 'Stacker on' : 'Stacker'}
-          </button>
-          {stacker.enabled && (
-            <>
-              <select
-                className="diff-stacker-select"
-                value={stacker.seconds}
-                onChange={(e) => setStackerSeconds(Number(e.target.value))}
-                aria-label="Seconds per case"
-              >
-                <option value={30}>30s</option>
-                <option value={45}>45s</option>
-                <option value={60}>60s</option>
-                <option value={90}>90s</option>
-                <option value={120}>2m</option>
-              </select>
-              <span
-                className={`diff-stacker-timer${secondsLeft <= 10 && stackerPhase !== 'processing' && !stackerPaused ? ' diff-stacker-timer--urgent' : ''}${stackerPhase === 'review' ? ' diff-stacker-timer--review' : ''}${stackerPhase === 'processing' ? ' diff-stacker-timer--processing' : ''}${stackerPaused ? ' diff-stacker-timer--paused' : ''}`}
-                aria-live="polite"
-              >
-                {stackerPaused
-                  ? stackerPhase === 'review'
-                    ? `Review · Paused ${secondsLeft}s`
-                    : `Paused ${secondsLeft}s`
-                  : stackerPhase === 'processing'
-                    ? 'Processing…'
-                    : stackerPhase === 'review'
-                      ? `Review ${secondsLeft}s`
-                      : `${secondsLeft}s`}
+          <div className="diff-stacker-cluster">
+            <button
+              type="button"
+              className={`diff-stacker-btn${stacker.enabled ? ' diff-stacker-btn--on' : ''}`}
+              onClick={toggleStacker}
+              title="1-minute stacker — auto-advance through all cases"
+            >
+              {stacker.enabled ? 'Stacker on' : 'Stacker'}
+            </button>
+            {stacker.enabled && (
+              <>
+                <select
+                  className="diff-stacker-select"
+                  value={stacker.seconds}
+                  onChange={(e) => setStackerSeconds(Number(e.target.value))}
+                  aria-label="Seconds per case"
+                >
+                  <option value={30}>30s</option>
+                  <option value={45}>45s</option>
+                  <option value={60}>60s</option>
+                  <option value={90}>90s</option>
+                  <option value={120}>2m</option>
+                </select>
+                <span
+                  className={`diff-stacker-timer${secondsLeft <= 10 && stackerPhase !== 'processing' && !stackerPaused ? ' diff-stacker-timer--urgent' : ''}${stackerPhase === 'review' ? ' diff-stacker-timer--review' : ''}${stackerPhase === 'processing' ? ' diff-stacker-timer--processing' : ''}${stackerPaused ? ' diff-stacker-timer--paused' : ''}`}
+                  aria-live="polite"
+                >
+                  {stackerPaused
+                    ? stackerPhase === 'review'
+                      ? `Review · Paused ${secondsLeft}s`
+                      : `Paused ${secondsLeft}s`
+                    : stackerPhase === 'processing'
+                      ? 'Processing…'
+                      : stackerPhase === 'review'
+                        ? `Review ${secondsLeft}s`
+                        : `${secondsLeft}s`}
+                </span>
+              </>
+            )}
+            <form
+              className="diff-case-jump"
+              onSubmit={(e) => {
+                e.preventDefault();
+                goToCaseId(caseJumpInput);
+              }}
+              title="Search by CCS case number"
+            >
+              <label className="diff-case-jump-label" htmlFor="diff-case-jump-input">
+                Case
+              </label>
+              <input
+                id="diff-case-jump-input"
+                type="search"
+                inputMode="numeric"
+                className={`diff-case-jump-input${caseJumpError ? ' diff-case-jump-input--error' : ''}`}
+                value={caseJumpInput}
+                onChange={(e) => {
+                  setCaseJumpInput(e.target.value);
+                  if (caseJumpError) setCaseJumpError('');
+                }}
+                placeholder="#"
+                aria-label="Search case number"
+                aria-invalid={caseJumpError ? 'true' : undefined}
+                aria-describedby={caseJumpError ? 'diff-case-jump-error' : undefined}
+                autoComplete="off"
+                spellCheck={false}
+              />
+              <button type="submit" className="diff-case-jump-btn">
+                Go
+              </button>
+            </form>
+            {caseJumpError ? (
+              <span id="diff-case-jump-error" className="diff-case-jump-error" role="alert">
+                {caseJumpError}
               </span>
-            </>
-          )}
+            ) : null}
+          </div>
           <button
             type="button"
             className="diff-export-btn"
@@ -1030,42 +1066,6 @@ export default function DifferentialPractice({ onBack }) {
           >
             Export log
           </button>
-          <form
-            className="diff-case-jump"
-            onSubmit={(e) => {
-              e.preventDefault();
-              goToCaseId(caseJumpInput);
-            }}
-            title="Type a CCS case number and press Enter"
-          >
-            <label className="diff-case-jump-label" htmlFor="diff-case-jump-input">
-              Case
-            </label>
-            <input
-              id="diff-case-jump-input"
-              type="text"
-              inputMode="numeric"
-              className={`diff-case-jump-input${caseJumpError ? ' diff-case-jump-input--error' : ''}`}
-              value={caseJumpInput}
-              onChange={(e) => {
-                setCaseJumpInput(e.target.value);
-                if (caseJumpError) setCaseJumpError('');
-              }}
-              aria-label="Go to case number"
-              aria-invalid={caseJumpError ? 'true' : undefined}
-              aria-describedby={caseJumpError ? 'diff-case-jump-error' : undefined}
-              autoComplete="off"
-              spellCheck={false}
-            />
-            <button type="submit" className="diff-case-jump-btn">
-              Go
-            </button>
-          </form>
-          {caseJumpError ? (
-            <span id="diff-case-jump-error" className="diff-case-jump-error" role="alert">
-              {caseJumpError}
-            </span>
-          ) : null}
           <span className="diff-counter">
             Case {entry.caseId}
             {stacker.enabled

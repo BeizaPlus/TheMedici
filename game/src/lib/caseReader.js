@@ -1,11 +1,10 @@
 import { readAudioPrefs } from './audioPrefs.js';
+import { apiUrl } from './apiBase.js';
 
 let readerEl = null;
 let readerAbort = null;
 let readerGen = 0;
 let speechUtterance = null;
-
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:3001';
 
 function targetVoiceVolume() {
   const prefs = readAudioPrefs();
@@ -195,7 +194,7 @@ export async function readCaseAloud({ caseId, section, text, onState }) {
 
   try {
     const statusResp = await fetch(
-      `${API_BASE}/api/read-case/status?${new URLSearchParams({
+      `${apiUrl('/api/read-case/status')}?${new URLSearchParams({
         caseId: String(caseId || ''),
         section: String(section || 'hpi'),
         text: trimmed.slice(0, 12000),
@@ -218,7 +217,7 @@ export async function readCaseAloud({ caseId, section, text, onState }) {
 
     if (controller.signal.aborted || gen !== readerGen) return;
 
-    const r = await fetch(`${API_BASE}/api/read-case`, {
+    const r = await fetch(apiUrl('/api/read-case'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

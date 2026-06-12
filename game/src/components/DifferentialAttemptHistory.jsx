@@ -84,6 +84,18 @@ function orphanRecordings(attempts, recordings) {
   return recordings.filter((rec) => !matched.has(localRecordingKey(rec)));
 }
 
+function buildTimelineRows(attempts, unmatched) {
+  const rows = [];
+  for (const rec of unmatched) {
+    rows.push({ kind: 'recording', at: rec.at || '', data: rec });
+  }
+  for (const attempt of attempts) {
+    rows.push({ kind: 'attempt', at: attempt.at || '', data: attempt });
+  }
+  rows.sort((a, b) => String(a.at).localeCompare(String(b.at)));
+  return rows;
+}
+
 function AttemptHistoryBody({ caseId, caseStats, recordingsVersion = 0 }) {
   const attempts = caseStats?.attempts || [];
   const bestPct = caseStats?.bestPct ?? null;
@@ -95,6 +107,17 @@ function AttemptHistoryBody({ caseId, caseStats, recordingsVersion = 0 }) {
     () => orphanRecordings(attempts, recordings),
     [attempts, recordings],
   );
+
+  const timelineRows = useMemo(
+    () => buildTimelineRows(attempts, unmatched),
+    [attempts, unmatched],
+  );
+
+  const attemptNumById = useMemo(() => {
+    const map = new Map();
+    attempts.forEach((a, i) => map.set(a.id, i + 1));
+    return map;
+  }, [attempts]);
 
   const hasAttempts = attempts.length > 0;
   const hasRecordings = recordings.length > 0;
@@ -130,46 +153,50 @@ function AttemptHistoryBody({ caseId, caseStats, recordingsVersion = 0 }) {
       )}
 
       <ol className="diff-attempt-list">
-        {unmatched.map((rec, revIdx) => {
-          const isLatest = revIdx === 0 && !hasAttempts;
-          const secs = Math.max(1, Math.round((rec.durationMs || 0) / 1000));
-          return (
-            <li
-              key={localRecordingKey(rec) || rec.at}
-              className={`diff-attempt-row diff-attempt-row--recording${isLatest ? ' diff-attempt-row--latest' : ''}`}
-            >
-              <div className="diff-attempt-row-head">
-                <span className="diff-attempt-num">#{rec.slot || unmatched.length - revIdx}</span>
-                <time className="diff-attempt-at" dateTime={rec.at}>
-                  {formatShortAt(rec.at)}
-                </time>
-                <span className="diff-attempt-voice-meta">{secs}s</span>
-                {isLatest && <span className="diff-attempt-badge">latest</span>}
-                <span className="diff-attempt-badge diff-attempt-badge--voice">voice</span>
-              </div>
-              <RecordingPlayback
-                recording={rec}
-                resolveSrc={resolveSrc}
-                blobsReady={blobsReady}
-                label={`Play voice note for case ${caseId}`}
-              />
-              {rec.transcript && (
-                <p className="diff-attempt-guesses">
-                  <span className="diff-attempt-guesses-label">Heard:</span> {rec.transcript}
-                </p>
-              )}
-            </li>
-          );
-        })}
+        {timelineRows.map((row, idx) => {
+          const isLatest = idx === timelineRows.length - 1;
 
-        {[...attempts].reverse().map((a, revIdx) => {
-          const attemptNum = attempts.length - revIdx;
-          const prevInOrder = attempts[attemptNum - 2];
+          if (row.kind === 'recording') {
+            const rec = row.data;
+            const secs = Math.max(1, Math.round((rec.durationMs || 0) / 1000));
+            return (
+              <li
+                key={localRecordingKey(rec) || rec.at}
+                className={`diff-attempt-row diff-attempt-row--recording${isLatest ? ' diff-attempt-row--latest' : ''}`}
+              >
+                <div className="diff-attempt-row-head">
+                  <span className="diff-attempt-num">#{rec.slot || idx + 1}</span>
+                  <time className="diff-attempt-at" dateTime={rec.at}>
+                    {formatShortAt(rec.at)}
+                  </time>
+                  <span className="diff-attempt-voice-meta">{secs}s</span>
+                  {isLatest && <span className="diff-attempt-badge">latest</span>}
+                  <span className="diff-attempt-badge diff-attempt-badge--voice">voice</span>
+                </div>
+                <RecordingPlayback
+                  recording={rec}
+                  resolveSrc={resolveSrc}
+                  blobsReady={blobsReady}
+                  label={`Play voice note for case ${caseId}`}
+                />
+                {rec.transcript && (
+                  <p className="diff-attempt-guesses">
+                    <span className="diff-attempt-guesses-label">Heard:</span> {rec.transcript}
+                  </p>
+                )}
+              </li>
+            );
+          }
+
+          const a = row.data;
+          const attemptNum = attemptNumById.get(a.id) || 0;
+          const prevAttempt = [...timelineRows.slice(0, idx)]
+            .reverse()
+            .find((r) => r.kind === 'attempt')?.data;
           const delta =
-            prevInOrder?.pct != null && a.pct != null ? a.pct - prevInOrder.pct : null;
+            prevAttempt?.pct != null && a.pct != null ? a.pct - prevAttempt.pct : null;
           const deltaLabel = formatDelta(delta);
           const isBest = a.pct >= (bestPct ?? 0);
-          const isLatest = revIdx === 0 && unmatched.length === 0;
 
           return (
             <li

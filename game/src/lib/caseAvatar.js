@@ -6,8 +6,7 @@ import {
   clearCaseRegenImage,
 } from './patientRegen.js';
 import { STORAGE } from './storageKeys.js';
-
-const API = 'http://127.0.0.1:3001';
+import { apiUrl } from './apiBase.js';
 
 export const CASE_AVATAR_EVENT = 'schoonmaker-case-avatar';
 
@@ -130,7 +129,7 @@ export async function generateCasePortraitFromAvatarSource(caseData, { refresh =
   }
 
   const ctx = buildAvatarCaseContext(caseId);
-  const r = await fetch(`${API}/api/case-avatar/from-video`, {
+  const r = await fetch(apiUrl('/api/case-avatar/from-video'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

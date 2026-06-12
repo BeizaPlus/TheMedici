@@ -1,10 +1,10 @@
 {
-  "builtAt": "2026-06-11T01:26:13.106Z",
+  "builtAt": "2026-06-11T01:30:54.685Z",
   "sourceDir": "C:\\Users\\steve\\MeWorld\\data\\cases",
   "source": "MeWorld/data/cases/case_N.json",
   "count": 181,
   "completeCount": 181,
-  "withOrders": 152,
+  "withOrders": 153,
   "cases": {
     "1": {
       "caseId": 1,
@@ -17593,24 +17593,125 @@
     "175": {
       "caseId": 175,
       "title": "Heavy Menstrual Bleeding",
-      "diagnosis": "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.",
-      "chiefComplaint": "",
+      "diagnosis": "Von Willebrand Disease (vWD)",
+      "chiefComplaint": "Heavy menstrual bleeding",
       "patientSex": "",
-      "specialty": "",
-      "location": "",
+      "specialty": "Emergency Medicine",
+      "location": "Emergency Department",
       "scores": null,
-      "caseSummary": "",
-      "hpiNarrative": "",
-      "orders": [],
-      "intro": "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.",
-      "history": "",
-      "ordersText": "",
-      "hasReview": false,
-      "structuredBy": "preparedCases+fmgmatch+mistral",
+      "caseSummary": "Differential: Von Willebrand disease (vWD), Thrombocytopenia, Hemophilia A, Platelet Abnormalities (Glanzmann thrombasthenia), Vasculopathies, Connective Tissue Diseases, Collagen Disorders, hypothyroidism.\n\nThe first step is to assess anemia and platelet count by getting a CBC. This shows anemia but normal platelets. Then order PT/PTT, revealing normal PT, mildly elevated PTT, and normal fibrinogen, pointing toward vWD. This is a classic presentation for vWD diagnosis in females around menarche due to heavy periods. Once suspected, order vWF assays showing decreased ristocetin-induced platelet aggregation at 1.0 mg/mL, suggestive of type 1 vWD. Confirmatory vWF activity takes 3 days, so the case ends before results, but initial findings allow empirical treatment.\n\nStart IV fluids for hypovolemia. Give DDAVP (desmopressin, 0.3 mcg/kg IV) concurrently with tranexamic acid for acute bleeding control. DDAVP boosts endogenous vWF/Factor VIII, working within 30-60 minutes (peak at 1 hour), lasting 8-24 hours. It's safe for type 1; risks include hyponatremia and tachyphylaxis. Avoid in type 2B as it may worsen thrombocytopenia. If ineffective, use vWF concentrates.\n\nTranexamic Acid is typically started concurrently with DDAVP, not after it fails, to stabilize clots and enhance hemostasis, especially for mucosal bleeding like menorrhagia.\n\nPreventive care would be to prevent future bleeds, so hormonal therapy such as oral contraceptives could be started or the patient could be referred to OB/GYN. Hormonal therapy helps by increasing vWF/factor VIII levels and stabilizing the endometrium. Counsel the patient on avoiding NSAIDs and trauma (playing sports). Add iron for anemia.",
+      "hpiNarrative": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation.\n\nWorkup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days).\n\nAcute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
+      "orders": [
+        {
+          "status": "correct",
+          "order": "Physical Exam: General Appearance",
+          "reason": "Assess for signs of acute blood loss, such as pallor or distress."
+        },
+        {
+          "status": "correct",
+          "order": "Physical Exam: HEENT / Neck",
+          "reason": "Identify mucosal bleeding sites — epistaxis or gum bleeding common in vWD."
+        },
+        {
+          "status": "correct",
+          "order": "Physical Exam: Skin",
+          "reason": "Look for bruising or petechiae indicating a bleeding disorder."
+        },
+        {
+          "status": "correct",
+          "order": "Physical Exam: Heart / Cardiovascular",
+          "reason": "Assess tachycardia or hypotension due to blood loss."
+        },
+        {
+          "status": "correct",
+          "order": "Physical Exam: Abdomen",
+          "reason": "Rule out other causes of bleeding or pain."
+        },
+        {
+          "status": "correct",
+          "order": "Physical Exam: Genitalia",
+          "reason": "Chief complaint — pelvic/genital exam indicated."
+        },
+        {
+          "status": "correct",
+          "order": "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit",
+          "reason": "Assess anemia from heavy menstrual bleeding."
+        },
+        {
+          "status": "correct",
+          "order": "PT/PTT / Partial thromboplastin time AND PT/INR",
+          "reason": "Coagulation labs essential for excessive bleeding workup."
+        },
+        {
+          "status": "correct",
+          "order": "Platelet aggregation",
+          "reason": "Ristocetin-induced aggregation often reduced in vWD."
+        },
+        {
+          "status": "correct",
+          "order": "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+          "reason": "Rule out hypothyroidism as a cause of menorrhagia."
+        },
+        {
+          "status": "correct",
+          "order": "Basic metabolic profile / Comprehensive metabolic profile",
+          "reason": "Screen electrolytes and renal function after blood loss."
+        },
+        {
+          "status": "correct",
+          "order": "von Willebrand factor activity / Consult, hematology/oncology",
+          "reason": "vWF activity or hematology consult confirms vWD (results may take 3 days)."
+        },
+        {
+          "status": "correct",
+          "order": "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal",
+          "reason": "IV fluids for mild-to-moderate hypovolemia; Hgb ~10 — pRBCs not indicated yet."
+        },
+        {
+          "status": "correct",
+          "order": "Desmopressin acetate",
+          "reason": "DDAVP stimulates vWF release — empiric for suspected type 1 vWD in ED."
+        },
+        {
+          "status": "correct",
+          "order": "Tranexamic acid / Aminocaproic acid",
+          "reason": "Antifibrinolytic adjunct — start concurrently with DDAVP for menorrhagia."
+        },
+        {
+          "status": "correct",
+          "order": "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron",
+          "reason": "Iron supplementation for anemia from chronic blood loss."
+        },
+        {
+          "status": "correct",
+          "order": "Advise patient, no NSAIDs",
+          "reason": "Avoid NSAIDs until bleeding disorder diagnosed."
+        },
+        {
+          "status": "correct",
+          "order": "Advise patient, no sports",
+          "reason": "Avoid contact sports until diagnosis confirmed."
+        },
+        {
+          "status": "correct",
+          "order": "Oral contraceptive / Consult, obstetrics/gynecology",
+          "reason": "Hormonal therapy or OB/GYN for long-term prevention of recurrent menorrhagia."
+        },
+        {
+          "status": "avoided",
+          "order": "Packed red blood cells / pRBC transfusion when Hgb stable ~10",
+          "reason": "Hgb 10 g/dL is above transfusion threshold in compensated patient — fluids + hemostasis first."
+        }
+      ],
+      "intro": "Heavy menstrual bleeding",
+      "history": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation.\n\nWorkup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days).\n\nAcute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.\n\nDifferential: Von Willebrand disease (vWD), Thrombocytopenia, Hemophilia A, Platelet Abnormalities (Glanzmann thrombasthenia), Vasculopathies, Connective Tissue Diseases, Collagen Disorders, hypothyroidism.\n\nThe first step is to assess anemia and platelet count by getting a CBC. This shows anemia but normal platelets. Then order PT/PTT, revealing normal PT, mildly elevated PTT, and normal fibrinogen, pointing toward vWD. This is a classic presentation for vWD diagnosis in females around menarche due to heavy periods. Once suspected, order vWF assays showing decreased ristocetin-induced platelet aggregation at 1.0 mg/mL, suggestive of type 1 vWD. Confirmatory vWF activity takes 3 days, so the case ends before results, but initial findings allow empirical treatment.\n\nStart IV fluids for hypovolemia. Give DDAVP (desmopressin) concurrently with tranexamic acid for acute bleeding control. DDAVP boosts endogenous vWF/Factor VIII. Tranexamic acid is an adjunct for mucosal bleeding — start with DDAVP, not after failure.\n\nPreventive care: oral contraceptives or OB/GYN consult; iron for anemia; counsel to avoid NSAIDs and contact sports.",
+      "ordersText": "[OK] Physical Exam: General Appearance\n   Assess for signs of acute blood loss, such as pallor or distress.\n\n[OK] Physical Exam: HEENT / Neck\n   Identify mucosal bleeding sites — epistaxis or gum bleeding common in vWD.\n\n[OK] Physical Exam: Skin\n   Look for bruising or petechiae indicating a bleeding disorder.\n\n[OK] Physical Exam: Heart / Cardiovascular\n   Assess tachycardia or hypotension due to blood loss.\n\n[OK] Physical Exam: Abdomen\n   Rule out other causes of bleeding or pain.\n\n[OK] Physical Exam: Genitalia\n   Chief complaint — pelvic/genital exam indicated.\n\n[OK] CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit\n   Assess anemia from heavy menstrual bleeding.\n\n[OK] PT/PTT / Partial thromboplastin time AND PT/INR\n   Coagulation labs essential for excessive bleeding workup.\n\n[OK] Platelet aggregation\n   Ristocetin-induced aggregation often reduced in vWD.\n\n[OK] Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum\n   Rule out hypothyroidism as a cause of menorrhagia.\n\n[OK] Basic metabolic profile / Comprehensive metabolic profile\n   Screen electrolytes and renal function after blood loss.\n\n[OK] von Willebrand factor activity / Consult, hematology/oncology\n   vWF activity or hematology consult confirms vWD (results may take 3 days).\n\n[OK] Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal\n   IV fluids for mild-to-moderate hypovolemia; Hgb ~10 — pRBCs not indicated yet.\n\n[OK] Desmopressin acetate\n   DDAVP stimulates vWF release — empiric for suspected type 1 vWD in ED.\n\n[OK] Tranexamic acid / Aminocaproic acid\n   Antifibrinolytic adjunct — start concurrently with DDAVP for menorrhagia.\n\n[OK] Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron\n   Iron supplementation for anemia from chronic blood loss.\n\n[OK] Advise patient, no NSAIDs\n   Avoid NSAIDs until bleeding disorder diagnosed.\n\n[OK] Advise patient, no sports\n   Avoid contact sports until diagnosis confirmed.\n\n[OK] Oral contraceptive / Consult, obstetrics/gynecology\n   Hormonal therapy or OB/GYN for long-term prevention of recurrent menorrhagia.\n\n[Avoid] Packed red blood cells / pRBC transfusion when Hgb stable ~10\n   Hgb 10 g/dL is above transfusion threshold in compensated patient — fluids + hemostasis first.",
+      "hasReview": true,
+      "structuredBy": "ccs_review_pdf",
       "parseQuality": "good",
-      "ordersSource": "none",
+      "ordersSource": "json",
       "complete": true,
-      "confidence": "inferred"
+      "confidence": 95
     },
     "176": {
       "caseId": 176,

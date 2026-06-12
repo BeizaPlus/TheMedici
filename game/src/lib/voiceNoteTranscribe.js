@@ -1,10 +1,7 @@
-const API =
-  typeof window !== 'undefined' && window.location?.hostname
-    ? ''
-    : 'http://127.0.0.1:3001';
+import { apiUrl } from './apiBase.js';
 
 async function apiJson(path, options = {}) {
-  const r = await fetch(`${API}${path}`, {
+  const r = await fetch(apiUrl(path), {
     headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
     ...options,
   });

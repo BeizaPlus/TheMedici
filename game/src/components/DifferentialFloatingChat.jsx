@@ -31,9 +31,18 @@ export default function DifferentialFloatingChat({
   const [resizing, setResizing] = useState(null);
   const dragRef = useRef({ dx: 0, dy: 0 });
   const resizeRef = useRef({ sx: 0, sy: 0, sw: 0, sh: 0 });
+  const placeChatRef = useRef({ open: false, caseId: null });
 
   useLayoutEffect(() => {
-    if (!open) return;
+    if (!open) {
+      placeChatRef.current.open = false;
+      return;
+    }
+    const shouldPlace =
+      !placeChatRef.current.open || placeChatRef.current.caseId !== caseId;
+    if (!shouldPlace) return;
+    placeChatRef.current = { open: true, caseId };
+
     const w = size.w;
     const h = size.h;
     const study = document.querySelector('.diff-study-panel');

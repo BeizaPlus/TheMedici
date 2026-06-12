@@ -78,14 +78,16 @@ export async function saveLocalDifferentialRecording(caseId, blob, meta = {}) {
   };
 }
 
-export function listLocalDifferentialRecordings(caseId) {
+export function listLocalDifferentialRecordings(caseId, { newestFirst = false } = {}) {
   const index = readIndex();
   const list = Array.isArray(index[String(caseId)]) ? index[String(caseId)] : [];
-  return list.map((rec) => ({
+  const rows = list.map((rec) => ({
     ...rec,
     local: true,
     localId: rec.localId || rec.id,
   }));
+  if (newestFirst) return rows;
+  return [...rows].sort((a, b) => String(a.at || '').localeCompare(String(b.at || '')));
 }
 
 export async function getLocalDifferentialRecordingUrl(localId) {
@@ -138,7 +140,7 @@ export function listAllDifferentialRecordings(caseId, serverData = null) {
       merged.push(rec);
     }
   }
-  merged.sort((a, b) => String(b.at || '').localeCompare(String(a.at || '')));
+  merged.sort((a, b) => String(a.at || '').localeCompare(String(b.at || '')));
   return merged;
 }
 

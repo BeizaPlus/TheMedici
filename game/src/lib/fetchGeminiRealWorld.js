@@ -1,7 +1,4 @@
-const API =
-  typeof window !== 'undefined' && window.location?.hostname
-    ? ''
-    : 'http://127.0.0.1:3001';
+import { apiUrl } from './apiBase.js';
 
 /** Real-world patient stories for a CCS case (DeepSeek default; Gemini optional). */
 export async function fetchGeminiRealWorld({
@@ -13,7 +10,7 @@ export async function fetchGeminiRealWorld({
   refresh = false,
   repairVideos = true,
 } = {}) {
-  const r = await fetch(`${API}/api/differential/real-world`, {
+  const r = await fetch(apiUrl('/api/differential/real-world'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

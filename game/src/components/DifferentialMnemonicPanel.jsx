@@ -14,6 +14,8 @@ import {
 
   removeCasePictureNote,
 
+  updateCasePictureNoteRole,
+
 } from '../lib/casePictureNotes.js';
 
 import {
@@ -246,6 +248,18 @@ export default function DifferentialMnemonicPanel({ caseId, embedded = false, no
 
 
 
+  const onChangePictureRole = async (pictureId, role) => {
+
+    if (!updateCasePictureNoteRole(caseId, pictureId, role)) return;
+
+    onChanged?.();
+
+    await loadPictures();
+
+  };
+
+
+
   const pictureCount = pictures.length;
 
   const body = (
@@ -370,8 +384,6 @@ export default function DifferentialMnemonicPanel({ caseId, embedded = false, no
 
               <li key={pic.id} className="diff-picture-card">
 
-                <span className={`diff-picture-badge diff-picture-badge--${pic.role}`}>{roleLabel(pic.role)}</span>
-
                 {pic.url ? (
 
                   <img src={pic.url} alt={`${roleLabel(pic.role)} for case ${caseId}`} />
@@ -381,6 +393,34 @@ export default function DifferentialMnemonicPanel({ caseId, embedded = false, no
                   <span className="diff-picture-missing">Missing file</span>
 
                 )}
+
+                <div className="diff-picture-card-roles" role="group" aria-label="Picture type">
+
+                  {ROLE_OPTIONS.map((opt) => (
+
+                    <button
+
+                      key={opt.id}
+
+                      type="button"
+
+                      className={`diff-picture-card-role-btn diff-picture-card-role-btn--${opt.id}${pic.role === opt.id ? ' diff-picture-card-role-btn--active' : ''}`}
+
+                      onClick={() => void onChangePictureRole(pic.id, opt.id)}
+
+                      aria-pressed={pic.role === opt.id}
+
+                      title={`Mark as ${opt.label}`}
+
+                    >
+
+                      {opt.label}
+
+                    </button>
+
+                  ))}
+
+                </div>
 
                 <button
 

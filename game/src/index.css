@@ -6961,10 +6961,10 @@ button {
   position: fixed;
   display: flex;
   flex-direction: column;
-  background: var(--panel, #1a1f2e);
+  background: #12151c;
   border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
   border-radius: 12px;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
   z-index: 71;
   overflow: hidden;
 }
@@ -7186,6 +7186,8 @@ button {
 .case-chat-bubble {
   max-width: 92%;
   min-width: 0;
+  flex-shrink: 0;
+  overflow: visible;
   padding: 12px 14px;
   border-radius: 14px;
   font-size: 0.88rem;
@@ -7193,7 +7195,6 @@ button {
   white-space: pre-wrap;
   word-break: break-word;
   overflow-wrap: anywhere;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -7203,7 +7204,7 @@ button {
 
 .case-chat-bubble.user {
   align-self: flex-end;
-  background: rgba(61, 54, 34, 0.78);
+  background: #3d3622;
   border: 1px solid rgba(212, 175, 55, 0.58);
   color: rgba(240, 238, 232, 0.94);
 }
@@ -7211,7 +7212,7 @@ button {
 .case-chat-bubble.assistant {
   align-self: flex-start;
   max-width: 96%;
-  background: rgba(42, 42, 46, 0.95);
+  background: #2a2a2e;
   border: 1px solid rgba(255, 255, 255, 0.14);
   color: rgba(240, 238, 232, 0.92);
 }
@@ -7222,10 +7223,9 @@ button {
 }
 
 .case-chat-bubble-text {
-  flex: 1;
   min-width: 0;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow: visible;
   user-select: text;
   -webkit-user-select: text;
   cursor: text;

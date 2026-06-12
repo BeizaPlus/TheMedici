@@ -6,8 +6,7 @@ import {
 import { resolvePortraitBriefForApi } from './casePortraitBrief.js';
 import { getBuiltInPatientSrc, isValidSceneSrc } from './patientImage.js';
 import { STORAGE } from './storageKeys.js';
-
-const API = 'http://127.0.0.1:3001';
+import { apiUrl } from './apiBase.js';
 
 const portraitInflight = new Map();
 
@@ -101,7 +100,7 @@ export function buildSceneSourceSig(caseData, erSrc) {
 export async function fetchCasePortraitStatus(caseId) {
   if (!caseId) return { exists: false, url: null };
   try {
-    const r = await fetch(`${API}/api/case-portrait/${encodeURIComponent(caseId)}`);
+    const r = await fetch(apiUrl(`/api/case-portrait/${encodeURIComponent(caseId)}`));
     if (!r.ok) return { exists: false, url: null };
     const data = await r.json();
     if (data.exists && data.url) {
@@ -165,7 +164,7 @@ export async function regeneratePatientFromCase(caseData, { refresh = false } = 
 
   const portraitBrief = resolvePortraitBriefForApi(caseData.id);
 
-  const r = await fetch(`${API}/api/regenerate-patient-from-case`, {
+  const r = await fetch(apiUrl('/api/regenerate-patient-from-case'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

@@ -1,8 +1,4 @@
-/** Browser uses same-origin /api (Vite proxy in dev). */
-const API =
-  typeof window !== 'undefined' && window.location?.hostname
-    ? ''
-    : 'http://127.0.0.1:3001';
+import { apiUrl } from './apiBase.js';
 
 export async function scoreDifferentialWithAi({
   caseId,
@@ -16,7 +12,7 @@ export async function scoreDifferentialWithAi({
   const timer = setTimeout(() => controller.abort(), 45_000);
   let r;
   try {
-    r = await fetch(`${API}/api/differential/score`, {
+    r = await fetch(apiUrl('/api/differential/score'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: controller.signal,

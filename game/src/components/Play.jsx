@@ -38,6 +38,7 @@ import {
   readGridItems,
   writeGridItems,
 } from '../lib/gridPlacement.js';
+import { apiUrl } from '../lib/apiBase.js';
 import { nextAttemptNumber, peekAttemptNumber, saveScreenshotToServer } from '../lib/captureScreenshot.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
@@ -2483,7 +2484,7 @@ export default function Play({
         } else {
           payload = await getPatientImagePayload(caseData);
         }
-        const resp = await fetch('http://127.0.0.1:3001/api/generate-scene', {
+        const resp = await fetch(apiUrl('/api/generate-scene'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

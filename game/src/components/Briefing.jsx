@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { apiUrl } from '../lib/apiBase.js';
 import PatientScene from './PatientScene.jsx';
 import BriefingCasePicker from './BriefingCasePicker.jsx';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
@@ -158,7 +159,7 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
         }
         if (readVisionZones(payload.source)) return;
 
-        const r = await fetch('http://127.0.0.1:3001/api/detect-zones', {
+        const r = await fetch(apiUrl('/api/detect-zones'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

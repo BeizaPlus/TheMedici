@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "builtAt": "2026-06-11T01:26:13.235Z",
+  "builtAt": "2026-06-11T01:30:54.808Z",
   "totalCases": 181,
   "caseBankMerged": 181,
   "caseBankSource": "ollama-case-bank",
@@ -12653,8 +12653,13 @@
       "category": "OB/GYN",
       "presentationKey": "Heavy Menstrual Bleeding",
       "playbookKey": "case-bank-175",
-      "diagnosis": "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.",
-      "caseBankSource": "deepseek_direct",
+      "diagnosis": "Von Willebrand Disease (vWD)",
+      "patient_voice": {
+        "chief_complaint": "My periods are extremely heavy — I'm soaking through pads every hour",
+        "history": "This started around when my periods began. I've been tired and bruise easily. My gums bleed when I brush.",
+        "pain": "Cramping with the heavy flow — I'm also dizzy when I stand up"
+      },
+      "caseBankSource": "ccs_review_pdf",
       "hasSourceIntro": false,
       "vitals": {
         "sbp": 109,
@@ -12677,60 +12682,214 @@
       "exam": [
         [
           "General",
-          "Heavy Menstrual Bleeding — exam tailored to chief complaint on arrival."
+          "Assess pallor and signs of acute blood loss."
         ],
         [
-          "Cardiovascular",
-          "HR 96; BP 109/68."
-        ],
-        [
-          "Respiratory",
-          "RR 17; SpO₂ 95%."
-        ],
-        [
-          "Abdomen",
-          "Soft, non-distended, no focal peritoneal signs on initial exam."
-        ],
-        [
-          "Neuro",
-          "Alert and oriented unless perfusion or metabolic derangement present."
+          "HEENT / Neck",
+          "Look for mucosal bleeding — epistaxis, gum bleeding."
         ],
         [
           "Skin",
-          "No acute rash; capillary refill and perfusion assessed."
+          "Bruising or petechiae suggesting bleeding disorder."
+        ],
+        [
+          "Heart / Cardiovascular",
+          "Tachycardia or hypotension from blood loss."
+        ],
+        [
+          "Abdomen",
+          "Rule out other causes of bleeding or pain."
+        ],
+        [
+          "Genitalia",
+          "Chief complaint — assess pelvic bleeding source."
         ]
       ],
-      "patientSex": "unknown",
+      "patientSex": "female",
+      "hpi_narrative": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation.\n\nWorkup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days).\n\nAcute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
       "difficulty": "standard",
-      "clinical_tip": "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary. — follow CCS review orders.",
-      "objective": "Complete diagnosis and treatment orders for The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary..",
+      "clinical_tip": "Von Willebrand Disease (vWD) — follow CCS review orders.",
+      "objective": "Complete diagnosis and treatment orders for Von Willebrand Disease (vWD).",
       "interventionIds": [
-        "laboratory-tests-complete-blood-count-cb",
-        "imaging-studies-transvaginal-ultrasound-",
-        "hcg"
+        "physical-exam-general-appearance",
+        "physical-exam-heent-neck",
+        "physical-exam-skin",
+        "physical-exam-heart-cardiovascular",
+        "physical-exam-abdomen",
+        "physical-exam-genitalia",
+        "cbc-with-differential-hemoglobin-blood-h",
+        "pt-ptt-partial-thromboplastin-time-and-p",
+        "platelet-aggregation",
+        "hormone-thyroid-stimulating-serum-ultras",
+        "basic-metabolic-profile-comprehensive-me",
+        "von-willebrand-factor-activity-consult-h",
+        "saline-solution-0-45-lactated-ringer-sol",
+        "desmopressin-acetate",
+        "tranexamic-acid-aminocaproic-acid",
+        "ferrous-gluconate-ferrous-sulfate-vitami",
+        "advise-patient-no-nsaids",
+        "advise-patient-no-sports",
+        "oral-contraceptive-consult-obstetrics-gy",
+        "packed-red-blood-cells-prbc-transfusion-"
       ],
       "interventions": [
         {
-          "id": "laboratory-tests-complete-blood-count-cb",
-          "label": "Laboratory tests: Complete blood count (CBC), coagulation panel, thyroid function tests, and hormone levels",
-          "correct_zone": "zone-blood",
-          "why": "Laboratory testing when systemic illness or severity warrants labs in The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary..",
+          "id": "physical-exam-general-appearance",
+          "label": "Physical Exam: General Appearance",
+          "correct_zone": "zone-custom-1",
+          "why": "Assess how ill the patient appears before focused testing for heavy menstrual bleeding.",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "imaging-studies-transvaginal-ultrasound-",
-          "label": "Imaging studies: Transvaginal ultrasound, pelvic MRI",
-          "correct_zone": "zone-monitor",
-          "why": "Pelvic/cervical evaluation is central for The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary. and localizes the source of heavy …",
+          "id": "physical-exam-heent-neck",
+          "label": "Physical Exam: HEENT / Neck",
+          "correct_zone": "zone-icu",
+          "why": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Von Willebrand Disease (vWD).",
           "guideline": "ACEP",
           "optional": false
         },
         {
-          "id": "hcg",
-          "label": "β-hCG",
+          "id": "physical-exam-skin",
+          "label": "Physical Exam: Skin",
+          "correct_zone": "zone-custom-1",
+          "why": "Skin exam may show rashes or systemic signs relevant to Von Willebrand Disease (vWD). Finding: Bruising or petechiae suggesting bleeding disorder.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-heart-cardiovascular",
+          "label": "Physical Exam: Heart / Cardiovascular",
+          "correct_zone": "zone-custom-1",
+          "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to heavy menstrual bleeding. Finding: Tachycardia or hypotension from blood loss.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-abdomen",
+          "label": "Physical Exam: Abdomen",
+          "correct_zone": "zone-custom-1",
+          "why": "Abdominal exam helps exclude alternative causes in a patient with heavy menstrual bleeding. Finding: Rule out other causes of bleeding or pain.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "physical-exam-genitalia",
+          "label": "Physical Exam: Genitalia",
+          "correct_zone": "zone-custom-1",
+          "why": "Pelvic/cervical evaluation is central for Von Willebrand Disease (vWD) and localizes the source of heavy menstrual bleeding.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "cbc-with-differential-hemoglobin-blood-h",
+          "label": "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit",
           "correct_zone": "zone-blood",
-          "why": "Appropriate CCS order for The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.: β-hCG.",
+          "why": "Laboratory testing when systemic illness or severity warrants labs in Von Willebrand Disease (vWD).",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "pt-ptt-partial-thromboplastin-time-and-p",
+          "label": "PT/PTT / Partial thromboplastin time AND PT/INR",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): PT/PTT / Partial thromboplastin time AND PT/INR.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "platelet-aggregation",
+          "label": "Platelet aggregation",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Platelet aggregation.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "hormone-thyroid-stimulating-serum-ultras",
+          "label": "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+          "correct_zone": "zone-arm",
+          "why": "Patient education and counseling are part of definitive care for Von Willebrand Disease (vWD).",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "basic-metabolic-profile-comprehensive-me",
+          "label": "Basic metabolic profile / Comprehensive metabolic profile",
+          "correct_zone": "zone-arm",
+          "why": "Laboratory testing when systemic illness or severity warrants labs in Von Willebrand Disease (vWD).",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "von-willebrand-factor-activity-consult-h",
+          "label": "von Willebrand factor activity / Consult, hematology/oncology",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): von Willebrand factor activity / Consult, hematology/oncology.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "saline-solution-0-45-lactated-ringer-sol",
+          "label": "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal",
+          "correct_zone": "zone-iv-bag",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "desmopressin-acetate",
+          "label": "Desmopressin acetate",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Desmopressin acetate.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "tranexamic-acid-aminocaproic-acid",
+          "label": "Tranexamic acid / Aminocaproic acid",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Tranexamic acid / Aminocaproic acid.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "ferrous-gluconate-ferrous-sulfate-vitami",
+          "label": "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron",
+          "correct_zone": "zone-arm",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "advise-patient-no-nsaids",
+          "label": "Advise patient, no NSAIDs",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Advise patient, no NSAIDs.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "advise-patient-no-sports",
+          "label": "Advise patient, no sports",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Advise patient, no sports.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "oral-contraceptive-consult-obstetrics-gy",
+          "label": "Oral contraceptive / Consult, obstetrics/gynecology",
+          "correct_zone": "zone-icu",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Oral contraceptive / Consult, obstetrics/gynecology.",
+          "guideline": "ACEP",
+          "optional": false
+        },
+        {
+          "id": "packed-red-blood-cells-prbc-transfusion-",
+          "label": "Packed red blood cells / pRBC transfusion when Hgb stable ~10",
+          "correct_zone": "zone-iv-bag",
+          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Packed red blood cells / pRBC transfusion when Hgb stable ~10.",
           "guideline": "ACEP",
           "optional": false
         }
@@ -12738,56 +12897,62 @@
       "decoys": [
         {
           "id": "decoy-avoid-175-0",
-          "label": "Order for immediate dilation and curettage (D&C) as it may be premature without definitive diagnosis",
-          "why": "CCS review: avoid this order for The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary. — it does not change acute management.",
-          "correct_zone": "zone-icu"
+          "label": "pRBC transfusion when hemodynamically stable with Hgb ~10",
+          "why": "CCS review: avoid this order for Von Willebrand Disease (vWD) — it does not change acute management.",
+          "correct_zone": "zone-iv-bag"
+        },
+        {
+          "id": "decoy-avoid-175-1",
+          "label": "NSAIDs",
+          "why": "CCS review: avoid this order for Von Willebrand Disease (vWD) — it does not change acute management.",
+          "correct_zone": "zone-arm"
         }
       ],
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Heavy Menstrual Bleeding — emergency presentation.",
-            "hpi": "Heavy Menstrual Bleeding — emergency presentation.",
+            "intro": "Heavy menstrual bleeding",
+            "hpi": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation. Workup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days). Acute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
             "vitalsText": "",
-            "clinicalTip": "Teaching hint: The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary. — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.. Start with stabilization, then targeted testing."
+            "clinicalTip": "Teaching hint: Von Willebrand Disease (vWD) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Von Willebrand Disease (vWD). Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Heavy Menstrual Bleeding — emergency presentation.",
-            "hpi": "Heavy Menstrual Bleeding — emergency presentation.",
+            "intro": "Heavy menstrual bleeding",
+            "hpi": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation. Workup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days). Acute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
             "vitalsText": "",
-            "clinicalTip": "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary. — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.."
+            "clinicalTip": "Von Willebrand Disease (vWD) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Von Willebrand Disease (vWD)."
           },
           "hard": {
-            "intro": "Heavy Menstrual Bleeding — emergency presentation.",
-            "hpi": "Heavy Menstrual Bleeding — emergency presentation.",
+            "intro": "Heavy menstrual bleeding",
+            "hpi": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation. Workup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days). Acute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Von Willebrand Disease (vWD)."
           }
         },
         "patient": {
           "easy": {
-            "intro": "Heavy Menstrual Bleeding — emergency presentation.",
-            "hpi": "Heavy Menstrual Bleeding — emergency presentation.",
+            "intro": "Heavy menstrual bleeding",
+            "hpi": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation. Workup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days). Acute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
             "vitalsText": "",
-            "clinicalTip": "Teaching hint: The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary. — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.. Share your symptoms clearly with the team."
+            "clinicalTip": "Teaching hint: Von Willebrand Disease (vWD) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Von Willebrand Disease (vWD). Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Heavy Menstrual Bleeding — emergency presentation.",
-            "hpi": "Heavy Menstrual Bleeding — emergency presentation.",
+            "intro": "Heavy menstrual bleeding",
+            "hpi": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation. Workup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days). Acute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
             "vitalsText": "",
-            "clinicalTip": "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary. — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.."
+            "clinicalTip": "Von Willebrand Disease (vWD) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Von Willebrand Disease (vWD)."
           },
           "hard": {
-            "intro": "Heavy Menstrual Bleeding — emergency presentation.",
-            "hpi": "Heavy Menstrual Bleeding — emergency presentation.",
+            "intro": "Heavy menstrual bleeding",
+            "hpi": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation. Workup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days). Acute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Von Willebrand Disease (vWD)."
           }
         }
       }
