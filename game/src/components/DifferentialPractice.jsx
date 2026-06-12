@@ -117,6 +117,23 @@ function mergeGuesses(existing, rawInput = '') {
   return flattenGuessList(chunks);
 }
 
+function stackerTimerLabel({ stackerPaused, stackerPhase, secondsLeft, compact = false }) {
+  if (compact) {
+    if (stackerPhase === 'processing') return '…';
+    if (stackerPaused) return `⏸ ${secondsLeft}s`;
+    if (stackerPhase === 'review') return `R ${secondsLeft}s`;
+    return `${secondsLeft}s`;
+  }
+  if (stackerPaused) {
+    return stackerPhase === 'review'
+      ? `Review · Paused ${secondsLeft}s`
+      : `Paused ${secondsLeft}s`;
+  }
+  if (stackerPhase === 'processing') return 'Processing…';
+  if (stackerPhase === 'review') return `Review ${secondsLeft}s`;
+  return `${secondsLeft}s`;
+}
+
 export default function DifferentialPractice({ onBack }) {
   const [cardIdx, setCardIdx] = useState(pickInitial);
   const [guesses, setGuesses] = useState([]);
@@ -969,6 +986,110 @@ export default function DifferentialPractice({ onBack }) {
     }
   }, [stacker.enabled, stackerPhase, secondsLeft, voice.recording, voice]);
 
+  const renderStackerCluster = (surfacing) => {
+    const compact = surfacing === 'foot';
+    const timerText = stackerTimerLabel({
+      stackerPaused,
+      stackerPhase,
+      secondsLeft,
+      compact,
+    });
+    return (
+      <div
+        className={`diff-stacker-cluster diff-stacker-cluster--${surfacing}`}
+        data-surfacing={surfacing}
+      >
+        <button
+          type="button"
+          className={`diff-stacker-btn${stacker.enabled ? ' diff-stacker-btn--on' : ''}`}
+          onClick={toggleStacker}
+          title="1-minute stacker — auto-advance through all cases"
+          aria-label={stacker.enabled ? 'Stacker on' : 'Stacker mode'}
+        >
+          <span className="diff-nav-label diff-nav-label--long">
+            {stacker.enabled ? 'Stacker on' : 'Stacker'}
+          </span>
+          <span className="diff-nav-label diff-nav-label--short" aria-hidden>
+            {stacker.enabled ? 'On' : 'Stk'}
+          </span>
+        </button>
+        {stacker.enabled && (
+          <>
+            <select
+              className="diff-stacker-select"
+              value={stacker.seconds}
+              onChange={(e) => setStackerSeconds(Number(e.target.value))}
+              aria-label="Seconds per case"
+            >
+              <option value={30}>30s</option>
+              <option value={45}>45s</option>
+              <option value={60}>60s</option>
+              <option value={90}>90s</option>
+              <option value={120}>2m</option>
+            </select>
+            <span
+              className={`diff-stacker-timer${secondsLeft <= 10 && stackerPhase !== 'processing' && !stackerPaused ? ' diff-stacker-timer--urgent' : ''}${stackerPhase === 'review' ? ' diff-stacker-timer--review' : ''}${stackerPhase === 'processing' ? ' diff-stacker-timer--processing' : ''}${stackerPaused ? ' diff-stacker-timer--paused' : ''}`}
+              aria-live="polite"
+            >
+              {timerText}
+            </span>
+            {surfacing === 'foot' && stackerPhase !== 'processing' && (
+              <button
+                type="button"
+                className={`diff-stacker-pause-btn diff-stacker-pause-btn--dock${stackerPaused ? ' diff-stacker-pause-btn--on' : ''}`}
+                onClick={toggleStackerPause}
+                title={stackerPaused ? 'Resume stacker timer' : 'Pause timer for more review time'}
+                aria-label={stackerPaused ? 'Resume timer' : 'Pause timer'}
+              >
+                {stackerPaused ? <IconPlayerPlay /> : <IconPlayerPause />}
+                <span className="diff-nav-label diff-nav-label--long">
+                  {stackerPaused ? 'Resume' : 'Pause'}
+                </span>
+              </button>
+            )}
+          </>
+        )}
+        <form
+          className="diff-case-jump"
+          onSubmit={(e) => {
+            e.preventDefault();
+            goToCaseId(caseJumpInput);
+          }}
+          title="Search by CCS case number"
+        >
+          <label className="diff-case-jump-label" htmlFor={`diff-case-jump-input-${surfacing}`}>
+            Case
+          </label>
+          <input
+            id={`diff-case-jump-input-${surfacing}`}
+            type="search"
+            inputMode="numeric"
+            className={`diff-case-jump-input${caseJumpError ? ' diff-case-jump-input--error' : ''}`}
+            value={caseJumpInput}
+            onChange={(e) => {
+              setCaseJumpInput(e.target.value);
+              if (caseJumpError) setCaseJumpError('');
+            }}
+            placeholder="#"
+            aria-label="Search case number"
+            aria-invalid={caseJumpError ? 'true' : undefined}
+            aria-describedby={caseJumpError ? `diff-case-jump-error-${surfacing}` : undefined}
+            autoComplete="off"
+            spellCheck={false}
+          />
+          <button type="submit" className="diff-case-jump-btn">
+            Go
+          </button>
+        </form>
+        {caseJumpError ? (
+          <span id={`diff-case-jump-error-${surfacing}`} className="diff-case-jump-error" role="alert">
+            {caseJumpError}
+          </span>
+        ) : null}
+      </div>
+    );
+  };
+
   return (
     <div
       className={`diff-practice${revealed ? ' diff-practice--revealed' : ''}`}
@@ -978,86 +1099,13 @@ export default function DifferentialPractice({ onBack }) {
     >
       <header className="diff-header">
         <button className="diff-back" onClick={handleBack} aria-label="Back" type="button">
-          ← Back
+          <span className="diff-nav-label diff-nav-label--long">← Back</span>
+          <span className="diff-nav-label diff-nav-label--short" aria-hidden>
+            ←
+          </span>
         </button>
         <div className="diff-header-actions">
-          <div className="diff-stacker-cluster">
-            <button
-              type="button"
-              className={`diff-stacker-btn${stacker.enabled ? ' diff-stacker-btn--on' : ''}`}
-              onClick={toggleStacker}
-              title="1-minute stacker — auto-advance through all cases"
-            >
-              {stacker.enabled ? 'Stacker on' : 'Stacker'}
-            </button>
-            {stacker.enabled && (
-              <>
-                <select
-                  className="diff-stacker-select"
-                  value={stacker.seconds}
-                  onChange={(e) => setStackerSeconds(Number(e.target.value))}
-                  aria-label="Seconds per case"
-                >
-                  <option value={30}>30s</option>
-                  <option value={45}>45s</option>
-                  <option value={60}>60s</option>
-                  <option value={90}>90s</option>
-                  <option value={120}>2m</option>
-                </select>
-                <span
-                  className={`diff-stacker-timer${secondsLeft <= 10 && stackerPhase !== 'processing' && !stackerPaused ? ' diff-stacker-timer--urgent' : ''}${stackerPhase === 'review' ? ' diff-stacker-timer--review' : ''}${stackerPhase === 'processing' ? ' diff-stacker-timer--processing' : ''}${stackerPaused ? ' diff-stacker-timer--paused' : ''}`}
-                  aria-live="polite"
-                >
-                  {stackerPaused
-                    ? stackerPhase === 'review'
-                      ? `Review · Paused ${secondsLeft}s`
-                      : `Paused ${secondsLeft}s`
-                    : stackerPhase === 'processing'
-                      ? 'Processing…'
-                      : stackerPhase === 'review'
-                        ? `Review ${secondsLeft}s`
-                        : `${secondsLeft}s`}
-                </span>
-              </>
-            )}
-            <form
-              className="diff-case-jump"
-              onSubmit={(e) => {
-                e.preventDefault();
-                goToCaseId(caseJumpInput);
-              }}
-              title="Search by CCS case number"
-            >
-              <label className="diff-case-jump-label" htmlFor="diff-case-jump-input">
-                Case
-              </label>
-              <input
-                id="diff-case-jump-input"
-                type="search"
-                inputMode="numeric"
-                className={`diff-case-jump-input${caseJumpError ? ' diff-case-jump-input--error' : ''}`}
-                value={caseJumpInput}
-                onChange={(e) => {
-                  setCaseJumpInput(e.target.value);
-                  if (caseJumpError) setCaseJumpError('');
-                }}
-                placeholder="#"
-                aria-label="Search case number"
-                aria-invalid={caseJumpError ? 'true' : undefined}
-                aria-describedby={caseJumpError ? 'diff-case-jump-error' : undefined}
-                autoComplete="off"
-                spellCheck={false}
-              />
-              <button type="submit" className="diff-case-jump-btn">
-                Go
-              </button>
-            </form>
-            {caseJumpError ? (
-              <span id="diff-case-jump-error" className="diff-case-jump-error" role="alert">
-                {caseJumpError}
-              </span>
-            ) : null}
-          </div>
+          {renderStackerCluster('header')}
           <button
             type="button"
             className="diff-export-btn"
@@ -1129,13 +1177,15 @@ export default function DifferentialPractice({ onBack }) {
               {stacker.enabled && stackerPhase !== 'processing' && (
                 <button
                   type="button"
-                  className={`diff-stacker-pause-btn${stackerPaused ? ' diff-stacker-pause-btn--on' : ''}`}
+                  className={`diff-stacker-pause-btn diff-stacker-pause-btn--voice${stackerPaused ? ' diff-stacker-pause-btn--on' : ''}`}
                   onClick={toggleStackerPause}
                   title={stackerPaused ? 'Resume stacker timer' : 'Pause timer for more review time'}
                   aria-label={stackerPaused ? 'Resume timer' : 'Pause timer'}
                 >
                   {stackerPaused ? <IconPlayerPlay /> : <IconPlayerPause />}
-                  <span>{stackerPaused ? 'Resume' : 'Pause'}</span>
+                  <span className="diff-nav-label diff-nav-label--long">
+                    {stackerPaused ? 'Resume' : 'Pause'}
+                  </span>
                 </button>
               )}
             </div>
@@ -1362,7 +1412,10 @@ export default function DifferentialPractice({ onBack }) {
             </p>
           )}
 
-          <div className="diff-nav">
+          <div className="diff-mobile-dock">
+            {renderStackerCluster('foot')}
+
+            <div className="diff-nav">
           <button
             type="button"
             className="diff-nav-btn"
@@ -1410,6 +1463,7 @@ export default function DifferentialPractice({ onBack }) {
               ›
             </span>
           </button>
+          </div>
           </div>
         </div>
       </div>

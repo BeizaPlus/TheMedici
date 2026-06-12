@@ -250,6 +250,18 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
+.diff-stacker-cluster--foot {
+  display: none;
+}
+
+.diff-mobile-dock {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  width: 100%;
+}
+
 .diff-ambience-dock {
   position: fixed;
   right: 18px;
@@ -620,6 +632,12 @@
 .diff-study-panel--collapsed {
   border-color: rgba(255, 255, 255, 0.05);
   background: rgba(255, 255, 255, 0.015);
+}
+
+.diff-study-panel--expanded {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .diff-study-tabs {
@@ -2773,6 +2791,10 @@
   height: 18px;
 }
 
+.diff-stacker-pause-btn--dock {
+  display: none;
+}
+
 .diff-stacker-timer--paused {
   color: var(--gold, #e8b84b);
   border-color: rgba(232, 184, 75, 0.35);
@@ -3809,59 +3831,148 @@
   }
 
   .diff-practice--revealed {
-    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    padding-bottom: calc(112px + env(safe-area-inset-bottom));
   }
 
   .diff-progress {
     padding: 8px max(12px, env(safe-area-inset-left)) 10px max(12px, env(safe-area-inset-right));
   }
 
+  .diff-back .diff-nav-label--short {
+    display: inline;
+  }
+
+  .diff-back .diff-nav-label--long {
+    display: none;
+  }
+
   .diff-header {
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 12px max(12px, env(safe-area-inset-left)) 12px max(12px, env(safe-area-inset-right));
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    padding: 8px max(10px, env(safe-area-inset-left)) 8px max(10px, env(safe-area-inset-right));
   }
 
   .diff-back {
-    min-height: 44px;
-    padding: 10px 14px;
+    min-height: 36px;
+    padding: 6px 10px;
+    flex-shrink: 0;
   }
 
   .diff-header-actions {
-    flex: 1 1 100%;
-    flex-wrap: wrap;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
     align-items: center;
-    gap: 8px;
-    row-gap: 8px;
+    justify-content: flex-end;
+    gap: 6px;
+    min-width: 0;
   }
 
   .diff-export-btn {
     display: none;
   }
 
-  .diff-stacker-cluster {
-    flex: 1 1 100%;
-    order: 1;
+  .diff-stacker-cluster--header {
+    display: none;
   }
 
-  .diff-case-jump {
-    flex: 1 1 auto;
-    min-width: 0;
+  .diff-stacker-cluster--foot {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 0 2px;
+    border: none;
+    background: transparent;
   }
 
-  .diff-counter {
-    flex: 1 1 100%;
-    order: 10;
-    font-size: 0.74rem;
+  .diff-stacker-cluster--foot::-webkit-scrollbar {
+    display: none;
   }
 
   .diff-stacker-btn,
   .diff-stacker-select,
   .diff-stacker-timer,
   .diff-case-jump-btn,
+  .diff-case-jump-input,
+  .diff-stacker-pause-btn--dock {
+    min-height: 32px;
+  }
+
+  .diff-stacker-btn,
+  .diff-stacker-select,
+  .diff-stacker-timer,
+  .diff-case-jump-btn {
+    font-size: 0.65rem;
+    padding: 4px 7px;
+  }
+
+  .diff-stacker-btn .diff-nav-label--long {
+    display: none;
+  }
+
+  .diff-stacker-btn .diff-nav-label--short {
+    display: inline;
+  }
+
+  .diff-stacker-select {
+    max-width: 52px;
+    padding: 4px 4px;
+  }
+
+  .diff-stacker-timer {
+    font-size: 0.72rem;
+    min-width: 2rem;
+  }
+
+  .diff-stacker-pause-btn--voice {
+    display: none;
+  }
+
+  .diff-stacker-pause-btn--dock {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    min-width: 32px;
+  }
+
+  .diff-stacker-pause-btn--dock .diff-nav-label--long {
+    display: none;
+  }
+
+  .diff-case-jump {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
   .diff-case-jump-input {
-    min-height: 40px;
+    width: 2.5rem;
+    min-height: 32px;
+    padding: 4px 6px;
+    font-size: 0.72rem;
+  }
+
+  .diff-case-jump-btn {
+    padding: 4px 8px;
+  }
+
+  .diff-case-jump-error {
+    flex: 1 1 100%;
+    font-size: 0.62rem;
+  }
+
+  .diff-counter {
+    flex: 0 1 auto;
+    order: 0;
+    font-size: 0.62rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 42vw;
   }
 
   .diff-card {
@@ -3893,29 +4004,30 @@
   }
 
   .diff-voice-controls {
-    width: 100%;
-    justify-content: stretch;
+    flex-wrap: nowrap;
+    gap: 6px;
+    justify-content: flex-start;
   }
 
   .diff-voice-controls > * {
-    flex: 1 1 auto;
-    min-height: 44px;
+    flex: 0 1 auto;
+    min-height: 36px;
   }
 
   .diff-practice .case-record-btn {
-    width: 100%;
-    min-height: 48px;
-    justify-content: center;
+    width: auto;
+    min-height: 36px;
+    flex: 0 0 auto;
   }
 
   .diff-mic-waveform {
-    max-width: none;
-    flex: 1 1 100%;
-    height: 48px;
+    flex: 1 1 auto;
+    min-width: 72px;
+    height: 36px;
   }
 
   .diff-stacker-pause-btn {
-    min-height: 44px;
+    min-height: 36px;
     justify-content: center;
   }
 
@@ -3951,10 +4063,33 @@
     max-height: min(42vh, 360px);
   }
 
+  .diff-study-panel--expanded {
+    max-height: min(46dvh, 400px);
+  }
+
+  .diff-study-panel--expanded .diff-study-body {
+    order: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .diff-study-panel--expanded .diff-study-tabs {
+    order: 2;
+    flex-shrink: 0;
+    border-bottom: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
   .diff-study-tab {
-    padding: 12px 6px;
-    font-size: 0.74rem;
-    min-height: 44px;
+    padding: 8px 4px;
+    font-size: 0.68rem;
+    min-height: 36px;
+  }
+
+  .diff-study-collapse-btn {
+    min-height: 36px;
+    padding: 0 8px;
   }
 
   .diff-study-body {
@@ -4169,13 +4304,14 @@
 
   .diff-reveal-btn {
     width: 100%;
-    min-height: 48px;
-    padding: 14px 18px;
+    min-height: 40px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
   }
 
   .diff-ambience-dock {
     right: max(10px, env(safe-area-inset-right));
-    bottom: max(10px, env(safe-area-inset-bottom));
+    bottom: calc(58px + env(safe-area-inset-bottom));
     z-index: 36;
   }
 
