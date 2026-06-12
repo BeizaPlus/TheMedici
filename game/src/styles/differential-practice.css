@@ -5188,3 +5188,44 @@
     display: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   REMOVE BOTTOM DOCK BAR ON MOBILE
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Hide the entire fixed bottom bar */
+  .diff-case-foot {
+    display: none !important;
+  }
+
+  /* Hide the desktop ambience dock (already hidden but be explicit) */
+  .diff-ambience-dock {
+    display: none !important;
+  }
+
+  /* Mic tab recording state — red pulsing ring */
+  .diff-input-mode-btn--recording {
+    color: #ff4d4d !important;
+    background: rgba(255, 77, 77, 0.12) !important;
+    animation: diffMicPulse 1.2s ease-in-out infinite;
+  }
+
+  @keyframes diffMicPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.3); }
+    50%       { box-shadow: 0 0 0 6px rgba(255, 77, 77, 0); }
+  }
+
+  /* Voice block inside card — no padding when it only shows waveform/status */
+  .diff-voice-block--card:empty {
+    display: none;
+  }
+
+  .diff-voice-block--card {
+    padding: 8px 12px 10px;
+  }
+
+  /* Remove bottom padding from diff-practice since there's no fixed bar */
+  .diff-practice {
+    padding-bottom: env(safe-area-inset-bottom, 8px) !important;
+  }
+}
