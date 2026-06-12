@@ -1418,6 +1418,46 @@ export default function DifferentialPractice({ onBack }) {
           <div className="diff-mobile-dock">
             {renderStackerCluster('foot')}
 
+            {/* Utility row: bookmark + chat + font controls + volume — mobile only */}
+            <div className="diff-mobile-utility-row">
+              <div className="diff-mobile-utility-left">
+                <CaseReviewFlagButton
+                  caseId={flagCaseId}
+                  iconOnly
+                  className="diff-dock-bookmark-btn"
+                  onChange={(flagged) => {
+                    setReviewQueueTick((t) => t + 1);
+                    setFlagToast(flagged ? 'Bookmarked for review later' : 'Bookmark removed');
+                    window.setTimeout(() => setFlagToast(''), 2400);
+                  }}
+                />
+                <button
+                  type="button"
+                  className={`diff-dock-chat-btn${chatDockOpen ? ' active' : ''}${chatPatientMode ? ' diff-dock-chat-btn--patient' : ''}`}
+                  onClick={toggleChatDock}
+                  aria-label="Case chat"
+                  aria-pressed={chatDockOpen}
+                  title={chatDockOpen ? 'Hide case chat' : chatPatientMode ? 'Case chat — patient mode' : 'Case chat — tutor (LLM)'}
+                >
+                  <IconMessage className="toolbar-icon" aria-hidden />
+                  {(caseChat?.messages?.filter((m) => m.role === 'user' || m.role === 'assistant').length || 0) > 0 && (
+                    <span className="diff-dock-chat-badge" aria-hidden>
+                      {caseChat.messages.filter((m) => m.role === 'user' || m.role === 'assistant').length}
+                    </span>
+                  )}
+                </button>
+              </div>
+              <div className="diff-mobile-utility-right">
+                <ClinicalFontControls
+                  prefs={textPrefs}
+                  onChange={setTextPrefs}
+                  compact
+                  showLabel={false}
+                />
+                <AudioVolumeControl label="ICU monitor" />
+              </div>
+            </div>
+
             <div className="diff-nav">
           <button
             type="button"

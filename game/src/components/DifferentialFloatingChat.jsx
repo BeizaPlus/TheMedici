@@ -8,6 +8,10 @@ import { IconMessage, IconStethoscope } from './sceneToolbar/SceneToolbarIcons.j
 const MIN_W = 320;
 const MIN_H = 300;
 
+function isMobile() {
+  return typeof window !== 'undefined' && window.innerWidth <= 768;
+}
+
 export default function DifferentialFloatingChat({
   open,
   onClose,
@@ -24,8 +28,8 @@ export default function DifferentialFloatingChat({
   const panelRef = useRef(null);
   const [pos, setPos] = useState({ x: 24, y: 96 });
   const [size, setSize] = useState(() => ({
-    w: Math.min(420, window.innerWidth - 32),
-    h: Math.min(560, window.innerHeight - 120),
+    w: isMobile() ? window.innerWidth : Math.min(420, window.innerWidth - 32),
+    h: isMobile() ? Math.round(window.innerHeight * 0.55) : Math.min(560, window.innerHeight - 120),
   }));
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(null);
@@ -122,12 +126,16 @@ export default function DifferentialFloatingChat({
 
   if (!open || !chat || !caseData) return null;
 
+  const mobile = isMobile();
+
   return createPortal(
     <aside
       ref={panelRef}
-      className={`case-chat-panel case-chat-panel--floating diff-floating-chat${dragging ? ' case-chat-dragging' : ''}${resizing ? ' case-chat-resizing' : ''}`}
+      className={`case-chat-panel case-chat-panel--floating diff-floating-chat${dragging ? ' case-chat-dragging' : ''}${resizing ? ' case-chat-resizing' : ''}${mobile ? ' diff-floating-chat--mobile' : ''}`}
       aria-label="Case chat"
-      style={{ left: `${pos.x}px`, top: `${pos.y}px`, width: `${size.w}px`, height: `${size.h}px` }}
+      style={mobile
+        ? { left: 0, bottom: 0, top: 'auto', width: '100%', height: `${size.h}px` }
+        : { left: `${pos.x}px`, top: `${pos.y}px`, width: `${size.w}px`, height: `${size.h}px` }}
     >
       <header
         className="case-chat-head case-chat-drag-handle"
@@ -186,9 +194,13 @@ export default function DifferentialFloatingChat({
         />
       </div>
 
-      <div className="chat-resize-handle chat-resize-e" onPointerDown={onResizeStart('e')} aria-hidden />
-      <div className="chat-resize-handle chat-resize-s" onPointerDown={onResizeStart('s')} aria-hidden />
-      <div className="chat-resize-handle chat-resize-se" onPointerDown={onResizeStart('se')} aria-hidden />
+      {!mobile && (
+        <>
+          <div className="chat-resize-handle chat-resize-e" onPointerDown={onResizeStart('e')} aria-hidden />
+          <div className="chat-resize-handle chat-resize-s" onPointerDown={onResizeStart('s')} aria-hidden />
+          <div className="chat-resize-handle chat-resize-se" onPointerDown={onResizeStart('se')} aria-hidden />
+        </>
+      )}
     </aside>,
     document.body,
   );

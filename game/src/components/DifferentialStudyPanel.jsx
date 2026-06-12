@@ -51,7 +51,7 @@ export default function DifferentialStudyPanel({
   onCaseNotesChanged,
 }) {
   const [tab, setTab] = useState('case');
-  const [expanded, setExpanded] = useState(() => isMobileStudyViewport());
+  const [expanded, setExpanded] = useState(false);
 
   const recordingCount = useMemo(
     () => listLocalDifferentialRecordings(caseId).length,
@@ -135,7 +135,7 @@ export default function DifferentialStudyPanel({
           ? 'case'
           : 'timeline';
     setTab(nextTab);
-    setExpanded(mobile);
+    setExpanded(false);
     lastTimelineFocusRef.current = 0;
     lastStudyTabRequestRef.current = 0;
     // Only reset tab when switching cases — not when timeline count updates (chat voice, etc.)
@@ -167,7 +167,6 @@ export default function DifferentialStudyPanel({
   const toggleTab = useCallback(
     (id) => {
       if (expanded && tab === id) {
-        if (isMobileStudyViewport()) return;
         collapseStudy();
         return;
       }
@@ -190,6 +189,9 @@ export default function DifferentialStudyPanel({
       aria-label="Practice timeline and CCS case reference"
     >
       <div className="diff-study-tabs" role="tablist" aria-label="Review list, timeline, case, notes, and real world">
+        {!expanded && (
+          <span className="diff-study-tab-hint">Study ↑</span>
+        )}
         {TABS.map((t) => (
           <button
             key={t.id}
