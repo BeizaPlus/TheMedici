@@ -4856,6 +4856,20 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   DESKTOP GUARD — Manus mobile UI must not replace desktop controls
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.diff-mobile-icon-strip {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .diff-mobile-icon-strip {
+    display: flex;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    UNIFIED INPUT CARD + CASE TITLE SUBTITLE — mobile only
    ═══════════════════════════════════════════════════════════════════════════ */
 

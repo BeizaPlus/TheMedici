@@ -71,6 +71,10 @@ import {
   pickStackerCaseIndex,
 } from '../lib/differentialCasePick.js';
 
+function isMobilePracticeViewport() {
+  return typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+}
+
 function pickInitial() {
   return pickDifferentialCaseIndex(bank, -1);
 }
@@ -177,6 +181,7 @@ export default function DifferentialPractice({ onBack }) {
   const [mobileInputMode, setMobileInputMode] = useState('voice');
   // Mobile study bottom sheet
   const [mobileStudyOpen, setMobileStudyOpen] = useState(false);
+  const [isMobilePractice, setIsMobilePractice] = useState(() => isMobilePracticeViewport());
   const inputRef = useRef(null);
   const voiceFocusRef = useRef(null);
   const loggedRoundRef = useRef(false);
@@ -197,6 +202,18 @@ export default function DifferentialPractice({ onBack }) {
   }, []);
 
   useEffect(() => subscribeAudioPrefs(setAudioPrefs), []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const sync = () => setIsMobilePractice(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobilePractice) setMobileStudyOpen(false);
+  }, [isMobilePractice]);
 
   useEffect(() => {
     const bump = () => setSettingsTick((t) => t + 1);
@@ -1104,6 +1121,38 @@ export default function DifferentialPractice({ onBack }) {
     );
   };
 
+  const renderStudyPanel = () => (
+    <DifferentialStudyPanel
+      caseId={entry.caseId}
+      clinicalStyle={clinicalStyle}
+      caseStats={caseStats}
+      caseRef={caseRef}
+      hasReviewText={hasReviewText}
+      ccsReview={ccsReview}
+      presentationIntro={presentationIntro}
+      presentationHistory={presentationHistory}
+      presentationVitals={presentationVitals}
+      fallbackHistory={fallbackHistory}
+      hasCaseData={Boolean(caseData)}
+      diagnosis={entry.diagnosis || ccsReview?.diagnosis || ''}
+      topic={entry.topic || ''}
+      recordingsVersion={recordingsVersion}
+      timelineFocusVersion={timelineFocusVersion}
+      studyTabRequest={studyTabRequest}
+      reviewQueueTick={reviewQueueTick + statsTick}
+      notesVersion={notesVersion}
+      onCaseNotesChanged={() => setNotesVersion((v) => v + 1)}
+      onJumpToCase={goToCaseId}
+      onPauseForStudy={pauseForStudy}
+      onResumeFromStudy={resumeFromStudy}
+      onStudyTabOpen={(tabId) => {
+        if (tabId === 'realworld') {
+          /* prefetch handled in panel */
+        }
+      }}
+    />
+  );
+
   return (
     <div
       className={`diff-practice${revealed ? ' diff-practice--revealed' : ''}${stacker.enabled ? ' diff-practice--stacker' : ''}`}
@@ -1165,6 +1214,7 @@ export default function DifferentialPractice({ onBack }) {
               <span className="diff-topic-line">{caseHeadline}</span>
             </h1>
             {/* Mobile: case number as subtitle — tapping opens the study sheet */}
+            {isMobilePractice && (
             <button
               type="button"
               className="diff-case-id diff-case-id--mobile diff-case-id--trigger"
@@ -1174,6 +1224,7 @@ export default function DifferentialPractice({ onBack }) {
               CCS Case {entry.caseId}
               <span className="diff-case-id-chevron" aria-hidden>›</span>
             </button>
+            )}
           </div>
         </div>
 
@@ -1189,7 +1240,96 @@ export default function DifferentialPractice({ onBack }) {
           </p>
         )}
 
-        {/* ── Unified mobile input card ── */}
+        {/* ── Desktop: voice + text input (unchanged from pre-mobile refactor) ── */}
+        {!isMobilePractice && (
+          <>
+          {(!revealed || stacker.enabled) && (
+            <div className="diff-voice-block">
+              <div className="diff-voice-controls">
+                <CaseRecordButton
+                  recording={voice.recording}
+                  busy={voice.busy}
+                  transcribing={voice.transcribing || voice.finalizing || voice.incrementalParsing}
+                  disabled={voice.disabled}
+                  toggleRecording={voice.toggleRecording}
+                  compact
+                />
+                {stacker.enabled && stackerPhase !== 'processing' && (
+                  <button
+                    type="button"
+                    className={`diff-stacker-pause-btn diff-stacker-pause-btn--voice${stackerPaused ? ' diff-stacker-pause-btn--on' : ''}`}
+                    onClick={toggleStackerPause}
+                    title={stackerPaused ? 'Resume stacker timer' : 'Pause timer for more review time'}
+                    aria-label={stackerPaused ? 'Resume timer' : 'Pause timer'}
+                  >
+                    {stackerPaused ? <IconPlayerPlay /> : <IconPlayerPause />}
+                    <span className="diff-nav-label diff-nav-label--long">
+                      {stackerPaused ? 'Resume' : 'Pause'}
+                    </span>
+                  </button>
+                )}
+              </div>
+              {voice.recording && voice.mediaStream && (
+                <MicWaveform
+                  stream={voice.mediaStream}
+                  active={voice.recording}
+                  className="diff-mic-waveform"
+                />
+              )}
+              {voice.incrementalParsing && stacker.enabled && stackerPhase === 'practice' && (
+                <p className="diff-voice-live diff-voice-finalizing" aria-live="polite">
+                  DeepSeek cleaning {STACKER_INCREMENTAL_SECONDS}s chunk…
+                </p>
+              )}
+              {voice.finalizing && stackerPhase !== 'practice' && (
+                <p className="diff-voice-live diff-voice-finalizing" aria-live="polite">
+                  Smart reviewer cleaning your list…
+                </p>
+              )}
+              {stacker.enabled && voiceBelongsToCase && voice.cleanedPreview && (
+                <p className="diff-voice-live diff-voice-cleaned" aria-live="polite">
+                  Corrected: {voice.cleanedPreview}
+                </p>
+              )}
+              {!voice.finalizing && voiceBelongsToCase && voice.livePreview && (
+                <p
+                  className={`diff-voice-live${
+                    voice.livePreview === 'Recording…' || voice.livePreview === 'Transcribing…'
+                      ? ' diff-voice-live--status'
+                      : ''
+                  }`}
+                  aria-live="polite"
+                >
+                  {voice.livePreview === 'Recording…' || voice.livePreview === 'Transcribing…'
+                    ? voice.livePreview
+                    : `Hearing: ${voice.livePreview}`}
+                </p>
+              )}
+              {voiceError && <p className="diff-voice-error">{voiceError}</p>}
+            </div>
+          )}
+
+          {!revealed && (
+            <div className="diff-input-row">
+              <input
+                ref={inputRef}
+                className="diff-input"
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKey}
+                placeholder="Type differentials — separate with commas (click here to type)"
+              />
+              <button className="diff-add-btn" type="button" onClick={addGuess} disabled={!input.trim()}>
+                Add
+              </button>
+            </div>
+          )}
+          </>
+        )}
+
+        {/* ── Mobile: unified input card (Manus) ── */}
+        {isMobilePractice && (
         <div className="diff-input-card">
           {!revealed && (
             <>
@@ -1323,6 +1463,7 @@ export default function DifferentialPractice({ onBack }) {
             </div>
           )}
         </div>
+        )}
 
         {(revealed || voiceBelongsToCase || tagGuesses.length > 0) && (
           <div className="diff-compare" aria-label="Compare your differential to the answer key">
@@ -1435,8 +1576,10 @@ export default function DifferentialPractice({ onBack }) {
 
         </div>
 
+        {!isMobilePractice && renderStudyPanel()}
+
         {/* Mobile study bottom sheet — wraps the study panel */}
-        {mobileStudyOpen && (
+        {isMobilePractice && mobileStudyOpen && (
           <div
             className="diff-study-sheet-overlay"
             onClick={(e) => { if (e.target === e.currentTarget) setMobileStudyOpen(false); }}
@@ -1456,35 +1599,7 @@ export default function DifferentialPractice({ onBack }) {
                 >✕</button>
               </div>
               <div className="diff-study-sheet-body">
-                <DifferentialStudyPanel
-                  caseId={entry.caseId}
-                  clinicalStyle={clinicalStyle}
-                  caseStats={caseStats}
-                  caseRef={caseRef}
-                  hasReviewText={hasReviewText}
-                  ccsReview={ccsReview}
-                  presentationIntro={presentationIntro}
-                  presentationHistory={presentationHistory}
-                  presentationVitals={presentationVitals}
-                  fallbackHistory={fallbackHistory}
-                  hasCaseData={Boolean(caseData)}
-                  diagnosis={entry.diagnosis || ccsReview?.diagnosis || ''}
-                  topic={entry.topic || ''}
-                  recordingsVersion={recordingsVersion}
-                  timelineFocusVersion={timelineFocusVersion}
-                  studyTabRequest={studyTabRequest}
-                  reviewQueueTick={reviewQueueTick + statsTick}
-                  notesVersion={notesVersion}
-                  onCaseNotesChanged={() => setNotesVersion((v) => v + 1)}
-                  onJumpToCase={goToCaseId}
-                  onPauseForStudy={pauseForStudy}
-                  onResumeFromStudy={resumeFromStudy}
-                  onStudyTabOpen={(tabId) => {
-                    if (tabId === 'realworld') {
-                      /* prefetch handled in panel; timer pause only on first expand */
-                    }
-                  }}
-                />
+                {renderStudyPanel()}
               </div>
             </div>
           </div>
@@ -1517,7 +1632,59 @@ export default function DifferentialPractice({ onBack }) {
             </p>
           )}
 
-          {/* ── Mobile icon strip (Telegram-style single row) ── */}
+          {!isMobilePractice && (
+            <div className="diff-nav">
+              <button
+                type="button"
+                className="diff-nav-btn"
+                onClick={goPrev}
+                title="Previous case (or random if none)"
+                aria-label="Previous case"
+              >
+                <span className="diff-nav-label diff-nav-label--long">‹ Prev</span>
+                <span className="diff-nav-label diff-nav-label--short" aria-hidden>
+                  ‹
+                </span>
+              </button>
+              <button
+                type="button"
+                className="diff-nav-btn"
+                onClick={refreshCase}
+                title="Refresh case"
+                aria-label="Refresh case"
+              >
+                <span className="diff-nav-label diff-nav-label--long">↻ Refresh</span>
+                <span className="diff-nav-label diff-nav-label--short" aria-hidden>
+                  ↻
+                </span>
+              </button>
+              <button
+                type="button"
+                className="diff-nav-btn diff-nav-btn--shuffle"
+                onClick={shuffleCase}
+                disabled={bank.length < 2}
+                title="Random case"
+                aria-label="Shuffle — random case"
+              >
+                <IconShuffle className="toolbar-icon" aria-hidden />
+                <span className="diff-nav-label diff-nav-label--long">Shuffle</span>
+              </button>
+              <button
+                type="button"
+                className="diff-nav-btn diff-nav-btn--primary"
+                onClick={goNext}
+                title="Random next case"
+                aria-label="Next random case"
+              >
+                <span className="diff-nav-label diff-nav-label--long">Next ›</span>
+                <span className="diff-nav-label diff-nav-label--short" aria-hidden>
+                  ›
+                </span>
+              </button>
+            </div>
+          )}
+
+          {isMobilePractice && (
           <div className="diff-mobile-dock">
             {/* Stacker cluster — only visible when stacker is on */}
             {renderStackerCluster('foot')}
@@ -1658,9 +1825,11 @@ export default function DifferentialPractice({ onBack }) {
 
             </div>
           </div>
+          )}
         </div>
       </div>
 
+      {!isMobilePractice && (
       <aside className="diff-ambience-dock" aria-label="Bookmark, case chat, text size, and ICU monitor">
         <div className="diff-dock-actions-row">
           <CaseReviewFlagButton
@@ -1704,6 +1873,7 @@ export default function DifferentialPractice({ onBack }) {
         />
         <AudioVolumeControl label="ICU monitor" />
       </aside>
+      )}
     </div>
   );
 }
