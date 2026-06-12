@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10T11:17:48.317Z",
+  "generated_at": "2026-06-12T13:27:47.539Z",
   "builder": "import-ollama-cases",
   "source": "game/data/ollama/cases.json",
   "total_cases": 181,
@@ -22484,84 +22484,164 @@
       "id": 128,
       "topic": "Depression",
       "title": "Depression",
-      "diagnosis": "Major Depressive Disorder is the most likely diagnosis for a patient presenting with Depression of unknown etiology.",
+      "diagnosis": "Cushing Disease",
       "confidence": "screenshot",
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
-        "Psychiatric Consult",
-        "Laboratory workup (CBC, Chemistry Panel, TSH, Urinalysis)",
-        "Psychological Evaluation",
-        "Cardiac Monitor",
-        "IV Access + Fluids",
-        "Stat Labs",
-        "Bedside / CT imaging",
-        "Admit / Disposition"
+        "Physical Exam: General Appearance",
+        "Physical Exam: Neuro / Psych",
+        "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative",
+        "Dexamethasone suppression test / Cortisol, 24-hour urine",
+        "Hormone, adrenocorticotropic, plasma",
+        "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium",
+        "CBC with differential",
+        "Basic metabolic profile / Comprehensive metabolic profile",
+        "Consult, surgery, neurologic"
       ],
       "should_avoid": [
-        "Prescribing medications without proper evaluation and consultation"
+        "SSRI / Psychiatry consult for depression without endocrine workup",
+        "SSRI or psychiatry consult without diagnosing Cushing disease"
       ],
       "rationale": {
-        "Psychiatric Consult": "To assess the severity of depression, rule out other psychiatric disorders, and guide further management.",
-        "Laboratory workup": "To evaluate for potential physical causes of depression or complications (e.g., electrolyte imbalance, thyroid dysfunction), and to monitor treatment response.",
-        "Psychological Evaluation": "To assess the patient's psychological state and functioning, which can aid in diagnosis and treatment planning.",
-        "Cardiac Monitor": "Continuous vitals.",
-        "IV Access + Fluids": "Two large-bore if shock.",
-        "Stat Labs": "CBC, BMP, lactate.",
-        "Bedside / CT imaging": "Targeted imaging.",
-        "Admit / Disposition": "Match acuity."
+        "Physical Exam: General Appearance": "It would be a good idea to take a general look at the patient to see how ill the patient looks.",
+        "Physical Exam: Neuro / Psych": "This is the chief complaint of the patient, so this should be evaluated.",
+        "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative": "The patient reports not having menses in 6 months. A pregnancy test should be ordered to verify.",
+        "Dexamethasone suppression test / Cortisol, 24-hour urine": "Dexamethasone test is the standard test for Cushing syndrome; 24-hour urinary cortisol can also be used.",
+        "Hormone, adrenocorticotropic, plasma": "Once Cushing syndrome is established, measure ACTH to determine ACTH-dependent vs independent cause.",
+        "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium": "With elevated ACTH, MRI of the brain should be done to look for a pituitary tumor.",
+        "CBC with differential": "The patient is having fatigue — check for anemia.",
+        "Basic metabolic profile / Comprehensive metabolic profile": "Chemistries are important to rule out other conditions.",
+        "Consult, surgery, neurologic": "Neurosurgery removes the pituitary tumor via transsphenoidal microadenomectomy.",
+        "SSRI / Psychiatry consult for depression without endocrine workup": "No points for treating depression alone — fix underlying Cushing disease causing her symptoms."
       },
-      "hpi": null,
-      "hpi_narrative": null,
-      "physical_exam": [
-        [
-          "General",
-          "Depression — exam tailored to chief complaint on arrival."
-        ],
-        [
-          "Cardiovascular",
-          "HR 88; BP 125/80."
-        ],
-        [
-          "Respiratory",
-          "RR 15; SpO₂ 98%."
-        ],
-        [
-          "Abdomen",
-          "Soft, non-distended, no focal peritoneal signs on initial exam."
-        ],
-        [
-          "Neuro",
-          "Alert and oriented unless perfusion or metabolic derangement present."
-        ],
-        [
-          "Skin",
-          "No acute rash; capillary refill and perfusion assessed."
-        ]
-      ],
-      "vitals": null,
-      "patient_voice": null,
-      "ccs_category": null,
-      "chief_complaint": null,
-      "case_summary": null,
+      "hpi": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder.\n\nWorkup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated.\n\nDefinitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
+      "hpi_narrative": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder.\n\nWorkup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated.\n\nDefinitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
+      "physical_exam": [],
+      "vitals": {
+        "hr": null,
+        "spo2": null,
+        "bp": null,
+        "rr": null,
+        "temp": null
+      },
+      "patient_voice": {
+        "chief_complaint": "I've been depressed, tired, and gaining weight",
+        "history": "I haven't had a period in six months. My face looks puffy and I've been feeling down for months.",
+        "pain": "Fatigue and low mood — not focal pain"
+      },
+      "ccs_category": "Internal Medicine",
+      "chief_complaint": "Depression, weight gain, amenorrhea, fatigue",
+      "case_summary": "Differential: Physiologic hypercortisolism, Adrenal Tumor, Metastatic Disease, Exogenous Cortisol use.\n\nThe patient in this case has Cushing Disease. The symptoms the patient is suffering include: weight gain, plethora face (moon face), hirsutism (facial hair growth), thinning hair, and depression. Dexamethasone test is the standard test to test for Cushings syndrome. 24-hour urinary cortisol can also be used.\n\nOnce Cushings Syndrome has been established, the cause of it should be determined by measuring ACTH. If ACTH is high (above 20 pg/mL), the syndrome is ACTH-dependent — pituitary tumor, ectopic ACTH, or CRH secretion; obtain brain MRI. If ACTH is low (below 5 pg/mL), evaluate adrenal glands with CT.\n\nIn this case ACTH is high (166 pg/mL), pituitary tumor is found on MRI, and neurosurgery should remove the tumor via transsphenoidal microadenomectomy. No points for SSRIs or mental health consult alone — treat the underlying hypercortisolism.",
       "decoys": [],
       "distractors": [],
-      "stacks": [],
+      "stacks": [
+        {
+          "label": "Physical Exam: General Appearance",
+          "type": "correctlyOrdered",
+          "finding": "It would be a good idea to take a general look at the patient to see how ill the patient looks.",
+          "aliases": [
+            "General Appearance"
+          ]
+        },
+        {
+          "label": "Physical Exam: Neuro / Psych",
+          "type": "correctlyOrdered",
+          "finding": "This is the chief complaint of the patient, so this should be evaluated.",
+          "aliases": [
+            "Neuro / Psych",
+            "Mental status exam"
+          ]
+        },
+        {
+          "label": "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative",
+          "type": "correctlyOrdered",
+          "finding": "The patient reports not having menses in 6 months. A pregnancy test should be ordered to verify.",
+          "aliases": [
+            "Pregnancy test",
+            "Beta hCG"
+          ]
+        },
+        {
+          "label": "Dexamethasone suppression test / Cortisol, 24-hour urine",
+          "type": "correctlyOrdered",
+          "finding": "Dexamethasone test is the standard test for Cushing syndrome; 24-hour urinary cortisol can also be used.",
+          "aliases": [
+            "Low-dose dexamethasone suppression",
+            "24-hour urine cortisol"
+          ]
+        },
+        {
+          "label": "Hormone, adrenocorticotropic, plasma",
+          "type": "correctlyOrdered",
+          "finding": "Once Cushing syndrome is established, measure ACTH to determine ACTH-dependent vs independent cause.",
+          "aliases": [
+            "ACTH",
+            "Plasma ACTH"
+          ]
+        },
+        {
+          "label": "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium",
+          "type": "correctlyOrdered",
+          "finding": "With elevated ACTH, MRI of the brain should be done to look for a pituitary tumor.",
+          "aliases": [
+            "MRI brain",
+            "Pituitary MRI"
+          ]
+        },
+        {
+          "label": "CBC with differential",
+          "type": "correctlyOrdered",
+          "finding": "The patient is having fatigue — check for anemia.",
+          "aliases": [
+            "CBC"
+          ]
+        },
+        {
+          "label": "Basic metabolic profile / Comprehensive metabolic profile",
+          "type": "correctlyOrdered",
+          "finding": "Chemistries are important to rule out other conditions.",
+          "aliases": [
+            "BMP",
+            "CMP"
+          ]
+        },
+        {
+          "label": "Consult, surgery, neurologic",
+          "type": "correctlyOrdered",
+          "finding": "Neurosurgery removes the pituitary tumor via transsphenoidal microadenomectomy.",
+          "aliases": [
+            "Neurosurgery consult",
+            "Transsphenoidal surgery"
+          ]
+        },
+        {
+          "label": "SSRI / Psychiatry consult for depression without endocrine workup",
+          "type": "correctlyAvoided",
+          "finding": "No points for treating depression alone — fix underlying Cushing disease causing her symptoms.",
+          "aliases": [
+            "Fluoxetine",
+            "Sertraline",
+            "Psychiatry consult"
+          ]
+        }
+      ],
       "order_sets": [
-        "Psychiatric Consult",
-        "Laboratory workup (CBC, Chemistry Panel, TSH, Urinalysis)",
-        "Psychological Evaluation",
-        "Cardiac Monitor",
-        "IV Access + Fluids",
-        "Stat Labs",
-        "Bedside / CT imaging",
-        "Admit / Disposition"
+        "Physical Exam: General Appearance",
+        "Physical Exam: Neuro / Psych",
+        "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative",
+        "Dexamethasone suppression test / Cortisol, 24-hour urine",
+        "Hormone, adrenocorticotropic, plasma",
+        "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium",
+        "CBC with differential",
+        "Basic metabolic profile / Comprehensive metabolic profile",
+        "Consult, surgery, neurologic"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
       "enrichment_sources": [
-        "mistral"
+        "ccs_review_pdf"
       ],
-      "extraction_notes": "Pass-through DeepSeek/converted case."
+      "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Cushing Disease."
     },
     {
       "id": 129,
@@ -27019,69 +27099,304 @@
       "id": 175,
       "topic": "Heavy Menstrual Bleeding",
       "title": "Heavy Menstrual Bleeding",
-      "diagnosis": "The most likely diagnoses for heavy menstrual bleeding include endometrial hyperplasia, fibroids, adenomyosis, and malignancies such as endometrial cancer. However, since the diagnosis is unknown, an initial comprehensive workup is necessary.",
+      "diagnosis": "Von Willebrand Disease (vWD)",
       "confidence": "screenshot",
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
-        "Laboratory tests: Complete blood count (CBC), coagulation panel, thyroid function tests, and hormone levels",
-        "Imaging studies: Transvaginal ultrasound, pelvic MRI",
-        "β-hCG"
+        "Physical Exam: General Appearance",
+        "Physical Exam: HEENT / Neck",
+        "Physical Exam: Skin",
+        "Physical Exam: Heart / Cardiovascular",
+        "Physical Exam: Abdomen",
+        "Physical Exam: Genitalia",
+        "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit",
+        "PT/PTT / Partial thromboplastin time AND PT/INR",
+        "Platelet aggregation",
+        "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+        "Basic metabolic profile / Comprehensive metabolic profile",
+        "von Willebrand factor activity / Consult, hematology/oncology",
+        "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal",
+        "Desmopressin acetate",
+        "Tranexamic acid / Aminocaproic acid",
+        "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron",
+        "Advise patient, no NSAIDs",
+        "Advise patient, no sports",
+        "Oral contraceptive / Consult, obstetrics/gynecology"
       ],
       "should_avoid": [
-        "Order for immediate dilation and curettage (D&C) as it may be premature without definitive diagnosis"
+        "Packed red blood cells / pRBC transfusion when Hgb stable ~10",
+        "pRBC transfusion when hemodynamically stable with Hgb ~10",
+        "NSAIDs"
       ],
       "rationale": {
-        "Order for D&C": "It should be avoided initially because the goal is to diagnose, not just manage symptoms. A definitive diagnosis will guide further management.",
-        "Order": "Since the patient is a woman of childbearing age, a pregnancy test (β-hCG) should be ordered first to determine if there is an underlying pregnancy causing heavy menstrual bleeding."
+        "Physical Exam: General Appearance": "Assess for signs of acute blood loss, such as pallor or distress.",
+        "Physical Exam: HEENT / Neck": "Identify mucosal bleeding sites — epistaxis or gum bleeding common in vWD.",
+        "Physical Exam: Skin": "Look for bruising or petechiae indicating a bleeding disorder.",
+        "Physical Exam: Heart / Cardiovascular": "Assess tachycardia or hypotension due to blood loss.",
+        "Physical Exam: Abdomen": "Rule out other causes of bleeding or pain.",
+        "Physical Exam: Genitalia": "Chief complaint — pelvic/genital exam indicated.",
+        "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit": "Assess anemia from heavy menstrual bleeding.",
+        "PT/PTT / Partial thromboplastin time AND PT/INR": "Coagulation labs essential for excessive bleeding workup.",
+        "Platelet aggregation": "Ristocetin-induced aggregation often reduced in vWD.",
+        "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum": "Rule out hypothyroidism as a cause of menorrhagia.",
+        "Basic metabolic profile / Comprehensive metabolic profile": "Screen electrolytes and renal function after blood loss.",
+        "von Willebrand factor activity / Consult, hematology/oncology": "vWF activity or hematology consult confirms vWD (results may take 3 days).",
+        "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal": "IV fluids for mild-to-moderate hypovolemia; Hgb ~10 — pRBCs not indicated yet.",
+        "Desmopressin acetate": "DDAVP stimulates vWF release — empiric for suspected type 1 vWD in ED.",
+        "Tranexamic acid / Aminocaproic acid": "Antifibrinolytic adjunct — start concurrently with DDAVP for menorrhagia.",
+        "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron": "Iron supplementation for anemia from chronic blood loss.",
+        "Advise patient, no NSAIDs": "Avoid NSAIDs until bleeding disorder diagnosed.",
+        "Advise patient, no sports": "Avoid contact sports until diagnosis confirmed.",
+        "Oral contraceptive / Consult, obstetrics/gynecology": "Hormonal therapy or OB/GYN for long-term prevention of recurrent menorrhagia.",
+        "Packed red blood cells / pRBC transfusion when Hgb stable ~10": "Hgb 10 g/dL is above transfusion threshold in compensated patient — fluids + hemostasis first."
       },
-      "hpi": null,
-      "hpi_narrative": null,
+      "hpi": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation.\n\nWorkup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days).\n\nAcute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
+      "hpi_narrative": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation.\n\nWorkup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days).\n\nAcute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
       "physical_exam": [
         [
           "General",
-          "Heavy Menstrual Bleeding — exam tailored to chief complaint on arrival."
+          "Assess pallor and signs of acute blood loss."
         ],
         [
-          "Cardiovascular",
-          "HR 96; BP 109/68."
-        ],
-        [
-          "Respiratory",
-          "RR 17; SpO₂ 95%."
-        ],
-        [
-          "Abdomen",
-          "Soft, non-distended, no focal peritoneal signs on initial exam."
-        ],
-        [
-          "Neuro",
-          "Alert and oriented unless perfusion or metabolic derangement present."
+          "HEENT / Neck",
+          "Look for mucosal bleeding — epistaxis, gum bleeding."
         ],
         [
           "Skin",
-          "No acute rash; capillary refill and perfusion assessed."
+          "Bruising or petechiae suggesting bleeding disorder."
+        ],
+        [
+          "Heart / Cardiovascular",
+          "Tachycardia or hypotension from blood loss."
+        ],
+        [
+          "Abdomen",
+          "Rule out other causes of bleeding or pain."
+        ],
+        [
+          "Genitalia",
+          "Chief complaint — assess pelvic bleeding source."
         ]
       ],
-      "vitals": null,
-      "patient_voice": null,
-      "ccs_category": null,
-      "chief_complaint": null,
-      "case_summary": null,
+      "vitals": {
+        "hr": 96,
+        "spo2": 95,
+        "bp": "109/68",
+        "rr": 17,
+        "temp": null
+      },
+      "patient_voice": {
+        "chief_complaint": "My periods are extremely heavy — I'm soaking through pads every hour",
+        "history": "This started around when my periods began. I've been tired and bruise easily. My gums bleed when I brush.",
+        "pain": "Cramping with the heavy flow — I'm also dizzy when I stand up"
+      },
+      "ccs_category": "Emergency Medicine",
+      "chief_complaint": "Heavy menstrual bleeding",
+      "case_summary": "Differential: Von Willebrand disease (vWD), Thrombocytopenia, Hemophilia A, Platelet Abnormalities (Glanzmann thrombasthenia), Vasculopathies, Connective Tissue Diseases, Collagen Disorders, hypothyroidism.\n\nThe first step is to assess anemia and platelet count by getting a CBC. This shows anemia but normal platelets. Then order PT/PTT, revealing normal PT, mildly elevated PTT, and normal fibrinogen, pointing toward vWD. This is a classic presentation for vWD diagnosis in females around menarche due to heavy periods. Once suspected, order vWF assays showing decreased ristocetin-induced platelet aggregation at 1.0 mg/mL, suggestive of type 1 vWD. Confirmatory vWF activity takes 3 days, so the case ends before results, but initial findings allow empirical treatment.\n\nStart IV fluids for hypovolemia. Give DDAVP (desmopressin) concurrently with tranexamic acid for acute bleeding control. DDAVP boosts endogenous vWF/Factor VIII. Tranexamic acid is an adjunct for mucosal bleeding — start with DDAVP, not after failure.\n\nPreventive care: oral contraceptives or OB/GYN consult; iron for anemia; counsel to avoid NSAIDs and contact sports.",
       "decoys": [],
       "distractors": [],
-      "stacks": [],
+      "stacks": [
+        {
+          "label": "Physical Exam: General Appearance",
+          "type": "correctlyOrdered",
+          "finding": "Assess for signs of acute blood loss, such as pallor or distress.",
+          "aliases": [
+            "General Appearance"
+          ]
+        },
+        {
+          "label": "Physical Exam: HEENT / Neck",
+          "type": "correctlyOrdered",
+          "finding": "Identify mucosal bleeding sites — epistaxis or gum bleeding common in vWD.",
+          "aliases": [
+            "HEENT exam"
+          ]
+        },
+        {
+          "label": "Physical Exam: Skin",
+          "type": "correctlyOrdered",
+          "finding": "Look for bruising or petechiae indicating a bleeding disorder.",
+          "aliases": [
+            "Skin exam"
+          ]
+        },
+        {
+          "label": "Physical Exam: Heart / Cardiovascular",
+          "type": "correctlyOrdered",
+          "finding": "Assess tachycardia or hypotension due to blood loss.",
+          "aliases": [
+            "Cardiovascular exam"
+          ]
+        },
+        {
+          "label": "Physical Exam: Abdomen",
+          "type": "correctlyOrdered",
+          "finding": "Rule out other causes of bleeding or pain.",
+          "aliases": [
+            "Abdominal exam"
+          ]
+        },
+        {
+          "label": "Physical Exam: Genitalia",
+          "type": "correctlyOrdered",
+          "finding": "Chief complaint — pelvic/genital exam indicated.",
+          "aliases": [
+            "Pelvic exam",
+            "Genital exam"
+          ]
+        },
+        {
+          "label": "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit",
+          "type": "correctlyOrdered",
+          "finding": "Assess anemia from heavy menstrual bleeding.",
+          "aliases": [
+            "CBC",
+            "Hgb",
+            "Hct"
+          ]
+        },
+        {
+          "label": "PT/PTT / Partial thromboplastin time AND PT/INR",
+          "type": "correctlyOrdered",
+          "finding": "Coagulation labs essential for excessive bleeding workup.",
+          "aliases": [
+            "Coagulation panel",
+            "PT",
+            "PTT"
+          ]
+        },
+        {
+          "label": "Platelet aggregation",
+          "type": "correctlyOrdered",
+          "finding": "Ristocetin-induced aggregation often reduced in vWD.",
+          "aliases": [
+            "Ristocetin cofactor"
+          ]
+        },
+        {
+          "label": "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+          "type": "correctlyOrdered",
+          "finding": "Rule out hypothyroidism as a cause of menorrhagia.",
+          "aliases": [
+            "TSH"
+          ]
+        },
+        {
+          "label": "Basic metabolic profile / Comprehensive metabolic profile",
+          "type": "correctlyOrdered",
+          "finding": "Screen electrolytes and renal function after blood loss.",
+          "aliases": [
+            "BMP",
+            "CMP"
+          ]
+        },
+        {
+          "label": "von Willebrand factor activity / Consult, hematology/oncology",
+          "type": "correctlyOrdered",
+          "finding": "vWF activity or hematology consult confirms vWD (results may take 3 days).",
+          "aliases": [
+            "vWF antigen",
+            "Hematology consult"
+          ]
+        },
+        {
+          "label": "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal",
+          "type": "correctlyOrdered",
+          "finding": "IV fluids for mild-to-moderate hypovolemia; Hgb ~10 — pRBCs not indicated yet.",
+          "aliases": [
+            "IV fluids",
+            "Normal saline",
+            "LR"
+          ]
+        },
+        {
+          "label": "Desmopressin acetate",
+          "type": "correctlyOrdered",
+          "finding": "DDAVP stimulates vWF release — empiric for suspected type 1 vWD in ED.",
+          "aliases": [
+            "DDAVP"
+          ]
+        },
+        {
+          "label": "Tranexamic acid / Aminocaproic acid",
+          "type": "correctlyOrdered",
+          "finding": "Antifibrinolytic adjunct — start concurrently with DDAVP for menorrhagia.",
+          "aliases": [
+            "TXA",
+            "Lysteda"
+          ]
+        },
+        {
+          "label": "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron",
+          "type": "correctlyOrdered",
+          "finding": "Iron supplementation for anemia from chronic blood loss.",
+          "aliases": [
+            "Iron supplementation"
+          ]
+        },
+        {
+          "label": "Advise patient, no NSAIDs",
+          "type": "correctlyOrdered",
+          "finding": "Avoid NSAIDs until bleeding disorder diagnosed.",
+          "aliases": [
+            "No NSAIDs"
+          ]
+        },
+        {
+          "label": "Advise patient, no sports",
+          "type": "correctlyOrdered",
+          "finding": "Avoid contact sports until diagnosis confirmed.",
+          "aliases": [
+            "Activity restriction"
+          ]
+        },
+        {
+          "label": "Oral contraceptive / Consult, obstetrics/gynecology",
+          "type": "correctlyOrdered",
+          "finding": "Hormonal therapy or OB/GYN for long-term prevention of recurrent menorrhagia.",
+          "aliases": [
+            "OCP",
+            "OB/GYN consult",
+            "Estrogen-progestin"
+          ]
+        },
+        {
+          "label": "Packed red blood cells / pRBC transfusion when Hgb stable ~10",
+          "type": "correctlyAvoided",
+          "finding": "Hgb 10 g/dL is above transfusion threshold in compensated patient — fluids + hemostasis first.",
+          "aliases": [
+            "PRBC",
+            "Blood transfusion"
+          ]
+        }
+      ],
       "order_sets": [
-        "Laboratory tests: Complete blood count (CBC), coagulation panel, thyroid function tests, and hormone levels",
-        "Imaging studies: Transvaginal ultrasound, pelvic MRI",
-        "β-hCG"
+        "Physical Exam: General Appearance",
+        "Physical Exam: HEENT / Neck",
+        "Physical Exam: Skin",
+        "Physical Exam: Heart / Cardiovascular",
+        "Physical Exam: Abdomen",
+        "Physical Exam: Genitalia",
+        "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit",
+        "PT/PTT / Partial thromboplastin time AND PT/INR",
+        "Platelet aggregation",
+        "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+        "Basic metabolic profile / Comprehensive metabolic profile",
+        "von Willebrand factor activity / Consult, hematology/oncology",
+        "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal",
+        "Desmopressin acetate",
+        "Tranexamic acid / Aminocaproic acid",
+        "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron",
+        "Advise patient, no NSAIDs",
+        "Advise patient, no sports",
+        "Oral contraceptive / Consult, obstetrics/gynecology"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
       "enrichment_sources": [
-        "fmgmatch",
-        "mistral"
+        "ccs_review_pdf"
       ],
-      "extraction_notes": "Pass-through DeepSeek/converted case."
+      "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Von Willebrand Disease (vWD)."
     },
     {
       "id": 176,

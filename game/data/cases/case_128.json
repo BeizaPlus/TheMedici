@@ -3,16 +3,38 @@
   "topic": "Depression",
   "title": "Depression",
   "diagnosis": "Cushing Disease",
-  "chief_complaint": "Depression, weight gain, amenorrhea, fatigue",
-  "specialty": "Internal Medicine",
-  "location": "Office",
-  "hpi_narrative": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder.\n\nWorkup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated.\n\nDefinitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
-  "case_summary": "Differential: Physiologic hypercortisolism, Adrenal Tumor, Metastatic Disease, Exogenous Cortisol use.\n\nThe patient in this case has Cushing Disease. The symptoms the patient is suffering include: weight gain, plethora face (moon face), hirsutism (facial hair growth), thinning hair, and depression. Dexamethasone test is the standard test to test for Cushings syndrome. 24-hour urinary cortisol can also be used.\n\nOnce Cushings Syndrome has been established, the cause of it should be determined by measuring ACTH. If ACTH is high (above 20 pg/mL), the syndrome is ACTH-dependent — pituitary tumor, ectopic ACTH, or CRH secretion; obtain brain MRI. If ACTH is low (below 5 pg/mL), evaluate adrenal glands with CT.\n\nIn this case ACTH is high (166 pg/mL), pituitary tumor is found on MRI, and neurosurgery should remove the tumor via transsphenoidal microadenomectomy. No points for SSRIs or mental health consult alone — treat the underlying hypercortisolism.",
-  "patient_voice": {
-    "chief_complaint": "I've been depressed, tired, and gaining weight",
-    "history": "I haven't had a period in six months. My face looks puffy and I've been feeling down for months.",
-    "pain": "Fatigue and low mood — not focal pain"
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Neuro / Psych",
+    "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative",
+    "Dexamethasone suppression test / Cortisol, 24-hour urine",
+    "Hormone, adrenocorticotropic, plasma",
+    "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium",
+    "CBC with differential",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Consult, surgery, neurologic"
+  ],
+  "should_avoid": [
+    "SSRI / Psychiatry consult for depression without endocrine workup",
+    "SSRI or psychiatry consult without diagnosing Cushing disease"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "It would be a good idea to take a general look at the patient to see how ill the patient looks.",
+    "Physical Exam: Neuro / Psych": "This is the chief complaint of the patient, so this should be evaluated.",
+    "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative": "The patient reports not having menses in 6 months. A pregnancy test should be ordered to verify.",
+    "Dexamethasone suppression test / Cortisol, 24-hour urine": "Dexamethasone test is the standard test for Cushing syndrome; 24-hour urinary cortisol can also be used.",
+    "Hormone, adrenocorticotropic, plasma": "Once Cushing syndrome is established, measure ACTH to determine ACTH-dependent vs independent cause.",
+    "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium": "With elevated ACTH, MRI of the brain should be done to look for a pituitary tumor.",
+    "CBC with differential": "The patient is having fatigue — check for anemia.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Chemistries are important to rule out other conditions.",
+    "Consult, surgery, neurologic": "Neurosurgery removes the pituitary tumor via transsphenoidal microadenomectomy.",
+    "SSRI / Psychiatry consult for depression without endocrine workup": "No points for treating depression alone — fix underlying Cushing disease causing her symptoms."
   },
+  "hpi": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder.\n\nWorkup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated.\n\nDefinitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
+  "hpi_narrative": "{{patient_name}} presents with depression, fatigue, weight gain, moon facies, hirsutism, thinning hair, and amenorrhea for six months. This is Cushing disease from a pituitary adenoma — not primary major depressive disorder.\n\nWorkup: pregnancy test (amenorrhea); dexamethasone suppression test or 24-hour urine cortisol to confirm hypercortisolism; ACTH level — high ACTH (>20 pg/mL) indicates ACTH-dependent Cushing (pituitary vs ectopic); brain MRI for pituitary tumor when ACTH is elevated.\n\nDefinitive treatment is transsphenoidal resection (neurosurgery consult). SSRIs or psychiatry consult alone do not treat the underlying endocrine cause.",
+  "physical_exam": [],
   "vitals": {
     "hr": null,
     "spo2": null,
@@ -20,98 +42,122 @@
     "rr": null,
     "temp": null
   },
-  "physical_exam": [],
+  "patient_voice": {
+    "chief_complaint": "I've been depressed, tired, and gaining weight",
+    "history": "I haven't had a period in six months. My face looks puffy and I've been feeling down for months.",
+    "pain": "Fatigue and low mood — not focal pain"
+  },
+  "ccs_category": "Internal Medicine",
+  "chief_complaint": "Depression, weight gain, amenorrhea, fatigue",
+  "case_summary": "Differential: Physiologic hypercortisolism, Adrenal Tumor, Metastatic Disease, Exogenous Cortisol use.\n\nThe patient in this case has Cushing Disease. The symptoms the patient is suffering include: weight gain, plethora face (moon face), hirsutism (facial hair growth), thinning hair, and depression. Dexamethasone test is the standard test to test for Cushings syndrome. 24-hour urinary cortisol can also be used.\n\nOnce Cushings Syndrome has been established, the cause of it should be determined by measuring ACTH. If ACTH is high (above 20 pg/mL), the syndrome is ACTH-dependent — pituitary tumor, ectopic ACTH, or CRH secretion; obtain brain MRI. If ACTH is low (below 5 pg/mL), evaluate adrenal glands with CT.\n\nIn this case ACTH is high (166 pg/mL), pituitary tumor is found on MRI, and neurosurgery should remove the tumor via transsphenoidal microadenomectomy. No points for SSRIs or mental health consult alone — treat the underlying hypercortisolism.",
+  "decoys": [],
+  "distractors": [],
   "stacks": [
     {
       "label": "Physical Exam: General Appearance",
       "type": "correctlyOrdered",
       "finding": "It would be a good idea to take a general look at the patient to see how ill the patient looks.",
-      "aliases": ["General Appearance"]
+      "aliases": [
+        "General Appearance"
+      ]
     },
     {
       "label": "Physical Exam: Neuro / Psych",
       "type": "correctlyOrdered",
       "finding": "This is the chief complaint of the patient, so this should be evaluated.",
-      "aliases": ["Neuro / Psych", "Mental status exam"]
+      "aliases": [
+        "Neuro / Psych",
+        "Mental status exam"
+      ]
     },
     {
       "label": "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative",
       "type": "correctlyOrdered",
       "finding": "The patient reports not having menses in 6 months. A pregnancy test should be ordered to verify.",
-      "aliases": ["Pregnancy test", "Beta hCG"]
+      "aliases": [
+        "Pregnancy test",
+        "Beta hCG"
+      ]
     },
     {
       "label": "Dexamethasone suppression test / Cortisol, 24-hour urine",
       "type": "correctlyOrdered",
       "finding": "Dexamethasone test is the standard test for Cushing syndrome; 24-hour urinary cortisol can also be used.",
-      "aliases": ["Low-dose dexamethasone suppression", "24-hour urine cortisol"]
+      "aliases": [
+        "Low-dose dexamethasone suppression",
+        "24-hour urine cortisol"
+      ]
     },
     {
       "label": "Hormone, adrenocorticotropic, plasma",
       "type": "correctlyOrdered",
       "finding": "Once Cushing syndrome is established, measure ACTH to determine ACTH-dependent vs independent cause.",
-      "aliases": ["ACTH", "Plasma ACTH"]
+      "aliases": [
+        "ACTH",
+        "Plasma ACTH"
+      ]
     },
     {
       "label": "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium",
       "type": "correctlyOrdered",
       "finding": "With elevated ACTH, MRI of the brain should be done to look for a pituitary tumor.",
-      "aliases": ["MRI brain", "Pituitary MRI"]
+      "aliases": [
+        "MRI brain",
+        "Pituitary MRI"
+      ]
     },
     {
       "label": "CBC with differential",
       "type": "correctlyOrdered",
       "finding": "The patient is having fatigue — check for anemia.",
-      "aliases": ["CBC"]
+      "aliases": [
+        "CBC"
+      ]
     },
     {
       "label": "Basic metabolic profile / Comprehensive metabolic profile",
       "type": "correctlyOrdered",
       "finding": "Chemistries are important to rule out other conditions.",
-      "aliases": ["BMP", "CMP"]
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
     },
     {
       "label": "Consult, surgery, neurologic",
       "type": "correctlyOrdered",
       "finding": "Neurosurgery removes the pituitary tumor via transsphenoidal microadenomectomy.",
-      "aliases": ["Neurosurgery consult", "Transsphenoidal surgery"]
+      "aliases": [
+        "Neurosurgery consult",
+        "Transsphenoidal surgery"
+      ]
     },
     {
       "label": "SSRI / Psychiatry consult for depression without endocrine workup",
       "type": "correctlyAvoided",
       "finding": "No points for treating depression alone — fix underlying Cushing disease causing her symptoms.",
-      "aliases": ["Fluoxetine", "Sertraline", "Psychiatry consult"]
+      "aliases": [
+        "Fluoxetine",
+        "Sertraline",
+        "Psychiatry consult"
+      ]
     }
   ],
-  "differential": [
-    "Cushing Disease",
-    "Cushing Syndrome",
-    "Physiologic hypercortisolism",
-    "Adrenal Tumor",
-    "Exogenous corticosteroid use",
-    "Major Depressive Disorder",
-    "Hypothyroidism"
-  ],
-  "correct_orders": [
+  "order_sets": [
     "Physical Exam: General Appearance",
     "Physical Exam: Neuro / Psych",
-    "HCG pregnancy test",
-    "Dexamethasone suppression / 24h urine cortisol",
-    "Plasma ACTH",
-    "Brain MRI",
-    "CBC",
-    "BMP/CMP",
-    "Neurosurgery consult"
+    "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative",
+    "Dexamethasone suppression test / Cortisol, 24-hour urine",
+    "Hormone, adrenocorticotropic, plasma",
+    "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium",
+    "CBC with differential",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Consult, surgery, neurologic"
   ],
-  "should_avoid": [
-    "SSRI or psychiatry consult without diagnosing Cushing disease"
-  ],
-  "rationale": {},
-  "confidence": 95,
-  "source": "CCS review PDF (Downloads) + case summary",
-  "extraction_method": "ccs_review_pdf",
-  "source_pdf": "C:\\Users\\steve\\Downloads\\CCS cases\\CCS Cases-Depression.pdf",
   "complete": true,
-  "parse_error": false,
-  "enrichment_sources": ["ccs_review_pdf"]
+  "extraction_method": "deepseek_direct",
+  "enrichment_sources": [
+    "ccs_review_pdf"
+  ],
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Cushing Disease."
 }

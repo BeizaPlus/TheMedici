@@ -3,16 +3,84 @@
   "topic": "Heavy Menstrual Bleeding",
   "title": "Heavy Menstrual Bleeding",
   "diagnosis": "Von Willebrand Disease (vWD)",
-  "chief_complaint": "Heavy menstrual bleeding",
-  "specialty": "Emergency Medicine",
-  "location": "Emergency Department",
-  "hpi_narrative": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation.\n\nWorkup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days).\n\nAcute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
-  "case_summary": "Differential: Von Willebrand disease (vWD), Thrombocytopenia, Hemophilia A, Platelet Abnormalities (Glanzmann thrombasthenia), Vasculopathies, Connective Tissue Diseases, Collagen Disorders, hypothyroidism.\n\nThe first step is to assess anemia and platelet count by getting a CBC. This shows anemia but normal platelets. Then order PT/PTT, revealing normal PT, mildly elevated PTT, and normal fibrinogen, pointing toward vWD. This is a classic presentation for vWD diagnosis in females around menarche due to heavy periods. Once suspected, order vWF assays showing decreased ristocetin-induced platelet aggregation at 1.0 mg/mL, suggestive of type 1 vWD. Confirmatory vWF activity takes 3 days, so the case ends before results, but initial findings allow empirical treatment.\n\nStart IV fluids for hypovolemia. Give DDAVP (desmopressin) concurrently with tranexamic acid for acute bleeding control. DDAVP boosts endogenous vWF/Factor VIII. Tranexamic acid is an adjunct for mucosal bleeding — start with DDAVP, not after failure.\n\nPreventive care: oral contraceptives or OB/GYN consult; iron for anemia; counsel to avoid NSAIDs and contact sports.",
-  "patient_voice": {
-    "chief_complaint": "My periods are extremely heavy — I'm soaking through pads every hour",
-    "history": "This started around when my periods began. I've been tired and bruise easily. My gums bleed when I brush.",
-    "pain": "Cramping with the heavy flow — I'm also dizzy when I stand up"
+  "confidence": "screenshot",
+  "source": "data/cases/case_N.json (DeepSeek)",
+  "correct_orders": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: HEENT / Neck",
+    "Physical Exam: Skin",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia",
+    "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit",
+    "PT/PTT / Partial thromboplastin time AND PT/INR",
+    "Platelet aggregation",
+    "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "von Willebrand factor activity / Consult, hematology/oncology",
+    "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal",
+    "Desmopressin acetate",
+    "Tranexamic acid / Aminocaproic acid",
+    "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron",
+    "Advise patient, no NSAIDs",
+    "Advise patient, no sports",
+    "Oral contraceptive / Consult, obstetrics/gynecology"
+  ],
+  "should_avoid": [
+    "Packed red blood cells / pRBC transfusion when Hgb stable ~10",
+    "pRBC transfusion when hemodynamically stable with Hgb ~10",
+    "NSAIDs"
+  ],
+  "rationale": {
+    "Physical Exam: General Appearance": "Assess for signs of acute blood loss, such as pallor or distress.",
+    "Physical Exam: HEENT / Neck": "Identify mucosal bleeding sites — epistaxis or gum bleeding common in vWD.",
+    "Physical Exam: Skin": "Look for bruising or petechiae indicating a bleeding disorder.",
+    "Physical Exam: Heart / Cardiovascular": "Assess tachycardia or hypotension due to blood loss.",
+    "Physical Exam: Abdomen": "Rule out other causes of bleeding or pain.",
+    "Physical Exam: Genitalia": "Chief complaint — pelvic/genital exam indicated.",
+    "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit": "Assess anemia from heavy menstrual bleeding.",
+    "PT/PTT / Partial thromboplastin time AND PT/INR": "Coagulation labs essential for excessive bleeding workup.",
+    "Platelet aggregation": "Ristocetin-induced aggregation often reduced in vWD.",
+    "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum": "Rule out hypothyroidism as a cause of menorrhagia.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Screen electrolytes and renal function after blood loss.",
+    "von Willebrand factor activity / Consult, hematology/oncology": "vWF activity or hematology consult confirms vWD (results may take 3 days).",
+    "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal": "IV fluids for mild-to-moderate hypovolemia; Hgb ~10 — pRBCs not indicated yet.",
+    "Desmopressin acetate": "DDAVP stimulates vWF release — empiric for suspected type 1 vWD in ED.",
+    "Tranexamic acid / Aminocaproic acid": "Antifibrinolytic adjunct — start concurrently with DDAVP for menorrhagia.",
+    "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron": "Iron supplementation for anemia from chronic blood loss.",
+    "Advise patient, no NSAIDs": "Avoid NSAIDs until bleeding disorder diagnosed.",
+    "Advise patient, no sports": "Avoid contact sports until diagnosis confirmed.",
+    "Oral contraceptive / Consult, obstetrics/gynecology": "Hormonal therapy or OB/GYN for long-term prevention of recurrent menorrhagia.",
+    "Packed red blood cells / pRBC transfusion when Hgb stable ~10": "Hgb 10 g/dL is above transfusion threshold in compensated patient — fluids + hemostasis first."
   },
+  "hpi": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation.\n\nWorkup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days).\n\nAcute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
+  "hpi_narrative": "{{patient_name}} is a young woman presenting to the ED with heavy menstrual bleeding. Classic vWD at menarche: anemia on CBC with normal platelets; PT normal, mildly elevated PTT, normal fibrinogen; decreased ristocetin-induced platelet aggregation.\n\nWorkup: CBC/hemoglobin; PT/PTT; platelet aggregation; TSH (rule out hypothyroid menorrhagia); pelvic/genital exam; vWF activity or hematology consult (confirmatory labs take 3 days).\n\nAcute treatment: IV fluids for hypovolemia (Hgb ~10 — not transfusion threshold); DDAVP and tranexamic acid together for mucosal bleeding; iron for anemia. Long-term: hormonal therapy or OB/GYN consult; avoid NSAIDs and contact sports until diagnosis confirmed.",
+  "physical_exam": [
+    [
+      "General",
+      "Assess pallor and signs of acute blood loss."
+    ],
+    [
+      "HEENT / Neck",
+      "Look for mucosal bleeding — epistaxis, gum bleeding."
+    ],
+    [
+      "Skin",
+      "Bruising or petechiae suggesting bleeding disorder."
+    ],
+    [
+      "Heart / Cardiovascular",
+      "Tachycardia or hypotension from blood loss."
+    ],
+    [
+      "Abdomen",
+      "Rule out other causes of bleeding or pain."
+    ],
+    [
+      "Genitalia",
+      "Chief complaint — assess pelvic bleeding source."
+    ]
+  ],
   "vitals": {
     "hr": 96,
     "spo2": 95,
@@ -20,168 +88,216 @@
     "rr": 17,
     "temp": null
   },
-  "physical_exam": [
-    ["General", "Assess pallor and signs of acute blood loss."],
-    ["HEENT / Neck", "Look for mucosal bleeding — epistaxis, gum bleeding."],
-    ["Skin", "Bruising or petechiae suggesting bleeding disorder."],
-    ["Heart / Cardiovascular", "Tachycardia or hypotension from blood loss."],
-    ["Abdomen", "Rule out other causes of bleeding or pain."],
-    ["Genitalia", "Chief complaint — assess pelvic bleeding source."]
-  ],
+  "patient_voice": {
+    "chief_complaint": "My periods are extremely heavy — I'm soaking through pads every hour",
+    "history": "This started around when my periods began. I've been tired and bruise easily. My gums bleed when I brush.",
+    "pain": "Cramping with the heavy flow — I'm also dizzy when I stand up"
+  },
+  "ccs_category": "Emergency Medicine",
+  "chief_complaint": "Heavy menstrual bleeding",
+  "case_summary": "Differential: Von Willebrand disease (vWD), Thrombocytopenia, Hemophilia A, Platelet Abnormalities (Glanzmann thrombasthenia), Vasculopathies, Connective Tissue Diseases, Collagen Disorders, hypothyroidism.\n\nThe first step is to assess anemia and platelet count by getting a CBC. This shows anemia but normal platelets. Then order PT/PTT, revealing normal PT, mildly elevated PTT, and normal fibrinogen, pointing toward vWD. This is a classic presentation for vWD diagnosis in females around menarche due to heavy periods. Once suspected, order vWF assays showing decreased ristocetin-induced platelet aggregation at 1.0 mg/mL, suggestive of type 1 vWD. Confirmatory vWF activity takes 3 days, so the case ends before results, but initial findings allow empirical treatment.\n\nStart IV fluids for hypovolemia. Give DDAVP (desmopressin) concurrently with tranexamic acid for acute bleeding control. DDAVP boosts endogenous vWF/Factor VIII. Tranexamic acid is an adjunct for mucosal bleeding — start with DDAVP, not after failure.\n\nPreventive care: oral contraceptives or OB/GYN consult; iron for anemia; counsel to avoid NSAIDs and contact sports.",
+  "decoys": [],
+  "distractors": [],
   "stacks": [
     {
       "label": "Physical Exam: General Appearance",
       "type": "correctlyOrdered",
       "finding": "Assess for signs of acute blood loss, such as pallor or distress.",
-      "aliases": ["General Appearance"]
+      "aliases": [
+        "General Appearance"
+      ]
     },
     {
       "label": "Physical Exam: HEENT / Neck",
       "type": "correctlyOrdered",
       "finding": "Identify mucosal bleeding sites — epistaxis or gum bleeding common in vWD.",
-      "aliases": ["HEENT exam"]
+      "aliases": [
+        "HEENT exam"
+      ]
     },
     {
       "label": "Physical Exam: Skin",
       "type": "correctlyOrdered",
       "finding": "Look for bruising or petechiae indicating a bleeding disorder.",
-      "aliases": ["Skin exam"]
+      "aliases": [
+        "Skin exam"
+      ]
     },
     {
       "label": "Physical Exam: Heart / Cardiovascular",
       "type": "correctlyOrdered",
       "finding": "Assess tachycardia or hypotension due to blood loss.",
-      "aliases": ["Cardiovascular exam"]
+      "aliases": [
+        "Cardiovascular exam"
+      ]
     },
     {
       "label": "Physical Exam: Abdomen",
       "type": "correctlyOrdered",
       "finding": "Rule out other causes of bleeding or pain.",
-      "aliases": ["Abdominal exam"]
+      "aliases": [
+        "Abdominal exam"
+      ]
     },
     {
       "label": "Physical Exam: Genitalia",
       "type": "correctlyOrdered",
       "finding": "Chief complaint — pelvic/genital exam indicated.",
-      "aliases": ["Pelvic exam", "Genital exam"]
+      "aliases": [
+        "Pelvic exam",
+        "Genital exam"
+      ]
     },
     {
       "label": "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit",
       "type": "correctlyOrdered",
       "finding": "Assess anemia from heavy menstrual bleeding.",
-      "aliases": ["CBC", "Hgb", "Hct"]
+      "aliases": [
+        "CBC",
+        "Hgb",
+        "Hct"
+      ]
     },
     {
       "label": "PT/PTT / Partial thromboplastin time AND PT/INR",
       "type": "correctlyOrdered",
       "finding": "Coagulation labs essential for excessive bleeding workup.",
-      "aliases": ["Coagulation panel", "PT", "PTT"]
+      "aliases": [
+        "Coagulation panel",
+        "PT",
+        "PTT"
+      ]
     },
     {
       "label": "Platelet aggregation",
       "type": "correctlyOrdered",
       "finding": "Ristocetin-induced aggregation often reduced in vWD.",
-      "aliases": ["Ristocetin cofactor"]
+      "aliases": [
+        "Ristocetin cofactor"
+      ]
     },
     {
       "label": "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
       "type": "correctlyOrdered",
       "finding": "Rule out hypothyroidism as a cause of menorrhagia.",
-      "aliases": ["TSH"]
+      "aliases": [
+        "TSH"
+      ]
     },
     {
       "label": "Basic metabolic profile / Comprehensive metabolic profile",
       "type": "correctlyOrdered",
       "finding": "Screen electrolytes and renal function after blood loss.",
-      "aliases": ["BMP", "CMP"]
+      "aliases": [
+        "BMP",
+        "CMP"
+      ]
     },
     {
       "label": "von Willebrand factor activity / Consult, hematology/oncology",
       "type": "correctlyOrdered",
       "finding": "vWF activity or hematology consult confirms vWD (results may take 3 days).",
-      "aliases": ["vWF antigen", "Hematology consult"]
+      "aliases": [
+        "vWF antigen",
+        "Hematology consult"
+      ]
     },
     {
       "label": "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal",
       "type": "correctlyOrdered",
       "finding": "IV fluids for mild-to-moderate hypovolemia; Hgb ~10 — pRBCs not indicated yet.",
-      "aliases": ["IV fluids", "Normal saline", "LR"]
+      "aliases": [
+        "IV fluids",
+        "Normal saline",
+        "LR"
+      ]
     },
     {
       "label": "Desmopressin acetate",
       "type": "correctlyOrdered",
       "finding": "DDAVP stimulates vWF release — empiric for suspected type 1 vWD in ED.",
-      "aliases": ["DDAVP"]
+      "aliases": [
+        "DDAVP"
+      ]
     },
     {
       "label": "Tranexamic acid / Aminocaproic acid",
       "type": "correctlyOrdered",
       "finding": "Antifibrinolytic adjunct — start concurrently with DDAVP for menorrhagia.",
-      "aliases": ["TXA", "Lysteda"]
+      "aliases": [
+        "TXA",
+        "Lysteda"
+      ]
     },
     {
       "label": "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron",
       "type": "correctlyOrdered",
       "finding": "Iron supplementation for anemia from chronic blood loss.",
-      "aliases": ["Iron supplementation"]
+      "aliases": [
+        "Iron supplementation"
+      ]
     },
     {
       "label": "Advise patient, no NSAIDs",
       "type": "correctlyOrdered",
       "finding": "Avoid NSAIDs until bleeding disorder diagnosed.",
-      "aliases": ["No NSAIDs"]
+      "aliases": [
+        "No NSAIDs"
+      ]
     },
     {
       "label": "Advise patient, no sports",
       "type": "correctlyOrdered",
       "finding": "Avoid contact sports until diagnosis confirmed.",
-      "aliases": ["Activity restriction"]
+      "aliases": [
+        "Activity restriction"
+      ]
     },
     {
       "label": "Oral contraceptive / Consult, obstetrics/gynecology",
       "type": "correctlyOrdered",
       "finding": "Hormonal therapy or OB/GYN for long-term prevention of recurrent menorrhagia.",
-      "aliases": ["OCP", "OB/GYN consult", "Estrogen-progestin"]
+      "aliases": [
+        "OCP",
+        "OB/GYN consult",
+        "Estrogen-progestin"
+      ]
     },
     {
       "label": "Packed red blood cells / pRBC transfusion when Hgb stable ~10",
       "type": "correctlyAvoided",
       "finding": "Hgb 10 g/dL is above transfusion threshold in compensated patient — fluids + hemostasis first.",
-      "aliases": ["PRBC", "Blood transfusion"]
+      "aliases": [
+        "PRBC",
+        "Blood transfusion"
+      ]
     }
   ],
-  "differential": [
-    "Von Willebrand Disease",
-    "Thrombocytopenia",
-    "Hemophilia A",
-    "Platelet function disorder",
-    "Hypothyroidism",
-    "Endometrial hyperplasia",
-    "Uterine fibroids"
-  ],
-  "correct_orders": [
-    "CBC",
-    "PT/PTT",
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: HEENT / Neck",
+    "Physical Exam: Skin",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: Abdomen",
+    "Physical Exam: Genitalia",
+    "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit",
+    "PT/PTT / Partial thromboplastin time AND PT/INR",
     "Platelet aggregation",
-    "TSH",
-    "Pelvic exam",
-    "vWF activity",
-    "IV fluids",
-    "DDAVP",
-    "Tranexamic acid",
-    "Iron",
-    "OCP or OB/GYN"
+    "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "von Willebrand factor activity / Consult, hematology/oncology",
+    "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal",
+    "Desmopressin acetate",
+    "Tranexamic acid / Aminocaproic acid",
+    "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron",
+    "Advise patient, no NSAIDs",
+    "Advise patient, no sports",
+    "Oral contraceptive / Consult, obstetrics/gynecology"
   ],
-  "should_avoid": [
-    "pRBC transfusion when hemodynamically stable with Hgb ~10",
-    "NSAIDs"
-  ],
-  "rationale": {},
-  "confidence": 95,
-  "source": "CCS review PDF (Downloads) + case summary",
-  "extraction_method": "ccs_review_pdf",
-  "source_pdf": "C:\\Users\\steve\\Downloads\\CCS cases\\CCS Cases 175.pdf",
   "complete": true,
-  "parse_error": false,
-  "enrichment_sources": ["ccs_review_pdf"]
+  "extraction_method": "deepseek_direct",
+  "enrichment_sources": [
+    "ccs_review_pdf"
+  ],
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Von Willebrand Disease (vWD)."
 }

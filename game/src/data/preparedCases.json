@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "builtAt": "2026-06-11T01:30:54.808Z",
+  "builtAt": "2026-06-12T13:27:47.655Z",
   "totalCases": 181,
   "caseBankMerged": 181,
   "caseBankSource": "ollama-case-bank",
@@ -4850,7 +4850,7 @@
     "128": {
       "id": "128",
       "title": "Depression",
-      "category": "Psychiatry & Social",
+      "category": "Internal Medicine",
       "presentationKey": "Depression",
       "playbookKey": "case-bank-128",
       "diagnosis": "Cushing Disease",
@@ -4859,8 +4859,8 @@
         "history": "I haven't had a period in six months. My face looks puffy and I've been feeling down for months.",
         "pain": "Fatigue and low mood — not focal pain"
       },
-      "caseBankSource": "ccs_review_pdf",
-      "hasSourceIntro": false,
+      "caseBankSource": "deepseek_direct",
+      "hasSourceIntro": true,
       "vitals": {
         "sbp": 125,
         "dbp": 80,
@@ -4919,15 +4919,14 @@
         "ct-head-with-contrast-ct-of-head-without",
         "cbc-with-differential",
         "basic-metabolic-profile-comprehensive-me",
-        "consult-surgery-neurologic",
-        "ssri-psychiatry-consult-for-depression-w"
+        "consult-surgery-neurologic"
       ],
       "interventions": [
         {
           "id": "physical-exam-general-appearance",
           "label": "Physical Exam: General Appearance",
           "correct_zone": "zone-custom-1",
-          "why": "Assess how ill the patient appears before focused testing for depression.",
+          "why": "It would be a good idea to take a general look at the patient to see how ill the patient looks.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -4935,7 +4934,7 @@
           "id": "physical-exam-neuro-psych",
           "label": "Physical Exam: Neuro / Psych",
           "correct_zone": "zone-icu",
-          "why": "Targeted Physical Exam: Neuro / Psych exam supports the differential for Cushing Disease.",
+          "why": "This is the chief complaint of the patient, so this should be evaluated.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -4943,7 +4942,7 @@
           "id": "hcg-beta-urine-qualitative-hcg-beta-seru",
           "label": "HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative",
           "correct_zone": "zone-blood",
-          "why": "Appropriate CCS order for Cushing Disease: HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative.",
+          "why": "The patient reports not having menses in 6 months. A pregnancy test should be ordered to verify.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -4951,7 +4950,7 @@
           "id": "dexamethasone-suppression-test-cortisol-",
           "label": "Dexamethasone suppression test / Cortisol, 24-hour urine",
           "correct_zone": "zone-arm",
-          "why": "Treatment aligned with CCS management for Cushing Disease.",
+          "why": "Dexamethasone test is the standard test for Cushing syndrome; 24-hour urinary cortisol can also be used.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -4959,7 +4958,7 @@
           "id": "hormone-adrenocorticotropic-plasma",
           "label": "Hormone, adrenocorticotropic, plasma",
           "correct_zone": "zone-arm",
-          "why": "Patient education and counseling are part of definitive care for Cushing Disease.",
+          "why": "Once Cushing syndrome is established, measure ACTH to determine ACTH-dependent vs independent cause.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -4967,7 +4966,7 @@
           "id": "ct-head-with-contrast-ct-of-head-without",
           "label": "CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium",
           "correct_zone": "zone-monitor",
-          "why": "Appropriate CCS order for Cushing Disease: CT, head, with contrast / CT of head without contrast / MRI, head, with gadolinium / MRI, head, without gadolinium.",
+          "why": "With elevated ACTH, MRI of the brain should be done to look for a pituitary tumor.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -4975,7 +4974,7 @@
           "id": "cbc-with-differential",
           "label": "CBC with differential",
           "correct_zone": "zone-blood",
-          "why": "Laboratory testing when systemic illness or severity warrants labs in Cushing Disease.",
+          "why": "The patient is having fatigue — check for anemia.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -4983,7 +4982,7 @@
           "id": "basic-metabolic-profile-comprehensive-me",
           "label": "Basic metabolic profile / Comprehensive metabolic profile",
           "correct_zone": "zone-arm",
-          "why": "Laboratory testing when systemic illness or severity warrants labs in Cushing Disease.",
+          "why": "Chemistries are important to rule out other conditions.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -4991,15 +4990,7 @@
           "id": "consult-surgery-neurologic",
           "label": "Consult, surgery, neurologic",
           "correct_zone": "zone-icu",
-          "why": "Targeted Consult, surgery, neurologic exam supports the differential for Cushing Disease.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "ssri-psychiatry-consult-for-depression-w",
-          "label": "SSRI / Psychiatry consult for depression without endocrine workup",
-          "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for Cushing Disease: SSRI / Psychiatry consult for depression without endocrine workup.",
+          "why": "Neurosurgery removes the pituitary tumor via transsphenoidal microadenomectomy.",
           "guideline": "ACEP",
           "optional": false
         }
@@ -5007,6 +4998,12 @@
       "decoys": [
         {
           "id": "decoy-avoid-128-0",
+          "label": "SSRI / Psychiatry consult for depression without endocrine workup",
+          "why": "No points for treating depression alone — fix underlying Cushing disease causing her symptoms.",
+          "correct_zone": "zone-icu"
+        },
+        {
+          "id": "decoy-avoid-128-1",
           "label": "SSRI or psychiatry consult without diagnosing Cushing disease",
           "why": "CCS review: avoid this order for Cushing Disease — it does not change acute management.",
           "correct_zone": "zone-icu"
@@ -12650,7 +12647,7 @@
     "175": {
       "id": "175",
       "title": "Heavy Menstrual Bleeding",
-      "category": "OB/GYN",
+      "category": "Emergency Medicine",
       "presentationKey": "Heavy Menstrual Bleeding",
       "playbookKey": "case-bank-175",
       "diagnosis": "Von Willebrand Disease (vWD)",
@@ -12659,8 +12656,8 @@
         "history": "This started around when my periods began. I've been tired and bruise easily. My gums bleed when I brush.",
         "pain": "Cramping with the heavy flow — I'm also dizzy when I stand up"
       },
-      "caseBankSource": "ccs_review_pdf",
-      "hasSourceIntro": false,
+      "caseBankSource": "deepseek_direct",
+      "hasSourceIntro": true,
       "vitals": {
         "sbp": 109,
         "dbp": 68,
@@ -12729,15 +12726,14 @@
         "ferrous-gluconate-ferrous-sulfate-vitami",
         "advise-patient-no-nsaids",
         "advise-patient-no-sports",
-        "oral-contraceptive-consult-obstetrics-gy",
-        "packed-red-blood-cells-prbc-transfusion-"
+        "oral-contraceptive-consult-obstetrics-gy"
       ],
       "interventions": [
         {
           "id": "physical-exam-general-appearance",
           "label": "Physical Exam: General Appearance",
           "correct_zone": "zone-custom-1",
-          "why": "Assess how ill the patient appears before focused testing for heavy menstrual bleeding.",
+          "why": "Assess for signs of acute blood loss, such as pallor or distress.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12745,7 +12741,7 @@
           "id": "physical-exam-heent-neck",
           "label": "Physical Exam: HEENT / Neck",
           "correct_zone": "zone-icu",
-          "why": "Targeted Physical Exam: HEENT / Neck exam supports the differential for Von Willebrand Disease (vWD).",
+          "why": "Identify mucosal bleeding sites — epistaxis or gum bleeding common in vWD.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12753,7 +12749,7 @@
           "id": "physical-exam-skin",
           "label": "Physical Exam: Skin",
           "correct_zone": "zone-custom-1",
-          "why": "Skin exam may show rashes or systemic signs relevant to Von Willebrand Disease (vWD). Finding: Bruising or petechiae suggesting bleeding disorder.",
+          "why": "Look for bruising or petechiae indicating a bleeding disorder.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12761,7 +12757,7 @@
           "id": "physical-exam-heart-cardiovascular",
           "label": "Physical Exam: Heart / Cardiovascular",
           "correct_zone": "zone-custom-1",
-          "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to heavy menstrual bleeding. Finding: Tachycardia or hypotension from blood loss.",
+          "why": "Assess tachycardia or hypotension due to blood loss.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12769,7 +12765,7 @@
           "id": "physical-exam-abdomen",
           "label": "Physical Exam: Abdomen",
           "correct_zone": "zone-custom-1",
-          "why": "Abdominal exam helps exclude alternative causes in a patient with heavy menstrual bleeding. Finding: Rule out other causes of bleeding or pain.",
+          "why": "Rule out other causes of bleeding or pain.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12777,7 +12773,7 @@
           "id": "physical-exam-genitalia",
           "label": "Physical Exam: Genitalia",
           "correct_zone": "zone-custom-1",
-          "why": "Pelvic/cervical evaluation is central for Von Willebrand Disease (vWD) and localizes the source of heavy menstrual bleeding.",
+          "why": "Chief complaint — pelvic/genital exam indicated.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12785,7 +12781,7 @@
           "id": "cbc-with-differential-hemoglobin-blood-h",
           "label": "CBC with differential / Hemoglobin, blood / Hemoglobin and hematocrit",
           "correct_zone": "zone-blood",
-          "why": "Laboratory testing when systemic illness or severity warrants labs in Von Willebrand Disease (vWD).",
+          "why": "Assess anemia from heavy menstrual bleeding.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12793,7 +12789,7 @@
           "id": "pt-ptt-partial-thromboplastin-time-and-p",
           "label": "PT/PTT / Partial thromboplastin time AND PT/INR",
           "correct_zone": "zone-arm",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): PT/PTT / Partial thromboplastin time AND PT/INR.",
+          "why": "Coagulation labs essential for excessive bleeding workup.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12801,7 +12797,7 @@
           "id": "platelet-aggregation",
           "label": "Platelet aggregation",
           "correct_zone": "zone-arm",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Platelet aggregation.",
+          "why": "Ristocetin-induced aggregation often reduced in vWD.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12809,7 +12805,7 @@
           "id": "hormone-thyroid-stimulating-serum-ultras",
           "label": "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
           "correct_zone": "zone-arm",
-          "why": "Patient education and counseling are part of definitive care for Von Willebrand Disease (vWD).",
+          "why": "Rule out hypothyroidism as a cause of menorrhagia.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12817,7 +12813,7 @@
           "id": "basic-metabolic-profile-comprehensive-me",
           "label": "Basic metabolic profile / Comprehensive metabolic profile",
           "correct_zone": "zone-arm",
-          "why": "Laboratory testing when systemic illness or severity warrants labs in Von Willebrand Disease (vWD).",
+          "why": "Screen electrolytes and renal function after blood loss.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12825,7 +12821,7 @@
           "id": "von-willebrand-factor-activity-consult-h",
           "label": "von Willebrand factor activity / Consult, hematology/oncology",
           "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): von Willebrand factor activity / Consult, hematology/oncology.",
+          "why": "vWF activity or hematology consult confirms vWD (results may take 3 days).",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12833,7 +12829,7 @@
           "id": "saline-solution-0-45-lactated-ringer-sol",
           "label": "Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal",
           "correct_zone": "zone-iv-bag",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Saline solution, 0.45% / Lactated Ringer solution / Saline solution, normal.",
+          "why": "IV fluids for mild-to-moderate hypovolemia; Hgb ~10 — pRBCs not indicated yet.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12841,7 +12837,7 @@
           "id": "desmopressin-acetate",
           "label": "Desmopressin acetate",
           "correct_zone": "zone-arm",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Desmopressin acetate.",
+          "why": "DDAVP stimulates vWF release — empiric for suspected type 1 vWD in ED.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12849,7 +12845,7 @@
           "id": "tranexamic-acid-aminocaproic-acid",
           "label": "Tranexamic acid / Aminocaproic acid",
           "correct_zone": "zone-arm",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Tranexamic acid / Aminocaproic acid.",
+          "why": "Antifibrinolytic adjunct — start concurrently with DDAVP for menorrhagia.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12857,7 +12853,7 @@
           "id": "ferrous-gluconate-ferrous-sulfate-vitami",
           "label": "Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron",
           "correct_zone": "zone-arm",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Ferrous gluconate / Ferrous sulfate / Vitamins, multiple, with iron.",
+          "why": "Iron supplementation for anemia from chronic blood loss.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12865,7 +12861,7 @@
           "id": "advise-patient-no-nsaids",
           "label": "Advise patient, no NSAIDs",
           "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Advise patient, no NSAIDs.",
+          "why": "Avoid NSAIDs until bleeding disorder diagnosed.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12873,7 +12869,7 @@
           "id": "advise-patient-no-sports",
           "label": "Advise patient, no sports",
           "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Advise patient, no sports.",
+          "why": "Avoid contact sports until diagnosis confirmed.",
           "guideline": "ACEP",
           "optional": false
         },
@@ -12881,15 +12877,7 @@
           "id": "oral-contraceptive-consult-obstetrics-gy",
           "label": "Oral contraceptive / Consult, obstetrics/gynecology",
           "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Oral contraceptive / Consult, obstetrics/gynecology.",
-          "guideline": "ACEP",
-          "optional": false
-        },
-        {
-          "id": "packed-red-blood-cells-prbc-transfusion-",
-          "label": "Packed red blood cells / pRBC transfusion when Hgb stable ~10",
-          "correct_zone": "zone-iv-bag",
-          "why": "Appropriate CCS order for Von Willebrand Disease (vWD): Packed red blood cells / pRBC transfusion when Hgb stable ~10.",
+          "why": "Hormonal therapy or OB/GYN for long-term prevention of recurrent menorrhagia.",
           "guideline": "ACEP",
           "optional": false
         }
@@ -12897,12 +12885,18 @@
       "decoys": [
         {
           "id": "decoy-avoid-175-0",
+          "label": "Packed red blood cells / pRBC transfusion when Hgb stable ~10",
+          "why": "Hgb 10 g/dL is above transfusion threshold in compensated patient — fluids + hemostasis first.",
+          "correct_zone": "zone-iv-bag"
+        },
+        {
+          "id": "decoy-avoid-175-1",
           "label": "pRBC transfusion when hemodynamically stable with Hgb ~10",
           "why": "CCS review: avoid this order for Von Willebrand Disease (vWD) — it does not change acute management.",
           "correct_zone": "zone-iv-bag"
         },
         {
-          "id": "decoy-avoid-175-1",
+          "id": "decoy-avoid-175-2",
           "label": "NSAIDs",
           "why": "CCS review: avoid this order for Von Willebrand Disease (vWD) — it does not change acute management.",
           "correct_zone": "zone-arm"
