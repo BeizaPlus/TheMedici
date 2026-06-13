@@ -47,6 +47,20 @@ Other options: `llama3.2-vision`, `llava` (larger downloads).
 
 Ollama must be running (`ollama serve` or the Ollama app).
 
+## ECG Vector Lab (standalone HTML)
+
+Interactive Einthoven triangle + limb-lead strips + vectorscope — **not** the React case game.
+
+```powershell
+cd "C:\Users\steve\MeWorld\game"
+npm run dev
+# http://localhost:5173/ecg-vector-lab.html
+```
+
+**Agent handoff (Manus / Cursor):** read **`game/ECG_VECTOR_LAB_HANDOFF.md`** first — body/heart layers, lead isolation, smoke tests, open tasks.
+
+Quick verify: `node scripts/smoke-ecg-vector-lab.mjs` (Vite on 5173).
+
 ## Dev assets
 
 Reference screenshots and floor plans live in **`dev/screenshots/`** (see `dev/README.md`). Game copies are in `game/public/`.
@@ -58,7 +72,8 @@ cd "C:\Users\steve\MeWorld\game"
 
 ## Files
 
-- `game/` — DotPhrase (Vite + React)
+- `game/` — DotPhrase (Vite + React) + **`ecg-vector-lab.html`**
+- `game/ECG_VECTOR_LAB_HANDOFF.md` — ECG lab agent notes (2026-06-13)
 - `dev/` — reference art and UI screenshots
 - `medgame.html` — legacy single-file game
 - `README.md` — this file
