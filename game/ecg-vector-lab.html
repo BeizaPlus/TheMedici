@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0c0c10"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>ECG Vector Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+/* ─── MeWorld Design Tokens ─────────────────────────────────────────────── */
+:root,[data-theme='dark']{
+  --bg:#0c0c10;
+  --panel:#14141c;
+  --border:#2a2a38;
+  --gold:#e8b84b;
+  --green:#3ecf8e;
+  --red:#ef5350;
+  --text:#f4f4f6;
+  --muted:#8b8b9a;
+  --font:'Archivo',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --radius:12px;
+  --radius-sm:8px;
+  --radius-xs:6px;
+  --shadow:0 2px 16px rgba(0,0,0,.55);
+}
+[data-theme='light']{
+  --bg:#f3f1eb;
+  --panel:#ffffff;
+  --border:#d8d2c6;
+  --gold:#9a7209;
+  --green:#1f7a52;
+  --red:#b83230;
+  --text:#1a1814;
+  --muted:#5c574d;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);background:var(--bg);color:var(--text)}
+button{font-family:inherit;cursor:pointer}
+
+/* ─── Layout ─────────────────────────────────────────────────────────────── */
+.ecg-app{
+  max-width:1160px;
+  margin:0 auto;
+  padding:20px 16px 56px;
+}
+
+/* ─── Page Header ────────────────────────────────────────────────────────── */
+.page-header{margin-bottom:20px}
+.page-kicker{
+  font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:4px;
+}
+.page-title{
+  font-size:1.45rem;font-weight:900;letter-spacing:-.02em;
+  color:var(--text);margin-bottom:4px;
+}
+.page-sub{font-size:.75rem;color:var(--muted);line-height:1.5}
+
+/* ─── Theme Toggle ───────────────────────────────────────────────────────── */
+.theme-btn{
+  position:fixed;top:16px;right:16px;z-index:100;
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--border);background:var(--panel);
+  color:var(--muted);font-size:.85rem;display:flex;align-items:center;
+  justify-content:center;transition:.15s;box-shadow:var(--shadow);
+}
+.theme-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ─── Card ───────────────────────────────────────────────────────────────── */
+.card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px;
+}
+.card-label{
+  font-size:.58rem;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);
+}
+.card-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:10px;
+}
+
+/* ─── Desktop 3-column grid ──────────────────────────────────────────────── */
+.top-grid{
+  display:grid;
+  grid-template-columns:220px 1fr 252px;
+  gap:12px;
+  margin-bottom:12px;
+}
+/* scope column stretches to fill */
+.col-scope .card{height:100%}
+
+/* ─── Controls card ──────────────────────────────────────────────────────── */
+.ctrl-col{display:flex;flex-direction:column;gap:12px}
+
+/* ─── Control row ────────────────────────────────────────────────────────── */
+.ctl{margin-bottom:12px}
+.ctl:last-child{margin-bottom:0}
+.ctl-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:7px;
+}
+.ctl-label{
+  font-size:.58rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);
+}
+.ctl-val-big{font-size:1.1rem;font-weight:900;color:var(--text)}
+.ctl-val-sm{font-size:.75rem;font-weight:700;font-family:var(--mono);color:var(--text)}
+.ctl-scale{
+  display:flex;justify-content:space-between;
+  font-size:.6rem;color:var(--muted);font-family:var(--mono);margin-top:4px;
+}
+
+/* ─── Range input ────────────────────────────────────────────────────────── */
+input[type=range]{
+  width:100%;height:4px;border-radius:4px;
+  background:var(--border);-webkit-appearance:none;appearance:none;
+  cursor:pointer;margin:0;accent-color:var(--gold);
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:var(--gold);border:2px solid var(--bg);
+  box-shadow:0 0 0 1px rgba(232,184,75,.45);
+}
+input[type=range]::-moz-range-thumb{
+  width:16px;height:16px;border-radius:50%;
+  background:var(--gold);border:2px solid var(--bg);
+}
+input[type=range]:disabled{opacity:.35}
+
+/* ─── Segment buttons ────────────────────────────────────────────────────── */
+.seg{display:flex;gap:5px}
+.seg button,.g4 button{
+  flex:1;padding:7px 0;
+  border:1px solid var(--border);background:transparent;
+  border-radius:var(--radius-sm);font-weight:700;font-size:.68rem;
+  letter-spacing:.04em;color:var(--muted);cursor:pointer;
+  transition:border-color .12s,background .12s,color .12s;
+}
+.seg button:hover,.g4 button:hover{border-color:var(--gold);color:var(--gold)}
+.seg button.on,.g4 button.on{
+  background:rgba(232,184,75,.12);color:var(--gold);
+  border-color:rgba(232,184,75,.55);
+}
+/* T-wave active = red accent */
+#tT.on{
+  background:rgba(239,83,80,.12);color:var(--red);
+  border-color:rgba(239,83,80,.55);
+}
+
+/* ─── 4-col preset grid ──────────────────────────────────────────────────── */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+
+/* ─── Lead polarity rows ─────────────────────────────────────────────────── */
+.lead-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.lead-row:last-child{border-bottom:0}
+.lead-row-name{font-size:.72rem;color:var(--text)}
+.lead-row-pol{font-size:.68rem;font-weight:700;font-family:var(--mono)}
+
+/* ─── Zone note ──────────────────────────────────────────────────────────── */
+.zone-note{
+  background:rgba(232,184,75,.06);border:1px solid rgba(232,184,75,.2);
+  border-radius:var(--radius-sm);padding:10px 12px;
+  font-size:.72rem;color:var(--muted);line-height:1.55;
+}
+.zone-note strong{color:var(--gold);font-weight:700}
+
+/* ─── Toggle (checkbox) ──────────────────────────────────────────────────── */
+.tog{
+  display:flex;align-items:center;gap:6px;
+  font-size:.68rem;color:var(--muted);cursor:pointer;user-select:none;
+}
+.tog input{cursor:pointer;width:13px;height:13px;accent-color:var(--gold)}
+
+/* ─── Phase label ────────────────────────────────────────────────────────── */
+.phase-lbl{
+  font-size:.65rem;font-family:var(--mono);
+  color:var(--muted);letter-spacing:.06em;
+}
+
+/* ─── Strip section ──────────────────────────────────────────────────────── */
+.strip-card{margin-top:0}
+.strip-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:10px;flex-wrap:wrap;gap:6px;
+}
+.strip-hint{font-size:.6rem;color:var(--muted)}
+.strip-legend{
+  display:flex;gap:14px;padding:8px 2px 0;
+  font-size:.65rem;color:var(--muted);flex-wrap:wrap;
+}
+.dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  margin-right:4px;vertical-align:-1px;
+}
+
+/* ─── Canvas ─────────────────────────────────────────────────────────────── */
+canvas{display:block}
+#strip{width:100%;cursor:ew-resize;touch-action:pan-y}
+#scope{width:100%;max-width:380px;height:auto;display:block;margin:0 auto}
+#silo{width:100%;height:auto}
+
+/* ─── Mobile layout ──────────────────────────────────────────────────────── */
+@media(max-width:860px){
+  .top-grid{
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:auto auto;
+  }
+  .col-silo{grid-column:1;grid-row:1}
+  .col-scope{grid-column:2;grid-row:1}
+  .ctrl-col{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ctrl-col .zone-note{grid-column:1/-1}
+}
+@media(max-width:540px){
+  .top-grid{grid-template-columns:1fr}
+  .col-silo{grid-column:1;grid-row:1}
+  .col-scope{grid-column:1;grid-row:2}
+  .ctrl-col{
+    grid-column:1;grid-row:3;
+    display:flex;flex-direction:column;gap:10px
+  }
+  .page-title{font-size:1.2rem}
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .ecg-app{padding:14px 12px 48px}
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- Theme toggle -->
+<button class="theme-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">☀</button>
+
+<div class="ecg-app">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-kicker">Cardiology · Vector Analysis</div>
+    <h1 class="page-title">ECG Vector Lab</h1>
+    <p class="page-sub">Drag the strip to study any moment in the cycle. Scope and silhouette update in sync. Click a lead row to focus it.</p>
+  </div>
+
+  <!-- Top 3-column grid -->
+  <div class="top-grid">
+
+    <!-- SILHOUETTE -->
+    <div class="col-silo">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-label">Body</span>
+          <label class="tog"><input type="checkbox" id="triTog" checked/> Einthoven</label>
+        </div>
+        <canvas id="silo" width="212" height="268"></canvas>
+      </div>
+    </div>
+
+    <!-- SCOPE -->
+    <div class="col-scope">
+      <div class="card" style="height:100%">
+        <div class="card-header">
+          <span class="card-label">Vectorscope</span>
+          <span class="phase-lbl" id="phLbl">Baseline</span>
+        </div>
+        <canvas id="scope"></canvas>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="ctrl-col">
+
+      <!-- Axis + Presets -->
+      <div class="card">
+        <div class="ctl">
+          <div class="ctl-head">
+            <span class="ctl-label">Mean QRS Axis</span>
+            <span class="ctl-val-big" id="axV">+60°</span>
+          </div>
+          <input type="range" id="axR" min="-180" max="180" value="60"/>
+          <div class="ctl-scale"><span>−180</span><span>0</span><span>+180</span></div>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Presets</span></div>
+          <div class="g4">
+            <button data-deg="60" class="on">Normal</button>
+            <button data-deg="-45">LAD</button>
+            <button data-deg="120">RAD</button>
+            <button data-deg="-135">XAxis</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playback + HR + Loops -->
+      <div class="card">
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Playback</span></div>
+          <div class="seg" style="margin-bottom:8px">
+            <button id="playB" class="on">▶ Play</button>
+            <button id="pauseB">⏸ Pause</button>
+          </div>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head">
+            <span class="ctl-label">Heart Rate</span>
+            <span class="ctl-val-sm" id="hrV">72 BPM</span>
+          </div>
+          <input type="range" id="hrR" min="40" max="120" value="72"/>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Loops</span></div>
+          <div class="seg">
+            <button id="tQRS" class="on">QRS</button>
+            <button id="tT">+ T wave</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lead Polarity -->
+      <div class="card">
+        <div class="card-label" style="margin-bottom:10px">Lead Polarity</div>
+        <div id="rows"></div>
+      </div>
+
+      <!-- Zone note -->
+      <div class="zone-note" id="zoneN"></div>
+
+    </div><!-- /ctrl-col -->
+  </div><!-- /top-grid -->
+
+  <!-- STRIP -->
+  <div class="card strip-card">
+    <div class="strip-header">
+      <span class="card-label">ECG Strip — 8 beats &nbsp;<span style="font-weight:400;color:var(--muted)" id="focLbl"></span></span>
+      <span class="strip-hint">drag to scrub · click lead to focus</span>
+    </div>
+    <canvas id="strip"></canvas>
+    <div class="strip-legend">
+      <span><span class="dot" style="background:var(--green)"></span>Positive</span>
+      <span><span class="dot" style="background:var(--red)"></span>Negative / T wave</span>
+      <span><span class="dot" style="background:#0284c7"></span>Live position</span>
+    </div>
+  </div>
+
+</div><!-- /ecg-app -->
+
+<script>
+(function(){
+'use strict';
+
+/* ── Theme toggle ─────────────────────────────────────────────────── */
+var themeBtn=document.getElementById('themeBtn');
+var currentTheme=document.documentElement.getAttribute('data-theme')||'dark';
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  themeBtn.textContent=t==='dark'?'☀':'☾';
+  currentTheme=t;
+  // reset scope trail with new bg
+  resetTrail();
+}
+themeBtn.addEventListener('click',function(){applyTheme(currentTheme==='dark'?'light':'dark');});
+
+/* ── Helpers ──────────────────────────────────────────────────────── */
+function cssVar(name){return getComputedStyle(document.documentElement).getPropertyValue(name).trim();}
+
+/* ── Leads & constants ────────────────────────────────────────────── */
+var LEADS=[{n:'I',deg:0},{n:'II',deg:60},{n:'III',deg:120},{n:'aVR',deg:-150},{n:'aVL',deg:-30},{n:'aVF',deg:90}];
+var N=8;
+var dpr=Math.min(window.devicePixelRatio||1,2);
+
+/* ── Body path ────────────────────────────────────────────────────── */
+var BODY='M104.265,117.959c-0.304,3.58,2.126,22.529,3.38,29.959c0.597,3.52,2.234,9.255,1.645,12.3c-0.841,4.244-1.084,9.736-0.621,12.934c0.292,1.942,1.211,10.899-0.104,14.175c-0.688,1.718-1.949,10.522-1.949,10.522c-3.285,8.294-1.431,7.886-1.431,7.886c1.017,1.248,2.759,0.098,2.759,0.098c1.327,0.846,2.246-0.201,2.246-0.201c1.139,0.943,2.467-0.116,2.467-0.116c1.431,0.743,2.758-0.627,2.758-0.627c0.822,0.414,1.023-0.109,1.023-0.109c2.466-0.158-1.376-8.05-1.376-8.05c-0.92-7.088,0.913-11.033,0.913-11.033c6.004-17.805,6.309-22.53,3.909-29.24c-0.676-1.937-0.847-2.704-0.536-3.545c0.719-1.941,0.195-9.748,1.072-12.848c1.692-5.979,3.361-21.142,4.231-28.217c1.169-9.53-4.141-22.308-4.141-22.308c-1.163-5.2,0.542-23.727,0.542-23.727c2.381,3.705,2.29,10.245,2.29,10.245c-0.378,6.859,5.541,17.342,5.541,17.342c2.844,4.332,3.921,8.442,3.921,8.747c0,1.248-0.273,4.269-0.273,4.269l0.109,2.631c0.049,0.67,0.426,2.977,0.365,4.092c-0.444,6.862,0.646,5.571,0.646,5.571c0.92,0,1.931-5.522,1.931-5.522c0,1.424-0.348,5.687,0.42,7.295c0.919,1.918,1.595-0.329,1.607-0.78c0.243-8.737,0.768-6.448,0.768-6.448c0.511,7.088,1.139,8.689,2.265,8.135c0.853-0.407,0.073-8.506,0.073-8.506c1.461,4.811,2.569,5.577,2.569,5.577c2.411,1.693,0.92-2.983,0.585-3.909c-1.784-4.92-1.839-6.625-1.839-6.625c2.229,4.421,3.909,4.257,3.909,4.257c2.174-0.694-1.9-6.954-4.287-9.953c-1.218-1.528-2.789-3.574-3.245-4.789c-0.743-2.058-1.304-8.674-1.304-8.674c-0.225-7.807-2.155-11.198-2.155-11.198c-3.3-5.282-3.921-15.135-3.921-15.135l-0.146-16.635c-1.157-11.347-9.518-11.429-9.518-11.429c-8.451-1.258-9.627-3.988-9.627-3.988c-1.79-2.576-0.767-7.514-0.767-7.514c1.485-1.208,2.058-4.415,2.058-4.415c2.466-1.891,2.345-4.658,1.206-4.628c-0.914,0.024-0.707-0.733-0.707-0.733C115.068,0.636,104.01,0,104.01,0h-1.688c0,0-11.063,0.636-9.523,13.089c0,0,0.207,0.758-0.715,0.733c-1.136-0.03-1.242,2.737,1.215,4.628c0,0,0.572,3.206,2.058,4.415c0,0,1.023,4.938-0.767,7.514c0,0-1.172,2.73-9.627,3.988c0,0-8.375,0.082-9.514,11.429l-0.158,16.635c0,0-0.609,9.853-3.922,15.135c0,0-1.921,3.392-2.143,11.198c0,0-0.563,6.616-1.303,8.674c-0.451,1.209-2.021,3.255-3.249,4.789c-2.408,2.993-6.455,9.24-4.29,9.953c0,0,1.689,0.164,3.909-4.257c0,0-0.046,1.693-1.827,6.625c-0.35,0.914-1.839,5.59,0.573,3.909c0,0,1.117-0.767,2.569-5.577c0,0-0.779,8.099,0.088,8.506c1.133,0.555,1.751-1.047,2.262-8.135c0,0,0.524-2.289,0.767,6.448c0.012,0.451,0.673,2.698,1.596,0.78c0.779-1.608,0.429-5.864,0.429-7.295c0,0,0.999,5.522,1.933,5.522c0,0,1.099,1.291,0.648-5.571c-0.073-1.121,0.32-3.422,0.369-4.092l0.106-2.631c0,0-0.274-3.014-0.274-4.269c0-0.311,1.078-4.415,3.921-8.747c0,0,5.913-10.488,5.532-17.342c0,0-0.082-6.54,2.299-10.245c0,0,1.69,18.526,0.545,23.727c0,0-5.319,12.778-4.146,22.308c0.864,7.094,2.53,22.237,4.226,28.217c0.886,3.094,0.362,10.899,1.072,12.848c0.32,0.847,0.152,1.627-0.536,3.545c-2.387,6.71-2.083,11.436,3.921,29.24c0,0,1.848,3.945,0.914,11.033c0,0-3.836,7.892-1.379,8.05c0,0,0.192,0.523,1.023,0.109c0,0,1.327,1.37,2.761,0.627c0,0,1.328,1.06,2.463,0.116c0,0,0.91,1.047,2.237,0.201c0,0,1.742,1.175,2.777-0.098c0,0,1.839,0.408-1.435-7.886c0,0-1.254-8.793-1.945-10.522c-1.318-3.275-0.387-12.251-0.106-14.175c0.453-3.216,0.21-8.695-0.618-12.934c-0.606-3.038,1.035-8.774,1.641-12.3c1.245-7.423,3.685-26.373,3.38-29.959l1.008,0.354C103.809,118.312,104.265,117.959,104.265,117.959z';
+
+/* ── State ────────────────────────────────────────────────────────── */
+var S={angle:60,time:0,speed:72/3600,paused:false,showT:false,focusLead:'II',showTri:true,mag:0.82};
+
+/* ── Math ─────────────────────────────────────────────────────────── */
+function r(d){return d*Math.PI/180;}
+function cosd(v,l){return Math.cos(r(v-l));}
+
+function vecAt(ph){
+  var a=r(S.angle),dx=Math.cos(a),dy=Math.sin(a),px=-dy,py=dx;
+  var q0=0.06,q1=0.20;
+  if(ph>=q0&&ph<=q1){
+    var u=(ph-q0)/(q1-q0),m,lat;
+    if(u<0.15)      m=-0.18*Math.sin(u/0.15*Math.PI);
+    else if(u<0.62){var ur=(u-0.15)/0.47;m=Math.pow(Math.sin(ur*Math.PI),0.7);}
+    else            {var us=(u-0.62)/0.38;m=-0.28*Math.sin(us*Math.PI);}
+    lat=0.14*Math.sin(u*Math.PI*2);
+    return{vx:m*dx+lat*px,vy:m*dy+lat*py,on:true,w:'qrs'};
+  }
+  if(S.showT&&ph>0.45&&ph<0.78){
+    var ut=(ph-0.45)/0.33,tm=0.40*Math.sin(ut*Math.PI),tl=0.05*Math.sin(ut*Math.PI);
+    return{vx:tm*dx+tl*px,vy:tm*dy+tl*py,on:true,w:'t'};
+  }
+  return{vx:0,vy:0,on:false,w:null};
+}
+
+function projL(ph,deg){
+  var v=vecAt(ph);if(!v.on)return{val:0,w:null};
+  var ul=r(deg);
+  return{val:v.vx*Math.cos(ul)+v.vy*Math.sin(ul),w:v.w};
+}
+
+/* ── Silhouette canvas ────────────────────────────────────────────── */
+var SC=document.getElementById('silo');
+var sctx=SC.getContext('2d');
+SC.width=212*dpr;SC.height=268*dpr;sctx.scale(dpr,dpr);
+var bp=new Path2D(BODY);
+var scl=212/206.326,yOff=(268-206.326*scl)/2;
+function toC(sx,sy){return{x:sx*scl,y:sy*scl+yOff};}
+var EL={RA:toC(58,78),LA:toC(148,78),LL:toC(148,176),RL:toC(58,176)};
+var HT=toC(103,67);
+
+function drawSilo(){
+  var bg=cssVar('--bg')||'#0c0c10';
+  var border=cssVar('--border')||'#2a2a38';
+  var muted=cssVar('--muted')||'#8b8b9a';
+  var text=cssVar('--text')||'#f4f4f6';
+  var gold=cssVar('--gold')||'#e8b84b';
+  var green=cssVar('--green')||'#3ecf8e';
+  var red=cssVar('--red')||'#ef5350';
+
+  sctx.clearRect(0,0,212,268);
+  // body fill
+  sctx.save();sctx.scale(scl,scl);sctx.translate(0,yOff/scl);
+  sctx.fillStyle=muted;sctx.globalAlpha=0.22;sctx.fill(bp);sctx.restore();sctx.globalAlpha=1;
+
+  // Einthoven triangle
+  if(S.showTri){
+    var tri=[{f:EL.RA,t:EL.LA,n:'I'},{f:EL.RA,t:EL.LL,n:'II'},{f:EL.LA,t:EL.LL,n:'III'}];
+    tri.forEach(function(e){
+      var foc=e.n===S.focusLead;
+      sctx.strokeStyle=foc?text:border;sctx.lineWidth=foc?1.8:1;
+      sctx.setLineDash(foc?[]:[4,3]);sctx.beginPath();
+      sctx.moveTo(e.f.x,e.f.y);sctx.lineTo(e.t.x,e.t.y);sctx.stroke();
+      sctx.setLineDash([]);
+      var mx=(e.f.x+e.t.x)/2+5,my=(e.f.y+e.t.y)/2-5;
+      sctx.fillStyle=foc?text:muted;
+      sctx.font=(foc?'700':'500')+' 9px Archivo,ui-sans-serif,system-ui';
+      sctx.textAlign='center';sctx.fillText(e.n,mx,my);
+    });
+  }
+
+  // focused lead axis
+  var fl=LEADS.find(function(l){return l.n===S.focusLead;});
+  if(fl){
+    var a=r(fl.deg),ux=Math.cos(a),uy=Math.sin(a),len=68;
+    sctx.save();sctx.setLineDash([5,4]);sctx.strokeStyle=border;sctx.lineWidth=1;
+    sctx.beginPath();sctx.moveTo(HT.x-ux*len,HT.y-uy*len);sctx.lineTo(HT.x+ux*len,HT.y+uy*len);
+    sctx.stroke();sctx.restore();
+    sctx.fillStyle=green;sctx.font='700 10px Archivo,ui-sans-serif';sctx.textAlign='center';
+    sctx.fillText('+',HT.x+ux*(len-4),HT.y+uy*(len-4)+4);
+    sctx.fillStyle=red;sctx.fillText('−',HT.x-ux*(len-4),HT.y-uy*(len-4)+4);
+  }
+
+  // electrodes
+  Object.keys(EL).forEach(function(n){
+    var e=EL[n];
+    var pos=(S.focusLead==='I'&&(n==='RA'||n==='LA'))||(S.focusLead==='II'&&(n==='RA'||n==='LL'))||
+            (S.focusLead==='III'&&(n==='LA'||n==='LL'))||(S.focusLead==='aVR'&&n==='RA')||
+            (S.focusLead==='aVL'&&n==='LA')||(S.focusLead==='aVF'&&n==='LL');
+    sctx.fillStyle=pos?'#0284c7':border;
+    sctx.beginPath();sctx.arc(e.x,e.y,pos?5:3.5,0,Math.PI*2);sctx.fill();
+    sctx.fillStyle=text;sctx.font='700 9px Archivo,ui-sans-serif';sctx.textAlign='center';
+    sctx.fillText(n,e.x,e.y-8);
+  });
+
+  // heart glow
+  sctx.fillStyle='rgba(239,83,80,0.18)';sctx.beginPath();sctx.arc(HT.x,HT.y,7,0,Math.PI*2);sctx.fill();
+
+  // vector arrow
+  var ph=S.time%1,v=vecAt(ph),vlen=44;
+  var tx=HT.x+v.vx*vlen,ty=HT.y+v.vy*vlen;
+  sctx.strokeStyle='#0284c7';sctx.lineWidth=2.2;
+  sctx.beginPath();sctx.moveTo(HT.x,HT.y);sctx.lineTo(tx,ty);sctx.stroke();
+  if(v.on){
+    var av=Math.atan2(ty-HT.y,tx-HT.x);
+    sctx.fillStyle='#0284c7';sctx.beginPath();
+    sctx.moveTo(tx,ty);
+    sctx.lineTo(tx-9*Math.cos(av-0.38),ty-9*Math.sin(av-0.38));
+    sctx.lineTo(tx-9*Math.cos(av+0.38),ty-9*Math.sin(av+0.38));
+    sctx.closePath();sctx.fill();
+  }
+  sctx.fillStyle='#0284c7';sctx.beginPath();sctx.arc(HT.x,HT.y,2.5,0,Math.PI*2);sctx.fill();
+}
+
+/* ── Scope canvas ─────────────────────────────────────────────────── */
+var PC=document.getElementById('scope');
+var PSZ=320;
+PC.width=PSZ*dpr;PC.height=PSZ*dpr;PC.style.height='auto';
+var pctx=PC.getContext('2d');pctx.scale(dpr,dpr);
+var trail=document.createElement('canvas');trail.width=PSZ*dpr;trail.height=PSZ*dpr;
+var tctx=trail.getContext('2d');tctx.scale(dpr,dpr);
+tctx.fillStyle='#0c0c10';tctx.fillRect(0,0,PSZ,PSZ);
+var pcx=PSZ/2,pcy=PSZ/2,PR=PSZ/2-26;
+
+function dot(x,y,r2,a,col){
+  var g=tctx.createRadialGradient(x,y,0,x,y,r2);
+  g.addColorStop(0,'rgba('+col+','+a+')');g.addColorStop(1,'rgba('+col+',0)');
+  tctx.fillStyle=g;tctx.beginPath();tctx.arc(x,y,r2,0,Math.PI*2);tctx.fill();
+}
+function resetTrail(){
+  var bg=cssVar('--bg')||'#0c0c10';
+  tctx.fillStyle=bg;tctx.fillRect(0,0,PSZ,PSZ);
+}
+
+function drawScope(){
+  var ph=S.time%1;
+  var bg=cssVar('--bg')||'#0c0c10';
+  var border=cssVar('--border')||'#2a2a38';
+  var muted=cssVar('--muted')||'#8b8b9a';
+  var text=cssVar('--text')||'#f4f4f6';
+  var gold=cssVar('--gold')||'#e8b84b';
+
+  if(!S.paused){
+    // fade trail toward bg colour
+    var bgRgb=currentTheme==='dark'?'12,12,16':'243,241,235';
+    tctx.fillStyle='rgba('+bgRgb+',0.055)';tctx.fillRect(0,0,PSZ,PSZ);
+    var v=vecAt(ph);
+    if(v.on){
+      var vx=pcx+v.vx*PR*S.mag,vy=pcy+v.vy*PR*S.mag;
+      // gold trail in dark, warm amber in light
+      var trailCol=currentTheme==='dark'?'232,184,75':'154,114,9';
+      dot(vx,vy,9,0.22,trailCol);dot(vx,vy,3,0.60,trailCol);
+    }
+  }
+
+  pctx.clearRect(0,0,PSZ,PSZ);
+  pctx.fillStyle=cssVar('--panel')||'#14141c';pctx.fillRect(0,0,PSZ,PSZ);
+
+  // outer ring
+  pctx.strokeStyle=border;pctx.lineWidth=1.2;
+  pctx.beginPath();pctx.arc(pcx,pcy,PR,0,Math.PI*2);pctx.stroke();
+  // inner ring
+  pctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.05)':'rgba(0,0,0,.06)';
+  pctx.beginPath();pctx.arc(pcx,pcy,PR*0.5,0,Math.PI*2);pctx.stroke();
+  // crosshair
+  pctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.06)':'rgba(0,0,0,.07)';
+  pctx.lineWidth=1;
+  pctx.beginPath();pctx.moveTo(pcx-PR,pcy);pctx.lineTo(pcx+PR,pcy);
+  pctx.moveTo(pcx,pcy-PR);pctx.lineTo(pcx,pcy+PR);pctx.stroke();
+  // ticks
+  for(var d=0;d<360;d+=3.6){
+    var a2=r(d),major=(d%30)<1.8,r3=PR-(major?8:4);
+    pctx.strokeStyle=major?muted:border;pctx.lineWidth=major?1:0.7;
+    pctx.beginPath();
+    pctx.moveTo(pcx+PR*Math.cos(a2),pcy+PR*Math.sin(a2));
+    pctx.lineTo(pcx+r3*Math.cos(a2),pcy+r3*Math.sin(a2));pctx.stroke();
+  }
+  // lead targets
+  LEADS.forEach(function(L){
+    var a3=r(L.deg),tx2=pcx+PR*0.72*Math.cos(a3),ty2=pcy+PR*0.72*Math.sin(a3);
+    var foc=L.n===S.focusLead;
+    var diff=Math.abs(((L.deg-S.angle+540)%360)-180),hot=diff<12;
+    var col=foc?'#0284c7':hot?text:muted;
+    var bs=7;
+    pctx.strokeStyle=col;pctx.lineWidth=foc?1.8:hot?1.4:0.9;
+    pctx.beginPath();
+    pctx.moveTo(tx2-bs,ty2-bs+3);pctx.lineTo(tx2-bs,ty2-bs);pctx.lineTo(tx2-bs+3,ty2-bs);
+    pctx.moveTo(tx2+bs-3,ty2-bs);pctx.lineTo(tx2+bs,ty2-bs);pctx.lineTo(tx2+bs,ty2-bs+3);
+    pctx.moveTo(tx2-bs,ty2+bs-3);pctx.lineTo(tx2-bs,ty2+bs);pctx.lineTo(tx2-bs+3,ty2+bs);
+    pctx.moveTo(tx2+bs-3,ty2+bs);pctx.lineTo(tx2+bs,ty2+bs);pctx.lineTo(tx2+bs,ty2+bs-3);
+    pctx.stroke();
+    pctx.fillStyle=col;pctx.font=(foc?'700':'600')+' 10px Archivo,ui-sans-serif,system-ui';
+    pctx.textAlign='left';pctx.fillText(L.n,tx2+10,ty2+4);
+  });
+
+  // trail composite — screen blends the gold glow on dark, multiply on light
+  pctx.globalCompositeOperation=currentTheme==='dark'?'screen':'multiply';
+  pctx.drawImage(trail,0,0,PSZ,PSZ);
+  pctx.globalCompositeOperation='source-over';
+
+  // live dot
+  var vv=vecAt(ph);
+  if(vv.on){
+    var lx=pcx+vv.vx*PR*S.mag,ly=pcy+vv.vy*PR*S.mag;
+    pctx.fillStyle='#0284c7';pctx.beginPath();pctx.arc(lx,ly,5,0,Math.PI*2);pctx.fill();
+    pctx.fillStyle=cssVar('--panel')||'#14141c';pctx.beginPath();pctx.arc(lx,ly,2,0,Math.PI*2);pctx.fill();
+  }
+  // center dot
+  pctx.fillStyle=text;pctx.beginPath();pctx.arc(pcx,pcy,2.5,0,Math.PI*2);pctx.fill();
+  // phase label
+  var vvv=vecAt(ph);
+  document.getElementById('phLbl').textContent=vvv.w==='t'?'T wave':vvv.on?'QRS':'Baseline';
+}
+
+/* ── Strip canvas ─────────────────────────────────────────────────── */
+var WC=document.getElementById('strip');
+var wctx=WC.getContext('2d');
+var WW,WH=260,LPAD=40,TPAD=6;
+
+function initStrip(){
+  WW=WC.parentElement.clientWidth-28;
+  WC.width=WW*dpr;WC.height=WH*dpr;
+  WC.style.height=WH+'px';
+  wctx.setTransform(1,0,0,1,0,0);wctx.scale(dpr,dpr);
+}
+initStrip();
+
+function drawStrip(){
+  var bg=cssVar('--panel')||'#14141c';
+  var border=cssVar('--border')||'#2a2a38';
+  var muted=cssVar('--muted')||'#8b8b9a';
+  var text=cssVar('--text')||'#f4f4f6';
+  var green=cssVar('--green')||'#3ecf8e';
+  var red=cssVar('--red')||'#ef5350';
+
+  wctx.clearRect(0,0,WW,WH);wctx.fillStyle=bg;wctx.fillRect(0,0,WW,WH);
+  var avail=WW-LPAD,rowH=(WH-TPAD*2)/LEADS.length;
+  var beatW=avail/N;
+  var phase=S.time%1;
+  var playX=LPAD+((S.time%N)/N)*avail;
+
+  // grid
+  wctx.lineWidth=0.7;
+  for(var gb=0;gb<=N;gb++){
+    wctx.strokeStyle=border;
+    wctx.beginPath();wctx.moveTo(LPAD+gb*beatW,TPAD);wctx.lineTo(LPAD+gb*beatW,WH-TPAD);wctx.stroke();
+  }
+  for(var gd=0;gd<N;gd++){
+    for(var gs=1;gs<5;gs++){
+      wctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.03)':'rgba(0,0,0,.04)';
+      var gx=LPAD+gd*beatW+gs*beatW/5;
+      wctx.beginPath();wctx.moveTo(gx,TPAD);wctx.lineTo(gx,WH-TPAD);wctx.stroke();
+    }
+  }
+
+  LEADS.forEach(function(L,idx){
+    var rowY=TPAD+idx*rowH,base=rowY+rowH/2,amp=rowH*0.43;
+    var foc=L.n===S.focusLead;
+
+    // row separator
+    wctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)';
+    wctx.lineWidth=0.8;
+    wctx.beginPath();wctx.moveTo(LPAD,rowY);wctx.lineTo(WW,rowY);wctx.stroke();
+
+    // label
+    wctx.fillStyle=foc?text:muted;
+    wctx.font=(foc?'700':'500')+' 10px Archivo,ui-sans-serif,system-ui';
+    wctx.textAlign='right';wctx.fillText(L.n,LPAD-5,base+4);
+
+    // baseline
+    wctx.strokeStyle=foc?border:currentTheme==='dark'?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)';
+    wctx.lineWidth=0.8;
+    wctx.beginPath();wctx.moveTo(LPAD,base);wctx.lineTo(WW,base);wctx.stroke();
+
+    var M=WW-LPAD;
+    // fill
+    for(var i=0;i<M;i+=1.5){
+      var gph=((i/M)*N)%1,pr=projL(gph,L.deg);
+      if(Math.abs(pr.val)<0.008)continue;
+      var fy=base-pr.val*amp;
+      var fc=pr.w==='t'?'rgba(239,83,80,0.14)':pr.val>=0?'rgba(62,207,142,0.14)':'rgba(239,83,80,0.14)';
+      wctx.strokeStyle=fc;wctx.lineWidth=2;
+      wctx.beginPath();wctx.moveTo(LPAD+i,base);wctx.lineTo(LPAD+i,fy);wctx.stroke();
+    }
+
+    // trace
+    wctx.lineWidth=foc?2:1.2;
+    var prevCol=null;
+    for(var i2=0;i2<M;i2++){
+      var gph2=((i2/M)*N)%1,pr2=projL(gph2,L.deg);
+      var yy=base-pr2.val*amp;
+      var col=pr2.w==='t'?red:(foc?text:cssVar('--text')||'#f4f4f6');
+      if(i2===0||col!==prevCol){
+        if(i2>0)wctx.stroke();
+        wctx.beginPath();wctx.strokeStyle=col;wctx.moveTo(LPAD+i2,yy);
+      }else{wctx.lineTo(LPAD+i2,yy);}
+      prevCol=col;
+    }
+    wctx.stroke();
+
+    // live dot
+    var lph=phase,lpr=projL(lph,L.deg),liveY=base-lpr.val*amp;
+    wctx.fillStyle='#0284c7';
+    wctx.beginPath();wctx.arc(playX,liveY,foc?4:2.5,0,Math.PI*2);wctx.fill();
+  });
+
+  // playhead
+  wctx.strokeStyle=currentTheme==='dark'?'rgba(232,184,75,0.6)':'rgba(154,114,9,0.6)';
+  wctx.lineWidth=1.5;wctx.setLineDash([4,3]);
+  wctx.beginPath();wctx.moveTo(playX,TPAD);wctx.lineTo(playX,WH-TPAD);wctx.stroke();
+  wctx.setLineDash([]);
+}
+
+/* ── Main loop ────────────────────────────────────────────────────── */
+function frame(){
+  if(!S.paused)S.time+=S.speed;
+  drawSilo();drawScope();drawStrip();
+  requestAnimationFrame(frame);
+}
+
+/* ── UI wiring ────────────────────────────────────────────────────── */
+var axR=document.getElementById('axR'),axV=document.getElementById('axV'),
+    hrR=document.getElementById('hrR'),hrV=document.getElementById('hrV'),
+    playB=document.getElementById('playB'),pauseB=document.getElementById('pauseB'),
+    rowsEl=document.getElementById('rows'),zoneEl=document.getElementById('zoneN'),
+    focLbl=document.getElementById('focLbl');
+
+function fmtA(d){return(d>0?'+':'')+d+'°';}
+function zoneOf(a){
+  if(a>=-30&&a<=90)  return{l:'Normal Axis',d:'Lead I and aVF both upright.'};
+  if(a>-90&&a<-30)   return{l:'Left Axis Deviation',d:'I upright, aVF inverted. Causes: LVH, LAFB, inferior MI.'};
+  if(a>90&&a<=180)   return{l:'Right Axis Deviation',d:'I inverted, aVF upright. Causes: RVH, LPFB, PE, COPD.'};
+  return{l:'Extreme Axis',d:'Both I and aVF inverted. Ventricular rhythm, hyperK, lead misplacement.'};
+}
+
+function updateUI(){
+  var a=parseInt(axR.value,10);S.angle=a;
+  var hr=parseInt(hrR.value,10);S.speed=hr/3600;
+  axV.textContent=fmtA(a);hrV.textContent=hr+' BPM';
+  rowsEl.innerHTML='';
+  LEADS.forEach(function(L){
+    var p=cosd(a,L.deg),up=p>=0;
+    var d=document.createElement('div');d.className='lead-row';
+    d.innerHTML='<span class="lead-row-name">'+L.n+'</span>'
+      +'<span class="lead-row-pol" style="color:'+(up?'var(--green)':'var(--red)')+'">'+
+      (up?'↑ Up':'↓ Inv')+'</span>';
+    rowsEl.appendChild(d);
+  });
+  var z=zoneOf(a>180?a-360:a);
+  zoneEl.innerHTML='<strong>'+z.l+'</strong>. '+z.d;
+  document.querySelectorAll('[data-deg]').forEach(function(b){
+    b.classList.toggle('on',parseInt(b.dataset.deg,10)===a);
+  });
+  focLbl.textContent=S.focusLead?'— '+S.focusLead:'';
+  resetTrail();
+}
+
+axR.addEventListener('input',updateUI);
+hrR.addEventListener('input',updateUI);
+document.querySelectorAll('[data-deg]').forEach(function(b){
+  b.addEventListener('click',function(){axR.value=b.dataset.deg;updateUI();});
+});
+playB.addEventListener('click',function(){
+  S.paused=false;playB.classList.add('on');pauseB.classList.remove('on');
+});
+pauseB.addEventListener('click',function(){
+  S.paused=true;pauseB.classList.add('on');playB.classList.remove('on');
+});
+document.getElementById('tT').addEventListener('click',function(){
+  S.showT=!S.showT;this.classList.toggle('on',S.showT);
+  var bg=cssVar('--bg')||'#0c0c10';
+  resetTrail();
+});
+document.getElementById('triTog').addEventListener('change',function(){S.showTri=this.checked;});
+
+/* ── Strip drag / scrub ───────────────────────────────────────────── */
+var _dmx=0,_moved=false;
+WC.addEventListener('mousedown',function(e){
+  S._drag=true;_moved=false;var x=localX(e,WC);_dmx=x;scrub(x);
+  S.paused=true;pauseB.classList.add('on');playB.classList.remove('on');
+});
+window.addEventListener('mousemove',function(e){
+  if(!S._drag)return;var x=localX(e,WC);if(Math.abs(x-_dmx)>3)_moved=true;scrub(x);
+});
+window.addEventListener('mouseup',function(e){
+  if(S._drag&&!_moved){
+    var y=localY(e,WC);
+    var rH=(WH-TPAD*2)/LEADS.length;
+    var idx=Math.floor((y-TPAD)/rH);
+    if(idx>=0&&idx<LEADS.length){S.focusLead=LEADS[idx].n;updateUI();}
+  }
+  S._drag=false;
+});
+WC.addEventListener('touchstart',function(e){
+  S._drag=true;_moved=false;var t=e.touches[0];_dmx=localX(t,WC);scrub(_dmx);
+  S.paused=true;pauseB.classList.add('on');playB.classList.remove('on');
+},{passive:true});
+window.addEventListener('touchmove',function(e){
+  if(!S._drag)return;var x=localX(e.touches[0],WC);if(Math.abs(x-_dmx)>3)_moved=true;scrub(x);
+},{passive:true});
+window.addEventListener('touchend',function(){S._drag=false;});
+
+function localX(e,el){var r2=el.getBoundingClientRect();return(e.clientX-r2.left)*(WW/r2.width);}
+function localY(e,el){var r2=el.getBoundingClientRect();return(e.clientY-r2.top)*(WH/r2.height);}
+function scrub(x){var f=Math.max(0,Math.min(1,(x-LPAD)/(WW-LPAD)));S.time=f*N;}
+
+/* ── Resize ───────────────────────────────────────────────────────── */
+var resizeTimer;
+window.addEventListener('resize',function(){
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(function(){initStrip();},120);
+});
+
+/* ── Boot ─────────────────────────────────────────────────────────── */
+updateUI();
+requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>
