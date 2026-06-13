@@ -44,22 +44,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text)}
 button{font-family:inherit;cursor:pointer}
 
 /* ─── Layout ─────────────────────────────────────────────────────────────── */
-.ecg-app{
-  max-width:1160px;
-  margin:0 auto;
-  padding:20px 16px 56px;
-}
+.ecg-app{max-width:1160px;margin:0 auto;padding:20px 16px 56px}
 
 /* ─── Page Header ────────────────────────────────────────────────────────── */
 .page-header{margin-bottom:20px}
-.page-kicker{
-  font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:4px;
-}
-.page-title{
-  font-size:1.45rem;font-weight:900;letter-spacing:-.02em;
-  color:var(--text);margin-bottom:4px;
-}
+.page-kicker{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.page-title{font-size:1.45rem;font-weight:900;letter-spacing:-.02em;color:var(--text);margin-bottom:4px}
 .page-sub{font-size:.75rem;color:var(--muted);line-height:1.5}
 
 /* ─── Theme Toggle ───────────────────────────────────────────────────────── */
@@ -73,28 +63,30 @@ button{font-family:inherit;cursor:pointer}
 .theme-btn:hover{border-color:var(--gold);color:var(--gold)}
 
 /* ─── Card ───────────────────────────────────────────────────────────────── */
-.card{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:var(--radius);padding:14px;
-}
-.card-label{
-  font-size:.58rem;font-weight:700;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--muted);
-}
-.card-header{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:10px;
-}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.card-label{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 
-/* ─── Desktop 3-column grid ──────────────────────────────────────────────── */
+/* ─── Desktop 2-column grid ──────────────────────────────────────────────── */
 .top-grid{
   display:grid;
-  grid-template-columns:220px 1fr 252px;
+  grid-template-columns:1fr 252px;
   gap:12px;
   margin-bottom:12px;
 }
-/* scope column stretches to fill */
-.col-scope .card{height:100%}
+
+/* ─── Unified body+scope canvas wrapper ─────────────────────────────────── */
+.body-scope-wrap{
+  position:relative;
+  width:100%;
+  /* aspect ratio maintained by canvas */
+}
+#unified{
+  width:100%;
+  height:auto;
+  display:block;
+  cursor:default;
+}
 
 /* ─── Controls card ──────────────────────────────────────────────────────── */
 .ctrl-col{display:flex;flex-direction:column;gap:12px}
@@ -102,20 +94,11 @@ button{font-family:inherit;cursor:pointer}
 /* ─── Control row ────────────────────────────────────────────────────────── */
 .ctl{margin-bottom:12px}
 .ctl:last-child{margin-bottom:0}
-.ctl-head{
-  display:flex;justify-content:space-between;align-items:baseline;
-  margin-bottom:7px;
-}
-.ctl-label{
-  font-size:.58rem;font-weight:700;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--muted);
-}
+.ctl-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.ctl-label{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .ctl-val-big{font-size:1.1rem;font-weight:900;color:var(--text)}
 .ctl-val-sm{font-size:.75rem;font-weight:700;font-family:var(--mono);color:var(--text)}
-.ctl-scale{
-  display:flex;justify-content:space-between;
-  font-size:.6rem;color:var(--muted);font-family:var(--mono);margin-top:4px;
-}
+.ctl-scale{display:flex;justify-content:space-between;font-size:.6rem;color:var(--muted);font-family:var(--mono);margin-top:4px}
 
 /* ─── Range input ────────────────────────────────────────────────────────── */
 input[type=range]{
@@ -148,20 +131,13 @@ input[type=range]:disabled{opacity:.35}
   background:rgba(232,184,75,.12);color:var(--gold);
   border-color:rgba(232,184,75,.55);
 }
-/* T-wave active = red accent */
-#tT.on{
-  background:rgba(239,83,80,.12);color:var(--red);
-  border-color:rgba(239,83,80,.55);
-}
+#tT.on{background:rgba(239,83,80,.12);color:var(--red);border-color:rgba(239,83,80,.55)}
 
 /* ─── 4-col preset grid ──────────────────────────────────────────────────── */
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
 
 /* ─── Lead polarity rows ─────────────────────────────────────────────────── */
-.lead-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);
-}
+.lead-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
 .lead-row:last-child{border-bottom:0}
 .lead-row-name{font-size:.72rem;color:var(--text)}
 .lead-row-pol{font-size:.68rem;font-weight:700;font-family:var(--mono)}
@@ -175,59 +151,71 @@ input[type=range]:disabled{opacity:.35}
 .zone-note strong{color:var(--gold);font-weight:700}
 
 /* ─── Toggle (checkbox) ──────────────────────────────────────────────────── */
-.tog{
-  display:flex;align-items:center;gap:6px;
-  font-size:.68rem;color:var(--muted);cursor:pointer;user-select:none;
-}
+.tog{display:flex;align-items:center;gap:6px;font-size:.68rem;color:var(--muted);cursor:pointer;user-select:none}
 .tog input{cursor:pointer;width:13px;height:13px;accent-color:var(--gold)}
 
 /* ─── Phase label ────────────────────────────────────────────────────────── */
-.phase-lbl{
-  font-size:.65rem;font-family:var(--mono);
-  color:var(--muted);letter-spacing:.06em;
+.phase-lbl{font-size:.65rem;font-family:var(--mono);color:var(--muted);letter-spacing:.06em}
+
+/* ─── Axis Explanation Accordion ────────────────────────────────────────── */
+.axis-accordions{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.axis-item{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.axis-item.active{border-color:rgba(232,184,75,.45)}
+.axis-trigger{
+  width:100%;display:flex;justify-content:space-between;align-items:center;
+  padding:9px 12px;background:transparent;border:none;
+  font-size:.72rem;font-weight:700;color:var(--muted);
+  cursor:pointer;transition:color .12s,background .12s;text-align:left;
+  font-family:var(--font);
 }
+.axis-trigger:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.axis-item.active .axis-trigger{color:var(--gold);background:rgba(232,184,75,.06)}
+.axis-chevron{font-size:.6rem;transition:transform .2s;flex-shrink:0;margin-left:6px}
+.axis-item.active .axis-chevron{transform:rotate(180deg)}
+.axis-body{
+  display:none;padding:0 12px 12px;
+  font-size:.7rem;color:var(--muted);line-height:1.65;
+}
+.axis-item.active .axis-body{display:block}
+.axis-body .axis-range{
+  display:inline-block;font-family:var(--mono);font-size:.65rem;
+  background:rgba(232,184,75,.1);color:var(--gold);
+  border-radius:4px;padding:1px 6px;margin-bottom:6px;
+}
+.axis-body .axis-causes{margin-top:6px}
+.axis-body .axis-causes strong{color:var(--text);font-size:.68rem}
+.axis-body ul{margin:4px 0 0 14px}
+.axis-body ul li{margin-bottom:2px}
+.axis-body .axis-leads{
+  display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;
+}
+.axis-body .lead-chip{
+  font-size:.62rem;font-weight:700;font-family:var(--mono);
+  padding:2px 7px;border-radius:4px;
+}
+.lead-chip.up{background:rgba(62,207,142,.12);color:var(--green);border:1px solid rgba(62,207,142,.3)}
+.lead-chip.dn{background:rgba(239,83,80,.12);color:var(--red);border:1px solid rgba(239,83,80,.3)}
 
 /* ─── Strip section ──────────────────────────────────────────────────────── */
 .strip-card{margin-top:0}
-.strip-header{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:10px;flex-wrap:wrap;gap:6px;
-}
+.strip-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px}
 .strip-hint{font-size:.6rem;color:var(--muted)}
-.strip-legend{
-  display:flex;gap:14px;padding:8px 2px 0;
-  font-size:.65rem;color:var(--muted);flex-wrap:wrap;
-}
-.dot{
-  display:inline-block;width:7px;height:7px;border-radius:50%;
-  margin-right:4px;vertical-align:-1px;
-}
+.strip-legend{display:flex;gap:14px;padding:8px 2px 0;font-size:.65rem;color:var(--muted);flex-wrap:wrap}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;vertical-align:-1px}
 
 /* ─── Canvas ─────────────────────────────────────────────────────────────── */
 canvas{display:block}
 #strip{width:100%;cursor:ew-resize;touch-action:pan-y}
-#scope{width:100%;max-width:380px;height:auto;display:block;margin:0 auto}
-#silo{width:100%;height:auto}
 
 /* ─── Mobile layout ──────────────────────────────────────────────────────── */
-@media(max-width:860px){
-  .top-grid{
-    grid-template-columns:1fr 1fr;
-    grid-template-rows:auto auto;
-  }
-  .col-silo{grid-column:1;grid-row:1}
-  .col-scope{grid-column:2;grid-row:1}
-  .ctrl-col{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .ctrl-col .zone-note{grid-column:1/-1}
-}
-@media(max-width:540px){
+@media(max-width:760px){
   .top-grid{grid-template-columns:1fr}
-  .col-silo{grid-column:1;grid-row:1}
-  .col-scope{grid-column:1;grid-row:2}
-  .ctrl-col{
-    grid-column:1;grid-row:3;
-    display:flex;flex-direction:column;gap:10px
-  }
+  .ctrl-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ctrl-col .zone-note,.ctrl-col .axis-accordions-wrap{grid-column:1/-1}
+}
+@media(max-width:480px){
+  .top-grid{grid-template-columns:1fr}
+  .ctrl-col{display:flex;flex-direction:column;gap:10px}
   .page-title{font-size:1.2rem}
   .g4{grid-template-columns:repeat(2,1fr)}
   .ecg-app{padding:14px 12px 48px}
@@ -242,7 +230,6 @@ canvas{display:block}
 </head>
 <body>
 
-<!-- Theme toggle -->
 <button class="theme-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">☀</button>
 
 <div class="ecg-app">
@@ -251,31 +238,25 @@ canvas{display:block}
   <div class="page-header">
     <div class="page-kicker">Cardiology · Vector Analysis</div>
     <h1 class="page-title">ECG Vector Lab</h1>
-    <p class="page-sub">Drag the strip to study any moment in the cycle. Scope and silhouette update in sync. Click a lead row to focus it.</p>
+    <p class="page-sub">Live vectorscope overlaid on the body. Comet shows the QRS vector sweeping through all leads simultaneously. Drag the strip to scrub.</p>
   </div>
 
-  <!-- Top 3-column grid -->
+  <!-- Top grid: unified canvas | controls -->
   <div class="top-grid">
 
-    <!-- SILHOUETTE -->
-    <div class="col-silo">
-      <div class="card">
+    <!-- UNIFIED BODY + SCOPE CANVAS -->
+    <div class="col-unified">
+      <div class="card" style="padding:10px">
         <div class="card-header">
-          <span class="card-label">Body</span>
-          <label class="tog"><input type="checkbox" id="triTog" checked/> Einthoven</label>
+          <span class="card-label">Body · Vectorscope</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="phase-lbl" id="phLbl">Baseline</span>
+            <label class="tog"><input type="checkbox" id="triTog" checked/> Einthoven</label>
+          </div>
         </div>
-        <canvas id="silo" width="212" height="268"></canvas>
-      </div>
-    </div>
-
-    <!-- SCOPE -->
-    <div class="col-scope">
-      <div class="card" style="height:100%">
-        <div class="card-header">
-          <span class="card-label">Vectorscope</span>
-          <span class="phase-lbl" id="phLbl">Baseline</span>
+        <div class="body-scope-wrap">
+          <canvas id="unified"></canvas>
         </div>
-        <canvas id="scope"></canvas>
       </div>
     </div>
 
@@ -337,6 +318,114 @@ canvas{display:block}
       <!-- Zone note -->
       <div class="zone-note" id="zoneN"></div>
 
+      <!-- Axis Explanation Accordions -->
+      <div class="axis-accordions-wrap">
+        <div class="card-label" style="margin-bottom:8px">How to Read Axis Deviation</div>
+        <div class="axis-accordions" id="axisAccordions">
+
+          <div class="axis-item" id="acc-normal">
+            <button class="axis-trigger" data-acc="normal">
+              <span>Normal Axis</span><span class="axis-chevron">▼</span>
+            </button>
+            <div class="axis-body">
+              <span class="axis-range">−30° to +90°</span>
+              <p>The electrical axis of the heart points downward and to the left — the normal direction of ventricular depolarisation from the AV node through the His-Purkinje system.</p>
+              <div class="axis-leads">
+                <span class="lead-chip up">I ↑ Upright</span>
+                <span class="lead-chip up">aVF ↑ Upright</span>
+                <span class="lead-chip up">II ↑ Upright</span>
+              </div>
+              <div class="axis-causes">
+                <strong>Quick rule:</strong>
+                <ul>
+                  <li>Lead I positive + aVF positive = Normal</li>
+                  <li>Both leads "point toward" the QRS vector</li>
+                  <li>No pathology implied</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="axis-item" id="acc-lad">
+            <button class="axis-trigger" data-acc="lad">
+              <span>Left Axis Deviation (LAD)</span><span class="axis-chevron">▼</span>
+            </button>
+            <div class="axis-body">
+              <span class="axis-range">−30° to −90°</span>
+              <p>The QRS vector swings superiorly and to the left, away from aVF. Lead I remains positive but aVF becomes negative (inverted).</p>
+              <div class="axis-leads">
+                <span class="lead-chip up">I ↑ Upright</span>
+                <span class="lead-chip dn">aVF ↓ Inverted</span>
+                <span class="lead-chip dn">II ↓ Inverted</span>
+              </div>
+              <div class="axis-causes">
+                <strong>Common causes:</strong>
+                <ul>
+                  <li><strong>Left Anterior Fascicular Block (LAFB)</strong> — most common cause; rS in II, III, aVF</li>
+                  <li><strong>Left Ventricular Hypertrophy (LVH)</strong> — increased left ventricular mass</li>
+                  <li><strong>Inferior MI</strong> — loss of inferior forces</li>
+                  <li><strong>Wolff-Parkinson-White</strong> — right-sided accessory pathway</li>
+                  <li><strong>Hyperkalemia</strong> — at very high K⁺ levels</li>
+                  <li><strong>Pacemaker</strong> — right ventricular pacing</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="axis-item" id="acc-rad">
+            <button class="axis-trigger" data-acc="rad">
+              <span>Right Axis Deviation (RAD)</span><span class="axis-chevron">▼</span>
+            </button>
+            <div class="axis-body">
+              <span class="axis-range">+90° to +180°</span>
+              <p>The QRS vector shifts rightward. Lead I becomes negative (inverted) while aVF remains positive. The heart is depolarising more toward the right ventricle.</p>
+              <div class="axis-leads">
+                <span class="lead-chip dn">I ↓ Inverted</span>
+                <span class="lead-chip up">aVF ↑ Upright</span>
+                <span class="lead-chip up">III ↑ Tall</span>
+              </div>
+              <div class="axis-causes">
+                <strong>Common causes:</strong>
+                <ul>
+                  <li><strong>Right Ventricular Hypertrophy (RVH)</strong> — COPD, pulmonary hypertension, cor pulmonale</li>
+                  <li><strong>Pulmonary Embolism (PE)</strong> — acute right heart strain; S1Q3T3 pattern</li>
+                  <li><strong>Left Posterior Fascicular Block (LPFB)</strong> — rare; diagnosis of exclusion</li>
+                  <li><strong>Lateral MI</strong> — loss of lateral forces</li>
+                  <li><strong>Dextrocardia</strong> — heart on right side</li>
+                  <li><strong>Normal variant</strong> — tall thin young adults, children</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="axis-item" id="acc-xaxis">
+            <button class="axis-trigger" data-acc="xaxis">
+              <span>Extreme / Northwest Axis</span><span class="axis-chevron">▼</span>
+            </button>
+            <div class="axis-body">
+              <span class="axis-range">−90° to ±180°</span>
+              <p>Both Lead I and aVF are negative. The vector points superiorly and to the right — the "northwest" quadrant. This is almost always pathological.</p>
+              <div class="axis-leads">
+                <span class="lead-chip dn">I ↓ Inverted</span>
+                <span class="lead-chip dn">aVF ↓ Inverted</span>
+                <span class="lead-chip dn">II ↓ Inverted</span>
+              </div>
+              <div class="axis-causes">
+                <strong>Common causes:</strong>
+                <ul>
+                  <li><strong>Ventricular tachycardia</strong> — most important to exclude</li>
+                  <li><strong>Severe hyperkalemia</strong> — sine-wave morphology</li>
+                  <li><strong>Lead misplacement</strong> — limb lead reversal (RA↔LA swap)</li>
+                  <li><strong>Artificial pacing</strong> — biventricular pacing patterns</li>
+                  <li><strong>Dextrocardia + situs inversus</strong></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /axis-accordions -->
+      </div><!-- /axis-accordions-wrap -->
+
     </div><!-- /ctrl-col -->
   </div><!-- /top-grid -->
 
@@ -367,7 +456,6 @@ function applyTheme(t){
   document.documentElement.setAttribute('data-theme',t);
   themeBtn.textContent=t==='dark'?'☀':'☾';
   currentTheme=t;
-  // reset scope trail with new bg
   resetTrail();
 }
 themeBtn.addEventListener('click',function(){applyTheme(currentTheme==='dark'?'light':'dark');});
@@ -380,8 +468,11 @@ var LEADS=[{n:'I',deg:0},{n:'II',deg:60},{n:'III',deg:120},{n:'aVR',deg:-150},{n
 var N=8;
 var dpr=Math.min(window.devicePixelRatio||1,2);
 
-/* ── Body path ────────────────────────────────────────────────────── */
+/* ── Body SVG path ────────────────────────────────────────────────── */
 var BODY='M104.265,117.959c-0.304,3.58,2.126,22.529,3.38,29.959c0.597,3.52,2.234,9.255,1.645,12.3c-0.841,4.244-1.084,9.736-0.621,12.934c0.292,1.942,1.211,10.899-0.104,14.175c-0.688,1.718-1.949,10.522-1.949,10.522c-3.285,8.294-1.431,7.886-1.431,7.886c1.017,1.248,2.759,0.098,2.759,0.098c1.327,0.846,2.246-0.201,2.246-0.201c1.139,0.943,2.467-0.116,2.467-0.116c1.431,0.743,2.758-0.627,2.758-0.627c0.822,0.414,1.023-0.109,1.023-0.109c2.466-0.158-1.376-8.05-1.376-8.05c-0.92-7.088,0.913-11.033,0.913-11.033c6.004-17.805,6.309-22.53,3.909-29.24c-0.676-1.937-0.847-2.704-0.536-3.545c0.719-1.941,0.195-9.748,1.072-12.848c1.692-5.979,3.361-21.142,4.231-28.217c1.169-9.53-4.141-22.308-4.141-22.308c-1.163-5.2,0.542-23.727,0.542-23.727c2.381,3.705,2.29,10.245,2.29,10.245c-0.378,6.859,5.541,17.342,5.541,17.342c2.844,4.332,3.921,8.442,3.921,8.747c0,1.248-0.273,4.269-0.273,4.269l0.109,2.631c0.049,0.67,0.426,2.977,0.365,4.092c-0.444,6.862,0.646,5.571,0.646,5.571c0.92,0,1.931-5.522,1.931-5.522c0,1.424-0.348,5.687,0.42,7.295c0.919,1.918,1.595-0.329,1.607-0.78c0.243-8.737,0.768-6.448,0.768-6.448c0.511,7.088,1.139,8.689,2.265,8.135c0.853-0.407,0.073-8.506,0.073-8.506c1.461,4.811,2.569,5.577,2.569,5.577c2.411,1.693,0.92-2.983,0.585-3.909c-1.784-4.92-1.839-6.625-1.839-6.625c2.229,4.421,3.909,4.257,3.909,4.257c2.174-0.694-1.9-6.954-4.287-9.953c-1.218-1.528-2.789-3.574-3.245-4.789c-0.743-2.058-1.304-8.674-1.304-8.674c-0.225-7.807-2.155-11.198-2.155-11.198c-3.3-5.282-3.921-15.135-3.921-15.135l-0.146-16.635c-1.157-11.347-9.518-11.429-9.518-11.429c-8.451-1.258-9.627-3.988-9.627-3.988c-1.79-2.576-0.767-7.514-0.767-7.514c1.485-1.208,2.058-4.415,2.058-4.415c2.466-1.891,2.345-4.658,1.206-4.628c-0.914,0.024-0.707-0.733-0.707-0.733C115.068,0.636,104.01,0,104.01,0h-1.688c0,0-11.063,0.636-9.523,13.089c0,0,0.207,0.758-0.715,0.733c-1.136-0.03-1.242,2.737,1.215,4.628c0,0,0.572,3.206,2.058,4.415c0,0,1.023,4.938-0.767,7.514c0,0-1.172,2.73-9.627,3.988c0,0-8.375,0.082-9.514,11.429l-0.158,16.635c0,0-0.609,9.853-3.922,15.135c0,0-1.921,3.392-2.143,11.198c0,0-0.563,6.616-1.303,8.674c-0.451,1.209-2.021,3.255-3.249,4.789c-2.408,2.993-6.455,9.24-4.29,9.953c0,0,1.689,0.164,3.909-4.257c0,0-0.046,1.693-1.827,6.625c-0.35,0.914-1.839,5.59,0.573,3.909c0,0,1.117-0.767,2.569-5.577c0,0-0.779,8.099,0.088,8.506c1.133,0.555,1.751-1.047,2.262-8.135c0,0,0.524-2.289,0.767,6.448c0.012,0.451,0.673,2.698,1.596,0.78c0.779-1.608,0.429-5.864,0.429-7.295c0,0,0.999,5.522,1.933,5.522c0,0,1.099,1.291,0.648-5.571c-0.073-1.121,0.32-3.422,0.369-4.092l0.106-2.631c0,0-0.274-3.014-0.274-4.269c0-0.311,1.078-4.415,3.921-8.747c0,0,5.913-10.488,5.532-17.342c0,0-0.082-6.54,2.299-10.245c0,0,1.69,18.526,0.545,23.727c0,0-5.319,12.778-4.146,22.308c0.864,7.094,2.53,22.237,4.226,28.217c0.886,3.094,0.362,10.899,1.072,12.848c0.32,0.847,0.152,1.627-0.536,3.545c-2.387,6.71-2.083,11.436,3.921,29.24c0,0,1.848,3.945,0.914,11.033c0,0-3.836,7.892-1.379,8.05c0,0,0.192,0.523,1.023,0.109c0,0,1.327,1.37,2.761,0.627c0,0,1.328,1.06,2.463,0.116c0,0,0.91,1.047,2.237,0.201c0,0,1.742,1.175,2.777-0.098c0,0,1.839,0.408-1.435-7.886c0,0-1.254-8.793-1.945-10.522c-1.318-3.275-0.387-12.251-0.106-14.175c0.453-3.216,0.21-8.695-0.618-12.934c-0.606-3.038,1.035-8.774,1.641-12.3c1.245-7.423,3.685-26.373,3.38-29.959l1.008,0.354C103.809,118.312,104.265,117.959,104.265,117.959z';
+
+/* Heart SVG path (flame/heart shape) — scaled to fit chest area */
+var HEART_PATH='M399.462,143.928c-1.761-4.052-6.474-5.909-10.526-4.148s-5.908,6.474-4.147,10.526c48.607,111.823-41.357,306.111-132.92,313.452c-41.213,3.306-82.397-28.544-109.225-60.016c-30.7-71.468,2.152-101.976,36.934-134.26c24.864-23.078,50.574-46.941,51.694-85.558c0.913-31.536-10.204-56.589-31.306-70.545c-3.686-2.439-8.648-1.424-11.086,2.259c-2.438,3.685-1.426,8.648,2.26,11.085c16.313,10.79,24.886,30.939,24.138,56.737c-2.053,70.836-110.728,87.555-100.171,181.143c-39.531-68.733-46.508-146.274-6.998-214.745c57.456-99.565,186.245-116.682,238.95-119.42c12.143-0.639,23.118,7.016,26.735,18.593c4.866,15.571-5.314,31.188-20.864,34.085c-29.269,5.456-57.379,21.682-81.295,46.923c-3.038,3.208-2.902,8.271,0.306,11.31c3.206,3.038,8.27,2.903,11.31-0.305c21.577-22.773,46.686-37.365,72.611-42.198c25.269-4.711,40.83-30.184,33.204-54.587c-5.798-18.554-23.389-30.811-42.837-29.799c-82.988,4.311-172.766,31.174-227.664,93.556c0.295-20.636-2.37-41.105-7.991-61.128c-3.627-12.916,3.899-26.37,16.778-29.992c10.414-2.928,21.612,1.443,27.244,10.633c1.072,1.749,2.126,3.55,3.133,5.353c2.153,3.858,7.027,5.239,10.885,3.086c3.857-2.153,5.239-7.026,3.086-10.884c-1.112-1.993-2.278-3.985-3.463-5.917c-9.353-15.263-27.949-22.53-45.217-17.673c-21.368,6.01-33.862,28.314-27.851,49.72c7.321,26.072,9.223,52.969,5.691,79.971c-22.276,33.776-35.148,74.301-35.195,116.125c-0.136,118.586,102.389,239.204,187.482,232.397c104.727-8.397,198.434-215.879,146.315-335.779z';
 
 /* ── State ────────────────────────────────────────────────────────── */
 var S={angle:60,time:0,speed:72/3600,paused:false,showT:false,focusLead:'II',showTri:true,mag:0.82};
@@ -414,18 +505,62 @@ function projL(ph,deg){
   return{val:v.vx*Math.cos(ul)+v.vy*Math.sin(ul),w:v.w};
 }
 
-/* ── Silhouette canvas ────────────────────────────────────────────── */
-var SC=document.getElementById('silo');
-var sctx=SC.getContext('2d');
-SC.width=212*dpr;SC.height=268*dpr;sctx.scale(dpr,dpr);
-var bp=new Path2D(BODY);
-var scl=212/206.326,yOff=(268-206.326*scl)/2;
-function toC(sx,sy){return{x:sx*scl,y:sy*scl+yOff};}
-var EL={RA:toC(58,78),LA:toC(148,78),LL:toC(148,176),RL:toC(58,176)};
-var HT=toC(103,67);
+/* ═══════════════════════════════════════════════════════════════════
+   UNIFIED CANVAS — body silhouette + heart + vectorscope overlay
+   ═══════════════════════════════════════════════════════════════════ */
+var UC=document.getElementById('unified');
+var uctx=UC.getContext('2d');
 
-function drawSilo(){
+/* Canvas logical size — body is 206×206 native, we give it generous padding */
+var UW=520, UH=420;
+UC.width=UW*dpr; UC.height=UH*dpr;
+UC.style.height='auto';
+uctx.scale(dpr,dpr);
+
+/* Body scale + offset — centre the figure horizontally, push up slightly */
+var bodyNW=206.326;
+var bodyScale=UH*0.88/bodyNW;          // body fills ~88% of canvas height
+var bodyOffX=(UW - bodyNW*bodyScale)/2; // horizontally centred
+var bodyOffY=UH*0.04;                   // small top margin
+
+function toU(sx,sy){return{x:sx*bodyScale+bodyOffX, y:sy*bodyScale+bodyOffY};}
+
+/* Electrode positions in body-SVG space (same as before) */
+var EL={RA:toU(58,78),LA:toU(148,78),LL:toU(148,176),RL:toU(58,176)};
+/* Heart centre — chest area */
+var HT=toU(103,67);
+
+/* Scope ring is centred on the chest, radius = ~30% of canvas width */
+var SCX=UW/2;
+var SCY=HT.y + UH*0.07;   /* slightly below heart centre */
+var SR=Math.min(UW,UH)*0.30; /* scope radius */
+
+/* Comet trail ring buffer */
+var TRAIL_LEN=180;
+var trailBuf=[];
+for(var _i=0;_i<TRAIL_LEN;_i++) trailBuf.push({x:SCX,y:SCY,on:false});
+var trailHead=0;
+
+function resetTrail(){
+  for(var _j=0;_j<TRAIL_LEN;_j++) trailBuf[_j]={x:SCX,y:SCY,on:false};
+}
+
+/* ── Heart SVG path (480×480 native) scaled to chest ── */
+var heartPath=new Path2D(HEART_PATH);
+/* Heart icon bounding box ≈ 100–400 x, 30–480 y in 480 space */
+var hIconSize=UH*0.18;    /* heart icon rendered height */
+var hIconScale=hIconSize/450;
+var hIconOffX=HT.x - 250*hIconScale;  /* centre on chest */
+var hIconOffY=HT.y - 240*hIconScale;
+
+/* ── Body path ── */
+var bp=new Path2D(BODY);
+
+function drawUnified(){
+  var ph=S.time%1;
+  var dark=currentTheme==='dark';
   var bg=cssVar('--bg')||'#0c0c10';
+  var panel=cssVar('--panel')||'#14141c';
   var border=cssVar('--border')||'#2a2a38';
   var muted=cssVar('--muted')||'#8b8b9a';
   var text=cssVar('--text')||'#f4f4f6';
@@ -433,207 +568,218 @@ function drawSilo(){
   var green=cssVar('--green')||'#3ecf8e';
   var red=cssVar('--red')||'#ef5350';
 
-  sctx.clearRect(0,0,212,268);
-  // body fill
-  sctx.save();sctx.scale(scl,scl);sctx.translate(0,yOff/scl);
-  sctx.fillStyle=muted;sctx.globalAlpha=0.22;sctx.fill(bp);sctx.restore();sctx.globalAlpha=1;
+  uctx.clearRect(0,0,UW,UH);
+  uctx.fillStyle=panel;
+  uctx.fillRect(0,0,UW,UH);
 
-  // Einthoven triangle
+  /* ── 1. BODY SILHOUETTE ── */
+  uctx.save();
+  uctx.translate(bodyOffX, bodyOffY);
+  uctx.scale(bodyScale, bodyScale);
+  uctx.fillStyle=muted;
+  uctx.globalAlpha=dark?0.18:0.14;
+  uctx.fill(bp);
+  uctx.restore();
+  uctx.globalAlpha=1;
+
+  /* ── 2. HEART ICON on chest ── */
+  uctx.save();
+  uctx.translate(hIconOffX, hIconOffY);
+  uctx.scale(hIconScale, hIconScale);
+  /* glow behind heart */
+  uctx.shadowColor=dark?'rgba(239,83,80,0.55)':'rgba(239,83,80,0.35)';
+  uctx.shadowBlur=18;
+  uctx.fillStyle=dark?'rgba(239,83,80,0.28)':'rgba(239,83,80,0.18)';
+  uctx.fill(heartPath);
+  uctx.shadowBlur=0;
+  /* heart outline */
+  uctx.strokeStyle=dark?'rgba(239,83,80,0.55)':'rgba(180,50,48,0.5)';
+  uctx.lineWidth=4/hIconScale;
+  uctx.stroke(heartPath);
+  uctx.restore();
+
+  /* ── 3. EINTHOVEN TRIANGLE ── */
   if(S.showTri){
     var tri=[{f:EL.RA,t:EL.LA,n:'I'},{f:EL.RA,t:EL.LL,n:'II'},{f:EL.LA,t:EL.LL,n:'III'}];
     tri.forEach(function(e){
       var foc=e.n===S.focusLead;
-      sctx.strokeStyle=foc?text:border;sctx.lineWidth=foc?1.8:1;
-      sctx.setLineDash(foc?[]:[4,3]);sctx.beginPath();
-      sctx.moveTo(e.f.x,e.f.y);sctx.lineTo(e.t.x,e.t.y);sctx.stroke();
-      sctx.setLineDash([]);
+      uctx.strokeStyle=foc?text:border;
+      uctx.lineWidth=foc?1.8:1;
+      uctx.setLineDash(foc?[]:[4,3]);
+      uctx.beginPath();
+      uctx.moveTo(e.f.x,e.f.y);uctx.lineTo(e.t.x,e.t.y);
+      uctx.stroke();uctx.setLineDash([]);
       var mx=(e.f.x+e.t.x)/2+5,my=(e.f.y+e.t.y)/2-5;
-      sctx.fillStyle=foc?text:muted;
-      sctx.font=(foc?'700':'500')+' 9px Archivo,ui-sans-serif,system-ui';
-      sctx.textAlign='center';sctx.fillText(e.n,mx,my);
+      uctx.fillStyle=foc?gold:muted;
+      uctx.font=(foc?'700':'500')+' '+(bodyScale*8)+'px Archivo,ui-sans-serif';
+      uctx.textAlign='center';
+      uctx.fillText(e.n,mx,my);
     });
   }
 
-  // focused lead axis
-  var fl=LEADS.find(function(l){return l.n===S.focusLead;});
-  if(fl){
-    var a=r(fl.deg),ux=Math.cos(a),uy=Math.sin(a),len=68;
-    sctx.save();sctx.setLineDash([5,4]);sctx.strokeStyle=border;sctx.lineWidth=1;
-    sctx.beginPath();sctx.moveTo(HT.x-ux*len,HT.y-uy*len);sctx.lineTo(HT.x+ux*len,HT.y+uy*len);
-    sctx.stroke();sctx.restore();
-    sctx.fillStyle=green;sctx.font='700 10px Archivo,ui-sans-serif';sctx.textAlign='center';
-    sctx.fillText('+',HT.x+ux*(len-4),HT.y+uy*(len-4)+4);
-    sctx.fillStyle=red;sctx.fillText('−',HT.x-ux*(len-4),HT.y-uy*(len-4)+4);
-  }
-
-  // electrodes
+  /* ── 4. ELECTRODE DOTS ── */
   Object.keys(EL).forEach(function(n){
     var e=EL[n];
     var pos=(S.focusLead==='I'&&(n==='RA'||n==='LA'))||(S.focusLead==='II'&&(n==='RA'||n==='LL'))||
             (S.focusLead==='III'&&(n==='LA'||n==='LL'))||(S.focusLead==='aVR'&&n==='RA')||
             (S.focusLead==='aVL'&&n==='LA')||(S.focusLead==='aVF'&&n==='LL');
-    sctx.fillStyle=pos?'#0284c7':border;
-    sctx.beginPath();sctx.arc(e.x,e.y,pos?5:3.5,0,Math.PI*2);sctx.fill();
-    sctx.fillStyle=text;sctx.font='700 9px Archivo,ui-sans-serif';sctx.textAlign='center';
-    sctx.fillText(n,e.x,e.y-8);
+    uctx.fillStyle=pos?'#0284c7':border;
+    uctx.beginPath();uctx.arc(e.x,e.y,pos?5:3.5,0,Math.PI*2);uctx.fill();
+    uctx.fillStyle=pos?text:muted;
+    uctx.font='700 '+(bodyScale*7.5)+'px Archivo,ui-sans-serif';
+    uctx.textAlign='center';
+    uctx.fillText(n,e.x,e.y-(pos?8:7));
   });
 
-  // heart glow
-  sctx.fillStyle='rgba(239,83,80,0.18)';sctx.beginPath();sctx.arc(HT.x,HT.y,7,0,Math.PI*2);sctx.fill();
+  /* ── 5. SCOPE RING + GRID (semi-transparent overlay on chest) ── */
+  /* outer ring */
+  uctx.strokeStyle=dark?'rgba(232,184,75,0.35)':'rgba(154,114,9,0.35)';
+  uctx.lineWidth=1.5;
+  uctx.beginPath();uctx.arc(SCX,SCY,SR,0,Math.PI*2);uctx.stroke();
 
-  // vector arrow
-  var ph=S.time%1,v=vecAt(ph),vlen=44;
-  var tx=HT.x+v.vx*vlen,ty=HT.y+v.vy*vlen;
-  sctx.strokeStyle='#0284c7';sctx.lineWidth=2.2;
-  sctx.beginPath();sctx.moveTo(HT.x,HT.y);sctx.lineTo(tx,ty);sctx.stroke();
-  if(v.on){
-    var av=Math.atan2(ty-HT.y,tx-HT.x);
-    sctx.fillStyle='#0284c7';sctx.beginPath();
-    sctx.moveTo(tx,ty);
-    sctx.lineTo(tx-9*Math.cos(av-0.38),ty-9*Math.sin(av-0.38));
-    sctx.lineTo(tx-9*Math.cos(av+0.38),ty-9*Math.sin(av+0.38));
-    sctx.closePath();sctx.fill();
+  /* inner ring at 50% */
+  uctx.strokeStyle=dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)';
+  uctx.lineWidth=1;
+  uctx.beginPath();uctx.arc(SCX,SCY,SR*0.5,0,Math.PI*2);uctx.stroke();
+
+  /* crosshair */
+  uctx.strokeStyle=dark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.07)';
+  uctx.lineWidth=1;
+  uctx.beginPath();
+  uctx.moveTo(SCX-SR,SCY);uctx.lineTo(SCX+SR,SCY);
+  uctx.moveTo(SCX,SCY-SR);uctx.lineTo(SCX,SCY+SR);
+  uctx.stroke();
+
+  /* degree ticks */
+  for(var d=0;d<360;d+=3.6){
+    var a2=r(d),major=(d%30)<1.8,r3=SR-(major?SR*0.065:SR*0.032);
+    uctx.strokeStyle=major?muted:border;
+    uctx.lineWidth=major?1:0.6;
+    uctx.beginPath();
+    uctx.moveTo(SCX+SR*Math.cos(a2),SCY+SR*Math.sin(a2));
+    uctx.lineTo(SCX+r3*Math.cos(a2),SCY+r3*Math.sin(a2));
+    uctx.stroke();
   }
-  sctx.fillStyle='#0284c7';sctx.beginPath();sctx.arc(HT.x,HT.y,2.5,0,Math.PI*2);sctx.fill();
-}
 
-/* ── Scope canvas ─────────────────────────────────────────────────── */
-var PC=document.getElementById('scope');
-var PSZ=320;
-PC.width=PSZ*dpr;PC.height=PSZ*dpr;PC.style.height='auto';
-var pctx=PC.getContext('2d');pctx.scale(dpr,dpr);
-var pcx=PSZ/2,pcy=PSZ/2,PR=PSZ/2-26;
+  /* lead bracket targets on scope ring */
+  LEADS.forEach(function(L){
+    var a3=r(L.deg);
+    var tx2=SCX+SR*0.72*Math.cos(a3);
+    var ty2=SCY+SR*0.72*Math.sin(a3);
+    var foc=L.n===S.focusLead;
+    var diff=Math.abs(((L.deg-S.angle+540)%360)-180),hot=diff<12;
+    var col=foc?'#0284c7':hot?text:muted;
+    var bs=SR*0.055;
+    uctx.strokeStyle=col;
+    uctx.lineWidth=foc?1.8:hot?1.4:0.9;
+    uctx.beginPath();
+    uctx.moveTo(tx2-bs,ty2-bs+bs*0.4);uctx.lineTo(tx2-bs,ty2-bs);uctx.lineTo(tx2-bs+bs*0.4,ty2-bs);
+    uctx.moveTo(tx2+bs-bs*0.4,ty2-bs);uctx.lineTo(tx2+bs,ty2-bs);uctx.lineTo(tx2+bs,ty2-bs+bs*0.4);
+    uctx.moveTo(tx2-bs,ty2+bs-bs*0.4);uctx.lineTo(tx2-bs,ty2+bs);uctx.lineTo(tx2-bs+bs*0.4,ty2+bs);
+    uctx.moveTo(tx2+bs-bs*0.4,ty2+bs);uctx.lineTo(tx2+bs,ty2+bs);uctx.lineTo(tx2+bs,ty2+bs-bs*0.4);
+    uctx.stroke();
+    uctx.fillStyle=col;
+    uctx.font=(foc?'700':'600')+' '+(SR*0.09)+'px Archivo,ui-sans-serif';
+    uctx.textAlign='center';
+    uctx.textBaseline='middle';
+    /* push label slightly outside the bracket */
+    var labelR=SR*0.72+bs*2.2;
+    uctx.fillText(L.n, SCX+labelR*Math.cos(a3), SCY+labelR*Math.sin(a3));
+    uctx.textBaseline='alphabetic';
+  });
 
-/* Comet trail: ring buffer of recent positions */
-var TRAIL_LEN=180; // ~3 seconds at 60fps — long enough to show full QRS sweep
-var trailBuf=[];   // [{x,y,on}]
-for(var _i=0;_i<TRAIL_LEN;_i++) trailBuf.push({x:pcx,y:pcy,on:false});
-var trailHead=0;
-
-function resetTrail(){
-  for(var _j=0;_j<TRAIL_LEN;_j++) trailBuf[_j]={x:pcx,y:pcy,on:false};
-}
-
-function drawScope(){
-  var ph=S.time%1;
-  var bg=cssVar('--bg')||'#0c0c10';
-  var border=cssVar('--border')||'#2a2a38';
-  var muted=cssVar('--muted')||'#8b8b9a';
-  var text=cssVar('--text')||'#f4f4f6';
-  var gold=cssVar('--gold')||'#e8b84b';
-
-  /* ── Push current position into ring buffer ── */
+  /* ── 6. COMET TRAIL ── */
+  /* push current position into ring buffer */
   if(!S.paused){
     var v=vecAt(ph);
-    var cx2=v.on?pcx+v.vx*PR*S.mag:pcx;
-    var cy2=v.on?pcy+v.vy*PR*S.mag:pcy;
+    var cx2=v.on?SCX+v.vx*SR*S.mag:SCX;
+    var cy2=v.on?SCY+v.vy*SR*S.mag:SCY;
     trailBuf[trailHead]={x:cx2,y:cy2,on:v.on};
     trailHead=(trailHead+1)%TRAIL_LEN;
   }
 
-  pctx.clearRect(0,0,PSZ,PSZ);
-  pctx.fillStyle=cssVar('--panel')||'#14141c';pctx.fillRect(0,0,PSZ,PSZ);
-
-  // outer ring
-  pctx.strokeStyle=border;pctx.lineWidth=1.2;
-  pctx.beginPath();pctx.arc(pcx,pcy,PR,0,Math.PI*2);pctx.stroke();
-  // inner ring
-  pctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.05)':'rgba(0,0,0,.06)';
-  pctx.beginPath();pctx.arc(pcx,pcy,PR*0.5,0,Math.PI*2);pctx.stroke();
-  // crosshair
-  pctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.06)':'rgba(0,0,0,.07)';
-  pctx.lineWidth=1;
-  pctx.beginPath();pctx.moveTo(pcx-PR,pcy);pctx.lineTo(pcx+PR,pcy);
-  pctx.moveTo(pcx,pcy-PR);pctx.lineTo(pcx,pcy+PR);pctx.stroke();
-  // ticks
-  for(var d=0;d<360;d+=3.6){
-    var a2=r(d),major=(d%30)<1.8,r3=PR-(major?8:4);
-    pctx.strokeStyle=major?muted:border;pctx.lineWidth=major?1:0.7;
-    pctx.beginPath();
-    pctx.moveTo(pcx+PR*Math.cos(a2),pcy+PR*Math.sin(a2));
-    pctx.lineTo(pcx+r3*Math.cos(a2),pcy+r3*Math.sin(a2));pctx.stroke();
-  }
-  // lead targets
-  LEADS.forEach(function(L){
-    var a3=r(L.deg),tx2=pcx+PR*0.72*Math.cos(a3),ty2=pcy+PR*0.72*Math.sin(a3);
-    var foc=L.n===S.focusLead;
-    var diff=Math.abs(((L.deg-S.angle+540)%360)-180),hot=diff<12;
-    var col=foc?'#0284c7':hot?text:muted;
-    var bs=7;
-    pctx.strokeStyle=col;pctx.lineWidth=foc?1.8:hot?1.4:0.9;
-    pctx.beginPath();
-    pctx.moveTo(tx2-bs,ty2-bs+3);pctx.lineTo(tx2-bs,ty2-bs);pctx.lineTo(tx2-bs+3,ty2-bs);
-    pctx.moveTo(tx2+bs-3,ty2-bs);pctx.lineTo(tx2+bs,ty2-bs);pctx.lineTo(tx2+bs,ty2-bs+3);
-    pctx.moveTo(tx2-bs,ty2+bs-3);pctx.lineTo(tx2-bs,ty2+bs);pctx.lineTo(tx2-bs+3,ty2+bs);
-    pctx.moveTo(tx2+bs-3,ty2+bs);pctx.lineTo(tx2+bs,ty2+bs);pctx.lineTo(tx2+bs,ty2+bs-3);
-    pctx.stroke();
-    pctx.fillStyle=col;pctx.font=(foc?'700':'600')+' 10px Archivo,ui-sans-serif,system-ui';
-    pctx.textAlign='left';pctx.fillText(L.n,tx2+10,ty2+4);
-  });
-
-  /* ── Draw comet trail from oldest → newest ── */
-  var dark=currentTheme==='dark';
   for(var ti=0;ti<TRAIL_LEN;ti++){
-    // age 0 = oldest (tail tip), age TRAIL_LEN-1 = newest (head)
-    var age=ti;
     var idx=(trailHead+ti)%TRAIL_LEN;
     var pt=trailBuf[idx];
-    if(!pt.on) continue;
-    var t01=age/(TRAIL_LEN-1);  // 0=tail, 1=head
-    // radius: tiny at tail, large at head
-    var rad=1.2+t01*12;
-    // opacity: cubic ease — very faint tail, bright head
-    var alpha=Math.pow(t01,1.6)*0.95;
-    // colour gradient: deep red tail → orange → gold → white-blue head
-    var r3,g3,b3;
-    if(t01<0.30){
-      var u=t01/0.30;
-      r3=Math.round(160+u*95); g3=Math.round(10+u*70); b3=10;
-    } else if(t01<0.60){
-      var u=(t01-0.30)/0.30;
-      r3=255; g3=Math.round(80+u*104); b3=Math.round(10+u*30);
-    } else if(t01<0.82){
-      var u=(t01-0.60)/0.22;
-      r3=Math.round(255-u*23); g3=Math.round(184+u*55); b3=Math.round(40+u*80);
-    } else {
-      var u=(t01-0.82)/0.18;
-      r3=Math.round(232+u*23); g3=Math.round(239-u*10); b3=Math.round(120+u*135);
-    }
+    if(!pt.on)continue;
+    var t01=ti/(TRAIL_LEN-1);
+    var rad=0.8+t01*SR*0.09;
+    var alpha=Math.pow(t01,1.6)*0.92;
+    var r4,g4,b4;
+    if(t01<0.30){var u=t01/0.30;r4=Math.round(160+u*95);g4=Math.round(10+u*70);b4=10;}
+    else if(t01<0.60){var u=(t01-0.30)/0.30;r4=255;g4=Math.round(80+u*104);b4=Math.round(10+u*30);}
+    else if(t01<0.82){var u=(t01-0.60)/0.22;r4=Math.round(255-u*23);g4=Math.round(184+u*55);b4=Math.round(40+u*80);}
+    else{var u=(t01-0.82)/0.18;r4=Math.round(232+u*23);g4=Math.round(239-u*10);b4=Math.round(120+u*135);}
     var glowR=rad*(dark?3.0:2.0);
-    var grd=pctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,glowR);
-    grd.addColorStop(0,'rgba('+r3+','+g3+','+b3+','+alpha.toFixed(3)+')');
-    grd.addColorStop(0.45,'rgba('+r3+','+g3+','+b3+','+(alpha*0.35).toFixed(3)+')');
-    grd.addColorStop(1,'rgba('+r3+','+g3+','+b3+',0)');
-    pctx.globalCompositeOperation=dark?'screen':'multiply';
-    pctx.fillStyle=grd;
-    pctx.beginPath();pctx.arc(pt.x,pt.y,glowR,0,Math.PI*2);pctx.fill();
-    pctx.globalCompositeOperation='source-over';
+    var grd=uctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,glowR);
+    grd.addColorStop(0,'rgba('+r4+','+g4+','+b4+','+alpha.toFixed(3)+')');
+    grd.addColorStop(0.45,'rgba('+r4+','+g4+','+b4+','+(alpha*0.35).toFixed(3)+')');
+    grd.addColorStop(1,'rgba('+r4+','+g4+','+b4+',0)');
+    uctx.globalCompositeOperation=dark?'screen':'multiply';
+    uctx.fillStyle=grd;
+    uctx.beginPath();uctx.arc(pt.x,pt.y,glowR,0,Math.PI*2);uctx.fill();
+    uctx.globalCompositeOperation='source-over';
   }
 
-  /* ── Bright glowing head ── */
+  /* ── 7. LIVE COMET HEAD ── */
   var vv=vecAt(ph);
   if(vv.on){
-    var lx=pcx+vv.vx*PR*S.mag,ly=pcy+vv.vy*PR*S.mag;
-    // wide outer corona
-    var corona=pctx.createRadialGradient(lx,ly,0,lx,ly,28);
+    var lx=SCX+vv.vx*SR*S.mag,ly=SCY+vv.vy*SR*S.mag;
+    var corona=uctx.createRadialGradient(lx,ly,0,lx,ly,SR*0.12);
     corona.addColorStop(0,'rgba(255,255,255,0.65)');
     corona.addColorStop(0.25,'rgba(200,230,255,0.40)');
     corona.addColorStop(0.55,'rgba(232,184,75,0.18)');
     corona.addColorStop(1,'rgba(232,184,75,0)');
-    pctx.globalCompositeOperation=dark?'screen':'source-over';
-    pctx.fillStyle=corona;
-    pctx.beginPath();pctx.arc(lx,ly,28,0,Math.PI*2);pctx.fill();
-    pctx.globalCompositeOperation='source-over';
-    // solid bright core
-    pctx.fillStyle='rgba(255,255,255,1)';
-    pctx.beginPath();pctx.arc(lx,ly,4,0,Math.PI*2);pctx.fill();
-    // blue-white inner ring
-    pctx.strokeStyle='rgba(180,210,255,0.85)';pctx.lineWidth=1.5;
-    pctx.beginPath();pctx.arc(lx,ly,6.5,0,Math.PI*2);pctx.stroke();
+    uctx.globalCompositeOperation=dark?'screen':'source-over';
+    uctx.fillStyle=corona;
+    uctx.beginPath();uctx.arc(lx,ly,SR*0.12,0,Math.PI*2);uctx.fill();
+    uctx.globalCompositeOperation='source-over';
+    uctx.fillStyle='rgba(255,255,255,1)';
+    uctx.beginPath();uctx.arc(lx,ly,SR*0.016,0,Math.PI*2);uctx.fill();
+    uctx.strokeStyle='rgba(180,210,255,0.85)';uctx.lineWidth=1.5;
+    uctx.beginPath();uctx.arc(lx,ly,SR*0.026,0,Math.PI*2);uctx.stroke();
   }
-  // center dot
-  pctx.fillStyle=text;pctx.beginPath();pctx.arc(pcx,pcy,2.5,0,Math.PI*2);pctx.fill();
-  // phase label
+
+  /* ── 8. VECTOR ARROW from heart centre ── */
+  var ph2=S.time%1,va=vecAt(ph2);
+  var arrowLen=SR*0.55;
+  var tx=SCX+va.vx*arrowLen,ty=SCY+va.vy*arrowLen;
+  uctx.strokeStyle='rgba(2,132,199,0.75)';uctx.lineWidth=2;
+  uctx.beginPath();uctx.moveTo(SCX,SCY);uctx.lineTo(tx,ty);uctx.stroke();
+  if(va.on){
+    var av=Math.atan2(ty-SCY,tx-SCX);
+    var as=SR*0.055;
+    uctx.fillStyle='rgba(2,132,199,0.9)';
+    uctx.beginPath();
+    uctx.moveTo(tx,ty);
+    uctx.lineTo(tx-as*Math.cos(av-0.38),ty-as*Math.sin(av-0.38));
+    uctx.lineTo(tx-as*Math.cos(av+0.38),ty-as*Math.sin(av+0.38));
+    uctx.closePath();uctx.fill();
+  }
+  /* scope centre dot */
+  uctx.fillStyle=dark?'rgba(255,255,255,0.5)':'rgba(0,0,0,0.4)';
+  uctx.beginPath();uctx.arc(SCX,SCY,2.5,0,Math.PI*2);uctx.fill();
+
+  /* ── 9. FOCUSED LEAD AXIS LINE on body ── */
+  var fl=LEADS.find(function(l){return l.n===S.focusLead;});
+  if(fl){
+    var fa=r(fl.deg),ux=Math.cos(fa),uy=Math.sin(fa),len=SR*0.52;
+    uctx.save();uctx.setLineDash([5,4]);
+    uctx.strokeStyle=dark?'rgba(255,255,255,0.12)':'rgba(0,0,0,0.12)';
+    uctx.lineWidth=1;
+    uctx.beginPath();
+    uctx.moveTo(SCX-ux*len,SCY-uy*len);uctx.lineTo(SCX+ux*len,SCY+uy*len);
+    uctx.stroke();uctx.restore();
+    uctx.fillStyle=green;
+    uctx.font='700 '+(SR*0.1)+'px Archivo,ui-sans-serif';
+    uctx.textAlign='center';uctx.textBaseline='middle';
+    uctx.fillText('+',SCX+ux*(len-SR*0.04),SCY+uy*(len-SR*0.04));
+    uctx.fillStyle=red;
+    uctx.fillText('−',SCX-ux*(len-SR*0.04),SCY-uy*(len-SR*0.04));
+    uctx.textBaseline='alphabetic';
+  }
+
+  /* ── 10. PHASE LABEL ── */
   var vvv=vecAt(ph);
   document.getElementById('phLbl').textContent=vvv.w==='t'?'T wave':vvv.on?'QRS':'Baseline';
 }
@@ -665,7 +811,6 @@ function drawStrip(){
   var phase=S.time%1;
   var playX=LPAD+((S.time%N)/N)*avail;
 
-  // grid
   wctx.lineWidth=0.7;
   for(var gb=0;gb<=N;gb++){
     wctx.strokeStyle=border;
@@ -683,23 +828,19 @@ function drawStrip(){
     var rowY=TPAD+idx*rowH,base=rowY+rowH/2,amp=rowH*0.43;
     var foc=L.n===S.focusLead;
 
-    // row separator
     wctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)';
     wctx.lineWidth=0.8;
     wctx.beginPath();wctx.moveTo(LPAD,rowY);wctx.lineTo(WW,rowY);wctx.stroke();
 
-    // label
     wctx.fillStyle=foc?text:muted;
     wctx.font=(foc?'700':'500')+' 10px Archivo,ui-sans-serif,system-ui';
     wctx.textAlign='right';wctx.fillText(L.n,LPAD-5,base+4);
 
-    // baseline
     wctx.strokeStyle=foc?border:currentTheme==='dark'?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)';
     wctx.lineWidth=0.8;
     wctx.beginPath();wctx.moveTo(LPAD,base);wctx.lineTo(WW,base);wctx.stroke();
 
     var M=WW-LPAD;
-    // fill
     for(var i=0;i<M;i+=1.5){
       var gph=((i/M)*N)%1,pr=projL(gph,L.deg);
       if(Math.abs(pr.val)<0.008)continue;
@@ -709,7 +850,6 @@ function drawStrip(){
       wctx.beginPath();wctx.moveTo(LPAD+i,base);wctx.lineTo(LPAD+i,fy);wctx.stroke();
     }
 
-    // trace
     wctx.lineWidth=foc?2:1.2;
     var prevCol=null;
     for(var i2=0;i2<M;i2++){
@@ -724,13 +864,11 @@ function drawStrip(){
     }
     wctx.stroke();
 
-    // live dot
     var lph=phase,lpr=projL(lph,L.deg),liveY=base-lpr.val*amp;
     wctx.fillStyle='#0284c7';
     wctx.beginPath();wctx.arc(playX,liveY,foc?4:2.5,0,Math.PI*2);wctx.fill();
   });
 
-  // playhead
   wctx.strokeStyle=currentTheme==='dark'?'rgba(232,184,75,0.6)':'rgba(154,114,9,0.6)';
   wctx.lineWidth=1.5;wctx.setLineDash([4,3]);
   wctx.beginPath();wctx.moveTo(playX,TPAD);wctx.lineTo(playX,WH-TPAD);wctx.stroke();
@@ -740,7 +878,8 @@ function drawStrip(){
 /* ── Main loop ────────────────────────────────────────────────────── */
 function frame(){
   if(!S.paused)S.time+=S.speed;
-  drawSilo();drawScope();drawStrip();
+  drawUnified();
+  drawStrip();
   requestAnimationFrame(frame);
 }
 
@@ -753,10 +892,10 @@ var axR=document.getElementById('axR'),axV=document.getElementById('axV'),
 
 function fmtA(d){return(d>0?'+':'')+d+'°';}
 function zoneOf(a){
-  if(a>=-30&&a<=90)  return{l:'Normal Axis',d:'Lead I and aVF both upright.'};
-  if(a>-90&&a<-30)   return{l:'Left Axis Deviation',d:'I upright, aVF inverted. Causes: LVH, LAFB, inferior MI.'};
-  if(a>90&&a<=180)   return{l:'Right Axis Deviation',d:'I inverted, aVF upright. Causes: RVH, LPFB, PE, COPD.'};
-  return{l:'Extreme Axis',d:'Both I and aVF inverted. Ventricular rhythm, hyperK, lead misplacement.'};
+  if(a>=-30&&a<=90)  return{l:'Normal Axis',d:'Lead I and aVF both upright.',acc:'normal'};
+  if(a>-90&&a<-30)   return{l:'Left Axis Deviation',d:'I upright, aVF inverted. Causes: LVH, LAFB, inferior MI.',acc:'lad'};
+  if(a>90&&a<=180)   return{l:'Right Axis Deviation',d:'I inverted, aVF upright. Causes: RVH, LPFB, PE, COPD.',acc:'rad'};
+  return{l:'Extreme Axis',d:'Both I and aVF inverted. Ventricular rhythm, hyperK, lead misplacement.',acc:'xaxis'};
 }
 
 function updateUI(){
@@ -774,6 +913,11 @@ function updateUI(){
   });
   var z=zoneOf(a>180?a-360:a);
   zoneEl.innerHTML='<strong>'+z.l+'</strong>. '+z.d;
+  /* auto-open matching accordion */
+  document.querySelectorAll('.axis-item').forEach(function(item){
+    var acc=item.id.replace('acc-','');
+    item.classList.toggle('active',acc===z.acc);
+  });
   document.querySelectorAll('[data-deg]').forEach(function(b){
     b.classList.toggle('on',parseInt(b.dataset.deg,10)===a);
   });
@@ -793,11 +937,19 @@ pauseB.addEventListener('click',function(){
   S.paused=true;pauseB.classList.add('on');playB.classList.remove('on');
 });
 document.getElementById('tT').addEventListener('click',function(){
-  S.showT=!S.showT;this.classList.toggle('on',S.showT);
-  var bg=cssVar('--bg')||'#0c0c10';
-  resetTrail();
+  S.showT=!S.showT;this.classList.toggle('on',S.showT);resetTrail();
 });
 document.getElementById('triTog').addEventListener('change',function(){S.showTri=this.checked;});
+
+/* ── Accordion toggles ────────────────────────────────────────────── */
+document.querySelectorAll('.axis-trigger').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var item=btn.closest('.axis-item');
+    var wasActive=item.classList.contains('active');
+    document.querySelectorAll('.axis-item').forEach(function(i){i.classList.remove('active');});
+    if(!wasActive)item.classList.add('active');
+  });
+});
 
 /* ── Strip drag / scrub ───────────────────────────────────────────── */
 var _dmx=0,_moved=false;
