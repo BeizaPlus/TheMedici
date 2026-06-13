@@ -1,4 +1,3 @@
 @echo off
-cd /d "%~dp0game"
-echo Starting Schoonmaker (MeWorld)...
-call npm run dev
+REM Alias launcher — same as START-GAME.bat
+call "%~dp0START-GAME.bat" %*
