@@ -502,19 +502,16 @@ var PC=document.getElementById('scope');
 var PSZ=320;
 PC.width=PSZ*dpr;PC.height=PSZ*dpr;PC.style.height='auto';
 var pctx=PC.getContext('2d');pctx.scale(dpr,dpr);
-var trail=document.createElement('canvas');trail.width=PSZ*dpr;trail.height=PSZ*dpr;
-var tctx=trail.getContext('2d');tctx.scale(dpr,dpr);
-tctx.fillStyle='#0c0c10';tctx.fillRect(0,0,PSZ,PSZ);
 var pcx=PSZ/2,pcy=PSZ/2,PR=PSZ/2-26;
 
-function dot(x,y,r2,a,col){
-  var g=tctx.createRadialGradient(x,y,0,x,y,r2);
-  g.addColorStop(0,'rgba('+col+','+a+')');g.addColorStop(1,'rgba('+col+',0)');
-  tctx.fillStyle=g;tctx.beginPath();tctx.arc(x,y,r2,0,Math.PI*2);tctx.fill();
-}
+/* Comet trail: ring buffer of recent positions */
+var TRAIL_LEN=180; // ~3 seconds at 60fps — long enough to show full QRS sweep
+var trailBuf=[];   // [{x,y,on}]
+for(var _i=0;_i<TRAIL_LEN;_i++) trailBuf.push({x:pcx,y:pcy,on:false});
+var trailHead=0;
+
 function resetTrail(){
-  var bg=cssVar('--bg')||'#0c0c10';
-  tctx.fillStyle=bg;tctx.fillRect(0,0,PSZ,PSZ);
+  for(var _j=0;_j<TRAIL_LEN;_j++) trailBuf[_j]={x:pcx,y:pcy,on:false};
 }
 
 function drawScope(){
@@ -525,17 +522,13 @@ function drawScope(){
   var text=cssVar('--text')||'#f4f4f6';
   var gold=cssVar('--gold')||'#e8b84b';
 
+  /* ── Push current position into ring buffer ── */
   if(!S.paused){
-    // fade trail toward bg colour
-    var bgRgb=currentTheme==='dark'?'12,12,16':'243,241,235';
-    tctx.fillStyle='rgba('+bgRgb+',0.055)';tctx.fillRect(0,0,PSZ,PSZ);
     var v=vecAt(ph);
-    if(v.on){
-      var vx=pcx+v.vx*PR*S.mag,vy=pcy+v.vy*PR*S.mag;
-      // gold trail in dark, warm amber in light
-      var trailCol=currentTheme==='dark'?'232,184,75':'154,114,9';
-      dot(vx,vy,9,0.22,trailCol);dot(vx,vy,3,0.60,trailCol);
-    }
+    var cx2=v.on?pcx+v.vx*PR*S.mag:pcx;
+    var cy2=v.on?pcy+v.vy*PR*S.mag:pcy;
+    trailBuf[trailHead]={x:cx2,y:cy2,on:v.on};
+    trailHead=(trailHead+1)%TRAIL_LEN;
   }
 
   pctx.clearRect(0,0,PSZ,PSZ);
@@ -578,17 +571,65 @@ function drawScope(){
     pctx.textAlign='left';pctx.fillText(L.n,tx2+10,ty2+4);
   });
 
-  // trail composite — screen blends the gold glow on dark, multiply on light
-  pctx.globalCompositeOperation=currentTheme==='dark'?'screen':'multiply';
-  pctx.drawImage(trail,0,0,PSZ,PSZ);
-  pctx.globalCompositeOperation='source-over';
+  /* ── Draw comet trail from oldest → newest ── */
+  var dark=currentTheme==='dark';
+  for(var ti=0;ti<TRAIL_LEN;ti++){
+    // age 0 = oldest (tail tip), age TRAIL_LEN-1 = newest (head)
+    var age=ti;
+    var idx=(trailHead+ti)%TRAIL_LEN;
+    var pt=trailBuf[idx];
+    if(!pt.on) continue;
+    var t01=age/(TRAIL_LEN-1);  // 0=tail, 1=head
+    // radius: tiny at tail, large at head
+    var rad=1.2+t01*12;
+    // opacity: cubic ease — very faint tail, bright head
+    var alpha=Math.pow(t01,1.6)*0.95;
+    // colour gradient: deep red tail → orange → gold → white-blue head
+    var r3,g3,b3;
+    if(t01<0.30){
+      var u=t01/0.30;
+      r3=Math.round(160+u*95); g3=Math.round(10+u*70); b3=10;
+    } else if(t01<0.60){
+      var u=(t01-0.30)/0.30;
+      r3=255; g3=Math.round(80+u*104); b3=Math.round(10+u*30);
+    } else if(t01<0.82){
+      var u=(t01-0.60)/0.22;
+      r3=Math.round(255-u*23); g3=Math.round(184+u*55); b3=Math.round(40+u*80);
+    } else {
+      var u=(t01-0.82)/0.18;
+      r3=Math.round(232+u*23); g3=Math.round(239-u*10); b3=Math.round(120+u*135);
+    }
+    var glowR=rad*(dark?3.0:2.0);
+    var grd=pctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,glowR);
+    grd.addColorStop(0,'rgba('+r3+','+g3+','+b3+','+alpha.toFixed(3)+')');
+    grd.addColorStop(0.45,'rgba('+r3+','+g3+','+b3+','+(alpha*0.35).toFixed(3)+')');
+    grd.addColorStop(1,'rgba('+r3+','+g3+','+b3+',0)');
+    pctx.globalCompositeOperation=dark?'screen':'multiply';
+    pctx.fillStyle=grd;
+    pctx.beginPath();pctx.arc(pt.x,pt.y,glowR,0,Math.PI*2);pctx.fill();
+    pctx.globalCompositeOperation='source-over';
+  }
 
-  // live dot
+  /* ── Bright glowing head ── */
   var vv=vecAt(ph);
   if(vv.on){
     var lx=pcx+vv.vx*PR*S.mag,ly=pcy+vv.vy*PR*S.mag;
-    pctx.fillStyle='#0284c7';pctx.beginPath();pctx.arc(lx,ly,5,0,Math.PI*2);pctx.fill();
-    pctx.fillStyle=cssVar('--panel')||'#14141c';pctx.beginPath();pctx.arc(lx,ly,2,0,Math.PI*2);pctx.fill();
+    // wide outer corona
+    var corona=pctx.createRadialGradient(lx,ly,0,lx,ly,28);
+    corona.addColorStop(0,'rgba(255,255,255,0.65)');
+    corona.addColorStop(0.25,'rgba(200,230,255,0.40)');
+    corona.addColorStop(0.55,'rgba(232,184,75,0.18)');
+    corona.addColorStop(1,'rgba(232,184,75,0)');
+    pctx.globalCompositeOperation=dark?'screen':'source-over';
+    pctx.fillStyle=corona;
+    pctx.beginPath();pctx.arc(lx,ly,28,0,Math.PI*2);pctx.fill();
+    pctx.globalCompositeOperation='source-over';
+    // solid bright core
+    pctx.fillStyle='rgba(255,255,255,1)';
+    pctx.beginPath();pctx.arc(lx,ly,4,0,Math.PI*2);pctx.fill();
+    // blue-white inner ring
+    pctx.strokeStyle='rgba(180,210,255,0.85)';pctx.lineWidth=1.5;
+    pctx.beginPath();pctx.arc(lx,ly,6.5,0,Math.PI*2);pctx.stroke();
   }
   // center dot
   pctx.fillStyle=text;pctx.beginPath();pctx.arc(pcx,pcy,2.5,0,Math.PI*2);pctx.fill();
