@@ -1,5 +1,8 @@
 # MeWorld / TheSchoonMaker — Agent handoff (other PC)
 
+> **Latest session:** [June 14, 2026 →](./AGENT_HANDOFF-2026-06-14.md) — ECG Vector Lab unified canvas + heart overlay, missed-dx drill panel, voice note Whisper engine fix, download buttons
+> **Previous session:** [June 12, 2026 →](./AGENT_HANDOFF-2026-06-12.md) — Mobile differential, Supabase Real World cache
+
 **Date:** 2026-06-07  
 **Repo:** https://github.com/stefopps/MeWorld (private — Steve will flip visibility)  
 **Remote name on source PC:** `meworld` → `https://github.com/stefopps/MeWorld.git`
