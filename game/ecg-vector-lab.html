@@ -6,6 +6,14 @@
 <meta name="theme-color" content="#0c0c10"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <title>ECG Vector Lab</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
@@ -62,11 +70,6 @@
   --shadow:0 2px 14px rgba(15,20,30,0.08);
   --backdrop:rgba(15,20,30,0.25);
 }
-[data-theme='light'] .play-mode-banner{
-  background:rgba(255,255,255,.96);
-  color:var(--gold);
-  border-color:rgba(122,90,8,0.35);
-}
 [data-theme='light'] .dock-rail{background:var(--rail-bg)}
 [data-theme='light'] .lead-strips-wrap{background:#fafbfc;border-left-color:var(--border)}
 [data-theme='light'] .ischemia-legend{background:rgba(0,0,0,.04)}
@@ -104,8 +107,7 @@ button{font-family:inherit;cursor:pointer}
 html,body{height:100%;overflow:hidden}
 .ecg-shell{
   height:100dvh;height:100vh;
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
+  display:flex;flex-direction:column;
   background:var(--bg);
   overflow:hidden;
 }
@@ -138,7 +140,7 @@ html,body{height:100%;overflow:hidden}
 /* ─── Center stage (chart / command area) ─────────────────────────────────── */
 .ecg-stage{
   display:flex;flex-direction:column;min-width:0;min-height:0;
-  position:relative;
+  position:relative;flex:1 1 auto;height:100%;
   /* overflow managed by the scroll rule above */
 }
 .stage-header{
@@ -147,20 +149,25 @@ html,body{height:100%;overflow:hidden}
 }
 .stage-header .page-kicker{margin-bottom:2px}
 .stage-header .page-title{font-size:1.05rem;margin:0}
-.stage-header-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.stage-header-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.header-transport{display:flex;gap:4px;align-items:center}
+.header-transport .dock-rail-btn{width:34px;height:34px;font-size:.75rem;padding:0}
 
 .hero-viewport{
-  /* Height = viewport minus header + pills + HUD so everything fits without scrolling */
-  height:calc(100dvh - 260px);
-  height:calc(100vh - 260px);
-  min-height:320px;
-  flex-shrink:0;
+  flex:1 1 auto;
+  min-height:280px;
+  height:auto;
   display:grid;
   grid-template-columns:1fr 160px;
   gap:0;align-items:stretch;
   margin:0 8px;border:1px solid var(--border);
   border-radius:var(--radius);overflow:hidden;
   background:var(--panel);
+}
+.ecg-stage--bottom-collapsed .hero-viewport{
+  min-height:0;
+  margin-bottom:0;
+  border-radius:var(--radius) var(--radius) 0 0;
 }
 .lead-strips-wrap{position:relative}
 .col-resize-handle{
@@ -180,7 +187,15 @@ html,body{height:100%;overflow:hidden}
   display:flex;align-items:center;justify-content:center;padding:4px;
   background:var(--canvas-bg);
   touch-action:none;
+  overflow:hidden;
 }
+.body-view-inner{
+  position:relative;width:100%;height:100%;flex:1;align-self:stretch;
+  transform-origin:0 0;will-change:transform;
+}
+.body-view-inner canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.body-scope-wrap.view-pan-hot{cursor:grab}
+.body-scope-wrap.view-pan-hot.view-pan-drag{cursor:grabbing}
 .lead-strips-wrap{
   display:flex;flex-direction:column;min-width:0;
   border-left:1px solid var(--border);
@@ -203,6 +218,12 @@ html,body{height:100%;overflow:hidden}
 }
 #leadStrips{width:100%;flex:1 1 auto;display:block;cursor:crosshair;touch-action:none}
 #unified{display:block;width:100%;height:100%;touch-action:none}
+#scene3d{display:none;width:100%;height:100%;touch-action:none}
+.hero-viewport.view-3d #unified{display:none}
+.hero-viewport.view-3d #scene3d{display:block}
+.view-mode-cycle{display:inline-flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-left:4px}
+.view-mode-btn{padding:4px 10px;font-size:.58rem;font-weight:700;letter-spacing:.04em;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.view-mode-btn.on{background:rgba(232,184,75,.12);color:var(--gold)}
 
 /* ─── HUD bar (bottom of stage) ───────────────────────────────────────────── */
 .stage-hud{
@@ -240,9 +261,7 @@ html,body{height:100%;overflow:hidden}
   contain:layout style;
 }
 .hud-status{white-space:nowrap;flex:0 0 auto}
-.hud-controls .seg{margin-left:auto}
-.stage-hud .seg{flex:0 0 auto}
-.stage-hud .seg button{padding:6px 12px;font-size:.65rem}
+.hud-controls{align-items:center}
 .hud-time{
   flex:0 1 auto;display:flex;align-items:center;gap:6px;min-width:0;
   max-width:200px;
@@ -258,13 +277,7 @@ html,body{height:100%;overflow:hidden}
 
 /* ─── Manual lead placement ─────────────────────────────────────────────── */
 .hero-viewport{position:relative}
-.play-mode-banner{
-  position:absolute;top:6px;left:50%;transform:translateX(-50%);z-index:12;
-  padding:5px 12px;border-radius:20px;font-size:.62rem;font-weight:700;
-  letter-spacing:.04em;color:var(--gold);
-  background:rgba(12,12,16,.88);border:1px solid rgba(232,184,75,.45);
-  pointer-events:none;max-width:92%;text-align:center;line-height:1.35;
-}
+.hud-place-hint{color:var(--gold);border:1px solid rgba(232,184,75,.35);font-weight:700;font-size:.58rem;letter-spacing:.03em}
 .body-scope-wrap.placing-leads,.body-scope-wrap.placing-scope,.body-scope-wrap.placing-heart{cursor:crosshair}
 .ischemia-legend{
   margin-top:8px;padding:8px 10px;border-radius:var(--radius-xs);
@@ -277,7 +290,45 @@ html,body{height:100%;overflow:hidden}
 .ischemia-swatch--dim{background:rgba(70,20,24,.75);border:1px solid rgba(255,255,255,.08)}
 .ischemia-swatch--bright{background:rgba(210,50,40,.55);border:1px solid rgba(255,255,255,.1)}
 #leadStrips.playhead-hot,#strip.playhead-hot{cursor:ew-resize}
+#leadStrips.strip-pan-hot,#strip.strip-pan-hot{cursor:grab}
+#leadStrips.strip-pan-drag,#strip.strip-pan-drag{cursor:grabbing}
 .ctl-hint{font-size:.65rem;color:var(--muted);line-height:1.45;margin:0}
+
+/* ─── Collapsible bottom strip (layers + leads + HUD) ───────────────────── */
+.stage-bottom-strip{
+  flex-shrink:0;
+  margin:0 8px 8px;
+  border:1px solid var(--border);
+  border-radius:0 0 var(--radius-sm) var(--radius-sm);
+  background:var(--panel);
+  overflow:hidden;
+}
+.ecg-stage--bottom-collapsed .stage-bottom-strip{
+  margin-top:0;
+  border-top:none;
+}
+.stage-bottom-toggle{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:6px 12px;
+  border:none;border-bottom:1px solid var(--border);
+  background:var(--hud-bg,rgba(12,12,16,.92));
+  color:var(--muted);
+  font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  cursor:pointer;transition:color .12s,background .12s;
+}
+.stage-bottom-toggle:hover{color:var(--gold);background:rgba(232,184,75,.06)}
+.stage-bottom-toggle-chevron{
+  display:inline-block;font-size:.7rem;line-height:1;
+  transition:transform .18s ease;
+}
+.stage-bottom-strip.collapsed .stage-bottom-toggle-chevron{transform:rotate(180deg)}
+.stage-bottom-strip.collapsed .stage-bottom-toggle{border-bottom:none}
+.stage-bottom-body{display:block}
+.stage-bottom-strip.collapsed .stage-bottom-body{display:none}
+#bottomStripBtn.on{color:var(--gold);border-color:rgba(232,184,75,.55);background:rgba(232,184,75,.1)}
+.stage-bottom-body .stage-hud{margin:0;border-radius:0;border-left:none;border-right:none;border-bottom:none}
+.stage-bottom-body .layer-pills{padding-top:4px}
+.stage-bottom-body .stage-hud{margin-bottom:0}
 
 /* ─── Layer toggle pills ──────────────────────────────────────────────────── */
 .layer-pills{
@@ -298,6 +349,31 @@ html,body{height:100%;overflow:hidden}
   flex-shrink:0;line-height:1;
 }
 .axis-cycle-btn:hover{border-color:var(--gold);color:var(--gold)}
+.body-mode-cycle{
+  display:inline-flex;align-items:center;gap:2px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);padding:2px;
+  flex-shrink:0;
+}
+.body-mode-btn{
+  font-size:.62rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  padding:5px 8px;border-radius:calc(var(--radius-sm) - 2px);border:1px solid transparent;
+  background:transparent;color:var(--muted);cursor:pointer;line-height:1;
+}
+.body-mode-btn:hover{border-color:var(--gold);color:var(--gold)}
+.body-mode-btn.on{background:rgba(232,184,75,.12);color:var(--gold);border-color:rgba(232,184,75,.45)}
+.body-look-cycle{
+  display:inline-flex;align-items:center;gap:2px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);padding:2px;
+  flex-shrink:0;
+}
+.body-look-cycle[hidden]{display:none!important}
+.body-look-btn{
+  font-size:.58rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+  padding:5px 7px;border-radius:calc(var(--radius-sm) - 2px);border:1px solid transparent;
+  background:transparent;color:var(--muted);cursor:pointer;line-height:1;white-space:nowrap;
+}
+.body-look-btn:hover{border-color:var(--gold);color:var(--gold)}
+.body-look-btn.on{background:rgba(232,184,75,.12);color:var(--gold);border-color:rgba(232,184,75,.45)}
 .axis-cond-sel{
   border:1px solid var(--border);
   background:var(--select-bg);
@@ -394,6 +470,23 @@ html,body{height:100%;overflow:hidden}
 .dock-tab.on{background:rgba(232,184,75,.12);color:var(--gold);border-color:rgba(232,184,75,.45)}
 .dock-tab-pane{display:none;flex-direction:column;gap:10px}
 .dock-tab-pane.on{display:flex}
+.ref-gallery{display:flex;flex-direction:column;gap:10px}
+.ref-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+  padding:10px;display:flex;flex-direction:column;gap:8px;
+}
+.ref-card-head{display:flex;flex-direction:column;gap:2px}
+.ref-card-num{font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.ref-card-title{font-size:.72rem;font-weight:700;color:var(--text);line-height:1.35}
+.ref-card-desc{font-size:.62rem;color:var(--muted);line-height:1.45;margin:0}
+.ref-card img{
+  width:100%;height:auto;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:#fff;cursor:zoom-in;
+}
+.ref-card img.missing{min-height:72px;object-fit:contain;opacity:.45;cursor:default}
+.ref-card-foot{font-size:.58rem;color:var(--muted);font-family:var(--mono);word-break:break-all}
+.ref-card-foot a{color:var(--gold);text-decoration:none}
+.ref-card-foot a:hover{text-decoration:underline}
 .dock-panel-body .card{padding:12px;margin:0}
 .dock-stack{display:flex;flex-direction:column;gap:10px}
 
@@ -465,6 +558,7 @@ input[type=range]:disabled{opacity:.35}
   border-color:rgba(232,184,75,.55);
 }
 #tT.on{background:rgba(239,83,80,.12);color:var(--red);border-color:rgba(239,83,80,.55)}
+#realEcgBtn.on{background:rgba(232,184,75,.12);color:var(--gold);border-color:rgba(232,184,75,.55)}
 
 /* ─── 4-col preset grid ──────────────────────────────────────────────────── */
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
@@ -525,8 +619,8 @@ input[type=range]:disabled{opacity:.35}
   font-size:.62rem;font-weight:700;font-family:var(--mono);
   padding:2px 7px;border-radius:4px;
 }
-.lead-chip.up{background:rgba(62,207,142,.12);color:var(--green);border:1px solid rgba(62,207,142,.3)}
-.lead-chip.dn{background:rgba(239,83,80,.12);color:var(--red);border:1px solid rgba(239,83,80,.3)}
+.lead-chip.up{background:rgba(239,83,80,.12);color:var(--red);border:1px solid rgba(239,83,80,.3)}
+.lead-chip.dn{background:rgba(62,207,142,.12);color:var(--green);border:1px solid rgba(62,207,142,.3)}
 
 /* ─── Strip in dock panel ─────────────────────────────────────────────────── */
 .strip-card{margin:0}
@@ -614,11 +708,21 @@ canvas{display:block}
       </div>
       <div class="stage-header-actions">
         <span class="phase-lbl" id="phLbl">Baseline</span>
+        <div class="header-transport seg" role="toolbar" aria-label="Playback">
+          <button type="button" class="dock-rail-btn on" id="playB" title="Play vector animation (Space)" aria-label="Play">▶</button>
+          <button type="button" class="dock-rail-btn" id="pauseB" title="Pause vector animation (Space)" aria-label="Pause">⏸</button>
+        </div>
+        <button type="button" class="dock-rail-btn" id="bottomStripBtn" title="Collapse bottom controls (layers, leads, HUD)" aria-label="Toggle bottom controls" aria-expanded="true">
+          <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
         <button type="button" class="dock-rail-btn" id="dockBtnControls" title="Controls" aria-label="Controls" style="width:34px;height:34px;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;transition:.12s;flex-shrink:0">
           <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M6 4v4"/><path d="M6 12v8"/><path d="M10 16a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M12 4v10"/><path d="M12 18v2"/><path d="M16 7a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M18 4v3"/><path d="M18 11v9"/></svg>
         </button>
         <button type="button" class="dock-rail-btn" id="dockBtnGuide" title="Axis guide" aria-label="Axis guide" style="width:34px;height:34px;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;transition:.12s;flex-shrink:0">
           <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6l0 13"/><path d="M12 6l0 13"/><path d="M21 6l0 13"/></svg>
+        </button>
+        <button type="button" class="dock-rail-btn" id="dockBtnRefs" title="ECG reference plates" aria-label="ECG references" style="width:34px;height:34px;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;transition:.12s;flex-shrink:0">
+          <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h6"/><path d="M8 11h8"/></svg>
         </button>
         <button type="button" class="dock-rail-btn" id="dockBtnStrip" title="ECG strip" aria-label="ECG strip" style="width:34px;height:34px;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;transition:.12s;flex-shrink:0">
           <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z"/><path d="M3 10h18"/><path d="M10 3v18"/></svg>
@@ -626,16 +730,24 @@ canvas{display:block}
       </div>
     </header>
     <div class="hero-viewport">
-      <div class="play-mode-banner" id="placeModeBanner" hidden>Drag RA · LA · LL · RL on the torso</div>
-      <div class="body-scope-wrap" id="bodyScopeWrap" title="Scroll to resize vectorscope ring">
-        <canvas id="unified"></canvas>
+      <div class="body-scope-wrap" id="bodyScopeWrap" title="Scroll = zoom chest · middle-drag = pan · Ctrl+scroll = scope ring · dbl-click = reset zoom">
+        <div class="body-view-inner" id="bodyViewInner">
+          <canvas id="scene3d" aria-label="3D torso — ref 02 limb ring and V fan"></canvas>
+          <canvas id="unified"></canvas>
+        </div>
       </div>
-      <div class="lead-strips-wrap" id="leadStripsWrap" title="Click or drag waveforms to scrub · scroll to zoom ECG chart">
+      <div class="lead-strips-wrap" id="leadStripsWrap" title="Drag gold playhead · middle-click/drag pan view · scroll zoom">
         <div class="col-resize-handle" id="leadColResize" title="Drag to widen — shows more beats / QRS complexes" aria-label="Resize lead strip column"></div>
         <div class="lead-strips-label">Leads<span class="zoom-hint" id="stripZoomHint">scroll chart zoom 100</span></div>
         <canvas id="leadStrips" aria-label="Live lead strips synced to vectorscope"></canvas>
       </div>
     </div>
+    <div class="stage-bottom-strip" id="stageBottomStrip">
+      <button type="button" class="stage-bottom-toggle" id="bottomStripToggle" aria-expanded="true" aria-controls="stageBottomBody" title="Collapse layers, leads, and HUD">
+        <span class="stage-bottom-toggle-label">Bottom controls</span>
+        <span class="stage-bottom-toggle-chevron" aria-hidden="true">▼</span>
+      </button>
+      <div class="stage-bottom-body" id="stageBottomBody">
     <div class="layer-pills" role="toolbar" aria-label="Canvas layers">
       <div class="axis-cycle" title="Cycle axis conditions — see how QRS vector deflection changes">
         <button type="button" class="axis-cycle-btn" id="axisPrev" aria-label="Previous axis condition">◀</button>
@@ -648,7 +760,23 @@ canvas{display:block}
         <button type="button" class="axis-cycle-btn" id="axisNext" aria-label="Next axis condition">▶</button>
       </div>
       <span class="pill-sep" aria-hidden="true"></span>
+      <div class="view-mode-cycle" role="group" aria-label="View mode" title="2D = canvas lab · 3D = ref 02 depth (limb ring + V fan)">
+        <button type="button" class="view-mode-btn on" data-view-mode="2d">2D</button>
+        <button type="button" class="view-mode-btn" data-view-mode="3d">3D</button>
+      </div>
+      <div class="body-mode-cycle" id="bodyModeCycle" role="group" aria-label="Body render mode" title="SVG = legacy gray silhouette · Real = full Kojo plate (no SVG clip)">
+        <button type="button" class="body-mode-btn on" data-body-mode="svg">SVG</button>
+        <button type="button" class="body-mode-btn" data-body-mode="real">Real</button>
+      </div>
+      <div class="body-look-cycle" id="bodyLookCycle" role="group" aria-label="Body demo look" title="Pick which demo plate to show in Real mode" hidden>
+        <button type="button" class="body-look-btn on" data-body-look="cardiocard-angle">Angle</button>
+        <button type="button" class="body-look-btn" data-body-look="gray-b">Gray B</button>
+      </div>
+      <span class="pill-sep" aria-hidden="true"></span>
       <button type="button" class="layer-pill on" data-layer="heart">♥ Heart</button>
+      <button type="button" class="layer-pill on" data-layer="ribs" title="SVG rib cage + sternum (teaching layer — toggle like heart)">⌗ Ribs</button>
+      <button type="button" class="layer-pill on" data-layer="limbRing" title="Ref 02 — blue frontal limb ring (3D)">○ Ring</button>
+      <button type="button" class="layer-pill on" data-layer="vFan" title="Ref 02 — red horizontal V1–V6 fan (3D)">◔ V fan</button>
       <button type="button" class="layer-pill on" data-layer="scope">◎ Scope</button>
       <button type="button" class="layer-pill on" data-layer="tri">△ Einthoven</button>
       <button type="button" class="layer-pill on" data-layer="vector">→ Vector</button>
@@ -671,6 +799,8 @@ canvas{display:block}
         <span class="hud-axis" id="hudAxis">+60°</span>
         <span class="hud-chip" id="hudPhase">Baseline</span>
         <span class="hud-chip" id="hudBpm">72 BPM</span>
+        <span class="hud-chip hud-place-hint" id="hudPlaceHint" hidden title="Layout editor — open Controls for coordinates"></span>
+        <span class="hud-chip" id="hudBodyView" hidden title="Chest zoom — scroll on body canvas">100%</span>
         <span class="hud-cursor-time" id="hudCursorTime" title="Time at cursor in visible strip window">0.000 s · beat 1.00</span>
       </div>
       <div class="hud-controls">
@@ -679,7 +809,7 @@ canvas{display:block}
         <input type="range" id="stageBeatsR" min="1" max="48" step="1" value="8" aria-label="Beats visible on lead strips"/>
         <span class="hud-time-val" id="stageBeatsV">8</span>
       </label>
-      <label class="hud-ctrl" title="Vector arrow stroke width on scope">
+      <label class="hud-ctrl" title="Vector arrow shaft width on scope (head scales with vector length)">
         <span>Arrow</span>
         <input type="range" id="vectorStrokeR" min="1" max="12" step="0.5" value="2"/>
         <span class="hud-ctrl-val" id="vectorStrokeV">2</span>
@@ -689,10 +819,8 @@ canvas{display:block}
         <input type="range" id="playbackRateR" min="5" max="100" step="5" value="100"/>
         <span class="hud-ctrl-val" id="playbackRateV">1×</span>
       </label>
-      <div class="seg">
-        <button type="button" id="playB" class="on">▶</button>
-        <button type="button" id="pauseB">⏸</button>
       </div>
+    </div>
       </div>
     </div>
   </main>
@@ -706,6 +834,7 @@ canvas{display:block}
       <div class="dock-tabs">
         <button type="button" class="dock-tab on" data-dock-tab="controls">Controls</button>
         <button type="button" class="dock-tab" data-dock-tab="guide">Guide</button>
+        <button type="button" class="dock-tab" data-dock-tab="references">Refs</button>
       </div>
       <button type="button" class="dock-panel-close" id="dockCloseLeft" aria-label="Close panel">×</button>
     </div>
@@ -740,6 +869,7 @@ canvas{display:block}
           <div class="ctl-head"><span class="ctl-label">Loops</span></div>
           <div class="seg">
             <button type="button" id="tQRS" class="on">QRS</button>
+            <button type="button" id="realEcgBtn" class="on" title="PTB-XL clinical limb-lead strip (PhysioNet)">Clinical strip</button>
             <button type="button" id="tT">+ T wave</button>
           </div>
         </div>
@@ -757,9 +887,42 @@ canvas{display:block}
           <p class="ctl-hint" style="margin-top:4px">Gray anatomy on the chest only — does not resize the vectorscope ring.</p>
         </div>
         <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Body look</span><span class="ctl-val-sm" id="bodyLookLbl">Plate A</span></div>
+          <select class="axis-cond-sel" id="bodyLookSel" aria-label="Body demo plate" style="width:100%;max-width:none">
+            <option value="cardiocard-angle">CardioCard angle — Magnific + Kojo (default)</option>
+            <option value="placement-a">Plate A — rib landmarks baked in</option>
+            <option value="placement-b">Plate B — alternate torso</option>
+            <option value="likeness-b">Likeness B — Kojo photo gray</option>
+            <option value="gray-full">Gray full — matte avatar</option>
+            <option value="gray-a">Gray A — Magnific full body</option>
+            <option value="gray-b">Gray B — Magnific full body</option>
+          </select>
+          <p class="ctl-hint" id="bodyLookHint" style="margin-top:6px">Avatar = Magnific at ref-04 angle. ♥ Heart and ⌗ Ribs = SVG toggles (regenerate avatar per profile later).</p>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Real body scale</span><span class="ctl-val-sm" id="bodyPlateScaleV">100%</span></div>
+          <input type="range" id="bodyPlateScaleR" min="50" max="200" step="1" value="100" aria-label="Real mode body plate scale"/>
+          <p class="ctl-hint" style="margin-top:4px">Real mode — default <strong>100% = fit viewport height</strong>. Nudge scale until electrodes sit on shoulders/hips.</p>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Plate background</span><span class="ctl-val-sm" id="plateBgV">—</span></div>
+          <button type="button" id="matchPlateBgBtn" style="width:100%">Match canvas to plate BG</button>
+          <p class="ctl-hint" style="margin-top:4px">Samples plate edge pixels → canvas background for a seamless Real-mode frame (auto on load).</p>
+        </div>
+        <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">Scope size</span><span class="ctl-val-sm" id="scopeSizeV">100%</span></div>
           <input type="range" id="scopeSizeR" min="60" max="180" step="1" value="100" aria-label="Vectorscope ring scale"/>
           <p class="ctl-hint" style="margin-top:4px">Gold vectorscope ring, comet trail, and vector arrow — independent of heart size.</p>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">± badge size</span><span class="ctl-val-sm" id="badgeSizeV">100%</span></div>
+          <input type="range" id="badgeSizeR" min="50" max="200" step="1" value="100" aria-label="Polarity badge scale"/>
+          <p class="ctl-hint" style="margin-top:4px">Red/green cathode/anode circles on limbs, scope ring, and strip playhead.</p>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">± badge spread</span><span class="ctl-val-sm" id="badgeSpreadV">100%</span></div>
+          <input type="range" id="badgeSpreadR" min="50" max="200" step="1" value="100" aria-label="Polarity badge spread"/>
+          <p class="ctl-hint" style="margin-top:4px">Push overlapping markers apart (e.g. II / III / aVF on LL). Scope ring badges move with spread.</p>
         </div>
       </div>
       <div class="card">
@@ -776,17 +939,20 @@ canvas{display:block}
       <div class="card">
         <div class="ctl-head"><span class="ctl-label">Limb lead positions</span></div>
         <div class="seg" style="margin-bottom:8px">
-          <button type="button" id="placeLeadsBtn">📍 Leads</button>
+          <button type="button" id="placeLeadsBtn">📍 12-lead</button>
           <button type="button" id="placeScopeBtn">◎ Scope</button>
           <button type="button" id="placeHeartBtn">♥ Heart</button>
           <button type="button" id="placeLabelsBtn" title="Small nudge only — labels stay near their lines">↔ Nudge</button>
           <button type="button" id="resetLabelsBtn">Reset labels</button>
           <button type="button" id="placeDoneBtn">Done</button>
         </div>
-        <p class="ctl-hint"><strong>Leads</strong> — RA/LA/LL form Einthoven triangle (I/II/III). <strong>Scope</strong> — HC centre. <strong>Heart</strong> — anatomy anchor.</p>
+        <p class="ctl-hint" id="placeModeHint" hidden style="margin-top:6px;color:var(--gold);font-weight:600"></p>
+        <p class="ctl-hint"><strong>2D</strong> — flat canvas + Einthoven triangle. <strong>3D</strong> — ref 02 depth: blue <strong>frontal limb ring</strong>, red <strong>V fan</strong>; orbit drag to see RA/LA forward vs LL/RL posterior. Strips unchanged.</p>
+        <p class="ctl-hint"><strong>Leads</strong> — RA/LA/LL form Einthoven triangle: <strong>I</strong> = RA→LA, <strong>II</strong> = RA→LL, <strong>III</strong> = LA→LL (toggle <strong>△ Einthoven</strong>). <strong>Scope ring</strong> — fixed hexaxial angles. <strong>Scope</strong> — HC centre. <strong>Heart</strong> — anatomy anchor.</p>
         <p class="ctl-hint" style="margin-top:6px;display:none" id="rlRefHint"><strong>RL ref</strong> — dashed line from RL to the Wilson central terminal (midpoint of RA+LA+LL). RL is <em>reference ground only</em>; it is not in I/II/III math.</p>
         <p class="ctl-hint" style="margin-top:4px"><strong>Nudge</strong> — tiny label shifts (~28px max) if text overlaps. <strong>Reset labels</strong> snaps them back beside their lines. Quadrant words (Left/Right/…) stay fixed outside the ring.</p>
         <div id="leadCoordReadout" class="ctl-hint" style="font-family:var(--mono);font-size:.6rem;margin-top:6px"></div>
+        <div id="precordialCoordReadout" class="ctl-hint" style="font-family:var(--mono);font-size:.6rem;margin-top:4px"></div>
         <div id="leadAxisReadout" class="ctl-hint" style="font-family:var(--mono);font-size:.6rem;margin-top:4px"></div>
         <div id="scopeCoordReadout" class="ctl-hint" style="font-family:var(--mono);font-size:.6rem;margin-top:4px"></div>
         <div id="heartCoordReadout" class="ctl-hint" style="font-family:var(--mono);font-size:.6rem;margin-top:4px"></div>
@@ -909,6 +1075,10 @@ canvas{display:block}
 
         </div><!-- /axis-accordions -->
       </div>
+      <div class="dock-tab-pane" data-dock-pane="references">
+        <p class="ctl-hint" style="margin:0 0 4px">North-star plates for hexaxial scope, electrode layout, and 3D mode. Click an image to open full size.</p>
+        <div class="ref-gallery" id="refGallery"></div>
+      </div>
     </div>
   </aside>
 
@@ -922,7 +1092,7 @@ canvas{display:block}
     <div class="strip-header">
       <span class="card-label"><span id="stripBeatLbl">8 beats</span> &nbsp;<span style="font-weight:400;color:var(--muted)" id="focLbl"></span></span>
       <span class="strip-time" id="stripCursorTime">0.000 s · beat 1.00</span>
-      <span class="strip-hint">drag gold playhead or click waveform · vector syncs to cursor</span>
+      <span class="strip-hint">gold playhead = scrub · middle-click center · middle-drag pan · click strip to jump</span>
     </div>
     <canvas id="strip"></canvas>
     <div class="strip-resize-handle" id="stripResizeHandle" title="Drag to resize strip height" aria-label="Resize strip height"></div>
@@ -937,9 +1107,10 @@ canvas{display:block}
       </div>
     </div>
     <div class="strip-legend">
-      <span><span class="dot" style="background:var(--green)"></span>Positive</span>
-      <span><span class="dot" style="background:var(--red)"></span>Negative / T wave</span>
+      <span><span class="dot" style="background:var(--red)"></span>Cathode (+)</span>
+      <span><span class="dot" style="background:var(--green)"></span>Anode (−) / T wave</span>
       <span><span class="dot" style="background:#0284c7"></span>Live position</span>
+      <span id="realEcgLegend"><span class="dot" style="background:var(--gold)"></span>PTB-XL 00001_hr</span>
     </div>
       </div>
     </div>
@@ -947,6 +1118,7 @@ canvas{display:block}
 
 </div><!-- /ecg-shell -->
 
+<script src="assets/ecg-vector-lab/organs/rib-cage-anterior-data.js"></script>
 <script src="assets/hearts/heart-1/heart-data.js"></script>
 <script src="assets/hearts/heart-1/heart-gray-data.js"></script>
 <script src="assets/hearts/heart-2/heart-data.js"></script>
@@ -1011,7 +1183,7 @@ var CANVAS_PALETTE_DEFAULTS={
     triStroke:'#ffffff',
     triStrokeDim:'#6b7280',
     triLabel:'#e8b84b',
-    heartFill:'#c0282a'
+    heartFill:'#b8b8b8'
   },
   light:{
     canvasBg:'#e8eaee',
@@ -1027,7 +1199,7 @@ var CANVAS_PALETTE_DEFAULTS={
     triStroke:'#151518',
     triStrokeDim:'#9ca3af',
     triLabel:'#7a5a08',
-    heartFill:'#b52226'
+    heartFill:'#a8a8a8'
   }
 };
 
@@ -1091,14 +1263,14 @@ function mergeCanvasPalette(src){
       var lbf=canvasPalette.light.bodyFill.toLowerCase();
       if(lbf==='#d1d4d9'||lbf==='#e6e6e6')canvasPalette.light.bodyFill='#333333';
     }
-    /* Migrate old gray heart fill to new crimson default */
+    /* Migrate saved crimson heart fill back to gray */
     if(t==='dark'&&canvasPalette.dark.heartFill){
       var dhf=canvasPalette.dark.heartFill.toLowerCase();
-      if(dhf==='#e6e6e6'||dhf==='#d4d4d4'||dhf==='#cccccc'||dhf==='#ff0000')canvasPalette.dark.heartFill='#c0282a';
+      if(dhf==='#c0282a'||dhf==='#b52226'||dhf==='#ff0000')canvasPalette.dark.heartFill='#b8b8b8';
     }
     if(t==='light'&&canvasPalette.light.heartFill){
       var lhf=canvasPalette.light.heartFill.toLowerCase();
-      if(lhf==='#d4d4d4'||lhf==='#e6e6e6'||lhf==='#cccccc')canvasPalette.light.heartFill='#b52226';
+      if(lhf==='#c0282a'||lhf==='#b52226'||lhf==='#ff0000')canvasPalette.light.heartFill='#a8a8a8';
     }
   });
 }
@@ -1221,12 +1393,100 @@ function ensureFocusLeadVisible(){
   }
 }
 var POSITIVE_FLOW_LEADS=ALL_LEAD_NAMES;
+/** Electrochemical / ECG diagram convention: cathode (+) red, anode (−) green. */
+function polarityColors(){
+  return{
+    cathode:cssVar('--red')||'#ef5350',
+    anode:cssVar('--green')||'#3ecf8e'
+  };
+}
+function badgeSizeMul(){return S.badgeScale!=null?S.badgeScale:1;}
+function badgeSpreadMul(){return S.badgeSpread!=null?S.badgeSpread:1;}
+function polarityBadgeR(base){return base*badgeSizeMul();}
 var SHOW_RL_REF=false;
-var LEAD_AXES={I:0,II:60,III:120,aVR:-150,aVL:-30,aVF:90};
+/** Textbook hexaxial degrees — scope ring, vector, and strip math (Limb Leads diagram). */
+var CANONICAL_LEAD_DEG={I:0,II:60,III:120,aVR:-150,aVL:-30,aVF:90};
+var MEASURED_LEAD_AXES={};
 var LAYOUT_STORAGE='ecgVectorLabLayoutV1';
 var LAYOUT_VERSION=3;
 var STRIP_STORAGE='ecgVectorLabStripV1';
 var HEART_STORAGE='ecgVectorLabHeartPackV1';
+var REAL_ECG_URL='assets/ecg-ptbxl-00001-limb-leads.json';
+var REAL_ECG=null;
+var REAL_ECG_READY=false;
+
+function realEcgScale(){
+  if(!REAL_ECG)return 1;
+  if(REAL_ECG._scale!=null)return REAL_ECG._scale;
+  var max=0;
+  ALL_LEAD_NAMES.forEach(function(n){
+    var arr=REAL_ECG.leads&&REAL_ECG.leads[n];
+    if(!arr)return;
+    for(var i=0;i<arr.length;i++)max=Math.max(max,Math.abs(arr[i]));
+  });
+  REAL_ECG._scale=max>0?1/max:1;
+  return REAL_ECG._scale;
+}
+
+function beatPosToRecSec(beatPos){
+  var hr=REAL_ECG&&REAL_ECG.hrBpm?REAL_ECG.hrBpm:currentHr();
+  var dur=REAL_ECG.durationSec||10;
+  return ((beatPos*60/hr)%dur+dur)%dur;
+}
+
+function realLeadSample(leadName,beatPos){
+  if(!REAL_ECG||!REAL_ECG.leads||!REAL_ECG.leads[leadName])return{val:0,w:null,gain:1};
+  var sec=beatPosToRecSec(beatPos);
+  var idx=sec*REAL_ECG.fs;
+  var arr=REAL_ECG.leads[leadName];
+  var i0=Math.floor(idx);
+  var i1=Math.min(arr.length-1,i0+1);
+  var frac=idx-i0;
+  var mv=arr[i0]+(arr[i1]-arr[i0])*frac;
+  return{val:mv*realEcgScale()*leadGain(leadName),w:null,gain:leadGain(leadName)};
+}
+
+/** Strips: real PTB-XL waveform by beat index, or synthetic vector projection by beat phase. */
+function stripLeadProj(beatPos,leadName){
+  if(S.useRealEcg&&REAL_ECG_READY)return realLeadSample(leadName,beatPos);
+  return projL(beatPhase(beatPos),leadName);
+}
+
+function stripBeatPosAtX(x,plotW,tInWindow){
+  var m=stripViewMetrics(tInWindow);
+  return m.winStart+(x/plotW)*m.dispBeats;
+}
+
+function loadRealEcg(cb){
+  fetch(REAL_ECG_URL).then(function(r){
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(function(j){
+    REAL_ECG=j;
+    REAL_ECG._scale=null;
+    REAL_ECG_READY=true;
+    if(cb)cb(j);
+  }).catch(function(err){
+    console.warn('Real ECG load failed',err);
+    REAL_ECG_READY=false;
+  });
+}
+
+function applyRealEcgHr(j){
+  if(!j||!j.hrBpm)return;
+  var hrR=document.getElementById('hrR');
+  if(hrR){
+    hrR.value=String(Math.round(j.hrBpm));
+    S.speed=j.hrBpm/3600;
+  }
+}
+
+function updateRealEcgHint(){
+  var el=document.getElementById('stripZoomHint');
+  if(!el||!S.useRealEcg||!REAL_ECG)return;
+  var src=REAL_ECG.source&&REAL_ECG.source.dataset?REAL_ECG.source.dataset:'PTB-XL';
+  el.textContent=(el.textContent||'')+' · '+src+' clinical strip';
+}
 
 function loadHeartPack(){
   try{
@@ -1304,10 +1564,13 @@ var LEAD_COL_MIN=72;
 var STRIP_ZOOM_MIN=0;
 var STRIP_ZOOM_MAX=300;
 var STRIP_ZOOM_DEFAULT=100;
+var STRIP_DURATION_SEC=300;
 var STRIP_ZOOM_STEP=8;
 var SCOPE_ZOOM_MIN=0;
 var SCOPE_ZOOM_MAX=300;
 var SCOPE_ZOOM_STEP=8;
+var BODY_VIEW_ZOOM_MIN=1;
+var BODY_VIEW_ZOOM_MAX=4;
 var BUNDLED_LAYOUT_URL='assets/ecg-vector-lab-user-layout.json';
 
 function clampStripZoom(z){
@@ -1327,25 +1590,71 @@ function stripAmpGain(){
   return stripChartGain();
 }
 
+/** Total beats in the continuous recording (~5 min at current HR). */
+function stripTotalBeats(){
+  return Math.max(12,Math.round((STRIP_DURATION_SEC/60)*currentHr()));
+}
+
 /** Visible beat window after chart zoom (macro = fewer beats magnified across plot width). */
-function stripViewMetrics(N,tInWindow){
+function stripDispBeats(){
+  return Math.max(0.25,S.stripBeats/stripChartGain());
+}
+
+function ensureStripWinStart(tInWindow){
+  var total=stripTotalBeats();
+  var disp=stripDispBeats();
+  if(S.stripWinStart==null||!isFinite(S.stripWinStart)){
+    S.stripWinStart=Math.max(0,Math.min(total-disp,tInWindow-disp/2));
+  }
+  S.stripWinStart=Math.max(0,Math.min(total-disp,S.stripWinStart));
+}
+
+function stripViewMetrics(tInWindow){
+  var total=stripTotalBeats();
   var gain=stripChartGain();
-  var dispBeats=Math.max(0.25,N/gain);
-  var winStart=Math.max(0,Math.min(N-dispBeats,tInWindow-dispBeats/2));
-  return{gain:gain,dispBeats:dispBeats,winStart:winStart};
+  var dispBeats=stripDispBeats();
+  ensureStripWinStart(tInWindow);
+  return{total:total,gain:gain,dispBeats:dispBeats,winStart:S.stripWinStart};
+}
+
+/** During playback, pan the pinned window so the playhead stays in view — not while dragging it. */
+function autoScrollStripWindow(){
+  if(S.paused)return;
+  if(_scrub.active&&_scrub.onPlayhead)return;
+  if(_stripPan.active)return;
+  var tWin=tInStripWindow();
+  var m=stripViewMetrics(tWin);
+  var margin=m.dispBeats*0.06;
+  if(tWin<m.winStart+margin){
+    S.stripWinStart=Math.max(0,tWin-margin);
+  }else if(tWin>m.winStart+m.dispBeats-margin){
+    S.stripWinStart=Math.min(m.total-m.dispBeats,tWin-m.dispBeats+margin);
+  }
+}
+
+/** Middle-click: center the visible window on the playhead. */
+function centerStripWindowOnPlayhead(){
+  var tWin=tInStripWindow();
+  var m=stripViewMetrics(tWin);
+  S.stripWinStart=Math.max(0,Math.min(m.total-m.dispBeats,tWin-m.dispBeats/2));
+}
+
+function panStripWindowByPixels(dx,plotW,win0){
+  if(plotW<=0)return;
+  var m=stripViewMetrics(tInStripWindow());
+  var base=win0!=null?win0:S.stripWinStart;
+  S.stripWinStart=Math.max(0,Math.min(m.total-m.dispBeats,base-(dx/plotW)*m.dispBeats));
 }
 
 function stripPlayX(lpad,plotW,tInWindow){
-  var N=stripN();
-  var m=stripViewMetrics(N,tInWindow);
+  var m=stripViewMetrics(tInWindow);
   return lpad+((tInWindow-m.winStart)/m.dispBeats)*plotW;
 }
 
 function stripBeatPhaseAtX(x,plotW,tInWindow){
-  var N=stripN();
-  var m=stripViewMetrics(N,tInWindow);
+  var m=stripViewMetrics(tInWindow);
   var beatPos=m.winStart+(x/plotW)*m.dispBeats;
-  return beatPos-Math.floor(beatPos);
+  return beatPhase(beatPos);
 }
 
 /** Vertical gain for lead strip rows — follows chart zoom (100 = normal). */
@@ -1365,7 +1674,8 @@ function scopeZoomFromScale(scale){
 
 function updateStripZoomHint(){
   var el=document.getElementById('stripZoomHint');
-  if(el)el.textContent=stripN()+' beats · scroll chart zoom '+clampStripZoom(S.stripZoom)+' (100=normal)';
+  var min=Math.round(STRIP_DURATION_SEC/60);
+  if(el)el.textContent=S.stripBeats+' visible · '+min+' min strip · zoom '+clampStripZoom(S.stripZoom)+' (100=normal)';
 }
 
 function maxLeadColW(){
@@ -1383,8 +1693,8 @@ function stripN(){return S.stripBeats;}
 function heroPlotW(){return Math.max(36,S.leadStripW-LPAD_S-4);}
 
 function tInStripWindow(){
-  var N=stripN();
-  return S.time-Math.floor(S.time/N)*N;
+  var total=stripTotalBeats();
+  return S.time%total;
 }
 
 function setStripBeats(n,opts){
@@ -1424,22 +1734,52 @@ var BODY='M104.265,117.959c-0.304,3.58,2.126,22.529,3.38,29.959c0.597,3.52,2.234
 
 /* ── State ────────────────────────────────────────────────────────── */
 var S={
-  angle:60,time:0,speed:72/3600,paused:false,showT:false,focusLead:'II',mag:0.82,
-  showHeart:true,showScope:true,showTri:true,showVector:true,showComet:true,
+  angle:60,time:0,speed:72/3600,paused:false,showT:false,useRealEcg:true,stripWinStart:null,bottomStripCollapsed:false,focusLead:'II',mag:0.82,
+  showHeart:true,showRibs:true,showScope:true,showTri:true,showVector:true,showComet:true,
+  showLimbRing:true,showVFan:true,
+  viewMode:'2d',
+  bodyMode:'svg',bodyPlateId:'cardiocard-angle',
   placingLeads:false,placingScope:false,placingHeart:false,placingLabels:false,
   dragLead:null,dragScope:false,dragHeart:false,dragLabel:null,
   stripBeats:_stripPrefs.stripBeats,stripHeight:_stripPrefs.stripHeight,leadStripW:_stripPrefs.leadStripW,stripZoom:_stripPrefs.stripZoom,
-  heartPack:loadHeartPack(),heartScale:1,scopeScale:1,
+  heartPack:loadHeartPack(),heartScale:1,scopeScale:1,badgeScale:1,badgeSpread:1,bodyPlateScale:1,autoMatchPlateBg:true,
+  bodyViewZoom:1,bodyViewPanX:0,bodyViewPanY:0,
   vectorStroke:2,playbackRate:1,
   visibleLeads:defaultVisibleLeads()
 };
 
 var EL_STORAGE='ecgVectorLabElectrodesV1';
 var SCOPE_STORAGE='ecgVectorLabScopeV1';
-var EL_BODY_DEFAULT={RA:{x:58,y:72},LA:{x:142,y:74},LL:{x:146,y:164},RL:{x:56,y:166}};
-var HC_BODY_DEFAULT={x:104,y:78};
-var HEART_BODY_DEFAULT={x:104,y:74};
+/** CardioCard ref 04 — normalized 0–1 in body space (bodyNW × bodyNH). */
+var CARDIOCARD_NORM={
+  RA:{x:0.3595,y:0.4632},LA:{x:0.6476,y:0.4672},RL:{x:0.3986,y:1},LL:{x:0.6098,y:1},
+  heart:{x:0.5302,y:0.3977},
+  V1:{x:0.475,y:0.5782},V2:{x:0.5356,y:0.5643},V3:{x:0.5423,y:0.6184},
+  V4:{x:0.5747,y:0.6516},V5:{x:0.6098,y:0.6516},V6:{x:0.628,y:0.6814}
+};
+var REF4_PRE_KEYS=['V1','V2','V3','V4','V5','V6'];
+var REF4_LIMB_KEYS=['RA','LA','LL','RL'];
+var REF4_ALL_KEYS=REF4_LIMB_KEYS.concat(REF4_PRE_KEYS);
+function normBodyPt(n){return{x:n.x*206.326,y:n.y*185};}
+function wilsonNormPt(){
+  var r=CARDIOCARD_NORM;
+  return{x:(r.RA.x+r.LA.x+r.LL.x)/3,y:(r.RA.y+r.LA.y+r.LL.y)/3};
+}
+var EL_BODY_DEFAULT={
+  RA:normBodyPt(CARDIOCARD_NORM.RA),
+  LA:normBodyPt(CARDIOCARD_NORM.LA),
+  LL:normBodyPt(CARDIOCARD_NORM.LL),
+  RL:normBodyPt(CARDIOCARD_NORM.RL)
+};
+var HC_BODY_DEFAULT=normBodyPt(wilsonNormPt());
+var HEART_BODY_DEFAULT=normBodyPt(CARDIOCARD_NORM.heart);
+var PRE_BODY_DEFAULT=(function(){
+  var d={};
+  REF4_PRE_KEYS.forEach(function(k){d[k]=normBodyPt(CARDIOCARD_NORM[k]);});
+  return d;
+})();
 var EL_BODY=JSON.parse(JSON.stringify(EL_BODY_DEFAULT));
+var PRE_BODY=JSON.parse(JSON.stringify(PRE_BODY_DEFAULT));
 var HC_BODY=JSON.parse(JSON.stringify(HC_BODY_DEFAULT));
 var HEART_BODY=JSON.parse(JSON.stringify(HEART_BODY_DEFAULT));
 var _layoutRestored=false;
@@ -1605,12 +1945,12 @@ function recomputeLeadAxes(){
   var avr=bodyVec((la.x+ll.x)*0.5,(la.y+ll.y)*0.5,ra.x,ra.y);
   var avl=bodyVec((ra.x+ll.x)*0.5,(ra.y+ll.y)*0.5,la.x,la.y);
   var avf=bodyVec((ra.x+la.x)*0.5,(ra.y+la.y)*0.5,ll.x,ll.y);
-  LEAD_AXES.I=vecAngleDeg(i.x,i.y);
-  LEAD_AXES.II=vecAngleDeg(ii.x,ii.y);
-  LEAD_AXES.III=vecAngleDeg(iii.x,iii.y);
-  LEAD_AXES.aVR=vecAngleDeg(avr.x,avr.y);
-  LEAD_AXES.aVL=vecAngleDeg(avl.x,avl.y);
-  LEAD_AXES.aVF=vecAngleDeg(avf.x,avf.y);
+  MEASURED_LEAD_AXES.I=vecAngleDeg(i.x,i.y);
+  MEASURED_LEAD_AXES.II=vecAngleDeg(ii.x,ii.y);
+  MEASURED_LEAD_AXES.III=vecAngleDeg(iii.x,iii.y);
+  MEASURED_LEAD_AXES.aVR=vecAngleDeg(avr.x,avr.y);
+  MEASURED_LEAD_AXES.aVL=vecAngleDeg(avl.x,avl.y);
+  MEASURED_LEAD_AXES.aVF=vecAngleDeg(avf.x,avf.y);
   updateLeadAxisReadout();
 }
 
@@ -1630,14 +1970,17 @@ function leadCanvasVec(name){
 }
 
 function leadRingPt(name,rad){
-  var v=leadCanvasVec(name);
-  return{x:SCX+v.dx*rad,y:SCY+v.dy*rad};
+  var deg=CANONICAL_LEAD_DEG[name];
+  if(deg==null)return{x:SCX+rad,y:SCY};
+  return scopePtFromDeg(deg,rad);
 }
 
-/* Electrical coords: +vx = screen left (see sX), +vy = screen down (see sY) */
+/* Canonical hexaxial unit vectors — scope ring, strips, comet (Limb Leads diagram). */
 function leadElectricalVec(name){
-  var c=leadCanvasVec(name);
-  return{vx:-c.dx,vy:c.dy};
+  var deg=CANONICAL_LEAD_DEG[name];
+  if(deg==null)return{vx:1,vy:0};
+  var a=r(deg);
+  return{vx:Math.cos(a),vy:Math.sin(a)};
 }
 
 function triLabelDefault(f,t){
@@ -1672,14 +2015,14 @@ function elLabelDefault(n,e,rad){
 }
 
 function leadDeg(name){
-  return LEAD_AXES[name]!=null?LEAD_AXES[name]:0;
+  return CANONICAL_LEAD_DEG[name]!=null?CANONICAL_LEAD_DEG[name]:0;
 }
 
 function updateLeadAxisReadout(){
   var el=document.getElementById('leadAxisReadout');
   if(!el)return;
-  el.textContent='Axes I '+Math.round(leadDeg('I'))+'° · II '+Math.round(leadDeg('II'))+'° · aVF '+Math.round(leadDeg('aVF'))+'°'
-    +' · gain I '+Math.round(leadGain('I')*100)+'% · II '+Math.round(leadGain('II')*100)+'%';
+  el.textContent='Hexaxial I '+leadDeg('I')+'° · II '+leadDeg('II')+'° · III '+leadDeg('III')+'° · aVF '+leadDeg('aVF')+'°'
+    +' · triangle II '+Math.round(MEASURED_LEAD_AXES.II||0)+'° · III '+Math.round(MEASURED_LEAD_AXES.III||0)+'°';
 }
 
 function buildLabLayout(){
@@ -1687,11 +2030,19 @@ function buildLabLayout(){
     version:LAYOUT_VERSION,
     savedAt:new Date().toISOString(),
     electrodes:JSON.parse(JSON.stringify(EL_BODY)),
+    precordial:JSON.parse(JSON.stringify(PRE_BODY)),
     scope:JSON.parse(JSON.stringify(HC_BODY)),
     heartAnchor:JSON.parse(JSON.stringify(HEART_BODY)),
     heartPack:S.heartPack,
     heartScale:S.heartScale,
     scopeScale:S.scopeScale,
+    badgeScale:S.badgeScale,
+    badgeSpread:S.badgeSpread,
+    bodyPlateScale:S.bodyPlateScale,
+    bodyViewZoom:S.bodyViewZoom,
+    bodyViewPanX:S.bodyViewPanX,
+    bodyViewPanY:S.bodyViewPanY,
+    autoMatchPlateBg:!!S.autoMatchPlateBg,
     axis:S.angle,
     heartRate:currentHr(),
     vectorStroke:S.vectorStroke,
@@ -1700,7 +2051,25 @@ function buildLabLayout(){
     focusLead:S.focusLead,
     labelOffsets:JSON.parse(JSON.stringify(LABEL_OFFSETS)),
     canvasPalette:JSON.parse(JSON.stringify(canvasPalette)),
-    strip:{stripBeats:S.stripBeats,stripHeight:S.stripHeight,leadStripW:S.leadStripW,stripZoom:clampStripZoom(S.stripZoom)}
+    bottomStripCollapsed:!!S.bottomStripCollapsed,
+    strip:{stripBeats:S.stripBeats,stripHeight:S.stripHeight,leadStripW:S.leadStripW,stripZoom:clampStripZoom(S.stripZoom)},
+    ui:{
+      showHeart:!!S.showHeart,
+      showRibs:!!S.showRibs,
+      showScope:!!S.showScope,
+      showTri:!!S.showTri,
+      showVector:!!S.showVector,
+      showComet:!!S.showComet,
+      showLimbRing:!!S.showLimbRing,
+      showVFan:!!S.showVFan,
+      showT:!!S.showT,
+      useRealEcg:!!S.useRealEcg,
+      theme:currentTheme,
+      bodyMode:S.bodyMode==='real'?'real':'svg',
+      viewMode:S.viewMode==='3d'?'3d':'2d',
+      bodyPlateId:S.bodyPlateId||'placement-a'
+    },
+    bodyPlateId:S.bodyPlateId||'placement-a'
   };
 }
 
@@ -1795,6 +2164,11 @@ function applyLabLayout(o,opts){
   if(o.electrodes&&o.electrodes.RA&&o.electrodes.LA&&o.electrodes.LL&&o.electrodes.RL){
     EL_BODY=o.electrodes;
   }
+  if(o.precordial&&typeof o.precordial==='object'){
+    REF4_PRE_KEYS.forEach(function(k){
+      if(o.precordial[k]&&typeof o.precordial[k].x==='number')PRE_BODY[k]=o.precordial[k];
+    });
+  }
   if(o.scope&&typeof o.scope.x==='number'&&typeof o.scope.y==='number'){
     HC_BODY=o.scope;
   }
@@ -1807,6 +2181,23 @@ function applyLabLayout(o,opts){
   if(typeof o.scopeScale==='number'){
     S.scopeScale=Math.max(0.6,Math.min(1.8,o.scopeScale));
   }
+  if(typeof o.badgeScale==='number'){
+    S.badgeScale=Math.max(0.5,Math.min(2,o.badgeScale));
+  }
+  if(typeof o.badgeSpread==='number'){
+    S.badgeSpread=Math.max(0.5,Math.min(2,o.badgeSpread));
+  }
+  if(typeof o.bodyPlateScale==='number'){
+    S.bodyPlateScale=Math.max(0.5,Math.min(2,o.bodyPlateScale));
+  }
+  if(typeof o.bodyViewZoom==='number'){
+    S.bodyViewZoom=Math.max(BODY_VIEW_ZOOM_MIN,Math.min(BODY_VIEW_ZOOM_MAX,o.bodyViewZoom));
+  }
+  if(typeof o.bodyViewPanX==='number')S.bodyViewPanX=o.bodyViewPanX;
+  if(typeof o.bodyViewPanY==='number')S.bodyViewPanY=o.bodyViewPanY;
+  applyBodyViewTransform();
+  syncBodyViewHud();
+  if(typeof o.autoMatchPlateBg==='boolean')S.autoMatchPlateBg=o.autoMatchPlateBg;
   syncSizeControls();
   if(o.heartPack&&window.HEART_PACKS&&window.HEART_PACKS[o.heartPack]){
     S.heartPack=o.heartPack;
@@ -1849,9 +2240,37 @@ function applyLabLayout(o,opts){
     LABEL_OFFSETS=JSON.parse(JSON.stringify(o.labelOffsets));
     Object.keys(LABEL_OFFSETS).forEach(function(k){clampLabelOffset(LABEL_OFFSETS[k]);});
   }
+  if(typeof o.bottomStripCollapsed==='boolean'){
+    S.bottomStripCollapsed=o.bottomStripCollapsed;
+  }
+  if(o.ui&&typeof o.ui==='object'){
+    if(typeof o.ui.showHeart==='boolean')S.showHeart=o.ui.showHeart;
+    if(typeof o.ui.showRibs==='boolean')S.showRibs=o.ui.showRibs;
+    if(typeof o.ui.showScope==='boolean')S.showScope=o.ui.showScope;
+    if(typeof o.ui.showTri==='boolean')S.showTri=o.ui.showTri;
+    if(typeof o.ui.showVector==='boolean')S.showVector=o.ui.showVector;
+    if(typeof o.ui.showComet==='boolean')S.showComet=o.ui.showComet;
+    if(typeof o.ui.showLimbRing==='boolean')S.showLimbRing=o.ui.showLimbRing;
+    if(typeof o.ui.showVFan==='boolean')S.showVFan=o.ui.showVFan;
+    if(typeof o.ui.showT==='boolean')S.showT=o.ui.showT;
+    if(typeof o.ui.useRealEcg==='boolean')S.useRealEcg=o.ui.useRealEcg;
+    if(o.ui.theme==='light'||o.ui.theme==='dark')applyTheme(o.ui.theme);
+    if(o.ui.bodyMode==='real'||o.ui.bodyMode==='svg')S.bodyMode=o.ui.bodyMode;
+    if(o.ui.viewMode==='3d'||o.ui.viewMode==='2d')S.viewMode=o.ui.viewMode;
+    if(typeof o.ui.bodyPlateId==='string')S.bodyPlateId=resolveBodyPlateId(o.ui.bodyPlateId);
+  }
+  if(typeof o.bodyPlateId==='string')S.bodyPlateId=resolveBodyPlateId(o.bodyPlateId);
+  syncViewModeUI();
+  syncBodyModeUI();
+  syncBodyLookUI();
+  syncLayerPillsFromState();
+  syncRealEcgBtn();
+  var tTBtnRestore=document.getElementById('tT');
+  if(tTBtnRestore)tTBtnRestore.classList.toggle('on',S.showT);
   if(o.canvasPalette)mergeCanvasPalette(o.canvasPalette);
   applyCanvasPaletteToDom();
   syncCanvasColorInputs();
+  if(typeof loadActiveBodyPlate==='function')loadActiveBodyPlate({skipSave:true});
   recomputeSceneGeometry();
   resetTrail();
   updateLeadReadout();
@@ -1907,6 +2326,11 @@ function updateLeadReadout(){
     +' · LA '+Math.round(EL_BODY.LA.x)+','+Math.round(EL_BODY.LA.y)
     +' · LL '+Math.round(EL_BODY.LL.x)+','+Math.round(EL_BODY.LL.y)
     +' · RL '+Math.round(EL_BODY.RL.x)+','+Math.round(EL_BODY.RL.y);
+  var pre=document.getElementById('precordialCoordReadout');
+  if(!pre)return;
+  pre.textContent=REF4_PRE_KEYS.map(function(k){
+    return k+' '+Math.round(PRE_BODY[k].x)+','+Math.round(PRE_BODY[k].y);
+  }).join(' · ');
 }
 
 function updateScopeReadout(){
@@ -1988,36 +2412,63 @@ function currentHr(){
 function updateTimeHud(){
   var hr=currentHr();
   var beatSec=60/hr;
-  var N=stripN();
+  var total=stripTotalBeats();
   var tWin=tInStripWindow();
-  var sec=(tWin*beatSec).toFixed(3);
-  var beatIdx=Math.min(N,Math.floor(tWin)+1);
-  var pct=Math.round((tWin%1)*100);
-  var txt=sec+' s · beat '+beatIdx+'.'+String(pct).padStart(2,'0');
+  var elapsedSec=tWin*beatSec;
+  var mm=Math.floor(elapsedSec/60);
+  var ss=Math.floor(elapsedSec%60);
+  var ms=Math.floor((elapsedSec%1)*100);
+  var txt=mm+':'+String(ss).padStart(2,'0')+'.'+String(ms).padStart(2,'0')+' / '+Math.round(STRIP_DURATION_SEC/60)+':00 · beat '+Math.floor(tWin+1)+'/'+total;
   var hud=document.getElementById('hudCursorTime');
   var strip=document.getElementById('stripCursorTime');
   if(hud)hud.textContent=txt;
   if(strip)strip.textContent=txt;
 }
 
-function setTimeFromPlotFraction(f){
-  var N=stripN();
-  var tWin=tInStripWindow();
-  var m=stripViewMetrics(N,tWin);
-  var beatInWindow=m.winStart+Math.max(0,Math.min(1,f))*m.dispBeats;
-  var base=Math.floor(S.time/N)*N;
-  S.time=base+Math.max(0,Math.min(N,beatInWindow));
+function setTimeFromBeat(beat,opts){
+  opts=opts||{};
+  var total=stripTotalBeats();
+  var base=Math.floor(S.time/total)*total;
+  S.time=base+Math.max(0,Math.min(total,beat));
   syncPhaseLabel(beatPhase(S.time));
   updateTimeHud();
-  resetTrail();
+  if(opts.resetTrail!==false)resetTrail();
+}
+
+function setTimeFromPlotFraction(f,opts){
+  opts=opts||{};
+  var total=stripTotalBeats();
+  var tWin=tInStripWindow();
+  var m=stripViewMetrics(tWin);
+  var beatInWindow=m.winStart+Math.max(0,Math.min(1,f))*m.dispBeats;
+  setTimeFromBeat(beatInWindow,opts);
 }
 
 function pauseForScrub(){
-  S.paused=true;
-  var pauseB=document.getElementById('pauseB');
+  setPlaybackPaused(true);
+}
+
+function syncPlaybackButtons(){
   var playB=document.getElementById('playB');
-  if(pauseB)pauseB.classList.add('on');
-  if(playB)playB.classList.remove('on');
+  var pauseB=document.getElementById('pauseB');
+  if(playB)playB.classList.toggle('on',!S.paused);
+  if(pauseB)pauseB.classList.toggle('on',!!S.paused);
+}
+
+function setPlaybackPaused(paused){
+  S.paused=!!paused;
+  syncPlaybackButtons();
+}
+
+function togglePlayback(){
+  setPlaybackPaused(!S.paused);
+}
+
+function isTypingTarget(el){
+  if(!el||!el.tagName)return false;
+  var tag=el.tagName.toLowerCase();
+  if(tag==='input'||tag==='textarea'||tag==='select')return true;
+  return !!el.isContentEditable;
 }
 
 function canvasLocalX(e,el,canvasW){
@@ -2032,7 +2483,84 @@ function canvasLocalY(e,el,canvasH){
 
 function scrubCanvasX(x,lpad,plotW){
   if(plotW<=0)return;
-  setTimeFromPlotFraction((x-lpad)/plotW);
+  setTimeFromPlotFraction((x-lpad)/plotW,{resetTrail:false});
+}
+
+var POL_TRACE_DEAD=0.035;
+var PLAYHEAD_DRAG_SCALE=0.42;
+/** Playhead ± badge — hover over trace, not pinned to deflection at row bottom */
+var PLAYHEAD_BADGE_DX=19;
+var PLAYHEAD_BADGE_LIFT=14;
+
+function playheadBadgeAnchor(playX,liveY,base,rowH,plotW){
+  var r=polarityBadgeR(Math.max(3.5,rowH*0.11));
+  var dx=Math.min(PLAYHEAD_BADGE_DX,Math.max(14,plotW*0.055));
+  var lift=Math.max(PLAYHEAD_BADGE_LIFT,rowH*0.1);
+  var y=liveY-lift;
+  var yTop=base-rowH*0.4;
+  var yBot=base+rowH*0.35;
+  if(y<yTop)y=yTop;
+  if(y>yBot)y=yBot;
+  return{x:playX+dx,y:y,r:r};
+}
+
+function traceColorForVal(val,sign,pc,pr){
+  if(!S.useRealEcg&&pr&&pr.w==='t')return{col:pc.anode,sign:-1};
+  if(val>POL_TRACE_DEAD)return{col:pc.cathode,sign:1};
+  if(val<-POL_TRACE_DEAD)return{col:pc.anode,sign:-1};
+  return{col:(sign!=null&&sign>=0)?pc.cathode:pc.anode,sign:(sign!=null&&sign!==0)?sign:1};
+}
+
+/** Smooth cathode/anode trace — hysteresis + baseline crossing, not per-pixel color flip. */
+function drawPolarityLeadTrace(ctx,lpad,plotW,base,amp,leadName,tInWindow,pc,lineW){
+  ctx.save();
+  ctx.lineJoin='round';
+  ctx.lineCap='round';
+  ctx.lineWidth=lineW;
+  var step=plotW>320?0.5:1;
+  var sign=1;
+  var prevCol=null;
+  var open=false;
+  var xPrev=0,vPrev=0;
+  function flush(){if(open){ctx.stroke();open=false;}}
+  function plotTo(x,y,col){
+    if(!open||col!==prevCol){
+      flush();
+      ctx.beginPath();
+      ctx.strokeStyle=col;
+      ctx.moveTo(lpad+x,y);
+      open=true;
+      prevCol=col;
+    }else{
+      ctx.lineTo(lpad+x,y);
+    }
+  }
+  for(var x=0;x<=plotW;x+=step){
+    var pr=stripLeadProj(stripBeatPosAtX(x,plotW,tInWindow),leadName);
+    var val=pr.val;
+    var yy=base-val*amp;
+    var tc=traceColorForVal(val,sign,pc,pr);
+    sign=tc.sign;
+    if(x>0&&vPrev*val<0&&Math.abs(vPrev-val)>0.002){
+      var u=vPrev/(vPrev-val);
+      var xc=xPrev+(x-xPrev)*u;
+      plotTo(xc,base,prevCol||tc.col);
+      flush();
+      prevCol=null;
+      plotTo(xc,base,tc.col);
+    }
+    plotTo(x,yy,tc.col);
+    xPrev=x;vPrev=val;
+  }
+  flush();
+  ctx.restore();
+}
+
+function scrubPlayheadByDelta(dx,plotW){
+  if(plotW<=0||_scrub.beat0==null)return;
+  var m=stripViewMetrics(tInStripWindow());
+  var beatDelta=(dx/plotW)*m.dispBeats*PLAYHEAD_DRAG_SCALE;
+  setTimeFromBeat(_scrub.beat0+beatDelta,{resetTrail:false});
 }
 
 function vecAt(ph){
@@ -2069,11 +2597,102 @@ function projL(ph,leadKey){
    ═══════════════════════════════════════════════════════════════════ */
 var UC=document.getElementById('unified');
 var uctx=UC?UC.getContext('2d',{alpha:false}):null;
+var SC3D=document.getElementById('scene3d');
+var scene3d=null;
+var scene3dReady=false;
+var scene3dLoading=false;
+
+function isView3d(){return S.viewMode==='3d';}
+
+function buildLab3dPayload(ph){
+  return{
+    EL_BODY:EL_BODY,
+    PRE_BODY:PRE_BODY,
+    HC_BODY:HC_BODY,
+    showTri:S.showTri,
+    showScope:S.showScope,
+    showVector:S.showVector,
+    showLimbRing:S.showLimbRing,
+    showVFan:S.showVFan,
+    scopeScale:S.scopeScale,
+    placingLeads:S.placingLeads,
+    placingScope:S.placingScope,
+    placingHeart:S.placingHeart,
+    vec:vecAt(ph!=null?ph:beatPhase(S.time))
+  };
+}
+
+function syncScene3dFromLab(ph){
+  if(!scene3d||!scene3dReady)return;
+  scene3d.sync(buildLab3dPayload(ph));
+  scene3d.render();
+}
+
+function ensureScene3d(done){
+  if(scene3dReady&&scene3d){if(done)done();return;}
+  if(scene3dLoading)return;
+  if(!SC3D){if(done)done();return;}
+  scene3dLoading=true;
+  import('./assets/ecg-vector-lab/ecg-scene-3d.js').then(function(mod){
+    scene3d=mod.createEcgScene3d(SC3D);
+    scene3dReady=true;
+    scene3dLoading=false;
+    sizeScene3dCanvas();
+    syncScene3dFromLab(beatPhase(S.time));
+    if(done)done();
+  }).catch(function(err){
+    scene3dLoading=false;
+    console.warn('ECG 3D scene failed to load',err);
+    S.viewMode='2d';
+    syncViewModeUI();
+    if(done)done();
+  });
+}
+
+function sizeScene3dCanvas(){
+  if(!SC3D||!scene3d)return;
+  var wrap=SC3D.parentElement;
+  if(!wrap)return;
+  var cssW=Math.max(300,Math.floor(wrap.clientWidth));
+  var cssH=Math.max(240,Math.floor(wrap.clientHeight));
+  scene3d.resize(cssW,cssH);
+}
+
+function syncViewModeUI(){
+  document.querySelectorAll('.view-mode-btn').forEach(function(btn){
+    btn.classList.toggle('on',btn.dataset.viewMode===(isView3d()?'3d':'2d'));
+  });
+  var hero=document.querySelector('.hero-viewport');
+  if(hero)hero.classList.toggle('view-3d',isView3d());
+  var bodyModeCycle=document.getElementById('bodyModeCycle');
+  if(bodyModeCycle)bodyModeCycle.hidden=isView3d();
+  var bodyLookCycle=document.getElementById('bodyLookCycle');
+  if(bodyLookCycle)bodyLookCycle.hidden=!isRealBodyMode()||isView3d();
+  document.querySelectorAll('.layer-pill[data-layer="limbRing"],.layer-pill[data-layer="vFan"]').forEach(function(p){
+    p.style.opacity=isView3d()?'1':'0.45';
+  });
+  if(isView3d())ensureScene3d(function(){syncScene3dFromLab(beatPhase(S.time));});
+}
+
+function initViewModeToggle(){
+  syncViewModeUI();
+  document.querySelectorAll('.view-mode-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var mode=btn.dataset.viewMode==='3d'?'3d':'2d';
+      if(S.viewMode===mode)return;
+      S.viewMode=mode;
+      syncViewModeUI();
+      saveLabLayout();
+      if(!isView3d())drawUnified();
+    });
+  });
+}
 
 var UW=520,UH=420;
 var bodyNW=206.326;
+var bodyNH=185;
 var bodyScale,bodyOffX,bodyOffY;
-var EL,HT,HC,HP,HEART_H,HEART_W,SCX,SCY,SR;
+var EL,PRE,HT,HC,HP,HEART_H,HEART_W,SCX,SCY,SR;
 
 function recomputeSceneGeometry(){
   bodyScale=UH*0.88/bodyNW;
@@ -2085,6 +2704,10 @@ function recomputeSceneGeometry(){
     LL:toU(EL_BODY.LL.x,EL_BODY.LL.y),
     RL:toU(EL_BODY.RL.x,EL_BODY.RL.y)
   };
+  PRE={};
+  REF4_PRE_KEYS.forEach(function(k){
+    PRE[k]=toU(PRE_BODY[k].x,PRE_BODY[k].y);
+  });
   HT=toU(HEART_BODY.x,HEART_BODY.y);
   HP=HT;
   var hs=S.heartScale||1;
@@ -2121,16 +2744,55 @@ function sizeUnifiedCanvas(){
   uctx.lineCap='round';
   recomputeSceneGeometry();
   resetTrail();
+  sizeScene3dCanvas();
 }
 
-/* ECG scope axes: 0° = Lead I toward patient left (screen left) */
-function sX(vx,scale){return SCX-vx*scale;}
+/* ECG scope axes — 0° = Lead I (+x), +90° = inferior; matches Limb Leads diagram */
+function scopePtFromDeg(deg,rad){
+  var a=r(deg);
+  return{x:SCX+rad*Math.cos(a),y:SCY+rad*Math.sin(a)};
+}
+function sX(vx,scale){return SCX+vx*scale;}
 function sY(vy,scale){return SCY+vy*scale;}
-function sPt(deg,rad){var a=r(deg);return{x:SCX-rad*Math.cos(a),y:SCY+rad*Math.sin(a)};}
+function sPt(deg,rad){return scopePtFromDeg(deg,rad);}
 
 function toU(sx,sy){return{x:sx*bodyScale+bodyOffX,y:sy*bodyScale+bodyOffY};}
 
 function lineW(base){return Math.max(base,SR*0.004);}
+
+/** Vector arrow — head size tracks shaft length; stroke width affects line only. */
+function drawScopeVectorArrow(va,strokeBase){
+  if(!va||!va.on)return;
+  var arrowScale=SR*0.55;
+  var tx=sX(va.vx,arrowScale),ty=sY(va.vy,arrowScale);
+  var dx=tx-SCX,dy=ty-SCY;
+  var shaftLen=Math.hypot(dx,dy);
+  if(shaftLen<3)return;
+  var lw=lineW(strokeBase||2);
+  var ux=dx/shaftLen,uy=dy/shaftLen;
+  var px=-uy,py=ux;
+  var headLen=Math.min(shaftLen*0.34,SR*0.075);
+  headLen=Math.max(Math.min(headLen,shaftLen*0.55),Math.min(lw*1.6,shaftLen*0.28));
+  var headHalf=Math.max(lw*0.65,headLen*0.38);
+  headHalf=Math.min(headHalf,headLen*0.48);
+  var ex=tx-ux*headLen,ey=ty-uy*headLen;
+  uctx.strokeStyle='rgba(2,132,199,0.85)';
+  uctx.lineWidth=lw;
+  uctx.lineCap='round';
+  uctx.lineJoin='round';
+  uctx.beginPath();
+  uctx.moveTo(SCX,SCY);
+  uctx.lineTo(ex,ey);
+  uctx.stroke();
+  var bx=tx-ux*headLen,by=ty-uy*headLen;
+  uctx.fillStyle='rgba(2,132,199,0.9)';
+  uctx.beginPath();
+  uctx.moveTo(tx,ty);
+  uctx.lineTo(bx+px*headHalf,by+py*headHalf);
+  uctx.lineTo(bx-px*headHalf,by-py*headHalf);
+  uctx.closePath();
+  uctx.fill();
+}
 
 function drawQuadLabel(text,x,y,dark,gold){
   uctx.font='700 '+(SR*0.062)+'px Archivo,ui-sans-serif';
@@ -2160,19 +2822,19 @@ function drawScopeLabel(id,text,x,y,dark,gold){
   if(S.placingLabels){drawLabelGrip(lp.x,lp.y);registerLabelHit(id,lp.x,lp.y);}
 }
 
-function drawPolarityBadgeCtx(ctx,cx,cy,r,val,green,red,opts){
+function drawPolarityBadgeCtx(ctx,cx,cy,r,val,cathode,anode,opts){
   opts=opts||{};
   var toward=val>0.04;
   var away=val<-0.04;
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx,cy,r,0,Math.PI*2);
-  ctx.fillStyle=toward?'rgba(62,207,142,0.35)':away?'rgba(239,83,80,0.25)':'rgba(255,255,255,0.12)';
+  ctx.fillStyle=toward?'rgba(239,83,80,0.35)':away?'rgba(62,207,142,0.25)':'rgba(255,255,255,0.12)';
   ctx.fill();
-  ctx.strokeStyle=toward?green:away?red:'rgba(255,255,255,0.45)';
+  ctx.strokeStyle=toward?cathode:away?anode:'rgba(255,255,255,0.45)';
   ctx.lineWidth=Math.max(1.2,r*0.16);
   ctx.stroke();
-  ctx.fillStyle=toward?green:away?red:'#f0f0f4';
+  ctx.fillStyle=toward?cathode:away?anode:'#f0f0f4';
   ctx.font='700 '+(r*0.88)+'px Archivo,ui-sans-serif';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
@@ -2186,21 +2848,21 @@ function drawPolarityBadgeCtx(ctx,cx,cy,r,val,green,red,opts){
 }
 
 /** Fixed + above baseline / − below — same on every lead row */
-function drawStripPolarityGuide(ctx,x,base,amp,rowH,green,red){
+function drawStripPolarityGuide(ctx,x,base,amp,rowH,cathode,anode){
   var dy=Math.max(5,Math.min(amp*0.38,Math.max(8,rowH*0.18)));
   ctx.save();
   ctx.font='700 7.5px Archivo,ui-sans-serif';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
-  ctx.fillStyle=green;
+  ctx.fillStyle=cathode;
   ctx.fillText('+',x,base-dy);
-  ctx.fillStyle=red;
+  ctx.fillStyle=anode;
   ctx.fillText('−',x,base+dy);
   ctx.restore();
 }
 
-function drawPositiveElectrodeBadge(cx,cy,r,val,leadLabel,green,red,text,border,opts){
-  drawPolarityBadgeCtx(uctx,cx,cy,r,val,green,red,Object.assign({},opts||{},{leadLabel:leadLabel}));
+function drawPositiveElectrodeBadge(cx,cy,r,val,leadLabel,cathode,anode,text,border,opts){
+  drawPolarityBadgeCtx(uctx,cx,cy,r,val,cathode,anode,Object.assign({},opts||{},{leadLabel:leadLabel}));
 }
 
 function positiveElectrodeCanvas(leadName){
@@ -2212,17 +2874,18 @@ function positiveElectrodeCanvas(leadName){
 }
 
 /** + badges on positive electrodes — I/aVL→LA, II/III/aVF→LL, aVR→RA */
-function drawPositiveElectrodeBadges(green,red,text,border,dark){
+function drawPositiveElectrodeBadges(cathode,anode,text,border,dark){
   if(!EL||!EL.LA)return;
   var off={I:{x:-10,y:-11},II:{x:-12,y:8},III:{x:12,y:8},aVF:{x:0,y:14},aVR:{x:-10,y:-4},aVL:{x:10,y:-10}};
+  var spread=badgeSpreadMul();
   var ph=beatPhase(S.time);
   POSITIVE_FLOW_LEADS.forEach(function(ln){
     var pt=positiveElectrodeCanvas(ln);
     if(!pt)return;
     var o=off[ln]||{x:0,y:0};
-    var cx=pt.x+o.x*(bodyScale/9);
-    var cy=pt.y+o.y*(bodyScale/9);
-    drawPositiveElectrodeBadge(cx,cy,Math.max(7,bodyScale*0.95),projL(ph,ln).val,'',green,red,text,border,{showLabel:false});
+    var cx=pt.x+o.x*(bodyScale/9)*spread;
+    var cy=pt.y+o.y*(bodyScale/9)*spread;
+    drawPositiveElectrodeBadge(cx,cy,polarityBadgeR(Math.max(7,bodyScale*0.95)),projL(ph,ln).val,'',cathode,anode,text,border,{showLabel:false});
   });
 }
 
@@ -2270,11 +2933,14 @@ function canvasPoint(clientX,clientY){
 }
 
 function hitLead(px,py){
-  var keys=['RA','LA','LL','RL'],i,k,p,dx,dy;
+  var keys=S.placingLeads?REF4_ALL_KEYS.slice():REF4_LIMB_KEYS.slice(),i,k,p,dx,dy,hitR;
+  hitR=S.placingLeads?18:12;
   for(i=0;i<keys.length;i++){
-    k=keys[i];p=EL[k];
+    k=keys[i];
+    p=REF4_PRE_KEYS.indexOf(k)>=0?PRE[k]:EL[k];
+    if(!p)continue;
     dx=px-p.x;dy=py-p.y;
-    if(dx*dx+dy*dy<(S.placingLeads?18:12)*(S.placingLeads?18:12))return k;
+    if(dx*dx+dy*dy<hitR*hitR)return k;
   }
   return null;
 }
@@ -2282,12 +2948,19 @@ function hitLead(px,py){
 function moveLeadToCanvas(key,px,py){
   var b=fromU(px,py);
   clampBodyPt(b);
-  EL_BODY[key].x=b.x;
-  EL_BODY[key].y=b.y;
-  EL[key]=toU(b.x,b.y);
-  recomputeLeadAxes();
-  resetTrail();
+  if(REF4_PRE_KEYS.indexOf(key)>=0){
+    PRE_BODY[key].x=b.x;
+    PRE_BODY[key].y=b.y;
+    PRE[key]=toU(b.x,b.y);
+  }else{
+    EL_BODY[key].x=b.x;
+    EL_BODY[key].y=b.y;
+    EL[key]=toU(b.x,b.y);
+    recomputeLeadAxes();
+    resetTrail();
+  }
   saveLabLayout();
+  updateLeadReadout();
   if(S.placingLeads&&typeof updateUI==='function')updateUI();
 }
 
@@ -2373,39 +3046,30 @@ function drawScopeCenterHandle(gold,text,border){
 function updateIschemiaLegend(){
   var el=document.getElementById('ischemiaLegend');
   if(!el)return;
-  var zone=heartZoneKey(S.angle);
-  var tints=heartRegionTints(zone);
-  if(!tints.length){
-    el.innerHTML='<strong>Normal axis</strong> — all regions equally perfused (healthy red). Dark zones appear with LAD, RAD, or extreme axis.';
-    return;
-  }
-  var html='<strong>'+(zone==='lad'?'LAD':'')+(zone==='rad'?'RAD':'')+(zone==='extreme'?'Extreme axis':'')+'</strong> — ischemic / dominant regions on heart:<br/>';
-  tints.forEach(function(t){
-    var cls=t.k==='rv'&&zone!=='extreme'?'ischemia-swatch--bright':'ischemia-swatch--dark';
-    if(t.k==='lv'||t.k==='lv_lat'||t.k==='apex')cls=t.fill.indexOf('210')>=0?'ischemia-swatch--bright':'ischemia-swatch--dim';
-    html+='<span class="'+cls+'"></span>'+t.label+'<br/>';
-  });
-  html+='Vector deflection follows which territory still depolarises toward the scope centre.';
-  el.innerHTML=html;
+  el.innerHTML='';
+  el.style.display='none';
 }
 
 function nearPlayhead(x,lpad,plotW,tol){
-  return Math.abs(x-stripPlayX(lpad,plotW,tInStripWindow()))<=(tol||14);
+  return Math.abs(x-stripPlayX(lpad,plotW,tInStripWindow()))<=(tol||22);
 }
 
 function drawPlayheadGrab(ctx,playX,h,topPad){
   var y0=topPad||0;
   var h2=h||(ctx.canvas.height);
-  ctx.fillStyle='rgba(232,184,75,0.95)';
+  ctx.strokeStyle='rgba(2,132,199,.65)';
+  ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(playX,y0+8);ctx.lineTo(playX,h2);ctx.stroke();
+  ctx.fillStyle='rgba(232,184,75,0.98)';
+  ctx.strokeStyle='rgba(12,12,16,0.35)';
+  ctx.lineWidth=1;
   ctx.beginPath();
   ctx.moveTo(playX,y0+2);
-  ctx.lineTo(playX-5,y0+10);
-  ctx.lineTo(playX+5,y0+10);
+  ctx.lineTo(playX-7,y0+12);
+  ctx.lineTo(playX+7,y0+12);
   ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle='rgba(2,132,199,.55)';
-  ctx.lineWidth=1.2;
-  ctx.beginPath();ctx.moveTo(playX,y0+10);ctx.lineTo(playX,h2);ctx.stroke();
+  ctx.stroke();
 }
 
 /* Comet trail ring buffer */
@@ -2424,10 +3088,9 @@ function resetTrail(){
 /* ── Anatomical heart (traced SVG from reference) ─────────────────── */
 var HEART_STROKE='rgba(150,150,155,0.88)';
 var HEART_VESSEL='rgba(190,190,195,0.75)';
-/* Rich anatomical red — visible on dark 20%-gray body */
-var HEART_GRAY_FILL='#c0282a';
-var HEART_2_GRAY_FILL='#b52226';
-/* Ensure the saved #ff0000 test value is migrated back to crimson */
+/* Heart fill — light gray on dark body */
+var HEART_GRAY_FILL='#B8B8B8';
+var HEART_2_GRAY_FILL='#A8A8A8';
 
 function heartZoneKey(a){
   a=a>180?a-360:a;
@@ -2528,38 +3191,23 @@ function drawHeartSvgLayer(svg,fill,stroke,strokeW,alpha,pulse){
   uctx.translate(-hc.x,-hc.y);
   uctx.globalAlpha=alpha;
   if(pulse){
-    uctx.shadowColor='rgba(180,30,30,0.55)';
-    uctx.shadowBlur=18/s;
+    uctx.shadowColor='rgba(180,180,185,0.35)';
+    uctx.shadowBlur=14/s;
   }
-  /* Outer glow so the heart reads on the dark body */
-  uctx.shadowColor='rgba(200,40,40,0.35)';
-  uctx.shadowBlur=12/s;
   drawSvgHeartPaths(svg.silhouette,fill,stroke,strokeW);
-  uctx.shadowColor='transparent';
-  uctx.shadowBlur=0;
   uctx.restore();
 }
 
 function drawAnatomicalHeart(ph,isDark){
   var svg=heartDrawGeometry();
   if(!svg||!svg.silhouette)return;
-  var zone=heartZoneKey(S.angle);
-  var s=HEART_H/svg.h;
-  var hc=svg.hc||{x:svg.w*0.5,y:svg.h*0.57};
   var fill=heartPackFill();
   var alpha=0.94;
   /* Fill-only trace — draw heart at HP (canvas coords), clipped to body */
   drawHeartSvgLayer(svg,fill,null,0,alpha,false);
-  if(isDark){
-    var tints=heartRegionTints(zone);
-    for(var ti=0;ti<tints.length;ti++){
-      var tr=scaledHeartRegion(tints[ti].k,svg);
-      if(tr)drawHeartRegionTint(tr,tints[ti].fill,svg,hc,s,true);
-    }
-  }
 }
 
-/** z0 — simple human torso (inline path); same shape heart on/off. */
+/** z0 — gray SVG fallback when no Kojo body plate is loaded. */
 function drawBodySilhouette(fill){
   uctx.save();
   uctx.translate(bodyOffX,bodyOffY);
@@ -2569,12 +3217,355 @@ function drawBodySilhouette(fill){
   uctx.restore();
 }
 
+/** Full frontal Kojo body plate — replaces SVG fill when present (not clipped overlay). */
+var BODY_PLATE_IMG=null;
+var BODY_PLATE_RENDER='native';
+var BODY_PLATE_HAS_BAKED_RIBS=false;
+var RIB_CAGE_IMG=null;
+var BODY_PLATE_DEFAULT_ID='cardiocard-angle';
+var BODY_PLATE_CATALOG={
+  'cardiocard-angle':{
+    src:'assets/ecg-vector-lab/character/kojo-cardiocard-angle-a.png',
+    render:'native',
+    label:'CardioCard angle',
+    hint:'Magnific body at ref-04 angle + Kojo likeness. Loads tuned electrode layout (layout 6) automatically.'
+  },
+  'placement-a':{
+    src:'assets/ecg-vector-lab/character/boy-ecg-placement-plate-a.png',
+    render:'native',
+    label:'Plate A',
+    hint:'Teaching plate — ribs baked in PNG. ⌗ Ribs SVG off.'
+  },
+  'placement-b':{
+    src:'assets/ecg-vector-lab/character/boy-ecg-placement-plate-b.png',
+    render:'native',
+    label:'Plate B',
+    hint:'Alternate placement plate — ribs baked in.'
+  },
+  'likeness-b':{
+    src:'assets/ecg-vector-lab/character/kojo-torso-likeness-b.png',
+    render:'photoGray',
+    label:'Likeness B',
+    hint:'Kojo photo + gray wash — toggle ⌗ Ribs SVG + ♥ Heart.'
+  },
+  'gray-full':{
+    src:'assets/ecg-vector-lab/character/kojo-gray-avatar-full.png',
+    render:'native',
+    label:'Gray full',
+    hint:'Full-body matte gray — organs via SVG layers.'
+  },
+  'gray-a':{
+    src:'assets/ecg-vector-lab/character/kojo-gray-avatar-full-a.png',
+    render:'native',
+    label:'Gray A',
+    hint:'Magnific gray full-body A.'
+  },
+  'gray-b':{
+    src:'assets/ecg-vector-lab/character/kojo-gray-avatar-full-b.png',
+    render:'native',
+    label:'Gray B',
+    hint:'Magnific gray full-body B — loads tuned electrode layout automatically.'
+  }
+};
+/** Per-plate bundled layouts (electrodes, scope, strip) applied when body look changes. */
+var BODY_PLATE_LAYOUTS={
+  'cardiocard-angle':'assets/ecg-vector-lab/layouts/cardiocard-angle-layout.json',
+  'gray-b':'assets/ecg-vector-lab/layouts/gray-b-layout.json',
+  'gray-a':'assets/ecg-vector-lab/layouts/gray-b-layout.json',
+  'gray-full':'assets/ecg-vector-lab/layouts/gray-b-layout.json'
+};
+var BODY_PLATE={
+  ribsSrc:'assets/ecg-vector-lab/references/05-rib-cage-anterior-ref.png',
+  ribsSrcCrop:{x:0.667,y:0,w:0.333,h:1},
+  /** Applied only when render mode is photoGray (color Kojo photo plates). */
+  grayTint:'#333333',
+  grayTintAlpha:0.42
+};
+
+function resolveBodyPlateId(id){
+  if(id&&BODY_PLATE_CATALOG[id])return id;
+  return BODY_PLATE_DEFAULT_ID;
+}
+
+function syncBodyLookUI(){
+  var id=resolveBodyPlateId(S.bodyPlateId);
+  var entry=BODY_PLATE_CATALOG[id];
+  var lbl=document.getElementById('bodyLookLbl');
+  var sel=document.getElementById('bodyLookSel');
+  var hint=document.getElementById('bodyLookHint');
+  if(lbl&&entry)lbl.textContent=entry.label;
+  if(sel)sel.value=id;
+  if(hint&&entry)hint.textContent=entry.hint;
+  document.querySelectorAll('.body-look-btn').forEach(function(btn){
+    btn.classList.toggle('on',btn.dataset.bodyLook===id);
+  });
+}
+
+function setBodyPlateId(id,opts){
+  opts=opts||{};
+  id=resolveBodyPlateId(id);
+  var changed=S.bodyPlateId!==id;
+  S.bodyPlateId=id;
+  if(S.bodyMode!=='real'){
+    S.bodyMode='real';
+    syncBodyModeUI();
+  }
+  syncBodyLookUI();
+  var layoutUrl=BODY_PLATE_LAYOUTS[id];
+  if((changed||opts.force)&&layoutUrl&&!opts.skipPlateLayout){
+    fetch(layoutUrl+'?t='+Date.now())
+      .then(function(r){return r.ok?r.json():null;})
+      .then(function(o){
+        if(!o){
+          loadActiveBodyPlate(opts);
+          if(!opts.skipSave)saveLabLayout();
+          return;
+        }
+        o.bodyPlateId=id;
+        if(o.ui&&typeof o.ui==='object')o.ui.bodyPlateId=id;
+        applyLabLayout(o,{skipSave:!!opts.skipSave,skipPlateLayout:true});
+      })
+      .catch(function(){
+        loadActiveBodyPlate(opts);
+        if(!opts.skipSave)saveLabLayout();
+      });
+    return;
+  }
+  if(changed||!hasBodyPlate()||opts.force)loadActiveBodyPlate(opts);
+  else if(typeof drawUnified==='function')drawUnified();
+  if(!opts.skipSave)saveLabLayout();
+}
+
+function loadActiveBodyPlate(opts){
+  opts=opts||{};
+  var entry=BODY_PLATE_CATALOG[resolveBodyPlateId(S.bodyPlateId)];
+  if(!entry)return;
+  var img=new Image();
+  img.onload=function(){
+    BODY_PLATE_IMG=img;
+    BODY_PLATE_RENDER=entry.render||'native';
+    BODY_PLATE_HAS_BAKED_RIBS=entry.src.indexOf('placement-plate')>=0;
+    if(BODY_PLATE_HAS_BAKED_RIBS&&S.showRibs){
+      S.showRibs=false;
+      syncLayerPillsFromState();
+    }
+    if(S.autoMatchPlateBg!==false)applyPlateBackgroundMatch({skipSave:true});
+    updatePlateBgReadout(samplePlateBackground(BODY_PLATE_IMG));
+    if(typeof drawUnified==='function')drawUnified();
+  };
+  img.onerror=function(){
+    if(S.bodyPlateId!==BODY_PLATE_DEFAULT_ID){
+      S.bodyPlateId=BODY_PLATE_DEFAULT_ID;
+      loadActiveBodyPlate(opts);
+      syncBodyLookUI();
+    }
+  };
+  img.src=entry.src;
+}
+
+/** Viewport height available for the real-mode body plate (px, CSS space). */
+function bodyPlateViewportHeightPx(){
+  var margin=bodyOffY!=null?bodyOffY:UH*0.04;
+  return Math.max(48,(UH||420)-margin*2);
+}
+
+/** Real mode: fit plate to viewport height · SVG: fit inside bodyNW×bodyNH. */
+function getBodyPlateRect(){
+  if(!hasBodyPlate())return{x:0,y:0,w:bodyNW,h:bodyNH};
+  var iw=BODY_PLATE_IMG.naturalWidth,ih=BODY_PLATE_IMG.naturalHeight;
+  if(!iw||!ih)return{x:0,y:0,w:bodyNW,h:bodyNH};
+  var aspect=iw/ih;
+  var sc=Math.max(0.5,Math.min(2,S.bodyPlateScale||1));
+  if(isRealBodyMode()){
+    var targetPx=bodyPlateViewportHeightPx()*sc;
+    var h=targetPx/(bodyScale||1);
+    var w=h*aspect;
+    return{x:(bodyNW-w)*0.5,y:0,w:w,h:h};
+  }
+  var h=bodyNH;
+  var w=h*aspect;
+  if(w>bodyNW){w=bodyNW;h=w/aspect;}
+  w*=sc;
+  h*=sc;
+  var cx=bodyNW*0.5,cy=bodyNH*0.5;
+  return{x:cx-w*0.5,y:cy-h*0.5,w:w,h:h};
+}
+
+function rgbToHex(r,g,b){
+  function h(n){var s=Math.max(0,Math.min(255,Math.round(n))).toString(16);return s.length<2?'0'+s:s;}
+  return '#'+h(r)+h(g)+h(b);
+}
+
+function samplePlateBackground(img){
+  if(!img||!img.naturalWidth)return null;
+  var w=img.naturalWidth,h=img.naturalHeight;
+  var c=document.createElement('canvas');
+  c.width=w;
+  c.height=h;
+  var ctx=c.getContext('2d',{willReadFrequently:true});
+  if(!ctx)return null;
+  ctx.drawImage(img,0,0);
+  var pts=[[2,2],[w-3,2],[2,h-3],[w-3,h-3],[Math.floor(w*0.5),2],[Math.floor(w*0.5),h-3],[2,Math.floor(h*0.5)],[w-3,Math.floor(h*0.5)]];
+  var r=0,g=0,b=0,n=0;
+  for(var i=0;i<pts.length;i++){
+    var d=ctx.getImageData(pts[i][0],pts[i][1],1,1).data;
+    r+=d[0];g+=d[1];b+=d[2];n++;
+  }
+  if(!n)return null;
+  return rgbToHex(r/n,g/n,b/n);
+}
+
+function updatePlateBgReadout(hex){
+  var el=document.getElementById('plateBgV');
+  if(el)el.textContent=hex||'—';
+}
+
+function applyPlateBackgroundMatch(opts){
+  if(!hasBodyPlate())return null;
+  var hex=samplePlateBackground(BODY_PLATE_IMG);
+  if(!hex)return null;
+  var t=canvasThemeKey();
+  if(!canvasPalette[t])canvasPalette[t]={};
+  canvasPalette[t].canvasBg=hex;
+  applyCanvasPaletteToDom();
+  syncCanvasColorInputs();
+  updatePlateBgReadout(hex);
+  if(!(opts&&opts.skipSave))saveLabLayout();
+  if(typeof drawUnified==='function')drawUnified();
+  return hex;
+}
+
+function getRibsRect(){
+  var pr=getBodyPlateRect();
+  return{
+    x:pr.x+pr.w*0.20,
+    y:pr.y+pr.h*0.24,
+    w:pr.w*0.60,
+    h:pr.h*0.26
+  };
+}
+
+function hasBodyPlate(){
+  return BODY_PLATE_IMG&&BODY_PLATE_IMG.complete&&BODY_PLATE_IMG.naturalWidth;
+}
+
+function isRealBodyMode(){
+  return S.bodyMode==='real';
+}
+
+function useSvgBodyClip(){
+  return !isRealBodyMode();
+}
+
+function drawBodyOverlayImage(img,bodyRect,srcCrop,alpha,clipBody){
+  if(!img||!img.complete||!img.naturalWidth)return;
+  uctx.save();
+  if(clipBody){
+    uctx.translate(bodyOffX,bodyOffY);
+    uctx.scale(bodyScale,bodyScale);
+    uctx.clip(bp);
+    uctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  if(alpha!=null)uctx.globalAlpha=alpha;
+  var sx=srcCrop?img.naturalWidth*srcCrop.x:0;
+  var sy=srcCrop?img.naturalHeight*srcCrop.y:0;
+  var sw=srcCrop?img.naturalWidth*srcCrop.w:img.naturalWidth;
+  var sh=srcCrop?img.naturalHeight*srcCrop.h:img.naturalHeight;
+  var dx=bodyOffX+bodyRect.x*bodyScale;
+  var dy=bodyOffY+bodyRect.y*bodyScale;
+  var dw=bodyRect.w*bodyScale;
+  var dh=bodyRect.h*bodyScale;
+  uctx.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh);
+  uctx.restore();
+}
+
+/** SVG mode = gray bp fill only · Real mode = full plate, no SVG clip. */
+function drawBodyPrimary(fallbackFill){
+  if(isRealBodyMode()&&hasBodyPlate()){
+    var pr=getBodyPlateRect();
+    var photoGray=BODY_PLATE_RENDER==='photoGray';
+    uctx.save();
+    if(photoGray)uctx.filter='grayscale(1) contrast(1.15) brightness(0.82)';
+    drawBodyOverlayImage(BODY_PLATE_IMG,pr,null,1,false);
+    uctx.restore();
+    if(photoGray){
+      uctx.save();
+      uctx.globalCompositeOperation='color';
+      uctx.globalAlpha=BODY_PLATE.grayTintAlpha||0.4;
+      uctx.fillStyle=BODY_PLATE.grayTint||bodySilhouetteFill();
+      uctx.fillRect(bodyOffX+pr.x*bodyScale,bodyOffY+pr.y*bodyScale,pr.w*bodyScale,pr.h*bodyScale);
+      uctx.restore();
+    }
+    return;
+  }
+  drawBodySilhouette(fallbackFill);
+}
+
+function drawRibCageSvgLayer(dark){
+  if(!S.showRibs||BODY_PLATE_HAS_BAKED_RIBS)return;
+  var svg=window.RIB_CAGE_ANTERIOR;
+  if(!svg||!svg.strokes||!svg.strokes.length)return;
+  var pr=getRibsRect();
+  var sx=pr.w/svg.w,sy=pr.h/svg.h,s=Math.min(sx,sy);
+  var cx=bodyOffX+(pr.x+pr.w*0.5)*bodyScale;
+  var cy=bodyOffY+(pr.y+pr.h*0.5)*bodyScale;
+  uctx.save();
+  uctx.translate(cx,cy);
+  uctx.scale(s*bodyScale,s*bodyScale);
+  uctx.translate(-svg.hc.x,-svg.hc.y);
+  uctx.globalAlpha=0.9;
+  uctx.lineCap='round';
+  uctx.lineJoin='round';
+  uctx.strokeStyle=dark?'rgba(255,255,255,0.9)':'rgba(230,230,230,0.88)';
+  for(var i=0;i<svg.strokes.length;i++){
+    var st=svg.strokes[i];
+    uctx.lineWidth=(st.w||1.2);
+    uctx.stroke(new Path2D(st.d));
+  }
+  uctx.restore();
+}
+
+function drawRibCageOverlay(dark){
+  drawRibCageSvgLayer(dark);
+}
+
+function tryLoadOverlayImage(src,onLoad){
+  var img=new Image();
+  img.onload=function(){onLoad(img);if(typeof drawUnified==='function')drawUnified();};
+  img.onerror=function(){};
+  img.src=src;
+}
+
+function initBodyPlateImages(){
+  if(!hasBodyPlate())loadActiveBodyPlate({skipSave:true});
+  tryLoadOverlayImage(BODY_PLATE.ribsSrc,function(img){RIB_CAGE_IMG=img;});
+}
+
+function initBodyLookUI(){
+  syncBodyLookUI();
+  var sel=document.getElementById('bodyLookSel');
+  if(sel){
+    sel.addEventListener('change',function(){
+      setBodyPlateId(sel.value);
+    });
+  }
+  document.querySelectorAll('.body-look-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      setBodyPlateId(btn.dataset.bodyLook);
+    });
+  });
+}
+
 /* ── Body path (clip mask + legacy fallback fill) ── */
 var bp=new Path2D(BODY);
 
 function drawUnified(){
   if(!uctx||!UW||!UH)return;
   var ph=beatPhase(S.time);
+  if(isView3d()){
+    syncScene3dFromLab(ph);
+    return;
+  }
   var dark=currentTheme==='dark';
   var bg=cssVar('--bg')||'#0c0c10';
   var panel=cssVar('--panel')||'#14141c';
@@ -2587,8 +3578,7 @@ function drawUnified(){
   var scopeFocus=canvasCol('scopeFocus','#0284c7');
   var quadGold=canvasCol('quadLabel',gold);
   var triLabelCol=canvasCol('triLabel',gold);
-  var green=cssVar('--green')||'#3ecf8e';
-  var red=cssVar('--red')||'#ef5350';
+  var pc=polarityColors();
   var bodyFill=bodySilhouetteFill();
   var triStroke=canvasCol('triStroke','#ffffff');
   var triDim=canvasCol('triStrokeDim','#6b7280');
@@ -2598,11 +3588,14 @@ function drawUnified(){
   uctx.fillStyle=canvasBg;
   uctx.fillRect(0,0,UW,UH);
 
-  /* z0 — human silhouette (light gray, always) */
-  drawBodySilhouette(bodyFill);
+  /* z0 — Kojo full-body plate, or gray SVG fallback */
+  drawBodyPrimary(bodyFill);
 
-  /* z1 — anatomical heart (SVG on chest; ♥ Heart layer) */
+  /* z1 — anatomical heart inside thorax (♥ Heart layer) */
   if(S.showHeart)drawAnatomicalHeart(ph,dark);
+
+  /* z1b — SVG rib cage in front of heart (⌗ Ribs layer) */
+  drawRibCageOverlay(dark);
 
   /* z2+ — Einthoven triangle, scope, comet, vector (over body/heart) */
   if(S.showTri||S.placingLeads||S.placingLabels){
@@ -2651,7 +3644,12 @@ function drawUnified(){
     Object.keys(EL).forEach(function(n){
       drawLeadHandle(n,EL[n],S.dragLead===n,border,text,muted,dark);
     });
-    if(S.showTri||S.showScope)drawPositiveElectrodeBadges(green,red,text,border,dark);
+    if(S.placingLeads){
+      REF4_PRE_KEYS.forEach(function(n){
+        drawLeadHandle(n,PRE[n],S.dragLead===n,border,text,muted,dark);
+      });
+    }
+    if(S.showTri||S.showScope)drawPositiveElectrodeBadges(pc.cathode,pc.anode,text,border,dark);
   }
 
   if(S.showScope||S.placingLabels){
@@ -2710,8 +3708,8 @@ function drawUnified(){
     uctx.font=(foc?'700':'600')+' '+(SR*0.1)+'px Archivo,ui-sans-serif';
     uctx.textAlign='center';
     uctx.textBaseline='middle';
-    var v=leadCanvasVec(L.n);
-    var labelP=labelXY('scope-'+L.n,SCX+v.dx*(SR*0.78+bs*1.8),SCY+v.dy*(SR*0.78+bs*1.8));
+    var lpPt=scopePtFromDeg(CANONICAL_LEAD_DEG[L.n],SR*0.78+bs*1.8);
+    var labelP=labelXY('scope-'+L.n,lpPt.x,lpPt.y);
     if(dark&&POSITIVE_FLOW_LEADS.indexOf(L.n)>=0){
       uctx.lineJoin='round';
       uctx.strokeStyle='rgba(12,12,16,0.85)';
@@ -2722,26 +3720,26 @@ function drawUnified(){
     if(POSITIVE_FLOW_LEADS.indexOf(L.n)>=0){
       var phQ=beatPhase(S.time);
       var prQ=projL(phQ,L.n);
-      var badgeR=Math.max(6,SR*0.046);
-      var badgeX=SCX+v.dx*(SR*0.58);
-      var badgeY=SCY+v.dy*(SR*0.58);
-      drawPositiveElectrodeBadge(badgeX,badgeY,badgeR,prQ.val,'',green,red,text,border,{showLabel:false});
+      var badgeR=polarityBadgeR(Math.max(6,SR*0.046));
+      var ringFrac=0.58*badgeSpreadMul();
+      var badgePt=scopePtFromDeg(CANONICAL_LEAD_DEG[L.n],SR*ringFrac);
+      drawPositiveElectrodeBadge(badgePt.x,badgePt.y,badgeR,prQ.val,'',pc.cathode,pc.anode,text,border,{showLabel:false});
     }
     if(S.placingLabels){drawLabelGrip(labelP.x,labelP.y);registerLabelHit('scope-'+L.n,labelP.x,labelP.y);}
     uctx.textBaseline='alphabetic';
   });
 
-  /* Einthoven I/II/III rays — scope bracket aligns with triangle edge */
+  /* Einthoven I/II/III rays — fixed hexaxial angles (same as scope labels) */
   if(S.showTri){
     ['I','II','III'].forEach(function(n){
       var foc=n===S.focusLead;
-      var v=leadCanvasVec(n);
+      var pt=scopePtFromDeg(CANONICAL_LEAD_DEG[n],SR*0.92);
       uctx.strokeStyle=foc?'rgba(2,132,199,0.35)':(dark?'rgba(232,184,75,0.16)':'rgba(154,114,9,0.2)');
       uctx.lineWidth=foc?1.4:0.9;
       uctx.setLineDash([3,5]);
       uctx.beginPath();
       uctx.moveTo(SCX,SCY);
-      uctx.lineTo(SCX+v.dx*SR*0.92,SCY+v.dy*SR*0.92);
+      uctx.lineTo(pt.x,pt.y);
       uctx.stroke();
       uctx.setLineDash([]);
     });
@@ -2813,42 +3811,28 @@ function drawUnified(){
 
   /* ── 8. VECTOR ARROW from electrical centre ── */
   if(S.showVector){
-  var va=vecAt(ph);
-  var arrowLen=SR*0.55;
-  var tx=sX(va.vx,arrowLen),ty=sY(va.vy,arrowLen);
-  uctx.strokeStyle='rgba(2,132,199,0.85)';uctx.lineWidth=lineW(S.vectorStroke||2);
-  uctx.beginPath();uctx.moveTo(SCX,SCY);uctx.lineTo(tx,ty);uctx.stroke();
-  if(va.on){
-    var av=Math.atan2(ty-SCY,tx-SCX);
-    var as=SR*0.055*Math.max(0.75,(S.vectorStroke||2)/2);
-    uctx.fillStyle='rgba(2,132,199,0.9)';
-    uctx.beginPath();
-    uctx.moveTo(tx,ty);
-    uctx.lineTo(tx-as*Math.cos(av-0.38),ty-as*Math.sin(av-0.38));
-    uctx.lineTo(tx-as*Math.cos(av+0.38),ty-as*Math.sin(av+0.38));
-    uctx.closePath();uctx.fill();
-  }
+  drawScopeVectorArrow(vecAt(ph),S.vectorStroke||2);
   }
 
   /* ── 9. FOCUSED LEAD AXIS LINE on scope ── */
   if(S.showScope&&S.visibleLeads[S.focusLead]!==false){
   var fl=LEADS.find(function(l){return l.n===S.focusLead;});
   if(fl){
-    var lv=leadCanvasVec(fl.n);
+    var lv=leadElectricalVec(fl.n);
     var len=SR*0.52;
     uctx.save();uctx.setLineDash([5,4]);
     uctx.strokeStyle=dark?'rgba(255,255,255,0.12)':'rgba(0,0,0,0.12)';
     uctx.lineWidth=1;
     uctx.beginPath();
-    uctx.moveTo(SCX+lv.dx*len,SCY+lv.dy*len);
-    uctx.lineTo(SCX-lv.dx*len,SCY-lv.dy*len);
+    uctx.moveTo(SCX+lv.vx*len,SCY+lv.vy*len);
+    uctx.lineTo(SCX-lv.vx*len,SCY-lv.vy*len);
     uctx.stroke();uctx.restore();
-    uctx.fillStyle=green;
+    uctx.fillStyle=pc.cathode;
     uctx.font='700 '+(SR*0.1)+'px Archivo,ui-sans-serif';
     uctx.textAlign='center';uctx.textBaseline='middle';
-    uctx.fillText('+',SCX+lv.dx*(len-SR*0.04),SCY+lv.dy*(len-SR*0.04));
-    uctx.fillStyle=red;
-    uctx.fillText('−',SCX-lv.dx*(len-SR*0.04),SCY-lv.dy*(len-SR*0.04));
+    uctx.fillText('+',SCX+lv.vx*(len-SR*0.04),SCY+lv.vy*(len-SR*0.04));
+    uctx.fillStyle=pc.anode;
+    uctx.fillText('−',SCX-lv.vx*(len-SR*0.04),SCY-lv.vy*(len-SR*0.04));
     uctx.textBaseline='alphabetic';
   }
   }
@@ -2887,8 +3871,7 @@ function drawLeadStrips(){
   var border=cssVar('--border')||'#2a2a38';
   var muted=cssVar('--muted')||'#8b8b9a';
   var text=cssVar('--text')||'#f4f4f6';
-  var green=cssVar('--green')||'#3ecf8e';
-  var red=cssVar('--red')||'#ef5350';
+  var pc=polarityColors();
   var blue='#0284c7';
 
   lctx.clearRect(0,0,LW,LH);
@@ -2898,10 +3881,9 @@ function drawLeadStrips(){
   var rows=Math.max(1,visible.length);
   var rowH=LH/rows;
   var plotW=LW-LPAD_S-4;
-  var N=stripN();
   var phase=beatPhase(S.time);
   var tInWindow=tInStripWindow();
-  var vm=stripViewMetrics(N,tInWindow);
+  var vm=stripViewMetrics(tInWindow);
   var playX=stripPlayX(LPAD_S,plotW,tInWindow);
 
   for(var gb=Math.floor(vm.winStart);gb<=Math.ceil(vm.winStart+vm.dispBeats);gb++){
@@ -2931,30 +3913,14 @@ function drawLeadStrips(){
     lctx.textBaseline='middle';
     lctx.fillText(L.n,LPAD_S-5,base);
 
-    drawStripPolarityGuide(lctx,7,base,amp,rowH,green,red);
+    drawStripPolarityGuide(lctx,7,base,amp,rowH,pc.cathode,pc.anode);
 
     lctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)';
     lctx.lineWidth=0.7;
     lctx.beginPath();lctx.moveTo(LPAD_S,base);lctx.lineTo(LW-2,base);lctx.stroke();
 
     lctx.lineWidth=foc?1.6:1.1;
-    var prevCol=null;
-    for(var x=0;x<=plotW;x+=1){
-      var gph=stripBeatPhaseAtX(x,plotW,tInWindow);
-      var pr=projL(gph,L.n);
-      var yy=base-pr.val*amp;
-      var col=pr.w==='t'?red:(pr.val>=0?green:red);
-      if(x===0||col!==prevCol){
-        if(x>0)lctx.stroke();
-        lctx.beginPath();
-        lctx.strokeStyle=col;
-        lctx.moveTo(LPAD_S+x,yy);
-      }else{
-        lctx.lineTo(LPAD_S+x,yy);
-      }
-      prevCol=col;
-    }
-    lctx.stroke();
+    drawPolarityLeadTrace(lctx,LPAD_S,plotW,base,amp,L.n,tInWindow,pc,foc?1.6:1.1);
 
     lctx.strokeStyle='rgba(2,132,199,.22)';
     lctx.lineWidth=0.8;
@@ -2962,11 +3928,12 @@ function drawLeadStrips(){
     lctx.beginPath();lctx.moveTo(playX,y0+2);lctx.lineTo(playX,y0+rowH-2);lctx.stroke();
     lctx.setLineDash([]);
 
-    var lph=phase,lpr=projL(lph,L.n);
+    var lpr=stripLeadProj(S.time,L.n);
     var liveY=base-lpr.val*amp;
     lctx.fillStyle=blue;
     lctx.beginPath();lctx.arc(playX,liveY,foc?3.2:2.4,0,Math.PI*2);lctx.fill();
-    drawPolarityBadgeCtx(lctx,playX+Math.min(9,plotW*0.04),liveY,Math.max(3.5,rowH*0.11),lpr.val,green,red);
+    var pba=playheadBadgeAnchor(playX,liveY,base,rowH,plotW);
+    drawPolarityBadgeCtx(lctx,pba.x,pba.y,pba.r,lpr.val,pc.cathode,pc.anode);
     if(foc){
       lctx.strokeStyle='rgba(180,210,255,.85)';lctx.lineWidth=1;
       lctx.beginPath();lctx.arc(playX,liveY,5,0,Math.PI*2);lctx.stroke();
@@ -2980,31 +3947,60 @@ function drawLeadStrips(){
 
 if(LC)LC.style.cursor='crosshair';
 
-/* ── ECG click / drag scrub (hero leads + right strip) ─────────────── */
-var _scrub={active:false,moved:false,canvas:null,cfg:null,x0:0};
+/* ── ECG playhead scrub (hero leads + dock strip) — playhead drag only ─ */
+var _scrub={active:false,moved:false,onPlayhead:false,canvas:null,cfg:null,x0:0,beat0:0};
+var _stripTap={pending:false,canvas:null,cfg:null,x0:0,y0:0};
+var _stripPan={active:false,moved:false,canvas:null,cfg:null,x0:0,win0:0};
+var PLAYHEAD_HIT=22;
 
 function bindScrubWindow(){
   if(bindScrubWindow.done)return;
   bindScrubWindow.done=true;
   window.addEventListener('mousemove',function(e){
-    if(!_scrub.active||!_scrub.cfg||!_scrub.canvas)return;
+    if(_stripPan.active&&_stripPan.cfg&&_stripPan.canvas){
+      var x=canvasLocalX(e,_stripPan.canvas,_stripPan.cfg.getW());
+      if(Math.abs(x-_stripPan.x0)>2)_stripPan.moved=true;
+      panStripWindowByPixels(x-_stripPan.x0,_stripPan.cfg.getPlotW(),_stripPan.win0);
+      return;
+    }
+    if(!_scrub.active||!_scrub.onPlayhead||!_scrub.cfg||!_scrub.canvas)return;
     var x=canvasLocalX(e,_scrub.canvas,_scrub.cfg.getW());
-    if(Math.abs(x-_scrub.x0)>3)_scrub.moved=true;
-    scrubCanvasX(x,_scrub.cfg.lpad,_scrub.cfg.getPlotW());
+    if(Math.abs(x-_scrub.x0)>2)_scrub.moved=true;
+    scrubPlayheadByDelta(x-_scrub.x0,_scrub.cfg.getPlotW());
   });
   window.addEventListener('mouseup',function(e){
-    if(!_scrub.active)return;
-    if(!_scrub.moved&&_scrub.cfg&&_scrub.cfg.onTapNoMove)_scrub.cfg.onTapNoMove(e);
-    if(_scrub.canvas)_scrub.canvas.classList.remove('playhead-hot');
-    _scrub.active=false;_scrub.onPlayhead=false;_scrub.canvas=null;_scrub.cfg=null;
+    if(_stripPan.active){
+      if(!_stripPan.moved&&_stripPan.cfg)_stripPan.cfg.onMiddleClick&&_stripPan.cfg.onMiddleClick();
+      if(_stripPan.canvas){
+        _stripPan.canvas.classList.remove('strip-pan-hot','strip-pan-drag');
+      }
+      _stripPan.active=false;_stripPan.moved=false;_stripPan.canvas=null;_stripPan.cfg=null;
+    }
+    if(_stripTap.pending&&_stripTap.canvas){
+      var dx=e.clientX-_stripTap.x0,dy=e.clientY-_stripTap.y0;
+      if(dx*dx+dy*dy<36&&_stripTap.cfg&&_stripTap.cfg.onTapNoMove)_stripTap.cfg.onTapNoMove(e);
+      _stripTap.pending=false;_stripTap.canvas=null;_stripTap.cfg=null;
+    }
+    if(_scrub.active){
+      if(_scrub.onPlayhead)resetTrail();
+      if(_scrub.canvas)_scrub.canvas.classList.remove('playhead-hot');
+      _scrub.active=false;_scrub.onPlayhead=false;_scrub.canvas=null;_scrub.cfg=null;
+    }
   });
   window.addEventListener('touchmove',function(e){
-    if(!_scrub.active||!_scrub.cfg||!_scrub.canvas||!e.touches||!e.touches[0])return;
+    if(!_scrub.active||!_scrub.onPlayhead||!_scrub.cfg||!_scrub.canvas||!e.touches||!e.touches[0])return;
     var x=canvasLocalX(e.touches[0],_scrub.canvas,_scrub.cfg.getW());
-    if(Math.abs(x-_scrub.x0)>3)_scrub.moved=true;
-    scrubCanvasX(x,_scrub.cfg.lpad,_scrub.cfg.getPlotW());
+    if(Math.abs(x-_scrub.x0)>2)_scrub.moved=true;
+    scrubPlayheadByDelta(x-_scrub.x0,_scrub.cfg.getPlotW());
   },{passive:true});
-  window.addEventListener('touchend',function(){
+  window.addEventListener('touchend',function(e){
+    if(_stripTap.pending&&_stripTap.canvas&&e.changedTouches&&e.changedTouches[0]){
+      var t=e.changedTouches[0];
+      var dx=t.clientX-_stripTap.x0,dy=t.clientY-_stripTap.y0;
+      if(dx*dx+dy*dy<64&&_stripTap.cfg&&_stripTap.cfg.onTapNoMove)_stripTap.cfg.onTapNoMove(t);
+      _stripTap.pending=false;_stripTap.canvas=null;_stripTap.cfg=null;
+    }
+    if(_scrub.active&&_scrub.onPlayhead)resetTrail();
     if(_scrub.canvas)_scrub.canvas.classList.remove('playhead-hot');
     _scrub.active=false;_scrub.onPlayhead=false;_scrub.canvas=null;_scrub.cfg=null;
   });
@@ -3013,29 +4009,82 @@ function bindScrubWindow(){
 function initEcgScrub(canvas,cfg){
   if(!canvas||!cfg)return;
   bindScrubWindow();
-  function startScrub(clientX){
+  cfg.onMiddleClick=cfg.onMiddleClick||centerStripWindowOnPlayhead;
+  function seekFromX(clientX){
     var x=canvasLocalX({clientX:clientX},canvas,cfg.getW());
-    _scrub.active=true;_scrub.moved=false;_scrub.onPlayhead=false;
-    _scrub.canvas=canvas;_scrub.cfg=cfg;_scrub.x0=x;
-    if(nearPlayhead(x,cfg.lpad,cfg.getPlotW(),14)){
-      _scrub.onPlayhead=true;
-      canvas.classList.add('playhead-hot');
-    }
     scrubCanvasX(x,cfg.lpad,cfg.getPlotW());
+    pauseForScrub();
+    resetTrail();
+  }
+  function startPlayheadDrag(clientX){
+    var x=canvasLocalX({clientX:clientX},canvas,cfg.getW());
+    _scrub.active=true;
+    _scrub.moved=false;
+    _scrub.onPlayhead=true;
+    _scrub.canvas=canvas;
+    _scrub.cfg=cfg;
+    _scrub.x0=x;
+    _scrub.beat0=S.time;
+    canvas.classList.add('playhead-hot');
+    setTimeFromPlotFraction((x-cfg.lpad)/cfg.getPlotW(),{resetTrail:false});
+    pauseForScrub();
+  }
+  function startStripPan(clientX){
+    var x=canvasLocalX({clientX:clientX},canvas,cfg.getW());
+    _stripPan.active=true;
+    _stripPan.moved=false;
+    _stripPan.canvas=canvas;
+    _stripPan.cfg=cfg;
+    _stripPan.x0=x;
+    _stripPan.win0=S.stripWinStart!=null?S.stripWinStart:stripViewMetrics(tInStripWindow()).winStart;
+    canvas.classList.add('strip-pan-drag');
     pauseForScrub();
   }
   canvas.addEventListener('mousedown',function(e){
+    if(e.button===1){
+      e.preventDefault();
+      startStripPan(e.clientX);
+      return;
+    }
     if(e.button!==0)return;
-    startScrub(e.clientX);
+    var x=canvasLocalX(e,canvas,cfg.getW());
+    if(nearPlayhead(x,cfg.lpad,cfg.getPlotW(),PLAYHEAD_HIT)){
+      startPlayheadDrag(e.clientX);
+      e.preventDefault();
+    }else{
+      _stripTap.pending=true;
+      _stripTap.canvas=canvas;
+      _stripTap.cfg=cfg;
+      _stripTap.x0=e.clientX;
+      _stripTap.y0=e.clientY;
+      seekFromX(e.clientX);
+    }
   });
+  canvas.addEventListener('auxclick',function(e){
+    if(e.button===1)e.preventDefault();
+  });
+  canvas.addEventListener('contextmenu',function(e){e.preventDefault();});
   canvas.addEventListener('touchstart',function(e){
     if(!e.touches||!e.touches[0])return;
-    startScrub(e.touches[0].clientX);
-  },{passive:true});
+    var t=e.touches[0];
+    var x=canvasLocalX(t,canvas,cfg.getW());
+    if(nearPlayhead(x,cfg.lpad,cfg.getPlotW(),PLAYHEAD_HIT+8)){
+      startPlayheadDrag(t.clientX);
+      e.preventDefault();
+    }else{
+      _stripTap.pending=true;
+      _stripTap.canvas=canvas;
+      _stripTap.cfg=cfg;
+      _stripTap.x0=t.clientX;
+      _stripTap.y0=t.clientY;
+      seekFromX(t.clientX);
+    }
+  },{passive:false});
   canvas.addEventListener('mousemove',function(e){
-    if(_scrub.active)return;
+    if(_scrub.active||_stripPan.active)return;
     var x=canvasLocalX(e,canvas,cfg.getW());
-    canvas.classList.toggle('playhead-hot',nearPlayhead(x,cfg.lpad,cfg.getPlotW(),14));
+    canvas.classList.toggle('playhead-hot',nearPlayhead(x,cfg.lpad,cfg.getPlotW(),PLAYHEAD_HIT));
+    canvas.classList.toggle('strip-pan-hot',e.buttons===4);
   });
 }
 
@@ -3125,9 +4174,7 @@ function drawStrip(){
   var border=cssVar('--border')||'#2a2a38';
   var muted=cssVar('--muted')||'#8b8b9a';
   var text=cssVar('--text')||'#f4f4f6';
-  var green=cssVar('--green')||'#3ecf8e';
-  var red=cssVar('--red')||'#ef5350';
-  var N=stripN();
+  var pc=polarityColors();
 
   wctx.clearRect(0,0,WW,WH);wctx.fillStyle=bg;wctx.fillRect(0,0,WW,WH);
   var visible=visibleLeadsList();
@@ -3135,7 +4182,7 @@ function drawStrip(){
   var avail=WW-LPAD,rowH=(WH-TPAD*2)/visRows;
   var phase=beatPhase(S.time);
   var tInWindow=tInStripWindow();
-  var vm=stripViewMetrics(N,tInWindow);
+  var vm=stripViewMetrics(tInWindow);
   var playX=stripPlayX(LPAD,avail,tInWindow);
 
   wctx.lineWidth=0.7;
@@ -3172,40 +4219,20 @@ function drawStrip(){
     wctx.font=(foc?'700':'500')+' 10px Archivo,ui-sans-serif,system-ui';
     wctx.textAlign='right';wctx.fillText(L.n,LPAD-6,base+4);
 
-    drawStripPolarityGuide(wctx,8,base,amp,rowH,green,red);
+    drawStripPolarityGuide(wctx,8,base,amp,rowH,pc.cathode,pc.anode);
 
     wctx.strokeStyle=foc?border:currentTheme==='dark'?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)';
     wctx.lineWidth=0.8;
     wctx.beginPath();wctx.moveTo(LPAD,base);wctx.lineTo(WW,base);wctx.stroke();
 
     var M=WW-LPAD;
-    for(var i=0;i<M;i+=1.5){
-      var gph=stripBeatPhaseAtX(i,M,tInWindow),pr=projL(gph,L.n);
-      if(Math.abs(pr.val)<0.008)continue;
-      var fy=base-pr.val*amp;
-      var fc=pr.w==='t'?'rgba(239,83,80,0.14)':pr.val>=0?'rgba(62,207,142,0.14)':'rgba(239,83,80,0.14)';
-      wctx.strokeStyle=fc;wctx.lineWidth=2;
-      wctx.beginPath();wctx.moveTo(LPAD+i,base);wctx.lineTo(LPAD+i,fy);wctx.stroke();
-    }
+    drawPolarityLeadTrace(wctx,LPAD,M,base,amp,L.n,tInWindow,pc,foc?2:1.2);
 
-    wctx.lineWidth=foc?2:1.2;
-    var prevCol=null;
-    for(var i2=0;i2<M;i2++){
-      var gph2=stripBeatPhaseAtX(i2,M,tInWindow),pr2=projL(gph2,L.n);
-      var yy=base-pr2.val*amp;
-      var col=pr2.w==='t'?red:(pr2.val>=0?green:red);
-      if(i2===0||col!==prevCol){
-        if(i2>0)wctx.stroke();
-        wctx.beginPath();wctx.strokeStyle=col;wctx.moveTo(LPAD+i2,yy);
-      }else{wctx.lineTo(LPAD+i2,yy);}
-      prevCol=col;
-    }
-    wctx.stroke();
-
-    var lph=phase,lpr=projL(lph,L.n),liveY=base-lpr.val*amp;
+    var lpr=stripLeadProj(S.time,L.n),liveY=base-lpr.val*amp;
     wctx.fillStyle='#0284c7';
     wctx.beginPath();wctx.arc(playX,liveY,foc?4:2.5,0,Math.PI*2);wctx.fill();
-    drawPolarityBadgeCtx(wctx,playX+Math.min(10,M*0.04),liveY,Math.max(4,rowH*0.12),lpr.val,green,red);
+    var pba2=playheadBadgeAnchor(playX,liveY,base,rowH,M);
+    drawPolarityBadgeCtx(wctx,pba2.x,pba2.y,Math.max(4,pba2.r),lpr.val,pc.cathode,pc.anode);
   });
 
   wctx.strokeStyle=currentTheme==='dark'?'rgba(232,184,75,0.6)':'rgba(154,114,9,0.6)';
@@ -3216,7 +4243,9 @@ function drawStrip(){
 /* ── Main loop ────────────────────────────────────────────────────── */
 function frame(){
   if(!S.paused)S.time+=S.speed*(S.playbackRate!=null?S.playbackRate:1);
-  if(S.time>1e6)S.time-=Math.floor(S.time);
+  var total=stripTotalBeats();
+  if(S.time>=total)S.time-=total;
+  autoScrollStripWindow();
   syncPhaseLabel(beatPhase(S.time));
   updateTimeHud();
   drawUnified();
@@ -3256,7 +4285,7 @@ function updateUI(){
       var g=Math.round(leadGain(L.n)*100);
       var d=document.createElement('div');d.className='lead-row';
       d.innerHTML='<span class="lead-row-name">'+L.n+'</span>'
-        +'<span class="lead-row-pol" style="color:'+(up?'var(--green)':'var(--red)')+'">'+
+        +'<span class="lead-row-pol" style="color:'+(up?'var(--red)':'var(--green)')+'">'+
         (up?'↑ Up':'↓ Inv')+' · '+g+'%</span>';
       rowsEl.appendChild(d);
     });
@@ -3287,10 +4316,22 @@ function syncSizeControls(){
   var hv=document.getElementById('heartSizeV');
   var ss=document.getElementById('scopeSizeR');
   var sv=document.getElementById('scopeSizeV');
+  var bs=document.getElementById('badgeSizeR');
+  var bv=document.getElementById('badgeSizeV');
+  var br=document.getElementById('badgeSpreadR');
+  var bsv=document.getElementById('badgeSpreadV');
+  var bps=document.getElementById('bodyPlateScaleR');
+  var bpv=document.getElementById('bodyPlateScaleV');
   if(hs)hs.value=Math.round((S.heartScale||1)*100);
   if(hv)hv.textContent=Math.round((S.heartScale||1)*100)+'%';
   if(ss)ss.value=Math.round((S.scopeScale||1)*100);
   if(sv)sv.textContent=Math.round((S.scopeScale||1)*100)+'%';
+  if(bs)bs.value=Math.round((S.badgeScale||1)*100);
+  if(bv)bv.textContent=Math.round((S.badgeScale||1)*100)+'%';
+  if(br)br.value=Math.round((S.badgeSpread||1)*100);
+  if(bsv)bsv.textContent=Math.round((S.badgeSpread||1)*100)+'%';
+  if(bps)bps.value=Math.round((S.bodyPlateScale||1)*100);
+  if(bpv)bpv.textContent=Math.round((S.bodyPlateScale||1)*100)+'%';
 }
 
 function initHeartSizeControl(){
@@ -3305,6 +4346,25 @@ function initHeartSizeControl(){
   });
 }
 
+function initBodyPlateControls(){
+  var scaleEl=document.getElementById('bodyPlateScaleR');
+  var matchBtn=document.getElementById('matchPlateBgBtn');
+  syncSizeControls();
+  if(scaleEl){
+    scaleEl.addEventListener('input',function(){
+      S.bodyPlateScale=Math.max(0.5,Math.min(2,(parseInt(scaleEl.value,10)||100)/100));
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
+  if(matchBtn){
+    matchBtn.addEventListener('click',function(){
+      applyPlateBackgroundMatch();
+    });
+  }
+  if(hasBodyPlate())updatePlateBgReadout(samplePlateBackground(BODY_PLATE_IMG));
+}
+
 function initScopeSizeControl(){
   var el=document.getElementById('scopeSizeR');
   if(!el)return;
@@ -3316,6 +4376,26 @@ function initScopeSizeControl(){
     resetTrail();
     saveLabLayout();
   });
+}
+
+function initBadgeSizeControls(){
+  var sizeEl=document.getElementById('badgeSizeR');
+  var spreadEl=document.getElementById('badgeSpreadR');
+  syncSizeControls();
+  if(sizeEl){
+    sizeEl.addEventListener('input',function(){
+      S.badgeScale=Math.max(0.5,Math.min(2,(parseInt(sizeEl.value,10)||100)/100));
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
+  if(spreadEl){
+    spreadEl.addEventListener('input',function(){
+      S.badgeSpread=Math.max(0.5,Math.min(2,(parseInt(spreadEl.value,10)||100)/100));
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
 }
 
 var AXIS_PRESETS=[60,-45,120,-135];
@@ -3399,23 +4479,72 @@ if(hrR)hrR.addEventListener('input',function(){updateUI();updateTimeHud();});
 document.querySelectorAll('[data-deg]').forEach(function(b){
   b.addEventListener('click',function(){setAxisDeg(parseInt(b.dataset.deg,10));});
 });
-if(playB)playB.addEventListener('click',function(){
-  S.paused=false;playB.classList.add('on');if(pauseB)pauseB.classList.remove('on');
-});
-if(pauseB)pauseB.addEventListener('click',function(){
-  S.paused=true;pauseB.classList.add('on');if(playB)playB.classList.remove('on');
-});
+if(playB)playB.addEventListener('click',function(){setPlaybackPaused(false);});
+if(pauseB)pauseB.addEventListener('click',function(){setPlaybackPaused(true);});
 var tTBtn=document.getElementById('tT');
 if(tTBtn)tTBtn.addEventListener('click',function(){
-  S.showT=!S.showT;this.classList.toggle('on',S.showT);resetTrail();resetPhaseDisplay();
+  S.showT=!S.showT;this.classList.toggle('on',S.showT);resetTrail();resetPhaseDisplay();saveLabLayout();
 });
+var realEcgBtn=document.getElementById('realEcgBtn');
+function syncRealEcgBtn(){
+  if(!realEcgBtn)return;
+  realEcgBtn.classList.toggle('on',S.useRealEcg&&REAL_ECG_READY);
+  realEcgBtn.disabled=!REAL_ECG_READY;
+  realEcgBtn.title=REAL_ECG_READY
+    ?(S.useRealEcg?'PTB-XL clinical strip on (PhysioNet CC BY 4.0)':'Synthetic vector strip')
+    :'Loading PTB-XL…';
+  var leg=document.getElementById('realEcgLegend');
+  if(leg)leg.style.display=S.useRealEcg&&REAL_ECG_READY?'':'none';
+}
+if(realEcgBtn)realEcgBtn.addEventListener('click',function(){
+  if(!REAL_ECG_READY)return;
+  S.useRealEcg=!S.useRealEcg;
+  if(S.useRealEcg)applyRealEcgHr(REAL_ECG);
+  syncRealEcgBtn();
+  updateStripZoomHint();
+  updateRealEcgHint();
+  updateUI();
+  saveLabLayout();
+});
+
+function syncLayerPillsFromState(){
+  var map={heart:S.showHeart,ribs:S.showRibs,limbRing:S.showLimbRing,vFan:S.showVFan,scope:S.showScope,tri:S.showTri,vector:S.showVector,comet:S.showComet};
+  document.querySelectorAll('.layer-pill').forEach(function(btn){
+    var layer=btn.dataset.layer;
+    if(map[layer]!=null)btn.classList.toggle('on',!!map[layer]);
+  });
+}
+
+function syncBodyModeUI(){
+  document.querySelectorAll('.body-mode-btn').forEach(function(btn){
+    btn.classList.toggle('on',btn.dataset.bodyMode===(S.bodyMode==='real'?'real':'svg'));
+  });
+  var lookCycle=document.getElementById('bodyLookCycle');
+  if(lookCycle)lookCycle.hidden=!isRealBodyMode();
+}
+
+function initBodyModeToggle(){
+  syncBodyModeUI();
+  document.querySelectorAll('.body-mode-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var mode=btn.dataset.bodyMode==='real'?'real':'svg';
+      if(S.bodyMode===mode)return;
+      S.bodyMode=mode;
+      syncBodyModeUI();
+      saveLabLayout();
+    });
+  });
+}
 
 function initLayerPills(){
   var map={
     heart:function(on){S.showHeart=on;},
-    scope:function(on){S.showScope=on;},
-    tri:function(on){S.showTri=on;},
-    vector:function(on){S.showVector=on;},
+    ribs:function(on){S.showRibs=on;},
+    limbRing:function(on){S.showLimbRing=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
+    vFan:function(on){S.showVFan=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
+    scope:function(on){S.showScope=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
+    tri:function(on){S.showTri=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
+    vector:function(on){S.showVector=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     comet:function(on){S.showComet=on;if(!on)resetTrail();}
   };
   document.querySelectorAll('.layer-pill').forEach(function(btn){
@@ -3424,8 +4553,10 @@ function initLayerPills(){
       var on=!btn.classList.contains('on');
       btn.classList.toggle('on',on);
       if(map[layer])map[layer](on);
+      saveLabLayout();
     });
   });
+  syncLayerPillsFromState();
 }
 
 function syncLeadPillsUI(){
@@ -3489,8 +4620,59 @@ var panelLeft=document.getElementById('dockPanelLeft');
 var panelStrip=document.getElementById('dockPanelStrip');
 var btnControls=document.getElementById('dockBtnControls');
 var btnGuide=document.getElementById('dockBtnGuide');
+var btnRefs=document.getElementById('dockBtnRefs');
 var btnStrip=document.getElementById('dockBtnStrip');
 var activeLeftTab='controls';
+
+var ECG_REF_PLATES=[
+  {num:'01',file:'01-hexaxial-degrees-on-heart.png',title:'Hexaxial degrees (frontal)',desc:'Gold scope ring targets — I 0°, II 60°, III 120°, aVF 90°, aVL −30°, aVR −150°.'},
+  {num:'02',file:'02-torso-limb-ring-precordial-fan.png',title:'Torso — limb ring + V fan',desc:'3D mode — blue circle = frontal limb ring; red curve = horizontal V1–V6 fan. Orbit drag to see electrode depth.'},
+  {num:'03',file:'03-3d-frontal-horizontal-planes-v-leads.png',title:'3D — frontal + horizontal',desc:'Future 3D mode — red frontal limb leads; blue horizontal V leads when the boy rotates.'},
+  {num:'04',file:'04-cardiocard-12lead-placement-ref.png',title:'CardioCard 12-lead placement',desc:'Magnific camera/pose + default electrode anchors — not a runtime overlay. See Refs tab only.'},
+  {num:'05',file:'05-rib-cage-anterior-ref.png',title:'Rib cage (anterior)',desc:'⌗ Ribs overlay layer — heart sits inside thoracic cavity.',optional:true}
+];
+
+function initRefGallery(){
+  var host=document.getElementById('refGallery');
+  if(!host||initRefGallery.done)return;
+  initRefGallery.done=true;
+  var base='assets/ecg-vector-lab/references/';
+  ECG_REF_PLATES.forEach(function(ref){
+    var card=document.createElement('article');
+    card.className='ref-card';
+    var src=base+ref.file;
+    card.innerHTML=
+      '<div class="ref-card-head">'+
+        '<span class="ref-card-num">Ref '+ref.num+'</span>'+
+        '<span class="ref-card-title">'+ref.title+'</span>'+
+      '</div>'+
+      '<p class="ref-card-desc">'+ref.desc+'</p>'+
+      '<img src="'+src+'" alt="'+ref.title+'" loading="lazy" decoding="async"/>'+
+      '<div class="ref-card-foot"><a href="'+src+'" target="_blank" rel="noopener">'+ref.file+'</a></div>';
+    var img=card.querySelector('img');
+    img.addEventListener('error',function(){
+      img.classList.add('missing');
+      img.alt=(ref.optional?'Optional — ':'')+'Missing: '+ref.file;
+      img.removeAttribute('src');
+    });
+    img.addEventListener('click',function(){
+      if(img.classList.contains('missing'))return;
+      window.open(src,'_blank','noopener');
+    });
+    host.appendChild(card);
+  });
+}
+
+function parseDockDeepLink(){
+  var hash=(location.hash||'').replace(/^#/,'').toLowerCase();
+  if(hash==='references'||hash==='refs')return 'references';
+  try{
+    var q=new URLSearchParams(location.search).get('dock');
+    if(q&&(q==='references'||q==='refs'))return 'references';
+    if(q==='guide'||q==='controls')return q;
+  }catch(e){}
+  return null;
+}
 
 function showLeftTab(tab){
   activeLeftTab=tab;
@@ -3509,6 +4691,7 @@ function syncDockUi(){
   backdrop.setAttribute('aria-hidden',leftOpen||stripOpen?'false':'true');
   btnControls.classList.toggle('on',leftOpen&&activeLeftTab==='controls');
   btnGuide.classList.toggle('on',leftOpen&&activeLeftTab==='guide');
+  if(btnRefs)btnRefs.classList.toggle('on',leftOpen&&activeLeftTab==='references');
   btnStrip.classList.toggle('on',stripOpen);
 }
 
@@ -3546,6 +4729,10 @@ function initDockPanels(){
   btnGuide.addEventListener('click',function(){
     if(panelLeft.classList.contains('open')&&activeLeftTab==='guide')closeDocks();
     else openLeft('guide');
+  });
+  if(btnRefs)btnRefs.addEventListener('click',function(){
+    if(panelLeft.classList.contains('open')&&activeLeftTab==='references')closeDocks();
+    else openLeft('references');
   });
   btnStrip.addEventListener('click',function(){
     if(panelStrip.classList.contains('open'))closeDocks();
@@ -3606,19 +4793,26 @@ function setPlacementMode(mode){
   var btnS=document.getElementById('placeScopeBtn');
   var btnH=document.getElementById('placeHeartBtn');
   var btnT=document.getElementById('placeLabelsBtn');
-  var banner=document.getElementById('placeModeBanner');
+  var hudHint=document.getElementById('hudPlaceHint');
+  var dockHint=document.getElementById('placeModeHint');
   var wrap=document.getElementById('bodyScopeWrap');
+  var placeMsg=null;
+  if(mode==='leads')placeMsg='Scroll zoom chest · drag V1–V6 · dbl-click reset view';
+  else if(mode==='scope')placeMsg='Drag gold HC — scope ring + vector · Ctrl+scroll scope size';
+  else if(mode==='heart')placeMsg='Drag ♥ anchor on chest';
+  else if(mode==='labels')placeMsg='Nudge labels (max ~28px)';
+  if(hudHint){
+    hudHint.hidden=!placeMsg;
+    hudHint.textContent=placeMsg||'';
+  }
+  if(dockHint){
+    dockHint.hidden=!placeMsg;
+    dockHint.textContent=placeMsg||'';
+  }
   if(btnL)btnL.classList.toggle('on',S.placingLeads);
   if(btnS)btnS.classList.toggle('on',S.placingScope);
   if(btnH)btnH.classList.toggle('on',S.placingHeart);
   if(btnT)btnT.classList.toggle('on',S.placingLabels);
-  if(banner){
-    banner.hidden=!mode;
-    if(mode==='leads')banner.textContent='Drag RA · LA · LL · RL — triangle + strips update live';
-    else if(mode==='scope')banner.textContent='Drag gold HC — vectorscope ring + vector arrow (heart stays put)';
-    else if(mode==='heart')banner.textContent='Drag ♥ anchor — move gray heart on chest (scope stays put)';
-    else if(mode==='labels')banner.textContent='Nudge labels slightly — they stay anchored to their line (max ~28px)';
-  }
   if(wrap){
     wrap.classList.toggle('placing-leads',S.placingLeads);
     wrap.classList.toggle('placing-scope',S.placingScope);
@@ -3626,6 +4820,7 @@ function setPlacementMode(mode){
     wrap.classList.toggle('placing-labels',S.placingLabels);
     wrap.classList.toggle('drag-label',!!S.dragLabel);
   }
+  syncBodyViewHud();
   if(S.placingLeads){
     S.showTri=true;
     document.querySelectorAll('.layer-pill[data-layer="tri"]').forEach(function(p){p.classList.add('on');});
@@ -3689,10 +4884,16 @@ function initLeadPlacement(){
   if(reset){
     reset.addEventListener('click',function(){
       EL_BODY=JSON.parse(JSON.stringify(EL_BODY_DEFAULT));
+      PRE_BODY=JSON.parse(JSON.stringify(PRE_BODY_DEFAULT));
       HC_BODY=JSON.parse(JSON.stringify(HC_BODY_DEFAULT));
       HEART_BODY=JSON.parse(JSON.stringify(HEART_BODY_DEFAULT));
       S.heartScale=1;
       S.scopeScale=1;
+      S.badgeScale=1;
+      S.badgeSpread=1;
+      S.bodyPlateScale=1;
+      S.bodyPlateId=BODY_PLATE_DEFAULT_ID;
+      setBodyPlateId(BODY_PLATE_DEFAULT_ID,{skipSave:true,force:true});
       S.stripBeats=8;
       S.stripHeight=280;
       S.leadStripW=108;
@@ -3732,6 +4933,7 @@ function initLeadPlacement(){
     });
   }
   function onDown(e){
+    if(e.button!==0)return;
     var pt=canvasPoint(e.clientX,e.clientY);
     if(S.placingLabels){
       var lid=hitLabelTag(pt.x,pt.y);
@@ -3818,6 +5020,90 @@ function bindBeatsSlider(el){
   });
 }
 
+function applyBodyViewTransform(){
+  var el=document.getElementById('bodyViewInner');
+  if(!el)return;
+  var z=S.bodyViewZoom||1;
+  el.style.transform='translate('+(S.bodyViewPanX||0)+'px,'+(S.bodyViewPanY||0)+'px) scale('+z+')';
+}
+
+function syncBodyViewHud(){
+  var chip=document.getElementById('hudBodyView');
+  var z=S.bodyViewZoom||1;
+  if(chip){
+    chip.hidden=z<=1.001&&!(S.bodyViewPanX||S.bodyViewPanY);
+    chip.textContent=Math.round(z*100)+'%';
+  }
+  var wrap=document.getElementById('bodyScopeWrap');
+  if(wrap)wrap.classList.toggle('view-pan-hot',z>1.001||!!S.placingLeads);
+}
+
+function resetBodyView(){
+  S.bodyViewZoom=1;
+  S.bodyViewPanX=0;
+  S.bodyViewPanY=0;
+  applyBodyViewTransform();
+  syncBodyViewHud();
+  saveLabLayout();
+}
+
+function zoomBodyViewFromWheel(e){
+  var wrap=document.getElementById('bodyScopeWrap');
+  if(!wrap)return;
+  var rect=wrap.getBoundingClientRect();
+  var mx=e.clientX-rect.left;
+  var my=e.clientY-rect.top;
+  var oldZ=S.bodyViewZoom||1;
+  var factor=e.deltaY>0?0.9:1.1;
+  var newZ=Math.max(BODY_VIEW_ZOOM_MIN,Math.min(BODY_VIEW_ZOOM_MAX,oldZ*factor));
+  if(Math.abs(newZ-oldZ)<0.001)return;
+  var px=S.bodyViewPanX||0;
+  var py=S.bodyViewPanY||0;
+  S.bodyViewPanX=mx-(mx-px)*(newZ/oldZ);
+  S.bodyViewPanY=my-(my-py)*(newZ/oldZ);
+  S.bodyViewZoom=newZ;
+  applyBodyViewTransform();
+  syncBodyViewHud();
+  saveLabLayout();
+}
+
+function initBodyViewPan(){
+  var wrap=document.getElementById('bodyScopeWrap');
+  if(!wrap)return;
+  var pan={active:false,x0:0,y0:0,px0:0,py0:0};
+  wrap.addEventListener('mousedown',function(e){
+    if(e.button!==1)return;
+    pan.active=true;
+    pan.x0=e.clientX;
+    pan.y0=e.clientY;
+    pan.px0=S.bodyViewPanX||0;
+    pan.py0=S.bodyViewPanY||0;
+    wrap.classList.add('view-pan-drag');
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove',function(e){
+    if(!pan.active)return;
+    S.bodyViewPanX=pan.px0+(e.clientX-pan.x0);
+    S.bodyViewPanY=pan.py0+(e.clientY-pan.y0);
+    applyBodyViewTransform();
+    syncBodyViewHud();
+    e.preventDefault();
+  });
+  window.addEventListener('mouseup',function(){
+    if(!pan.active)return;
+    pan.active=false;
+    wrap.classList.remove('view-pan-drag');
+    saveLabLayout();
+  });
+  wrap.addEventListener('dblclick',function(e){
+    if(e.target.closest('#leadStripsWrap'))return;
+    resetBodyView();
+  });
+  wrap.addEventListener('auxclick',function(e){
+    if(e.button===1)e.preventDefault();
+  });
+}
+
 function zoomScopeFromWheel(e){
   var dir=e.deltaY>0?-1:1;
   var z=scopeZoomFromScale(S.scopeScale||1);
@@ -3849,18 +5135,25 @@ function initCtrlScrollZoom(){
       e.stopPropagation();
       var dir=e.deltaY>0?-1:1;
       S.stripZoom=clampStripZoom((S.stripZoom!=null?S.stripZoom:STRIP_ZOOM_DEFAULT)+dir*STRIP_ZOOM_STEP);
+      ensureStripWinStart(tInStripWindow());
       updateStripZoomHint();
       saveStripPrefs();
       return;
     }
-    /* Body / vectorscope canvas: scroll resizes gold scope ring (no modifier) */
+    /* Body canvas: scroll = chest zoom · Ctrl+scroll = gold scope ring */
     if(!target.overScope)return;
     e.preventDefault();
     e.stopPropagation();
-    zoomScopeFromWheel(e);
+    if(e.ctrlKey||e.metaKey){
+      zoomScopeFromWheel(e);
+    }else{
+      zoomBodyViewFromWheel(e);
+    }
   }
   document.addEventListener('wheel',onWheel,{passive:false,capture:true});
+  var scene3d=document.getElementById('scene3d');
   if(unified)unified.addEventListener('wheel',onWheel,{passive:false});
+  if(scene3d)scene3d.addEventListener('wheel',onWheel,{passive:false});
   if(scopeWrap&&scopeWrap!==unified)scopeWrap.addEventListener('wheel',onWheel,{passive:false});
   updateStripZoomHint();
 }
@@ -3962,19 +5255,76 @@ if(typeof ResizeObserver!=='undefined'){
   }).observe(document.querySelector('.body-scope-wrap'));
 }
 
+function setBottomStripCollapsed(collapsed,opts){
+  opts=opts||{};
+  S.bottomStripCollapsed=!!collapsed;
+  var stage=document.querySelector('.ecg-stage');
+  var strip=document.getElementById('stageBottomStrip');
+  var toggle=document.getElementById('bottomStripToggle');
+  var btn=document.getElementById('bottomStripBtn');
+  if(stage)stage.classList.toggle('ecg-stage--bottom-collapsed',S.bottomStripCollapsed);
+  if(strip)strip.classList.toggle('collapsed',S.bottomStripCollapsed);
+  if(toggle){
+    toggle.setAttribute('aria-expanded',S.bottomStripCollapsed?'false':'true');
+    toggle.title=S.bottomStripCollapsed?'Expand layers, leads, and HUD':'Collapse layers, leads, and HUD';
+    var lbl=toggle.querySelector('.stage-bottom-toggle-label');
+    if(lbl)lbl.textContent=S.bottomStripCollapsed?'Show bottom controls':'Bottom controls';
+  }
+  if(btn){
+    btn.classList.toggle('on',S.bottomStripCollapsed);
+    btn.setAttribute('aria-expanded',S.bottomStripCollapsed?'false':'true');
+    btn.title=S.bottomStripCollapsed?'Expand bottom controls':'Collapse bottom controls (layers, leads, HUD)';
+  }
+  if(!opts.skipResize&&typeof onViewportResize==='function')onViewportResize();
+  if(!opts.skipSave)saveLabLayout();
+}
+
+function initBottomStripCollapse(){
+  var toggle=document.getElementById('bottomStripToggle');
+  var btn=document.getElementById('bottomStripBtn');
+  function flip(){setBottomStripCollapsed(!S.bottomStripCollapsed);}
+  if(toggle)toggle.addEventListener('click',flip);
+  if(btn)btn.addEventListener('click',flip);
+  setBottomStripCollapsed(!!S.bottomStripCollapsed,{skipSave:true});
+}
+
+function initPlaybackKeyboard(){
+  if(initPlaybackKeyboard.done)return;
+  initPlaybackKeyboard.done=true;
+  window.addEventListener('keydown',function(e){
+    if(e.code!=='Space'&&e.key!==' ')return;
+    if(e.repeat)return;
+    if(isTypingTarget(e.target))return;
+    e.preventDefault();
+    togglePlayback();
+  });
+}
+
 /* ── Boot ─────────────────────────────────────────────────────────── */
 function bootApp(restored){
   sizeUnifiedCanvas();
+  initRefGallery();
   initDockPanels();
+  var dockDeep=parseDockDeepLink();
+  if(dockDeep)openLeft(dockDeep);
   initHeartPackUI();
   initHeartSizeControl();
+  initBodyPlateControls();
+  initBodyLookUI();
   initScopeSizeControl();
+  initBadgeSizeControls();
   initAxisCycle();
   initVectorStrokeControl();
   initPlaybackRateControl();
   initLayerPills();
+  initViewModeToggle();
+  initBodyModeToggle();
+  initBodyPlateImages();
   initLeadPills();
   initLeadPlacement();
+  initBodyViewPan();
+  applyBodyViewTransform();
+  syncBodyViewHud();
   initStripViewControls();
   initCtrlScrollZoom();
   applyCanvasPaletteToDom();
@@ -3984,8 +5334,18 @@ function bootApp(restored){
   sizeLeadStrips();
   initStrip();
   initAllEcgScrub();
+  initBottomStripCollapse();
+  initPlaybackKeyboard();
+  syncPlaybackButtons();
   syncSizeControls();
   syncLeadPillsUI();
+  syncRealEcgBtn();
+  loadRealEcg(function(j){
+    if(S.useRealEcg)applyRealEcgHr(j);
+    syncRealEcgBtn();
+    updateStripZoomHint();
+    updateRealEcgHint();
+  });
   updateUI();
   updateStripZoomHint();
   if(!restored)saveLabLayout();

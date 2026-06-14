@@ -34,8 +34,8 @@ JS sanity: `python tools/validate_ecg_js.py`
 
 | Layer | What | When |
 |-------|------|------|
-| **z0 Body** | Inline `BODY` path (`bp`), fill **20% gray `#333333`** | Always — same shape ♥ on/off |
-| **z1 Heart** | Chest-scaled SVG from red-pack bounds, **fill only** (no vascular strokes) | ♥ Heart layer on |
+| **z0 Body** | **Full Kojo plate PNG** (`kojo-torso-likeness.png`) when present — **replaces** gray SVG fill | Always — fallback = inline `BODY` path `#333333` |
+| **z1 Heart** | Chest-scaled SVG from red-pack bounds, **fill only** | ♥ Heart layer on |
 | **Ischemia tints** | Soft **ellipse** overlays by axis zone | Dark theme only |
 
 **Do not** draw the full Heart 1/2 **gray pack** at torso scale for the body — that paints the entire vascular tree and Steve rejected it.
@@ -43,6 +43,13 @@ JS sanity: `python tools/validate_ecg_js.py`
 Key symbols: `drawBodySilhouette()`, `drawAnatomicalHeart()`, `withBodySilhouetteClip()`, `heartDrawGeometry()` → `activeHeartRed()` at `HEART_H` chest scale.
 
 Heart assets: `assets/hearts/heart-1/`, `heart-2/` · registry `assets/hearts/registry.js` · index `assets/hearts/HEARTS_INDEX.md`.
+
+**Axis reference plates:** `assets/ecg-vector-lab/references/` · index `REFERENCES_INDEX.md` · degrees `hexaxial-axes.json`.  
+**3D boy (future):** `assets/ecg-vector-lab/character/` — rotatable mesh; wrap frontal + horizontal lead planes per ref `03-3d-frontal-horizontal-planes-v-leads.png`.
+
+**Body plate:** `character/kojo-torso-likeness.png` replaces SVG when present — **gray avatar** pass (grayscale + `#333` tint). Fit uses image aspect in `getBodyPlateRect()` so markers line up.
+
+**Marker defaults (CardioCard ref 04):** `CARDIOCARD_NORM` → RA/LA/LL/RL, Wilson scope centre `(RA+LA+LL)/3`, heart at `(0.52, 0.38)`. Bundled JSON updated — click **Reload bundled** or **Reset layout to defaults** if localStorage still has old positions.
 
 ### Lead isolation (Steve request)
 
@@ -97,7 +104,8 @@ Steve export path (agent cannot read Downloads): copy manually into `assets/ecg-
 ## Open / next for Manus
 
 1. **Steve visual sign-off** — hard refresh, compare heart on/off and solo lead **I** / **aVF** on his monitor.
-2. If heart on chest is **too subtle**, draw **outer silhouette path only** (not all `silhouette[]` paths) — still chest-scaled, still no full-body gray pack.
+2. **3D mode** — boy mesh in `assets/ecg-vector-lab/character/`; rotate torso; limb ring (frontal) + V fan (horizontal) per `references/03-3d-frontal-horizontal-planes-v-leads.png`.
+3. If heart on chest is **too subtle**, draw **outer silhouette path only** (not all `silhouette[]` paths) — still chest-scaled, still no full-body gray pack.
 3. Optional: strip zoom slider in Controls panel (called out earlier, not built).
 4. Update `ECG_VECTOR_LAB_SPEC.md` if spec doc still matters (describes old scroll layout).
 5. Heart 1 ↔ Heart 2 pack toggle should update **heart** fill/tint; body stays `#333333` unless picker changed.

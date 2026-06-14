@@ -1,28 +1,100 @@
 {
   "version": 3,
-  "savedAt": "2026-06-13T21:05:19.093Z",
-  "note": "Steve layout — exported from ecg-vector-lab; auto-loaded when browser has no saved session.",
+  "savedAt": "2026-06-14T16:12:14.014Z",
+  "note": "Default boot layout — CardioCard-angle avatar (layout 6). Heart & ribs = SVG toggles. Ref 04 = Magnific pose only.",
   "electrodes": {
-    "RA": { "x": 83.5701283869334, "y": 44.99176418080527 },
-    "LA": { "x": 123.40896733350216, "y": 44.01212060015194 },
-    "LL": { "x": 115.57181868827551, "y": 142.62957438592048 },
-    "RL": { "x": 90.7541813117245, "y": 138.71100006330715 }
+    "RA": { "x": 74.17638383838384, "y": 85.69088139204545 },
+    "LA": { "x": 133.61729292929294, "y": 86.42471977588383 },
+    "LL": { "x": 125.9119898989899, "y": 198 },
+    "RL": { "x": 82.24860606060606, "y": 198 }
   },
-  "scope": { "x": 109.69395720435554, "y": 67.85011439604963 },
-  "heartAnchor": { "x": 109.04086148391998, "y": 63.27844435300076 },
+  "precordial": {
+    "V1": { "x": 98.02613131313132, "y": 106.97219452335858 },
+    "V2": { "x": 110.50138383838384, "y": 104.40376017992423 },
+    "V3": { "x": 111.96906060606061, "y": 114.31057836174242 },
+    "V4": { "x": 118.57360606060607, "y": 120.54820462436868 },
+    "V5": { "x": 125.9119898989899, "y": 120.54820462436868 },
+    "V6": { "x": 129.58118181818182, "y": 126.05199250315655 }
+  },
+  "scope": { "x": 112.3359797979798, "y": 78.3524975536616 },
+  "heartAnchor": { "x": 109.40062626262626, "y": 73.58254805871212 },
   "heartPack": "heart-1",
   "heartScale": 0.8,
-  "scopeScale": 1,
+  "scopeScale": 1.064,
+  "badgeScale": 1,
+  "badgeSpread": 1,
+  "bodyPlateScale": 1,
+  "autoMatchPlateBg": true,
   "axis": 120,
-  "heartRate": 72,
+  "heartRate": 64,
   "vectorStroke": 2,
   "playbackRate": 1,
-  "visibleLeads": { "I": true, "II": true, "III": true, "aVR": true, "aVL": true, "aVF": true },
+  "visibleLeads": {
+    "I": true,
+    "II": true,
+    "III": true,
+    "aVR": true,
+    "aVL": true,
+    "aVF": true
+  },
   "focusLead": "II",
+  "labelOffsets": {},
+  "canvasPalette": {
+    "dark": {
+      "canvasBg": "#17161b",
+      "bodyFill": "#333333",
+      "scopeRing": "#e8b84b",
+      "scopeLead": "#e8b84b",
+      "scopeFocus": "#0284c7",
+      "quadLabel": "#e8b84b",
+      "elLabel": "#f0f0f4",
+      "elLabelDim": "#9ca3af",
+      "elDotLimb": "#0284c7",
+      "elDotRef": "#5c6370",
+      "triStroke": "#ffffff",
+      "triStrokeDim": "#6b7280",
+      "triLabel": "#e8b84b",
+      "heartFill": "#b8b8b8"
+    },
+    "light": {
+      "canvasBg": "#e8eaee",
+      "bodyFill": "#333333",
+      "scopeRing": "#7a5a08",
+      "scopeLead": "#7a5a08",
+      "scopeFocus": "#0369a1",
+      "quadLabel": "#7a5a08",
+      "elLabel": "#151518",
+      "elLabelDim": "#4a4e57",
+      "elDotLimb": "#0369a1",
+      "elDotRef": "#6b7280",
+      "triStroke": "#151518",
+      "triStrokeDim": "#9ca3af",
+      "triLabel": "#7a5a08",
+      "heartFill": "#a8a8a8"
+    }
+  },
+  "bottomStripCollapsed": false,
   "strip": {
     "stripBeats": 8,
     "stripHeight": 280,
     "leadStripW": 362,
     "stripZoom": 100
-  }
+  },
+  "ui": {
+    "showHeart": true,
+    "showRibs": false,
+    "showScope": true,
+    "showTri": true,
+    "showVector": true,
+    "showComet": true,
+    "showLimbRing": true,
+    "showVFan": true,
+    "showT": false,
+    "useRealEcg": true,
+    "theme": "dark",
+    "bodyMode": "real",
+    "viewMode": "2d",
+    "bodyPlateId": "cardiocard-angle"
+  },
+  "bodyPlateId": "cardiocard-angle"
 }
