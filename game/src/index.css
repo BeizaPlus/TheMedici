@@ -4898,6 +4898,40 @@ button {
   height: 28px;
 }
 
+/* Voice note download controls (CaseNotesPanel) */
+.case-recording-item {
+  display: grid;
+  gap: 4px;
+}
+.case-recording-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.case-recording-controls audio {
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+}
+.case-recording-download {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold, #e8b84b);
+  text-decoration: none;
+  padding: 3px 7px;
+  border: 1px solid var(--gold, #e8b84b);
+  border-radius: 4px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.case-recording-download:hover {
+  background: var(--gold, #e8b84b);
+  color: #0c0c10;
+}
+
 .welcome-journal-stats {
   margin: 10px 0 12px;
   padding-top: 10px;

@@ -2911,6 +2911,36 @@
   text-align: center;
 }
 
+/* Voice note download controls */
+.diff-recording-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.diff-recording-controls > audio,
+.diff-recording-controls > .exclusive-audio {
+  flex: 1;
+  min-width: 0;
+}
+.diff-recording-download {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold, #e8b84b);
+  text-decoration: none;
+  padding: 3px 7px;
+  border: 1px solid var(--gold, #e8b84b);
+  border-radius: 4px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.diff-recording-download:hover {
+  background: var(--gold, #e8b84b);
+  color: #0c0c10;
+}
+
 .diff-input-row {
   display: flex;
   gap: 10px;

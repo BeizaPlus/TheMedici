@@ -101,17 +101,35 @@ export default function CaseNotesPanel({
       )}
       {recordings.length > 0 && !threadMode && (
         <ul className="case-recordings-list" aria-label="Saved intuition recordings">
-          {recordings.map((rec) => (
-            <li key={rec.id}>
-              <span className="case-recording-meta">
-                Voice note #{rec.slot || '?'}
-                {rec.attempt ? ` · Run ${rec.attempt}` : ''}
-                {' · '}
-                {Math.round((rec.durationMs || 0) / 1000)}s
-              </span>
-              <audio controls preload="none" src={recordingPublicUrl(rec.file)} />
-            </li>
-          ))}
+          {recordings.map((rec) => {
+            const src = recordingPublicUrl(rec.file);
+            const secs = Math.round((rec.durationMs || 0) / 1000);
+            const filename = `voice-note-case${caseId}-run${rec.attempt || 1}-slot${rec.slot || rec.id || 'x'}-${secs}s.webm`;
+            return (
+              <li key={rec.id} className="case-recording-item">
+                <span className="case-recording-meta">
+                  Voice note #{rec.slot || '?'}
+                  {rec.attempt ? ` · Run ${rec.attempt}` : ''}
+                  {' · '}
+                  {secs}s
+                </span>
+                <div className="case-recording-controls">
+                  <audio controls preload="none" src={src} />
+                  {src && (
+                    <a
+                      className="case-recording-download btn-ghost"
+                      href={src}
+                      download={filename}
+                      title="Download voice note to your device"
+                      aria-label={`Download voice note ${rec.slot || ''}`}
+                    >
+                      ↓ Save
+                    </a>
+                  )}
+                </div>
+              </li>
+            );
+          })}
         </ul>
       )}
       <textarea
