@@ -107,7 +107,7 @@ button{font-family:inherit;cursor:pointer}
 html,body{height:100%;overflow:hidden}
 .ecg-shell{
   height:100dvh;height:100vh;
-  display:flex;flex-direction:column;
+  display:flex;flex-direction:row;
   background:var(--bg);
   overflow:hidden;
 }
@@ -152,6 +152,8 @@ html,body{height:100%;overflow:hidden}
 .stage-header-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .header-transport{display:flex;gap:4px;align-items:center}
 .header-transport .dock-rail-btn{width:34px;height:34px;font-size:.75rem;padding:0}
+.header-layout.seg{margin:0}
+.header-layout.seg button{padding:6px 10px;font-size:.62rem;white-space:nowrap}
 
 .hero-viewport{
   flex:1 1 auto;
@@ -219,6 +221,25 @@ html,body{height:100%;overflow:hidden}
 #leadStrips{width:100%;flex:1 1 auto;display:block;cursor:crosshair;touch-action:none}
 #unified{display:block;width:100%;height:100%;touch-action:none}
 #scene3d{display:none;width:100%;height:100%;touch-action:none}
+.scene3d-plane-labels{
+  position:absolute;inset:0;z-index:5;pointer-events:none;
+  display:none;justify-content:space-between;align-items:flex-start;
+  padding:8px 10px;
+}
+.hero-viewport.view-3d .scene3d-plane-labels{display:flex}
+.plane-label{
+  font-size:.58rem;font-weight:700;letter-spacing:.04em;
+  color:var(--text);background:rgba(18,18,26,.82);
+  border:1px solid var(--border);border-radius:var(--radius-xs);
+  padding:5px 8px;display:inline-flex;align-items:center;gap:6px;
+  max-width:46%;line-height:1.25;
+}
+.plane-label .plane-swatch{
+  width:10px;height:10px;border-radius:2px;flex-shrink:0;
+  box-shadow:0 0 6px currentColor;
+}
+.plane-label--frontal .plane-swatch{background:#3b82f6;color:#3b82f6}
+.plane-label--horizontal .plane-swatch{background:#ef4444;color:#ef4444}
 .hero-viewport.view-3d #unified{display:none}
 .hero-viewport.view-3d #scene3d{display:block}
 .view-mode-cycle{display:inline-flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-left:4px}
@@ -473,29 +494,41 @@ html,body{height:100%;overflow:hidden}
 .lead-pill--toggle.on{background:rgba(232,184,75,.12);color:var(--gold);border-color:rgba(232,184,75,.45)}
 .lead-pill--focus{box-shadow:0 0 0 1px rgba(2,132,199,.35)}
 
-/* ─── Slide-out dock panels ───────────────────────────────────────────────── */
+/* ─── Dock panels — push layout (desktop) · overlay (mobile) ─────────────── */
 .dock-backdrop{
+  display:none;
   position:fixed;inset:0;z-index:44;
   background:var(--backdrop,rgba(0,0,0,.48));
   opacity:0;pointer-events:none;transition:opacity .2s;
 }
 .dock-backdrop.show{opacity:1;pointer-events:auto}
+.ecg-shell{
+  display:flex;flex-direction:row;align-items:stretch;
+}
+.ecg-stage{order:2;flex:1 1 auto;min-width:0}
 .dock-panel{
-  position:fixed;top:0;bottom:0;z-index:48;
-  width:min(360px,calc(100vw - 56px));
+  position:relative;top:auto;bottom:auto;left:auto;right:auto;
+  z-index:2;flex:0 0 auto;width:0;min-width:0;max-height:none;height:auto;
+  align-self:stretch;
   background:var(--panel);border:1px solid var(--border);
-  box-shadow:var(--shadow);
   display:flex;flex-direction:column;
-  transition:transform .22s ease;
-  transform:translateX(-110%);
+  overflow:hidden;
+  transform:none;
+  transition:width .22s ease;
+  box-shadow:none;border-radius:0;
+  pointer-events:none;
 }
-.dock-panel--left{left:0;border-left:none;border-radius:0 var(--radius) var(--radius) 0}
+.dock-panel.open{pointer-events:auto}
+.dock-panel--left{
+  order:1;border-left:none;border-right:none;
+  max-width:min(360px,38vw);
+}
+.dock-panel--left.open{width:min(360px,38vw);border-right:1px solid var(--border)}
 .dock-panel--right{
-  right:0;border-right:none;border-radius:var(--radius) 0 0 var(--radius);
-  transform:translateX(110%);
-  width:min(520px,calc(100vw - 56px));
+  order:3;border-right:none;border-left:none;
+  max-width:min(520px,40vw);
 }
-.dock-panel.open{transform:translateX(0)}
+.dock-panel--right.open{width:min(520px,40vw);border-left:1px solid var(--border)}
 .dock-panel-head{
   display:flex;justify-content:space-between;align-items:center;
   gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);flex-shrink:0;
@@ -714,9 +747,22 @@ canvas{display:block}
 
 /* ─── Mobile layout ──────────────────────────────────────────────────────── */
 @media(max-width:760px){
-  .ecg-shell{grid-template-columns:minmax(0,1fr)}
-  .dock-panel--left{left:0;width:min(340px,calc(100vw - 48px))}
-  .dock-panel--right{right:0}
+  .ecg-shell{flex-direction:column;position:relative}
+  .ecg-stage{order:0;width:100%;flex:1 1 auto}
+  .dock-backdrop{display:block}
+  .dock-panel{
+    position:fixed;top:0;bottom:0;z-index:48;
+    width:min(340px,calc(100vw - 48px));max-width:none;
+    transform:translateX(-110%);transition:transform .22s ease;
+    box-shadow:var(--shadow);pointer-events:auto;
+  }
+  .dock-panel--left{left:0;border-radius:0 var(--radius) var(--radius) 0}
+  .dock-panel--left.open{width:min(340px,calc(100vw - 48px));transform:translateX(0)}
+  .dock-panel--right{
+    right:0;left:auto;width:min(520px,calc(100vw - 48px));
+    transform:translateX(110%);border-radius:var(--radius) 0 0 var(--radius);
+  }
+  .dock-panel--right.open{transform:translateX(0)}
   /* Stack lead strips BELOW the canvas on mobile — canvas gets full width */
   .hero-viewport{
     grid-template-columns:1fr;
@@ -787,6 +833,9 @@ canvas{display:block}
           <button type="button" class="dock-rail-btn on" id="playB" title="Play vector animation (Space)" aria-label="Play"></button>
           <button type="button" class="dock-rail-btn" id="pauseB" title="Pause vector animation (Space)" aria-label="Pause"></button>
         </div>
+        <div class="header-layout seg" role="toolbar" aria-label="Layout backup" title="Full global snapshot — layout, layers, theme, flow, strips, dock">
+          <button type="button" id="exportLayoutBtn">Export JSON</button>
+        </div>
         <button type="button" class="dock-rail-btn" id="bottomStripBtn" title="Collapse bottom controls (layers, leads, HUD)" aria-label="Toggle bottom controls" aria-expanded="true">
           <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
         </button>
@@ -816,6 +865,10 @@ canvas{display:block}
         </div>
       </div>
       <div class="body-scope-wrap" id="bodyScopeWrap" title="Scroll = zoom chest · middle-drag = pan · Ctrl+scroll = scope ring · Shift+Ctrl+scroll = ± badge spread · dbl-click = reset zoom · Esc = exit isolate (then click another lead)">
+        <div class="scene3d-plane-labels" id="scene3dPlaneLabels" hidden aria-hidden="true">
+          <span class="plane-label plane-label--frontal" id="planeLblFrontal" hidden><span class="plane-swatch" aria-hidden="true"></span>Frontal · limb ring (ref 02)</span>
+          <span class="plane-label plane-label--horizontal" id="planeLblHorizontal" hidden><span class="plane-swatch" aria-hidden="true"></span>Horizontal · V1–V6 fan (ref 02)</span>
+        </div>
         <div class="body-view-inner" id="bodyViewInner">
           <canvas id="scene3d" aria-label="3D torso — ref 02 limb ring and V fan"></canvas>
           <canvas id="unified"></canvas>
@@ -860,13 +913,14 @@ canvas{display:block}
       </div>
       <div class="body-look-cycle" id="bodyLookCycle" role="group" aria-label="Body demo look" title="Pick which demo plate to show in Real mode" hidden>
         <button type="button" class="body-look-btn on" data-body-look="cardiocard-angle">Angle</button>
+        <button type="button" class="body-look-btn" data-body-look="cardiocard-angle-16x9">16:9</button>
         <button type="button" class="body-look-btn" data-body-look="gray-b">Gray B</button>
       </div>
       <span class="pill-sep" aria-hidden="true"></span>
       <button type="button" class="layer-pill on" data-layer="heart"><span class="pill-txt">Heart</span></button>
       <button type="button" class="layer-pill on" data-layer="ribs" title="SVG rib cage + sternum (teaching layer — toggle like heart)"><span class="pill-txt">Ribs</span></button>
-      <button type="button" class="layer-pill on" data-layer="limbRing" title="Ref 02 — blue frontal limb ring (3D)"><span class="pill-txt">Ring</span></button>
-      <button type="button" class="layer-pill on" data-layer="vFan" title="Ref 02 — red horizontal V1–V6 fan (3D)"><span class="pill-txt">V fan</span></button>
+      <button type="button" class="layer-pill on" data-layer="limbRing" title="Ref 02/03 — blue coronal frontal limb ring (3D)"><span class="pill-txt">Ring</span></button>
+      <button type="button" class="layer-pill on" data-layer="vFan" title="Ref 02/03 — red transverse V1–V6 plane + fan from HC (3D)"><span class="pill-txt">V fan</span></button>
       <button type="button" class="layer-pill on" data-layer="scope"><span class="pill-txt">Scope</span></button>
       <button type="button" class="layer-pill on" data-layer="tri"><span class="pill-txt">Einthoven</span></button>
       <button type="button" class="layer-pill on" data-layer="vector"><span class="pill-txt">Vector</span></button>
@@ -1004,6 +1058,7 @@ canvas{display:block}
           <div class="ctl-head"><span class="ctl-label">Body look</span><span class="ctl-val-sm" id="bodyLookLbl">Plate A</span></div>
           <select class="axis-cond-sel" id="bodyLookSel" aria-label="Body demo plate" style="width:100%;max-width:none">
             <option value="cardiocard-angle">CardioCard angle — Magnific + Kojo (default)</option>
+            <option value="cardiocard-angle-16x9">CardioCard angle 16:9 — wide canvas</option>
             <option value="placement-a">Plate A — rib landmarks baked in</option>
             <option value="placement-b">Plate B — alternate torso</option>
             <option value="likeness-b">Likeness B — Kojo photo gray</option>
@@ -1053,22 +1108,44 @@ canvas{display:block}
         </div>
         </div>
       </div>
+      <div class="axis-item ctl-section" data-ctl-section="cometTune">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>Comet trail</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
+          <p class="ctl-hint" style="margin:0 0 8px">Streaming consciousness trail on the vectorscope — turn on <strong>Comet</strong> layer. Pauses while Controls/placement modes are open.</p>
+          <div class="ctl">
+            <div class="ctl-head"><span class="ctl-label">Tail length</span><span class="ctl-val-sm" id="cometTailV">45%</span></div>
+            <input type="range" id="cometTailR" min="15" max="100" step="1" value="45" aria-label="Comet trail tail length"/>
+            <p class="ctl-hint" style="margin-top:4px">How much history the streaming tail keeps (longer = more ribbon).</p>
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><span class="ctl-label">Taper width</span><span class="ctl-val-sm" id="cometWidthV">100%</span></div>
+            <input type="range" id="cometWidthR" min="40" max="250" step="1" value="100" aria-label="Comet trail taper width"/>
+            <p class="ctl-hint" style="margin-top:4px">Stroke thickness — thin wisp vs bold stream at the head.</p>
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><span class="ctl-label">Opacity fade</span><span class="ctl-val-sm" id="cometFadeV">100%</span></div>
+            <input type="range" id="cometFadeR" min="35" max="250" step="1" value="100" aria-label="Comet trail opacity fade"/>
+            <p class="ctl-hint" style="margin-top:4px">How fast the tail dissolves toward transparent (higher = sharper fade at the back).</p>
+          </div>
+        </div>
+      </div>
       <div class="axis-item ctl-section" data-ctl-section="leadFlowTune">
         <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>Lead flow</span><span class="axis-chevron" aria-hidden="true"></span></button>
         <div class="axis-body ctl-section-body">
           <p class="ctl-hint" style="margin:0 0 8px">Teardrop pulse along each lead axis (− green → + red). Turn on <strong>Flow</strong> layer to preview.</p>
           <div class="ctl">
-            <div class="ctl-head"><span class="ctl-label">Tail taper</span><span class="ctl-val-sm" id="flowTailV">28%</span></div>
-            <input type="range" id="flowTailR" min="10" max="50" step="1" value="28" aria-label="Flow tail taper percent of path"/>
-            <p class="ctl-hint" style="margin-top:4px">Wide green tail at − pole — longer = more comet-like.</p>
+            <div class="ctl-head"><span class="ctl-label">Tail length</span><span class="ctl-val-sm" id="flowTailV">28%</span></div>
+            <input type="range" id="flowTailR" min="10" max="50" step="1" value="28" aria-label="Flow comet tail length percent of path"/>
+            <p class="ctl-hint" style="margin-top:4px">How long the green tail is along the path (comet length).</p>
           </div>
           <div class="ctl">
             <div class="ctl-head"><span class="ctl-label">Head size</span><span class="ctl-val-sm" id="flowHeadV">100%</span></div>
             <input type="range" id="flowHeadR" min="50" max="200" step="1" value="100" aria-label="Flow teardrop head size"/>
           </div>
           <div class="ctl">
-            <div class="ctl-head"><span class="ctl-label">Stroke</span><span class="ctl-val-sm" id="flowStrokeV">100%</span></div>
-            <input type="range" id="flowStrokeR" min="50" max="200" step="1" value="100" aria-label="Flow pulse stroke width"/>
+            <div class="ctl-head"><span class="ctl-label">Line width</span><span class="ctl-val-sm" id="flowStrokeV">100%</span></div>
+            <input type="range" id="flowStrokeR" min="50" max="200" step="1" value="100" aria-label="Flow pulse line width"/>
+            <p class="ctl-hint" style="margin-top:4px">Stroke thickness of the moving pulse and static path (taper width).</p>
           </div>
           <div class="ctl">
             <div class="ctl-head"><span class="ctl-label">Path dim</span><span class="ctl-val-sm" id="flowPathV">100%</span></div>
@@ -1151,12 +1228,11 @@ canvas{display:block}
           </div>
         </div>
         <div class="seg" style="margin-top:8px;margin-bottom:6px">
-          <button type="button" id="exportLayoutBtn">Export JSON</button>
           <button type="button" id="importLayoutBtn">Import JSON</button>
           <button type="button" id="reloadBundledBtn" title="Load assets/ecg-vector-lab-user-layout.json">Reload bundled</button>
         </div>
         <input type="file" id="importLayoutFile" accept="application/json,.json" hidden/>
-        <p class="ctl-hint" id="layoutSaveHint">Positions auto-save — bundled file: assets/ecg-vector-lab-user-layout.json</p>
+        <p class="ctl-hint" id="layoutSaveHint">Auto-saves to this browser. <strong>Export JSON</strong> is in the top header. Import / reload bundled here. Import replaces session + localStorage.</p>
         <div class="ischemia-legend" id="ischemiaLegend"></div>
         <button type="button" id="resetLeadsBtn" style="margin-top:8px;width:100%">Reset layout to defaults</button>
         </div>
@@ -1717,6 +1793,20 @@ function flowPathStrokeW(){return Math.max(1,SR*0.013*(S.flowStrokeMul||1));}
 function flowPathAlphaMul(){return Math.max(0.2,Math.min(1.8,S.flowPathMul||1));}
 function leadFlowSpeed(){return LEAD_FLOW_SPEED_BASE*(S.flowSpeedMul||1);}
 
+function clampCometTailPct(v){return Math.max(15,Math.min(100,v));}
+function cometTailPct(){return clampCometTailPct(S.cometTailPct!=null?S.cometTailPct:45);}
+function cometWidthMul(){return Math.max(0.4,Math.min(2.5,S.cometWidthMul||1));}
+function cometFadeMul(){return Math.max(0.35,Math.min(2.5,S.cometFadeMul||1));}
+
+function cometColorAt(t01){
+  var r4,g4,b4;
+  if(t01<0.30){var u=t01/0.30;r4=Math.round(160+u*95);g4=Math.round(10+u*70);b4=10;}
+  else if(t01<0.60){var u=(t01-0.30)/0.30;r4=255;g4=Math.round(80+u*104);b4=Math.round(10+u*30);}
+  else if(t01<0.82){var u=(t01-0.60)/0.22;r4=Math.round(255-u*23);g4=Math.round(184+u*55);b4=Math.round(40+u*80);}
+  else{var u=(t01-0.82)/0.18;r4=Math.round(232+u*23);g4=Math.round(239-u*10);b4=Math.round(120+u*135);}
+  return[r4,g4,b4];
+}
+
 function drawLeadFlowTeardrop(xNeg,yNeg,xPos,yPos,t,alpha){
   if(alpha<0.05)return;
   var len=Math.hypot(xPos-xNeg,yPos-yNeg)||1;
@@ -2108,6 +2198,7 @@ var S={
   stripBeats:_stripPrefs.stripBeats,stripHeight:_stripPrefs.stripHeight,leadStripW:_stripPrefs.leadStripW,stripZoom:_stripPrefs.stripZoom,
   heartPack:loadHeartPack(),heartScale:1,heartRotation:0,scopeScale:1,badgeScale:1,badgeSpread:1,bodyPlateScale:1,autoMatchPlateBg:true,
   flowTailPct:28,flowHeadMul:1,flowStrokeMul:1,flowPathMul:1,flowSpeedMul:1,
+  cometTailPct:45,cometWidthMul:1,cometFadeMul:1,
   bodyViewZoom:1,bodyViewPanX:0,bodyViewPanY:0,
   vectorStroke:2,playbackRate:1,clickToIsolate:false,
   visibleLeads:defaultVisibleLeads()
@@ -2469,6 +2560,8 @@ function updateLeadAxisReadout(){
 }
 
 function buildLabLayout(){
+  var leftEl=document.getElementById('dockPanelLeft');
+  var stripEl=document.getElementById('dockPanelStrip');
   return{
     version:LAYOUT_VERSION,
     savedAt:new Date().toISOString(),
@@ -2487,6 +2580,9 @@ function buildLabLayout(){
     flowStrokeMul:S.flowStrokeMul,
     flowPathMul:S.flowPathMul,
     flowSpeedMul:S.flowSpeedMul,
+    cometTailPct:S.cometTailPct,
+    cometWidthMul:S.cometWidthMul,
+    cometFadeMul:S.cometFadeMul,
     bodyPlateScale:S.bodyPlateScale,
     bodyViewZoom:S.bodyViewZoom,
     bodyViewPanX:S.bodyViewPanX,
@@ -2519,6 +2615,9 @@ function buildLabLayout(){
       conductionAxis:S.conductionAxis!=null?S.conductionAxis:60,
       clickToIsolate:!!S.clickToIsolate,
       controlsSections:JSON.parse(JSON.stringify(S.controlsSections||{})),
+      dockLeftOpen:!!(leftEl&&leftEl.classList.contains('open')),
+      dockRightOpen:!!(stripEl&&stripEl.classList.contains('open')),
+      dockLeftTab:typeof activeLeftTab==='string'?activeLeftTab:'controls',
       theme:currentTheme,
       bodyMode:S.bodyMode==='real'?'real':'svg',
       viewMode:S.viewMode==='3d'?'3d':'2d',
@@ -2660,6 +2759,15 @@ function applyLabLayout(o,opts){
   if(typeof o.flowSpeedMul==='number'){
     S.flowSpeedMul=Math.max(0.25,Math.min(2,o.flowSpeedMul));
   }
+  if(typeof o.cometTailPct==='number'){
+    S.cometTailPct=clampCometTailPct(o.cometTailPct);
+  }
+  if(typeof o.cometWidthMul==='number'){
+    S.cometWidthMul=Math.max(0.4,Math.min(2.5,o.cometWidthMul));
+  }
+  if(typeof o.cometFadeMul==='number'){
+    S.cometFadeMul=Math.max(0.35,Math.min(2.5,o.cometFadeMul));
+  }
   if(typeof o.bodyPlateScale==='number'){
     S.bodyPlateScale=Math.max(0.5,Math.min(2,o.bodyPlateScale));
   }
@@ -2764,8 +2872,22 @@ function applyLabLayout(o,opts){
   if(window.syncHeartLegacyAliases)window.syncHeartLegacyAliases(S.heartPack);
   if(!opts.skipUi&&typeof setHeartPack==='function')setHeartPack(S.heartPack,{skipSave:!!opts.skipSave});
   if(!opts.skipUi&&typeof updateUI==='function')updateUI();
+  if(!opts.skipUi&&typeof restoreDockFromLayout==='function')restoreDockFromLayout(o.ui);
   if(!opts.skipSave)saveLabLayout();
   return true;
+}
+
+function restoreDockFromLayout(ui){
+  if(!ui||typeof closeDocks!=='function')return;
+  if(ui.dockRightOpen&&typeof openStrip==='function'){
+    openStrip();
+    return;
+  }
+  if(ui.dockLeftOpen&&typeof openLeft==='function'){
+    openLeft(ui.dockLeftTab==='guide'||ui.dockLeftTab==='references'?ui.dockLeftTab:'controls');
+    return;
+  }
+  closeDocks();
 }
 
 function loadLabLayoutFromStorage(callback){
@@ -2774,19 +2896,29 @@ function loadLabLayoutFromStorage(callback){
 }
 
 function exportLabLayoutJson(){
-  var json=JSON.stringify(buildLabLayout(),null,2);
+  var payload=buildLabLayout();
+  var json=JSON.stringify(payload,null,2);
   var blob=new Blob([json],{type:'application/json'});
   var a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download='ecg-vector-lab-layout.json';
+  var stamp=new Date().toISOString().slice(0,10);
+  a.download='ecg-vector-lab-layout ('+stamp+').json';
   a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);},500);
+  var hint=document.getElementById('layoutSaveHint');
+  if(hint)hint.textContent='Exported global snapshot '+new Date().toLocaleTimeString()+' — import on any machine/port.';
 }
 
 function importLabLayoutJson(text){
   try{
     var o=JSON.parse(text);
-    if(applyLabLayout(o))return true;
+    if(applyLabLayout(o)){
+      saveLabLayout();
+      syncLeadPillsUI();
+      showLayoutRestoreHint(true,o.savedAt,false);
+      if(typeof notifyDockLayoutChange==='function')notifyDockLayoutChange();
+      return true;
+    }
   }catch(e){}
   alert('Could not load layout JSON — check the file format.');
   return false;
@@ -2956,6 +3088,15 @@ function setPlaybackPaused(paused){
   syncPlaybackButtons();
 }
 
+/** Pause vector + strip animation while editing layout (Controls dock or placement modes). */
+function pausePlaybackForEdit(){
+  setPlaybackPaused(true);
+}
+
+function isPlacementEditMode(){
+  return !!(S.placingLeads||S.placingScope||S.placingHeart||S.placingLabels);
+}
+
 function togglePlayback(){
   setPlaybackPaused(!S.paused);
 }
@@ -3121,6 +3262,8 @@ function buildLab3dPayload(ph){
     placingLeads:S.placingLeads,
     placingScope:S.placingScope,
     placingHeart:S.placingHeart,
+    bodyNW:bodyNW,
+    bodyNH:bodyNH,
     vec:vecAt(ph!=null?ph:beatPhase(S.time))
   };
 }
@@ -3168,6 +3311,19 @@ function sizeScene3dCanvas(){
   scene3d.resize(cssW,cssH);
 }
 
+function syncScene3dPlaneLabels(){
+  var host=document.getElementById('scene3dPlaneLabels');
+  var lf=document.getElementById('planeLblFrontal');
+  var lh=document.getElementById('planeLblHorizontal');
+  var on3d=isView3d()&&S.studyMode!=='conduction';
+  if(host){
+    host.hidden=!on3d;
+    host.setAttribute('aria-hidden',on3d?'false':'true');
+  }
+  if(lf)lf.hidden=!on3d||!S.showLimbRing;
+  if(lh)lh.hidden=!on3d||!S.showVFan;
+}
+
 function syncViewModeUI(){
   document.querySelectorAll('.view-mode-btn').forEach(function(btn){
     btn.classList.toggle('on',btn.dataset.viewMode===(isView3d()?'3d':'2d'));
@@ -3182,6 +3338,7 @@ function syncViewModeUI(){
     p.style.opacity=isView3d()?'1':'0.45';
   });
   if(isView3d())ensureScene3d(function(){syncScene3dFromLab(beatPhase(S.time));});
+  syncScene3dPlaneLabels();
 }
 
 function initViewModeToggle(){
@@ -3199,8 +3356,10 @@ function initViewModeToggle(){
 }
 
 var UW=520,UH=420;
-var bodyNW=206.326;
-var bodyNH=185;
+var BODY_SPACE_H=185;
+var BODY_SPACE_W_DEFAULT=206.326;
+var bodyNW=BODY_SPACE_W_DEFAULT;
+var bodyNH=BODY_SPACE_H;
 var bodyScale,bodyOffX,bodyOffY;
 var EL,PRE,HT,HC,HP,HEART_H,HEART_W,SCX,SCY,SR;
 var HEART_SCALE_MIN=0.4,HEART_SCALE_MAX=2;
@@ -3208,7 +3367,20 @@ var HEART_ROT_MIN=-45,HEART_ROT_MAX=45;
 function clampHeartScale(v){return Math.max(HEART_SCALE_MIN,Math.min(HEART_SCALE_MAX,v));}
 function clampHeartRotation(v){return Math.max(HEART_ROT_MIN,Math.min(HEART_ROT_MAX,v));}
 
+function bodySpaceFromPlate(){
+  var entry=BODY_PLATE_CATALOG[resolveBodyPlateId(S.bodyPlateId)];
+  var aspect=entry&&entry.bodyAspect?entry.bodyAspect:(BODY_SPACE_W_DEFAULT/BODY_SPACE_H);
+  return{w:BODY_SPACE_H*aspect,h:BODY_SPACE_H};
+}
+
+function syncBodySpaceDims(){
+  var bs=bodySpaceFromPlate();
+  bodyNW=bs.w;
+  bodyNH=bs.h;
+}
+
 function recomputeSceneGeometry(){
+  syncBodySpaceDims();
   bodyScale=UH*0.88/bodyNW;
   bodyOffX=(UW-bodyNW*bodyScale)/2;
   bodyOffY=UH*0.04;
@@ -3666,6 +3838,84 @@ function resetTrail(){
   trailHead=0;
 }
 
+function pushCometSample(ph){
+  if(S.paused)return;
+  var v=vecAt(ph);
+  var cx2=v.on?sX(v.vx,SR*S.mag):SCX;
+  var cy2=v.on?sY(v.vy,SR*S.mag):SCY;
+  trailBuf[trailHead]={x:cx2,y:cy2,on:v.on};
+  trailHead=(trailHead+1)%TRAIL_LEN;
+}
+
+function cometTrailChain(){
+  var nVis=Math.max(6,Math.round(TRAIL_LEN*cometTailPct()/100));
+  var chain=[];
+  for(var ci=0;ci<nVis;ci++){
+    var idx=(trailHead+TRAIL_LEN-nVis+ci)%TRAIL_LEN;
+    var pt=trailBuf[idx];
+    if(pt.on)chain.push(pt);
+  }
+  return chain;
+}
+
+function drawCometStreamingTrail(dark){
+  var chain=cometTrailChain();
+  if(chain.length<2)return;
+  var fadePow=1.6/cometFadeMul();
+  uctx.save();
+  uctx.globalCompositeOperation='screen';
+  uctx.lineCap='round';
+  uctx.lineJoin='round';
+  for(var si=1;si<chain.length;si++){
+    var tPrev=(si-1)/(chain.length-1);
+    var t01=si/(chain.length-1);
+    var alphaPrev=Math.pow(tPrev,fadePow)*0.92;
+    var alpha=Math.pow(t01,fadePow)*0.92;
+    var wPrev=(0.35+tPrev*SR*0.1)*cometWidthMul();
+    var wHead=(0.35+t01*SR*0.1)*cometWidthMul();
+    var cPrev=cometColorAt(tPrev);
+    var col=cometColorAt(t01);
+    var grad=uctx.createLinearGradient(chain[si-1].x,chain[si-1].y,chain[si].x,chain[si].y);
+    grad.addColorStop(0,'rgba('+cPrev[0]+','+cPrev[1]+','+cPrev[2]+','+(alphaPrev*0.8).toFixed(3)+')');
+    grad.addColorStop(1,'rgba('+col[0]+','+col[1]+','+col[2]+','+alpha.toFixed(3)+')');
+    uctx.strokeStyle=grad;
+    uctx.lineWidth=(wPrev+wHead)*0.5;
+    uctx.beginPath();
+    uctx.moveTo(chain[si-1].x,chain[si-1].y);
+    uctx.lineTo(chain[si].x,chain[si].y);
+    uctx.stroke();
+    var glowR=uctx.lineWidth*(dark?2.4:1.7);
+    var grd=uctx.createRadialGradient(chain[si].x,chain[si].y,0,chain[si].x,chain[si].y,glowR);
+    grd.addColorStop(0,'rgba('+col[0]+','+col[1]+','+col[2]+','+(alpha*0.32).toFixed(3)+')');
+    grd.addColorStop(1,'rgba('+col[0]+','+col[1]+','+col[2]+',0)');
+    uctx.fillStyle=grd;
+    uctx.beginPath();
+    uctx.arc(chain[si].x,chain[si].y,glowR,0,Math.PI*2);
+    uctx.fill();
+  }
+  uctx.restore();
+}
+
+function drawCometHead(ph,dark){
+  var vv=vecAt(ph);
+  if(!vv.on)return;
+  var lx=sX(vv.vx,SR*S.mag),ly=sY(vv.vy,SR*S.mag);
+  var headR=Math.max(2.2,SR*0.022*cometWidthMul());
+  var corona=uctx.createRadialGradient(lx,ly,0,lx,ly,SR*0.12*cometWidthMul());
+  corona.addColorStop(0,'rgba(255,255,255,0.72)');
+  corona.addColorStop(0.25,'rgba(200,230,255,0.38)');
+  corona.addColorStop(0.55,'rgba(232,184,75,0.16)');
+  corona.addColorStop(1,'rgba(232,184,75,0)');
+  uctx.globalCompositeOperation=dark?'screen':'source-over';
+  uctx.fillStyle=corona;
+  uctx.beginPath();uctx.arc(lx,ly,SR*0.12*cometWidthMul(),0,Math.PI*2);uctx.fill();
+  uctx.globalCompositeOperation='source-over';
+  uctx.fillStyle='rgba(255,255,255,1)';
+  uctx.beginPath();uctx.arc(lx,ly,headR,0,Math.PI*2);uctx.fill();
+  uctx.strokeStyle='rgba(180,210,255,0.85)';uctx.lineWidth=1.5;
+  uctx.beginPath();uctx.arc(lx,ly,headR*1.5,0,Math.PI*2);uctx.stroke();
+}
+
 /* ── Anatomical heart (traced SVG from reference) ─────────────────── */
 var HEART_STROKE='rgba(150,150,155,0.88)';
 var HEART_VESSEL='rgba(190,190,195,0.75)';
@@ -3813,6 +4063,13 @@ var BODY_PLATE_CATALOG={
     label:'CardioCard angle',
     hint:'Steve-approved Magnific plate (ref-04 angle + Kojo face). Loads tuned layout 6 automatically.'
   },
+  'cardiocard-angle-16x9':{
+    src:'assets/ecg-vector-lab/character/kojo-cardiocard-angle-16x9.png',
+    render:'native',
+    bodyAspect:16/9,
+    label:'CardioCard 16:9',
+    hint:'Wide cinematic plate — same pose, extra lateral room for scope ring + labels. Body space 328×185.'
+  },
   'placement-a':{
     src:'assets/ecg-vector-lab/character/boy-ecg-placement-plate-a.png',
     render:'native',
@@ -3853,6 +4110,7 @@ var BODY_PLATE_CATALOG={
 /** Per-plate bundled layouts (electrodes, scope, strip) applied when body look changes. */
 var BODY_PLATE_LAYOUTS={
   'cardiocard-angle':'assets/ecg-vector-lab/layouts/cardiocard-angle-layout.json',
+  'cardiocard-angle-16x9':'assets/ecg-vector-lab/layouts/cardiocard-angle-16x9-layout.json',
   'gray-b':'assets/ecg-vector-lab/layouts/gray-b-layout.json',
   'gray-a':'assets/ecg-vector-lab/layouts/gray-b-layout.json',
   'gray-full':'assets/ecg-vector-lab/layouts/gray-b-layout.json'
@@ -4342,57 +4600,9 @@ function drawUnified(){
   drawLeadFlowLayer();
 
   if(S.showComet){
-  /* ── 6. COMET TRAIL ── */
-  /* push current position into ring buffer */
-  if(!S.paused){
-    var v=vecAt(ph);
-    var cx2=v.on?sX(v.vx,SR*S.mag):SCX;
-    var cy2=v.on?sY(v.vy,SR*S.mag):SCY;
-    trailBuf[trailHead]={x:cx2,y:cy2,on:v.on};
-    trailHead=(trailHead+1)%TRAIL_LEN;
-  }
-
-  for(var ti=0;ti<TRAIL_LEN;ti++){
-    var idx=(trailHead+ti)%TRAIL_LEN;
-    var pt=trailBuf[idx];
-    if(!pt.on)continue;
-    var t01=ti/(TRAIL_LEN-1);
-    var rad=0.8+t01*SR*0.09;
-    var alpha=Math.pow(t01,1.6)*0.92;
-    var r4,g4,b4;
-    if(t01<0.30){var u=t01/0.30;r4=Math.round(160+u*95);g4=Math.round(10+u*70);b4=10;}
-    else if(t01<0.60){var u=(t01-0.30)/0.30;r4=255;g4=Math.round(80+u*104);b4=Math.round(10+u*30);}
-    else if(t01<0.82){var u=(t01-0.60)/0.22;r4=Math.round(255-u*23);g4=Math.round(184+u*55);b4=Math.round(40+u*80);}
-    else{var u=(t01-0.82)/0.18;r4=Math.round(232+u*23);g4=Math.round(239-u*10);b4=Math.round(120+u*135);}
-    var glowR=rad*(dark?3.0:2.0);
-    var grd=uctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,glowR);
-    grd.addColorStop(0,'rgba('+r4+','+g4+','+b4+','+alpha.toFixed(3)+')');
-    grd.addColorStop(0.45,'rgba('+r4+','+g4+','+b4+','+(alpha*0.35).toFixed(3)+')');
-    grd.addColorStop(1,'rgba('+r4+','+g4+','+b4+',0)');
-    uctx.globalCompositeOperation='screen';
-    uctx.fillStyle=grd;
-    uctx.beginPath();uctx.arc(pt.x,pt.y,glowR,0,Math.PI*2);uctx.fill();
-    uctx.globalCompositeOperation='source-over';
-  }
-
-  /* ── 7. LIVE COMET HEAD ── */
-  var vv=vecAt(ph);
-  if(S.showComet&&vv.on){
-    var lx=sX(vv.vx,SR*S.mag),ly=sY(vv.vy,SR*S.mag);
-    var corona=uctx.createRadialGradient(lx,ly,0,lx,ly,SR*0.12);
-    corona.addColorStop(0,'rgba(255,255,255,0.65)');
-    corona.addColorStop(0.25,'rgba(200,230,255,0.40)');
-    corona.addColorStop(0.55,'rgba(232,184,75,0.18)');
-    corona.addColorStop(1,'rgba(232,184,75,0)');
-    uctx.globalCompositeOperation=dark?'screen':'source-over';
-    uctx.fillStyle=corona;
-    uctx.beginPath();uctx.arc(lx,ly,SR*0.12,0,Math.PI*2);uctx.fill();
-    uctx.globalCompositeOperation='source-over';
-    uctx.fillStyle='rgba(255,255,255,1)';
-    uctx.beginPath();uctx.arc(lx,ly,SR*0.016,0,Math.PI*2);uctx.fill();
-    uctx.strokeStyle='rgba(180,210,255,0.85)';uctx.lineWidth=1.5;
-    uctx.beginPath();uctx.arc(lx,ly,SR*0.026,0,Math.PI*2);uctx.stroke();
-  }
+  pushCometSample(ph);
+  drawCometStreamingTrail(dark);
+  drawCometHead(ph,dark);
   }
 
   if(S.showScope||S.showVector){
@@ -4994,6 +5204,7 @@ function syncStudyModeUI(){
   if(split)split.hidden=!isConductionMode();
   if(wrap)wrap.classList.toggle('conduction-hidden',isConductionMode());
   if(isConductionMode())ensureConductionModules(function(){sizeConductionCanvases();});
+  syncScene3dPlaneLabels();
 }
 
 function initStudyModeToggle(){
@@ -5067,6 +5278,7 @@ var DEFAULT_CTL_OPEN={
   heartPlayback:true,
   bodyPlate:false,
   scopeBadges:false,
+  cometTune:false,
   leadFlowTune:false,
   canvasColors:false,
   conductionTune:false,
@@ -5235,6 +5447,18 @@ function syncSizeControls(){
   if(fpv)fpv.textContent=Math.round((S.flowPathMul||1)*100)+'%';
   if(fsp)fsp.value=Math.round((S.flowSpeedMul||1)*100);
   if(fspv)fspv.textContent=Math.round((S.flowSpeedMul||1)*100)+'%';
+  var ct=document.getElementById('cometTailR');
+  var ctv=document.getElementById('cometTailV');
+  var cw=document.getElementById('cometWidthR');
+  var cwv=document.getElementById('cometWidthV');
+  var cf=document.getElementById('cometFadeR');
+  var cfv=document.getElementById('cometFadeV');
+  if(ct)ct.value=cometTailPct();
+  if(ctv)ctv.textContent=cometTailPct()+'%';
+  if(cw)cw.value=Math.round((S.cometWidthMul||1)*100);
+  if(cwv)cwv.textContent=Math.round((S.cometWidthMul||1)*100)+'%';
+  if(cf)cf.value=Math.round((S.cometFadeMul||1)*100);
+  if(cfv)cfv.textContent=Math.round((S.cometFadeMul||1)*100)+'%';
 }
 
 function initHeartAnatomyControls(){
@@ -5352,6 +5576,34 @@ function initFlowControls(){
   if(speedEl){
     speedEl.addEventListener('input',function(){
       S.flowSpeedMul=Math.max(0.25,Math.min(2,(parseInt(speedEl.value,10)||100)/100));
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
+}
+
+function initCometControls(){
+  var tailEl=document.getElementById('cometTailR');
+  var widthEl=document.getElementById('cometWidthR');
+  var fadeEl=document.getElementById('cometFadeR');
+  syncSizeControls();
+  if(tailEl){
+    tailEl.addEventListener('input',function(){
+      S.cometTailPct=clampCometTailPct(parseInt(tailEl.value,10)||45);
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
+  if(widthEl){
+    widthEl.addEventListener('input',function(){
+      S.cometWidthMul=Math.max(0.4,Math.min(2.5,(parseInt(widthEl.value,10)||100)/100));
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
+  if(fadeEl){
+    fadeEl.addEventListener('input',function(){
+      S.cometFadeMul=Math.max(0.35,Math.min(2.5,(parseInt(fadeEl.value,10)||100)/100));
       syncSizeControls();
       saveLabLayout();
     });
@@ -5500,8 +5752,8 @@ function initLayerPills(){
   var map={
     heart:function(on){S.showHeart=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     ribs:function(on){S.showRibs=on;},
-    limbRing:function(on){S.showLimbRing=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
-    vFan:function(on){S.showVFan=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
+    limbRing:function(on){S.showLimbRing=on;syncScene3dPlaneLabels();if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
+    vFan:function(on){S.showVFan=on;syncScene3dPlaneLabels();if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     scope:function(on){S.showScope=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     tri:function(on){S.showTri=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     vector:function(on){S.showVector=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
@@ -5655,7 +5907,7 @@ var activeLeftTab='controls';
 var ECG_REF_PLATES=[
   {num:'01',file:'01-hexaxial-degrees-on-heart.png',title:'Hexaxial degrees (frontal)',desc:'Gold scope ring targets — I 0°, II 60°, III 120°, aVF 90°, aVL −30°, aVR −150°.'},
   {num:'02',file:'02-torso-limb-ring-precordial-fan.png',title:'Torso — limb ring + V fan',desc:'3D mode — blue circle = frontal limb ring; red curve = horizontal V1–V6 fan. Orbit drag to see electrode depth.'},
-  {num:'03',file:'03-3d-frontal-horizontal-planes-v-leads.png',title:'3D — frontal + horizontal',desc:'Future 3D mode — red frontal limb leads; blue horizontal V leads when the boy rotates.'},
+  {num:'03',file:'03-3d-frontal-horizontal-planes-v-leads.png',title:'3D — frontal + horizontal',desc:'3D mode — blue frontal limb ring (coronal); red horizontal V1–V6 fan from HC. Orbit to see planes perpendicular at heart center.'},
   {num:'04',file:'04-cardiocard-12lead-placement-ref.png',title:'CardioCard 12-lead placement',desc:'Magnific camera/pose + default electrode anchors — not a runtime overlay. See Refs tab only.'},
   {num:'05',file:'05-rib-cage-anterior-ref.png',title:'Rib cage (anterior)',desc:'Ribs overlay layer — heart sits inside thoracic cavity.',optional:true}
 ];
@@ -5712,15 +5964,31 @@ function showLeftTab(tab){
   });
 }
 
+function notifyDockLayoutChange(){
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      sizeUnifiedCanvas();
+      if(typeof sizeLeadStrips==='function')sizeLeadStrips();
+      if(typeof initStrip==='function')initStrip();
+    });
+  });
+}
+
 function syncDockUi(){
   var leftOpen=panelLeft.classList.contains('open');
   var stripOpen=panelStrip.classList.contains('open');
+  var shell=document.querySelector('.ecg-shell');
+  if(shell){
+    shell.classList.toggle('dock-left-open',leftOpen);
+    shell.classList.toggle('dock-right-open',stripOpen);
+  }
   backdrop.classList.toggle('show',leftOpen||stripOpen);
   backdrop.setAttribute('aria-hidden',leftOpen||stripOpen?'false':'true');
   btnControls.classList.toggle('on',leftOpen&&activeLeftTab==='controls');
   btnGuide.classList.toggle('on',leftOpen&&activeLeftTab==='guide');
   if(btnRefs)btnRefs.classList.toggle('on',leftOpen&&activeLeftTab==='references');
   btnStrip.classList.toggle('on',stripOpen);
+  notifyDockLayoutChange();
 }
 
 function openLeft(tab){
@@ -5729,6 +5997,7 @@ function openLeft(tab){
   panelStrip.setAttribute('aria-hidden','true');
   panelLeft.classList.add('open');
   panelLeft.setAttribute('aria-hidden','false');
+  if(tab==='controls')pausePlaybackForEdit();
   syncDockUi();
 }
 
@@ -5815,6 +6084,7 @@ function setPlacementMode(mode){
   S.placingScope=mode==='scope';
   S.placingHeart=mode==='heart';
   S.placingLabels=mode==='labels';
+  if(mode)pausePlaybackForEdit();
   S.dragLead=null;
   S.dragScope=false;
   S.dragHeart=false;
@@ -5958,7 +6228,9 @@ function initLeadPlacement(){
       if(!file)return;
       var reader=new FileReader();
       reader.onload=function(){
-        importLabLayoutJson(reader.result);
+        if(importLabLayoutJson(reader.result)){
+          updateUI();
+        }
         importFile.value='';
       };
       reader.readAsText(file);
@@ -6364,6 +6636,15 @@ function bootApp(restored){
   initDockPanels();
   var dockDeep=parseDockDeepLink();
   if(dockDeep)openLeft(dockDeep);
+  else{
+    try{
+      var dockRaw=localStorage.getItem(LAYOUT_STORAGE);
+      if(dockRaw){
+        var dockO=JSON.parse(dockRaw);
+        if(dockO&&dockO.ui)restoreDockFromLayout(dockO.ui);
+      }
+    }catch(e){}
+  }
   initHeartPackUI();
   initHeartAnatomyControls();
   initBodyPlateControls();
@@ -6371,6 +6652,7 @@ function bootApp(restored){
   initScopeSizeControl();
   initBadgeSizeControls();
   initFlowControls();
+  initCometControls();
   initAxisCycle();
   initRoadmapPhaseGo();
   initVectorStrokeControl();

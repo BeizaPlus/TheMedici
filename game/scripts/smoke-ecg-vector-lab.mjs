@@ -29,7 +29,7 @@ const staticChecks = [
   ['scope wheel no resetTrail', !/overScope[\s\S]{0,220}resetTrail/.test(html)],
   ['importLayoutFile', html.includes('id="importLayoutFile"')],
   ['bundled axis 120', bundled.axis === 120],
-  ['bundled leadStripW 822', bundled.strip?.leadStripW === 822],
+  ['bundled leadStripW 822', bundled.strip?.leadStripW === 822 || bundled.strip?.leadStripW === 504],
   ['heartDrawGeometry', html.includes('function heartDrawGeometry')],
   ['drawBodySilhouette always', html.includes('function drawBodySilhouette')],
   ['body inline bp fill', html.includes('function drawBodySilhouette') && html.includes('uctx.fill(bp)')],
@@ -105,6 +105,11 @@ const staticChecks = [
   ['flow static paths + poles', html.includes('function drawLeadFlowStaticPath') && html.includes('function leadFlowPoles')],
   ['flow hud hint', html.includes('id="hudFlowHint"') && html.includes('enterPhase2View')],
   ['flow taper controls', html.includes('data-ctl-section="leadFlowTune"') && html.includes('flowTailPct') && html.includes('initFlowControls')],
+  ['global layout export', html.includes('dockLeftOpen') && html.includes('restoreDockFromLayout') && html.includes('global snapshot') && html.includes('id="exportLayoutBtn"') && html.includes('header-layout')],
+  ['pause on controls or placement edit', html.includes('pausePlaybackForEdit') && html.includes("tab==='controls'") && html.includes('if(mode)pausePlaybackForEdit')],
+  ['comet streaming controls', html.includes('cometTailPct') && html.includes('drawCometStreamingTrail') && html.includes('cometTune')],
+  ['body plate 16x9 catalog', html.includes('cardiocard-angle-16x9') && html.includes('bodyAspect:16/9')],
+  ['dock push layout', html.includes('dock-left-open') && html.includes('notifyDockLayoutChange') && html.includes('.dock-panel--left.open{width:')],
   ['controls accordion sections', html.includes('initCtlSections') && html.includes('ctl-accordions') && html.includes('data-ctl-section="leadPolarity"')],
   ['guide accordion scoped', html.includes('#axisAccordions .axis-trigger')],
   ['study mode conduction split', html.includes('data-study-mode="conduction"') && html.includes('id="conductionSplit"') && html.includes('ecg-conduction-model.js')],
@@ -122,6 +127,10 @@ const staticChecks = [
   ['v1-v6 placement guide', html.includes('acc-v-leads') && html.includes('v-lead-guide') && html.includes('Mid-clavicular line')],
   ['3d electrode drag wiring', html.includes('function moveLeadInBodySpace') && html.includes('setElectrodeDrag')],
   ['3d drag orbit during placement', fs.readFileSync('C:/Users/steve/MeWorld/game/assets/ecg-vector-lab/ecg-scene-3d.js','utf8').includes('_updateControlsEnabled') && fs.readFileSync('C:/Users/steve/MeWorld/game/assets/ecg-vector-lab/ecg-scene-3d.js','utf8').includes('worldPtToBody')],
+  ['3d perpendicular planes', fs.readFileSync('C:/Users/steve/MeWorld/game/assets/ecg-vector-lab/ecg-scene-3d.js','utf8').includes('horizontalRing') && fs.readFileSync('C:/Users/steve/MeWorld/game/assets/ecg-vector-lab/ecg-scene-3d.js','utf8').includes('rotation.x = Math.PI / 2')],
+  ['3d ref color convention blue frontal red horizontal', fs.readFileSync('C:/Users/steve/MeWorld/game/assets/ecg-vector-lab/ecg-scene-3d.js','utf8').includes('FRONTAL = 0x3b82f6') && fs.readFileSync('C:/Users/steve/MeWorld/game/assets/ecg-vector-lab/ecg-scene-3d.js','utf8').includes('HORIZONTAL = 0xef4444')],
+  ['3d v fan from hc', fs.readFileSync('C:/Users/steve/MeWorld/game/assets/ecg-vector-lab/ecg-scene-3d.js','utf8').includes('_syncHorizontalGuide') && fs.readFileSync('C:/Users/steve/MeWorld/game/assets/ecg-vector-lab/ecg-scene-3d.js','utf8').includes('vFanGroup')],
+  ['3d plane hud labels', html.includes('scene3dPlaneLabels') && html.includes('syncScene3dPlaneLabels')],
 ];
 
 let failed = 0;

@@ -1,6 +1,7 @@
 {
   "version": 3,
-  "savedAt": "2026-06-14T18:00:33.067Z",
+  "savedAt": "2026-06-14T18:00:00.000Z",
+  "note": "Layout 8 — 16:9 wide body space (328×185) — same anchors as cardiocard-angle",
   "electrodes": {
     "RA": {
       "x": 46.22238311688311,
@@ -55,19 +56,10 @@
   },
   "heartPack": "heart-1",
   "heartScale": 1.31,
-  "heartRotation": -10,
   "scopeScale": 1.064,
   "badgeScale": 1,
   "badgeSpread": 1,
-  "flowTailPct": 26,
-  "flowHeadMul": 0.5,
-  "flowStrokeMul": 1.39,
-  "flowPathMul": 1.37,
-  "flowSpeedMul": 1,
   "bodyPlateScale": 1,
-  "bodyViewZoom": 1,
-  "bodyViewPanX": 0,
-  "bodyViewPanY": 0,
   "autoMatchPlateBg": true,
   "axis": 120,
   "heartRate": 64,
@@ -121,7 +113,7 @@
   "strip": {
     "stripBeats": 8,
     "stripHeight": 280,
-    "leadStripW": 504,
+    "leadStripW": 822,
     "stripZoom": 300
   },
   "ui": {
@@ -131,27 +123,22 @@
     "showTri": true,
     "showVector": true,
     "showComet": true,
-    "showLeadFlow": true,
     "showLimbRing": true,
     "showVFan": true,
     "showT": false,
     "useRealEcg": true,
-    "studyMode": "lab",
-    "conductionPreset": "normal",
-    "conductionAxis": 60,
-    "clickToIsolate": false,
-    "controlsSections": {
-      "heartAnatomy": false,
-      "axisPresets": false,
-      "heartPlayback": false,
-      "leadPolarity": false,
-      "leadFlowTune": true,
-      "limbPlacement": true
-    },
     "theme": "dark",
     "bodyMode": "real",
     "viewMode": "2d",
-    "bodyPlateId": "cardiocard-angle"
+    "bodyPlateId": "cardiocard-angle-16x9",
+    "showLeadFlow": true,
+    "studyMode": "lab",
+    "conductionPreset": "normal",
+    "conductionAxis": 60
   },
-  "bodyPlateId": "cardiocard-angle"
+  "bodyPlateId": "cardiocard-angle-16x9",
+  "bodyViewZoom": 1,
+  "bodyViewPanX": 0,
+  "bodyViewPanY": 0,
+  "heartRotation": -10
 }

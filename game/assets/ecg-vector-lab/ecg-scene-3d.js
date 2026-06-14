@@ -1,15 +1,20 @@
 /**
- * ECG Vector Lab — 3D torso (ref 02 limb ring + precordial fan).
- * Electrodes carry Z depth so rotation reveals frontal vs horizontal planes.
+ * ECG Vector Lab — 3D torso (ref 02 / ref 03 dual-plane).
+ * Blue coronal frontal ring ⊥ red transverse precordial plane at HC.
  */
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-const BODY_W = 206.326;
 const BODY_H = 185;
+const BODY_W_DEFAULT = 206.326;
 const GLB_PATH = 'assets/ecg-vector-lab/character/boy.glb';
 const LIMB_LEADS = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'];
+/** Ref 02/03 — blue = frontal limb plane, red = horizontal precordial plane */
+const FRONTAL = 0x3b82f6;
+const HORIZONTAL = 0xef4444;
+const HORIZONTAL_RADIUS = 0.36;
+const HORIZONTAL_ELLIPSE_Z = 0.2;
 
 /** @param {string} key electrode id */
 function electrodeDepthZ(key, nx, ny) {
@@ -26,8 +31,9 @@ function electrodeDepthZ(key, nx, ny) {
 }
 
 /** 2D lab body coords → world (+Y up, +Z anterior toward viewer). */
-export function bodyPtToWorld(bx, by, key) {
-  var nx = bx / BODY_W;
+export function bodyPtToWorld(bx, by, key, bodyW) {
+  var bw = bodyW || BODY_W_DEFAULT;
+  var nx = bx / bw;
   var ny = by / BODY_H;
   var x = (nx - 0.5) * 1.05;
   var y = (0.5 - ny) * 1.18;
@@ -36,21 +42,108 @@ export function bodyPtToWorld(bx, by, key) {
 }
 
 /** Inverse of bodyPtToWorld (ignores z — maps world XY back to body plate). */
-export function worldPtToBody(wx, wy) {
+export function worldPtToBody(wx, wy, bodyW) {
+  var bw = bodyW || BODY_W_DEFAULT;
   var nx = wx / 1.05 + 0.5;
   var ny = 0.5 - wy / 1.18;
-  return { x: nx * BODY_W, y: ny * BODY_H };
+  return { x: nx * bw, y: ny * BODY_H };
 }
 
 function r(d) {
   return (d * Math.PI) / 180;
 }
 
+function emissiveLineMat(color, opacity) {
+  return new THREE.LineBasicMaterial({
+    color: color,
+    transparent: true,
+    opacity: opacity,
+    depthWrite: false,
+  });
+}
+
+function emissiveRingMat(color, opacity) {
+  return new THREE.MeshBasicMaterial({
+    color: color,
+    transparent: true,
+    opacity: opacity,
+    depthWrite: false,
+  });
+}
+
+function clearGroup(group) {
+  while (group.children.length) {
+    var c = group.children[0];
+    group.remove(c);
+    if (c.geometry) c.geometry.dispose();
+    if (c.material) {
+      if (Array.isArray(c.material)) {
+        c.material.forEach(function (m) {
+          if (m.map) m.map.dispose();
+          m.dispose();
+        });
+      } else {
+        if (c.material.map) c.material.map.dispose();
+        c.material.dispose();
+      }
+    }
+  }
+}
+
+/** Small canvas sprite for V1–V6 edge labels on the horizontal plane. */
+function makeTextSprite(text, color) {
+  var hex = '#' + color.toString(16).padStart(6, '0');
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  canvas.width = 128;
+  canvas.height = 64;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = 'bold 36px system-ui,sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.strokeStyle = '#000000';
+  ctx.lineWidth = 4;
+  ctx.strokeText(text, 64, 32);
+  ctx.fillStyle = hex;
+  ctx.fillText(text, 64, 32);
+  var tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  var mat = new THREE.SpriteMaterial({
+    map: tex,
+    transparent: true,
+    depthWrite: false,
+    depthTest: false,
+  });
+  var sp = new THREE.Sprite(mat);
+  sp.scale.set(0.11, 0.055, 1);
+  sp.renderOrder = 15;
+  return sp;
+}
+
+/** Points on horizontal (XZ) ellipse at HC — ref 02 red ellipse. */
+function horizontalEllipsePoints(hc, rx, rz, segments) {
+  var pts = [];
+  for (var i = 0; i <= segments; i++) {
+    var t = (i / segments) * Math.PI * 2;
+    pts.push(new THREE.Vector3(hc.x + Math.cos(t) * rx, hc.y, hc.z + Math.sin(t) * rz));
+  }
+  return pts;
+}
+
+/** Unit direction in transverse plane from HC toward body-plate target. */
+function horizontalDirFromBody(hc, bx, by, bodyW) {
+  var w = bodyPtToWorld(bx, by, 'V', bodyW);
+  var dx = w.x - hc.x;
+  var dz = w.z - hc.z;
+  var len = Math.sqrt(dx * dx + dz * dz) || 1;
+  return new THREE.Vector3(dx / len, 0, dz / len);
+}
+
 export class EcgScene3D {
   constructor(canvas) {
     this.canvas = canvas;
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x12121a);
+    this.scene.background = new THREE.Color(0x1c1c24);
 
     this.camera = new THREE.PerspectiveCamera(42, 1, 0.05, 40);
     this.camera.position.set(0, 0.08, 2.35);
@@ -69,12 +162,18 @@ export class EcgScene3D {
     this.controls.enableZoom = false;
     this.controls.update();
 
-    var amb = new THREE.AmbientLight(0xffffff, 0.55);
-    var key = new THREE.DirectionalLight(0xfff4e6, 1.05);
-    key.position.set(1.2, 2, 2.5);
-    var fill = new THREE.DirectionalLight(0x8899cc, 0.35);
-    fill.position.set(-2, 0.5, 1);
-    this.scene.add(amb, key, fill);
+    /* Ambient + key + fill — body readable in dark gray, rings stay emissive */
+    this.scene.add(new THREE.AmbientLight(0xd8dce8, 0.78));
+    this.scene.add(new THREE.HemisphereLight(0xf0f4ff, 0x3a3a48, 0.42));
+    var key = new THREE.DirectionalLight(0xfff6ea, 1.15);
+    key.position.set(0.4, 2.6, 2.8);
+    this.scene.add(key);
+    var fill = new THREE.DirectionalLight(0xaabbdd, 0.48);
+    fill.position.set(-1.8, 0.6, 1.2);
+    this.scene.add(fill);
+    var rim = new THREE.DirectionalLight(0xffffff, 0.28);
+    rim.position.set(0, 0.2, -2.2);
+    this.scene.add(rim);
 
     this.root = new THREE.Group();
     this.scene.add(this.root);
@@ -89,7 +188,9 @@ export class EcgScene3D {
     this.electrodeMeshes = {};
     this.triLines = null;
     this.limbRing = null;
-    this.vFan = null;
+    this.horizontalRing = null;
+    this.vFanGroup = null;
+    this.hcMarker = null;
     this.scopeRing = null;
     this.vectorArrow = null;
     this._lastLab = null;
@@ -107,11 +208,18 @@ export class EcgScene3D {
     this._bindPointer();
   }
 
+  _bw(lab) {
+    lab = lab || this._lastLab || {};
+    return lab.bodyNW || BODY_W_DEFAULT;
+  }
+
   _manikinMat() {
     return new THREE.MeshStandardMaterial({
-      color: 0x333333,
-      roughness: 0.88,
-      metalness: 0.04,
+      color: 0x555560,
+      roughness: 0.82,
+      metalness: 0.06,
+      emissive: 0x151518,
+      emissiveIntensity: 0.35,
     });
   }
 
@@ -155,9 +263,10 @@ export class EcgScene3D {
       function (gltf) {
         while (self.manikinGroup.children.length) self.manikinGroup.remove(self.manikinGroup.children[0]);
         var model = gltf.scene;
+        var mat = self._manikinMat();
         model.traverse(function (o) {
           if (o.isMesh) {
-            o.material = self._manikinMat();
+            o.material = mat;
             o.castShadow = false;
           }
         });
@@ -179,63 +288,75 @@ export class EcgScene3D {
     );
   }
 
+  /**
+   * Ref guide rings — perpendicular at HC (ref 02/03 colors):
+   * · Blue = coronal frontal limb plane (XY, vertical hoop facing +Z)
+   * · Red = transverse precordial plane (XZ, horizontal disc at heart level)
+   * Plane labels are 2D HUD in ecg-vector-lab.html.
+   */
   _buildGuideMeshes() {
-    /* Ref 02 — blue limb hexaxial ring (frontal plane, faces viewer at rest). */
-    var ringGeo = new THREE.TorusGeometry(0.4, 0.006, 10, 80);
+    /* Coronal / frontal limb plane — default torus lies in XY (normal +Z). */
     this.limbRing = new THREE.Mesh(
-      ringGeo,
-      new THREE.MeshBasicMaterial({ color: 0x3b82f6, transparent: true, opacity: 0.55 })
+      new THREE.TorusGeometry(0.4, 0.008, 12, 80),
+      emissiveRingMat(FRONTAL, 0.72)
     );
-    this.limbRing.position.set(0, 0.08, 0.12);
+    this.limbRing.renderOrder = 10;
     this.guidesGroup.add(this.limbRing);
 
-    var ringLabel = this._makeLabel('Frontal · limb ring (ref 02)', 0.52, 0.08, 0.12);
-    this.guidesGroup.add(ringLabel);
-
-    /* Ref 02 — red precordial fan (horizontal plane on chest). */
-    var fanPts = [];
-    for (var i = 0; i <= 32; i++) {
-      var t = i / 32;
-      var ang = Math.PI * 0.15 + t * Math.PI * 0.7;
-      var rx = 0.08 + Math.cos(ang) * 0.34;
-      var rz = 0.22 + Math.sin(ang) * 0.12;
-      fanPts.push(new THREE.Vector3(-0.34 + t * 0.68, 0.1, rz));
-    }
-    var fanGeo = new THREE.BufferGeometry().setFromPoints(fanPts);
-    this.vFan = new THREE.Line(
-      fanGeo,
-      new THREE.LineBasicMaterial({ color: 0xef4444, transparent: true, opacity: 0.7 })
+    /* Transverse / precordial plane — rotate π/2 around X → XZ (horizontal disc). */
+    this.horizontalRing = new THREE.Mesh(
+      new THREE.TorusGeometry(HORIZONTAL_RADIUS, 0.007, 12, 80),
+      emissiveRingMat(HORIZONTAL, 0.58)
     );
-    this.guidesGroup.add(this.vFan);
-    this.vFanFallback = this.vFan.geometry;
+    this.horizontalRing.rotation.x = Math.PI / 2;
+    this.horizontalRing.renderOrder = 9;
+    this.guidesGroup.add(this.horizontalRing);
 
-    var fanLabel = this._makeLabel('Horizontal · V1–V6 fan (ref 02)', 0, 0.28, 0.28);
-    this.guidesGroup.add(fanLabel);
+    /* V1–V6 vectors + edge markers — rebuilt each sync from HC in horizontal plane. */
+    this.vFanGroup = new THREE.Group();
+    this.vFanGroup.renderOrder = 11;
+    this.guidesGroup.add(this.vFanGroup);
+
+    /* Shared convergence point — both planes meet at HC (ref 03). */
+    this.hcMarker = new THREE.Mesh(
+      new THREE.SphereGeometry(0.022, 14, 10),
+      new THREE.MeshBasicMaterial({ color: 0xf8fafc, transparent: true, opacity: 0.95, depthWrite: false })
+    );
+    this.hcMarker.renderOrder = 16;
+    this.guidesGroup.add(this.hcMarker);
   }
 
-  _makeLabel(text, x, y, z) {
-    var cv = document.createElement('canvas');
-    var ctx = cv.getContext('2d');
-    ctx.font = '600 22px Archivo,sans-serif';
-    var w = ctx.measureText(text).width + 16;
-    cv.width = w;
-    cv.height = 32;
-    ctx.font = '600 22px Archivo,sans-serif';
-    ctx.fillStyle = 'rgba(232,184,75,0.95)';
-    ctx.fillText(text, 8, 22);
-    var tex = new THREE.CanvasTexture(cv);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    var sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
-    sp.scale.set(w / 280, 0.12, 1);
-    sp.position.set(x, y, z);
-    return sp;
+  _syncGuidePlanes(lab) {
+    if (!lab || !lab.HC_BODY) return;
+    var bw = this._bw(lab);
+    var hc = bodyPtToWorld(lab.HC_BODY.x, lab.HC_BODY.y, 'HC', bw);
+    if (this.limbRing) {
+      this.limbRing.position.copy(hc);
+      this.limbRing.rotation.set(0, 0, 0);
+    }
+    if (this.horizontalRing) {
+      this.horizontalRing.position.copy(hc);
+      this.horizontalRing.rotation.x = Math.PI / 2;
+      this.horizontalRing.rotation.y = 0;
+      this.horizontalRing.rotation.z = 0;
+    }
+    if (this.hcMarker) {
+      this.hcMarker.position.copy(hc);
+      this.hcMarker.visible = (lab.showLimbRing !== false) || (lab.showVFan !== false);
+    }
   }
 
   _ensureElectrode(name, color) {
     if (this.electrodeMeshes[name]) return this.electrodeMeshes[name];
     var mesh = new THREE.Mesh(
       new THREE.SphereGeometry(0.028, 16, 12),
-      new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.25, roughness: 0.4 })
+      new THREE.MeshStandardMaterial({
+        color: color,
+        emissive: color,
+        emissiveIntensity: 0.55,
+        roughness: 0.35,
+        metalness: 0.05,
+      })
     );
     mesh.userData.electrodeKey = name;
     this.electrodeGroup.add(mesh);
@@ -265,7 +386,7 @@ export class EcgScene3D {
     this._ndcFromEvent(e);
     this._raycaster.setFromCamera(this._pointer, this.camera);
     if (!this._raycaster.ray.intersectPlane(this._dragPlane, this._dragIntersect)) return;
-    var body = worldPtToBody(this._dragIntersect.x, this._dragIntersect.y);
+    var body = worldPtToBody(this._dragIntersect.x, this._dragIntersect.y, this._bw(this._lastLab));
     if (this._onElectrodeMove) this._onElectrodeMove(this._dragKey, body.x, body.y);
   }
 
@@ -320,10 +441,11 @@ export class EcgScene3D {
     var limbColors = { RA: 0xf8fafc, LA: 0x111827, RL: 0x5c6370, LL: 0x0284c7 };
     var placing = !!lab.placingLeads;
     var self = this;
+    var bw = this._bw(lab);
     Object.keys(lab.EL_BODY || {}).forEach(function (n) {
       var p = lab.EL_BODY[n];
       var mesh = self._ensureElectrode(n, limbColors[n] || 0x0284c7);
-      var w = bodyPtToWorld(p.x, p.y, n);
+      var w = bodyPtToWorld(p.x, p.y, n, bw);
       mesh.position.copy(w);
       mesh.visible = lab.showTri !== false || placing;
       mesh.scale.setScalar(placing ? 1.35 : 1);
@@ -332,7 +454,7 @@ export class EcgScene3D {
       var p = lab.PRE_BODY[n];
       if (!p) return;
       var mesh = self._ensureElectrode(n, 0xef4444);
-      mesh.position.copy(bodyPtToWorld(p.x, p.y, n));
+      mesh.position.copy(bodyPtToWorld(p.x, p.y, n, bw));
       mesh.visible = placing;
       mesh.scale.setScalar(placing ? 1.45 : 1);
     });
@@ -346,27 +468,18 @@ export class EcgScene3D {
       this.triLines = null;
     }
     if (!lab.showTri) return;
-    var ra = bodyPtToWorld(lab.EL_BODY.RA.x, lab.EL_BODY.RA.y, 'RA');
-    var la = bodyPtToWorld(lab.EL_BODY.LA.x, lab.EL_BODY.LA.y, 'LA');
-    var ll = bodyPtToWorld(lab.EL_BODY.LL.x, lab.EL_BODY.LL.y, 'LL');
-    var segs = [
-      { a: ra, b: la, n: 'I' },
-      { a: ra, b: ll, n: 'II' },
-      { a: la, b: ll, n: 'III' },
-    ];
-    var pts = [];
-    segs.forEach(function (s) {
-      pts.push(s.a.clone(), s.b.clone());
-    });
+    var bw = this._bw(lab);
+    var ra = bodyPtToWorld(lab.EL_BODY.RA.x, lab.EL_BODY.RA.y, 'RA', bw);
+    var la = bodyPtToWorld(lab.EL_BODY.LA.x, lab.EL_BODY.LA.y, 'LA', bw);
+    var ll = bodyPtToWorld(lab.EL_BODY.LL.x, lab.EL_BODY.LL.y, 'LL', bw);
+    var pts = [ra.clone(), la.clone(), ra.clone(), ll.clone(), la.clone(), ll.clone()];
     var geo = new THREE.BufferGeometry().setFromPoints(pts);
-    this.triLines = new THREE.LineSegments(
-      geo,
-      new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.72 })
-    );
+    this.triLines = new THREE.LineSegments(geo, emissiveLineMat(0xffffff, 0.78));
+    this.triLines.renderOrder = 8;
     this.guidesGroup.add(this.triLines);
   }
 
-  /** 2D scope degrees → unit direction in frontal plane (matches lab vector arrow). */
+  /** 2D scope degrees → unit direction in coronal (XY) plane. */
   _dirFromLeadDeg(deg) {
     var a = r(deg);
     return new THREE.Vector3(Math.cos(a), -Math.sin(a), 0);
@@ -385,27 +498,28 @@ export class EcgScene3D {
     });
     if (!pts.length) return;
     var geo = new THREE.BufferGeometry().setFromPoints(pts);
-    var axes = new THREE.LineSegments(
-      geo,
-      new THREE.LineBasicMaterial({ color: 0xe8b84b, transparent: true, opacity: 0.55 })
-    );
+    var axes = new THREE.LineSegments(geo, emissiveLineMat(FRONTAL, 0.62));
+    axes.renderOrder = 12;
     this.scopeGroup.add(axes);
   }
 
   _syncHeart(lab) {
     while (this.heartGroup.children.length) this.heartGroup.remove(this.heartGroup.children[0]);
     if (!lab.showHeart || !lab.HEART_BODY) return;
-    var pos = bodyPtToWorld(lab.HEART_BODY.x, lab.HEART_BODY.y, 'heart');
+    var bw = this._bw(lab);
+    var pos = bodyPtToWorld(lab.HEART_BODY.x, lab.HEART_BODY.y, 'heart', bw);
     var scale = 0.11 * (lab.heartScale || 1);
     var rot = r(lab.heartRotation || 0);
     var heart = new THREE.Mesh(
       new THREE.SphereGeometry(scale, 18, 14),
       new THREE.MeshStandardMaterial({
-        color: 0xb8b8b8,
-        roughness: 0.92,
+        color: 0xd8d8dc,
+        emissive: 0x888890,
+        emissiveIntensity: 0.25,
+        roughness: 0.88,
         metalness: 0.02,
         transparent: true,
-        opacity: 0.88,
+        opacity: 0.92,
       })
     );
     heart.scale.set(1.05, 1, 0.32);
@@ -418,15 +532,19 @@ export class EcgScene3D {
     while (this.scopeGroup.children.length) this.scopeGroup.remove(this.scopeGroup.children[0]);
     if (!lab.showScope && !lab.showVector) return;
 
-    var hc = bodyPtToWorld(lab.HC_BODY.x, lab.HC_BODY.y, 'HC');
+    var bw = this._bw(lab);
+    var hc = bodyPtToWorld(lab.HC_BODY.x, lab.HC_BODY.y, 'HC', bw);
     var sr = 0.36 * (lab.scopeScale || 1);
 
     if (lab.showScope) {
+      /* Measured scope ring — same coronal plane as blue ref ring (XY). */
       var ring = new THREE.Mesh(
         new THREE.TorusGeometry(sr, 0.005, 8, 64),
-        new THREE.MeshBasicMaterial({ color: 0xe8b84b, transparent: true, opacity: 0.75 })
+        emissiveRingMat(FRONTAL, 0.82)
       );
       ring.position.copy(hc);
+      ring.rotation.set(0, 0, 0);
+      ring.renderOrder = 13;
       this.scopeGroup.add(ring);
       this._syncMeasuredScopeAxes(lab, hc, sr);
     }
@@ -436,32 +554,70 @@ export class EcgScene3D {
       if (va.on) {
         var len = 0.28;
         var dir = new THREE.Vector3(va.vx, -va.vy, 0).normalize().multiplyScalar(len);
-        var origin = hc.clone();
-        var arrow = new THREE.ArrowHelper(dir, origin, len, 0x0284c7, 0.06, 0.04);
+        var arrow = new THREE.ArrowHelper(dir, hc.clone(), len, 0x0284c7, 0.06, 0.04);
+        arrow.renderOrder = 14;
         this.scopeGroup.add(arrow);
       }
     }
   }
 
-  _syncVFan(lab) {
-    if (!this.vFan || !lab.PRE_BODY) return;
-    var pts = [];
+  /**
+   * Ref 02/03 horizontal plane geometry: red ellipse + V1–V6 vectors from HC
+   * fanning patient-right (V1) → patient-left (V6) within the transverse plane.
+   */
+  _syncHorizontalGuide(lab) {
+    if (!this.vFanGroup) return;
+    clearGroup(this.vFanGroup);
+    if (!lab || !lab.HC_BODY || !lab.PRE_BODY || lab.showVFan === false) return;
+
+    var hc = bodyPtToWorld(lab.HC_BODY.x, lab.HC_BODY.y, 'HC', this._bw(lab));
+    var rx = HORIZONTAL_RADIUS * 0.98;
+    var rz = HORIZONTAL_ELLIPSE_Z;
+
+    /* Red ellipse boundary — edge-on from front like ref 02. */
+    var ellPts = horizontalEllipsePoints(hc, rx, rz, 72);
+    var ellGeo = new THREE.BufferGeometry().setFromPoints(ellPts);
+    var ell = new THREE.LineLoop(ellGeo, emissiveLineMat(HORIZONTAL, 0.52));
+    ell.renderOrder = 10;
+    this.vFanGroup.add(ell);
+
+    var self = this;
     REF_KEYS.forEach(function (k) {
       var p = lab.PRE_BODY[k];
-      if (p) pts.push(bodyPtToWorld(p.x, p.y, k));
+      if (!p) return;
+      var dir = horizontalDirFromBody(hc, p.x, p.y, self._bw(lab));
+      var end = hc.clone().add(dir.clone().multiplyScalar(rx * 0.92));
+      end.y = hc.y;
+
+      var segPts = [hc.clone(), end];
+      var segGeo = new THREE.BufferGeometry().setFromPoints(segPts);
+      var seg = new THREE.Line(segGeo, emissiveLineMat(HORIZONTAL, 0.88));
+      seg.renderOrder = 12;
+      self.vFanGroup.add(seg);
+
+      var marker = new THREE.Mesh(
+        new THREE.SphereGeometry(0.018, 12, 10),
+        new THREE.MeshBasicMaterial({ color: HORIZONTAL, transparent: true, opacity: 0.95, depthWrite: false })
+      );
+      marker.position.copy(end);
+      marker.renderOrder = 13;
+      self.vFanGroup.add(marker);
+
+      var lbl = makeTextSprite(k, HORIZONTAL);
+      lbl.position.copy(end.clone().add(dir.clone().multiplyScalar(0.07)));
+      lbl.position.y = hc.y + 0.04;
+      self.vFanGroup.add(lbl);
     });
-    if (pts.length >= 2) {
-      if (this.vFan.geometry) this.vFan.geometry.dispose();
-      this.vFan.geometry = new THREE.BufferGeometry().setFromPoints(pts);
-    }
   }
 
   sync(lab) {
     this._lastLab = lab;
+    this._syncGuidePlanes(lab);
     if (this.limbRing) this.limbRing.visible = lab.showLimbRing !== false;
-    if (this.vFan) this.vFan.visible = lab.showVFan !== false;
+    if (this.horizontalRing) this.horizontalRing.visible = lab.showVFan !== false;
+    if (this.vFanGroup) this.vFanGroup.visible = lab.showVFan !== false;
+    this._syncHorizontalGuide(lab);
     this._syncElectrodes(lab);
-    this._syncVFan(lab);
     this._syncEinthoven(lab);
     this._syncScope(lab);
     this._syncHeart(lab);
