@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "convention": "Frontal plane, 0° = Lead I (+x screen right when facing patient). +90° = inferior (aVF). Matches ecg-vector-lab.html CANONICAL_LEAD_DEG.",
+  "limbLeads": {
+    "I": { "deg": 0, "edge": "RA→LA", "plane": "frontal" },
+    "II": { "deg": 60, "edge": "RA→LL", "plane": "frontal" },
+    "III": { "deg": 120, "edge": "LA→LL", "plane": "frontal" },
+    "aVR": { "deg": -150, "plane": "frontal" },
+    "aVL": { "deg": -30, "plane": "frontal" },
+    "aVF": { "deg": 90, "plane": "frontal" }
+  },
+  "precordialLeads": {
+    "note": "Future 3D — approximate chest wrap from ref 03-3d-frontal-horizontal-planes-v-leads.png",
+    "V1": { "plane": "horizontal", "position": "sternal-right" },
+    "V2": { "plane": "horizontal", "position": "sternal-left" },
+    "V3": { "plane": "horizontal", "position": "between V2-V4" },
+    "V4": { "plane": "horizontal", "position": "5th ICS MCL" },
+    "V5": { "plane": "horizontal", "position": "5th ICS AAL" },
+    "V6": { "plane": "horizontal", "position": "5th ICS MAL" }
+  }
+}

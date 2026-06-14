@@ -1,0 +1,90 @@
+{
+  "version": 3,
+  "savedAt": "2026-06-14T15:40:25.409Z",
+  "note": "Steve tuned layout for gray-b avatar — electrodes, scope, heart, strip column.",
+  "electrodes": {
+    "RA": { "x": 84.45012121212122, "y": 54.50275007891414 },
+    "LA": { "x": 121.1420404040404, "y": 53.76891169507575 },
+    "LL": { "x": 117.1059292929293, "y": 168.6146187657828 },
+    "RL": { "x": 90.68774747474748, "y": 166.78002280618685 }
+  },
+  "precordial": {
+    "V1": { "x": 106.83219191919193, "y": 69.54643694760101 },
+    "V2": { "x": 114.17057575757576, "y": 68.81259856376262 },
+    "V3": { "x": 116.73901010101011, "y": 84.59012381628787 },
+    "V4": { "x": 123.71047474747475, "y": 85.69088139204545 },
+    "V5": { "x": 132.51653535353535, "y": 84.59012381628787 },
+    "V6": { "x": 137.28648484848486, "y": 76.51790159406565 }
+  },
+  "scope": { "x": 112.3359797979798, "y": 78.3524975536616 },
+  "heartAnchor": { "x": 109.40062626262626, "y": 73.58254805871212 },
+  "heartPack": "heart-1",
+  "heartScale": 0.8,
+  "scopeScale": 0.872,
+  "badgeScale": 1,
+  "badgeSpread": 1,
+  "bodyPlateScale": 1,
+  "autoMatchPlateBg": true,
+  "axis": 120,
+  "heartRate": 64,
+  "vectorStroke": 2,
+  "playbackRate": 1,
+  "visibleLeads": { "I": true, "II": true, "III": true, "aVR": true, "aVL": true, "aVF": true },
+  "focusLead": "II",
+  "labelOffsets": {},
+  "canvasPalette": {
+    "dark": {
+      "canvasBg": "#07090d",
+      "bodyFill": "#333333",
+      "scopeRing": "#e8b84b",
+      "scopeLead": "#e8b84b",
+      "scopeFocus": "#0284c7",
+      "quadLabel": "#e8b84b",
+      "elLabel": "#f0f0f4",
+      "elLabelDim": "#9ca3af",
+      "elDotLimb": "#0284c7",
+      "elDotRef": "#5c6370",
+      "triStroke": "#ffffff",
+      "triStrokeDim": "#6b7280",
+      "triLabel": "#e8b84b",
+      "heartFill": "#b8b8b8"
+    },
+    "light": {
+      "canvasBg": "#e8eaee",
+      "bodyFill": "#333333",
+      "scopeRing": "#7a5a08",
+      "scopeLead": "#7a5a08",
+      "scopeFocus": "#0369a1",
+      "quadLabel": "#7a5a08",
+      "elLabel": "#151518",
+      "elLabelDim": "#4a4e57",
+      "elDotLimb": "#0369a1",
+      "elDotRef": "#6b7280",
+      "triStroke": "#151518",
+      "triStrokeDim": "#9ca3af",
+      "triLabel": "#7a5a08",
+      "heartFill": "#a8a8a8"
+    }
+  },
+  "bottomStripCollapsed": false,
+  "strip": {
+    "stripBeats": 8,
+    "stripHeight": 280,
+    "leadStripW": 362,
+    "stripZoom": 100
+  },
+  "ui": {
+    "showHeart": true,
+    "showRibs": false,
+    "showScope": true,
+    "showTri": true,
+    "showVector": true,
+    "showComet": true,
+    "showT": false,
+    "useRealEcg": true,
+    "theme": "dark",
+    "bodyMode": "real",
+    "bodyPlateId": "gray-b"
+  },
+  "bodyPlateId": "gray-b"
+}
