@@ -877,9 +877,9 @@ canvas{display:block}
           <canvas id="unified"></canvas>
         </div>
       </div>
-      <div class="lead-strips-wrap" id="leadStripsWrap" title="Scroll = zoom in (time + amplitude) · dbl-click = auto fit rows · middle-drag pan · drag playhead">
+      <div class="lead-strips-wrap" id="leadStripsWrap" title="Scroll = time zoom (beats visible) · amplitude always fills row · dbl-click reset time · middle-drag pan · drag playhead">
         <div class="col-resize-handle" id="leadColResize" title="Drag to widen — shows more beats / QRS complexes" aria-label="Resize lead strip column"></div>
-        <div class="lead-strips-label">Leads<span class="zoom-hint" id="stripZoomHint">auto fit · scroll to zoom in</span></div>
+        <div class="lead-strips-label">Leads<span class="zoom-hint" id="stripZoomHint">auto fit · scroll = time zoom</span></div>
         <canvas id="leadStrips" aria-label="Live lead strips synced to vectorscope"></canvas>
       </div>
     </div>
@@ -925,10 +925,12 @@ canvas{display:block}
       <button type="button" class="layer-pill on" data-layer="limbRing" title="Ref 02/03 — blue coronal frontal limb ring (3D)"><span class="pill-txt">Ring</span></button>
       <button type="button" class="layer-pill on" data-layer="vFan" title="Ref 02/03 — red transverse V1–V6 plane + fan from HC (3D)"><span class="pill-txt">V fan</span></button>
       <button type="button" class="layer-pill on" data-layer="scope"><span class="pill-txt">Scope</span></button>
-      <button type="button" class="layer-pill on" data-layer="tri"><span class="pill-txt">Einthoven</span></button>
+      <button type="button" class="layer-pill on" data-layer="tri" title="Einthoven triangle — body electrode lines RA→LA (I), RA→LL (II), LA→LL (III)"><span class="pill-txt">Einthoven</span></button>
       <button type="button" class="layer-pill on" data-layer="vector"><span class="pill-txt">Vector</span></button>
-      <button type="button" class="layer-pill on" data-layer="comet"><span class="pill-txt">Comet</span></button>
-      <button type="button" class="layer-pill on" data-layer="leadFlow" title="Pulse along each lead axis — click a lead label to solo it"><span class="pill-txt">Flow</span></button>
+      <button type="button" class="layer-pill on" data-layer="comet" title="Vectorscope comet trail — streaming tail behind the net QRS vector arrow"><span class="pill-txt">Comet</span></button>
+      <button type="button" class="layer-pill" data-layer="smear" title="CRT phosphor persistence — accumulating density heatmap where the vector arrow spends time. Brightest spot = heart's predominant electrical axis."><span class="pill-txt">Smear</span></button>
+      <button type="button" class="layer-pill on" data-layer="leadFlowPath" title="Show paths from Einthoven + Scope layers (no duplicate lines)"><span class="pill-txt">Flow path</span></button>
+      <button type="button" class="layer-pill on" data-layer="leadFlow" title="Teardrop pulse — I/II/III travel on Einthoven triangle + HC rays"><span class="pill-txt">Pure flow</span></button>
     </div>
     <div class="lead-pills" role="toolbar" aria-label="Lead study set">
       <span class="lead-pills-label">Lead</span>
@@ -951,7 +953,7 @@ canvas{display:block}
         <span class="hud-chip hud-place-hint" id="hudPlaceHint" hidden title="Layout editor — open Controls for coordinates"></span>
         <span class="hud-chip" id="hudBodyView" hidden title="Chest zoom — scroll on body canvas">100%</span>
         <span class="hud-chip hud-lead-study" id="hudLeadStudy" hidden title="Focused lead — click another label or Lead → All"></span>
-        <span class="hud-chip hud-flow-hint" id="hudFlowHint" hidden title="Lead flow layer">− → + along each lead axis · teaching metaphor</span>
+        <span class="hud-chip hud-flow-hint" id="hudFlowHint" hidden title="Lead flow layers">Pure flow · teardrop travel · toggle path separately</span>
         <span class="hud-cursor-time" id="hudCursorTime" title="Time at cursor in visible strip window">0.000 s · beat 1.00</span>
       </div>
       <div class="hud-controls">
@@ -1132,10 +1134,7 @@ canvas{display:block}
             <button type="button" id="scopeRingTextbookBtn" data-scope-ring="textbook" title="Perfect circle — teaching hexaxial diagram; angles from your triangle">Textbook ring</button>
             <button type="button" id="scopeRingMeasuredBtn" data-scope-ring="measured" title="Irregular hex — ray lengths from |I| |II| |III| and Goldberger magnitudes">Measured ring</button>
           </div>
-          <div class="seg" style="margin-bottom:6px">
-            <button type="button" id="hcLinkTriangleBtn" title="When on, dragging RA/LA/LL moves HC with Wilson central terminal (triangle centroid)">Link HC to triangle</button>
-          </div>
-          <p class="ctl-hint" style="margin-top:0">Ring <strong>size</strong> follows triangle scale (electrode spacing × Scope size slider). Measured ring = literal reduction of Einthoven + augmented vectors to HC.</p>
+          <p class="ctl-hint" style="margin-top:0">Ring <strong>size</strong> follows triangle scale (electrode spacing × Scope size slider). Measured ring = literal reduction of Einthoven + augmented vectors to HC. HC stays heart-anchored — not Wilson centroid.</p>
         </div>
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">Scope size</span><span class="ctl-val-sm" id="scopeSizeV">100%</span></div>
@@ -1186,7 +1185,7 @@ canvas{display:block}
       <div class="axis-item ctl-section" data-ctl-section="leadFlowTune">
         <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>Lead flow</span><span class="axis-chevron" aria-hidden="true"></span></button>
         <div class="axis-body ctl-section-body">
-          <p class="ctl-hint" style="margin:0 0 8px">Teardrop pulse along each lead axis (− green → + red). Turn on <strong>Flow</strong> layer to preview.</p>
+          <p class="ctl-hint" style="margin:0 0 8px">Teardrop pulse along each lead axis (− green → + red). <strong>Flow path</strong> turns on <strong>Einthoven</strong> + <strong>Scope</strong> (paths live there only). <strong>Pure flow</strong> = travel; I/II/III follow triangle edges + HC→ring rays.</p>
           <div class="ctl">
             <div class="ctl-head"><span class="ctl-label">Tail length</span><span class="ctl-val-sm" id="flowTailV">28%</span></div>
             <input type="range" id="flowTailR" min="10" max="50" step="1" value="28" aria-label="Flow comet tail length percent of path"/>
@@ -1260,7 +1259,7 @@ canvas{display:block}
         </div>
         <p class="ctl-hint" id="placeModeHint" hidden style="margin-top:6px;color:var(--gold);font-weight:600"></p>
         <p class="ctl-hint"><strong>2D</strong> — flat canvas + Einthoven triangle. <strong>3D</strong> — ref 02 depth: blue <strong>frontal limb ring</strong>, red <strong>V fan</strong>; orbit drag to see RA/LA forward vs LL/RL posterior. Strips unchanged.</p>
-        <p class="ctl-hint"><strong>Leads</strong> — RA/LA/LL form Einthoven triangle: <strong>I</strong> = RA→LA, <strong>II</strong> = RA→LL, <strong>III</strong> = LA→LL (toggle <strong>Einthoven</strong> layer). Vectorscope ring size follows triangle spacing; <strong>Measured ring</strong> mode uses literal |I|/|II|/|III| ray lengths. <strong>Scope</strong> — HC centre (link to Wilson centroid optional).</p>
+        <p class="ctl-hint"><strong>Leads</strong> — RA/LA/LL form Einthoven triangle: <strong>I</strong> = RA→LA, <strong>II</strong> = RA→LL, <strong>III</strong> = LA→LL (toggle <strong>Einthoven</strong> layer). Vectorscope ring size follows triangle spacing; <strong>Measured ring</strong> mode uses literal |I|/|II|/|III| ray lengths. <strong>Scope</strong> — HC at the heart's electrical centre; ring rays share the triangle edge direction, translated to HC.</p>
         <p class="ctl-hint" style="margin-top:6px;display:none" id="rlRefHint"><strong>RL ref</strong> — dashed line from RL to the Wilson central terminal (midpoint of RA+LA+LL). RL is <em>reference ground only</em>; it is not in I/II/III math.</p>
         <p class="ctl-hint" style="margin-top:4px"><strong>Nudge</strong> — tiny label shifts (~28px max) if text overlaps. <strong>Reset labels</strong> snaps them back beside their lines. Quadrant words (Left/Right/…) stay fixed outside the ring.</p>
         <div class="layout-readout" id="layoutReadout">
@@ -1307,7 +1306,7 @@ canvas{display:block}
               <ul class="lab-roadmap" aria-label="Implementation phases">
                 <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 0</strong> — Collapsible Controls<span class="rm-try">Controls dock accordions</span></span></li>
                 <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 1</strong> — Measured hexaxial ring<span class="rm-try">Ring + strips follow electrode drag</span></span></li>
-                <li class="done" data-phase-go="2"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 2</strong> — Green→red flow teardrops<span class="rm-try">Layer: Flow · static paths + −→+ pulse · click to open</span></span></li>
+                <li class="done" data-phase-go="2"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 2</strong> — Green→red flow teardrops<span class="rm-try">Pure flow + Flow path layers · −→+ pulse · click to open</span></span></li>
                 <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 3</strong> — Lead isolation UX<span class="rm-try">Lead pills · Click iso · Esc show all</span></span></li>
                 <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 5</strong> — Conduction + VCG split<span class="rm-try">Bottom bar: Lab | Conduction</span></span></li>
                 <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 4</strong> — Smoke + handoff docs<span class="rm-try">node scripts/smoke-ecg-vector-lab.mjs</span></span></li>
@@ -1794,8 +1793,16 @@ function focusLeadOnly(name){
 }
 
 function pickLeadFromChart(name){
-  if(S.clickToIsolate)isolateLead(name);
-  else focusLeadOnly(name);
+  if(S.clickToIsolate){
+    /* Clicking the already-solo lead restores all */
+    if(soloLeadVisible()&&S.visibleLeads[name]){
+      showAllLeads();
+    }else{
+      isolateLead(name);
+    }
+  }else{
+    focusLeadOnly(name);
+  }
 }
 
 function isolateLead(name){
@@ -1976,6 +1983,33 @@ function beatPosToRecSec(beatPos){
   return ((beatPos*60/hr)%dur+dur)%dur;
 }
 
+function realEcgRecDur(){
+  return REAL_ECG&&REAL_ECG.durationSec?REAL_ECG.durationSec:10;
+}
+
+function beatPosToUnwrappedSec(beatPos){
+  var hr=REAL_ECG&&REAL_ECG.hrBpm?REAL_ECG.hrBpm:currentHr();
+  return beatPos*60/hr;
+}
+
+function stripTraceLoopBreak(prevBeat,beatPos){
+  if(!S.useRealEcg||!REAL_ECG_READY||prevBeat==null)return false;
+  var dur=realEcgRecDur();
+  return Math.floor(beatPosToUnwrappedSec(prevBeat)/dur)!==Math.floor(beatPosToUnwrappedSec(beatPos)/dur);
+}
+
+function stripTraceStepPx(plotW,tInWindow){
+  if(!S.useRealEcg||!REAL_ECG_READY)return plotW>320?0.5:1;
+  var vm=stripViewMetrics(tInWindow);
+  var hr=REAL_ECG.hrBpm||currentHr();
+  var fs=REAL_ECG.fs||100;
+  var beatsPerPx=vm.dispBeats/Math.max(1,plotW);
+  var samplesPerPx=beatsPerPx*(60/hr)*fs;
+  if(samplesPerPx>=4)return 1;
+  if(samplesPerPx>=2)return 0.5;
+  return 0.25;
+}
+
 function realLeadSample(leadName,beatPos){
   if(!REAL_ECG||!REAL_ECG.leads||!REAL_ECG.leads[leadName])return{val:0,w:null,gain:1};
   var sec=beatPosToRecSec(beatPos);
@@ -1985,7 +2019,7 @@ function realLeadSample(leadName,beatPos){
   var i1=Math.min(arr.length-1,i0+1);
   var frac=idx-i0;
   var mv=arr[i0]+(arr[i1]-arr[i0])*frac;
-  return{val:mv*realEcgScale()*leadGain(leadName),w:null,gain:leadGain(leadName)};
+  return{val:mv*realEcgScale(),w:null,gain:1};
 }
 
 /** Strips: real PTB-XL waveform by beat index, or synthetic vector projection by beat phase. */
@@ -2204,6 +2238,27 @@ function stripBeatPhaseAtX(x,plotW,tInWindow){
 /** Vertical gain for lead strip rows — auto-fits each lead unless user scroll-zoomed. */
 function maxStripLeadExcursion(leadName,tInWindow){
   var vm=stripViewMetrics(tInWindow);
+  if(S.useRealEcg&&REAL_ECG_READY&&REAL_ECG.leads&&REAL_ECG.leads[leadName]){
+    var arr=REAL_ECG.leads[leadName];
+    var fs=REAL_ECG.fs||100;
+    var hr=REAL_ECG.hrBpm||currentHr();
+    var scale=realEcgScale();
+    var maxAbs=0.06;
+    var b0=vm.winStart;
+    var b1=vm.winStart+vm.dispBeats;
+    var steps=Math.max(200,Math.ceil((b1-b0)*fs*(60/hr)*0.5));
+    for(var s=0;s<=steps;s++){
+      var beatPos=b0+(s/steps)*(b1-b0);
+      var sec=beatPosToRecSec(beatPos);
+      var idx=sec*fs;
+      var i0=Math.floor(idx);
+      var i1=Math.min(arr.length-1,i0+1);
+      var frac=idx-i0;
+      var mv=arr[i0]+(arr[i1]-arr[i0])*frac;
+      maxAbs=Math.max(maxAbs,Math.abs(mv*scale));
+    }
+    return Math.max(maxAbs,0.06);
+  }
   var maxAbs=0.06;
   var steps=48;
   for(var s=0;s<=steps;s++){
@@ -2215,16 +2270,13 @@ function maxStripLeadExcursion(leadName,tInWindow){
 }
 
 function stripRowAmpForLead(rowH,leadName,tInWindow){
-  if(S.stripManualZoom){
-    return rowH*0.36*stripChartGain();
-  }
   var half=rowH*STRIP_ROW_FILL*0.5;
   return half/maxStripLeadExcursion(leadName,tInWindow);
 }
 
 function stripRowAmp(rowH,leadName,tInWindow){
   if(leadName&&tInWindow!=null)return stripRowAmpForLead(rowH,leadName,tInWindow);
-  return rowH*0.36*(S.stripManualZoom?stripChartGain():1);
+  return rowH*0.36;
 }
 
 function scopeScaleFromZoom(z){
@@ -2243,9 +2295,9 @@ function updateStripZoomHint(){
   var leads=visibleLeadsList().length;
   if(!el)return;
   if(S.stripManualZoom){
-    el.textContent=leads+' lead'+(leads===1?'':'s')+' · '+S.stripBeats+' beats · '+min+' min · zoom '+clampStripZoom(S.stripZoom)+' (scroll) · dbl-click auto fit';
+    el.textContent=leads+' lead'+(leads===1?'':'s')+' · '+S.stripBeats+' beats · '+min+' min · time zoom '+clampStripZoom(S.stripZoom)+' · dbl-click reset time';
   }else{
-    el.textContent=leads+' lead'+(leads===1?'':'s')+' · '+S.stripBeats+' beats · '+min+' min · auto fit · scroll to zoom in';
+    el.textContent=leads+' lead'+(leads===1?'':'s')+' · '+S.stripBeats+' beats · '+min+' min · auto fit · scroll = time zoom';
   }
 }
 
@@ -2317,8 +2369,8 @@ var BODY='M104.265,117.959c-0.304,3.58,2.126,22.529,3.38,29.959c0.597,3.52,2.234
 /* ── State ────────────────────────────────────────────────────────── */
 var S={
   angle:60,time:0,speed:72/3600,paused:false,showT:false,useRealEcg:true,stripWinStart:null,bottomStripCollapsed:false,focusLead:'II',mag:0.82,
-  showHeart:true,showRibs:true,showScope:true,showTri:true,showVector:true,showComet:true,showLeadFlow:true,
-  showLimbRing:true,showVFan:true,
+  showHeart:true,showRibs:true,showScope:true,showTri:true,showVector:true,showComet:true,showLeadFlow:true,showLeadFlowPath:true,
+  showLimbRing:true,showVFan:true,showSmear:false,smearDecay:0.98,
   studyMode:'lab',
   conductionPreset:'normal',conductionAxis:60,
   controlsSections:{},
@@ -2331,9 +2383,9 @@ var S={
   flowTailPct:28,flowHeadMul:1,flowStrokeMul:1,flowPathMul:1,flowSpeedMul:1,
   cometTailPct:45,cometWidthMul:1,cometFadeMul:1,
   bodyViewZoom:1,bodyViewPanX:0,bodyViewPanY:0,
-  scopeRingMode:'textbook',hcLinkedToTriangle:true,
+  scopeRingMode:'textbook',hcLinkedToTriangle:false,
   scene3dLight:{ambient:0.4,key:1.15,keyAz:12,keyEl:48},
-  vectorStroke:2,playbackRate:1,clickToIsolate:false,
+  vectorStroke:2,playbackRate:1,clickToIsolate:true,
   visibleLeads:defaultVisibleLeads()
 };
 
@@ -2427,6 +2479,7 @@ var HEART_BODY=JSON.parse(JSON.stringify(HEART_BODY_DEFAULT));
 var MEASURED_LEAD_AXES={};
 var MEASURED_RING_RAD={};
 var ALL_LIMB_LEAD_NAMES=['I','II','III','aVR','aVL','aVF'];
+function isEinthovenLead(name){return name==='I'||name==='II'||name==='III';}
 var SCOPE_TRI_MEAN_BODY_REF=triangleMeanDistToHc(HC_BODY_DEFAULT,EL_BODY_DEFAULT);
 var _layoutRestored=false;
 var _layoutHadScene3dLight=false;
@@ -2495,12 +2548,19 @@ function drawLeadFlowLayer(){
   visibleLeadsList().forEach(function(L,idx){
     var poles=leadFlowPoles(L.n);
     var t=(base+idx*0.13)%1;
-    if(poles.body.neg&&poles.body.pos){
-      drawLeadFlowStaticPath(poles.body.neg.x,poles.body.neg.y,poles.body.pos.x,poles.body.pos.y,0.5);
-      drawLeadFlowTeardrop(poles.body.neg.x,poles.body.neg.y,poles.body.pos.x,poles.body.pos.y,t,1);
+    if(isEinthovenLead(L.n)){
+      var edge=einthovenBodyEdge(L.n);
+      if(edge&&edge.f&&edge.t){
+        drawLeadFlowTeardrop(edge.f.x,edge.f.y,edge.t.x,edge.t.y,t,1);
+      }
+      var ringPos=scopePtFromDeg(leadDeg(L.n),leadRingOuterRadius(L.n)*0.92);
+      drawLeadFlowTeardrop(SCX,SCY,ringPos.x,ringPos.y,(t+0.07)%1,0.88);
+    }else{
+      if(poles.body.neg&&poles.body.pos){
+        drawLeadFlowTeardrop(poles.body.neg.x,poles.body.neg.y,poles.body.pos.x,poles.body.pos.y,t,1);
+      }
+      drawLeadFlowTeardrop(poles.ring.neg.x,poles.ring.neg.y,poles.ring.pos.x,poles.ring.pos.y,(t+0.07)%1,0.88);
     }
-    drawLeadFlowStaticPath(poles.ring.neg.x,poles.ring.neg.y,poles.ring.pos.x,poles.ring.pos.y,0.38);
-    drawLeadFlowTeardrop(poles.ring.neg.x,poles.ring.neg.y,poles.ring.pos.x,poles.ring.pos.y,(t+0.07)%1,0.88);
   });
 }
 var _labelDrag={id:null,ax:0,ay:0,ox:0,oy:0};
@@ -2670,7 +2730,8 @@ function recomputeMeasuredRingRadii(){
     maxLen=Math.max(maxLen,len);
   });
   ALL_LIMB_LEAD_NAMES.forEach(function(n){
-    MEASURED_RING_RAD[n]=(MEASURED_RING_RAD[n]||0)/maxLen;
+    var ratio=(MEASURED_RING_RAD[n]||0)/maxLen;
+    MEASURED_RING_RAD[n]=Math.max(0.12,ratio);
   });
 }
 
@@ -2709,7 +2770,9 @@ function leadCanvasVec(name){
 
 function leadRingPt(name,frac){
   frac=frac!=null?frac:1;
-  return scopePtFromDeg(leadDeg(name),leadRingOuterRadius(name)*frac);
+  /* Textbook ring mode → canonical hexaxial angles (evenly spaced 30°); Measured → electrode-derived */
+  var deg=S.scopeRingMode==='measured'?leadDeg(name):(CANONICAL_LEAD_DEG[name]!=null?CANONICAL_LEAD_DEG[name]:leadDeg(name));
+  return scopePtFromDeg(deg,leadRingOuterRadius(name)*frac);
 }
 
 /* Measured hexaxial unit vectors — electrode geometry drives ring + strips. */
@@ -2787,7 +2850,7 @@ function buildLabLayout(){
     heartRotation:S.heartRotation!=null?S.heartRotation:0,
     scopeScale:S.scopeScale,
     scopeRingMode:S.scopeRingMode==='measured'?'measured':'textbook',
-    hcLinkedToTriangle:S.hcLinkedToTriangle!==false,
+    hcLinkedToTriangle:!!S.hcLinkedToTriangle,
     badgeScale:S.badgeScale,
     badgeSpread:S.badgeSpread,
     flowTailPct:S.flowTailPct,
@@ -2798,6 +2861,8 @@ function buildLabLayout(){
     cometTailPct:S.cometTailPct,
     cometWidthMul:S.cometWidthMul,
     cometFadeMul:S.cometFadeMul,
+    showSmear:!!S.showSmear,
+    smearDecay:S.smearDecay,
     bodyPlateScale:S.bodyPlateScale,
     linkAnchorsToPlate:S.linkAnchorsToPlate!==false,
     bodyViewZoom:S.bodyViewZoom,
@@ -2823,6 +2888,8 @@ function buildLabLayout(){
       showVector:!!S.showVector,
       showComet:!!S.showComet,
       showLeadFlow:!!S.showLeadFlow,
+      showLeadFlowPath:!!S.showLeadFlowPath,
+      showSmear:!!S.showSmear,
       showLimbRing:!!S.showLimbRing,
       showVFan:!!S.showVFan,
       showT:!!S.showT,
@@ -2996,6 +3063,8 @@ function applyLabLayout(o,opts){
   if(typeof o.cometTailPct==='number'){
     S.cometTailPct=clampCometTailPct(o.cometTailPct);
   }
+  if(typeof o.showSmear==='boolean')S.showSmear=o.showSmear;
+  if(typeof o.smearDecay==='number')S.smearDecay=Math.max(0.85,Math.min(0.998,o.smearDecay));
   if(typeof o.cometWidthMul==='number'){
     S.cometWidthMul=Math.max(0.4,Math.min(2.5,o.cometWidthMul));
   }
@@ -3078,6 +3147,9 @@ function applyLabLayout(o,opts){
     if(typeof o.ui.showVector==='boolean')S.showVector=o.ui.showVector;
     if(typeof o.ui.showComet==='boolean')S.showComet=o.ui.showComet;
     if(typeof o.ui.showLeadFlow==='boolean')S.showLeadFlow=o.ui.showLeadFlow;
+    if(typeof o.ui.showLeadFlowPath==='boolean')S.showLeadFlowPath=o.ui.showLeadFlowPath;
+    else if(typeof o.ui.showLeadFlow==='boolean'&&o.ui.showLeadFlowPath==null)S.showLeadFlowPath=o.ui.showLeadFlow;
+    if(typeof o.ui.showSmear==='boolean')S.showSmear=o.ui.showSmear;
     if(typeof o.ui.showLimbRing==='boolean')S.showLimbRing=o.ui.showLimbRing;
     if(typeof o.ui.showVFan==='boolean')S.showVFan=o.ui.showVFan;
     if(typeof o.ui.showT==='boolean')S.showT=o.ui.showT;
@@ -3390,6 +3462,30 @@ function playheadBadgeAnchor(playX,liveY,base,rowH,plotW){
   return{x:playX+dx,y:y,r:r};
 }
 
+/** Single-color clinical trace — one continuous path, no polarity color switching. */
+function drawLeadTrace(ctx,lpad,plotW,base,amp,leadName,tInWindow,color,lineW){
+  ctx.save();
+  ctx.lineJoin='round';
+  ctx.lineCap='round';
+  ctx.strokeStyle=color;
+  ctx.lineWidth=lineW;
+  ctx.beginPath();
+  var step=stripTraceStepPx(plotW,tInWindow);
+  var first=true;
+  var prevBeat=null;
+  for(var x=0;x<=plotW;x+=step){
+    var beatPos=stripBeatPosAtX(x,plotW,tInWindow);
+    if(stripTraceLoopBreak(prevBeat,beatPos))first=true;
+    var pr=stripLeadProj(beatPos,leadName);
+    var yy=base-pr.val*amp;
+    if(first){ctx.moveTo(lpad+x,yy);first=false;}
+    else ctx.lineTo(lpad+x,yy);
+    prevBeat=beatPos;
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
 function traceColorForVal(val,sign,pc,pr){
   if(!S.useRealEcg&&pr&&pr.w==='t')return{col:pc.anode,sign:-1};
   if(val>POL_TRACE_DEAD)return{col:pc.cathode,sign:1};
@@ -3403,11 +3499,12 @@ function drawPolarityLeadTrace(ctx,lpad,plotW,base,amp,leadName,tInWindow,pc,lin
   ctx.lineJoin='round';
   ctx.lineCap='round';
   ctx.lineWidth=lineW;
-  var step=plotW>320?0.5:1;
+  var step=stripTraceStepPx(plotW,tInWindow);
   var sign=1;
   var prevCol=null;
   var open=false;
   var xPrev=0,vPrev=0;
+  var prevBeat=null;
   function flush(){if(open){ctx.stroke();open=false;}}
   function plotTo(x,y,col){
     if(!open||col!==prevCol){
@@ -3422,7 +3519,13 @@ function drawPolarityLeadTrace(ctx,lpad,plotW,base,amp,leadName,tInWindow,pc,lin
     }
   }
   for(var x=0;x<=plotW;x+=step){
-    var pr=stripLeadProj(stripBeatPosAtX(x,plotW,tInWindow),leadName);
+    var beatPos=stripBeatPosAtX(x,plotW,tInWindow);
+    if(stripTraceLoopBreak(prevBeat,beatPos)){
+      flush();
+      prevCol=null;
+      open=false;
+    }
+    var pr=stripLeadProj(beatPos,leadName);
     var val=pr.val;
     var yy=base-val*amp;
     var tc=traceColorForVal(val,sign,pc,pr);
@@ -3436,7 +3539,7 @@ function drawPolarityLeadTrace(ctx,lpad,plotW,base,amp,leadName,tInWindow,pc,lin
       plotTo(xc,base,tc.col);
     }
     plotTo(x,yy,tc.col);
-    xPrev=x;vPrev=val;
+    xPrev=x;vPrev=val;prevBeat=beatPos;
   }
   flush();
   ctx.restore();
@@ -3516,7 +3619,7 @@ function buildLab3dPayload(ph){
     scopeScale:S.scopeScale,
     scopeRingMode:S.scopeRingMode||'textbook',
     measuredRingRad:ringRadSnap,
-    hcLinkedToTriangle:S.hcLinkedToTriangle!==false,
+    hcLinkedToTriangle:!!S.hcLinkedToTriangle,
   placingLeads:S.placingLeads,
     placingScope:S.placingScope,
     placingHeart:S.placingHeart,
@@ -3803,6 +3906,29 @@ function einthovenBodyEdge(leadName){
   if(leadName==='III')return{f:EL.LA,t:EL.LL};
   return null;
 }
+function einthovenElectrodeLineLabel(leadName){
+  if(leadName==='I')return'RA→LA';
+  if(leadName==='II')return'RA→LL';
+  if(leadName==='III')return'LA→LL';
+  return '';
+}
+function drawParallelOffsetBracket(edge,ringFrom,ringTo,stroke,lineW,tickLen){
+  if(!edge||!ringFrom||!ringTo)return;
+  var bx=(edge.f.x+edge.t.x)*0.5,by=(edge.f.y+edge.t.y)*0.5;
+  var rx=(ringFrom.x+ringTo.x)*0.5,ry=(ringFrom.y+ringTo.y)*0.5;
+  var dx=edge.t.x-edge.f.x,dy=edge.t.y-edge.f.y;
+  var len=Math.hypot(dx,dy)||1;
+  var px=-dy/len,py=dx/len,h=tickLen*0.5;
+  uctx.save();
+  uctx.strokeStyle=stroke;
+  uctx.lineWidth=lineW;
+  uctx.setLineDash([]);
+  uctx.beginPath();
+  uctx.moveTo(bx-px*h,by-py*h);uctx.lineTo(bx+px*h,by+py*h);
+  uctx.moveTo(rx-px*h,ry-py*h);uctx.lineTo(rx+px*h,ry+py*h);
+  uctx.stroke();
+  uctx.restore();
+}
 function drawTriRingTranslationAnim(dark){
   if(!_triRingAnim||!S.showTri)return;
   var elapsed=performance.now()-_triRingAnim.t0;
@@ -4057,7 +4183,7 @@ function applyPlateNormAnchors(opts){
   var wn=wilsonNormFrom(norms);
   HC_BODY=plateNormToBodyPt(wn.x,wn.y,pr);
   if(norms.heart)HEART_BODY=plateNormToBodyPt(norms.heart.x,norms.heart.y,pr);
-  if(S.hcLinkedToTriangle!==false)syncHcFromTriangleIfLinked();
+  if(S.hcLinkedToTriangle)syncHcFromTriangleIfLinked();
   recomputeSceneGeometry();
   resetTrail();
   updateLeadReadout();
@@ -4395,6 +4521,58 @@ function drawCometHead(ph,dark){
   uctx.beginPath();uctx.arc(lx,ly,headR,0,Math.PI*2);uctx.fill();
   uctx.strokeStyle='rgba(180,210,255,0.85)';uctx.lineWidth=1.5;
   uctx.beginPath();uctx.arc(lx,ly,headR*1.5,0,Math.PI*2);uctx.stroke();
+}
+
+/* ── Smear / phosphor persistence layer (CRT density accumulation) ── */
+var _smearCanvas=null;
+var _smearCtx=null;
+var _smearW=0,_smearH=0;
+
+function _ensureSmearBuf(w,h,dpr){
+  if(_smearCanvas&&_smearW===w&&_smearH===h)return;
+  _smearW=w;_smearH=h;
+  if(!_smearCanvas){
+    _smearCanvas=document.createElement('canvas');
+    _smearCtx=_smearCanvas.getContext('2d',{alpha:true});
+  }
+  _smearCanvas.width=Math.round(w*dpr);
+  _smearCanvas.height=Math.round(h*dpr);
+  _smearCtx.setTransform(1,0,0,1,0,0);
+  _smearCtx.scale(dpr,dpr);
+}
+
+function _clearSmearBuf(){
+  if(_smearCtx&&_smearW&&_smearH)_smearCtx.clearRect(0,0,_smearW,_smearH);
+}
+
+function drawSmearLayer(ph,dark){
+  if(!S.showSmear)return;
+  var vv=vecAt(ph);
+  if(!vv.on){return;}
+  var d=Math.min(window.devicePixelRatio||1,3);
+  _ensureSmearBuf(UW,UH,d);
+  /* Exponential decay — fade previous frame by retention factor */
+  var decay=S.smearDecay!=null?S.smearDecay:0.98;
+  _smearCtx.save();
+  _smearCtx.globalCompositeOperation='destination-out';
+  _smearCtx.fillStyle='rgba(0,0,0,'+(1-decay).toFixed(4)+')';
+  _smearCtx.fillRect(0,0,_smearW,_smearH);
+  _smearCtx.restore();
+  /* Draw glow at current vector arrow tip */
+  var lx=sX(vv.vx,SR*S.mag),ly=sY(vv.vy,SR*S.mag);
+  var glowR=SR*0.055;
+  var grd=_smearCtx.createRadialGradient(lx,ly,0,lx,ly,glowR);
+  grd.addColorStop(0,'rgba(2,132,199,0.65)');
+  grd.addColorStop(0.4,'rgba(2,132,199,0.28)');
+  grd.addColorStop(1,'rgba(2,132,199,0)');
+  _smearCtx.fillStyle=grd;
+  _smearCtx.beginPath();_smearCtx.arc(lx,ly,glowR,0,Math.PI*2);_smearCtx.fill();
+  /* Composite onto unified canvas */
+  uctx.save();
+  uctx.globalAlpha=0.72;
+  uctx.globalCompositeOperation=dark?'screen':'source-over';
+  uctx.drawImage(_smearCanvas,0,0,_smearW,_smearH,0,0,UW,UH);
+  uctx.restore();
 }
 
 /* ── Anatomical heart (traced SVG from reference) ─────────────────── */
@@ -4931,6 +5109,7 @@ function drawUnified(){
       uctx.beginPath();
       uctx.moveTo(e.f.x,e.f.y);uctx.lineTo(e.t.x,e.t.y);
       uctx.stroke();uctx.setLineDash([]);
+      if(!S.showScope){
       var def=triLabelDefault(e.f,e.t);
       var lp=labelXY('tri-'+e.n,def.x,def.y);
       uctx.fillStyle=foc?triLabelCol:(dark?triLabelCol:muted);
@@ -4939,6 +5118,7 @@ function drawUnified(){
       uctx.fillText(e.n,lp.x,lp.y);
       if(S.placingLabels){drawLabelGrip(lp.x,lp.y);registerLabelHit('tri-'+e.n,lp.x,lp.y);}
       else registerStudyLeadHit(e.n,lp.x,lp.y,Math.max(14,bodyScale*9));
+      }
       uctx.restore();
     });
     /* RL → WCT (hidden for now — reference only, not in I/II/III math) */
@@ -5071,20 +5251,36 @@ function drawUnified(){
     uctx.restore();
   });
 
-  /* Einthoven I/II/III rays — measured angles from triangle */
+  /* Einthoven I/II/III rays — measured angles from triangle (HC→ring; parallel to body edge) */
   if(S.showTri){
+    var soloEinth=soloLeadVisible();
     ['I','II','III'].forEach(function(n){
       if(S.visibleLeads[n]===false)return;
       var foc=n===S.focusLead;
-      var pt=leadRingPt(n,0.92);
-      uctx.strokeStyle=foc?'rgba(2,132,199,0.35)':(dark?'rgba(232,184,75,0.16)':'rgba(154,114,9,0.2)');
-      uctx.lineWidth=foc?1.4:0.9;
-      uctx.setLineDash([3,5]);
+      var pt=scopePtFromDeg(leadDeg(n),leadRingOuterRadius(n)*0.92); /* Einthoven ray always measured */
+      var ringFrom={x:SCX,y:SCY};
+      uctx.save();
+      if(foc){
+        uctx.strokeStyle=scopeFocus;
+        uctx.lineWidth=soloEinth?2.6:2.1;
+        uctx.globalAlpha=soloEinth?0.92:0.78;
+        uctx.setLineDash(soloEinth?[]:[5,4]);
+      }else{
+        uctx.strokeStyle=dark?'rgba(232,184,75,0.16)':'rgba(154,114,9,0.2)';
+        uctx.lineWidth=0.9;
+        uctx.setLineDash([3,5]);
+      }
       uctx.beginPath();
-      uctx.moveTo(SCX,SCY);
+      uctx.moveTo(ringFrom.x,ringFrom.y);
       uctx.lineTo(pt.x,pt.y);
       uctx.stroke();
       uctx.setLineDash([]);
+      uctx.globalAlpha=1;
+      if(foc&&soloEinth&&S.showScope){
+        var edge=einthovenBodyEdge(n);
+        drawParallelOffsetBracket(edge,ringFrom,pt,scopeFocus,foc?2.2:1.6,Math.max(8,bodyScale*7));
+      }
+      uctx.restore();
     });
   }
 
@@ -5098,6 +5294,8 @@ function drawUnified(){
   drawCometStreamingTrail(dark);
   drawCometHead(ph,dark);
   }
+
+  drawSmearLayer(ph,dark);
 
   if(S.showScope||S.showVector){
   /* scope centre dot */
@@ -5223,7 +5421,6 @@ function drawLeadStrips(){
     lctx.lineWidth=0.7;
     lctx.beginPath();lctx.moveTo(LPAD_S,base);lctx.lineTo(LW-2,base);lctx.stroke();
 
-    lctx.lineWidth=foc?1.6:1.1;
     drawPolarityLeadTrace(lctx,LPAD_S,plotW,base,amp,L.n,tInWindow,pc,foc?1.6:1.1);
 
     lctx.strokeStyle='rgba(2,132,199,.22)';
@@ -5545,8 +5742,6 @@ function drawStrip(){
     var lpr=stripLeadProj(S.time,L.n),liveY=base-lpr.val*amp;
     wctx.fillStyle='#0284c7';
     wctx.beginPath();wctx.arc(playX,liveY,foc?4:2.5,0,Math.PI*2);wctx.fill();
-    var pba2=playheadBadgeAnchor(playX,liveY,base,rowH,M);
-    drawPolarityBadgeCtx(wctx,pba2.x,pba2.y,Math.max(4,pba2.r),lpr.val,pc.cathode,pc.anode,{dark:currentTheme==='dark'});
   });
 
   wctx.strokeStyle=currentTheme==='dark'?'rgba(232,184,75,0.6)':'rgba(154,114,9,0.6)';
@@ -5810,8 +6005,12 @@ function applyCtlSectionsFromState(){
 }
 
 /* ── Main loop ────────────────────────────────────────────────────── */
-function frame(){
-  if(!S.paused)S.time+=S.speed*(S.playbackRate!=null?S.playbackRate:1);
+var _lastFrameTs=0;
+function frame(ts){
+  if(!_lastFrameTs)_lastFrameTs=ts;
+  var delta=Math.min(0.1,(ts-_lastFrameTs)/1000);
+  _lastFrameTs=ts;
+  if(!S.paused)S.time+=delta*S.speed*60*(S.playbackRate!=null?S.playbackRate:1);
   var total=stripTotalBeats();
   if(S.time>=total)S.time-=total;
   autoScrollStripWindow();
@@ -5877,8 +6076,12 @@ function updateUI(){
           +avrNote+' · click dim pills to add · Alt+click to remove · '+showAllBtn;
       }else if(S.focusLead&&LEAD_STUDY[S.focusLead]){
         var st=LEAD_STUDY[S.focusLead];
+        var axisNote='';
+        if(['I','II','III'].indexOf(S.focusLead)>=0&&soloLeadVisible()&&S.showTri&&S.showScope){
+          axisNote=' · Same direction as the '+einthovenElectrodeLineLabel(S.focusLead)+' electrode line, translated to the heart\'s electrical center (HC).';
+        }
         hudStudy.hidden=false;
-        hudStudy.innerHTML='Lead '+S.focusLead+' = '+st.formula+' · '+st.deg+'° measured'+avrNote
+        hudStudy.innerHTML='Lead '+S.focusLead+' = '+st.formula+' · '+st.deg+'° measured'+axisNote+avrNote
           +' · click another pill to compare · '+showAllBtn
           +'<span class="hud-show-all" style="cursor:default;border:none;background:transparent;padding:0 0 0 4px">· Esc restores all</span>';
       }else{
@@ -5891,7 +6094,7 @@ function updateUI(){
     }
   }
   var hudFlow=document.getElementById('hudFlowHint');
-  if(hudFlow)hudFlow.hidden=!S.showLeadFlow;
+  if(hudFlow)hudFlow.hidden=!S.showLeadFlow&&!S.showLeadFlowPath;
   if(rowsEl){
     rowsEl.innerHTML='';
     LEADS.forEach(function(L){
@@ -6104,11 +6307,9 @@ function initScopeSizeControl(){
 function syncScopeRingModeUI(){
   var tb=document.getElementById('scopeRingTextbookBtn');
   var ms=document.getElementById('scopeRingMeasuredBtn');
-  var lk=document.getElementById('hcLinkTriangleBtn');
   var mode=S.scopeRingMode==='measured'?'measured':'textbook';
   if(tb)tb.classList.toggle('on',mode==='textbook');
   if(ms)ms.classList.toggle('on',mode==='measured');
-  if(lk)lk.classList.toggle('on',!!S.hcLinkedToTriangle);
 }
 
 function setScopeRingMode(mode){
@@ -6137,14 +6338,8 @@ function initScopeRingModeControls(){
   syncScopeRingModeUI();
   var tb=document.getElementById('scopeRingTextbookBtn');
   var ms=document.getElementById('scopeRingMeasuredBtn');
-  var lk=document.getElementById('hcLinkTriangleBtn');
   if(tb)tb.addEventListener('click',function(){setScopeRingMode('textbook');});
   if(ms)ms.addEventListener('click',function(){setScopeRingMode('measured');});
-  if(lk){
-    lk.addEventListener('click',function(){
-      setHcLinkedToTriangle(!S.hcLinkedToTriangle);
-    });
-  }
 }
 
 function initBadgeSizeControls(){
@@ -6349,7 +6544,7 @@ if(realEcgBtn)realEcgBtn.addEventListener('click',function(){
 });
 
 function syncLayerPillsFromState(){
-  var map={heart:S.showHeart,ribs:S.showRibs,limbRing:S.showLimbRing,vFan:S.showVFan,scope:S.showScope,tri:S.showTri,vector:S.showVector,comet:S.showComet,leadFlow:S.showLeadFlow};
+  var map={heart:S.showHeart,ribs:S.showRibs,limbRing:S.showLimbRing,vFan:S.showVFan,scope:S.showScope,tri:S.showTri,vector:S.showVector,comet:S.showComet,smear:S.showSmear,leadFlow:S.showLeadFlow,leadFlowPath:S.showLeadFlowPath};
   document.querySelectorAll('.layer-pill').forEach(function(btn){
     var layer=btn.dataset.layer;
     if(map[layer]!=null)btn.classList.toggle('on',!!map[layer]);
@@ -6383,11 +6578,18 @@ function initLayerPills(){
     ribs:function(on){S.showRibs=on;},
     limbRing:function(on){S.showLimbRing=on;syncScene3dPlaneLabels();if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     vFan:function(on){S.showVFan=on;syncScene3dPlaneLabels();if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
-    scope:function(on){S.showScope=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
-    tri:function(on){S.showTri=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
+    scope:function(on){S.showScope=on;if(!on)S.showLeadFlowPath=false;if(isView3d())syncScene3dFromLab(beatPhase(S.time));syncLayerPillsFromState();},
+    tri:function(on){S.showTri=on;if(!on)S.showLeadFlowPath=false;if(isView3d())syncScene3dFromLab(beatPhase(S.time));syncLayerPillsFromState();},
     vector:function(on){S.showVector=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     comet:function(on){S.showComet=on;if(!on)resetTrail();},
-    leadFlow:function(on){S.showLeadFlow=on;updateUI();}
+    smear:function(on){S.showSmear=on;if(!on)_clearSmearBuf();},
+    leadFlow:function(on){S.showLeadFlow=on;updateUI();},
+    leadFlowPath:function(on){
+      S.showLeadFlowPath=on;
+      if(on){S.showTri=true;S.showScope=true;if(isView3d())syncScene3dFromLab(beatPhase(S.time));}
+      syncLayerPillsFromState();
+      updateUI();
+    }
   };
   document.querySelectorAll('.layer-pill').forEach(function(btn){
     btn.addEventListener('click',function(){
@@ -6487,7 +6689,7 @@ function initClickIsolateControls(){
 function initLeadPills(){
   syncLeadPillsUI();
   document.querySelectorAll('.lead-pill[data-lead]').forEach(function(btn){
-    btn.addEventListener('click',function(){
+    btn.addEventListener('click',function(e){
       var key=btn.dataset.lead;
       if(key==='all'){
         showAllLeads();
@@ -6515,6 +6717,7 @@ document.querySelectorAll('#axisAccordions .axis-trigger').forEach(function(btn)
 
 function enterPhase2View(){
   S.showLeadFlow=true;
+  S.showLeadFlowPath=true;
   syncLayerPillsFromState();
   saveLabLayout();
   updateUI();
@@ -6841,7 +7044,7 @@ function initLeadPlacement(){
       S.heartRotation=0;
       S.scopeScale=1;
       S.scopeRingMode='textbook';
-      S.hcLinkedToTriangle=true;
+      S.hcLinkedToTriangle=false;
       S.badgeScale=1;
       S.badgeSpread=1;
       S.bodyPlateScale=1;
@@ -7192,7 +7395,7 @@ function initCtrlScrollZoom(){
   function onWheel(e){
     var target=wheelZoomTarget(e);
     var overChart=target.overStrips||target.overDockStrip;
-    /* Lead-strip ECG chart: scroll = macro zoom (0–300, horizontal + amplitude) */
+    /* Lead-strip ECG chart: scroll = time-axis zoom only (amplitude auto-fits row height) */
     if(overChart){
       e.preventDefault();
       e.stopPropagation();
