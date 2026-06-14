@@ -5243,3 +5243,47 @@
     padding-bottom: env(safe-area-inset-bottom, 8px) !important;
   }
 }
+
+/* ── Mobile: shuffle / next-random-case button (Manus) ── */
+@media (max-width: 768px) {
+  .diff-mobile-shuffle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: calc(100% - 32px);
+    margin: 16px auto 24px;
+    padding: 14px 20px;
+    border-radius: 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .diff-mobile-shuffle-btn .toolbar-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.7;
+  }
+  .diff-mobile-shuffle-btn:active {
+    transform: scale(0.97);
+  }
+  /* After reveal: becomes the primary green CTA */
+  .diff-mobile-shuffle-btn--primary {
+    background: var(--green, #3ecf8e);
+    border-color: var(--green, #3ecf8e);
+    color: #0c0c10;
+    font-size: 16px;
+  }
+  .diff-mobile-shuffle-btn--primary .toolbar-icon {
+    opacity: 1;
+  }
+  .diff-mobile-shuffle-btn--primary:active {
+    background: #2eb87a;
+  }
+}

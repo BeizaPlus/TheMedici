@@ -1574,6 +1574,18 @@ export default function DifferentialPractice({ onBack }) {
           </div>
         )}
 
+        {/* Mobile: shuffle / next-random-case button */}
+        {isMobilePractice && bank.length > 1 && (
+          <button
+            type="button"
+            className={`diff-mobile-shuffle-btn${revealed ? ' diff-mobile-shuffle-btn--primary' : ''}`}
+            onClick={shuffleCase}
+            aria-label="Next random case"
+          >
+            <IconShuffle className="toolbar-icon" aria-hidden />
+            Next Case
+          </button>
+        )}
         </div>
 
         {!isMobilePractice && renderStudyPanel()}
