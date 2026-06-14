@@ -1,23 +1,23 @@
 {
   "version": 3,
-  "savedAt": "2026-06-14T18:00:00.000Z",
-  "note": "Layout 8 — 16:9 wide body space (328×185) — same anchors as cardiocard-angle",
+  "savedAt": "2026-06-14T18:49:16.522Z",
+  "note": "Layout 9 — Steve QA 16:9 (exported ecg-vector-lab-layout 2026-06-14). Limb electrodes + scope/heart tuned; bodyView zoom/pan framing; scope 60%, heart 82%.",
   "electrodes": {
     "RA": {
-      "x": 46.22238311688311,
-      "y": 59.099150072150074
+      "x": 118.00845274868153,
+      "y": 63.696100817897445
     },
     "LA": {
-      "x": 157.8706515151515,
-      "y": 59.099150072150074
+      "x": 209.51333943989775,
+      "y": 61.45333386359901
     },
     "LL": {
-      "x": 150.05527272727272,
-      "y": 198
+      "x": 198.74805865269585,
+      "y": 174.48878836024014
     },
     "RL": {
-      "x": 61.48097979797979,
-      "y": 198
+      "x": 130.11939363428365,
+      "y": 170.00325445164327
     }
   },
   "precordial": {
@@ -47,19 +47,32 @@
     }
   },
   "scope": {
-    "x": 133.63183013974933,
-    "y": 124.38714119003025
+    "x": 179.59246533744556,
+    "y": 111.14289050246815
   },
   "heartAnchor": {
-    "x": 131.77397464342314,
-    "y": 117.69886140325602
+    "x": 177.21749707829204,
+    "y": 103.61735260440959
   },
   "heartPack": "heart-1",
-  "heartScale": 1.31,
-  "scopeScale": 1.064,
-  "badgeScale": 1,
-  "badgeSpread": 1,
+  "heartScale": 0.82,
+  "heartRotation": -12,
+  "scopeScale": 0.6,
+  "badgeScale": 0.62,
+  "badgeSpread": 1.26,
+  "flowTailPct": 26,
+  "flowHeadMul": 0.5,
+  "flowStrokeMul": 1.39,
+  "flowPathMul": 1.37,
+  "flowSpeedMul": 1,
+  "cometTailPct": 45,
+  "cometWidthMul": 1,
+  "cometFadeMul": 1,
   "bodyPlateScale": 1,
+  "linkAnchorsToPlate": false,
+  "bodyViewZoom": 1.7363069361000014,
+  "bodyViewPanX": -298.10368743819686,
+  "bodyViewPanY": -36.02500180145043,
   "autoMatchPlateBg": true,
   "axis": 120,
   "heartRate": 64,
@@ -77,7 +90,7 @@
   "labelOffsets": {},
   "canvasPalette": {
     "dark": {
-      "canvasBg": "#2f2e34",
+      "canvasBg": "#2a2930",
       "bodyFill": "#333333",
       "scopeRing": "#e8b84b",
       "scopeLead": "#e8b84b",
@@ -113,7 +126,7 @@
   "strip": {
     "stripBeats": 8,
     "stripHeight": 280,
-    "leadStripW": 822,
+    "leadStripW": 511,
     "stripZoom": 300
   },
   "ui": {
@@ -123,22 +136,31 @@
     "showTri": true,
     "showVector": true,
     "showComet": true,
+    "showLeadFlow": true,
     "showLimbRing": true,
     "showVFan": true,
     "showT": false,
     "useRealEcg": true,
+    "studyMode": "lab",
+    "conductionPreset": "normal",
+    "conductionAxis": 60,
+    "clickToIsolate": false,
+    "controlsSections": {
+      "heartAnatomy": false,
+      "axisPresets": false,
+      "heartPlayback": false,
+      "leadPolarity": false,
+      "leadFlowTune": false,
+      "limbPlacement": false,
+      "scopeBadges": true
+    },
+    "dockLeftOpen": true,
+    "dockRightOpen": false,
+    "dockLeftTab": "controls",
     "theme": "dark",
     "bodyMode": "real",
     "viewMode": "2d",
-    "bodyPlateId": "cardiocard-angle-16x9",
-    "showLeadFlow": true,
-    "studyMode": "lab",
-    "conductionPreset": "normal",
-    "conductionAxis": 60
+    "bodyPlateId": "cardiocard-angle-16x9"
   },
-  "bodyPlateId": "cardiocard-angle-16x9",
-  "bodyViewZoom": 1,
-  "bodyViewPanX": 0,
-  "bodyViewPanY": 0,
-  "heartRotation": -10
+  "bodyPlateId": "cardiocard-angle-16x9"
 }

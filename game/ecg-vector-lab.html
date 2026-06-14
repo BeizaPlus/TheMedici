@@ -832,6 +832,9 @@ canvas{display:block}
         <div class="header-transport seg" role="toolbar" aria-label="Playback">
           <button type="button" class="dock-rail-btn on" id="playB" title="Play vector animation (Space)" aria-label="Play"></button>
           <button type="button" class="dock-rail-btn" id="pauseB" title="Pause vector animation (Space)" aria-label="Pause"></button>
+          <button type="button" class="dock-rail-btn" id="fitViewBtn" title="Fit chest canvas to view (2D or 3D) · dbl-click canvas · F" aria-label="Fit to view">
+            <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+          </button>
         </div>
         <div class="header-layout seg" role="toolbar" aria-label="Layout backup" title="Full global snapshot — layout, layers, theme, flow, strips, dock">
           <button type="button" id="exportLayoutBtn">Export JSON</button>
@@ -864,7 +867,7 @@ canvas{display:block}
           <canvas id="conductionLoop" aria-label="P QRS T vector loops"></canvas>
         </div>
       </div>
-      <div class="body-scope-wrap" id="bodyScopeWrap" title="Scroll = zoom chest · middle-drag = pan · Ctrl+scroll = scope ring · Shift+Ctrl+scroll = ± badge spread · dbl-click = reset zoom · Esc = exit isolate (then click another lead)">
+      <div class="body-scope-wrap" id="bodyScopeWrap" title="Scroll = zoom chest · middle-drag = pan · Ctrl+scroll = scope ring · Shift+Ctrl+scroll = ± badge spread · dbl-click or F = fit to view · Esc = exit isolate (then click another lead)">
         <div class="scene3d-plane-labels" id="scene3dPlaneLabels" hidden aria-hidden="true">
           <span class="plane-label plane-label--frontal" id="planeLblFrontal" hidden><span class="plane-swatch" aria-hidden="true"></span>Frontal · limb ring (ref 02)</span>
           <span class="plane-label plane-label--horizontal" id="planeLblHorizontal" hidden><span class="plane-swatch" aria-hidden="true"></span>Horizontal · V1–V6 fan (ref 02)</span>
@@ -874,9 +877,9 @@ canvas{display:block}
           <canvas id="unified"></canvas>
         </div>
       </div>
-      <div class="lead-strips-wrap" id="leadStripsWrap" title="Drag gold playhead · middle-click/drag pan view · scroll zoom">
+      <div class="lead-strips-wrap" id="leadStripsWrap" title="Scroll = zoom in (time + amplitude) · dbl-click = auto fit rows · middle-drag pan · drag playhead">
         <div class="col-resize-handle" id="leadColResize" title="Drag to widen — shows more beats / QRS complexes" aria-label="Resize lead strip column"></div>
-        <div class="lead-strips-label">Leads<span class="zoom-hint" id="stripZoomHint">scroll chart zoom 100</span></div>
+        <div class="lead-strips-label">Leads<span class="zoom-hint" id="stripZoomHint">auto fit · scroll to zoom in</span></div>
         <canvas id="leadStrips" aria-label="Live lead strips synced to vectorscope"></canvas>
       </div>
     </div>
@@ -912,8 +915,8 @@ canvas{display:block}
         <button type="button" class="body-mode-btn" data-body-mode="real">Real</button>
       </div>
       <div class="body-look-cycle" id="bodyLookCycle" role="group" aria-label="Body demo look" title="Pick which demo plate to show in Real mode" hidden>
-        <button type="button" class="body-look-btn on" data-body-look="cardiocard-angle">Angle</button>
-        <button type="button" class="body-look-btn" data-body-look="cardiocard-angle-16x9">16:9</button>
+        <button type="button" class="body-look-btn" data-body-look="cardiocard-angle">Angle</button>
+        <button type="button" class="body-look-btn on" data-body-look="cardiocard-angle-16x9">16:9</button>
         <button type="button" class="body-look-btn" data-body-look="gray-b">Gray B</button>
       </div>
       <span class="pill-sep" aria-hidden="true"></span>
@@ -927,18 +930,18 @@ canvas{display:block}
       <button type="button" class="layer-pill on" data-layer="comet"><span class="pill-txt">Comet</span></button>
       <button type="button" class="layer-pill on" data-layer="leadFlow" title="Pulse along each lead axis — click a lead label to solo it"><span class="pill-txt">Flow</span></button>
     </div>
-    <div class="lead-pills" role="toolbar" aria-label="Lead isolation">
+    <div class="lead-pills" role="toolbar" aria-label="Lead study set">
       <span class="lead-pills-label">Lead</span>
       <button type="button" class="lead-pill lead-pill--all on" data-lead="all" title="Show all six limb leads">All</button>
       <button type="button" class="lead-pill lead-pill--clear" data-lead="none" title="Show only the focused lead">Solo focus</button>
       <button type="button" class="lead-pill lead-pill--toggle" id="clickIsolateToggle" title="Off: strip/scope click changes focus only. On: hides other leads (Esc to show all)."><span class="pill-txt">Click iso</span></button>
       <span class="pill-sep" aria-hidden="true"></span>
-      <button type="button" class="lead-pill on" data-lead="I" title="Show only lead I">I</button>
-      <button type="button" class="lead-pill on" data-lead="II" title="Show only lead II">II</button>
-      <button type="button" class="lead-pill on" data-lead="III" title="Show only lead III">III</button>
-      <button type="button" class="lead-pill on" data-lead="aVR" title="Show only lead aVR">aVR</button>
-      <button type="button" class="lead-pill on" data-lead="aVL" title="Show only lead aVL">aVL</button>
-      <button type="button" class="lead-pill on" data-lead="aVF" title="Show only lead aVF">aVF</button>
+      <button type="button" class="lead-pill on" data-lead="I" title="Study set: from All pick one lead, then click others to add · Alt+click lit pill to remove">I</button>
+      <button type="button" class="lead-pill on" data-lead="II" title="Study set: from All pick one lead, then click others to add · Alt+click lit pill to remove">II</button>
+      <button type="button" class="lead-pill on" data-lead="III" title="Study set: from All pick one lead, then click others to add · Alt+click lit pill to remove">III</button>
+      <button type="button" class="lead-pill on" data-lead="aVR" title="Study set: from All pick one lead, then click others to add · Alt+click lit pill to remove">aVR</button>
+      <button type="button" class="lead-pill on" data-lead="aVL" title="Study set: from All pick one lead, then click others to add · Alt+click lit pill to remove">aVL</button>
+      <button type="button" class="lead-pill on" data-lead="aVF" title="Study set: from All pick one lead, then click others to add · Alt+click lit pill to remove">aVF</button>
     </div>
     <div class="stage-hud">
       <div class="hud-readouts">
@@ -1057,8 +1060,8 @@ canvas{display:block}
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">Body look</span><span class="ctl-val-sm" id="bodyLookLbl">Plate A</span></div>
           <select class="axis-cond-sel" id="bodyLookSel" aria-label="Body demo plate" style="width:100%;max-width:none">
-            <option value="cardiocard-angle">CardioCard angle — Magnific + Kojo (default)</option>
-            <option value="cardiocard-angle-16x9">CardioCard angle 16:9 — wide canvas</option>
+            <option value="cardiocard-angle-16x9">CardioCard 16:9 — desktop default (Magnific + Kojo)</option>
+            <option value="cardiocard-angle">CardioCard angle — standard aspect</option>
             <option value="placement-a">Plate A — rib landmarks baked in</option>
             <option value="placement-b">Plate B — alternate torso</option>
             <option value="likeness-b">Likeness B — Kojo photo gray</option>
@@ -1070,8 +1073,16 @@ canvas{display:block}
         </div>
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">Real body scale</span><span class="ctl-val-sm" id="bodyPlateScaleV">100%</span></div>
-          <input type="range" id="bodyPlateScaleR" min="50" max="200" step="1" value="100" aria-label="Real mode body plate scale"/>
-          <p class="ctl-hint" style="margin-top:4px">Real mode — default <strong>100% = fit viewport height</strong>. Nudge scale until electrodes sit on shoulders/hips.</p>
+          <input type="range" id="bodyPlateScaleR" min="50" max="250" step="1" value="100" aria-label="Real mode body plate scale"/>
+          <p class="ctl-hint" style="margin-top:4px">Scales the photo inside the body box (never clips past canvas edges). With <strong>Link to plate</strong> on, electrodes move with the image.</p>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Electrode anchors</span></div>
+          <div class="seg" style="margin-bottom:6px">
+            <button type="button" id="linkAnchorsPlateBtn" title="When on, RA/LA/LL/V1–V6 follow plate scale from normalized landmarks">Link to plate</button>
+            <button type="button" id="fitPlateAnchorsBtn" title="Snap electrodes to CARDIOCARD norm ratios on current plate">Auto-fit now</button>
+          </div>
+          <p class="ctl-hint" style="margin-top:0">Landmarks are <strong>ratios on the plate image</strong> (not fixed pixels). Future: vision model replaces CARDIOCARD_NORM per character. Manual drag turns link off.</p>
         </div>
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">Plate background</span><span class="ctl-val-sm" id="plateBgV">—</span></div>
@@ -1080,13 +1091,56 @@ canvas{display:block}
         </div>
         </div>
       </div>
+      <div class="axis-item ctl-section" data-ctl-section="scene3dLight">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>3D lighting</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
+        <p class="ctl-hint" style="margin:0 0 8px"><strong>3D view only.</strong> Ambient + key on manikin/heart mesh. Rings, vectors, and HC stay emissive.</p>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Ambient</span><span class="ctl-val-sm" id="lightAmbientV">40%</span></div>
+          <input type="range" id="lightAmbientR" min="0" max="120" step="1" value="40" aria-label="3D ambient light intensity"/>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Key light</span><span class="ctl-val-sm" id="lightKeyV">115%</span></div>
+          <input type="range" id="lightKeyR" min="0" max="250" step="1" value="115" aria-label="3D key light intensity"/>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Key azimuth</span><span class="ctl-val-sm" id="lightKeyAzV">12°</span></div>
+          <input type="range" id="lightKeyAzR" min="-180" max="180" step="1" value="12" aria-label="3D key light azimuth"/>
+          <p class="ctl-hint" style="margin-top:4px">0° = from front · +90° = patient right</p>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Key elevation</span><span class="ctl-val-sm" id="lightKeyElV">48°</span></div>
+          <input type="range" id="lightKeyElR" min="5" max="89" step="1" value="48" aria-label="3D key light elevation"/>
+        </div>
+        <button type="button" id="resetScene3dLightBtn" style="width:100%;margin-top:4px">Reset 3D lighting</button>
+        <div class="ctl" style="margin-top:10px">
+          <div class="ctl-head"><span class="ctl-label">Canvas view</span></div>
+          <div class="seg" style="margin-bottom:6px">
+            <button type="button" id="fitCanvasViewBtn" title="Frame body + scope (2D) or torso (3D) in the canvas">Fit to view</button>
+            <button type="button" id="resetBodyViewBtn" title="2D only — 100% zoom, centered">Reset 2D zoom</button>
+          </div>
+          <p class="ctl-hint" style="margin:0">Header fit icon · <strong>F</strong> · dbl-click canvas. 2D fits plate + scope ring; 3D reframes orbit camera.</p>
+        </div>
+        </div>
+      </div>
       <div class="axis-item ctl-section" data-ctl-section="scopeBadges">
         <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>Scope &amp; ± badges</span><span class="axis-chevron" aria-hidden="true"></span></button>
         <div class="axis-body ctl-section-body">
         <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Vectorscope ring</span></div>
+          <div class="seg" style="margin-bottom:6px">
+            <button type="button" id="scopeRingTextbookBtn" data-scope-ring="textbook" title="Perfect circle — teaching hexaxial diagram; angles from your triangle">Textbook ring</button>
+            <button type="button" id="scopeRingMeasuredBtn" data-scope-ring="measured" title="Irregular hex — ray lengths from |I| |II| |III| and Goldberger magnitudes">Measured ring</button>
+          </div>
+          <div class="seg" style="margin-bottom:6px">
+            <button type="button" id="hcLinkTriangleBtn" title="When on, dragging RA/LA/LL moves HC with Wilson central terminal (triangle centroid)">Link HC to triangle</button>
+          </div>
+          <p class="ctl-hint" style="margin-top:0">Ring <strong>size</strong> follows triangle scale (electrode spacing × Scope size slider). Measured ring = literal reduction of Einthoven + augmented vectors to HC.</p>
+        </div>
+        <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">Scope size</span><span class="ctl-val-sm" id="scopeSizeV">100%</span></div>
-          <input type="range" id="scopeSizeR" min="60" max="180" step="1" value="100" aria-label="Vectorscope ring scale"/>
-          <p class="ctl-hint" style="margin-top:4px">Gold vectorscope ring, comet trail, and vector arrow — independent of heart size.</p>
+          <input type="range" id="scopeSizeR" min="60" max="180" step="1" value="100" aria-label="Vectorscope ring scale multiplier"/>
+          <p class="ctl-hint" style="margin-top:4px">Multiplier on triangle-derived base radius — closer limb electrodes shrink the ring; Scope size scales it up/down.</p>
         </div>
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">± badge size</span><span class="ctl-val-sm" id="badgeSizeV">100%</span></div>
@@ -1206,7 +1260,7 @@ canvas{display:block}
         </div>
         <p class="ctl-hint" id="placeModeHint" hidden style="margin-top:6px;color:var(--gold);font-weight:600"></p>
         <p class="ctl-hint"><strong>2D</strong> — flat canvas + Einthoven triangle. <strong>3D</strong> — ref 02 depth: blue <strong>frontal limb ring</strong>, red <strong>V fan</strong>; orbit drag to see RA/LA forward vs LL/RL posterior. Strips unchanged.</p>
-        <p class="ctl-hint"><strong>Leads</strong> — RA/LA/LL form Einthoven triangle: <strong>I</strong> = RA→LA, <strong>II</strong> = RA→LL, <strong>III</strong> = LA→LL (toggle <strong>Einthoven</strong> layer). Measured scope ring follows electrode geometry. <strong>Scope</strong> — HC centre. <strong>Heart</strong> — anatomy anchor.</p>
+        <p class="ctl-hint"><strong>Leads</strong> — RA/LA/LL form Einthoven triangle: <strong>I</strong> = RA→LA, <strong>II</strong> = RA→LL, <strong>III</strong> = LA→LL (toggle <strong>Einthoven</strong> layer). Vectorscope ring size follows triangle spacing; <strong>Measured ring</strong> mode uses literal |I|/|II|/|III| ray lengths. <strong>Scope</strong> — HC centre (link to Wilson centroid optional).</p>
         <p class="ctl-hint" style="margin-top:6px;display:none" id="rlRefHint"><strong>RL ref</strong> — dashed line from RL to the Wilson central terminal (midpoint of RA+LA+LL). RL is <em>reference ground only</em>; it is not in I/II/III math.</p>
         <p class="ctl-hint" style="margin-top:4px"><strong>Nudge</strong> — tiny label shifts (~28px max) if text overlaps. <strong>Reset labels</strong> snaps them back beside their lines. Quadrant words (Left/Right/…) stay fixed outside the ring.</p>
         <div class="layout-readout" id="layoutReadout">
@@ -1261,7 +1315,10 @@ canvas{display:block}
                 <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>+ Polish</strong> — 3D measured ring · Tabler icons · click-to-isolate toggle</span></li>
                 <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>+ V1–V6 guide</strong> — clinical landmarks in Guide<span class="rm-try">Guide → V1–V6 placement</span></span></li>
                 <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>+ 3D electrode drag</strong> — 3D + 12-lead mode · drag spheres<span class="rm-try">Switch 3D · Controls → 12-lead</span></span></li>
-                <li class="next"><span data-roadmap-icon="circle-dotted" aria-hidden="true"></span><span class="rm-body"><strong>Next</strong> — Steve visual QA · git commit · 3D fan tune vs ref 02<span class="rm-try">Compare 2D plate vs 3D fan · local boy.glb</span></span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>+ Immersion polish</strong> — live projection · P/QRS/T loops · tri→ring ghost · aVR callout<span class="rm-try">Solo a lead · Comet on · isolate II</span></span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>+ Layout 9</strong> — Steve 16:9 QA (limb + scope 60% + chest zoom)<span class="rm-try">Body look → 16:9 · Reload bundled</span></span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>+ Plate anchors</strong> — fit-in-box resize · Link to plate · Auto-fit<span class="rm-try">Controls → Body plate</span></span></li>
+                <li class="next"><span data-roadmap-icon="circle-dotted" aria-hidden="true"></span><span class="rm-body"><strong>Next</strong> — Vision landmark detect per plate · git commit · optional angle readout<span class="rm-try">ANCHOR_VISION_PIPELINE.md · Meshy deferred</span></span></li>
               </ul>
             </div>
           </div>
@@ -1745,6 +1802,7 @@ function isolateLead(name){
   if(ALL_LEAD_NAMES.indexOf(name)<0)return;
   ALL_LEAD_NAMES.forEach(function(n){S.visibleLeads[n]=(n===name);});
   S.focusLead=name;
+  if(['I','II','III'].indexOf(name)>=0)triggerTriRingTranslation(name);
   ensureFocusLeadVisible();
   updateUI();
   syncLeadPillsUI();
@@ -1857,7 +1915,40 @@ function drawLeadFlowStaticPath(xNeg,yNeg,xPos,yPos,alpha){
   uctx.stroke();
   uctx.restore();
 }
-var MEASURED_LEAD_AXES={};
+function triangleMeanDistToHc(hc,el){
+  if(!hc||!el||!el.RA||!el.LA||!el.LL)return 0;
+  function d(p){return Math.hypot(p.x-hc.x,p.y-hc.y);}
+  return (d(el.RA)+d(el.LA)+d(el.LL))/3;
+}
+
+function wilsonBodyPt(){
+  var ra=EL_BODY.RA,la=EL_BODY.LA,ll=EL_BODY.LL;
+  return{x:(ra.x+la.x+ll.x)/3,y:(ra.y+la.y+ll.y)/3};
+}
+
+function syncHcFromTriangleIfLinked(){
+  if(!S.hcLinkedToTriangle)return;
+  var w=wilsonBodyPt();
+  HC_BODY.x=w.x;
+  HC_BODY.y=w.y;
+}
+
+/** Canvas pixels — triangle mean RA/LA/LL distance to HC, calibrated to legacy default layout. */
+function scopeBaseRadiusCanvas(){
+  var meanBody=triangleMeanDistToHc(HC_BODY,EL_BODY);
+  var legacyAtRef=UH*0.22*1.55;
+  var scale=SCOPE_TRI_MEAN_BODY_REF>0.001?meanBody/SCOPE_TRI_MEAN_BODY_REF:1;
+  return Math.max(UH*0.08,legacyAtRef*scale);
+}
+
+function scopeRingBoundingRadius(){
+  if(S.scopeRingMode!=='measured')return SR;
+  var maxR=SR;
+  ALL_LIMB_LEAD_NAMES.forEach(function(n){
+    maxR=Math.max(maxR,leadRingOuterRadius(n));
+  });
+  return maxR;
+}
 var LAYOUT_STORAGE='ecgVectorLabLayoutV1';
 var LAYOUT_VERSION=3;
 var STRIP_STORAGE='ecgVectorLabStripV1';
@@ -2017,6 +2108,7 @@ var STRIP_ZOOM_MAX=300;
 var STRIP_ZOOM_DEFAULT=100;
 var STRIP_DURATION_SEC=300;
 var STRIP_ZOOM_STEP=8;
+var STRIP_ROW_FILL=0.84;
 var SCOPE_ZOOM_MIN=0;
 var SCOPE_ZOOM_MAX=300;
 var SCOPE_ZOOM_STEP=8;
@@ -2033,6 +2125,7 @@ function clampScopeZoom(z){
 }
 
 function stripChartGain(){
+  if(!S.stripManualZoom)return 1;
   return Math.max(0.15,(S.stripZoom!=null?S.stripZoom:STRIP_ZOOM_DEFAULT)/100);
 }
 
@@ -2108,9 +2201,30 @@ function stripBeatPhaseAtX(x,plotW,tInWindow){
   return beatPhase(beatPos);
 }
 
-/** Vertical gain for lead strip rows — follows chart zoom (100 = normal). */
-function stripRowAmp(rowH){
-  return rowH*0.36*stripChartGain();
+/** Vertical gain for lead strip rows — auto-fits each lead unless user scroll-zoomed. */
+function maxStripLeadExcursion(leadName,tInWindow){
+  var vm=stripViewMetrics(tInWindow);
+  var maxAbs=0.06;
+  var steps=48;
+  for(var s=0;s<=steps;s++){
+    var beatPos=vm.winStart+(s/steps)*vm.dispBeats;
+    var pr=stripLeadProj(beatPos,leadName);
+    maxAbs=Math.max(maxAbs,Math.abs(pr.val));
+  }
+  return Math.max(maxAbs,0.06);
+}
+
+function stripRowAmpForLead(rowH,leadName,tInWindow){
+  if(S.stripManualZoom){
+    return rowH*0.36*stripChartGain();
+  }
+  var half=rowH*STRIP_ROW_FILL*0.5;
+  return half/maxStripLeadExcursion(leadName,tInWindow);
+}
+
+function stripRowAmp(rowH,leadName,tInWindow){
+  if(leadName&&tInWindow!=null)return stripRowAmpForLead(rowH,leadName,tInWindow);
+  return rowH*0.36*(S.stripManualZoom?stripChartGain():1);
 }
 
 function scopeScaleFromZoom(z){
@@ -2126,7 +2240,21 @@ function scopeZoomFromScale(scale){
 function updateStripZoomHint(){
   var el=document.getElementById('stripZoomHint');
   var min=Math.round(STRIP_DURATION_SEC/60);
-  if(el)el.textContent=S.stripBeats+' visible · '+min+' min strip · zoom '+clampStripZoom(S.stripZoom)+' (100=normal)';
+  var leads=visibleLeadsList().length;
+  if(!el)return;
+  if(S.stripManualZoom){
+    el.textContent=leads+' lead'+(leads===1?'':'s')+' · '+S.stripBeats+' beats · '+min+' min · zoom '+clampStripZoom(S.stripZoom)+' (scroll) · dbl-click auto fit';
+  }else{
+    el.textContent=leads+' lead'+(leads===1?'':'s')+' · '+S.stripBeats+' beats · '+min+' min · auto fit · scroll to zoom in';
+  }
+}
+
+function resetStripAutoFit(){
+  S.stripManualZoom=false;
+  S.stripZoom=STRIP_ZOOM_DEFAULT;
+  ensureStripWinStart(tInStripWindow());
+  updateStripZoomHint();
+  saveStripPrefs();
 }
 
 function maxLeadColW(){
@@ -2157,7 +2285,7 @@ function setStripBeats(n,opts){
 }
 
 function loadStripPrefs(){
-  var d={stripBeats:8,stripHeight:280,leadStripW:108,stripZoom:STRIP_ZOOM_DEFAULT};
+  var d={stripBeats:8,stripHeight:280,leadStripW:108,stripZoom:STRIP_ZOOM_DEFAULT,stripManualZoom:false};
   try{
     var raw=localStorage.getItem(STRIP_STORAGE);
     if(raw){
@@ -2165,8 +2293,11 @@ function loadStripPrefs(){
       if(o.stripBeats>=1&&o.stripBeats<=48)d.stripBeats=o.stripBeats;
       if(o.stripHeight>=160&&o.stripHeight<=920)d.stripHeight=o.stripHeight;
       if(o.leadStripW>=LEAD_COL_MIN&&o.leadStripW<=2000)d.leadStripW=o.leadStripW;
-      if(typeof o.stripZoom==='number')d.stripZoom=clampStripZoom(o.stripZoom);
-      else if(typeof o.stripYGain==='number')d.stripZoom=clampStripZoom(o.stripYGain*100);
+      if(typeof o.stripManualZoom==='boolean')d.stripManualZoom=o.stripManualZoom;
+      if(o.stripManualZoom){
+        if(typeof o.stripZoom==='number')d.stripZoom=clampStripZoom(o.stripZoom);
+        else if(typeof o.stripYGain==='number')d.stripZoom=clampStripZoom(o.stripYGain*100);
+      }
     }
   }catch(e){}
   d.leadStripW=Math.min(d.leadStripW,maxLeadColW());
@@ -2192,20 +2323,71 @@ var S={
   conductionPreset:'normal',conductionAxis:60,
   controlsSections:{},
   viewMode:'2d',
-  bodyMode:'svg',bodyPlateId:'cardiocard-angle',
+  bodyMode:'real',bodyPlateId:'cardiocard-angle-16x9',
   placingLeads:false,placingScope:false,placingHeart:false,placingLabels:false,
   dragLead:null,dragScope:false,dragHeart:false,dragLabel:null,
-  stripBeats:_stripPrefs.stripBeats,stripHeight:_stripPrefs.stripHeight,leadStripW:_stripPrefs.leadStripW,stripZoom:_stripPrefs.stripZoom,
-  heartPack:loadHeartPack(),heartScale:1,heartRotation:0,scopeScale:1,badgeScale:1,badgeSpread:1,bodyPlateScale:1,autoMatchPlateBg:true,
+  stripBeats:_stripPrefs.stripBeats,stripHeight:_stripPrefs.stripHeight,leadStripW:_stripPrefs.leadStripW,stripZoom:_stripPrefs.stripZoom,stripManualZoom:!!_stripPrefs.stripManualZoom,
+  heartPack:loadHeartPack(),heartScale:1,heartRotation:0,scopeScale:1,badgeScale:1,badgeSpread:1,bodyPlateScale:1,autoMatchPlateBg:true,linkAnchorsToPlate:false,
   flowTailPct:28,flowHeadMul:1,flowStrokeMul:1,flowPathMul:1,flowSpeedMul:1,
   cometTailPct:45,cometWidthMul:1,cometFadeMul:1,
   bodyViewZoom:1,bodyViewPanX:0,bodyViewPanY:0,
+  scopeRingMode:'textbook',hcLinkedToTriangle:true,
+  scene3dLight:{ambient:0.4,key:1.15,keyAz:12,keyEl:48},
   vectorStroke:2,playbackRate:1,clickToIsolate:false,
   visibleLeads:defaultVisibleLeads()
 };
 
 var EL_STORAGE='ecgVectorLabElectrodesV1';
 var SCOPE_STORAGE='ecgVectorLabScopeV1';
+var SCENE3D_LIGHT_STORAGE='ecgVectorLabScene3dLightV1';
+var SCENE3D_LIGHT_DEFAULT={ambient:0.4,key:1.15,keyAz:12,keyEl:48};
+
+function normalizeScene3dLightState(o){
+  o=o||{};
+  var d=SCENE3D_LIGHT_DEFAULT;
+  function c(v,lo,hi,fb){
+    var n=Number(v);
+    if(!isFinite(n))return fb;
+    return Math.max(lo,Math.min(hi,n));
+  }
+  return{
+    ambient:c(o.ambient,0,1.2,d.ambient),
+    key:c(o.key,0,2.5,d.key),
+    keyAz:c(o.keyAz,-180,180,d.keyAz),
+    keyEl:c(o.keyEl,5,89,d.keyEl)
+  };
+}
+
+function syncScene3dLightControls(){
+  var L=S.scene3dLight||SCENE3D_LIGHT_DEFAULT;
+  var amb=document.getElementById('lightAmbientR');
+  var key=document.getElementById('lightKeyR');
+  var az=document.getElementById('lightKeyAzR');
+  var el=document.getElementById('lightKeyElR');
+  var ambV=document.getElementById('lightAmbientV');
+  var keyV=document.getElementById('lightKeyV');
+  var azV=document.getElementById('lightKeyAzV');
+  var elV=document.getElementById('lightKeyElV');
+  if(amb)amb.value=Math.round(L.ambient*100);
+  if(key)key.value=Math.round(L.key*100);
+  if(az)az.value=Math.round(L.keyAz);
+  if(el)el.value=Math.round(L.keyEl);
+  if(ambV)ambV.textContent=Math.round(L.ambient*100)+'%';
+  if(keyV)keyV.textContent=Math.round(L.key*100)+'%';
+  if(azV)azV.textContent=Math.round(L.keyAz)+'°';
+  if(elV)elV.textContent=Math.round(L.keyEl)+'°';
+}
+
+function applyScene3dLightFromState(opts){
+  opts=opts||{};
+  S.scene3dLight=normalizeScene3dLightState(S.scene3dLight);
+  syncScene3dLightControls();
+  if(scene3dReady&&scene3d){
+    scene3d.applyLighting(S.scene3dLight);
+    if(isView3d())scene3d.render();
+  }
+  if(!opts.skipSave)saveLabLayout();
+}
 /** CardioCard ref 04 — normalized 0–1 in body space (bodyNW × bodyNH). */
 var CARDIOCARD_NORM={
   RA:{x:0.2239,y:0.3195},LA:{x:0.7652,y:0.3195},RL:{x:0.2979,y:1},LL:{x:0.7276,y:1},
@@ -2216,7 +2398,11 @@ var CARDIOCARD_NORM={
 var REF4_PRE_KEYS=['V1','V2','V3','V4','V5','V6'];
 var REF4_LIMB_KEYS=['RA','LA','LL','RL'];
 var REF4_ALL_KEYS=REF4_LIMB_KEYS.concat(REF4_PRE_KEYS);
-function normBodyPt(n){return{x:n.x*206.326,y:n.y*185};}
+function normBodyPt(n,bw,bh){
+  bw=bw||(typeof bodyNW==='number'?bodyNW:BODY_SPACE_W_DEFAULT);
+  bh=bh||(typeof bodyNH==='number'?bodyNH:BODY_SPACE_H);
+  return{x:n.x*bw,y:n.y*bh};
+}
 function wilsonNormPt(){
   var r=CARDIOCARD_NORM;
   return{x:(r.RA.x+r.LA.x+r.LL.x)/3,y:(r.RA.y+r.LA.y+r.LL.y)/3};
@@ -2238,7 +2424,12 @@ var EL_BODY=JSON.parse(JSON.stringify(EL_BODY_DEFAULT));
 var PRE_BODY=JSON.parse(JSON.stringify(PRE_BODY_DEFAULT));
 var HC_BODY=JSON.parse(JSON.stringify(HC_BODY_DEFAULT));
 var HEART_BODY=JSON.parse(JSON.stringify(HEART_BODY_DEFAULT));
+var MEASURED_LEAD_AXES={};
+var MEASURED_RING_RAD={};
+var ALL_LIMB_LEAD_NAMES=['I','II','III','aVR','aVL','aVF'];
+var SCOPE_TRI_MEAN_BODY_REF=triangleMeanDistToHc(HC_BODY_DEFAULT,EL_BODY_DEFAULT);
 var _layoutRestored=false;
+var _layoutHadScene3dLight=false;
 var LEAD_LEN_REF={};
 var LABEL_OFFSETS={};
 var LABEL_NUDGE_MAX=28;
@@ -2287,7 +2478,7 @@ function leadFlowPoles(name){
   else if(name==='aVL'){bodyNeg={x:(EL.RA.x+EL.LL.x)*0.5,y:(EL.RA.y+EL.LL.y)*0.5};bodyPos=EL.LA;}
   else if(name==='aVF'){bodyNeg={x:(EL.RA.x+EL.LA.x)*0.5,y:(EL.RA.y+EL.LA.y)*0.5};bodyPos=EL.LL;}
   else if(/^V\d$/.test(name)&&PRE&&PRE[name]){bodyNeg=wilsonCanvasPt();bodyPos=PRE[name];}
-  var ringR=SR*0.92;
+  var ringR=leadRingOuterRadius(name)*0.92;
   var a=r(leadDeg(name));
   return{
     body:{neg:bodyNeg,pos:bodyPos},
@@ -2452,6 +2643,7 @@ function vecAngleDeg(vx,vy){
 }
 
 function recomputeLeadAxes(){
+  /* Vectorscope angles + measured ring radii derive from RA/LA/LL triangle (see scopeRingMode). */
   var ra=EL_BODY.RA,la=EL_BODY.LA,ll=EL_BODY.LL;
   var i=bodyVec(ra.x,ra.y,la.x,la.y);
   var ii=bodyVec(ra.x,ra.y,ll.x,ll.y);
@@ -2465,7 +2657,27 @@ function recomputeLeadAxes(){
   MEASURED_LEAD_AXES.aVR=vecAngleDeg(avr.x,avr.y);
   MEASURED_LEAD_AXES.aVL=vecAngleDeg(avl.x,avl.y);
   MEASURED_LEAD_AXES.aVF=vecAngleDeg(avf.x,avf.y);
+  recomputeMeasuredRingRadii();
   computeLeadModel();
+}
+
+/** Per-lead outer ring radius fractions for measured ring (max lead = 1 → SR). */
+function recomputeMeasuredRingRadii(){
+  var maxLen=0.001;
+  ALL_LIMB_LEAD_NAMES.forEach(function(n){
+    var len=leadBipolarLen(n);
+    MEASURED_RING_RAD[n]=len;
+    maxLen=Math.max(maxLen,len);
+  });
+  ALL_LIMB_LEAD_NAMES.forEach(function(n){
+    MEASURED_RING_RAD[n]=(MEASURED_RING_RAD[n]||0)/maxLen;
+  });
+}
+
+function leadRingOuterRadius(name){
+  if(S.scopeRingMode!=='measured')return SR;
+  var f=MEASURED_RING_RAD[name];
+  return SR*(f!=null&&isFinite(f)?f:1);
 }
 
 function computeLeadModel(){
@@ -2495,8 +2707,9 @@ function leadCanvasVec(name){
   return{dx:dx/len,dy:dy/len};
 }
 
-function leadRingPt(name,rad){
-  return scopePtFromDeg(leadDeg(name),rad);
+function leadRingPt(name,frac){
+  frac=frac!=null?frac:1;
+  return scopePtFromDeg(leadDeg(name),leadRingOuterRadius(name)*frac);
 }
 
 /* Measured hexaxial unit vectors — electrode geometry drives ring + strips. */
@@ -2548,7 +2761,7 @@ function leadDeg(name){
 function updateLeadAxisReadout(){
   var el=document.getElementById('leadAxisReadout');
   if(!el)return;
-  var onAngle=(S.bodyPlateId||'')==='cardiocard-angle';
+  var onAngle=['cardiocard-angle','cardiocard-angle-16x9'].indexOf(S.bodyPlateId||'')>=0;
   fillCoordGrid(el,ALL_LEAD_NAMES.map(function(n){
     var m=Math.round(leadDeg(n));
     var ref=CANONICAL_LEAD_DEG[n];
@@ -2573,6 +2786,8 @@ function buildLabLayout(){
     heartScale:S.heartScale,
     heartRotation:S.heartRotation!=null?S.heartRotation:0,
     scopeScale:S.scopeScale,
+    scopeRingMode:S.scopeRingMode==='measured'?'measured':'textbook',
+    hcLinkedToTriangle:S.hcLinkedToTriangle!==false,
     badgeScale:S.badgeScale,
     badgeSpread:S.badgeSpread,
     flowTailPct:S.flowTailPct,
@@ -2584,9 +2799,11 @@ function buildLabLayout(){
     cometWidthMul:S.cometWidthMul,
     cometFadeMul:S.cometFadeMul,
     bodyPlateScale:S.bodyPlateScale,
+    linkAnchorsToPlate:S.linkAnchorsToPlate!==false,
     bodyViewZoom:S.bodyViewZoom,
     bodyViewPanX:S.bodyViewPanX,
     bodyViewPanY:S.bodyViewPanY,
+    scene3dLight:normalizeScene3dLightState(S.scene3dLight),
     autoMatchPlateBg:!!S.autoMatchPlateBg,
     axis:S.angle,
     heartRate:currentHr(),
@@ -2597,7 +2814,7 @@ function buildLabLayout(){
     labelOffsets:JSON.parse(JSON.stringify(LABEL_OFFSETS)),
     canvasPalette:JSON.parse(JSON.stringify(canvasPalette)),
     bottomStripCollapsed:!!S.bottomStripCollapsed,
-    strip:{stripBeats:S.stripBeats,stripHeight:S.stripHeight,leadStripW:S.leadStripW,stripZoom:clampStripZoom(S.stripZoom)},
+    strip:{stripBeats:S.stripBeats,stripHeight:S.stripHeight,leadStripW:S.leadStripW,stripZoom:clampStripZoom(S.stripZoom),stripManualZoom:!!S.stripManualZoom},
     ui:{
       showHeart:!!S.showHeart,
       showRibs:!!S.showRibs,
@@ -2621,9 +2838,9 @@ function buildLabLayout(){
       theme:currentTheme,
       bodyMode:S.bodyMode==='real'?'real':'svg',
       viewMode:S.viewMode==='3d'?'3d':'2d',
-      bodyPlateId:S.bodyPlateId||'placement-a'
+      bodyPlateId:S.bodyPlateId||BODY_PLATE_DEFAULT_ID
     },
-    bodyPlateId:S.bodyPlateId||'placement-a'
+    bodyPlateId:S.bodyPlateId||BODY_PLATE_DEFAULT_ID
   };
 }
 
@@ -2633,6 +2850,7 @@ function saveLabLayout(){
     localStorage.setItem(LAYOUT_STORAGE,JSON.stringify(payload));
     localStorage.setItem(EL_STORAGE,JSON.stringify(EL_BODY));
     localStorage.setItem(SCOPE_STORAGE,JSON.stringify(HC_BODY));
+    localStorage.setItem(SCENE3D_LIGHT_STORAGE,JSON.stringify(normalizeScene3dLightState(S.scene3dLight)));
     localStorage.setItem(HEART_STORAGE,S.heartPack);
     localStorage.setItem(STRIP_STORAGE,JSON.stringify(payload.strip));
   }catch(e){}
@@ -2667,6 +2885,7 @@ function buildLayoutFromLegacyKeys(){
 }
 
 function loadInitialLayout(callback){
+  _layoutHadScene3dLight=false;
   function finish(restored,savedAt,fromBundled){
     if(restored){
       _layoutRestored=true;
@@ -2676,6 +2895,15 @@ function loadInitialLayout(callback){
       showLayoutRestoreHint(false,false);
     }
     if(typeof callback==='function')callback(restored);
+    if(!_layoutHadScene3dLight){
+      try{
+        var lightRaw=localStorage.getItem(SCENE3D_LIGHT_STORAGE);
+        if(lightRaw){
+          S.scene3dLight=normalizeScene3dLightState(JSON.parse(lightRaw));
+          syncScene3dLightControls();
+        }
+      }catch(e){}
+    }
   }
   try{
     var raw=localStorage.getItem(LAYOUT_STORAGE);
@@ -2738,6 +2966,12 @@ function applyLabLayout(o,opts){
   if(typeof o.scopeScale==='number'){
     S.scopeScale=Math.max(0.6,Math.min(1.8,o.scopeScale));
   }
+  if(o.scopeRingMode==='measured'||o.scopeRingMode==='textbook'){
+    S.scopeRingMode=o.scopeRingMode;
+  }
+  if(typeof o.hcLinkedToTriangle==='boolean'){
+    S.hcLinkedToTriangle=o.hcLinkedToTriangle;
+  }
   if(typeof o.badgeScale==='number'){
     S.badgeScale=Math.max(0.5,Math.min(2,o.badgeScale));
   }
@@ -2769,7 +3003,12 @@ function applyLabLayout(o,opts){
     S.cometFadeMul=Math.max(0.35,Math.min(2.5,o.cometFadeMul));
   }
   if(typeof o.bodyPlateScale==='number'){
-    S.bodyPlateScale=Math.max(0.5,Math.min(2,o.bodyPlateScale));
+    S.bodyPlateScale=Math.max(0.5,Math.min(2.5,o.bodyPlateScale));
+  }
+  if(typeof o.linkAnchorsToPlate==='boolean')S.linkAnchorsToPlate=o.linkAnchorsToPlate;
+  if(o.scene3dLight&&typeof o.scene3dLight==='object'){
+    S.scene3dLight=normalizeScene3dLightState(o.scene3dLight);
+    _layoutHadScene3dLight=true;
   }
   if(typeof o.bodyViewZoom==='number'){
     S.bodyViewZoom=Math.max(BODY_VIEW_ZOOM_MIN,Math.min(BODY_VIEW_ZOOM_MAX,o.bodyViewZoom));
@@ -2812,11 +3051,18 @@ function applyLabLayout(o,opts){
     if(o.strip.stripBeats>=1&&o.strip.stripBeats<=48)S.stripBeats=o.strip.stripBeats;
     if(o.strip.stripHeight>=160&&o.strip.stripHeight<=920)S.stripHeight=o.strip.stripHeight;
     if(o.strip.leadStripW>=LEAD_COL_MIN&&o.strip.leadStripW<=2000)S.leadStripW=o.strip.leadStripW;
-    if(typeof o.strip.stripZoom==='number')S.stripZoom=clampStripZoom(o.strip.stripZoom);
-    else if(typeof o.strip.stripYGain==='number')S.stripZoom=clampStripZoom(o.strip.stripYGain*100);
+    if(typeof o.strip.stripManualZoom==='boolean')S.stripManualZoom=o.strip.stripManualZoom;
+    if(o.strip.stripManualZoom){
+      if(typeof o.strip.stripZoom==='number')S.stripZoom=clampStripZoom(o.strip.stripZoom);
+      else if(typeof o.strip.stripYGain==='number')S.stripZoom=clampStripZoom(o.strip.stripYGain*100);
+    }else{
+      S.stripZoom=STRIP_ZOOM_DEFAULT;
+      S.stripManualZoom=false;
+    }
   }
   updateStripZoomHint();
   syncStripViewFromState();
+  syncScopeRingModeUI();
   if(o.labelOffsets&&typeof o.labelOffsets==='object'){
     LABEL_OFFSETS=JSON.parse(JSON.stringify(o.labelOffsets));
     Object.keys(LABEL_OFFSETS).forEach(function(k){clampLabelOffset(LABEL_OFFSETS[k]);});
@@ -2869,6 +3115,9 @@ function applyLabLayout(o,opts){
   updateLeadReadout();
   updateScopeReadout();
   updateHeartReadout();
+  if(hasBodyPlate())captureAnchorNormsFromBody();
+  syncScene3dLightControls();
+  applyScene3dLightFromState({skipSave:true});
   if(window.syncHeartLegacyAliases)window.syncHeartLegacyAliases(S.heartPack);
   if(!opts.skipUi&&typeof setHeartPack==='function')setHeartPack(S.heartPack,{skipSave:!!opts.skipSave});
   if(!opts.skipUi&&typeof updateUI==='function')updateUI();
@@ -3203,6 +3452,10 @@ function scrubPlayheadByDelta(dx,plotW){
 function vecAt(ph){
   var a=r(S.angle),dx=Math.cos(a),dy=Math.sin(a),px=-dy,py=dx;
   var q0=0.06,q1=0.20;
+  if(ph>=0.02&&ph<q0){
+    var up=(ph-0.02)/(q0-0.02),m=0.12*Math.sin(up*Math.PI);
+    return{vx:m*dx,vy:m*dy,on:true,w:'p'};
+  }
   if(ph>=q0&&ph<=q1){
     var u=(ph-q0)/(q1-q0),m,lat;
     if(u<0.15)      m=-0.18*Math.sin(u/0.15*Math.PI);
@@ -3244,6 +3497,8 @@ function isView3d(){return S.viewMode==='3d';}
 function buildLab3dPayload(ph){
   var leadDegSnap={};
   ALL_LEAD_NAMES.forEach(function(n){leadDegSnap[n]=leadDeg(n);});
+  var ringRadSnap={};
+  ALL_LIMB_LEAD_NAMES.forEach(function(n){ringRadSnap[n]=MEASURED_RING_RAD[n]!=null?MEASURED_RING_RAD[n]:1;});
   return{
     EL_BODY:EL_BODY,
     PRE_BODY:PRE_BODY,
@@ -3259,11 +3514,15 @@ function buildLab3dPayload(ph){
     showLimbRing:S.showLimbRing,
     showVFan:S.showVFan,
     scopeScale:S.scopeScale,
-    placingLeads:S.placingLeads,
+    scopeRingMode:S.scopeRingMode||'textbook',
+    measuredRingRad:ringRadSnap,
+    hcLinkedToTriangle:S.hcLinkedToTriangle!==false,
+  placingLeads:S.placingLeads,
     placingScope:S.placingScope,
     placingHeart:S.placingHeart,
     bodyNW:bodyNW,
     bodyNH:bodyNH,
+    scene3dLight:normalizeScene3dLightState(S.scene3dLight),
     vec:vecAt(ph!=null?ph:beatPhase(S.time))
   };
 }
@@ -3381,6 +3640,9 @@ function syncBodySpaceDims(){
 
 function recomputeSceneGeometry(){
   syncBodySpaceDims();
+  if(S.linkAnchorsToPlate!==false&&isRealBodyMode()&&hasBodyPlate()){
+    applyPlateNormAnchors({skipSave:true,skipDraw:true});
+  }
   bodyScale=UH*0.88/bodyNW;
   bodyOffX=(UW-bodyNW*bodyScale)/2;
   bodyOffY=UH*0.04;
@@ -3397,13 +3659,12 @@ function recomputeSceneGeometry(){
   HT=toU(HEART_BODY.x,HEART_BODY.y);
   HP=HT;
   var hs=S.heartScale||1;
-  var ss=S.scopeScale||1;
   HEART_H=UH*0.22*hs;
   HEART_W=HEART_H*0.72;
   HC=toU(HC_BODY.x,HC_BODY.y);
   SCX=HC.x;
   SCY=HC.y;
-  SR=Math.max(UH*0.22*1.55*ss,Math.min(UW,UH)*0.12);
+  SR=Math.max(scopeBaseRadiusCanvas()*(S.scopeScale||1),Math.min(UW,UH)*0.08);
   recomputeLeadAxes();
 }
 
@@ -3478,6 +3739,96 @@ function drawScopeVectorArrow(va,strokeBase){
   uctx.lineTo(bx-px*headHalf,by-py*headHalf);
   uctx.closePath();
   uctx.fill();
+}
+
+/** Live geometric projection when one lead is isolated — arrow → axis foot → strip sync. */
+var _projBridgeFoot=null;
+function drawLiveProjectionConstruction(ph,leadName,pc,dark){
+  if(!soloLeadVisible()||!S.showVector||S.visibleLeads[leadName]===false)return;
+  var va=vecAt(ph);
+  if(!va.on)return;
+  var lv=leadElectricalVec(leadName);
+  if(!lv)return;
+  var arrowScale=SR*0.55;
+  var tx=sX(va.vx,arrowScale),ty=sY(va.vy,arrowScale);
+  var geoProj=va.vx*lv.vx+va.vy*lv.vy;
+  var footX=SCX+lv.vx*geoProj*arrowScale;
+  var footY=SCY+lv.vy*geoProj*arrowScale;
+  var fpr=projL(ph,leadName);
+  var polSt=polarityBadgeStyle(fpr.val,pc.cathode,pc.anode,{dark:dark,cathodeSite:true});
+  var stroke=polSt.lit?polSt.stroke:(dark?'rgba(180,180,190,0.55)':'rgba(100,100,110,0.55)');
+  uctx.save();
+  uctx.setLineDash([4,4]);
+  uctx.strokeStyle=stroke;
+  uctx.lineWidth=1.2;
+  uctx.beginPath();
+  uctx.moveTo(tx,ty);
+  uctx.lineTo(footX,footY);
+  uctx.stroke();
+  uctx.setLineDash([]);
+  uctx.strokeStyle=polSt.lit?polSt.stroke:'rgba(150,150,160,0.45)';
+  uctx.lineWidth=1.6;
+  uctx.beginPath();
+  uctx.moveTo(SCX,SCY);
+  uctx.lineTo(footX,footY);
+  uctx.stroke();
+  uctx.fillStyle=polSt.lit?polSt.stroke:(dark?'rgba(200,200,210,0.7)':'rgba(80,80,90,0.7)');
+  uctx.beginPath();
+  uctx.arc(footX,footY,4.2,0,Math.PI*2);
+  uctx.fill();
+  uctx.strokeStyle=stroke;
+  uctx.lineWidth=1;
+  uctx.stroke();
+  if(UW&&footX<UW-4){
+    uctx.setLineDash([3,5]);
+    uctx.strokeStyle=polSt.lit?polSt.stroke+'99':'rgba(2,132,199,0.28)';
+    uctx.lineWidth=1;
+    uctx.beginPath();
+    uctx.moveTo(footX,footY);
+    uctx.lineTo(UW-2,footY);
+    uctx.stroke();
+    uctx.setLineDash([]);
+  }
+  uctx.restore();
+  _projBridgeFoot={y:footY,val:fpr.val,stroke:stroke,lit:polSt.lit};
+}
+
+var _triRingAnim=null;
+function triggerTriRingTranslation(leadName){
+  _triRingAnim={lead:leadName,t0:performance.now()};
+}
+function einthovenBodyEdge(leadName){
+  if(leadName==='I')return{f:EL.RA,t:EL.LA};
+  if(leadName==='II')return{f:EL.RA,t:EL.LL};
+  if(leadName==='III')return{f:EL.LA,t:EL.LL};
+  return null;
+}
+function drawTriRingTranslationAnim(dark){
+  if(!_triRingAnim||!S.showTri)return;
+  var elapsed=performance.now()-_triRingAnim.t0;
+  var t=Math.min(1,elapsed/520);
+  var ease=t*(2-t);
+  var edge=einthovenBodyEdge(_triRingAnim.lead);
+  if(!edge){_triRingAnim=null;return;}
+  if(t>=1){_triRingAnim=null;return;}
+  var ringEnd=leadRingPt(_triRingAnim.lead,0.92);
+  var bodyMid={x:(edge.f.x+edge.t.x)*0.5,y:(edge.f.y+edge.t.y)*0.5};
+  var bodyHalf={x:(edge.t.x-edge.f.x)*0.5,y:(edge.t.y-edge.f.y)*0.5};
+  var ringHalf={x:(ringEnd.x-SCX)*0.5,y:(ringEnd.y-SCY)*0.5};
+  var midX=bodyMid.x+(SCX-bodyMid.x)*ease;
+  var midY=bodyMid.y+(SCY-bodyMid.y)*ease;
+  var hx=bodyHalf.x+(ringHalf.x-bodyHalf.x)*ease;
+  var hy=bodyHalf.y+(ringHalf.y-bodyHalf.y)*ease;
+  uctx.save();
+  uctx.strokeStyle=dark?'rgba(232,184,75,0.55)':'rgba(154,114,9,0.45)';
+  uctx.lineWidth=2.2;
+  uctx.setLineDash([6,4]);
+  uctx.globalAlpha=0.35+0.55*(1-Math.abs(t-0.5)*2);
+  uctx.beginPath();
+  uctx.moveTo(midX-hx,midY-hy);
+  uctx.lineTo(midX+hx,midY+hy);
+  uctx.stroke();
+  uctx.restore();
 }
 
 function drawQuadLabel(text,x,y,dark,gold){
@@ -3668,8 +4019,87 @@ function fromU(px,py){
 }
 
 function clampBodyPt(p){
-  p.x=Math.max(18,Math.min(188,p.x));
-  p.y=Math.max(18,Math.min(198,p.y));
+  var m=Math.max(6,Math.min(bodyNW||BODY_SPACE_W_DEFAULT,bodyNH||BODY_SPACE_H)*0.025);
+  var w=bodyNW||BODY_SPACE_W_DEFAULT;
+  var h=bodyNH||BODY_SPACE_H;
+  p.x=Math.max(m,Math.min(w-m,p.x));
+  p.y=Math.max(m,Math.min(h-m,p.y));
+}
+
+/** Normalized 0–1 on the active body-plate image rect → body-space coords. */
+function plateNormToBodyPt(nx,ny,pr){
+  pr=pr||getBodyPlateRect();
+  return{x:pr.x+nx*pr.w,y:pr.y+ny*pr.h};
+}
+
+function wilsonNormFrom(norms){
+  var r=norms||CARDIOCARD_NORM;
+  return{x:(r.RA.x+r.LA.x+r.LL.x)/3,y:(r.RA.y+r.LA.y+r.LL.y)/3};
+}
+
+/**
+ * Reposition all electrodes from plate-normalized anchors (CARDIOCARD_NORM or vision output).
+ * Future: replace CARDIOCARD_NORM with detectPlateLandmarksFromVision() result.
+ */
+function applyPlateNormAnchors(opts){
+  opts=opts||{};
+  if(!hasBodyPlate())return false;
+  var norms=S.anchorNorms||CARDIOCARD_NORM;
+  var pr=getBodyPlateRect();
+  ['RA','LA','LL','RL'].forEach(function(k){
+    if(!norms[k])return;
+    EL_BODY[k]=plateNormToBodyPt(norms[k].x,norms[k].y,pr);
+  });
+  REF4_PRE_KEYS.forEach(function(k){
+    if(!norms[k])return;
+    PRE_BODY[k]=plateNormToBodyPt(norms[k].x,norms[k].y,pr);
+  });
+  var wn=wilsonNormFrom(norms);
+  HC_BODY=plateNormToBodyPt(wn.x,wn.y,pr);
+  if(norms.heart)HEART_BODY=plateNormToBodyPt(norms.heart.x,norms.heart.y,pr);
+  if(S.hcLinkedToTriangle!==false)syncHcFromTriangleIfLinked();
+  recomputeSceneGeometry();
+  resetTrail();
+  updateLeadReadout();
+  if(!opts.skipSave)saveLabLayout();
+  if(!opts.skipDraw&&typeof updateUI==='function')updateUI();
+  else if(!opts.skipDraw&&typeof drawUnified==='function')drawUnified();
+  return true;
+}
+
+/** Stub — wire to Gemini/segmentation when character pipeline is funded. Returns plate-normalized landmarks. */
+function detectPlateLandmarksFromVision(imageSrc){
+  return Promise.resolve(S.anchorNorms||CARDIOCARD_NORM);
+}
+
+async function autoFitAnchorsFromVision(){
+  if(!hasBodyPlate())return;
+  var entry=BODY_PLATE_CATALOG[resolveBodyPlateId(S.bodyPlateId)];
+  var src=entry&&entry.src?entry.src:(BODY_PLATE_IMG&&BODY_PLATE_IMG.src);
+  try{
+    var norms=await detectPlateLandmarksFromVision(src);
+    if(norms&&norms.RA){
+      S.anchorNorms=norms;
+      S.linkAnchorsToPlate=true;
+      applyPlateNormAnchors();
+    }
+  }catch(err){
+    console.warn('Vision landmark detect failed',err);
+    applyPlateNormAnchors();
+  }
+}
+
+function captureAnchorNormsFromBody(){
+  if(!hasBodyPlate())return;
+  var pr=getBodyPlateRect();
+  if(!pr.w||!pr.h)return;
+  function normPt(p){
+    return{x:(p.x-pr.x)/pr.w,y:(p.y-pr.y)/pr.h};
+  }
+  var out={heart:normPt(HEART_BODY)};
+  ['RA','LA','LL','RL'].forEach(function(k){if(EL_BODY[k])out[k]=normPt(EL_BODY[k]);});
+  REF4_PRE_KEYS.forEach(function(k){if(PRE_BODY[k])out[k]=normPt(PRE_BODY[k]);});
+  S.anchorNorms=out;
 }
 
 function canvasPoint(clientX,clientY){
@@ -3700,6 +4130,7 @@ function moveLeadToCanvas(key,px,py){
 
 function moveLeadInBodySpace(key,b){
   clampBodyPt(b);
+  S.linkAnchorsToPlate=false;
   if(REF4_PRE_KEYS.indexOf(key)>=0){
     PRE_BODY[key].x=b.x;
     PRE_BODY[key].y=b.y;
@@ -3707,8 +4138,8 @@ function moveLeadInBodySpace(key,b){
   }else{
     EL_BODY[key].x=b.x;
     EL_BODY[key].y=b.y;
-    EL[key]=toU(b.x,b.y);
-    recomputeLeadAxes();
+    syncHcFromTriangleIfLinked();
+    recomputeSceneGeometry();
     resetTrail();
   }
   saveLabLayout();
@@ -3725,6 +4156,7 @@ function hitScopeCenter(px,py){
 function moveScopeToCanvas(px,py){
   var b=fromU(px,py);
   clampBodyPt(b);
+  S.hcLinkedToTriangle=false;
   HC_BODY.x=b.x;
   HC_BODY.y=b.y;
   saveHcBody();
@@ -3836,6 +4268,8 @@ function resetTrail(){
   var cy=typeof SCY==='number'?SCY:0;
   for(var _j=0;_j<TRAIL_LEN;_j++)trailBuf[_j]={x:cx,y:cy,on:false};
   trailHead=0;
+  _loopTrail.p=[];_loopTrail.qrs=[];_loopTrail.t=[];
+  _loopTrailPh=0;
 }
 
 function pushCometSample(ph){
@@ -3845,6 +4279,53 @@ function pushCometSample(ph){
   var cy2=v.on?sY(v.vy,SR*S.mag):SCY;
   trailBuf[trailHead]={x:cx2,y:cy2,on:v.on};
   trailHead=(trailHead+1)%TRAIL_LEN;
+  pushVectorscopeLoopSample(ph,v);
+}
+
+var LOOP_TRAIL_LEN=140;
+var _loopTrail={p:[],qrs:[],t:[]};
+var _loopTrailPh=0;
+function pushVectorscopeLoopSample(ph,v){
+  if(S.paused)return;
+  if(ph<_loopTrailPh-0.4){
+    _loopTrail.p=[];_loopTrail.qrs=[];_loopTrail.t=[];
+  }
+  _loopTrailPh=ph;
+  if(!v||!v.on||!v.w)return;
+  var key=v.w==='p'||v.w==='t'?v.w:'qrs';
+  var scale=SR*0.55;
+  var buf=_loopTrail[key];
+  buf.push({x:sX(v.vx,scale),y:sY(v.vy,scale)});
+  if(buf.length>LOOP_TRAIL_LEN)buf.shift();
+}
+
+function drawVectorscopeLoopTrails(dark){
+  var layers=[
+    {key:'p',col:[2,132,199],wMul:0.75,alpha:0.38},
+    {key:'qrs',col:[239,83,80],wMul:1,alpha:0.72},
+    {key:'t',col:[62,207,142],wMul:0.82,alpha:0.52}
+  ];
+  uctx.save();
+  uctx.globalCompositeOperation=dark?'screen':'source-over';
+  uctx.lineCap='round';
+  uctx.lineJoin='round';
+  layers.forEach(function(layer){
+    var buf=_loopTrail[layer.key];
+    if(!buf||buf.length<2)return;
+    for(var si=1;si<buf.length;si++){
+      var t0=(si-1)/(buf.length-1),t1=si/(buf.length-1);
+      var a0=layer.alpha*Math.pow(t0,1.4);
+      var a1=layer.alpha*Math.pow(t1,1.2);
+      var w=(0.8+t1*SR*0.08)*layer.wMul*cometWidthMul();
+      uctx.strokeStyle='rgba('+layer.col[0]+','+layer.col[1]+','+layer.col[2]+','+a1.toFixed(3)+')';
+      uctx.lineWidth=w;
+      uctx.beginPath();
+      uctx.moveTo(buf[si-1].x,buf[si-1].y);
+      uctx.lineTo(buf[si].x,buf[si].y);
+      uctx.stroke();
+    }
+  });
+  uctx.restore();
 }
 
 function cometTrailChain(){
@@ -4055,20 +4536,20 @@ var BODY_PLATE_IMG=null;
 var BODY_PLATE_RENDER='native';
 var BODY_PLATE_HAS_BAKED_RIBS=false;
 var RIB_CAGE_IMG=null;
-var BODY_PLATE_DEFAULT_ID='cardiocard-angle';
+var BODY_PLATE_DEFAULT_ID='cardiocard-angle-16x9';
 var BODY_PLATE_CATALOG={
-  'cardiocard-angle':{
-    src:'assets/ecg-vector-lab/character/kojo-cardiocard-angle.png',
-    render:'native',
-    label:'CardioCard angle',
-    hint:'Steve-approved Magnific plate (ref-04 angle + Kojo face). Loads tuned layout 6 automatically.'
-  },
   'cardiocard-angle-16x9':{
     src:'assets/ecg-vector-lab/character/kojo-cardiocard-angle-16x9.png',
     render:'native',
     bodyAspect:16/9,
     label:'CardioCard 16:9',
-    hint:'Wide cinematic plate — same pose, extra lateral room for scope ring + labels. Body space 328×185.'
+    hint:'Desktop default — wide cinematic plate + Layout 9 electrodes. Mobile layout later.'
+  },
+  'cardiocard-angle':{
+    src:'assets/ecg-vector-lab/character/kojo-cardiocard-angle.png',
+    render:'native',
+    label:'CardioCard angle',
+    hint:'Steve-approved Magnific plate (ref-04 angle + Kojo face). Standard aspect.'
   },
   'placement-a':{
     src:'assets/ecg-vector-lab/character/boy-ecg-placement-plate-a.png',
@@ -4192,6 +4673,7 @@ function loadActiveBodyPlate(opts){
     }
     if(S.autoMatchPlateBg!==false)applyPlateBackgroundMatch({skipSave:true});
     updatePlateBgReadout(samplePlateBackground(BODY_PLATE_IMG));
+    recomputeSceneGeometry();
     if(typeof drawUnified==='function')drawUnified();
   };
   img.onerror=function(){
@@ -4204,32 +4686,21 @@ function loadActiveBodyPlate(opts){
   img.src=entry.src;
 }
 
-/** Viewport height available for the real-mode body plate (px, CSS space). */
-function bodyPlateViewportHeightPx(){
-  var margin=bodyOffY!=null?bodyOffY:UH*0.04;
-  return Math.max(48,(UH||420)-margin*2);
-}
-
-/** Real mode: fit plate to viewport height · SVG: fit inside bodyNW×bodyNH. */
+/** Fit plate image inside bodyNW×bodyNH — avoids overflow past clamp bounds. */
 function getBodyPlateRect(){
   if(!hasBodyPlate())return{x:0,y:0,w:bodyNW,h:bodyNH};
   var iw=BODY_PLATE_IMG.naturalWidth,ih=BODY_PLATE_IMG.naturalHeight;
   if(!iw||!ih)return{x:0,y:0,w:bodyNW,h:bodyNH};
   var aspect=iw/ih;
-  var sc=Math.max(0.5,Math.min(2,S.bodyPlateScale||1));
-  if(isRealBodyMode()){
-    var targetPx=bodyPlateViewportHeightPx()*sc;
-    var h=targetPx/(bodyScale||1);
-    var w=h*aspect;
-    return{x:(bodyNW-w)*0.5,y:0,w:w,h:h};
-  }
-  var h=bodyNH;
-  var w=h*aspect;
-  if(w>bodyNW){w=bodyNW;h=w/aspect;}
-  w*=sc;
-  h*=sc;
-  var cx=bodyNW*0.5,cy=bodyNH*0.5;
-  return{x:cx-w*0.5,y:cy-h*0.5,w:w,h:h};
+  var sc=Math.max(0.5,Math.min(2.5,S.bodyPlateScale||1));
+  var maxW=bodyNW*sc;
+  var maxH=bodyNH*sc;
+  var w,h;
+  if(maxW/maxH>aspect){h=maxH;w=h*aspect;}
+  else{w=maxW;h=w/aspect;}
+  w=Math.min(w,bodyNW);
+  h=Math.min(h,bodyNH);
+  return{x:(bodyNW-w)*0.5,y:(bodyNH-h)*0.5,w:w,h:h};
 }
 
 function rgbToHex(r,g,b){
@@ -4402,6 +4873,7 @@ var bp=new Path2D(BODY);
 
 function drawUnified(){
   if(!uctx||!UW||!UH)return;
+  _projBridgeFoot=null;
   var ph=beatPhase(S.time);
   if(isView3d()){
     syncScene3dFromLab(ph);
@@ -4499,42 +4971,63 @@ function drawUnified(){
   }
 
   if(S.showScope||S.placingLabels){
-  /* ── 5. SCOPE RING + GRID (legible quadrants) ── */
-  uctx.strokeStyle=canvasRgba('scopeRing',dark?0.62:0.55,gold);
-  uctx.lineWidth=lineW(2);
-  uctx.beginPath();uctx.arc(SCX,SCY,SR,0,Math.PI*2);uctx.stroke();
+  /* ── 5. SCOPE RING + GRID — textbook circle or measured hex from triangle ── */
+  var ringBound=scopeRingBoundingRadius();
+  if(S.scopeRingMode==='measured'){
+    var mPts=ALL_LIMB_LEAD_NAMES.map(function(n){return leadRingPt(n,1);});
+    uctx.strokeStyle=canvasRgba('scopeRing',dark?0.62:0.55,gold);
+    uctx.lineWidth=lineW(2);
+    uctx.beginPath();
+    mPts.forEach(function(p,i){
+      if(i===0)uctx.moveTo(p.x,p.y);else uctx.lineTo(p.x,p.y);
+    });
+    uctx.closePath();
+    uctx.stroke();
+    ALL_LIMB_LEAD_NAMES.forEach(function(n){
+      var ep=leadRingPt(n,1);
+      uctx.strokeStyle=canvasRgba('scopeRing',dark?0.38:0.32,gold);
+      uctx.lineWidth=lineW(1);
+      uctx.beginPath();
+      uctx.moveTo(SCX,SCY);
+      uctx.lineTo(ep.x,ep.y);
+      uctx.stroke();
+    });
+  }else{
+    uctx.strokeStyle=canvasRgba('scopeRing',dark?0.62:0.55,gold);
+    uctx.lineWidth=lineW(2);
+    uctx.beginPath();uctx.arc(SCX,SCY,SR,0,Math.PI*2);uctx.stroke();
+    for(var d=0;d<360;d+=3.6){
+      var major=(d%30)<1.8,r3=SR-(major?SR*0.08:SR*0.038);
+      var p1=sPt(d,SR),p2=sPt(d,r3);
+      uctx.strokeStyle=major?canvasRgba('scopeRing',dark?0.55:0.85,gold):border;
+      uctx.lineWidth=major?lineW(1.4):lineW(0.7);
+      uctx.beginPath();
+      uctx.moveTo(p1.x,p1.y);uctx.lineTo(p2.x,p2.y);
+      uctx.stroke();
+    }
+  }
 
   uctx.strokeStyle=dark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.08)';
   uctx.lineWidth=lineW(1.2);
-  uctx.beginPath();uctx.arc(SCX,SCY,SR*0.5,0,Math.PI*2);uctx.stroke();
+  uctx.beginPath();uctx.arc(SCX,SCY,ringBound*0.5,0,Math.PI*2);uctx.stroke();
 
   uctx.strokeStyle=canvasRgba('scopeRing',dark?0.48:0.5,gold);
   uctx.lineWidth=lineW(1.8);
   uctx.beginPath();
-  uctx.moveTo(SCX-SR,SCY);uctx.lineTo(SCX+SR,SCY);
-  uctx.moveTo(SCX,SCY-SR);uctx.lineTo(SCX,SCY+SR);
+  uctx.moveTo(SCX-ringBound,SCY);uctx.lineTo(SCX+ringBound,SCY);
+  uctx.moveTo(SCX,SCY-ringBound);uctx.lineTo(SCX,SCY+ringBound);
   uctx.stroke();
 
   uctx.fillStyle=canvasRgba('scopeRing',dark?0.82:0.9,gold);
-  var qOut=SR*1.18;
+  var qOut=ringBound*1.18;
   var qLeft=sPt(0,qOut),qRight=sPt(180,qOut),qInf=sPt(90,qOut),qSup=sPt(-90,qOut);
   drawQuadLabel('Left',qLeft.x,qLeft.y,dark,quadGold);
   drawQuadLabel('Right',qRight.x,qRight.y,dark,quadGold);
   drawQuadLabel('Inferior',qInf.x,qInf.y,dark,quadGold);
   drawQuadLabel('Superior',qSup.x,qSup.y,dark,quadGold);
 
-  for(var d=0;d<360;d+=3.6){
-    var a2=r(d),major=(d%30)<1.8,r3=SR-(major?SR*0.08:SR*0.038);
-    var p1=sPt(d,SR),p2=sPt(d,r3);
-    uctx.strokeStyle=major?canvasRgba('scopeRing',dark?0.55:0.85,gold):border;
-    uctx.lineWidth=major?lineW(1.4):lineW(0.7);
-    uctx.beginPath();
-    uctx.moveTo(p1.x,p1.y);uctx.lineTo(p2.x,p2.y);
-    uctx.stroke();
-  }
-
   visibleLeadsList().forEach(function(L){
-    var bp=leadRingPt(L.n,SR*0.72);
+    var bp=leadRingPt(L.n,0.72);
     var tx2=bp.x,ty2=bp.y;
     var foc=L.n===S.focusLead;
     uctx.save();
@@ -4555,7 +5048,7 @@ function drawUnified(){
     uctx.font=(foc?'700':'600')+' '+(SR*0.1)+'px Archivo,ui-sans-serif';
     uctx.textAlign='center';
     uctx.textBaseline='middle';
-    var lpPt=leadRingPt(L.n,SR*0.78+bs*1.8);
+    var lpPt=leadRingPt(L.n,0.86);
     var labelP=labelXY('scope-'+L.n,lpPt.x,lpPt.y);
     if(dark&&POSITIVE_FLOW_LEADS.indexOf(L.n)>=0){
       uctx.lineJoin='round';
@@ -4569,7 +5062,7 @@ function drawUnified(){
       var prQ=projL(phQ,L.n);
       var badgeR=polarityBadgeR(Math.max(6,SR*0.046));
       var ringFrac=0.58*badgeSpreadMul();
-      var badgePt=leadRingPt(L.n,SR*ringFrac);
+      var badgePt=leadRingPt(L.n,ringFrac);
       drawPositiveElectrodeBadge(badgePt.x,badgePt.y,badgeR,prQ.val,'',pc.cathode,pc.anode,text,border,{showLabel:false,dark:dark});
     }
     if(S.placingLabels){drawLabelGrip(labelP.x,labelP.y);registerLabelHit('scope-'+L.n,labelP.x,labelP.y);}
@@ -4578,12 +5071,12 @@ function drawUnified(){
     uctx.restore();
   });
 
-  /* Einthoven I/II/III rays — fixed hexaxial angles (same as scope labels) */
+  /* Einthoven I/II/III rays — measured angles from triangle */
   if(S.showTri){
     ['I','II','III'].forEach(function(n){
       if(S.visibleLeads[n]===false)return;
       var foc=n===S.focusLead;
-      var pt=leadRingPt(n,SR*0.92);
+      var pt=leadRingPt(n,0.92);
       uctx.strokeStyle=foc?'rgba(2,132,199,0.35)':(dark?'rgba(232,184,75,0.16)':'rgba(154,114,9,0.2)');
       uctx.lineWidth=foc?1.4:0.9;
       uctx.setLineDash([3,5]);
@@ -4601,6 +5094,7 @@ function drawUnified(){
 
   if(S.showComet){
   pushCometSample(ph);
+  drawVectorscopeLoopTrails(dark);
   drawCometStreamingTrail(dark);
   drawCometHead(ph,dark);
   }
@@ -4613,9 +5107,12 @@ function drawUnified(){
   }
   }
 
+  drawTriRingTranslationAnim(dark);
+
   /* ── 8. VECTOR ARROW from electrical centre ── */
   if(S.showVector){
   drawScopeVectorArrow(vecAt(ph),S.vectorStroke||2);
+  drawLiveProjectionConstruction(ph,S.focusLead,pc,dark);
   }
 
   /* ── 9. FOCUSED LEAD AXIS LINE on scope ── */
@@ -4704,7 +5201,7 @@ function drawLeadStrips(){
   visible.forEach(function(L,idx){
     var y0=idx*rowH;
     var base=y0+rowH/2;
-    var amp=stripRowAmp(rowH);
+    var amp=stripRowAmpForLead(rowH,L.n,tInWindow);
     var foc=L.n===S.focusLead;
 
     lctx.fillStyle=foc?'rgba(2,132,199,.12)':'transparent';
@@ -4744,6 +5241,16 @@ function drawLeadStrips(){
     if(foc){
       lctx.strokeStyle='rgba(180,210,255,.85)';lctx.lineWidth=1;
       lctx.beginPath();lctx.arc(playX,liveY,5,0,Math.PI*2);lctx.stroke();
+      if(soloLeadVisible()&&_projBridgeFoot){
+        lctx.setLineDash([3,5]);
+        lctx.strokeStyle=_projBridgeFoot.lit?_projBridgeFoot.stroke:'rgba(2,132,199,.35)';
+        lctx.lineWidth=1.1;
+        lctx.beginPath();
+        lctx.moveTo(0,liveY);
+        lctx.lineTo(LPAD_S-2,liveY);
+        lctx.stroke();
+        lctx.setLineDash([]);
+      }
     }
   });
 
@@ -5015,7 +5522,7 @@ function drawStrip(){
   }
 
   visible.forEach(function(L,idx){
-    var rowY=TPAD+idx*rowH,base=rowY+rowH/2,amp=stripRowAmp(rowH);
+    var rowY=TPAD+idx*rowH,base=rowY+rowH/2,amp=stripRowAmpForLead(rowH,L.n,tInWindow);
     var foc=L.n===S.focusLead;
 
     wctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)';
@@ -5356,12 +5863,28 @@ function updateUI(){
         }
       });
     }
-    if(!allLeadsVisible()&&S.focusLead&&LEAD_STUDY[S.focusLead]){
-      var st=LEAD_STUDY[S.focusLead];
-      hudStudy.hidden=false;
-      hudStudy.innerHTML='Lead '+S.focusLead+' = '+st.formula+' · '+st.deg+'° measured'
-        +'<button type="button" class="hud-show-all">Show all</button>'
-        +'<span class="hud-show-all" style="cursor:default;border:none;background:transparent;padding:0 0 0 4px">· Esc to pick another</span>';
+    if(!allLeadsVisible()){
+      var visStudy=visibleLeadsList();
+      var avrNote=S.focusLead==='aVR'
+        ?' <span class="lead-chip dn" style="margin-left:6px;font-size:10px">aVR points away from the heart\'s normal axis — normally inverted</span>'
+        :'';
+      var showAllBtn='<button type="button" class="hud-show-all">Show all</button>';
+      if(visStudy.length>1){
+        hudStudy.hidden=false;
+        hudStudy.innerHTML='Studying '+visStudy.map(function(L){return L.n;}).join(' + ')
+          +' · focus '+S.focusLead
+          +(S.focusLead&&LEAD_STUDY[S.focusLead]?' = '+LEAD_STUDY[S.focusLead].formula:'')
+          +avrNote+' · click dim pills to add · Alt+click to remove · '+showAllBtn;
+      }else if(S.focusLead&&LEAD_STUDY[S.focusLead]){
+        var st=LEAD_STUDY[S.focusLead];
+        hudStudy.hidden=false;
+        hudStudy.innerHTML='Lead '+S.focusLead+' = '+st.formula+' · '+st.deg+'° measured'+avrNote
+          +' · click another pill to compare · '+showAllBtn
+          +'<span class="hud-show-all" style="cursor:default;border:none;background:transparent;padding:0 0 0 4px">· Esc restores all</span>';
+      }else{
+        hudStudy.hidden=true;
+        hudStudy.textContent='';
+      }
     }else{
       hudStudy.hidden=true;
       hudStudy.textContent='';
@@ -5398,6 +5921,7 @@ function updateUI(){
   }
   if(focLbl)focLbl.textContent=S.focusLead?'Focus · '+S.focusLead:'';
   syncLeadPillsUI();
+  updateStripZoomHint();
   updateTimeHud();
   updateIschemiaLegend();
 }
@@ -5459,6 +5983,7 @@ function syncSizeControls(){
   if(cwv)cwv.textContent=Math.round((S.cometWidthMul||1)*100)+'%';
   if(cf)cf.value=Math.round((S.cometFadeMul||1)*100);
   if(cfv)cfv.textContent=Math.round((S.cometFadeMul||1)*100)+'%';
+  syncScene3dLightControls();
 }
 
 function initHeartAnatomyControls(){
@@ -5489,11 +6014,31 @@ function initHeartAnatomyControls(){
 function initBodyPlateControls(){
   var scaleEl=document.getElementById('bodyPlateScaleR');
   var matchBtn=document.getElementById('matchPlateBgBtn');
+  var linkBtn=document.getElementById('linkAnchorsPlateBtn');
+  var fitBtn=document.getElementById('fitPlateAnchorsBtn');
   syncSizeControls();
+  if(linkBtn){
+    linkBtn.classList.toggle('on',S.linkAnchorsToPlate!==false);
+    linkBtn.addEventListener('click',function(){
+      S.linkAnchorsToPlate=!S.linkAnchorsToPlate;
+      linkBtn.classList.toggle('on',S.linkAnchorsToPlate);
+      if(S.linkAnchorsToPlate)applyPlateNormAnchors();
+      saveLabLayout();
+    });
+  }
+  if(fitBtn){
+    fitBtn.addEventListener('click',function(){
+      S.linkAnchorsToPlate=true;
+      if(linkBtn)linkBtn.classList.add('on');
+      applyPlateNormAnchors();
+    });
+  }
   if(scaleEl){
     scaleEl.addEventListener('input',function(){
-      S.bodyPlateScale=Math.max(0.5,Math.min(2,(parseInt(scaleEl.value,10)||100)/100));
+      S.bodyPlateScale=Math.max(0.5,Math.min(2.5,(parseInt(scaleEl.value,10)||100)/100));
       syncSizeControls();
+      recomputeSceneGeometry();
+      resetTrail();
       saveLabLayout();
     });
   }
@@ -5503,6 +6048,44 @@ function initBodyPlateControls(){
     });
   }
   if(hasBodyPlate())updatePlateBgReadout(samplePlateBackground(BODY_PLATE_IMG));
+}
+
+function initScene3dLightControls(){
+  if(initScene3dLightControls.done)return;
+  initScene3dLightControls.done=true;
+  S.scene3dLight=normalizeScene3dLightState(S.scene3dLight);
+  syncScene3dLightControls();
+  function bind(id,fn){
+    var el=document.getElementById(id);
+    if(el)el.addEventListener('input',fn);
+  }
+  bind('lightAmbientR',function(){
+    S.scene3dLight=normalizeScene3dLightState(S.scene3dLight);
+    S.scene3dLight.ambient=(parseInt(this.value,10)||40)/100;
+    applyScene3dLightFromState();
+  });
+  bind('lightKeyR',function(){
+    S.scene3dLight=normalizeScene3dLightState(S.scene3dLight);
+    S.scene3dLight.key=(parseInt(this.value,10)||115)/100;
+    applyScene3dLightFromState();
+  });
+  bind('lightKeyAzR',function(){
+    S.scene3dLight=normalizeScene3dLightState(S.scene3dLight);
+    S.scene3dLight.keyAz=parseInt(this.value,10)||0;
+    applyScene3dLightFromState();
+  });
+  bind('lightKeyElR',function(){
+    S.scene3dLight=normalizeScene3dLightState(S.scene3dLight);
+    S.scene3dLight.keyEl=parseInt(this.value,10)||48;
+    applyScene3dLightFromState();
+  });
+  var resetBtn=document.getElementById('resetScene3dLightBtn');
+  if(resetBtn){
+    resetBtn.addEventListener('click',function(){
+      S.scene3dLight=JSON.parse(JSON.stringify(SCENE3D_LIGHT_DEFAULT));
+      applyScene3dLightFromState();
+    });
+  }
 }
 
 function initScopeSizeControl(){
@@ -5516,6 +6099,52 @@ function initScopeSizeControl(){
     resetTrail();
     saveLabLayout();
   });
+}
+
+function syncScopeRingModeUI(){
+  var tb=document.getElementById('scopeRingTextbookBtn');
+  var ms=document.getElementById('scopeRingMeasuredBtn');
+  var lk=document.getElementById('hcLinkTriangleBtn');
+  var mode=S.scopeRingMode==='measured'?'measured':'textbook';
+  if(tb)tb.classList.toggle('on',mode==='textbook');
+  if(ms)ms.classList.toggle('on',mode==='measured');
+  if(lk)lk.classList.toggle('on',!!S.hcLinkedToTriangle);
+}
+
+function setScopeRingMode(mode){
+  mode=mode==='measured'?'measured':'textbook';
+  if(S.scopeRingMode===mode)return;
+  S.scopeRingMode=mode;
+  syncScopeRingModeUI();
+  recomputeSceneGeometry();
+  resetTrail();
+  saveLabLayout();
+  if(isView3d())syncScene3dFromLab(beatPhase(S.time));
+  if(typeof updateUI==='function')updateUI();
+}
+
+function setHcLinkedToTriangle(on){
+  S.hcLinkedToTriangle=!!on;
+  if(S.hcLinkedToTriangle)syncHcFromTriangleIfLinked();
+  syncScopeRingModeUI();
+  recomputeSceneGeometry();
+  resetTrail();
+  saveLabLayout();
+  if(typeof updateUI==='function')updateUI();
+}
+
+function initScopeRingModeControls(){
+  syncScopeRingModeUI();
+  var tb=document.getElementById('scopeRingTextbookBtn');
+  var ms=document.getElementById('scopeRingMeasuredBtn');
+  var lk=document.getElementById('hcLinkTriangleBtn');
+  if(tb)tb.addEventListener('click',function(){setScopeRingMode('textbook');});
+  if(ms)ms.addEventListener('click',function(){setScopeRingMode('measured');});
+  if(lk){
+    lk.addEventListener('click',function(){
+      setHcLinkedToTriangle(!S.hcLinkedToTriangle);
+    });
+  }
 }
 
 function initBadgeSizeControls(){
@@ -5788,6 +6417,25 @@ function syncLeadPillsUI(){
   });
 }
 
+function onLeadPillClick(name,ev){
+  if(ALL_LEAD_NAMES.indexOf(name)<0)return;
+  if(allLeadsVisible()){
+    isolateLead(name);
+    return;
+  }
+  var removeIntent=ev&&(ev.altKey||ev.metaKey&&ev.shiftKey);
+  if(S.visibleLeads[name]===false){
+    toggleLeadVisible(name,true);
+    focusLeadOnly(name);
+    return;
+  }
+  if(removeIntent&&visibleLeadsList().length>1){
+    toggleLeadVisible(name,false);
+    return;
+  }
+  focusLeadOnly(name);
+}
+
 function toggleLeadVisible(name,on){
   if(on==null)on=S.visibleLeads[name]===false;
   else on=!!on;
@@ -5795,6 +6443,7 @@ function toggleLeadVisible(name,on){
   S.visibleLeads[name]=on;
   ensureFocusLeadVisible();
   syncLeadPillsUI();
+  updateUI();
   saveLabLayout();
 }
 
@@ -5849,7 +6498,7 @@ function initLeadPills(){
         showSoloFocusLead();
         return;
       }
-      isolateLead(key);
+      onLeadPillClick(key,e);
     });
   });
 }
@@ -6097,7 +6746,7 @@ function setPlacementMode(mode){
   var dockHint=document.getElementById('placeModeHint');
   var wrap=document.getElementById('bodyScopeWrap');
   var placeMsg=null;
-  if(mode==='leads')placeMsg=isView3d()?'Orbit chest · drag electrode spheres · dbl-click reset view':'Scroll zoom chest · drag V1–V6 · dbl-click reset view';
+  if(mode==='leads')placeMsg=isView3d()?'Orbit chest · drag electrode spheres · dbl-click or F fit view':'Scroll zoom chest · drag V1–V6 · dbl-click or F fit view';
   else if(mode==='scope')placeMsg='Drag gold HC — scope ring + vector · Ctrl+scroll scope size';
   else if(mode==='heart')placeMsg='Drag heart anchor on chest';
   else if(mode==='labels')placeMsg='Nudge labels (max ~28px)';
@@ -6191,18 +6840,23 @@ function initLeadPlacement(){
       S.heartScale=1;
       S.heartRotation=0;
       S.scopeScale=1;
+      S.scopeRingMode='textbook';
+      S.hcLinkedToTriangle=true;
       S.badgeScale=1;
       S.badgeSpread=1;
       S.bodyPlateScale=1;
+      S.scene3dLight=JSON.parse(JSON.stringify(SCENE3D_LIGHT_DEFAULT));
       S.bodyPlateId=BODY_PLATE_DEFAULT_ID;
       setBodyPlateId(BODY_PLATE_DEFAULT_ID,{skipSave:true,force:true});
       S.stripBeats=8;
       S.stripHeight=280;
       S.leadStripW=108;
       S.stripZoom=STRIP_ZOOM_DEFAULT;
+      S.stripManualZoom=false;
       LABEL_OFFSETS={};
       syncSizeControls();
       syncStripViewFromState();
+      syncScopeRingModeUI();
       recomputeSceneGeometry();
       recomputeLeadAxes();
       resetTrail();
@@ -6359,6 +7013,103 @@ function resetBodyView(){
   saveLabLayout();
 }
 
+function expandBodyBoundsPt(b,x,y){
+  if(!isFinite(x)||!isFinite(y))return b;
+  if(!b)return{minX:x,minY:y,maxX:x,maxY:y};
+  b.minX=Math.min(b.minX,x);
+  b.minY=Math.min(b.minY,y);
+  b.maxX=Math.max(b.maxX,x);
+  b.maxY=Math.max(b.maxY,y);
+  return b;
+}
+
+/** Unified-canvas bbox for 2D fit — body plate, scope ring, heart, limb electrodes. */
+function getBodyCanvasContentBounds(){
+  if(typeof SCX!=='number'||typeof SR!=='number')recomputeSceneGeometry();
+  var b=null;
+  var pr=getBodyPlateRect();
+  [[pr.x,pr.y],[pr.x+pr.w,pr.y],[pr.x+pr.w,pr.y+pr.h],[pr.x,pr.y+pr.h]].forEach(function(c){
+    var u=toU(c[0],c[1]);
+    b=expandBodyBoundsPt(b,u.x,u.y);
+  });
+  [[0,0],[bodyNW,0],[bodyNW,bodyNH],[0,bodyNH]].forEach(function(c){
+    var u=toU(c[0],c[1]);
+    b=expandBodyBoundsPt(b,u.x,u.y);
+  });
+  if(S.showScope||S.showVector){
+    var ringBound=typeof scopeRingBoundingRadius==='function'?scopeRingBoundingRadius():SR;
+    b=expandBodyBoundsPt(b,SCX-ringBound,SCY-ringBound);
+    b=expandBodyBoundsPt(b,SCX+ringBound,SCY+ringBound);
+  }
+  if(S.showHeart&&HT){
+    b=expandBodyBoundsPt(b,HT.x-HEART_W*0.55,HT.y-HEART_H*0.55);
+    b=expandBodyBoundsPt(b,HT.x+HEART_W*0.55,HT.y+HEART_H*0.55);
+  }
+  if(S.showTri&&EL){
+    Object.keys(EL).forEach(function(k){
+      b=expandBodyBoundsPt(b,EL[k].x,EL[k].y);
+    });
+  }
+  var pad=18;
+  if(b){
+    b.minX=Math.max(0,b.minX-pad);
+    b.minY=Math.max(0,b.minY-pad);
+    b.maxX=Math.min(UW,b.maxX+pad);
+    b.maxY=Math.min(UH,b.maxY+pad);
+    return b;
+  }
+  return{minX:0,minY:0,maxX:UW||520,maxY:UH||420};
+}
+
+function fitBodyView2d(){
+  var wrap=document.getElementById('bodyScopeWrap');
+  var inner=document.getElementById('bodyViewInner');
+  if(!wrap||!inner)return;
+  var b=getBodyCanvasContentBounds();
+  var viewW=inner.clientWidth||wrap.clientWidth;
+  var viewH=inner.clientHeight||wrap.clientHeight;
+  if(!viewW||!viewH||!b)return;
+  var contentW=Math.max(8,b.maxX-b.minX);
+  var contentH=Math.max(8,b.maxY-b.minY);
+  var pad=14;
+  var zFit=Math.min((viewW-pad*2)/contentW,(viewH-pad*2)/contentH);
+  zFit=Math.max(BODY_VIEW_ZOOM_MIN,Math.min(BODY_VIEW_ZOOM_MAX,zFit));
+  S.bodyViewZoom=zFit;
+  S.bodyViewPanX=viewW*0.5-(b.minX+b.maxX)*0.5*zFit;
+  S.bodyViewPanY=viewH*0.5-(b.minY+b.maxY)*0.5*zFit;
+  applyBodyViewTransform();
+  syncBodyViewHud();
+  saveLabLayout();
+}
+
+function fitCanvasView(){
+  if(isView3d()){
+    ensureScene3d(function(){
+      if(scene3d&&typeof scene3d.fitToView==='function'){
+        scene3d.fitToView();
+        scene3d.render();
+      }
+    });
+    return;
+  }
+  fitBodyView2d();
+  if(!isConductionMode())drawUnified();
+}
+
+function initFitViewControls(){
+  if(initFitViewControls.done)return;
+  initFitViewControls.done=true;
+  var headerBtn=document.getElementById('fitViewBtn');
+  var ctlBtn=document.getElementById('fitCanvasViewBtn');
+  var resetBtn=document.getElementById('resetBodyViewBtn');
+  if(headerBtn)headerBtn.addEventListener('click',fitCanvasView);
+  if(ctlBtn)ctlBtn.addEventListener('click',fitCanvasView);
+  if(resetBtn)resetBtn.addEventListener('click',function(){
+    resetBodyView();
+    if(!isConductionMode()&&!isView3d())drawUnified();
+  });
+}
+
 function zoomBodyViewFromWheel(e){
   var wrap=document.getElementById('bodyScopeWrap');
   if(!wrap)return;
@@ -6409,7 +7160,7 @@ function initBodyViewPan(){
   });
   wrap.addEventListener('dblclick',function(e){
     if(e.target.closest('#leadStripsWrap'))return;
-    resetBodyView();
+    fitCanvasView();
   });
   wrap.addEventListener('auxclick',function(e){
     if(e.button===1)e.preventDefault();
@@ -6446,6 +7197,7 @@ function initCtrlScrollZoom(){
       e.preventDefault();
       e.stopPropagation();
       var dir=e.deltaY>0?-1:1;
+      S.stripManualZoom=true;
       S.stripZoom=clampStripZoom((S.stripZoom!=null?S.stripZoom:STRIP_ZOOM_DEFAULT)+dir*STRIP_ZOOM_STEP);
       ensureStripWinStart(tInStripWindow());
       updateStripZoomHint();
@@ -6475,6 +7227,19 @@ function initCtrlScrollZoom(){
   if(scene3d)scene3d.addEventListener('wheel',onWheel,{passive:false});
   if(scopeWrap&&scopeWrap!==unified)scopeWrap.addEventListener('wheel',onWheel,{passive:false});
   updateStripZoomHint();
+}
+
+function initLeadStripAutoFit(){
+  if(initLeadStripAutoFit.done)return;
+  initLeadStripAutoFit.done=true;
+  var wrap=document.getElementById('leadStripsWrap');
+  if(!wrap)return;
+  wrap.addEventListener('dblclick',function(e){
+    if(e.target.closest('.col-resize-handle'))return;
+    resetStripAutoFit();
+    updateUI();
+    e.preventDefault();
+  });
 }
 
 function initStripViewControls(){
@@ -6616,6 +7381,11 @@ function initPlaybackKeyboard(){
     if(e.repeat)return;
     if(isTypingTarget(e.target))return;
     if(handleEscapeKey(e))return;
+    if(e.code==='KeyF'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){
+      e.preventDefault();
+      fitCanvasView();
+      return;
+    }
     if(e.code!=='Space'&&e.key!==' '&&!LEAD_KEYS[e.code])return;
     if(LEAD_KEYS[e.code]){
       e.preventDefault();
@@ -6648,8 +7418,10 @@ function bootApp(restored){
   initHeartPackUI();
   initHeartAnatomyControls();
   initBodyPlateControls();
+  initScene3dLightControls();
   initBodyLookUI();
   initScopeSizeControl();
+  initScopeRingModeControls();
   initBadgeSizeControls();
   initFlowControls();
   initCometControls();
@@ -6668,10 +7440,12 @@ function bootApp(restored){
   initCtlSections();
   initConductionControls();
   initBodyViewPan();
+  initFitViewControls();
   applyBodyViewTransform();
   syncBodyViewHud();
   initStripViewControls();
   initCtrlScrollZoom();
+  initLeadStripAutoFit();
   applyCanvasPaletteToDom();
   initCanvasColorUI();
   applyLeadStripWidth();

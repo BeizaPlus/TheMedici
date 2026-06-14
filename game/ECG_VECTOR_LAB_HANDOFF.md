@@ -93,8 +93,9 @@ Code: `computeLeadModel()`, `drawLeadFlowTeardrop()`, `drawConductionMode()`, `h
 |------|--------|
 | **Browser key** | `localStorage` `ecgVectorLabLayoutV1` |
 | **Bundled default** | `assets/ecg-vector-lab-user-layout.json` |
-| **Per-plate auto-load** | `BODY_PLATE_LAYOUTS` → angle: `layouts/cardiocard-angle-layout.json` · gray-*: `layouts/gray-b-layout.json` |
-| **Layout 8** | Steve approved heart anatomy — Heart 1, 131%, −10°; scope on chest | `apply-ecg-angle-layout8.mjs` |
+| **Per-plate auto-load** | `BODY_PLATE_LAYOUTS` → angle: `layouts/cardiocard-angle-layout.json` · **16:9: `layouts/cardiocard-angle-16x9-layout.json` (Layout 9 — Steve QA 2026-06-14)** · gray-*: `layouts/gray-b-layout.json` |
+| **Layout 8** | Standard angle plate — Heart 1, 131%, −10°; scope on chest | `apply-ecg-angle-layout8.mjs` |
+| **Layout 9** | **16:9 wide plate — Steve export** — limb electrodes retuned, scope 60%, heart 82%, bodyView zoom ~174% + pan | `layouts/cardiocard-angle-16x9-layout.json` |
 
 **Apply / revert layout 6 without touching HTML:**
 
@@ -165,11 +166,23 @@ See `docs/ECG_LAB_INCREMENTAL_REVERT.md` for `git revert` order.
 ## Open / next for Manus
 
 1. **Wire catalog default** — confirm `kojo-cardiocard-angle.png` loads on fresh boot (Steve-approved).
-2. **Optional:** “Frontal vs body angle” readout when Angle plate selected (reduces II/III confusion).
-3. ~~**Optional:** V1–V6 placement guide accordion in Guide panel.~~ **Shipped** — Guide → **V1–V6 placement guide** (ICS + landmark table).
-4. ~~**3D electrode drag** on torso surface~~ **Shipped** — 3D view + **12-lead** mode · drag electrode spheres · orbit when not dragging. Tune V fan vs ref `02-torso-limb-ring-precordial-fan.png` still open for visual QA.
-5. **Public launch only:** Meshy / segment pipeline from approved plates — **deferred**; local **`character/boy.glb`** is the active 3D mesh for now (see `MESHY_WORKFLOW.md` when shipping publicly).
+2. **Layout 9 (16:9)** — bundled at `layouts/cardiocard-angle-16x9-layout.json` from Steve export `ecg-vector-lab-layout (2026-06-14).json`.
+3. **Vision landmarks** — wire `detectPlateLandmarksFromVision()` per new character plate (`character/ANCHOR_VISION_PIPELINE.md`). Meshy / segment pipeline **deferred**.
+4. **Optional:** “Frontal vs body angle” readout when Angle plate selected (reduces II/III confusion).
+5. **Git commit** — MeWorld branch is ahead of remote; commit after Steve sign-off on Layout 9.
 6. Update stale sections in `ECG_VECTOR_LAB_SPEC.md` if still referenced.
+
+### Shipped after original Phases 0–5 (2026-06-14 session)
+
+| Feature | What it does |
+|---------|----------------|
+| **Live projection construction** | Solo one lead → dashed perpendicular from vector arrow to axis foot, synced to strip playhead |
+| **P/QRS/T loop trails** | Comet layer traces phase-colored vectorcardiogram loops |
+| **Triangle→ring ghost** | Isolating I/II/III animates Einthoven side sliding to hexaxial ray |
+| **aVR callout** | HUD chip when aVR isolated: normally inverted |
+| **3D V fan fix** | V1–V6 on chest surface (`PRE_BODY`), not flat disc behind body |
+| **Plate boundary + anchors** | Photo fits body box; **Link to plate** / **Auto-fit now**; dynamic clamp |
+| **Layout 9** | Steve-tuned 16:9 — limbs, scope 60%, heart 82%, chest zoom/pan |
 
 ---
 

@@ -16,6 +16,43 @@ const HORIZONTAL = 0xef4444;
 const HORIZONTAL_RADIUS = 0.36;
 const HORIZONTAL_ELLIPSE_Z = 0.2;
 
+/** Default 3D lighting — low ambient, key from above-front (body reads dark gray). */
+export const DEFAULT_SCENE3D_LIGHT = {
+  ambient: 0.4,
+  key: 1.15,
+  keyAz: 12,
+  keyEl: 48,
+};
+
+const KEY_LIGHT_DIST = 3.6;
+
+function clampNum(v, lo, hi, fallback) {
+  var n = Number(v);
+  if (!isFinite(n)) return fallback;
+  return Math.max(lo, Math.min(hi, n));
+}
+
+export function normalizeScene3dLight(o) {
+  o = o || {};
+  var d = DEFAULT_SCENE3D_LIGHT;
+  return {
+    ambient: clampNum(o.ambient, 0, 1.2, d.ambient),
+    key: clampNum(o.key, 0, 2.5, d.key),
+    keyAz: clampNum(o.keyAz, -180, 180, d.keyAz),
+    keyEl: clampNum(o.keyEl, 5, 89, d.keyEl),
+  };
+}
+
+function keyLightPosition(azDeg, elDeg, dist) {
+  var az = r(azDeg);
+  var el = r(elDeg);
+  return new THREE.Vector3(
+    Math.sin(az) * Math.cos(el) * dist,
+    Math.sin(el) * dist,
+    Math.cos(az) * Math.cos(el) * dist
+  );
+}
+
 /** @param {string} key electrode id */
 function electrodeDepthZ(key, nx, ny) {
   if (key === 'RA') return 0.1;
@@ -24,8 +61,10 @@ function electrodeDepthZ(key, nx, ny) {
   if (key === 'LL') return -0.06;
   if (key === 'HC' || key === 'heart') return 0.2;
   if (/^V\d$/.test(key)) {
-    var vi = parseInt(key.slice(1), 10) - 1;
-    return 0.16 + vi * 0.028;
+    var vi = parseInt(key.slice(1), 10);
+    var wrapFrac = (vi - 1) / 5;
+    /* Anterior chest wall — all V leads in front of heart center (HC ~0.2). */
+    return 0.3 + wrapFrac * 0.12 + (1 - ny) * 0.035;
   }
   return 0.08 * (0.5 - Math.abs(nx - 0.5));
 }
@@ -161,19 +200,24 @@ export class EcgScene3D {
     this.controls.maxPolarAngle = Math.PI * 0.92;
     this.controls.enableZoom = false;
     this.controls.update();
+    this._defaultCameraPosition = this.camera.position.clone();
+    this._defaultTarget = this.controls.target.clone();
+    this._defaultFitOffset = this._defaultCameraPosition.clone().sub(this._defaultTarget).normalize();
 
-    /* Ambient + key + fill — body readable in dark gray, rings stay emissive */
-    this.scene.add(new THREE.AmbientLight(0xd8dce8, 0.78));
+    /* Ambient + key (tunable) · fill/rim/hemi fixed — emissive guides ignore lights */
+    this.ambientLight = new THREE.AmbientLight(0xd8dce8, DEFAULT_SCENE3D_LIGHT.ambient);
+    this.scene.add(this.ambientLight);
     this.scene.add(new THREE.HemisphereLight(0xf0f4ff, 0x3a3a48, 0.42));
-    var key = new THREE.DirectionalLight(0xfff6ea, 1.15);
-    key.position.set(0.4, 2.6, 2.8);
-    this.scene.add(key);
+    this.keyLight = new THREE.DirectionalLight(0xfff6ea, DEFAULT_SCENE3D_LIGHT.key);
+    this.scene.add(this.keyLight);
     var fill = new THREE.DirectionalLight(0xaabbdd, 0.48);
     fill.position.set(-1.8, 0.6, 1.2);
     this.scene.add(fill);
     var rim = new THREE.DirectionalLight(0xffffff, 0.28);
     rim.position.set(0, 0.2, -2.2);
     this.scene.add(rim);
+    this._lightCfg = normalizeScene3dLight(DEFAULT_SCENE3D_LIGHT);
+    this.applyLighting(this._lightCfg);
 
     this.root = new THREE.Group();
     this.scene.add(this.root);
@@ -211,6 +255,17 @@ export class EcgScene3D {
   _bw(lab) {
     lab = lab || this._lastLab || {};
     return lab.bodyNW || BODY_W_DEFAULT;
+  }
+
+  /** Tune ambient + key only — rings/lines/sprites use MeshBasicMaterial (unaffected). */
+  applyLighting(cfg) {
+    cfg = normalizeScene3dLight(cfg || this._lightCfg);
+    this._lightCfg = cfg;
+    if (this.ambientLight) this.ambientLight.intensity = cfg.ambient;
+    if (this.keyLight) {
+      this.keyLight.intensity = cfg.key;
+      this.keyLight.position.copy(keyLightPosition(cfg.keyAz, cfg.keyEl, KEY_LIGHT_DIST));
+    }
   }
 
   _manikinMat() {
@@ -480,6 +535,31 @@ export class EcgScene3D {
   }
 
   /** 2D scope degrees → unit direction in coronal (XY) plane. */
+  _scopeWorldBase(lab) {
+    lab = lab || this._lastLab || {};
+    var bw = this._bw(lab);
+    var hc = lab.HC_BODY;
+    var el = lab.EL_BODY;
+    if (!hc || !el || !el.RA) return 0.36 * (lab.scopeScale || 1);
+    var hcW = bodyPtToWorld(hc.x, hc.y, 'HC', bw);
+    var sum = 0;
+    ['RA', 'LA', 'LL'].forEach(function (k) {
+      var p = el[k];
+      var w = bodyPtToWorld(p.x, p.y, k, bw);
+      sum += Math.hypot(w.x - hcW.x, w.y - hcW.y);
+    });
+    var mean = sum / 3;
+    /* Legacy torus sr=0.36 at default CARDIOCARD triangle spacing. */
+    var REF = 0.34;
+    return Math.max(0.14, mean * (0.36 / REF) * (lab.scopeScale || 1));
+  }
+
+  _leadScopeRadius(lab, sr, name) {
+    if (lab.scopeRingMode !== 'measured') return sr;
+    var f = lab.measuredRingRad && lab.measuredRingRad[name];
+    return sr * (f != null && isFinite(f) ? f : 1);
+  }
+
   _dirFromLeadDeg(deg) {
     var a = r(deg);
     return new THREE.Vector3(Math.cos(a), -Math.sin(a), 0);
@@ -492,9 +572,10 @@ export class EcgScene3D {
     LIMB_LEADS.forEach(function (name) {
       var deg = lab.leadDeg[name];
       if (deg == null || !isFinite(deg)) return;
+      var lr = self._leadScopeRadius(lab, sr, name);
       var dir = self._dirFromLeadDeg(deg);
-      pts.push(hc.clone().add(dir.clone().multiplyScalar(-sr * 0.92)));
-      pts.push(hc.clone().add(dir.clone().multiplyScalar(sr * 0.92)));
+      pts.push(hc.clone().add(dir.clone().multiplyScalar(-lr * 0.92)));
+      pts.push(hc.clone().add(dir.clone().multiplyScalar(lr * 0.92)));
     });
     if (!pts.length) return;
     var geo = new THREE.BufferGeometry().setFromPoints(pts);
@@ -534,18 +615,36 @@ export class EcgScene3D {
 
     var bw = this._bw(lab);
     var hc = bodyPtToWorld(lab.HC_BODY.x, lab.HC_BODY.y, 'HC', bw);
-    var sr = 0.36 * (lab.scopeScale || 1);
+    var sr = this._scopeWorldBase(lab);
 
     if (lab.showScope) {
-      /* Measured scope ring — same coronal plane as blue ref ring (XY). */
-      var ring = new THREE.Mesh(
-        new THREE.TorusGeometry(sr, 0.005, 8, 64),
-        emissiveRingMat(FRONTAL, 0.82)
-      );
-      ring.position.copy(hc);
-      ring.rotation.set(0, 0, 0);
-      ring.renderOrder = 13;
-      this.scopeGroup.add(ring);
+      if (lab.scopeRingMode === 'measured' && lab.measuredRingRad) {
+        var ringPts = [];
+        var self = this;
+        LIMB_LEADS.forEach(function (name) {
+          var deg = lab.leadDeg && lab.leadDeg[name];
+          if (deg == null || !isFinite(deg)) return;
+          var lr = self._leadScopeRadius(lab, sr, name);
+          var dir = self._dirFromLeadDeg(deg);
+          ringPts.push(hc.clone().add(dir.clone().multiplyScalar(lr)));
+        });
+        if (ringPts.length >= 3) {
+          ringPts.push(ringPts[0].clone());
+          var ringGeo = new THREE.BufferGeometry().setFromPoints(ringPts);
+          var ringLine = new THREE.LineLoop(ringGeo, emissiveLineMat(FRONTAL, 0.82));
+          ringLine.renderOrder = 13;
+          this.scopeGroup.add(ringLine);
+        }
+      } else {
+        var ring = new THREE.Mesh(
+          new THREE.TorusGeometry(sr, 0.005, 8, 64),
+          emissiveRingMat(FRONTAL, 0.82)
+        );
+        ring.position.copy(hc);
+        ring.rotation.set(0, 0, 0);
+        ring.renderOrder = 13;
+        this.scopeGroup.add(ring);
+      }
       this._syncMeasuredScopeAxes(lab, hc, sr);
     }
 
@@ -570,26 +669,19 @@ export class EcgScene3D {
     clearGroup(this.vFanGroup);
     if (!lab || !lab.HC_BODY || !lab.PRE_BODY || lab.showVFan === false) return;
 
-    var hc = bodyPtToWorld(lab.HC_BODY.x, lab.HC_BODY.y, 'HC', this._bw(lab));
-    var rx = HORIZONTAL_RADIUS * 0.98;
-    var rz = HORIZONTAL_ELLIPSE_Z;
-
-    /* Red ellipse boundary — edge-on from front like ref 02. */
-    var ellPts = horizontalEllipsePoints(hc, rx, rz, 72);
-    var ellGeo = new THREE.BufferGeometry().setFromPoints(ellPts);
-    var ell = new THREE.LineLoop(ellGeo, emissiveLineMat(HORIZONTAL, 0.52));
-    ell.renderOrder = 10;
-    this.vFanGroup.add(ell);
+    var bw = this._bw(lab);
+    var hc = bodyPtToWorld(lab.HC_BODY.x, lab.HC_BODY.y, 'HC', bw);
+    var surfacePts = [];
 
     var self = this;
     REF_KEYS.forEach(function (k) {
       var p = lab.PRE_BODY[k];
       if (!p) return;
-      var dir = horizontalDirFromBody(hc, p.x, p.y, self._bw(lab));
-      var end = hc.clone().add(dir.clone().multiplyScalar(rx * 0.92));
-      end.y = hc.y;
+      var surf = bodyPtToWorld(p.x, p.y, k, bw);
+      surfacePts.push(surf);
 
-      var segPts = [hc.clone(), end];
+      /* HC → chest-surface V lead (curves with torso, not a flat disc). */
+      var segPts = [hc.clone(), surf];
       var segGeo = new THREE.BufferGeometry().setFromPoints(segPts);
       var seg = new THREE.Line(segGeo, emissiveLineMat(HORIZONTAL, 0.88));
       seg.renderOrder = 12;
@@ -599,19 +691,52 @@ export class EcgScene3D {
         new THREE.SphereGeometry(0.018, 12, 10),
         new THREE.MeshBasicMaterial({ color: HORIZONTAL, transparent: true, opacity: 0.95, depthWrite: false })
       );
-      marker.position.copy(end);
+      marker.position.copy(surf);
       marker.renderOrder = 13;
       self.vFanGroup.add(marker);
 
+      var lblDir = surf.clone().sub(hc).normalize();
       var lbl = makeTextSprite(k, HORIZONTAL);
-      lbl.position.copy(end.clone().add(dir.clone().multiplyScalar(0.07)));
-      lbl.position.y = hc.y + 0.04;
+      lbl.position.copy(surf.clone().add(lblDir.multiplyScalar(0.07)));
+      lbl.position.y += 0.03;
       self.vFanGroup.add(lbl);
     });
+
+    /* Approximate red ring at precordial level — guide only, not a rigid plane. */
+    if (surfacePts.length >= 2) {
+      var avgY = 0;
+      var maxRx = 0;
+      var maxRz = HORIZONTAL_ELLIPSE_Z;
+      surfacePts.forEach(function (sp) {
+        avgY += sp.y;
+        var dx = sp.x - hc.x;
+        var dz = sp.z - hc.z;
+        maxRx = Math.max(maxRx, Math.sqrt(dx * dx + dz * dz));
+        maxRz = Math.max(maxRz, Math.abs(dz) * 0.85);
+      });
+      avgY /= surfacePts.length;
+      var ringCenter = new THREE.Vector3(hc.x, avgY, hc.z);
+      var ellPts = [];
+      for (var i = 0; i <= 72; i++) {
+        var t = (i / 72) * Math.PI * 2;
+        ellPts.push(
+          new THREE.Vector3(
+            ringCenter.x + Math.cos(t) * maxRx * 0.92,
+            ringCenter.y,
+            ringCenter.z + Math.sin(t) * maxRz
+          )
+        );
+      }
+      var ellGeo = new THREE.BufferGeometry().setFromPoints(ellPts);
+      var ell = new THREE.LineLoop(ellGeo, emissiveLineMat(HORIZONTAL, 0.48));
+      ell.renderOrder = 10;
+      this.vFanGroup.add(ell);
+    }
   }
 
   sync(lab) {
     this._lastLab = lab;
+    if (lab && lab.scene3dLight) this.applyLighting(lab.scene3dLight);
     this._syncGuidePlanes(lab);
     if (this.limbRing) this.limbRing.visible = lab.showLimbRing !== false;
     if (this.horizontalRing) this.horizontalRing.visible = lab.showVFan !== false;
@@ -623,6 +748,31 @@ export class EcgScene3D {
     this._syncHeart(lab);
     this._placingLeads = !!lab.placingLeads;
     this._updateControlsEnabled(lab);
+  }
+
+  resetView() {
+    this.camera.position.copy(this._defaultCameraPosition);
+    this.controls.target.copy(this._defaultTarget);
+    this.controls.update();
+  }
+
+  /** Frame manikin + guides in the canvas (OrbitControls target + distance). */
+  fitToView() {
+    var box = new THREE.Box3().setFromObject(this.root);
+    if (box.isEmpty()) {
+      this.resetView();
+      return;
+    }
+    var center = box.getCenter(new THREE.Vector3());
+    var size = box.getSize(new THREE.Vector3());
+    var maxSize = Math.max(size.x, size.y, size.z, 0.01);
+    var fov = (this.camera.fov * Math.PI) / 180;
+    var dist = (maxSize * 0.5) / Math.tan(fov * 0.5);
+    dist *= 1.28;
+    dist = Math.max(this.controls.minDistance, Math.min(this.controls.maxDistance, dist));
+    this.controls.target.copy(center);
+    this.camera.position.copy(center).add(this._defaultFitOffset.clone().multiplyScalar(dist));
+    this.controls.update();
   }
 
   resize(w, h) {
