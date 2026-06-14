@@ -22,14 +22,17 @@ After apply/revert: open lab → **Controls → Reload bundled** (or hard refres
 
 Recent ECG lab work is split so you can `git revert` one commit:
 
-1. **Tooling** — backup + apply/revert scripts + this doc
-2. **Assets** — `assets/ecg-vector-lab/`, PTB-XL JSON, export scripts
-3. **App + layout 6** — `ecg-vector-lab.html`, smoke test, handoff, bundled layout
+| # | Commit | Reverts |
+|---|--------|---------|
+| 1 | `20cd7a5` | Apply/revert scripts + backup only |
+| 2 | `a097b8d` | Assets, 3D module, layouts, PTB-XL JSON |
+| 3 | `18f0273` | HTML app (scroll zoom, 3D, layout wiring) + bundled user layout |
 
 ```powershell
 cd C:\Users\steve\MeWorld
 git log --oneline -5 -- game/ecg-vector-lab.html
-git revert <commit-hash>   # one commit at a time, newest first
+git revert 18f0273   # app + layout defaults only
+git revert a097b8d   # asset pack (only if you also want assets gone)
 ```
 
 ## Scroll zoom (body canvas)
