@@ -1,8 +1,9 @@
-import { useCallback, useRef, useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { uploadCaseRecording } from '../lib/caseUserLog.js';
 import {
   fetchVoiceNoteStatus,
   mergeVoiceNoteChunk,
+  transcribeVoiceNoteAudioChunk,
   transcribeVoiceNoteFull,
 } from '../lib/voiceNoteTranscribe.js';
 import {
@@ -15,7 +16,23 @@ import { createLiveSpeechRecognition, speechRecognitionSupported } from '../lib/
 const RECORDING_LABEL = 'Recording…';
 const TRANSCRIBING_LABEL = 'Transcribing…';
 
-/** Mic capture → batch STT on stop (Cursor-style) → append to case notes → save audio */
+/**
+ * Rolling Whisper chunk interval — same as the differential recorder (12 s).
+ * Each chunk is sent to Whisper while recording, giving live preview and
+ * ensuring audio is never lost if the tab loses focus before stop fires.
+ */
+const WHISPER_CHUNK_MS = 12_000;
+
+/**
+ * Mic capture → rolling Whisper chunks (same engine as differential recorder)
+ * → full-clip Whisper on stop → append to case notes → save audio.
+ *
+ * Fixes:
+ *  - Cutoff: rec.start(WHISPER_CHUNK_MS) so ondataavailable fires every 12 s,
+ *    not only on stop.
+ *  - Engine mismatch: batch mode now uses the same Whisper chunk pipeline as
+ *    useDifferentialVoice instead of falling back to browser SpeechRecognition.
+ */
 export function useCaseRecording({
   caseId,
   sessionId,
@@ -31,6 +48,7 @@ export function useCaseRecording({
   const [recording, setRecording] = useState(false);
   const [busy, setBusy] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
+
   const recorderRef = useRef(null);
   const streamRef = useRef(null);
   const chunksRef = useRef([]);
@@ -40,6 +58,7 @@ export function useCaseRecording({
   const speechActiveRef = useRef(false);
   const transcriptRef = useRef('');
   const mergeQueueRef = useRef(Promise.resolve());
+  const whisperQueueRef = useRef(Promise.resolve());
   const liveStampRef = useRef('');
   const interimRef = useRef('');
   const batchModeRef = useRef(false);
@@ -47,11 +66,12 @@ export function useCaseRecording({
   const onTranscriptReadyRef = useRef(onTranscriptReady);
   onTranscriptReadyRef.current = onTranscriptReady;
   promptHintRef.current = promptHint || '';
-
   sessionIdRef.current = sessionId;
 
+  // ─── helpers ──────────────────────────────────────────────────────────────
+
   const stopTracks = useCallback(() => {
-    streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
   }, []);
 
@@ -75,6 +95,8 @@ export function useCaseRecording({
     },
     [caseId, onNotesChanged, onTranscriptUpdate],
   );
+
+  // ─── browser speech merge queue (fallback when Whisper unavailable) ────────
 
   const enqueueMerge = useCallback(
     (chunkText) => {
@@ -105,23 +127,52 @@ export function useCaseRecording({
     [pushNotes],
   );
 
+  // ─── rolling Whisper chunk queue (batch mode — same as differential recorder) ──
+
+  const enqueueWhisperChunk = useCallback(
+    (blob) => {
+      if (!blob?.size || blob.size < 800) return whisperQueueRef.current;
+
+      whisperQueueRef.current = whisperQueueRef.current
+        .then(async () => {
+          setTranscribing(true);
+          try {
+            const merged = await transcribeVoiceNoteAudioChunk(
+              blob,
+              transcriptRef.current,
+              promptHintRef.current,
+            );
+            if (merged) {
+              transcriptRef.current = merged;
+              interimRef.current = '';
+              pushNotes(merged);
+            }
+          } catch {
+            /* chunk failures are non-fatal — full clip runs on stop */
+          } finally {
+            setTranscribing(false);
+          }
+        })
+        .catch(() => {});
+
+      return whisperQueueRef.current;
+    },
+    [pushNotes],
+  );
+
+  // ─── browser SpeechRecognition (fallback only) ────────────────────────────
+
   const stopSpeechRecognition = useCallback(() => {
     speechActiveRef.current = false;
     const rec = speechRef.current;
     speechRef.current = null;
-    try {
-      rec?.stop();
-    } catch {
-      /* ignore */
-    }
+    try { rec?.stop(); } catch { /* ignore */ }
   }, []);
 
   const startSpeechRecognition = useCallback(() => {
     if (batchModeRef.current || !speechRecognitionSupported()) return false;
     const rec = createLiveSpeechRecognition({
-      onFinalChunk: (text) => {
-        void enqueueMerge(text);
-      },
+      onFinalChunk: (text) => { void enqueueMerge(text); },
       onInterim: (text) => {
         interimRef.current = text;
         pushNotes(transcriptRef.current, text);
@@ -136,17 +187,11 @@ export function useCaseRecording({
 
     speechRef.current = rec;
     speechActiveRef.current = true;
-
     rec.onend = () => {
       if (speechActiveRef.current && speechRef.current === rec) {
-        try {
-          rec.start();
-        } catch {
-          /* ignore restart errors */
-        }
+        try { rec.start(); } catch { /* ignore restart errors */ }
       }
     };
-
     try {
       rec.start();
       return true;
@@ -156,6 +201,8 @@ export function useCaseRecording({
       return false;
     }
   }, [enqueueMerge, onError, pushNotes]);
+
+  // ─── full-clip Whisper on stop ────────────────────────────────────────────
 
   const transcribeBatchClip = useCallback(
     async (blob) => {
@@ -183,6 +230,8 @@ export function useCaseRecording({
     [onError, pushNotes],
   );
 
+  // ─── stop / start ─────────────────────────────────────────────────────────
+
   const stopRecording = useCallback(() => {
     const rec = recorderRef.current;
     if (!rec || rec.state === 'inactive') return;
@@ -193,6 +242,7 @@ export function useCaseRecording({
 
   const startRecording = useCallback(async () => {
     if (recording || busy) return;
+
     const sid = await resolveSessionId();
     if (!sid) {
       onError?.(new Error('Could not start case session — is the API server running?'));
@@ -219,6 +269,7 @@ export function useCaseRecording({
       transcriptRef.current = '';
       interimRef.current = '';
       mergeQueueRef.current = Promise.resolve();
+      whisperQueueRef.current = Promise.resolve();
       liveStampRef.current = caseId ? beginLiveVoiceNote(caseId) : '';
       onNotesChanged?.();
 
@@ -239,6 +290,12 @@ export function useCaseRecording({
       rec.ondataavailable = (event) => {
         if (!event.data?.size) return;
         chunksRef.current.push(event.data);
+        // Rolling Whisper chunk — same as differential recorder.
+        // Each 12-second slice is sent to Whisper immediately so the user
+        // gets a live preview and audio is never lost on an abrupt stop.
+        if (batchModeRef.current && event.data.size > 800) {
+          void enqueueWhisperChunk(event.data);
+        }
       };
 
       rec.onstop = async () => {
@@ -252,6 +309,9 @@ export function useCaseRecording({
         setBusy(true);
         try {
           if (batchModeRef.current && blob.size > 0) {
+            // Wait for any in-flight chunk Whisper calls, then run full-clip
+            // Whisper for the authoritative final transcript.
+            await whisperQueueRef.current;
             await transcribeBatchClip(blob);
           } else {
             await mergeQueueRef.current;
@@ -286,7 +346,9 @@ export function useCaseRecording({
 
       recorderRef.current = rec;
       startedAtRef.current = Date.now();
-      rec.start();
+      // Use a timeslice so ondataavailable fires every WHISPER_CHUNK_MS.
+      // This prevents cutoffs and enables rolling Whisper preview.
+      rec.start(WHISPER_CHUNK_MS);
       setRecording(true);
       onRecordingStart?.();
     } catch (e) {
@@ -297,17 +359,18 @@ export function useCaseRecording({
   }, [
     busy,
     caseId,
+    enqueueWhisperChunk,
     onError,
     onNotesChanged,
     onRecordingStart,
     onSaved,
+    pushNotes,
     recording,
     resolveSessionId,
     startSpeechRecognition,
     stopSpeechRecognition,
     stopTracks,
     transcribeBatchClip,
-    pushNotes,
   ]);
 
   const toggleRecording = useCallback(() => {
@@ -319,9 +382,9 @@ export function useCaseRecording({
     recording,
     busy,
     transcribing,
-    disabled: busy,
     toggleRecording,
     startRecording,
     stopRecording,
+    transcript: transcriptRef.current,
   };
-};
+}

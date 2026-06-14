@@ -61,6 +61,7 @@ import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from
 import { applyMonitorVolume, prefetchMonitorAudio, startIcuMonitor, subscribeAudioPrefs, unlockAmbience } from '../lib/audio.js';
 import { patchAudioPrefs, readAudioPrefs } from '../lib/audioPrefs.js';
 import { practiceCaseHeadline } from '../lib/differentialHeadline.js';
+import DifferentialDrillPanel from './DifferentialDrillPanel.jsx';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 import { normalizeCaseProgressId } from '../data/caseProgress.js';
 import { useCaseChat } from '../hooks/useCaseChat.js';
@@ -179,6 +180,8 @@ export default function DifferentialPractice({ onBack }) {
   const [caseJumpError, setCaseJumpError] = useState('');
   // Mobile unified input card: 'voice' | 'text'
   const [mobileInputMode, setMobileInputMode] = useState('voice');
+  // Drill panel — clicked missed diagnosis
+  const [drillDx, setDrillDx] = useState(null);
   // Mobile study bottom sheet
   const [mobileStudyOpen, setMobileStudyOpen] = useState(false);
   const [isMobilePractice, setIsMobilePractice] = useState(() => isMobilePracticeViewport());
@@ -1512,12 +1515,18 @@ export default function DifferentialPractice({ onBack }) {
                     {answerRows.map((row, i) => (
                       <li
                         key={row.key}
-                        className={`diff-compare-row ${row.matched ? 'diff-compare-row--match' : 'diff-compare-row--miss'}${row.isCaseDx ? ' diff-compare-row--case-dx' : ''}`}
+                        className={`diff-compare-row ${row.matched ? 'diff-compare-row--match' : 'diff-compare-row--miss'}${row.isCaseDx ? ' diff-compare-row--case-dx' : ''}${!row.matched ? ' diff-compare-row--clickable' : ''}`}
+                        onClick={!row.matched ? () => setDrillDx(row.diagnosis) : undefined}
+                        role={!row.matched ? 'button' : undefined}
+                        tabIndex={!row.matched ? 0 : undefined}
+                        onKeyDown={!row.matched ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDrillDx(row.diagnosis); } } : undefined}
+                        aria-label={!row.matched ? `Explain ${row.diagnosis}` : undefined}
                       >
                         <span className="diff-compare-idx">{i + 1}</span>
                         <span className="diff-compare-text">{row.diagnosis}</span>
                         {row.isCaseDx && <span className="diff-compare-badge diff-compare-badge--star">★</span>}
                         {row.matched && <span className="diff-compare-badge diff-compare-badge--ok">✓</span>}
+                        {!row.matched && <span className="diff-compare-drill-hint">tap to explain</span>}
                       </li>
                     ))}
                   </ol>
@@ -1887,5 +1896,19 @@ export default function DifferentialPractice({ onBack }) {
       </aside>
       )}
     </div>
+
+    {/* ── Drill panel — opens when a missed answer-key chip is tapped ── */}
+    <DifferentialDrillPanel
+      diagnosis={drillDx}
+      topic={entry?.topic || ''}
+      caseDiagnosis={entry?.diagnosis || ''}
+      onClose={() => setDrillDx(null)}
+      drillAvailable={drillDx ? bank.some((e, i) => i !== cardIdx && e.diagnoses.some((d) => d.toLowerCase().trim() === drillDx.toLowerCase().trim())) : false}
+      onDrill={() => {
+        if (!drillDx) return;
+        const target = bank.findIndex((e, i) => i !== cardIdx && e.diagnoses.some((d) => d.toLowerCase().trim() === drillDx.toLowerCase().trim()));
+        if (target >= 0) goToIndex(target);
+      }}
+    />
   );
 }

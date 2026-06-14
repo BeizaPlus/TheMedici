@@ -1033,6 +1033,43 @@ app.post('/api/differential/score', async (req, res) => {
   }
 });
 
+app.post('/api/differential/explain', async (req, res) => {
+  const key = chatApiKeyOrError(res);
+  if (!key) return;
+  const { diagnosis, topic, caseDiagnosis } = req.body || {};
+  const dx = String(diagnosis || '').trim();
+  if (!dx) return res.status(400).json({ error: 'Missing diagnosis' });
+  const system = `You are a concise clinical educator helping a medical student understand why they missed a diagnosis.
+Return ONLY valid JSON (no markdown fences):
+{
+  "hook": "One sentence — the single most memorable clinical anchor for this diagnosis (mechanism or pattern, not a mnemonic)",
+  "features": ["Key distinguishing feature 1", "Key distinguishing feature 2", "Key distinguishing feature 3"],
+  "traps": ["Common confusion 1 — why it looks like X instead", "Common confusion 2 if applicable"],
+  "clue": "The one HPI/exam clue that should always trigger this diagnosis on your differential"
+}
+Rules:
+- features: 3 items max, each under 12 words, clinically specific (not generic)
+- traps: what the student likely confused it with and why
+- hook: mechanism-based, not a mnemonic — help them see WHY, not just WHAT
+- clue: the single most discriminating trigger from history or exam`;
+  const user = JSON.stringify({
+    diagnosis: dx,
+    chiefComplaint: topic || null,
+    caseDiagnosis: caseDiagnosis || null,
+  });
+  try {
+    const raw = await callChatCompletion(
+      key,
+      [{ role: 'system', content: system }, { role: 'user', content: user }],
+      { maxTokens: 400, temperature: 0.3 },
+    );
+    const parsed = parseModelJson(raw);
+    return res.json({ ok: true, explain: parsed, provider: chatProvider() });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
 app.post('/api/case-chat/message', async (req, res) => {
   const key = chatApiKeyOrError(res);
   if (!key) return;
