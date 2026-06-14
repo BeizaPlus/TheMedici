@@ -39,8 +39,8 @@ The lab **loads one generated plate** at that angle with **Kojo likeness**. Elec
 Save A/B picks to this folder:
 
 - `kojo-cardiocard-angle-a.png` — manikin style, generic face (2026-06-14 regen)
-- `kojo-cardiocard-angle-b.png` — **promoted** — manikin + Kojo face likeness
-- `kojo-cardiocard-angle.png` — copy of pick B
+- `kojo-cardiocard-angle-b.png` — Magnific regen pick B — manikin + Kojo face likeness
+- `kojo-cardiocard-angle.png` — **Steve-approved canonical** (copy of pick B) — **runtime default**
 
 ## What we wrongly built before (UI overlays)
 

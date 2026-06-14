@@ -273,7 +273,54 @@ html,body{height:100%;overflow:hidden}
   font-size:.68rem;font-family:var(--mono);color:var(--gold);
   min-width:9.5em;font-variant-numeric:tabular-nums;flex-shrink:0;
 }
+.hud-lead-study{cursor:default}
+.hud-lead-study .hud-show-all{
+  margin-left:6px;padding:1px 7px;border-radius:999px;
+  border:1px solid rgba(232,184,75,.45);background:rgba(232,184,75,.08);
+  color:var(--gold);font-size:.58rem;font-weight:700;cursor:pointer;
+}
+.hud-lead-study .hud-show-all:hover{background:rgba(232,184,75,.16)}
 .strip-time{font-size:.62rem;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums}
+.ctl-section{margin-top:0}
+.ctl-section .axis-body{padding:10px 12px 12px}
+.ctl-section .ctl{margin:0}
+.ctl-section .ctl+.ctl,.ctl-section .ctl-hint+.ctl{margin-top:10px}
+.ctl-accordions{display:flex;flex-direction:column;gap:8px}
+.ctl-accordions>.axis-item.ctl-section{background:var(--panel)}
+.layout-coord-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 12px;
+  font-family:var(--mono);font-size:.58rem;color:var(--muted);line-height:1.35;
+}
+.layout-coord-grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.coord-cell{display:flex;justify-content:space-between;gap:6px;min-width:0}
+.coord-k{color:var(--text);font-weight:700;flex-shrink:0}
+.coord-v{font-variant-numeric:tabular-nums;text-align:right}
+.layout-readout{display:flex;flex-direction:column;gap:10px;margin-top:8px;padding:10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:rgba(0,0,0,.12)}
+.layout-readout-title{font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.layout-readout-anchors{display:flex;flex-wrap:wrap;gap:8px 16px;font-family:var(--mono);font-size:.58rem;color:var(--muted)}
+.layout-readout-anchors span{white-space:nowrap}
+.study-mode-cycle{
+  display:inline-flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;
+}
+.study-mode-btn{
+  padding:4px 10px;font-size:.62rem;font-weight:700;letter-spacing:.04em;
+  border:0;background:transparent;color:var(--muted);cursor:pointer;
+}
+.study-mode-btn.on{background:rgba(232,184,75,.14);color:var(--gold)}
+.conduction-split{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;height:100%;min-height:280px;
+}
+.conduction-split[hidden]{display:none!important}
+.body-scope-wrap.conduction-hidden{display:none}
+.conduction-pane{
+  position:relative;background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius-sm);overflow:hidden;min-height:240px;
+}
+.conduction-pane canvas{width:100%;height:100%;display:block}
+.conduction-pane-label{
+  position:absolute;top:6px;left:8px;font-size:.58rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--muted);pointer-events:none;
+}
 
 /* ─── Manual lead placement ─────────────────────────────────────────────── */
 .hero-viewport{position:relative}
@@ -399,6 +446,7 @@ html,body{height:100%;overflow:hidden}
   flex:0 0 auto;padding:5px 11px;border:1px solid var(--border);border-radius:20px;
   background:transparent;color:var(--muted);font-size:.66rem;font-weight:700;
   white-space:nowrap;letter-spacing:.02em;
+  display:inline-flex;align-items:center;gap:5px;
 }
 .layer-pill:hover{border-color:var(--gold);color:var(--gold)}
 .layer-pill.on{background:rgba(232,184,75,.12);color:var(--gold);border-color:rgba(232,184,75,.55)}
@@ -414,12 +462,15 @@ html,body{height:100%;overflow:hidden}
   padding:4px 9px;border-radius:999px;border:1px solid var(--border);
   background:transparent;color:var(--muted);font-size:.62rem;font-weight:700;
   font-family:var(--mono);line-height:1.2;
+  display:inline-flex;align-items:center;gap:5px;
 }
 .lead-pill:hover{border-color:var(--gold);color:var(--gold)}
 .lead-pill.on{background:rgba(2,132,199,.12);color:#0284c7;border-color:rgba(2,132,199,.45)}
 .lead-pill--all{font-family:var(--font);letter-spacing:.03em}
 .lead-pill--clear{font-family:var(--font);letter-spacing:.02em;font-size:.58rem}
 .lead-pill--clear.on{background:rgba(255,255,255,.06);color:var(--muted);border-color:var(--border)}
+.lead-pill--toggle{font-family:var(--font);letter-spacing:.01em;font-size:.58rem;min-width:4.6em}
+.lead-pill--toggle.on{background:rgba(232,184,75,.12);color:var(--gold);border-color:rgba(232,184,75,.45)}
 .lead-pill--focus{box-shadow:0 0 0 1px rgba(2,132,199,.35)}
 
 /* ─── Slide-out dock panels ───────────────────────────────────────────────── */
@@ -596,8 +647,14 @@ input[type=range]:disabled{opacity:.35}
 }
 .axis-trigger:hover{color:var(--text);background:rgba(255,255,255,.03)}
 .axis-item.active .axis-trigger{color:var(--gold);background:rgba(232,184,75,.06)}
-.axis-chevron{font-size:.6rem;transition:transform .2s;flex-shrink:0;margin-left:6px}
+.axis-chevron{display:inline-flex;align-items:center;transition:transform .2s;flex-shrink:0;margin-left:6px}
 .axis-item.active .axis-chevron{transform:rotate(180deg)}
+.stage-bottom-toggle-chevron{display:inline-flex;align-items:center}
+.ti-svg{flex-shrink:0;display:block}
+.pill-txt{line-height:1.1}
+.dock-rail-btn .ti-svg,.axis-cycle-btn .ti-svg,.theme-btn .ti-svg{pointer-events:none}
+.theme-btn{display:inline-flex;align-items:center;justify-content:center;padding:0}
+.seg button{display:inline-flex;align-items:center;gap:5px}
 .axis-body{
   display:none;padding:0 12px 12px;
   font-size:.7rem;color:var(--muted);line-height:1.65;
@@ -621,6 +678,24 @@ input[type=range]:disabled{opacity:.35}
 }
 .lead-chip.up{background:rgba(239,83,80,.12);color:var(--red);border:1px solid rgba(239,83,80,.3)}
 .lead-chip.dn{background:rgba(62,207,142,.12);color:var(--green);border:1px solid rgba(62,207,142,.3)}
+.lab-roadmap{list-style:none;padding:0;margin:0}
+.lab-roadmap li{
+  display:flex;align-items:flex-start;gap:8px;padding:7px 0;
+  border-bottom:1px solid var(--border);font-size:.66rem;line-height:1.35;
+}
+.lab-roadmap li:last-child{border-bottom:none}
+.lab-roadmap li .ti-svg{flex-shrink:0;margin-top:1px;color:var(--green)}
+.lab-roadmap li.next .ti-svg{color:var(--gold)}
+.lab-roadmap li.next{font-weight:600;color:var(--gold)}
+.lab-roadmap li .rm-body{flex:1;min-width:0}
+.lab-roadmap li .rm-try{display:block;font-size:.58rem;color:var(--muted);font-weight:400;margin-top:2px}
+.v-lead-guide{width:100%;border-collapse:collapse;font-size:.62rem;margin-top:6px}
+.v-lead-guide th,.v-lead-guide td{
+  text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);vertical-align:top;
+}
+.v-lead-guide th{font-family:var(--mono);font-weight:700;color:var(--gold);width:2.2em}
+.v-lead-guide td:first-of-type{font-weight:600;white-space:nowrap;width:2.5em}
+.v-lead-guide .v-landmark{color:var(--muted);font-size:.58rem;display:block;margin-top:2px}
 
 /* ─── Strip in dock panel ─────────────────────────────────────────────────── */
 .strip-card{margin:0}
@@ -694,7 +769,7 @@ canvas{display:block}
 </head>
 <body>
 
-<button class="theme-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">☀</button>
+<button class="theme-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme"></button>
 
 <div class="ecg-shell">
 
@@ -709,8 +784,8 @@ canvas{display:block}
       <div class="stage-header-actions">
         <span class="phase-lbl" id="phLbl">Baseline</span>
         <div class="header-transport seg" role="toolbar" aria-label="Playback">
-          <button type="button" class="dock-rail-btn on" id="playB" title="Play vector animation (Space)" aria-label="Play">▶</button>
-          <button type="button" class="dock-rail-btn" id="pauseB" title="Pause vector animation (Space)" aria-label="Pause">⏸</button>
+          <button type="button" class="dock-rail-btn on" id="playB" title="Play vector animation (Space)" aria-label="Play"></button>
+          <button type="button" class="dock-rail-btn" id="pauseB" title="Pause vector animation (Space)" aria-label="Pause"></button>
         </div>
         <button type="button" class="dock-rail-btn" id="bottomStripBtn" title="Collapse bottom controls (layers, leads, HUD)" aria-label="Toggle bottom controls" aria-expanded="true">
           <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
@@ -730,7 +805,17 @@ canvas{display:block}
       </div>
     </header>
     <div class="hero-viewport">
-      <div class="body-scope-wrap" id="bodyScopeWrap" title="Scroll = zoom chest · middle-drag = pan · Ctrl+scroll = scope ring · dbl-click = reset zoom">
+      <div class="conduction-split" id="conductionSplit" hidden aria-label="Conduction pathway and vectorcardiogram">
+        <div class="conduction-pane conduction-pane--path">
+          <span class="conduction-pane-label">Conduction</span>
+          <canvas id="conductionPath" aria-label="Purkinje conduction glow"></canvas>
+        </div>
+        <div class="conduction-pane conduction-pane--loop">
+          <span class="conduction-pane-label">Vectorscope</span>
+          <canvas id="conductionLoop" aria-label="P QRS T vector loops"></canvas>
+        </div>
+      </div>
+      <div class="body-scope-wrap" id="bodyScopeWrap" title="Scroll = zoom chest · middle-drag = pan · Ctrl+scroll = scope ring · Shift+Ctrl+scroll = ± badge spread · dbl-click = reset zoom · Esc = exit isolate (then click another lead)">
         <div class="body-view-inner" id="bodyViewInner">
           <canvas id="scene3d" aria-label="3D torso — ref 02 limb ring and V fan"></canvas>
           <canvas id="unified"></canvas>
@@ -745,19 +830,24 @@ canvas{display:block}
     <div class="stage-bottom-strip" id="stageBottomStrip">
       <button type="button" class="stage-bottom-toggle" id="bottomStripToggle" aria-expanded="true" aria-controls="stageBottomBody" title="Collapse layers, leads, and HUD">
         <span class="stage-bottom-toggle-label">Bottom controls</span>
-        <span class="stage-bottom-toggle-chevron" aria-hidden="true">▼</span>
+        <span class="stage-bottom-toggle-chevron" aria-hidden="true"></span>
       </button>
       <div class="stage-bottom-body" id="stageBottomBody">
     <div class="layer-pills" role="toolbar" aria-label="Canvas layers">
       <div class="axis-cycle" title="Cycle axis conditions — see how QRS vector deflection changes">
-        <button type="button" class="axis-cycle-btn" id="axisPrev" aria-label="Previous axis condition">◀</button>
+        <button type="button" class="axis-cycle-btn" id="axisPrev" aria-label="Previous axis condition"></button>
         <select class="axis-cond-sel" id="axisCondSel" aria-label="Axis condition">
           <option value="60">Normal +60°</option>
           <option value="-45">LAD −45°</option>
           <option value="120">RAD +120°</option>
           <option value="-135">Extreme −135°</option>
         </select>
-        <button type="button" class="axis-cycle-btn" id="axisNext" aria-label="Next axis condition">▶</button>
+        <button type="button" class="axis-cycle-btn" id="axisNext" aria-label="Next axis condition"></button>
+      </div>
+      <span class="pill-sep" aria-hidden="true"></span>
+      <div class="study-mode-cycle" role="group" aria-label="Study mode" title="Lab = body + scope · Conduction = pathway + vector loops">
+        <button type="button" class="study-mode-btn on" data-study-mode="lab">Lab</button>
+        <button type="button" class="study-mode-btn" data-study-mode="conduction">Conduction</button>
       </div>
       <span class="pill-sep" aria-hidden="true"></span>
       <div class="view-mode-cycle" role="group" aria-label="View mode" title="2D = canvas lab · 3D = ref 02 depth (limb ring + V fan)">
@@ -773,19 +863,21 @@ canvas{display:block}
         <button type="button" class="body-look-btn" data-body-look="gray-b">Gray B</button>
       </div>
       <span class="pill-sep" aria-hidden="true"></span>
-      <button type="button" class="layer-pill on" data-layer="heart">♥ Heart</button>
-      <button type="button" class="layer-pill on" data-layer="ribs" title="SVG rib cage + sternum (teaching layer — toggle like heart)">⌗ Ribs</button>
-      <button type="button" class="layer-pill on" data-layer="limbRing" title="Ref 02 — blue frontal limb ring (3D)">○ Ring</button>
-      <button type="button" class="layer-pill on" data-layer="vFan" title="Ref 02 — red horizontal V1–V6 fan (3D)">◔ V fan</button>
-      <button type="button" class="layer-pill on" data-layer="scope">◎ Scope</button>
-      <button type="button" class="layer-pill on" data-layer="tri">△ Einthoven</button>
-      <button type="button" class="layer-pill on" data-layer="vector">→ Vector</button>
-      <button type="button" class="layer-pill on" data-layer="comet">✦ Comet</button>
+      <button type="button" class="layer-pill on" data-layer="heart"><span class="pill-txt">Heart</span></button>
+      <button type="button" class="layer-pill on" data-layer="ribs" title="SVG rib cage + sternum (teaching layer — toggle like heart)"><span class="pill-txt">Ribs</span></button>
+      <button type="button" class="layer-pill on" data-layer="limbRing" title="Ref 02 — blue frontal limb ring (3D)"><span class="pill-txt">Ring</span></button>
+      <button type="button" class="layer-pill on" data-layer="vFan" title="Ref 02 — red horizontal V1–V6 fan (3D)"><span class="pill-txt">V fan</span></button>
+      <button type="button" class="layer-pill on" data-layer="scope"><span class="pill-txt">Scope</span></button>
+      <button type="button" class="layer-pill on" data-layer="tri"><span class="pill-txt">Einthoven</span></button>
+      <button type="button" class="layer-pill on" data-layer="vector"><span class="pill-txt">Vector</span></button>
+      <button type="button" class="layer-pill on" data-layer="comet"><span class="pill-txt">Comet</span></button>
+      <button type="button" class="layer-pill on" data-layer="leadFlow" title="Pulse along each lead axis — click a lead label to solo it"><span class="pill-txt">Flow</span></button>
     </div>
     <div class="lead-pills" role="toolbar" aria-label="Lead isolation">
       <span class="lead-pills-label">Lead</span>
       <button type="button" class="lead-pill lead-pill--all on" data-lead="all" title="Show all six limb leads">All</button>
       <button type="button" class="lead-pill lead-pill--clear" data-lead="none" title="Show only the focused lead">Solo focus</button>
+      <button type="button" class="lead-pill lead-pill--toggle" id="clickIsolateToggle" title="Off: strip/scope click changes focus only. On: hides other leads (Esc to show all)."><span class="pill-txt">Click iso</span></button>
       <span class="pill-sep" aria-hidden="true"></span>
       <button type="button" class="lead-pill on" data-lead="I" title="Show only lead I">I</button>
       <button type="button" class="lead-pill on" data-lead="II" title="Show only lead II">II</button>
@@ -801,6 +893,8 @@ canvas{display:block}
         <span class="hud-chip" id="hudBpm">72 BPM</span>
         <span class="hud-chip hud-place-hint" id="hudPlaceHint" hidden title="Layout editor — open Controls for coordinates"></span>
         <span class="hud-chip" id="hudBodyView" hidden title="Chest zoom — scroll on body canvas">100%</span>
+        <span class="hud-chip hud-lead-study" id="hudLeadStudy" hidden title="Focused lead — click another label or Lead → All"></span>
+        <span class="hud-chip hud-flow-hint" id="hudFlowHint" hidden title="Lead flow layer">− → + along each lead axis · teaching metaphor</span>
         <span class="hud-cursor-time" id="hudCursorTime" title="Time at cursor in visible strip window">0.000 s · beat 1.00</span>
       </div>
       <div class="hud-controls">
@@ -836,12 +930,14 @@ canvas{display:block}
         <button type="button" class="dock-tab" data-dock-tab="guide">Guide</button>
         <button type="button" class="dock-tab" data-dock-tab="references">Refs</button>
       </div>
-      <button type="button" class="dock-panel-close" id="dockCloseLeft" aria-label="Close panel">×</button>
+      <button type="button" class="dock-panel-close" id="dockCloseLeft" aria-label="Close panel"></button>
     </div>
     <div class="dock-panel-body">
       <div class="dock-tab-pane on" data-dock-pane="controls">
-        <div class="dock-stack">
-      <div class="card">
+        <div class="dock-stack ctl-accordions">
+      <div class="axis-item ctl-section" data-ctl-section="axisPresets">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="true"><span>QRS axis &amp; presets</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
         <div class="ctl">
           <div class="ctl-head">
             <span class="ctl-label">Mean QRS Axis</span>
@@ -859,8 +955,34 @@ canvas{display:block}
             <button type="button" data-deg="-135">XAxis</button>
           </div>
         </div>
+        </div>
       </div>
-      <div class="card">
+      <div class="axis-item ctl-section" data-ctl-section="heartAnatomy">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="true"><span>Heart anatomy</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Heart model</span></div>
+          <div class="seg">
+            <button type="button" id="heartPack1Btn" class="on">Heart 1</button>
+            <button type="button" id="heartPack2Btn">Heart 2</button>
+          </div>
+          <p class="ctl-hint" id="heartPackNote" style="margin-top:6px"></p>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Heart size</span><span class="ctl-val-sm" id="heartSizeV">100%</span></div>
+          <input type="range" id="heartSizeR" min="40" max="200" step="1" value="100" aria-label="Heart diagram scale"/>
+          <p class="ctl-hint" style="margin-top:4px">Chest silhouette only — scope ring uses Scope size in Scope &amp; badges.</p>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Heart rotation</span><span class="ctl-val-sm" id="heartRotV">0°</span></div>
+          <input type="range" id="heartRotR" min="-45" max="45" step="1" value="0" aria-label="Heart diagram rotation"/>
+          <p class="ctl-hint" style="margin-top:4px">Rotates the gray heart around its anchor — use <strong>Heart</strong> placement on the canvas.</p>
+        </div>
+        </div>
+      </div>
+      <div class="axis-item ctl-section" data-ctl-section="heartPlayback">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="true"><span>Heart &amp; playback</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">Heart Rate</span><span class="ctl-val-sm" id="hrV">72 BPM</span></div>
           <input type="range" id="hrR" min="40" max="120" value="72"/>
@@ -873,19 +995,11 @@ canvas{display:block}
             <button type="button" id="tT">+ T wave</button>
           </div>
         </div>
-        <div class="ctl">
-          <div class="ctl-head"><span class="ctl-label">Heart model</span></div>
-          <div class="seg">
-            <button type="button" id="heartPack1Btn" class="on">Heart 1</button>
-            <button type="button" id="heartPack2Btn">Heart 2</button>
-          </div>
-          <p class="ctl-hint" id="heartPackNote" style="margin-top:6px"></p>
         </div>
-        <div class="ctl">
-          <div class="ctl-head"><span class="ctl-label">Heart size</span><span class="ctl-val-sm" id="heartSizeV">100%</span></div>
-          <input type="range" id="heartSizeR" min="60" max="160" step="1" value="100" aria-label="Heart diagram scale"/>
-          <p class="ctl-hint" style="margin-top:4px">Gray anatomy on the chest only — does not resize the vectorscope ring.</p>
-        </div>
+      </div>
+      <div class="axis-item ctl-section" data-ctl-section="bodyPlate">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>Body plate</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">Body look</span><span class="ctl-val-sm" id="bodyLookLbl">Plate A</span></div>
           <select class="axis-cond-sel" id="bodyLookSel" aria-label="Body demo plate" style="width:100%;max-width:none">
@@ -897,7 +1011,7 @@ canvas{display:block}
             <option value="gray-a">Gray A — Magnific full body</option>
             <option value="gray-b">Gray B — Magnific full body</option>
           </select>
-          <p class="ctl-hint" id="bodyLookHint" style="margin-top:6px">Avatar = Magnific at ref-04 angle. ♥ Heart and ⌗ Ribs = SVG toggles (regenerate avatar per profile later).</p>
+          <p class="ctl-hint" id="bodyLookHint" style="margin-top:6px">Avatar = Magnific at ref-04 angle. Heart and Ribs layers are SVG toggles (regenerate avatar per profile later).</p>
         </div>
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">Real body scale</span><span class="ctl-val-sm" id="bodyPlateScaleV">100%</span></div>
@@ -909,6 +1023,11 @@ canvas{display:block}
           <button type="button" id="matchPlateBgBtn" style="width:100%">Match canvas to plate BG</button>
           <p class="ctl-hint" style="margin-top:4px">Samples plate edge pixels → canvas background for a seamless Real-mode frame (auto on load).</p>
         </div>
+        </div>
+      </div>
+      <div class="axis-item ctl-section" data-ctl-section="scopeBadges">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>Scope &amp; ± badges</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">Scope size</span><span class="ctl-val-sm" id="scopeSizeV">100%</span></div>
           <input type="range" id="scopeSizeR" min="60" max="180" step="1" value="100" aria-label="Vectorscope ring scale"/>
@@ -917,45 +1036,120 @@ canvas{display:block}
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">± badge size</span><span class="ctl-val-sm" id="badgeSizeV">100%</span></div>
           <input type="range" id="badgeSizeR" min="50" max="200" step="1" value="100" aria-label="Polarity badge scale"/>
-          <p class="ctl-hint" style="margin-top:4px">Red/green cathode/anode circles on limbs, scope ring, and strip playhead.</p>
+          <p class="ctl-hint" style="margin-top:4px">Cathode (+) lights <strong>red</strong> when current hits it; idle stays gray. Anode (−) lights green on negative deflection. Strip playhead badge follows live polarity.</p>
         </div>
         <div class="ctl">
           <div class="ctl-head"><span class="ctl-label">± badge spread</span><span class="ctl-val-sm" id="badgeSpreadV">100%</span></div>
           <input type="range" id="badgeSpreadR" min="50" max="200" step="1" value="100" aria-label="Polarity badge spread"/>
-          <p class="ctl-hint" style="margin-top:4px">Push overlapping markers apart (e.g. II / III / aVF on LL). Scope ring badges move with spread.</p>
+          <p class="ctl-hint" style="margin-top:4px">Push overlapping ± markers apart on limbs (fans along X on RA/LA/LL). Scope ring badges move with spread. On body canvas: <strong>Shift+Ctrl+scroll</strong>.</p>
+        </div>
+        <div class="ctl">
+          <div class="ctl-head"><span class="ctl-label">Chart click</span></div>
+          <div class="seg">
+            <button type="button" id="clickFocusBtn" class="on">Focus only</button>
+            <button type="button" id="clickIsolateBtn">Isolate lead</button>
+          </div>
+          <p class="ctl-hint" style="margin-top:4px">Strip rows and scope labels. Lead pills (I…aVF) always isolate. Keys <strong>1–6</strong> follow this setting.</p>
+        </div>
         </div>
       </div>
-      <div class="card">
-        <div class="ctl-head"><span class="ctl-label">Canvas colors</span></div>
-        <p class="ctl-hint">Tune scope / body / electrodes until everything reads on your monitor. Saved with layout.</p>
-        <p class="color-theme-note">Editing: <strong id="canvasColorThemeLbl">dark</strong> mode canvas</p>
-        <div class="color-grid" id="canvasColorGrid"></div>
-        <button type="button" id="resetCanvasColorsBtn" style="margin-top:10px;width:100%">Reset canvas colors (this theme)</button>
+      <div class="axis-item ctl-section" data-ctl-section="leadFlowTune">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>Lead flow</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
+          <p class="ctl-hint" style="margin:0 0 8px">Teardrop pulse along each lead axis (− green → + red). Turn on <strong>Flow</strong> layer to preview.</p>
+          <div class="ctl">
+            <div class="ctl-head"><span class="ctl-label">Tail taper</span><span class="ctl-val-sm" id="flowTailV">28%</span></div>
+            <input type="range" id="flowTailR" min="10" max="50" step="1" value="28" aria-label="Flow tail taper percent of path"/>
+            <p class="ctl-hint" style="margin-top:4px">Wide green tail at − pole — longer = more comet-like.</p>
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><span class="ctl-label">Head size</span><span class="ctl-val-sm" id="flowHeadV">100%</span></div>
+            <input type="range" id="flowHeadR" min="50" max="200" step="1" value="100" aria-label="Flow teardrop head size"/>
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><span class="ctl-label">Stroke</span><span class="ctl-val-sm" id="flowStrokeV">100%</span></div>
+            <input type="range" id="flowStrokeR" min="50" max="200" step="1" value="100" aria-label="Flow pulse stroke width"/>
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><span class="ctl-label">Path dim</span><span class="ctl-val-sm" id="flowPathV">100%</span></div>
+            <input type="range" id="flowPathR" min="30" max="150" step="1" value="100" aria-label="Flow static path brightness"/>
+            <p class="ctl-hint" style="margin-top:4px">Faint green→red wire under the moving pulse.</p>
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><span class="ctl-label">Speed</span><span class="ctl-val-sm" id="flowSpeedV">100%</span></div>
+            <input type="range" id="flowSpeedR" min="25" max="200" step="1" value="100" aria-label="Flow pulse travel speed"/>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-label" style="margin-bottom:10px">Lead Polarity</div>
+      <div class="axis-item ctl-section" data-ctl-section="canvasColors">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>Canvas colors</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
+          <p class="ctl-hint">Tune scope / body / electrodes until everything reads on your monitor. Saved with layout.</p>
+          <p class="color-theme-note">Editing: <strong id="canvasColorThemeLbl">dark</strong> mode canvas</p>
+          <div class="color-grid" id="canvasColorGrid"></div>
+          <button type="button" id="resetCanvasColorsBtn" style="margin-top:10px;width:100%">Reset canvas colors (this theme)</button>
+        </div>
+      </div>
+      <div class="axis-item ctl-section" data-ctl-section="conductionTune">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>Conduction model</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
+          <p class="ctl-hint">Teaching model — parametric pathway glow + frontal vector loops (not cell simulation).</p>
+          <div class="ctl">
+            <div class="ctl-head"><span class="ctl-label">Preset</span></div>
+            <select class="axis-cond-sel" id="conductionPresetSel" aria-label="Conduction preset" style="width:100%;max-width:none">
+              <option value="normal">Normal</option>
+              <option value="lad">LAD</option>
+              <option value="rad">RAD</option>
+              <option value="lbbb">LBBB</option>
+              <option value="rbbb">RBBB</option>
+            </select>
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><span class="ctl-label">QRS axis</span><span class="ctl-val-sm" id="conductionAxisV">+60°</span></div>
+            <input type="range" id="conductionAxisR" min="-90" max="150" step="1" value="60" aria-label="Conduction QRS axis"/>
+          </div>
+        </div>
+      </div>
+      <div class="axis-item ctl-section" data-ctl-section="leadPolarity">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="true"><span>Lead polarity</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
         <div id="rows"></div>
+        </div>
       </div>
-      <div class="card">
-        <div class="ctl-head"><span class="ctl-label">Limb lead positions</span></div>
+      <div class="axis-item ctl-section" data-ctl-section="limbPlacement">
+        <button type="button" class="axis-trigger ctl-section-trigger" aria-expanded="false"><span>Limb lead positions</span><span class="axis-chevron" aria-hidden="true"></span></button>
+        <div class="axis-body ctl-section-body">
         <div class="seg" style="margin-bottom:8px">
-          <button type="button" id="placeLeadsBtn">📍 12-lead</button>
-          <button type="button" id="placeScopeBtn">◎ Scope</button>
-          <button type="button" id="placeHeartBtn">♥ Heart</button>
+          <button type="button" id="placeLeadsBtn"><span class="pill-txt">12-lead</span></button>
+          <button type="button" id="placeScopeBtn"><span class="pill-txt">Scope</span></button>
+          <button type="button" id="placeHeartBtn"><span class="pill-txt">Heart</span></button>
           <button type="button" id="placeLabelsBtn" title="Small nudge only — labels stay near their lines">↔ Nudge</button>
           <button type="button" id="resetLabelsBtn">Reset labels</button>
           <button type="button" id="placeDoneBtn">Done</button>
         </div>
         <p class="ctl-hint" id="placeModeHint" hidden style="margin-top:6px;color:var(--gold);font-weight:600"></p>
         <p class="ctl-hint"><strong>2D</strong> — flat canvas + Einthoven triangle. <strong>3D</strong> — ref 02 depth: blue <strong>frontal limb ring</strong>, red <strong>V fan</strong>; orbit drag to see RA/LA forward vs LL/RL posterior. Strips unchanged.</p>
-        <p class="ctl-hint"><strong>Leads</strong> — RA/LA/LL form Einthoven triangle: <strong>I</strong> = RA→LA, <strong>II</strong> = RA→LL, <strong>III</strong> = LA→LL (toggle <strong>△ Einthoven</strong>). <strong>Scope ring</strong> — fixed hexaxial angles. <strong>Scope</strong> — HC centre. <strong>Heart</strong> — anatomy anchor.</p>
+        <p class="ctl-hint"><strong>Leads</strong> — RA/LA/LL form Einthoven triangle: <strong>I</strong> = RA→LA, <strong>II</strong> = RA→LL, <strong>III</strong> = LA→LL (toggle <strong>Einthoven</strong> layer). Measured scope ring follows electrode geometry. <strong>Scope</strong> — HC centre. <strong>Heart</strong> — anatomy anchor.</p>
         <p class="ctl-hint" style="margin-top:6px;display:none" id="rlRefHint"><strong>RL ref</strong> — dashed line from RL to the Wilson central terminal (midpoint of RA+LA+LL). RL is <em>reference ground only</em>; it is not in I/II/III math.</p>
         <p class="ctl-hint" style="margin-top:4px"><strong>Nudge</strong> — tiny label shifts (~28px max) if text overlaps. <strong>Reset labels</strong> snaps them back beside their lines. Quadrant words (Left/Right/…) stay fixed outside the ring.</p>
-        <div id="leadCoordReadout" class="ctl-hint" style="font-family:var(--mono);font-size:.6rem;margin-top:6px"></div>
-        <div id="precordialCoordReadout" class="ctl-hint" style="font-family:var(--mono);font-size:.6rem;margin-top:4px"></div>
-        <div id="leadAxisReadout" class="ctl-hint" style="font-family:var(--mono);font-size:.6rem;margin-top:4px"></div>
-        <div id="scopeCoordReadout" class="ctl-hint" style="font-family:var(--mono);font-size:.6rem;margin-top:4px"></div>
-        <div id="heartCoordReadout" class="ctl-hint" style="font-family:var(--mono);font-size:.6rem;margin-top:4px"></div>
+        <div class="layout-readout" id="layoutReadout">
+          <div>
+            <div class="layout-readout-title">Limb electrodes</div>
+            <div class="layout-coord-grid" id="leadCoordReadout"></div>
+          </div>
+          <div>
+            <div class="layout-readout-title">Precordial V1–V6</div>
+            <div class="layout-coord-grid layout-coord-grid--3" id="precordialCoordReadout"></div>
+          </div>
+          <div>
+            <div class="layout-readout-title">Hexaxial (measured · textbook)</div>
+            <div class="layout-coord-grid layout-coord-grid--3" id="leadAxisReadout"></div>
+          </div>
+          <div class="layout-readout-anchors">
+            <span id="scopeCoordReadout"></span>
+            <span id="heartCoordReadout"></span>
+          </div>
+        </div>
         <div class="seg" style="margin-top:8px;margin-bottom:6px">
           <button type="button" id="exportLayoutBtn">Export JSON</button>
           <button type="button" id="importLayoutBtn">Import JSON</button>
@@ -965,6 +1159,7 @@ canvas{display:block}
         <p class="ctl-hint" id="layoutSaveHint">Positions auto-save — bundled file: assets/ecg-vector-lab-user-layout.json</p>
         <div class="ischemia-legend" id="ischemiaLegend"></div>
         <button type="button" id="resetLeadsBtn" style="margin-top:8px;width:100%">Reset layout to defaults</button>
+        </div>
       </div>
       <div class="zone-note" id="zoneN"></div>
         </div>
@@ -973,9 +1168,52 @@ canvas{display:block}
         <div class="card-label" style="margin-bottom:8px">How to Read Axis Deviation</div>
         <div class="axis-accordions" id="axisAccordions">
 
+          <div class="axis-item active" id="acc-roadmap">
+            <button class="axis-trigger" data-acc="roadmap">
+              <span>Lab roadmap — where we are</span><span class="axis-chevron" aria-hidden="true"></span>
+            </button>
+            <div class="axis-body">
+              <p class="ctl-hint" style="margin:0 0 8px">Measured-geometry plan (Phases 0–5) is <strong>shipped</strong>. You are on post-plan polish + optional backlog.</p>
+              <ul class="lab-roadmap" aria-label="Implementation phases">
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 0</strong> — Collapsible Controls<span class="rm-try">Controls dock accordions</span></span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 1</strong> — Measured hexaxial ring<span class="rm-try">Ring + strips follow electrode drag</span></span></li>
+                <li class="done" data-phase-go="2"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 2</strong> — Green→red flow teardrops<span class="rm-try">Layer: Flow · static paths + −→+ pulse · click to open</span></span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 3</strong> — Lead isolation UX<span class="rm-try">Lead pills · Click iso · Esc show all</span></span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 5</strong> — Conduction + VCG split<span class="rm-try">Bottom bar: Lab | Conduction</span></span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>Phase 4</strong> — Smoke + handoff docs<span class="rm-try">node scripts/smoke-ecg-vector-lab.mjs</span></span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>+ Layout 8</strong> — Heart 131% · −10° · chest scope<span class="rm-try">Heart anatomy · Reload bundled</span></span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>+ Polish</strong> — 3D measured ring · Tabler icons · click-to-isolate toggle</span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>+ V1–V6 guide</strong> — clinical landmarks in Guide<span class="rm-try">Guide → V1–V6 placement</span></span></li>
+                <li class="done"><span data-roadmap-icon="circle-check" aria-hidden="true"></span><span class="rm-body"><strong>+ 3D electrode drag</strong> — 3D + 12-lead mode · drag spheres<span class="rm-try">Switch 3D · Controls → 12-lead</span></span></li>
+                <li class="next"><span data-roadmap-icon="circle-dotted" aria-hidden="true"></span><span class="rm-body"><strong>Next</strong> — Steve visual QA · git commit · 3D fan tune vs ref 02<span class="rm-try">Compare 2D plate vs 3D fan · local boy.glb</span></span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="axis-item" id="acc-v-leads">
+            <button class="axis-trigger" data-acc="vleads">
+              <span>V1–V6 placement guide</span><span class="axis-chevron" aria-hidden="true"></span>
+            </button>
+            <div class="axis-body">
+              <p class="ctl-hint" style="margin:0 0 8px">Standard precordial landmarks (AP view). Enable <strong>Controls → 12-lead</strong> to drag on the plate (2D) or electrode spheres (3D). Red <strong>V fan</strong> layer follows V1→V6.</p>
+              <table class="v-lead-guide" aria-label="Precordial lead landmarks">
+                <thead><tr><th scope="col">Lead</th><th scope="col">ICS</th><th scope="col">Landmark</th></tr></thead>
+                <tbody>
+                  <tr><td>V1</td><td>4th</td><td>Right sternal border<span class="v-landmark">Right parasternal · sees RV / septum</span></td></tr>
+                  <tr><td>V2</td><td>4th</td><td>Left sternal border<span class="v-landmark">Septal transition · S wave in LVH</span></td></tr>
+                  <tr><td>V3</td><td>—</td><td>Between V2 and V4<span class="v-landmark">Anterior wall transition</span></td></tr>
+                  <tr><td>V4</td><td>5th</td><td>Mid-clavicular line (MCL)<span class="v-landmark">Classic STEMI anchor · ~ apex level</span></td></tr>
+                  <tr><td>V5</td><td>5th</td><td>Anterior axillary line (AAL)<span class="v-landmark">Lateral wall</span></td></tr>
+                  <tr><td>V6</td><td>5th</td><td>Mid-axillary line (MAL)<span class="v-landmark">Lateral · tall R in normal axis</span></td></tr>
+                </tbody>
+              </table>
+              <p class="ctl-hint" style="margin-top:8px">Teaching only — your CardioCard plate uses draggable markers; textbook spacing may differ on angled Magnific torso.</p>
+            </div>
+          </div>
+
           <div class="axis-item" id="acc-normal">
             <button class="axis-trigger" data-acc="normal">
-              <span>Normal Axis</span><span class="axis-chevron">▼</span>
+              <span>Normal Axis</span><span class="axis-chevron" aria-hidden="true"></span>
             </button>
             <div class="axis-body">
               <span class="axis-range">−30° to +90°</span>
@@ -998,7 +1236,7 @@ canvas{display:block}
 
           <div class="axis-item" id="acc-lad">
             <button class="axis-trigger" data-acc="lad">
-              <span>Left Axis Deviation (LAD)</span><span class="axis-chevron">▼</span>
+              <span>Left Axis Deviation (LAD)</span><span class="axis-chevron" aria-hidden="true"></span>
             </button>
             <div class="axis-body">
               <span class="axis-range">−30° to −90°</span>
@@ -1024,7 +1262,7 @@ canvas{display:block}
 
           <div class="axis-item" id="acc-rad">
             <button class="axis-trigger" data-acc="rad">
-              <span>Right Axis Deviation (RAD)</span><span class="axis-chevron">▼</span>
+              <span>Right Axis Deviation (RAD)</span><span class="axis-chevron" aria-hidden="true"></span>
             </button>
             <div class="axis-body">
               <span class="axis-range">+90° to +180°</span>
@@ -1050,7 +1288,7 @@ canvas{display:block}
 
           <div class="axis-item" id="acc-xaxis">
             <button class="axis-trigger" data-acc="xaxis">
-              <span>Extreme / Northwest Axis</span><span class="axis-chevron">▼</span>
+              <span>Extreme / Northwest Axis</span><span class="axis-chevron" aria-hidden="true"></span>
             </button>
             <div class="axis-body">
               <span class="axis-range">−90° to ±180°</span>
@@ -1073,6 +1311,24 @@ canvas{display:block}
             </div>
           </div>
 
+          <div class="axis-item" id="acc-flow">
+            <button class="axis-trigger" data-acc="flow">
+              <span>Lead flow animation</span><span class="axis-chevron" aria-hidden="true"></span>
+            </button>
+            <div class="axis-body">
+              <p class="ctl-hint" style="margin:0">Animated green→red pulses are a <strong>teaching metaphor</strong>: depolarization projects onto each lead axis. The real cardiac dipole rotates in 3D; each lead records a projection, not literal current along a wire.</p>
+            </div>
+          </div>
+
+          <div class="axis-item" id="acc-conduction">
+            <button class="axis-trigger" data-acc="conduction">
+              <span>Conduction + VCG mode</span><span class="axis-chevron" aria-hidden="true"></span>
+            </button>
+            <div class="axis-body">
+              <p class="ctl-hint" style="margin:0">Conduction animation is simplified. The vector loop is the <strong>frontal-plane projection</strong> of the net dipole, not literal current in wires. Real activation is 3D and varies by pathology.</p>
+            </div>
+          </div>
+
         </div><!-- /axis-accordions -->
       </div>
       <div class="dock-tab-pane" data-dock-pane="references">
@@ -1085,14 +1341,14 @@ canvas{display:block}
   <aside class="dock-panel dock-panel--right" id="dockPanelStrip" aria-hidden="true">
     <div class="dock-panel-head">
       <h2>ECG strip</h2>
-      <button type="button" class="dock-panel-close" id="dockCloseStrip" aria-label="Close panel">×</button>
+      <button type="button" class="dock-panel-close" id="dockCloseStrip" aria-label="Close panel"></button>
     </div>
     <div class="dock-panel-body">
       <div class="card strip-card">
     <div class="strip-header">
       <span class="card-label"><span id="stripBeatLbl">8 beats</span> &nbsp;<span style="font-weight:400;color:var(--muted)" id="focLbl"></span></span>
       <span class="strip-time" id="stripCursorTime">0.000 s · beat 1.00</span>
-      <span class="strip-hint">gold playhead = scrub · middle-click center · middle-drag pan · click strip to jump</span>
+      <span class="strip-hint">gold playhead = scrub · middle-click center · middle-drag pan · click row = focus (enable Click iso to solo)</span>
     </div>
     <canvas id="strip"></canvas>
     <div class="strip-resize-handle" id="stripResizeHandle" title="Drag to resize strip height" aria-label="Resize strip height"></div>
@@ -1118,6 +1374,7 @@ canvas{display:block}
 
 </div><!-- /ecg-shell -->
 
+<script src="assets/ecg-vector-lab/ecg-lab-icons.js"></script>
 <script src="assets/ecg-vector-lab/organs/rib-cage-anterior-data.js"></script>
 <script src="assets/hearts/heart-1/heart-data.js"></script>
 <script src="assets/hearts/heart-1/heart-gray-data.js"></script>
@@ -1133,8 +1390,8 @@ var themeBtn=document.getElementById('themeBtn');
 var currentTheme=document.documentElement.getAttribute('data-theme')||'dark';
 function applyTheme(t){
   document.documentElement.setAttribute('data-theme',t);
-  if(themeBtn){
-    themeBtn.textContent=t==='dark'?'☀':'☾';
+  if(themeBtn&&window.EcgIcons){
+    EcgIcons.setIconOnly(themeBtn,t==='dark'?'sun':'moon',18);
     themeBtn.title=t==='dark'?'Switch to light mode':'Switch to dark mode';
   }
   var meta=document.querySelector('meta[name=theme-color]');
@@ -1368,12 +1625,44 @@ function showAllLeads(){
   ALL_LEAD_NAMES.forEach(function(n){S.visibleLeads[n]=true;});
   ensureFocusLeadVisible();
   syncLeadPillsUI();
+  updateUI();
   saveLabLayout();
+}
+
+function exitIsolateMode(){
+  if(allLeadsVisible())return false;
+  showAllLeads();
+  return true;
+}
+
+function handleEscapeKey(e){
+  if(e.code!=='Escape'&&e.key!=='Escape')return false;
+  if(isTypingTarget(e.target))return false;
+  if(exitIsolateMode()){
+    e.preventDefault();
+    return true;
+  }
+  return false;
 }
 
 function showSoloFocusLead(){
   var foc=S.focusLead||'II';
   isolateLead(foc);
+}
+
+function focusLeadOnly(name){
+  if(ALL_LEAD_NAMES.indexOf(name)<0)return;
+  S.focusLead=name;
+  if(S.visibleLeads[name]===false)S.visibleLeads[name]=true;
+  ensureFocusLeadVisible();
+  updateUI();
+  syncLeadPillsUI();
+  saveLabLayout();
+}
+
+function pickLeadFromChart(name){
+  if(S.clickToIsolate)isolateLead(name);
+  else focusLeadOnly(name);
 }
 
 function isolateLead(name){
@@ -1406,6 +1695,78 @@ function polarityBadgeR(base){return base*badgeSizeMul();}
 var SHOW_RL_REF=false;
 /** Textbook hexaxial degrees — scope ring, vector, and strip math (Limb Leads diagram). */
 var CANONICAL_LEAD_DEG={I:0,II:60,III:120,aVR:-150,aVL:-30,aVF:90};
+var LEAD_MODEL={deg:{},vec:{}};
+var LEAD_STUDY={
+  I:{formula:'LA − RA',deg:0},
+  II:{formula:'LL − RA',deg:60},
+  III:{formula:'LL − LA',deg:120},
+  aVR:{formula:'RA − (LA+LL)/2',deg:-150},
+  aVL:{formula:'LA − (RA+LL)/2',deg:-30},
+  aVF:{formula:'LL − (RA+LA)/2',deg:90}
+};
+var LEAD_FLOW_SPEED_BASE=0.85;
+function clampFlowTailPct(v){return Math.max(10,Math.min(50,v));}
+function flowTailPct(){return clampFlowTailPct(S.flowTailPct!=null?S.flowTailPct:28);}
+function flowTailLen(len){
+  var pct=flowTailPct();
+  return Math.min(len*(pct/100),SR*0.14*(pct/28));
+}
+function flowHeadR(){return Math.max(2,SR*0.028*(S.flowHeadMul||1));}
+function flowStrokeW(){return Math.max(1.2,SR*0.022*(S.flowStrokeMul||1));}
+function flowPathStrokeW(){return Math.max(1,SR*0.013*(S.flowStrokeMul||1));}
+function flowPathAlphaMul(){return Math.max(0.2,Math.min(1.8,S.flowPathMul||1));}
+function leadFlowSpeed(){return LEAD_FLOW_SPEED_BASE*(S.flowSpeedMul||1);}
+
+function drawLeadFlowTeardrop(xNeg,yNeg,xPos,yPos,t,alpha){
+  if(alpha<0.05)return;
+  var len=Math.hypot(xPos-xNeg,yPos-yNeg)||1;
+  var headX=xNeg+(xPos-xNeg)*t,headY=yNeg+(yPos-yNeg)*t;
+  var tailLen=flowTailLen(len);
+  var tailT=Math.max(0,t-tailLen/len);
+  var tailX=xNeg+(xPos-xNeg)*tailT,tailY=yNeg+(yPos-yNeg)*tailT;
+  uctx.save();
+  uctx.globalCompositeOperation='screen';
+  var grad=uctx.createLinearGradient(tailX,tailY,headX,headY);
+  grad.addColorStop(0,'rgba(62,207,142,'+(alpha*0.55).toFixed(3)+')');
+  grad.addColorStop(0.55,'rgba(255,200,80,'+(alpha*0.5).toFixed(3)+')');
+  grad.addColorStop(1,'rgba(239,83,80,'+(alpha*0.9).toFixed(3)+')');
+  uctx.strokeStyle=grad;
+  uctx.lineWidth=flowStrokeW();
+  uctx.lineCap='round';
+  uctx.beginPath();
+  uctx.moveTo(tailX,tailY);
+  uctx.lineTo(headX,headY);
+  uctx.stroke();
+  var hr=flowHeadR();
+  var grd=uctx.createRadialGradient(headX,headY,0,headX,headY,hr*2.4);
+  grd.addColorStop(0,'rgba(255,120,90,'+(alpha*0.95).toFixed(3)+')');
+  grd.addColorStop(0.5,'rgba(239,83,80,'+(alpha*0.45).toFixed(3)+')');
+  grd.addColorStop(1,'rgba(239,83,80,0)');
+  uctx.fillStyle=grd;
+  uctx.beginPath();
+  uctx.arc(headX,headY,hr*1.8,0,Math.PI*2);
+  uctx.fill();
+  uctx.restore();
+}
+
+function drawLeadFlowStaticPath(xNeg,yNeg,xPos,yPos,alpha){
+  if(alpha<0.04||!isFinite(xNeg+xPos+yNeg))return;
+  var a=alpha*flowPathAlphaMul();
+  uctx.save();
+  uctx.globalCompositeOperation='screen';
+  var grad=uctx.createLinearGradient(xNeg,yNeg,xPos,yPos);
+  grad.addColorStop(0,'rgba(62,207,142,'+(a*0.42).toFixed(3)+')');
+  grad.addColorStop(0.5,'rgba(255,200,80,'+(a*0.28).toFixed(3)+')');
+  grad.addColorStop(1,'rgba(239,83,80,'+(a*0.55).toFixed(3)+')');
+  uctx.strokeStyle=grad;
+  uctx.lineWidth=flowPathStrokeW();
+  uctx.lineCap='round';
+  uctx.beginPath();
+  uctx.moveTo(xNeg,yNeg);
+  uctx.lineTo(xPos,yPos);
+  uctx.stroke();
+  uctx.restore();
+}
 var MEASURED_LEAD_AXES={};
 var LAYOUT_STORAGE='ecgVectorLabLayoutV1';
 var LAYOUT_VERSION=3;
@@ -1735,16 +2096,20 @@ var BODY='M104.265,117.959c-0.304,3.58,2.126,22.529,3.38,29.959c0.597,3.52,2.234
 /* ── State ────────────────────────────────────────────────────────── */
 var S={
   angle:60,time:0,speed:72/3600,paused:false,showT:false,useRealEcg:true,stripWinStart:null,bottomStripCollapsed:false,focusLead:'II',mag:0.82,
-  showHeart:true,showRibs:true,showScope:true,showTri:true,showVector:true,showComet:true,
+  showHeart:true,showRibs:true,showScope:true,showTri:true,showVector:true,showComet:true,showLeadFlow:true,
   showLimbRing:true,showVFan:true,
+  studyMode:'lab',
+  conductionPreset:'normal',conductionAxis:60,
+  controlsSections:{},
   viewMode:'2d',
   bodyMode:'svg',bodyPlateId:'cardiocard-angle',
   placingLeads:false,placingScope:false,placingHeart:false,placingLabels:false,
   dragLead:null,dragScope:false,dragHeart:false,dragLabel:null,
   stripBeats:_stripPrefs.stripBeats,stripHeight:_stripPrefs.stripHeight,leadStripW:_stripPrefs.leadStripW,stripZoom:_stripPrefs.stripZoom,
-  heartPack:loadHeartPack(),heartScale:1,scopeScale:1,badgeScale:1,badgeSpread:1,bodyPlateScale:1,autoMatchPlateBg:true,
+  heartPack:loadHeartPack(),heartScale:1,heartRotation:0,scopeScale:1,badgeScale:1,badgeSpread:1,bodyPlateScale:1,autoMatchPlateBg:true,
+  flowTailPct:28,flowHeadMul:1,flowStrokeMul:1,flowPathMul:1,flowSpeedMul:1,
   bodyViewZoom:1,bodyViewPanX:0,bodyViewPanY:0,
-  vectorStroke:2,playbackRate:1,
+  vectorStroke:2,playbackRate:1,clickToIsolate:false,
   visibleLeads:defaultVisibleLeads()
 };
 
@@ -1752,10 +2117,10 @@ var EL_STORAGE='ecgVectorLabElectrodesV1';
 var SCOPE_STORAGE='ecgVectorLabScopeV1';
 /** CardioCard ref 04 — normalized 0–1 in body space (bodyNW × bodyNH). */
 var CARDIOCARD_NORM={
-  RA:{x:0.3595,y:0.4632},LA:{x:0.6476,y:0.4672},RL:{x:0.3986,y:1},LL:{x:0.6098,y:1},
-  heart:{x:0.5302,y:0.3977},
-  V1:{x:0.475,y:0.5782},V2:{x:0.5356,y:0.5643},V3:{x:0.5423,y:0.6184},
-  V4:{x:0.5747,y:0.6516},V5:{x:0.6098,y:0.6516},V6:{x:0.628,y:0.6814}
+  RA:{x:0.2239,y:0.3195},LA:{x:0.7652,y:0.3195},RL:{x:0.2979,y:1},LL:{x:0.7276,y:1},
+  heart:{x:0.6382,y:0.6362},
+  V1:{x:0.4531,y:0.5287},V2:{x:0.5469,y:0.5327},V3:{x:0.5830,y:0.6011},
+  V4:{x:0.6371,y:0.6675},V5:{x:0.6768,y:0.6956},V6:{x:0.7525,y:0.7077}
 };
 var REF4_PRE_KEYS=['V1','V2','V3','V4','V5','V6'];
 var REF4_LIMB_KEYS=['RA','LA','LL','RL'];
@@ -1798,6 +2163,64 @@ function resetLabelOffsets(){
   saveLabLayout();
 }
 var _labelHits=[];
+var _studyLeadHits=[];
+
+function registerStudyLeadHit(name,x,y,r){
+  _studyLeadHits.push({name:name,x:x,y:y,r:r||Math.max(14,SR*0.075)});
+}
+
+function hitStudyLead(px,py){
+  for(var i=_studyLeadHits.length-1;i>=0;i--){
+    var h=_studyLeadHits[i],dx=px-h.x,dy=py-h.y;
+    if(dx*dx+dy*dy<=h.r*h.r)return h.name;
+  }
+  return null;
+}
+
+function drawLeadFlowPulse(x0,y0,x1,y1,t,alpha){
+  drawLeadFlowTeardrop(x0,y0,x1,y1,t,alpha);
+}
+
+function wilsonCanvasPt(){
+  if(!EL||!EL.RA)return{x:typeof SCX==='number'?SCX:0,y:typeof SCY==='number'?SCY:0};
+  return{x:(EL.RA.x+EL.LA.x+EL.LL.x)/3,y:(EL.RA.y+EL.LA.y+EL.LL.y)/3};
+}
+
+/** Body wires + full ring diameter along measured lead axis (− pole → + pole). */
+function leadFlowPoles(name){
+  var bodyNeg=null,bodyPos=null;
+  if(name==='I'){bodyNeg=EL.RA;bodyPos=EL.LA;}
+  else if(name==='II'){bodyNeg=EL.RA;bodyPos=EL.LL;}
+  else if(name==='III'){bodyNeg=EL.LA;bodyPos=EL.LL;}
+  else if(name==='aVR'){bodyNeg={x:(EL.LA.x+EL.LL.x)*0.5,y:(EL.LA.y+EL.LL.y)*0.5};bodyPos=EL.RA;}
+  else if(name==='aVL'){bodyNeg={x:(EL.RA.x+EL.LL.x)*0.5,y:(EL.RA.y+EL.LL.y)*0.5};bodyPos=EL.LA;}
+  else if(name==='aVF'){bodyNeg={x:(EL.RA.x+EL.LA.x)*0.5,y:(EL.RA.y+EL.LA.y)*0.5};bodyPos=EL.LL;}
+  else if(/^V\d$/.test(name)&&PRE&&PRE[name]){bodyNeg=wilsonCanvasPt();bodyPos=PRE[name];}
+  var ringR=SR*0.92;
+  var a=r(leadDeg(name));
+  return{
+    body:{neg:bodyNeg,pos:bodyPos},
+    ring:{
+      neg:{x:SCX-Math.cos(a)*ringR,y:SCY-Math.sin(a)*ringR},
+      pos:{x:SCX+Math.cos(a)*ringR,y:SCY+Math.sin(a)*ringR}
+    }
+  };
+}
+
+function drawLeadFlowLayer(){
+  if(!S.showLeadFlow)return;
+  var base=S.time*leadFlowSpeed();
+  visibleLeadsList().forEach(function(L,idx){
+    var poles=leadFlowPoles(L.n);
+    var t=(base+idx*0.13)%1;
+    if(poles.body.neg&&poles.body.pos){
+      drawLeadFlowStaticPath(poles.body.neg.x,poles.body.neg.y,poles.body.pos.x,poles.body.pos.y,0.5);
+      drawLeadFlowTeardrop(poles.body.neg.x,poles.body.neg.y,poles.body.pos.x,poles.body.pos.y,t,1);
+    }
+    drawLeadFlowStaticPath(poles.ring.neg.x,poles.ring.neg.y,poles.ring.pos.x,poles.ring.pos.y,0.38);
+    drawLeadFlowTeardrop(poles.ring.neg.x,poles.ring.neg.y,poles.ring.pos.x,poles.ring.pos.y,(t+0.07)%1,0.88);
+  });
+}
 var _labelDrag={id:null,ax:0,ay:0,ox:0,oy:0};
 
 function loadLabelOffsets(){
@@ -1951,6 +2374,18 @@ function recomputeLeadAxes(){
   MEASURED_LEAD_AXES.aVR=vecAngleDeg(avr.x,avr.y);
   MEASURED_LEAD_AXES.aVL=vecAngleDeg(avl.x,avl.y);
   MEASURED_LEAD_AXES.aVF=vecAngleDeg(avf.x,avf.y);
+  computeLeadModel();
+}
+
+function computeLeadModel(){
+  ALL_LEAD_NAMES.forEach(function(n){
+    var deg=MEASURED_LEAD_AXES[n];
+    if(deg==null||!isFinite(deg))deg=CANONICAL_LEAD_DEG[n]!=null?CANONICAL_LEAD_DEG[n]:0;
+    LEAD_MODEL.deg[n]=deg;
+    var a=r(deg);
+    LEAD_MODEL.vec[n]={vx:Math.cos(a),vy:Math.sin(a)};
+    if(LEAD_STUDY[n])LEAD_STUDY[n].deg=Math.round(deg);
+  });
   updateLeadAxisReadout();
 }
 
@@ -1970,13 +2405,13 @@ function leadCanvasVec(name){
 }
 
 function leadRingPt(name,rad){
-  var deg=CANONICAL_LEAD_DEG[name];
-  if(deg==null)return{x:SCX+rad,y:SCY};
-  return scopePtFromDeg(deg,rad);
+  return scopePtFromDeg(leadDeg(name),rad);
 }
 
-/* Canonical hexaxial unit vectors — scope ring, strips, comet (Limb Leads diagram). */
+/* Measured hexaxial unit vectors — electrode geometry drives ring + strips. */
 function leadElectricalVec(name){
+  var v=LEAD_MODEL.vec[name];
+  if(v)return v;
   var deg=CANONICAL_LEAD_DEG[name];
   if(deg==null)return{vx:1,vy:0};
   var a=r(deg);
@@ -2015,14 +2450,22 @@ function elLabelDefault(n,e,rad){
 }
 
 function leadDeg(name){
+  if(LEAD_MODEL.deg[name]!=null)return LEAD_MODEL.deg[name];
   return CANONICAL_LEAD_DEG[name]!=null?CANONICAL_LEAD_DEG[name]:0;
 }
 
 function updateLeadAxisReadout(){
   var el=document.getElementById('leadAxisReadout');
   if(!el)return;
-  el.textContent='Hexaxial I '+leadDeg('I')+'° · II '+leadDeg('II')+'° · III '+leadDeg('III')+'° · aVF '+leadDeg('aVF')+'°'
-    +' · triangle II '+Math.round(MEASURED_LEAD_AXES.II||0)+'° · III '+Math.round(MEASURED_LEAD_AXES.III||0)+'°';
+  var onAngle=(S.bodyPlateId||'')==='cardiocard-angle';
+  fillCoordGrid(el,ALL_LEAD_NAMES.map(function(n){
+    var m=Math.round(leadDeg(n));
+    var ref=CANONICAL_LEAD_DEG[n];
+    var delta=Math.round(m-ref);
+    var v=m+'° · ref '+ref+'°';
+    if(onAngle&&delta!==0)v+=' · Δ'+(delta>0?'+':'')+delta+'°';
+    return{k:n,v:v};
+  }));
 }
 
 function buildLabLayout(){
@@ -2035,9 +2478,15 @@ function buildLabLayout(){
     heartAnchor:JSON.parse(JSON.stringify(HEART_BODY)),
     heartPack:S.heartPack,
     heartScale:S.heartScale,
+    heartRotation:S.heartRotation!=null?S.heartRotation:0,
     scopeScale:S.scopeScale,
     badgeScale:S.badgeScale,
     badgeSpread:S.badgeSpread,
+    flowTailPct:S.flowTailPct,
+    flowHeadMul:S.flowHeadMul,
+    flowStrokeMul:S.flowStrokeMul,
+    flowPathMul:S.flowPathMul,
+    flowSpeedMul:S.flowSpeedMul,
     bodyPlateScale:S.bodyPlateScale,
     bodyViewZoom:S.bodyViewZoom,
     bodyViewPanX:S.bodyViewPanX,
@@ -2060,10 +2509,16 @@ function buildLabLayout(){
       showTri:!!S.showTri,
       showVector:!!S.showVector,
       showComet:!!S.showComet,
+      showLeadFlow:!!S.showLeadFlow,
       showLimbRing:!!S.showLimbRing,
       showVFan:!!S.showVFan,
       showT:!!S.showT,
       useRealEcg:!!S.useRealEcg,
+      studyMode:S.studyMode==='conduction'?'conduction':'lab',
+      conductionPreset:S.conductionPreset||'normal',
+      conductionAxis:S.conductionAxis!=null?S.conductionAxis:60,
+      clickToIsolate:!!S.clickToIsolate,
+      controlsSections:JSON.parse(JSON.stringify(S.controlsSections||{})),
       theme:currentTheme,
       bodyMode:S.bodyMode==='real'?'real':'svg',
       viewMode:S.viewMode==='3d'?'3d':'2d',
@@ -2176,7 +2631,10 @@ function applyLabLayout(o,opts){
     HEART_BODY=o.heartAnchor;
   }
   if(typeof o.heartScale==='number'){
-    S.heartScale=Math.max(0.6,Math.min(1.6,o.heartScale));
+    S.heartScale=clampHeartScale(o.heartScale);
+  }
+  if(typeof o.heartRotation==='number'){
+    S.heartRotation=clampHeartRotation(o.heartRotation);
   }
   if(typeof o.scopeScale==='number'){
     S.scopeScale=Math.max(0.6,Math.min(1.8,o.scopeScale));
@@ -2186,6 +2644,21 @@ function applyLabLayout(o,opts){
   }
   if(typeof o.badgeSpread==='number'){
     S.badgeSpread=Math.max(0.5,Math.min(2,o.badgeSpread));
+  }
+  if(typeof o.flowTailPct==='number'){
+    S.flowTailPct=clampFlowTailPct(o.flowTailPct);
+  }
+  if(typeof o.flowHeadMul==='number'){
+    S.flowHeadMul=Math.max(0.5,Math.min(2,o.flowHeadMul));
+  }
+  if(typeof o.flowStrokeMul==='number'){
+    S.flowStrokeMul=Math.max(0.5,Math.min(2,o.flowStrokeMul));
+  }
+  if(typeof o.flowPathMul==='number'){
+    S.flowPathMul=Math.max(0.3,Math.min(1.5,o.flowPathMul));
+  }
+  if(typeof o.flowSpeedMul==='number'){
+    S.flowSpeedMul=Math.max(0.25,Math.min(2,o.flowSpeedMul));
   }
   if(typeof o.bodyPlateScale==='number'){
     S.bodyPlateScale=Math.max(0.5,Math.min(2,o.bodyPlateScale));
@@ -2250,10 +2723,18 @@ function applyLabLayout(o,opts){
     if(typeof o.ui.showTri==='boolean')S.showTri=o.ui.showTri;
     if(typeof o.ui.showVector==='boolean')S.showVector=o.ui.showVector;
     if(typeof o.ui.showComet==='boolean')S.showComet=o.ui.showComet;
+    if(typeof o.ui.showLeadFlow==='boolean')S.showLeadFlow=o.ui.showLeadFlow;
     if(typeof o.ui.showLimbRing==='boolean')S.showLimbRing=o.ui.showLimbRing;
     if(typeof o.ui.showVFan==='boolean')S.showVFan=o.ui.showVFan;
     if(typeof o.ui.showT==='boolean')S.showT=o.ui.showT;
     if(typeof o.ui.useRealEcg==='boolean')S.useRealEcg=o.ui.useRealEcg;
+    if(o.ui.studyMode==='conduction'||o.ui.studyMode==='lab')S.studyMode=o.ui.studyMode;
+    if(typeof o.ui.conductionPreset==='string')S.conductionPreset=o.ui.conductionPreset;
+    if(typeof o.ui.conductionAxis==='number')S.conductionAxis=o.ui.conductionAxis;
+    if(typeof o.ui.clickToIsolate==='boolean')S.clickToIsolate=o.ui.clickToIsolate;
+    if(o.ui.controlsSections&&typeof o.ui.controlsSections==='object'){
+      S.controlsSections=JSON.parse(JSON.stringify(o.ui.controlsSections));
+    }
     if(o.ui.theme==='light'||o.ui.theme==='dark')applyTheme(o.ui.theme);
     if(o.ui.bodyMode==='real'||o.ui.bodyMode==='svg')S.bodyMode=o.ui.bodyMode;
     if(o.ui.viewMode==='3d'||o.ui.viewMode==='2d')S.viewMode=o.ui.viewMode;
@@ -2261,10 +2742,14 @@ function applyLabLayout(o,opts){
   }
   if(typeof o.bodyPlateId==='string')S.bodyPlateId=resolveBodyPlateId(o.bodyPlateId);
   syncViewModeUI();
+  syncStudyModeUI();
+  applyCtlSectionsFromState();
+  syncConductionControlsUI();
   syncBodyModeUI();
   syncBodyLookUI();
   syncLayerPillsFromState();
   syncRealEcgBtn();
+  syncClickIsolateUI();
   var tTBtnRestore=document.getElementById('tT');
   if(tTBtnRestore)tTBtnRestore.classList.toggle('on',S.showT);
   if(o.canvasPalette)mergeCanvasPalette(o.canvasPalette);
@@ -2319,30 +2804,41 @@ function reloadBundledLayout(){
     .catch(function(){alert('Could not load bundled layout.');});
 }
 
+function fillCoordGrid(el,items){
+  if(!el)return;
+  el.innerHTML=items.map(function(it){
+    return '<span class="coord-cell"><span class="coord-k">'+it.k+'</span><span class="coord-v">'+it.v+'</span></span>';
+  }).join('');
+}
+
 function updateLeadReadout(){
   var el=document.getElementById('leadCoordReadout');
-  if(!el)return;
-  el.textContent='RA '+Math.round(EL_BODY.RA.x)+','+Math.round(EL_BODY.RA.y)
-    +' · LA '+Math.round(EL_BODY.LA.x)+','+Math.round(EL_BODY.LA.y)
-    +' · LL '+Math.round(EL_BODY.LL.x)+','+Math.round(EL_BODY.LL.y)
-    +' · RL '+Math.round(EL_BODY.RL.x)+','+Math.round(EL_BODY.RL.y);
+  fillCoordGrid(el,[
+    {k:'RA',v:Math.round(EL_BODY.RA.x)+', '+Math.round(EL_BODY.RA.y)},
+    {k:'LA',v:Math.round(EL_BODY.LA.x)+', '+Math.round(EL_BODY.LA.y)},
+    {k:'LL',v:Math.round(EL_BODY.LL.x)+', '+Math.round(EL_BODY.LL.y)},
+    {k:'RL',v:Math.round(EL_BODY.RL.x)+', '+Math.round(EL_BODY.RL.y)}
+  ]);
   var pre=document.getElementById('precordialCoordReadout');
-  if(!pre)return;
-  pre.textContent=REF4_PRE_KEYS.map(function(k){
-    return k+' '+Math.round(PRE_BODY[k].x)+','+Math.round(PRE_BODY[k].y);
-  }).join(' · ');
+  fillCoordGrid(pre,REF4_PRE_KEYS.map(function(k){
+    return{k:k,v:Math.round(PRE_BODY[k].x)+', '+Math.round(PRE_BODY[k].y)};
+  }));
+  updateLeadAxisReadout();
+  updateScopeReadout();
+  updateHeartReadout();
 }
 
 function updateScopeReadout(){
   var el=document.getElementById('scopeCoordReadout');
   if(!el)return;
-  el.textContent='Scope centre (HC) '+Math.round(HC_BODY.x)+','+Math.round(HC_BODY.y)+' — vectorscope ring';
+  el.textContent='Scope HC '+Math.round(HC_BODY.x)+', '+Math.round(HC_BODY.y);
 }
 
 function updateHeartReadout(){
   var el=document.getElementById('heartCoordReadout');
   if(!el)return;
-  el.textContent='Heart anchor '+Math.round(HEART_BODY.x)+','+Math.round(HEART_BODY.y)+' on chest';
+  el.textContent='Heart '+Math.round(HEART_BODY.x)+', '+Math.round(HEART_BODY.y)
+    +' · '+Math.round((S.heartScale||1)*100)+'% · '+Math.round(S.heartRotation||0)+'°';
 }
 
 /* ── Math ─────────────────────────────────────────────────────────── */
@@ -2605,10 +3101,17 @@ var scene3dLoading=false;
 function isView3d(){return S.viewMode==='3d';}
 
 function buildLab3dPayload(ph){
+  var leadDegSnap={};
+  ALL_LEAD_NAMES.forEach(function(n){leadDegSnap[n]=leadDeg(n);});
   return{
     EL_BODY:EL_BODY,
     PRE_BODY:PRE_BODY,
     HC_BODY:HC_BODY,
+    HEART_BODY:HEART_BODY,
+    heartScale:S.heartScale,
+    heartRotation:S.heartRotation||0,
+    showHeart:!!S.showHeart,
+    leadDeg:leadDegSnap,
     showTri:S.showTri,
     showScope:S.showScope,
     showVector:S.showVector,
@@ -2625,6 +3128,13 @@ function buildLab3dPayload(ph){
 function syncScene3dFromLab(ph){
   if(!scene3d||!scene3dReady)return;
   scene3d.sync(buildLab3dPayload(ph));
+  scene3d.setElectrodeDrag({
+    placingLeads:!!S.placingLeads&&isView3d(),
+    onMove:function(key,bx,by){
+      moveLeadInBodySpace(key,{x:bx,y:by});
+      syncScene3dFromLab(beatPhase(S.time));
+    }
+  });
   scene3d.render();
 }
 
@@ -2693,6 +3203,10 @@ var bodyNW=206.326;
 var bodyNH=185;
 var bodyScale,bodyOffX,bodyOffY;
 var EL,PRE,HT,HC,HP,HEART_H,HEART_W,SCX,SCY,SR;
+var HEART_SCALE_MIN=0.4,HEART_SCALE_MAX=2;
+var HEART_ROT_MIN=-45,HEART_ROT_MAX=45;
+function clampHeartScale(v){return Math.max(HEART_SCALE_MIN,Math.min(HEART_SCALE_MAX,v));}
+function clampHeartRotation(v){return Math.max(HEART_ROT_MIN,Math.min(HEART_ROT_MAX,v));}
 
 function recomputeSceneGeometry(){
   bodyScale=UH*0.88/bodyNW;
@@ -2822,23 +3336,71 @@ function drawScopeLabel(id,text,x,y,dark,gold){
   if(S.placingLabels){drawLabelGrip(lp.x,lp.y);registerLabelHit(id,lp.x,lp.y);}
 }
 
+function polarityBadgeStyle(val,cathode,anode,opts){
+  opts=opts||{};
+  var thr=POL_TRACE_DEAD;
+  var dark=opts.dark!=null?opts.dark:(currentTheme==='dark');
+  var gray={
+    fill:dark?'rgba(90,90,98,0.45)':'rgba(175,175,182,0.55)',
+    stroke:dark?'rgba(120,120,130,0.55)':'rgba(130,130,138,0.65)',
+    text:dark?'rgba(145,145,155,0.8)':'rgba(95,95,102,0.85)',
+    symbol:'+',
+    lit:false
+  };
+  if(val>thr){
+    return{
+      fill:'rgba(239,83,80,0.38)',
+      stroke:cathode,
+      text:cathode,
+      symbol:'+',
+      lit:true,
+      pole:'cathode'
+    };
+  }
+  if(!opts.cathodeSite&&val<-thr){
+    return{
+      fill:'rgba(62,207,142,0.28)',
+      stroke:anode,
+      text:anode,
+      symbol:'−',
+      lit:true,
+      pole:'anode'
+    };
+  }
+  return gray;
+}
+
 function drawPolarityBadgeCtx(ctx,cx,cy,r,val,cathode,anode,opts){
   opts=opts||{};
-  var toward=val>0.04;
-  var away=val<-0.04;
+  var st=polarityBadgeStyle(val,cathode,anode,opts);
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx,cy,r,0,Math.PI*2);
-  ctx.fillStyle=toward?'rgba(239,83,80,0.35)':away?'rgba(62,207,142,0.25)':'rgba(255,255,255,0.12)';
+  ctx.fillStyle=st.fill;
   ctx.fill();
-  ctx.strokeStyle=toward?cathode:away?anode:'rgba(255,255,255,0.45)';
+  ctx.strokeStyle=st.stroke;
   ctx.lineWidth=Math.max(1.2,r*0.16);
   ctx.stroke();
-  ctx.fillStyle=toward?cathode:away?anode:'#f0f0f4';
+  if(st.lit&&st.pole==='cathode'){
+    var glow=ctx.createRadialGradient(cx,cy,0,cx,cy,r*2.2);
+    glow.addColorStop(0,'rgba(239,83,80,0.45)');
+    glow.addColorStop(1,'rgba(239,83,80,0)');
+    ctx.fillStyle=glow;
+    ctx.beginPath();
+    ctx.arc(cx,cy,r*1.8,0,Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.fillStyle=st.fill;
+    ctx.fill();
+    ctx.strokeStyle=st.stroke;
+    ctx.stroke();
+  }
+  ctx.fillStyle=st.text;
   ctx.font='700 '+(r*0.88)+'px Archivo,ui-sans-serif';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
-  ctx.fillText(toward?'+':away?'−':'+',cx,cy);
+  ctx.fillText(st.symbol,cx,cy);
   if(opts.showLabel!==false&&opts.leadLabel){
     ctx.font='600 '+(Math.max(7,r*0.72))+'px Archivo,ui-sans-serif';
     ctx.textBaseline='alphabetic';
@@ -2847,22 +3409,23 @@ function drawPolarityBadgeCtx(ctx,cx,cy,r,val,cathode,anode,opts){
   ctx.restore();
 }
 
-/** Fixed + above baseline / − below — same on every lead row */
+/** Fixed + above baseline / − below — dim gray until playhead badge lights up */
 function drawStripPolarityGuide(ctx,x,base,amp,rowH,cathode,anode){
   var dy=Math.max(5,Math.min(amp*0.38,Math.max(8,rowH*0.18)));
+  var dark=currentTheme==='dark';
   ctx.save();
   ctx.font='700 7.5px Archivo,ui-sans-serif';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
-  ctx.fillStyle=cathode;
+  ctx.fillStyle=dark?'rgba(145,145,155,0.55)':'rgba(110,110,118,0.6)';
   ctx.fillText('+',x,base-dy);
-  ctx.fillStyle=anode;
+  ctx.fillStyle=dark?'rgba(145,155,145,0.45)':'rgba(100,110,100,0.55)';
   ctx.fillText('−',x,base+dy);
   ctx.restore();
 }
 
 function drawPositiveElectrodeBadge(cx,cy,r,val,leadLabel,cathode,anode,text,border,opts){
-  drawPolarityBadgeCtx(uctx,cx,cy,r,val,cathode,anode,Object.assign({},opts||{},{leadLabel:leadLabel}));
+  drawPolarityBadgeCtx(uctx,cx,cy,r,val,cathode,anode,Object.assign({cathodeSite:true,dark:currentTheme==='dark'},opts||{},{leadLabel:leadLabel}));
 }
 
 function positiveElectrodeCanvas(leadName){
@@ -2873,19 +3436,32 @@ function positiveElectrodeCanvas(leadName){
   return null;
 }
 
-/** + badges on positive electrodes — I/aVL→LA, II/III/aVF→LL, aVR→RA */
+/** + badges on positive electrodes — visible leads only; fan along X when several share RA/LA/LL */
 function drawPositiveElectrodeBadges(cathode,anode,text,border,dark){
   if(!EL||!EL.LA)return;
-  var off={I:{x:-10,y:-11},II:{x:-12,y:8},III:{x:12,y:8},aVF:{x:0,y:14},aVR:{x:-10,y:-4},aVL:{x:10,y:-10}};
+  var baseOff={I:{x:-10,y:-11},II:{x:-12,y:8},III:{x:12,y:8},aVF:{x:0,y:14},aVR:{x:-10,y:-4},aVL:{x:10,y:-10}};
   var spread=badgeSpreadMul();
   var ph=beatPhase(S.time);
-  POSITIVE_FLOW_LEADS.forEach(function(ln){
+  var groups={RA:[],LA:[],LL:[]};
+  visibleLeadsList().forEach(function(L){
+    var ln=L.n;
     var pt=positiveElectrodeCanvas(ln);
     if(!pt)return;
-    var o=off[ln]||{x:0,y:0};
-    var cx=pt.x+o.x*(bodyScale/9)*spread;
-    var cy=pt.y+o.y*(bodyScale/9)*spread;
-    drawPositiveElectrodeBadge(cx,cy,polarityBadgeR(Math.max(7,bodyScale*0.95)),projL(ph,ln).val,'',cathode,anode,text,border,{showLabel:false});
+    var ek=ln==='aVR'?'RA':(ln==='I'||ln==='aVL'?'LA':'LL');
+    groups[ek].push({ln:ln,pt:pt,off:baseOff[ln]||{x:0,y:0}});
+  });
+  ['RA','LA','LL'].forEach(function(ek){
+    var items=groups[ek];
+    if(!items.length)return;
+    var n=items.length;
+    var xStep=(bodyScale*5.5)*spread;
+    items.forEach(function(it,i){
+      var fanX=(n>1)?(i-(n-1)/2)*xStep:0;
+      var o=it.off;
+      var cx=it.pt.x+o.x*(bodyScale/9)*spread+fanX;
+      var cy=it.pt.y+o.y*(bodyScale/9)*Math.max(0.35,spread*0.55);
+      drawPositiveElectrodeBadge(cx,cy,polarityBadgeR(Math.max(7,bodyScale*0.95)),projL(ph,it.ln).val,'',cathode,anode,text,border,{showLabel:false});
+    });
   });
 }
 
@@ -2947,6 +3523,10 @@ function hitLead(px,py){
 
 function moveLeadToCanvas(key,px,py){
   var b=fromU(px,py);
+  moveLeadInBodySpace(key,b);
+}
+
+function moveLeadInBodySpace(key,b){
   clampBodyPt(b);
   if(REF4_PRE_KEYS.indexOf(key)>=0){
     PRE_BODY[key].x=b.x;
@@ -3012,10 +3592,11 @@ function drawHeartAnchorHandle(gold,text){
   uctx.fillStyle='rgba(232,184,75,0.92)';
   uctx.beginPath();uctx.arc(HP.x,HP.y,rad,0,Math.PI*2);uctx.fill();
   uctx.fillStyle=gold;
-  uctx.font='700 '+(bodyScale*7.5)+'px Archivo,ui-sans-serif';
+  uctx.font='600 '+(bodyScale*6)+'px Archivo,ui-sans-serif';
   uctx.textAlign='center';
-  uctx.fillText('♥',HP.x,HP.y+rad*0.35);
-  uctx.fillText('Heart',HP.x,HP.y-rad-8);
+  uctx.textBaseline='bottom';
+  uctx.fillText('Heart',HP.x,HP.y-rad-6);
+  uctx.textBaseline='alphabetic';
 }
 
 function drawScopeCenterHandle(gold,text,border){
@@ -3143,6 +3724,7 @@ function drawHeartRegionTint(reg,fill,svg,hc,s,isDark){
   if(!reg)return;
   uctx.save();
   uctx.translate(HP.x,HP.y);
+  uctx.rotate(r(S.heartRotation||0));
   uctx.scale(s,s);
   uctx.translate(-hc.x,-hc.y);
   uctx.beginPath();
@@ -3187,6 +3769,7 @@ function drawHeartSvgLayer(svg,fill,stroke,strokeW,alpha,pulse){
   var hc=svg.hc||{x:svg.w*0.5,y:svg.h*0.57};
   uctx.save();
   uctx.translate(HP.x,HP.y);
+  uctx.rotate(r(S.heartRotation||0));
   uctx.scale(s,s);
   uctx.translate(-hc.x,-hc.y);
   uctx.globalAlpha=alpha;
@@ -3225,16 +3808,16 @@ var RIB_CAGE_IMG=null;
 var BODY_PLATE_DEFAULT_ID='cardiocard-angle';
 var BODY_PLATE_CATALOG={
   'cardiocard-angle':{
-    src:'assets/ecg-vector-lab/character/kojo-cardiocard-angle-a.png',
+    src:'assets/ecg-vector-lab/character/kojo-cardiocard-angle.png',
     render:'native',
     label:'CardioCard angle',
-    hint:'Magnific body at ref-04 angle + Kojo likeness. Loads tuned electrode layout (layout 6) automatically.'
+    hint:'Steve-approved Magnific plate (ref-04 angle + Kojo face). Loads tuned layout 6 automatically.'
   },
   'placement-a':{
     src:'assets/ecg-vector-lab/character/boy-ecg-placement-plate-a.png',
     render:'native',
     label:'Plate A',
-    hint:'Teaching plate — ribs baked in PNG. ⌗ Ribs SVG off.'
+    hint:'Teaching plate — ribs baked in PNG. Ribs SVG layer off.'
   },
   'placement-b':{
     src:'assets/ecg-vector-lab/character/boy-ecg-placement-plate-b.png',
@@ -3246,7 +3829,7 @@ var BODY_PLATE_CATALOG={
     src:'assets/ecg-vector-lab/character/kojo-torso-likeness-b.png',
     render:'photoGray',
     label:'Likeness B',
-    hint:'Kojo photo + gray wash — toggle ⌗ Ribs SVG + ♥ Heart.'
+    hint:'Kojo photo + gray wash — toggle Ribs SVG + Heart layers.'
   },
   'gray-full':{
     src:'assets/ecg-vector-lab/character/kojo-gray-avatar-full.png',
@@ -3585,6 +4168,7 @@ function drawUnified(){
 
   uctx.clearRect(0,0,UW,UH);
   _labelHits=[];
+  _studyLeadHits=[];
   uctx.fillStyle=canvasBg;
   uctx.fillRect(0,0,UW,UH);
 
@@ -3602,7 +4186,9 @@ function drawUnified(){
     if(S.showTri){
     var tri=[{f:EL.RA,t:EL.LA,n:'I'},{f:EL.RA,t:EL.LL,n:'II'},{f:EL.LA,t:EL.LL,n:'III'}];
     tri.forEach(function(e){
+      if(S.visibleLeads[e.n]===false)return;
       var foc=e.n===S.focusLead;
+      uctx.save();
       if(dark){
         uctx.strokeStyle=foc?triStroke:(e.n==='II'?triStroke:triDim);
         uctx.lineWidth=foc?2:(e.n==='II'?1.6:1);
@@ -3622,6 +4208,8 @@ function drawUnified(){
       uctx.textAlign='center';
       uctx.fillText(e.n,lp.x,lp.y);
       if(S.placingLabels){drawLabelGrip(lp.x,lp.y);registerLabelHit('tri-'+e.n,lp.x,lp.y);}
+      else registerStudyLeadHit(e.n,lp.x,lp.y,Math.max(14,bodyScale*9));
+      uctx.restore();
     });
     /* RL → WCT (hidden for now — reference only, not in I/II/III math) */
     if(SHOW_RL_REF){
@@ -3691,6 +4279,7 @@ function drawUnified(){
     var bp=leadRingPt(L.n,SR*0.72);
     var tx2=bp.x,ty2=bp.y;
     var foc=L.n===S.focusLead;
+    uctx.save();
     var diff=Math.abs(((leadDeg(L.n)-S.angle+540)%360)-180),hot=diff<12;
     var col=foc?scopeFocus:hot?(dark?text:scopeLead):scopeLead;
     var bs=SR*0.06;
@@ -3708,7 +4297,7 @@ function drawUnified(){
     uctx.font=(foc?'700':'600')+' '+(SR*0.1)+'px Archivo,ui-sans-serif';
     uctx.textAlign='center';
     uctx.textBaseline='middle';
-    var lpPt=scopePtFromDeg(CANONICAL_LEAD_DEG[L.n],SR*0.78+bs*1.8);
+    var lpPt=leadRingPt(L.n,SR*0.78+bs*1.8);
     var labelP=labelXY('scope-'+L.n,lpPt.x,lpPt.y);
     if(dark&&POSITIVE_FLOW_LEADS.indexOf(L.n)>=0){
       uctx.lineJoin='round';
@@ -3722,18 +4311,21 @@ function drawUnified(){
       var prQ=projL(phQ,L.n);
       var badgeR=polarityBadgeR(Math.max(6,SR*0.046));
       var ringFrac=0.58*badgeSpreadMul();
-      var badgePt=scopePtFromDeg(CANONICAL_LEAD_DEG[L.n],SR*ringFrac);
-      drawPositiveElectrodeBadge(badgePt.x,badgePt.y,badgeR,prQ.val,'',pc.cathode,pc.anode,text,border,{showLabel:false});
+      var badgePt=leadRingPt(L.n,SR*ringFrac);
+      drawPositiveElectrodeBadge(badgePt.x,badgePt.y,badgeR,prQ.val,'',pc.cathode,pc.anode,text,border,{showLabel:false,dark:dark});
     }
     if(S.placingLabels){drawLabelGrip(labelP.x,labelP.y);registerLabelHit('scope-'+L.n,labelP.x,labelP.y);}
+    else registerStudyLeadHit(L.n,labelP.x,labelP.y,Math.max(14,SR*0.09));
     uctx.textBaseline='alphabetic';
+    uctx.restore();
   });
 
   /* Einthoven I/II/III rays — fixed hexaxial angles (same as scope labels) */
   if(S.showTri){
     ['I','II','III'].forEach(function(n){
+      if(S.visibleLeads[n]===false)return;
       var foc=n===S.focusLead;
-      var pt=scopePtFromDeg(CANONICAL_LEAD_DEG[n],SR*0.92);
+      var pt=leadRingPt(n,SR*0.92);
       uctx.strokeStyle=foc?'rgba(2,132,199,0.35)':(dark?'rgba(232,184,75,0.16)':'rgba(154,114,9,0.2)');
       uctx.lineWidth=foc?1.4:0.9;
       uctx.setLineDash([3,5]);
@@ -3746,6 +4338,8 @@ function drawUnified(){
   }
 
   }
+
+  drawLeadFlowLayer();
 
   if(S.showComet){
   /* ── 6. COMET TRAIL ── */
@@ -3827,11 +4421,14 @@ function drawUnified(){
     uctx.moveTo(SCX+lv.vx*len,SCY+lv.vy*len);
     uctx.lineTo(SCX-lv.vx*len,SCY-lv.vy*len);
     uctx.stroke();uctx.restore();
-    uctx.fillStyle=pc.cathode;
+    var fpr=projL(ph,fl.n);
+    var plusSt=polarityBadgeStyle(fpr.val,pc.cathode,pc.anode,{dark:dark,cathodeSite:true});
+    var minusSt=polarityBadgeStyle(fpr.val,pc.cathode,pc.anode,{dark:dark});
     uctx.font='700 '+(SR*0.1)+'px Archivo,ui-sans-serif';
     uctx.textAlign='center';uctx.textBaseline='middle';
+    uctx.fillStyle=plusSt.text;
     uctx.fillText('+',SCX+lv.vx*(len-SR*0.04),SCY+lv.vy*(len-SR*0.04));
-    uctx.fillStyle=pc.anode;
+    uctx.fillStyle=minusSt.text;
     uctx.fillText('−',SCX-lv.vx*(len-SR*0.04),SCY-lv.vy*(len-SR*0.04));
     uctx.textBaseline='alphabetic';
   }
@@ -3933,7 +4530,7 @@ function drawLeadStrips(){
     lctx.fillStyle=blue;
     lctx.beginPath();lctx.arc(playX,liveY,foc?3.2:2.4,0,Math.PI*2);lctx.fill();
     var pba=playheadBadgeAnchor(playX,liveY,base,rowH,plotW);
-    drawPolarityBadgeCtx(lctx,pba.x,pba.y,pba.r,lpr.val,pc.cathode,pc.anode);
+    drawPolarityBadgeCtx(lctx,pba.x,pba.y,pba.r,lpr.val,pc.cathode,pc.anode,{dark:currentTheme==='dark'});
     if(foc){
       lctx.strokeStyle='rgba(180,210,255,.85)';lctx.lineWidth=1;
       lctx.beginPath();lctx.arc(playX,liveY,5,0,Math.PI*2);lctx.stroke();
@@ -4099,7 +4696,7 @@ function initAllEcgScrub(){
       var vis=visibleLeadsList();
       if(!vis.length)return;
       var idx=Math.floor(y/(LH/vis.length));
-      if(idx>=0&&idx<vis.length){S.focusLead=vis[idx].n;updateUI();syncLeadPillsUI();}
+      if(idx>=0&&idx<vis.length){pickLeadFromChart(vis[idx].n);}
     }
   });
   if(WC)initEcgScrub(WC,{
@@ -4113,7 +4710,7 @@ function initAllEcgScrub(){
       if(!vis.length)return;
       var rH=(WH-TPAD*2)/vis.length;
       var idx=Math.floor((y-TPAD)/rH);
-      if(idx>=0&&idx<vis.length){S.focusLead=vis[idx].n;updateUI();syncLeadPillsUI();}
+      if(idx>=0&&idx<vis.length){pickLeadFromChart(vis[idx].n);}
     }
   });
 }
@@ -4232,12 +4829,265 @@ function drawStrip(){
     wctx.fillStyle='#0284c7';
     wctx.beginPath();wctx.arc(playX,liveY,foc?4:2.5,0,Math.PI*2);wctx.fill();
     var pba2=playheadBadgeAnchor(playX,liveY,base,rowH,M);
-    drawPolarityBadgeCtx(wctx,pba2.x,pba2.y,Math.max(4,pba2.r),lpr.val,pc.cathode,pc.anode);
+    drawPolarityBadgeCtx(wctx,pba2.x,pba2.y,Math.max(4,pba2.r),lpr.val,pc.cathode,pc.anode,{dark:currentTheme==='dark'});
   });
 
   wctx.strokeStyle=currentTheme==='dark'?'rgba(232,184,75,0.6)':'rgba(154,114,9,0.6)';
   wctx.lineWidth=1.5;wctx.setLineDash([]);
   drawPlayheadGrab(wctx,playX,WH-TPAD,TPAD);
+}
+
+/* ── Conduction + vectorscope split ───────────────────────────────── */
+var COND_PATH=document.getElementById('conductionPath');
+var COND_LOOP=document.getElementById('conductionLoop');
+var condPathCtx=COND_PATH?COND_PATH.getContext('2d',{alpha:false}):null;
+var condLoopCtx=COND_LOOP?COND_LOOP.getContext('2d',{alpha:false}):null;
+var _conductionMod=null;
+var _conductionPaths=null;
+var _conductionLoading=false;
+var _condLoopTrail={p:[],qrs:[],t:[]};
+var COND_LOOP_LEN=120;
+
+function isConductionMode(){return S.studyMode==='conduction';}
+
+function ensureConductionModules(cb){
+  if(_conductionMod&&_conductionPaths){if(cb)cb();return;}
+  if(_conductionLoading)return;
+  _conductionLoading=true;
+  Promise.all([
+    import('./assets/ecg-vector-lab/ecg-conduction-model.js'),
+    import('./assets/ecg-vector-lab/conduction-paths-data.js')
+  ]).then(function(m){
+    _conductionMod=m[0];
+    _conductionPaths=m[1];
+    _conductionLoading=false;
+    sizeConductionCanvases();
+    if(cb)cb();
+  }).catch(function(err){
+    _conductionLoading=false;
+    console.warn('Conduction modules failed',err);
+    S.studyMode='lab';
+    syncStudyModeUI();
+  });
+}
+
+function sizeConductionCanvases(){
+  [COND_PATH,COND_LOOP].forEach(function(cv){
+    if(!cv)return;
+    var pane=cv.parentElement;
+    if(!pane)return;
+    var w=Math.max(160,Math.floor(pane.clientWidth));
+    var h=Math.max(180,Math.floor(pane.clientHeight));
+    var d=Math.min(window.devicePixelRatio||1,3);
+    cv.width=Math.round(w*d);
+    cv.height=Math.round(h*d);
+    cv.style.width=w+'px';
+    cv.style.height=h+'px';
+    var ctx=cv.getContext('2d');
+    if(ctx){ctx.setTransform(1,0,0,1,0,0);ctx.scale(d,d);}
+  });
+}
+
+function conductionParams(){
+  return{preset:S.conductionPreset||'normal',axisDeg:S.conductionAxis!=null?S.conductionAxis:60};
+}
+
+function mapConductionPt(u,v,w,h){
+  return{x:u*w,y:v*h};
+}
+
+function drawConductionPathPane(sample,dark){
+  if(!condPathCtx||!COND_PATH||!_conductionPaths)return;
+  var w=COND_PATH.clientWidth,h=COND_PATH.clientHeight;
+  condPathCtx.fillStyle=dark?'#12121a':'#f4f4f6';
+  condPathCtx.fillRect(0,0,w,h);
+  var segs=_conductionPaths.CONDUCTION_SEGMENTS;
+  var active=sample.activeSegments||[];
+  Object.keys(segs).forEach(function(key){
+    var seg=segs[key],pts=seg.points;
+    if(!pts||!pts.length)return;
+    var on=active.indexOf(key)>=0;
+    condPathCtx.strokeStyle=on?(dark?'rgba(255,200,80,0.95)':'rgba(180,120,20,0.9)'):(dark?'rgba(255,255,255,0.12)':'rgba(0,0,0,0.1)');
+    condPathCtx.lineWidth=on?3:1.2;
+    condPathCtx.lineJoin='round';
+    condPathCtx.lineCap='round';
+    condPathCtx.beginPath();
+    pts.forEach(function(p,i){
+      var m=mapConductionPt(p[0],p[1],w,h);
+      if(i===0)condPathCtx.moveTo(m.x,m.y);else condPathCtx.lineTo(m.x,m.y);
+    });
+    if(key==='atria'||key==='ventricles')condPathCtx.closePath();
+    condPathCtx.stroke();
+    if(on){
+      condPathCtx.strokeStyle=dark?'rgba(255,220,120,0.35)':'rgba(255,180,40,0.25)';
+      condPathCtx.lineWidth=8;
+      condPathCtx.stroke();
+    }
+  });
+  condPathCtx.fillStyle=dark?'rgba(232,184,75,0.85)':'rgba(120,90,10,0.85)';
+  condPathCtx.font='600 10px Archivo,ui-sans-serif';
+  condPathCtx.fillText((sample.wave||'').toUpperCase()+' wave',10,h-10);
+}
+
+function pushCondLoop(wave,x,y){
+  var buf=_condLoopTrail[wave];
+  if(!buf)return;
+  buf.push({x:x,y:y});
+  if(buf.length>COND_LOOP_LEN)buf.shift();
+}
+
+function drawConductionLoopPane(sample,dark){
+  if(!condLoopCtx||!COND_LOOP)return;
+  var w=COND_LOOP.clientWidth,h=COND_LOOP.clientHeight;
+  var cx=w*0.5,cy=h*0.52,rad=Math.min(w,h)*0.36;
+  condLoopCtx.fillStyle=dark?'#12121a':'#f4f4f6';
+  condLoopCtx.fillRect(0,0,w,h);
+  condLoopCtx.strokeStyle=dark?'rgba(232,184,75,0.45)':'rgba(154,114,9,0.45)';
+  condLoopCtx.lineWidth=1.5;
+  condLoopCtx.beginPath();condLoopCtx.arc(cx,cy,rad,0,Math.PI*2);condLoopCtx.stroke();
+  condLoopCtx.strokeStyle=dark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.08)';
+  condLoopCtx.beginPath();
+  condLoopCtx.moveTo(cx-rad,cy);condLoopCtx.lineTo(cx+rad,cy);
+  condLoopCtx.moveTo(cx,cy-rad);condLoopCtx.lineTo(cx,cy+rad);
+  condLoopCtx.stroke();
+  var wave=sample.wave||'qrs';
+  if(sample.dipole&&sample.dipole.on){
+    pushCondLoop(wave==='p'?'p':wave==='t'?'t':'qrs',sample.dipole.vx,sample.dipole.vy);
+  }
+  [{key:'p',col:'#0284c7'},{key:'qrs',col:'#ef5350'},{key:'t',col:'#3ecf8e'}].forEach(function(layer){
+    var buf=_condLoopTrail[layer.key];
+    if(!buf||buf.length<2)return;
+    condLoopCtx.strokeStyle=layer.col;
+    condLoopCtx.lineWidth=layer.key===wave?2.2:1.2;
+    condLoopCtx.globalAlpha=layer.key===wave?0.95:0.45;
+    condLoopCtx.beginPath();
+    buf.forEach(function(pt,i){
+      var px=cx+pt.x*rad*0.92,py=cy-pt.y*rad*0.92;
+      if(i===0)condLoopCtx.moveTo(px,py);else condLoopCtx.lineTo(px,py);
+    });
+    condLoopCtx.stroke();
+    condLoopCtx.globalAlpha=1;
+  });
+  if(sample.dipole&&sample.dipole.on){
+    var lx=cx+sample.dipole.vx*rad*0.88,ly=cy-sample.dipole.vy*rad*0.88;
+    condLoopCtx.strokeStyle='#fff';
+    condLoopCtx.lineWidth=2;
+    condLoopCtx.beginPath();condLoopCtx.moveTo(cx,cy);condLoopCtx.lineTo(lx,ly);condLoopCtx.stroke();
+  }
+}
+
+function drawConductionMode(){
+  if(!_conductionMod)return;
+  var ph=beatPhase(S.time);
+  var sample=_conductionMod.conductionSample(ph,conductionParams());
+  var dark=currentTheme==='dark';
+  drawConductionPathPane(sample,dark);
+  drawConductionLoopPane(sample,dark);
+}
+
+function syncStudyModeUI(){
+  var split=document.getElementById('conductionSplit');
+  var wrap=document.getElementById('bodyScopeWrap');
+  document.querySelectorAll('[data-study-mode]').forEach(function(btn){
+    btn.classList.toggle('on',btn.dataset.studyMode===(isConductionMode()?'conduction':'lab'));
+  });
+  if(split)split.hidden=!isConductionMode();
+  if(wrap)wrap.classList.toggle('conduction-hidden',isConductionMode());
+  if(isConductionMode())ensureConductionModules(function(){sizeConductionCanvases();});
+}
+
+function initStudyModeToggle(){
+  document.querySelectorAll('[data-study-mode]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var mode=btn.dataset.studyMode==='conduction'?'conduction':'lab';
+      if(S.studyMode===mode)return;
+      S.studyMode=mode;
+      syncStudyModeUI();
+      saveLabLayout();
+      if(isConductionMode())ensureConductionModules();
+    });
+  });
+  syncStudyModeUI();
+}
+
+function syncConductionControlsUI(){
+  var sel=document.getElementById('conductionPresetSel');
+  var axR=document.getElementById('conductionAxisR');
+  var axV=document.getElementById('conductionAxisV');
+  if(sel)sel.value=S.conductionPreset||'normal';
+  if(axR)axR.value=S.conductionAxis!=null?S.conductionAxis:60;
+  if(axV)axV.textContent=fmtA(S.conductionAxis!=null?S.conductionAxis:60);
+}
+
+function initConductionControls(){
+  if(initConductionControls.done){syncConductionControlsUI();return;}
+  initConductionControls.done=true;
+  var sel=document.getElementById('conductionPresetSel');
+  var axR=document.getElementById('conductionAxisR');
+  if(sel){
+    sel.addEventListener('change',function(){
+      S.conductionPreset=sel.value;
+      _condLoopTrail={p:[],qrs:[],t:[]};
+      saveLabLayout();
+    });
+  }
+  if(axR){
+    axR.addEventListener('input',function(){
+      S.conductionAxis=parseInt(axR.value,10);
+      syncConductionControlsUI();
+      saveLabLayout();
+    });
+  }
+  syncConductionControlsUI();
+}
+
+function initCtlSections(){
+  if(initCtlSections.done)return;
+  initCtlSections.done=true;
+  applyCtlSectionsFromState();
+  document.querySelectorAll('.ctl-section-trigger').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var item=btn.closest('[data-ctl-section]');
+      if(!item)return;
+      var id=item.dataset.ctlSection;
+      var now=!item.classList.contains('active');
+      item.classList.toggle('active',now);
+      btn.setAttribute('aria-expanded',now?'true':'false');
+      if(!S.controlsSections)S.controlsSections={};
+      S.controlsSections[id]=now;
+      saveLabLayout();
+    });
+  });
+}
+
+var DEFAULT_CTL_OPEN={
+  axisPresets:true,
+  heartAnatomy:true,
+  heartPlayback:true,
+  bodyPlate:false,
+  scopeBadges:false,
+  leadFlowTune:false,
+  canvasColors:false,
+  conductionTune:false,
+  leadPolarity:true,
+  limbPlacement:false
+};
+
+function ctlSectionIsOpen(id){
+  var s=S.controlsSections||{};
+  if(typeof s[id]==='boolean')return s[id];
+  return DEFAULT_CTL_OPEN[id]===true;
+}
+
+function applyCtlSectionsFromState(){
+  document.querySelectorAll('[data-ctl-section]').forEach(function(item){
+    var id=item.dataset.ctlSection;
+    var open=ctlSectionIsOpen(id);
+    item.classList.toggle('active',open);
+    var trig=item.querySelector('.ctl-section-trigger');
+    if(trig)trig.setAttribute('aria-expanded',open?'true':'false');
+  });
 }
 
 /* ── Main loop ────────────────────────────────────────────────────── */
@@ -4248,7 +5098,11 @@ function frame(){
   autoScrollStripWindow();
   syncPhaseLabel(beatPhase(S.time));
   updateTimeHud();
-  drawUnified();
+  if(isConductionMode()&&_conductionMod){
+    drawConductionMode();
+  }else{
+    drawUnified();
+  }
   drawLeadStrips();
   drawStrip();
   requestAnimationFrame(frame);
@@ -4278,6 +5132,31 @@ function updateUI(){
   var hudBpm=document.getElementById('hudBpm');
   if(hudAxis)hudAxis.textContent=fmtA(a);
   if(hudBpm)hudBpm.textContent=hr+' BPM';
+  var hudStudy=document.getElementById('hudLeadStudy');
+  if(hudStudy){
+    if(!hudStudy._delegated){
+      hudStudy._delegated=true;
+      hudStudy.addEventListener('click',function(e){
+        if(e.target.closest('.hud-show-all')){
+          e.stopPropagation();
+          showAllLeads();
+          updateUI();
+        }
+      });
+    }
+    if(!allLeadsVisible()&&S.focusLead&&LEAD_STUDY[S.focusLead]){
+      var st=LEAD_STUDY[S.focusLead];
+      hudStudy.hidden=false;
+      hudStudy.innerHTML='Lead '+S.focusLead+' = '+st.formula+' · '+st.deg+'° measured'
+        +'<button type="button" class="hud-show-all">Show all</button>'
+        +'<span class="hud-show-all" style="cursor:default;border:none;background:transparent;padding:0 0 0 4px">· Esc to pick another</span>';
+    }else{
+      hudStudy.hidden=true;
+      hudStudy.textContent='';
+    }
+  }
+  var hudFlow=document.getElementById('hudFlowHint');
+  if(hudFlow)hudFlow.hidden=!S.showLeadFlow;
   if(rowsEl){
     rowsEl.innerHTML='';
     LEADS.forEach(function(L){
@@ -4292,8 +5171,8 @@ function updateUI(){
   }
   var z=zoneOf(a>180?a-360:a);
   if(zoneEl)zoneEl.innerHTML='<strong>'+z.l+'</strong>. '+z.d;
-  /* auto-open matching accordion */
-  document.querySelectorAll('.axis-item').forEach(function(item){
+  /* auto-open matching Guide accordion (not Controls sections) */
+  document.querySelectorAll('#axisAccordions .axis-item').forEach(function(item){
     var acc=item.id.replace('acc-','');
     item.classList.toggle('active',acc===z.acc);
   });
@@ -4314,6 +5193,8 @@ function updateUI(){
 function syncSizeControls(){
   var hs=document.getElementById('heartSizeR');
   var hv=document.getElementById('heartSizeV');
+  var hr=document.getElementById('heartRotR');
+  var hrv=document.getElementById('heartRotV');
   var ss=document.getElementById('scopeSizeR');
   var sv=document.getElementById('scopeSizeV');
   var bs=document.getElementById('badgeSizeR');
@@ -4324,6 +5205,8 @@ function syncSizeControls(){
   var bpv=document.getElementById('bodyPlateScaleV');
   if(hs)hs.value=Math.round((S.heartScale||1)*100);
   if(hv)hv.textContent=Math.round((S.heartScale||1)*100)+'%';
+  if(hr)hr.value=Math.round(S.heartRotation||0);
+  if(hrv)hrv.textContent=(S.heartRotation>0?'+':'')+Math.round(S.heartRotation||0)+'°';
   if(ss)ss.value=Math.round((S.scopeScale||1)*100);
   if(sv)sv.textContent=Math.round((S.scopeScale||1)*100)+'%';
   if(bs)bs.value=Math.round((S.badgeScale||1)*100);
@@ -4332,18 +5215,51 @@ function syncSizeControls(){
   if(bsv)bsv.textContent=Math.round((S.badgeSpread||1)*100)+'%';
   if(bps)bps.value=Math.round((S.bodyPlateScale||1)*100);
   if(bpv)bpv.textContent=Math.round((S.bodyPlateScale||1)*100)+'%';
+  var ft=document.getElementById('flowTailR');
+  var ftv=document.getElementById('flowTailV');
+  var fh=document.getElementById('flowHeadR');
+  var fhv=document.getElementById('flowHeadV');
+  var fs=document.getElementById('flowStrokeR');
+  var fsv=document.getElementById('flowStrokeV');
+  var fp=document.getElementById('flowPathR');
+  var fpv=document.getElementById('flowPathV');
+  var fsp=document.getElementById('flowSpeedR');
+  var fspv=document.getElementById('flowSpeedV');
+  if(ft)ft.value=flowTailPct();
+  if(ftv)ftv.textContent=flowTailPct()+'%';
+  if(fh)fh.value=Math.round((S.flowHeadMul||1)*100);
+  if(fhv)fhv.textContent=Math.round((S.flowHeadMul||1)*100)+'%';
+  if(fs)fs.value=Math.round((S.flowStrokeMul||1)*100);
+  if(fsv)fsv.textContent=Math.round((S.flowStrokeMul||1)*100)+'%';
+  if(fp)fp.value=Math.round((S.flowPathMul||1)*100);
+  if(fpv)fpv.textContent=Math.round((S.flowPathMul||1)*100)+'%';
+  if(fsp)fsp.value=Math.round((S.flowSpeedMul||1)*100);
+  if(fspv)fspv.textContent=Math.round((S.flowSpeedMul||1)*100)+'%';
 }
 
-function initHeartSizeControl(){
-  var el=document.getElementById('heartSizeR');
-  if(!el)return;
+function initHeartAnatomyControls(){
+  var sizeEl=document.getElementById('heartSizeR');
+  var rotEl=document.getElementById('heartRotR');
   syncSizeControls();
-  el.addEventListener('input',function(){
-    S.heartScale=Math.max(0.6,Math.min(1.6,(parseInt(el.value,10)||100)/100));
-    syncSizeControls();
-    recomputeSceneGeometry();
-    saveLabLayout();
-  });
+  if(sizeEl){
+    sizeEl.addEventListener('input',function(){
+      S.heartScale=clampHeartScale((parseInt(sizeEl.value,10)||100)/100);
+      syncSizeControls();
+      recomputeSceneGeometry();
+      updateHeartReadout();
+      if(isView3d())syncScene3dFromLab(beatPhase(S.time));
+      saveLabLayout();
+    });
+  }
+  if(rotEl){
+    rotEl.addEventListener('input',function(){
+      S.heartRotation=clampHeartRotation(parseInt(rotEl.value,10)||0);
+      syncSizeControls();
+      updateHeartReadout();
+      if(isView3d())syncScene3dFromLab(beatPhase(S.time));
+      saveLabLayout();
+    });
+  }
 }
 
 function initBodyPlateControls(){
@@ -4392,6 +5308,50 @@ function initBadgeSizeControls(){
   if(spreadEl){
     spreadEl.addEventListener('input',function(){
       S.badgeSpread=Math.max(0.5,Math.min(2,(parseInt(spreadEl.value,10)||100)/100));
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
+}
+
+function initFlowControls(){
+  var tailEl=document.getElementById('flowTailR');
+  var headEl=document.getElementById('flowHeadR');
+  var strokeEl=document.getElementById('flowStrokeR');
+  var pathEl=document.getElementById('flowPathR');
+  var speedEl=document.getElementById('flowSpeedR');
+  syncSizeControls();
+  if(tailEl){
+    tailEl.addEventListener('input',function(){
+      S.flowTailPct=clampFlowTailPct(parseInt(tailEl.value,10)||28);
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
+  if(headEl){
+    headEl.addEventListener('input',function(){
+      S.flowHeadMul=Math.max(0.5,Math.min(2,(parseInt(headEl.value,10)||100)/100));
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
+  if(strokeEl){
+    strokeEl.addEventListener('input',function(){
+      S.flowStrokeMul=Math.max(0.5,Math.min(2,(parseInt(strokeEl.value,10)||100)/100));
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
+  if(pathEl){
+    pathEl.addEventListener('input',function(){
+      S.flowPathMul=Math.max(0.3,Math.min(1.5,(parseInt(pathEl.value,10)||100)/100));
+      syncSizeControls();
+      saveLabLayout();
+    });
+  }
+  if(speedEl){
+    speedEl.addEventListener('input',function(){
+      S.flowSpeedMul=Math.max(0.25,Math.min(2,(parseInt(speedEl.value,10)||100)/100));
       syncSizeControls();
       saveLabLayout();
     });
@@ -4508,7 +5468,7 @@ if(realEcgBtn)realEcgBtn.addEventListener('click',function(){
 });
 
 function syncLayerPillsFromState(){
-  var map={heart:S.showHeart,ribs:S.showRibs,limbRing:S.showLimbRing,vFan:S.showVFan,scope:S.showScope,tri:S.showTri,vector:S.showVector,comet:S.showComet};
+  var map={heart:S.showHeart,ribs:S.showRibs,limbRing:S.showLimbRing,vFan:S.showVFan,scope:S.showScope,tri:S.showTri,vector:S.showVector,comet:S.showComet,leadFlow:S.showLeadFlow};
   document.querySelectorAll('.layer-pill').forEach(function(btn){
     var layer=btn.dataset.layer;
     if(map[layer]!=null)btn.classList.toggle('on',!!map[layer]);
@@ -4538,14 +5498,15 @@ function initBodyModeToggle(){
 
 function initLayerPills(){
   var map={
-    heart:function(on){S.showHeart=on;},
+    heart:function(on){S.showHeart=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     ribs:function(on){S.showRibs=on;},
     limbRing:function(on){S.showLimbRing=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     vFan:function(on){S.showVFan=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     scope:function(on){S.showScope=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     tri:function(on){S.showTri=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
     vector:function(on){S.showVector=on;if(isView3d())syncScene3dFromLab(beatPhase(S.time));},
-    comet:function(on){S.showComet=on;if(!on)resetTrail();}
+    comet:function(on){S.showComet=on;if(!on)resetTrail();},
+    leadFlow:function(on){S.showLeadFlow=on;updateUI();}
   };
   document.querySelectorAll('.layer-pill').forEach(function(btn){
     btn.addEventListener('click',function(){
@@ -4585,6 +5546,43 @@ function toggleLeadVisible(name,on){
   saveLabLayout();
 }
 
+function syncClickIsolateUI(){
+  var iso=!!S.clickToIsolate;
+  var toggle=document.getElementById('clickIsolateToggle');
+  var focusBtn=document.getElementById('clickFocusBtn');
+  var isolateBtn=document.getElementById('clickIsolateBtn');
+  if(toggle){
+    toggle.classList.toggle('on',iso);
+    toggle.title=iso?'On: strip/scope click hides other leads (Esc = show all).':'Off: strip/scope click changes focus only.';
+  }
+  if(focusBtn)focusBtn.classList.toggle('on',!iso);
+  if(isolateBtn)isolateBtn.classList.toggle('on',iso);
+}
+
+function setClickToIsolate(on){
+  S.clickToIsolate=!!on;
+  syncClickIsolateUI();
+  saveLabLayout();
+}
+
+function initClickIsolateControls(){
+  syncClickIsolateUI();
+  var toggle=document.getElementById('clickIsolateToggle');
+  var focusBtn=document.getElementById('clickFocusBtn');
+  var isolateBtn=document.getElementById('clickIsolateBtn');
+  if(toggle){
+    toggle.addEventListener('click',function(){
+      setClickToIsolate(!S.clickToIsolate);
+    });
+  }
+  if(focusBtn){
+    focusBtn.addEventListener('click',function(){setClickToIsolate(false);});
+  }
+  if(isolateBtn){
+    isolateBtn.addEventListener('click',function(){setClickToIsolate(true);});
+  }
+}
+
 function initLeadPills(){
   syncLeadPillsUI();
   document.querySelectorAll('.lead-pill[data-lead]').forEach(function(btn){
@@ -4604,15 +5602,45 @@ function initLeadPills(){
   });
 }
 
-/* ── Accordion toggles ────────────────────────────────────────────── */
-document.querySelectorAll('.axis-trigger').forEach(function(btn){
+/* ── Guide tab accordion (single-open) — not Controls sections ─────── */
+document.querySelectorAll('#axisAccordions .axis-trigger').forEach(function(btn){
   btn.addEventListener('click',function(){
     var item=btn.closest('.axis-item');
     var wasActive=item.classList.contains('active');
-    document.querySelectorAll('.axis-item').forEach(function(i){i.classList.remove('active');});
+    document.querySelectorAll('#axisAccordions .axis-item').forEach(function(i){i.classList.remove('active');});
     if(!wasActive)item.classList.add('active');
   });
 });
+
+function enterPhase2View(){
+  S.showLeadFlow=true;
+  syncLayerPillsFromState();
+  saveLabLayout();
+  updateUI();
+  openLeft('controls');
+  var tune=document.querySelector('[data-ctl-section="leadFlowTune"]');
+  if(tune){
+    document.querySelectorAll('[data-ctl-section]').forEach(function(item){
+      var on=item.dataset.ctlSection==='leadFlowTune';
+      item.classList.toggle('active',on);
+      var btn=item.querySelector('.ctl-section-trigger');
+      if(btn)btn.setAttribute('aria-expanded',on?'true':'false');
+    });
+    if(!S.controlsSections)S.controlsSections={};
+    S.controlsSections.leadFlowTune=true;
+    try{tune.scrollIntoView({block:'nearest',behavior:'smooth'});}catch(e){}
+  }
+}
+
+function initRoadmapPhaseGo(){
+  document.querySelectorAll('[data-phase-go="2"]').forEach(function(el){
+    el.style.cursor='pointer';
+    el.addEventListener('click',function(e){
+      if(e.target.closest('a'))return;
+      enterPhase2View();
+    });
+  });
+}
 
 /* ── Dock panels (left controls/guide · right strip) ───────────────── */
 var backdrop=document.getElementById('dockBackdrop');
@@ -4629,7 +5657,7 @@ var ECG_REF_PLATES=[
   {num:'02',file:'02-torso-limb-ring-precordial-fan.png',title:'Torso — limb ring + V fan',desc:'3D mode — blue circle = frontal limb ring; red curve = horizontal V1–V6 fan. Orbit drag to see electrode depth.'},
   {num:'03',file:'03-3d-frontal-horizontal-planes-v-leads.png',title:'3D — frontal + horizontal',desc:'Future 3D mode — red frontal limb leads; blue horizontal V leads when the boy rotates.'},
   {num:'04',file:'04-cardiocard-12lead-placement-ref.png',title:'CardioCard 12-lead placement',desc:'Magnific camera/pose + default electrode anchors — not a runtime overlay. See Refs tab only.'},
-  {num:'05',file:'05-rib-cage-anterior-ref.png',title:'Rib cage (anterior)',desc:'⌗ Ribs overlay layer — heart sits inside thoracic cavity.',optional:true}
+  {num:'05',file:'05-rib-cage-anterior-ref.png',title:'Rib cage (anterior)',desc:'Ribs overlay layer — heart sits inside thoracic cavity.',optional:true}
 ];
 
 function initRefGallery(){
@@ -4750,6 +5778,7 @@ function initDockPanels(){
     });
   });
   document.addEventListener('keydown',function(e){
+    if(handleEscapeKey(e))return;
     if(e.key==='Escape')closeDocks();
   });
 }
@@ -4767,7 +5796,8 @@ function setHeartPack(id,opts){
   if(h2)h2.classList.toggle('on',id==='heart-2');
   if(note)note.textContent=pack.note||'';
   var pill=document.querySelector('.layer-pill[data-layer="heart"]');
-  if(pill)pill.textContent='♥ '+pack.label;
+  if(pill&&window.EcgIcons)EcgIcons.setPill(pill,'heart',pack.label);
+  else if(pill)pill.textContent=pack.label;
   resetTrail();
   if(!opts.skipSave)saveLabLayout();
 }
@@ -4797,9 +5827,9 @@ function setPlacementMode(mode){
   var dockHint=document.getElementById('placeModeHint');
   var wrap=document.getElementById('bodyScopeWrap');
   var placeMsg=null;
-  if(mode==='leads')placeMsg='Scroll zoom chest · drag V1–V6 · dbl-click reset view';
+  if(mode==='leads')placeMsg=isView3d()?'Orbit chest · drag electrode spheres · dbl-click reset view':'Scroll zoom chest · drag V1–V6 · dbl-click reset view';
   else if(mode==='scope')placeMsg='Drag gold HC — scope ring + vector · Ctrl+scroll scope size';
-  else if(mode==='heart')placeMsg='Drag ♥ anchor on chest';
+  else if(mode==='heart')placeMsg='Drag heart anchor on chest';
   else if(mode==='labels')placeMsg='Nudge labels (max ~28px)';
   if(hudHint){
     hudHint.hidden=!placeMsg;
@@ -4839,6 +5869,7 @@ function setPlacementMode(mode){
     S.showHeart=true;
     document.querySelectorAll('.layer-pill[data-layer="heart"]').forEach(function(p){p.classList.add('on');});
   }
+  if(isView3d())syncScene3dFromLab(beatPhase(S.time));
 }
 
 function initLeadPlacement(){
@@ -4888,6 +5919,7 @@ function initLeadPlacement(){
       HC_BODY=JSON.parse(JSON.stringify(HC_BODY_DEFAULT));
       HEART_BODY=JSON.parse(JSON.stringify(HEART_BODY_DEFAULT));
       S.heartScale=1;
+      S.heartRotation=0;
       S.scopeScale=1;
       S.badgeScale=1;
       S.badgeSpread=1;
@@ -4935,6 +5967,14 @@ function initLeadPlacement(){
   function onDown(e){
     if(e.button!==0)return;
     var pt=canvasPoint(e.clientX,e.clientY);
+    if(!S.placingLeads&&!S.placingScope&&!S.placingHeart&&!S.placingLabels){
+      var studyLead=hitStudyLead(pt.x,pt.y);
+      if(studyLead){
+        pickLeadFromChart(studyLead);
+        e.preventDefault();
+        return;
+      }
+    }
     if(S.placingLabels){
       var lid=hitLabelTag(pt.x,pt.y);
       if(lid){
@@ -5140,10 +6180,17 @@ function initCtrlScrollZoom(){
       saveStripPrefs();
       return;
     }
-    /* Body canvas: scroll = chest zoom · Ctrl+scroll = gold scope ring */
+    /* Body canvas: scroll = chest zoom · Ctrl+scroll = scope ring · Shift+Ctrl+scroll = badge spread */
     if(!target.overScope)return;
     e.preventDefault();
     e.stopPropagation();
+    if(e.shiftKey&&(e.ctrlKey||e.metaKey)){
+      var dirSpread=e.deltaY>0?-1:1;
+      S.badgeSpread=Math.max(0.5,Math.min(2,(S.badgeSpread||1)+dirSpread*0.05));
+      syncSizeControls();
+      saveLabLayout();
+      return;
+    }
     if(e.ctrlKey||e.metaKey){
       zoomScopeFromWheel(e);
     }else{
@@ -5235,6 +6282,7 @@ function onViewportResize(){
   sizeUnifiedCanvas();
   sizeLeadStrips();
   initStrip();
+  if(isConductionMode())sizeConductionCanvases();
 }
 var resizeTimer;
 window.addEventListener('resize',function(){
@@ -5291,10 +6339,17 @@ function initBottomStripCollapse(){
 function initPlaybackKeyboard(){
   if(initPlaybackKeyboard.done)return;
   initPlaybackKeyboard.done=true;
+  var LEAD_KEYS={Digit1:'I',Digit2:'II',Digit3:'III',Digit4:'aVR',Digit5:'aVL',Digit6:'aVF'};
   window.addEventListener('keydown',function(e){
-    if(e.code!=='Space'&&e.key!==' ')return;
     if(e.repeat)return;
     if(isTypingTarget(e.target))return;
+    if(handleEscapeKey(e))return;
+    if(e.code!=='Space'&&e.key!==' '&&!LEAD_KEYS[e.code])return;
+    if(LEAD_KEYS[e.code]){
+      e.preventDefault();
+      pickLeadFromChart(LEAD_KEYS[e.code]);
+      return;
+    }
     e.preventDefault();
     togglePlayback();
   });
@@ -5302,26 +6357,34 @@ function initPlaybackKeyboard(){
 
 /* ── Boot ─────────────────────────────────────────────────────────── */
 function bootApp(restored){
+  if(window.EcgIcons)EcgIcons.initDom();
+  applyTheme(currentTheme);
   sizeUnifiedCanvas();
   initRefGallery();
   initDockPanels();
   var dockDeep=parseDockDeepLink();
   if(dockDeep)openLeft(dockDeep);
   initHeartPackUI();
-  initHeartSizeControl();
+  initHeartAnatomyControls();
   initBodyPlateControls();
   initBodyLookUI();
   initScopeSizeControl();
   initBadgeSizeControls();
+  initFlowControls();
   initAxisCycle();
+  initRoadmapPhaseGo();
   initVectorStrokeControl();
   initPlaybackRateControl();
   initLayerPills();
   initViewModeToggle();
+  initStudyModeToggle();
   initBodyModeToggle();
   initBodyPlateImages();
   initLeadPills();
+  initClickIsolateControls();
   initLeadPlacement();
+  initCtlSections();
+  initConductionControls();
   initBodyViewPan();
   applyBodyViewTransform();
   syncBodyViewHud();
@@ -5348,6 +6411,9 @@ function bootApp(restored){
   });
   updateUI();
   updateStripZoomHint();
+  var hash=(location.hash||'').replace(/^#/,'').toLowerCase();
+  if(hash==='phase2')enterPhase2View();
+  if(isConductionMode())ensureConductionModules();
   if(!restored)saveLabLayout();
   requestAnimationFrame(frame);
 }

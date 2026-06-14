@@ -9,6 +9,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 const BODY_W = 206.326;
 const BODY_H = 185;
 const GLB_PATH = 'assets/ecg-vector-lab/character/boy.glb';
+const LIMB_LEADS = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'];
 
 /** @param {string} key electrode id */
 function electrodeDepthZ(key, nx, ny) {
@@ -32,6 +33,13 @@ export function bodyPtToWorld(bx, by, key) {
   var y = (0.5 - ny) * 1.18;
   var z = electrodeDepthZ(key || '', nx, ny);
   return new THREE.Vector3(x, y, z);
+}
+
+/** Inverse of bodyPtToWorld (ignores z — maps world XY back to body plate). */
+export function worldPtToBody(wx, wy) {
+  var nx = wx / 1.05 + 0.5;
+  var ny = 0.5 - wy / 1.18;
+  return { x: nx * BODY_W, y: ny * BODY_H };
 }
 
 function r(d) {
@@ -75,7 +83,8 @@ export class EcgScene3D {
     this.guidesGroup = new THREE.Group();
     this.electrodeGroup = new THREE.Group();
     this.scopeGroup = new THREE.Group();
-    this.root.add(this.manikinGroup, this.guidesGroup, this.electrodeGroup, this.scopeGroup);
+    this.heartGroup = new THREE.Group();
+    this.root.add(this.manikinGroup, this.guidesGroup, this.electrodeGroup, this.scopeGroup, this.heartGroup);
 
     this.electrodeMeshes = {};
     this.triLines = null;
@@ -84,10 +93,18 @@ export class EcgScene3D {
     this.scopeRing = null;
     this.vectorArrow = null;
     this._lastLab = null;
+    this._dragKey = null;
+    this._dragPlane = new THREE.Plane();
+    this._dragIntersect = new THREE.Vector3();
+    this._raycaster = new THREE.Raycaster();
+    this._pointer = new THREE.Vector2();
+    this._onElectrodeMove = null;
+    this._placingLeads = false;
 
     this._buildProceduralManikin();
     this._buildGuideMeshes();
     this._tryLoadGlb();
+    this._bindPointer();
   }
 
   _manikinMat() {
@@ -220,27 +237,104 @@ export class EcgScene3D {
       new THREE.SphereGeometry(0.028, 16, 12),
       new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.25, roughness: 0.4 })
     );
+    mesh.userData.electrodeKey = name;
     this.electrodeGroup.add(mesh);
     this.electrodeMeshes[name] = mesh;
     return mesh;
   }
 
+  _ndcFromEvent(e) {
+    var rect = this.canvas.getBoundingClientRect();
+    this._pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    this._pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  }
+
+  _pickElectrode(e) {
+    this._ndcFromEvent(e);
+    this._raycaster.setFromCamera(this._pointer, this.camera);
+    var hits = this._raycaster.intersectObjects(this.electrodeGroup.children, false);
+    for (var i = 0; i < hits.length; i++) {
+      var key = hits[i].object.userData.electrodeKey;
+      if (key && hits[i].object.visible) return key;
+    }
+    return null;
+  }
+
+  _dragElectrodeTo(e) {
+    if (!this._dragKey) return;
+    this._ndcFromEvent(e);
+    this._raycaster.setFromCamera(this._pointer, this.camera);
+    if (!this._raycaster.ray.intersectPlane(this._dragPlane, this._dragIntersect)) return;
+    var body = worldPtToBody(this._dragIntersect.x, this._dragIntersect.y);
+    if (this._onElectrodeMove) this._onElectrodeMove(this._dragKey, body.x, body.y);
+  }
+
+  _updateControlsEnabled(lab) {
+    lab = lab || this._lastLab || {};
+    this.controls.enabled = !lab.placingScope && !lab.placingHeart && !this._dragKey;
+  }
+
+  _bindPointer() {
+    var self = this;
+    this.canvas.addEventListener('pointerdown', function (e) {
+      if (!self._placingLeads || e.button !== 0) return;
+      var key = self._pickElectrode(e);
+      if (!key) return;
+      self._dragKey = key;
+      self.controls.enabled = false;
+      var mesh = self.electrodeMeshes[key];
+      if (mesh) {
+        var n = new THREE.Vector3(0, 0, 1);
+        self._dragPlane.setFromNormalAndCoplanarPoint(n, mesh.position.clone());
+      }
+      self.canvas.setPointerCapture(e.pointerId);
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    this.canvas.addEventListener('pointermove', function (e) {
+      if (!self._dragKey) return;
+      self._dragElectrodeTo(e);
+      e.preventDefault();
+    });
+    function endDrag(e) {
+      if (!self._dragKey) return;
+      self._dragKey = null;
+      self._updateControlsEnabled();
+      try {
+        self.canvas.releasePointerCapture(e.pointerId);
+      } catch (_) {
+        /* ignore */
+      }
+    }
+    this.canvas.addEventListener('pointerup', endDrag);
+    this.canvas.addEventListener('pointercancel', endDrag);
+  }
+
+  setElectrodeDrag(opts) {
+    opts = opts || {};
+    this._placingLeads = !!opts.placingLeads;
+    this._onElectrodeMove = typeof opts.onMove === 'function' ? opts.onMove : null;
+  }
+
   _syncElectrodes(lab) {
     var limbColors = { RA: 0xf8fafc, LA: 0x111827, RL: 0x5c6370, LL: 0x0284c7 };
+    var placing = !!lab.placingLeads;
     var self = this;
     Object.keys(lab.EL_BODY || {}).forEach(function (n) {
       var p = lab.EL_BODY[n];
       var mesh = self._ensureElectrode(n, limbColors[n] || 0x0284c7);
       var w = bodyPtToWorld(p.x, p.y, n);
       mesh.position.copy(w);
-      mesh.visible = lab.showTri !== false || lab.placingLeads;
+      mesh.visible = lab.showTri !== false || placing;
+      mesh.scale.setScalar(placing ? 1.35 : 1);
     });
     REF_KEYS.forEach(function (n) {
       var p = lab.PRE_BODY[n];
       if (!p) return;
       var mesh = self._ensureElectrode(n, 0xef4444);
       mesh.position.copy(bodyPtToWorld(p.x, p.y, n));
-      mesh.visible = !!lab.placingLeads;
+      mesh.visible = placing;
+      mesh.scale.setScalar(placing ? 1.45 : 1);
     });
   }
 
@@ -272,6 +366,54 @@ export class EcgScene3D {
     this.guidesGroup.add(this.triLines);
   }
 
+  /** 2D scope degrees → unit direction in frontal plane (matches lab vector arrow). */
+  _dirFromLeadDeg(deg) {
+    var a = r(deg);
+    return new THREE.Vector3(Math.cos(a), -Math.sin(a), 0);
+  }
+
+  _syncMeasuredScopeAxes(lab, hc, sr) {
+    if (!lab.showScope || !lab.leadDeg) return;
+    var pts = [];
+    var self = this;
+    LIMB_LEADS.forEach(function (name) {
+      var deg = lab.leadDeg[name];
+      if (deg == null || !isFinite(deg)) return;
+      var dir = self._dirFromLeadDeg(deg);
+      pts.push(hc.clone().add(dir.clone().multiplyScalar(-sr * 0.92)));
+      pts.push(hc.clone().add(dir.clone().multiplyScalar(sr * 0.92)));
+    });
+    if (!pts.length) return;
+    var geo = new THREE.BufferGeometry().setFromPoints(pts);
+    var axes = new THREE.LineSegments(
+      geo,
+      new THREE.LineBasicMaterial({ color: 0xe8b84b, transparent: true, opacity: 0.55 })
+    );
+    this.scopeGroup.add(axes);
+  }
+
+  _syncHeart(lab) {
+    while (this.heartGroup.children.length) this.heartGroup.remove(this.heartGroup.children[0]);
+    if (!lab.showHeart || !lab.HEART_BODY) return;
+    var pos = bodyPtToWorld(lab.HEART_BODY.x, lab.HEART_BODY.y, 'heart');
+    var scale = 0.11 * (lab.heartScale || 1);
+    var rot = r(lab.heartRotation || 0);
+    var heart = new THREE.Mesh(
+      new THREE.SphereGeometry(scale, 18, 14),
+      new THREE.MeshStandardMaterial({
+        color: 0xb8b8b8,
+        roughness: 0.92,
+        metalness: 0.02,
+        transparent: true,
+        opacity: 0.88,
+      })
+    );
+    heart.scale.set(1.05, 1, 0.32);
+    heart.position.copy(pos);
+    heart.rotation.set(-0.15, 0, rot);
+    this.heartGroup.add(heart);
+  }
+
   _syncScope(lab) {
     while (this.scopeGroup.children.length) this.scopeGroup.remove(this.scopeGroup.children[0]);
     if (!lab.showScope && !lab.showVector) return;
@@ -286,6 +428,7 @@ export class EcgScene3D {
       );
       ring.position.copy(hc);
       this.scopeGroup.add(ring);
+      this._syncMeasuredScopeAxes(lab, hc, sr);
     }
 
     if (lab.showVector) {
@@ -321,7 +464,9 @@ export class EcgScene3D {
     this._syncVFan(lab);
     this._syncEinthoven(lab);
     this._syncScope(lab);
-    this.controls.enabled = !lab.placingLeads && !lab.placingScope && !lab.placingHeart;
+    this._syncHeart(lab);
+    this._placingLeads = !!lab.placingLeads;
+    this._updateControlsEnabled(lab);
   }
 
   resize(w, h) {

@@ -8,15 +8,23 @@ Placeholder for the **rotatable torso** used in future **3D mode**.
 - Wrap **hexaxial limb axes** (frontal plane) + **V1–V6 fan** (horizontal plane) around the mesh — see `../references/03-3d-frontal-horizontal-planes-v-leads.png`.
 - Same heart anchor as today: Wilson central terminal at chest centre.
 
+## Steve-approved plates (2026-06-15)
+
+| File | Role |
+|------|------|
+| **`kojo-cardiocard-angle.png`** | **Default Angle body** — ref-04 pose + Kojo face (Magnific pick B promoted) |
+| **`kojo-gray-avatar-full.png`** | **Gray full body** — matte manikin Steve likes |
+
+Runtime catalog: `BODY_PLATE_CATALOG` in `ecg-vector-lab.html` · handoff: `ECG_VECTOR_LAB_HANDOFF.md`
+
 ## Body plate (2D — gray avatar)
 
 | File | Render |
 |------|--------|
-| **`kojo-gray-avatar-full-b.png`** | **Default Real body** — 4yo Kojo full-body gray avatar |
-| `boy-ecg-placement-plate-a.png` | **Rib overlay source** — white rib/sternum lines composited on chest (⌗ Ribs) |
-| **`kojo-torso-likeness-b.png`** | Kojo photo + gray wash (`photoGray` in app) |
-| **`kojo-gray-avatar-full.png`** | Full-body matte gray Kojo |
-| `kojo-gray-avatar-full-a.png` / `-b.png` | Magnific gray full-body picks |
+| **`kojo-gray-avatar-full-b.png`** | Gray B look — auto-loads `layouts/gray-b-layout.json` |
+| `boy-ecg-placement-plate-a.png` | Teaching plate — style ref for Magnific |
+| **`kojo-gray-avatar-full.png`** | **Steve-approved** full-body matte gray |
+| `kojo-gray-avatar-full-a.png` / `-b.png` | Magnific gray picks |
 
 ## Meshy 3D (rotatable)
 

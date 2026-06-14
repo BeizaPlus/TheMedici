@@ -2,6 +2,22 @@
 
 Small steps so you can undo one layer without losing everything.
 
+## Layout 7 (CardioCard-angle — Steve export 2026-06-14)
+
+| Action | Command |
+|--------|---------|
+| **Apply** layout 7 from Downloads export | `node scripts/apply-ecg-angle-layout7.mjs "C:\Users\steve\Downloads\ecg-vector-lab-layout (7).json"` |
+| **Apply** from repo angle layout file | `node scripts/apply-ecg-angle-layout7.mjs` |
+| **Revert** bundled JSON to pre-layout-7 | `node scripts/revert-ecg-angle-layout7.mjs` |
+
+Files:
+
+- Source: `assets/ecg-vector-lab/layouts/cardiocard-angle-layout.json`
+- Target: `assets/ecg-vector-lab-user-layout.json`
+- Backup: `assets/ecg-vector-lab-user-layout.backup-pre-layout7.json`
+
+Layout 7 changes vs 6: wider shoulder span (RA/LA), retuned V1–V6 precordial grid, canvas `#2f2e34`, strip column 822px / zoom 300.
+
 ## Layout 6 (CardioCard-angle electrodes)
 
 | Action | Command |
