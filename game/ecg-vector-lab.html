@@ -539,15 +539,47 @@ canvas{display:block}
   .ecg-shell{grid-template-columns:40px minmax(0,1fr) 40px}
   .dock-panel--left{left:40px;width:min(340px,calc(100vw - 48px))}
   .dock-panel--right{right:40px}
-  .hero-viewport{grid-template-columns:1fr;grid-template-rows:1fr auto}
-  .lead-strips-wrap{border-left:none;border-top:1px solid var(--border);max-height:128px}
-  #leadStrips{min-height:108px}
+  /* Stack lead strips BELOW the canvas on mobile — canvas gets full width */
+  .hero-viewport{
+    grid-template-columns:1fr;
+    grid-template-rows:1fr auto;
+  }
+  .lead-strips-wrap{
+    border-left:none;
+    border-top:1px solid var(--border);
+    /* Fixed height strip row on mobile — enough to see all 6 leads */
+    height:160px;
+    max-height:160px;
+    min-height:120px;
+    flex-shrink:0;
+  }
+  #leadStrips{
+    min-height:120px;
+    height:100%;
+  }
+  /* Hide the col-resize handle on mobile (no horizontal resize needed) */
+  .col-resize-handle{display:none}
   .theme-btn{right:48px}
+  /* Layer pills — single scrollable row, no wrapping */
+  .layer-pills{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+  .lead-pills{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+  /* HUD — stack readouts and controls vertically */
+  .stage-hud{padding:8px 10px 10px}
+  .hud-readouts{gap:6px 10px}
+  .hud-controls{gap:6px 8px}
+  /* Smaller axis value on mobile */
+  .hud-axis{font-size:.95rem;min-width:52px}
 }
 @media(max-width:480px){
-  .stage-header .page-title{font-size:.95rem}
+  .stage-header .page-title{font-size:.9rem}
   .g4{grid-template-columns:repeat(2,1fr)}
   .dock-rail-btn{width:32px;height:32px}
+  /* Even tighter HUD on small phones */
+  .hud-chip{font-size:.6rem;padding:2px 7px}
+  .hud-cursor-time{font-size:.6rem;min-width:0}
+  .hud-ctrl input[type=range]{width:44px}
+  /* Axis cycle selector — full width on small screens */
+  .axis-cond-sel{max-width:8rem;font-size:.6rem}
 }
 
 /* ─── Scrollbar ──────────────────────────────────────────────────────────── */
@@ -972,7 +1004,7 @@ var CANVAS_PALETTE_DEFAULTS={
     triStroke:'#ffffff',
     triStrokeDim:'#6b7280',
     triLabel:'#e8b84b',
-    heartFill:'#e6e6e6'
+    heartFill:'#c0282a'
   },
   light:{
     canvasBg:'#e8eaee',
@@ -988,7 +1020,7 @@ var CANVAS_PALETTE_DEFAULTS={
     triStroke:'#151518',
     triStrokeDim:'#9ca3af',
     triLabel:'#7a5a08',
-    heartFill:'#d4d4d4'
+    heartFill:'#b52226'
   }
 };
 
@@ -1051,6 +1083,15 @@ function mergeCanvasPalette(src){
     if(t==='light'&&canvasPalette.light.bodyFill){
       var lbf=canvasPalette.light.bodyFill.toLowerCase();
       if(lbf==='#d1d4d9'||lbf==='#e6e6e6')canvasPalette.light.bodyFill='#333333';
+    }
+    /* Migrate old gray heart fill to new crimson default */
+    if(t==='dark'&&canvasPalette.dark.heartFill){
+      var dhf=canvasPalette.dark.heartFill.toLowerCase();
+      if(dhf==='#e6e6e6'||dhf==='#d4d4d4'||dhf==='#cccccc'||dhf==='#ff0000')canvasPalette.dark.heartFill='#c0282a';
+    }
+    if(t==='light'&&canvasPalette.light.heartFill){
+      var lhf=canvasPalette.light.heartFill.toLowerCase();
+      if(lhf==='#d4d4d4'||lhf==='#e6e6e6'||lhf==='#cccccc')canvasPalette.light.heartFill='#b52226';
     }
   });
 }
@@ -1229,11 +1270,23 @@ function bodySilhouetteFill(){
 
 function withBodySilhouetteClip(drawFn){
   uctx.save();
+  /* Build a transformed clip path in canvas-pixel space so the heart
+     draws at HP (canvas coords) while still being masked to the body. */
+  uctx.beginPath();
+  uctx.save();
+  uctx.translate(bodyOffX,bodyOffY);
+  uctx.scale(bodyScale,bodyScale);
+  /* Re-trace the body path into the current transform */
+  var bodyPath=new Path2D(BODY);
+  uctx.restore();
+  /* Apply clip using the body path with the body transform baked in */
+  uctx.save();
   uctx.translate(bodyOffX,bodyOffY);
   uctx.scale(bodyScale,bodyScale);
   uctx.clip(bp);
   uctx.setTransform(dpr,0,0,dpr,0,0);
   drawFn();
+  uctx.restore();
   uctx.restore();
 }
 var dpr=Math.min(window.devicePixelRatio||1,2);
@@ -2364,8 +2417,10 @@ function resetTrail(){
 /* ── Anatomical heart (traced SVG from reference) ─────────────────── */
 var HEART_STROKE='rgba(150,150,155,0.88)';
 var HEART_VESSEL='rgba(190,190,195,0.75)';
-var HEART_GRAY_FILL='#E6E6E6';
-var HEART_2_GRAY_FILL='#D4D4D4';
+/* Rich anatomical red — visible on dark 20%-gray body */
+var HEART_GRAY_FILL='#c0282a';
+var HEART_2_GRAY_FILL='#b52226';
+/* Ensure the saved #ff0000 test value is migrated back to crimson */
 
 function heartZoneKey(a){
   a=a>180?a-360:a;
@@ -2385,22 +2440,23 @@ var HEART_REGIONS={
 };
 
 function heartRegionTints(zone){
+  /* Stronger overlays so they read clearly on the crimson heart fill */
   if(zone==='lad')return[
-    {k:'apex',fill:'rgba(35,35,40,0.78)',label:'apex — electrically silent'},
-    {k:'lv_lat',fill:'rgba(55,55,60,0.62)',label:'inferolateral LV — weakened'},
-    {k:'lv',fill:'rgba(70,70,75,0.45)',label:'LV bulk — dimmed'},
-    {k:'rv',fill:'rgba(200,200,205,0.28)',label:'RV — relatively hyperactive'}
+    {k:'apex',fill:'rgba(8,8,12,0.82)',label:'apex — electrically silent'},
+    {k:'lv_lat',fill:'rgba(18,18,22,0.72)',label:'inferolateral LV — weakened'},
+    {k:'lv',fill:'rgba(28,28,32,0.55)',label:'LV bulk — dimmed'},
+    {k:'rv',fill:'rgba(255,220,180,0.22)',label:'RV — relatively hyperactive'}
   ];
   if(zone==='rad')return[
-    {k:'rv',fill:'rgba(210,210,215,0.55)',label:'RV dominant'},
-    {k:'lv',fill:'rgba(55,55,60,0.5)',label:'LV dimmed'},
-    {k:'apex',fill:'rgba(48,48,52,0.48)',label:'apex dimmed'}
+    {k:'rv',fill:'rgba(255,200,150,0.45)',label:'RV dominant — bright'},
+    {k:'lv',fill:'rgba(18,18,22,0.60)',label:'LV dimmed'},
+    {k:'apex',fill:'rgba(12,12,16,0.55)',label:'apex dimmed'}
   ];
   if(zone==='extreme')return[
-    {k:'septum',fill:'rgba(28,28,32,0.82)',label:'septum — global failure'},
-    {k:'lv',fill:'rgba(40,40,44,0.58)',label:'LV suppressed'},
-    {k:'rv',fill:'rgba(40,40,44,0.58)',label:'RV suppressed'},
-    {k:'apex',fill:'rgba(32,32,36,0.68)',label:'apex suppressed'}
+    {k:'septum',fill:'rgba(4,4,8,0.88)',label:'septum — global failure'},
+    {k:'lv',fill:'rgba(12,12,16,0.72)',label:'LV suppressed'},
+    {k:'rv',fill:'rgba(12,12,16,0.72)',label:'RV suppressed'},
+    {k:'apex',fill:'rgba(8,8,12,0.80)',label:'apex suppressed'}
   ];
   return[];
 }
@@ -2465,10 +2521,15 @@ function drawHeartSvgLayer(svg,fill,stroke,strokeW,alpha,pulse){
   uctx.translate(-hc.x,-hc.y);
   uctx.globalAlpha=alpha;
   if(pulse){
-    uctx.shadowColor='rgba(160,160,165,0.45)';
-    uctx.shadowBlur=14/s;
+    uctx.shadowColor='rgba(180,30,30,0.55)';
+    uctx.shadowBlur=18/s;
   }
+  /* Outer glow so the heart reads on the dark body */
+  uctx.shadowColor='rgba(200,40,40,0.35)';
+  uctx.shadowBlur=12/s;
   drawSvgHeartPaths(svg.silhouette,fill,stroke,strokeW);
+  uctx.shadowColor='transparent';
+  uctx.shadowBlur=0;
   uctx.restore();
 }
 
@@ -2480,10 +2541,8 @@ function drawAnatomicalHeart(ph,isDark){
   var hc=svg.hc||{x:svg.w*0.5,y:svg.h*0.57};
   var fill=heartPackFill();
   var alpha=0.94;
-  /* Fill-only trace — no dark vascular strokes on the torso */
-  withBodySilhouetteClip(function(){
-    drawHeartSvgLayer(svg,fill,null,0,alpha,false);
-  });
+  /* Fill-only trace — draw heart at HP (canvas coords), clipped to body */
+  drawHeartSvgLayer(svg,fill,null,0,alpha,false);
   if(isDark){
     var tints=heartRegionTints(zone);
     for(var ti=0;ti<tints.length;ti++){
