@@ -40,13 +40,15 @@ Recent ECG lab work is split so you can `git revert` one commit:
 
 | # | Commit | Reverts |
 |---|--------|---------|
+| 4 | `69af1b1` | **Measured ring + flow taper controls + 3D drag + layout 8** — Phases 0–5, conduction split, V1 guide, Tabler icons, flow sliders |
 | 1 | `20cd7a5` | Apply/revert scripts + backup only |
 | 2 | `a097b8d` | Assets, 3D module, layouts, PTB-XL JSON |
 | 3 | `18f0273` | HTML app (scroll zoom, 3D, layout wiring) + bundled user layout |
 
 ```powershell
 cd C:\Users\steve\MeWorld
-git log --oneline -5 -- game/ecg-vector-lab.html
+git log --oneline -8 -- game/ecg-vector-lab.html
+git revert 69af1b1   # undo measured ring, flow controls, 3D drag, layout 8 bundle
 git revert 18f0273   # app + layout defaults only
 git revert a097b8d   # asset pack (only if you also want assets gone)
 ```
