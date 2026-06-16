@@ -53,7 +53,10 @@ step3/ccs_presentations/*.txt              ← real intro/vitals/history (8 type
 src/data/ccsCatalog.json                   ← 181 cases + categories + presentations
         ↓  npm run build:cases
 src/data/preparedCases.json                ← vitals, exam, narratives (what the game plays)
+        ↓  node scripts/rewrite-hpi-neutral.mjs --case NNN  (after import — spoiler-free HPI)
 ```
+
+**HPI spoiler split (required after new cases):** Teaching content (diagnosis, pathophysiology, management) belongs in `case_summary`, not `hpi_narrative` or `narrative.*.hpi`. Run `rewrite-hpi-neutral.mjs` — task file: `C:\Users\steve\MeWorld\.cursor\tasks\rewrite-hpi-neutral.md` · rules: repo root `CURSOR_RULES.md` § CASE DATA FIELD SCHEMA.
 
 **npm scripts:**
 
