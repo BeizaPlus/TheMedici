@@ -10,11 +10,12 @@ import { briefCacheKey, resolveCaseBriefMarkdown } from './caseBrief.js';
 import { buildCaseDiscussionContext, discussionCacheKey } from './caseDiscussionContext.js';
 import { enrichmentCacheKey } from './differentialChatEnrichment.js';
 import { resolveSimulationCreativity } from './simulationCreativity.js';
+import { getActiveNameRegion } from './patientNameRegions.js';
 import { STORAGE } from './storageKeys.js';
 import { apiUrl } from './apiBase.js';
 const sessions = new Map();
 /** Bump when portrait/demographics logic changes — clears stale localStorage personas. */
-const PORTRAIT_PERSONA_VERSION = 2;
+const PORTRAIT_PERSONA_VERSION = 3;
 
 export function buildCaseChatContext(caseData, {
   patientPersona = null,
@@ -54,6 +55,7 @@ export function buildCaseChatContext(caseData, {
     patientVoice: prepared?.patient_voice || caseData?.patient_voice || null,
     hpiExcerpt: hpiExcerpt(enriched),
     patientSex: caseData?.patientSex,
+    nameRegion: caseData?.nameRegion || getActiveNameRegion(),
     chief_complaint: caseData?.chief_complaint,
     historyText: caseData?.historyText,
     clinical_hpi_narrative: enriched.clinical_hpi_narrative,
@@ -271,15 +273,39 @@ export function clearAllCaseChatSessions() {
   sessions.clear();
 }
 
-export async function sendCaseChatMessage(sessionId, message, sessionContext = null) {
+async function postCaseChatMessage(sessionId, message, sessionContext) {
   const r = await fetch(apiUrl('/api/case-chat/message'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ sessionId, message, sessionContext }),
   });
   const data = await r.json().catch(() => ({}));
-  if (!r.ok) {
+  return { ok: r.ok, status: r.status, data };
+}
+
+/** @param {{ caseData: object, chatMode?: string } | null} recover — retry once after server lost in-memory session */
+export async function sendCaseChatMessage(
+  sessionId,
+  message,
+  sessionContext = null,
+  recover = null,
+) {
+  let { ok, status, data } = await postCaseChatMessage(sessionId, message, sessionContext);
+  const expired =
+    status === 404 &&
+    String(data.error || '').toLowerCase().includes('session expired');
+  if (!ok && expired && recover?.caseData) {
+    clearCaseChatSession(recover.caseData.id);
+    const freshId = await ensureCaseChatSession(recover.caseData, {
+      chatMode: recover.chatMode || 'patient_sim',
+    });
+    ({ ok, status, data } = await postCaseChatMessage(freshId, message, sessionContext));
+    if (ok) {
+      return { reply: data.reply, sessionId: freshId };
+    }
+  }
+  if (!ok) {
     throw new Error(data.error || 'Case chat request failed');
   }
-  return data.reply;
+  return { reply: data.reply, sessionId };
 }

@@ -105,7 +105,14 @@ export function applySessionToCase(caseData, session = {}) {
   const displayName = resolvePatientName(merged);
   const namedClinical = applyPatientName(clinicalHpi, displayName);
   merged.hpi_narrative = namedClinical;
-  merged.historyText = namedClinical;
+  const practiceHistoryRaw =
+    prepared?.practice_hpi?.trim() ||
+    caseData?.historyText?.trim() ||
+    prepared?.narrative?.doctor?.standard?.hpi?.trim() ||
+    '';
+  merged.historyText = practiceHistoryRaw
+    ? applyPatientName(practiceHistoryRaw, displayName)
+    : namedClinical;
   merged.chief_complaint = applyPatientName(merged.chief_complaint || '', displayName);
   return { ...merged, patientDisplayName: displayName };
 }

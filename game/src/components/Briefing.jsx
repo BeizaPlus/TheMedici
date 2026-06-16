@@ -112,7 +112,7 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
     return () => {
       cancelled = true;
     };
-  }, [caseData]);
+  }, [caseData?.id, caseData?.patientSex]);
 
   useEffect(() => {
     const onAvatar = (e) => {
@@ -485,13 +485,12 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             key={caseData.id}
             mode="briefing"
             caseData={caseData}
-            brandName={brand.name}
             hpiText={hpiText}
             examSummary={examSummary}
             hideHeader
             textStyle={textStyle}
             defaultTab="hpi"
-            readLabel="Read aloud"
+            readLabel="Read case"
             onReadCase={handleReadCase}
             readState={readState}
             footer={

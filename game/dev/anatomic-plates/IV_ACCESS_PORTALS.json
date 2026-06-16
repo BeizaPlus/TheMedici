@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "label": "MeWorld ED IV access portals — approved scope",
+  "approvedAt": "2026-06-16",
+  "anatomyReferences": {
+    "male": "raw/male-ed-anatomic-plate-anatomy.png",
+    "female": "raw/female-ed-anatomic-plate-anatomy.png"
+  },
+  "overlayLegend": {
+    "green": "Torso — exams, abdomen/chest workflows (NOT IV)",
+    "red": "IV access portals — stacks may be placed here"
+  },
+  "torso": {
+    "color": "green",
+    "label": "Torso / abdomen / chest",
+    "gameZones": ["zone-custom-1", "zone-custom-3"],
+    "purpose": "Physical exam, abdomen orders, chest workflows — not peripheral IV"
+  },
+  "ivPortals": {
+    "precedenceNote": "Peripheral IV site precedence for Play/Teach Me: antecubital fossa first. In the current game config there is only one IV drop zone (zone-arm), tuned to antecubital placement; neck and face portals are reference scope until separate zones are added.",
+    "precedence": [
+      "antecubital-fossa",
+      "neck",
+      "facial"
+    ],
+    "portals": [
+      {
+        "id": "iv-portal-arm-left",
+        "label": "Left antecubital fossa",
+        "anatomy": "Inner elbow crease / volar cubital fossa — left arm",
+        "precedence": 1,
+        "primary": true,
+        "overlayColor": "red",
+        "currentGameZone": "zone-arm"
+      },
+      {
+        "id": "iv-portal-arm-right",
+        "label": "Right antecubital fossa",
+        "anatomy": "Inner elbow crease / volar cubital fossa — right arm",
+        "precedence": 1,
+        "primary": true,
+        "overlayColor": "red",
+        "currentGameZone": "zone-arm",
+        "note": "Not separate in current game config (zone-arm)."
+      },
+      {
+        "id": "iv-portal-neck-left",
+        "label": "Left neck / supraclavicular",
+        "anatomy": "Left lateral neck — central line / difficult access alternate",
+        "precedence": 2,
+        "primary": false,
+        "overlayColor": "red",
+        "currentGameZone": null,
+        "note": "Reference scope only until a neck-specific zone exists."
+      },
+      {
+        "id": "iv-portal-neck-right",
+        "label": "Right neck / supraclavicular",
+        "anatomy": "Right lateral neck — central line / difficult access alternate",
+        "precedence": 2,
+        "primary": false,
+        "overlayColor": "red",
+        "currentGameZone": null,
+        "note": "Reference scope only until a neck-specific zone exists."
+      },
+      {
+        "id": "iv-portal-face-left",
+        "label": "Left facial / cheek",
+        "anatomy": "Left upper cheek — rare alternate (documented on female anatomy plate)",
+        "precedence": 3,
+        "primary": false,
+        "overlayColor": "red",
+        "currentGameZone": null,
+        "femaleOnly": true,
+        "note": "Reference scope only until a face-specific zone exists."
+      },
+      {
+        "id": "iv-portal-face-right",
+        "label": "Right facial / cheek",
+        "anatomy": "Right upper cheek — rare alternate (documented on female anatomy plate)",
+        "precedence": 3,
+        "primary": false,
+        "overlayColor": "red",
+        "currentGameZone": null,
+        "femaleOnly": true,
+        "note": "Reference scope only until a face-specific zone exists."
+      }
+    ]
+  },
+  "medicalRules": {
+    "primaryIvSite": "antecubital fossa — never dorsal forearm, wrist, or hand for default peripheral IV stacks",
+    "source": "talking-images/characters/ghanaian-girl-hospital/prompts/medical-iv-accuracy.txt",
+    "platesGenerateWithoutIv": true,
+    "zonePainting": "Steve paints red ellipses in Photoshop offline — never burn overlays into Magnific gens"
+  }
+}

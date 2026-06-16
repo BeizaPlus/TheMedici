@@ -1,8 +1,10 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   buildTeachCompareRows,
   teachCompareStatusLabel,
 } from '../lib/teachMeCompare.js';
+import { fetchOrderWhy } from '../lib/orderWhy.js';
+import { buildBareEssentialsRows, groupTeachCompareRowsByTier } from '../lib/caseBareEssentials.js';
 
 function flowDotClass(row, focused) {
   const parts = ['teach-flow-dot'];
@@ -26,7 +28,15 @@ export default function TeachMeComparePanel({
   reviewResults = null,
   onFocusStep,
   compact = false,
+  caseId = null,
+  caseData = null,
 }) {
+  const [panelTab, setPanelTab] = useState('flow');
+  const [whyOpenId, setWhyOpenId] = useState(null);
+  const [whyText, setWhyText] = useState({});
+  const [whyLoadingId, setWhyLoadingId] = useState(null);
+  const [whyError, setWhyError] = useState('');
+
   const { rows, extras } = useMemo(
     () =>
       buildTeachCompareRows({
@@ -40,48 +50,208 @@ export default function TeachMeComparePanel({
     [interventions, interventionById, placementOrder, placed, nextExpectedId, reviewResults],
   );
 
+  const critical = useMemo(
+    () =>
+      buildBareEssentialsRows({
+        caseData,
+        interventions,
+        placed,
+      }),
+    [caseData, interventions, placed],
+  );
+
+  const flowTiers = useMemo(
+    () =>
+      groupTeachCompareRowsByTier({
+        rows,
+        caseData,
+        interventions,
+      }),
+    [rows, caseData, interventions],
+  );
+
+  const [tierCollapsed, setTierCollapsed] = useState(() =>
+    Object.fromEntries(
+      ['critical', 'general', 'misc'].map((id) => [
+        id,
+        id === 'misc',
+      ]),
+    ),
+  );
+
+  const toggleTier = useCallback((tierId) => {
+    setTierCollapsed((prev) => ({ ...prev, [tierId]: !prev[tierId] }));
+  }, []);
+
   const nextLabel =
     nextExpectedId && interventionById[nextExpectedId]
       ? interventionById[nextExpectedId].label
       : 'All core stacks placed';
 
+  const loadWhy = useCallback(
+    async (row) => {
+      if (!caseId || !caseData) {
+        setWhyError('Case context unavailable');
+        return;
+      }
+      const id = row.id;
+      if (whyText[id]) {
+        setWhyOpenId((open) => (open === id ? null : id));
+        return;
+      }
+      setWhyError('');
+      setWhyLoadingId(id);
+      setWhyOpenId(id);
+      try {
+        const { why } = await fetchOrderWhy({
+          caseId,
+          orderId: id,
+          orderLabel: row.label,
+          caseData,
+          playbookWhy: row.why || row.iv?.why || '',
+        });
+        setWhyText((prev) => ({ ...prev, [id]: why }));
+      } catch (e) {
+        setWhyError(String(e.message || e));
+        setWhyOpenId(null);
+      } finally {
+        setWhyLoadingId(null);
+      }
+    },
+    [caseId, caseData, whyText],
+  );
+
   const renderRow = (row, keyPrefix = '', isExtra = false) => {
     const focused = !isExtra && teachFocusId === row.id;
+    const whyOpen = whyOpenId === row.id;
+    const whyBusy = whyLoadingId === row.id;
+    const whyBody = whyText[row.id];
+
     return (
       <li
         key={`${keyPrefix}${row.id}`}
-        className={`teach-compare-row status-${row.status}${focused ? ' is-focused' : ''}`}
+        className={`teach-compare-row status-${row.status}${focused ? ' is-focused' : ''}${whyOpen ? ' is-open' : ''}`}
       >
-        <button
-          type="button"
-          className="teach-compare-row-btn"
-          onClick={() => {
-            if (!isExtra) onFocusStep?.(row.id);
-          }}
-        >
-          <span
-            className={flowDotClass(row, focused)}
-            aria-hidden={isExtra}
-            title={isExtra ? undefined : `Step ${row.expectedSeq}`}
+        <div className="teach-compare-row-main">
+          <button
+            type="button"
+            className="teach-compare-row-btn"
+            onClick={() => {
+              if (!isExtra) onFocusStep?.(row.id);
+            }}
           >
-            {isExtra ? '·' : row.expectedSeq}
-          </span>
-          <span className="teach-compare-label" title={row.label}>
-            {row.label}
-          </span>
-          <span className="teach-compare-yours">
-            {row.yourSeq != null ? `#${row.yourSeq}` : '—'}
-          </span>
-          <span className={`teach-compare-badge status-${row.status}`}>
-            {teachCompareStatusLabel(row.status)}
-          </span>
-        </button>
+            <span
+              className={flowDotClass(row, focused)}
+              aria-hidden={isExtra}
+              title={isExtra ? undefined : `Step ${row.expectedSeq}`}
+            >
+              {isExtra ? '·' : row.expectedSeq}
+            </span>
+            <span className="teach-compare-label" title={row.label}>
+              {row.label}
+            </span>
+            <span className="teach-compare-yours">
+              {row.yourSeq != null ? `#${row.yourSeq}` : '—'}
+            </span>
+            <span className={`teach-compare-badge status-${row.status}`}>
+              {teachCompareStatusLabel(row.status)}
+            </span>
+          </button>
+          {caseId && caseData && (
+            <button
+              type="button"
+              className={`teach-compare-why-btn${whyOpen ? ' is-active' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                void loadWhy(row);
+              }}
+              disabled={whyBusy}
+              title="Why is this order relevant for this patient?"
+              aria-expanded={whyOpen}
+            >
+              {whyBusy ? '…' : 'Why'}
+            </button>
+          )}
+        </div>
+        {whyOpen && (
+          <div className="teach-compare-rationale" aria-live="polite">
+            {whyBusy && !whyBody && (
+              <p className="teach-compare-rationale-text">Asking the master…</p>
+            )}
+            {whyBody && <p className="teach-compare-rationale-text">{whyBody}</p>}
+            {row.guideline && (
+              <p className="teach-compare-rationale-guideline">{row.guideline}</p>
+            )}
+          </div>
+        )}
       </li>
     );
   };
 
   return (
     <div className={`teach-compare-panel${compact ? ' teach-compare-panel--compact' : ''}`}>
+      <div className="teach-compare-tabs" role="tablist" aria-label="Report views">
+        <button
+          type="button"
+          role="tab"
+          className={`teach-compare-tab${panelTab === 'flow' ? ' is-active' : ''}`}
+          aria-selected={panelTab === 'flow'}
+          onClick={() => setPanelTab('flow')}
+        >
+          Flow
+        </button>
+        <button
+          type="button"
+          role="tab"
+          className={`teach-compare-tab${panelTab === 'critical' ? ' is-active' : ''}`}
+          aria-selected={panelTab === 'critical'}
+          onClick={() => setPanelTab('critical')}
+          disabled={!critical.rows.length}
+          title={critical.rows.length ? 'Bare-minimum must-dos' : 'No critical list for this case yet'}
+        >
+          Critical
+          {critical.total > 0 && (
+            <span className="teach-compare-tab-count">
+              {critical.doneCount}/{critical.total}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {panelTab === 'critical' && critical.rows.length > 0 ? (
+        <>
+          <p className="teach-compare-critical-title">{critical.title}</p>
+          {critical.subtitle && (
+            <p className="teach-compare-critical-sub">{critical.subtitle}</p>
+          )}
+          <ul className="teach-compare-critical-list" aria-label="Non-negotiable orders">
+            {critical.rows.map((row) => (
+              <li
+                key={row.id}
+                className={`teach-compare-critical-item${row.isDone ? ' is-done' : ' is-miss'}`}
+              >
+                <span className="teach-compare-critical-check" aria-hidden>
+                  {row.isDone ? '✓' : '○'}
+                </span>
+                <div className="teach-compare-critical-body">
+                  <strong>{row.shortLabel}</strong>
+                  {row.label !== row.shortLabel && (
+                    <span className="teach-compare-critical-stack">{row.label}</span>
+                  )}
+                  {row.why && <p className="teach-compare-critical-why">{row.why}</p>}
+                </div>
+                <span className={`teach-compare-critical-status${row.isDone ? ' done' : ''}`}>
+                  {row.isDone ? 'Placed' : 'Must do'}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="teach-compare-hint">
+            Hard must-dos for this case — included in <strong>Print</strong> / <strong>Save</strong> exports.
+          </p>
+        </>
+      ) : (
+        <>
       <p className="teach-compare-next">
         Next: <strong>{nextLabel}</strong>
       </p>
@@ -91,9 +261,39 @@ export default function TeachMeComparePanel({
         <span className="teach-compare-col">Yours</span>
         <span className="teach-compare-col teach-compare-col-badge">Status</span>
       </div>
-      <ul className="teach-compare-list" aria-label="Standard flow compared to your order timeline">
-        {rows.map((row) => renderRow(row))}
-      </ul>
+      {whyError && <p className="teach-compare-why-error">{whyError}</p>}
+      {flowTiers.map((tier) => {
+        const collapsed = tierCollapsed[tier.id] ?? tier.defaultCollapsed;
+        return (
+          <section key={tier.id} className={`teach-compare-tier tier-${tier.id}`}>
+            <button
+              type="button"
+              className="teach-compare-tier-head"
+              onClick={() => toggleTier(tier.id)}
+              aria-expanded={!collapsed}
+            >
+              <span className="teach-compare-tier-chevron" aria-hidden>
+                {collapsed ? '▸' : '▾'}
+              </span>
+              <span className="teach-compare-tier-label">{tier.label}</span>
+              <span className="teach-compare-tier-count">
+                {tier.placedCount}/{tier.total}
+              </span>
+            </button>
+            {!collapsed && (
+              <>
+                <p className="teach-compare-tier-hint">{tier.hint}</p>
+                <ul
+                  className="teach-compare-list teach-compare-list-tier"
+                  aria-label={`${tier.label} orders`}
+                >
+                  {tier.rows.map((row) => renderRow(row))}
+                </ul>
+              </>
+            )}
+          </section>
+        );
+      })}
       {extras.length > 0 && (
         <>
           <p className="teach-compare-extra-title">Outside standard set</p>
@@ -102,7 +302,11 @@ export default function TeachMeComparePanel({
           </ul>
         </>
       )}
-      <p className="teach-compare-hint">Tap a row to jump to that stack — green dots are placed.</p>
+      <p className="teach-compare-hint">
+        Collapse <strong>Misc</strong> to focus on emergent work — <strong>Critical</strong> tab is your bare-minimum checklist for export.
+      </p>
+        </>
+      )}
     </div>
   );
 }

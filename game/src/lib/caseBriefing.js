@@ -42,7 +42,7 @@ function getClinicalHpiTemplate(caseData) {
   );
 }
 
-/** HPI narrative string for tabs — clinical voice with {{patient_name}} substituted. */
+/** Answer-key HPI (diagnosis, workup, treatment) — teach / notes only, not briefing HPI tab. */
 export function getCaseHpiNarrative(caseData, presentationHpi = '') {
   void presentationHpi;
   const raw = resolveHpiText(getClinicalHpiTemplate(caseData));
@@ -51,12 +51,15 @@ export function getCaseHpiNarrative(caseData, presentationHpi = '') {
   return applyPatientName(raw, displayName);
 }
 
-/** Full HPI for briefing / sidebar. */
+/** Practice presentation for briefing / play HPI tab — never the answer-key narrative. */
 export function getBriefingHpi(caseData, caseFlow, presentationHpi = '') {
   void caseFlow;
-  const narrative = getCaseHpiNarrative(caseData, presentationHpi);
-  const hpi = formatClinicalText(narrative);
-  if (hpi) return hpi;
+  const presentation = formatClinicalText(
+    presentationHpi || caseData?.historyText?.trim() || '',
+  );
+  if (presentation) return presentation;
+  const chief = formatClinicalText(caseData?.chief_complaint?.trim() || '');
+  if (chief) return chief;
   return 'No HPI available for this case.';
 }
 

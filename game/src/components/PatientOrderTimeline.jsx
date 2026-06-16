@@ -27,6 +27,7 @@ export default function PatientOrderTimeline({
   sessionStartedAt = null,
   footProps = null,
   toolbar = null,
+  footOnly = false,
 }) {
   const trackRef = useRef(null);
   const [collapsed, setCollapsed] = useState(readCollapsed);
@@ -53,6 +54,15 @@ export default function PatientOrderTimeline({
       return next;
     });
   };
+
+  if (footOnly) {
+    if (!footProps) return null;
+    return (
+      <div className="patient-order-timeline-foot-only" aria-label="Session controls">
+        <PlayNotesSessionFoot {...footProps} toolbar={toolbar} />
+      </div>
+    );
+  }
 
   return (
     <aside

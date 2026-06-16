@@ -1157,6 +1157,7 @@ export default function DifferentialPractice({ onBack }) {
   );
 
   return (
+    <>
     <div
       className={`diff-practice${revealed ? ' diff-practice--revealed' : ''}${stacker.enabled ? ' diff-practice--stacker' : ''}`}
       ref={voiceFocusRef}
@@ -1910,5 +1911,6 @@ export default function DifferentialPractice({ onBack }) {
         if (target >= 0) goToIndex(target);
       }}
     />
+    </>
   );
 }

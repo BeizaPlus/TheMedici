@@ -50,7 +50,7 @@ import CaseReadyTag from './CaseReadyTag.jsx';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 
 import CaseReviewFlagTag from './CaseReviewFlagTag.jsx';
-import { getBuiltInPatientSrc } from '../lib/patientImage.js';
+import CaseSelectionScenePreview from './CaseSelectionScenePreview.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import CaseLandscapeRail from './CaseLandscapeRail.jsx';
 
@@ -915,16 +915,7 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
           {selected ? (
             <div className="case-detail-landscape">
               <div className="case-detail-landscape-main">
-              <div className="case-detail-scene" aria-hidden={false}>
-                <img
-                  src={getBuiltInPatientSrc(selectedGameCase)}
-                  alt=""
-                  className="case-detail-scene-img"
-                />
-                <div className="case-detail-scene-cap">
-                  <span>ER scene preview</span>
-                </div>
-              </div>
+              <CaseSelectionScenePreview gameCase={selectedGameCase} />
 
               <div className="case-preview-card case-preview-card--landscape">
                 {listFilter === 'stacks' && (

@@ -4,6 +4,7 @@ import {
   IconCopy,
   IconFileMedical,
   IconPlayerStop,
+  IconStethoscope,
   IconVolume2,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import ChatMessageContent from './ChatMessageContent.jsx';
@@ -265,7 +266,39 @@ export default function CaseSessionThread({
         )}
         {expanded && caseRecording && (
           <div className="case-chat-head-actions">
+            {onPatientModeChange && (
+              <button
+                type="button"
+                className={`case-chat-patient-btn${patientMode ? ' is-active' : ''}`}
+                title={
+                  patientMode
+                    ? 'Patient mode ON — simulated patient replies'
+                    : defaultChatTarget === 'tutor'
+                      ? 'Tutor chat — click for patient interview mode'
+                      : 'Notes mode — click for patient mode or type /pt'
+                }
+                aria-label={patientMode ? 'Patient mode on' : 'Turn on patient mode'}
+                aria-pressed={patientMode}
+                onClick={() => onPatientModeChange(!patientMode)}
+              >
+                <IconStethoscope className="toolbar-icon" />
+              </button>
+            )}
             <CaseRecordButton {...caseRecording} compact variant="toolbar" iconOnly chatMode={available === true} />
+          </div>
+        )}
+        {expanded && !caseRecording && onPatientModeChange && fillTab && (
+          <div className="case-chat-head-actions">
+            <button
+              type="button"
+              className={`case-chat-patient-btn${patientMode ? ' is-active' : ''}`}
+              title={patientMode ? 'Patient mode ON' : 'Turn on patient mode'}
+              aria-label={patientMode ? 'Patient mode on' : 'Turn on patient mode'}
+              aria-pressed={patientMode}
+              onClick={() => onPatientModeChange(!patientMode)}
+            >
+              <IconStethoscope className="toolbar-icon" />
+            </button>
           </div>
         )}
       </header>

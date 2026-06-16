@@ -55,6 +55,7 @@ export default function PlaySceneToolbar({
   onToggleTheme,
   onToggleDropMode,
   onToggleSettings,
+  stacksDisabled = false,
 }) {
   return (
     <nav className="dock-toolbar-nav" aria-label="Scene controls">
@@ -80,6 +81,7 @@ export default function PlaySceneToolbar({
           onClick={onOpenStacks}
           title="Treatment stacks"
           aria-label="Treatment stacks"
+          disabled={stacksDisabled}
         >
           <IconClipboardList />
         </ToolbarBtn>

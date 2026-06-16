@@ -99,6 +99,7 @@ export function toGameCase(ccsCase, catalog) {
   const vitalsText =
     prepared?.vitalsText || pres?.vitals?.replace(/\s+/g, ' ').trim() || '';
   const historyText =
+    prepared?.practice_hpi?.trim() ||
     prepared?.narrative?.doctor?.standard?.hpi ||
     pres?.history?.replace(/\s+/g, ' ').trim() ||
     '';
@@ -114,7 +115,20 @@ export function toGameCase(ccsCase, catalog) {
   const chiefComplaint = introText || `${ccsCase.title} — CCS Case ${ccsCase.caseNumber}`;
   const sexHint = prepared?.patientSex && prepared.patientSex !== 'unknown'
     ? prepared.patientSex
-    : inferPatientSex({ chief_complaint: introText, historyText, title: ccsCase.title });
+    : inferPatientSex({
+        chief_complaint: introText,
+        historyText,
+        hpi_narrative: hpiNarrative,
+        title: ccsCase.title,
+      });
+
+  const sceneCasePayload = {
+    chief_complaint: introText,
+    historyText,
+    hpi_narrative: hpiNarrative || undefined,
+    title: ccsCase.title,
+    patientSex: sexHint,
+  };
 
   return {
     id: ccsCase.id,
@@ -135,12 +149,7 @@ export function toGameCase(ccsCase, catalog) {
     interventions,
     zones: gameConfig.zones,
     zoneColors: gameConfig.zoneColors,
-    patientScene: getPatientSceneForCase({
-      chief_complaint: introText,
-      historyText,
-      title: ccsCase.title,
-      patientSex: sexHint,
-    }),
+    patientScene: getPatientSceneForCase(sceneCasePayload),
     patientSex: sexHint,
     preparedMeta: prepared
       ? {

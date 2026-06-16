@@ -1,0 +1,96 @@
+{
+  "version": 2,
+  "id": "meworld-ed-central-bedside",
+  "label": "MeWorld ED central bedside plate",
+  "aspectRatio": "16:9",
+  "aspectNumeric": 1.7777777778,
+  "exportPixels": {
+    "width": 1536,
+    "height": 864
+  },
+  "cropLock": {
+    "male": {
+      "path": "dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png",
+      "pixels": { "width": 2752, "height": 1536 },
+      "role": "Steve-approved male crop lock — full supine patient crown through toes; slightly zoomed out vs legacy mid-thigh framing",
+      "approvedAt": "2026-06-16"
+    }
+  },
+  "portraitFrameVersion": 2,
+  "baseplates": {
+    "male": {
+      "path": "public/assets/patient/patient-scene.png",
+      "sourcePixels": { "width": 1536, "height": 864 },
+      "role": "Canonical male ED baseplate — promote from cropLock when zones retuned",
+      "cropLockRef": "dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png"
+    },
+    "female": {
+      "path": "public/assets/patient/patient-scene-female.png",
+      "sourcePixels": { "width": 2048, "height": 1152 },
+      "role": "Canonical female ED baseplate — same camera lock; crop to exportPixels on promote",
+      "ladyIdentity": "src/data/patientLadyRefs.json"
+    }
+  },
+  "legacyReferences": [
+    {
+      "path": "dev/screenshots/reference/patient-bed-topdown.png",
+      "note": "Early mood reference — superseded by patient-scene.png for zone alignment"
+    }
+  ],
+  "camera": {
+    "mount": "high overhead bedside",
+    "angleDegFromVertical": 38,
+    "bearing": "from foot of bed toward headboard",
+    "lensFeel": "35–50mm equivalent; mild perspective, not wide fisheye",
+    "height": "above mattress rail height — training plate, not OR dove",
+    "rollDeg": 0,
+    "forbidden": [
+      "eye-level portrait",
+      "tight face close-up",
+      "profile-only bust",
+      "dutch angle",
+      "cctv extreme zoom",
+      "3/4 hero poster framing"
+    ]
+  },
+  "patientScope": {
+    "pose": "supine on ED stretcher, head on pillow, legs extended toward foot of bed",
+    "visibleAnatomy": "crown through toes — full supine figure on stretcher; both forearms and bare feet visible",
+    "zoom": "slightly wider than legacy mid-thigh crop — pull back enough to show toes with small margin below feet",
+    "horizontalCenterNorm": 0.5,
+    "headTopNorm": 0.1,
+    "footBottomNorm": 0.88,
+    "gown": "light blue short-sleeve hospital gown",
+    "forearms": "both antecubital fossae visible when possible",
+    "feet": "both feet and toes visible at bottom of frame — required for foot zones",
+    "identityChangeOnly": ["demographics", "distress", "gown details", "cables/mask", "hair"]
+  },
+  "sceneArrangement": {
+    "bed": "centered stretcher, white/grey linens, both rails visible",
+    "bedRailControls": "left rail — integrated button panel",
+    "monitor": { "side": "right", "cx": 0.927, "cy": 0.099, "label": "vitals monitor upper-right" },
+    "ivFluids": { "side": "left", "cx": 0.092, "cy": 0.1, "label": "IV pole / fluids upper-left" },
+    "bedsideTable": { "side": "left", "note": "wood top, partial in frame mid-left" },
+    "background": "dim ED room, wall outlets, soft bokeh equipment",
+    "lighting": "cool overhead clinical key, soft fill, balanced exposure on gown and skin"
+  },
+  "zones": {
+    "zone-monitor": { "cx": 0.9267, "cy": 0.099, "w": 0.109, "h": 0.1288, "label": "Monitor & vitals" },
+    "zone-iv-bag": { "cx": 0.0918, "cy": 0.0998, "w": 0.121, "h": 0.1361, "label": "IV fluids" },
+    "zone-blood": { "cx": 0.6324, "cy": 0.4246, "w": 0.0897, "h": 0.1097, "label": "Blood draw" },
+    "zone-arm": { "cx": 0.3695, "cy": 0.4072, "w": 0.0834, "h": 0.1035, "label": "IV line / meds" },
+    "zone-icu": { "cx": 0.8779, "cy": 0.9116, "w": 0.1994, "h": 0.0997, "label": "ICU · ward · obs · transfer" },
+    "zone-custom-1": { "cx": 0.4936, "cy": 0.4215, "w": 0.1693, "h": 0.1693, "label": "Abdomen" },
+    "zone-custom-2": { "cx": 0.5017, "cy": 0.1598, "w": 0.05, "h": 0.04, "label": "Nose" },
+    "zone-custom-3": { "cx": 0.5226, "cy": 0.2815, "w": 0.3835, "h": 0.0985, "label": "Chest" },
+    "zone-custom-4": { "cx": 0.5007, "cy": 0.6694, "w": 0.1213, "h": 0.1143, "label": "Left Knee" },
+    "zone-custom-5": { "cx": 0.3307, "cy": 0.6294, "w": 0.1123, "h": 0.108, "label": "Right Knee" },
+    "zone-custom-6": { "cx": 0.212, "cy": 0.9011, "w": 0.2333, "h": 0.0992, "label": "Right Foot" },
+    "zone-custom-7": { "cx": 0.4919, "cy": 0.9387, "w": 0.2402, "h": 0.1016, "label": "Left Foot" }
+  },
+  "prompts": {
+    "short": "Match approved ED crop lock EXACTLY — 16:9 high overhead bedside central view, same bed rails, monitor upper-right, IV upper-left, patient supine crown through toes (slightly zoomed out). Change patient only; never camera or room layout.",
+    "openai": "CAMERA / FRAMING LOCK (mandatory): Match the reference crop lock EXACTLY — same high overhead bedside angle (~38° from vertical), same zoom (slightly wide — full body), same bed rails and monitor positions in frame. Patient supine on stretcher from crown through toes, centered; bare feet visible at bottom; do NOT reframe as tight face close-up, mid-thigh crop, or eye-level portrait. Monitor cluster stays upper-right; IV fluids upper-left; both bed rails visible. Only change patient demographics, gown, distress pose, and cables — never the camera or room layout.",
+    "magnific": "Cinematic hospital film-still CGI. CAMERA LOCK: match reference crop lock exactly — 16:9 landscape, high overhead bedside view from foot of bed toward head (~38° from vertical), patient supine centered crown through toes (slightly zoomed out so feet and toes are visible), both bed rails visible, vitals monitor upper-right, IV pole upper-left, cool clinical overhead lighting. Do NOT change camera angle, zoom, bed position, or room layout. Only change patient identity, gown, distress, and medical attachments."
+  }
+}

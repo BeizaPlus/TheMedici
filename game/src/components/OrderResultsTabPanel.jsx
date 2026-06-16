@@ -1,0 +1,63 @@
+import OrderResultSceneCard from './OrderResultSceneCard.jsx';
+import { neutralStackOrderName } from '../lib/stackDecoys.js';
+
+export default function OrderResultsTabPanel({
+  resultRows = [],
+  activeIvId = null,
+  onSelectIvId,
+  caseData,
+  caseFlow,
+  portraitSrc = '',
+  onPrintStatus,
+  teachMeMode = false,
+}) {
+  const hasRows = resultRows.length > 0;
+  const activeRow =
+    resultRows.find((row) => row.iv.id === activeIvId) || (hasRows ? resultRows[0] : null);
+
+  return (
+    <div className="order-results-tab-panel">
+      <p className="order-results-tab-kicker">Lab and intervention results</p>
+
+      {!hasRows && (
+        <p className="order-results-tab-empty">
+          Place an order on the patient, then tap its pin to view the result here.
+        </p>
+      )}
+
+      {hasRows && (
+        <>
+          <div className="order-results-tab-list" role="tablist" aria-label="Placed order results">
+            {resultRows.map((row) => {
+              const isActive = activeRow?.iv.id === row.iv.id;
+              return (
+                <button
+                  key={row.iv.id}
+                  type="button"
+                  className={`order-results-tab-chip ${isActive ? 'active' : ''}`}
+                  onClick={() => onSelectIvId?.(row.iv.id)}
+                  aria-selected={isActive}
+                  title={neutralStackOrderName(row.iv.label)}
+                >
+                  {neutralStackOrderName(row.iv.label)}
+                </button>
+              );
+            })}
+          </div>
+          {activeRow && (
+            <OrderResultSceneCard
+              intervention={activeRow.iv}
+              caseData={caseData}
+              caseFlow={caseFlow}
+              portraitSrc={portraitSrc}
+              onPrintStatus={onPrintStatus}
+              className="order-result-tab-card"
+              hideClose
+              teachMeMode={teachMeMode}
+            />
+          )}
+        </>
+      )}
+    </div>
+  );
+}

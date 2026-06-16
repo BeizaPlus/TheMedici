@@ -1,0 +1,43 @@
+---
+description: ED scene camera lock — 16:9 central overhead bedside baseplate; all patient/scene gens must match
+globs: game/dev/scene-camera-lock/**,game/public/assets/patient/**,game/server/casePortrait.js,game/server/portraitFrame.js,game/dev/anatomic-plates/**,game/src/lib/sceneCameraLock.js
+alwaysApply: false
+---
+
+# Scene camera lock (MeWorld Play)
+
+## Canonical masters
+
+| Sex | Baseplate | Export |
+|-----|-----------|--------|
+| Male | `public/assets/patient/patient-scene.png` | 1536×864 |
+| Female | `public/assets/patient/patient-scene-female.png` | crop → 1536×864 |
+
+**Male crop lock (Steve-approved):** `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` (2752×1536) — **base framing reference** for all new male gens and crops.
+
+Spec: **`dev/scene-camera-lock/SCENE_LOCK.json`** · README in same folder.
+
+## Locked (never change between gens)
+
+- **Camera:** high overhead bedside ~38° from vertical, foot→head bearing, 16:9  
+- **Scope:** patient supine, **crown through toes** — full body, slightly zoomed out vs legacy mid-thigh crop  
+- **Feet:** bare feet and toes visible at bottom of frame (required for foot zones)  
+- **Scene:** both rails, monitor **upper-right**, IV fluids **upper-left**  
+- **Zones:** normalized anchors in `SCENE_LOCK.json` (= `gameConfig.json`) — retune after promoting wider crop
+
+## May change
+
+Patient demographics, distress, gown, mask/IV/cables, hair. Lady **face** from `patientLadyRefs.json` (9:16 maps = identity only).
+
+## Every generation
+
+1. Read `SCENE_LOCK.json` or `getCameraLockPrompt('magnific'|'openai')` from `src/lib/sceneCameraLock.js`  
+2. **Male:** attach **`male-ed-anatomic-plate-a.png`** as **`image` reference** (crop lock)  
+3. **Female:** attach `patient-scene-female.png` as layout lock + same crown-through-toes zoom  
+4. Paste prompt block from `dev/scene-camera-lock/prompts/`  
+5. Post: center crop to **1536×864** — preserve full patient including toes (`fitToBaseplate`)  
+6. Run `node scripts/validate-scene-lock.mjs` before promote
+
+## Forbidden
+
+Eye-level portrait, tight face crop, **mid-thigh-only crop**, dutch angle, new room layout, non–16:9 export without updating zones.

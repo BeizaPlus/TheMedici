@@ -58,6 +58,8 @@ import {
   readGridItems,
   writeGridItems,
 } from '../lib/gridPlacement.js';
+import { usePrivateVideoSrc } from '../hooks/usePrivateVideoSrc.js';
+import { VIDEO_NO_DOWNLOAD_ATTRS } from '../lib/privateVideoSrc.js';
 
 const NAV = [
   { id: 'play', label: 'Play', Icon: FiZap, action: 'play' },
@@ -85,6 +87,7 @@ export default function WelcomeScreen({
   const brand = getBranding();
   const plateSrc = brand.welcomePlate || '/welcome-plate.png';
   const plateVideoSrc = brand.welcomePlateVideo || '';
+  const resolvedPlateVideoSrc = usePrivateVideoSrc(plateVideoSrc);
   const plateVideoLoop =
     brand.welcomePlateVideoHoldLastFrame === false ? brand.welcomePlateVideoLoop !== false : false;
   const holdLastFrame = brand.welcomePlateVideoHoldLastFrame !== false;
@@ -97,7 +100,7 @@ export default function WelcomeScreen({
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [videoAtEnd, setVideoAtEnd] = useState(false);
   const [lastFrameSrc, setLastFrameSrc] = useState('');
-  const hasPlateVideo = Boolean(plateVideoSrc) && !videoFailed;
+  const hasPlateVideo = Boolean(plateVideoSrc && resolvedPlateVideoSrc) && !videoFailed;
   const plateStillSrc = lastFrameSrc || plateSrc;
 
   useEffect(() => {
@@ -511,7 +514,7 @@ export default function WelcomeScreen({
         <video
           ref={welcomeVideoRef}
           className={`welcome-plate-img welcome-plate-video${videoPlaying ? ' welcome-plate-video--visible' : ''}`}
-          src={plateVideoSrc}
+          src={resolvedPlateVideoSrc}
           poster={plateSrc}
           muted
           defaultMuted
@@ -520,6 +523,7 @@ export default function WelcomeScreen({
           preload={idleVideoTriggered || videoAtEnd ? 'auto' : 'metadata'}
           draggable={false}
           aria-hidden
+          {...VIDEO_NO_DOWNLOAD_ATTRS}
           onLoadedMetadata={silenceWelcomeVideo}
           onPlaying={() => {
             silenceWelcomeVideo();

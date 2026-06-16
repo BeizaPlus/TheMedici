@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import { applyTheme, readTheme } from './lib/theme.js';
 import { migrateLegacyStorage } from './lib/storageKeys.js';
+import { migrateAllLegacyCaseNotes } from './lib/caseNotes.js';
 import { ensurePlayUiFavoriteSeeded } from './lib/playUiFavorite.js';
 import {
   readBriefingUiLayout,
@@ -15,8 +16,10 @@ import './index.css';
 import './styles/differential-practice.css';
 import './ui-overrides.css';
 import './styles/scene-toolbar.css';
+import './styles/teach-compare-landscape.css';
 
 migrateLegacyStorage();
+void migrateAllLegacyCaseNotes();
 try {
   ensurePlayUiFavoriteSeeded();
   scrubInvalidSceneStorage();

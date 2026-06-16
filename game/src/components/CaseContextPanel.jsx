@@ -5,6 +5,7 @@ import {
   IconMessage,
   IconClipboardList,
   IconStethoscope,
+  IconFileMedical,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { formatExamForDisplay } from '../lib/caseBriefing.js';
@@ -13,6 +14,7 @@ const CASE_TAB_DEFS = [
   { id: 'hpi', label: 'HPI', Icon: IconClipboardPulse },
   { id: 'exam', label: 'Physical exam', Icon: IconStethoscope },
   { id: 'treatment', label: 'Orders', Icon: IconClipboardList },
+  { id: 'results', label: 'Results', Icon: IconFileMedical },
   { id: 'chat', label: 'Thread', Icon: IconMessage },
 ];
 
@@ -39,8 +41,10 @@ export default function CaseContextPanel({
   /** briefing = HPI + physical exam only (no treatment until Begin case) */
   mode = 'play',
   showTreatmentTab = false,
+  showResultsTab = false,
   showChatTab = false,
   treatmentPanel = null,
+  resultsPanel = null,
   treatmentSummaryText = '',
   chatPanel = null,
   footer = null,
@@ -53,8 +57,10 @@ export default function CaseContextPanel({
   const setTab = isControlled ? onTabChange : setInfoTab;
   const isBriefing = mode === 'briefing';
   const treatmentEnabled = !isBriefing && showTreatmentTab;
+  const resultsEnabled = !isBriefing && showResultsTab;
   const chatEnabled = !isBriefing && showChatTab;
   const isTreatment = tab === 'treatment';
+  const isResults = tab === 'results';
   const isChat = tab === 'chat';
   const stacksWide = isTreatment && Boolean(treatmentPanel);
 
@@ -62,13 +68,10 @@ export default function CaseContextPanel({
     if (!isControlled) setInfoTab(defaultTab);
   }, [defaultTab, caseData?.id, isControlled]);
 
-  const hpiNarrative = isBriefing
-    ? (typeof hpiText === 'string' && hpiText.trim()) ||
-      (typeof caseData?.hpi_narrative === 'string' && caseData.hpi_narrative.trim()) ||
-      ''
-    : (typeof caseData?.hpi_narrative === 'string' && caseData.hpi_narrative.trim()) ||
-      (typeof hpiText === 'string' && hpiText.trim()) ||
-      '';
+  const hpiNarrative =
+    (typeof hpiText === 'string' && hpiText.trim()) ||
+    (typeof caseData?.historyText === 'string' && caseData.historyText.trim()) ||
+    '';
   const bodyText =
     tab === 'hpi'
       ? hpiNarrative || 'HPI not yet available for this case.'
@@ -97,7 +100,24 @@ export default function CaseContextPanel({
               Case {caseData.ccsNumber || caseData.id}
             </p>
             {headerControls}
-            <span className="pack-tag">{brandName}</span>
+            {onReadCase &&
+            !isChat &&
+            !isResults &&
+            (tab !== 'treatment' || !treatmentPanel) ? (
+              <button
+                type="button"
+                className={`pack-tag pack-tag--read ${readPlaying ? 'is-active' : ''}`}
+                onClick={() => onReadCase(readSection, bodyText)}
+                disabled={readBusy}
+                title={readBusy ? 'Generating audio' : readPlaying ? 'Stop reading' : readLabel}
+                aria-label={readBusy ? 'Generating audio' : readPlaying ? 'Stop reading' : readLabel}
+              >
+                <FiVolume2 aria-hidden />
+                {readBusy ? 'Generating…' : readPlaying ? 'Stop' : readLabel}
+              </button>
+            ) : brandName ? (
+              <span className="pack-tag">{brandName}</span>
+            ) : null}
           </div>
           <h2 className="sidebar-title" title={toTitleCase(caseData.title)}>
             {toTitleCase(caseData.title)}
@@ -105,9 +125,11 @@ export default function CaseContextPanel({
           {locationContext && <p className="case-location-context">{locationContext}</p>}
         </div>
       )}
+      <div className="case-info-tabs-row">
       <div className="case-info-tabs" role="tablist" aria-label="Case context tabs">
         {CASE_TAB_DEFS.filter((def) => {
           if (def.id === 'treatment') return treatmentEnabled;
+          if (def.id === 'results') return resultsEnabled;
           if (def.id === 'chat') return chatEnabled;
           return true;
         }).map(({ id, label, Icon }) => (
@@ -124,19 +146,24 @@ export default function CaseContextPanel({
           </button>
         ))}
       </div>
-      {!isChat && onReadCase && (tab !== 'treatment' || !treatmentPanel) && (
-        <div className="case-read-row">
+      {hideHeader &&
+        onReadCase &&
+        !isChat &&
+        !isResults &&
+        (tab !== 'treatment' || !treatmentPanel) && (
           <button
             type="button"
-            className={`btn-ghost case-read-btn ${readPlaying ? 'active' : ''}`}
+            className={`pack-tag pack-tag--read ${readPlaying ? 'is-active' : ''}`}
             onClick={() => onReadCase(readSection, bodyText)}
             disabled={readBusy}
+            title={readBusy ? 'Generating audio' : readPlaying ? 'Stop reading' : readLabel}
+            aria-label={readBusy ? 'Generating audio' : readPlaying ? 'Stop reading' : readLabel}
           >
             <FiVolume2 aria-hidden />
-            {readBusy ? 'Generating…' : readPlaying ? 'Stop reading' : readLabel}
+            {readBusy ? 'Generating…' : readPlaying ? 'Stop' : readLabel}
           </button>
-        </div>
-      )}
+        )}
+      </div>
       </div>
       <div className="case-context-body-wrap">
       {tab === 'hpi' && !isTreatment && !isChat && (
@@ -175,6 +202,14 @@ export default function CaseContextPanel({
       )}
       {isTreatment && treatmentPanel && (
         <div className="case-treatment-stacks sidebar-stacks">{treatmentPanel}</div>
+      )}
+      {resultsEnabled && resultsPanel && (
+        <div
+          className={`case-results-tab-wrap${isResults ? '' : ' case-results-tab-wrap--hidden'}`}
+          aria-hidden={!isResults}
+        >
+          {resultsPanel}
+        </div>
       )}
       {showStats && !stacksWide && !isChat && (
         <div className="pack-stats">

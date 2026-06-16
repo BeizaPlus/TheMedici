@@ -4,7 +4,8 @@ import {
   readStoredCaseAvatarSource,
 } from './caseAvatar.js';
 import { resolvePortraitBriefForApi } from './casePortraitBrief.js';
-import { getBuiltInPatientSrc, isValidSceneSrc } from './patientImage.js';
+import { getBuiltInPatientSrc, isValidSceneSrc, portraitCacheBust } from './patientImage.js';
+import { inferPatientSex } from './patientSex.js';
 import { STORAGE } from './storageKeys.js';
 import { apiUrl } from './apiBase.js';
 
@@ -112,6 +113,9 @@ export async function fetchCasePortraitStatus(caseId) {
         persona: data.persona || null,
         cachedAt: data.cachedAt || null,
         sourceVideo: data.sourceVideo || null,
+        patientSex: data.patientSex || null,
+        ladyRefSlug: data.ladyRefSlug || null,
+        portraitFrameVersion: data.portraitFrameVersion || 1,
       };
     }
     return { exists: false, url: null };
@@ -125,13 +129,39 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
   const caseId = caseData?.id;
   if (!caseId) return null;
 
+  const expectedSex = inferPatientSex(caseData);
+  const MIN_PORTRAIT_FRAME_VERSION = 2;
+
+  const storePortraitUrl = (status) => {
+    if (!status?.url) return null;
+    const busted = portraitCacheBust(
+      status.url,
+      status.cachedAt || status.ladyRefSlug || expectedSex,
+    );
+    writeCaseRegenImage(caseId, busted);
+    return busted;
+  };
+
   if (!refresh) {
-    const local = readCaseRegenImage(caseId);
-    if (isValidSceneSrc(local)) return local;
     const status = await fetchCasePortraitStatus(caseId);
     if (status.exists && status.url) {
-      writeCaseRegenImage(caseId, status.url);
-      return status.url;
+      if (status.patientSex && status.patientSex !== expectedSex) {
+        clearCaseRegenImage(caseId);
+      } else if (
+        status.portraitFrameVersion != null
+        && status.portraitFrameVersion < MIN_PORTRAIT_FRAME_VERSION
+      ) {
+        clearCaseRegenImage(caseId);
+      } else {
+        return storePortraitUrl(status);
+      }
+    }
+    const local = readCaseRegenImage(caseId);
+    if (isValidSceneSrc(local) && local.includes('/case-portraits/')) {
+      return local;
+    }
+    if (isValidSceneSrc(local)) {
+      clearCaseRegenImage(caseId);
     }
   }
 
@@ -183,10 +213,11 @@ export async function regeneratePatientFromCase(caseData, { refresh = false } = 
   const resolvedUrl = data.dataUrl || data.url;
   if (!resolvedUrl) throw new Error('No regenerated patient image returned');
 
-  writeCaseRegenImage(caseData.id, resolvedUrl);
+  const busted = portraitCacheBust(resolvedUrl, data.cachedAt || data.patientSex || caseData.id);
+  writeCaseRegenImage(caseData.id, busted);
   if (data.persona) writeCasePortraitPersona(caseData.id, data.persona);
   return {
-    dataUrl: resolvedUrl,
+    dataUrl: busted,
     cached: Boolean(data.cached),
     analysis: data.analysis || null,
     persona: data.persona || null,

@@ -1,5 +1,16 @@
 import fsp from 'fs/promises';
 import path from 'path';
+import { resolvePortraitSex } from '../src/lib/portraitSex.js';
+import { resolvePatientLadyRef } from '../src/lib/resolvePatientLadyRef.js';
+import {
+  BASEPLATE_HEIGHT,
+  BASEPLATE_WIDTH,
+  PORTRAIT_FRAME_VERSION,
+  bufferToBase64,
+  fitToBaseplate,
+} from './portraitFrame.js';
+import { getLandscapeFramePrompt } from '../src/lib/sceneCameraLock.js';
+export { resolvePortraitSex };
 
 export function normalizeCaseId(caseId) {
   const s = String(caseId || '').trim();
@@ -201,6 +212,11 @@ Clinical, dignified, no names unless visible on image.`,
   }
 }
 
+export const PORTRAIT_ASPECT = '16:9';
+export const PORTRAIT_OPENAI_SIZE = '1536x1024';
+
+const LANDSCAPE_FRAME = getLandscapeFramePrompt();
+
 /** House-style cold-open portrait prompt from case presentation context. */
 export function buildPortraitPrompt(caseContext = {}, { portraitBrief = '' } = {}) {
   const facts = caseContext.patientFacts || {};
@@ -209,7 +225,15 @@ export function buildPortraitPrompt(caseContext = {}, { portraitBrief = '' } = {
     facts.ageLabel ||
     demo.ageLabel ||
     (facts.age != null ? `${facts.age} ${facts.ageUnit || 'years'}` : demo.isPediatric ? '7 years' : 'adult');
-  const sex = facts.sex || caseContext.patientSex || 'patient';
+  const sex = resolvePortraitSex(caseContext);
+  const sexLabel =
+    sex === 'female'
+      ? demo.isPediatric || facts.isPediatric
+        ? 'girl'
+        : 'woman'
+      : demo.isPediatric || facts.isPediatric
+        ? 'boy'
+        : 'man';
   const name = caseContext.patientName || facts.name || 'the patient';
   const cc =
     facts.chiefComplaint ||
@@ -224,10 +248,16 @@ export function buildPortraitPrompt(caseContext = {}, { portraitBrief = '' } = {
   const contextLine = excerpt ? `History cue: ${excerpt}.` : '';
 
   const custom = String(portraitBrief || caseContext.portraitBrief || '').trim();
-  const base = `Photorealistic emergency medicine training scene. ${age} old ${sex} named ${name} in an ED hospital bed${category}.
+  const ladyRef = resolvePatientLadyRef(caseContext, { sex });
+  const ladyBlock = ladyRef?.identityPrompt
+    ? `\nFEMALE IDENTITY LOCK (LongMan Atta character ref: ${ladyRef.label}): ${ladyRef.identityPrompt}`
+    : '';
+
+  const base = `Photorealistic emergency medicine training scene. ${LANDSCAPE_FRAME}
+${age} old ${sexLabel} (${sex}) named ${name} in an ED hospital bed${category}.
 Chief complaint: ${cc}. ${contextLine}
-Show ${presentationCue}. Single patient in hospital gown on stretcher, monitor cables and pulse ox visible, dignified clinical lighting.
-Keep the same camera angle, bed alignment, and single-person framing as the reference template.
+Show ${presentationCue}. Single ${sexLabel} patient in hospital gown lying supine on stretcher.
+Monitor cables and pulse ox visible, dignified clinical lighting. Patient must clearly present as ${sexLabel}; match reference bed composition exactly.${ladyBlock}
 No text, watermark, logos, or extra people. No gore or sensational injury.`;
 
   if (!custom) return base;
@@ -330,6 +360,19 @@ export async function writePortraitCache(portraitDir, caseId, outB64, meta = {})
   return { fileName, pngPath, meta: payload };
 }
 
+export function buildPortraitMeta(caseContext = {}) {
+  const sex = resolvePortraitSex(caseContext);
+  const ladyRef = resolvePatientLadyRef(caseContext, { sex });
+  return {
+    patientSex: sex,
+    portraitAspect: PORTRAIT_ASPECT,
+    portraitFrameVersion: PORTRAIT_FRAME_VERSION,
+    portraitWidth: BASEPLATE_WIDTH,
+    portraitHeight: BASEPLATE_HEIGHT,
+    ladyRefSlug: ladyRef?.slug || null,
+    ladyRefUrl: ladyRef?.publicUrl || null,
+  };
+}
 export async function generatePortraitWithOpenAI({ imageBase64, mimeType, prompt }) {
   const key = process.env.OPENAI_API_KEY;
   if (!key) throw new Error('OPENAI_API_KEY not configured');
@@ -337,7 +380,7 @@ export async function generatePortraitWithOpenAI({ imageBase64, mimeType, prompt
   const form = new FormData();
   form.append('model', 'gpt-image-1');
   form.append('prompt', prompt);
-  form.append('size', '1024x1024');
+  form.append('size', PORTRAIT_OPENAI_SIZE);
   // gpt-image-1 /images/edits rejects response_format; b64_json is returned by default.
   form.append('image', new Blob([Buffer.from(imageBase64, 'base64')], { type: mimeType }), 'patient.png');
 
@@ -353,5 +396,7 @@ export async function generatePortraitWithOpenAI({ imageBase64, mimeType, prompt
   const data = await r.json();
   const outB64 = data?.data?.[0]?.b64_json;
   if (!outB64) throw new Error('No image returned from OpenAI');
-  return outB64;
+
+  const fitted = await fitToBaseplate(Buffer.from(outB64, 'base64'));
+  return bufferToBase64(fitted);
 }

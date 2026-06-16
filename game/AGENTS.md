@@ -22,6 +22,8 @@ Or: `C:\Users\steve\MeWorld\START-GAME.bat` / `START-MEWORLD.bat`
 
 If ports are busy, kill old node processes or use the alternate Vite port shown in the terminal.
 
+**Not MeWorld:** `C:\Users\steve\Downloads\teleprompter-station\` is **Teleprompter Station** (voiceover recording, :8765) — different app. **ECG Vector Lab** is only `/ecg-vector-lab.html` on :5173; default launch is the **main game** at http://localhost:5173/.
+
 ---
 
 ## Data pipeline (case bank)
@@ -88,12 +90,20 @@ Key files: `src/components/Play.jsx`, `src/hooks/usePlayDockLayout.js`, `src/com
 | **Full-app blank white page** | JS won't compile (duplicate `const`, syntax). Run **`npm run build`** before "done". Example fix: `src/lib/caseDiscussionContext.js` |
 | **Port 3001/5173 in use, Vite on 5178** | Run **`npm run dev`** (auto `free-dev-ports`) or `node scripts/free-dev-ports.mjs`. Rule: `dev-server-guard.mdc` |
 | **Differential compare + AI score** | Split scroll columns: yours (left) vs answer key (right). `POST /api/differential/score` uses DeepSeek/OpenAI from `.env`. Client: `src/lib/differentialAiScore.js` |
+| **Dev won't start — vite build / `Expected ")" but found "{"` in `DifferentialPractice.jsx`** | JSX must have **one root** per `return`. Overlay siblings (e.g. `DifferentialDrillPanel` after main `</div>`) need `<>...</>` fragment wrapper. Verify: `npm run smoke:pre-serve` |
+| **`voice-note/status` timeout in `validate-diff-smoke`** (intermittent) | First call probes local `faster_whisper` (Python cold start) and can exceed 8s. **Retry** `npm run dev` once; or `node scripts/free-dev-ports.mjs` then restart. If persistent: check `WHISPER_PYTHON` / Chatterbox venv in `.env` |
+| **Agent spawned bare API + Vite (no smoke)** | Do **not** bypass `npm run dev` — broken JSX/CSS won't be caught. Use `START-GAME.bat` only |
+| **HPI tab dumps diagnosis/treatment in practice** | Use `practice_hpi` for presentation; never show `hpi_narrative` in briefing/play HPI. `applySessionToCase` must not overwrite `historyText` with answer key. Rule: `practice-presentation.mdc` |
+| **Chat session expired** after dev restart | Server sessions are in-memory only. Client auto-recovers via `sendCaseChatMessage` retry — do not remove. Rule: `play-case-chat.mdc` |
+| **Play missing patient interview mode** | Stethoscope on Order · Chat dock + thread; tutor default, patient when gold. Rule: `play-case-chat.mdc` |
 
 ---
 
 ## Differential Practice (study mode)
 
 **Entry:** Welcome → **Differentials** · `src/components/DifferentialPractice.jsx`
+
+**JSX rule (2026-06-16):** Any modal/drill/portal rendered **beside** the main `.diff-practice` root must stay inside the same `return ( <> ... </> )` — never add a second top-level sibling without a fragment or dev build fails at `smoke-pre-serve`.
 
 Full-page study loop: chief complaint → voice/type differentials → reveal & score → bottom study panel.
 
@@ -141,17 +151,42 @@ npm run build:differential-review
 
 `game/.cursor/rules/differential-practice.mdc` — read before differential tasks.
 
-### Open work
+### Open work checklist
 
-1. Sync clean `MeWorld/data/cases/` → `game/data/cases/` for Play/Briefing
-2. Curate more `realWorldCases.json` entries (target: 2 stories per high-yield case)
-3. Optional: API/AI auto-discovery for real-world YouTube matches
+- [ ] Sync clean `MeWorld/data/cases/` → `game/data/cases/` for Play/Briefing
+- [ ] Add **`practice_hpi`** for cases whose `hpi_narrative` spoils diagnosis/treatment (batch high-yield first)
+- [ ] Curate more `realWorldCases.json` entries (target: 2 stories per high-yield case)
+- [ ] More lady **character maps** from approved Pinterest refs (`patient-character-maps.mdc`)
+- [ ] Optional: API/AI auto-discovery for real-world YouTube matches
+
+### Play UX checklist (current session)
+
+- [x] Results moved from scene popup into **Results tab**
+- [x] Added **lower-third results carousel** on scene
+- [x] Compare/review stack tap shows **explanation only** (no command stacks reopen)
+- [x] Practice mode results use objective wording (no teaching cues)
+- [x] Teach Me mode keeps interpretive guidance
+- [x] Print flow hardened to avoid blank `about:blank` tabs
+- [x] **Practice HPI** separated from answer-key `hpi_narrative` (`practice_hpi`, `getBriefingHpi`, `applySessionToCase`)
+- [x] **Read case** moved to top-right gold pill (replaces Immersa tag)
+- [x] **Play patient mode** — stethoscope parity with Differentials (tutor default)
+- [x] **Chat session expired** — client auto-retry after API restart
+- [x] Case **140** lady map `pinterest-cornrows-star` + `practice_hpi` for IIH presentation
 
 ---
 
 ## Case portraits (OpenAI)
 
-Per-case **House-style cold-open** patient image from built-in ED template + case JSON. Requires `OPENAI_API_KEY` in `MeWorld/.env`.
+Per-case **House-style cold-open** patient image from the **approved ED baseplate** + case JSON. Requires `OPENAI_API_KEY` in `MeWorld/.env`.
+
+| Baseplate | Path | Frame |
+|-----------|------|-------|
+| Male default | `public/assets/patient/patient-scene.png` | **1536×864 (16:9)** |
+| Male crop lock | `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` | 2752×1536 — crown→toes base framing |
+| Female default | `public/assets/patient/patient-scene-female.png` | same camera lock; crop to 1536×864 |
+| Camera / scene spec | `dev/scene-camera-lock/SCENE_LOCK.json` | Central overhead bedside — zones, prompts, anchors |
+
+**Rule (Steve):** Every generated portrait must match the approved baseplate profile first — same overhead bedside angle, zoom, bed rails, and monitor positions. Only swap patient identity/demographics/distress; never a tight face close-up or different aspect ratio.
 
 | Piece | Path / behavior |
 |-------|-----------------|
@@ -174,20 +209,35 @@ Per-case **House-style cold-open** patient image from built-in ED template + cas
 
 Example custom brief (case 25 sickle cell): *6-year-old boy, curled on stretcher in pain, parents at bedside, monitor cables, dignified ED lighting.*
 
+### Lady character maps (likeness bank)
+
+| Piece | Path |
+|-------|------|
+| Registry | `src/data/patientLadyRefs.json` |
+| Maps | `public/assets/patient/ladies/*-CHARACTER-MAP.png` |
+| Workflow doc | `dev/character-maps/CHARACTER_MAPS.md` |
+| Server | `server/casePortrait.js` + `resolvePatientLadyRef.js` |
+
+Pinterest ref → Magnific 9:16 contact sheet → register slug + `identityPrompt`. Case **140** → `pinterest-cornrows-star`. Rule: `patient-character-maps.mdc`.
+
 ---
 
 ## Patient simulation chat
 
-Case chat runs in **patient_sim** mode (DeepSeek or OpenAI from `.env`).
+Case chat in Play and Differentials (DeepSeek or OpenAI from `.env`). **Play default = tutor**; stethoscope gold = **patient_sim**.
 
 | Piece | Path / behavior |
 |-------|----------|
 | Context | `src/lib/caseChat.js` — `buildCaseChatContext()`, session per case |
+| Play / Diff modes | `Play.jsx` + `SceneOrderCommandDock` · `DifferentialFloatingChat.jsx` |
+| Session recovery | `sendCaseChatMessage` retries once after API restart (404 expired) |
 | Demographics | `src/lib/patientFactsFromHpi.js` — `resolvePatientDemographics()`, `extractPatientFacts()` |
 | Prompt | `server/index.js` — `PATIENT DEMOGRAPHICS` block; age answers must match `ageLabel` |
 | Pediatric | `Pediatrics` category + child `patient_voice` → infer ~6–7 yo if HPI has no explicit age; never invent adult age |
-| Persona cache | Portrait vision + `PORTRAIT_PERSONA_VERSION = 2` in `caseChat.js` |
+| Persona cache | Portrait vision + `PORTRAIT_PERSONA_VERSION` in `caseChat.js` |
 | Creativity | Global: Welcome → Settings · Per-case override: **Play gear** (`SimulationCreativityControl`) |
+
+**Agent rules:** `.cursor/rules/play-case-chat.mdc` · `practice-presentation.mdc`
 
 ### Case chat rail (Play → Chat tab)
 
@@ -196,6 +246,38 @@ Case chat runs in **patient_sim** mode (DeepSeek or OpenAI from `.env`).
 ---
 
 ## Play UX (recent)
+
+### Normal play vs Teach Me (order rules — Steve 2026-06)
+
+| Mode | Orders |
+|------|--------|
+| **Normal / studying** (`teachMeMode` off) | Place **any** order — case stacks, decoys, extras, any zone. No “not indicated” blocks, no sequence enforcement, no wrong-zone punishment. Everything logs to timeline for review. |
+| **Teach Me** (`teachMeMode` on) | Guided: enforce **next stack in sequence**, compare panel, “not indicated” for extras outside case set. Decoys log silently; **Show Answer** reveals teaching on decoys. |
+
+### Placed order results (pin click + lower-third)
+
+Click a **placed** label on the patient → **Results** tab + **lower-third carousel** on scene.
+
+- Lower-third UI: `src/components/OrderResultsLowerThird.jsx`
+- Result card renderer: `src/components/OrderResultSceneCard.jsx`
+- Resolver: `src/lib/orderResult.js`
+- Print helper: `src/lib/exportOrderResult.js` (opens printable HTML, then choose **Microsoft Print to PDF**)
+
+Mode behavior:
+
+| Mode | Result wording |
+|------|----------------|
+| **Practice** (`teachMeMode` off) | Objective values/findings only (no interpretive teaching cues) |
+| **Teach Me** (`teachMeMode` on) | Includes interpretation/rationale cues |
+
+### Review / compare tap behavior
+
+When tapping a stack row in compare/review, show **explanation only** (do not reopen command stacks dock):
+
+- `Play.jsx` uses `explainCompareStep()` (no `setInfoTab('treatment')`)
+- Inline explanation card: `src/components/CompareStepRationaleCard.jsx`
+
+Implementation: `Play.jsx` — `handleDrop`, `commitStackPlacement`, `submitOrderCommand`, `processDecoyOrder`.
 
 | Feature | Location |
 |---------|----------|
@@ -219,11 +301,12 @@ Case chat runs in **patient_sim** mode (DeepSeek or OpenAI from `.env`).
 
 ## Suggested next work (priority order)
 
-1. **Commit & push** MeWorld batch: portraits, custom brief, pediatric chat, play UX (when Steve asks)
-2. **Test case 25** — custom portrait brief + patient chat age (~6 yo)
-3. **Capture more case bank depth:** `step3/ccs_credentials.json` → capture scripts → `npm run refresh:case-bank`
-4. **Expand playbooks** for high-volume presentation titles still on `default`
-5. Optional: batch pre-cache all 181 case portraits on server
+1. **Batch `practice_hpi`** for cases whose `hpi_narrative` spoils diagnosis/treatment (rule: `practice-presentation.mdc`)
+2. **Sync case bank** — `MeWorld/data/cases/` → `game/data/cases/` + `preparedCases.json`
+3. **More lady character maps** — Pinterest ref → Magnific → `patientLadyRefs.json` (`patient-character-maps.mdc`)
+4. **Capture more CCS presentations** — `step3/ccs_credentials.json` → `npm run refresh:case-bank`
+5. **Expand playbooks** for high-volume presentation titles still on `default`
+6. Optional: batch pre-cache all 181 case portraits on server
 
 ---
 

@@ -16,13 +16,16 @@ import {
   syncManifestWithDisk,
 } from './caseTtsCache.js';
 import {
+  appendCaseNotesBlockText,
   appendChatHistory,
   appendTimelineEvent,
   endCaseSession,
   getOverallStats,
+  readCaseNotesText,
   readCaseUser,
   saveRecording,
   startCaseSession,
+  writeCaseNotesText,
 } from './userCaseStore.js';
 import {
   mergeVoiceNoteTranscript,
@@ -45,8 +48,11 @@ import {
 import { realWorldVideoProvider } from './youtubeSearchRepair.js';
 import { sanitizeRealWorldStories } from './realWorldStoryQuality.js';
 import { fetchYoutubeTranscript } from './youtubeTranscript.js';
+import { readOrderWhyEntry, writeOrderWhyEntry } from './orderWhyCache.js';
+import { buildOrderWhyPrompt } from './orderWhy.js';
 import {
   buildPortraitAnalysis,
+  buildPortraitMeta,
   buildPortraitPersona,
   buildPortraitPrompt,
   buildVideoAvatarPrompt,
@@ -56,8 +62,15 @@ import {
   generatePortraitWithOpenAI,
   portraitPublicUrl,
   readPortraitCache,
+  resolvePortraitSex,
   writePortraitCache,
 } from './casePortrait.js';
+import {
+  PORTRAIT_FRAME_VERSION,
+  bufferToBase64,
+  fitToBaseplate,
+  readBaseplateBuffer,
+} from './portraitFrame.js';
 import {
   caseBriefFileName,
   ensureBriefDir,
@@ -131,6 +144,11 @@ app.use('/case-portraits', express.static(CASE_PORTRAIT_DIR));
 const CASE_BRIEF_DIR = path.join(GAME_ROOT, '.case-briefs');
 ensureBriefDir(CASE_BRIEF_DIR);
 app.use('/case-briefs', express.static(CASE_BRIEF_DIR));
+
+const ORDER_WHY_CACHE_DIR = path.join(GAME_ROOT, '.order-why-cache');
+if (!fs.existsSync(ORDER_WHY_CACHE_DIR)) {
+  fs.mkdirSync(ORDER_WHY_CACHE_DIR, { recursive: true });
+}
 
 const MEWORLD_CASES_DIR = path.join(REPO_ROOT, 'data', 'cases');
 const DIFFERENTIAL_REVIEW_PATH = path.join(GAME_ROOT, 'src', 'data', 'differentialReview.json');
@@ -723,6 +741,42 @@ app.post('/api/user/case/:caseId/chat', async (req, res) => {
   }
 });
 
+app.get('/api/user/case/:caseId/notes', async (req, res) => {
+  const caseId = String(req.params.caseId || '').trim();
+  if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
+  try {
+    const text = await readCaseNotesText(caseId);
+    const href = text.trim() ? `cases/notes/${caseId.padStart(3, '0')}.md` : null;
+    return res.json({ ok: true, caseId, text, href });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.put('/api/user/case/:caseId/notes', async (req, res) => {
+  const caseId = String(req.params.caseId || '').trim();
+  if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
+  try {
+    const saved = await writeCaseNotesText(caseId, req.body?.text ?? '');
+    return res.json({ ok: true, caseId, ...saved });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/user/case/:caseId/notes/append', async (req, res) => {
+  const caseId = String(req.params.caseId || '').trim();
+  const { body, header, at } = req.body || {};
+  if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
+  if (!body) return res.status(400).json({ error: 'Missing body' });
+  try {
+    const saved = await appendCaseNotesBlockText(caseId, body, { header, at });
+    return res.json({ ok: true, caseId, ...saved });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
 app.post('/api/user/case/:caseId/session/:sessionId/recording', async (req, res) => {
   const caseId = String(req.params.caseId || '').trim();
   const sessionId = String(req.params.sessionId || '').trim();
@@ -1109,6 +1163,52 @@ app.post('/api/case-chat/message', async (req, res) => {
   }
 });
 
+app.post('/api/order-why', async (req, res) => {
+  const key = chatApiKeyOrError(res);
+  if (!key) return;
+
+  const { caseId, orderId, orderLabel, playbookWhy = '', caseContext = null } = req.body || {};
+  const cid = String(caseId ?? '').trim();
+  const oid = String(orderId ?? '').trim();
+  const label = String(orderLabel ?? '').trim();
+  if (!cid || !oid || !label) {
+    return res.status(400).json({ error: 'Missing caseId, orderId, or orderLabel' });
+  }
+
+  try {
+    const cached = await readOrderWhyEntry(ORDER_WHY_CACHE_DIR, cid, oid);
+    if (cached?.why) {
+      return res.json({
+        ok: true,
+        why: cached.why,
+        cached: true,
+        cachedAt: cached.cachedAt,
+        provider: 'cache',
+      });
+    }
+
+    const messages = buildOrderWhyPrompt({
+      orderLabel: label,
+      playbookWhy,
+      caseContext: caseContext && typeof caseContext === 'object' ? caseContext : {},
+    });
+    const why = await callChatCompletion(key, messages, { maxTokens: 320, temperature: 0.32 });
+    const saved = await writeOrderWhyEntry(ORDER_WHY_CACHE_DIR, cid, oid, {
+      why,
+      orderLabel: label,
+    });
+    return res.json({
+      ok: true,
+      why,
+      cached: false,
+      cachedAt: saved?.cachedAt || null,
+      provider: chatProvider(),
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
 function runReadCaseTts({ cacheDir, voiceRef }) {
   return new Promise((resolve, reject) => {
     const args = [READ_CASE_SCRIPT, '--cache-dir', cacheDir];
@@ -1382,6 +1482,11 @@ app.get('/api/case-portrait/:caseId', async (req, res) => {
       persona: cached.meta?.persona || cached.meta?.analysis?.persona || null,
       provider: cached.meta?.provider || 'openai',
       sourceVideo: cached.meta?.sourceVideo || null,
+      patientSex: cached.meta?.patientSex || cached.meta?.analysis?.sex || null,
+      ladyRefSlug: cached.meta?.ladyRefSlug || null,
+      portraitFrameVersion: cached.meta?.portraitFrameVersion || 1,
+      portraitWidth: cached.meta?.portraitWidth || null,
+      portraitHeight: cached.meta?.portraitHeight || null,
     });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
@@ -1497,12 +1602,16 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
   } = req.body || {};
   const caseId = caseContext?.id ?? caseContext?.ccsNumber;
   if (!caseId) return res.status(400).json({ error: 'Missing case id in caseContext' });
-  if (!imageBase64) return res.status(400).json({ error: 'Missing image' });
 
   try {
+    const portraitSex = resolvePortraitSex(caseContext || {});
     if (!refresh) {
       const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId);
-      if (cached.exists) {
+      const cachedSex = cached.meta?.patientSex || cached.meta?.analysis?.sex || null;
+      const sexMismatch = cachedSex && portraitSex && cachedSex !== portraitSex;
+      const frameStale =
+        (cached.meta?.portraitFrameVersion || 1) < PORTRAIT_FRAME_VERSION;
+      if (cached.exists && !sexMismatch && !frameStale) {
         const url = portraitPublicUrl(caseId, serverOrigin(req));
         const persona = cached.meta?.persona || cached.meta?.analysis?.persona || buildPortraitPersona(caseContext);
         return res.json({
@@ -1513,12 +1622,22 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
           provider: 'openai',
           analysis: cached.meta?.analysis || buildPortraitAnalysis(caseContext, persona),
           persona,
+          patientSex: cachedSex || portraitSex,
+          portraitFrameVersion: cached.meta?.portraitFrameVersion || 1,
         });
       }
     }
 
+    const plate = await readBaseplateBuffer(GAME_ROOT, caseContext);
+    const fittedInput = await fitToBaseplate(plate.buffer);
+    const editBase64 = bufferToBase64(fittedInput);
+
     const prompt = buildPortraitPrompt(caseContext, { portraitBrief });
-    const outB64 = await generatePortraitWithOpenAI({ imageBase64, mimeType, prompt });
+    const outB64 = await generatePortraitWithOpenAI({
+      imageBase64: editBase64,
+      mimeType: 'image/png',
+      prompt,
+    });
     let visionPersona = null;
     try {
       visionPersona = await extractPersonaFromPortraitImage(outB64);
@@ -1530,6 +1649,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
     await writePortraitCache(CASE_PORTRAIT_DIR, caseId, outB64, {
       analysis,
       persona,
+      ...buildPortraitMeta(caseContext),
       portraitBrief: String(portraitBrief || '').trim() || null,
     });
     const url = portraitPublicUrl(caseId, serverOrigin(req));
@@ -1541,6 +1661,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       provider: 'openai',
       analysis,
       persona,
+      patientSex: portraitSex,
     });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });

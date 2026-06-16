@@ -81,10 +81,26 @@ export function scrubInvalidSceneStorage() {
 /** First usable scene image URL, else built-in hospital photo. */
 export function resolveSceneSrc({ forceSrc, overrideSrc, sceneSrc, caseData } = {}) {
   const fallback = getBuiltInPatientSrc(caseData);
+  const caseTemplate = isValidSceneSrc(sceneSrc) ? sceneSrc : fallback;
+
+  // Per-case briefing/play: case portrait → sex-aware template — not global Settings upload.
+  if (caseData?.id != null && caseData.id !== '') {
+    for (const candidate of [forceSrc, caseTemplate, fallback]) {
+      if (isValidSceneSrc(candidate)) return candidate;
+    }
+    return fallback;
+  }
+
   for (const candidate of [forceSrc, overrideSrc, sceneSrc, fallback]) {
     if (isValidSceneSrc(candidate)) return candidate;
   }
   return fallback;
+}
+
+export function portraitCacheBust(url, version) {
+  if (!url || !version) return url;
+  const sep = url.includes('?') ? '&' : '?';
+  return `${url}${sep}v=${encodeURIComponent(String(version))}`;
 }
 
 /** Built-in hospital photo or user upload (data URL). */

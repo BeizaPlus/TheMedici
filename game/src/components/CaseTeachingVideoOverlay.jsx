@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { usePrivateVideoSrc } from '../hooks/usePrivateVideoSrc.js';
+import { VIDEO_NO_DOWNLOAD_ATTRS } from '../lib/privateVideoSrc.js';
 
 export default function CaseTeachingVideoOverlay({
   src,
@@ -13,6 +15,7 @@ export default function CaseTeachingVideoOverlay({
   const endedRef = useRef(false);
   const playTokenRef = useRef(null);
   const onErrorRef = useRef(onError);
+  const resolvedSrc = usePrivateVideoSrc(src);
 
   useEffect(() => {
     onErrorRef.current = onError;
@@ -42,14 +45,14 @@ export default function CaseTeachingVideoOverlay({
   }, []);
 
   useEffect(() => {
-    if (!open || !src) {
+    if (!open || !resolvedSrc) {
       endedRef.current = false;
       playTokenRef.current = null;
       return undefined;
     }
     if (frozen || endedRef.current) return undefined;
 
-    const token = src;
+    const token = resolvedSrc;
     if (playTokenRef.current === token) return undefined;
     playTokenRef.current = token;
 
@@ -82,7 +85,7 @@ export default function CaseTeachingVideoOverlay({
     return () => {
       cancelled = true;
     };
-  }, [open, src, frozen]);
+  }, [open, resolvedSrc, frozen]);
 
   useEffect(() => {
     if (open && frozen) freezeFrame();
@@ -100,7 +103,7 @@ export default function CaseTeachingVideoOverlay({
     onSkip?.();
   };
 
-  if (!open || !src) return null;
+  if (!open || !src || !resolvedSrc) return null;
 
   return (
     <div
@@ -113,11 +116,12 @@ export default function CaseTeachingVideoOverlay({
       <video
         ref={videoRef}
         className="thanks-video-player"
-        src={src}
+        src={resolvedSrc}
         style={{ objectPosition }}
         playsInline
         preload="auto"
         muted
+        {...VIDEO_NO_DOWNLOAD_ATTRS}
         onError={() => onError?.('Video failed to load. Check public/assets/video paths.')}
         onEnded={handleEnded}
       />

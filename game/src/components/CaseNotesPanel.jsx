@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { readCaseNotes, writeCaseNotes } from '../lib/caseNotes.js';
+import { hydrateCaseNotes, readCaseNotes, writeCaseNotes } from '../lib/caseNotes.js';
 import { fetchCaseUserData, recordingPublicUrl } from '../lib/caseUserLog.js';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import CaseScreenshotThumb from './CaseScreenshotThumb.jsx';
@@ -26,6 +26,19 @@ export default function CaseNotesPanel({
   const syncNotesFromStorage = useCallback(() => {
     skipWriteRef.current = true;
     setNotes(readCaseNotes(caseId));
+  }, [caseId]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void hydrateCaseNotes(caseId).then((text) => {
+      if (!cancelled) {
+        skipWriteRef.current = true;
+        setNotes(text);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [caseId]);
 
   const loadRecordings = useCallback(async () => {
@@ -91,7 +104,7 @@ export default function CaseNotesPanel({
   return (
     <div className={`case-notes-panel ${compact ? 'compact' : ''} ${minimal ? 'minimal' : ''}${threadMode ? ' thread-mode' : ''}`}>
       {!minimal && (
-        <p className="case-notes-hint">Saved per case in your journal — every run is logged.</p>
+        <p className="case-notes-hint">Saved per case on your PC — journal file linked in browser, not one giant blob.</p>
       )}
       {recordButtonProps && <CaseRecordButton {...recordButtonProps} compact />}
       {recordButtonProps?.transcribing && (

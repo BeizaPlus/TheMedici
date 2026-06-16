@@ -1,15 +1,18 @@
 import { STORAGE } from './storageKeys.js';
 
 const MIN_W = 260;
-const MIN_H = 280;
-const MIN_CLINICAL = 100;
-const MIN_STACKS = 120;
-const MIN_STACKS_LIST = 96;
+const MIN_H = 10;
+const DOCK_HANDLE_PX = 24;
+const MIN_CLINICAL = 0;
+const MIN_STACKS = 0;
+const MIN_STACKS_LIST = 10;
 const MAX_STACKS_LIST = 720;
 
 function clamp(n, min, max) {
   return Math.min(max, Math.max(min, n));
 }
+
+export const DOCK_CHROME_COLLAPSED_HEIGHT = 168;
 
 export function defaultPlayDockLayout() {
   if (typeof window === 'undefined') {
@@ -24,7 +27,7 @@ export function defaultPlayDockLayout() {
     : clamp(Math.round(window.innerHeight * 0.78), 360, 860);
   const x = compact ? 8 : Math.max(12, window.innerWidth - width - 18);
   const y = compact ? Math.max(44, window.innerHeight - height - 52) : 52;
-  const clinicalPx = clamp(Math.round(height * 0.38), MIN_CLINICAL, height - MIN_STACKS - 80);
+  const clinicalPx = clamp(Math.round(height * 0.38), 0, Math.max(0, height - DOCK_HANDLE_PX - 8));
   return { x, y, width, height, clinicalPx, stacksListPx: 0 };
 }
 
@@ -93,17 +96,19 @@ export function clampDockLayout(layout) {
   const height = clamp(layout.height, MIN_H, maxH);
   const x = clamp(layout.x, 8, Math.max(8, window.innerWidth - width - 8));
   const y = clamp(layout.y, 44, Math.max(44, window.innerHeight - height - 8));
+  const contentH = Math.max(0, height - DOCK_HANDLE_PX);
   const clinicalPx = clamp(
     layout.clinicalPx,
     MIN_CLINICAL,
-    height - MIN_STACKS - 72,
+    Math.max(MIN_CLINICAL, contentH - 8),
   );
   const stacksRaw = Number(layout.stacksListPx) || 0;
+  const stacksMax = Math.max(0, contentH - clinicalPx - 8);
   const stacksListPx =
     stacksRaw <= 0
       ? 0
-      : clamp(stacksRaw, MIN_STACKS_LIST, Math.min(MAX_STACKS_LIST, height - 160));
+      : clamp(stacksRaw, MIN_STACKS_LIST, Math.min(MAX_STACKS_LIST, stacksMax));
   return { x, y, width, height, clinicalPx, stacksListPx };
 }
 
-export { MIN_W, MIN_H, MIN_CLINICAL, MIN_STACKS, MIN_STACKS_LIST, MAX_STACKS_LIST };
+export { MIN_W, MIN_H, DOCK_HANDLE_PX, MIN_CLINICAL, MIN_STACKS, MIN_STACKS_LIST, MAX_STACKS_LIST };

@@ -773,6 +773,13 @@
   overflow: auto;
 }
 
+.scene-order-command-reply-answer .case-chat-italic {
+  display: block;
+  margin-bottom: 6px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.72);
+}
+
 .scene-order-command-reply-actions {
   display: flex;
   gap: 8px;
@@ -1040,8 +1047,20 @@
 }
 
 .case-context-panel--play .case-info-tabs,
-.case-context-panel--play .case-read-row {
+.case-context-panel--play .case-info-tabs-row {
   flex-shrink: 0;
+}
+
+.case-info-tabs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.case-info-tabs-row .case-info-tabs {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .case-context-panel--play .case-location-context,
@@ -1151,6 +1170,27 @@
   pointer-events: none;
 }
 
+.game-sidebar.floating.collapsed:not(.final-mode-minimized) {
+  opacity: 1;
+  pointer-events: auto;
+  height: var(--dock-chrome-h, 168px) !important;
+  min-height: var(--dock-chrome-h, 168px) !important;
+  max-height: var(--dock-chrome-h, 168px) !important;
+  resize: none;
+}
+
+.game-sidebar.floating.collapsed:not(.final-mode-minimized) .dock-panel-clinical {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.game-sidebar.floating.collapsed:not(.final-mode-minimized) .case-context-body-wrap,
+.game-sidebar.floating.collapsed:not(.final-mode-minimized) .case-read-row,
+.game-sidebar.floating.collapsed:not(.final-mode-minimized) .dock-resize-handle,
+.game-sidebar.floating.collapsed:not(.final-mode-minimized) .reviewed-stamp {
+  display: none !important;
+}
+
 .game-sidebar.floating.final-mode-minimized {
   width: 52px !important;
   min-width: 52px !important;
@@ -1246,6 +1286,33 @@
   flex-shrink: 0;
   padding: 10px 12px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.teach-compare-export-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.teach-compare-export-btn {
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 7px;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 184, 75, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(232, 184, 75, 0.95);
+  cursor: pointer;
+}
+
+.teach-compare-export-btn:hover {
+  background: rgba(232, 184, 75, 0.12);
+  border-color: rgba(232, 184, 75, 0.55);
 }
 
 .teach-compare-scene-title {
@@ -1270,14 +1337,27 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   margin-top: 0;
+  padding-right: 2px;
 }
 
 .teach-compare-panel--compact .teach-compare-list {
   flex: 1 1 auto;
   min-height: 0;
   max-height: none;
+}
+
+.teach-compare-panel--compact .teach-compare-critical-list,
+.teach-compare-panel--compact .teach-compare-list-tier,
+.teach-compare-panel--compact .teach-compare-list-extra {
+  max-height: none;
+  overflow: visible;
+}
+
+.teach-compare-panel--compact .teach-compare-tier {
+  overflow: visible;
 }
 
 .teach-compare-panel--compact .teach-compare-next {

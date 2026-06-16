@@ -68,9 +68,32 @@ If the task says "replace icons" — touch only `SceneToolbarIcons.jsx` and the 
 
 **`CaseRecordButton.jsx`** uses `IconMicrophone` / `IconPlayerStop` only — not `FiMic` / `FiSquare`.
 
-**Case chat markdown:** assistant replies may use `**bold**`; render with `src/lib/chatMessageFormat.jsx` (`renderChatMarkdown`), not raw asterisks in the UI.
+**Case chat markdown:** assistant replies may use `**bold**` and `*italic*` stage directions; render with `src/lib/chatMessageFormat.jsx` (`renderChatMarkdown`), not raw asterisks in the UI.
 
 **Do not** add one-off inline SVGs in `Play.jsx`, `CaseChatPanel.jsx`, or CSS — extend `SceneToolbarIcons.jsx` instead.
+
+---
+
+## FORWARD MOMENTUM (2026-06 — read before case/chat/UI work)
+
+Cursor rules in `game/.cursor/rules/` — agents must read the matching rule **before** editing that area:
+
+| Rule file | Locks in |
+|-----------|----------|
+| `practice-presentation.mdc` | `practice_hpi` vs `hpi_narrative`; HPI tab never spoils diagnosis/treatment |
+| `play-case-chat.mdc` | Play stethoscope = Differential parity; chat session auto-recovery |
+| `patient-character-maps.mdc` | Pinterest → Magnific map → `patientLadyRefs.json` |
+| `dev-server-guard.mdc` | Ports 5173/3001, `npm run dev` smoke chain |
+| `component-css-guard.mdc` | Full-page CSS in dedicated files + `main.jsx` |
+| `differential-practice.mdc` | Study panel, real-world tab, differential data banks |
+
+**Practice presentation:** Briefing/Play HPI = presentation only. Answer key stays in `hpi_narrative` / Notes / Teach Me.
+
+**Read case:** Gold pill top-right (`pack-tag--read`) — not a row under tabs; replaces Immersa tag.
+
+**Chat expired:** API sessions are RAM-only; client retries once — do not remove recovery in `caseChat.js`.
+
+**Demo → production:** When a one-case fix proves a rule (e.g. case 140 `practice_hpi`), generalize to field + build path + rule doc — see DEMO → PRODUCTION RULE below.
 
 ---
 If the task says "plug in cases" — touch only the data files.

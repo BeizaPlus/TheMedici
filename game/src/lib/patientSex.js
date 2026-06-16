@@ -6,6 +6,8 @@ export function inferPatientSex(caseData) {
   const blob = [
     caseData?.chief_complaint,
     caseData?.historyText,
+    caseData?.hpi_narrative,
+    caseData?.clinical_hpi_narrative,
     caseData?.title,
   ]
     .filter(Boolean)
@@ -13,8 +15,15 @@ export function inferPatientSex(caseData) {
 
   if (!blob) return 'male';
 
-  const femaleHits = (blob.match(/\bfemale\b/gi) || []).length;
-  const maleHits = (blob.match(/\bmale\b/gi) || []).length;
+  const femaleHits =
+    (blob.match(/\bfemale\b|\bwoman\b|\bwomen\b|\bgirl\b|\bdaughter\b|\bmother\b|\bgravida\b|\bg\d+p\d+\b/gi) || [])
+      .length +
+    (/\bpregnant\b|\bchildbearing\s+age\b|\bmenstrual\b|\btampon\b|\bpap\s+smear\b|\bhpv\b|\btdap\b|\bectopic\b|\bpelvic\s+pain\b|\bobstetric\b/gi.test(
+      blob,
+    )
+      ? 2
+      : 0);
+  const maleHits = (blob.match(/\bmale\b|\bman\b|\bmen\b|\bboy\b|\bson\b|\bfather\b/gi) || []).length;
   if (femaleHits > maleHits) return 'female';
   if (maleHits > femaleHits) return 'male';
 

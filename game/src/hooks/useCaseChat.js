@@ -147,7 +147,14 @@ export function useCaseChat({
       setBusy(true);
       try {
         const sessionContext = getSessionContext?.() ?? null;
-        const reply = await sendCaseChatMessage(sid, trimmed, sessionContext);
+        const result = await sendCaseChatMessage(sid, trimmed, sessionContext, {
+          caseData,
+          chatMode,
+        });
+        if (result.sessionId && result.sessionId !== sid) {
+          setSessionId(result.sessionId);
+        }
+        const reply = result.reply;
         setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
         persistMessage('assistant', reply);
         void reloadHistory();

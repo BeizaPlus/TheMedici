@@ -1,0 +1,87 @@
+{
+  "version": 2,
+  "miscLabelPatterns": [
+    "vaccine",
+    "tdap",
+    "hpv",
+    "papanicolaou",
+    "pap smear",
+    "instruct patient",
+    "advise patient",
+    "counsel",
+    "smoking cessation",
+    "safe sex"
+  ],
+  "cases": {
+    "004": {
+      "title": "Non-negotiables — acute DKA",
+      "subtitle": "Bare minimum before disposition. Miss any → patient harm.",
+      "miscInterventionIds": [
+        "papanicolaou-smear-hpv-dna-test",
+        "tdap-vaccine",
+        "hpv-vaccine",
+        "advise-patient-no-illegal-drug-use",
+        "instruct-patient-diabetes"
+      ],
+      "items": [
+        {
+          "id": "iv-access",
+          "shortLabel": "IV access",
+          "matchInterventionIds": ["intravenous-access"],
+          "why": "Access to deliver IV fluids and insulin."
+        },
+        {
+          "id": "iv-fluids",
+          "shortLabel": "IV fluids (NS / LR)",
+          "matchInterventionIds": ["normal-saline-lactated-ringer-0-45-salin"],
+          "why": "Volume resuscitation — every DKA patient needs fluids."
+        },
+        {
+          "id": "insulin",
+          "shortLabel": "Insulin",
+          "matchInterventionIds": ["insulin-regular-lispro-glargine-nph"],
+          "why": "Mainstay of DKA — lowers glucose and closes the anion gap."
+        },
+        {
+          "id": "potassium",
+          "shortLabel": "Potassium replacement",
+          "matchInterventionIds": ["potassium-replacement-kcl-k-citrate-k-ph"],
+          "why": "Check K⁺ before insulin; replete if < 5.3 — insulin drives K⁺ down."
+        }
+      ]
+    }
+  },
+  "diagnosisPatterns": [
+    {
+      "match": "diabetic ketoacidosis|\\bdka\\b",
+      "title": "Non-negotiables — acute DKA",
+      "subtitle": "Bare minimum before disposition.",
+      "items": [
+        {
+          "id": "iv-access",
+          "shortLabel": "IV access",
+          "matchLabels": ["intravenous access", "iv access"],
+          "why": "Access to deliver IV fluids and insulin."
+        },
+        {
+          "id": "iv-fluids",
+          "shortLabel": "IV fluids (NS / LR)",
+          "matchLabels": ["normal saline", "lactated ringer"],
+          "why": "Volume resuscitation for DKA."
+        },
+        {
+          "id": "insulin",
+          "shortLabel": "Insulin",
+          "matchLabels": ["insulin"],
+          "why": "Mainstay of DKA treatment."
+        },
+        {
+          "id": "potassium",
+          "shortLabel": "Potassium replacement",
+          "matchLabels": ["potassium replacement", "kcl"],
+          "why": "Replete K⁺ before/with insulin when low."
+        }
+      ]
+    }
+  ]
+}

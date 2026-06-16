@@ -66,7 +66,13 @@ Pass criteria:
 
 **URLs:** http://localhost:5173/ only — if Vite would bind elsewhere, port free failed; fix before serving.
 
-If voice-note fails: fix `game/server/voiceNoteTranscribe.js` — dev will not stay up until green.
+If voice-note fails: fix `game/server/voiceNoteTranscribe.js` — dev will not stay up until green. First Whisper probe can be slow; smoke allows **20s** for `/api/voice-note/status` (retry `npm run dev` if machine was cold).
+
+## JSX — one return root (2026-06-16)
+
+`DifferentialPractice.jsx` (and any overlay): **one** top-level child per `return`, or wrap siblings in `<>...</>`. Example failure: main `</div>` then `<DifferentialDrillPanel />` without fragment → `smoke-pre-serve` vite build: `Expected ")" but found "{"`.
+
+After differential component edits: `npm run smoke:pre-serve` before telling Steve dev is ready.
 
 ## Patient names
 
@@ -129,5 +135,7 @@ Video plug-in: `youtubeSearchRepair.js` — **yt-search** by default (free). Opt
 ## Open gaps
 
 - Play/Briefing still use thin `game/data/cases/` — sync from `MeWorld/data/cases/` if Steve wants one bank everywhere
+- **`practice_hpi`** batch for spoiler-heavy DeepSeek cases (see `practice-presentation.mdc`)
+- Play **patient mode** now matches Differentials (`play-case-chat.mdc`) — keep parity when editing chat UI
 - Real World: most cases need curated stories (only TSS + a few diagnosis keys seeded)
 - Auto YouTube discovery not wired — search link fallback only

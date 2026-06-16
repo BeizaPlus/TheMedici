@@ -256,10 +256,12 @@ html,body{height:100%;overflow:hidden}
   overflow:visible;min-width:0;
 }
 .hud-readouts{
-  display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;
+  display:flex;align-items:center;gap:10px 14px;flex-wrap:nowrap;
+  height:26px;overflow:hidden;
 }
 .hud-controls{
-  display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap;
+  display:flex;align-items:center;gap:10px 12px;flex-wrap:nowrap;
+  height:24px;overflow:hidden;
 }
 .hud-axis{
   font-size:1.1rem;font-weight:900;font-family:var(--mono);color:var(--gold);
@@ -472,8 +474,9 @@ html,body{height:100%;overflow:hidden}
 .layer-pill:hover{border-color:var(--gold);color:var(--gold)}
 .layer-pill.on{background:rgba(232,184,75,.12);color:var(--gold);border-color:rgba(232,184,75,.55)}
 .lead-pills{
-  flex-shrink:0;display:flex;gap:5px;flex-wrap:wrap;
+  flex-shrink:0;display:flex;gap:5px;flex-wrap:nowrap;
   align-items:center;padding:0 10px 8px;
+  overflow:hidden;height:32px;
 }
 .lead-pills-label{
   font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
@@ -1493,6 +1496,11 @@ canvas{display:block}
         <input type="range" id="stripBeatsR" min="1" max="48" step="1" value="8"/>
         <div class="ctl-scale"><span>1 beat (zoom in)</span><span>time</span><span>48 beats</span></div>
       </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;padding:4px 0 2px">
+        <button type="button" id="stripSweepBtn" class="layer-pill" title="Sweep mode — ECG paper is stationary; playhead sweeps left→right like a real ECG monitor. Click again to toggle off."><span class="pill-txt">Sweep</span></button>
+        <button type="button" id="stripGridBtn" class="layer-pill" title="ECG paper grid — 1mm (40ms) / 5mm (200ms) squares at standard 25mm/s paper speed"><span class="pill-txt">Grid</span></button>
+        <button type="button" id="stripPolBadgeBtn" class="layer-pill on" title="Polarity badge — moving +/− icon near playhead showing live deflection direction. Toggle off to hide."><span class="pill-txt">Pol badge</span></button>
+      </div>
     </div>
     <div class="strip-legend">
       <span><span class="dot" style="background:var(--red)"></span>Cathode (+)</span>
@@ -2201,6 +2209,12 @@ function autoScrollStripWindow(){
   if(_scrub.active&&_scrub.onPlayhead)return;
   if(_stripPan.active)return;
   var tWin=tInStripWindow();
+  if(S.stripSweepMode){
+    /* Sweep: window is a fixed page; playhead moves left→right and wraps */
+    var disp=stripDispBeats();
+    S.stripWinStart=Math.floor(tWin/disp)*disp;
+    return;
+  }
   var m=stripViewMetrics(tWin);
   var margin=m.dispBeats*0.06;
   if(tWin<m.winStart+margin){
@@ -2385,7 +2399,7 @@ var S={
   bodyViewZoom:1,bodyViewPanX:0,bodyViewPanY:0,
   scopeRingMode:'textbook',hcLinkedToTriangle:false,
   scene3dLight:{ambient:0.4,key:1.15,keyAz:12,keyEl:48},
-  vectorStroke:2,playbackRate:1,clickToIsolate:true,
+  vectorStroke:2,playbackRate:1,clickToIsolate:true,showPolarityBadge:true,stripSweepMode:false,showEcgGrid:false,
   visibleLeads:defaultVisibleLeads()
 };
 
@@ -4073,6 +4087,57 @@ function drawStripPolarityGuide(ctx,x,base,amp,rowH,cathode,anode){
   ctx.restore();
 }
 
+/** 1mm/5mm ECG paper time grid (vertical lines, 40ms/200ms at 25mm/s). */
+var ECG_GRID_SMALL_SEC=0.04;
+var ECG_GRID_LARGE_SEC=0.20;
+function drawEcgPaperGrid(ctx,lpad,plotW,yTop,yH,winStart,dispBeats){
+  if(!S.showEcgGrid)return;
+  var hr=currentHr();
+  var secPerBeat=60/hr;
+  var secTotal=dispBeats*secPerBeat;
+  var pxPerSec=plotW/secTotal;
+  var smallPx=ECG_GRID_SMALL_SEC*pxPerSec;
+  if(smallPx<2)return;
+  var winStartSec=winStart*secPerBeat;
+  var firstSmall=Math.ceil((winStartSec-0.001)/ECG_GRID_SMALL_SEC)*ECG_GRID_SMALL_SEC;
+  var dark=currentTheme==='dark';
+  ctx.save();
+  for(var i=0;i<Math.ceil(secTotal/ECG_GRID_SMALL_SEC)+2;i++){
+    var t=firstSmall+i*ECG_GRID_SMALL_SEC;
+    var x=lpad+(t-winStartSec)*pxPerSec;
+    if(x<lpad-0.5)continue;
+    if(x>lpad+plotW+0.5)break;
+    var isLarge=Math.abs(Math.round(t/ECG_GRID_LARGE_SEC)*ECG_GRID_LARGE_SEC-t)<0.005;
+    ctx.strokeStyle=dark
+      ?(isLarge?'rgba(255,130,70,0.28)':'rgba(255,130,70,0.10)')
+      :(isLarge?'rgba(190,60,30,0.22)':'rgba(190,60,30,0.08)');
+    ctx.lineWidth=isLarge?0.8:0.4;
+    ctx.beginPath();ctx.moveTo(x,yTop);ctx.lineTo(x,yTop+yH);ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/** 1mm/5mm ECG paper amplitude grid (horizontal lines per row, 0.1mV/0.5mV). */
+function drawEcgAmpGrid(ctx,lpad,plotW,base,amp){
+  if(!S.showEcgGrid)return;
+  if(amp<8)return; /* too small to be meaningful */
+  var smallAmp=amp*0.1; /* 1mm at 10mm/mV */
+  if(smallAmp<3)return; /* too dense */
+  var dark=currentTheme==='dark';
+  ctx.save();
+  var maxI=Math.ceil(amp/smallAmp)+2;
+  for(var i=-maxI;i<=maxI;i++){
+    var y=base-i*smallAmp;
+    var isLarge=i%5===0;
+    ctx.strokeStyle=dark
+      ?(isLarge?'rgba(255,130,70,0.22)':'rgba(255,130,70,0.08)')
+      :(isLarge?'rgba(190,60,30,0.18)':'rgba(190,60,30,0.06)');
+    ctx.lineWidth=isLarge?0.7:0.35;
+    ctx.beginPath();ctx.moveTo(lpad,y);ctx.lineTo(lpad+plotW,y);ctx.stroke();
+  }
+  ctx.restore();
+}
+
 function drawPositiveElectrodeBadge(cx,cy,r,val,leadLabel,cathode,anode,text,border,opts){
   drawPolarityBadgeCtx(uctx,cx,cy,r,val,cathode,anode,Object.assign({cathodeSite:true,dark:currentTheme==='dark'},opts||{},{leadLabel:leadLabel}));
 }
@@ -5388,12 +5453,16 @@ function drawLeadStrips(){
   var vm=stripViewMetrics(tInWindow);
   var playX=stripPlayX(LPAD_S,plotW,tInWindow);
 
-  for(var gb=Math.floor(vm.winStart);gb<=Math.ceil(vm.winStart+vm.dispBeats);gb++){
-    lctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.07)':'rgba(0,0,0,.06)';
-    lctx.lineWidth=0.6;
-    var gx=LPAD_S+((gb-vm.winStart)/vm.dispBeats)*plotW;
-    if(gx<LPAD_S-1||gx>LPAD_S+plotW+1)continue;
-    lctx.beginPath();lctx.moveTo(gx,0);lctx.lineTo(gx,LH);lctx.stroke();
+  drawEcgPaperGrid(lctx,LPAD_S,plotW,0,LH,vm.winStart,vm.dispBeats);
+
+  if(!S.showEcgGrid){
+    for(var gb=Math.floor(vm.winStart);gb<=Math.ceil(vm.winStart+vm.dispBeats);gb++){
+      lctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.07)':'rgba(0,0,0,.06)';
+      lctx.lineWidth=0.6;
+      var gx=LPAD_S+((gb-vm.winStart)/vm.dispBeats)*plotW;
+      if(gx<LPAD_S-1||gx>LPAD_S+plotW+1)continue;
+      lctx.beginPath();lctx.moveTo(gx,0);lctx.lineTo(gx,LH);lctx.stroke();
+    }
   }
 
   visible.forEach(function(L,idx){
@@ -5404,6 +5473,8 @@ function drawLeadStrips(){
 
     lctx.fillStyle=foc?'rgba(2,132,199,.12)':'transparent';
     lctx.fillRect(0,y0,LW,rowH);
+
+    drawEcgAmpGrid(lctx,LPAD_S,plotW,base,amp);
 
     lctx.strokeStyle=border;
     lctx.lineWidth=0.6;
@@ -5433,8 +5504,10 @@ function drawLeadStrips(){
     var liveY=base-lpr.val*amp;
     lctx.fillStyle=blue;
     lctx.beginPath();lctx.arc(playX,liveY,foc?3.2:2.4,0,Math.PI*2);lctx.fill();
-    var pba=playheadBadgeAnchor(playX,liveY,base,rowH,plotW);
-    drawPolarityBadgeCtx(lctx,pba.x,pba.y,pba.r,lpr.val,pc.cathode,pc.anode,{dark:currentTheme==='dark'});
+    if(S.showPolarityBadge){
+      var pba=playheadBadgeAnchor(playX,liveY,base,rowH,plotW);
+      drawPolarityBadgeCtx(lctx,pba.x,pba.y,pba.r,lpr.val,pc.cathode,pc.anode,{dark:currentTheme==='dark'});
+    }
     if(foc){
       lctx.strokeStyle='rgba(180,210,255,.85)';lctx.lineWidth=1;
       lctx.beginPath();lctx.arc(playX,liveY,5,0,Math.PI*2);lctx.stroke();
@@ -5696,9 +5769,11 @@ function drawStrip(){
   var vm=stripViewMetrics(tInWindow);
   var playX=stripPlayX(LPAD,avail,tInWindow);
 
+  drawEcgPaperGrid(wctx,LPAD,avail,TPAD,WH-TPAD*2,vm.winStart,vm.dispBeats);
+
   wctx.lineWidth=0.7;
   for(var gb=Math.floor(vm.winStart);gb<=Math.ceil(vm.winStart+vm.dispBeats);gb++){
-    wctx.strokeStyle=border;
+    wctx.strokeStyle=S.showEcgGrid?'rgba(255,130,70,0.30)':border;
     var gx=LPAD+((gb-vm.winStart)/vm.dispBeats)*avail;
     if(gx<LPAD-1||gx>LPAD+avail+1)continue;
     wctx.beginPath();wctx.moveTo(gx,TPAD);wctx.lineTo(gx,WH-TPAD);wctx.stroke();
@@ -5721,6 +5796,8 @@ function drawStrip(){
   visible.forEach(function(L,idx){
     var rowY=TPAD+idx*rowH,base=rowY+rowH/2,amp=stripRowAmpForLead(rowH,L.n,tInWindow);
     var foc=L.n===S.focusLead;
+
+    drawEcgAmpGrid(wctx,LPAD,WW-LPAD,base,amp);
 
     wctx.strokeStyle=currentTheme==='dark'?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)';
     wctx.lineWidth=0.8;
@@ -6621,21 +6698,19 @@ function syncLeadPillsUI(){
 
 function onLeadPillClick(name,ev){
   if(ALL_LEAD_NAMES.indexOf(name)<0)return;
-  if(allLeadsVisible()){
-    isolateLead(name);
-    return;
-  }
-  var removeIntent=ev&&(ev.altKey||ev.metaKey&&ev.shiftKey);
+  /* Hidden lead: show and focus */
   if(S.visibleLeads[name]===false){
     toggleLeadVisible(name,true);
     focusLeadOnly(name);
     return;
   }
-  if(removeIntent&&visibleLeadsList().length>1){
-    toggleLeadVisible(name,false);
+  /* Solo lead clicked again: restore all */
+  if(soloLeadVisible()){
+    showAllLeads();
     return;
   }
-  focusLeadOnly(name);
+  /* Any visible lead (all or partial): isolate it — second click restores */
+  isolateLead(name);
 }
 
 function toggleLeadVisible(name,on){
@@ -7600,6 +7675,26 @@ function initPlaybackKeyboard(){
   });
 }
 
+/* ── Strip chip toggles (Sweep / Grid / Pol badge) ────────────────── */
+function initStripChipBtns(){
+  var chips=[
+    {id:'stripSweepBtn',flag:'stripSweepMode',onAfter:function(on){if(!on)S.stripWinStart=null;}},
+    {id:'stripGridBtn',flag:'showEcgGrid'},
+    {id:'stripPolBadgeBtn',flag:'showPolarityBadge'}
+  ];
+  chips.forEach(function(c){
+    var btn=document.getElementById(c.id);
+    if(!btn)return;
+    btn.classList.toggle('on',!!S[c.flag]);
+    btn.addEventListener('click',function(){
+      S[c.flag]=!S[c.flag];
+      btn.classList.toggle('on',!!S[c.flag]);
+      if(c.onAfter)c.onAfter(S[c.flag]);
+      updateUI();
+    });
+  });
+}
+
 /* ── Boot ─────────────────────────────────────────────────────────── */
 function bootApp(restored){
   if(window.EcgIcons)EcgIcons.initDom();
@@ -7633,6 +7728,7 @@ function bootApp(restored){
   initVectorStrokeControl();
   initPlaybackRateControl();
   initLayerPills();
+  initStripChipBtns();
   initViewModeToggle();
   initStudyModeToggle();
   initBodyModeToggle();

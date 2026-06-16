@@ -27,7 +27,7 @@ function readJson(rel) {
 
 async function fetchJson(route) {
   try {
-    const res = await fetch(`${API}${route}`, { signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`${API}${route}`, { signal: AbortSignal.timeout(route.includes('voice-note') ? 20000 : 8000) });
     const ct = res.headers.get('content-type') || '';
     if (!res.ok) return { error: `HTTP ${res.status}` };
     if (!ct.includes('json')) return { error: 'not JSON' };

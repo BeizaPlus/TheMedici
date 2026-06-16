@@ -7,12 +7,81 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const USER_ROOT = path.join(__dirname, '../user-data');
 const USER_CASES_DIR = path.join(USER_ROOT, 'cases');
+const USER_NOTES_DIR = path.join(USER_CASES_DIR, 'notes');
 const USER_RECORDINGS_DIR = path.join(USER_ROOT, 'recordings');
 
 export function ensureUserDirs() {
-  for (const dir of [USER_ROOT, USER_CASES_DIR, USER_RECORDINGS_DIR]) {
+  for (const dir of [USER_ROOT, USER_CASES_DIR, USER_NOTES_DIR, USER_RECORDINGS_DIR]) {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   }
+}
+
+function notesFilePath(caseId) {
+  return path.join(USER_NOTES_DIR, `${String(caseId).padStart(3, '0')}.md`);
+}
+
+function notesPublicHref(caseId) {
+  return `cases/notes/${String(caseId).padStart(3, '0')}.md`;
+}
+
+export async function readCaseNotesText(caseId) {
+  ensureUserDirs();
+  try {
+    return await fsp.readFile(notesFilePath(caseId), 'utf8');
+  } catch {
+    return '';
+  }
+}
+
+export async function writeCaseNotesText(caseId, text) {
+  ensureUserDirs();
+  const trimmed = String(text || '');
+  const fp = notesFilePath(caseId);
+  if (!trimmed.trim()) {
+    try {
+      await fsp.unlink(fp);
+    } catch {
+      /* missing file */
+    }
+    return { text: '', href: null, bytes: 0 };
+  }
+  await fsp.writeFile(fp, trimmed, 'utf8');
+  const stat = await fsp.stat(fp);
+  return {
+    text: trimmed,
+    href: notesPublicHref(caseId),
+    bytes: stat.size,
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+/** Append one journal block without reading the full file into memory. */
+export async function appendCaseNotesBlockText(caseId, body, { header = 'Note', at = null } = {}) {
+  const content = String(body || '').trim();
+  if (!content) return null;
+  ensureUserDirs();
+  const fp = notesFilePath(caseId);
+  const when = at ? new Date(at) : new Date();
+  const stamp = when.toLocaleString();
+  const block = `\n\n---\n**${header} · ${stamp}**\n${content}\n`;
+  let exists = false;
+  try {
+    await fsp.access(fp);
+    exists = true;
+  } catch {
+    exists = false;
+  }
+  if (!exists) {
+    await fsp.writeFile(fp, block.trimStart(), 'utf8');
+  } else {
+    await fsp.appendFile(fp, block, 'utf8');
+  }
+  const stat = await fsp.stat(fp);
+  return {
+    href: notesPublicHref(caseId),
+    bytes: stat.size,
+    updatedAt: new Date().toISOString(),
+  };
 }
 
 function caseFilePath(caseId) {

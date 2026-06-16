@@ -1,0 +1,44 @@
+---
+description: Practice presentation vs answer-key HPI — briefing/play must not spoil diagnosis or treatment
+globs:
+  - src/lib/caseBriefing.js
+  - src/lib/caseNarrative.js
+  - src/lib/casePresentation.js
+  - src/data/gameData.js
+  - src/data/preparedCases.json
+  - data/cases/**/*.json
+  - src/components/CaseContextPanel.jsx
+  - src/components/Briefing.jsx
+alwaysApply: false
+---
+
+# Practice presentation (forward momentum)
+
+**Steve rule:** Briefing + Play **HPI tab** = what the learner sees **before** workup. Never dump diagnosis, fundoscopy results, LP opening pressure, or treatment plan there.
+
+## Two HPI fields (do not conflate)
+
+| Field | Purpose | Shown in practice HPI tab? |
+|-------|---------|----------------------------|
+| **`practice_hpi`** | Spoiler-free presentation (symptoms, PMH cues only) | **Yes** — preferred |
+| **`hpi_narrative`** | DeepSeek answer-key / teach chart (full workup + treatment) | **No** — teach, notes, chat context only |
+
+Add `practice_hpi` to `preparedCases.json` (and `game/data/cases/case_N.json` when syncing bank) for any case whose `hpi_narrative` contains spoilers.
+
+## Code paths (do not regress)
+
+| Function | Must use |
+|----------|----------|
+| `getBriefingHpi()` | `presentationHistory` / `historyText` / `practice_hpi` — **never** `hpi_narrative` first |
+| `applySessionToCase()` | Keep `historyText` on practice source — **do not** overwrite with `hpi_narrative` |
+| `CaseContextPanel` HPI body | `hpiText` prop / `historyText` — **never** `caseData.hpi_narrative` for display |
+| `getBriefingNotes()` | Full chart (diagnosis, treatment) — **Notes tab only** |
+
+## CCS shared titles
+
+Cases that share a presentation title (e.g. many **Headache** cases) may get generic CCS `historyText`. Case-specific DeepSeek cases still need their own **`practice_hpi`** when the diagnosis differs (e.g. case 140 IIH).
+
+## Read case control
+
+- **Read case** = gold pill top-right (`pack-tag--read`), replaces Immersa brand tag in case chrome.
+- Not a second row under tab icons. Briefing with `hideHeader` → read pill on tab row.

@@ -1,0 +1,36 @@
+---
+description: Lady patient likeness — Pinterest ref → Magnific character map → portrait pipeline
+globs:
+  - src/data/patientLadyRefs.json
+  - server/casePortrait.js
+  - dev/character-maps/**
+  - public/assets/patient/ladies/**
+alwaysApply: false
+---
+
+# Patient character maps (lady likeness)
+
+**Docs:** `dev/character-maps/CHARACTER_MAPS.md`
+
+## Pipeline (every new ref)
+
+1. Save source → `dev/character-maps/sources/<slug>-REF.png` (note Pinterest URL in markdown)
+2. Magnific **`imagen-nano-banana-2`** · **9:16** · **2k** · ref-guided 4-panel contact sheet (white bg)
+3. Ship → `public/assets/patient/ladies/<slug>-CHARACTER-MAP.png`
+4. Register in `src/data/patientLadyRefs.json`:
+   - `identityPrompt` (hospital gown on stretcher; preserve face/hair/jewelry)
+   - optional `caseSlugs` (e.g. `"140": "pinterest-cornrows-star"`)
+   - add to `mixedRotation` for `nameRegion: mixed`
+
+**Stills policy:** Magnific first (Steve `steve-generation-access.mdc`). Not Fal.
+
+## Runtime
+
+- `resolvePatientLadyRef.js` + `server/casePortrait.js` pick slug by case id / region / rotation
+- Portrait must still use **approved 16:9 ED baseplate** (`SCENE_LOCK.json`) — character map is **identity only**, not camera
+
+## Forward work
+
+- [ ] Batch `practice_hpi` for high-yield cases with spoiler-heavy `hpi_narrative`
+- [ ] More Pinterest refs → maps for female cases without likeness lock
+- [ ] Sync `practice_hpi` in build script from `game/data/cases/` → `preparedCases.json`

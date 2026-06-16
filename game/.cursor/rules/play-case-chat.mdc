@@ -1,0 +1,45 @@
+---
+description: Play case chat — patient/tutor mode parity, session recovery, order dock stethoscope
+globs:
+  - src/components/Play.jsx
+  - src/components/SceneOrderCommandDock.jsx
+  - src/components/CaseSessionThread.jsx
+  - src/components/PlayChatNotesTabPanel.jsx
+  - src/hooks/useCaseChat.js
+  - src/lib/caseChat.js
+  - server/index.js
+alwaysApply: false
+---
+
+# Play case chat (parity with Differentials)
+
+## Patient mode (stethoscope)
+
+Play must match Differential floating chat:
+
+| Control | Location |
+|---------|----------|
+| Stethoscope toggle | `SceneOrderCommandDock` header + `CaseSessionThread` when `onPatientModeChange` set |
+| State | `chatPatientMode` + `chatPatientModeRef` in `Play.jsx` — reset on `caseData.id` change |
+| Off (default) | Order dock + voice → **tutor** (`chatMode: 'tutor'`) |
+| On (gold) | → **patient_sim** |
+| Slash | `/pt` patient · `/ch` tutor/notes — `parseChatModeCommand` in dock + thread |
+
+Thread default in Play: `defaultChatTarget="tutor"` (not notes-only).
+
+## Chat session expired
+
+Server keeps sessions **in RAM only** (`caseChatSessions` in `server/index.js`). Lost on API restart (~every `npm run dev`) or **2h** idle.
+
+**Do not** tell Steve to "close chat" as the only fix. Client must auto-recover:
+
+- `sendCaseChatMessage(..., recover: { caseData, chatMode })` → clear client cache → `/api/case-chat/start` → retry once.
+- Persisted UI history stays in localStorage; only server LLM window is new.
+
+When adding new chat send paths, always pass `recover` or call `ensureCaseChatSession` after 404.
+
+## Order · Chat dock
+
+Non-order text → chat (not "Answer in chat →" dead end). Matcher: `orderCommandAutocomplete.js` synonym rings for common labs/exam phrases.
+
+Chat markdown: `*italic*` stage directions via `chatMessageFormat.jsx` — not raw asterisks.

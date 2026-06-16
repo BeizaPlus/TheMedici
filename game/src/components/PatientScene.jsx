@@ -6,6 +6,11 @@ import {
   resolveSceneSrc,
 } from '../lib/patientImage.js';
 import { STORAGE } from '../lib/storageKeys.js';
+import {
+  preloadPrivateVideos,
+  resolvePrivateVideoSrc,
+  VIDEO_NO_DOWNLOAD_ATTRS,
+} from '../lib/privateVideoSrc.js';
 
 const idleVideos = [
   '/assets/video/breathing_01.mp4',
@@ -28,6 +33,8 @@ function sleep(ms) {
 
 function slotSrc(slot) {
   if (!slot) return '';
+  const logical = slot.dataset?.assetSrc;
+  if (logical) return logical;
   const attr = slot.getAttribute('src');
   if (attr) return attr;
   const url = slot.currentSrc || slot.src;
@@ -107,9 +114,11 @@ export default function PatientScene({
     setUseVideoFallback(false);
   }, [safeForce, safeOverride, cfg?.src, caseData?.id]);
 
-  const loadSlot = useCallback((slot, videoSrc) => {
+  const loadSlot = useCallback(async (slot, videoSrc) => {
     if (!slot) return;
-    slot.src = videoSrc;
+    slot.dataset.assetSrc = videoSrc;
+    const blobSrc = await resolvePrivateVideoSrc(videoSrc);
+    slot.src = blobSrc;
     slot.loop = false;
     slot.muted = true;
     slot.playsInline = true;
@@ -146,8 +155,13 @@ export default function PatientScene({
   }, [crossfadeIdle]);
 
   useEffect(() => {
+    preloadPrivateVideos([...idleVideos, DEATH_VIDEO]);
+  }, []);
+
+  useEffect(() => {
     if (!showAmbientVideo) return undefined;
 
+    let cancelled = false;
     idleSwappingRef.current = false;
     setFrontKey('active');
     const activeSlot = activeRef.current;
@@ -155,18 +169,31 @@ export default function PatientScene({
     if (!activeSlot || !nextSlot) return undefined;
 
     const start = pickIdle(null);
-    loadSlot(activeSlot, start);
-    loadSlot(nextSlot, pickIdle(start));
-
-    activeSlot.addEventListener('ended', onIdleEnded);
-    activeSlot.play().catch(() => {});
+    Promise.all([loadSlot(activeSlot, start), loadSlot(nextSlot, pickIdle(start))]).then(() => {
+      if (cancelled) return;
+      activeSlot.addEventListener('ended', onIdleEnded);
+      activeSlot.play().catch(() => {});
+    });
 
     return () => {
+      cancelled = true;
       activeSlot.removeEventListener('ended', onIdleEnded);
       activeSlot.pause();
       nextSlot.pause();
     };
   }, [loadSlot, onIdleEnded, showAmbientVideo]);
+
+  useEffect(() => {
+    const deathSlot = deathRef.current;
+    if (!deathSlot || !showAmbientVideo) return undefined;
+    let cancelled = false;
+    resolvePrivateVideoSrc(DEATH_VIDEO).then((blobSrc) => {
+      if (!cancelled) deathSlot.src = blobSrc;
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [showAmbientVideo]);
 
   useEffect(() => {
     const frontSlot = frontRef.current;
@@ -207,6 +234,7 @@ export default function PatientScene({
             muted
             playsInline
             preload="auto"
+            {...VIDEO_NO_DOWNLOAD_ATTRS}
             style={{
               ...videoStyleBase,
               objectPosition: cfg.objectPosition || 'center center',
@@ -221,6 +249,7 @@ export default function PatientScene({
             muted
             playsInline
             preload="auto"
+            {...VIDEO_NO_DOWNLOAD_ATTRS}
             style={{
               ...videoStyleBase,
               objectPosition: cfg.objectPosition || 'center center',
@@ -233,10 +262,10 @@ export default function PatientScene({
             ref={deathRef}
             id="death"
             className="patient-scene-img"
-            src={DEATH_VIDEO}
             muted
             playsInline
             preload="auto"
+            {...VIDEO_NO_DOWNLOAD_ATTRS}
             style={{
               ...videoStyleBase,
               objectPosition: cfg.objectPosition || 'center center',

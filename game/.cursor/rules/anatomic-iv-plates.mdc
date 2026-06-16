@@ -1,0 +1,85 @@
+---
+description: Anatomic IV zone baseplates — Magnific generation, lady likeness, Photoshop zone marking for MeWorld Play
+globs: game/dev/anatomic-plates/**,game/public/assets/patient/**,game/src/data/gameConfig.json,game/src/lib/zoneStudio.js,game/studio.html
+alwaysApply: false
+---
+
+# Anatomic IV plates (medical product)
+
+## Purpose
+
+Generate and maintain **sex-specific ED overhead baseplates** with **approved IV access portal scope** for Zone Studio and Play drop zones.
+
+**Spec:** `dev/anatomic-plates/IV_ACCESS_PORTALS.json`
+
+## Anatomy references (Steve-approved scope)
+
+| Sex | Anatomy overlay | Clean base |
+|-----|-----------------|------------|
+| Male | **`raw/male-ed-anatomic-plate-anatomy.png`** | `raw/male-ed-anatomic-plate-a.png` (crop lock) |
+| Female | **`raw/female-ed-anatomic-plate-anatomy.png`** | regenerate to match scope |
+
+### Overlay legend
+
+| Color | Meaning |
+|-------|---------|
+| **Green** | **Torso** — exams, abdomen/chest (`zone-custom-1`, `zone-custom-3`) — **NOT IV** |
+| **Red** | **IV access portals** — stacks may be placed here |
+
+### IV portal precedence (red zones)
+
+1. **Antecubital fossa** — both arms (**PRIMARY** · inner elbow crease only)
+2. **Neck** — bilateral lateral / supraclavicular (alternate access)
+3. **Face** — bilateral cheek (female anatomy plate · rare alternate)
+
+Never dorsal forearm, wrist, or hand for default peripheral IV.
+
+## Crop lock (male)
+
+| File | Role |
+|------|------|
+| **`raw/male-ed-anatomic-plate-a.png`** | Base crop lock — 2752×1536, crown through toes |
+
+Export/play target: **1536×864**.
+
+## Generation (Magnific — not Higgsfield/Fal)
+
+| Step | Action |
+|------|--------|
+| 1 | Read `IV_ACCESS_PORTALS.json` + prompts + `SCENE_LOCK.json` |
+| 2 | `images_generate` · `imagen-nano-banana-2` · `aspectRatio: 16:9` · `resolution: 2k` · `count: 2` |
+| 3 | **Female refs:** `female-ed-anatomic-plate-anatomy.png` (scope) + `patient-scene-female.png` (layout) + library `character` **akosuaduku** (`id: 1870701`) |
+| 4 | **Male refs:** `male-ed-anatomic-plate-anatomy.png` (scope) + `male-ed-anatomic-plate-a.png` (crop lock) |
+| 5 | Output = **clean plate** — NO red/green overlays in gen (Steve paints zones in Photoshop) |
+| 6 | Save to `raw/` · `creations_wait` → download |
+
+Append `talking-images/.../prompts/lighting-balanced-review.txt` if underexposed.
+
+## Framing (locked)
+
+- **16:9** · crown → toes · antecubital fossae + neck sides visible
+- Gown short enough to expose inner elbow creases and lateral neck
+
+## Post-process (Steve — Photoshop offline)
+
+1. Retouch clean plate locally (`photoshop-offline.mdc`).
+2. Paint **red** ellipses per anatomy reference (`IV_ACCESS_PORTALS.json`).
+3. Paint **green** torso zone if not already in anatomy ref.
+4. Center crop to **1536×864** (toes visible).
+5. Export to `approved/` → promote → **retune zones** in Zone Studio.
+
+## Zone wiring (current → planned)
+
+| Portal | Precedence | Current zone (game) | Future (if we add more zones) |
+|--------|------------|-----------------------|--------------------------------|
+| Antecubital L/R | 1 | `zone-arm` (peripheral IV placement) | split `zone-arm-left` / `zone-arm-right` |
+| Neck L/R | 2 | — (reference scope only) | `zone-iv-neck-left`, `zone-iv-neck-right` |
+| Face L/R | 3 | — (reference scope only) | `zone-iv-face-left`, `zone-iv-face-right` |
+| Torso | — | `zone-custom-1`, `zone-custom-3` | exams only |
+
+## Do not
+
+- Burn colored zone overlays into Magnific gens
+- Place IV catheter in generation (blocks zone painting)
+- Use dorsal forearm / wrist / hand for `zone-arm`
+- Crop tighter than crop lock

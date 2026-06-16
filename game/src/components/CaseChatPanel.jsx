@@ -2,32 +2,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FiSend, FiX } from 'react-icons/fi';
 import { IconCopy, IconFileMedical, IconNotes, IconPlayerStop, IconVolume2 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import ChatMessageContent from './ChatMessageContent.jsx';
-import { resolveOrderAutocomplete } from '../lib/orderCommandAutocomplete.js';
+import {
+  findKnownOrderMatch,
+  findStackMatchForQuery,
+  normCommandText,
+  resolveCaseStackOrder,
+  resolveOrderAutocomplete,
+} from '../lib/orderCommandAutocomplete.js';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { readCaseNotes, writeCaseNotes } from '../lib/caseNotes.js';
 import { addCasePictureNote, casePictureLink } from '../lib/casePictureNotes.js';
-
-function normCommandText(s) {
-  return String(s || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function stackAliases(stack) {
-  const label = String(stack?.label || '');
-  const aliases = new Set([label, ...(Array.isArray(stack?.aliases) ? stack.aliases : [])]);
-  label.split('/').forEach((part) => {
-    const trimmed = part.trim();
-    if (trimmed) aliases.add(trimmed);
-  });
-  label.split(':').forEach((part) => {
-    const trimmed = part.trim();
-    if (trimmed && trimmed.length > 2) aliases.add(trimmed);
-  });
-  return [...aliases].filter(Boolean);
-}
 
 const MIN_W = 340;
 const MIN_H = 320;
@@ -137,46 +121,23 @@ export default function CaseChatPanel({
   }, [dragging, resizing, size]);
 
   // ── order matching (same logic as treatment tab) ──
-  const commandMatch = useMemo(() => {
-    const t = normCommandText(input);
-    if (t.length <= 2) return null;
-    for (const s of interventions) {
-      if (placed[s.id]) continue;
-      for (const a of stackAliases(s)) {
-        const alias = normCommandText(a);
-        if (!alias) continue;
-        if (t.includes(alias) || alias.includes(t)) return s;
-      }
-    }
-    return null;
-  }, [interventions, input, placed]);
+  const commandMatch = useMemo(
+    () => resolveCaseStackOrder(input, interventions, placed),
+    [interventions, input, placed],
+  );
 
-  const decoyCommandMatch = useMemo(() => {
-    const t = normCommandText(input);
-    if (t.length <= 2) return null;
-    for (const d of decoyInterventions) {
-      if (placed[d.id]) continue;
-      for (const a of stackAliases(d)) {
-        const alias = normCommandText(a);
-        if (!alias) continue;
-        if (t.includes(alias) || alias.includes(t)) return d;
-      }
-    }
-    return null;
-  }, [decoyInterventions, input, placed]);
+  const decoyCommandMatch = useMemo(
+    () => findStackMatchForQuery(input, decoyInterventions, placed),
+    [decoyInterventions, input, placed],
+  );
 
-  const knownOrderMatch = useMemo(() => {
-    const t = normCommandText(input);
-    if (t.length <= 2 || commandMatch) return null;
-    return (
-      allMedicalOrders.find((order) => {
-        const name = normCommandText(order.name);
-        const firstWord = name.split(' ')[0];
-        if (!name) return false;
-        return name.includes(t) || t.includes(name) || (firstWord.length > 2 && t.includes(firstWord));
-      }) || null
-    );
-  }, [commandMatch, input, allMedicalOrders]);
+  const knownOrderMatch = useMemo(
+    () =>
+      commandMatch
+        ? null
+        : findKnownOrderMatch(input, allMedicalOrders, interventions, placed),
+    [commandMatch, input, allMedicalOrders, interventions, placed],
+  );
 
   const orderCommandHint = useMemo(() => {
     if (!input.trim()) return 'Matches unplaced stacks only';

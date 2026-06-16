@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { FiSend } from 'react-icons/fi';
-import { IconCamera, IconFileMedical } from './sceneToolbar/SceneToolbarIcons.jsx';
+import { IconCamera, IconFileMedical, IconStethoscope } from './sceneToolbar/SceneToolbarIcons.jsx';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 
 export default function SceneOrderCommandDock({
@@ -21,6 +21,8 @@ export default function SceneOrderCommandDock({
   onToggleReplyExpanded,
   onDismissReply,
   onOpenFullChat,
+  patientMode = false,
+  onPatientModeChange,
 }) {
   const inputRef = useRef(null);
   const showDockReply = Boolean(quickReply?.answer && !chatOpen && replyExpanded);
@@ -37,6 +39,22 @@ export default function SceneOrderCommandDock({
       <header className="scene-order-command-head">
         <span className="scene-order-command-title">Order · Chat</span>
         <div className="scene-order-command-actions">
+          {onPatientModeChange && (
+            <button
+              type="button"
+              className={`scene-order-command-icon-btn case-chat-patient-btn${patientMode ? ' is-active' : ''}`}
+              title={
+                patientMode
+                  ? 'Patient mode ON — simulated patient replies'
+                  : 'Tutor chat — click for patient interview mode'
+              }
+              aria-label={patientMode ? 'Patient mode on' : 'Turn on patient mode'}
+              aria-pressed={patientMode}
+              onClick={() => onPatientModeChange(!patientMode)}
+            >
+              <IconStethoscope className="toolbar-icon" />
+            </button>
+          )}
           <button
             type="button"
             className="scene-order-command-icon-btn"

@@ -1,0 +1,310 @@
+# Agent handoff — TheSchoonMaker
+
+Medical training game: **181 CCS cases**, drag-and-place clinical orders onto a patient scene. React 19 + Vite 6 + Express.
+
+**Repo:** `git@github.com:BeizaPlus/TheSchoonMaker.git` (SSH as **BeizaPlus** — configured on this machine)
+
+---
+
+## Run the app
+
+```powershell
+Set-Location "C:\Users\steve\MeWorld\game"
+npm run dev
+```
+
+Or: `C:\Users\steve\MeWorld\START-GAME.bat` / `START-MEWORLD.bat`
+
+- Web: http://localhost:5173 (Vite)
+- API: http://localhost:3001 (Express)
+- `predev` runs `build:data` + `smoke-test.mjs` + `smoke-pre-serve.mjs` (CSS audit + vite build) — must pass before dev starts
+- `npm run dev` uses `start-dev.mjs`: API → `smoke:differential` → Vite → `smoke:differential-session` — **servers exit if live smoke fails**
+
+If ports are busy, kill old node processes or use the alternate Vite port shown in the terminal.
+
+**Not MeWorld:** `C:\Users\steve\Downloads\teleprompter-station\` is **Teleprompter Station** (voiceover recording, :8765) — different app. **ECG Vector Lab** is only `/ecg-vector-lab.html` on :5173; default launch is the **main game** at http://localhost:5173/.
+
+---
+
+## Data pipeline (case bank)
+
+```
+step3/ccs_screenshots/ccs_case_list.json   ← export from live CCS (gitignored)
+step3/ccs_presentations/*.txt              ← real intro/vitals/history (8 types in repo)
+        ↓  npm run build:catalog
+src/data/ccsCatalog.json                   ← 181 cases + categories + presentations
+        ↓  npm run build:cases
+src/data/preparedCases.json                ← vitals, exam, narratives (what the game plays)
+```
+
+**npm scripts:**
+
+| Script | Purpose |
+|--------|---------|
+| `npm run refresh:case-bank` | Rebuild catalog + prepared cases |
+| `npm run capture:case-list` | Export 181 cases from app.ccscases.com (needs `step3/ccs_credentials.json`) |
+| `npm run capture:presentations` | Capture more intro/vitals text |
+| `npm run build:data` | Same as refresh (used by predev) |
+
+**Current state:**
+
+- **181 cases** in catalog and preparedCases — playable today
+- **8 presentation intros** in `step3/ccs_presentations/` (~56 cases share those titles via `hasIntro`)
+- Remaining cases use **title + category template vitals** until more presentations are captured
+- `ccs_case_list.json` is **gitignored**; build falls back to checked-in catalog if missing (see `scripts/build-ccs-catalog.mjs`)
+
+See `DATA.md` and `step3/CCS_LOCAL_PROXY.md` for full pipeline docs.
+
+---
+
+## Playbooks & order counts
+
+- **`src/data/playbooks.json`** — interventions per presentation title + `default` fallback
+- **`src/data/caseSpecificPlaybooks.json`** — overrides by case id
+- **`src/data/resolvePlaybook.js`** — `getCaseOrderCount(ccsCase)` is source of truth for stack count (not fixed at 5; supports 3–20+)
+- Most of the 89 unique titles still use the **default** playbook unless overridden
+
+---
+
+## UI rules (user cares about these)
+
+1. **Stacks list = vertical column only** — never horizontal wrap/grouping (e.g. no "Office / clinic" parent grouping)
+2. **Expanded stack** shows **one order’s** rationale/guideline — not the full sequence inline (full sequence stays in Teach Me)
+3. **Command dock** must be **draggable and resizable** (gold grips: right, bottom, corner)
+4. **Surface Pro / small screens** — performance matters; avoid huge DOM (SceneGridOverlay uses one surface div, not 1500+ buttons). See `src/lib/deviceProfile.js`, `usePlayDockLayout.js`, compact CSS in `index.css`
+5. **Toolbar icons = Tabler only** — all play-dock / case chrome icons live in `src/components/sceneToolbar/SceneToolbarIcons.jsx`, copied from [tabler.io/icons](https://tabler.io/icons) (outline 24×24, stroke 2). Do not use `react-icons` for toolbar buttons. Voice record: `IconMicrophone` / `IconPlayerStop`. See **ICON RULES** in `CURSOR_RULES.md`.
+
+Key files: `src/components/Play.jsx`, `src/hooks/usePlayDockLayout.js`, `src/components/sceneToolbar/SceneToolbarIcons.jsx`, `src/index.css`
+
+---
+
+## Launch gotchas (already fixed — don’t regress)
+
+| Issue | Fix location |
+|-------|----------------|
+| `predev` failed without external Step 3 folder | `scripts/build-ccs-catalog.mjs` — uses in-repo `step3/`, catalog fallback |
+| Node 24 JSON imports | `with { type: 'json' }` on JSON imports in data files |
+| Smoke test expected 80% completion | `scripts/smoke-test.mjs` reads `gameConfig.json` threshold (99) |
+| Blank welcome screen (TDZ) | `WelcomeScreen.jsx` — declare `panel` state before `useMemo` that uses it |
+| **White unstyled full-page mode** (Differentials, etc.) | Orphan CSS in `index.css` + lazy route without CSS in main bundle. Fix: `src/styles/differential-practice.css`, import in `main.jsx` + component, eager import in `Home.jsx`. Guard: `node scripts/audit-component-css.mjs` (in `predev`) |
+| **Full-app blank white page** | JS won't compile (duplicate `const`, syntax). Run **`npm run build`** before "done". Example fix: `src/lib/caseDiscussionContext.js` |
+| **Port 3001/5173 in use, Vite on 5178** | Run **`npm run dev`** (auto `free-dev-ports`) or `node scripts/free-dev-ports.mjs`. Rule: `dev-server-guard.mdc` |
+| **Differential compare + AI score** | Split scroll columns: yours (left) vs answer key (right). `POST /api/differential/score` uses DeepSeek/OpenAI from `.env`. Client: `src/lib/differentialAiScore.js` |
+| **Dev won't start — vite build / `Expected ")" but found "{"` in `DifferentialPractice.jsx`** | JSX must have **one root** per `return`. Overlay siblings (e.g. `DifferentialDrillPanel` after main `</div>`) need `<>...</>` fragment wrapper. Verify: `npm run smoke:pre-serve` |
+| **`voice-note/status` timeout in `validate-diff-smoke`** (intermittent) | First call probes local `faster_whisper` (Python cold start) and can exceed 8s. **Retry** `npm run dev` once; or `node scripts/free-dev-ports.mjs` then restart. If persistent: check `WHISPER_PYTHON` / Chatterbox venv in `.env` |
+| **Agent spawned bare API + Vite (no smoke)** | Do **not** bypass `npm run dev` — broken JSX/CSS won't be caught. Use `START-GAME.bat` only |
+
+---
+
+## Differential Practice (study mode)
+
+**Entry:** Welcome → **Differentials** · `src/components/DifferentialPractice.jsx`
+
+**JSX rule (2026-06-16):** Any modal/drill/portal rendered **beside** the main `.diff-practice` root must stay inside the same `return ( <> ... </> )` — never add a second top-level sibling without a fragment or dev build fails at `smoke-pre-serve`.
+
+Full-page study loop: chief complaint → voice/type differentials → reveal & score → bottom study panel.
+
+### Study panel tabs (`DifferentialStudyPanel.jsx`)
+
+| Tab | Content |
+|-----|---------|
+| **Timeline** | Saved practice attempts per case |
+| **Case** | Clean LLM case reference — HPI summary + **numbered order workflow** (1, 2, 3…) |
+| **Real World** | Up to 2 real patient stories + YouTube embeds (deep dive) |
+
+### Case data — two banks (do not confuse)
+
+| Bank | Path | Used by |
+|------|------|---------|
+| **Clean (canonical)** | `C:\Users\steve\MeWorld\data\cases\case_N.json` (181, DeepSeek) | Build → `differentialReview.json` |
+| **Game runtime** | `game/data/cases/` + `preparedCases.json` | Play / Briefing only |
+
+Rebuild differential review:
+```powershell
+npm run build:differential-review
+```
+
+### Patient names & settings
+
+- `{{patient_name}}` in HPI → resolved via `personalizeDifferentialReview()` + `patientName.js`
+- Name region from Welcome **Settings** (`audienceProfile.nameRegion`)
+- **Default:** `mixed` (NYC multicultural — rotates Ghanaian, Chinese, Brazilian, Indian, Nigerian per case #)
+- Refined agreed HPI from `narrativeRefine.js` overrides when saved for that case
+
+### Real World tab
+
+- Curated: `src/data/realWorldCases.json` — match by `caseId`, diagnosis, topic
+- Lookup: `src/lib/realWorldCases.js` · UI: `DifferentialRealWorldPanel.jsx`
+- **Seeded:** Case 96 TSS — Alex Lewis, Lauren Wasser (verified YouTube IDs)
+- Fallback: pre-filled YouTube search link when no curated match
+
+### Audio & layout
+
+- ICU monitor ambience on enter (`src/lib/audio.js`)
+- Volume: fixed **bottom-right**, no bordered box (`.diff-ambience-dock`)
+- Chief complaint: **2-line headline** (complaint + specialty) — `differentialHeadline.js`
+
+### Agent rule file
+
+`game/.cursor/rules/differential-practice.mdc` — read before differential tasks.
+
+### Open work checklist
+
+- [ ] Sync clean `MeWorld/data/cases/` → `game/data/cases/` for Play/Briefing
+- [ ] Curate more `realWorldCases.json` entries (target: 2 stories per high-yield case)
+- [ ] Optional: API/AI auto-discovery for real-world YouTube matches
+
+### Play UX checklist (current session)
+
+- [x] Results moved from scene popup into **Results tab**
+- [x] Added **lower-third results carousel** on scene
+- [x] Compare/review stack tap shows **explanation only** (no command stacks reopen)
+- [x] Practice mode results use objective wording (no teaching cues)
+- [x] Teach Me mode keeps interpretive guidance
+- [x] Print flow hardened to avoid blank `about:blank` tabs
+
+---
+
+## Case portraits (OpenAI)
+
+Per-case **House-style cold-open** patient image from the **approved ED baseplate** + case JSON. Requires `OPENAI_API_KEY` in `MeWorld/.env`.
+
+| Baseplate | Path | Frame |
+|-----------|------|-------|
+| Male default | `public/assets/patient/patient-scene.png` | **1536×864 (16:9)** |
+| Male crop lock | `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` | 2752×1536 — crown→toes base framing |
+| Female default | `public/assets/patient/patient-scene-female.png` | same camera lock; crop to 1536×864 |
+| Camera / scene spec | `dev/scene-camera-lock/SCENE_LOCK.json` | Central overhead bedside — zones, prompts, anchors |
+
+**Rule (Steve):** Every generated portrait must match the approved baseplate profile first — same overhead bedside angle, zoom, bed rails, and monitor positions. Only swap patient identity/demographics/distress; never a tight face close-up or different aspect ratio.
+
+| Piece | Path / behavior |
+|-------|-----------------|
+| Server module | `server/casePortrait.js` — prompt, OpenAI `gpt-image-1` edit, vision persona |
+| Disk cache | `game/.case-portraits/case_N.png` + `.json` meta (gitignored) |
+| Static URL | `GET http://127.0.0.1:3001/case-portraits/case_N.png` |
+| API | `GET /api/case-portrait/:id` · `POST /api/regenerate-patient-from-case` · `POST /api/case-persona` |
+| Client | `src/lib/patientRegen.js` — `ensureCasePortrait()`, `regeneratePatientFromCase()` |
+| Auto-load | Briefing + Play on case enter (cache hit = instant) |
+
+### Custom portrait brief (per case)
+
+| Piece | Behavior |
+|-------|----------|
+| UI | `CasePortraitBriefPanel.jsx` — **Play toolbar gear** + **Briefing sidebar footer** |
+| Toggle | **Auto** = demographics + CC from case JSON · **Custom** = user textarea guides OpenAI |
+| Storage | `localStorage` key `schoonmaker_case_portrait_brief` (`casePortraitBrief.js`) |
+| Regen feedback | Button **Regenerating…** + spinning icon; scene **overlay** “Regenerating patient portrait…” (~20–40s); toast on done in Play |
+| Server | `buildPortraitPrompt(caseContext, { portraitBrief })` appends mandatory user direction |
+
+Example custom brief (case 25 sickle cell): *6-year-old boy, curled on stretcher in pain, parents at bedside, monitor cables, dignified ED lighting.*
+
+---
+
+## Patient simulation chat
+
+Case chat runs in **patient_sim** mode (DeepSeek or OpenAI from `.env`).
+
+| Piece | Path / behavior |
+|-------|----------|
+| Context | `src/lib/caseChat.js` — `buildCaseChatContext()`, session per case |
+| Demographics | `src/lib/patientFactsFromHpi.js` — `resolvePatientDemographics()`, `extractPatientFacts()` |
+| Prompt | `server/index.js` — `PATIENT DEMOGRAPHICS` block; age answers must match `ageLabel` |
+| Pediatric | `Pediatrics` category + child `patient_voice` → infer ~6–7 yo if HPI has no explicit age; never invent adult age |
+| Persona cache | Portrait vision + `PORTRAIT_PERSONA_VERSION = 2` in `caseChat.js` |
+| Creativity | Global: Welcome → Settings · Per-case override: **Play gear** (`SimulationCreativityControl`) |
+
+### Case chat rail (Play → Chat tab)
+
+**Cases · drag sideways** — recent cases with saved chat. Badge number = **message count**. Gold border = chat you're viewing; lighter border = case you're still playing.
+
+---
+
+## Play UX (recent)
+
+### Normal play vs Teach Me (order rules — Steve 2026-06)
+
+| Mode | Orders |
+|------|--------|
+| **Normal / studying** (`teachMeMode` off) | Place **any** order — case stacks, decoys, extras, any zone. No “not indicated” blocks, no sequence enforcement, no wrong-zone punishment. Everything logs to timeline for review. |
+| **Teach Me** (`teachMeMode` on) | Guided: enforce **next stack in sequence**, compare panel, “not indicated” for extras outside case set. Decoys log silently; **Show Answer** reveals teaching on decoys. |
+
+### Placed order results (pin click + lower-third)
+
+Click a **placed** label on the patient → **Results** tab + **lower-third carousel** on scene.
+
+- Lower-third UI: `src/components/OrderResultsLowerThird.jsx`
+- Result card renderer: `src/components/OrderResultSceneCard.jsx`
+- Resolver: `src/lib/orderResult.js`
+- Print helper: `src/lib/exportOrderResult.js` (opens printable HTML, then choose **Microsoft Print to PDF**)
+
+Mode behavior:
+
+| Mode | Result wording |
+|------|----------------|
+| **Practice** (`teachMeMode` off) | Objective values/findings only (no interpretive teaching cues) |
+| **Teach Me** (`teachMeMode` on) | Includes interpretation/rationale cues |
+
+### Review / compare tap behavior
+
+When tapping a stack row in compare/review, show **explanation only** (do not reopen command stacks dock):
+
+- `Play.jsx` uses `explainCompareStep()` (no `setInfoTab('treatment')`)
+- Inline explanation card: `src/components/CompareStepRationaleCard.jsx`
+
+Implementation: `Play.jsx` — `handleDrop`, `commitStackPlacement`, `submitOrderCommand`, `processDecoyOrder`.
+
+| Feature | Location |
+|---------|----------|
+| Next case | `IconSkipForward` in play panel stack (`Play.jsx` + `App.jsx` `skipToNextCase`) |
+| Shuffle case | `IconShuffle` in Briefing case picker |
+| Case creativity | Play gear settings (not in chat thread) |
+| Differential cycle arrows | Left/right when revealed (`DifferentialPractice.jsx`) |
+| CCS stack labels | `neutralStackOrderName` — no OCR “Ordered the following:” on real tests/workflow steps |
+| Teaching video | Single-start guard (`CaseTeachingVideoOverlay.jsx`) |
+
+---
+
+## Git / auth
+
+- Remote: **SSH** `git@github.com:BeizaPlus/TheSchoonMaker.git`
+- Push/pull as **BeizaPlus** (SSH key in `~/.ssh/id_ed25519`)
+- Commit author in git config may still show personal email — that’s metadata only; repo is under BeizaPlus org
+- **Uncommitted local changes** (as of last agent session): case-bank integration in `DATA.md`, `package.json`, `build-ccs-catalog.mjs`, regenerated `ccsCatalog.json` / `preparedCases.json`, `step3/CCS_LOCAL_PROXY.md`
+
+---
+
+## Suggested next work (priority order)
+
+1. **Commit & push** MeWorld batch: portraits, custom brief, pediatric chat, play UX (when Steve asks)
+2. **Test case 25** — custom portrait brief + patient chat age (~6 yo)
+3. **Capture more case bank depth:** `step3/ccs_credentials.json` → capture scripts → `npm run refresh:case-bank`
+4. **Expand playbooks** for high-volume presentation titles still on `default`
+5. Optional: batch pre-cache all 181 case portraits on server
+
+---
+
+## Key paths
+
+| Path | Role |
+|------|------|
+| `src/App.jsx` | Routes, welcome / play / browser |
+| `src/data/gameData.js` | Merges catalog + preparedCases + playbooks → game case |
+| `src/data/useCcsCatalog.js` | Catalog hook |
+| `src/components/Play.jsx` | Main play UI + command dock |
+| `src/lib/patientRegen.js` | Case portrait load/regenerate |
+| `src/lib/casePortraitBrief.js` | Per-case custom portrait text |
+| `src/lib/patientFactsFromHpi.js` | Patient demographics for chat |
+| `server/casePortrait.js` | OpenAI portrait prompt + cache |
+| `scripts/smoke-test.mjs` | Pre-dev sanity checks |
+| `step3/` | CCS capture toolchain + mirror cache |
+
+---
+
+## Do not
+
+- Change stacks to horizontal layout or nest orders under category headers
+- Add toolbar/case UI icons outside `SceneToolbarIcons.jsx` or from `react-icons`
+- Require `C:\Users\steve\Step 3` external path — use in-repo `step3/`
+- Commit `step3/ccs_credentials.json`, `.env`, or browser profiles
+- Force-push `main` without explicit user request

@@ -14,6 +14,8 @@ alwaysApply: true
 | Game on **5178**, styles/API broken | Zombie Vite on **5173–5177** — new `npm run dev` picks next port; user still opens **5173** |
 | **Blank white page** (entire app) | JS parse error (e.g. duplicate `const` in `caseDiscussionContext.js`) — bundle never mounts React |
 | White differential only | CSS guard issue — see `component-css-guard.mdc` |
+| **`predev` fails — `Expected ")" but found "{"` in `DifferentialPractice.jsx`** | Two JSX roots in one `return` (e.g. main div + `DifferentialDrillPanel`) without `<>...</>`. Run `npm run smoke:pre-serve` after any differential JSX edit |
+| **`voice-note/status` — operation aborted (timeout)** | Live smoke hits `/api/voice-note/status` with 8s limit while API probes local Whisper on first request. Usually passes on **second** `npm run dev`; fix env if it never passes |
 
 ## Canonical URLs (only these)
 
@@ -33,7 +35,9 @@ npm run dev
 
 `npm run dev` runs **`free-dev-ports`** first (kills listeners on 3001 + 5173), then `predev` (build:data + smoke-test), then API + Vite.
 
-**Do not** spawn extra `node server/index.js` or bare `vite` in parallel — one `npm run dev` only.
+**Do not** spawn extra `node server/index.js` or bare `vite` in parallel — one `npm run dev` only. Bypassing smoke leaves broken JSX running until Steve hits a white screen.
+
+**"Run MeWorld"** = `C:\Users\steve\MeWorld\START-GAME.bat` → http://localhost:5173/ (main game). Not teleprompter-station (:8765). Not ECG lab unless Steve asks for `/ecg-vector-lab.html`.
 
 Manual free if needed:
 

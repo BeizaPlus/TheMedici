@@ -1,0 +1,561 @@
+/* Landscape teach compare — horizontal rails over patient portrait */
+.teach-compare-landscape-host {
+  position: absolute;
+  inset: 0;
+  z-index: 42;
+  pointer-events: none;
+}
+
+.teach-compare-landscape {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  color: #f0eee8;
+  pointer-events: none;
+}
+
+.tc-land-chrome,
+.tc-land-rail,
+.tc-land-foot {
+  pointer-events: auto;
+}
+
+.tc-land-bg {
+  position: absolute;
+  inset: 0;
+  background: #0a0c10 center / cover no-repeat;
+  z-index: 0;
+}
+
+.tc-land-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(to bottom, rgba(6, 8, 14, 0.88) 0%, rgba(6, 8, 14, 0.55) 38%, rgba(6, 8, 14, 0.72) 100%),
+    radial-gradient(ellipse 90% 80% at 50% 42%, rgba(8, 10, 16, 0.15) 0%, rgba(4, 6, 12, 0.75) 100%);
+  pointer-events: none;
+}
+
+.tc-land-chrome {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 12px;
+  padding: 8px 12px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(6, 8, 14, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.tc-land-chrome-left {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.tc-land-case-cat {
+  display: block;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(232, 184, 75, 0.88);
+  margin-bottom: 2px;
+}
+
+.tc-land-case-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #faf8f2;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+
+.tc-land-case-meta {
+  margin: 2px 0 0;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.tc-land-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.tc-land-pill {
+  font-size: 0.62rem;
+  padding: 4px 8px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(240, 238, 232, 0.88);
+}
+
+.tc-land-pill strong {
+  color: #e8b84b;
+}
+
+.tc-land-pill.good strong {
+  color: #7ce89a;
+}
+
+.tc-land-pill.warn strong {
+  color: #f0a060;
+}
+
+.tc-land-vitals {
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.48);
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-land-chrome-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.tc-land-layout-btn,
+.tc-land-chrome-actions .teach-compare-export-btn {
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 7px;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 184, 75, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(232, 184, 75, 0.95);
+  cursor: pointer;
+}
+
+.tc-land-layout-btn:hover,
+.tc-land-chrome-actions .teach-compare-export-btn:hover {
+  background: rgba(232, 184, 75, 0.12);
+}
+
+.tc-land-rails {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+  max-height: min(46vh, 340px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 0 10px 10px;
+  margin-top: auto;
+}
+
+.tc-land-critical {
+  flex-shrink: 0;
+  padding: 7px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 120, 100, 0.35);
+  background: rgba(40, 12, 10, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.tc-land-critical-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.tc-land-critical-title {
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: rgba(255, 154, 136, 0.95);
+}
+
+.tc-land-critical-count {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-land-critical-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tc-land-critical-chip {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 4px;
+  max-width: 100%;
+  padding: 4px 7px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 120, 100, 0.28);
+  background: rgba(0, 0, 0, 0.28);
+  font-size: 0.64rem;
+  line-height: 1.25;
+  color: rgba(255, 220, 210, 0.92);
+}
+
+.tc-land-critical-chip.is-done {
+  border-color: rgba(124, 232, 154, 0.35);
+  background: rgba(20, 48, 32, 0.45);
+  color: rgba(210, 255, 220, 0.95);
+}
+
+.tc-land-critical-mark {
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.tc-land-critical-chip-label {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.tc-land-rail {
+  flex-shrink: 0;
+  background: rgba(6, 8, 14, 0.78);
+  border: 1px solid rgba(232, 184, 75, 0.22);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+.tc-land-rail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 9px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(232, 184, 75, 0.92);
+  font-weight: 600;
+}
+
+.tc-land-next {
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(240, 238, 232, 0.72);
+  font-weight: 400;
+  white-space: normal;
+  line-height: 1.25;
+  text-align: right;
+  max-width: min(48vw, 420px);
+}
+
+.tc-land-next strong {
+  color: rgba(232, 184, 75, 0.95);
+}
+
+.tc-land-rail-count {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.tc-land-rail-track {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 7px 8px 9px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tc-land-rail-track-tiers {
+  align-items: stretch;
+  gap: 0;
+  padding-bottom: 8px;
+}
+
+.tc-land-tier-block {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  gap: 4px;
+  padding: 0 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tc-land-tier-block:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.tc-land-tier-block.tier-critical .tc-land-tier-cap {
+  color: rgba(255, 154, 136, 0.95);
+}
+
+.tc-land-tier-block.tier-misc .tc-land-tier-cap {
+  color: rgba(180, 200, 255, 0.8);
+}
+
+.tc-land-tier-cap {
+  flex-shrink: 0;
+  font-size: 0.54rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: rgba(232, 184, 75, 0.88);
+  white-space: nowrap;
+}
+
+.tc-land-tier-scroll {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.tc-land-rail-track::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tc-land-rail-track::-webkit-scrollbar-thumb {
+  background: rgba(232, 184, 75, 0.35);
+  border-radius: 999px;
+}
+
+.tc-land-step {
+  flex: 0 0 auto;
+  width: min(152px, 24vw);
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.3rem 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 2px 6px;
+  align-items: start;
+  padding: 6px 7px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.tc-land-step-static {
+  cursor: default;
+}
+
+.tc-land-step:hover:not(.tc-land-step-static) {
+  border-color: rgba(232, 184, 75, 0.45);
+  background: rgba(232, 184, 75, 0.08);
+}
+
+.tc-land-step-num {
+  grid-column: 1;
+  grid-row: 1;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.88);
+  background: linear-gradient(180deg, #f3d060 0%, #e8b84b 100%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.56rem;
+  font-weight: 800;
+  color: #1a1200;
+}
+
+.tc-land-step.status-match .tc-land-step-num {
+  border-color: rgba(124, 232, 154, 0.72);
+  background: linear-gradient(180deg, #9ef0b8 0%, #5fd88a 100%);
+  color: #0f2a18;
+}
+
+.tc-land-step.status-order-off .tc-land-step-num,
+.tc-land-step.status-missed .tc-land-step-num {
+  border-color: rgba(255, 140, 120, 0.7);
+}
+
+.tc-land-step-extra-dot {
+  border-style: dashed;
+  background: transparent;
+  color: rgba(255, 180, 168, 0.9);
+  font-size: 0.9rem;
+}
+
+.tc-land-step-label {
+  grid-column: 2;
+  grid-row: 1;
+  font-size: 0.72rem;
+  line-height: 1.22;
+  color: rgba(244, 242, 236, 0.95);
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  display: block;
+}
+
+.tc-land-step-badge {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  font-size: 0.52rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.tc-land-step-yours {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  font-size: 0.56rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.tc-land-step.status-match .tc-land-step-badge {
+  color: #7ce89a;
+}
+
+.tc-land-step.status-order-off .tc-land-step-badge,
+.tc-land-step.status-extra .tc-land-step-badge {
+  color: #ff8c78;
+}
+
+.tc-land-step.status-next .tc-land-step-badge {
+  color: #e8b84b;
+}
+
+.tc-land-step.status-missed .tc-land-step-badge {
+  color: #f0a060;
+}
+
+.tc-land-step.status-pending .tc-land-step-badge {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.tc-land-timeline-step {
+  flex: 0 0 auto;
+  width: min(152px, 24vw);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 7px;
+  border-radius: 9px;
+  border: 1px solid rgba(232, 184, 75, 0.28);
+  background: rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.tc-land-timeline-step::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -9px;
+  width: 8px;
+  height: 2px;
+  background: rgba(232, 184, 75, 0.45);
+}
+
+.tc-land-timeline-step:last-child::before {
+  display: none;
+}
+
+.tc-land-timeline-step.kind-extra {
+  border-color: rgba(120, 180, 255, 0.35);
+}
+
+.tc-land-timeline-time {
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-land-timeline-label {
+  font-size: 0.72rem;
+  line-height: 1.22;
+  color: rgba(244, 242, 236, 0.95);
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.tc-land-timeline-seq {
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(232, 184, 75, 0.75);
+}
+
+.tc-land-empty {
+  margin: 0;
+  padding: 8px 4px;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.tc-land-foot {
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
+  padding: 0 10px 8px;
+}
+
+.tc-land-foot .patient-order-timeline-foot {
+  border-radius: 10px;
+  background: rgba(6, 8, 14, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Landscape mode — skip teach-me blur on patient; overlay owns the portrait */
+.game.teach-me-focus.teach-compare-landscape .game-scene.teach-me-active .patient-drop-surface {
+  filter: none;
+}
+
+.game.teach-me-focus.teach-compare-landscape .game-scene.teach-me-active .patient-drop-surface::after {
+  display: none;
+}
+
+.game.teach-compare-landscape .scene-timeline-dock {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .tc-land-chrome {
+    padding: 6px 8px 5px;
+  }
+
+  .tc-land-pills {
+    width: 100%;
+  }
+
+  .tc-land-rails {
+    max-height: min(52vh, 360px);
+  }
+
+  .tc-land-step,
+  .tc-land-timeline-step {
+    width: min(136px, 38vw);
+  }
+}

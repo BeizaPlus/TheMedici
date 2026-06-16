@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-06-16",
+  "model": "imagen-nano-banana-2",
+  "resolution": "2k",
+  "aspectRatio": "16:9",
+  "cropLock": {
+    "male": "male-ed-anatomic-plate-a.png",
+    "note": "Steve-approved base framing — crown through toes, slightly zoomed out; center-crop to 1536x864 for play"
+  },
+  "anatomyScope": {
+    "male": "male-ed-anatomic-plate-anatomy.png",
+    "female": "female-ed-anatomic-plate-anatomy.png",
+    "spec": "IV_ACCESS_PORTALS.json"
+  },
+  "plates": [
+    {
+      "sex": "female",
+      "file": "female-ed-anatomic-plate-a.png",
+      "characterRef": "akosuaduku",
+      "layoutRef": "patient-scene-female.png"
+    },
+    {
+      "sex": "female",
+      "file": "female-ed-anatomic-plate-b.png",
+      "characterRef": "akosuaduku",
+      "layoutRef": "patient-scene-female.png"
+    },
+    {
+      "sex": "male",
+      "file": "male-ed-anatomic-plate-a.png",
+      "layoutRef": "patient-scene.png",
+      "cropLock": true,
+      "pixels": { "width": 2752, "height": 1536 }
+    },
+    {
+      "sex": "male",
+      "file": "male-ed-anatomic-plate-b.png",
+      "layoutRef": "patient-scene.png"
+    }
+  ],
+  "nextSteps": [
+    "IV scope: green=torso, red=IV portals — see IV_ACCESS_PORTALS.json",
+    "Antecubital fossa has precedence for IV access",
+    "female-ed-anatomic-plate-anatomy.png is the lady scope reference",
+    "Regenerate clean female plates (no overlays) matching anatomy scope",
+    "Center-crop to 1536x864 for play (toes must stay visible)",
+    "Paint zones in Photoshop offline → approved/ → Zone Studio"
+  ]
+}
