@@ -15,6 +15,19 @@ CHATTERBOX_VOICE_REF=none
 
 3. First run loads the GPU model — expect 30–90s for a long case.
 
+## Patient voices (sex-matched chat)
+
+Chatterbox Turbo ships **one unprompted default voice** (`voice-ref none`). It does **not** include a male/female preset pack — gender matching uses **short clone clips** (~10–30s reference audio).
+
+| Profile | Env | Default on this machine |
+|---------|-----|-------------------------|
+| Narrator / Read case | `CHATTERBOX_VOICE_REF` | `none` |
+| Male patient | `CHATTERBOX_PATIENT_VOICE_MALE` | `VoiceClone_STEF_AMP_under25MB.flac` if present |
+| Female patient | `CHATTERBOX_PATIENT_VOICE_FEMALE` | `none` (unprompted) until you add a clip |
+| Pediatric | `CHATTERBOX_PATIENT_VOICE_CHILD` | `none` |
+
+Patient mode in Play **auto-speaks** replies via Chatterbox (toggle: Settings → Audio → Patient auto-speak). Browser speech fallback picks OS male/female voices if Chatterbox is offline.
+
 ## Files
 
 | File | Role |

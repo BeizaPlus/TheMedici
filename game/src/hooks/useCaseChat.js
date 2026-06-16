@@ -8,6 +8,7 @@ import {
 } from '../lib/caseChat.js';
 import { loadPersistedChatHistory, logChatMessage } from '../lib/caseUserLog.js';
 import { appendCaseNotesBlock } from '../lib/caseNotes.js';
+import { speakPatientReply } from '../lib/patientSpeech.js';
 
 function toUiMessages(rows) {
   if (!rows?.length) return [];
@@ -157,6 +158,9 @@ export function useCaseChat({
         const reply = result.reply;
         setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
         persistMessage('assistant', reply);
+        if (chatMode === 'patient_sim' && reply) {
+          void speakPatientReply({ caseData, text: reply });
+        }
         void reloadHistory();
         if (notesMode && caseId) {
           const stamp = new Date().toLocaleTimeString();

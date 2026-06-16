@@ -64,11 +64,13 @@ if %EXITCODE% neq 0 (
   echo.
   echo === Dev server stopped with error %EXITCODE% ===
   echo.
+  echo This usually means API ^(:3001^) or Vite ^(:5173^) exited after smoke — not always missing API keys.
+  echo.
   echo Try:
-  echo   1. Add DEEPSEEK_API_KEY to %ROOT%.env
-  echo   2. cd game ^&^& npm install
-  echo   3. cd game ^&^& node scripts/free-dev-ports.mjs
-  echo   4. cd game ^&^& npm run dev
+  echo   1. cd game ^&^& node scripts/free-dev-ports.mjs
+  echo   2. Remove SERVE_STATIC=1 from your shell or .env ^(dev needs split ports^)
+  echo   3. cd game ^&^& npm run dev
+  echo   4. If chat/voice fails: add DEEPSEEK_API_KEY to %ROOT%.env
   echo.
   pause
   exit /b %EXITCODE%

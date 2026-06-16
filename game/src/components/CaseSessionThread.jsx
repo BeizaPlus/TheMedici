@@ -10,6 +10,7 @@ import {
 import ChatMessageContent from './ChatMessageContent.jsx';
 import CasePictureInline from './CasePictureInline.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
+import { patientVoiceProfile } from '../lib/patientSpeech.js';
 import { mergeSessionThread, parseNoteBubbleContent } from '../lib/caseSessionThread.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
@@ -367,8 +368,9 @@ export default function CaseSessionThread({
                             setReadingIdx(i);
                             readCaseAloud({
                               caseId: caseData?.id,
-                              section: 'chat',
+                              section: patientMode ? 'patient-chat' : 'chat',
                               text: m.content,
+                              voiceProfile: patientMode ? patientVoiceProfile(caseData) : 'narrator',
                               onState: (state) => {
                                 if (state === 'idle' || state === 'error') setReadingIdx(null);
                               },

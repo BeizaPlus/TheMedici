@@ -116,6 +116,14 @@ export default function AudioSettingsPanel({ embedded = false, showGameSounds = 
           bump({ voiceVolume, voiceMuted: voiceVolume === 0 });
         }}
       />
+      <label className="audio-settings-toggle">
+        <input
+          type="checkbox"
+          checked={prefs.patientAutoSpeak !== false}
+          onChange={(e) => bump({ patientAutoSpeak: e.target.checked })}
+        />
+        <span>Patient auto-speak (Chatterbox)</span>
+      </label>
     </section>
   );
 }

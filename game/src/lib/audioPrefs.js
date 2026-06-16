@@ -6,6 +6,7 @@ const DEFAULTS = {
   voiceVolume: 1,
   monitorMuted: false,
   voiceMuted: false,
+  patientAutoSpeak: true,
   monitorEnabled: true,
 };
 
@@ -27,6 +28,7 @@ export function readAudioPrefs() {
       voiceVolume: clamp01(parsed.voiceVolume, DEFAULTS.voiceVolume),
       monitorMuted: Boolean(parsed.monitorMuted),
       voiceMuted: Boolean(parsed.voiceMuted),
+      patientAutoSpeak: parsed.patientAutoSpeak !== false,
     };
   } catch {
     return { ...DEFAULTS };

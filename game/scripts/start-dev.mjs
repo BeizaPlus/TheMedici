@@ -13,7 +13,26 @@ const WEB = process.env.WEB_BASE || 'http://127.0.0.1:5173';
 const viteBin = path.join(root, 'node_modules', 'vite', 'bin', 'vite.js');
 
 const children = [];
+const childLabels = new WeakMap();
 let shuttingDown = false;
+
+/** Local dev = API :3001 + Vite :5173. Never inherit cloud single-port mode. */
+function devChildEnv(overrides = {}) {
+  const env = { ...process.env, ...overrides };
+  delete env.SERVE_STATIC;
+  env.PORT = '3001';
+  env.SPORTMAKER_API_PORT = '3001';
+  return env;
+}
+
+function describeExit(code) {
+  if (code == null) return 'unknown';
+  const n = Number(code);
+  if (n === 0) return '0 (clean)';
+  // Windows unsigned 32-bit for killed processes (e.g. 4294967295 → -1)
+  if (n > 2000000000) return `${code} (process killed — port conflict or free-dev-ports?)`;
+  return String(code);
+}
 
 function runNodeScript(rel) {
   return new Promise((resolve, reject) => {
@@ -43,15 +62,23 @@ async function waitForUrl(url, ms = 90000) {
   return false;
 }
 
-function spawnServer(label, command, args) {
+function spawnServer(label, command, args, envOverrides = {}) {
   const child = spawn(command, args, {
     cwd: root,
     stdio: 'inherit',
-    env: process.env,
+    env: devChildEnv(envOverrides),
     shell: false,
   });
+  childLabels.set(child, label);
   child.on('error', (err) => {
     if (!shuttingDown) console.error(`[${label}] ${err.message}`);
+  });
+  child.on('close', (code, signal) => {
+    if (!shuttingDown) {
+      console.error(
+        `[${label}] exited (code ${describeExit(code)}${signal ? `, signal ${signal}` : ''})`,
+      );
+    }
   });
   children.push(child);
   return child;
@@ -83,6 +110,7 @@ async function main() {
 
   if (!(await waitForUrl(`${API}/api/health`))) {
     console.error('❌ API did not become ready on :3001');
+    console.error('   If you see "static + API" on :5173, unset SERVE_STATIC in your shell or .env.');
     shutdown(1);
     return;
   }
@@ -101,7 +129,10 @@ async function main() {
   const viteArgs = process.argv.includes('--studio')
     ? [viteBin, '--open', '/studio.html']
     : [viteBin];
-  spawnServer('web', process.execPath, viteArgs);
+  spawnServer('web', process.execPath, viteArgs, {
+    PORT: '',
+    SPORTMAKER_API_PORT: '',
+  });
 
   if (!(await waitForUrl(`${WEB}/`))) {
     console.error('❌ Vite did not become ready on :5173');
@@ -129,13 +160,15 @@ async function main() {
     children.map(
       (child) =>
         new Promise((resolve) => {
-          child.on('close', (code) => resolve(code));
+          child.on('close', (code) => resolve({ label: childLabels.get(child) || 'server', code }));
         }),
     ),
   );
 
   if (!shuttingDown) {
     console.error('\n❌ A dev server exited unexpectedly.');
+    console.error('   Usually: port 3001/5173 conflict, SERVE_STATIC=1 in env, or API crash.');
+    console.error('   Try: node scripts/free-dev-ports.mjs  then  npm run dev');
     shutdown(1);
   }
 }

@@ -15,6 +15,7 @@ import {
   readManifest,
   syncManifestWithDisk,
 } from './caseTtsCache.js';
+import { listPatientVoiceConfig, resolveVoiceRefForProfile } from './patientVoiceRef.js';
 import {
   appendCaseNotesBlockText,
   appendChatHistory,
@@ -661,6 +662,7 @@ app.get('/api/health', (_req, res) => {
     chatterboxPython: CHATTERBOX_PYTHON,
     readCaseScript: READ_CASE_SCRIPT,
     readCaseScriptFound: scriptReady,
+    patientVoices: listPatientVoiceConfig(),
     gameRoot: GAME_ROOT,
   });
 });
@@ -1237,7 +1239,7 @@ function runReadCaseTts({ cacheDir, voiceRef }) {
 }
 
 app.post('/api/read-case', async (req, res) => {
-  const { caseId = '', section = 'hpi', text = '' } = req.body || {};
+  const { caseId = '', section = 'hpi', text = '', voiceProfile = 'narrator' } = req.body || {};
   const trimmed = String(text).trim();
   if (!trimmed) {
     return res.status(400).json({ error: 'Missing text' });
@@ -1251,7 +1253,12 @@ app.post('/api/read-case', async (req, res) => {
     return res.status(503).json({ error: 'Missing tools/chatterbox/read_case_tts.py' });
   }
 
-  const voiceRef = process.env.CHATTERBOX_VOICE_REF || '';
+  let voiceRef;
+  try {
+    voiceRef = resolveVoiceRefForProfile(voiceProfile);
+  } catch (e) {
+    return res.status(400).json({ error: String(e.message || e).slice(0, 400) });
+  }
   const apiOrigin = serverOrigin(req);
 
   try {
@@ -1294,10 +1301,11 @@ app.get('/api/read-case/status', async (req, res) => {
   const caseId = req.query.caseId || '';
   const section = req.query.section || 'hpi';
   const text = String(req.query.text || '').trim();
+  const voiceProfile = req.query.voiceProfile || 'narrator';
   if (!text) return res.status(400).json({ error: 'Missing text' });
 
   try {
-    const voiceRef = process.env.CHATTERBOX_VOICE_REF || '';
+    const voiceRef = resolveVoiceRefForProfile(voiceProfile);
     const { manifest, layout } = await buildOrLoadManifest({
       cacheRoot: CASE_TTS_DIR,
       caseId,

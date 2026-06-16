@@ -511,6 +511,20 @@
   text-align: right;
 }
 
+.audio-settings-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 10px;
+  font-size: 0.68rem;
+  color: rgba(240, 238, 232, 0.72);
+  cursor: pointer;
+}
+
+.audio-settings-toggle input {
+  accent-color: var(--gold);
+}
+
 /* â”€â”€ ICU bedside monitor (audio + visual) â”€â”€ */
 .icu-monitor-strip {
   position: absolute;

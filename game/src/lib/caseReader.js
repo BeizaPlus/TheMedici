@@ -94,13 +94,38 @@ async function playPlaylist(playlist, signal) {
   }
 }
 
-function pickEnglishVoice() {
+function pickEnglishVoice(voiceProfile = 'narrator') {
   if (typeof window === 'undefined' || !window.speechSynthesis) return null;
   const voices = window.speechSynthesis.getVoices();
-  return voices.find((v) => v.lang?.startsWith('en')) || voices[0] || null;
+  const en = voices.filter((v) => v.lang?.startsWith('en'));
+  const profile = String(voiceProfile || '').toLowerCase();
+  const wantFemale = profile.includes('female');
+  const wantMale = profile.includes('male') && !wantFemale;
+  const wantChild = profile.includes('child');
+
+  const matchName = (re) => en.find((v) => re.test(v.name));
+
+  if (wantFemale) {
+    return (
+      matchName(/female|zira|samantha|jenny|aria|susan|victoria/i) ||
+      en.find((v) => v.name.includes('Female')) ||
+      en[0]
+    );
+  }
+  if (wantChild) {
+    return matchName(/child|kid|junior/i) || matchName(/female|zira|samantha/i) || en[0];
+  }
+  if (wantMale) {
+    return (
+      matchName(/male|david|guy|ryan|mark|james|andrew|brian/i) ||
+      en.find((v) => v.name.includes('Male')) ||
+      en[0]
+    );
+  }
+  return en.find((v) => v.lang?.startsWith('en')) || voices[0] || null;
 }
 
-function readWithBrowserSpeech(text, signal, onState) {
+function readWithBrowserSpeech(text, signal, onState, voiceProfile = 'narrator') {
   if (typeof window === 'undefined' || !window.speechSynthesis) {
     throw new Error('Browser speech not available');
   }
@@ -111,10 +136,11 @@ function readWithBrowserSpeech(text, signal, onState) {
   return new Promise((resolve, reject) => {
     const utter = new SpeechSynthesisUtterance(clean);
     speechUtterance = utter;
-    utter.rate = 0.92;
-    utter.pitch = 1;
+    const profile = String(voiceProfile || '').toLowerCase();
+    utter.rate = profile.includes('child') ? 1.02 : 0.92;
+    utter.pitch = profile.includes('child') ? 1.12 : profile.includes('female') ? 1.05 : 0.98;
     utter.volume = targetVoiceVolume();
-    const voice = pickEnglishVoice();
+    const voice = pickEnglishVoice(voiceProfile);
     if (voice) utter.voice = voice;
 
     const cleanup = () => {
@@ -169,7 +195,7 @@ function shouldFallbackToBrowser(err) {
   );
 }
 
-export async function readCaseAloud({ caseId, section, text, onState }) {
+export async function readCaseAloud({ caseId, section, text, voiceProfile = 'narrator', onState }) {
   const trimmed = String(text || '').trim();
   if (!trimmed) {
     onState?.('error', 'No text to read');
@@ -198,6 +224,7 @@ export async function readCaseAloud({ caseId, section, text, onState }) {
         caseId: String(caseId || ''),
         section: String(section || 'hpi'),
         text: trimmed.slice(0, 12000),
+        voiceProfile: String(voiceProfile || 'narrator'),
       })}`,
       { signal: controller.signal },
     );
@@ -224,6 +251,7 @@ export async function readCaseAloud({ caseId, section, text, onState }) {
         caseId,
         section,
         text: trimmed.slice(0, 12000),
+        voiceProfile: String(voiceProfile || 'narrator'),
       }),
       signal: controller.signal,
     });
@@ -249,7 +277,7 @@ export async function readCaseAloud({ caseId, section, text, onState }) {
     if (shouldFallbackToBrowser(e)) {
       try {
         onState?.('generating', 'browser');
-        await readWithBrowserSpeech(trimmed, controller.signal, onState);
+        await readWithBrowserSpeech(trimmed, controller.signal, onState, voiceProfile);
         if (gen === readerGen) onState?.('idle');
         return;
       } catch (browserErr) {

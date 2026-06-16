@@ -83,6 +83,9 @@ button {
   flex: 1;
   min-height: 0;
   height: 100%;
+  /* Floating dock/sidebar — scene must fill viewport (not split rows). */
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
 }
 
 .app--studio .shell-home,
@@ -8200,11 +8203,6 @@ button {
     overflow: hidden;
   }
 
-  .game {
-    grid-template-columns: 1fr;
-    grid-template-rows: min(42vh, 360px) 1fr;
-  }
-
   .shell-body {
     grid-template-columns: 1fr;
     grid-template-rows: 200px 1fr;
@@ -8271,11 +8269,6 @@ button {
 
   .welcome h1 {
     font-size: clamp(2rem, 7vw, 3.2rem);
-  }
-
-  .game {
-    grid-template-columns: 1fr;
-    grid-template-rows: min(38vh, 320px) 1fr;
   }
 
   .game-sidebar.floating {

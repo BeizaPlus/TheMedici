@@ -2865,6 +2865,7 @@ export default function Play({
       className={`game ${finalMode ? 'final-mode' : ''} ${activeDrawer ? 'drawer-open' : ''}${teachMeMode ? ' teach-me-focus' : ''}${teachCompareLandscape ? ' teach-compare-landscape' : ''}`}
       style={{
         gridTemplateColumns: '1fr',
+        gridTemplateRows: '1fr',
         ['--algo-h']: `${layout.algorithmPanelHeightPx || 220}px`,
         ['--pill-h']: `${layout.pillRowHeightPx || 52}px`,
       }}
