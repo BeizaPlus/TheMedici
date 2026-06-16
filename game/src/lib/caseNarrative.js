@@ -65,6 +65,9 @@ export function applySessionToCase(caseData, session = {}) {
   if (prepared?.diagnosis) {
     merged.diagnosis = prepared.diagnosis;
   }
+  if (prepared?.case_summary?.trim()) {
+    merged.case_summary = prepared.case_summary.trim();
+  }
   if (prepared?.caseBankSource) {
     merged.caseBankSource = prepared.caseBankSource;
   }

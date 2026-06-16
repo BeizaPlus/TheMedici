@@ -308,12 +308,26 @@ function simulationCreativityBand(score) {
   return { band: 'immersive', temperature: 0.78 };
 }
 
+function sanitizeCaseContextForPrompt(caseContext) {
+  if (!caseContext || typeof caseContext !== 'object') return caseContext;
+  const out = { ...caseContext };
+  delete out.clinical_tip;
+  delete out.objective;
+  delete out.diagnosis;
+  delete out.case_summary;
+  if (Array.isArray(out.interventions)) {
+    out.interventions = out.interventions.map(({ why, ...rest }) => rest);
+  }
+  return out;
+}
+
 function buildCaseChatSystemPrompt(caseContext) {
-  const creativity = caseContext?.simulationCreativity ?? 55;
+  const ctx = caseContext?.learningMode ? sanitizeCaseContextForPrompt(caseContext) : caseContext;
+  const creativity = ctx?.simulationCreativity ?? 55;
   const { band } = simulationCreativityBand(creativity);
-  const name = caseContext?.patientName || 'the patient';
-  const facts = caseContext?.patientFacts || {};
-  const patientSim = caseContext?.chatMode === 'patient_sim' || caseContext?.playRole === 'patient';
+  const name = ctx?.patientName || 'the patient';
+  const facts = ctx?.patientFacts || {};
+  const patientSim = ctx?.chatMode === 'patient_sim' || ctx?.playRole === 'patient';
 
   if (patientSim) {
     const bandRules =
@@ -354,32 +368,32 @@ SIMULATION CREATIVITY: ${creativity}/100 (${band} mode)
 ${bandRules}
 
 PATIENT DEMOGRAPHICS (mandatory — age questions must match this; overrides guesses):
-${JSON.stringify(caseContext?.patientDemographics || {}, null, 2)}
+${JSON.stringify(ctx?.patientDemographics || {}, null, 2)}
 
 PATIENT FACTS (ground truth for interview answers):
 ${JSON.stringify(facts, null, 2)}
-${caseContext?.patientVoice ? `
+${ctx?.patientVoice ? `
 PATIENT VOICE (first-person cues — child vs adult tone):
-${JSON.stringify(caseContext.patientVoice, null, 2)}
+${JSON.stringify(ctx.patientVoice, null, 2)}
 ` : ''}
-${caseContext?.patientPersona ? `
+${ctx?.patientPersona ? `
 PATIENT APPEARANCE & PRESENCE (from this case's portrait — stay consistent with how you look and sound):
-${formatPersonaForChat(caseContext.patientPersona)}
+${formatPersonaForChat(ctx.patientPersona)}
 ` : ''}
 HPI EXCERPT:
-${caseContext?.hpiExcerpt || '(see CASE JSON history fields)'}
-${caseContext?.caseDiscussion ? `
+${ctx?.hpiExcerpt || '(see CASE JSON history fields)'}
+${ctx?.caseDiscussion ? `
 PRIOR CASE DISCUSSION & TRANSCRIPTS (this case only — treat as your memory of earlier interviews and what you already told the learner; stay consistent):
-${formatCaseDiscussionForChat(caseContext.caseDiscussion)}
+${formatCaseDiscussionForChat(ctx.caseDiscussion)}
 ` : ''}
-${caseContext?.caseBriefMarkdown ? `
+${ctx?.caseBriefMarkdown ? `
 CASE DOSSIER (Markdown — OCR, constants, transcripts, and raw data reorganized for this case; ground truth for interview):
-${caseContext.caseBriefMarkdown}
+${ctx.caseBriefMarkdown}
 ` : ''}
 When the learner message includes SESSION SO FAR (orders, vitals, timeline), you may reference what has already happened in this visit — still in patient voice.
 
 CASE JSON:
-${JSON.stringify(caseContext, null, 2)}`;
+${JSON.stringify(ctx, null, 2)}`;
   }
 
   const roleLine =
@@ -393,7 +407,7 @@ Rules:
 - When the learner sends a message, it may include a SESSION SO FAR block with ordersTimeline and standardFlow (Teach Me compare). Use that live session data to explain placement mistakes, out-of-order steps, and what to do next — in addition to the static case JSON.
 
 CASE JSON:
-${JSON.stringify(caseContext, null, 2)}`;
+${JSON.stringify(ctx, null, 2)}`;
 }
 
 async function callChatCompletion(key, messages, { maxTokens = 700, temperature = 0.35 } = {}) {

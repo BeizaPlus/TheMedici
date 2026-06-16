@@ -63,7 +63,8 @@ export function readAudienceProfile() {
       : 'standard';
     const timerSeconds = normalizeTimerSeconds(parsed.timerSeconds, DEFAULT_TIMER_SECONDS);
     const nameRegion = normalizeNameRegion(parsed.nameRegion || DEFAULT_NAME_REGION);
-    return { level, condition, playRole, difficulty, timerSeconds, nameRegion };
+    const learningMode = parsed.learningMode !== false;
+    return { level, condition, playRole, difficulty, timerSeconds, nameRegion, learningMode };
   } catch {
     return null;
   }

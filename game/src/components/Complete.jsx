@@ -58,6 +58,13 @@ export default function Complete({ caseData, stats, playMode, onAgain, onHome, o
 
         {videoError && <p className="complete-video-note">{videoError}</p>}
 
+        {caseData?.case_summary?.trim() && (
+          <div className="complete-case-summary">
+            <p className="complete-case-summary-label">Case summary</p>
+            <p className="complete-case-summary-body">{caseData.case_summary.trim()}</p>
+          </div>
+        )}
+
         <div className="complete-actions">
           {showNext && (
             <button type="button" className="btn-play" onClick={onNext}>

@@ -10,10 +10,12 @@ export default function PhysicalExamPickerDialog({
 }) {
   const suggested = useMemo(() => new Set(suggestedIds), [suggestedIds]);
   const [selected, setSelected] = useState(() => new Set());
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   useEffect(() => {
     if (!open) return;
-    setSelected(new Set(suggestedIds));
+    setSelected(new Set());
+    setShowSuggestions(false);
   }, [open, suggestedIds]);
 
   if (!open) return null;
@@ -29,7 +31,10 @@ export default function PhysicalExamPickerDialog({
 
   const selectAll = () => setSelected(new Set(CCS_PHYSICAL_EXAM_SECTIONS.map((s) => s.id)));
   const clearAll = () => setSelected(new Set());
-  const selectSuggested = () => setSelected(new Set(suggestedIds));
+  const selectSuggested = () => {
+    setSelected(new Set(suggestedIds));
+    setShowSuggestions(true);
+  };
 
   return (
     <div
@@ -72,7 +77,7 @@ export default function PhysicalExamPickerDialog({
         <ul className="physical-exam-picker-list">
           {CCS_PHYSICAL_EXAM_SECTIONS.map((section) => {
             const checked = selected.has(section.id);
-            const isSuggested = suggested.has(section.id);
+            const isSuggested = showSuggestions && suggested.has(section.id);
             return (
               <li key={section.id}>
                 <label className={`physical-exam-picker-row${checked ? ' is-checked' : ''}`}>

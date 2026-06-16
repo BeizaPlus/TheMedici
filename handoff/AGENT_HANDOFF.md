@@ -1,6 +1,7 @@
 # MeWorld / TheSchoonMaker — Agent handoff (other PC)
 
-> **Latest session:** [June 14, 2026 →](./AGENT_HANDOFF-2026-06-14.md) — ECG Vector Lab unified canvas + heart overlay, missed-dx drill panel, voice note Whisper engine fix, download buttons
+> **Latest session:** [June 15, 2026 →](./AGENT_HANDOFF-2026-06-15.md) — ECG Vector Lab immersive study (Flow layer, scroll zoom, layout 6, Steve-approved angle + gray plates)  
+> **Previous:** [June 14, 2026 →](./AGENT_HANDOFF-2026-06-14.md) — ECG unified canvas, missed-dx drill panel, voice Whisper fix
 > **Previous session:** [June 12, 2026 →](./AGENT_HANDOFF-2026-06-12.md) — Mobile differential, Supabase Real World cache
 
 **Date:** 2026-06-07  
@@ -122,10 +123,13 @@ If `predev` is slow on first run, that’s normal — it validates 181 cases.
 | Problem | Fix |
 |---------|-----|
 | `EADDRINUSE` port 3001 | Kill old `node server/index.js`, restart `npm run dev` |
-| Vite on 5174 instead of 5173 | Use the URL Vite prints; API still 3001 |
+| Vite on 5174 instead of 5173 | Run `node scripts/free-dev-ports.mjs`, then `npm run dev` — **always use 5173** |
 | “API server not running” in differential | Start from `game/` with `npm run dev`, not `vite` alone |
 | Stale chat prompts | Restart API after `server/index.js` changes |
 | UI changes not visible | Hard refresh `Ctrl+Shift+R` |
+| **`predev` / vite build fails on `DifferentialPractice.jsx:1900`** | JSX: wrap multiple return children in `<>...</>` (fixed 2026-06-16 for `DifferentialDrillPanel`). Verify: `npm run smoke:pre-serve` |
+| **`voice-note/status` timeout** during `npm run dev` | First Whisper probe can be slow — retry once. Check `DEEPSEEK_API_KEY` + optional `WHISPER_PYTHON` in `.env` |
+| Agent opened **teleprompter-station** or **ECG lab** by mistake | Main game = `MeWorld\START-GAME.bat` → http://localhost:5173/ only |
 
 ---
 

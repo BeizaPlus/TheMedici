@@ -181,7 +181,7 @@ Refresh data: `npm run build:cases` from `game/`.
 | `practice_hpi` | Briefing HPI tab override | Same rules |
 | `patient_voice.history` | Patient-sim AI context | Same rules |
 | `diagnosis` | Post-game review only | One-line diagnosis name |
-| `case_summary` | **Teaching/review mode** | Full teaching block: pathophysiology, differential, treatment plan, management protocol |
+| `case_summary` | **Briefing → Notes tab** + **Complete screen** after case ends | Full teaching block: pathophysiology, differential, treatment plan, management protocol |
 | `clinical_tip` | After case begins (not during briefing) | Brief teaching hint — no direct diagnosis giveaway |
 | `objective` | Framing only | Learning goal — not a diagnosis statement |
 
@@ -210,7 +210,7 @@ These rules apply to every field the player sees **before or during** a case:
 | `patient_voice.history` | patient-sim AI chat context | Same rule |
 | `historyText` (derived) | briefing display | Same rule |
 | `diagnosis` | **post-game review only** | Teaching context — never shown during prep or play |
-| `case_summary` | **post-game review only** | Teaching context — never shown during prep or play |
+| `case_summary` | **Briefing Notes tab** + **Complete screen** (after case ends) | Teaching context — not shown on HPI tab during play |
 | `clinical_tip` | shown after player begins case | Can hint at teaching point — no explicit diagnosis until case started |
 
 **What "spoiler-free" means for HPI/narrative fields:**

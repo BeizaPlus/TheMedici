@@ -102,6 +102,7 @@ import OrderResultsTabPanel from './OrderResultsTabPanel.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
+import { isLearningMode } from '../lib/learningMode.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { buildShuffledStackEntries } from '../lib/shuffleStacks.js';
 import {
@@ -754,8 +755,8 @@ export default function Play({
     return {
       subjective,
       objective,
-      assessment: caseData.clinical_tip || 'Assessment pending.',
-      plan: caseData.objective || 'Plan pending.',
+      assessment: isLearningMode() ? 'Assessment pending.' : caseData.clinical_tip || 'Assessment pending.',
+      plan: isLearningMode() ? 'Plan pending.' : caseData.objective || 'Plan pending.',
     };
   }, [presentationHistory, caseData.clinical_tip, caseData.objective, vitals, examSummary]);
 

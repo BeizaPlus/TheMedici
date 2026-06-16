@@ -1,7 +1,9 @@
 /** Fixed-size clinical explainer panel (AoE / chapter-screen style). */
 import { APP_PRODUCT_NAME } from '../lib/appBrand.js';
+import { isLearningMode } from '../lib/learningMode.js';
 
 export default function SceneExplainer({ caseData, step, stepIndex, totalSteps, patientNode }) {
+  const learning = isLearningMode();
   return (
     <aside className="scene-explainer">
       <p className="explainer-kicker">{APP_PRODUCT_NAME} · Case {caseData.ccsNumber}</p>
@@ -17,13 +19,16 @@ export default function SceneExplainer({ caseData, step, stepIndex, totalSteps, 
             Step {step.order} of {totalSteps}
           </p>
           <h3 className="explainer-step-name">{step.label}</h3>
-          <p className="explainer-body">{step.why || caseData.clinical_tip}</p>
+          <p className="explainer-body">{step.why || (learning ? 'Work the case to build your assessment.' : caseData.clinical_tip)}</p>
           {step.guideline && <p className="explainer-guideline">{step.guideline}</p>}
         </>
       ) : (
         <>
-          <p className="explainer-body">{caseData.clinical_tip}</p>
-          <p className="explainer-body muted">{caseData.objective}</p>
+          {!learning && <p className="explainer-body">{caseData.clinical_tip}</p>}
+          {!learning && <p className="explainer-body muted">{caseData.objective}</p>}
+          {learning && (
+            <p className="explainer-body muted">Study mode — place orders and interview the patient without answer-key hints.</p>
+          )}
         </>
       )}
     </aside>

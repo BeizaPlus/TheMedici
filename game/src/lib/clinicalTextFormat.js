@@ -46,8 +46,10 @@ export function formatClinicalText(text = '') {
   let t = stripChartJunk(text);
   if (!t) return '';
 
+  // Case-sensitive only — CCS section labels are Title Case; prose uses lowercase
+  // ("past medical history", "family history") and must not get paragraph breaks.
   for (const header of SECTION_HEADERS) {
-    const re = new RegExp(`(?<!\\n\\n)(${header}\\s*:?)`, 'gi');
+    const re = new RegExp(`(?<!\\n\\n)(${header}\\s*:?)`, 'g');
     t = t.replace(re, '\n\n$1');
   }
 

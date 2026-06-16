@@ -1,6 +1,7 @@
 import { formatClinicalText } from './clinicalTextFormat.js';
 import { applyPatientName, resolvePatientName } from './patientName.js';
 import { getPreparedCase } from './caseNarrative.js';
+import { isLearningMode } from './learningMode.js';
 
 function formatVitalsLine(vitals = {}) {
   const temp =
@@ -93,9 +94,10 @@ export function getBriefingTreatment(caseData, interventions = []) {
   return blocks.join('\n');
 }
 
-/** Full chart note for the Notes tab — deep dive beyond the summary tabs. */
-export function getBriefingNotes(caseData, caseFlow, presentationHpi = '') {
+/** Structured sections for Briefing Notes tab (Working diagnosis, Case summary, …). */
+export function getBriefingNoteSections(caseData, caseFlow, presentationHpi = '') {
   const sections = [];
+  const learning = isLearningMode();
   const chief = formatClinicalText(caseData?.chief_complaint?.trim() || '');
   const history = formatClinicalText(caseData?.historyText?.trim() || '');
   const summaryHpi = formatClinicalText(presentationHpi || '');
@@ -122,23 +124,38 @@ export function getBriefingNotes(caseData, caseFlow, presentationHpi = '') {
   }
 
   const treatment = getBriefingTreatment(caseData, caseData?.interventions || []);
-  if (treatment) {
+  if (treatment && !learning) {
     sections.push({ title: 'Treatment plan', body: treatment });
   }
 
-  if (caseData?.diagnosis) {
-    sections.push({ title: 'Working diagnosis', body: caseData.diagnosis });
-  }
-  if (caseData?.clinical_tip?.trim()) {
-    sections.push({ title: 'Clinical tip', body: caseData.clinical_tip.trim() });
-  }
-  if (caseData?.objective?.trim()) {
-    sections.push({ title: 'Learning objective', body: caseData.objective.trim() });
+  if (!learning) {
+    if (caseData?.diagnosis) {
+      sections.push({ title: 'Working diagnosis', body: caseData.diagnosis });
+    }
+    if (caseData?.case_summary?.trim()) {
+      sections.push({ title: 'Case summary', body: caseData.case_summary.trim() });
+    }
+    if (caseData?.clinical_tip?.trim()) {
+      sections.push({ title: 'Clinical tip', body: caseData.clinical_tip.trim() });
+    }
+    if (caseData?.objective?.trim()) {
+      sections.push({ title: 'Learning objective', body: caseData.objective.trim() });
+    }
+  } else {
+    sections.push({
+      title: 'Study mode',
+      body: 'Diagnosis and teaching content unlock after you complete the case. Use HPI and physical exam tabs while you work.',
+    });
   }
 
+  return sections;
+}
+
+/** Full chart note for the Notes tab — deep dive beyond the summary tabs. */
+export function getBriefingNotes(caseData, caseFlow, presentationHpi = '') {
+  const sections = getBriefingNoteSections(caseData, caseFlow, presentationHpi);
   if (!sections.length) {
     return 'No extended chart note available for this case yet.';
   }
-
   return sections.map(({ title, body }) => `${title}\n${body}`).join('\n\n');
 }

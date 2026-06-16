@@ -11,6 +11,7 @@ import { buildCaseDiscussionContext, discussionCacheKey } from './caseDiscussion
 import { enrichmentCacheKey } from './differentialChatEnrichment.js';
 import { resolveSimulationCreativity } from './simulationCreativity.js';
 import { getActiveNameRegion } from './patientNameRegions.js';
+import { isLearningMode, sanitizeCaseForLearning } from './learningMode.js';
 import { STORAGE } from './storageKeys.js';
 import { apiUrl } from './apiBase.js';
 const sessions = new Map();
@@ -38,6 +39,17 @@ export function buildCaseChatContext(caseData, {
   const patientFacts = extractPatientFacts(enriched, patientPersona);
   const patientDemographics = resolvePatientDemographics(enriched, patientPersona);
   const simulationCreativity = resolveSimulationCreativity(caseData?.id);
+  const learningMode = isLearningMode();
+  const cleanHpi =
+    enriched.clinical_hpi_narrative?.trim() ||
+    enriched.hpi_narrative?.trim() ||
+    enriched.historyText?.trim() ||
+    '';
+  const patientVoiceRaw = prepared?.patient_voice || caseData?.patient_voice || null;
+  const patientVoice =
+    patientVoiceRaw && learningMode && cleanHpi
+      ? { ...patientVoiceRaw, history: cleanHpi.slice(0, 800) }
+      : patientVoiceRaw;
 
   const ctx = {
     id: caseData?.id,
@@ -52,28 +64,30 @@ export function buildCaseChatContext(caseData, {
     patientName: resolvePatientName(caseData),
     patientFacts,
     patientDemographics,
-    patientVoice: prepared?.patient_voice || caseData?.patient_voice || null,
+    patientVoice,
     hpiExcerpt: hpiExcerpt(enriched),
     patientSex: caseData?.patientSex,
     nameRegion: caseData?.nameRegion || getActiveNameRegion(),
     chief_complaint: caseData?.chief_complaint,
-    historyText: caseData?.historyText,
+    historyText: learningMode && cleanHpi ? cleanHpi : caseData?.historyText,
     clinical_hpi_narrative: enriched.clinical_hpi_narrative,
     vitalsText: caseData?.vitalsText,
-    clinical_tip: caseData?.clinical_tip,
-    objective: caseData?.objective,
+    learningMode,
     vitals: flow?.vitals || prepared?.vitals || caseData?.vitals,
     exam: flow?.exam,
     flowTrack: flow?.flowTrack,
     dispositionUnits: flow?.dispositionUnits,
     hasSourceIntro: prepared?.hasSourceIntro ?? caseData?.preparedMeta?.hasSourceIntro,
-    interventions: (caseData?.interventions || []).map((iv) => ({
-      id: iv.id,
-      label: iv.label,
-      why: iv.why,
-      guideline: iv.guideline,
-      zone: iv.correct_zone,
-    })),
+    interventions: (caseData?.interventions || []).map((iv) => {
+      const row = {
+        id: iv.id,
+        label: iv.label,
+        guideline: iv.guideline,
+        zone: iv.correct_zone,
+      };
+      if (!learningMode && iv.why) row.why = iv.why;
+      return row;
+    }),
     algorithm: caseData?.algorithm
       ? {
           title: caseData.algorithm.title,
@@ -99,7 +113,7 @@ export function buildCaseChatContext(caseData, {
     ctx.differentialStudyContext = caseData.differentialStudyContext;
   }
 
-  return ctx;
+  return learningMode ? sanitizeCaseForLearning(ctx) : ctx;
 }
 
 function personaCacheKey(persona) {

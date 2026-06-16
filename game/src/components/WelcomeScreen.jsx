@@ -244,7 +244,7 @@ export default function WelcomeScreen({
   const [difficulty, setDifficulty] = useState('standard');
   const [timerMinutes, setTimerMinutes] = useState(2.5);
   const [nameRegion, setNameRegion] = useState(DEFAULT_NAME_REGION);
-  const fileRef = useRef(null);
+  const [learningMode, setLearningMode] = useState(true);
   const magicFileRef = useRef(null);
   const [patientSet, setPatientSet] = useState(() => {
     try {
@@ -291,6 +291,7 @@ export default function WelcomeScreen({
     if (saved.difficulty) setDifficulty(saved.difficulty);
     if (saved.timerSeconds) setTimerMinutes(Math.round((saved.timerSeconds / 60) * 10) / 10);
     if (saved.nameRegion) setNameRegion(normalizeNameRegion(saved.nameRegion));
+    if (saved.learningMode === false) setLearningMode(false);
   }, []);
 
   useEffect(() => {
@@ -361,10 +362,11 @@ export default function WelcomeScreen({
       difficulty,
       timerSeconds: normalizeTimerSeconds(Math.round(timerMinutes * 60), DEFAULT_TIMER_SECONDS),
       nameRegion: normalizeNameRegion(nameRegion),
+      learningMode,
     });
     markOnboardingComplete();
     setAudienceReady(true);
-  }, [audienceLevel, condition, playRole, difficulty, timerMinutes, nameRegion]);
+  }, [audienceLevel, condition, playRole, difficulty, timerMinutes, nameRegion, learningMode]);
 
   const continueAsPhysician = useCallback(() => {
     const profile = applyPhysicianProfile(timerMinutes);
@@ -914,6 +916,19 @@ export default function WelcomeScreen({
                 <span className="welcome-settings-scene-hint muted">
                   Default patient names in HPI come from this region&apos;s name bank (181+ per region).
                 </span>
+              </label>
+              <label className="welcome-settings-field welcome-settings-field--checkbox">
+                <span>Learning mode (hide diagnosis until case complete)</span>
+                <input
+                  type="checkbox"
+                  checked={learningMode}
+                  onChange={(e) => {
+                    const next = e.target.checked;
+                    setLearningMode(next);
+                    const profile = readAudienceProfile() || {};
+                    writeAudienceProfile({ ...profile, learningMode: next });
+                  }}
+                />
               </label>
               <button type="button" className="welcome-panel-btn" onClick={toggleTheme}>
                 Theme: {theme === 'light' ? 'Light' : 'Dark'}

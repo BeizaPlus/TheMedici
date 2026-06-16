@@ -39,6 +39,12 @@ node scripts/rewrite-hpi-neutral.mjs --all
 ```
 Saves every 10 cases. If interrupted, resume with `--start N` where N is the last saved index.
 
+### 2b. Repair missed screenshot cases (no case_summary)
+```
+node scripts/rewrite-hpi-neutral.mjs --missing-summary
+```
+Runs only cases with `hasSourceIntro` + HPI but empty `case_summary`. Generates teaching block from diagnosis when needed.
+
 ### 3. Dry run (verify before writing)
 ```
 node scripts/rewrite-hpi-neutral.mjs

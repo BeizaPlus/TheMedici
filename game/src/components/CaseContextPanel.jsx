@@ -6,6 +6,7 @@ import {
   IconClipboardList,
   IconStethoscope,
   IconFileMedical,
+  IconNotes,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { formatExamForDisplay } from '../lib/caseBriefing.js';
@@ -49,6 +50,8 @@ export default function CaseContextPanel({
   resultsPanel = null,
   treatmentSummaryText = '',
   chatPanel = null,
+  /** Briefing Notes tab — array of { title, body } from getBriefingNoteSections */
+  notesSections = null,
   footer = null,
   activeTab: controlledTab,
   onTabChange,
@@ -61,6 +64,8 @@ export default function CaseContextPanel({
   const treatmentEnabled = !isBriefing && showTreatmentTab;
   const resultsEnabled = !isBriefing && showResultsTab;
   const chatEnabled = !isBriefing && showChatTab;
+  const notesEnabled = isBriefing && Array.isArray(notesSections) && notesSections.length > 0;
+  const isNotes = tab === 'notes';
   const isTreatment = tab === 'treatment';
   const isResults = tab === 'results';
   const isChat = tab === 'chat';
@@ -134,7 +139,7 @@ export default function CaseContextPanel({
           if (def.id === 'results') return resultsEnabled;
           if (def.id === 'chat') return chatEnabled;
           return true;
-        }).map(({ id, label, Icon }) => (
+        }).concat(notesEnabled ? [{ id: 'notes', label: 'Notes', Icon: IconNotes }] : []).map(({ id, label, Icon }) => (
           <button
             key={id}
             type="button"
@@ -168,12 +173,12 @@ export default function CaseContextPanel({
       </div>
       </div>
       <div className="case-context-body-wrap">
-      {tab === 'hpi' && !isTreatment && !isChat && (
+      {tab === 'hpi' && !isTreatment && !isChat && !isNotes && (
         <div className="hpi-text case-context-body clinical-text-block" style={textStyle}>
           {hpiNarrative || 'HPI not yet available for this case.'}
         </div>
       )}
-      {tab === 'exam' && !isTreatment && !isChat && (
+      {tab === 'exam' && !isTreatment && !isChat && !isNotes && (
         <div className="hpi-text case-context-body clinical-text-block exam-by-system" style={textStyle}>
           {hasStructuredExam
             ? formatExamForDisplay(
@@ -184,7 +189,17 @@ export default function CaseContextPanel({
             : bodyText}
         </div>
       )}
-      {tab !== 'hpi' && tab !== 'exam' && !isTreatment && !isChat && (
+      {isNotes && (
+        <div className="case-context-body briefing-notes-sections clinical-text-block" style={textStyle}>
+          {notesSections.map(({ title, body }) => (
+            <section key={title} className="briefing-notes-section">
+              <h3 className="briefing-notes-section-title">{title}</h3>
+              <p className="briefing-notes-section-body">{body}</p>
+            </section>
+          ))}
+        </div>
+      )}
+      {tab !== 'hpi' && tab !== 'exam' && !isTreatment && !isChat && !isNotes && (
         <p className="sub case-context-body clinical-text-block" style={textStyle} title={bodyText}>
           {bodyText}
         </p>

@@ -24,7 +24,9 @@ import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import {
   getBriefingExam,
   getBriefingHpi,
+  getBriefingNoteSections,
 } from '../lib/caseBriefing.js';
+import { isLearningMode } from '../lib/learningMode.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
@@ -219,6 +221,10 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
     [caseData, caseFlow, presentationHistory],
   );
   const examSummary = useMemo(() => getBriefingExam(caseFlow), [caseFlow]);
+  const notesSections = useMemo(
+    () => getBriefingNoteSections(caseData, caseFlow, presentationHistory),
+    [caseData, caseFlow, presentationHistory],
+  );
 
   const handleReadCase = (section, text) => {
     readCaseAloud({
@@ -497,6 +503,7 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             caseData={caseData}
             hpiText={hpiText}
             examSummary={examSummary}
+            notesSections={notesSections}
             hideHeader
             textStyle={textStyle}
             defaultTab="hpi"
@@ -506,7 +513,7 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             footer={
               <div className="briefing-panel-footer">
                 {readMsg && <p className="case-read-msg">{readMsg}</p>}
-                {caseData.objective && (
+                {caseData.objective && !isLearningMode() && (
                   <p className="briefing-objective">Objective — {caseData.objective}</p>
                 )}
                 {portraitRegenMsg && !portraitRegenBusy && (

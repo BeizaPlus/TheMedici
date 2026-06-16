@@ -96,6 +96,21 @@ async function main() {
   ok(clampVitals({ spo2: 102 }).spo2 === 100, "vitalsLimits: SpO2 capped at 100");
   ok(VITAL_LIMITS.spo2.max === 100, "vitalsLimits: SpO2 max documented", "100%");
 
+  const { formatClinicalText } = await import(
+    url.pathToFileURL(path.join(root, "src/lib/clinicalTextFormat.js")).href
+  );
+  const proseHpi =
+    "The patient is a 22-year-old woman with no known past medical history who presents with abdominal pain. She has a family history of diabetes in a sibling.";
+  ok(
+    !formatClinicalText(proseHpi).includes("\n\n"),
+    "clinicalTextFormat: prose HPI phrases stay inline",
+    "past/family history",
+  );
+  ok(
+    formatClinicalText("Initial History Past Medical History None.").includes("\n\nPast Medical History"),
+    "clinicalTextFormat: CCS section headers still break",
+  );
+
   const { resolvePlaybook, getCaseSpecificPlaybookIds } = await import(
     url.pathToFileURL(path.join(root, "src/data/resolvePlaybook.js")).href
   );

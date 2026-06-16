@@ -3,6 +3,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { getCatalog, getCategories, getCasesInCategory, getCaseById } from '../data/useCcsCatalog.js';
 
 import { getLayout } from '../data/gameData.js';
+import { isLearningMode } from '../lib/learningMode.js';
 
 import {
 
@@ -954,13 +955,13 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
                   </p>
                 )}
 
-                {selectedGameCase?.clinical_tip && (
+                {selectedGameCase?.clinical_tip && !isLearningMode() && (
                   <p className="preview-tip" title={selectedGameCase.clinical_tip}>
                     {selectedGameCase.clinical_tip}
                   </p>
                 )}
 
-                {selectedGameCase?.objective && (
+                {selectedGameCase?.objective && !isLearningMode() && (
                   <p className="preview-obj" title={selectedGameCase.objective}>
                     {selectedGameCase.objective}
                   </p>
