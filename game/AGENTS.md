@@ -4,6 +4,8 @@ Medical training game: **181 CCS cases**, drag-and-place clinical orders onto a 
 
 **Repo:** `git@github.com:BeizaPlus/TheSchoonMaker.git` (SSH as **BeizaPlus** — configured on this machine)
 
+**Baseline architecture:** commit `92a2586` · tag `base-architecture-2026-06-16` · see **`ARCHITECTURE.md`** in this folder.
+
 ---
 
 ## Run the app
@@ -312,7 +314,7 @@ Implementation: `Play.jsx` — `handleDrop`, `commitStackPlacement`, `submitOrde
 - Remote: **SSH** `git@github.com:BeizaPlus/TheSchoonMaker.git`
 - Push/pull as **BeizaPlus** (SSH key in `~/.ssh/id_ed25519`)
 - Commit author in git config may still show personal email — that’s metadata only; repo is under BeizaPlus org
-- **Uncommitted local changes** (as of last agent session): case-bank integration in `DATA.md`, `package.json`, `build-ccs-catalog.mjs`, regenerated `ccsCatalog.json` / `preparedCases.json`, `step3/CCS_LOCAL_PROXY.md`
+- **Baseline:** `base-architecture-2026-06-16` on `main` — see `ARCHITECTURE.md`
 
 ---
 
@@ -331,6 +333,7 @@ Implementation: `Play.jsx` — `handleDrop`, `commitStackPlacement`, `submitOrde
 
 | Path | Role |
 |------|------|
+| `ARCHITECTURE.md` | Baseline system map (tag `base-architecture-2026-06-16`) |
 | `src/App.jsx` | Routes, welcome / play / browser |
 | `src/data/gameData.js` | Merges catalog + preparedCases + playbooks → game case |
 | `src/data/useCcsCatalog.js` | Catalog hook |
