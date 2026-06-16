@@ -34,6 +34,17 @@ Generate and maintain **sex-specific ED overhead baseplates** with **approved IV
 
 Never dorsal forearm, wrist, or hand for default peripheral IV.
 
+### Green torso — default stack drop (Play)
+
+**All case stacks** (drag, command order, extras) pin to **green torso** zones:
+
+| Zone | Label | Anatomic plate |
+|------|-------|----------------|
+| `zone-custom-1` | Abdomen | Green torso |
+| `zone-custom-3` | Chest | Green torso |
+
+Code: `src/lib/torsoDropZone.js` — alternates abdomen/chest by placement index. IV portrait layer still uses red antecubital scope separately.
+
 ## Crop lock (male)
 
 | File | Role |

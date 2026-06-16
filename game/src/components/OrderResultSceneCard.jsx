@@ -1,9 +1,9 @@
-import { resolveOrderResult } from '../lib/orderResult.js';
 import { neutralStackOrderName } from '../lib/stackDecoys.js';
 import {
   buildOrderResultPrintPayload,
   printOrderResultReport,
 } from '../lib/exportOrderResult.js';
+import { useOrderResult } from '../hooks/useOrderResult.js';
 
 export default function OrderResultSceneCard({
   intervention,
@@ -16,9 +16,10 @@ export default function OrderResultSceneCard({
   hideClose = false,
   teachMeMode = false,
 }) {
+  const { result, loading } = useOrderResult(intervention, { caseData, caseFlow, teachMeMode });
+
   if (!intervention) return null;
 
-  const result = resolveOrderResult(intervention, { caseData, caseFlow, teachMeMode });
   const label = neutralStackOrderName(intervention.label);
 
   const handlePrint = () => {
@@ -28,6 +29,7 @@ export default function OrderResultSceneCard({
       caseFlow,
       portraitSrc,
       teachMeMode,
+      resultOverride: result,
     });
     const ok = printOrderResultReport(payload);
     onPrintStatus?.(
@@ -41,6 +43,7 @@ export default function OrderResultSceneCard({
       className={`order-result-scene-card ${className}`.trim()}
       role="region"
       aria-label={`Result for ${label}`}
+      aria-busy={loading}
     >
       <header className="order-result-scene-head">
         <div className="order-result-scene-titles">

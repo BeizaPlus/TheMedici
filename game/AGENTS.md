@@ -20,7 +20,7 @@ Or: `C:\Users\steve\MeWorld\START-GAME.bat` / `START-MEWORLD.bat`
 - Web: http://localhost:5173 (Vite)
 - API: http://localhost:3001 (Express)
 - `predev` runs `build:data` + `smoke-test.mjs` + `smoke-pre-serve.mjs` (CSS audit + vite build) — must pass before dev starts
-- `npm run dev` uses `start-dev.mjs`: API → `smoke:differential` → Vite → `smoke:differential-session` — **servers exit if live smoke fails**
+- `npm run dev` uses `start-dev.mjs`: API → `smoke:differential` → Vite → `smoke:differential-session` → **`smoke:play-case`** (welcome → briefing → play scene + screenshots) — **servers exit if live smoke fails**
 
 If ports are busy, kill old node processes or use the alternate Vite port shown in the terminal.
 
@@ -114,7 +114,8 @@ Key files: `src/components/Play.jsx`, `src/hooks/usePlayDockLayout.js`, `src/com
 | **Differential compare + AI score** | Split scroll columns: yours (left) vs answer key (right). `POST /api/differential/score` uses DeepSeek/OpenAI from `.env`. Client: `src/lib/differentialAiScore.js` |
 | **Dev won't start — vite build / `Expected ")" but found "{"` in `DifferentialPractice.jsx`** | JSX must have **one root** per `return`. Overlay siblings (e.g. `DifferentialDrillPanel` after main `</div>`) need `<>...</>` fragment wrapper. Verify: `npm run smoke:pre-serve` |
 | **`voice-note/status` timeout in `validate-diff-smoke`** (intermittent) | First call probes local `faster_whisper` (Python cold start) and can exceed 8s. **Retry** `npm run dev` once; or `node scripts/free-dev-ports.mjs` then restart. If persistent: check `WHISPER_PYTHON` / Chatterbox venv in `.env` |
-| **Agent spawned bare API + Vite (no smoke)** | Do **not** bypass `npm run dev` — broken JSX/CSS won't be caught. Use `START-GAME.bat` only |
+| **`inferPatientSex is not defined`** (Play / briefing won't open) | Missing import in `src/data/gameData.js` — add `import { inferPatientSex } from '../lib/patientSex.js'`. Playwright play-case smoke catches this |
+| **`allCaseIds` ReferenceError** on welcome Play | `WelcomeScreen.handlePlay` fallback must use `catalog.cases.map((c) => c.id)` — fixed 2026-06-16 |
 | **HPI tab dumps diagnosis/treatment in practice** | Use `practice_hpi` for presentation; never show `hpi_narrative` in briefing/play HPI. `applySessionToCase` must not overwrite `historyText` with answer key. Rule: `practice-presentation.mdc` |
 | **Chat session expired** after dev restart | Server sessions are in-memory only. Client auto-recovers via `sendCaseChatMessage` retry — do not remove. Rule: `play-case-chat.mdc` |
 | **Play missing patient interview mode** | Stethoscope on Order · Chat dock + thread; tutor default, patient when gold. Rule: `play-case-chat.mdc` |
@@ -242,6 +243,22 @@ Example custom brief (case 25 sickle cell): *6-year-old boy, curled on stretcher
 
 Pinterest ref → Magnific 9:16 contact sheet → register slug + `identityPrompt`. Case **140** → `pinterest-cornrows-star`. Rule: `patient-character-maps.mdc`.
 
+### Scene element registry (anti-slop)
+
+Every prop in the portrait scene (bed, table, monitor, IV pole, O2 mask, catheter) must map to a **real product ref** or approved game asset — generate element maps once, load on subsequent runs.
+
+| Piece | Path |
+|-------|------|
+| Master registry | `dev/scene-elements/SCENE_ELEMENT_REGISTRY.json` |
+| Medical devices | `dev/medical-element-plates/` (O2 HUD1040, BD Insyte IV) |
+| Runtime loader | `src/lib/sceneElementRegistry.js` · `server/sceneElementRegistry.js` |
+| Portrait prompts | `buildPortraitPrompt()` appends `SCENE ELEMENT LOCK` block from registry |
+| Audit | `scripts/audit-scene-element-registry.mjs` (in predev smoke) |
+
+Workflow: Pinterest/manufacturer search → save `sources/<id>/` → Magnific element map → Photoshop → register `approved` status. Rule: `scene-element-reference-lock.mdc`.
+
+**Pending maps:** vitals monitor, IV pole/bag, ped Kojo/Daniella baseplates, patient wristband.
+
 ---
 
 ## Patient simulation chat
@@ -276,21 +293,23 @@ Case chat in Play and Differentials (DeepSeek or OpenAI from `.env`). **Play def
 | **Normal / studying** (`teachMeMode` off) | Place **any** order — case stacks, decoys, extras, any zone. No “not indicated” blocks, no sequence enforcement, no wrong-zone punishment. Everything logs to timeline for review. |
 | **Teach Me** (`teachMeMode` on) | Guided: enforce **next stack in sequence**, compare panel, “not indicated” for extras outside case set. Decoys log silently; **Show Answer** reveals teaching on decoys. |
 
-### Placed order results (pin click + lower-third)
+### Placed order results (pin click + Order · Chat dock)
 
-Click a **placed** label on the patient → **Results** tab + **lower-third carousel** on scene.
+Click a **placed** label on the patient → **Order · Chat** dock **Results** slide panel.
 
-- Lower-third UI: `src/components/OrderResultsLowerThird.jsx`
 - Result card renderer: `src/components/OrderResultSceneCard.jsx`
-- Resolver: `src/lib/orderResult.js`
-- Print helper: `src/lib/exportOrderResult.js` (opens printable HTML, then choose **Microsoft Print to PDF**)
+- Hook: `src/hooks/useOrderResult.js` — instant local fallback, then LLM upgrade
+- Local resolver: `src/lib/orderResult.js` + `src/lib/labPanelValues.js` (CBC/BMP/UA panels + single labs: complement, ANA, dsDNA, ESR, CRP, …)
+- Clean case bank: `game/data/cases/case_N.json` via `GET /api/case-clinical/:id` — stack `finding` + `rationale` seed results
+- LLM cache: `POST /api/order-result` · `server/orderResultGen.js` (`ORDER_RESULT_PROMPT_VERSION` 2) · `.order-result-cache/`
+- Print helper: `src/lib/exportOrderResult.js`
 
 Mode behavior:
 
 | Mode | Result wording |
 |------|----------------|
-| **Practice** (`teachMeMode` off) | Objective values/findings only (no interpretive teaching cues) |
-| **Teach Me** (`teachMeMode` on) | Includes interpretation/rationale cues |
+| **Practice** (`teachMeMode` off) | Objective values/findings only (numeric labs — never bare “— completed.” for labs) |
+| **Teach Me** (`teachMeMode` on) | Includes interpretation/rationale cues from stack findings |
 
 ### Review / compare tap behavior
 

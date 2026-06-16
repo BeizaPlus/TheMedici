@@ -1,10 +1,12 @@
 import { buildCaseChatContext, writeCasePortraitPersona } from './caseChat.js';
+import { loadPersistedChatHistory } from './caseUserLog.js';
 import {
   generateCasePortraitFromAvatarSource,
   readStoredCaseAvatarSource,
 } from './caseAvatar.js';
 import { resolvePortraitBriefForApi } from './casePortraitBrief.js';
 import { getBuiltInPatientSrc, isValidSceneSrc, portraitCacheBust } from './patientImage.js';
+import { portraitCacheNeedsLayers, PORTRAIT_LAYERS_VERSION } from './portraitLayers.js';
 import { inferPatientSex } from './patientSex.js';
 import { STORAGE } from './storageKeys.js';
 import { apiUrl } from './apiBase.js';
@@ -109,6 +111,7 @@ export async function fetchCasePortraitStatus(caseId) {
       return {
         exists: true,
         url: data.url,
+        layers: data.layers || null,
         analysis: data.analysis || null,
         persona: data.persona || null,
         cachedAt: data.cachedAt || null,
@@ -116,6 +119,7 @@ export async function fetchCasePortraitStatus(caseId) {
         patientSex: data.patientSex || null,
         ladyRefSlug: data.ladyRefSlug || null,
         portraitFrameVersion: data.portraitFrameVersion || 1,
+        portraitLayersVersion: data.portraitLayersVersion || 0,
       };
     }
     return { exists: false, url: null };
@@ -130,7 +134,7 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
   if (!caseId) return null;
 
   const expectedSex = inferPatientSex(caseData);
-  const MIN_PORTRAIT_FRAME_VERSION = 2;
+  const MIN_PORTRAIT_FRAME_VERSION = 3;
 
   const storePortraitUrl = (status) => {
     if (!status?.url) return null;
@@ -151,6 +155,8 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
         status.portraitFrameVersion != null
         && status.portraitFrameVersion < MIN_PORTRAIT_FRAME_VERSION
       ) {
+        clearCaseRegenImage(caseId);
+      } else if (portraitCacheNeedsLayers(status)) {
         clearCaseRegenImage(caseId);
       } else {
         return storePortraitUrl(status);
@@ -191,6 +197,7 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
 export async function regeneratePatientFromCase(caseData, { refresh = false } = {}) {
   const payload = await fetchBuiltInImagePayload(caseData);
   const caseContext = buildCaseChatContext(caseData);
+  const chatMessages = await loadPersistedChatHistory(caseData?.id);
 
   const portraitBrief = resolvePortraitBriefForApi(caseData.id);
 
@@ -202,6 +209,7 @@ export async function regeneratePatientFromCase(caseData, { refresh = false } = 
       mimeType: payload.mimeType,
       caseContext,
       portraitBrief,
+      chatMessages,
       refresh,
     }),
   });
@@ -219,7 +227,9 @@ export async function regeneratePatientFromCase(caseData, { refresh = false } = 
   return {
     dataUrl: busted,
     cached: Boolean(data.cached),
+    layers: data.layers || null,
     analysis: data.analysis || null,
     persona: data.persona || null,
+    portraitLayersVersion: data.portraitLayersVersion || PORTRAIT_LAYERS_VERSION,
   };
 }

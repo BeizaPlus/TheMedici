@@ -4,9 +4,9 @@ import {
   IconCopy,
   IconFileMedical,
   IconPlayerStop,
-  IconStethoscope,
   IconVolume2,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
+import PatientPortraitAvatar from './PatientPortraitAvatar.jsx';
 import ChatMessageContent from './ChatMessageContent.jsx';
 import CasePictureInline from './CasePictureInline.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
@@ -17,6 +17,7 @@ import {
 } from '../lib/patientReplyText.js';
 import { mergeSessionThread, parseNoteBubbleContent } from '../lib/caseSessionThread.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
+import { looksLikeTutorQuestion } from '../lib/chatIntentRouting.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import CaseThreadCaseRail from './CaseThreadCaseRail.jsx';
@@ -101,6 +102,7 @@ export default function CaseSessionThread({
   patientMode = false,
   defaultChatTarget = 'notes',
   onPatientModeChange,
+  onOpenCaseFromRail,
   onTimelineChat,
 }) {
   const {
@@ -117,6 +119,7 @@ export default function CaseSessionThread({
   const inputRef = useRef(null);
   const [readingIdx, setReadingIdx] = useState(null);
   const [draft, setDraft] = useState('');
+  const [tutorRouteHint, setTutorRouteHint] = useState('');
   const [collapsed, setCollapsed] = useState(() =>
     fillTab ? false : readCollapsed(STORAGE.threadCollapsed, true),
   );
@@ -218,6 +221,13 @@ export default function CaseSessionThread({
       }
     }
 
+    if (asPatient && looksLikeTutorQuestion(body)) {
+      setTutorRouteHint('Clinical question — routed to tutor (portrait still in patient mode).');
+      setTimeout(() => setTutorRouteHint(''), 6000);
+      await sendMessage(body, { chatMode: 'tutor' });
+      onTimelineChat?.(body);
+      return;
+    }
     if (asPatient) {
       await sendMessage(body, { chatMode: 'patient_sim' });
       onTimelineChat?.(body);
@@ -288,7 +298,17 @@ export default function CaseSessionThread({
                 aria-pressed={patientMode}
                 onClick={() => onPatientModeChange(!patientMode)}
               >
-                <IconStethoscope className="toolbar-icon" />
+                <PatientPortraitAvatar
+                  caseId={caseId}
+                  caseData={caseData}
+                  title={
+                    patientMode
+                      ? 'Patient mode ON — simulated patient replies'
+                      : defaultChatTarget === 'tutor'
+                        ? 'Tutor chat — click for patient interview mode'
+                        : 'Notes mode — click for patient mode or type /pt'
+                  }
+                />
               </button>
             )}
             <CaseRecordButton {...caseRecording} compact variant="toolbar" iconOnly chatMode={available === true} />
@@ -304,7 +324,11 @@ export default function CaseSessionThread({
               aria-pressed={patientMode}
               onClick={() => onPatientModeChange(!patientMode)}
             >
-              <IconStethoscope className="toolbar-icon" />
+              <PatientPortraitAvatar
+                caseId={caseId}
+                caseData={caseData}
+                title={patientMode ? 'Patient mode ON' : 'Turn on patient mode'}
+              />
             </button>
           </div>
         )}
@@ -319,6 +343,7 @@ export default function CaseSessionThread({
               activeCaseId={threadViewCaseId ?? caseId}
               playCaseId={playCaseId}
               onSelectCase={onSelectThreadCase}
+              onOpenCaseChat={onOpenCaseFromRail}
             />
           )}
           {viewingOtherCase && (
@@ -332,6 +357,9 @@ export default function CaseSessionThread({
             </p>
           )}
           {error && <p className="case-chat-banner bad">{error}</p>}
+          {tutorRouteHint && (
+            <p className="case-chat-banner case-chat-banner--patient">{tutorRouteHint}</p>
+          )}
 
           {patientMode && !quietChatChrome && !compact && (
             <p className="case-chat-banner case-chat-banner--patient">
@@ -345,6 +373,11 @@ export default function CaseSessionThread({
             {historyLoaded && thread.length === 0 && !busy && !quietChatChrome && (
               <p className="case-chat-tab-empty">
                 Talk to the patient — ask age, travel, smoking, symptoms — or jot a clinical note.
+              </p>
+            )}
+            {busy && (
+              <p className="case-chat-tab-empty case-chat-tab-busy" role="status">
+                {defaultChatTarget === 'tutor' || patientMode ? 'Tutor thinking…' : 'Working…'}
               </p>
             )}
             {thread.map((m, i) => {

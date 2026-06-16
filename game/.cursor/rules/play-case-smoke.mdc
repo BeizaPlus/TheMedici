@@ -1,0 +1,48 @@
+---
+description: Mandatory welcome → briefing → play scene smoke with screenshots before Steve is told dev is ready
+globs: scripts/smoke-play-case-session.mjs,scripts/start-dev.mjs,src/components/WelcomeScreen.jsx,src/components/Briefing.jsx,src/components/Play.jsx,src/data/gameData.js
+alwaysApply: false
+---
+
+# Play case smoke (welcome → one case)
+
+## Rule
+
+Before telling Steve the **main game** is ready, agents must run the full welcome → case pass and **share screenshot paths** (or paste images in chat).
+
+```powershell
+Set-Location C:\Users\steve\MeWorld\game
+npm run dev   # includes smoke:play-case at end of start-dev.mjs
+# or, servers already up:
+npm run smoke:play-case
+```
+
+## Flow (Playwright)
+
+1. Welcome plate (`01-welcome.png`)
+2. Continue as physician (`02-after-physician.png` if first run)
+3. Welcome HUD ready (`03-welcome-ready.png`)
+4. **Play** nav → random case → Briefing (`04-briefing.png`)
+5. **Begin case →** → Play scene with life bar + dock (`05-play-scene.png`)
+
+Output: `docs/smoke-screenshots/<YYYY-MM-DD>/play-case/`
+
+## Pair with differential smoke
+
+| Script | Path |
+|--------|------|
+| Differentials | `docs/smoke-screenshots/<date>/01-welcome.png` … `06-floating-chat-open.png` |
+| **Play case** | `docs/smoke-screenshots/<date>/play-case/*.png` |
+
+Both run from `npm run dev` — do not skip.
+
+## Common failures this catches
+
+| Error | Fix |
+|-------|-----|
+| `inferPatientSex is not defined` | Import in `src/data/gameData.js` |
+| `allCaseIds is not defined` | `WelcomeScreen.handlePlay` fallback |
+| Play click does nothing | Stale Vite — `node scripts/free-dev-ports.mjs` + `npm run dev` |
+| White / black screen | `npm run smoke:pre-serve` (vite build) |
+
+Optional API 500s on portrait/scene assets are ignored in console filter if play scene mounts.

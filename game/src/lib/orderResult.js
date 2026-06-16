@@ -4,6 +4,8 @@
  */
 
 import { getPreparedCase } from './caseNarrative.js';
+import { resolveLabPanelResult, resolveSingleLabResult } from './labPanelValues.js';
+import { mergeCleanCaseIntoCtx } from './cleanCaseClinical.js';
 
 function norm(s) {
   return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
@@ -68,8 +70,15 @@ function isDkaContext(diagnosis, hpi) {
 
 function labResultForLabel(label, ctx, teachMeMode) {
   const l = norm(label);
-  const { diagnosis = '', vitals = {}, hpi = '', why = '' } = ctx;
+  const { diagnosis = '', vitals = {}, hpi = '', why = '', caseId, category, chiefComplaint } = ctx;
+  const panelCtx = { diagnosis, vitals, hpi, why, caseId, category, chiefComplaint };
   const dka = isDkaContext(diagnosis, hpi);
+
+  const panelResult = resolveLabPanelResult(label, panelCtx, teachMeMode);
+  if (panelResult) return panelResult;
+
+  const singleLab = resolveSingleLabResult(label, panelCtx, teachMeMode);
+  if (singleLab) return singleLab;
 
   if (/hcg|pregnancy/i.test(l)) {
     return teachMeMode
@@ -85,27 +94,6 @@ function labResultForLabel(label, ctx, teachMeMode) {
     return teachMeMode && dka
       ? 'pH 7.18, pCO₂ 28, HCO₃⁻ 12, glucose 598. Anion gap metabolic acidosis.'
       : 'pH 7.18. pCO₂ 28 mmHg. HCO₃⁻ 12 mEq/L. Glucose 598 mg/dL.';
-  }
-  if (/\bbmp\b|basic metabolic|comprehensive metabolic|\bcmp\b/i.test(l)) {
-    if (dka) {
-      const k = vitals.k != null ? vitals.k : 4.1;
-      return teachMeMode
-        ? `Glucose 612 mg/dL (↑). Na 132, K ${k}, Cl 98, HCO₃ 12, BUN 22, Cr 1.0. Anion gap ~22 — consistent with DKA.`
-        : `Glucose 612 mg/dL. Na 132 mEq/L. K ${k} mEq/L. Cl 98 mEq/L. HCO₃ 12 mEq/L. BUN 22 mg/dL. Cr 1.0 mg/dL.`;
-    }
-    return teachMeMode
-      ? 'BMP within expected range for presentation unless otherwise noted in chart.'
-      : 'BMP resulted. See values in chart.';
-  }
-  if (/cbc|complete blood/i.test(l)) {
-    return teachMeMode && dka
-      ? 'WBC 14.2 K (mild leukocytosis — may reflect stress/dehydration in DKA). Hgb 14.1, plt 285.'
-      : 'WBC 14.2 K/µL. Hgb 14.1 g/dL. Plt 285 K/µL.';
-  }
-  if (/urinalysis|\bua\b/i.test(l)) {
-    return teachMeMode && dka
-      ? 'Glucose 4+, ketones 3+, protein trace. No nitrites; few WBC.'
-      : 'Glucose 4+. Ketones 3+. Protein trace. Nitrites negative. WBC few.';
   }
   if (/troponin/i.test(l)) {
     return teachMeMode
@@ -236,7 +224,11 @@ export function classifyOrderKind(label) {
   if (/ct |mri|x-ray|cxr|ultrasound|sonograph|imaging|ekg|ecg/i.test(l)) {
     return { kind: 'imaging', kindLabel: 'Imaging result' };
   }
-  if (/cbc|bmp|cmp|lab|blood|urinalysis|ua\b|hcg|a1c|abg|troponin|culture|lactate/i.test(l)) {
+  if (
+    /cbc|bmp|cmp|lab|blood|urinalysis|ua\b|hcg|a1c|abg|troponin|culture|lactate|complement|anti-dsdna|anti-smith|\bana\b|antinuclear|\besr\b|\bcrp\b|d-dimer|\bbnp\b|\btsh\b|lipase|amylase|coombs|ferritin|procalcitonin|rheumatoid|anti-ccp|\binr\b|\bptt\b|serolog|antibody|titer/i.test(
+      l,
+    )
+  ) {
     return { kind: 'lab', kindLabel: 'Lab result' };
   }
   if (/advise|instruct|counsel|vaccine|smear/i.test(l)) {
@@ -251,7 +243,10 @@ export function classifyOrderKind(label) {
 /**
  * @returns {{ kind: string, kindLabel: string, text: string } | null}
  */
-export function resolveOrderResult(intervention, { caseData, caseFlow, teachMeMode = false } = {}) {
+export function resolveOrderResult(
+  intervention,
+  { caseData, caseFlow, teachMeMode = false, cleanCase = null } = {},
+) {
   if (!intervention?.label) return null;
 
   const label = intervention.label;
@@ -262,14 +257,33 @@ export function resolveOrderResult(intervention, { caseData, caseFlow, teachMeMo
     caseData?.physical_exam ||
     [];
   const vitals = caseFlow?.vitals || caseData?.preparedVitals || {};
-  const diagnosis = caseData?.diagnosis || '';
-  const hpi =
-    caseData?.hpi_narrative ||
-    caseData?.clinical_hpi_narrative ||
-    caseData?.historyText ||
-    '';
+  const merged = mergeCleanCaseIntoCtx(
+    {
+      diagnosis: caseData?.diagnosis || prepared?.diagnosis || '',
+      hpi:
+        caseData?.hpi_narrative ||
+        caseData?.clinical_hpi_narrative ||
+        caseData?.historyText ||
+        '',
+      chiefComplaint: caseData?.chief_complaint || prepared?.patient_voice?.chief_complaint || '',
+      category: caseData?.category || prepared?.category || '',
+    },
+    cleanCase,
+    label,
+  );
+  const diagnosis = merged.diagnosis || '';
+  const hpi = merged.hpi || '';
   const why = intervention.why || '';
-  const ctx = { diagnosis, vitals, hpi, why };
+  const ctx = {
+    diagnosis,
+    vitals,
+    hpi,
+    why,
+    stackFinding: merged.stackFinding || '',
+    caseId: caseData?.id,
+    category: merged.category,
+    chiefComplaint: merged.chiefComplaint,
+  };
 
   const meta = classifyOrderKind(label);
 

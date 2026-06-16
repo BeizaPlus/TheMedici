@@ -10,6 +10,7 @@ import {
   nextInQueue,
   setLastMode,
   markCaseIncomplete,
+  touchCaseVisited,
 } from './data/caseProgress.js';
 import { runEvalSuite } from './data/evalSuite.js';
 import { isStudioApp, playerAppHref } from './lib/appMode.js';
@@ -92,6 +93,7 @@ export default function App() {
       clearPlayCheckpoint();
       setResumeCheckpoint(null);
     }
+    touchCaseVisited(gameCase.id, 'briefing');
     setPlayMode(mode);
     setLastMode(mode);
     setCurrentCase(gameCase);
@@ -113,6 +115,7 @@ export default function App() {
     setPlayMode(mode);
     setLastMode(mode);
     setCurrentCase(gameCase);
+    touchCaseVisited(gameCase.id, 'play');
     setResumeCheckpoint(cp);
     setScreen(SCREENS.play);
   }, []);
@@ -127,12 +130,14 @@ export default function App() {
   }, []);
 
   const beginPlay = useCallback(() => {
+    if (currentCase?.id) touchCaseVisited(currentCase.id, 'play');
     unlockAmbience();
     startIcuMonitor({ fadeMs: 0 });
     setScreen(SCREENS.play);
-  }, []);
+  }, [currentCase?.id]);
 
   const switchBriefingCase = useCallback((gameCase) => {
+    touchCaseVisited(gameCase.id, 'briefing');
     setPlayMode('browse');
     setLastMode('browse');
     setCurrentCase(gameCase);
@@ -167,6 +172,15 @@ export default function App() {
     setHomeKey((k) => k + 1);
   }, [refreshResumeCheckpoint]);
 
+  const openCaseFromPlay = useCallback(
+    (caseId) => {
+      const gameCase = getCaseById(caseId);
+      if (!gameCase) return;
+      startCase(gameCase, 'browse');
+    },
+    [startCase],
+  );
+
   const skipToNextCase = useCallback(() => {
     if (!currentCase?.id) return;
     const cp = readPlayCheckpoint();
@@ -190,6 +204,7 @@ export default function App() {
     }
 
     setCurrentCase(nextCase);
+    touchCaseVisited(nextCase.id, 'play');
     unlockAmbience();
     startIcuMonitor({ fadeMs: 0 });
     setScreen(SCREENS.play);
@@ -279,6 +294,7 @@ export default function App() {
           onComplete={finishCase}
           onQuit={goHome}
           onSkipToNext={skipToNextCase}
+          onOpenCase={openCaseFromPlay}
           studioCapture={studioBuild}
         />
       )}

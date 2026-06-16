@@ -15,8 +15,11 @@ export function buildOrderResultPrintPayload({
   caseFlow,
   portraitSrc = '',
   teachMeMode = false,
+  resultOverride = null,
 }) {
-  const result = resolveOrderResult(intervention, { caseData, caseFlow, teachMeMode });
+  const result =
+    resultOverride ||
+    resolveOrderResult(intervention, { caseData, caseFlow, teachMeMode });
   const label = neutralStackOrderName(intervention?.label || 'Order');
   return {
     caseNum: caseData?.ccsNumber || caseData?.id,

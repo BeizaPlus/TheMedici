@@ -1,5 +1,6 @@
 import gameConfig from './gameConfig.json' with { type: 'json' };
 import { getPreparedCase } from '../lib/caseNarrative.js';
+import { resolvePatientSceneKey } from '../lib/patientSceneKey.js';
 import { inferPatientSex } from '../lib/patientSex.js';
 import { resolvePlaybook } from './resolvePlaybook.js';
 
@@ -31,16 +32,22 @@ export function getLayout() {
   return gameConfig.layout;
 }
 
-export function getPatientScene(sex = 'male') {
-  if (sex === 'female' && gameConfig.patientSceneFemale) {
+export function getPatientScene(sexOrKey = 'male') {
+  const key = sexOrKey;
+  if (key === 'pedFemale' && gameConfig.patientScenePedFemale) {
+    return gameConfig.patientScenePedFemale;
+  }
+  if (key === 'pedMale' && gameConfig.patientScenePedMale) {
+    return gameConfig.patientScenePedMale;
+  }
+  if ((key === 'female' || key === 'pedFemale') && gameConfig.patientSceneFemale) {
     return gameConfig.patientSceneFemale;
   }
   return gameConfig.patientScene;
 }
 
 export function getPatientSceneForCase(caseData) {
-  const sex = inferPatientSex(caseData);
-  return getPatientScene(sex);
+  return getPatientScene(resolvePatientSceneKey(caseData));
 }
 
 /** Build ordered clinical steps from playbook (JSON algorithm overrides). */

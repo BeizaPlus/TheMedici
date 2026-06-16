@@ -51,6 +51,16 @@ import { sanitizeRealWorldStories } from './realWorldStoryQuality.js';
 import { fetchYoutubeTranscript } from './youtubeTranscript.js';
 import { readOrderWhyEntry, writeOrderWhyEntry } from './orderWhyCache.js';
 import { buildOrderWhyPrompt } from './orderWhy.js';
+import { readOrderResultEntry, writeOrderResultEntry } from './orderResultCache.js';
+import {
+  ORDER_RESULT_PROMPT_VERSION,
+  buildOrderResultPrompt,
+  parseOrderResultJson,
+} from './orderResultGen.js';
+import {
+  enrichCaseContextWithCleanCase,
+  loadCleanCaseJson,
+} from './cleanCaseLoader.js';
 import { splitPatientReply } from '../src/lib/patientReplyText.js';
 import { APP_PRODUCT_NAME } from '../src/lib/appBrand.js';
 import { appendPatientStageEntry } from './patientStageCache.js';
@@ -69,6 +79,17 @@ import {
   resolvePortraitSex,
   writePortraitCache,
 } from './casePortrait.js';
+import {
+  extractPortraitDirectorBrief,
+  logPortraitRegenBlock,
+} from './portraitDirector.js';
+import {
+  PORTRAIT_LAYERS_VERSION,
+  portraitLayerPublicUrl,
+  readPortraitLayers,
+  writeIvMaskLayer,
+  writePortraitLayer,
+} from './portraitLayers.js';
 import {
   PORTRAIT_FRAME_VERSION,
   bufferToBase64,
@@ -152,6 +173,10 @@ app.use('/case-briefs', express.static(CASE_BRIEF_DIR));
 const ORDER_WHY_CACHE_DIR = path.join(GAME_ROOT, '.order-why-cache');
 if (!fs.existsSync(ORDER_WHY_CACHE_DIR)) {
   fs.mkdirSync(ORDER_WHY_CACHE_DIR, { recursive: true });
+}
+const ORDER_RESULT_CACHE_DIR = path.join(GAME_ROOT, '.order-result-cache');
+if (!fs.existsSync(ORDER_RESULT_CACHE_DIR)) {
+  fs.mkdirSync(ORDER_RESULT_CACHE_DIR, { recursive: true });
 }
 
 const MEWORLD_CASES_DIR = path.join(REPO_ROOT, 'data', 'cases');
@@ -327,7 +352,7 @@ function buildCaseChatSystemPrompt(caseContext) {
   const { band } = simulationCreativityBand(creativity);
   const name = ctx?.patientName || 'the patient';
   const facts = ctx?.patientFacts || {};
-  const patientSim = ctx?.chatMode === 'patient_sim' || ctx?.playRole === 'patient';
+  const patientSim = ctx?.chatMode === 'patient_sim';
 
   if (patientSim) {
     const bandRules =
@@ -397,14 +422,19 @@ ${JSON.stringify(ctx, null, 2)}`;
   }
 
   const roleLine =
-    'Respond as a clinical tutor helping the learner work through this case. Use the case JSON — no outside facts.';
+    'You are the MASTER CLINICAL TUTOR (attending/educator), NOT the patient. Never reply in patient first person. Never say you only know your symptoms.';
   return `${roleLine}
 
 Rules:
-- Keep answers concise and practical for emergency medicine training.
+- Keep answers practical for emergency medicine training — use short headings or numbered bullets when the learner thinks out loud or reviews a whole workup.
+- When the learner streams partial knowledge (correct + wrong + "I forgot"), affirm what is right, correct errors plainly, fill gaps, and tie back to case orders (CBC, complement, ANA, anti-dsDNA, UA, sun protection, etc.).
+- Answer pathophysiology, mechanism, anatomy, and "why" questions directly (e.g. complement consumption in SLE, anti-dsDNA vs anti-Smith specificity, lupus nephritis monitoring).
+- For "how would autoimmune affect DNA" — explain that anti-dsDNA targets native double-stranded DNA (nucleosomes), not mRNA/topoisomerase; anti-Smith is anti-Sm nuclear ribonucleoprotein — not topoisomerase.
+- SLE musculoskeletal: avascular necrosis (esp. with steroids), inflammatory arthritis — not primarily "bone marrow attack."
 - Do not invent labs, imaging results, or outcomes not present in the JSON unless clearly labeled as teaching speculation.
 - When differentialStudyContext is present, use it for CCS orders (ordersText/orders), treatmentStacks, answer-key differentials, realWorldStories, savedVideoTranscripts, and pictureNotes (likeness/teach-in attachments) — reference these when the learner asks about workup, treatment stack, Real World videos, or saved visual refs.
 - When the learner sends a message, it may include a SESSION SO FAR block with ordersTimeline and standardFlow (Teach Me compare). Use that live session data to explain placement mistakes, out-of-order steps, and what to do next — in addition to the static case JSON.
+- NEVER return an empty reply. If the question is long, summarize the learner's points then teach.
 
 CASE JSON:
 ${JSON.stringify(ctx, null, 2)}`;
@@ -439,8 +469,8 @@ async function callChatCompletion(key, messages, { maxTokens = 700, temperature 
   return data.choices?.[0]?.message?.content?.trim() || 'No response.';
 }
 
-async function callCaseChatCompletion(key, messages, { temperature = 0.45 } = {}) {
-  return callChatCompletion(key, messages, { temperature });
+async function callCaseChatCompletion(key, messages, { temperature = 0.45, maxTokens = 700 } = {}) {
+  return callChatCompletion(key, messages, { temperature, maxTokens });
 }
 
 function parseModelJson(raw) {
@@ -1178,6 +1208,9 @@ app.post('/api/case-chat/message', async (req, res) => {
         ? '[SESSION SO FAR — standard flow compare, order timeline, case transcripts, notes, and scene activity for this run]'
         : '[SESSION SO FAR — orders, case transcripts, notes, and scene activity for this run]';
       let ctxBlock = `${header}\n${JSON.stringify(sessionContext, null, 2)}`;
+      if (ctxBlock.length > 14000) {
+        ctxBlock = `${ctxBlock.slice(0, 14000)}\n…[session context truncated for token limit]`;
+      }
       if (sessionContext.caseDiscussion) {
         ctxBlock += `\n\n[CASE DISCUSSION SUMMARY]\n${formatCaseDiscussionForChat(sessionContext.caseDiscussion)}`;
       }
@@ -1185,11 +1218,16 @@ app.post('/api/case-chat/message', async (req, res) => {
     }
     session.messages.push({ role: 'user', content: userContent });
     const window = session.messages.slice(0, 1).concat(session.messages.slice(-24));
+    const maxTokens = session.chatMode === 'patient_sim' ? 450 : 1600;
     const reply = await callCaseChatCompletion(key, window, {
       temperature: session.temperature ?? 0.45,
+      maxTokens,
     });
 
-    let clientReply = reply;
+    let clientReply = String(reply || '').trim();
+    if (!clientReply || /^no response\.?$/i.test(clientReply)) {
+      throw new Error('Tutor returned empty — retry or shorten the question');
+    }
     let stageDirections = '';
 
     if (session.chatMode === 'patient_sim') {
@@ -1261,6 +1299,111 @@ app.post('/api/order-why', async (req, res) => {
       cachedAt: saved?.cachedAt || null,
       provider: chatProvider(),
     });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/order-result', async (req, res) => {
+  const key = chatApiKeyOrError(res);
+  if (!key) return;
+
+  const {
+    caseId,
+    orderId,
+    orderLabel,
+    playbookWhy = '',
+    caseContext = null,
+    teachMeMode = false,
+    refresh = false,
+    fallbackText = '',
+    orderKindHint = 'order',
+  } = req.body || {};
+  const cid = String(caseId ?? '').trim();
+  const oid = String(orderId ?? '').trim();
+  const label = String(orderLabel ?? '').trim();
+  if (!cid || !oid || !label) {
+    return res.status(400).json({ error: 'Missing caseId, orderId, or orderLabel' });
+  }
+
+  try {
+    if (!refresh) {
+      const cached = await readOrderResultEntry(ORDER_RESULT_CACHE_DIR, cid, oid, teachMeMode);
+      if (cached?.text && (cached.promptVersion || 1) >= ORDER_RESULT_PROMPT_VERSION) {
+        return res.json({
+          ok: true,
+          text: cached.text,
+          kind: cached.kind || orderKindHint,
+          kindLabel: cached.kindLabel || 'Result',
+          cached: true,
+          cachedAt: cached.cachedAt,
+          provider: 'cache',
+        });
+      }
+    }
+
+    const cleanCase = await loadCleanCaseJson(GAME_ROOT, cid);
+    const enrichedContext = enrichCaseContextWithCleanCase(
+      caseContext && typeof caseContext === 'object' ? caseContext : {},
+      cleanCase,
+      label,
+    );
+
+    const messages = buildOrderResultPrompt({
+      orderLabel: label,
+      orderKindHint,
+      playbookWhy,
+      caseContext: enrichedContext,
+      teachMeMode: Boolean(teachMeMode),
+      fallbackText,
+    });
+    const raw = await callChatCompletion(key, messages, { maxTokens: 520, temperature: 0.28 });
+    let parsed;
+    try {
+      parsed = parseOrderResultJson(raw);
+    } catch (parseErr) {
+      if (fallbackText) {
+        return res.json({
+          ok: true,
+          text: String(fallbackText).trim(),
+          kind: orderKindHint,
+          kindLabel: 'Result',
+          cached: false,
+          provider: 'fallback',
+          parseError: String(parseErr.message || parseErr),
+        });
+      }
+      throw parseErr;
+    }
+    const saved = await writeOrderResultEntry(ORDER_RESULT_CACHE_DIR, cid, oid, teachMeMode, {
+      text: parsed.text,
+      kind: parsed.kind,
+      kindLabel: parsed.kindLabel,
+      promptVersion: ORDER_RESULT_PROMPT_VERSION,
+      orderLabel: label,
+    });
+    return res.json({
+      ok: true,
+      text: parsed.text,
+      kind: parsed.kind,
+      kindLabel: parsed.kindLabel,
+      cached: false,
+      cachedAt: saved?.cachedAt || null,
+      provider: chatProvider(),
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+/** Canonical clinical case bank — `game/data/cases/case_N.json` (DeepSeek / GitHub sync). */
+app.get('/api/case-clinical/:caseId', async (req, res) => {
+  const cid = String(req.params.caseId ?? '').trim();
+  if (!cid) return res.status(400).json({ error: 'Missing caseId' });
+  try {
+    const cleanCase = await loadCleanCaseJson(GAME_ROOT, cid);
+    if (!cleanCase) return res.status(404).json({ error: 'Case not found' });
+    return res.json({ ok: true, caseId: cid, case: cleanCase });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
   }
@@ -1534,12 +1677,26 @@ app.get('/api/case-portrait/:caseId', async (req, res) => {
     if (!cached.exists) {
       return res.json({ ok: true, exists: false, caseId });
     }
-    const url = portraitPublicUrl(caseId, serverOrigin(req));
+    const origin = serverOrigin(req);
+    const layerState = await readPortraitLayers(CASE_PORTRAIT_DIR, caseId);
+    const hasLayers =
+      layerState.base
+      && layerState.iv
+      && layerState.mask
+      && (cached.meta?.portraitLayersVersion || 0) >= PORTRAIT_LAYERS_VERSION;
+    const url = portraitPublicUrl(caseId, origin);
     return res.json({
       ok: true,
       exists: true,
       caseId,
       url,
+      layers: hasLayers
+        ? {
+            base: url,
+            iv: portraitLayerPublicUrl(caseId, 'iv', origin),
+            mask: portraitLayerPublicUrl(caseId, 'mask', origin),
+          }
+        : null,
       cachedAt: cached.meta?.cachedAt || null,
       analysis: cached.meta?.analysis || null,
       persona: cached.meta?.persona || cached.meta?.analysis?.persona || null,
@@ -1548,8 +1705,10 @@ app.get('/api/case-portrait/:caseId', async (req, res) => {
       patientSex: cached.meta?.patientSex || cached.meta?.analysis?.sex || null,
       ladyRefSlug: cached.meta?.ladyRefSlug || null,
       portraitFrameVersion: cached.meta?.portraitFrameVersion || 1,
+      portraitLayersVersion: cached.meta?.portraitLayersVersion || 0,
       portraitWidth: cached.meta?.portraitWidth || null,
       portraitHeight: cached.meta?.portraitHeight || null,
+      directorBriefSource: cached.meta?.directorBriefSource || null,
     });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
@@ -1656,75 +1815,145 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
     return res.status(400).json({ error: 'OPENAI_API_KEY not configured in MeWorld/.env' });
   }
 
+  const startedAt = Date.now();
   const {
     imageBase64,
     mimeType = 'image/png',
     caseContext,
     portraitBrief = '',
     refresh = false,
+    chatMessages = [],
   } = req.body || {};
   const caseId = caseContext?.id ?? caseContext?.ccsNumber;
   if (!caseId) return res.status(400).json({ error: 'Missing case id in caseContext' });
 
   try {
     const portraitSex = resolvePortraitSex(caseContext || {});
+    const layerState = await readPortraitLayers(CASE_PORTRAIT_DIR, caseId);
+
     if (!refresh) {
       const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId);
       const cachedSex = cached.meta?.patientSex || cached.meta?.analysis?.sex || null;
       const sexMismatch = cachedSex && portraitSex && cachedSex !== portraitSex;
-      const frameStale =
-        (cached.meta?.portraitFrameVersion || 1) < PORTRAIT_FRAME_VERSION;
-      if (cached.exists && !sexMismatch && !frameStale) {
-        const url = portraitPublicUrl(caseId, serverOrigin(req));
+      const frameStale = (cached.meta?.portraitFrameVersion || 1) < PORTRAIT_FRAME_VERSION;
+      const layersStale =
+        (cached.meta?.portraitLayersVersion || 0) < PORTRAIT_LAYERS_VERSION
+        || !layerState.iv
+        || !layerState.mask;
+      if (cached.exists && !sexMismatch && !frameStale && !layersStale) {
+        const origin = serverOrigin(req);
+        const url = portraitPublicUrl(caseId, origin);
         const persona = cached.meta?.persona || cached.meta?.analysis?.persona || buildPortraitPersona(caseContext);
         return res.json({
           ok: true,
           cached: true,
           url,
           dataUrl: url,
+          layers: {
+            base: url,
+            iv: portraitLayerPublicUrl(caseId, 'iv', origin),
+            mask: portraitLayerPublicUrl(caseId, 'mask', origin),
+          },
           provider: 'openai',
           analysis: cached.meta?.analysis || buildPortraitAnalysis(caseContext, persona),
           persona,
           patientSex: cachedSex || portraitSex,
           portraitFrameVersion: cached.meta?.portraitFrameVersion || 1,
+          portraitLayersVersion: cached.meta?.portraitLayersVersion || PORTRAIT_LAYERS_VERSION,
         });
       }
     }
+
+    const chatKey = DEEPSEEK_API_KEY || OPENAI_API_KEY;
+    const directorBrief = await extractPortraitDirectorBrief(caseContext, {
+      chatMessages,
+      portraitBrief,
+      callChat: chatKey
+        ? (messages, opts) => callChatCompletion(chatKey, messages, opts)
+        : null,
+    });
 
     const plate = await readBaseplateBuffer(GAME_ROOT, caseContext);
     const fittedInput = await fitToBaseplate(plate.buffer);
     const editBase64 = bufferToBase64(fittedInput);
 
-    const prompt = buildPortraitPrompt(caseContext, { portraitBrief });
-    const outB64 = await generatePortraitWithOpenAI({
+    const basePrompt = buildPortraitPrompt(caseContext, {
+      portraitBrief,
+      directorBrief,
+      variant: 'base',
+    });
+    const baseB64 = await generatePortraitWithOpenAI({
       imageBase64: editBase64,
       mimeType: 'image/png',
-      prompt,
+      prompt: basePrompt,
     });
+
+    const ivPrompt = buildPortraitPrompt(caseContext, {
+      portraitBrief,
+      directorBrief,
+      variant: 'iv',
+    });
+    const ivB64 = await generatePortraitWithOpenAI({
+      imageBase64: baseB64,
+      mimeType: 'image/png',
+      prompt: ivPrompt,
+    });
+
     let visionPersona = null;
     try {
-      visionPersona = await extractPersonaFromPortraitImage(outB64);
+      visionPersona = await extractPersonaFromPortraitImage(baseB64);
     } catch (visionErr) {
       console.warn('[case-portrait] vision persona skipped:', visionErr.message);
     }
     const persona = buildPortraitPersona(caseContext, visionPersona);
     const analysis = buildPortraitAnalysis(caseContext, persona);
-    await writePortraitCache(CASE_PORTRAIT_DIR, caseId, outB64, {
+    const meta = {
       analysis,
       persona,
       ...buildPortraitMeta(caseContext),
       portraitBrief: String(portraitBrief || '').trim() || null,
+      portraitLayersVersion: PORTRAIT_LAYERS_VERSION,
+      directorBriefSource: directorBrief?.source || null,
+      chatMessageCount: chatMessages.length,
+    };
+
+    await writePortraitCache(CASE_PORTRAIT_DIR, caseId, baseB64, meta);
+    await writePortraitLayer(CASE_PORTRAIT_DIR, caseId, 'iv', ivB64);
+    await writeIvMaskLayer(
+      CASE_PORTRAIT_DIR,
+      caseId,
+      Buffer.from(baseB64, 'base64'),
+      Buffer.from(ivB64, 'base64'),
+    );
+
+    const timingMs = Date.now() - startedAt;
+    logPortraitRegenBlock({
+      caseId,
+      directorBrief,
+      prompts: { basePreview: basePrompt, ivPreview: ivPrompt },
+      meta: { hasBase: true, hasIv: true, hasMask: true },
+      timingMs,
     });
-    const url = portraitPublicUrl(caseId, serverOrigin(req));
+
+    const origin = serverOrigin(req);
+    const url = portraitPublicUrl(caseId, origin);
     return res.json({
       ok: true,
       cached: false,
       url,
       dataUrl: url,
+      layers: {
+        base: url,
+        iv: portraitLayerPublicUrl(caseId, 'iv', origin),
+        mask: portraitLayerPublicUrl(caseId, 'mask', origin),
+      },
       provider: 'openai',
       analysis,
       persona,
       patientSex: portraitSex,
+      portraitFrameVersion: PORTRAIT_FRAME_VERSION,
+      portraitLayersVersion: PORTRAIT_LAYERS_VERSION,
+      elapsedMs: timingMs,
     });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });

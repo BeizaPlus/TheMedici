@@ -49,7 +49,7 @@ export default function CaseThreadCaseRail({
 
   return (
     <div className="case-thread-case-rail-wrap">
-      <p className="case-thread-case-rail-label">Cases · drag sideways</p>
+      <p className="case-thread-case-rail-label">History · drag sideways · tap ↗ to open case</p>
       <div
         ref={railRef}
         className="case-thread-case-rail"
@@ -78,13 +78,20 @@ export default function CaseThreadCaseRail({
                   if (suppressClickRef.current) return;
                   onSelectCase?.(id);
                 }}
-                title={toTitleCase(item.title)}
+                onDoubleClick={() => {
+                  onOpenCaseChat?.(item);
+                }}
+                title={`${toTitleCase(item.title)} — double-click to open case`}
               >
                 <span className="case-thread-case-chip-num">#{item.ccsNumber ?? id}</span>
                 <span className="case-thread-case-chip-title">{toTitleCase(item.title)}</span>
-                {item.messageCount > 0 && (
+                {item.messageCount > 0 ? (
                   <span className="case-thread-case-chip-count">{item.messageCount}</span>
-                )}
+                ) : item.plays > 0 ? (
+                  <span className="case-thread-case-chip-count case-thread-case-chip-count--played" title="Played">
+                    ·
+                  </span>
+                ) : null}
               </button>
               {onOpenCaseChat && (
                 <button

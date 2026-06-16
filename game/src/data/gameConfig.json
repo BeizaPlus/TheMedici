@@ -29,6 +29,22 @@
     "objectFit": "cover",
     "objectPosition": "center center"
   },
+  "patientScenePedMale": {
+    "src": "/assets/patient/patient-scene-ped-male.png",
+    "aspect": "16:9",
+    "width": 1536,
+    "height": 864,
+    "objectFit": "cover",
+    "objectPosition": "center center"
+  },
+  "patientScenePedFemale": {
+    "src": "/assets/patient/patient-scene-ped-female.png",
+    "aspect": "16:9",
+    "width": 1536,
+    "height": 864,
+    "objectFit": "cover",
+    "objectPosition": "center center"
+  },
   "cinematics": {
     "thanksDoctorVideos": [
       "/assets/video/patient-thanks-doctor-v2.mp4",
@@ -127,7 +143,9 @@
     "zone-iv-bag": "#34d399",
     "zone-blood": "#f87171",
     "zone-arm": "#a78bfa",
-    "zone-icu": "#fbbf24"
+    "zone-icu": "#fbbf24",
+    "zone-custom-1": "#4ade80",
+    "zone-custom-3": "#22c55e"
   },
   "ui": {
     "hintIdle": "Drag a stack onto the patient — snap to any grid cell",

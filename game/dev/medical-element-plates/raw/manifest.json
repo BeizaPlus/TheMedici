@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-16",
+  "backend": "Magnific imagen-nano-banana-2 @ 2k",
+  "manufacturerRefs": {
+    "o2Mask": "Hudson RCI HUD1040 — Medline/Teleflex",
+    "ivCatheter": "BD Insyte family — winged antecubital 20g"
+  },
+  "assets": {
+    "o2-mask-hudson-1040": {
+      "hero": [
+        { "file": "o2-mask-hudson-1040-hero-a.png", "magnificId": "swEJ5CKl8e", "view": "front_three_quarter" },
+        { "file": "o2-mask-hudson-1040-hero-b.png", "magnificId": "dI2mc2BXSL", "view": "front_three_quarter_alt" }
+      ],
+      "angles": [
+        { "file": "o2-mask-hudson-1040-r45.png", "magnificId": "e8Ztc9cdqL", "rotate": 45 },
+        { "file": "o2-mask-hudson-1040-r90.png", "magnificId": "wPq9jEO7EI", "rotate": 90 },
+        { "file": "o2-mask-hudson-1040-r270.png", "magnificId": "IaYCpZXtvE", "rotate": 270 }
+      ],
+      "pickHero": "o2-mask-hudson-1040-hero-a.png"
+    },
+    "iv-bd-insyte-antecubital": {
+      "hero": [
+        { "file": "iv-bd-insyte-antecubital-hero-a.png", "magnificId": "fFMqoMYCDY", "view": "oblique_antecubital" },
+        { "file": "iv-bd-insyte-antecubital-hero-b.png", "magnificId": "hE0Qd0DvqL", "view": "oblique_antecubital_alt" }
+      ],
+      "angles": [
+        { "file": "iv-bd-insyte-antecubital-r35.png", "magnificId": "mCcudGkhJQ", "rotate": 35 },
+        { "file": "iv-bd-insyte-antecubital-r90.png", "magnificId": "43rZUbp9Aa", "rotate": 90 }
+      ],
+      "pickHero": "iv-bd-insyte-antecubital-hero-a.png"
+    }
+  },
+  "stockRefsImported": [
+    { "id": 44533462, "label": "O2 mask mockup white", "uploadId": "LUC7bXQswO" },
+    { "id": 423510619, "label": "O2 mask with tubing product", "uploadId": "ohzaV4o829" },
+    { "id": 41115854, "label": "IV infusion isolated white", "uploadId": "MXiozUcDCm" },
+    { "id": 18946857, "label": "Clinical IV hand close-up", "uploadId": "8vnfMNfIrU" }
+  ],
+  "nextSteps": [
+    "Steve: pick hero A/B in Magnific or Photoshop — reject any double-tube variants",
+    "Retouch in Photoshop offline — crisp tape edges, single tube path",
+    "Promote to approved/ and wire O2 layer compositing (IV layer already exists)",
+    "Update casePortrait.js IV prompt to reference element plate instead of inline gen"
+  ]
+}

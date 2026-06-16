@@ -103,6 +103,7 @@ Rule: `.cursor/rules/agent-implementation-guard.mdc`
 - [x] **Click placed pin → clinical result** (exam / lab / imaging), not just stack rationale
 - [x] **Print on order result card**
 - [x] **Practice vs Teach Me result wording** — objective only in practice; teaching cues in Teach Me
+- [x] **Lab results per case** — instant numeric fallback (`labPanelValues.js` + clean case stack findings) + LLM upgrade via `/api/order-result` with `game/data/cases/case_N.json` context (`ORDER_RESULT_PROMPT_VERSION` 2)
 - [x] **Print flow hardened** — no blank `about:blank` tabs (`exportOrderResult.js`)
 - [~] **Results in Order · Chat slide panel** — top-aligned in scene dock; visible when sidebar collapsed *(local uncommitted; replaces Results tab + lower-third)*
 - [x] ~~Lower-third results carousel on scene~~ → **superseded** by dock slide panel (2026-06-16)

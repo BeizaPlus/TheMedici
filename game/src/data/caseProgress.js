@@ -247,12 +247,52 @@ export function getLastPlayedCaseId() {
   let bestId = null;
   let bestTime = 0;
   for (const [id, rec] of Object.entries(p.cases)) {
-    if (!rec?.lastPlayed) continue;
-    const t = new Date(rec.lastPlayed).getTime();
+    const stamp = rec?.lastVisited || rec?.lastPlayed;
+    if (!stamp) continue;
+    const t = new Date(stamp).getTime();
     if (t > bestTime) {
       bestTime = t;
       bestId = id;
     }
   }
   return bestId;
+}
+
+/** Record that the learner opened this case (briefing, play, or browse). */
+export function touchCaseVisited(caseId, source = 'play') {
+  const id = normalizeCaseProgressId(caseId);
+  if (!id) return;
+  const p = readProgress();
+  const prev = p.cases[id] || {
+    plays: 0,
+    bestAccuracy: 0,
+    completed: false,
+    lastPlayed: null,
+  };
+  p.cases[id] = {
+    ...prev,
+    lastVisited: new Date().toISOString(),
+    lastVisitSource: source,
+  };
+  writeProgress(p);
+}
+
+/** Cases touched or chatted, most recent first (for History / resume lists). */
+export function getRecentCaseHistory({ limit = 30 } = {}) {
+  const byId = new Map();
+  for (const [caseId, rec] of Object.entries(readProgress().cases)) {
+    const at = rec?.lastVisited || rec?.lastPlayed || null;
+    if (!at) continue;
+    byId.set(caseId, {
+      caseId,
+      at,
+      completed: Boolean(rec.completed),
+      plays: rec.plays || 0,
+      chatMessages: 0,
+      source: rec.lastVisitSource || 'play',
+    });
+  }
+  return [...byId.values()]
+    .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime())
+    .slice(0, limit);
 }

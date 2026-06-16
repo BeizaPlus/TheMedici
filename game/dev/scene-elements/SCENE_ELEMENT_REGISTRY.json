@@ -1,0 +1,266 @@
+{
+  "version": 1,
+  "label": "MeWorld ED scene element registry — anti-slop reference lock",
+  "purpose": "Every prop in the patient portrait scene must map to a real-world product or approved game ref. Generate element character maps once; load on subsequent runs — never invent from scratch.",
+  "sceneLockRef": "dev/scene-camera-lock/SCENE_LOCK.json",
+  "medicalDevicesRef": "dev/medical-element-plates/MEDICAL_ELEMENT_PLATES.json",
+  "patientCharacterMapsRef": "dev/character-maps/CHARACTER_MAPS.md",
+  "workflow": {
+    "step1": "Search Pinterest + manufacturer/stock for real product photos",
+    "step2": "Save refs → dev/scene-elements/sources/<id>/",
+    "step3": "Magnific element map (1:1 or 16:9) · imagen-nano-banana-2 · 2k · ref-guided",
+    "step4": "Steve offline retouch → approved/ → register paths below",
+    "step5": "Runtime loads approvedLayer — skip inline gen in portrait prompts"
+  },
+  "generationDefaults": {
+    "backend": "Magnific MCP",
+    "model": "imagen-nano-banana-2",
+    "resolution": "2k",
+    "count": 2
+  },
+  "elements": [
+    {
+      "id": "patient-adult-male",
+      "category": "patient",
+      "label": "Adult male patient identity",
+      "realWorld": { "note": "Demographics from case JSON; no fixed celebrity likeness" },
+      "referenceSearch": {
+        "pinterest": ["supine male patient hospital gown ed stretcher overhead"],
+        "gameRefs": ["public/assets/patient/patient-scene.png", "dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png"]
+      },
+      "characterMap": { "status": "approved", "path": "public/assets/patient/patient-scene.png", "role": "baseplate identity baked in clean plate" },
+      "approvedLayer": { "path": "public/assets/patient/patient-scene.png", "compositeSlot": "baseplate" },
+      "antiSlop": ["poster hero bust only", "standing pose", "street clothes", "missing feet"]
+    },
+    {
+      "id": "patient-adult-female",
+      "category": "patient",
+      "label": "Adult female patient identity",
+      "realWorld": { "note": "Lady likeness from patientLadyRefs rotation or case slug" },
+      "referenceSearch": {
+        "pinterest": ["black woman hospital gown stretcher cornrows", "female patient ed overhead"],
+        "gameRefs": ["src/data/patientLadyRefs.json", "public/assets/patient/patient-scene-female.png"]
+      },
+      "characterMap": { "status": "approved", "path": "public/assets/patient/ladies/", "role": "identity-only maps; camera from SCENE_LOCK" },
+      "approvedLayer": { "path": "public/assets/patient/patient-scene-female.png", "compositeSlot": "baseplate" },
+      "antiSlop": ["generic stock model face", "wrong braid pattern vs map", "tight face crop"]
+    },
+    {
+      "id": "patient-ped-male",
+      "category": "patient",
+      "label": "Pediatric male patient (Kojo likeness)",
+      "realWorld": { "characterSlug": "kojo-oppong", "ageRange": "6-10" },
+      "referenceSearch": {
+        "pinterest": ["boy hospital gown stretcher pediatric ed"],
+        "gameRefs": ["M:/Works/Houdini Projects/TheMind_KOS/resources/talking-images/characters/kojo-oppong/references/kojo-face-likeness-lock.png"]
+      },
+      "characterMap": { "status": "pending", "path": null, "sourcesDir": "dev/scene-elements/sources/patient-ped-male/" },
+      "approvedLayer": { "path": null, "compositeSlot": "baseplate", "fallback": "public/assets/patient/patient-scene.png" },
+      "antiSlop": ["adult proportions", "teen face", "wrong Kojo likeness"]
+    },
+    {
+      "id": "patient-ped-female",
+      "category": "patient",
+      "label": "Pediatric female patient (Daniella likeness)",
+      "realWorld": { "characterSlug": "daniella", "ageRange": "6-10" },
+      "referenceSearch": {
+        "pinterest": ["girl hospital gown stretcher pediatric ed"],
+        "gameRefs": ["M:/Works/Houdini Projects/TheMind_KOS/resources/talking-images/characters/daniella/stills/93-meworld-welcome-plate-daniella-pick.png"]
+      },
+      "characterMap": { "status": "pending", "path": null, "sourcesDir": "dev/scene-elements/sources/patient-ped-female/" },
+      "approvedLayer": { "path": null, "compositeSlot": "baseplate", "fallback": "public/assets/patient/patient-scene-female.png" },
+      "antiSlop": ["adult proportions", "wrong Daniella likeness"]
+    },
+    {
+      "id": "ed-stretcher-hillrom",
+      "category": "furniture",
+      "label": "ED stretcher / gurney with side rails",
+      "realWorld": {
+        "manufacturer": "Hill-Rom / Stryker",
+        "productLine": "Advanta 2 / Prime Series ED stretcher",
+        "catalogHint": "Integrated rail controls, white-grey mattress, both rails visible"
+      },
+      "referenceSearch": {
+        "pinterest": ["hospital stretcher top view rails", "ed gurney overhead patient"],
+        "web": ["https://www.hillrom.com/en/products/adv-series-stretcher/"],
+        "gameRefs": ["dev/screenshots/reference/patient-bed-topdown.png", "public/assets/patient/patient-scene.png"]
+      },
+      "characterMap": { "status": "approved", "path": "public/assets/patient/patient-scene.png", "role": "baked into baseplate — do not regen bed separately unless new angle" },
+      "approvedLayer": { "path": null, "compositeSlot": "baseplate-background" },
+      "antiSlop": ["home bed", "OR table", "missing rails", "cartoon rounded rails", "patient floating off mattress"]
+    },
+    {
+      "id": "hospital-gown-blue-short-sleeve",
+      "category": "apparel",
+      "label": "Light blue short-sleeve hospital gown",
+      "realWorld": { "productType": "Standard reversible patient gown", "color": "light blue / aqua" },
+      "referenceSearch": {
+        "pinterest": ["hospital gown supine patient blue short sleeve"],
+        "gameRefs": ["dev/scene-camera-lock/SCENE_LOCK.json patientScope.gown"]
+      },
+      "characterMap": { "status": "approved", "path": null, "role": "baked in SCENE_LOCK patientScope — identity change only" },
+      "approvedLayer": { "path": null, "compositeSlot": "patient-body" },
+      "antiSlop": ["street clothes", "scrubs on patient", "long robe covering antecubital fossae"]
+    },
+    {
+      "id": "vitals-monitor-ge-carescape",
+      "category": "equipment",
+      "label": "Bedside vitals monitor (upper-right)",
+      "realWorld": {
+        "manufacturer": "GE Healthcare",
+        "productLine": "Carescape B650 / B850 class",
+        "placement": "SCENE_LOCK sceneArrangement.monitor — cx 0.927 cy 0.099"
+      },
+      "referenceSearch": {
+        "pinterest": ["ge carescape monitor hospital bedside", "ed vitals monitor screen"],
+        "web": ["https://www.gehealthcare.com/products/patient-monitoring"],
+        "gameRefs": ["dev/scene-camera-lock/SCENE_LOCK.json zones.zone-monitor"]
+      },
+      "characterMap": { "status": "pending", "path": null, "sourcesDir": "dev/scene-elements/sources/vitals-monitor-ge-carescape/", "prompt": "dev/scene-elements/prompts/vitals-monitor-ge-carescape-hero.txt" },
+      "approvedLayer": { "path": null, "compositeSlot": "zone-monitor" },
+      "antiSlop": ["tablet on stand", "consumer TV", "wrong screen UI gibberish dominant", "monitor on wrong side"]
+    },
+    {
+      "id": "iv-pole-4-hook-stainless",
+      "category": "equipment",
+      "label": "IV pole with roller base (upper-left)",
+      "realWorld": {
+        "manufacturer": "Generic hospital supply",
+        "productType": "Stainless 4-hook IV pole on 5-wheel base",
+        "placement": "SCENE_LOCK sceneArrangement.ivFluids — cx 0.092 cy 0.1"
+      },
+      "referenceSearch": {
+        "pinterest": ["hospital iv pole stainless 4 hook", "iv stand roller base ed"],
+        "gameRefs": ["dev/scene-camera-lock/SCENE_LOCK.json zones.zone-iv-bag"]
+      },
+      "characterMap": { "status": "pending", "path": null, "sourcesDir": "dev/scene-elements/sources/iv-pole-4-hook-stainless/", "prompt": "dev/scene-elements/prompts/iv-pole-4-hook-stainless-hero.txt" },
+      "approvedLayer": { "path": null, "compositeSlot": "zone-iv-bag" },
+      "antiSlop": ["wooden coat rack", "single hook", "pole without wheels", "pole center frame blocking patient"]
+    },
+    {
+      "id": "iv-bag-ns-1000ml-baxter",
+      "category": "equipment",
+      "label": "1000 mL normal saline IV bag on pole",
+      "realWorld": {
+        "manufacturer": "Baxter / ICU Medical",
+        "productLine": "Viaflex NS 1000 mL",
+        "catalogHint": "Clear bag, blue print label 0.9% Sodium Chloride"
+      },
+      "referenceSearch": {
+        "pinterest": ["normal saline 1000ml iv bag baxter", "ns iv bag hanging pole"],
+        "web": ["https://www.baxter.com/products-and-specialties/hospital-products/iv-solutions"],
+        "gameRefs": ["dev/medical-element-plates/MEDICAL_ELEMENT_PLATES.json"]
+      },
+      "characterMap": { "status": "pending", "path": null, "sourcesDir": "dev/scene-elements/sources/iv-bag-ns-1000ml-baxter/" },
+      "approvedLayer": { "path": null, "compositeSlot": "zone-iv-bag" },
+      "antiSlop": ["blood bag red only", "multiple bags tangled", "bag on floor", "label unreadable neon fantasy colors"]
+    },
+    {
+      "id": "bedside-overbed-table",
+      "category": "furniture",
+      "label": "Overbed / bedside table (partial, mid-left)",
+      "realWorld": {
+        "productType": "H-style overbed table, laminate wood top, grey metal base",
+        "placement": "SCENE_LOCK sceneArrangement.bedsideTable"
+      },
+      "referenceSearch": {
+        "pinterest": ["hospital overbed table wood top", "bedside table ed patient room"],
+        "gameRefs": ["public/assets/patient/patient-scene.png"]
+      },
+      "characterMap": { "status": "approved", "path": null, "role": "partial in baseplate — extract only if regen base" },
+      "approvedLayer": { "path": null, "compositeSlot": "baseplate-background" },
+      "antiSlop": ["dining table", "nightstand with lamp", "table blocking patient torso"]
+    },
+    {
+      "id": "bed-rail-control-panel",
+      "category": "equipment",
+      "label": "Integrated bed rail control panel (left rail)",
+      "realWorld": {
+        "productType": "Stretcher rail pendant / integrated button panel",
+        "placement": "SCENE_LOCK sceneArrangement.bedRailControls"
+      },
+      "referenceSearch": {
+        "pinterest": ["hospital bed rail controls panel", "stretcher side rail buttons"],
+        "gameRefs": ["public/assets/patient/patient-scene.png"]
+      },
+      "characterMap": { "status": "approved", "path": null, "role": "baked in baseplate" },
+      "approvedLayer": { "path": null, "compositeSlot": "baseplate-background" },
+      "antiSlop": ["consumer remote", "phone on rail", "rails without controls when reference shows them"]
+    },
+    {
+      "id": "hospital-pillow-white",
+      "category": "furniture",
+      "label": "White hospital pillow under head",
+      "realWorld": { "productType": "Standard hospital pillow, white case" },
+      "referenceSearch": {
+        "pinterest": ["hospital pillow white supine patient"],
+        "gameRefs": ["SCENE_LOCK patientScope.pose"]
+      },
+      "characterMap": { "status": "approved", "path": null, "role": "baked in baseplate" },
+      "approvedLayer": { "path": null, "compositeSlot": "baseplate" },
+      "antiSlop": ["decorative throw pillow", "no pillow", "pillow floating"]
+    },
+    {
+      "id": "patient-id-wristband",
+      "category": "accessory",
+      "label": "Hospital ID wristband",
+      "realWorld": { "productType": "Zebra / standard thermal print patient ID band, white or pastel" },
+      "referenceSearch": {
+        "pinterest": ["hospital patient id wristband white"],
+        "gameRefs": []
+      },
+      "characterMap": { "status": "pending", "path": null, "sourcesDir": "dev/scene-elements/sources/patient-id-wristband/" },
+      "approvedLayer": { "path": null, "compositeSlot": "patient-wrist-overlay" },
+      "antiSlop": ["smartwatch", "rubber festival band", "band on wrong wrist inconsistent"]
+    },
+    {
+      "id": "o2-mask-hudson-1040",
+      "category": "medical-device",
+      "label": "Hudson RCI HUD1040 O2 face mask",
+      "realWorld": { "ref": "dev/medical-element-plates/MEDICAL_ELEMENT_PLATES.json devices[0]" },
+      "referenceSearch": {
+        "pinterest": ["hudson rci oxygen mask 1040", "medium concentration o2 mask clear vinyl"],
+        "web": ["https://www.mountainside-medical.com/products/hudson-rci-1040-adult-oxygen-mask-with-7-foot-tubing"],
+        "gameRefs": ["dev/medical-element-plates/raw/manifest.json"]
+      },
+      "characterMap": {
+        "status": "approved",
+        "path": "dev/medical-element-plates/raw/o2-mask-hudson-1040-hero-a.png",
+        "manifest": "dev/medical-element-plates/raw/manifest.json"
+      },
+      "approvedLayer": { "path": null, "compositeSlot": "patient-face-overlay", "pickHero": "dev/medical-element-plates/raw/o2-mask-hudson-1040-hero-a.png" },
+      "antiSlop": ["double tubing from one port", "CPAP full face", "nasal cannula", "diving mask"]
+    },
+    {
+      "id": "iv-bd-insyte-20g-antecubital",
+      "category": "medical-device",
+      "label": "BD Insyte peripheral IV — antecubital",
+      "realWorld": { "ref": "dev/medical-element-plates/MEDICAL_ELEMENT_PLATES.json devices[1]" },
+      "referenceSearch": {
+        "pinterest": ["bd insyte iv catheter antecubital", "iv insertion transparent tegaderm winged hub"],
+        "web": ["https://www.bd.com/en-us/products-and-solutions/products/product-page.381257"],
+        "gameRefs": ["dev/medical-element-plates/raw/manifest.json"]
+      },
+      "characterMap": {
+        "status": "approved",
+        "path": "dev/medical-element-plates/raw/iv-bd-insyte-antecubital-hero-a.png",
+        "manifest": "dev/medical-element-plates/raw/manifest.json"
+      },
+      "approvedLayer": { "path": null, "compositeSlot": "zone-arm", "pickHero": "dev/medical-element-plates/raw/iv-bd-insyte-antecubital-hero-a.png" },
+      "antiSlop": ["dorsal hand IV", "double parallel tubes", "wire without hub", "wrist placement"]
+    },
+    {
+      "id": "ed-background-clinical-bokeh",
+      "category": "environment",
+      "label": "Dim ED room background with wall outlets",
+      "realWorld": { "note": "Generic US ED treatment bay — not OR, not home" },
+      "referenceSearch": {
+        "pinterest": ["emergency department room wall outlets bokeh", "ed bay background clinical"],
+        "gameRefs": ["public/assets/patient/patient-scene.png", "dev/scene-camera-lock/SCENE_LOCK.json sceneArrangement.background"]
+      },
+      "characterMap": { "status": "approved", "path": null, "role": "baked in baseplate" },
+      "approvedLayer": { "path": null, "compositeSlot": "baseplate-background" },
+      "antiSlop": ["window sunlight portrait", "home bedroom", "sci-fi panels", "over-sharp clutter"]
+    }
+  ]
+}

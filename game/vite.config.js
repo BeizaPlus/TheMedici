@@ -18,6 +18,8 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
+    // VITE_DISABLE_HMR=1 — no live reload while studying; refresh manually when ready (npm run dev:study).
+    hmr: process.env.VITE_DISABLE_HMR === '1' ? false : undefined,
     proxy: {
       '/api': 'http://127.0.0.1:3001',
       '/user-data': 'http://127.0.0.1:3001',

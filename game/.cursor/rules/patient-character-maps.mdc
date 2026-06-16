@@ -28,6 +28,7 @@ alwaysApply: false
 
 - `resolvePatientLadyRef.js` + `server/casePortrait.js` pick slug by case id / region / rotation
 - Portrait must still use **approved 16:9 ED baseplate** (`SCENE_LOCK.json`) — character map is **identity only**, not camera
+- **Framing lock (Steve 2026-06-16):** crown → toes, bare feet visible at bottom — same as male crop lock. Female gens use `patient-scene-female.png` + `female-ed-anatomic-plate.txt`; never mid-thigh or face-only crop
 
 ## Forward work
 

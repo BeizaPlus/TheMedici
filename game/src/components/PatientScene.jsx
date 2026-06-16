@@ -77,6 +77,9 @@ export default function PatientScene({
   forceSrc = null,
   showVideoBackground = true,
   caseData = null,
+  ivPortraitLayer = null,
+  ivPortraitMask = null,
+  showIvLayer = false,
 }) {
   const cfg = scene || getPatientScene();
   const overrideSrc =
@@ -212,6 +215,20 @@ export default function PatientScene({
     }
   }, [onLoad, onSceneError, useVideoFallback]);
 
+  const ivOverlaySrc =
+    showIvLayer && isValidSceneSrc(ivPortraitLayer) && isValidSceneSrc(ivPortraitMask)
+      ? ivPortraitLayer
+      : null;
+  const ivMaskSrc = ivOverlaySrc ? ivPortraitMask : null;
+
+  const imgStyle = {
+    objectFit: cfg.objectFit || 'cover',
+    objectPosition: cfg.objectPosition || 'center',
+    opacity: 1,
+    zIndex: 2,
+    pointerEvents: 'none',
+  };
+
   const slotOpacity = (key) => {
     const isFront = key === frontKey;
     if (crossfading) return isFront ? 0 : 1;
@@ -275,22 +292,48 @@ export default function PatientScene({
           />
         </div>
       )}
-      <img
-        ref={imgRef}
-        className={className}
-        src={displaySrc}
-        alt="Patient in hospital bed"
-        draggable={false}
-        onLoad={onLoad}
-        onError={handleImgError}
-        style={{
-          objectFit: cfg.objectFit || 'cover',
-          objectPosition: cfg.objectPosition || 'center',
-          opacity: 1,
-          zIndex: 2,
-          pointerEvents: 'none',
-        }}
-      />
+      {ivOverlaySrc ? (
+        <div className="patient-portrait-stack">
+          <img
+            ref={imgRef}
+            className={className}
+            src={displaySrc}
+            alt="Patient in hospital bed"
+            draggable={false}
+            onLoad={onLoad}
+            onError={handleImgError}
+            style={imgStyle}
+          />
+          <img
+            className={`${className} patient-portrait-iv-overlay`}
+            src={ivOverlaySrc}
+            alt=""
+            draggable={false}
+            aria-hidden
+            style={{
+              ...imgStyle,
+              zIndex: 3,
+              maskImage: `url(${ivMaskSrc})`,
+              WebkitMaskImage: `url(${ivMaskSrc})`,
+              maskSize: '100% 100%',
+              WebkitMaskSize: '100% 100%',
+              maskRepeat: 'no-repeat',
+              WebkitMaskRepeat: 'no-repeat',
+            }}
+          />
+        </div>
+      ) : (
+        <img
+          ref={imgRef}
+          className={className}
+          src={displaySrc}
+          alt="Patient in hospital bed"
+          draggable={false}
+          onLoad={onLoad}
+          onError={handleImgError}
+          style={imgStyle}
+        />
+      )}
     </>
   );
 }

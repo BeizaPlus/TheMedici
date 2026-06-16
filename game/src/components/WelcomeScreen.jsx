@@ -42,6 +42,8 @@ import { DEFAULT_TIMER_SECONDS, normalizeTimerSeconds } from '../lib/caseTimer.j
 import { getReadyPracticeCount, getStackTestingCount } from '../lib/caseReadyPractice.js';
 import { getFavoriteCount, getFlaggedReviewCount } from '../data/caseProgress.js';
 import { fetchOverallUserStats } from '../lib/caseUserLog.js';
+import { getCaseVisitHistory, formatCaseVisitWhen } from '../lib/caseVisitHistory.js';
+import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import {
   applyPhysicianProfile,
   hasCompletedOnboarding,
@@ -77,6 +79,7 @@ export default function WelcomeScreen({
   onOpenStackTestingCases,
   onOpenFavoritesCases,
   onOpenFlaggedCases,
+  onOpenRecentCases,
   onOpenDifferential,
   resumeCheckpoint,
   resumeCase,
@@ -258,8 +261,13 @@ export default function WelcomeScreen({
   const [magicLink, setMagicLink] = useState('');
   const [magicMsg, setMagicMsg] = useState('');
   const [journalStats, setJournalStats] = useState(null);
+  const [historyVersion, setHistoryVersion] = useState(0);
 
-  const allCaseIds = useMemo(() => catalog.cases.map((c) => c.id), [catalog]);
+  const visitHistory = useMemo(() => {
+    void historyVersion;
+    void panel;
+    return getCaseVisitHistory({ limit: 12 });
+  }, [historyVersion, panel]);
   const audienceLevel = useMemo(() => levelFromSlider(understanding), [understanding]);
   const conditionChoices = useMemo(() => getConditionChoices(audienceLevel), [audienceLevel]);
   useEffect(() => {
@@ -296,6 +304,7 @@ export default function WelcomeScreen({
 
   useEffect(() => {
     if (panel !== 'profiles') return undefined;
+    setHistoryVersion((v) => v + 1);
     let cancelled = false;
     fetchOverallUserStats().then((stats) => {
       if (!cancelled) setJournalStats(stats);
@@ -336,6 +345,7 @@ export default function WelcomeScreen({
   }, []);
 
   const handlePlay = () => {
+    const allCaseIds = catalog.cases.map((c) => c.id);
     const pool = allowedCaseIds.length ? allowedCaseIds : allCaseIds;
     const id = pickRandomId(pool);
     const gameCase = id ? getCaseById(id) : null;
@@ -791,6 +801,41 @@ export default function WelcomeScreen({
               </p>
             </div>
           )}
+          {visitHistory.length > 0 && (
+            <div className="welcome-case-history" aria-label="Recent case history">
+              <p className="welcome-panel-kicker">History</p>
+              <p className="welcome-panel-stat muted welcome-case-history-hint">
+                Cases you opened or chatted with — tap to reopen.
+              </p>
+              <ul className="welcome-case-history-list">
+                {visitHistory.map((row) => (
+                  <li key={row.caseId}>
+                    <button
+                      type="button"
+                      className="welcome-case-history-row"
+                      onClick={() => {
+                        const gameCase = getCaseById(row.caseId);
+                        if (!gameCase) return;
+                        ensureReadyForCases();
+                        setPanel(null);
+                        onPlay(gameCase, 'browse');
+                      }}
+                    >
+                      <span className="welcome-case-history-main">
+                        <strong>#{row.ccsNumber}</strong>{' '}
+                        {toTitleCase(row.title)}
+                      </span>
+                      <span className="welcome-case-history-meta">
+                        {formatCaseVisitWhen(row.at)}
+                        {row.chatMessages > 0 ? ` · ${row.chatMessages} chat` : ''}
+                        {row.completed ? ' · done' : ''}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {lastCase && (
             <p className="welcome-panel-meta">
               Last case: <strong>{lastCase.title}</strong>
@@ -829,6 +874,18 @@ export default function WelcomeScreen({
                 }}
               >
                 Stack testing ({stackTestingCount}) →
+              </button>
+            )}
+            {onOpenRecentCases && visitHistory.length > 0 && (
+              <button
+                type="button"
+                className="welcome-panel-btn"
+                onClick={() => {
+                  ensureReadyForCases();
+                  onOpenRecentCases();
+                }}
+              >
+                History ({visitHistory.length}) →
               </button>
             )}
             {onOpenFavoritesCases && (

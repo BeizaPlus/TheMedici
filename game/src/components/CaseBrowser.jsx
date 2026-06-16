@@ -54,6 +54,7 @@ import CaseReviewFlagTag from './CaseReviewFlagTag.jsx';
 import CaseSelectionScenePreview from './CaseSelectionScenePreview.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import CaseLandscapeRail from './CaseLandscapeRail.jsx';
+import { getCaseVisitHistory } from '../lib/caseVisitHistory.js';
 
 
 
@@ -89,7 +90,11 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
         ? 'stacks'
         : initialFilter === 'flagged'
           ? 'flagged'
-          : 'all',
+          : initialFilter === 'recent'
+            ? 'recent'
+            : initialFilter === 'favorites'
+              ? 'favorites'
+              : 'all',
   );
 
   const [activeCategory, setActiveCategory] = useState(categories[0]?.id);
@@ -101,6 +106,13 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
     if (initialFilter === 'stacks') return stackTestingCases[0]?.id || '138';
 
     if (initialFilter === 'flagged') return getFlaggedCaseIds()[0] || readyCases[0]?.id || '001';
+
+    if (initialFilter === 'recent') {
+      const recent = getCaseVisitHistory({ limit: 1 });
+      return recent[0]?.caseId || readyCases[0]?.id || '001';
+    }
+
+    if (initialFilter === 'favorites') return getFavoriteCaseIds()[0] || readyCases[0]?.id || '001';
 
     return categories[0]?.caseIds?.[0] || '001';
 
@@ -136,6 +148,13 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
     return favoriteIds.map((id) => byId.get(id)).filter(Boolean);
   }, [catalog.cases, favoriteIds]);
 
+  const recentCases = useMemo(() => {
+    const byId = new Map(catalog.cases.map((c) => [c.id, c]));
+    return getCaseVisitHistory({ limit: 40 })
+      .map((row) => byId.get(row.caseId))
+      .filter(Boolean);
+  }, [catalog.cases]);
+
   const overallStats = useMemo(() => getCompletionStats(catalog.totalCases), [catalog.totalCases]);
 
 
@@ -150,9 +169,11 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
     if (listFilter === 'favorites') return favoriteCases;
 
+    if (listFilter === 'recent') return recentCases;
+
     return getCasesInCategory(activeCategory);
 
-  }, [listFilter, activeCategory, readyCases, stackTestingCases, flaggedCases, favoriteCases]);
+  }, [listFilter, activeCategory, readyCases, stackTestingCases, flaggedCases, favoriteCases, recentCases]);
 
 
 
@@ -250,6 +271,12 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
   };
 
+  const showRecentFilter = () => {
+    setListFilter('recent');
+    const recent = getCaseVisitHistory({ limit: 1 });
+    if (recent[0]?.caseId) setSelectedId(recent[0].caseId);
+  };
+
 
 
   const playCase = useCallback(
@@ -308,7 +335,11 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
               ? favoriteIds
 
-              : allCaseIds;
+              : listFilter === 'recent'
+
+                ? recentCases.map((c) => c.id)
+
+                : allCaseIds;
 
     const firstId = startShuffleQueue(pool);
 
@@ -472,6 +503,24 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
           type="button"
 
+          className={listFilter === 'recent' ? 'ready-filter-chip active' : 'ready-filter-chip'}
+
+          onClick={showRecentFilter}
+
+          aria-pressed={listFilter === 'recent'}
+
+        >
+
+          History
+
+          <span className="ready-filter-count">{recentCases.length}</span>
+
+        </button>
+
+        <button
+
+          type="button"
+
           className={listFilter === 'favorites' ? 'ready-filter-chip active' : 'ready-filter-chip'}
 
           onClick={showFavoritesFilter}
@@ -545,6 +594,16 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
           <p className="ready-filter-note">
 
             ⭐ Cases you starred — quick access to your favorite cases.
+
+          </p>
+
+        )}
+
+        {listFilter === 'recent' && (
+
+          <p className="ready-filter-note">
+
+            Cases you opened or chatted with — most recent first.
 
           </p>
 

@@ -9,7 +9,8 @@ import { useGridDragGame } from '../hooks/useGridDragGame.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
 import { DOCK_CHROME_COLLAPSED_HEIGHT } from '../lib/playDockLayout.js';
 import { useTeachCompareDockWidth } from '../hooks/useTeachCompareDockWidth.js';
-import { isCorrectGridPlacement, zoneIdForCell } from '../lib/placementGrid.js';
+import { isCorrectGridPlacement, zoneIdForCell, zoneToGridCell } from '../lib/placementGrid.js';
+import { isTorsoDropZone, stackDropZoneForIv } from '../lib/torsoDropZone.js';
 import SceneGridOverlay from './SceneGridOverlay.jsx';
 import { playWrong, playComplete } from '../lib/audio.js';
 import { mergeZonesForPlay } from '../lib/zoneStudio.js';
@@ -40,7 +41,7 @@ import {
   writeGridItems,
 } from '../lib/gridPlacement.js';
 import { apiUrl } from '../lib/apiBase.js';
-import { nextAttemptNumber, peekAttemptNumber, saveScreenshotToServer } from '../lib/captureScreenshot.js';
+import { nextAttemptNumber, peekAttemptNumber, saveScreenshotToServer, captureElementPng } from '../lib/captureScreenshot.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
   getPresentationHistory,
@@ -64,7 +65,8 @@ import { useCaseRecording } from '../hooks/useCaseRecording.js';
 import { useCaseChat } from '../hooks/useCaseChat.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
 import { buildChatSessionContext } from '../lib/buildChatSessionContext.js';
-import { consumePlayOpenTab, listCasesWithChatActivity } from '../lib/recentChatCases.js';
+import { consumePlayOpenTab, stashPlayOpenTab } from '../lib/recentChatCases.js';
+import { getCaseVisitHistory } from '../lib/caseVisitHistory.js';
 import {
   isOrderTimelineEvent,
   orderTimelineEntryFromEvent,
@@ -84,6 +86,9 @@ import {
   resolveCaseStackOrder,
   resolveOrderAutocomplete,
 } from '../lib/orderCommandAutocomplete.js';
+import { extraOrderPinId } from '../lib/extraOrderPlacement.js';
+import { buildPlacedResultRows } from '../lib/placedResultRows.js';
+import { readExportUseLiveScene, writeExportUseLiveScene } from '../lib/exportLiveScenePrefs.js';
 import {
   IconLayoutSidebarRightCollapse,
   IconLayoutSidebarRightExpand,
@@ -104,6 +109,7 @@ import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
 import { isLearningMode } from '../lib/learningMode.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
+import { looksLikeTutorQuestion } from '../lib/chatIntentRouting.js';
 import { buildShuffledStackEntries } from '../lib/shuffleStacks.js';
 import {
   neutralStackOrderName,
@@ -160,8 +166,12 @@ import {
   clearCaseRegenImage,
   clearSceneVariantUnit,
   ensureCasePortrait,
+  fetchCasePortraitStatus,
   readCaseRegenImage,
 } from '../lib/patientRegen.js';
+import { prefetchOrderResult } from '../lib/orderResultApi.js';
+import { clearCaseChatSession } from '../lib/caseChat.js';
+import { hasIvOrderPlaced } from '../lib/portraitLayers.js';
 import { CASE_AVATAR_EVENT } from '../lib/caseAvatar.js';
 
 const LOCATIONS = {
@@ -291,6 +301,7 @@ export default function Play({
   onComplete,
   onQuit,
   onSkipToNext,
+  onOpenCase,
   studioCapture = false,
 }) {
   const brand = getBranding();
@@ -344,8 +355,15 @@ export default function Play({
   const [dockResultsExpanded, setDockResultsExpanded] = useState(false);
   const [dockChatReply, setDockChatReply] = useState(null);
   const [dockReplyExpanded, setDockReplyExpanded] = useState(false);
-  const [chatPatientMode, setChatPatientMode] = useState(false);
+  const [chatPatientMode, setChatPatientModeState] = useState(false);
   const chatPatientModeRef = useRef(false);
+  const setChatPatientMode = useCallback((next) => {
+    setChatPatientModeState((prev) => {
+      const val = typeof next === 'function' ? next(prev) : next;
+      if (prev && !val) clearCaseChatSession(caseData?.id, 'patient_sim');
+      return val;
+    });
+  }, [caseData?.id]);
   const [recordingsVersion, setRecordingsVersion] = useState(0);
   const [notesVersion, setNotesVersion] = useState(0);
   const [conversationLog, setConversationLog] = useState([]);
@@ -583,7 +601,7 @@ export default function Play({
     if (knownOrderMatch) {
       return teachMeMode ? `${knownOrderMatch.name} is not in this case's order set` : '';
     }
-    return chatPatientMode ? 'Patient mode — send question' : 'Tutor chat — stethoscope for patient mode';
+    return chatPatientMode ? 'Patient mode — send question' : 'Master tutor — tap portrait for patient mode';
   }, [orderCommandQuery, commandMatch, decoyCommandMatch, knownOrderMatch, teachMeMode, chatPatientMode]);
 
   const commandUiMatch = commandMatch || (!teachMeMode ? decoyCommandMatch : null);
@@ -725,12 +743,25 @@ export default function Play({
   }, [interventions, placed, zones, teachMeMode]);
   const caseFlow = useMemo(() => getCaseFlow(caseData), [caseData]);
   const placedResultRows = useMemo(
-    () =>
-      interventions
-        .filter((iv) => Boolean(placed[iv.id]))
-        .map((iv) => ({ iv })),
-    [interventions, placed],
+    () => buildPlacedResultRows({ interventions, placed, pins, interventionById }),
+    [interventions, placed, pins, interventionById],
   );
+
+  useEffect(() => {
+    if (!caseData?.id) return;
+    for (const row of placedResultRows) {
+      prefetchOrderResult({
+        caseId: caseData.id,
+        orderId: row.iv.id,
+        orderLabel: row.iv.label,
+        intervention: row.iv,
+        caseData,
+        caseFlow,
+        teachMeMode,
+        playbookWhy: row.iv.why || '',
+      });
+    }
+  }, [placedResultRows, caseData, caseFlow, teachMeMode]);
   const vitals = caseFlow.vitals;
   const exam = caseFlow.exam;
   const examSummary = useMemo(() => getBriefingExam(caseFlow), [caseFlow]);
@@ -770,7 +801,9 @@ export default function Play({
   const [careUnit, setCareUnit] = useState(caseFlow.dispositionUnits?.[0] || 'ER');
   const [portraitReady, setPortraitReady] = useState(0);
   const [portraitRegenBusy, setPortraitRegenBusy] = useState(false);
+  const [portraitLayers, setPortraitLayers] = useState(null);
   const regenSrc = useMemo(() => readCaseRegenImage(caseData?.id), [caseData?.id, portraitReady]);
+  const hasIvPlaced = useMemo(() => hasIvOrderPlaced(placed), [placed]);
   const [reviewedAt, setReviewedAt] = useState(null);
   const [sceneByUnit, setSceneByUnit] = useState(() => {
     if (typeof window === 'undefined') return {};
@@ -795,6 +828,7 @@ export default function Play({
   const [gridItems, setGridItems] = useState([]);
   const [selectedGridId, setSelectedGridId] = useState(null);
   const [captureBusy, setCaptureBusy] = useState(false);
+  const [exportUseLiveScene, setExportUseLiveScene] = useState(() => readExportUseLiveScene());
   const [showThanksVideo, setShowThanksVideo] = useState(false);
   const [pendingCompleteResult, setPendingCompleteResult] = useState(null);
   const [activeThanksVideo, setActiveThanksVideo] = useState(null);
@@ -1000,6 +1034,7 @@ export default function Play({
     playSessionId: threadIsPlayCase ? playSessionId : null,
     getSessionContext: threadIsPlayCase ? getChatSessionContext : undefined,
     portraitVersion: portraitReady,
+    defaultChatMode: 'tutor',
     onModelReady: useCallback((label) => {
       if (!threadIsPlayCase) return;
       logTimeline({ type: 'chat', role: 'system', text: `Case chat running on ${label}` });
@@ -1014,9 +1049,22 @@ export default function Play({
   }, [infoTab, caseChat.reloadHistory]);
 
   const threadChatCases = useMemo(() => {
-    const activity = listCasesWithChatActivity({ limit: 20 });
+    const visits = getCaseVisitHistory({ limit: 24 });
     const currentId = String(caseData.id);
-    const byId = new Map(activity.map((row) => [row.caseId, row]));
+    const byId = new Map(
+      visits.map((row) => [
+        row.caseId,
+        {
+          caseId: row.caseId,
+          ccsNumber: row.ccsNumber ?? row.caseId,
+          title: row.title,
+          messageCount: row.chatMessages || 0,
+          lastAt: row.at,
+          plays: row.plays || 0,
+          completed: Boolean(row.completed),
+        },
+      ]),
+    );
     if (!byId.has(currentId)) {
       byId.set(currentId, {
         caseId: currentId,
@@ -1024,6 +1072,8 @@ export default function Play({
         title: caseData.title,
         messageCount: 0,
         lastAt: null,
+        plays: 0,
+        completed: false,
       });
     }
     return [...byId.values()].sort((a, b) => {
@@ -1034,6 +1084,22 @@ export default function Play({
       return tb - ta;
     });
   }, [caseData.id, caseData.ccsNumber, caseData.title, notesVersion, caseChat.messages.length]);
+
+  const handleOpenCaseFromRail = useCallback(
+    (item) => {
+      const id = String(item?.caseId ?? '').trim();
+      if (!id) return;
+      if (id === String(caseData.id)) {
+        setThreadViewCaseId(id);
+        expandDockPanel();
+        setInfoTab('chat');
+        return;
+      }
+      stashPlayOpenTab('chat');
+      onOpenCase?.(id);
+    },
+    [caseData.id, onOpenCase, expandDockPanel],
+  );
 
   const misses = Math.max(0, attempts - correctAttempts);
   const lifePct = useMemo(
@@ -1161,8 +1227,30 @@ export default function Play({
     if (!c) return;
 
     setPlaced(c.placed || {});
+    const restoredPins = Array.isArray(c.pins) ? [...c.pins] : [];
+    const restoredPlaced = { ...(c.placed || {}) };
+    if (Array.isArray(c.extraOrders)) {
+      for (const order of c.extraOrders) {
+        const ivId = extraOrderPinId(order.name);
+        if (restoredPins.some((pin) => pin.ivId === ivId)) continue;
+        const zoneId = stackDropZoneForIv(null, restoredPins.length);
+        restoredPins.push({
+          zoneId,
+          label: order.name,
+          ivId,
+          ok: null,
+        });
+        if (!restoredPlaced[ivId]) restoredPlaced[ivId] = zoneId;
+      }
+    }
+    for (const pin of restoredPins) {
+      if (pin.ivId && !restoredPlaced[pin.ivId]) {
+        restoredPlaced[pin.ivId] = pin.zoneId || stackDropZoneForIv(null, 0);
+      }
+    }
+    setPlaced(restoredPlaced);
     setPlacementOrder(c.placementOrder || []);
-    setPins(Array.isArray(c.pins) ? c.pins : []);
+    setPins(restoredPins);
     if (c.careUnit) setCareUnit(c.careUnit);
     if (typeof c.timeLeft === 'number') setTimeLeft(c.timeLeft);
     if (typeof c.timedOut === 'boolean') setTimedOut(c.timedOut);
@@ -1400,6 +1488,17 @@ export default function Play({
   }, [caseData?.id]);
 
   useEffect(() => {
+    if (!caseData?.id) return undefined;
+    let cancelled = false;
+    void fetchCasePortraitStatus(caseData.id).then((status) => {
+      if (!cancelled && status.layers) setPortraitLayers(status.layers);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [caseData?.id, portraitReady]);
+
+  useEffect(() => {
     const onAvatar = (e) => {
       if (String(e.detail?.caseId) !== String(caseData?.id)) return;
       setPortraitReady((n) => n + 1);
@@ -1462,16 +1561,38 @@ export default function Play({
       setInfoTab('chat');
     },
     onNotesChanged: () => setNotesVersion((v) => v + 1),
-    onTranscriptReady: (text) => {
+    onTranscriptReady: async (text) => {
       if (!text) return;
       if (caseChat.available === false) {
         void caseChat.appendNote?.(text, { header: 'Voice note' });
         setNotesVersion((v) => v + 1);
+        showToast('Chat API offline — saved as voice note only', 'bad');
         return;
       }
-      const chatMode = chatPatientModeRef.current ? 'patient_sim' : 'tutor';
-      void caseChat.sendMessage(text, { chatMode });
-      showToast(chatMode === 'patient_sim' ? 'Voice question sent to patient' : 'Voice question sent to tutor', 'ok');
+      const forceTutor = looksLikeTutorQuestion(text);
+      const chatMode =
+        forceTutor || !chatPatientModeRef.current ? 'tutor' : 'patient_sim';
+      showToast(
+        forceTutor && chatPatientModeRef.current
+          ? 'Clinical question → tutor…'
+          : chatMode === 'patient_sim'
+            ? 'Sending to patient…'
+            : 'Sending to tutor…',
+        '',
+      );
+      const reply = await caseChat.sendMessage(text, { chatMode });
+      if (reply) {
+        showToast(
+          forceTutor && chatPatientModeRef.current
+            ? 'Tutor answered'
+            : chatMode === 'patient_sim'
+              ? 'Patient replied'
+              : 'Tutor answered',
+          'ok',
+        );
+      } else {
+        showToast(caseChat.error || 'No tutor response — check Order · Chat panel', 'bad');
+      }
     },
   });
 
@@ -1508,6 +1629,10 @@ export default function Play({
   const commitStackPlacement = useCallback(
     (iv, target, { wrap, zone, pill } = {}, { silentDecoy = false, viaCommand = false, decoyInput = '', isCorrect = true } = {}) => {
       const isGrid = typeof target === 'object' && target != null && 'col' in target;
+      const dropZone = stackDropZoneForIv(iv, placementOrder.length);
+      const effectiveTarget = isGrid
+        ? zoneToGridCell(dropZone, zones) || target
+        : dropZone;
 
       if (wrap && pill) {
         pill.dataset.placed = 'false';
@@ -1515,7 +1640,7 @@ export default function Play({
         if (zone) zone.classList.remove('zone-done');
       }
 
-      setPlaced((p) => ({ ...p, [iv.id]: target }));
+      setPlaced((p) => ({ ...p, [iv.id]: effectiveTarget }));
       if (silentDecoy) {
         logDecoyAttempt(iv, decoyInput || iv.label);
       } else {
@@ -1530,8 +1655,8 @@ export default function Play({
 
       const pinLabel = neutralStackOrderName(iv.label);
       const pinPayload = isGrid
-        ? { ...target, label: pinLabel, ivId: iv.id, ok: null }
-        : { zoneId: target, label: pinLabel, ivId: iv.id, ok: null };
+        ? { ...effectiveTarget, label: pinLabel, ivId: iv.id, ok: null }
+        : { zoneId: effectiveTarget, label: pinLabel, ivId: iv.id, ok: null };
       setPins((prev) => [
         ...prev.filter((pin) => pin.ivId !== iv.id && pin.label !== iv.label),
         pinPayload,
@@ -1570,7 +1695,7 @@ export default function Play({
         ...(viaCommand ? { method: 'command' } : {}),
       });
     },
-    [logDecoyAttempt, logTimeline, teachMeMode],
+    [logDecoyAttempt, logTimeline, teachMeMode, placementOrder.length, zones],
   );
 
 
@@ -1661,10 +1786,10 @@ export default function Play({
         if (stackMatch) {
           if (nextPlaced[stackMatch.id]) continue;
           if (teachMeMode && stackMatch.id !== nextExpectedId) continue;
-          nextPlaced[stackMatch.id] = stackMatch.correct_zone;
+          nextPlaced[stackMatch.id] = stackDropZoneForIv(stackMatch, orderIds.length);
           orderIds.push(stackMatch.id);
           pinAdds.push({
-            zoneId: stackMatch.correct_zone,
+            zoneId: stackDropZoneForIv(stackMatch, orderIds.length - 1),
             label: stackMatch.label,
             ivId: stackMatch.id,
             ok: null,
@@ -1699,10 +1824,13 @@ export default function Play({
         if (extraOrders.some((o) => o.name.toLowerCase() === key)) continue;
 
         extras.push({ name: label, category: 'physical_exam' });
+        const ivId = extraOrderPinId(label);
+        const zoneId = stackDropZoneForIv(null, orderIds.length + extras.length);
+        nextPlaced[ivId] = zoneId;
         pinAdds.push({
-          zoneId: 'zone-blood',
+          zoneId,
           label,
-          ivId: `phys-exam-${key.replace(/[^a-z0-9]+/g, '-')}`,
+          ivId,
           ok: null,
         });
         events.push({ type: 'extra_order', label, category: 'physical_exam' });
@@ -1803,11 +1931,12 @@ export default function Play({
           setOrderCommandQuery('');
           return;
         }
-        setPlaced((p) => ({ ...p, [stackMatch.id]: stackMatch.correct_zone }));
+        const dropZone = stackDropZoneForIv(stackMatch, placementOrder.length);
+        setPlaced((p) => ({ ...p, [stackMatch.id]: dropZone }));
         setPlacementOrder((prev) => (prev.includes(stackMatch.id) ? prev : [...prev, stackMatch.id]));
         setPins((prev) => [
           ...prev.filter((pin) => pin.ivId !== stackMatch.id && pin.label !== stackMatch.label),
-          { zoneId: stackMatch.correct_zone, label: stackMatch.label, ivId: stackMatch.id, ok: null },
+          { zoneId: dropZone, label: stackMatch.label, ivId: stackMatch.id, ok: null },
         ]);
         setReviewed(false);
         setReviewResults({});
@@ -1851,17 +1980,29 @@ export default function Play({
           return;
         }
         const label = knownMatch.name;
-        setExtraOrders((prev) => {
-          const key = label.toLowerCase();
-          if (prev.some((o) => o.name.toLowerCase() === key)) return prev;
-          return [...prev, { name: label, category: knownMatch.category }];
-        });
+        const key = label.toLowerCase();
+        if (extraOrders.some((o) => o.name.toLowerCase() === key)) {
+          showToast(`Already ordered: ${label}`, '');
+          setOrderCommandQuery('');
+          return;
+        }
+        setExtraOrders((prev) => [...prev, { name: label, category: knownMatch.category }]);
+        const zoneId = stackDropZoneForIv(null, extraOrders.length + placementOrder.length);
+        const ivId = extraOrderPinId(label);
+        setPlaced((p) => ({ ...p, [ivId]: zoneId }));
+        setPins((prev) => [
+          ...prev.filter((pin) => pin.ivId !== ivId && pin.label !== label),
+          { zoneId, label, ivId, ok: null },
+        ]);
         setOrderCommandQuery('');
         setReviewed(false);
         setReviewResults({});
         setOrderReview({});
         setReviewedAt(null);
-        showToast(`Ordered ${label}`, 'ok');
+        showToast(
+          `Ordered ${label} — extra order (on canvas, not in this case's ${total} stacks)`,
+          'ok',
+        );
         logTimeline({ type: 'extra_order', label, category: knownMatch.category });
         return;
       }
@@ -1890,9 +2031,15 @@ export default function Play({
         setOrderCommandQuery('');
         return;
       }
-      const chatMode = (cmd?.patientMode || chatPatientModeRef.current) ? 'patient_sim' : 'tutor';
+      const chatMode =
+        looksLikeTutorQuestion(question) || !(cmd?.patientMode || chatPatientModeRef.current)
+          ? 'tutor'
+          : 'patient_sim';
       setOrderCommandQuery('');
       void (async () => {
+        if (chatMode === 'tutor') {
+          clearCaseChatSession(caseData?.id, 'patient_sim');
+        }
         const reply = await caseChat.sendMessage(question, { chatMode });
         if (reply) {
           logTimeline({ type: 'chat', role: 'user', text: question });
@@ -1920,6 +2067,9 @@ export default function Play({
       switchCareUnit,
       caseChat,
       infoTab,
+      caseData?.id,
+      extraOrders,
+      total,
     ],
   );
 
@@ -2472,50 +2622,57 @@ export default function Play({
     return null;
   }, [careUnit, regenSrc, sceneByUnit]);
 
-  const buildTeachCompareExport = useCallback(
-    () =>
-      buildTeachCompareReport({
-        caseData,
-        interventions,
-        interventionById,
-        placementOrder,
-        placed,
-        nextExpectedId,
-        reviewResults: reviewed ? reviewResults : null,
-        orderTimelineEvents,
-        sessionStartedAt,
-        portraitSrc: playSceneForceSrc || getBuiltInPatientSrc(caseData),
-        vitals,
-        doneCount,
-        total,
-        careUnit,
-        flowTrack: caseFlow.flowTrack,
-        layout: teachCompareLayout,
-      }),
-    [
+  const buildTeachCompareExport = useCallback(async () => {
+    let portraitSrc = playSceneForceSrc || getBuiltInPatientSrc(caseData);
+    if (exportUseLiveScene && sceneCaptureRef.current) {
+      try {
+        portraitSrc = await captureElementPng(sceneCaptureRef.current);
+      } catch {
+        /* keep portrait fallback */
+      }
+    }
+    return buildTeachCompareReport({
       caseData,
       interventions,
       interventionById,
       placementOrder,
       placed,
       nextExpectedId,
-      reviewed,
-      reviewResults,
+      reviewResults: reviewed ? reviewResults : null,
       orderTimelineEvents,
       sessionStartedAt,
-      playSceneForceSrc,
+      portraitSrc,
       vitals,
       doneCount,
       total,
       careUnit,
-      caseFlow.flowTrack,
-      teachCompareLayout,
-    ],
-  );
+      flowTrack: caseFlow.flowTrack,
+      layout: teachCompareLayout,
+    });
+  }, [
+    caseData,
+    interventions,
+    interventionById,
+    placementOrder,
+    placed,
+    nextExpectedId,
+    reviewed,
+    reviewResults,
+    orderTimelineEvents,
+    sessionStartedAt,
+    playSceneForceSrc,
+    vitals,
+    doneCount,
+    total,
+    careUnit,
+    caseFlow.flowTrack,
+    teachCompareLayout,
+    exportUseLiveScene,
+  ]);
 
   const handleCopyTeachCompare = useCallback(async () => {
     try {
-      const { ok, kind } = await copyTeachCompareReport(buildTeachCompareExport());
+      const { ok, kind } = await copyTeachCompareReport(await buildTeachCompareExport());
       showToast(
         ok ? (kind === 'image' ? 'Report image copied' : 'Report copied') : 'Copy failed — try Save',
         ok ? 'ok' : 'bad',
@@ -2527,7 +2684,7 @@ export default function Play({
 
   const handleSaveTeachCompare = useCallback(async () => {
     try {
-      await downloadTeachCompareReport(buildTeachCompareExport());
+      await downloadTeachCompareReport(await buildTeachCompareExport());
       showToast('Compare report saved (PNG)', 'ok');
     } catch (e) {
       showToast(e.message || 'Save failed', 'bad');
@@ -2536,7 +2693,7 @@ export default function Play({
 
   const handlePrintTeachCompare = useCallback(async () => {
     try {
-      const ok = await printTeachCompareReport(buildTeachCompareExport());
+      const ok = await printTeachCompareReport(await buildTeachCompareExport());
       showToast(ok ? 'Opening print view…' : 'Allow pop-ups to print', ok ? 'ok' : 'bad');
     } catch (e) {
       showToast(e.message || 'Print failed', 'bad');
@@ -2545,6 +2702,18 @@ export default function Play({
 
   const teachCompareExportActions = (
     <>
+      <label className="teach-compare-export-live" title="Use live play view (portrait + order pins) as export hero">
+        <input
+          type="checkbox"
+          checked={exportUseLiveScene}
+          onChange={(e) => {
+            const on = e.target.checked;
+            setExportUseLiveScene(on);
+            writeExportUseLiveScene(on);
+          }}
+        />
+        Live scene
+      </label>
       <button
         type="button"
         className="teach-compare-export-btn"
@@ -3125,8 +3294,9 @@ export default function Play({
         <CasePortraitBriefControl
           caseData={caseData}
           onBusyChange={setPortraitRegenBusy}
-          onRegenerated={() => {
+          onRegenerated={(result) => {
             setPortraitReady((n) => n + 1);
+            if (result?.layers) setPortraitLayers(result.layers);
             showToast('Patient portrait updated', 'ok');
           }}
           onError={(msg) => showToast(msg, 'bad')}
@@ -3241,6 +3411,8 @@ export default function Play({
             captureBusy={captureBusy}
             patientMode={chatPatientMode}
             onPatientModeChange={setChatPatientMode}
+            caseId={caseData.id}
+            caseData={caseData}
           />
         </div>
         <div className="scene-timeline-dock">
@@ -3313,6 +3485,9 @@ export default function Play({
             onSceneError={handleSceneImageError}
             forceSrc={playSceneForceSrc}
             showVideoBackground={false}
+            showIvLayer={hasIvPlaced}
+            ivPortraitLayer={portraitLayers?.iv}
+            ivPortraitMask={portraitLayers?.mask}
           />
         </div>
         {teachCompareLandscape && (
@@ -3377,8 +3552,8 @@ export default function Play({
           const isTeachZone =
             teachMeMode &&
             nextExpectedId &&
-            interventionById[nextExpectedId]?.correct_zone === zoneId &&
-            !placed[nextExpectedId];
+            !placed[nextExpectedId] &&
+            isTorsoDropZone(zoneId);
           const show = (zoneLit && !isDone) || isTeachZone;
           const color = zoneColors[zoneId] || '#e8b84b';
           const zoneLeftPct = frameLeft + z.cx * frameW;
@@ -3431,16 +3606,12 @@ export default function Play({
           return (
             <div
               key={`${p.ivId || p.zoneId}-${i}-${p.label}`}
-              className={`pin ${useGridPlacement ? 'pin-grid' : ''} ${p.ok === true ? 'ok' : ''} ${p.ok === false ? 'bad' : ''} ${p.ivId && placed[p.ivId] ? 'pin-has-result' : ''} ${orderResultIvId === p.ivId ? 'pin-active' : ''}`}
+              className={`pin ${useGridPlacement ? 'pin-grid' : ''} ${p.ok === true ? 'ok' : ''} ${p.ok === false ? 'bad' : ''} ${p.ivId ? 'pin-has-result' : ''} ${orderResultIvId === p.ivId ? 'pin-active' : ''}`}
               data-iv-id={p.ivId || ''}
               data-x="0"
               data-y="0"
               onClick={() => {
                 if (!p.ivId) return;
-                if (!placed[p.ivId]) {
-                  showToast('Place this order on the patient first', '');
-                  return;
-                }
                 setOrderResultIvId(p.ivId);
                 setDockResultsExpanded(true);
               }}
@@ -3945,6 +4116,7 @@ export default function Play({
                 caseRailItems={threadChatCases}
                 threadViewCaseId={threadViewCaseId}
                 onSelectThreadCase={setThreadViewCaseId}
+                onOpenCaseFromRail={handleOpenCaseFromRail}
                 caseRecording={threadIsPlayCase ? caseRecording : null}
                 notesVersion={notesVersion}
                 onTimelineNote={(text) => logTimeline({ type: 'note', text })}

@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { FiSend } from 'react-icons/fi';
-import { IconCamera, IconFileMedical, IconStethoscope } from './sceneToolbar/SceneToolbarIcons.jsx';
+import { IconCamera, IconFileMedical } from './sceneToolbar/SceneToolbarIcons.jsx';
+import PatientPortraitAvatar from './PatientPortraitAvatar.jsx';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 import { sanitizePatientReplyForDisplay } from '../lib/patientReplyText.js';
 
@@ -37,6 +38,8 @@ function SceneOrderCommandDock({
   patientMode = false,
   onPatientModeChange,
   resetKey,
+  caseId = null,
+  caseData = null,
 }) {
   const inputRef = useRef(null);
   const [draft, setDraft] = useState('');
@@ -89,7 +92,15 @@ function SceneOrderCommandDock({
               aria-pressed={patientMode}
               onClick={() => onPatientModeChange(!patientMode)}
             >
-              <IconStethoscope className="toolbar-icon" />
+              <PatientPortraitAvatar
+                caseId={caseId}
+                caseData={caseData}
+                title={
+                  patientMode
+                    ? 'Patient mode ON — simulated patient replies'
+                    : 'Tutor chat — click for patient interview mode'
+                }
+              />
             </button>
           )}
           <button

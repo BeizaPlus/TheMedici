@@ -19,6 +19,7 @@ export default function PlayChatNotesTabPanel({
   patientMode = false,
   defaultChatTarget = 'notes',
   onPatientModeChange,
+  onOpenCaseFromRail,
 }) {
   return (
     <CaseSessionThread
@@ -40,6 +41,7 @@ export default function PlayChatNotesTabPanel({
       patientMode={patientMode}
       defaultChatTarget={defaultChatTarget}
       onPatientModeChange={onPatientModeChange}
+      onOpenCaseFromRail={onOpenCaseFromRail}
     />
   );
 }

@@ -10,6 +10,10 @@ import {
   fitToBaseplate,
 } from './portraitFrame.js';
 import { getLandscapeFramePrompt } from '../src/lib/sceneCameraLock.js';
+import {
+  buildSceneElementPromptBlock,
+  sceneElementIdsForPortrait,
+} from './sceneElementRegistry.js';
 export { resolvePortraitSex };
 
 export function normalizeCaseId(caseId) {
@@ -218,7 +222,10 @@ export const PORTRAIT_OPENAI_SIZE = '1536x1024';
 const LANDSCAPE_FRAME = getLandscapeFramePrompt();
 
 /** House-style cold-open portrait prompt from case presentation context. */
-export function buildPortraitPrompt(caseContext = {}, { portraitBrief = '' } = {}) {
+export function buildPortraitPrompt(
+  caseContext = {},
+  { portraitBrief = '', directorBrief = null, variant = 'base' } = {},
+) {
   const facts = caseContext.patientFacts || {};
   const demo = caseContext.patientDemographics || {};
   const age =
@@ -245,7 +252,17 @@ export function buildPortraitPrompt(caseContext = {}, { portraitBrief = '' } = {
 
   const presentationCue = presentationCueForComplaint(cc);
 
-  const contextLine = excerpt ? `History cue: ${excerpt}.` : '';
+  const director = directorBrief && typeof directorBrief === 'object' ? directorBrief : null;
+  const contextLine = director?.visibleFindings
+    ? `Presentation: ${director.visibleFindings}`
+    : excerpt
+      ? `History cue: ${excerpt}.`
+      : '';
+  const distressLine = director?.distress ? `Distress: ${director.distress}.` : `Show ${presentationCue}.`;
+  const examLine = director?.skinAndExam ? `${director.skinAndExam}` : '';
+  const poseLine =
+    director?.pose ||
+    `Single ${sexLabel} patient in hospital gown lying supine on stretcher.`;
 
   const custom = String(portraitBrief || caseContext.portraitBrief || '').trim();
   const ladyRef = resolvePatientLadyRef(caseContext, { sex });
@@ -253,12 +270,24 @@ export function buildPortraitPrompt(caseContext = {}, { portraitBrief = '' } = {
     ? `\nFEMALE IDENTITY LOCK (LongMan Atta character ref: ${ladyRef.label}): ${ladyRef.identityPrompt}`
     : '';
 
+  const ivBlock =
+    variant === 'iv'
+      ? `
+IV LAYER (identical framing/composition to arrival portrait): ADD a peripheral IV only —
+20g catheter in LEFT antecubital fossa (inner elbow crease), IV tubing secured with tape.
+Antecubital portal per ED training — NOT dorsal hand, wrist, or neck unless specified.
+Patient otherwise identical to arrival state.`
+      : `
+NO IV lines, catheters, central lines, or IV fluids — patient as they ARRIVED to the ED.`;
+
   const base = `Photorealistic emergency medicine training scene. ${LANDSCAPE_FRAME}
 ${age} old ${sexLabel} (${sex}) named ${name} in an ED hospital bed${category}.
 Chief complaint: ${cc}. ${contextLine}
-Show ${presentationCue}. Single ${sexLabel} patient in hospital gown lying supine on stretcher.
+${distressLine} ${examLine}
+${poseLine}
 Monitor cables and pulse ox visible, dignified clinical lighting. Patient must clearly present as ${sexLabel}; match reference bed composition exactly.${ladyBlock}
-No text, watermark, logos, or extra people. No gore or sensational injury.`;
+${ivBlock}
+No text, watermark, logos, diagnosis labels, or extra people. No gore or sensational injury.${buildSceneElementPromptBlock(sceneElementIdsForPortrait(caseContext, variant))}`;
 
   if (!custom) return base;
 

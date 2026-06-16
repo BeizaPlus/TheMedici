@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "label": "MeWorld medical device element plates — manufacturer-accurate compositing",
+  "parentRegistry": "dev/scene-elements/SCENE_ELEMENT_REGISTRY.json",
+  "purpose": "Separate PNG layers for O2 mask and peripheral IV — composited onto patient portraits instead of burning slop into base gens.",
+  "generation": {
+    "backend": "Magnific MCP",
+    "model": "imagen-nano-banana-2",
+    "resolution": "2k",
+    "aspectRatio": "1:1",
+    "count": 2
+  },
+  "devices": [
+    {
+      "id": "o2-mask-hudson-1040",
+      "label": "Adult medium-concentration O2 face mask",
+      "manufacturer": "Medline / Hudson RCI (Teleflex legacy)",
+      "catalogNumbers": ["HUD1040", "1040"],
+      "anatomy": {
+        "maskBody": "Clear soft vinyl; covers nose and mouth; standard (not elongated aerosol) adult face mask",
+        "noseClip": "Malleable metal nose clip molded into upper rim",
+        "elasticStrap": "Single green or white elastic head strap through side tabs — ONE strap only",
+        "connector": "Single molded plastic barbed port at bottom center of mask (22 mm standard)",
+        "tubing": "ONE continuous clear Star Lumen oxygen supply tube (~7 ft) attached to bottom port — never duplicate parallel tubes from same port",
+        "forbidden": [
+          "double tubing from one port",
+          "CPAP full-face mask",
+          "non-rebreather reservoir bag unless explicitly requested",
+          "nasal cannula prongs",
+          "fantasy mesh or rubber diving mask shape"
+        ]
+      },
+      "views": ["front", "three_quarter_left", "three_quarter_right", "profile_left", "profile_right", "top_down"],
+      "compositeUse": "Face zone — mask only layer + optional tubing exit frame edge"
+    },
+    {
+      "id": "iv-bd-insyte-20g-antecubital",
+      "label": "Peripheral IV — BD Insyte-class winged catheter at antecubital fossa",
+      "manufacturer": "BD (Becton Dickinson)",
+      "catalogFamily": ["BD Insyte", "BD Insyte Autoguard", "381223", "381257"],
+      "anatomy": {
+        "site": "Antecubital fossa — inner elbow volar crease ONLY",
+        "catheterHub": "Transparent wings (T-shaped or butterfly wings) with visible 18–22g catheter hub at insertion",
+        "needle": "Needle removed post-insertion — hub only with flashback chamber appearance",
+        "tape": "Two strips transparent Tegaderm-style tape crossing hub — not floating gray smudges",
+        "extensionSet": "Single clear IV extension tubing from hub, one luer connection, runs proximally along forearm toward bed/pole",
+        "forbidden": [
+          "double parallel tubes",
+          "dorsal hand or wrist placement",
+          "wire-like lines without hub",
+          "broken disconnected tubing",
+          "fantasy rectangles without catheter hardware"
+        ]
+      },
+      "views": ["insertion_close_front", "insertion_close_oblique", "arm_context_oblique"],
+      "compositeUse": "zone-arm overlay — masked to antecubital only"
+    }
+  ],
+  "manufacturerSources": [
+    {
+      "device": "o2-mask-hudson-1040",
+      "url": "https://www.mountainside-medical.com/products/hudson-rci-1040-adult-oxygen-mask-with-7-foot-tubing",
+      "notes": "HUD1040 — clear vinyl, adjustable nose clip, 7 ft tubing, medium concentration"
+    },
+    {
+      "device": "o2-mask-hudson-1040",
+      "url": "https://mms.mckesson.com/product/301385/Medline-HUD1048",
+      "notes": "McKesson listing — standard style, vinyl, no valve"
+    },
+    {
+      "device": "iv-bd-insyte-20g-antecubital",
+      "url": "https://www.bd.com/en-us/products-and-solutions/products/product-page.381257",
+      "notes": "BD Insyte 16G reference — winged hub geometry"
+    },
+    {
+      "device": "iv-bd-insyte-20g-antecubital",
+      "url": "https://7157e75ac0509b6a8f5c-5b19c577d01b9ccfe75d2f9e4b17ab55.ssl.cf1.rackcdn.com/UUHUXSXY-PDF-4-447116-4428684998.pdf",
+      "notes": "BD vascular access catalog — Insyte Autoguard product photos"
+    }
+  ],
+  "stockRefs": {
+    "o2Mask": [44533462, 423510619, 320872802, 8236659],
+    "ivCatheter": [41115854, 18946857, 25166301, 258715579]
+  }
+}

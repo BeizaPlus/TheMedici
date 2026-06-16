@@ -1,5 +1,5 @@
 ---
-description: Play case chat — patient/tutor mode, dock-only conversation, session recovery
+description: Play case chat — patient/tutor mode, routing, order dock vs chat tab (read before chat bugs)
 globs:
   - src/components/Play.jsx
   - src/components/SceneOrderCommandDock.jsx
@@ -7,40 +7,110 @@ globs:
   - src/components/PlayChatNotesTabPanel.jsx
   - src/hooks/useCaseChat.js
   - src/lib/caseChat.js
+  - src/lib/chatIntentRouting.js
   - server/index.js
 alwaysApply: false
 ---
 
-# Play case chat
+# Play case chat — how it works (Steve + agents)
 
-## Where conversation lives (Steve — single surface)
+## Two brains, not one
 
-| UI | Chat? |
-|----|-------|
-| **`SceneOrderCommandDock`** on scene | **Yes** — expand via message icon; `dockChatExpanded` + embedded `CaseSessionThread` (`messagesOnly`) |
-| Sidebar `CaseContextPanel` | **No Thread tab** — do not set `showChatTab` in Play |
-| Differential Practice | Separate mode — `DifferentialFloatingChat` |
+Case chat is **not** a single assistant. The server picks a **system prompt** at session start based on `caseContext.chatMode`:
 
-Do not add a second Play chat path (sidebar tab + dock quick-reply was removed for this reason).
+| Mode | `chatMode` | Who answers | System prompt in `server/index.js` |
+|------|------------|-------------|----------------------------------|
+| **Tutor** (default in Play) | `tutor` | Master clinical educator | Explains pathophys, labs, orders, "why", session timeline |
+| **Patient** (portrait gold) | `patient_sim` | Simulated patient | First-person only; HPI/demographics; **cannot** teach complement levels |
 
-## Patient mode (stethoscope)
+**Symptom:** replies like *"I didn't quite catch that"* / *"I don't understand — speak more clearly"* → almost always **patient_sim**, not tutor failure. The patient LLM deflects clinical jargon and garbled voice text.
 
-| Control | Location |
-|---------|----------|
-| Stethoscope toggle | `SceneOrderCommandDock` header |
-| State | `chatPatientMode` + `chatPatientModeRef` in `Play.jsx` — reset on `caseData.id` change |
-| Off (default) | Dock text → **tutor** (`chatMode: 'tutor'`) |
-| On (gold) | → **patient_sim** |
-| Slash | `/pt` patient · `/ch …` saves note · dock `submitOrderCommand` |
+## Where messages go (UI map)
 
-Patient replies: **direct dialogue only** — `sanitizePatientReplyForDisplay` + server prompt (no `*(actions)*` or parentheses). Stripped stage text saved to `.patient-stage-cache/` for future video — **never shown in chat**. TTS: tap **▶**; auto-play off by default.
+| Surface | Component | Default target |
+|---------|-----------|----------------|
+| Play sidebar **Chat tab** | `PlayChatNotesTabPanel` → `CaseSessionThread` | **Tutor** (`defaultChatTarget="tutor"`) |
+| Scene **Order·Chat dock** (expand message icon) | Same thread, `messagesOnly` | Tutor unless portrait **gold** |
+| Voice mic (chat header) | `useCaseRecording` → `onTranscriptReady` in `Play.jsx` | Tutor unless portrait gold |
 
-## Chat session expired
+**Place orders on canvas** → **Order·Chat dock command line** (`submitOrderCommand` in `Play.jsx`), **not** the Chat tab. Chat tab text goes to LLM only (unless it matches order autocomplete in the dock).
 
-Server keeps sessions **in RAM only** (`caseChatSessions` in `server/index.js`). Lost on API restart (~every `npm run dev`) or **2h** idle.
+## Patient mode toggle
 
-Client must auto-recover: `sendCaseChatMessage(..., recover: { caseData, chatMode })` → retry once after `/api/case-chat/start`.
+| Control | State |
+|---------|--------|
+| Patient portrait button (dock + chat header) | `chatPatientMode` in `Play.jsx` |
+| Gold / active | `patient_sim` for voice + dock free text |
+| Off (default) | `tutor` |
 
-## Order matching vs chat
+Slash: `/pt` patient · `/ch` tutor · `/ch note text` saves note (notes-only path when `defaultChatTarget !== 'tutor'`).
 
-Non-order text in dock → chat. Order synonyms: `orderCommandAutocomplete.js`.
+## Session architecture (client)
+
+```
+CaseSessionThread.submitDraft()
+  → parseChatModeCommand
+  → looksLikeTutorQuestion?  → force tutor (even if portrait gold)
+  → patientMode?             → sendMessage(..., { chatMode: 'patient_sim' })
+  → defaultChatTarget tutor? → sendMessage(..., { chatMode: 'tutor' })
+  → else                     → appendNote (journal only)
+
+useCaseChat.sendMessage()
+  → ensureCaseChatSession(caseData, { chatMode })  // separate RAM session per caseId:mode
+  → POST /api/case-chat/message
+
+caseChat.js sessions Map key: `${caseId}:tutor` | `${caseId}:patient_sim`
+```
+
+## Session architecture (server)
+
+- `POST /api/case-chat/start` — builds **one** system prompt from `buildCaseChatSystemPrompt(caseContext)`; stores in RAM (`caseChatSessions`).
+- `POST /api/case-chat/message` — appends user message; optional `sessionContext` block (orders timeline, Teach Me flow).
+- **Lost on API restart** or 2h idle → client retries via `sendCaseChatMessage(..., recover)`.
+
+Tutor prompt must answer: *what does X mean*, *why order complement*, order rationale pasted from study notes.
+
+Patient prompt must **never** answer those — only direct interview answers in patient voice.
+
+## Intent routing (2026-06-16)
+
+`src/lib/chatIntentRouting.js` — `looksLikeTutorQuestion()`:
+
+- *what does / explain / why order*
+- Order rationales (*Order Complement C3/C4 to assess…*)
+- Pathophys keywords (complement, nephritis, workup, etc.)
+
+Used in `CaseSessionThread` + voice `onTranscriptReady` to **force tutor** when patient mode is on but message is clearly educational.
+
+## Chat vs orders (common confusion)
+
+| User types | Chat tab | Order dock |
+|------------|----------|------------|
+| "what does malar rash mean" | Tutor explains | Tutor (if not matched as order) |
+| "Order Complement C3/C4" | Tutor discusses (or auto-route) | Matches stack → canvas pin |
+| "Normal saline maintenance" | Tutor / patient | Known catalog → extra order + pin |
+
+## Persistence
+
+- Messages logged per **case id** in localStorage (`caseUserLog.js`) — tutor and patient threads **share one transcript UI** per case.
+- Server sessions are **separate per mode**; UI history is merged for display.
+
+## Do not
+
+- Assume Chat tab places orders
+- Debug "won't answer clinical question" without checking **portrait gold** (patient mode)
+- Pre-warm only `patient_sim` on Play load — Play uses `defaultChatMode: 'tutor'`
+- Collide tutor/patient server sessions (always pass `chatMode` into `ensureCaseChatSession`)
+
+## Key files
+
+| File | Role |
+|------|------|
+| `server/index.js` | `buildCaseChatSystemPrompt`, `/api/case-chat/*` |
+| `src/lib/caseChat.js` | Session cache, `buildCaseChatContext`, API calls |
+| `src/hooks/useCaseChat.js` | React hook, `sendMessage`, history |
+| `src/components/CaseSessionThread.jsx` | Chat UI + submit routing |
+| `src/lib/chatIntentRouting.js` | Tutor vs patient intent |
+| `src/lib/orderCommandAutocomplete.js` | Order dock matching (separate from chat) |
+
+Rule companion: `game/AGENTS.md` § Patient simulation chat

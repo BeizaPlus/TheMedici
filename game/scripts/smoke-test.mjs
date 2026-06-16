@@ -53,6 +53,19 @@ async function main() {
   }
   ok(true, "css-audit: feature styles wired", "differential-practice + index.css integrity");
 
+  const { auditSceneElementRegistry } = await import("./audit-scene-element-registry.mjs");
+  const sceneIssues = auditSceneElementRegistry();
+  if (sceneIssues.length) {
+    for (const issue of sceneIssues) console.log(`❌ scene-element-registry: ${issue}`);
+    process.exitCode = 1;
+    return;
+  }
+  ok(true, "scene-element-registry", `${readJson("dev/scene-elements/SCENE_ELEMENT_REGISTRY.json").elements.length} elements`);
+
+  const { resolveSceneElement, getApprovedLayerPath } = await import("../src/lib/sceneElementRegistry.js");
+  ok(Boolean(resolveSceneElement("o2-mask-hudson-1040")), "scene elements: O2 mask registered");
+  ok(Boolean(getApprovedLayerPath("iv-bd-insyte-20g-antecubital")), "scene elements: IV pickHero path");
+
   const gameCfg = readJson("src/data/gameConfig.json");
   const catalog = readJson("src/data/ccsCatalog.json");
   const playbooks = readJson("src/data/playbooks.json");
@@ -109,6 +122,83 @@ async function main() {
   ok(
     formatClinicalText("Initial History Past Medical History None.").includes("\n\nPast Medical History"),
     "clinicalTextFormat: CCS section headers still break",
+  );
+
+  const { touchCaseVisited, getRecentCaseHistory } = await import(
+    url.pathToFileURL(path.join(root, "src/data/caseProgress.js")).href
+  );
+  const prevStorage = globalThis.localStorage;
+  globalThis.localStorage = makeLocalStorage();
+  try {
+    touchCaseVisited("004", "briefing");
+    const recent = getRecentCaseHistory({ limit: 5 });
+    ok(recent.some((row) => row.caseId === "004"), "caseProgress: touchCaseVisited records history");
+  } finally {
+    globalThis.localStorage = prevStorage;
+  }
+
+  const { hasIvOrderPlaced, portraitCacheNeedsLayers } = await import(
+    url.pathToFileURL(path.join(root, "src/lib/portraitLayers.js")).href
+  );
+  ok(hasIvOrderPlaced({ "intravenous-access": true }), "portraitLayers: IV order detected");
+  ok(!hasIvOrderPlaced({}), "portraitLayers: no IV when empty");
+  ok(
+    portraitCacheNeedsLayers({ exists: true, portraitFrameVersion: 2, layers: null }),
+    "portraitLayers: stale when frame/layers missing",
+  );
+
+  const { resolveOrderResult } = await import(
+    url.pathToFileURL(path.join(root, "src/lib/orderResult.js")).href
+  );
+  const sleLab = resolveOrderResult(
+    { label: "CBC / BMP / UA", why: "Cytopenias, nephritis screen." },
+    {
+      caseData: {
+        id: "094",
+        diagnosis: "Systemic Lupus Erythematosus",
+        hpi_narrative: "Malar rash, polyarthritis, fever.",
+      },
+      teachMeMode: false,
+    },
+  );
+  ok(/CBC:/.test(sleLab.text) && /Glucose \d+ mg\/dL/.test(sleLab.text), "orderResult: combined lab panel has numeric values");
+  ok(!/See values in chart/i.test(sleLab.text), "orderResult: no chart placeholder for labs");
+
+  const sleComplement = resolveOrderResult(
+    { label: "Complement C3/C4", why: "Low = active disease." },
+    {
+      caseData: {
+        id: "094",
+        diagnosis: "Systemic Lupus Erythematosus",
+        hpi_narrative: "Malar rash, polyarthritis, fever.",
+      },
+      teachMeMode: false,
+    },
+  );
+  ok(
+    /Complement C3 \d+ mg\/dL/.test(sleComplement.text) && /C4 \d+ mg\/dL/.test(sleComplement.text),
+    "orderResult: single lab (complement) has numeric C3/C4",
+  );
+  ok(!/— completed\.$/.test(sleComplement.text.trim()), "orderResult: complement not bare completed stub");
+
+  const { resolveSingleLabResult } = await import(
+    url.pathToFileURL(path.join(root, "src/lib/labPanelValues.js")).href
+  );
+  const ana = resolveSingleLabResult(
+    "ANA",
+    { diagnosis: "Systemic Lupus Erythematosus", caseId: "094", stackFinding: "Positive — required for diagnosis." },
+    false,
+  );
+  ok(/ANA positive/i.test(ana) && /titer 1:\d+/.test(ana), "labPanelValues: ANA numeric titer for SLE");
+
+  const { stackFindingForOrder } = await import(
+    url.pathToFileURL(path.join(root, "server/cleanCaseLoader.js")).href
+  );
+  const case94Raw = fs.readFileSync(path.join(root, "data/cases/case_94.json"), "utf8");
+  const case94 = JSON.parse(case94Raw);
+  ok(
+    stackFindingForOrder(case94, "Complement C3/C4") === "Low = active disease.",
+    "cleanCaseLoader: stack finding for complement",
   );
 
   const { resolvePlaybook, getCaseSpecificPlaybookIds } = await import(
@@ -260,6 +350,30 @@ async function main() {
     "preparedCases: most cases have varied why text",
     `${dupCaseCount} all-same-why / ${checkedCases} checked`,
   );
+
+  const { zoneForExtraOrder, extraOrderPinId } = await import("../src/lib/extraOrderPlacement.js");
+  const { stackDropZoneForIv, isTorsoDropZone } = await import("../src/lib/torsoDropZone.js");
+  ok(
+    zoneForExtraOrder("medications", "Normal saline maintenance") === "zone-custom-1",
+    "extra orders: default torso drop (abdomen)",
+  );
+  ok(
+    extraOrderPinId("Normal saline maintenance") === "extra-order-normal-saline-maintenance",
+    "extra orders: stable pin id",
+  );
+  ok(isTorsoDropZone("zone-custom-1"), "torso drop zones include abdomen");
+  ok(stackDropZoneForIv(null, 1) === "zone-custom-3", "torso drop alternates to chest");
+
+  const { looksLikeTutorQuestion } = await import("../src/lib/chatIntentRouting.js");
+  ok(looksLikeTutorQuestion("what does malar rash mean"), "chat intent: tutor question");
+  ok(looksLikeTutorQuestion("Order Complement C3/C4 to assess lupus"), "chat intent: order rationale");
+  ok(
+    looksLikeTutorQuestion(
+      "For systemic lupus you order CBC for cytopenia and complement C3 C4 because of nephritis",
+    ),
+    "chat intent: SLE think-aloud monologue",
+  );
+  ok(!looksLikeTutorQuestion("how long have you had the rash"), "chat intent: patient interview");
 
   if (failCount) {
     console.log(`\n❌ ${failCount} smoke check(s) failed — dev will not start.\n`);

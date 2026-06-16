@@ -383,6 +383,21 @@
   background: rgba(232, 184, 75, 0.18);
 }
 
+.patient-portrait-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  flex-shrink: 0;
+}
+
+.case-chat-patient-btn.is-active .patient-portrait-thumb {
+  border-color: rgba(232, 184, 75, 0.75);
+  box-shadow: 0 0 0 1px rgba(232, 184, 75, 0.35);
+}
+
 .case-chat-banner--patient {
   color: var(--gold, #e8b84b);
   background: rgba(232, 184, 75, 0.1);

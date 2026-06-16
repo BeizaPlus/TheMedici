@@ -8,6 +8,9 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
+if (process.argv.includes('--no-hmr')) {
+  process.env.VITE_DISABLE_HMR = '1';
+}
 const API = process.env.API_BASE || 'http://127.0.0.1:3001';
 const WEB = process.env.WEB_BASE || 'http://127.0.0.1:5173';
 const viteBin = path.join(root, 'node_modules', 'vite', 'bin', 'vite.js');
@@ -150,7 +153,19 @@ async function main() {
     return;
   }
 
+  console.log('\n--- Live smoke: welcome → case play + screenshots ---');
+  try {
+    await runNodeScript('scripts/smoke-play-case-session.mjs');
+  } catch (e) {
+    console.error(`❌ ${e.message}`);
+    shutdown(1);
+    return;
+  }
+
   console.log('\n✅ All smoke passed — serving at http://localhost:5173/\n');
+  if (process.env.VITE_DISABLE_HMR === '1') {
+    console.log('📚 Study mode: HMR off — refresh the browser when you want UI updates.\n');
+  }
   console.log('Press Ctrl+C to stop.\n');
 
   process.on('SIGINT', () => shutdown(0));

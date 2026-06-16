@@ -54,7 +54,8 @@ node scripts/free-dev-ports.mjs
 | **predev** | `build:data` + `smoke-test.mjs` + `smoke-pre-serve.mjs` | Before any server starts |
 | **pre-serve** | CSS audit + `vite build` | Catches JS errors → white screen |
 | **live API** | `validate-diff-smoke.mjs` | After API up, before Vite |
-| **live UI** | `smoke-differential-session.mjs` | After Vite up — Playwright + screenshots |
+| **live UI** | `smoke-differential-session.mjs` | After Vite up — Playwright + screenshots (Differentials) |
+| **live UI** | `smoke-play-case-session.mjs` | After differential session — Welcome → Play → Briefing → case scene + screenshots |
 
 If any phase fails, **`start-dev.mjs` kills servers and exits 1** — nothing is left running on a broken build.
 
@@ -64,7 +65,10 @@ Manual re-check (servers must already be up for live phases):
 npm run smoke:pre-serve
 npm run smoke:differential
 npm run smoke:differential-session
+npm run smoke:play-case
 ```
+
+**Before telling Steve the game is ready:** share screenshot paths from both session smokes (`docs/smoke-screenshots/<date>/` and `.../play-case/`). Agents must run the full welcome → case pass — not only differential.
 
 ## After killing stale processes
 

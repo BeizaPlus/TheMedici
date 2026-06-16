@@ -216,10 +216,16 @@ export async function fetchChatModelLabel() {
 }
 
 /** One chat session per case + mode — case JSON + portrait persona in the system prompt. */
+function sessionMapKey(caseId, chatMode) {
+  const mode = chatMode === 'patient_sim' ? 'patient_sim' : 'tutor';
+  return `${String(caseId || '')}:${mode}`;
+}
+
 export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim' } = {}) {
   const caseId = String(caseData?.id || '');
   if (!caseId) throw new Error('Missing case id');
   const mode = chatMode === 'patient_sim' ? 'patient_sim' : 'tutor';
+  const mapKey = sessionMapKey(caseId, mode);
 
   const patientPersona = await resolvePatientPersona(caseData);
   const caseDiscussion = buildCaseDiscussionContext(caseId);
@@ -240,7 +246,7 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
   const discussionKey = discussionCacheKey(caseDiscussion);
   const briefKey = briefCacheKey(caseBriefMarkdown);
   const enrichKey = enrichmentCacheKey(caseData?.differentialStudyContext);
-  const cached = sessions.get(caseId);
+  const cached = sessions.get(mapKey);
 
   if (
     cached?.sessionId &&
@@ -255,7 +261,7 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
     return cached.sessionId;
   }
 
-  sessions.delete(caseId);
+  sessions.delete(mapKey);
   const r = await fetch(apiUrl('/api/case-chat/start'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -265,7 +271,7 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
   if (!r.ok) {
     throw new Error(data.error || 'Could not start case chat session');
   }
-  sessions.set(caseId, {
+  sessions.set(mapKey, {
     sessionId: data.sessionId,
     caseId,
     chatMode: mode,
@@ -279,8 +285,15 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
   return data.sessionId;
 }
 
-export function clearCaseChatSession(caseId) {
-  sessions.delete(String(caseId || ''));
+export function clearCaseChatSession(caseId, chatMode = null) {
+  const id = String(caseId || '');
+  if (!id) return;
+  if (chatMode) {
+    sessions.delete(sessionMapKey(id, chatMode));
+    return;
+  }
+  sessions.delete(sessionMapKey(id, 'patient_sim'));
+  sessions.delete(sessionMapKey(id, 'tutor'));
 }
 
 export function clearAllCaseChatSessions() {

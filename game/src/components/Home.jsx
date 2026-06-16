@@ -60,6 +60,10 @@ export default function Home({
         setCasesFilter('flagged');
         setView('cases');
       }}
+      onOpenRecentCases={() => {
+        setCasesFilter('recent');
+        setView('cases');
+      }}
       onOpenDifferential={() => setView('differential')}
       studioBuild={studioBuild}
     />

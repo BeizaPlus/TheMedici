@@ -1,0 +1,98 @@
+---
+description: Scene element anti-slop — Pinterest/product refs → element character maps → load on next run (MeWorld ED portrait)
+globs:
+  - dev/scene-elements/**
+  - dev/medical-element-plates/**
+  - dev/character-maps/**
+  - dev/anatomic-plates/**
+  - dev/scene-camera-lock/**
+  - src/lib/sceneElementRegistry.js
+  - src/data/sceneElementRegistry.json
+  - server/casePortrait.js
+  - server/portraitFrame.js
+alwaysApply: false
+---
+
+# Scene element reference lock (anti-slop)
+
+**Registry:** `dev/scene-elements/SCENE_ELEMENT_REGISTRY.json`  
+**Runtime:** `src/lib/sceneElementRegistry.js` · `src/data/sceneElementRegistry.json`  
+**Docs:** `dev/scene-elements/README.md`
+
+## Mandatory rule
+
+Before generating **any** scene prop (bed, table, monitor, IV pole, bag, gown, mask, catheter, wristband, rails, background):
+
+1. **Find the real thing** — Pinterest search, manufacturer product page, Magnific stock, or approved game asset (`SCENE_LOCK.json`, baseplates, `patientLadyRefs.json`, Kojo/Daniella character refs).
+2. **Never invent from scratch** if an element map exists with `status: "approved"`.
+3. **Generate element character map once** — save refs → Magnific hero/contact sheet → Photoshop retouch → register path.
+4. **Next run** — `resolveSceneElement(id)` / `getApprovedLayerPath(id)` only; append identity notes to portrait prompt, do not re-describe hardware.
+
+## Search order
+
+| Priority | Source |
+|----------|--------|
+| 1 | Approved layer in registry (`approvedLayer.path` or `pickHero`) |
+| 2 | In-game baseplate / character map (`public/assets/patient/`, `patientLadyRefs.json`) |
+| 3 | `dev/medical-element-plates/raw/manifest.json` (O2, IV) |
+| 4 | Pinterest → save `dev/scene-elements/sources/<id>/` + URL in NOTES.md |
+| 5 | Manufacturer / Magnific stock → `stock_to_creation` |
+
+## Element categories
+
+| Category | Examples | Map type |
+|----------|----------|----------|
+| **patient** | adult male/female, ped Kojo/Daniella | 9:16 character contact sheet (ladies) or baseplate |
+| **furniture** | stretcher, overbed table, pillow | Baked in baseplate or 16:9 prop plate |
+| **equipment** | vitals monitor, IV pole, IV bag | 1:1 or 16:9 product hero + angle set |
+| **medical-device** | O2 HUD1040, BD Insyte IV | `dev/medical-element-plates/` — composite layers |
+| **apparel** | hospital gown | Locked in `SCENE_LOCK` — change only with case brief |
+| **environment** | ED background bokeh | Baked in baseplate |
+
+## Generation defaults
+
+- **Magnific** `imagen-nano-banana-2` · **2k** · `count: 2` · ref-guided
+- Patient identity maps: **9:16** (see `patient-character-maps.mdc`)
+- Device/prop plates: **1:1** or match `SCENE_LOCK` **16:9** camera
+- Append `talking-images/.../prompts/lighting-balanced-review.txt` if underexposed
+- **Not Fal.** Magnific → Higgsfield fallback per `steve-generation-access.mdc`
+
+## Anti-slop checklist (every element)
+
+Each registry entry must include `antiSlop[]`. Reject gens that hit forbidden patterns (double O2 tubes, dorsal IV, home furniture, wrong monitor side, missing feet, etc.).
+
+## Compositing slots
+
+| Slot | Zone / use |
+|------|------------|
+| `baseplate` | Full scene — promote via `scripts/promote-baseplates.mjs` |
+| `zone-monitor` | Upper-right vitals |
+| `zone-iv-bag` | Upper-left pole + bag |
+| `zone-arm` | IV catheter overlay |
+| `patient-face-overlay` | O2 mask layer |
+| `patient-wrist-overlay` | ID band |
+
+## Register after approval
+
+1. Set `characterMap.status` → `"approved"` and `path` / `pickHero`
+2. Sync `src/data/sceneElementRegistry.json` (run audit script)
+3. Wire compositing in Play / `casePortrait.js` if new layer type
+
+## Do not
+
+- Burn O2/IV into baseplate gens when separate plates exist
+- Regenerate approved baseplate bed/table/monitor because of one bad portrait — fix identity layer only
+- Use fantasy hospital props without a product ref on file
+- Skip Pinterest/product search for `status: "missing"` elements
+
+## Audit
+
+```powershell
+node scripts/audit-scene-element-registry.mjs
+```
+
+## Related rules
+
+- `anatomic-iv-plates.mdc` — body baseplates + IV zone scope
+- `patient-character-maps.mdc` — lady Pinterest → likeness maps
+- `scene-camera-lock.mdc` — overhead camera lock

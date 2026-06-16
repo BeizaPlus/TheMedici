@@ -3,7 +3,8 @@ import { createPortal } from 'react-dom';
 import { FiX } from 'react-icons/fi';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import PlayChatNotesTabPanel from './PlayChatNotesTabPanel.jsx';
-import { IconMessage, IconStethoscope } from './sceneToolbar/SceneToolbarIcons.jsx';
+import { IconMessage } from './sceneToolbar/SceneToolbarIcons.jsx';
+import PatientPortraitAvatar from './PatientPortraitAvatar.jsx';
 
 const MIN_W = 320;
 const MIN_H = 300;
@@ -162,7 +163,17 @@ export default function DifferentialFloatingChat({
             aria-pressed={patientMode}
             onClick={() => onPatientModeChange?.(!patientMode)}
           >
-            <IconStethoscope className="toolbar-icon" />
+            <PatientPortraitAvatar
+              caseId={caseId}
+              caseData={caseData}
+              title={
+                patientMode
+                  ? 'Patient mode ON — simulated patient replies'
+                  : defaultChatTarget === 'tutor'
+                    ? 'Tutor chat — click for patient interview mode'
+                    : 'Notes mode — click for patient mode or type /pt'
+              }
+            />
           </button>
           {caseRecording && (
             <CaseRecordButton

@@ -195,11 +195,18 @@
   right: calc(100% + 10px);
   width: min(320px, calc(100vw - 88px));
   z-index: 600;
+  padding: 2px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(12, 14, 20, 0.98);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.62);
 }
 
 .portrait-brief-popover .portrait-brief {
   margin: 0;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+  border: none;
+  box-shadow: none;
+  background: transparent;
 }
 
 .panel-next-case-btn {
@@ -371,6 +378,9 @@
   min-width: 300px;
   max-width: min(360px, calc(100vw - 24px));
   white-space: normal;
+  background: rgba(12, 14, 20, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.62);
 }
 
 .toolbar-settings-popover .settings-popover-block {

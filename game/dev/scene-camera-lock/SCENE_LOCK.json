@@ -14,6 +14,13 @@
       "pixels": { "width": 2752, "height": 1536 },
       "role": "Steve-approved male crop lock — full supine patient crown through toes; slightly zoomed out vs legacy mid-thigh framing",
       "approvedAt": "2026-06-16"
+    },
+    "female": {
+      "path": "dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png",
+      "pixels": { "width": 2752, "height": 1536 },
+      "role": "Shared layout/camera lock for female gens until dedicated female crop lock promoted — crown through toes, bare feet at bottom (Steve 2026-06-16)",
+      "layoutReferenceOnly": true,
+      "approvedAt": "2026-06-16"
     }
   },
   "portraitFrameVersion": 2,
@@ -27,8 +34,10 @@
     "female": {
       "path": "public/assets/patient/patient-scene-female.png",
       "sourcePixels": { "width": 2048, "height": 1152 },
-      "role": "Canonical female ED baseplate — same camera lock; crop to exportPixels on promote",
-      "ladyIdentity": "src/data/patientLadyRefs.json"
+      "role": "Canonical female ED baseplate — same camera lock as male (crown through toes, bare feet at bottom); crop to exportPixels on promote",
+      "ladyIdentity": "src/data/patientLadyRefs.json",
+      "cropLockRef": "dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png",
+      "promptRef": "dev/anatomic-plates/prompts/female-ed-anatomic-plate.txt"
     }
   },
   "legacyReferences": [

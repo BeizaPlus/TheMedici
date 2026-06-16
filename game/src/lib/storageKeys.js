@@ -30,6 +30,7 @@ export const STORAGE = {
   playUiFavorite: 'schoonmaker_play_ui_favorite',
   teachCompareDockWidth: 'schoonmaker_teach_compare_dock_width',
   teachCompareLayout: 'schoonmaker_teach_compare_layout',
+  exportUseLiveScene: 'schoonmaker_export_use_live_scene',
   playSessionTimeline: 'schoonmaker_play_session_timeline',
   threadCollapsed: 'schoonmaker_thread_collapsed',
   timelineCollapsed: 'schoonmaker_timeline_collapsed',

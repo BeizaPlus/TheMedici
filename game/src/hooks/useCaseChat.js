@@ -37,7 +37,9 @@ export function useCaseChat({
   onModelReady,
   getSessionContext,
   portraitVersion = 0,
+  defaultChatMode = 'patient_sim',
 }) {
+  const defaultMode = defaultChatMode === 'patient_sim' ? 'patient_sim' : 'tutor';
   const [available, setAvailable] = useState(null);
   const [modelLabel, setModelLabel] = useState(null);
   const [sessionId, setSessionId] = useState(null);
@@ -111,7 +113,7 @@ export function useCaseChat({
   useEffect(() => {
     if (!caseId || !historyLoaded) return undefined;
     let cancelled = false;
-    ensureCaseChatSession(caseData)
+    ensureCaseChatSession(caseData, { chatMode: defaultMode })
       .then((id) => {
         if (!cancelled) setSessionId(id);
       })
@@ -121,7 +123,7 @@ export function useCaseChat({
     return () => {
       cancelled = true;
     };
-  }, [caseId, caseData, historyLoaded, portraitVersion]);
+  }, [caseId, caseData, historyLoaded, portraitVersion, defaultMode]);
 
   const appendNote = useCallback(
     async (text, { header = 'Note' } = {}) => {
@@ -143,62 +145,93 @@ export function useCaseChat({
     setSessionId(null);
     setError('');
     try {
-      const id = await ensureCaseChatSession(caseData);
+      const id = await ensureCaseChatSession(caseData, { chatMode: defaultMode });
       setSessionId(id);
     } catch (e) {
       setError(String(e.message || e));
     }
-  }, [caseId, caseData]);
+  }, [caseId, caseData, defaultMode]);
 
-  const sendMessage = useCallback(
-    async (text, { notesMode = false, chatMode = 'patient_sim' } = {}) => {
-      const trimmed = String(text || '').trim();
-      if (!trimmed || busy) return null;
-      setError('');
+  const pendingQueueRef = useRef([]);
+  const drainingRef = useRef(false);
 
+  const runSend = useCallback(
+    async (trimmed, { notesMode = false, chatMode = defaultMode } = {}) => {
       const sid = await ensureCaseChatSession(caseData, { chatMode });
-      if (sid !== sessionId) setSessionId(sid);
+      setSessionId((prev) => (prev !== sid ? sid : prev));
 
       setMessages((prev) => [...prev, { role: 'user', content: trimmed }]);
       persistMessage('user', trimmed);
-      setBusy(true);
-      try {
-        const sessionContext = getSessionContext?.() ?? null;
-        const result = await sendCaseChatMessage(sid, trimmed, sessionContext, {
-          caseData,
-          chatMode,
-        });
-        if (result.sessionId && result.sessionId !== sid) {
-          setSessionId(result.sessionId);
-        }
-        const reply = result.reply;
-        const displayReply =
-          chatMode === 'patient_sim' ? sanitizePatientReplyForDisplay(reply) : reply;
-        const shown = displayReply || (chatMode === 'patient_sim' ? '' : reply);
-        if (chatMode === 'patient_sim' && !shown) {
-          setError('Patient reply had no speakable dialogue — try asking again.');
-          return null;
-        }
-        setMessages((prev) => [...prev, { role: 'assistant', content: shown || reply }]);
-        persistMessage('assistant', shown || reply);
-        if (chatMode === 'patient_sim' && shown) {
-          void prefetchPatientReplyAudio({ caseData, text: shown });
-          void speakPatientReply({ caseData, text: shown });
-        }
-        void reloadHistory();
-        if (notesMode && caseId) {
-          const stamp = new Date().toLocaleTimeString();
-          appendCaseNotesBlock(caseId, reply, { header: `Chat · ${stamp}` });
-        }
-        return reply;
-      } catch (e) {
-        setError(String(e.message || e));
-        return null;
-      } finally {
-        setBusy(false);
+
+      const sessionContext = getSessionContext?.() ?? null;
+      const result = await sendCaseChatMessage(sid, trimmed, sessionContext, {
+        caseData,
+        chatMode,
+      });
+      if (result.sessionId) {
+        setSessionId(result.sessionId);
       }
+      const reply = result.reply;
+      const displayReply =
+        chatMode === 'patient_sim' ? sanitizePatientReplyForDisplay(reply) : reply;
+      const shown = displayReply || (chatMode === 'patient_sim' ? '' : reply);
+      if (chatMode === 'patient_sim' && !shown) {
+        throw new Error('Patient reply had no speakable dialogue — try asking again.');
+      }
+      if (chatMode === 'tutor' && !String(shown || reply || '').trim()) {
+        throw new Error('Tutor returned empty — retry or check API keys');
+      }
+      setMessages((prev) => [...prev, { role: 'assistant', content: shown || reply }]);
+      persistMessage('assistant', shown || reply);
+      if (chatMode === 'patient_sim' && shown) {
+        void prefetchPatientReplyAudio({ caseData, text: shown });
+        void speakPatientReply({ caseData, text: shown });
+      }
+      void reloadHistory();
+      if (notesMode && caseId) {
+        const stamp = new Date().toLocaleTimeString();
+        appendCaseNotesBlock(caseId, reply, { header: `Chat · ${stamp}` });
+      }
+      return reply;
     },
-    [busy, sessionId, caseData, persistMessage, caseId, reloadHistory, getSessionContext],
+    [caseData, persistMessage, caseId, reloadHistory, getSessionContext, defaultMode],
+  );
+
+  const drainSendQueue = useCallback(async () => {
+    if (drainingRef.current) return;
+    drainingRef.current = true;
+    setBusy(true);
+    try {
+      while (pendingQueueRef.current.length) {
+        const job = pendingQueueRef.current.shift();
+        if (!job) continue;
+        setError('');
+        try {
+          const reply = await runSend(job.trimmed, job.options);
+          job.resolve(reply);
+        } catch (e) {
+          const msg = String(e.message || e);
+          setError(msg);
+          job.resolve(null);
+        }
+      }
+    } finally {
+      drainingRef.current = false;
+      setBusy(false);
+    }
+  }, [runSend]);
+
+  const sendMessage = useCallback(
+    (text, { notesMode = false, chatMode = defaultMode } = {}) => {
+      const trimmed = String(text || '').trim();
+      if (!trimmed) return Promise.resolve(null);
+
+      return new Promise((resolve) => {
+        pendingQueueRef.current.push({ trimmed, options: { notesMode, chatMode }, resolve });
+        void drainSendQueue();
+      });
+    },
+    [defaultMode, drainSendQueue],
   );
 
   return {
