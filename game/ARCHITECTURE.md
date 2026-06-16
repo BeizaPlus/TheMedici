@@ -72,6 +72,8 @@ MeWorld/data/cases/*.json ← clean DeepSeek bank (Differential review build)
 
 **Pending UX (discuss first):** `CaseThreadCaseRail.jsx` — horizontal “recent cases with chat” strip; Steve may remove. **No agent changes until cleared.**
 
+**Deferred — true learning mode (Steve 2026-06-16):** Physical exam picker (`PhysicalExamPickerDialog.jsx`) must open **clean** — no pre-selected sections, no **In case stacks** tags. **Case suggestions** is the only control that turns hints on. Full spec: `docs/FEATURE_REQUEST_AUDIT.md` § Deferred: True learning mode. **Do not implement until Steve clears.**
+
 ---
 
 ## Server (Express)

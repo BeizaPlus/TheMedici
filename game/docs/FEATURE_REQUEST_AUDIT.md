@@ -5,8 +5,8 @@
 | Field | Value |
 |--------|--------|
 | **Audit date** | 2026-06-16 (updated) |
-| **Last known commit on `main`** | `4e22441` — `feat(play): patient Chatterbox auto-speak and fix scene layout` |
-| **Repo** | `C:\Users\steve\MeWorld\game` · remote `BeizaPlus/TheSchoonMaker` |
+| **Baseline** | `base-architecture-2026-06-16` · commit `310e941` on `main` |
+| **Repo** | `C:\Users\steve\MeWorld\game` · remote `stefopps/MeWorld` |
 | **Product display name** | `MeWorld` — `src/data/gameConfig.json` → `branding.productName` |
 
 ---
@@ -81,7 +81,8 @@ Rule: `.cursor/rules/agent-implementation-guard.mdc`
 - [x] **Remove deficiencies panel** from landscape export
 - [x] **Flow tab tiers** — Critical / General / Misc collapsible groups + export grouping
 - [x] **Compare/review stack tap** — explanation only (`CompareStepRationaleCard`); does **not** reopen command stacks dock
-- [x] **Physical exam checkbox dialog** — `PhysicalExamPickerDialog` + stethoscope / `physical` command *(local uncommitted)*
+- [x] **Physical exam checkbox dialog** — `PhysicalExamPickerDialog` + stethoscope / `physical` command
+- [ ] **Physical exam — learning mode default (deferred)** — see **Deferred: True learning mode** below
 
 ---
 
@@ -151,6 +152,20 @@ Rule: `.cursor/rules/agent-implementation-guard.mdc`
 
 ## Backlog (handoff / not user-blockers)
 
+### Deferred: True learning mode (Steve — 2026-06-16, **do not implement until cleared**)
+
+Steve is studying in **learning mode**: no answer cues on first open. Agents must **discuss + get clearance** before changing this (same as `agent-implementation-guard.mdc`).
+
+| Item | Current (wrong for learning) | Target |
+|------|------------------------------|--------|
+| **Physical exam picker open** | Pre-selects all `suggestedIds` from case stacks; shows green **In case stacks** tags immediately | **Clean sheet:** nothing selected, **no** stack tags visible |
+| **Case suggestions button** | Re-applies suggested selection | **Only** way to reveal hints: click toggles suggested sections **on** (and may show tags while active) |
+| **Select all / Clear** | Unchanged | Keep as bulk helpers |
+
+**Files when implemented:** `PhysicalExamPickerDialog.jsx` (remove `useEffect` that seeds `selected` from `suggestedIds` on open; gate `isSuggested` tag behind “suggestions visible” state). Possibly tie to a future global **Learning mode** flag in Welcome settings.
+
+**Related backlog (same theme):** hide case-rail chat peek, no Teach Me spoilers in HPI, orders that change vitals — all learning-mode family; implement as one design pass later.
+
 - [ ] Sync clean `MeWorld/data/cases/` → `game/data/cases/` for Play/Briefing
 - [ ] Batch **`practice_hpi`** for cases that spoil diagnosis in `hpi_narrative`
 - [ ] Capture more CCS presentations (`step3/ccs_credentials.json` → `npm run refresh:case-bank`)
@@ -182,10 +197,12 @@ Rule: `.cursor/rules/agent-implementation-guard.mdc`
 | Date | Who | Notes |
 |------|-----|--------|
 | 2026-06-16 | — | Checklist file created; consolidates thread requests + local uncommitted session work |
+| 2026-06-16 | Steve | **Learning mode deferred:** physical exam picker must open clean — no pre-select, no “In case stacks” until Case suggestions clicked |
 | | | *Add rows as you test* |
 
 ---
 
 ## Changelog (this document)
 
+- **2026-06-16** — Deferred learning-mode spec: physical exam picker clean default.
 - **2026-06-16** — Initial tracked file. Merged thread checklist (2026-06-16 chat) with dock-results, patient-dialogue-only, MeWorld branding, physical exam picker, and canonical UI table.
