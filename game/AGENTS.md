@@ -26,6 +26,22 @@ If ports are busy, kill old node processes or use the alternate Vite port shown 
 
 ---
 
+## Graphify (codebase knowledge graph)
+
+Installed from [safishamsi/graphify](https://github.com/safishamsi/graphify) · PyPI package **`graphifyy`** · CLI **`graphify`**.
+
+| Item | Path / command |
+|------|----------------|
+| Cursor rule | `C:\Users\steve\MeWorld\.cursor\rules\graphify.mdc` (always-on) |
+| Graph output | `C:\Users\steve\MeWorld\graphify-out\` — `graph.json`, `GRAPH_REPORT.md`, `graph.html` |
+| Refresh after code edits | `graphify update .` from repo root (AST-only, no API cost) |
+| Query (agents) | `graphify query "…"` · `graphify path "A" "B"` · `graphify explain "…"` |
+| Full doc/media pass | `/graphify .` in Cursor (needs `GEMINI_API_KEY` or `GOOGLE_API_KEY` in env) |
+
+Game-only subgraph also at `game/graphify-out/` if you run `graphify update .` from `game/`.
+
+---
+
 ## Data pipeline (case bank)
 
 ```
@@ -68,6 +84,7 @@ See `DATA.md` and `step3/CCS_LOCAL_PROXY.md` for full pipeline docs.
 
 ## UI rules (user cares about these)
 
+0. **Implementation guard** — `.cursor/rules/agent-implementation-guard.mdc`: no feature work unless ≥99% understood; **discuss before** new tabs/panels or moving chat between sidebar and scene dock. Play chat = **`SceneOrderCommandDock` only** (sidebar Thread tab removed).
 1. **Stacks list = vertical column only** — never horizontal wrap/grouping (e.g. no "Office / clinic" parent grouping)
 2. **Expanded stack** shows **one order’s** rationale/guideline — not the full sequence inline (full sequence stays in Teach Me)
 3. **Command dock** must be **draggable and resizable** (gold grips: right, bottom, corner)
@@ -151,27 +168,27 @@ npm run build:differential-review
 
 `game/.cursor/rules/differential-practice.mdc` — read before differential tasks.
 
-### Open work checklist
+### Open work & audit checklist
+
+**Canonical tracker:** [`docs/FEATURE_REQUEST_AUDIT.md`](docs/FEATURE_REQUEST_AUDIT.md) — mark `[x]` / `[~]` / `[ ]` as you test; hand to Claude for deep audits.
+
+Quick backlog (see audit file for full list):
 
 - [ ] Sync clean `MeWorld/data/cases/` → `game/data/cases/` for Play/Briefing
 - [ ] Add **`practice_hpi`** for cases whose `hpi_narrative` spoils diagnosis/treatment (batch high-yield first)
 - [ ] Curate more `realWorldCases.json` entries (target: 2 stories per high-yield case)
 - [ ] More lady **character maps** from approved Pinterest refs (`patient-character-maps.mdc`)
 - [ ] Optional: API/AI auto-discovery for real-world YouTube matches
+- [ ] **Live patient simulation** — orders change vitals/life/chat (not built)
 
-### Play UX checklist (current session)
+### Play UX (recent — detail in audit file)
 
-- [x] Results moved from scene popup into **Results tab**
-- [x] Added **lower-third results carousel** on scene
-- [x] Compare/review stack tap shows **explanation only** (no command stacks reopen)
-- [x] Practice mode results use objective wording (no teaching cues)
-- [x] Teach Me mode keeps interpretive guidance
-- [x] Print flow hardened to avoid blank `about:blank` tabs
-- [x] **Practice HPI** separated from answer-key `hpi_narrative` (`practice_hpi`, `getBriefingHpi`, `applySessionToCase`)
-- [x] **Read case** moved to top-right gold pill (replaces Immersa tag)
-- [x] **Play patient mode** — stethoscope parity with Differentials (tutor default)
-- [x] **Chat session expired** — client auto-retry after API restart
-- [x] Case **140** lady map `pinterest-cornrows-star` + `practice_hpi` for IIH presentation
+- [x] Results in **Order · Chat** slide panel (scene dock); sidebar Results + lower-third removed *(local uncommitted)*
+- [x] Compare/review stack tap → **explanation only** (`CompareStepRationaleCard`)
+- [x] Physical exam picker dialog + stethoscope command *(local uncommitted)*
+- [x] Patient chat: dialogue only, ▶ TTS, auto-speak off by default *(local uncommitted)*
+- [x] **MeWorld** display name via `gameConfig.branding.productName` *(local uncommitted)*
+- [x] Practice HPI, Read case pill, patient mode stethoscope, chat session retry — see audit file
 
 ---
 

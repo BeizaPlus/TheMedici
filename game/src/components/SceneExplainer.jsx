@@ -1,8 +1,10 @@
 /** Fixed-size clinical explainer panel (AoE / chapter-screen style). */
+import { APP_PRODUCT_NAME } from '../lib/appBrand.js';
+
 export default function SceneExplainer({ caseData, step, stepIndex, totalSteps, patientNode }) {
   return (
     <aside className="scene-explainer">
-      <p className="explainer-kicker">Schoonmaker · Case {caseData.ccsNumber}</p>
+      <p className="explainer-kicker">{APP_PRODUCT_NAME} · Case {caseData.ccsNumber}</p>
       <h2 className="explainer-title">{caseData.title}</h2>
       {patientNode && (
         <p className="explainer-location">

@@ -119,10 +119,10 @@ export default function AudioSettingsPanel({ embedded = false, showGameSounds = 
       <label className="audio-settings-toggle">
         <input
           type="checkbox"
-          checked={prefs.patientAutoSpeak !== false}
+          checked={prefs.patientAutoSpeak === true}
           onChange={(e) => bump({ patientAutoSpeak: e.target.checked })}
         />
-        <span>Patient auto-speak (Chatterbox)</span>
+        <span>Auto-play patient voice (off = tap ▶ on each reply)</span>
       </label>
     </section>
   );

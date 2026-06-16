@@ -5,6 +5,7 @@
 import { getPreparedCase } from '../lib/caseNarrative.js';
 import { composeCaseHistory, resolveCaseExam } from '../lib/caseExam.js';
 import { parseVitalsFromText } from '../lib/vitalsParse.js';
+import { clampVitals } from '../lib/vitalsLimits.js';
 
 const CASE_FLOW_DICTIONARY = {
   '001': {
@@ -34,15 +35,16 @@ export function getCaseFlow(caseData) {
   const key = String(caseData?.id || '').padStart(3, '0');
   const prepared = getPreparedCase(key);
   const authored = CASE_FLOW_DICTIONARY[key];
-  const vitals =
+  const vitals = clampVitals(
     prepared?.vitals ||
-    caseData?.preparedVitals ||
-    authored?.vitals ||
-    parseVitalsFromText(
-      caseData?.vitalsText || prepared?.vitalsText || '',
-      caseData?.category || prepared?.category || 'Emergency Medicine',
-      Number(caseData?.ccsNumber) || Number(key) || 0,
-    );
+      caseData?.preparedVitals ||
+      authored?.vitals ||
+      parseVitalsFromText(
+        caseData?.vitalsText || prepared?.vitalsText || '',
+        caseData?.category || prepared?.category || 'Emergency Medicine',
+        Number(caseData?.ccsNumber) || Number(key) || 0,
+      ),
+  );
 
   const clinicalHpi =
     caseData?.clinical_hpi_narrative ||

@@ -14,6 +14,8 @@ Do not create a new index.html anywhere.
 Do not create a new React app anywhere.
 Do not run npm create, npx create-*, or vite anywhere.
 
+**Feature audit checklist (requested vs shipped):** `docs/FEATURE_REQUEST_AUDIT.md` — update checkboxes when testing or shipping.
+
 ---
 
 ## GIT RULES
@@ -37,6 +39,8 @@ anything over 95MB must NOT be pushed to GitHub.
 ## CHANGE RULES
 Only touch files directly related to the task.
 If the task says "replace icons" — touch only `SceneToolbarIcons.jsx` and the component that imports the icon (not random react-icons elsewhere).
+
+**Agent guard:** Unless ≥99% sure you understand a feature, do not implement — ask Steve. Architecture changes (new tabs, moving chat/sidebar/dock, new entry points) require discussion first. See `.cursor/rules/agent-implementation-guard.mdc`.
 
 ---
 

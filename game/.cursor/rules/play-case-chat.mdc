@@ -1,5 +1,5 @@
 ---
-description: Play case chat — patient/tutor mode parity, session recovery, order dock stethoscope
+description: Play case chat — patient/tutor mode, dock-only conversation, session recovery
 globs:
   - src/components/Play.jsx
   - src/components/SceneOrderCommandDock.jsx
@@ -11,35 +11,36 @@ globs:
 alwaysApply: false
 ---
 
-# Play case chat (parity with Differentials)
+# Play case chat
+
+## Where conversation lives (Steve — single surface)
+
+| UI | Chat? |
+|----|-------|
+| **`SceneOrderCommandDock`** on scene | **Yes** — expand via message icon; `dockChatExpanded` + embedded `CaseSessionThread` (`messagesOnly`) |
+| Sidebar `CaseContextPanel` | **No Thread tab** — do not set `showChatTab` in Play |
+| Differential Practice | Separate mode — `DifferentialFloatingChat` |
+
+Do not add a second Play chat path (sidebar tab + dock quick-reply was removed for this reason).
 
 ## Patient mode (stethoscope)
 
-Play must match Differential floating chat:
-
 | Control | Location |
 |---------|----------|
-| Stethoscope toggle | `SceneOrderCommandDock` header + `CaseSessionThread` when `onPatientModeChange` set |
+| Stethoscope toggle | `SceneOrderCommandDock` header |
 | State | `chatPatientMode` + `chatPatientModeRef` in `Play.jsx` — reset on `caseData.id` change |
-| Off (default) | Order dock + voice → **tutor** (`chatMode: 'tutor'`) |
+| Off (default) | Dock text → **tutor** (`chatMode: 'tutor'`) |
 | On (gold) | → **patient_sim** |
-| Slash | `/pt` patient · `/ch` tutor/notes — `parseChatModeCommand` in dock + thread |
+| Slash | `/pt` patient · `/ch …` saves note · dock `submitOrderCommand` |
 
-Thread default in Play: `defaultChatTarget="tutor"` (not notes-only).
+Patient replies: **direct dialogue only** — `sanitizePatientReplyForDisplay` + server prompt (no `*(actions)*` or parentheses). Stripped stage text saved to `.patient-stage-cache/` for future video — **never shown in chat**. TTS: tap **▶**; auto-play off by default.
 
 ## Chat session expired
 
 Server keeps sessions **in RAM only** (`caseChatSessions` in `server/index.js`). Lost on API restart (~every `npm run dev`) or **2h** idle.
 
-**Do not** tell Steve to "close chat" as the only fix. Client must auto-recover:
+Client must auto-recover: `sendCaseChatMessage(..., recover: { caseData, chatMode })` → retry once after `/api/case-chat/start`.
 
-- `sendCaseChatMessage(..., recover: { caseData, chatMode })` → clear client cache → `/api/case-chat/start` → retry once.
-- Persisted UI history stays in localStorage; only server LLM window is new.
+## Order matching vs chat
 
-When adding new chat send paths, always pass `recover` or call `ensureCaseChatSession` after 404.
-
-## Order · Chat dock
-
-Non-order text → chat (not "Answer in chat →" dead end). Matcher: `orderCommandAutocomplete.js` synonym rings for common labs/exam phrases.
-
-Chat markdown: `*italic*` stage directions via `chatMessageFormat.jsx` — not raw asterisks.
+Non-order text in dock → chat. Order synonyms: `orderCommandAutocomplete.js`.

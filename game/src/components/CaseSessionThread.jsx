@@ -10,7 +10,11 @@ import {
 import ChatMessageContent from './ChatMessageContent.jsx';
 import CasePictureInline from './CasePictureInline.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
-import { patientVoiceProfile } from '../lib/patientSpeech.js';
+import { speakPatientReply } from '../lib/patientSpeech.js';
+import {
+  looksLikePatientStageReply,
+  sanitizePatientReplyForDisplay,
+} from '../lib/patientReplyText.js';
 import { mergeSessionThread, parseNoteBubbleContent } from '../lib/caseSessionThread.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
@@ -92,6 +96,8 @@ export default function CaseSessionThread({
   onTimelineNote,
   fillTab = false,
   suppressHeader = false,
+  messagesOnly = false,
+  compact = false,
   patientMode = false,
   defaultChatTarget = 'notes',
   onPatientModeChange,
@@ -307,7 +313,7 @@ export default function CaseSessionThread({
 
       {expanded && (
         <>
-          {caseRailItems.length > 0 && onSelectThreadCase && (
+          {caseRailItems.length > 0 && onSelectThreadCase && !compact && (
             <CaseThreadCaseRail
               items={caseRailItems}
               activeCaseId={threadViewCaseId ?? caseId}
@@ -327,13 +333,14 @@ export default function CaseSessionThread({
           )}
           {error && <p className="case-chat-banner bad">{error}</p>}
 
-          {patientMode && !quietChatChrome && (
+          {patientMode && !quietChatChrome && !compact && (
             <p className="case-chat-banner case-chat-banner--patient">
-              Patient mode — patient will reply. Type <code>/ch</code> for notes only.
+              Patient mode — direct answers only; tap <strong>▶</strong> to hear. Type <code>/ch</code> for
+              notes.
             </p>
           )}
 
-          <div className="case-chat-messages selectable-text" ref={listRef}>
+          <div className={`case-chat-messages selectable-text${compact ? ' case-chat-messages--compact' : ''}`} ref={listRef}>
             {!historyLoaded && <p className="case-chat-tab-empty">Loading…</p>}
             {historyLoaded && thread.length === 0 && !busy && !quietChatChrome && (
               <p className="case-chat-tab-empty">
@@ -344,36 +351,57 @@ export default function CaseSessionThread({
               if (m.role === 'note') {
                 return <ThreadNoteBubble key={m.id || `note-${i}`} content={m.content} />;
               }
+              const bubbleText =
+                m.role === 'assistant' &&
+                (patientMode || looksLikePatientStageReply(m.content))
+                  ? sanitizePatientReplyForDisplay(m.content) || m.content
+                  : m.content;
               return (
                 <div
                   key={m.id || `${m.role}-${i}`}
                   className={`case-chat-bubble ${m.role}`}
                 >
                   <span className="case-chat-bubble-text">
-                    <ChatMessageContent content={m.content} />
+                    <ChatMessageContent content={bubbleText} />
                   </span>
                   {m.role === 'assistant' && (
                     <div className="case-chat-bubble-actions">
                       <button
                         type="button"
                         className={`case-chat-bubble-btn case-chat-read-btn ${readingIdx === i ? 'is-reading' : ''}`}
-                        title={readingIdx === i ? 'Stop reading' : 'Read aloud'}
-                        aria-label={readingIdx === i ? 'Stop reading' : 'Read aloud'}
+                        title={
+                          readingIdx === i
+                            ? 'Stop'
+                            : patientMode
+                              ? 'Play patient dialogue'
+                              : 'Read aloud'
+                        }
+                        aria-label={readingIdx === i ? 'Stop' : 'Play reply'}
                         onClick={() => {
                           if (readingIdx === i) {
                             stopCaseReader();
                             setReadingIdx(null);
+                            return;
+                          }
+                          stopCaseReader();
+                          setReadingIdx(i);
+                          const onState = (state) => {
+                            if (state === 'idle' || state === 'error') setReadingIdx(null);
+                          };
+                          if (patientMode) {
+                            void speakPatientReply({
+                              caseData,
+                              text: bubbleText,
+                              force: true,
+                              onState,
+                            });
                           } else {
-                            stopCaseReader();
-                            setReadingIdx(i);
                             readCaseAloud({
                               caseId: caseData?.id,
-                              section: patientMode ? 'patient-chat' : 'chat',
-                              text: m.content,
-                              voiceProfile: patientMode ? patientVoiceProfile(caseData) : 'narrator',
-                              onState: (state) => {
-                                if (state === 'idle' || state === 'error') setReadingIdx(null);
-                              },
+                              section: 'chat',
+                              text: bubbleText,
+                              voiceProfile: 'narrator',
+                              onState,
                             });
                           }
                         }}
@@ -397,6 +425,7 @@ export default function CaseSessionThread({
             {busy && <div className="case-chat-bubble assistant typing">Thinking…</div>}
           </div>
 
+          {!messagesOnly && (
           <form
             className="case-chat-form"
             onPaste={handlePicturePaste}
@@ -452,7 +481,8 @@ export default function CaseSessionThread({
               )}
             </div>
           </form>
-          {caseRecording?.transcribing && (
+          )}
+          {!messagesOnly && caseRecording?.transcribing && (
             <p className="case-notes-live-hint case-session-thread-live-hint" aria-live="polite">
               Transcribing voice…
               {!quietChatChrome &&

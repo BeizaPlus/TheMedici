@@ -298,3 +298,24 @@ export async function readCaseAloud({ caseId, section, text, voiceProfile = 'nar
 export function stopCaseReader() {
   stopReader();
 }
+
+/** Generate / cache TTS without playing — makes the play button feel instant on repeat. */
+export async function prefetchCaseAudio({ caseId, section, text, voiceProfile = 'narrator' }) {
+  const trimmed = String(text || '').trim();
+  if (!trimmed) return;
+
+  try {
+    await fetch(apiUrl('/api/read-case'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        caseId,
+        section,
+        text: trimmed.slice(0, 12000),
+        voiceProfile: String(voiceProfile || 'narrator'),
+      }),
+    });
+  } catch {
+    /* best-effort cache warm */
+  }
+}

@@ -84,6 +84,18 @@ async function main() {
   const parsedVitals = Object.values(prepared.cases || {}).filter((c) => c.vitalsSource === "parsed").length;
   ok(parsedVitals >= 8, "preparedCases: CCS vitals parsed", `${parsedVitals} parsed`);
 
+  const badSpo2 = Object.entries(prepared.cases || {}).filter(([, c]) => {
+    const s = c?.vitals?.spo2;
+    return typeof s === "number" && (s > 100 || s < 0);
+  });
+  ok(badSpo2.length === 0, "preparedCases: SpO2 within 0–100%", badSpo2.length ? `${badSpo2.length} invalid` : "all ok");
+
+  const { clampVitals, VITAL_LIMITS } = await import(
+    url.pathToFileURL(path.join(root, "src/lib/vitalsLimits.js")).href
+  );
+  ok(clampVitals({ spo2: 102 }).spo2 === 100, "vitalsLimits: SpO2 capped at 100");
+  ok(VITAL_LIMITS.spo2.max === 100, "vitalsLimits: SpO2 max documented", "100%");
+
   const { resolvePlaybook, getCaseSpecificPlaybookIds } = await import(
     url.pathToFileURL(path.join(root, "src/data/resolvePlaybook.js")).href
   );

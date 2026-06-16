@@ -14,6 +14,8 @@ export default function PlayChatNotesTabPanel({
   onTimelineNote,
   onTimelineChat,
   suppressHeader = false,
+  messagesOnly = false,
+  compact = false,
   patientMode = false,
   defaultChatTarget = 'notes',
   onPatientModeChange,
@@ -33,6 +35,8 @@ export default function PlayChatNotesTabPanel({
       onTimelineChat={onTimelineChat}
       fillTab
       suppressHeader={suppressHeader}
+      messagesOnly={messagesOnly}
+      compact={compact}
       patientMode={patientMode}
       defaultChatTarget={defaultChatTarget}
       onPatientModeChange={onPatientModeChange}

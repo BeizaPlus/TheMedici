@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useState } from 'react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { subscribeMonitorState, unlockAmbience } from '../lib/audio.js';
+import { clampVitals } from '../lib/vitalsLimits.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import AudioVolumeControl from './AudioVolumeControl.jsx';
 
@@ -86,28 +87,32 @@ export default function IcuMonitorStrip({
   useEffect(() => subscribeMonitorState(setState), []);
 
   useEffect(() => {
-    setLive({
-      hr: vitals?.hr ?? 88,
-      spo2: vitals?.spo2 ?? 97,
-      sbp: vitals?.sbp ?? 118,
-      dbp: vitals?.dbp ?? 72,
-      rr: vitals?.rr ?? 18,
-      temp: vitals?.temp ?? 37,
-      lactate: vitals?.lactate ?? 1.4,
-    });
+    setLive(
+      clampVitals({
+        hr: vitals?.hr ?? 88,
+        spo2: vitals?.spo2 ?? 97,
+        sbp: vitals?.sbp ?? 118,
+        dbp: vitals?.dbp ?? 72,
+        rr: vitals?.rr ?? 18,
+        temp: vitals?.temp ?? 37,
+        lactate: vitals?.lactate ?? 1.4,
+      }),
+    );
   }, [vitals]);
 
   useEffect(() => {
     const id = window.setInterval(() => {
-      setLive((prev) => ({
-        hr: jitter(vitals?.hr ?? prev.hr, 2),
-        spo2: jitter(vitals?.spo2 ?? prev.spo2, 1),
-        sbp: jitter(vitals?.sbp ?? prev.sbp, 3),
-        dbp: jitter(vitals?.dbp ?? prev.dbp, 2),
-        rr: jitter(vitals?.rr ?? prev.rr, 1),
-        temp: jitter(vitals?.temp ?? prev.temp, 0.15, 1),
-        lactate: jitter(vitals?.lactate ?? prev.lactate, 0.12, 1),
-      }));
+      setLive((prev) =>
+        clampVitals({
+          hr: jitter(vitals?.hr ?? prev.hr, 2),
+          spo2: jitter(vitals?.spo2 ?? prev.spo2, 1),
+          sbp: jitter(vitals?.sbp ?? prev.sbp, 3),
+          dbp: jitter(vitals?.dbp ?? prev.dbp, 2),
+          rr: jitter(vitals?.rr ?? prev.rr, 1),
+          temp: jitter(vitals?.temp ?? prev.temp, 0.15, 1),
+          lactate: jitter(vitals?.lactate ?? prev.lactate, 0.12, 1),
+        }),
+      );
     }, 1800);
     return () => window.clearInterval(id);
   }, [vitals]);

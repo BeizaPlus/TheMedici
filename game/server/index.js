@@ -51,6 +51,9 @@ import { sanitizeRealWorldStories } from './realWorldStoryQuality.js';
 import { fetchYoutubeTranscript } from './youtubeTranscript.js';
 import { readOrderWhyEntry, writeOrderWhyEntry } from './orderWhyCache.js';
 import { buildOrderWhyPrompt } from './orderWhy.js';
+import { splitPatientReply } from '../src/lib/patientReplyText.js';
+import { APP_PRODUCT_NAME } from '../src/lib/appBrand.js';
+import { appendPatientStageEntry } from './patientStageCache.js';
 import {
   buildPortraitAnalysis,
   buildPortraitMeta,
@@ -192,7 +195,7 @@ async function sendMagicEmail(toEmail, magicLink) {
   await mailer.transporter.sendMail({
     from: mailer.from,
     to: toEmail,
-    subject: 'Your personalized Schoonmaker link',
+    subject: `Your personalized ${APP_PRODUCT_NAME} link`,
     text: `Your personalized case experience is ready.\n\nOpen this magic link:\n${magicLink}\n\nThis link expires in 48 hours.`,
     html: `<p>Your personalized case experience is ready.</p>
 <p><a href="${magicLink}">Open your magic link</a></p>
@@ -315,16 +318,22 @@ function buildCaseChatSystemPrompt(caseContext) {
   if (patientSim) {
     const bandRules =
       band === 'strict'
-        ? `- Use PATIENT DEMOGRAPHICS, PATIENT FACTS, and CASE JSON only. Speak in first person, 1–3 sentences.
+        ? `- Use PATIENT DEMOGRAPHICS, PATIENT FACTS, and CASE JSON only. Speak in first person, 1–2 short sentences.
 - When asked age, answer with patientDemographics.ageLabel exactly.
 - If isPediatric/speakAsChild, you are a child — never answer with an adult age.
+- NEVER narrate blinking, wincing, voice quality, weakness, or body language. NO asterisks. NO stage directions.
+- Answer only what the doctor asked — direct speech, straight to the point.
 - If a detail is missing, say you are not sure or do not remember — NEVER say "not documented in this case" or "check my records".`
         : band === 'balanced'
           ? `- Speak naturally in first person as the sick patient. Use PATIENT DEMOGRAPHICS, PATIENT FACTS, HPI EXCERPT, and CASE JSON.
 - When asked age, use patientDemographics.ageLabel exactly — never invent a different age.
 - If isPediatric or speakAsChild is true, you are a child patient (not an adult). Use simple words; a parent may be nearby.
+- NEVER narrate your own actions or sensations as prose (e.g. "I blink slowly", "my voice is weak"). NO asterisks. NO *actions*.
+- Give direct answers only — 1–3 sentences max. Do not describe how you look or sound.
 - NEVER say "not documented in this case". If unsure: "I don't remember" or "Nobody asked me that yet".`
-          : `- Fully inhabit ${name}. Natural, conversational first-person answers (1–4 sentences).
+          : `- Fully inhabit ${name}. Natural, conversational first-person answers (1–3 sentences).
+- NEVER narrate blinking, voice weakness, or body language (wrong: "I blink slowly, my voice still weak"). Right: "Yeah, my chest hurts when I breathe."
+- NO asterisks, NO stage directions, NO third-person description of yourself. Answer only what was asked.
 - Use PATIENT DEMOGRAPHICS, HPI EXCERPT, PATIENT FACTS, vitals, and presentation to simulate a believable ED patient.
 - When asked age, answer with patientDemographics.ageLabel exactly. If isPediatric/speakAsChild, never claim to be an adult (30s–50s).
 - Only invent missing social details that fit the same age band (child vs adult) — keep them stable across the interview.
@@ -333,6 +342,13 @@ function buildCaseChatSystemPrompt(caseContext) {
 - For tests not done yet: "They haven't given me those results yet" — not chart-speak.`;
 
     return `You ARE the patient "${name}" in the emergency department. The learner is interviewing you.
+
+OUTPUT FORMAT (mandatory — violations are stripped and break the UI):
+- Reply with ONLY the words you say aloud to the doctor. Nothing else.
+- FORBIDDEN: parentheses, asterisks, stage directions, narrating breaths, voice quality, gestures, or shifting in bed.
+- FORBIDDEN examples: *(I take a shallow breath...)* · (I rub my forehead) · "my voice is weak" · "I blink slowly"
+- GOOD example when asked your name: "My name is Fang Huang."
+- Do not prepend or append action lines. Start with the answer.
 
 SIMULATION CREATIVITY: ${creativity}/100 (${band} mode)
 ${bandRules}
@@ -883,6 +899,7 @@ app.post('/api/case-chat/start', async (req, res) => {
     const systemPrompt = buildCaseChatSystemPrompt(caseContext);
     caseChatSessions.set(sessionId, {
       caseId: String(caseContext.id),
+      chatMode: caseContext.chatMode === 'patient_sim' ? 'patient_sim' : 'tutor',
       creativity,
       temperature,
       messages: [{ role: 'system', content: systemPrompt }],
@@ -1157,9 +1174,33 @@ app.post('/api/case-chat/message', async (req, res) => {
     const reply = await callCaseChatCompletion(key, window, {
       temperature: session.temperature ?? 0.45,
     });
-    session.messages.push({ role: 'assistant', content: reply });
+
+    let clientReply = reply;
+    let stageDirections = '';
+
+    if (session.chatMode === 'patient_sim') {
+      const split = splitPatientReply(reply);
+      clientReply = split.dialogue || reply;
+      stageDirections = split.stageDirections || '';
+      session.messages.push({ role: 'assistant', content: clientReply });
+      if (stageDirections) {
+        void appendPatientStageEntry(session.caseId, {
+          userMessage: text,
+          stageDirections,
+          dialogue: clientReply,
+          raw: split.raw,
+        });
+      }
+    } else {
+      session.messages.push({ role: 'assistant', content: reply });
+    }
+
     session.lastUsed = Date.now();
-    return res.json({ ok: true, reply });
+    return res.json({
+      ok: true,
+      reply: clientReply,
+      ...(stageDirections ? { stageDirections } : {}),
+    });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
   }
@@ -1967,5 +2008,5 @@ if (process.env.SERVE_STATIC === '1') {
 
 app.listen(PORT, '0.0.0.0', () => {
   const host = process.env.SERVE_STATIC === '1' ? '0.0.0.0' : '127.0.0.1';
-  console.log(`Schoonmaker API → http://${host}:${PORT}${process.env.SERVE_STATIC === '1' ? ' (static + API)' : ''}`);
+  console.log(`${APP_PRODUCT_NAME} API → http://${host}:${PORT}${process.env.SERVE_STATIC === '1' ? ' (static + API)' : ''}`);
 });

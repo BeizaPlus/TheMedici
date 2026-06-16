@@ -8,11 +8,27 @@ import {
 } from '../lib/caseChat.js';
 import { loadPersistedChatHistory, logChatMessage } from '../lib/caseUserLog.js';
 import { appendCaseNotesBlock } from '../lib/caseNotes.js';
-import { speakPatientReply } from '../lib/patientSpeech.js';
+import { prefetchPatientReplyAudio, speakPatientReply } from '../lib/patientSpeech.js';
+import { sanitizePatientReplyForDisplay, looksLikePatientStageReply } from '../lib/patientReplyText.js';
 
-function toUiMessages(rows) {
+function normalizeAssistantContent(content, { patientMode = false } = {}) {
+  const text = String(content || '');
+  if (!text) return text;
+  if (patientMode || looksLikePatientStageReply(text)) {
+    return sanitizePatientReplyForDisplay(text) || text;
+  }
+  return text;
+}
+
+function toUiMessages(rows, { patientMode = false } = {}) {
   if (!rows?.length) return [];
-  return rows.map((m) => ({ role: m.role, content: m.content }));
+  return rows.map((m) => ({
+    role: m.role,
+    content:
+      m.role === 'assistant'
+        ? normalizeAssistantContent(m.content, { patientMode })
+        : m.content,
+  }));
 }
 
 export function useCaseChat({
@@ -59,8 +75,8 @@ export function useCaseChat({
     [caseId, playSessionId],
   );
 
-  const applyHistoryRows = useCallback((rows) => {
-    setMessages(toUiMessages(rows));
+  const applyHistoryRows = useCallback((rows, { patientMode = false } = {}) => {
+    setMessages(toUiMessages(rows, { patientMode }));
   }, []);
 
   const reloadHistory = useCallback(async () => {
@@ -156,10 +172,18 @@ export function useCaseChat({
           setSessionId(result.sessionId);
         }
         const reply = result.reply;
-        setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
-        persistMessage('assistant', reply);
-        if (chatMode === 'patient_sim' && reply) {
-          void speakPatientReply({ caseData, text: reply });
+        const displayReply =
+          chatMode === 'patient_sim' ? sanitizePatientReplyForDisplay(reply) : reply;
+        const shown = displayReply || (chatMode === 'patient_sim' ? '' : reply);
+        if (chatMode === 'patient_sim' && !shown) {
+          setError('Patient reply had no speakable dialogue — try asking again.');
+          return null;
+        }
+        setMessages((prev) => [...prev, { role: 'assistant', content: shown || reply }]);
+        persistMessage('assistant', shown || reply);
+        if (chatMode === 'patient_sim' && shown) {
+          void prefetchPatientReplyAudio({ caseData, text: shown });
+          void speakPatientReply({ caseData, text: shown });
         }
         void reloadHistory();
         if (notesMode && caseId) {

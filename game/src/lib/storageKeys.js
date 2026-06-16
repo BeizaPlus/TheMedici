@@ -1,4 +1,4 @@
-/** localStorage keys — prefixed for Schoonmaker. */
+/** localStorage keys — internal prefix (stable across product renames). */
 export const STORAGE = {
   progress: 'schoonmaker_progress',
   theme: 'schoonmaker_theme',

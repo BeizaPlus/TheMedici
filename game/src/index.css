@@ -2503,14 +2503,22 @@ button {
   position: fixed;
 }
 
-.game-sidebar.collapsed {
+/* Legacy non-floating sidebar — full hide when collapsed */
+.game-sidebar.collapsed:not(.floating) {
   opacity: 0;
   border-left-color: transparent;
   pointer-events: none;
 }
 
+/* Play floating dock — fully hidden (double-click collapse control) */
+.game-sidebar.floating.dock-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 /* Play command dock — collapse to case chrome only (header + tabs), not full hide */
-.game-sidebar.floating.collapsed:not(.final-mode-minimized) {
+.game-sidebar.floating.collapsed:not(.final-mode-minimized):not(.dock-hidden) {
   opacity: 1;
   pointer-events: auto;
   height: var(--dock-chrome-h, 168px) !important;
@@ -5723,6 +5731,7 @@ button {
   line-height: 1;
   color: #fff;
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
+  text-align: center;
 }
 
 [data-theme='light'] .welcome-title {
@@ -5732,7 +5741,7 @@ button {
 .welcome-brand {
   display: inline-flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   width: fit-content;
   max-width: 100%;
 }
@@ -5747,8 +5756,8 @@ button {
 }
 
 .welcome-tagline-line {
-  flex: 0 0 auto;
-  width: 72px;
+  flex: 1 1 0;
+  min-width: 0;
   height: 1px;
   background: rgba(255, 220, 160, 0.75);
 }

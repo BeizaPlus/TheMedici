@@ -97,7 +97,8 @@ import IcuMonitorStrip from './IcuMonitorStrip.jsx';
 import ClinicalTextControls from './ClinicalTextControls.jsx';
 import AudioSettingsPanel from './AudioSettingsPanel.jsx';
 import SimulationCreativityControl from './SimulationCreativityControl.jsx';
-import CasePortraitBriefPanel from './CasePortraitBriefPanel.jsx';
+import CasePortraitBriefControl from './CasePortraitBriefControl.jsx';
+import OrderResultsTabPanel from './OrderResultsTabPanel.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
@@ -108,6 +109,13 @@ import {
   resolveStackDecoys,
   stackPillDisplayLabel,
 } from '../lib/stackDecoys.js';
+import PhysicalExamPickerDialog from './PhysicalExamPickerDialog.jsx';
+import {
+  CCS_PHYSICAL_EXAM_SECTIONS,
+  isPhysicalExamPickerTrigger,
+  suggestedPhysicalExamSectionIds,
+} from '../data/physicalExamSections.js';
+import '../styles/physical-exam-picker.css';
 import { pickTeachingVideo, preloadTeachingVideo } from '../lib/caseTeachingVideo.js';
 import { decoyReason, handleDecoyOrder } from '../lib/decoyOrder.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
@@ -115,8 +123,7 @@ import CaseTeachingVideoOverlay from './CaseTeachingVideoOverlay.jsx';
 import TeachMeSceneOverlay from './TeachMeSceneOverlay.jsx';
 import TeachMeComparePanel from './TeachMeComparePanel.jsx';
 import TeachMeCompareLandscape from './TeachMeCompareLandscape.jsx';
-import OrderResultsTabPanel from './OrderResultsTabPanel.jsx';
-import OrderResultsLowerThird from './OrderResultsLowerThird.jsx';
+import { sanitizePatientReplyForDisplay } from '../lib/patientReplyText.js';
 import CompareStepRationaleCard from './CompareStepRationaleCard.jsx';
 import {
   buildTeachCompareReport,
@@ -321,7 +328,7 @@ export default function Play({
   const [teachMeMode, setTeachMeMode] = useState(false);
   const [teachCompareLayout, setTeachCompareLayout] = useState(readTeachCompareLayout);
   const [placementOrder, setPlacementOrder] = useState([]);
-  const [orderCommand, setOrderCommand] = useState('');
+  const [orderCommandQuery, setOrderCommandQuery] = useState('');
   const [extraOrders, setExtraOrders] = useState([]);
   const [decoyAttempts, setDecoyAttempts] = useState([]);
   const [stackSettingsOpen, setStackSettingsOpen] = useState(false);
@@ -333,6 +340,7 @@ export default function Play({
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [vitalsHighlight, setVitalsHighlight] = useState(false);
   const [logOpen, setLogOpen] = useState(false);
+  const [dockResultsExpanded, setDockResultsExpanded] = useState(false);
   const [dockChatReply, setDockChatReply] = useState(null);
   const [dockReplyExpanded, setDockReplyExpanded] = useState(false);
   const [chatPatientMode, setChatPatientMode] = useState(false);
@@ -345,6 +353,10 @@ export default function Play({
   const stackCommandRef = useRef(null);
   const expandedDockHeightRef = useRef(null);
   const [dockCollapsed, setDockCollapsed] = useState(false);
+  const [dockHidden, setDockHidden] = useState(false);
+  const [physicalExamPickerOpen, setPhysicalExamPickerOpen] = useState(false);
+  const collapseClickTimerRef = useRef(null);
+  const dockRestoreCollapsedRef = useRef(false);
   const {
     layout: dockLayout,
     persist: persistDockLayout,
@@ -353,6 +365,7 @@ export default function Play({
     isDragging: dockDragging,
   } = usePlayDockLayout();
   const expandDockPanel = useCallback(() => {
+    setDockHidden(false);
     setDockCollapsed(false);
     if (expandedDockHeightRef.current) {
       persistDockLayout({
@@ -364,6 +377,7 @@ export default function Play({
   }, [dockLayout, persistDockLayout]);
 
   const collapseDockPanel = useCallback(() => {
+    setDockHidden(false);
     expandedDockHeightRef.current = dockLayout.height;
     persistDockLayout({
       ...dockLayout,
@@ -378,6 +392,47 @@ export default function Play({
     if (dockCollapsed) expandDockPanel();
     else collapseDockPanel();
   }, [dockCollapsed, expandDockPanel, collapseDockPanel]);
+
+  const hideDockPanel = useCallback(() => {
+    dockRestoreCollapsedRef.current = dockCollapsed;
+    setDockHidden(true);
+  }, [dockCollapsed]);
+
+  const onCollapsePanelClick = useCallback(() => {
+    if (collapseClickTimerRef.current) {
+      window.clearTimeout(collapseClickTimerRef.current);
+    }
+    collapseClickTimerRef.current = window.setTimeout(() => {
+      collapseClickTimerRef.current = null;
+      if (dockHidden) {
+        setDockHidden(false);
+        if (dockRestoreCollapsedRef.current) collapseDockPanel();
+        else expandDockPanel();
+        return;
+      }
+      toggleDockPanel();
+    }, 280);
+  }, [dockHidden, expandDockPanel, collapseDockPanel, toggleDockPanel]);
+
+  const onCollapsePanelDoubleClick = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (collapseClickTimerRef.current) {
+        window.clearTimeout(collapseClickTimerRef.current);
+        collapseClickTimerRef.current = null;
+      }
+      if (dockHidden) return;
+      hideDockPanel();
+    },
+    [dockHidden, hideDockPanel],
+  );
+
+  useEffect(
+    () => () => {
+      if (collapseClickTimerRef.current) window.clearTimeout(collapseClickTimerRef.current);
+    },
+    [],
+  );
   const {
     width: teachCompareDockWidth,
     startResize: startTeachCompareResize,
@@ -412,6 +467,10 @@ export default function Play({
   const decoyInterventions = useMemo(
     () => resolveStackDecoys(caseData, interventions),
     [caseData, interventions],
+  );
+  const suggestedPhysicalExamIds = useMemo(
+    () => suggestedPhysicalExamSectionIds([...interventions, ...decoyInterventions]),
+    [interventions, decoyInterventions],
   );
   const expectedOrderIds = useMemo(() => interventions.map((iv) => iv.id), [interventions]);
 
@@ -499,40 +558,40 @@ export default function Play({
     [teachMeMode, nextExpectedId, decoyInterventions],
   );
   const commandMatch = useMemo(
-    () => resolveCaseStackOrder(orderCommand, interventions, placed),
-    [interventions, orderCommand, placed],
+    () => resolveCaseStackOrder(orderCommandQuery, interventions, placed),
+    [interventions, orderCommandQuery, placed],
   );
 
   const decoyCommandMatch = useMemo(
-    () => findStackMatchForQuery(orderCommand, decoyInterventions, placed),
-    [decoyInterventions, orderCommand, placed],
+    () => findStackMatchForQuery(orderCommandQuery, decoyInterventions, placed),
+    [decoyInterventions, orderCommandQuery, placed],
   );
 
-  const knownOrderMatch = useMemo(
-    () =>
-      commandMatch
-        ? null
-        : findKnownOrderMatch(orderCommand, ALL_ORDERS, interventions, placed),
-    [commandMatch, orderCommand, interventions, placed],
-  );
+  const knownOrderMatch = useMemo(() => {
+    if (commandMatch || chatPatientMode) return null;
+    return findKnownOrderMatch(orderCommandQuery, ALL_ORDERS, interventions, placed);
+  }, [commandMatch, chatPatientMode, orderCommandQuery, interventions, placed]);
 
   const orderCommandHint = useMemo(() => {
-    if (!orderCommand.trim()) return '';
+    if (!orderCommandQuery.trim()) return '';
+    if (isPhysicalExamPickerTrigger(orderCommandQuery)) {
+      return 'Physical exam — Enter to open section picker';
+    }
     if (commandMatch) return `Match: ${commandMatch.label}`;
     if (!teachMeMode && decoyCommandMatch) return `Match: ${decoyCommandMatch.label}`;
     if (knownOrderMatch) {
       return teachMeMode ? `${knownOrderMatch.name} is not in this case's order set` : '';
     }
     return chatPatientMode ? 'Patient mode — send question' : 'Tutor chat — stethoscope for patient mode';
-  }, [orderCommand, commandMatch, decoyCommandMatch, knownOrderMatch, teachMeMode, chatPatientMode]);
+  }, [orderCommandQuery, commandMatch, decoyCommandMatch, knownOrderMatch, teachMeMode, chatPatientMode]);
 
   const commandUiMatch = commandMatch || (!teachMeMode ? decoyCommandMatch : null);
 
   const orderCommandAutocomplete = useMemo(() => {
-    if (commandUiMatch) return resolveOrderAutocomplete(orderCommand, commandUiMatch);
-    if (knownOrderMatch) return resolveOrderAutocomplete(orderCommand, knownOrderMatch);
+    if (commandUiMatch) return resolveOrderAutocomplete(orderCommandQuery, commandUiMatch);
+    if (knownOrderMatch) return resolveOrderAutocomplete(orderCommandQuery, knownOrderMatch);
     return null;
-  }, [orderCommand, commandUiMatch, knownOrderMatch]);
+  }, [orderCommandQuery, commandUiMatch, knownOrderMatch]);
 
   const orderCommandHintDisplay = useMemo(() => {
     const base = orderCommandHint;
@@ -551,18 +610,20 @@ export default function Play({
 
   useEffect(() => {
     setChatPatientMode(false);
+    setDockResultsExpanded(false);
     setDockChatReply(null);
     setDockReplyExpanded(false);
+    setDockHidden(false);
   }, [caseData.id]);
 
   const isDockChatMode = useMemo(() => {
-    if (!orderCommand.trim()) return false;
-    if (detectLocation(orderCommand)) return false;
+    if (!orderCommandQuery.trim()) return false;
+    if (detectLocation(orderCommandQuery)) return false;
     if (decoyCommandMatch) return false;
     if (commandMatch) return false;
     if (knownOrderMatch && !teachMeMode) return false;
     return true;
-  }, [orderCommand, decoyCommandMatch, commandMatch, knownOrderMatch, teachMeMode]);
+  }, [orderCommandQuery, decoyCommandMatch, commandMatch, knownOrderMatch, teachMeMode]);
 
   const renderStackPill = (iv, isDecoy = false, displayNumOverride = null) => {
     const seqNum = interventions.findIndex((x) => x.id === iv.id);
@@ -753,13 +814,15 @@ export default function Play({
   const [reviewRevealStep, setReviewRevealStep] = useState(0);
   const reviewRevealTimerRef = useRef(null);
   const [infoTab, setInfoTab] = useState(
-    playUiFavorite.infoTab === 'notes' ? 'chat' : playUiFavorite.infoTab,
+    playUiFavorite.infoTab === 'notes' || playUiFavorite.infoTab === 'chat'
+      ? 'treatment'
+      : playUiFavorite.infoTab,
   );
   const commandUiLocked = teachMeMode || reviewed || showPostVideoReview || showThanksVideo;
 
   useEffect(() => {
     if (commandUiLocked && infoTab === 'treatment') {
-      setInfoTab('chat');
+      setInfoTab('hpi');
     }
   }, [commandUiLocked, infoTab]);
 
@@ -942,6 +1005,13 @@ export default function Play({
     }, [logTimeline, threadIsPlayCase]),
   });
 
+  useEffect(() => {
+    if (infoTab === 'chat') {
+      setDockReplyExpanded(false);
+      void caseChat.reloadHistory();
+    }
+  }, [infoTab, caseChat.reloadHistory]);
+
   const threadChatCases = useMemo(() => {
     const activity = listCasesWithChatActivity({ limit: 20 });
     const currentId = String(caseData.id);
@@ -963,13 +1033,6 @@ export default function Play({
       return tb - ta;
     });
   }, [caseData.id, caseData.ccsNumber, caseData.title, notesVersion, caseChat.messages.length]);
-
-  useEffect(() => {
-    if (infoTab === 'chat') {
-      setDockReplyExpanded(false);
-      void caseChat.reloadHistory();
-    }
-  }, [infoTab, caseChat.reloadHistory]);
 
   const misses = Math.max(0, attempts - correctAttempts);
   const lifePct = useMemo(
@@ -1473,6 +1536,11 @@ export default function Play({
         pinPayload,
       ]);
 
+      if (!silentDecoy) {
+        setOrderResultIvId(iv.id);
+        setDockResultsExpanded(true);
+      }
+
       if (!teachMeMode) {
         showToast(viaCommand ? `Ordered ${iv.label}` : `Placed ${iv.label}`, 'ok');
         if (!silentDecoy) {
@@ -1573,140 +1641,311 @@ export default function Play({
     [careUnit, logTimeline],
   );
 
-  const submitOrderCommand = useCallback(() => {
-    const t = normCommandText(orderCommand);
-    if (!t) {
-      showToast('Type an order first', 'bad');
-      return;
-    }
-    const loc = detectLocation(orderCommand);
-    if (loc) {
-      switchCareUnit(loc);
-      setOrderCommand('');
-      return;
-    }
-    const s = commandMatch;
-    if (s) {
-      if (placed[s.id]) {
-        showToast(`Already ordered: ${s.label}`, '');
-        setOrderCommand('');
-        return;
-      }
-      if (teachMeMode && s.id !== nextExpectedId) {
-        const nextIv = nextExpectedId ? interventionById[nextExpectedId] : null;
-        showToast(nextIv ? `Teach Me: next is ${nextIv.label}` : 'Teach Me: all stacks placed', 'bad');
-        setOrderCommand('');
-        return;
-      }
-      setPlaced((p) => ({ ...p, [s.id]: s.correct_zone }));
-      setPlacementOrder((prev) => (prev.includes(s.id) ? prev : [...prev, s.id]));
-      setPins((prev) => [
-        ...prev.filter((pin) => pin.ivId !== s.id && pin.label !== s.label),
-        { zoneId: s.correct_zone, label: s.label, ivId: s.id, ok: null },
-      ]);
-      setReviewed(false);
-      setReviewResults({});
-      setOrderReview({});
-      setReviewedAt(null);
-      setWhyPanel(null);
-      setTeachFocusId(null);
-      setExpandedStackId(s.id);
-      setOrderCommand('');
-      showToast(teachMeMode ? `Ordered ${s.label}` : 'Order placed.', teachMeMode ? 'ok' : 'ok');
-      logTimeline({
-        type: 'stack',
-        stackId: s.id,
-        label: s.label,
-        correct: true,
-        method: 'command',
-      });
-      return;
-    }
-    const decoy = decoyCommandMatch;
-    if (decoy) {
-      const input = orderCommand.trim() || decoy.label;
-      setOrderCommand('');
-      void processDecoyOrder({ ...decoy, isDecoy: true }, input);
-      return;
-    }
-    const alreadyOnCase = findStackMatchForQuery(orderCommand, interventions, placed, {
-      includePlaced: true,
-    });
-    if (alreadyOnCase && placed[alreadyOnCase.id]) {
-      showToast(`Already ordered: ${alreadyOnCase.label}`, '');
-      setOrderCommand('');
-      return;
-    }
-    if (knownOrderMatch) {
-      if (teachMeMode) {
-        showToast(`${knownOrderMatch.name} is not in this case's order set`, '');
-        setOrderCommand('');
-        return;
-      }
-      const label = knownOrderMatch.name;
-      setExtraOrders((prev) => {
-        const key = label.toLowerCase();
-        if (prev.some((o) => o.name.toLowerCase() === key)) return prev;
-        return [...prev, { name: label, category: knownOrderMatch.category }];
-      });
-      setOrderCommand('');
-      setReviewed(false);
-      setReviewResults({});
-      setOrderReview({});
-      setReviewedAt(null);
-      showToast(`Ordered ${label}`, 'ok');
-      logTimeline({ type: 'extra_order', label, category: knownOrderMatch.category });
-      return;
-    }
-    if (caseChat.available === false) {
-      showToast('Chat unavailable — add DEEPSEEK_API_KEY or OPENAI_API_KEY to .env', 'bad');
-      return;
-    }
-    const cmd = parseChatModeCommand(orderCommand);
-    if (cmd) {
-      if (cmd.patientMode) {
-        setChatPatientMode(true);
-      } else if (!cmd.remainder) {
-        setChatPatientMode(false);
-        setOrderCommand('');
-        return;
-      } else {
-        setChatPatientMode(false);
-      }
-    }
-    const question = (cmd?.remainder || orderCommand).trim();
-    if (!question) {
-      setOrderCommand('');
-      return;
-    }
-    const chatMode = (cmd?.patientMode || chatPatientModeRef.current) ? 'patient_sim' : 'tutor';
-    setOrderCommand('');
-    void (async () => {
-      const reply = await caseChat.sendMessage(question, { chatMode });
-      if (reply) {
-        logTimeline({ type: 'chat', role: 'user', text: question });
-        if (infoTab !== 'chat') {
-          setDockChatReply({ question, answer: reply });
-          setDockReplyExpanded(true);
+  const applyPhysicalExamSections = useCallback(
+    (sectionIds) => {
+      const labels = sectionIds
+        .map((id) => CCS_PHYSICAL_EXAM_SECTIONS.find((s) => s.id === id)?.orderLabel)
+        .filter(Boolean);
+      if (!labels.length) return;
+
+      let nextPlaced = { ...placed };
+      const orderIds = [];
+      const pinAdds = [];
+      const extras = [];
+      const events = [];
+      let placedCount = 0;
+
+      for (const label of labels) {
+        const stackMatch = resolveCaseStackOrder(label, interventions, nextPlaced);
+        if (stackMatch) {
+          if (nextPlaced[stackMatch.id]) continue;
+          if (teachMeMode && stackMatch.id !== nextExpectedId) continue;
+          nextPlaced[stackMatch.id] = stackMatch.correct_zone;
+          orderIds.push(stackMatch.id);
+          pinAdds.push({
+            zoneId: stackMatch.correct_zone,
+            label: stackMatch.label,
+            ivId: stackMatch.id,
+            ok: null,
+          });
+          events.push({
+            type: 'stack',
+            stackId: stackMatch.id,
+            label: stackMatch.label,
+            correct: true,
+            method: 'command',
+          });
+          placedCount += 1;
+          continue;
         }
-      } else if (caseChat.error) {
-        showToast(caseChat.error, 'bad');
+
+        const decoy = findStackMatchForQuery(label, decoyInterventions, nextPlaced);
+        if (decoy) {
+          if (nextPlaced[decoy.id]) continue;
+          nextPlaced[decoy.id] = decoy.correct_zone || 'zone-monitor';
+          pinAdds.push({
+            zoneId: decoy.correct_zone || 'zone-monitor',
+            label: decoy.label,
+            ivId: decoy.id,
+            ok: null,
+          });
+          events.push({ type: 'extra_order', label: decoy.label });
+          placedCount += 1;
+          continue;
+        }
+
+        const key = label.toLowerCase();
+        if (extraOrders.some((o) => o.name.toLowerCase() === key)) continue;
+
+        extras.push({ name: label, category: 'physical_exam' });
+        pinAdds.push({
+          zoneId: 'zone-blood',
+          label,
+          ivId: `phys-exam-${key.replace(/[^a-z0-9]+/g, '-')}`,
+          ok: null,
+        });
+        events.push({ type: 'extra_order', label, category: 'physical_exam' });
+        placedCount += 1;
       }
-    })();
-  }, [
-    commandMatch,
-    decoyCommandMatch,
-    knownOrderMatch,
-    orderCommand,
-    teachMeMode,
-    nextExpectedId,
-    interventionById,
-    logTimeline,
-    processDecoyOrder,
-    switchCareUnit,
-    caseChat,
-    infoTab,
-  ]);
+
+      setPhysicalExamPickerOpen(false);
+      setOrderCommandQuery('');
+
+      if (placedCount === 0) {
+        showToast('No new exam sections to place', '');
+        return;
+      }
+
+      setPlaced(nextPlaced);
+      if (orderIds.length) {
+        setPlacementOrder((prev) => {
+          const next = [...prev];
+          for (const id of orderIds) {
+            if (!next.includes(id)) next.push(id);
+          }
+          return next;
+        });
+      }
+      if (extras.length) {
+        setExtraOrders((prev) => [...prev, ...extras]);
+      }
+      if (pinAdds.length) {
+        setPins((prev) => {
+          let next = [...prev];
+          for (const pin of pinAdds) {
+            next = next.filter((p) => p.ivId !== pin.ivId && p.label !== pin.label);
+            next.push(pin);
+          }
+          return next;
+        });
+      }
+      setReviewed(false);
+      setReviewResults({});
+      setOrderReview({});
+      setReviewedAt(null);
+      for (const event of events) {
+        logTimeline(event);
+      }
+      const focusIvId =
+        orderIds[orderIds.length - 1] ||
+        pinAdds.find((p) => p.ivId && !String(p.ivId).startsWith('phys-exam-'))?.ivId ||
+        pinAdds[pinAdds.length - 1]?.ivId;
+      if (focusIvId) {
+        setOrderResultIvId(focusIvId);
+        setDockResultsExpanded(true);
+      }
+      showToast(
+        `Placed ${placedCount} physical exam section${placedCount === 1 ? '' : 's'}`,
+        'ok',
+      );
+    },
+    [
+      placed,
+      extraOrders,
+      interventions,
+      decoyInterventions,
+      teachMeMode,
+      nextExpectedId,
+      logTimeline,
+    ],
+  );
+
+  const submitOrderCommand = useCallback(
+    (commandText) => {
+      const raw = String(commandText ?? orderCommandQuery ?? '');
+      const t = normCommandText(raw);
+      if (!t) {
+        showToast('Type an order first', 'bad');
+        return;
+      }
+      const loc = detectLocation(raw);
+      if (loc) {
+        switchCareUnit(loc);
+        setOrderCommandQuery('');
+        return;
+      }
+      if (isPhysicalExamPickerTrigger(raw)) {
+        setPhysicalExamPickerOpen(true);
+        setOrderCommandQuery('');
+        return;
+      }
+      const stackMatch = resolveCaseStackOrder(raw, interventions, placed);
+      if (stackMatch) {
+        if (placed[stackMatch.id]) {
+          showToast(`Already ordered: ${stackMatch.label}`, '');
+          setOrderCommandQuery('');
+          return;
+        }
+        if (teachMeMode && stackMatch.id !== nextExpectedId) {
+          const nextIv = nextExpectedId ? interventionById[nextExpectedId] : null;
+          showToast(nextIv ? `Teach Me: next is ${nextIv.label}` : 'Teach Me: all stacks placed', 'bad');
+          setOrderCommandQuery('');
+          return;
+        }
+        setPlaced((p) => ({ ...p, [stackMatch.id]: stackMatch.correct_zone }));
+        setPlacementOrder((prev) => (prev.includes(stackMatch.id) ? prev : [...prev, stackMatch.id]));
+        setPins((prev) => [
+          ...prev.filter((pin) => pin.ivId !== stackMatch.id && pin.label !== stackMatch.label),
+          { zoneId: stackMatch.correct_zone, label: stackMatch.label, ivId: stackMatch.id, ok: null },
+        ]);
+        setReviewed(false);
+        setReviewResults({});
+        setOrderReview({});
+        setReviewedAt(null);
+        setWhyPanel(null);
+        setTeachFocusId(null);
+        setExpandedStackId(stackMatch.id);
+        setOrderCommandQuery('');
+        showToast(teachMeMode ? `Ordered ${stackMatch.label}` : 'Order placed.', 'ok');
+        logTimeline({
+          type: 'stack',
+          stackId: stackMatch.id,
+          label: stackMatch.label,
+          correct: true,
+          method: 'command',
+        });
+        return;
+      }
+      const decoy = findStackMatchForQuery(raw, decoyInterventions, placed);
+      if (decoy) {
+        const input = raw.trim() || decoy.label;
+        setOrderCommandQuery('');
+        void processDecoyOrder({ ...decoy, isDecoy: true }, input);
+        return;
+      }
+      const alreadyOnCase = findStackMatchForQuery(raw, interventions, placed, {
+        includePlaced: true,
+      });
+      if (alreadyOnCase && placed[alreadyOnCase.id]) {
+        showToast(`Already ordered: ${alreadyOnCase.label}`, '');
+        setOrderCommandQuery('');
+        return;
+      }
+      const knownMatch =
+        findKnownOrderMatch(raw, ALL_ORDERS, interventions, placed);
+      if (knownMatch) {
+        if (teachMeMode) {
+          showToast(`${knownMatch.name} is not in this case's order set`, '');
+          setOrderCommandQuery('');
+          return;
+        }
+        const label = knownMatch.name;
+        setExtraOrders((prev) => {
+          const key = label.toLowerCase();
+          if (prev.some((o) => o.name.toLowerCase() === key)) return prev;
+          return [...prev, { name: label, category: knownMatch.category }];
+        });
+        setOrderCommandQuery('');
+        setReviewed(false);
+        setReviewResults({});
+        setOrderReview({});
+        setReviewedAt(null);
+        showToast(`Ordered ${label}`, 'ok');
+        logTimeline({ type: 'extra_order', label, category: knownMatch.category });
+        return;
+      }
+      if (caseChat.available === false) {
+        showToast('Chat unavailable — add DEEPSEEK_API_KEY or OPENAI_API_KEY to .env', 'bad');
+        return;
+      }
+      const cmd = parseChatModeCommand(raw);
+      if (cmd) {
+        if (cmd.patientMode) {
+          setChatPatientMode(true);
+        } else if (!cmd.remainder) {
+          setChatPatientMode(false);
+          setOrderCommandQuery('');
+          return;
+        } else {
+          setChatPatientMode(false);
+          setOrderCommandQuery('');
+          void caseChat.appendNote?.(cmd.remainder, { header: 'Note' });
+          logTimeline({ type: 'note', text: cmd.remainder });
+          return;
+        }
+      }
+      const question = (cmd?.remainder || raw).trim();
+      if (!question) {
+        setOrderCommandQuery('');
+        return;
+      }
+      const chatMode = (cmd?.patientMode || chatPatientModeRef.current) ? 'patient_sim' : 'tutor';
+      setOrderCommandQuery('');
+      void (async () => {
+        const reply = await caseChat.sendMessage(question, { chatMode });
+        if (reply) {
+          logTimeline({ type: 'chat', role: 'user', text: question });
+          const displayAnswer =
+            chatMode === 'patient_sim' ? sanitizePatientReplyForDisplay(reply) : reply;
+          if (infoTab !== 'chat') {
+            setDockChatReply({ question, answer: displayAnswer || reply });
+            setDockReplyExpanded(true);
+          }
+        } else if (caseChat.error) {
+          showToast(caseChat.error, 'bad');
+        }
+      })();
+    },
+    [
+      orderCommandQuery,
+      teachMeMode,
+      nextExpectedId,
+      interventionById,
+      interventions,
+      placed,
+      decoyInterventions,
+      logTimeline,
+      processDecoyOrder,
+      switchCareUnit,
+      caseChat,
+      infoTab,
+    ],
+  );
+
+  const dockResultsPanel = useMemo(
+    () => (
+      <OrderResultsTabPanel
+        resultRows={placedResultRows}
+        activeIvId={orderResultIvId}
+        onSelectIvId={setOrderResultIvId}
+        caseData={caseData}
+        caseFlow={caseFlow}
+        portraitSrc={regenSrc || ''}
+        onPrintStatus={(msg, type) => showToast(msg, type)}
+        teachMeMode={teachMeMode}
+        compact
+        hideKicker
+      />
+    ),
+    [placedResultRows, orderResultIvId, caseData, caseFlow, regenSrc, teachMeMode],
+  );
+
+  const dockOrderContextLabel = useMemo(() => {
+    const row =
+      placedResultRows.find((r) => r.iv.id === orderResultIvId) ||
+      (placedResultRows.length ? placedResultRows[placedResultRows.length - 1] : null);
+    return row ? neutralStackOrderName(row.iv.label) : '';
+  }, [placedResultRows, orderResultIvId]);
 
   const computePostVideoRows = useCallback((override = null) => {
     const expectedOrder = interventions.map((iv) => iv.id);
@@ -2822,22 +3061,10 @@ export default function Play({
               onCreativityChange={() => void caseChat.resetSession?.()}
             />
           </div>
-          <div className="settings-popover-block">
-            <CasePortraitBriefPanel
-              caseData={caseData}
-              compact
-              onBusyChange={setPortraitRegenBusy}
-              onRegenerated={() => {
-                setPortraitReady((n) => n + 1);
-                showToast('Patient portrait updated', 'ok');
-              }}
-              onError={(msg) => showToast(msg, 'bad')}
-            />
-          </div>
           <AudioSettingsPanel embedded showGameSounds={false} />
         </div>
       }
-      onToggleExam={() => setActiveDrawer((d) => (d === 'exam' ? null : 'exam'))}
+      onToggleExam={() => setPhysicalExamPickerOpen(true)}
       onToggleHistory={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
       onOpenStacks={() => {
         if (commandUiLocked) return;
@@ -2846,10 +3073,7 @@ export default function Play({
       }}
       onToggleChat={() => {
         expandDockPanel();
-        setInfoTab((tab) => {
-          if (tab === 'chat') return commandUiLocked ? 'chat' : 'treatment';
-          return 'chat';
-        });
+        setInfoTab((tab) => (tab === 'chat' ? 'treatment' : 'chat'));
       }}
       onRestart={restartCurrentCase}
       onToggleCues={() => setShowCues((v) => !v)}
@@ -2874,12 +3098,38 @@ export default function Play({
         <button
           type="button"
           className="panel-toggle-btn"
-          onClick={toggleDockPanel}
-          title={dockCollapsed ? 'Expand panel' : 'Collapse panel'}
-          aria-label={dockCollapsed ? 'Expand panel' : 'Collapse panel'}
+          onClick={onCollapsePanelClick}
+          onDoubleClick={onCollapsePanelDoubleClick}
+          title={
+            dockHidden
+              ? 'Show panel (single click)'
+              : dockCollapsed
+                ? 'Expand panel · double-click to hide'
+                : 'Collapse panel · double-click to hide'
+          }
+          aria-label={
+            dockHidden
+              ? 'Show panel'
+              : dockCollapsed
+                ? 'Expand panel'
+                : 'Collapse panel'
+          }
         >
-          {dockCollapsed ? <IconLayoutSidebarRightExpand /> : <IconLayoutSidebarRightCollapse />}
+          {dockHidden || dockCollapsed ? (
+            <IconLayoutSidebarRightExpand />
+          ) : (
+            <IconLayoutSidebarRightCollapse />
+          )}
         </button>
+        <CasePortraitBriefControl
+          caseData={caseData}
+          onBusyChange={setPortraitRegenBusy}
+          onRegenerated={() => {
+            setPortraitReady((n) => n + 1);
+            showToast('Patient portrait updated', 'ok');
+          }}
+          onError={(msg) => showToast(msg, 'bad')}
+        />
         <button
           type="button"
           className={`panel-chat-btn${infoTab === 'chat' ? ' active' : ''}`}
@@ -2961,8 +3211,8 @@ export default function Play({
             />
           </div>
           <SceneOrderCommandDock
-            orderCommand={orderCommand}
-            onOrderCommandChange={setOrderCommand}
+            resetKey={caseData.id}
+            onQueryChange={setOrderCommandQuery}
             onSubmit={submitOrderCommand}
             hint={orderCommandHintDisplay}
             hasMatch={Boolean(commandUiMatch)}
@@ -2970,9 +3220,10 @@ export default function Play({
             isChatMode={isDockChatMode}
             chatBusy={caseChat.busy}
             chatOpen={infoTab === 'chat'}
-            autocompleteText={orderCommandAutocomplete}
-            onScreenshot={capturePlayScreenshot}
-            captureBusy={captureBusy}
+            resultsExpanded={dockResultsExpanded}
+            resultsPanel={placedResultRows.length > 0 ? dockResultsPanel : null}
+            orderContextLabel={dockOrderContextLabel}
+            onToggleOrderContext={() => setDockResultsExpanded((v) => !v)}
             quickReply={dockChatReply}
             replyExpanded={dockReplyExpanded}
             onToggleReplyExpanded={() => setDockReplyExpanded((v) => !v)}
@@ -2984,6 +3235,9 @@ export default function Play({
               expandDockPanel();
               setInfoTab('chat');
             }}
+            autocompleteText={orderCommandAutocomplete}
+            onScreenshot={capturePlayScreenshot}
+            captureBusy={captureBusy}
             patientMode={chatPatientMode}
             onPatientModeChange={setChatPatientMode}
           />
@@ -3186,10 +3440,8 @@ export default function Play({
                   showToast('Place this order on the patient first', '');
                   return;
                 }
-                expandDockPanel();
-                setExpandedStackId(p.ivId);
                 setOrderResultIvId(p.ivId);
-                setInfoTab('results');
+                setDockResultsExpanded(true);
               }}
               style={{
                 left: `${leftPct}%`,
@@ -3201,16 +3453,6 @@ export default function Play({
             </div>
           );
         })}
-        <OrderResultsLowerThird
-          resultRows={placedResultRows}
-          activeIvId={orderResultIvId}
-          onSelectIvId={setOrderResultIvId}
-          caseData={caseData}
-          caseFlow={caseFlow}
-          portraitSrc={regenSrc || ''}
-          onPrintStatus={(msg, type) => showToast(msg, type)}
-          teachMeMode={teachMeMode}
-        />
         {compareRationaleIvId && interventionById[compareRationaleIvId] && (
           <CompareStepRationaleCard
             intervention={interventionById[compareRationaleIvId]}
@@ -3571,7 +3813,7 @@ export default function Play({
 
       <aside
         ref={dockRef}
-        className={`game-sidebar floating dock-return-zone ${dockCollapsed ? 'collapsed' : ''} ${dockDragging ? 'dragging' : ''} ${finalMode ? 'final-mode-minimized' : ''}`}
+        className={`game-sidebar floating dock-return-zone ${dockHidden ? 'dock-hidden' : ''} ${dockCollapsed ? 'collapsed' : ''} ${dockDragging ? 'dragging' : ''} ${finalMode ? 'final-mode-minimized' : ''}`}
         style={{
           left: `${dockLayout.x}px`,
           top: `${dockLayout.y}px`,
@@ -3625,7 +3867,6 @@ export default function Play({
             }
             defaultTab="treatment"
             showTreatmentTab
-            showResultsTab
             showChatTab
             activeTab={infoTab}
             onTabChange={(tab) => {
@@ -3643,26 +3884,6 @@ export default function Play({
             }}
             readState={readState}
             readLabel="Read case"
-            chatPanel={
-              <PlayChatNotesTabPanel
-                chat={caseChat}
-                caseData={threadViewCase}
-                caseId={threadViewCase.id}
-                playCaseId={caseData.id}
-                caseRailItems={threadChatCases}
-                threadViewCaseId={threadViewCaseId}
-                onSelectThreadCase={setThreadViewCaseId}
-                caseRecording={threadIsPlayCase ? caseRecording : null}
-                recordingsVersion={recordingsVersion}
-                notesVersion={notesVersion}
-                onTimelineNote={(text) => logTimeline({ type: 'note', text })}
-                onTimelineChat={(text) => logTimeline({ type: 'chat', role: 'user', text })}
-                onRecordingSaved={() => showToast('Voice note saved', 'ok')}
-                patientMode={chatPatientMode}
-                onPatientModeChange={setChatPatientMode}
-                defaultChatTarget="tutor"
-              />
-            }
             treatmentPanel={
               <>
                 <p
@@ -3714,16 +3935,22 @@ export default function Play({
                 )}
               </>
             }
-            resultsPanel={
-              <OrderResultsTabPanel
-                resultRows={placedResultRows}
-                activeIvId={orderResultIvId}
-                onSelectIvId={setOrderResultIvId}
-                caseData={caseData}
-                caseFlow={caseFlow}
-                portraitSrc={regenSrc || ''}
-                onPrintStatus={(msg, type) => showToast(msg, type)}
-                teachMeMode={teachMeMode}
+            chatPanel={
+              <PlayChatNotesTabPanel
+                chat={caseChat}
+                caseData={threadViewCase}
+                caseId={threadViewCase.id}
+                playCaseId={caseData.id}
+                caseRailItems={threadChatCases}
+                threadViewCaseId={threadViewCaseId}
+                onSelectThreadCase={setThreadViewCaseId}
+                caseRecording={threadIsPlayCase ? caseRecording : null}
+                notesVersion={notesVersion}
+                onTimelineNote={(text) => logTimeline({ type: 'note', text })}
+                onTimelineChat={(text) => logTimeline({ type: 'chat', role: 'user', text })}
+                patientMode={chatPatientMode}
+                onPatientModeChange={setChatPatientMode}
+                defaultChatTarget="tutor"
               />
             }
           />
@@ -3751,6 +3978,13 @@ export default function Play({
         intervention={whyPanel?.iv}
         ok={whyPanel?.ok}
         onClose={() => setWhyPanel(null)}
+      />
+
+      <PhysicalExamPickerDialog
+        open={physicalExamPickerOpen}
+        onClose={() => setPhysicalExamPickerOpen(false)}
+        onApply={applyPhysicalExamSections}
+        suggestedIds={suggestedPhysicalExamIds}
       />
 
       <div className={`toast ${toast.type} ${toast.msg ? 'show' : ''}`}>{toast.msg}</div>

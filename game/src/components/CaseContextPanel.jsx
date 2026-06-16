@@ -18,9 +18,11 @@ const CASE_TAB_DEFS = [
   { id: 'chat', label: 'Thread', Icon: IconMessage },
 ];
 
+import { APP_PRODUCT_NAME } from '../lib/appBrand.js';
+
 export default function CaseContextPanel({
   caseData,
-  brandName = 'Schoonmaker',
+  brandName = APP_PRODUCT_NAME,
   hpiText = '',
   examSummary = '',
   showStats = false,

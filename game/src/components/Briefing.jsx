@@ -13,7 +13,7 @@ import {
 import { getPresentationHistory } from '../lib/casePresentation.js';
 import { clearCaseRegenImage, ensureCasePortrait, readCaseRegenImage } from '../lib/patientRegen.js';
 import { CASE_AVATAR_EVENT } from '../lib/caseAvatar.js';
-import CasePortraitBriefPanel from './CasePortraitBriefPanel.jsx';
+import CasePortraitBriefControl from './CasePortraitBriefControl.jsx';
 import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { unlockAmbience } from '../lib/audio.js';
@@ -370,6 +370,16 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
         >
           <IconDoorExit />
         </button>
+        <CasePortraitBriefControl
+          caseData={caseData}
+          onBusyChange={setPortraitRegenBusy}
+          onRegenerated={(result) => {
+            if (result?.dataUrl) setRegenSrc(result.dataUrl);
+            setPortraitRegenMsg('Portrait updated.');
+            window.setTimeout(() => setPortraitRegenMsg(''), 4000);
+          }}
+          onError={(msg) => setPortraitRegenMsg(msg)}
+        />
       </div>
 
       <div className="briefing-scene-wrap">
@@ -499,17 +509,6 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
                 {caseData.objective && (
                   <p className="briefing-objective">Objective — {caseData.objective}</p>
                 )}
-                <CasePortraitBriefPanel
-                  caseData={caseData}
-                  compact
-                  onBusyChange={setPortraitRegenBusy}
-                  onRegenerated={(result) => {
-                    if (result?.dataUrl) setRegenSrc(result.dataUrl);
-                    setPortraitRegenMsg('Portrait updated.');
-                    window.setTimeout(() => setPortraitRegenMsg(''), 4000);
-                  }}
-                  onError={(msg) => setPortraitRegenMsg(msg)}
-                />
                 {portraitRegenMsg && !portraitRegenBusy && (
                   <p className="portrait-brief-status portrait-brief-status--briefing" role="status">
                     {portraitRegenMsg}

@@ -1,5 +1,7 @@
 /** Parse CCS-style vitals blocks and free-text vitals into structured numbers. */
 
+import { clampVitals } from './vitalsLimits.js';
+
 function pickNum(text, re, fallback) {
   const m = text?.match(re);
   if (!m?.[1]) return fallback;
@@ -32,7 +34,7 @@ export function parseCcsVitalsBlock(vitalsText = '') {
   const spo2 = pickNum(t, /(?:spo2|o2 sat(?:uration)?)[^\d]{0,8}(\d{2,3})/i, 96);
   const lactate = pickNum(t, /lactate[^\d]{0,8}(\d(?:\.\d)?)/i, 1.8);
 
-  return { sbp, dbp, hr, rr, temp, spo2, lactate };
+  return clampVitals({ sbp, dbp, hr, rr, temp, spo2, lactate });
 }
 
 const CATEGORY_VITALS = {
@@ -52,7 +54,7 @@ const CATEGORY_VITALS = {
 export function vitalsForCategory(category, seed = 0) {
   const base = { ...(CATEGORY_VITALS[category] || CATEGORY_VITALS['Emergency Medicine']) };
   const jitter = (n, spread) => Math.max(1, Math.round(n + ((seed % 7) - 3) * spread));
-  return {
+  return clampVitals({
     sbp: jitter(base.sbp, 3),
     dbp: jitter(base.dbp, 2),
     hr: jitter(base.hr, 4),
@@ -60,7 +62,7 @@ export function vitalsForCategory(category, seed = 0) {
     temp: Math.round((base.temp + ((seed % 5) - 2) * 0.2) * 10) / 10,
     spo2: jitter(base.spo2, 1),
     lactate: Math.round((base.lactate + ((seed % 3) - 1) * 0.3) * 10) / 10,
-  };
+  });
 }
 
 export function parseVitalsFromText(vitalsText = '', category = 'Emergency Medicine', seed = 0) {

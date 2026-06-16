@@ -705,6 +705,82 @@
   border-radius: 0;
 }
 
+.scene-order-command-dock--chat-open .scene-order-command-form.stack-command-ui {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.scene-order-command-dock--slide-open .scene-order-command-form.stack-command-ui {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.scene-order-command-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  max-height: min(62vh, 520px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+.scene-order-command-results {
+  flex: 0 0 auto;
+}
+
+.scene-order-command-results .order-results-tab-panel--dock {
+  padding: 8px 10px 10px;
+  gap: 8px;
+}
+
+.scene-order-command-results .order-results-tab-kicker {
+  margin: 0;
+}
+
+.scene-order-command-results .order-result-tab-card--dock {
+  max-height: min(36vh, 280px);
+}
+
+.scene-order-command-results + .scene-order-command-chat {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.scene-order-command-chat {
+  max-height: min(44vh, 380px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  border-bottom: none;
+}
+
+.scene-order-command-chat .case-session-thread {
+  min-height: 0;
+  flex: 1;
+}
+
+.scene-order-command-chat .case-chat-messages--compact {
+  max-height: min(40vh, 340px);
+  overflow-y: auto;
+  padding: 6px 8px 4px;
+}
+
+.scene-order-command-chat .case-chat-bubble {
+  font-size: 0.82rem;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+}
+
+.scene-order-command-chat .case-chat-bubble-actions {
+  margin-top: 4px;
+}
+
+.scene-order-command-icon-btn.is-active {
+  color: var(--gold);
+  background: rgba(232, 184, 75, 0.14);
+}
+
 .stack-command-btn--chat {
   display: inline-flex;
   align-items: center;
@@ -749,6 +825,23 @@
 .scene-order-command-reply-body {
   padding: 0 12px 12px;
   animation: scene-order-reply-expand 0.24s ease-out;
+}
+
+.scene-order-command-context-body {
+  padding-top: 4px;
+}
+
+.scene-order-command-context-body .order-results-tab-panel--dock {
+  padding: 0;
+  gap: 8px;
+}
+
+.scene-order-command-context-body .order-result-tab-card--dock {
+  max-height: min(32vh, 240px);
+}
+
+.scene-order-command-context + .scene-order-command-context {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 @keyframes scene-order-reply-expand {
@@ -1178,13 +1271,19 @@
   position: fixed;
 }
 
-.game-sidebar.collapsed {
+.game-sidebar.collapsed:not(.floating) {
   opacity: 0;
   border-left-color: transparent;
   pointer-events: none;
 }
 
-.game-sidebar.floating.collapsed:not(.final-mode-minimized) {
+.game-sidebar.floating.dock-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.game-sidebar.floating.collapsed:not(.final-mode-minimized):not(.dock-hidden) {
   opacity: 1;
   pointer-events: auto;
   height: var(--dock-chrome-h, 168px) !important;

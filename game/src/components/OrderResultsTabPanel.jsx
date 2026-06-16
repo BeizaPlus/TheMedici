@@ -10,14 +10,18 @@ export default function OrderResultsTabPanel({
   portraitSrc = '',
   onPrintStatus,
   teachMeMode = false,
+  compact = false,
+  hideKicker = false,
 }) {
   const hasRows = resultRows.length > 0;
   const activeRow =
     resultRows.find((row) => row.iv.id === activeIvId) || (hasRows ? resultRows[0] : null);
 
   return (
-    <div className="order-results-tab-panel">
-      <p className="order-results-tab-kicker">Lab and intervention results</p>
+    <div className={`order-results-tab-panel${compact ? ' order-results-tab-panel--dock' : ''}`}>
+      {!hideKicker && (
+        <p className="order-results-tab-kicker">Lab and intervention results</p>
+      )}
 
       {!hasRows && (
         <p className="order-results-tab-empty">
@@ -51,7 +55,7 @@ export default function OrderResultsTabPanel({
               caseFlow={caseFlow}
               portraitSrc={portraitSrc}
               onPrintStatus={onPrintStatus}
-              className="order-result-tab-card"
+              className={`order-result-tab-card${compact ? ' order-result-tab-card--dock' : ''}`}
               hideClose
               teachMeMode={teachMeMode}
             />

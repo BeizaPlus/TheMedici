@@ -1,0 +1,47 @@
+---
+description: Do not implement until feature is understood; discuss architecture changes with Steve first
+alwaysApply: true
+---
+
+# Agent implementation guard (Steve)
+
+## 99% certainty before code
+
+Do **not** implement a feature unless you are **≥99% sure** you understand:
+
+- What Steve asked for (not what a prior agent assumed)
+- Where it lives in the UI today
+- Whether it replaces, extends, or duplicates existing behavior
+
+If ambiguous: **ask one short clarifying question** or propose **two options in plain language** and wait. Do not “helpfully” ship a parallel UI path.
+
+## Architecture changes — discuss first
+
+Stop and discuss with Steve **before coding** when the change would:
+
+- Add or remove **tabs**, **panels**, **docks**, or **entry points** to the same workflow
+- Split one surface into two (e.g. chat in sidebar **and** scene dock)
+- Move state between sidebar ↔ scene ↔ full-page modes
+- Change default navigation (Welcome → Briefing → Play → Differential)
+- Introduce a new data path (localStorage shape, API route, case JSON field) used across modes
+
+**Allowed without a design chat:** bug fixes, copy, synonyms, CSS within an existing surface, prompt/cache tweaks that do not add UI chrome.
+
+## Play mode — canonical chrome (do not regress)
+
+Steve wants **one** order/chat surface on the scene, not duplicate tabs.
+
+| Surface | Role | Canonical? |
+|---------|------|------------|
+| **`SceneOrderCommandDock`** (scene, left) | Orders + chat input; **conversation expands here** (message icon) | **Yes — chat home** |
+| **Floating sidebar** (`CaseContextPanel`) | HPI · Physical exam · **Orders stacks** · **Results** only | Yes — clinical context |
+| ~~Sidebar **Thread** tab~~ | Was `showChatTab` + `chatPanel` in `Play.jsx` | **Removed** — do not re-add without Steve |
+| **Differential Practice** | Separate full-page study mode; own floating chat | Different mode — not Play |
+
+**Where “extra tabs” came from:** `CaseContextPanel.jsx` defines `CASE_TAB_DEFS` (HPI, exam, orders, results, **Thread**). Play used to set `showChatTab` and mount `PlayChatNotesTabPanel` in the sidebar while also showing quick-reply in the dock — **two chat UIs**. That duplication was agent-driven, not a Steve spec. Current rule: **dock only** for Play conversation.
+
+## Before adding UI
+
+1. Name the **single** surface Steve will use.
+2. Say what you will **not** add (e.g. “no new sidebar tab”).
+3. If unsure, link to this rule and ask.
