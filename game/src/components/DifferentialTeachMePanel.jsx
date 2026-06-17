@@ -16,6 +16,7 @@ export default function DifferentialTeachMePanel({
   ccsReview,
   hasReviewText,
   clinicalStyle,
+  onDiagnosisTap,
 }) {
   const caseSummary = useMemo(() => {
     if (!ccsReview) return null;
@@ -49,7 +50,12 @@ export default function DifferentialTeachMePanel({
           {diagnoses.map((d, i) => (
             <li
               key={`${d}-${i}`}
-              className={`diff-teach-me-dd-item${isCaseDx(d) ? ' diff-teach-me-dd-item--star' : ''}`}
+              className={`diff-teach-me-dd-item${isCaseDx(d) ? ' diff-teach-me-dd-item--star' : ''}${onDiagnosisTap ? ' diff-teach-me-dd-item--tappable' : ''}`}
+              onClick={onDiagnosisTap ? () => onDiagnosisTap(d) : undefined}
+              role={onDiagnosisTap ? 'button' : undefined}
+              tabIndex={onDiagnosisTap ? 0 : undefined}
+              onKeyDown={onDiagnosisTap ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onDiagnosisTap(d); } } : undefined}
+              aria-label={onDiagnosisTap ? `Explain ${d}` : undefined}
             >
               <span className="diff-teach-me-dd-num">{i + 1}</span>
               <span className="diff-teach-me-dd-text">{d}</span>

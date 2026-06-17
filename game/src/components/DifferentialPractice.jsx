@@ -1153,6 +1153,10 @@ export default function DifferentialPractice({ onBack }) {
           /* prefetch handled in panel */
         }
       }}
+      caseDiagnoses={entry.diagnoses}
+      bankTopic={entry.topic}
+      bankTitle={entry.title}
+      onDiagnosisTap={setDrillDx}
     />
   );
 

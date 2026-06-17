@@ -86,6 +86,7 @@ function MobileStudyFeed({
   caseDiagnoses,
   bankTopic,
   bankTitle,
+  onDiagnosisTap,
 }) {
   // Each section has its own open/closed state — all collapsed by default
   const [openSections, setOpenSections] = useState({});
@@ -164,6 +165,7 @@ function MobileStudyFeed({
           ccsReview={ccsReview}
           hasReviewText={hasReviewText}
           clinicalStyle={clinicalStyle}
+          onDiagnosisTap={onDiagnosisTap}
         />
       </AccordionSection>
 
@@ -316,6 +318,7 @@ export default function DifferentialStudyPanel({
   caseDiagnoses,
   bankTopic,
   bankTitle,
+  onDiagnosisTap,
 }) {
   const [tab, setTab] = useState('case');
   const [expanded, setExpanded] = useState(false);
@@ -488,6 +491,7 @@ export default function DifferentialStudyPanel({
         caseDiagnoses={caseDiagnoses}
         bankTopic={bankTopic}
         bankTitle={bankTitle}
+        onDiagnosisTap={onDiagnosisTap}
       />
     );
   }

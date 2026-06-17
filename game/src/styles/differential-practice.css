@@ -4902,6 +4902,16 @@
   border: 1px solid rgba(232, 184, 75, 0.25);
 }
 
+.diff-teach-me-dd-item--tappable {
+  cursor: pointer;
+}
+
+.diff-teach-me-dd-item--tappable:hover,
+.diff-teach-me-dd-item--tappable:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
 .diff-teach-me-dd-num {
   flex-shrink: 0;
   width: 20px;
