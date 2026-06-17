@@ -2368,6 +2368,38 @@
   color: rgba(255, 255, 255, 0.45);
 }
 
+.portrait-brief-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 0;
+}
+
+.portrait-brief-progress-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.portrait-brief-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(232, 184, 75, 0.75), var(--accent, #e8b84b));
+  transition: width 0.25s ease-out;
+}
+
+.portrait-brief-progress-pct {
+  flex-shrink: 0;
+  min-width: 2.2rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: rgba(232, 184, 75, 0.95);
+  text-align: right;
+}
+
 .portrait-brief-status--briefing {
   margin: 0 0 10px;
 }
@@ -2739,6 +2771,12 @@
 .clinical-text-block {
   font-size: var(--clinical-font-size, 1rem);
   font-weight: var(--clinical-font-weight, 600);
+}
+
+.teach-me-text-block {
+  font-size: var(--teach-me-font-size, 0.76rem);
+  font-weight: var(--teach-me-font-weight, 500);
+  line-height: 1.45;
 }
 
 .case-context-body.clinical-text-block,

@@ -405,12 +405,6 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             if (portraitForceSrc) clearPortraitSrc();
           }}
         />
-        {portraitRegenBusy && (
-          <div className="portrait-regen-overlay portrait-regen-overlay--briefing" role="status" aria-live="polite">
-            <span className="portrait-regen-overlay-spinner" aria-hidden />
-            Regenerating patient portrait…
-          </div>
-        )}
         <div className="briefing-scene-dim" />
         <div
           className={`briefing-case-hero ${uiShellClass('case-hero', uiLayout['case-hero'], layoutStudio)}`}

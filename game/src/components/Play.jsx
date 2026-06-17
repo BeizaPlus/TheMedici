@@ -909,6 +909,7 @@ export default function Play({
   const [activeThanksVideo, setActiveThanksVideo] = useState(null);
   const [thanksVideoIssue, setThanksVideoIssue] = useState('');
   const [showPostVideoReview, setShowPostVideoReview] = useState(false);
+  const finalMode = showThanksVideo || showPostVideoReview;
   const [reviewCentered, setReviewCentered] = useState(false);
   const [postVideoRows, setPostVideoRows] = useState([]);
   const [reviewChecked, setReviewChecked] = useState([]);
@@ -3217,8 +3218,6 @@ export default function Play({
     if (doneCount !== total || total === 0) return;
     reviewPlacements();
   }, [teachMeMode, reviewed, timedOut, doneCount, total, reviewPlacements, showThanksVideo, showPostVideoReview]);
-
-  const finalMode = showThanksVideo || showPostVideoReview;
 
   useEffect(() => {
     if (!finalMode) return undefined;

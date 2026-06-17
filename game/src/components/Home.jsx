@@ -7,6 +7,7 @@ import { getCaseById } from '../data/useCcsCatalog.js';
 
 export default function Home({
   onPlay,
+  onLaunchWhys,
   resumeCheckpoint,
   onResumeSession,
   onDiscardSession,
@@ -36,6 +37,7 @@ export default function Home({
   return (
     <WelcomeScreen
       onPlay={onPlay}
+      onLaunchWhys={onLaunchWhys}
       resumeCheckpoint={resumeCheckpoint}
       resumeCase={resumeCase}
       onResumeSession={onResumeSession}
