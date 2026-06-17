@@ -38,17 +38,25 @@ export default function OrderResultsTabPanel({
                 <button
                   key={row.iv.id}
                   type="button"
-                  className={`order-results-tab-chip ${isActive ? 'active' : ''}`}
-                  onClick={() => onSelectIvId?.(row.iv.id)}
+                  className={`order-results-tab-chip ${isActive ? 'active' : ''}${row.teachPending ? ' is-pending' : ''}`}
+                  onClick={() => {
+                    if (row.teachPending) return;
+                    onSelectIvId?.(row.iv.id);
+                  }}
                   aria-selected={isActive}
-                  title={neutralStackOrderName(row.iv.label)}
+                  disabled={row.teachPending}
+                  title={
+                    row.teachPending
+                      ? `${neutralStackOrderName(row.iv.label)} — not placed yet`
+                      : neutralStackOrderName(row.iv.label)
+                  }
                 >
                   {neutralStackOrderName(row.iv.label)}
                 </button>
               );
             })}
           </div>
-          {activeRow && (
+          {activeRow && !activeRow.teachPending && (
             <OrderResultSceneCard
               intervention={activeRow.iv}
               caseData={caseData}

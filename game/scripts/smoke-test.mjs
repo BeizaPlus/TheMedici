@@ -165,6 +165,32 @@ async function main() {
     "portraitLayers: stale when frame/layers missing",
   );
 
+  const mdSrc = "**## AMPA receptors**\\nEvery day, turnover.";
+  const mdNorm = mdSrc.replace(/\*\*(#{1,4}\s+[^*\n]+)\*\*/g, "$1");
+  ok(!mdNorm.includes("**##"), "chatMarkdown: unwrap bold headings");
+  ok(mdNorm.startsWith("## AMPA"), "chatMarkdown: heading line starts clean");
+
+  const { detectLabProfile } = await import(
+    url.pathToFileURL(path.join(root, "src/lib/labPanelValues.js")).href
+  );
+  ok(
+    detectLabProfile({
+      diagnosis: "Non-Accidental Trauma",
+      hpi: "child immersion burns cigarette burns",
+    }) === "child_abuse_burns",
+    "labPanelValues: burns child abuse profile",
+  );
+
+  const { isTreatmentOrderIntervention, classifyInterventionTier } = await import(
+    url.pathToFileURL(path.join(root, "src/lib/caseBareEssentials.js")).href
+  );
+  const donepezilIv = { id: "cholinesterase-inhibitor-donepezil", label: "Cholinesterase inhibitor (Donepezil)" };
+  ok(isTreatmentOrderIntervention(donepezilIv), "teachMeStack: donepezil is treatment order");
+  ok(
+    classifyInterventionTier(donepezilIv) === "critical",
+    "teachMeStack: donepezil critical tier",
+  );
+
   const { resolveOrderResult } = await import(
     url.pathToFileURL(path.join(root, "src/lib/orderResult.js")).href
   );

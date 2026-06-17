@@ -145,9 +145,42 @@ const TEST_ORDER_PATTERNS = [
 /** Labs, imaging, and diagnostic studies → Misc tier. */
 export function isTestOrderIntervention(iv) {
   if (!iv || isPhysicalExamIntervention(iv)) return false;
+  if (isTreatmentOrderIntervention(iv)) return false;
   const label = String(iv.label || '');
   const id = String(iv.id || '').toLowerCase();
   return TEST_ORDER_PATTERNS.some((p) => p.test(label) || p.test(id));
+}
+
+const TREATMENT_ORDER_PATTERNS = [
+  /\bdonepezil\b/i,
+  /\bmemantine\b/i,
+  /\brivastigmine\b/i,
+  /\bgalantamine\b/i,
+  /\bcholinesterase\b/i,
+  /\bphototherapy\b/i,
+  /\binsulin\b/i,
+  /\bvasopressor\b/i,
+  /\bantibiotic\b/i,
+  /\btransfusion\b/i,
+  /\bintubat/i,
+  /\bnaloxone\b/i,
+  /\bheparin\b/i,
+  /\badmit for safety\b/i,
+  /\bchild protective\b/i,
+  /\breport to cps\b/i,
+  /\bsocial work\b/i,
+  /\blactation\b/i,
+  /\bbreastfeeding optim/i,
+  /\bcaregiver support\b/i,
+  /\badvance care planning\b/i,
+];
+
+/** Medications, admits, CPS, and definitive treatments → Critical tier (visible in Teach Me). */
+export function isTreatmentOrderIntervention(iv) {
+  if (!iv) return false;
+  const label = String(iv.label || '');
+  const id = String(iv.id || '').toLowerCase();
+  return TREATMENT_ORDER_PATTERNS.some((p) => p.test(label) || p.test(id));
 }
 
 /**
@@ -160,6 +193,7 @@ export function classifyInterventionTier(
 ) {
   if (!iv?.id) return 'general';
   if (criticalIds.has(iv.id)) return 'critical';
+  if (isTreatmentOrderIntervention(iv)) return 'critical';
   if (isPhysicalExamIntervention(iv)) return 'general';
   if (miscIds.has(iv.id) || isTestOrderIntervention(iv)) return 'misc';
   return 'critical';

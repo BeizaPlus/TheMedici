@@ -2207,6 +2207,21 @@ button {
   color: #f3cf82;
 }
 
+.order-results-tab-chip.is-pending {
+  opacity: 0.45;
+  border-style: dashed;
+  cursor: default;
+}
+
+.pin.pin-draggable {
+  cursor: grab;
+}
+
+.pin.pin-draggable.pin-dragging {
+  cursor: grabbing;
+  z-index: 40;
+}
+
 .order-result-body {
   margin: 0;
   padding: 12px 14px 14px;
@@ -3337,7 +3352,6 @@ button {
 
 .pill-why-inline-text {
   margin: 0;
-  font-size: 0.76rem;
   line-height: 1.45;
   color: rgba(240, 238, 232, 0.86);
 }
@@ -3605,7 +3619,6 @@ button {
 
 .teach-compare-critical-why {
   margin: 4px 0 0;
-  font-size: 0.62rem;
   line-height: 1.35;
   color: rgba(255, 255, 255, 0.52);
 }
@@ -3930,7 +3943,6 @@ button {
 
 .teach-compare-rationale-text {
   margin: 0 0 6px;
-  font-size: 0.74rem;
   line-height: 1.5;
   color: rgba(240, 238, 232, 0.9);
 }
@@ -4616,7 +4628,6 @@ button {
   margin: 0;
   padding-left: 0;
   color: rgba(240, 238, 232, 0.86);
-  font-size: 0.8rem;
   line-height: 1.42;
 }
 
@@ -5765,6 +5776,77 @@ button {
   margin-top: 2px;
   font-size: 0.66rem;
   color: rgba(255, 255, 255, 0.48);
+}
+
+.welcome-panel--continue .welcome-continue-checkpoint,
+.welcome-panel--whys .welcome-panel-kicker + .welcome-case-history-list {
+  margin-top: 8px;
+}
+
+.welcome-continue-checkpoint {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(232, 184, 75, 0.35);
+  border-radius: 10px;
+  background: rgba(232, 184, 75, 0.06);
+}
+
+.welcome-continue-checkpoint-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+.welcome-continue-when {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.welcome-continue-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.welcome-continue-list {
+  max-height: min(48vh, 320px);
+}
+
+.welcome-continue-row {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.welcome-continue-open {
+  flex: 1;
+  min-width: 0;
+}
+
+.welcome-continue-resume-chip {
+  flex-shrink: 0;
+  align-self: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 184, 75, 0.55);
+  background: rgba(232, 184, 75, 0.12);
+  color: var(--gold, #e8b84b);
+  cursor: pointer;
+}
+
+.welcome-continue-resume-chip:hover {
+  background: rgba(232, 184, 75, 0.22);
+}
+
+.welcome-whys-row .welcome-case-history-meta {
+  color: rgba(160, 200, 255, 0.55);
 }
 
 .welcome-panel-kicker {

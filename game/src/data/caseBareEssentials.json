@@ -91,6 +91,56 @@
           "why": "Urate lowering after the acute flare settles — not during the attack."
         }
       ]
+    },
+    "073": {
+      "title": "Alzheimer's — disease-modifying meds",
+      "subtitle": "Donepezil + memantine are Critical tier — must appear in Teach Me stack.",
+      "criticalInterventionIds": [
+        "cholinesterase-inhibitor-donepezil",
+        "memantine",
+        "caregiver-support-advance-care-planning",
+        "physical-exam-neuro-psych",
+        "ct-mri-brain"
+      ]
+    },
+    "089": {
+      "title": "Child abuse — burns",
+      "subtitle": "Document, image, consult specialists, admit, CPS — must-not-miss.",
+      "criticalInterventionIds": [
+        "physical-exam-full-skin-exam-photographs",
+        "skeletal-survey",
+        "head-ct",
+        "ophthalmology-exam",
+        "admit-for-safety",
+        "report-to-cps-mandatory"
+      ],
+      "miscInterventionIds": ["cbc-coags-bmp"],
+      "items": [
+        {
+          "id": "skin-photo",
+          "shortLabel": "Skin exam + photographs",
+          "matchInterventionIds": ["physical-exam-full-skin-exam-photographs"],
+          "why": "Immersion and cigarette burns — forensic documentation for CPS."
+        },
+        {
+          "id": "ophtho",
+          "shortLabel": "Ophthalmology consult",
+          "matchInterventionIds": ["ophthalmology-exam"],
+          "why": "Retinal hemorrhages suggest abusive head trauma — specialist exam."
+        },
+        {
+          "id": "cps",
+          "shortLabel": "Report to CPS",
+          "matchInterventionIds": ["report-to-cps-mandatory"],
+          "why": "Mandatory reporting. Child protection + social work consult."
+        },
+        {
+          "id": "admit",
+          "shortLabel": "Admit for safety",
+          "matchInterventionIds": ["admit-for-safety"],
+          "why": "Cannot discharge to unsafe environment — inpatient specialist care unit."
+        }
+      ]
     }
   },
   "diagnosisPatterns": [

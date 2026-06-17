@@ -38,6 +38,9 @@ export function detectLabProfile(ctx = {}) {
   if (/jaundice|yellow baby|hyperbilirubin|neonatal|newborn|breastfeeding jaundice/.test(blob)) {
     return 'neonatal_jaundice';
   }
+  if (/child abuse|non-accidental|immersion burn|cigarette burn|stocking-glove|nat\b|skeletal survey/.test(blob)) {
+    return 'child_abuse_burns';
+  }
   if (/heart failure|volume overload|edema/.test(blob)) return 'renal_stress';
   if (/pneumonia|copd exacerbation/.test(blob)) return 'infection';
   if (/rash|fever|viral|exanthem/.test(blob)) return 'inflammatory';
@@ -161,6 +164,16 @@ export function synthesizeCbc(ctx) {
       neut: pick(caseId, 'neut', 38, 52, 0),
       lymph: pick(caseId, 'lymph', 38, 52, 0),
       retic: pick(caseId, 'retic', 0.8, 1.8, 1),
+    };
+  }
+  if (profile === 'child_abuse_burns') {
+    return {
+      wbc: pick(caseId, 'wbc', 8.5, 11.5, 1),
+      hgb: pick(caseId, 'hgb', 10.8, 12.4, 1),
+      hct: pick(caseId, 'hct', 32, 37, 1),
+      plt: pick(caseId, 'plt', 280, 380, 0),
+      neut: pick(caseId, 'neut', 58, 72, 0),
+      lymph: pick(caseId, 'lymph', 22, 34, 0),
     };
   }
   return {

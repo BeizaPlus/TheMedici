@@ -1,84 +1,76 @@
-# Case chat & Order·Chat dock — source of truth
+# Order·Chat dock — visual + behavior standard (Steve approved)
 
-**Companion rule:** `.cursor/rules/play-case-chat.mdc` (agent quick ref)  
-**Primary files:** `Play.jsx`, `SceneOrderCommandDock.jsx`, `CaseSessionThread.jsx`, `chatMessageFormat.jsx`
+**Gold screenshots:** `docs/smoke-screenshots/*/play-case/` — agent smoke must match these.
 
-## Surfaces (two UIs, one brain)
+## Layout (bottom-left on play scene)
 
-| Surface | When visible | What appears here |
-|---------|--------------|-------------------|
-| **Order·Chat dock** (`SceneOrderCommandDock`) | Always on play scene (unless hidden) | Orders via command line; **tutor replies** when Chat tab is closed; order result cards; **order-why rationales** after placement |
-| **Chat tab** (`PlayChatNotesTabPanel` → `CaseSessionThread`) | Sidebar `infoTab === 'chat'` | Full thread history, voice mic, notes |
+```
+┌─────────────────────────────────────────────┐
+│ [portrait] [camera]                         │
+│ [📋] Type an order or ask about this… [Order]│
+│ ▴ tutor / patient reply (markdown, expanded) │
+│ [chip] [chip] [chip] …  ← all case stacks in Teach Me │
+│ ┌ LAB RESULT / EXAM ──────────────────────┐ │
+│ │ values + optional Why line               │ │
+│ └─────────────────────────────────────────┘ │
+│                              [chat] [✕]     │
+└─────────────────────────────────────────────┘
+```
 
-### Dock reply area (quick chat mode)
+## Reply strip (quick chat — NOT the Chat tab)
 
-When the user asks a question from the dock **and** the Chat tab is **not** open:
+| Input | Route | Reply appears |
+|-------|--------|----------------|
+| Clinical question | Tutor (`DEEPSEEK` / OpenAI) | **Dock reply** — auto-expanded ▴ |
+| Order placed (Teach Me / Learning) | `fetchOrderWhy` | Same dock reply — `Why order …?` |
+| Patient mode + interview | `patient_sim` | Dock reply — lay language, short |
+| Matched stack order | Canvas pin | Result card below chips |
 
-1. `submitOrderCommand` routes to `caseChat.sendMessage` (tutor or patient).
-2. Reply lands in `dockChatReply` + `dockReplyExpanded = true`.
-3. `SceneOrderCommandDock` renders `renderChatMarkdown(reply)` in `.scene-order-command-reply`.
+**Exam mode without Learning:** tutor blocked — toast tells user to enable Learning.
 
-**Order placement rationales** (Teach Me or Learning mode on):
+## Markdown rules
 
-1. After stack placement, `showOrderWhyInDock(iv)` calls `fetchOrderWhy` (playbook → `/api/order-why`).
-2. Same dock reply panel — question `Why order {label}?`, answer = rationale.
+Renderer: `src/lib/chatMessageFormat.jsx` → `renderChatMarkdown()`
 
-Do **not** require opening the Chat tab for coaching text.
+- Headings: `## Title` on its own line (unwrap `**## Title**`)
+- **Bold** mechanism terms; short paragraphs; no raw `##` visible
+- Patient replies: `sanitizePatientReplyForDisplay` — one direct answer
 
-## Markdown rendering
+## Teach Me stack chips
 
-`src/lib/chatMessageFormat.jsx` — `renderChatMarkdown(text)`:
+When **Teach Me ON**, dock shows **every** intervention in the case (e.g. Donepezil + Memantine for #073):
 
-- Preprocess via `normalizeChatMarkdown()` — unwraps `**## Heading**`, splits inline `##` onto new lines.
-- Block types: headings, lists, tables, paragraphs.
-- Used in dock reply **and** `CaseSessionThread` bubbles.
+- Placed → active chip, result card
+- Unplaced → muted `is-pending` chip (label visible — user knows what's left)
 
-## Tutor vs patient
+Drugs / admits / CPS → **Critical** tier in Teach Me panel (`isTreatmentOrderIntervention`).
 
-| Mode | Trigger | Blocked when |
-|------|---------|--------------|
-| **Tutor** | Default; `looksLikeTutorQuestion()` forces tutor even if portrait gold | Exam mode **and** Learning off |
-| **Patient** | Portrait gold / `/pt` | N/A (patient deflects clinical teaching questions) |
+## Pin reposition
 
-Exam mode gate: `!isLearningMode()` → toast *"Enable Learning in Settings"*.
+Placed order pins: class `pin-draggable` — drag anywhere on patient to reposition (`usePinReposition`).
 
-## Orders vs chat (dock command line)
+## Persistence
 
-Priority in `submitOrderCommand`:
+| Setting | Storage key |
+|---------|-------------|
+| Dock position per case | `schoonmaker_play_dock_layout_{caseId}` |
+| Clinical font | `schoonmaker_clinical_text_prefs` (localStorage JSON) |
+| Teach Me notes font | `schoonmaker_teach_me_text_prefs` |
+| Case chat history | `schoonmaker_case_chat_history` — per case id |
 
-1. Location switch (`ER`, `ICU`, …)
-2. Physical exam picker
-3. **Case stack match** → canvas pin
-4. Decoy stack
-5. **Known catalog order** → extra order (not in Teach Me)
-6. **Chat** (tutor/patient)
+Font prefs **re-read from localStorage on case change** — never reset to default.
 
-Autocomplete synonyms: `orderCommandAutocomplete.js` — IV peripheral ≠ central line; `usg abdomen` → Ultrasound abdomen.
+## Smoke checks (must pass)
 
-## Dock layout persistence
+1. Dock reply visible after tutor question (Chat tab closed)
+2. `renderChatMarkdown('**## AMPA receptors**')` → heading, not literal `##`
+3. Teach Me #073 dock chips include `Donepezil` before placement
+4. Pin drag updates position (`.pin-draggable`)
+5. Screenshot saved incrementally under dated `play-case/run-HHMMSS/`
 
-**Per case:** `playDockStorageKey(caseId)` → `schoonmaker_play_dock_layout_054`  
-Reloaded when case changes (`usePlayDockLayout({ storageKey })`).
+## Related
 
-## Vitals after orders
-
-`vitalsProgression.js` — monitor uses `liveVitals` in `Play.jsx`, nudged when `placementOrder` / `extraOrders` grow (phototherapy, O2, fluids, labs).
-
-## API dependencies
-
-| Endpoint | Purpose |
-|----------|---------|
-| `POST /api/case-chat/*` | Tutor + patient threads (`DEEPSEEK_API_KEY` or `OPENAI_API_KEY`) |
-| `POST /api/order-why` | Order rationales (playbook fallback offline) |
-| `POST /api/order-result` | Rich lab/imaging text (local `labPanelValues.js` fallback) |
-
-## The Whys (welcome)
-
-`WhysCasePanel` lists **all catalog cases** (not only attempted). Launch → Teach Me mode, skip briefing.
-
-## Component doc index (grow over time)
-
-| Doc | Component |
-|-----|-----------|
-| `CASE_CHAT.md` | Chat + dock (this file) |
-| *(planned)* | `ORDER_RESULT.md`, `MONITOR_VITALS.md`, `WHYS_PANEL.md` |
+- `.cursor/rules/play-case-chat.mdc`
+- `docs/components/PORTRAIT_RULES.md`
+- `docs/components/TEAM_CASE_DISCUSSION.md`
+- `docs/cases/case-089-burns.md`

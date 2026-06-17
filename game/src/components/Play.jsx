@@ -7,6 +7,7 @@ import medicalOrders from '../data/medical-orders.json';
 import { useDragGame } from '../hooks/useDragGame.js';
 import { useGridDragGame } from '../hooks/useGridDragGame.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
+import { usePinReposition } from '../hooks/usePinReposition.js';
 import { useCasePortraitSrc } from '../hooks/useCasePortraitSrc.js';
 import { DOCK_CHROME_COLLAPSED_HEIGHT, playDockStorageKey } from '../lib/playDockLayout.js';
 import { nudgeVitalsAfterOrder } from '../lib/vitalsProgression.js';
@@ -635,12 +636,14 @@ export default function Play({
   }, [chatPatientMode]);
 
   useEffect(() => {
+    setTextPrefs(readClinicalTextPrefs());
+    setTeachMeTextPrefs(readTeachMeTextPrefs());
     setChatPatientMode(false);
     setDockResultsExpanded(false);
     setDockChatReply(null);
     setDockReplyExpanded(false);
     setDockHidden(false);
-  }, [caseData.id]);
+  }, [caseData?.id]);
 
   const showOrderWhyInDock = useCallback(
     (iv) => {
@@ -2179,10 +2182,20 @@ export default function Play({
     ],
   );
 
+  const dockResultRows = useMemo(() => {
+    if (teachMeMode && interventions.length > 0) {
+      return interventions.map((iv) => ({
+        iv,
+        teachPending: !placed[iv.id],
+      }));
+    }
+    return placedResultRows;
+  }, [teachMeMode, interventions, placed, placedResultRows]);
+
   const dockResultsPanel = useMemo(
     () => (
       <OrderResultsTabPanel
-        resultRows={placedResultRows}
+        resultRows={dockResultRows}
         activeIvId={orderResultIvId}
         onSelectIvId={setOrderResultIvId}
         caseData={caseData}
@@ -2194,15 +2207,15 @@ export default function Play({
         hideKicker
       />
     ),
-    [placedResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode],
+    [dockResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode],
   );
 
   const dockOrderContextLabel = useMemo(() => {
     const row =
-      placedResultRows.find((r) => r.iv.id === orderResultIvId) ||
-      (placedResultRows.length ? placedResultRows[placedResultRows.length - 1] : null);
+      dockResultRows.find((r) => r.iv.id === orderResultIvId) ||
+      (dockResultRows.length ? dockResultRows[dockResultRows.length - 1] : null);
     return row ? neutralStackOrderName(row.iv.label) : '';
-  }, [placedResultRows, orderResultIvId]);
+  }, [dockResultRows, orderResultIvId]);
 
   const computePostVideoRows = useCallback((override = null) => {
     const expectedOrder = interventions.map((iv) => iv.id);
@@ -2461,6 +2474,12 @@ export default function Play({
     },
     [interventions],
   );
+
+  usePinReposition({
+    sceneRef,
+    enabled: !timedOut && !finalMode && pins.length > 0,
+    onMovePin: handleMovePin,
+  });
 
   const returnStackToDock = useCallback(
     (ivId, { wrap } = {}) => {
@@ -3510,7 +3529,7 @@ export default function Play({
             chatBusy={caseChat.busy}
             chatOpen={infoTab === 'chat'}
             resultsExpanded={dockResultsExpanded}
-            resultsPanel={placedResultRows.length > 0 ? dockResultsPanel : null}
+            resultsPanel={dockResultRows.length > 0 ? dockResultsPanel : null}
             orderContextLabel={dockOrderContextLabel}
             onToggleOrderContext={() => setDockResultsExpanded((v) => !v)}
             quickReply={dockChatReply}
@@ -3718,7 +3737,7 @@ export default function Play({
           return (
             <div
               key={`${p.ivId || p.zoneId}-${i}-${p.label}`}
-              className={`pin ${useGridPlacement ? 'pin-grid' : ''} ${p.ok === true ? 'ok' : ''} ${p.ok === false ? 'bad' : ''} ${p.ivId ? 'pin-has-result' : ''} ${orderResultIvId === p.ivId ? 'pin-active' : ''}`}
+              className={`pin ${p.ivId ? 'pin-draggable' : ''} ${useGridPlacement ? 'pin-grid' : ''} ${p.ok === true ? 'ok' : ''} ${p.ok === false ? 'bad' : ''} ${p.ivId ? 'pin-has-result' : ''} ${orderResultIvId === p.ivId ? 'pin-active' : ''}`}
               data-iv-id={p.ivId || ''}
               data-x="0"
               data-y="0"
@@ -3731,7 +3750,7 @@ export default function Play({
                 left: `${leftPct}%`,
                 top: `${topPct}%`,
               }}
-              title={useGridPlacement ? 'Drag pin to reposition on patient' : undefined}
+              title="Drag pin to reposition on patient"
             >
               <span className="pin-label">{p.label}</span>
             </div>

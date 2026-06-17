@@ -17,14 +17,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const WEB = process.env.WEB_BASE || 'http://127.0.0.1:5173';
 const API = process.env.API_BASE || 'http://127.0.0.1:3001';
-const OUT_DIR = path.join(
-  root,
-  'docs',
-  'smoke-screenshots',
-  new Date().toISOString().slice(0, 10),
-  'play-case',
-);
+function shotDir() {
+  const day = new Date().toISOString().slice(0, 10);
+  const run = new Date().toISOString().slice(11, 19).replace(/:/g, '');
+  const dir = path.join(root, 'docs', 'smoke-screenshots', day, 'play-case', `run-${run}`);
+  fs.mkdirSync(dir, { recursive: true });
+  return dir;
+}
 
+let OUT_DIR = shotDir();
+let shotSeq = 0;
 let fail = 0;
 
 function ok(cond, name, detail = '') {
@@ -35,8 +37,7 @@ function ok(cond, name, detail = '') {
 }
 
 async function shot(page, name) {
-  fs.mkdirSync(OUT_DIR, { recursive: true });
-  const file = path.join(OUT_DIR, `${name}.png`);
+  const file = path.join(OUT_DIR, `${String(++shotSeq).padStart(2, '0')}-${name}.png`);
   await page.screenshot({ path: file, fullPage: false });
   const kb = Math.round(fs.statSync(file).size / 1024);
   console.log(`   📸 ${file} (${kb} KB)`);
@@ -197,6 +198,14 @@ async function main() {
   ok(await stacks.isVisible({ timeout: 10000 }), 'play chrome visible (dock / sidebar / monitor)');
 
   await smokeUberDeepLink(page);
+
+  const portraitBtn = page.locator('.panel-portrait-btn');
+  if (await portraitBtn.count()) {
+    await portraitBtn.first().click({ timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(400);
+    await shot(page, 'portrait-panel');
+    ok(await page.locator('.portrait-brief-popover:not(.is-closed)').count() > 0, 'portrait panel opens');
+  }
 
   if (errors.length) {
     console.log('\n⚠ Browser console errors:');

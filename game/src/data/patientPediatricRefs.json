@@ -1,0 +1,11 @@
+{
+  "note": "Pediatric portrait scale — identity prompts for child cases. Scene lock still 16:9 ED baseplate.",
+  "defaultAgeYears": 7,
+  "caseIds": {
+    "054": { "ageYears": 0, "label": "term newborn", "prompt": "term newborn infant, jaundiced skin, swaddled or gown, proportional neonate on ED warmer" },
+    "089": { "ageYears": 6, "label": "school-age child", "prompt": "school-age child approximately 6 years old, smaller body proportions than adult, burn injuries on face and buttocks per case, hospital gown, frightened but stable" }
+  },
+  "categoryPatterns": [
+    { "match": "pediatrics|neonatology|child|newborn|infant", "ageYears": 7, "prompt": "pediatric patient child proportions, not adult ED manikin" }
+  ]
+}
