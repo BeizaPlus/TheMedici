@@ -3,6 +3,7 @@ import { getCompletionThresholdAdjust } from './sessionProfile.js';
 import { getActiveRefinedNarrative } from './narrativeRefine.js';
 import { composeCaseHistory, resolveCaseExam } from './caseExam.js';
 import { applyPatientName, applyPatientNameToCase, getDefaultPatientName, resolvePatientName } from './patientName.js';
+import { hpiContainsSpoilers, resolveAnswerKeyHpi, resolvePracticeHpi } from './practiceHpi.js';
 
 const PREPARED = preparedCases?.cases || {};
 
@@ -29,11 +30,7 @@ export function applySessionToCase(caseData, session = {}) {
     dispositionUnits: prepared?.dispositionUnits || caseData.dispositionUnits,
   };
 
-  const clinicalHpi =
-    prepared?.hpi_narrative ||
-    prepared?.narrative?.doctor?.standard?.hpi ||
-    caseData?.hpi_narrative ||
-    '';
+  const clinicalHpi = resolveAnswerKeyHpi(prepared, caseData);
   merged.clinical_hpi_narrative = clinicalHpi;
 
   if (narr) {
@@ -78,9 +75,9 @@ export function applySessionToCase(caseData, session = {}) {
   const patientVoice =
     caseData?.patient_voice || caseData?.patientVoice || prepared?.patient_voice || null;
   const composedHistory = composeCaseHistory({
-    history: merged.historyText || prepared?.narrative?.doctor?.standard?.hpi || '',
+    history: merged.historyText || resolvePracticeHpi(prepared, caseData) || '',
     patientVoice,
-    clinicalHpi: merged.clinical_hpi_narrative || prepared?.hpi_narrative || '',
+    clinicalHpi: merged.clinical_hpi_narrative || resolveAnswerKeyHpi(prepared, caseData) || '',
     chiefComplaint: merged.chief_complaint || '',
   });
   merged.preparedExam = resolveCaseExam({
@@ -108,14 +105,10 @@ export function applySessionToCase(caseData, session = {}) {
   const displayName = resolvePatientName(merged);
   const namedClinical = applyPatientName(clinicalHpi, displayName);
   merged.hpi_narrative = namedClinical;
-  const practiceHistoryRaw =
-    prepared?.practice_hpi?.trim() ||
-    caseData?.historyText?.trim() ||
-    prepared?.narrative?.doctor?.standard?.hpi?.trim() ||
-    '';
+  const practiceHistoryRaw = resolvePracticeHpi(prepared, caseData);
   merged.historyText = practiceHistoryRaw
     ? applyPatientName(practiceHistoryRaw, displayName)
-    : namedClinical;
+    : '';
   merged.chief_complaint = applyPatientName(merged.chief_complaint || '', displayName);
   return { ...merged, patientDisplayName: displayName };
 }

@@ -1,8 +1,10 @@
 import gameConfig from './gameConfig.json' with { type: 'json' };
 import { getPreparedCase } from '../lib/caseNarrative.js';
+import { hpiContainsSpoilers } from '../lib/practiceHpi.js';
 import { resolvePatientSceneKey } from '../lib/patientSceneKey.js';
 import { inferPatientSex } from '../lib/patientSex.js';
 import { resolvePlaybook } from './resolvePlaybook.js';
+import { getUberDefinition } from '../lib/uberCases.js';
 
 export function getGameConfig() {
   return gameConfig;
@@ -105,11 +107,11 @@ export function toGameCase(ccsCase, catalog) {
     '';
   const vitalsText =
     prepared?.vitalsText || pres?.vitals?.replace(/\s+/g, ' ').trim() || '';
+  const catalogHistory = pres?.history?.replace(/\s+/g, ' ').trim() || '';
+  const practiceHpi = prepared?.practice_hpi?.trim();
   const historyText =
-    prepared?.practice_hpi?.trim() ||
-    prepared?.narrative?.doctor?.standard?.hpi ||
-    pres?.history?.replace(/\s+/g, ' ').trim() ||
-    '';
+    practiceHpi ||
+    (catalogHistory && !hpiContainsSpoilers(catalogHistory) ? catalogHistory : '');
   const hpiNarrative =
     (typeof prepared?.hpi_narrative === 'string' && prepared.hpi_narrative.trim()) ||
     (typeof prepared?.narrative?.doctor?.standard?.hpi === 'string' &&
@@ -137,7 +139,7 @@ export function toGameCase(ccsCase, catalog) {
     patientSex: sexHint,
   };
 
-  return {
+  const base = {
     id: ccsCase.id,
     ccsNumber: ccsCase.caseNumber,
     title: ccsCase.title.toUpperCase(),
@@ -175,4 +177,29 @@ export function toGameCase(ccsCase, catalog) {
     algorithm: buildAlgorithm(pb, gameConfig.zones),
     layout: gameConfig.layout,
   };
+
+  if (ccsCase.isUber || String(ccsCase.id).startsWith('U')) {
+    const uber = getUberDefinition(ccsCase.id);
+    const anchorId = String(uber?.anchorId || ccsCase.uberMemberIds?.[0] || '007').padStart(3, '0');
+    const anchorRaw = catalog?.cases?.find((c) => c.id === anchorId) || ccsCase;
+    const anchorPrepared = getPreparedCase(anchorId);
+    if (anchorPrepared && !prepared) {
+      return enrichUberGameCase(
+        {
+          ...base,
+          diagnosis: anchorPrepared.diagnosis || base.diagnosis,
+          vitalsText: anchorPrepared.vitalsText || base.vitalsText,
+          hpi_narrative: anchorPrepared.hpi_narrative || base.hpi_narrative,
+          physical_exam: anchorPrepared.physical_exam || base.physical_exam,
+          patient_name_default: anchorPrepared.patient_name_default || base.patient_name_default,
+          patientSex: anchorPrepared.patientSex || base.patientSex,
+        },
+        ccsCase,
+        catalog,
+      );
+    }
+    return enrichUberGameCase(base, ccsCase, catalog);
+  }
+
+  return base;
 }

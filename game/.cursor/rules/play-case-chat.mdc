@@ -20,8 +20,8 @@ Case chat is **not** a single assistant. The server picks a **system prompt** at
 
 | Mode | `chatMode` | Who answers | System prompt in `server/index.js` |
 |------|------------|-------------|----------------------------------|
-| **Tutor** (default in Play) | `tutor` | Master clinical educator | Explains pathophys, labs, orders, "why", session timeline |
-| **Patient** (portrait gold) | `patient_sim` | Simulated patient | First-person only; HPI/demographics; **cannot** teach complement levels |
+| **Tutor** (default in Play) | `tutor` | Immersa AI Attendant | `server/immersaAttendantPrompt.js` + `server/prompts/immersa-attendant.md` — mechanism-first teaching (temp ~0.7) |
+| **Patient** (portrait gold) | `patient_sim` | Simulated patient | `server/immersaPatientPrompt.js` + `server/prompts/immersa-patient.md` — Immersa patient voice (lay language, Law 2: answer only what was asked) |
 
 **Symptom:** replies like *"I didn't quite catch that"* / *"I don't understand — speak more clearly"* → almost always **patient_sim**, not tutor failure. The patient LLM deflects clinical jargon and garbled voice text.
 
@@ -107,6 +107,8 @@ Used in `CaseSessionThread` + voice `onTranscriptReady` to **force tutor** when 
 | File | Role |
 |------|------|
 | `server/index.js` | `buildCaseChatSystemPrompt`, `/api/case-chat/*` |
+| `server/immersaAttendantPrompt.js` | Attendant system prompt + order-why voice |
+| `server/immersaPatientPrompt.js` | Patient system prompt + temperature |
 | `src/lib/caseChat.js` | Session cache, `buildCaseChatContext`, API calls |
 | `src/hooks/useCaseChat.js` | React hook, `sendMessage`, history |
 | `src/components/CaseSessionThread.jsx` | Chat UI + submit routing |

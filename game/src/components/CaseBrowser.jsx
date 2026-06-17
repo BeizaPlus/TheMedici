@@ -6,29 +6,19 @@ import { getLayout } from '../data/gameData.js';
 import { isLearningMode } from '../lib/learningMode.js';
 
 import {
-
   readProgress,
-
   getCaseRecord,
-
   getCompletionStats,
-
   getFlaggedCaseIds,
-
   getFavoriteCaseIds,
-
   getFavoriteCount,
-
   isFavorite,
-
   toggleFavorite,
-
+  countAttemptedInIds,
+  isCaseAttempted,
   pickRandomId,
-
   startShuffleQueue,
-
   setLastMode,
-
 } from '../data/caseProgress.js';
 
 import {
@@ -45,6 +35,8 @@ import {
 import { hasCaseSpecificPlaybook } from '../data/resolvePlaybook.js';
 
 import CaseProgressTag from './CaseProgressTag.jsx';
+import CaseAttemptRadio from './CaseAttemptRadio.jsx';
+import { getUberDefinitions } from '../lib/uberCases.js';
 
 import CaseReadyTag from './CaseReadyTag.jsx';
 
@@ -81,7 +73,16 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
     [catalog.cases],
   );
 
-  const stackTestingIds = useMemo(() => stackTestingCases.map((c) => c.id), [stackTestingCases]);
+  const uberCases = useMemo(() => {
+    const byId = new Map(catalog.cases.map((c) => [c.id, c]));
+    return getUberDefinitions()
+      .map((u) => byId.get(u.id))
+      .filter(Boolean)
+      .map((c) => getCaseById(c.id))
+      .filter(Boolean);
+  }, [catalog.cases]);
+
+  const uberCount = uberCases.length;
 
   const [listFilter, setListFilter] = useState(() =>
     initialFilter === 'ready'
@@ -94,7 +95,9 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
             ? 'recent'
             : initialFilter === 'favorites'
               ? 'favorites'
-              : 'all',
+              : initialFilter === 'uber'
+                ? 'uber'
+                : 'all',
   );
 
   const [activeCategory, setActiveCategory] = useState(categories[0]?.id);
@@ -123,6 +126,8 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
   const [flagVersion, setFlagVersion] = useState(0);
 
   const [favVersion, setFavVersion] = useState(0);
+
+  const [checkVersion, setCheckVersion] = useState(0);
 
   const flaggedIds = useMemo(() => {
     void flagVersion;
@@ -171,9 +176,11 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
     if (listFilter === 'recent') return recentCases;
 
+    if (listFilter === 'uber') return uberCases;
+
     return getCasesInCategory(activeCategory);
 
-  }, [listFilter, activeCategory, readyCases, stackTestingCases, flaggedCases, favoriteCases, recentCases]);
+  }, [listFilter, activeCategory, readyCases, stackTestingCases, flaggedCases, favoriteCases, recentCases, uberCases]);
 
 
 
@@ -188,6 +195,11 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
     [casesInView],
 
   );
+
+  const attemptedInView = useMemo(() => {
+    void checkVersion;
+    return countAttemptedInIds(categoryCaseIds);
+  }, [checkVersion, categoryCaseIds]);
 
 
 
@@ -269,6 +281,11 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
     if (ids[0]) setSelectedId(ids[0]);
 
+  };
+
+  const showUberFilter = () => {
+    setListFilter('uber');
+    if (uberCases[0]) setSelectedId(uberCases[0].id);
   };
 
   const showRecentFilter = () => {
@@ -451,9 +468,9 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
         <h1 className="shell-cases-title">Cases</h1>
 
-        <span className="shell-cases-completion" title="Cases mastered / total">
+        <span className="shell-cases-completion" title="Attempted in current list / mastered overall">
 
-          {overallStats.completed}/{overallStats.total} mastered
+          {attemptedInView}/{casesInView.length} attempted · {overallStats.completed}/{overallStats.total} mastered
 
         </span>
 
@@ -478,6 +495,24 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
           Ready to practice
 
           <span className="ready-filter-count">{readyCount}</span>
+
+        </button>
+
+        <button
+
+          type="button"
+
+          className={listFilter === 'uber' ? 'ready-filter-chip active' : 'ready-filter-chip'}
+
+          onClick={showUberFilter}
+
+          aria-pressed={listFilter === 'uber'}
+
+        >
+
+          Uber cases
+
+          <span className="ready-filter-count">{uberCount}</span>
 
         </button>
 
@@ -574,6 +609,16 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
           <p className="ready-filter-note">
 
             Case-specific CCS stacks from your study guides — pick any row below (not random).
+
+          </p>
+
+        )}
+
+        {listFilter === 'uber' && (
+
+          <p className="ready-filter-note">
+
+            Eight composite patients — each session merges 4 CCS cases across multiple domains.
 
           </p>
 
@@ -882,8 +927,10 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
               const rec = getCaseRecord(c.id);
 
               const rowState = rec?.completed ? 'case-done' : rec?.plays ? 'case-attempted' : '';
+              const attempted = isCaseAttempted(c.id);
 
               const isReady = hasCaseSpecificPlaybook(c.id);
+              const isUber = Boolean(c.uberMeta || String(c.id).startsWith('U'));
 
               const orderCount = getCaseOrderCount(c);
 
@@ -903,11 +950,13 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
                   aria-selected={c.id === selectedId}
 
-                  className={`case-row ${c.id === selectedId ? 'selected' : ''} ${rowState} ${isReady ? 'case-row-ready' : ''} ${flagged ? 'case-row-flagged' : ''} ${faved ? 'case-row-faved' : ''}`}
+                  className={`case-row ${c.id === selectedId ? 'selected' : ''} ${rowState} ${attempted ? 'case-row-attempted' : ''} ${isReady ? 'case-row-ready' : ''} ${flagged ? 'case-row-flagged' : ''} ${faved ? 'case-row-faved' : ''} ${isUber ? 'case-row-uber' : ''}`}
 
                   onClick={() => setSelectedId(c.id)}
 
                 >
+
+                  <CaseAttemptRadio caseId={c.id} onChange={() => setCheckVersion((v) => v + 1)} />
 
                   <span className="case-num">#{c.ccsNumber}</span>
 
@@ -946,6 +995,12 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
                   <span className="case-meta case-meta-tags">
 
                     <span className="case-stack-count">{orderCount} orders</span>
+
+                    {isUber && c.uberMeta?.domains?.length > 0 && (
+                      <span className="case-stack-count case-stack-count--uber">
+                        {c.uberMeta.domains.length} domains
+                      </span>
+                    )}
 
                     {listFilter === 'stacks' && orderCount >= STACK_TESTING_MIN_ORDERS && (
                       <span className="case-stack-count case-stack-count--stress">long stack</span>

@@ -86,7 +86,8 @@ Cursor rules in `game/.cursor/rules/` — agents must read the matching rule **b
 |-----------|----------|
 | `practice-presentation.mdc` | `practice_hpi` vs `hpi_narrative`; HPI tab never spoils diagnosis/treatment |
 | `play-case-chat.mdc` | Play stethoscope = Differential parity; chat session auto-recovery |
-| `patient-character-maps.mdc` | Pinterest → Magnific map → `patientLadyRefs.json` |
+| `patient-character-maps.mdc` | Pinterest → Magnific MCP map → `patientLadyRefs.json` |
+| `meworld-magnific-mcp.mdc` | Portrait gens — Kojo upload + `images_generate` @ 2k (not OpenAI) |
 | `scene-element-reference-lock.mdc` | Pinterest/product refs → element maps → load on next run (bed, monitor, IV, O2, table) |
 | `anatomic-iv-plates.mdc` | Sex-specific ED baseplates + IV zone scope |
 | `dev-server-guard.mdc` | Ports 5173/3001, `npm run dev` smoke chain |

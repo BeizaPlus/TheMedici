@@ -249,19 +249,38 @@ export function useGridDragGame({
         },
         end(event) {
           const el = event.target;
+          const ivId = el.dataset.ivId;
           el.classList.remove('pin-dragging');
           scene.classList.remove('grid-drag-active');
           clearHover();
           setPatientDropHighlight(scene, false);
-          if (event.relatedTarget && isPointerOverPatient(scene, event.clientX, event.clientY)) {
-            el.style.transform = 'translate(-50%, -100%)';
-          } else {
-            el.style.transition = `transform ${snapBackMs}ms ease`;
-            el.style.transform = 'translate(-50%, -100%)';
-            setTimeout(() => {
-              el.style.transition = '';
-            }, snapBackMs + 20);
+
+          const overPatient = isPointerOverPatient(scene, event.clientX, event.clientY);
+          const surface = scene.querySelector('.scene-grid-overlay.drop-target');
+
+          if (ivId && overPatient && surface) {
+            const cell = cellFromDropSurface(surface, event.clientX, event.clientY);
+            if (cell) {
+              const placement = { col: cell.col, row: cell.row, cx: cell.cx, cy: cell.cy };
+              el.style.transition = 'left 0.2s ease, top 0.2s ease';
+              el.style.left = `${placement.cx * 100}%`;
+              el.style.top = `${placement.cy * 100}%`;
+              el.style.transform = 'translate(-50%, -100%)';
+              el.setAttribute('data-x', '0');
+              el.setAttribute('data-y', '0');
+              onMovePinRef.current?.(ivId, placement, { wrap: el });
+              setTimeout(() => {
+                el.style.transition = '';
+              }, 220);
+              return;
+            }
           }
+
+          el.style.transition = `transform ${snapBackMs}ms ease`;
+          el.style.transform = 'translate(-50%, -100%)';
+          setTimeout(() => {
+            el.style.transition = '';
+          }, snapBackMs + 20);
           el.setAttribute('data-x', '0');
           el.setAttribute('data-y', '0');
           el.setAttribute('data-dropped', 'false');

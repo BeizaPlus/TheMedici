@@ -305,9 +305,9 @@ export default function CaseChatPanel({
         <div className="case-chat-messages selectable-text" ref={listRef}>
           {messages.map((m, i) => (
             <div key={`${m.role}-${i}-${m.content.slice(0, 24)}`} className={`case-chat-bubble ${m.role}`}>
-              <span className="case-chat-bubble-text">
+              <div className="case-chat-bubble-text">
                 <ChatMessageContent content={m.content} />
-              </span>
+              </div>
               {m.role === 'assistant' && (
                 <div className="case-chat-bubble-actions">
                   <button

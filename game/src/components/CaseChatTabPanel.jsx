@@ -40,7 +40,7 @@ export default function CaseChatTabPanel({ chat, caseData, compactHint = true })
         )}
         {visibleMessages.map((m, i) => (
           <div key={`${m.role}-${i}-${m.content.slice(0, 24)}`} className={`case-chat-bubble ${m.role}`}>
-            <span className="case-chat-bubble-text">{renderChatMarkdown(m.content)}</span>
+            <div className="case-chat-bubble-text">{renderChatMarkdown(m.content)}</div>
             {m.role === 'assistant' && (
               <div className="case-chat-bubble-actions">
                 <button

@@ -156,14 +156,16 @@ export function useCaseChat({
   const drainingRef = useRef(false);
 
   const runSend = useCallback(
-    async (trimmed, { notesMode = false, chatMode = defaultMode } = {}) => {
+    async (trimmed, { notesMode = false, chatMode = defaultMode, dockBrief = false } = {}) => {
       const sid = await ensureCaseChatSession(caseData, { chatMode });
       setSessionId((prev) => (prev !== sid ? sid : prev));
 
       setMessages((prev) => [...prev, { role: 'user', content: trimmed }]);
       persistMessage('user', trimmed);
 
-      const sessionContext = getSessionContext?.() ?? null;
+      const sessionContext = dockBrief
+        ? { dockBrief: true }
+        : (getSessionContext?.() ?? null);
       const result = await sendCaseChatMessage(sid, trimmed, sessionContext, {
         caseData,
         chatMode,
@@ -222,12 +224,16 @@ export function useCaseChat({
   }, [runSend]);
 
   const sendMessage = useCallback(
-    (text, { notesMode = false, chatMode = defaultMode } = {}) => {
+    (text, { notesMode = false, chatMode = defaultMode, dockBrief = false } = {}) => {
       const trimmed = String(text || '').trim();
       if (!trimmed) return Promise.resolve(null);
 
       return new Promise((resolve) => {
-        pendingQueueRef.current.push({ trimmed, options: { notesMode, chatMode }, resolve });
+        pendingQueueRef.current.push({
+          trimmed,
+          options: { notesMode, chatMode, dockBrief },
+          resolve,
+        });
         void drainSendQueue();
       });
     },

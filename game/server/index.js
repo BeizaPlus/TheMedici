@@ -8,6 +8,9 @@ import crypto from 'crypto';
 import { spawn } from 'child_process';
 import nodemailer from 'nodemailer';
 import { fileURLToPath } from 'url';
+import { loadMasterEnv } from './loadMasterEnv.js';
+
+loadMasterEnv();
 import {
   buildOrLoadManifest,
   countReadyChunks,
@@ -61,8 +64,16 @@ import {
   enrichCaseContextWithCleanCase,
   loadCleanCaseJson,
 } from './cleanCaseLoader.js';
-import { splitPatientReply } from '../src/lib/patientReplyText.js';
+import {
+  buildImmersaAttendantSystemPrompt,
+  immersaAttendantTemperature,
+} from './immersaAttendantPrompt.js';
+import {
+  buildImmersaPatientSystemPrompt,
+  immersaPatientTemperature,
+} from './immersaPatientPrompt.js';
 import { APP_PRODUCT_NAME } from '../src/lib/appBrand.js';
+import { splitPatientReply } from '../src/lib/patientReplyText.js';
 import { appendPatientStageEntry } from './patientStageCache.js';
 import {
   buildPortraitAnalysis,
@@ -73,12 +84,19 @@ import {
   extractPersonaFromPortraitImage,
   fetchYouTubeThumbnailBase64,
   formatPersonaForChat,
-  generatePortraitWithOpenAI,
+  generatePortraitWithFallback,
   portraitPublicUrl,
   readPortraitCache,
   resolvePortraitSex,
   writePortraitCache,
 } from './casePortrait.js';
+import {
+  generateImageEditWithMagnific,
+  magnificApiKey,
+  magnificImageModel,
+  magnificRefRouter,
+  portraitImageAvailable,
+} from './magnificImage.js';
 import {
   extractPortraitDirectorBrief,
   logPortraitRegenBlock,
@@ -136,6 +154,7 @@ if (corsOrigins.length) {
   app.use(cors());
 }
 app.use(express.json({ limit: '12mb' }));
+app.use('/api/magnific-ref', magnificRefRouter());
 
 const SCENE_CACHE_DIR = path.join(GAME_ROOT, '.scene-cache');
 if (!fs.existsSync(SCENE_CACHE_DIR)) {
@@ -348,96 +367,13 @@ function sanitizeCaseContextForPrompt(caseContext) {
 
 function buildCaseChatSystemPrompt(caseContext) {
   const ctx = caseContext?.learningMode ? sanitizeCaseContextForPrompt(caseContext) : caseContext;
-  const creativity = ctx?.simulationCreativity ?? 55;
-  const { band } = simulationCreativityBand(creativity);
-  const name = ctx?.patientName || 'the patient';
-  const facts = ctx?.patientFacts || {};
   const patientSim = ctx?.chatMode === 'patient_sim';
 
   if (patientSim) {
-    const bandRules =
-      band === 'strict'
-        ? `- Use PATIENT DEMOGRAPHICS, PATIENT FACTS, and CASE JSON only. Speak in first person, 1–2 short sentences.
-- When asked age, answer with patientDemographics.ageLabel exactly.
-- If isPediatric/speakAsChild, you are a child — never answer with an adult age.
-- NEVER narrate blinking, wincing, voice quality, weakness, or body language. NO asterisks. NO stage directions.
-- Answer only what the doctor asked — direct speech, straight to the point.
-- If a detail is missing, say you are not sure or do not remember — NEVER say "not documented in this case" or "check my records".`
-        : band === 'balanced'
-          ? `- Speak naturally in first person as the sick patient. Use PATIENT DEMOGRAPHICS, PATIENT FACTS, HPI EXCERPT, and CASE JSON.
-- When asked age, use patientDemographics.ageLabel exactly — never invent a different age.
-- If isPediatric or speakAsChild is true, you are a child patient (not an adult). Use simple words; a parent may be nearby.
-- NEVER narrate your own actions or sensations as prose (e.g. "I blink slowly", "my voice is weak"). NO asterisks. NO *actions*.
-- Give direct answers only — 1–3 sentences max. Do not describe how you look or sound.
-- NEVER say "not documented in this case". If unsure: "I don't remember" or "Nobody asked me that yet".`
-          : `- Fully inhabit ${name}. Natural, conversational first-person answers (1–3 sentences).
-- NEVER narrate blinking, voice weakness, or body language (wrong: "I blink slowly, my voice still weak"). Right: "Yeah, my chest hurts when I breathe."
-- NO asterisks, NO stage directions, NO third-person description of yourself. Answer only what was asked.
-- Use PATIENT DEMOGRAPHICS, HPI EXCERPT, PATIENT FACTS, vitals, and presentation to simulate a believable ED patient.
-- When asked age, answer with patientDemographics.ageLabel exactly. If isPediatric/speakAsChild, never claim to be an adult (30s–50s).
-- Only invent missing social details that fit the same age band (child vs adult) — keep them stable across the interview.
-- Plausible everyday details are OK (school vs work, family, when symptoms started).
-- NEVER break character. NEVER say "not documented", "JSON", or "simulation".
-- For tests not done yet: "They haven't given me those results yet" — not chart-speak.`;
-
-    return `You ARE the patient "${name}" in the emergency department. The learner is interviewing you.
-
-OUTPUT FORMAT (mandatory — violations are stripped and break the UI):
-- Reply with ONLY the words you say aloud to the doctor. Nothing else.
-- FORBIDDEN: parentheses, asterisks, stage directions, narrating breaths, voice quality, gestures, or shifting in bed.
-- FORBIDDEN examples: *(I take a shallow breath...)* · (I rub my forehead) · "my voice is weak" · "I blink slowly"
-- GOOD example when asked your name: "My name is Fang Huang."
-- Do not prepend or append action lines. Start with the answer.
-
-SIMULATION CREATIVITY: ${creativity}/100 (${band} mode)
-${bandRules}
-
-PATIENT DEMOGRAPHICS (mandatory — age questions must match this; overrides guesses):
-${JSON.stringify(ctx?.patientDemographics || {}, null, 2)}
-
-PATIENT FACTS (ground truth for interview answers):
-${JSON.stringify(facts, null, 2)}
-${ctx?.patientVoice ? `
-PATIENT VOICE (first-person cues — child vs adult tone):
-${JSON.stringify(ctx.patientVoice, null, 2)}
-` : ''}
-${ctx?.patientPersona ? `
-PATIENT APPEARANCE & PRESENCE (from this case's portrait — stay consistent with how you look and sound):
-${formatPersonaForChat(ctx.patientPersona)}
-` : ''}
-HPI EXCERPT:
-${ctx?.hpiExcerpt || '(see CASE JSON history fields)'}
-${ctx?.caseDiscussion ? `
-PRIOR CASE DISCUSSION & TRANSCRIPTS (this case only — treat as your memory of earlier interviews and what you already told the learner; stay consistent):
-${formatCaseDiscussionForChat(ctx.caseDiscussion)}
-` : ''}
-${ctx?.caseBriefMarkdown ? `
-CASE DOSSIER (Markdown — OCR, constants, transcripts, and raw data reorganized for this case; ground truth for interview):
-${ctx.caseBriefMarkdown}
-` : ''}
-When the learner message includes SESSION SO FAR (orders, vitals, timeline), you may reference what has already happened in this visit — still in patient voice.
-
-CASE JSON:
-${JSON.stringify(ctx, null, 2)}`;
+    return buildImmersaPatientSystemPrompt(ctx, { formatCaseDiscussionForChat });
   }
 
-  const roleLine =
-    'You are the MASTER CLINICAL TUTOR (attending/educator), NOT the patient. Never reply in patient first person. Never say you only know your symptoms.';
-  return `${roleLine}
-
-Rules:
-- Keep answers practical for emergency medicine training — use short headings or numbered bullets when the learner thinks out loud or reviews a whole workup.
-- When the learner streams partial knowledge (correct + wrong + "I forgot"), affirm what is right, correct errors plainly, fill gaps, and tie back to case orders (CBC, complement, ANA, anti-dsDNA, UA, sun protection, etc.).
-- Answer pathophysiology, mechanism, anatomy, and "why" questions directly (e.g. complement consumption in SLE, anti-dsDNA vs anti-Smith specificity, lupus nephritis monitoring).
-- For "how would autoimmune affect DNA" — explain that anti-dsDNA targets native double-stranded DNA (nucleosomes), not mRNA/topoisomerase; anti-Smith is anti-Sm nuclear ribonucleoprotein — not topoisomerase.
-- SLE musculoskeletal: avascular necrosis (esp. with steroids), inflammatory arthritis — not primarily "bone marrow attack."
-- Do not invent labs, imaging results, or outcomes not present in the JSON unless clearly labeled as teaching speculation.
-- When differentialStudyContext is present, use it for CCS orders (ordersText/orders), treatmentStacks, answer-key differentials, realWorldStories, savedVideoTranscripts, and pictureNotes (likeness/teach-in attachments) — reference these when the learner asks about workup, treatment stack, Real World videos, or saved visual refs.
-- When the learner sends a message, it may include a SESSION SO FAR block with ordersTimeline and standardFlow (Teach Me compare). Use that live session data to explain placement mistakes, out-of-order steps, and what to do next — in addition to the static case JSON.
-- NEVER return an empty reply. If the question is long, summarize the learner's points then teach.
-
-CASE JSON:
-${JSON.stringify(ctx, null, 2)}`;
+  return buildImmersaAttendantSystemPrompt(ctx, { formatCaseDiscussionForChat });
 }
 
 async function callChatCompletion(key, messages, { maxTokens = 700, temperature = 0.35 } = {}) {
@@ -608,8 +544,10 @@ const FAL_SCENE_MODEL = process.env.FAL_SCENE_MODEL || 'fal-ai/joyai-image-edit'
 
 function sceneImageProvider() {
   const pref = String(process.env.SCENE_IMAGE_PROVIDER || 'auto').toLowerCase();
-  if (pref === 'openai') return 'openai';
-  if (pref === 'fal') return process.env.FAL_KEY ? 'fal' : 'openai';
+  if (pref === 'magnific') return magnificApiKey() ? 'magnific' : null;
+  if (pref === 'openai') return process.env.OPENAI_API_KEY ? 'openai' : null;
+  if (pref === 'fal') return process.env.FAL_KEY ? 'fal' : magnificApiKey() ? 'magnific' : null;
+  if (magnificApiKey()) return 'magnific';
   if (process.env.FAL_KEY) return 'fal';
   return process.env.OPENAI_API_KEY ? 'openai' : null;
 }
@@ -657,6 +595,19 @@ async function generateSceneWithFal({ imageBase64, mimeType, prompt }) {
   return downloadImageAsBase64(imageUrl);
 }
 
+async function generateSceneWithMagnific({ imageBase64, mimeType, prompt }) {
+  if (!magnificApiKey()) throw new Error('MAGNIFIC_API_KEY not configured');
+  const buf = await generateImageEditWithMagnific({
+    imageBase64,
+    mimeType,
+    prompt,
+    aspectRatio: '16:9',
+    resolution: process.env.MAGNIFIC_SCENE_RESOLUTION || '2K',
+    referenceText: 'Match reference camera lock and room layout; change scene context only as prompted.',
+  });
+  return buf.toString('base64');
+}
+
 async function generateSceneWithOpenAI({ imageBase64, mimeType, prompt }) {
   const key = process.env.OPENAI_API_KEY;
   if (!key) throw new Error('OPENAI_API_KEY not configured');
@@ -685,8 +636,16 @@ async function generateSceneWithOpenAI({ imageBase64, mimeType, prompt }) {
 
 async function generateSceneImage({ imageBase64, mimeType, prompt }) {
   const provider = sceneImageProvider();
-  if (!provider) throw new Error('Add FAL_KEY or OPENAI_API_KEY to MeWorld/.env');
-  if (provider === 'fal') {
+  if (!provider) throw new Error('Add MAGNIFIC_API_KEY, FAL_KEY, or OPENAI_API_KEY to MeWorld/.env');
+  if (provider === 'magnific') {
+    try {
+      return { outB64: await generateSceneWithMagnific({ imageBase64, mimeType, prompt }), provider: 'magnific' };
+    } catch (magnificErr) {
+      if (!process.env.FAL_KEY && !process.env.OPENAI_API_KEY) throw magnificErr;
+      console.warn('[generate-scene] Magnific failed, falling back:', magnificErr.message);
+    }
+  }
+  if (provider === 'fal' || process.env.FAL_KEY) {
     try {
       return { outB64: await generateSceneWithFal({ imageBase64, mimeType, prompt }), provider: 'fal' };
     } catch (falErr) {
@@ -715,8 +674,10 @@ app.get('/api/health', (_req, res) => {
     chatProvider: provider,
     chatModel: chatModel(),
     fal: Boolean(process.env.FAL_KEY),
+    magnific: Boolean(magnificApiKey()),
+    magnificImageModel: magnificImageModel(),
     sceneProvider: sceneImageProvider(),
-    casePortraits: Boolean(process.env.OPENAI_API_KEY),
+    casePortraits: portraitImageAvailable(),
     falSceneModel: FAL_SCENE_MODEL,
     chatterbox: pythonReady && scriptReady,
     chatterboxPython: CHATTERBOX_PYTHON,
@@ -939,7 +900,10 @@ app.post('/api/case-chat/start', async (req, res) => {
     pruneCaseChatSessions();
     const sessionId = crypto.randomBytes(16).toString('hex');
     const creativity = caseContext?.simulationCreativity ?? 55;
-    const { temperature } = simulationCreativityBand(creativity);
+    const isPatientSim = caseContext.chatMode === 'patient_sim';
+    const temperature = isPatientSim
+      ? immersaPatientTemperature(creativity)
+      : immersaAttendantTemperature(creativity);
     const systemPrompt = buildCaseChatSystemPrompt(caseContext);
     caseChatSessions.set(sessionId, {
       caseId: String(caseContext.id),
@@ -1203,7 +1167,16 @@ app.post('/api/case-chat/message', async (req, res) => {
 
   try {
     let userContent = text;
-    if (sessionContext && typeof sessionContext === 'object') {
+    if (sessionContext?.dockBrief) {
+      const briefLead =
+        session.chatMode === 'patient_sim'
+          ? `[ORDER DOCK — patient voice, 1–3 short sentences in lay language. Answer only what was asked.]\n\n`
+          : `[ORDER DOCK — ultra-brief tutor reply]
+2–4 short sentences max. No intro ("I am the attendant…"). No disclaimer about not being the patient. No bullet lists unless they asked for a list. Direct answer first. Full teaching is in the Chat tab.
+
+Learner question: `;
+      userContent = `${briefLead}${text}`;
+    } else if (sessionContext && typeof sessionContext === 'object') {
       const header = sessionContext.standardFlow
         ? '[SESSION SO FAR — standard flow compare, order timeline, case transcripts, notes, and scene activity for this run]'
         : '[SESSION SO FAR — orders, case transcripts, notes, and scene activity for this run]';
@@ -1218,7 +1191,15 @@ app.post('/api/case-chat/message', async (req, res) => {
     }
     session.messages.push({ role: 'user', content: userContent });
     const window = session.messages.slice(0, 1).concat(session.messages.slice(-24));
-    const maxTokens = session.chatMode === 'patient_sim' ? 450 : 1600;
+    const dockBrief = Boolean(sessionContext?.dockBrief);
+    const maxTokens =
+      session.chatMode === 'patient_sim'
+        ? dockBrief
+          ? 220
+          : 450
+        : dockBrief
+          ? 220
+          : 1600;
     const reply = await callCaseChatCompletion(key, window, {
       temperature: session.temperature ?? 0.45,
       maxTokens,
@@ -1287,7 +1268,10 @@ app.post('/api/order-why', async (req, res) => {
       playbookWhy,
       caseContext: caseContext && typeof caseContext === 'object' ? caseContext : {},
     });
-    const why = await callChatCompletion(key, messages, { maxTokens: 320, temperature: 0.32 });
+    const why = await callChatCompletion(key, messages, {
+      maxTokens: 320,
+      temperature: immersaAttendantTemperature(caseContext?.simulationCreativity ?? 55),
+    });
     const saved = await writeOrderWhyEntry(ORDER_WHY_CACHE_DIR, cid, oid, {
       why,
       orderLabel: label,
@@ -1700,7 +1684,7 @@ app.get('/api/case-portrait/:caseId', async (req, res) => {
       cachedAt: cached.meta?.cachedAt || null,
       analysis: cached.meta?.analysis || null,
       persona: cached.meta?.persona || cached.meta?.analysis?.persona || null,
-      provider: cached.meta?.provider || 'openai',
+      provider: cached.meta?.provider || 'magnific',
       sourceVideo: cached.meta?.sourceVideo || null,
       patientSex: cached.meta?.patientSex || cached.meta?.analysis?.sex || null,
       ladyRefSlug: cached.meta?.ladyRefSlug || null,
@@ -1854,7 +1838,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
             iv: portraitLayerPublicUrl(caseId, 'iv', origin),
             mask: portraitLayerPublicUrl(caseId, 'mask', origin),
           },
-          provider: 'openai',
+          provider: cached.meta?.provider || 'magnific',
           analysis: cached.meta?.analysis || buildPortraitAnalysis(caseContext, persona),
           persona,
           patientSex: cachedSex || portraitSex,
@@ -1882,7 +1866,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       directorBrief,
       variant: 'base',
     });
-    const baseB64 = await generatePortraitWithOpenAI({
+    const { b64: baseB64, provider: portraitProvider } = await generatePortraitWithFallback({
       imageBase64: editBase64,
       mimeType: 'image/png',
       prompt: basePrompt,
@@ -1893,7 +1877,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       directorBrief,
       variant: 'iv',
     });
-    const ivB64 = await generatePortraitWithOpenAI({
+    const { b64: ivB64 } = await generatePortraitWithFallback({
       imageBase64: baseB64,
       mimeType: 'image/png',
       prompt: ivPrompt,
@@ -1915,6 +1899,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       portraitLayersVersion: PORTRAIT_LAYERS_VERSION,
       directorBriefSource: directorBrief?.source || null,
       chatMessageCount: chatMessages.length,
+      provider: portraitProvider || 'magnific',
     };
 
     await writePortraitCache(CASE_PORTRAIT_DIR, caseId, baseB64, meta);
@@ -1947,7 +1932,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
         iv: portraitLayerPublicUrl(caseId, 'iv', origin),
         mask: portraitLayerPublicUrl(caseId, 'mask', origin),
       },
-      provider: 'openai',
+      provider: portraitProvider || 'magnific',
       analysis,
       persona,
       patientSex: portraitSex,
@@ -1981,7 +1966,7 @@ app.post('/api/case-avatar/from-video', async (req, res) => {
     const thumb = await fetchYouTubeThumbnailBase64(youtubeId);
     const ctx = caseContext && typeof caseContext === 'object' ? caseContext : { id };
     const prompt = buildVideoAvatarPrompt(ctx, { patientName, videoTitle: title });
-    const outB64 = await generatePortraitWithOpenAI({
+    const { b64: outB64, provider: portraitProvider } = await generatePortraitWithFallback({
       imageBase64: thumb.base64,
       mimeType: thumb.mimeType,
       prompt,
@@ -2064,6 +2049,14 @@ No text overlays, no extra people, no style transfer. Photorealistic hospital sc
 });
 
 async function generateLikenessImage({ imageBase64, mimeType, prompt }) {
+  if (magnificApiKey() && sceneImageProvider() !== 'fal' && sceneImageProvider() !== 'openai') {
+    try {
+      return await generateSceneWithMagnific({ imageBase64, mimeType, prompt });
+    } catch (magnificErr) {
+      if (!process.env.FAL_KEY && !process.env.OPENAI_API_KEY) throw magnificErr;
+      console.warn('[magic/create] Magnific failed, falling back:', magnificErr.message);
+    }
+  }
   if (process.env.FAL_KEY && sceneImageProvider() === 'fal') {
     try {
       return await generateSceneWithFal({ imageBase64, mimeType, prompt });
@@ -2077,7 +2070,7 @@ async function generateLikenessImage({ imageBase64, mimeType, prompt }) {
 
 app.post('/api/magic/create', async (req, res) => {
   if (!sceneImageProvider()) {
-    return res.status(400).json({ error: 'Add FAL_KEY or OPENAI_API_KEY to MeWorld/.env' });
+    return res.status(400).json({ error: 'Add MAGNIFIC_API_KEY, FAL_KEY, or OPENAI_API_KEY to MeWorld/.env' });
   }
   const { imageBase64, mimeType = 'image/png', email = '', origin = '' } = req.body || {};
   if (!imageBase64) return res.status(400).json({ error: 'Missing image' });

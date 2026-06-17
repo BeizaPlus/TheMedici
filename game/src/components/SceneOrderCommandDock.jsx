@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { FiSend } from 'react-icons/fi';
+import { FiMessageSquare, FiSend, FiX } from 'react-icons/fi';
 import { IconCamera, IconFileMedical } from './sceneToolbar/SceneToolbarIcons.jsx';
 import PatientPortraitAvatar from './PatientPortraitAvatar.jsx';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
@@ -76,8 +76,7 @@ function SceneOrderCommandDock({
     <div
       className={`scene-order-command-dock${dockContextOpen ? ' scene-order-command-dock--reply-open' : ''}`}
     >
-      <header className="scene-order-command-head">
-        <span className="scene-order-command-title">Order · Chat</span>
+      <header className="scene-order-command-head" aria-label="Order and chat">
         <div className="scene-order-command-actions">
           {onPatientModeChange && (
             <button
@@ -176,14 +175,11 @@ function SceneOrderCommandDock({
         >
           <button
             type="button"
-            className="scene-order-command-reply-toggle"
+            className="scene-order-command-reply-toggle scene-order-command-reply-toggle--icon"
             onClick={() => onToggleOrderContext?.()}
             aria-expanded={showOrderContext}
+            aria-label={showOrderContext ? 'Hide result' : 'Show result'}
           >
-            <span className="scene-order-command-reply-label">
-              {showOrderContext ? 'Hide result' : 'Show result'}
-              {orderContextLabel ? ` · ${orderContextLabel}` : ''}
-            </span>
             <span className="scene-order-command-reply-chevron" aria-hidden>
               {showOrderContext ? '▴' : '▾'}
             </span>
@@ -200,34 +196,38 @@ function SceneOrderCommandDock({
         <div className={`scene-order-command-reply scene-order-command-context${replyExpanded ? ' is-expanded' : ' is-collapsed'}`}>
           <button
             type="button"
-            className="scene-order-command-reply-toggle"
+            className="scene-order-command-reply-toggle scene-order-command-reply-toggle--icon"
             onClick={() => onToggleReplyExpanded?.()}
             aria-expanded={replyExpanded}
+            aria-label={replyExpanded ? 'Hide answer' : 'Show answer'}
           >
-            <span className="scene-order-command-reply-label">
-              {replyExpanded ? 'Hide answer' : 'Show answer'}
-            </span>
             <span className="scene-order-command-reply-chevron" aria-hidden>
               {replyExpanded ? '▴' : '▾'}
             </span>
           </button>
           {replyExpanded && (
             <div className="scene-order-command-reply-body selectable-text">
-              {quickReply.question && (
-                <p className="scene-order-command-reply-question">
-                  <span className="scene-order-command-reply-you">You</span>
-                  {quickReply.question}
-                </p>
-              )}
               <div className="scene-order-command-reply-answer">
                 {renderChatMarkdown(replyAnswer)}
               </div>
               <div className="scene-order-command-reply-actions">
-                <button type="button" className="btn-ghost btn-ghost-sm" onClick={() => onOpenFullChat?.()}>
-                  Open chat
+                <button
+                  type="button"
+                  className="scene-order-command-icon-btn"
+                  aria-label="Open full chat"
+                  title="Open chat"
+                  onClick={() => onOpenFullChat?.()}
+                >
+                  <FiMessageSquare aria-hidden />
                 </button>
-                <button type="button" className="btn-ghost btn-ghost-sm" onClick={() => onDismissReply?.()}>
-                  Dismiss
+                <button
+                  type="button"
+                  className="scene-order-command-icon-btn"
+                  aria-label="Dismiss"
+                  title="Dismiss"
+                  onClick={() => onDismissReply?.()}
+                >
+                  <FiX aria-hidden />
                 </button>
               </div>
             </div>

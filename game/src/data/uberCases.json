@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "description": "Eight composite patients — one session spans multiple CCS domains. Merged order stacks at play time.",
+  "cases": [
+    {
+      "id": "U01",
+      "title": "Elena — Neuro & Weakness",
+      "patientName": "Elena Vasquez",
+      "domains": ["Neurology", "MSK & General"],
+      "anchorId": "007",
+      "memberCaseIds": ["007", "046", "041", "068"],
+      "segmentLabels": [
+        "Generalized weakness (MG workup)",
+        "Weakness in extremities (GBS pattern)",
+        "Nonspecific weakness",
+        "Muscle weakness — fatigability"
+      ],
+      "briefingNote": "One patient, four weakness presentations you would otherwise drill as separate CCS cases.",
+      "objective": "Stabilize and work up progressive weakness across neuromuscular differentials — MG, GBS, and mimics.",
+      "chiefComplaint": "Progressive weakness over weeks — ptosis, limb fatigability, and dyspnea on exertion."
+    },
+    {
+      "id": "U02",
+      "title": "James — Cardiopulmonary Acute",
+      "patientName": "James Okonkwo",
+      "domains": ["Cardiopulmonary", "Emergency Medicine"],
+      "anchorId": "001",
+      "memberCaseIds": ["001", "023", "053", "126"],
+      "segmentLabels": [
+        "Chest pain — ACS rule-out",
+        "Shortness of breath — acute dyspnea",
+        "SOB with cardiac risk",
+        "Respiratory distress escalation"
+      ],
+      "briefingNote": "Chest pain and dyspnea in one admission — cardio + pulmonary orders without switching patients.",
+      "objective": "Evaluate chest pain and dyspnea with overlapping cardiac and pulmonary pathways.",
+      "chiefComplaint": "Substernal chest pressure and worsening shortness of breath over 24 hours."
+    },
+    {
+      "id": "U03",
+      "title": "Maria — GI & Abdomen",
+      "patientName": "Maria Santos",
+      "domains": ["GI & Abdomen", "Emergency Medicine"],
+      "anchorId": "004",
+      "memberCaseIds": ["004", "019", "032", "084"],
+      "segmentLabels": [
+        "Abdominal pain — initial ED",
+        "Abdominal pain — surgical screen",
+        "Abdominal pain — inflammatory",
+        "Abdominal pain — complicated course"
+      ],
+      "briefingNote": "Four abdominal-pain CCS variants merged — efficient surgical / medical / OB-GYN screening.",
+      "objective": "Diagnose and manage abdominal pain across surgical, inflammatory, and obstructive etiologies.",
+      "chiefComplaint": "Progressive abdominal pain with nausea — location and character evolve during the stay."
+    },
+    {
+      "id": "U04",
+      "title": "David — Neuro Headache & AMS",
+      "patientName": "David Kim",
+      "domains": ["Neurology", "Emergency Medicine"],
+      "anchorId": "005",
+      "memberCaseIds": ["005", "034", "002", "049"],
+      "segmentLabels": [
+        "Headache — primary workup",
+        "Headache — secondary red flags",
+        "Altered mental status overlap",
+        "Severe headache — neuro imaging"
+      ],
+      "briefingNote": "Headache and AMS threads in one neuro admission — SAH, meningitis, and mass lesions.",
+      "objective": "Rule out life-threatening headache and AMS causes before symptomatic treatment.",
+      "chiefComplaint": "Worst headache of life with intermittent confusion and photophobia."
+    },
+    {
+      "id": "U05",
+      "title": "Aisha — Women's & GU",
+      "patientName": "Aisha Patel",
+      "domains": ["OB/GYN", "Genitourinary"],
+      "anchorId": "003",
+      "memberCaseIds": ["003", "028", "008", "164"],
+      "segmentLabels": [
+        "Pelvic pain — gynecologic",
+        "Pelvic pain — pregnancy-related",
+        "Dysuria / UTI workup",
+        "Pelvic pain — complex"
+      ],
+      "briefingNote": "Pelvic and urinary complaints in one reproductive-age patient — OB, GU, and STI overlap.",
+      "objective": "Evaluate pelvic pain and urinary symptoms with pregnancy and infection rule-outs.",
+      "chiefComplaint": "Lower abdominal and pelvic pain with dysuria for several days."
+    },
+    {
+      "id": "U06",
+      "title": "Robert — MSK Pain Marathon",
+      "patientName": "Robert Hayes",
+      "domains": ["MSK & General", "Neurology"],
+      "anchorId": "042",
+      "memberCaseIds": ["042", "079", "069", "098"],
+      "segmentLabels": [
+        "Knee pain — trauma vs septic",
+        "Back pain — radiculopathy",
+        "Leg pain — vascular vs neuro",
+        "Chronic back pain — red flags"
+      ],
+      "briefingNote": "Knee, back, and leg pain in one patient — ortho, neuro, and vascular screens combined.",
+      "objective": "Differentiate mechanical, inflammatory, vascular, and neurologic limb and spine pain.",
+      "chiefComplaint": "Knee swelling after a fall, with new leg pain and progressive low back stiffness."
+    },
+    {
+      "id": "U07",
+      "title": "Sophie — Fever, Rash & ID",
+      "patientName": "Sophie Laurent",
+      "domains": ["ID & Dermatology", "Emergency Medicine"],
+      "anchorId": "006",
+      "memberCaseIds": ["006", "110", "127", "141"],
+      "segmentLabels": [
+        "Rash and lethargy — pediatric-style ID",
+        "Fever with rash — adult",
+        "Diffuse rash — drug vs infection",
+        "Rash — disseminated infection"
+      ],
+      "briefingNote": "Fever and rash variants in one admission — meningococcemia, viral exanthem, and drug reaction.",
+      "objective": "Stabilize febrile rash and identify infectious vs allergic etiologies.",
+      "chiefComplaint": "Fever, diffuse rash, and lethargy worsening over 48 hours."
+    },
+    {
+      "id": "U08",
+      "title": "Marcus — Psych & Behavior",
+      "patientName": "Marcus Webb",
+      "domains": ["Psychiatry & Social", "Neurology"],
+      "anchorId": "065",
+      "memberCaseIds": ["065", "128", "160", "033"],
+      "segmentLabels": [
+        "Anxiety — medical rule-out",
+        "Depression — safety assessment",
+        "Anxiety — complicated",
+        "AMS — organic vs psychiatric"
+      ],
+      "briefingNote": "Psychiatric presentations with mandatory medical and AMS rule-outs in one encounter.",
+      "objective": "Assess anxiety and depression while excluding organic AMS and substance causes.",
+      "chiefComplaint": "Panic attacks, low mood, and episodes of confusion — family worried about safety."
+    }
+  ]
+}

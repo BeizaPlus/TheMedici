@@ -76,9 +76,9 @@ function ThreadNoteBubble({ content }) {
         </span>
       </button>
       {open && body && (
-        <span className="case-chat-bubble-text">
+        <div className="case-chat-bubble-text">
           <ChatMessageContent content={body} />
-        </span>
+        </div>
       )}
     </div>
   );
@@ -394,9 +394,9 @@ export default function CaseSessionThread({
                   key={m.id || `${m.role}-${i}`}
                   className={`case-chat-bubble ${m.role}`}
                 >
-                  <span className="case-chat-bubble-text">
+                  <div className="case-chat-bubble-text">
                     <ChatMessageContent content={bubbleText} />
-                  </span>
+                  </div>
                   {m.role === 'assistant' && (
                     <div className="case-chat-bubble-actions">
                       <button

@@ -46,6 +46,6 @@ export async function fitToBaseplate(buffer) {
     .toBuffer();
 }
 
-export async function bufferToBase64(buffer) {
+export function bufferToBase64(buffer) {
   return buffer.toString('base64');
 }

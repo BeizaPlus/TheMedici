@@ -11,8 +11,6 @@ import {
   writeVisionZones,
 } from '../lib/patientImage.js';
 import { getPresentationHistory } from '../lib/casePresentation.js';
-import { clearCaseRegenImage, ensureCasePortrait, readCaseRegenImage } from '../lib/patientRegen.js';
-import { CASE_AVATAR_EVENT } from '../lib/caseAvatar.js';
 import CasePortraitBriefControl from './CasePortraitBriefControl.jsx';
 import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
@@ -28,6 +26,7 @@ import {
 } from '../lib/caseBriefing.js';
 import { isLearningMode } from '../lib/learningMode.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
+import { useCasePortraitSrc } from '../hooks/useCasePortraitSrc.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
   BRIEFING_UI_ELEMENTS,
@@ -79,7 +78,11 @@ function studioOnlyPosition(entry, layoutStudio) {
 
 export default function Briefing({ caseData, onBegin, onBack, onSelectCase, studioCapture = false }) {
   const brand = getBranding();
-  const [regenSrc, setRegenSrc] = useState(() => readCaseRegenImage(caseData?.id));
+  const {
+    portraitForceSrc,
+    setPortraitSrc,
+    clearPortraitSrc,
+  } = useCasePortraitSrc(caseData);
   const [portraitRegenBusy, setPortraitRegenBusy] = useState(false);
   const [portraitRegenMsg, setPortraitRegenMsg] = useState('');
   const [readState, setReadState] = useState('idle');
@@ -99,31 +102,9 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
   }, []);
 
   useEffect(() => {
-    setRegenSrc(readCaseRegenImage(caseData?.id));
     stopCaseReader();
     setReadState('idle');
     setReadMsg('');
-  }, [caseData?.id]);
-
-  useEffect(() => {
-    if (!caseData?.id) return;
-    let cancelled = false;
-    void ensureCasePortrait(caseData).then((url) => {
-      if (!cancelled && url) setRegenSrc(url);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [caseData?.id, caseData?.patientSex]);
-
-  useEffect(() => {
-    const onAvatar = (e) => {
-      if (String(e.detail?.caseId) !== String(caseData?.id)) return;
-      const url = e.detail?.url;
-      if (url) setRegenSrc(url);
-    };
-    window.addEventListener(CASE_AVATAR_EVENT, onAvatar);
-    return () => window.removeEventListener(CASE_AVATAR_EVENT, onAvatar);
   }, [caseData?.id]);
 
   useEffect(() => () => stopCaseReader(), []);
@@ -132,7 +113,7 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
     let cancelled = false;
     async function run() {
       try {
-        const savedRegen = readCaseRegenImage(caseData.id);
+        const savedRegen = portraitForceSrc;
         let payload;
         if (savedRegen?.startsWith('data:')) {
           payload = {
@@ -182,7 +163,7 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
     return () => {
       cancelled = true;
     };
-  }, [caseData?.id]);
+  }, [caseData?.id, caseData, portraitForceSrc]);
 
   useEffect(() => {
     if (!uiDrag) return undefined;
@@ -380,7 +361,7 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
           caseData={caseData}
           onBusyChange={setPortraitRegenBusy}
           onRegenerated={(result) => {
-            if (result?.dataUrl) setRegenSrc(result.dataUrl);
+            if (result?.dataUrl) setPortraitSrc(result.dataUrl);
             setPortraitRegenMsg('Portrait updated.');
             window.setTimeout(() => setPortraitRegenMsg(''), 4000);
           }}
@@ -418,13 +399,10 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
           scene={caseData.patientScene}
           caseData={caseData}
           className="briefing-scene-img"
-          forceSrc={regenSrc}
+          forceSrc={portraitForceSrc}
           showVideoBackground={false}
           onSceneError={() => {
-            if (regenSrc) {
-              clearCaseRegenImage(caseData?.id);
-              setRegenSrc(null);
-            }
+            if (portraitForceSrc) clearPortraitSrc();
           }}
         />
         {portraitRegenBusy && (
@@ -446,6 +424,18 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             {caseData.timeLimit ? ` · ${caseData.timeLimit}` : ''}
           </p>
           <h1>{toTitleCase(caseData.title)}</h1>
+          {caseData.uberMeta && (
+            <div className="briefing-uber-meta">
+              <p className="briefing-uber-note">{caseData.uberMeta.briefingNote}</p>
+              <ul className="briefing-uber-segments">
+                {caseData.uberMeta.segments?.map((seg) => (
+                  <li key={seg.id}>
+                    <span className="briefing-uber-seg-num">#{seg.ccsNumber}</span> {seg.label}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 

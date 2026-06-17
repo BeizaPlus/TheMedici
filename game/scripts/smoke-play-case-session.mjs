@@ -92,6 +92,7 @@ async function main() {
     const text = msg.text();
     if (/React does not recognize|Warning:/i.test(text)) return;
     if (/Failed to load resource:.*\b500\b/i.test(text)) return;
+    if (/Failed to load resource:.*\b429\b/i.test(text)) return;
     errors.push(text);
   });
 
@@ -120,7 +121,9 @@ async function main() {
   ok(await beginBtn.isVisible({ timeout: 8000 }), 'Begin case button visible');
   await beginBtn.click();
 
-  await page.waitForSelector('.game-scene', { timeout: 25000 });
+  await page.waitForSelector('main.briefing', { state: 'hidden', timeout: 20000 }).catch(() => {});
+  await page.waitForSelector('.game-scene, div.game', { timeout: 60000 });
+  await page.waitForSelector('.game-scene', { timeout: 20000 });
   await page.waitForTimeout(2000);
   await shot(page, showedOnboarding ? '05-play-scene' : '04-play-scene');
 

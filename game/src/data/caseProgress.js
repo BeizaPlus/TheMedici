@@ -1,5 +1,6 @@
 import { STORAGE } from '../lib/storageKeys.js';
 import { getBranding } from './gameData.js';
+import { getUberDefinition } from '../lib/uberCases.js';
 
 const STORAGE_KEY = STORAGE.progress;
 
@@ -60,6 +61,77 @@ export function getFlaggedReviewCount() {
 
 export function isFavorite(caseId) {
   return Boolean(getCaseRecord(caseId)?.favorite);
+}
+
+/** Manual study checklist — independent of accuracy-based "mastered". */
+export function isCaseStudyDone(caseId) {
+  return isCaseAttempted(caseId);
+}
+
+/** Learner opened or finished this case — green radio in case lists. */
+export function isCaseAttempted(caseId) {
+  const rec = getCaseRecord(caseId);
+  if (!rec) return false;
+  if (rec.attempted === false) return false;
+  return Boolean(
+    rec.attempted || rec.studyDone || (rec.plays ?? 0) > 0 || rec.lastVisited,
+  );
+}
+
+export function markCaseAttempted(caseId, source = 'visit') {
+  const id = normalizeCaseProgressId(caseId);
+  if (!id) return false;
+  const p = readProgress();
+  const prev = p.cases[id] || {
+    plays: 0,
+    bestAccuracy: 0,
+    completed: false,
+    lastPlayed: null,
+  };
+  const next = {
+    ...prev,
+    attempted: true,
+    attemptedAt: prev.attemptedAt || new Date().toISOString(),
+    attemptedSource: source,
+  };
+  p.cases[id] = next;
+  writeProgress(p);
+  return true;
+}
+
+export function toggleCaseAttempted(caseId) {
+  const id = normalizeCaseProgressId(caseId);
+  if (!id) return false;
+  const p = readProgress();
+  const prev = p.cases[id] || {
+    plays: 0,
+    bestAccuracy: 0,
+    completed: false,
+    lastPlayed: null,
+  };
+  const nextAttempted = isCaseAttempted(id) ? false : true;
+  const next = {
+    ...prev,
+    attempted: nextAttempted,
+    attemptedAt: nextAttempted ? new Date().toISOString() : null,
+    attemptedSource: nextAttempted ? 'manual' : null,
+  };
+  p.cases[id] = next;
+  writeProgress(p);
+  return nextAttempted;
+}
+
+export function countAttemptedInIds(ids = []) {
+  return ids.filter((rawId) => isCaseAttempted(rawId)).length;
+}
+
+/** @deprecated use countAttemptedInIds */
+export function countStudyDoneInIds(ids = []) {
+  return countAttemptedInIds(ids);
+}
+
+export function toggleCaseStudyDone(caseId) {
+  return toggleCaseAttempted(caseId);
 }
 
 export function toggleFavorite(caseId) {
@@ -157,6 +229,9 @@ export function recordCaseComplete(caseId, { accuracy, attempts, seconds }) {
     lastPlayed: new Date().toISOString(),
     lastAttempts: attempts,
     lastSeconds: seconds,
+    attempted: true,
+    attemptedAt: prev.attemptedAt || new Date().toISOString(),
+    attemptedSource: prev.attemptedSource || 'complete',
   };
   p.cases[id] = next;
   writeProgress(p);
@@ -273,8 +348,18 @@ export function touchCaseVisited(caseId, source = 'play') {
     ...prev,
     lastVisited: new Date().toISOString(),
     lastVisitSource: source,
+    attempted: true,
+    attemptedAt: prev.attemptedAt || new Date().toISOString(),
+    attemptedSource: prev.attemptedSource || source,
   };
   writeProgress(p);
+
+  const uber = getUberDefinition(id);
+  if (uber?.memberCaseIds?.length) {
+    for (const memberId of uber.memberCaseIds) {
+      markCaseAttempted(memberId, `uber:${id}`);
+    }
+  }
 }
 
 /** Cases touched or chatted, most recent first (for History / resume lists). */

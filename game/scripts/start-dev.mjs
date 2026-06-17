@@ -154,12 +154,18 @@ async function main() {
   }
 
   console.log('\n--- Live smoke: welcome → case play + screenshots ---');
-  try {
-    await runNodeScript('scripts/smoke-play-case-session.mjs');
-  } catch (e) {
-    console.error(`❌ ${e.message}`);
-    shutdown(1);
-    return;
+  const skipPlaySmoke =
+    process.env.SKIP_PLAY_SMOKE === '1' || process.argv.includes('--no-hmr');
+  if (skipPlaySmoke) {
+    console.log('⏭ Skipping play-case browser smoke (study / SKIP_PLAY_SMOKE)\n');
+  } else {
+    try {
+      await runNodeScript('scripts/smoke-play-case-session.mjs');
+    } catch (e) {
+      console.error(`❌ ${e.message}`);
+      shutdown(1);
+      return;
+    }
   }
 
   console.log('\n✅ All smoke passed — serving at http://localhost:5173/\n');

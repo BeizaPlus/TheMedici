@@ -2,6 +2,7 @@ import { formatClinicalText } from './clinicalTextFormat.js';
 import { applyPatientName, resolvePatientName } from './patientName.js';
 import { getPreparedCase } from './caseNarrative.js';
 import { isLearningMode } from './learningMode.js';
+import { hpiContainsSpoilers, resolveAnswerKeyHpi } from './practiceHpi.js';
 
 function formatVitalsLine(vitals = {}) {
   const temp =
@@ -32,21 +33,11 @@ function resolveDisplayPatientName(caseData) {
   return resolvePatientName(caseData);
 }
 
-/** Third-person clinical HPI template (never patient-voice regex). */
-function getClinicalHpiTemplate(caseData) {
-  const prepared = getPreparedCase(caseData?.id);
-  return (
-    prepared?.hpi_narrative ||
-    caseData?.clinical_hpi_narrative ||
-    caseData?.hpi_narrative ||
-    ''
-  );
-}
-
 /** Answer-key HPI (diagnosis, workup, treatment) — teach / notes only, not briefing HPI tab. */
 export function getCaseHpiNarrative(caseData, presentationHpi = '') {
   void presentationHpi;
-  const raw = resolveHpiText(getClinicalHpiTemplate(caseData));
+  const prepared = getPreparedCase(caseData?.id);
+  const raw = resolveHpiText(resolveAnswerKeyHpi(prepared, caseData));
   if (!raw) return '';
   const displayName = resolveDisplayPatientName(caseData);
   return applyPatientName(raw, displayName);
@@ -55,12 +46,17 @@ export function getCaseHpiNarrative(caseData, presentationHpi = '') {
 /** Practice presentation for briefing / play HPI tab — never the answer-key narrative. */
 export function getBriefingHpi(caseData, caseFlow, presentationHpi = '') {
   void caseFlow;
-  const presentation = formatClinicalText(
-    presentationHpi || caseData?.historyText?.trim() || '',
-  );
-  if (presentation) return presentation;
+  const candidates = [
+    presentationHpi,
+    caseData?.historyText,
+    getPreparedCase(caseData?.id)?.practice_hpi,
+  ];
+  for (const raw of candidates) {
+    const text = formatClinicalText(String(raw || '').trim());
+    if (text && !hpiContainsSpoilers(text)) return text;
+  }
   const chief = formatClinicalText(caseData?.chief_complaint?.trim() || '');
-  if (chief) return chief;
+  if (chief && !hpiContainsSpoilers(chief)) return chief;
   return 'No HPI available for this case.';
 }
 

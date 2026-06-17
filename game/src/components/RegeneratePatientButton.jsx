@@ -77,7 +77,7 @@ export default function RegeneratePatientButton({
       className={className}
       onClick={() => void handleClick()}
       disabled={busy}
-      title="Optional — rebuild only this case's patient from its presentation (OpenAI)"
+      title="Optional — rebuild only this case's patient from its presentation (Magnific Nano Banana)"
     >
       <FiRefreshCw className={`chip-icon ${busy ? 'spin' : ''}`} aria-hidden />
       {busy ? 'Regenerating patient…' : label}

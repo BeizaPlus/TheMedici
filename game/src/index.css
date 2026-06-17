@@ -1096,9 +1096,39 @@ button {
   text-align: center;
 }
 
+.briefing-uber-meta {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(120, 80, 200, 0.12);
+  border: 1px solid rgba(180, 140, 255, 0.28);
+  font-size: 0.76rem;
+}
+
+.briefing-uber-note {
+  margin: 0 0 8px;
+  color: rgba(230, 220, 255, 0.9);
+}
+
+.briefing-uber-segments {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: rgba(200, 195, 210, 0.88);
+}
+
+.briefing-uber-seg-num {
+  color: var(--gold);
+  font-family: ui-monospace, monospace;
+  margin-right: 6px;
+}
+
 .briefing-picker-row {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 26px auto 1fr auto;
   gap: 8px;
   align-items: center;
   width: 100%;
@@ -1131,6 +1161,12 @@ button {
 
 .briefing-picker-row.done .briefing-picker-name {
   color: var(--green);
+}
+
+.briefing-picker-row.study-done .briefing-picker-name {
+  opacity: 0.62;
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.28);
 }
 
 .briefing-picker-num {
@@ -1246,6 +1282,53 @@ button {
   text-shadow: 0 0 6px rgba(232, 184, 75, 0.55);
 }
 
+.case-check-btn {
+  display: none;
+}
+
+.case-attempt-radio {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.case-attempt-radio-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.28);
+  background: transparent;
+  box-sizing: border-box;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.case-attempt-radio:hover .case-attempt-radio-dot {
+  border-color: rgba(212, 175, 55, 0.65);
+}
+
+.case-attempt-radio.is-attempted .case-attempt-radio-dot {
+  border-color: #6fcf97;
+  background: #6fcf97;
+  box-shadow: 0 0 0 2px rgba(111, 207, 151, 0.25);
+}
+
+.case-row-attempted .case-name {
+  opacity: 0.88;
+}
+
+.case-row-study-done .case-name {
+  opacity: 0.62;
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.28);
+}
+
 .case-review-flag-btn {
   display: inline-flex;
   align-items: center;
@@ -1293,6 +1376,11 @@ button {
   flex-wrap: wrap;
   gap: 4px;
   justify-content: flex-end;
+}
+
+.case-stack-count--uber {
+  color: rgba(180, 140, 255, 0.9);
+  border: 1px solid rgba(180, 140, 255, 0.35);
 }
 
 .case-row-ready {
@@ -1803,14 +1891,15 @@ button {
 }
 
 .pin.pin-grid {
-  z-index: 80;
   cursor: grab;
   touch-action: none;
+  z-index: 80;
 }
 
 .pin.pin-grid.pin-dragging {
   cursor: grabbing;
-  z-index: 90;
+  z-index: 120;
+  opacity: 0.92;
 }
 
 .pin.pin-has-result {
@@ -3842,8 +3931,15 @@ button {
 .teach-compare-rationale-text {
   margin: 0 0 6px;
   font-size: 0.74rem;
-  line-height: 1.45;
+  line-height: 1.5;
   color: rgba(240, 238, 232, 0.9);
+}
+
+.teach-compare-rationale-loading {
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: rgba(232, 184, 75, 0.85);
 }
 
 .teach-compare-rationale-guideline,
@@ -6542,6 +6638,13 @@ button {
   background: #0a0a0e;
 }
 
+.case-detail-scene .patient-portrait-stack,
+.case-detail-scene > img.patient-scene-img {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+}
+
 .case-detail-scene-img {
   width: 100%;
   height: 100%;
@@ -6690,7 +6793,7 @@ button {
   min-height: var(--case-row-h, 48px);
   max-height: var(--case-row-h, 48px);
   display: grid;
-  grid-template-columns: 40px 1fr 52px;
+  grid-template-columns: 26px 36px minmax(0, 1fr) 28px auto;
   gap: 6px;
   align-items: center;
   padding: 0 10px;

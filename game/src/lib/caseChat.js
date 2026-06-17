@@ -11,6 +11,7 @@ import { buildCaseDiscussionContext, discussionCacheKey } from './caseDiscussion
 import { enrichmentCacheKey } from './differentialChatEnrichment.js';
 import { resolveSimulationCreativity } from './simulationCreativity.js';
 import { getActiveNameRegion } from './patientNameRegions.js';
+import { resolvePracticeHpi } from './practiceHpi.js';
 import { isLearningMode, sanitizeCaseForLearning } from './learningMode.js';
 import { STORAGE } from './storageKeys.js';
 import { apiUrl } from './apiBase.js';
@@ -26,6 +27,7 @@ export function buildCaseChatContext(caseData, {
 } = {}) {
   const flow = getCaseFlow(caseData);
   const prepared = getPreparedCase(caseData?.id);
+  const practiceHpi = resolvePracticeHpi(prepared, caseData);
   const enriched = {
     ...caseData,
     clinical_hpi_narrative:
@@ -36,15 +38,22 @@ export function buildCaseChatContext(caseData, {
       '',
     hpi_narrative: prepared?.hpi_narrative || caseData?.hpi_narrative,
   };
-  const patientFacts = extractPatientFacts(enriched, patientPersona);
-  const patientDemographics = resolvePatientDemographics(enriched, patientPersona);
-  const simulationCreativity = resolveSimulationCreativity(caseData?.id);
   const learningMode = isLearningMode();
-  const cleanHpi =
-    enriched.clinical_hpi_narrative?.trim() ||
-    enriched.hpi_narrative?.trim() ||
-    enriched.historyText?.trim() ||
+  const interviewHpi =
+    practiceHpi ||
+    (learningMode ? caseData?.historyText : null) ||
+    enriched.clinical_hpi_narrative ||
+    enriched.historyText ||
     '';
+  const enrichedForPatient = {
+    ...enriched,
+    historyText: interviewHpi || enriched.historyText,
+    clinical_hpi_narrative: interviewHpi || enriched.clinical_hpi_narrative,
+  };
+  const patientFacts = extractPatientFacts(enrichedForPatient, patientPersona);
+  const patientDemographics = resolvePatientDemographics(enrichedForPatient, patientPersona);
+  const simulationCreativity = resolveSimulationCreativity(caseData?.id);
+  const cleanHpi = interviewHpi.trim();
   const patientVoiceRaw = prepared?.patient_voice || caseData?.patient_voice || null;
   const patientVoice =
     patientVoiceRaw && learningMode && cleanHpi
@@ -65,7 +74,7 @@ export function buildCaseChatContext(caseData, {
     patientFacts,
     patientDemographics,
     patientVoice,
-    hpiExcerpt: hpiExcerpt(enriched),
+    hpiExcerpt: hpiExcerpt(enrichedForPatient),
     patientSex: caseData?.patientSex,
     nameRegion: caseData?.nameRegion || getActiveNameRegion(),
     chief_complaint: caseData?.chief_complaint,

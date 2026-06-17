@@ -10,7 +10,8 @@
     "advise patient",
     "counsel",
     "smoking cessation",
-    "safe sex"
+    "safe sex",
+    "reassure patient"
   ],
   "cases": {
     "004": {
@@ -49,9 +50,76 @@
           "why": "Check K⁺ before insulin; replete if < 5.3 — insulin drives K⁺ down."
         }
       ]
+    },
+    "042": {
+      "title": "Critical — acute monoarticular knee",
+      "subtitle": "Synovial fluid before empiric antibiotics — gout vs septic joint.",
+      "criticalInterventionIds": [
+        "physical-exam-extremities-knee",
+        "arthrocentesis-synovial-fluid-analysis",
+        "nsaids-indomethacin-naproxen-or-colchici",
+        "allopurinol-after-acute-flare"
+      ],
+      "criticalExamLabelPatterns": ["extremities", "knee"],
+      "items": [
+        {
+          "id": "knee-exam",
+          "shortLabel": "Knee / extremities exam",
+          "matchInterventionIds": ["physical-exam-extremities-knee"],
+          "matchLabels": ["extremities / knee", "extremities", "knee"],
+          "why": "Monoarticular hot swollen joint — exam localizes aspiration and distinguishes inflammatory vs septic arthritis."
+        },
+        {
+          "id": "arthrocentesis",
+          "shortLabel": "Arthrocentesis + synovial fluid",
+          "matchInterventionIds": ["arthrocentesis-synovial-fluid-analysis"],
+          "matchLabels": ["arthrocentesis", "synovial fluid"],
+          "why": "Crystal analysis and gram stain — must rule out septic arthritis before closing the case."
+        },
+        {
+          "id": "nsaids",
+          "shortLabel": "NSAIDs or colchicine",
+          "matchInterventionIds": ["nsaids-indomethacin-naproxen-or-colchici"],
+          "matchLabels": ["nsaid", "colchicine", "indomethacin"],
+          "why": "Acute gout flare treatment once infection is reasonably excluded."
+        },
+        {
+          "id": "allopurinol",
+          "shortLabel": "Allopurinol (after flare)",
+          "matchInterventionIds": ["allopurinol-after-acute-flare"],
+          "matchLabels": ["allopurinol"],
+          "why": "Urate lowering after the acute flare settles — not during the attack."
+        }
+      ]
     }
   },
   "diagnosisPatterns": [
+    {
+      "match": "acute gout|\\bgout\\b",
+      "title": "Critical — acute monoarticular arthritis",
+      "subtitle": "Aspiration and synovial fluid before disposition.",
+      "criticalExamLabelPatterns": ["extremities", "knee"],
+      "items": [
+        {
+          "id": "knee-exam",
+          "shortLabel": "Joint exam",
+          "matchLabels": ["extremities", "knee"],
+          "why": "Hot monoarticular joint — exam guides aspiration site and septic workup."
+        },
+        {
+          "id": "arthrocentesis",
+          "shortLabel": "Arthrocentesis",
+          "matchLabels": ["arthrocentesis", "synovial fluid"],
+          "why": "Crystals vs bacteria — this decision changes everything."
+        },
+        {
+          "id": "nsaids",
+          "shortLabel": "Anti-inflammatory flare treatment",
+          "matchLabels": ["nsaid", "colchicine"],
+          "why": "Treat the crystal flare after ruling out septic joint."
+        }
+      ]
+    },
     {
       "match": "diabetic ketoacidosis|\\bdka\\b",
       "title": "Non-negotiables — acute DKA",

@@ -4,6 +4,7 @@ import {
 } from './clinicalTextFormat.js';
 import { getActiveRefinedNarrative } from './narrativeRefine.js';
 import { readAudienceProfile } from './audienceProfile.js';
+import { hpiContainsSpoilers } from './practiceHpi.js';
 
 /** Whether this case has imported CCS narrative vs a placeholder stub. */
 export function hasRichPresentation(caseData) {
@@ -25,7 +26,9 @@ export function getPresentationHistory(caseData) {
   const playRole = caseData?.playRole || readAudienceProfile()?.playRole || 'doctor';
   const difficulty = caseData?.sessionDifficulty || readAudienceProfile()?.difficulty || 'standard';
   const refined = getActiveRefinedNarrative(caseData?.id, playRole, difficulty);
-  if (refined?.hpi) return formatClinicalText(refined.hpi);
+  if (refined?.hpi && !hpiContainsSpoilers(refined.hpi)) {
+    return formatClinicalText(refined.hpi);
+  }
 
   const intro = caseData?.chief_complaint?.trim() || '';
   const history = caseData?.historyText?.trim() || '';

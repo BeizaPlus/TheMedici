@@ -108,9 +108,14 @@ export async function fetchCasePortraitStatus(caseId) {
     const data = await r.json();
     if (data.exists && data.url) {
       if (data.persona) writeCasePortraitPersona(caseId, data.persona);
+      const busted = portraitCacheBust(
+        data.url,
+        data.cachedAt || data.ladyRefSlug || data.patientSex || caseId,
+      );
+      writeCaseRegenImage(caseId, busted);
       return {
         exists: true,
-        url: data.url,
+        url: busted,
         layers: data.layers || null,
         analysis: data.analysis || null,
         persona: data.persona || null,
@@ -128,7 +133,7 @@ export async function fetchCasePortraitStatus(caseId) {
   }
 }
 
-/** Load or generate a case-specific patient portrait (OpenAI, server disk cache). */
+/** Load or generate a case-specific patient portrait (Magnific Nano Banana, server disk cache). */
 export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
   const caseId = caseData?.id;
   if (!caseId) return null;

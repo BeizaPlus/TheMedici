@@ -5,19 +5,19 @@ export const ORDER_TIER_META = {
   critical: {
     id: 'critical',
     label: 'Critical',
-    hint: 'Non-negotiables — unsafe if missed',
+    hint: 'Case-specific orders — treatments, consults, must-not-miss',
     defaultCollapsed: false,
   },
   general: {
     id: 'general',
     label: 'General',
-    hint: 'Exams, labs, and core workflow',
+    hint: 'Physical exams and core workflow',
     defaultCollapsed: false,
   },
   misc: {
     id: 'misc',
     label: 'Misc',
-    hint: 'Prevention, vaccines, counseling — relevant but not emergent',
+    hint: 'Labs, imaging, and diagnostic tests',
     defaultCollapsed: true,
   },
 };
@@ -61,10 +61,19 @@ export function getCaseBareEssentialsSpec(caseData = {}) {
 
 function resolveCriticalInterventionIds(caseData = {}, interventions = []) {
   const spec = getCaseBareEssentialsSpec(caseData);
-  const ids = new Set();
+  const ids = new Set(spec?.criticalInterventionIds || []);
   for (const item of spec?.items || []) {
     const iv = findIntervention(interventions, item);
     if (iv?.id) ids.add(iv.id);
+  }
+  const examPatterns = (spec?.criticalExamLabelPatterns || []).map((p) =>
+    String(p).toLowerCase(),
+  );
+  if (examPatterns.length) {
+    for (const iv of interventions) {
+      const label = String(iv.label || '').toLowerCase();
+      if (examPatterns.some((p) => label.includes(p))) ids.add(iv.id);
+    }
   }
   return ids;
 }
@@ -73,6 +82,87 @@ function labelMatchesMisc(label, patterns = []) {
   const norm = String(label || '').toLowerCase();
   if (!norm) return false;
   return patterns.some((p) => norm.includes(String(p).toLowerCase()));
+}
+
+function interventionByIdMap(interventions = []) {
+  return Object.fromEntries(interventions.map((iv) => [iv.id, iv]));
+}
+
+/** Physical exam stacks → General tier. */
+export function isPhysicalExamIntervention(iv) {
+  if (!iv) return false;
+  const id = String(iv.id || '').toLowerCase();
+  const label = String(iv.label || '');
+  return (
+    id.startsWith('physical-exam')
+    || /^physical exam\b/i.test(label)
+    || /^physical exam:/i.test(label)
+  );
+}
+
+const TEST_ORDER_PATTERNS = [
+  /\bx-?ray\b/i,
+  /\bct\b/i,
+  /\bmri\b/i,
+  /\becg\b/i,
+  /\bekg\b/i,
+  /\bcbc\b/i,
+  /\bbmp\b/i,
+  /\bcmp\b/i,
+  /\blipase\b/i,
+  /\btroponin\b/i,
+  /\bpulse ox/i,
+  /\boximetry\b/i,
+  /\bantibody\b/i,
+  /\belectromyography\b/i,
+  /\bemg\b/i,
+  /\btensilon\b/i,
+  /\bedrophonium\b/i,
+  /\burinalysis\b/i,
+  /\bculture\b/i,
+  /\bgram stain\b/i,
+  /\btype and screen\b/i,
+  /\bpt\b/i,
+  /\bptt\b/i,
+  /\binr\b/i,
+  /\btsh\b/i,
+  /\bhcg\b/i,
+  /\bsedimentation\b/i,
+  /\besr\b/i,
+  /\bultrasound\b/i,
+  /\becho\b/i,
+  /\barterial blood\b/i,
+  /\babg\b/i,
+  /\blumbar puncture\b/i,
+  /\bspirometry\b/i,
+  /\bnaat\b/i,
+  /\bdna probe\b/i,
+  /\bmetabolic profile\b/i,
+  /\bbasic metabolic\b/i,
+  /\bcomprehensive metabolic\b/i,
+];
+
+/** Labs, imaging, and diagnostic studies → Misc tier. */
+export function isTestOrderIntervention(iv) {
+  if (!iv || isPhysicalExamIntervention(iv)) return false;
+  const label = String(iv.label || '');
+  const id = String(iv.id || '').toLowerCase();
+  return TEST_ORDER_PATTERNS.some((p) => p.test(label) || p.test(id));
+}
+
+/**
+ * Rule of thumb: physical → general, tests → misc, case-specific → critical.
+ * Explicit caseBareEssentials entries always win for critical/misc overrides.
+ */
+export function classifyInterventionTier(
+  iv,
+  { criticalIds = new Set(), miscIds = new Set() } = {},
+) {
+  if (!iv?.id) return 'general';
+  if (criticalIds.has(iv.id)) return 'critical';
+  if (isPhysicalExamIntervention(iv)) return 'general';
+  if (miscIds.has(iv.id) || isTestOrderIntervention(iv)) return 'misc';
+  return 'critical';
 }
 
 function resolveMiscInterventionIds(caseData = {}, interventions = [], criticalIds = new Set()) {
@@ -102,12 +192,13 @@ export function groupTeachCompareRowsByTier({
 } = {}) {
   const criticalIds = resolveCriticalInterventionIds(caseData, interventions);
   const miscIds = resolveMiscInterventionIds(caseData, interventions, criticalIds);
+  const ivById = interventionByIdMap(interventions);
 
   const buckets = { critical: [], general: [], misc: [] };
   for (const row of rows) {
-    if (criticalIds.has(row.id)) buckets.critical.push(row);
-    else if (miscIds.has(row.id)) buckets.misc.push(row);
-    else buckets.general.push(row);
+    const iv = ivById[row.id] || row.iv || { id: row.id, label: row.label };
+    const tier = classifyInterventionTier(iv, { criticalIds, miscIds });
+    buckets[tier].push(row);
   }
 
   return ['critical', 'general', 'misc']

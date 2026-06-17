@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   buildTeachCompareRows,
   teachCompareStatusLabel,
 } from '../lib/teachMeCompare.js';
 import { fetchOrderWhy } from '../lib/orderWhy.js';
 import { buildBareEssentialsRows, groupTeachCompareRowsByTier } from '../lib/caseBareEssentials.js';
+import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 
 function flowDotClass(row, focused) {
   const parts = ['teach-flow-dot'];
@@ -89,19 +90,20 @@ export default function TeachMeComparePanel({
       : 'All core stacks placed';
 
   const loadWhy = useCallback(
-    async (row) => {
-      if (!caseId || !caseData) {
+    async (row, { forceOpen = true } = {}) => {
+      if (!caseId || !caseData || !row?.id) {
         setWhyError('Case context unavailable');
         return;
       }
       const id = row.id;
-      if (whyText[id]) {
-        setWhyOpenId((open) => (open === id ? null : id));
-        return;
+      if (forceOpen) setWhyOpenId(id);
+      if (whyText[id]) return;
+      const seed = String(row.why || row.iv?.why || '').trim();
+      if (seed) {
+        setWhyText((prev) => (prev[id] ? prev : { ...prev, [id]: seed }));
       }
       setWhyError('');
       setWhyLoadingId(id);
-      setWhyOpenId(id);
       try {
         const { why } = await fetchOrderWhy({
           caseId,
@@ -112,8 +114,13 @@ export default function TeachMeComparePanel({
         });
         setWhyText((prev) => ({ ...prev, [id]: why }));
       } catch (e) {
-        setWhyError(String(e.message || e));
-        setWhyOpenId(null);
+        const fallback = String(row.why || row.iv?.why || '').trim();
+        if (fallback) {
+          setWhyText((prev) => ({ ...prev, [id]: fallback }));
+          setWhyError('');
+        } else {
+          setWhyError(String(e.message || e));
+        }
       } finally {
         setWhyLoadingId(null);
       }
@@ -121,11 +128,25 @@ export default function TeachMeComparePanel({
     [caseId, caseData, whyText],
   );
 
+  useEffect(() => {
+    if (!teachFocusId) {
+      setWhyOpenId(null);
+      return;
+    }
+    const row =
+      rows.find((r) => r.id === teachFocusId)
+      || extras.find((r) => r.id === teachFocusId);
+    if (!row) return;
+    setWhyOpenId(teachFocusId);
+    void loadWhy(row, { forceOpen: true });
+  }, [teachFocusId, rows, extras, loadWhy]);
+
   const renderRow = (row, keyPrefix = '', isExtra = false) => {
     const focused = !isExtra && teachFocusId === row.id;
-    const whyOpen = whyOpenId === row.id;
+    const whyOpen = whyOpenId === row.id || focused;
     const whyBusy = whyLoadingId === row.id;
-    const whyBody = whyText[row.id];
+    const playbookWhy = row.why || row.iv?.why || '';
+    const whyBody = whyText[row.id] || playbookWhy;
 
     return (
       <li
@@ -138,6 +159,7 @@ export default function TeachMeComparePanel({
             className="teach-compare-row-btn"
             onClick={() => {
               if (!isExtra) onFocusStep?.(row.id);
+              if (caseId && caseData) void loadWhy(row);
             }}
           >
             <span
@@ -157,28 +179,17 @@ export default function TeachMeComparePanel({
               {teachCompareStatusLabel(row.status)}
             </span>
           </button>
-          {caseId && caseData && (
-            <button
-              type="button"
-              className={`teach-compare-why-btn${whyOpen ? ' is-active' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                void loadWhy(row);
-              }}
-              disabled={whyBusy}
-              title="Why is this order relevant for this patient?"
-              aria-expanded={whyOpen}
-            >
-              {whyBusy ? '…' : 'Why'}
-            </button>
-          )}
         </div>
         {whyOpen && (
           <div className="teach-compare-rationale" aria-live="polite">
-            {whyBusy && !whyBody && (
-              <p className="teach-compare-rationale-text">Asking the master…</p>
+            {whyBusy && !whyText[row.id] && (
+              <p className="teach-compare-rationale-loading">Asking the attending…</p>
             )}
-            {whyBody && <p className="teach-compare-rationale-text">{whyBody}</p>}
+            {whyBody && (
+              <div className="teach-compare-rationale-text selectable-text">
+                {renderChatMarkdown(whyBody)}
+              </div>
+            )}
             {row.guideline && (
               <p className="teach-compare-rationale-guideline">{row.guideline}</p>
             )}
@@ -238,7 +249,11 @@ export default function TeachMeComparePanel({
                   {row.label !== row.shortLabel && (
                     <span className="teach-compare-critical-stack">{row.label}</span>
                   )}
-                  {row.why && <p className="teach-compare-critical-why">{row.why}</p>}
+                  {row.why && (
+                    <div className="teach-compare-critical-why selectable-text">
+                      {renderChatMarkdown(row.why)}
+                    </div>
+                  )}
                 </div>
                 <span className={`teach-compare-critical-status${row.isDone ? ' done' : ''}`}>
                   {row.isDone ? 'Placed' : 'Must do'}

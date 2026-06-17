@@ -7,6 +7,7 @@ import medicalOrders from '../data/medical-orders.json';
 import { useDragGame } from '../hooks/useDragGame.js';
 import { useGridDragGame } from '../hooks/useGridDragGame.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
+import { useCasePortraitSrc } from '../hooks/useCasePortraitSrc.js';
 import { DOCK_CHROME_COLLAPSED_HEIGHT } from '../lib/playDockLayout.js';
 import { useTeachCompareDockWidth } from '../hooks/useTeachCompareDockWidth.js';
 import { isCorrectGridPlacement, zoneIdForCell, zoneToGridCell } from '../lib/placementGrid.js';
@@ -42,6 +43,7 @@ import {
 } from '../lib/gridPlacement.js';
 import { apiUrl } from '../lib/apiBase.js';
 import { nextAttemptNumber, peekAttemptNumber, saveScreenshotToServer, captureElementPng } from '../lib/captureScreenshot.js';
+import { recordingPublicUrl } from '../lib/caseUserLog.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
   getPresentationHistory,
@@ -131,7 +133,6 @@ import TeachMeSceneOverlay from './TeachMeSceneOverlay.jsx';
 import TeachMeComparePanel from './TeachMeComparePanel.jsx';
 import TeachMeCompareLandscape from './TeachMeCompareLandscape.jsx';
 import { sanitizePatientReplyForDisplay } from '../lib/patientReplyText.js';
-import CompareStepRationaleCard from './CompareStepRationaleCard.jsx';
 import {
   buildTeachCompareReport,
   copyTeachCompareReport,
@@ -163,16 +164,12 @@ import { readPlayUiFavorite } from '../lib/playUiFavorite.js';
 import {
   buildSceneSourceSig,
   clearCaseSceneVariantsForSig,
-  clearCaseRegenImage,
   clearSceneVariantUnit,
-  ensureCasePortrait,
   fetchCasePortraitStatus,
-  readCaseRegenImage,
 } from '../lib/patientRegen.js';
 import { prefetchOrderResult } from '../lib/orderResultApi.js';
 import { clearCaseChatSession } from '../lib/caseChat.js';
 import { hasIvOrderPlaced } from '../lib/portraitLayers.js';
-import { CASE_AVATAR_EVENT } from '../lib/caseAvatar.js';
 
 const LOCATIONS = {
   // LOCATION IMAGE SWAP: set image path here when each unit has a dedicated patient scene.
@@ -335,7 +332,6 @@ export default function Play({
   const [whyPanel, setWhyPanel] = useState(null);
   const [expandedStackId, setExpandedStackId] = useState(null);
   const [orderResultIvId, setOrderResultIvId] = useState(null);
-  const [compareRationaleIvId, setCompareRationaleIvId] = useState(null);
   const [teachFocusId, setTeachFocusId] = useState(null);
   const [teachMeMode, setTeachMeMode] = useState(false);
   const [teachCompareLayout, setTeachCompareLayout] = useState(readTeachCompareLayout);
@@ -459,6 +455,7 @@ export default function Play({
   } = useTeachCompareDockWidth();
   const [theme, setTheme] = useState(() => readTheme());
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [simDeteriorationActive, setSimDeteriorationActive] = useState(false);
   const [dropMode, setDropMode] = useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE.dropMode);
@@ -561,11 +558,10 @@ export default function Play({
     });
   }, []);
 
-  /** Compare / review taps: rationale only — never reopen command stacks dock. */
+  /** Compare / review taps: focus step + inline attending rationale (no pop-up). */
   const explainCompareStep = useCallback((id) => {
     if (!id) return;
-    setTeachFocusId(id);
-    setCompareRationaleIvId((prev) => (prev === id ? null : id));
+    setTeachFocusId((prev) => (prev === id ? null : id));
   }, []);
 
   const canStartStackDrag = useCallback(
@@ -704,7 +700,9 @@ export default function Play({
                 Your placement order #{placementOrder.indexOf(iv.id) + 1}
               </p>
             )}
-            <p className="pill-why-inline-text">{iv.why || 'No explanation available yet.'}</p>
+            <p className="pill-why-inline-text selectable-text">
+              {renderChatMarkdown(iv.why || 'No explanation available yet.')}
+            </p>
             {iv.guideline && <p className="pill-why-inline-guideline">Guideline: {iv.guideline}</p>}
           </div>
         )}
@@ -799,28 +797,20 @@ export default function Play({
 
   const SOAP_MIN_CHARS = 12;
   const [careUnit, setCareUnit] = useState(caseFlow.dispositionUnits?.[0] || 'ER');
-  const [portraitReady, setPortraitReady] = useState(0);
+  const {
+    portraitForceSrc,
+    portraitDisplaySrc,
+    portraitTick,
+    setPortraitSrc,
+    clearPortraitSrc,
+  } = useCasePortraitSrc(caseData);
   const [portraitRegenBusy, setPortraitRegenBusy] = useState(false);
   const [portraitLayers, setPortraitLayers] = useState(null);
-  const regenSrc = useMemo(() => readCaseRegenImage(caseData?.id), [caseData?.id, portraitReady]);
   const hasIvPlaced = useMemo(() => hasIvOrderPlaced(placed), [placed]);
   const [reviewedAt, setReviewedAt] = useState(null);
-  const [sceneByUnit, setSceneByUnit] = useState(() => {
-    if (typeof window === 'undefined') return {};
-    try {
-      const overrideSrc = localStorage.getItem(STORAGE.patientImage);
-      const regenSrc = readCaseRegenImage(caseData?.id);
-      const erSrc = resolveSceneSrc({
-        forceSrc: regenSrc,
-        overrideSrc,
-        sceneSrc: caseData?.patientScene?.src,
-        caseData,
-      });
-      return { ER: erSrc };
-    } catch {
-      return { ER: getBuiltInPatientSrc(caseData) };
-    }
-  });
+  const [sceneByUnit, setSceneByUnit] = useState(() => ({
+    ER: getBuiltInPatientSrc(caseData),
+  }));
   const [sceneSourceSig, setSceneSourceSig] = useState('');
   const [sceneBusy, setSceneBusy] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
@@ -873,7 +863,6 @@ export default function Play({
   useEffect(() => {
     setThreadViewCaseId(String(caseData.id));
     setOrderResultIvId(null);
-    setCompareRationaleIvId(null);
   }, [caseData.id]);
 
   useEffect(() => {
@@ -1033,7 +1022,7 @@ export default function Play({
     caseData: threadViewCase,
     playSessionId: threadIsPlayCase ? playSessionId : null,
     getSessionContext: threadIsPlayCase ? getChatSessionContext : undefined,
-    portraitVersion: portraitReady,
+    portraitVersion: portraitTick,
     defaultChatMode: 'tutor',
     onModelReady: useCallback((label) => {
       if (!threadIsPlayCase) return;
@@ -1476,42 +1465,21 @@ export default function Play({
   }, [studioCapture, caseData.id]);
 
   useEffect(() => {
-    if (!caseData?.id) return;
-    let cancelled = false;
-    void ensureCasePortrait(caseData).then((url) => {
-      if (!cancelled && url) setPortraitReady((n) => n + 1);
-    });
-    void hydrateCaseNotes(caseData.id);
-    return () => {
-      cancelled = true;
-    };
-  }, [caseData?.id]);
-
-  useEffect(() => {
     if (!caseData?.id) return undefined;
     let cancelled = false;
     void fetchCasePortraitStatus(caseData.id).then((status) => {
       if (!cancelled && status.layers) setPortraitLayers(status.layers);
     });
+    void hydrateCaseNotes(caseData.id);
     return () => {
       cancelled = true;
     };
-  }, [caseData?.id, portraitReady]);
-
-  useEffect(() => {
-    const onAvatar = (e) => {
-      if (String(e.detail?.caseId) !== String(caseData?.id)) return;
-      setPortraitReady((n) => n + 1);
-    };
-    window.addEventListener(CASE_AVATAR_EVENT, onAvatar);
-    return () => window.removeEventListener(CASE_AVATAR_EVENT, onAvatar);
-  }, [caseData?.id]);
+  }, [caseData?.id, portraitTick]);
 
   useEffect(() => {
     const overrideSrc = localStorage.getItem(STORAGE.patientImage);
-    const regenSrc = readCaseRegenImage(caseData.id);
     const erSrc = resolveSceneSrc({
-      forceSrc: regenSrc,
+      forceSrc: portraitForceSrc,
       overrideSrc,
       sceneSrc: caseData?.patientScene?.src,
       caseData,
@@ -1536,7 +1504,7 @@ export default function Play({
       /* ignore */
     }
     setSceneByUnit(next);
-  }, [caseData.id, caseData.patientSex, caseData.patientScene?.src, portraitReady]);
+  }, [caseData.id, caseData.patientSex, caseData.patientScene?.src, portraitForceSrc, portraitTick]);
 
   const showToast = (msg, type = '') => {
     setToast({ msg, type });
@@ -1553,6 +1521,16 @@ export default function Play({
     onSaved: (rec) => {
       setRecordingsVersion((v) => v + 1);
       setNotesVersion((v) => v + 1);
+      const replayUrl = recordingPublicUrl(rec?.file);
+      if (replayUrl && caseChat.appendNote) {
+        const mins = Math.floor((rec?.durationMs || 0) / 60000);
+        const secs = Math.floor(((rec?.durationMs || 0) % 60000) / 1000);
+        const duration = `${mins}:${String(secs).padStart(2, '0')}`;
+        void caseChat.appendNote(
+          `[Replay voice note — Case ${caseData.id}](${replayUrl})\n\nDuration ${duration}${rec?.slot ? ` · slot #${rec.slot}` : ''}`,
+          { header: `Voice note #${rec?.slot || '?'}` },
+        );
+      }
       showToast(rec?.slot ? `Voice note #${rec.slot} saved` : 'Voice note saved', 'ok');
     },
     onError: (e) => showToast(e?.message || 'Recording failed', 'bad'),
@@ -1572,6 +1550,12 @@ export default function Play({
       const forceTutor = looksLikeTutorQuestion(text);
       const chatMode =
         forceTutor || !chatPatientModeRef.current ? 'tutor' : 'patient_sim';
+      if (chatMode === 'tutor' && !isLearningMode()) {
+        void caseChat.appendNote?.(text, { header: 'Voice note' });
+        setNotesVersion((v) => v + 1);
+        showToast('Exam mode — voice saved as note only (enable Learning for tutor)', 'bad');
+        return;
+      }
       showToast(
         forceTutor && chatPatientModeRef.current
           ? 'Clinical question → tutor…'
@@ -1627,12 +1611,28 @@ export default function Play({
   );
 
   const commitStackPlacement = useCallback(
-    (iv, target, { wrap, zone, pill } = {}, { silentDecoy = false, viaCommand = false, decoyInput = '', isCorrect = true } = {}) => {
+    (iv, target, { wrap, zone, pill, clientX, clientY } = {}, { silentDecoy = false, viaCommand = false, decoyInput = '', isCorrect = true } = {}) => {
       const isGrid = typeof target === 'object' && target != null && 'col' in target;
+      const isFreePoint =
+        typeof target === 'object' && target != null && target.cx != null && target.cy != null;
       const dropZone = stackDropZoneForIv(iv, placementOrder.length);
-      const effectiveTarget = isGrid
-        ? zoneToGridCell(dropZone, zones) || target
-        : dropZone;
+      const zoneId = typeof target === 'string' ? target : target?.zoneId || dropZone;
+
+      let effectiveTarget = dropZone;
+      if (isGrid) {
+        effectiveTarget = zoneToGridCell(dropZone, zones) || target;
+      } else if (isFreePoint) {
+        effectiveTarget = { zoneId, cx: target.cx, cy: target.cy };
+      } else if (dropMode === 'free' && sceneRef.current && clientX != null && clientY != null) {
+        const rect = sceneRef.current.getBoundingClientRect();
+        effectiveTarget = {
+          zoneId,
+          cx: Math.max(0.02, Math.min(0.98, (clientX - rect.left) / rect.width)),
+          cy: Math.max(0.02, Math.min(0.98, (clientY - rect.top) / rect.height)),
+        };
+      } else if (typeof target === 'string') {
+        effectiveTarget = dropZone;
+      }
 
       if (wrap && pill) {
         pill.dataset.placed = 'false';
@@ -1656,7 +1656,16 @@ export default function Play({
       const pinLabel = neutralStackOrderName(iv.label);
       const pinPayload = isGrid
         ? { ...effectiveTarget, label: pinLabel, ivId: iv.id, ok: null }
-        : { zoneId: effectiveTarget, label: pinLabel, ivId: iv.id, ok: null };
+        : effectiveTarget?.cx != null
+          ? {
+              cx: effectiveTarget.cx,
+              cy: effectiveTarget.cy,
+              zoneId: effectiveTarget.zoneId || zoneId,
+              label: pinLabel,
+              ivId: iv.id,
+              ok: null,
+            }
+          : { zoneId: effectiveTarget, label: pinLabel, ivId: iv.id, ok: null };
       setPins((prev) => [
         ...prev.filter((pin) => pin.ivId !== iv.id && pin.label !== iv.label),
         pinPayload,
@@ -1695,7 +1704,7 @@ export default function Play({
         ...(viaCommand ? { method: 'command' } : {}),
       });
     },
-    [logDecoyAttempt, logTimeline, teachMeMode, placementOrder.length, zones],
+    [logDecoyAttempt, logTimeline, teachMeMode, placementOrder.length, zones, dropMode],
   );
 
 
@@ -2010,6 +2019,14 @@ export default function Play({
         showToast('Chat unavailable — add DEEPSEEK_API_KEY or OPENAI_API_KEY to .env', 'bad');
         return;
       }
+      if (!isLearningMode() && !chatPatientModeRef.current) {
+        showToast(
+          'Exam mode — enable Learning in Settings for tutor coaching, or tap the portrait for patient mode.',
+          'bad',
+        );
+        setOrderCommandQuery('');
+        return;
+      }
       const cmd = parseChatModeCommand(raw);
       if (cmd) {
         if (cmd.patientMode) {
@@ -2035,12 +2052,17 @@ export default function Play({
         looksLikeTutorQuestion(question) || !(cmd?.patientMode || chatPatientModeRef.current)
           ? 'tutor'
           : 'patient_sim';
+      if (chatMode === 'tutor' && !isLearningMode()) {
+        showToast('Exam mode — tutor coaching is off. Enable Learning in Settings.', 'bad');
+        setOrderCommandQuery('');
+        return;
+      }
       setOrderCommandQuery('');
       void (async () => {
         if (chatMode === 'tutor') {
           clearCaseChatSession(caseData?.id, 'patient_sim');
         }
-        const reply = await caseChat.sendMessage(question, { chatMode });
+        const reply = await caseChat.sendMessage(question, { chatMode, dockBrief: true });
         if (reply) {
           logTimeline({ type: 'chat', role: 'user', text: question });
           const displayAnswer =
@@ -2081,14 +2103,14 @@ export default function Play({
         onSelectIvId={setOrderResultIvId}
         caseData={caseData}
         caseFlow={caseFlow}
-        portraitSrc={regenSrc || ''}
+        portraitSrc={portraitDisplaySrc}
         onPrintStatus={(msg, type) => showToast(msg, type)}
         teachMeMode={teachMeMode}
         compact
         hideKicker
       />
     ),
-    [placedResultRows, orderResultIvId, caseData, caseFlow, regenSrc, teachMeMode],
+    [placedResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode],
   );
 
   const dockOrderContextLabel = useMemo(() => {
@@ -2270,10 +2292,11 @@ export default function Play({
   };
 
   const handleDrop = useCallback(
-    (ivId, target, { wrap, zone, pill }) => {
+    (ivId, target, ctx = {}) => {
+      const { wrap, zone, pill, clientX, clientY } = ctx;
       const decoy = decoyInterventions.find((i) => i.id === ivId);
       if (decoy) {
-        commitStackPlacement(decoy, target, { wrap, zone, pill }, {
+        commitStackPlacement(decoy, target, { wrap, zone, pill, clientX, clientY }, {
           isCorrect: false,
           silentDecoy: teachMeMode,
           decoyInput: decoy.label,
@@ -2316,12 +2339,12 @@ export default function Play({
           return;
         }
         // Always allow placement even on wrong zone — logs for review
-        commitStackPlacement(iv, target, { wrap, zone, pill }, { isCorrect: ok });
+        commitStackPlacement(iv, target, { wrap, zone, pill, clientX, clientY }, { isCorrect: ok });
         return;
       }
 
       // Always allow placement — logs correct/incorrect for review
-      commitStackPlacement(iv, target, { wrap, zone, pill }, { isCorrect: ok });
+      commitStackPlacement(iv, target, { wrap, zone, pill, clientX, clientY }, { isCorrect: ok });
     },
     [
       interventions,
@@ -2528,6 +2551,7 @@ export default function Play({
     placed,
     overlap: dragCfg.overlap,
     snapBackMs: dragCfg.snapBackMs,
+    freeDrop: dropMode === 'free',
     onDrop: handleDrop,
     onReturnToDock: returnStackToDock,
     canStartDrag: canStartStackDrag,
@@ -2618,15 +2642,25 @@ export default function Play({
       const unitSrc = sceneByUnit[careUnit];
       if (isValidSceneSrc(unitSrc)) return unitSrc;
     }
-    if (isValidSceneSrc(regenSrc)) return regenSrc;
-    return null;
-  }, [careUnit, regenSrc, sceneByUnit]);
+    return portraitDisplaySrc;
+  }, [careUnit, portraitDisplaySrc, sceneByUnit]);
 
   const buildTeachCompareExport = useCallback(async () => {
     let portraitSrc = playSceneForceSrc || getBuiltInPatientSrc(caseData);
     if (exportUseLiveScene && sceneCaptureRef.current) {
       try {
-        portraitSrc = await captureElementPng(sceneCaptureRef.current);
+        portraitSrc = await captureElementPng(sceneCaptureRef.current, {
+          filter: (node) => {
+            if (!node?.classList) return true;
+            if (node.classList.contains('scene-dock-left')) return false;
+            if (node.classList.contains('scene-timeline-dock')) return false;
+            if (node.classList.contains('teach-compare-scene-dock')) return false;
+            if (node.classList.contains('teach-compare-landscape-host')) return false;
+            if (node.classList.contains('scene-grid-overlay')) return false;
+            if (node.classList.contains('studio-toolbar')) return false;
+            return true;
+          },
+        });
       } catch {
         /* keep portrait fallback */
       }
@@ -2743,8 +2777,8 @@ export default function Play({
 
   const handleSceneImageError = useCallback(() => {
     clearSceneVariantUnit(sceneSourceSig, careUnit);
-    if (careUnit === 'ER' || readCaseRegenImage(caseData?.id)) {
-      clearCaseRegenImage(caseData?.id);
+    if (careUnit === 'ER' || portraitForceSrc) {
+      clearPortraitSrc();
       const builtin = getBuiltInPatientSrc(caseData);
       setSceneByUnit((prev) => ({ ...prev, ER: builtin }));
     } else if (careUnit !== 'ER') {
@@ -2754,7 +2788,7 @@ export default function Play({
         return next;
       });
     }
-  }, [careUnit, caseData, sceneSourceSig]);
+  }, [careUnit, caseData, sceneSourceSig, portraitForceSrc, clearPortraitSrc]);
 
   const onDockDragStart = (event) => {
     if (event.button !== 0 || dockCollapsed) return;
@@ -2973,9 +3007,7 @@ export default function Play({
       if (!unit || unit === 'ER' || sceneByUnit[unit] || !sceneSourceSig) return;
       setSceneBusy(true);
       try {
-        const regenSrc = readCaseRegenImage(caseData.id);
-        const overrideSrc = localStorage.getItem(STORAGE.patientImage);
-        const erSrc = sceneByUnit.ER || regenSrc || overrideSrc || getBuiltInPatientSrc(caseData);
+        const erSrc = sceneByUnit.ER || portraitDisplaySrc || getBuiltInPatientSrc(caseData);
         let payload;
         if (erSrc.startsWith('data:')) {
           payload = {
@@ -3035,7 +3067,7 @@ export default function Play({
         setSceneBusy(false);
       }
     },
-    [sceneByUnit, sceneSourceSig, caseData],
+    [sceneByUnit, sceneSourceSig, caseData, portraitDisplaySrc],
   );
 
   useEffect(() => {
@@ -3207,10 +3239,22 @@ export default function Play({
             </button>
             <button
               type="button"
+              className={simDeteriorationActive ? 'active' : ''}
+              aria-pressed={simDeteriorationActive}
               onClick={() => {
                 const death = document.getElementById('death');
                 const idleSlots = document.querySelectorAll('.idle-slot');
                 if (!death) return;
+                if (simDeteriorationActive) {
+                  death.style.opacity = '0';
+                  death.style.zIndex = '0';
+                  death.pause();
+                  idleSlots.forEach((slot) => {
+                    slot.style.opacity = '1';
+                  });
+                  setSimDeteriorationActive(false);
+                  return;
+                }
                 idleSlots.forEach((slot) => {
                   slot.pause();
                   slot.style.opacity = '0';
@@ -3219,9 +3263,10 @@ export default function Play({
                 death.style.zIndex = '2';
                 death.currentTime = 0;
                 death.play().catch(() => {});
+                setSimDeteriorationActive(true);
               }}
             >
-              Simulate deterioration
+              {simDeteriorationActive ? 'Deterioration: ON' : 'Simulate deterioration'}
             </button>
           </div>
           <div className="settings-popover-block">
@@ -3295,7 +3340,7 @@ export default function Play({
           caseData={caseData}
           onBusyChange={setPortraitRegenBusy}
           onRegenerated={(result) => {
-            setPortraitReady((n) => n + 1);
+            if (result?.dataUrl) setPortraitSrc(result.dataUrl);
             if (result?.layers) setPortraitLayers(result.layers);
             showToast('Patient portrait updated', 'ok');
           }}
@@ -3619,19 +3664,12 @@ export default function Play({
                 left: `${leftPct}%`,
                 top: `${topPct}%`,
               }}
-              title={useGridPlacement ? 'Drag to move pin' : undefined}
+              title={useGridPlacement ? 'Drag pin to reposition on patient' : undefined}
             >
               <span className="pin-label">{p.label}</span>
             </div>
           );
         })}
-        {compareRationaleIvId && interventionById[compareRationaleIvId] && (
-          <CompareStepRationaleCard
-            intervention={interventionById[compareRationaleIvId]}
-            placementOrder={placementOrder}
-            onClose={() => setCompareRationaleIvId(null)}
-          />
-        )}
         <div className={`flash ${flash}`} />
         <CaseTeachingVideoOverlay
           open={showThanksVideo}
@@ -3934,7 +3972,9 @@ export default function Play({
                       </span>
                       <strong className="post-review-label">{row.label}</strong>
                     </div>
-                    <p className="post-review-why">{row.why}</p>
+                    <div className="post-review-why selectable-text">
+                      {renderChatMarkdown(row.why)}
+                    </div>
                     {(row.guideline || row.placedOrder != null) && (
                       <p className="post-review-meta">
                         {row.placedOrder != null && (

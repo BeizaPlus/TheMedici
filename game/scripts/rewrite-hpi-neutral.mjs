@@ -7,8 +7,9 @@
  *   2. LLM splits it into:
  *      - clean_hpi: learning-neutral presentation (symptoms, findings, raw data only)
  *      - teaching: diagnostic conclusions, treatment plans, pathophysiology facts
- *   3. Writes clean_hpi back to all HPI fields
- *   4. Appends teaching to case_summary (or generates summary if missing)
+ *   3. Writes clean_hpi to practice_hpi + narrative HPI fields (briefing/play)
+ *   4. Preserves original in hpi_narrative / answer_key_hpi (teach only)
+ *   5. Appends teaching to case_summary (or generates summary if missing)
  *
  * Usage:
  *   node scripts/rewrite-hpi-neutral.mjs                    → dry run (5 cases)
@@ -115,9 +116,15 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function applyCleanHpi(caseObj, cleanHpi) {
-  caseObj.hpi_narrative = cleanHpi;
-  if (caseObj.practice_hpi) caseObj.practice_hpi = cleanHpi;
+function applyCleanHpi(caseObj, cleanHpi, originalRaw) {
+  const answerKey = (originalRaw || caseObj.hpi_narrative || '').trim();
+  if (answerKey && !caseObj.answer_key_hpi) {
+    caseObj.answer_key_hpi = answerKey;
+  }
+  if (answerKey) {
+    caseObj.hpi_narrative = answerKey;
+  }
+  caseObj.practice_hpi = cleanHpi;
 
   const narr = caseObj.narrative;
   if (narr) {
@@ -191,7 +198,7 @@ async function processCase(caseId, caseObj, { allowGenerateSummary = false } = {
 
   if (hpiNeedsClean && cleanHpi !== raw.trim()) {
     console.log(`  Case ${caseId} (${caseObj.title}): cleaned HPI`);
-    if (!DRY_RUN) applyCleanHpi(caseObj, cleanHpi);
+    if (!DRY_RUN) applyCleanHpi(caseObj, cleanHpi, raw);
     changed = true;
   }
 

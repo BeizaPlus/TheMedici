@@ -91,7 +91,7 @@ export default function CasePortraitBriefPanel({
     if (busy || !caseId) return;
     persist({ enabled, text: draft });
     setBusy(true);
-    setStatus('Generating portrait with OpenAI…');
+    setStatus('Generating portrait with Magnific (Nano Banana)…');
     onBusyChange?.(true);
     try {
       clearVisionZones();
@@ -127,7 +127,7 @@ export default function CasePortraitBriefPanel({
           role="switch"
           aria-checked={enabled}
           onClick={handleToggle}
-          title={enabled ? 'Custom look on — your description guides OpenAI' : 'Auto look from case JSON'}
+          title={enabled ? 'Custom look on — your description guides Magnific' : 'Auto look from case JSON'}
         >
           {enabled ? 'Custom' : 'Auto'}
         </button>
@@ -145,7 +145,7 @@ export default function CasePortraitBriefPanel({
           onChange={(e) => setDraft(e.target.value)}
           onBlur={handleBlur}
           placeholder="e.g. 6-year-old boy, sickle cell crisis, curled on stretcher, parents at bedside, monitor cables visible, dignified ED lighting…"
-          aria-label="Portrait description for OpenAI"
+          aria-label="Portrait description for Magnific"
         />
       )}
       <button
@@ -153,7 +153,7 @@ export default function CasePortraitBriefPanel({
         className="portrait-brief-regen"
         onClick={() => void handleRegenerate()}
         disabled={busy || (enabled && !draft.trim())}
-        title="Regenerate this case's patient image with OpenAI"
+        title="Regenerate this case's patient image with Magnific Nano Banana"
       >
         <IconRefresh className={busy ? 'spin' : ''} aria-hidden />
         {busy ? 'Regenerating…' : enabled ? 'Regenerate with custom look' : 'Regenerate portrait'}
@@ -163,7 +163,7 @@ export default function CasePortraitBriefPanel({
           {busy ? (
             <>
               {status || 'Regenerating…'}
-              <span className="portrait-brief-status-note"> Usually 20–40 seconds.</span>
+              <span className="portrait-brief-status-note"> Magnific Nano Banana · usually 20–40 seconds.</span>
             </>
           ) : (
             status

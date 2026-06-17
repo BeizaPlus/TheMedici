@@ -9,6 +9,7 @@ import {
   bufferToBase64,
   fitToBaseplate,
 } from './portraitFrame.js';
+import { generateImageEditWithMagnific, magnificApiKey } from './magnificImage.js';
 import { getLandscapeFramePrompt } from '../src/lib/sceneCameraLock.js';
 import {
   buildSceneElementPromptBlock,
@@ -382,7 +383,7 @@ export async function writePortraitCache(portraitDir, caseId, outB64, meta = {})
   const payload = {
     caseId: normalizeCaseId(caseId),
     cachedAt: new Date().toISOString(),
-    provider: 'openai',
+    provider: meta.provider || 'magnific',
     ...meta,
   };
   await fsp.writeFile(metaPath, JSON.stringify(payload, null, 2), 'utf8');
@@ -402,30 +403,65 @@ export function buildPortraitMeta(caseContext = {}) {
     ladyRefUrl: ladyRef?.publicUrl || null,
   };
 }
-export async function generatePortraitWithOpenAI({ imageBase64, mimeType, prompt }) {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) throw new Error('OPENAI_API_KEY not configured');
+async function generatePortraitWithMagnific({ imageBase64, mimeType, prompt }) {
+  const buf = await generateImageEditWithMagnific({
+    imageBase64,
+    mimeType,
+    prompt,
+    aspectRatio: PORTRAIT_ASPECT,
+    resolution: process.env.MAGNIFIC_PORTRAIT_RESOLUTION || '2K',
+    referenceText:
+      'ED training baseplate — keep camera lock, bed rails, monitor upper-right, IV upper-left; change patient only.',
+  });
+  const fitted = await fitToBaseplate(buf);
+  return bufferToBase64(fitted);
+}
 
-  const form = new FormData();
-  form.append('model', 'gpt-image-1');
-  form.append('prompt', prompt);
-  form.append('size', PORTRAIT_OPENAI_SIZE);
-  // gpt-image-1 /images/edits rejects response_format; b64_json is returned by default.
-  form.append('image', new Blob([Buffer.from(imageBase64, 'base64')], { type: mimeType }), 'patient.png');
-
-  const r = await fetch('https://api.openai.com/v1/images/edits', {
+async function generatePortraitWithFal({ imageBase64, mimeType, prompt }) {
+  const key = process.env.FAL_KEY;
+  if (!key) throw new Error('FAL_KEY not configured');
+  const model = process.env.FAL_SCENE_MODEL || 'fal-ai/joyai-image-edit';
+  const r = await fetch(`https://fal.run/${model}`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${key}` },
-    body: form,
+    headers: {
+      Authorization: `Key ${key}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      prompt,
+      image_url: `data:${mimeType};base64,${imageBase64}`,
+    }),
   });
   if (!r.ok) {
     const err = await r.text();
-    throw new Error(`OpenAI portrait edit failed: ${err || r.status}`);
+    throw new Error(`fal portrait failed: ${err || r.status}`);
   }
   const data = await r.json();
-  const outB64 = data?.data?.[0]?.b64_json;
-  if (!outB64) throw new Error('No image returned from OpenAI');
-
-  const fitted = await fitToBaseplate(Buffer.from(outB64, 'base64'));
+  const imageUrl =
+    data?.images?.[0]?.url
+    || data?.image?.url
+    || data?.output?.url
+    || data?.data?.images?.[0]?.url;
+  if (!imageUrl) throw new Error('No image returned from fal');
+  const imgResp = await fetch(imageUrl);
+  if (!imgResp.ok) throw new Error('Could not download fal portrait');
+  const buf = Buffer.from(await imgResp.arrayBuffer());
+  const fitted = await fitToBaseplate(buf);
   return bufferToBase64(fitted);
+}
+
+/** Magnific Nano Banana Pro first; legacy fal fallback when Magnific fails or is unset. */
+export async function generatePortraitWithFallback(opts) {
+  if (magnificApiKey()) {
+    try {
+      return { b64: await generatePortraitWithMagnific(opts), provider: 'magnific' };
+    } catch (e) {
+      console.warn('[case-portrait] Magnific failed, trying fal:', e.message);
+      if (!process.env.FAL_KEY) throw e;
+    }
+  }
+  if (process.env.FAL_KEY) {
+    return { b64: await generatePortraitWithFal(opts), provider: 'fal' };
+  }
+  throw new Error('MAGNIFIC_API_KEY or FAL_KEY required for portrait generation');
 }

@@ -21,6 +21,7 @@ export function useDragGame({
   placed,
   overlap = 0.35,
   snapBackMs = 380,
+  freeDrop = false,
   onDrop,
   onReturnToDock,
   canStartDrag,
@@ -29,8 +30,10 @@ export function useDragGame({
   canStartDragRef.current = canStartDrag;
   const onDropRef = useRef(onDrop);
   const onReturnToDockRef = useRef(onReturnToDock);
+  const freeDropRef = useRef(freeDrop);
   onDropRef.current = onDrop;
   onReturnToDockRef.current = onReturnToDock;
+  freeDropRef.current = freeDrop;
   const dragSessionRef = useRef(null);
 
   useEffect(() => {
@@ -177,8 +180,16 @@ export function useDragGame({
           const ivId = pill.dataset.ivId;
           const zr = zone.getBoundingClientRect();
           const wr = wrap.getBoundingClientRect();
-          const tx = zr.left + zr.width / 2 - wr.left - wr.width / 2;
-          const ty = zr.top + zr.height / 2 - wr.top - wr.height / 2;
+          let tx;
+          let ty;
+          if (freeDropRef.current) {
+            const parent = wrap.offsetParent?.getBoundingClientRect?.() || scene.getBoundingClientRect();
+            tx = clientX - parent.left - wr.width / 2;
+            ty = clientY - parent.top - wr.height / 2;
+          } else {
+            tx = zr.left + zr.width / 2 - wr.left - wr.width / 2;
+            ty = zr.top + zr.height / 2 - wr.top - wr.height / 2;
+          }
 
           dismissWrapFromDock(wrap);
           wrap.style.transition = 'transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.28s ease';
@@ -199,5 +210,5 @@ export function useDragGame({
       cleanupDragGhosts();
       dragSessionRef.current = null;
     };
-  }, [enabled, sceneRef, overlap, snapBackMs, placed]);
+  }, [enabled, sceneRef, overlap, snapBackMs, placed, freeDrop]);
 }

@@ -4,6 +4,8 @@ import { getAllGameCases, getCategories, getCasesInCategory } from '../data/useC
 import { getCaseRecord, getCompletionStats, pickRandomId } from '../data/caseProgress.js';
 import { IconShuffle } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseProgressTag from './CaseProgressTag.jsx';
+import CaseAttemptRadio from './CaseAttemptRadio.jsx';
+import { isCaseAttempted } from '../data/caseProgress.js';
 import CaseReadyTag from './CaseReadyTag.jsx';
 import { hasCaseSpecificPlaybook } from '../data/resolvePlaybook.js';
 import {
@@ -73,6 +75,7 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
   const [categoryId, setCategoryId] = useState(visibleCategories[0]?.id);
   const [query, setQuery] = useState('');
   const [readyOnly, setReadyOnly] = useState(false);
+  const [checkVersion, setCheckVersion] = useState(0);
   const readyCount = getReadyPracticeCount();
   const readyCases = useMemo(() => getReadyPracticeCases(allCases), [allCases]);
 
@@ -291,6 +294,8 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
             )}
             {filteredCases.map((c) => {
               const rec = getCaseRecord(c.id);
+              const attempted = isCaseAttempted(c.id);
+              void checkVersion;
               const selected = c.id === currentCaseId;
               const rowState = rec?.completed ? 'done' : rec?.plays ? 'attempted' : '';
               return (
@@ -299,10 +304,11 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
                   type="button"
                   role="option"
                   aria-selected={selected}
-                  className={`briefing-picker-row ${selected ? 'selected' : ''} ${rowState}`}
+                  className={`briefing-picker-row ${selected ? 'selected' : ''} ${rowState} ${attempted ? 'study-done' : ''}`}
                   onClick={() => onSelectCase(c)}
                   title={`Switch to ${c.title}`}
                 >
+                  <CaseAttemptRadio caseId={c.id} onChange={() => setCheckVersion((v) => v + 1)} />
                   <span className="briefing-picker-num">#{c.ccsNumber}</span>
                   <span className="briefing-picker-name" title={toTitleCase(c.title)}>
                     {toTitleCase(c.title)}

@@ -198,9 +198,16 @@ Quick backlog (see audit file for full list):
 
 ---
 
-## Case portraits (OpenAI)
+## Case portraits (Magnific MCP — Kojo parity)
 
-Per-case **House-style cold-open** patient image from the **approved ED baseplate** + case JSON. Requires `OPENAI_API_KEY` in `MeWorld/.env`.
+Per-case **House-style cold-open** patient image from the **approved ED baseplate** + case JSON.
+
+| Path | Auth |
+|------|------|
+| **Cursor agents (preferred)** | **Magnific MCP** `user-Magnific` · OAuth · `imagen-nano-banana-2` @ **2k** · upload flow like Kojo |
+| **Play Regenerate (runtime)** | Optional `MAGNIFIC_API_KEY` REST in `.env` · else agent MCP batch → `.case-portraits/` |
+
+**Rule:** `.cursor/rules/meworld-magnific-mcp.mdc` · **No OpenAI image edits.** Fal legacy fallback only if Magnific unavailable.
 
 | Baseplate | Path | Frame |
 |-----------|------|-------|
@@ -213,7 +220,7 @@ Per-case **House-style cold-open** patient image from the **approved ED baseplat
 
 | Piece | Path / behavior |
 |-------|-----------------|
-| Server module | `server/casePortrait.js` — prompt, OpenAI `gpt-image-1` edit, vision persona |
+| Server module | `server/casePortrait.js` + `server/magnificImage.js` — Magnific REST; MCP batch per rule |
 | Disk cache | `game/.case-portraits/case_N.png` + `.json` meta (gitignored) |
 | Static URL | `GET http://127.0.0.1:3001/case-portraits/case_N.png` |
 | API | `GET /api/case-portrait/:id` · `POST /api/regenerate-patient-from-case` · `POST /api/case-persona` |
@@ -225,7 +232,7 @@ Per-case **House-style cold-open** patient image from the **approved ED baseplat
 | Piece | Behavior |
 |-------|----------|
 | UI | `CasePortraitBriefPanel.jsx` — **Play toolbar gear** + **Briefing sidebar footer** |
-| Toggle | **Auto** = demographics + CC from case JSON · **Custom** = user textarea guides OpenAI |
+| Toggle | **Auto** = demographics + CC from case JSON · **Custom** = user textarea guides portrait prompt |
 | Storage | `localStorage` key `schoonmaker_case_portrait_brief` (`casePortraitBrief.js`) |
 | Regen feedback | Button **Regenerating…** + spinning icon; scene **overlay** “Regenerating patient portrait…” (~20–40s); toast on done in Play |
 | Server | `buildPortraitPrompt(caseContext, { portraitBrief })` appends mandatory user direction |
@@ -271,7 +278,9 @@ Case chat in Play and Differentials (DeepSeek or OpenAI from `.env`). **Play def
 | Play / Diff modes | `Play.jsx` + `SceneOrderCommandDock` · `DifferentialFloatingChat.jsx` |
 | Session recovery | `sendCaseChatMessage` retries once after API restart (404 expired) |
 | Demographics | `src/lib/patientFactsFromHpi.js` — `resolvePatientDemographics()`, `extractPatientFacts()` |
-| Prompt | `server/index.js` — `PATIENT DEMOGRAPHICS` block; age answers must match `ageLabel` |
+| Prompt (patient) | `server/prompts/immersa-patient.md` + `server/immersaPatientPrompt.js` — Immersa patient voice (3 laws, temp ~0.85) |
+| Prompt (tutor) | `server/prompts/immersa-attendant.md` + `server/immersaAttendantPrompt.js` — Immersa explainer/attendant (mechanism-first, temp ~0.7); order-why tooltips use same voice |
+| Practice HPI | `resolvePracticeHpi()` in `caseChat.js` — patient interview uses spoiler-free `practice_hpi` when learning mode on |
 | Pediatric | `Pediatrics` category + child `patient_voice` → infer ~6–7 yo if HPI has no explicit age; never invent adult age |
 | Persona cache | Portrait vision + `PORTRAIT_PERSONA_VERSION` in `caseChat.js` |
 | Creativity | Global: Welcome → Settings · Per-case override: **Play gear** (`SimulationCreativityControl`) |
@@ -363,7 +372,7 @@ Implementation: `Play.jsx` — `handleDrop`, `commitStackPlacement`, `submitOrde
 | `src/lib/patientRegen.js` | Case portrait load/regenerate |
 | `src/lib/casePortraitBrief.js` | Per-case custom portrait text |
 | `src/lib/patientFactsFromHpi.js` | Patient demographics for chat |
-| `server/casePortrait.js` | OpenAI portrait prompt + cache |
+| `server/casePortrait.js` | Magnific portrait prompt + cache |
 | `scripts/smoke-test.mjs` | Pre-dev sanity checks |
 | `step3/` | CCS capture toolchain + mirror cache |
 

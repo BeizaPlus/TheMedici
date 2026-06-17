@@ -1,8 +1,4 @@
-const SYSTEM = `You explain why a specific clinical order or exam belongs in a USMLE CCS-style case.
-Write 2–4 short sentences for a medical student in active play.
-Be specific to THIS patient's presentation — not generic textbook filler.
-Mention what you are ruling in/out or what finding you expect.
-No markdown, no bullet lists, no "as an AI".`;
+import { buildImmersaOrderWhySystemPrompt } from './immersaAttendantPrompt.js';
 
 export function buildOrderWhyPrompt({ orderLabel, playbookWhy = '', caseContext = {} }) {
   const cc =
@@ -34,7 +30,7 @@ export function buildOrderWhyPrompt({ orderLabel, playbookWhy = '', caseContext 
   };
 
   return [
-    { role: 'system', content: SYSTEM },
+    { role: 'system', content: buildImmersaOrderWhySystemPrompt() },
     {
       role: 'user',
       content: `Explain why this order is relevant for this case:\n${JSON.stringify(user, null, 2)}`,

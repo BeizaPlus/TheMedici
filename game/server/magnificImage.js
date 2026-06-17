@@ -1,0 +1,157 @@
+import crypto from 'crypto';
+import { Router } from 'express';
+
+const refStore = new Map();
+
+const MODEL_PATH = {
+  'nano-banana-pro': '/v1/ai/text-to-image/nano-banana-pro',
+  'nano-banana-pro-flash': '/v1/ai/text-to-image/nano-banana-pro-flash',
+  'imagen-nano-banana-2': '/v1/ai/text-to-image/nano-banana-pro',
+  'imagen-nano-banana-2-flash': '/v1/ai/text-to-image/nano-banana-pro-flash',
+};
+
+export function magnificApiKey() {
+  return process.env.MAGNIFIC_API_KEY || process.env.MAGNIFIC_API_KEY_B2B || '';
+}
+
+export function magnificImageModel() {
+  const raw = String(process.env.MAGNIFIC_IMAGE_MODEL || 'imagen-nano-banana-2').trim();
+  return MODEL_PATH[raw] ? raw : 'imagen-nano-banana-2';
+}
+
+export function magnificImagePath() {
+  return MODEL_PATH[magnificImageModel()] || MODEL_PATH['nano-banana-pro'];
+}
+
+export function portraitImageAvailable() {
+  return Boolean(magnificApiKey() || process.env.FAL_KEY);
+}
+
+export function magnificRefRouter() {
+  const router = Router();
+  router.get('/:token', (req, res) => {
+    const token = String(req.params.token || '').replace(/\.(png|jpe?g|webp)$/i, '');
+    const item = refStore.get(token);
+    if (!item || Date.now() > item.expires) {
+      return res.status(404).end();
+    }
+    res.setHeader('Content-Type', item.mimeType);
+    res.setHeader('Cache-Control', 'no-store');
+    return res.send(item.buffer);
+  });
+  return router;
+}
+
+function stashRef(imageBase64, mimeType, ttlMs = 180000) {
+  const token = crypto.randomBytes(16).toString('hex');
+  refStore.set(token, {
+    buffer: Buffer.from(imageBase64, 'base64'),
+    mimeType: mimeType || 'image/png',
+    expires: Date.now() + ttlMs,
+  });
+  return token;
+}
+
+function publicApiBase() {
+  const port = Number(process.env.PORT || process.env.SPORTMAKER_API_PORT || 3001);
+  return process.env.PUBLIC_URL?.replace(/\/$/, '') || `http://127.0.0.1:${port}`;
+}
+
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+async function pollMagnificTask(taskPath, taskId, { timeoutMs = 180000 } = {}) {
+  const key = magnificApiKey();
+  const started = Date.now();
+  while (Date.now() - started < timeoutMs) {
+    const r = await fetch(`https://api.magnific.com${taskPath}/${taskId}`, {
+      headers: { 'x-magnific-api-key': key },
+    });
+    if (!r.ok) {
+      const err = await r.text();
+      throw new Error(`Magnific task poll failed: ${err || r.status}`);
+    }
+    const payload = await r.json();
+    const data = payload?.data || payload;
+    const status = String(data?.status || '').toUpperCase();
+    if (status === 'COMPLETED') {
+      const urls = data?.generated;
+      if (Array.isArray(urls) && urls[0]) return urls[0];
+      throw new Error('Magnific task completed without image URL');
+    }
+    if (status === 'FAILED') {
+      throw new Error(data?.message || 'Magnific image task failed');
+    }
+    await sleep(2500);
+  }
+  throw new Error('Magnific image task timed out');
+}
+
+/**
+ * Reference-guided edit via Magnific REST (Nano Banana Pro API).
+ * Kojo/MCP agents use OAuth + creations_request_upload instead — see
+ * `.cursor/rules/meworld-magnific-mcp.mdc`.
+ *
+ * REST refs use inline data URLs (Magnific cloud cannot fetch localhost).
+ */
+export async function generateImageEditWithMagnific({
+  imageBase64,
+  mimeType = 'image/png',
+  prompt,
+  aspectRatio = '16:9',
+  resolution = '2K',
+  referenceText = 'CAMERA LOCK — match bed composition, camera angle, and room layout exactly.',
+  extraReferenceImages = [],
+}) {
+  const key = magnificApiKey();
+  if (!key) {
+    throw new Error(
+      'MAGNIFIC_API_KEY not configured — use Magnific MCP in Cursor (Kojo upload flow) or add REST key from magnific.com/developers',
+    );
+  }
+
+  const mime =
+    mimeType === 'image/jpeg' ? 'image/jpeg' : mimeType === 'image/webp' ? 'image/webp' : 'image/png';
+  const dataUrl = `data:${mime};base64,${imageBase64}`;
+  const taskPath = magnificImagePath();
+
+  const reference_images = [
+    {
+      image: dataUrl,
+      mime_type: mime,
+      text: referenceText,
+    },
+    ...extraReferenceImages,
+  ];
+
+  const body = {
+    prompt,
+    aspect_ratio: aspectRatio,
+    resolution,
+    reference_images,
+  };
+
+  const r = await fetch(`https://api.magnific.com${taskPath}`, {
+    method: 'POST',
+    headers: {
+      'x-magnific-api-key': key,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!r.ok) {
+    const err = await r.text();
+    throw new Error(`Magnific image create failed: ${err || r.status}`);
+  }
+
+  const created = await r.json();
+  const taskId = created?.data?.task_id || created?.task_id;
+  if (!taskId) throw new Error('Magnific did not return task_id');
+
+  const imageUrl = await pollMagnificTask(taskPath, taskId);
+  const imgResp = await fetch(imageUrl);
+  if (!imgResp.ok) throw new Error(`Could not download Magnific image (${imgResp.status})`);
+  return Buffer.from(await imgResp.arrayBuffer());
+}

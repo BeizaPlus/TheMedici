@@ -1,0 +1,79 @@
+---
+description: MeWorld patient portraits — Magnific MCP (Kojo parity). OAuth in Cursor; not OpenAI image edits.
+globs:
+  - server/casePortrait.js
+  - server/magnificImage.js
+  - server/portraitFrame.js
+  - dev/anatomic-plates/**
+  - dev/scene-camera-lock/**
+  - public/assets/patient/**
+  - src/data/patientLadyRefs.json
+alwaysApply: false
+---
+
+# MeWorld Magnific MCP — same workflow as Kojo
+
+**Global policy:** `steve-generation-access.mdc` · Kojo reference: `kojo-oppong.mdc` + `AGENT_HANDOFF-2026-06-09-EAGLE-STYLE.md`
+
+| Task | Primary | Fallback |
+|------|---------|----------|
+| **Stills / portraits** | **Magnific MCP** `images_generate` | **Higgsfield** `nano_banana_pro` @ **2k** |
+| **Video** | ComfyUI only | — |
+| ~~OpenAI image edits~~ | **Do not use** | billing dead / wrong backend |
+| ~~Fal~~ | **Do not use** | expired |
+
+## MCP auth (Cursor agents)
+
+- Server: **`user-Magnific`** · OAuth — **no API key** in chat
+- Reauth: Cursor → Settings → MCP → Magnific → Disconnect / Connect → Reload Window → `library_list` verify
+- Read tool schema under `mcps/user-Magnific/tools/` before every call
+
+## Upload flow (mandatory for refs — Kojo parity)
+
+Local PNGs are **not** visible to Magnific cloud. Never pass `http://127.0.0.1/...` refs.
+
+```
+creations_request_upload (mimeType: image/png)
+  → PUT bytes to presigned URL
+  → creations_finalize_upload
+  → identifier for references[]
+```
+
+Or `creations_upload_image` when you have a stable public URL.
+
+## `images_generate` (per-case portrait)
+
+| Param | Value |
+|-------|--------|
+| `mode` | `imagen-nano-banana-2` (MCP slug) or `auto` |
+| `aspectRatio` | `16:9` |
+| `resolution` | **`2k`** (never omit) |
+| `count` | `2` for A/B pick |
+
+**`references[]` order (never text-only):**
+
+1. **`image`** — crop lock / baseplate  
+   - Male: `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png`  
+   - Female layout: `public/assets/patient/patient-scene-female.png`
+2. **`image`** (optional) — anatomy scope `*-anatomic-plate-anatomy.png`
+3. **`character`** — lady map from `patientLadyRefs.json` when female case
+4. Prompt: `server/casePortrait.js` `buildPortraitPrompt()` + `dev/scene-camera-lock/prompts/magnific-camera-lock.txt`
+
+Then: **`creations_wait`** → download → `fitToBaseplate` (1536×864) → `.case-portraits/case_XXX.png` + `.json` meta `provider: magnific`.
+
+## Play runtime (learner Regenerate button)
+
+| Auth | Path |
+|------|------|
+| **MCP (agents)** | Batch regen in Cursor — preferred when no REST key |
+| **`MAGNIFIC_API_KEY`** | `server/magnificImage.js` REST — Business plan only |
+| **HF** | Server fallback if Magnific REST fails and `HF` token available |
+
+REST uses **inline base64** refs (not localhost URLs). If REST unavailable, agent runs MCP batch above.
+
+## Related rules
+
+- `scene-camera-lock.mdc` — camera / crop lock
+- `patient-character-maps.mdc` — 9:16 lady maps (likeness only)
+- `anatomic-iv-plates.mdc` — baseplate generation
+- `scene-element-reference-lock.mdc` — O2 / IV element plates

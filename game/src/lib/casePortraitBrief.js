@@ -17,7 +17,7 @@ function writeMap(map) {
   }
 }
 
-/** Per-case custom OpenAI portrait direction. */
+/** Per-case custom Magnific portrait direction. */
 export function readCasePortraitBrief(caseId) {
   if (caseId == null) return { enabled: false, text: '' };
   const row = readMap()[String(caseId)];
@@ -44,7 +44,7 @@ export function writeCasePortraitBrief(caseId, { enabled, text }) {
   writeMap(map);
 }
 
-/** Text sent to OpenAI when custom portrait is enabled. */
+/** Text sent to Magnific when custom portrait is enabled. */
 export function resolvePortraitBriefForApi(caseId) {
   const brief = readCasePortraitBrief(caseId);
   if (!brief.enabled) return '';

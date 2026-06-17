@@ -35,6 +35,7 @@ export const STORAGE = {
   threadCollapsed: 'schoonmaker_thread_collapsed',
   timelineCollapsed: 'schoonmaker_timeline_collapsed',
   caseChatHistory: 'schoonmaker_case_chat_history',
+  orderWhyCache: 'schoonmaker_order_why_cache',
   caseNotes: 'schoonmaker_case_notes',
   caseNotesIndex: 'schoonmaker_case_notes_index',
   caseNotesMigrated: 'schoonmaker_case_notes_disk_migrated',

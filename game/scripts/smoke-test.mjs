@@ -89,10 +89,14 @@ async function main() {
   ok(zoneRangesOk, "config: zone fractions 0..1");
 
   ok(Array.isArray(catalog.cases) && catalog.cases.length > 0, "catalog: cases loaded", `${catalog.cases.length} cases`);
+  const uberCatalogCount = catalog.cases.filter(
+    (c) => c.isUber || String(c.id).startsWith("U"),
+  ).length;
+  const catalogStandardCount = catalog.cases.length - uberCatalogCount;
   ok(
-    prepared.totalCases === catalog.cases.length,
-    "preparedCases: count matches catalog",
-    `${prepared.totalCases} vs ${catalog.cases.length}`,
+    prepared.totalCases === catalogStandardCount,
+    "preparedCases: count matches catalog (excludes uber composites)",
+    `${prepared.totalCases} vs ${catalogStandardCount} (+${uberCatalogCount} uber)`,
   );
   const parsedVitals = Object.values(prepared.cases || {}).filter((c) => c.vitalsSource === "parsed").length;
   ok(parsedVitals >= 8, "preparedCases: CCS vitals parsed", `${parsedVitals} parsed`);

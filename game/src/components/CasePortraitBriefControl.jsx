@@ -31,11 +31,12 @@ export default function CasePortraitBriefControl({
         type="button"
         className={`panel-portrait-btn${open ? ' active' : ''}`}
         onClick={() => setOpen((v) => !v)}
-        title="Patient portrait"
-        aria-label="Patient portrait"
+        title="Patient portrait — Auto or Custom look"
+        aria-label="Patient portrait settings"
         aria-expanded={open}
       >
         <IconUser />
+        <span className="panel-portrait-mode-label">Portrait</span>
       </button>
       {open && (
         <div className="portrait-brief-popover" role="dialog" aria-label="Patient portrait settings">

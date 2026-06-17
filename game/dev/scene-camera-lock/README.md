@@ -61,7 +61,7 @@ Normalized zone coordinates live in **`SCENE_LOCK.json`** (copied from `gameConf
 
 | Use | File |
 |-----|------|
-| OpenAI portrait edit | `prompts/openai-camera-lock.txt` |
+| OpenAI portrait edit | `prompts/openai-camera-lock.txt` (legacy — do not use for new gens) |
 | Magnific anatomic / scene gen | `prompts/magnific-camera-lock.txt` |
 
 Always attach the matching **crop lock / baseplate PNG** as the `image` reference (layout lock), not just character/style refs.

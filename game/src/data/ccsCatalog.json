@@ -1,11 +1,11 @@
 {
-  "builtAt": "2026-06-16T22:12:05.548Z",
+  "builtAt": "2026-06-17T11:33:05.540Z",
   "source": "Step 3 / CCS",
   "step3Root": "step3",
   "caseListSource": "catalog-fallback",
   "caseListPath": "src/data/ccsCatalog.json",
   "presentationFiles": 8,
-  "totalCases": 181,
+  "totalCases": 189,
   "sidebarCategories": [
     "Internal Medicine",
     "Neurology",
@@ -15,6 +15,21 @@
     "Psychiatry"
   ],
   "categories": [
+    {
+      "id": "Uber Cases",
+      "label": "Uber Cases",
+      "count": 8,
+      "caseIds": [
+        "U01",
+        "U02",
+        "U03",
+        "U04",
+        "U05",
+        "U06",
+        "U07",
+        "U08"
+      ]
+    },
     {
       "id": "GI & Abdomen",
       "label": "GI & Abdomen",
@@ -2265,6 +2280,182 @@
       "highYield": "45",
       "completionDate": "5/19/2026",
       "hasIntro": false
+    },
+    {
+      "id": "U01",
+      "caseNumber": "U01",
+      "title": "Elena — Neuro & Weakness",
+      "category": "Uber Cases",
+      "timeLimit": "40 Minute Case",
+      "averageGrade": "",
+      "highYield": "",
+      "completionDate": "",
+      "hasIntro": true,
+      "isUber": true,
+      "uberDomains": [
+        "Neurology",
+        "MSK & General"
+      ],
+      "uberMemberIds": [
+        "007",
+        "046",
+        "041",
+        "068"
+      ]
+    },
+    {
+      "id": "U02",
+      "caseNumber": "U02",
+      "title": "James — Cardiopulmonary Acute",
+      "category": "Uber Cases",
+      "timeLimit": "40 Minute Case",
+      "averageGrade": "",
+      "highYield": "",
+      "completionDate": "",
+      "hasIntro": true,
+      "isUber": true,
+      "uberDomains": [
+        "Cardiopulmonary",
+        "Emergency Medicine"
+      ],
+      "uberMemberIds": [
+        "001",
+        "023",
+        "053",
+        "126"
+      ]
+    },
+    {
+      "id": "U03",
+      "caseNumber": "U03",
+      "title": "Maria — GI & Abdomen",
+      "category": "Uber Cases",
+      "timeLimit": "40 Minute Case",
+      "averageGrade": "",
+      "highYield": "",
+      "completionDate": "",
+      "hasIntro": true,
+      "isUber": true,
+      "uberDomains": [
+        "GI & Abdomen",
+        "Emergency Medicine"
+      ],
+      "uberMemberIds": [
+        "004",
+        "019",
+        "032",
+        "084"
+      ]
+    },
+    {
+      "id": "U04",
+      "caseNumber": "U04",
+      "title": "David — Neuro Headache & AMS",
+      "category": "Uber Cases",
+      "timeLimit": "40 Minute Case",
+      "averageGrade": "",
+      "highYield": "",
+      "completionDate": "",
+      "hasIntro": true,
+      "isUber": true,
+      "uberDomains": [
+        "Neurology",
+        "Emergency Medicine"
+      ],
+      "uberMemberIds": [
+        "005",
+        "034",
+        "002",
+        "049"
+      ]
+    },
+    {
+      "id": "U05",
+      "caseNumber": "U05",
+      "title": "Aisha — Women's & GU",
+      "category": "Uber Cases",
+      "timeLimit": "40 Minute Case",
+      "averageGrade": "",
+      "highYield": "",
+      "completionDate": "",
+      "hasIntro": true,
+      "isUber": true,
+      "uberDomains": [
+        "OB/GYN",
+        "Genitourinary"
+      ],
+      "uberMemberIds": [
+        "003",
+        "028",
+        "008",
+        "164"
+      ]
+    },
+    {
+      "id": "U06",
+      "caseNumber": "U06",
+      "title": "Robert — MSK Pain Marathon",
+      "category": "Uber Cases",
+      "timeLimit": "40 Minute Case",
+      "averageGrade": "",
+      "highYield": "",
+      "completionDate": "",
+      "hasIntro": true,
+      "isUber": true,
+      "uberDomains": [
+        "MSK & General",
+        "Neurology"
+      ],
+      "uberMemberIds": [
+        "042",
+        "079",
+        "069",
+        "098"
+      ]
+    },
+    {
+      "id": "U07",
+      "caseNumber": "U07",
+      "title": "Sophie — Fever, Rash & ID",
+      "category": "Uber Cases",
+      "timeLimit": "40 Minute Case",
+      "averageGrade": "",
+      "highYield": "",
+      "completionDate": "",
+      "hasIntro": true,
+      "isUber": true,
+      "uberDomains": [
+        "ID & Dermatology",
+        "Emergency Medicine"
+      ],
+      "uberMemberIds": [
+        "006",
+        "110",
+        "127",
+        "141"
+      ]
+    },
+    {
+      "id": "U08",
+      "caseNumber": "U08",
+      "title": "Marcus — Psych & Behavior",
+      "category": "Uber Cases",
+      "timeLimit": "40 Minute Case",
+      "averageGrade": "",
+      "highYield": "",
+      "completionDate": "",
+      "hasIntro": true,
+      "isUber": true,
+      "uberDomains": [
+        "Psychiatry & Social",
+        "Neurology"
+      ],
+      "uberMemberIds": [
+        "065",
+        "128",
+        "160",
+        "033"
+      ]
     }
   ],
   "presentations": {
@@ -2316,5 +2507,6 @@
       "vitals": "Initial Vital Signs\n\nDay 1 @ 9:00\n\nTemperature:\n\n38.3 C (101.0 degrees F)\n\nPulse:\n\n89 beat/min, Regular rhythm\n\nRespiratory rate:\n\n20 /minute\n\nBlood pressure, systolic:\n\n122 mm Hg\n\nBlood pressure, diastolic:\n\n74 mm Hg\n\nHeight:\n\n183cm (72.0 in)\n\nWeight:\n\n97.5 kg (215 lb)\n\nBody Mass Index:\n\n29.1 kg/m2",
       "history": "Initial History\n\nReason(s) for visit: Burning during urination\nHistory of present Illness:\nThe patient, a 19 year old college freshman, presents to your office stating that he has a 5/10, sharp pain when he urinates. The pain stops when urination is complete. The pain began 3 days ago and has been progressively getting worse. He also recently developed testicular pain and pain with sex, especially with ejaculation. He is sexually active with his girlfriend of 6 months, and although they typically use condoms, they occasionally have unprotected sex. He also confirms chills, lethargy, a subjective fever, decreased appetite, but denies nausea and vomiting. Tylenol has improved his pain and fever. \r\n\r\nPast Medical History: Fractured ankle.\r\nCurrent medications: Tylenol 500mg as needed\r\nAllergies: None\r\nVaccinations: He received his childhood vaccinations.\r\nFamily History: The patient's father has hypertension. His mother has hypothyroidism. \r\n\r\nSocial History: \r\nThe patient is a college freshman, and had his first sexual encounter at age 15. He states that he never had a sexually transmitted infection before. He is a social drinker and has experimented with marijuana in the past. He denies any other illicit drug use. He enjoys rock climbing.\r\n\r\nReview of systems:\r\nGeneral: See HPI\r\nSkin: Negative\r\nHEENT: Negative\r\nCardiorespiratory: Negative\r\nGastrointestinal: Negative\r\nGenitourinary:  See HPI\r\nNeuropsychiatric: Negative"
     }
-  }
+  },
+  "uberCasesMergedAt": "2026-06-17T12:06:01.658Z"
 }

@@ -15,9 +15,9 @@ export function getCameraLockPrompt(variant = 'openai') {
   return prompts[variant] || prompts.openai || prompts.short || '';
 }
 
-export function getLandscapeFramePrompt() {
+export function getLandscapeFramePrompt(variant = 'magnific') {
   const { width, height } = SCENE_CAMERA_LOCK.exportPixels;
-  return `Landscape 16:9 wide cinematic frame (output will be cropped to ${width}x${height}). Patient centered on ED stretcher, full body crown through toes slightly zoomed out; monitor upper-right and IV fluids upper-left; same central overhead bedside composition as reference crop lock. ${getCameraLockPrompt('openai')}`;
+  return `Landscape 16:9 wide cinematic frame (output will be cropped to ${width}x${height}). Patient centered on ED stretcher, full body crown through toes slightly zoomed out; monitor upper-right and IV fluids upper-left; same central overhead bedside composition as reference crop lock. ${getCameraLockPrompt(variant)}`;
 }
 
 export function getCropLockRelPath(sex = 'male') {
