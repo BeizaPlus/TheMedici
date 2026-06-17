@@ -4827,6 +4827,167 @@
   overflow: visible;
 }
 
+/* ─── Teach Me panel (mobile accordion section) ───────────────────────────── */
+
+.diff-teach-me {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.diff-teach-me-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.diff-teach-me-kicker {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold, #e8b84b);
+  opacity: 0.85;
+}
+
+.diff-teach-me-topic {
+  margin: 0;
+  font-size: calc(var(--clinical-font-size, 17.92px) * 0.98);
+  font-weight: 700;
+  color: var(--text, #e0e0e0);
+  line-height: 1.3;
+}
+
+/* ── Sections ── */
+.diff-teach-me-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.diff-teach-me-section-title {
+  margin: 0;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted, #888);
+}
+
+/* ── Differential list ── */
+.diff-teach-me-dd-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.diff-teach-me-dd-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: calc(var(--clinical-font-size, 17.92px) * 0.74);
+  font-weight: var(--clinical-font-weight, 600);
+  color: var(--text, #e0e0e0);
+  line-height: 1.35;
+}
+
+.diff-teach-me-dd-item--star {
+  background: rgba(232, 184, 75, 0.08);
+  border: 1px solid rgba(232, 184, 75, 0.25);
+}
+
+.diff-teach-me-dd-num {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--muted, #777);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.diff-teach-me-dd-item--star .diff-teach-me-dd-num {
+  color: var(--gold, #e8b84b);
+  background: rgba(232, 184, 75, 0.15);
+}
+
+.diff-teach-me-dd-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.diff-teach-me-star {
+  flex-shrink: 0;
+  color: var(--gold, #e8b84b);
+  font-size: 0.85rem;
+}
+
+/* ── Clinical summary ── */
+.diff-teach-me-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diff-teach-me-para {
+  margin: 0;
+  font-size: calc(var(--clinical-font-size, 17.92px) * 0.7);
+  font-weight: var(--clinical-font-weight, 600);
+  color: var(--text, #ccc);
+  line-height: 1.55;
+}
+
+/* ── High-yield orders ── */
+.diff-teach-me-orders-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.diff-teach-me-order-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(239, 83, 80, 0.06);
+  border-left: 3px solid rgba(239, 83, 80, 0.4);
+}
+
+.diff-teach-me-order-name {
+  font-size: calc(var(--clinical-font-size, 17.92px) * 0.72);
+  font-weight: 600;
+  color: var(--text, #e0e0e0);
+}
+
+.diff-teach-me-order-reason {
+  font-size: calc(var(--clinical-font-size, 17.92px) * 0.62);
+  font-weight: var(--clinical-font-weight, 600);
+  color: var(--muted, #999);
+  line-height: 1.4;
+}
+
+.diff-teach-me-empty {
+  margin: 0;
+  padding: 12px 0;
+  font-size: 0.78rem;
+  color: var(--muted, #888);
+  text-align: center;
+}
+
 /* ─── Mobile scroll layout ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
   /* The whole practice screen becomes a natural scroll container */
