@@ -36,6 +36,7 @@ export default function App() {
   const [currentCase, setCurrentCase] = useState(null);
   const [stats, setStats] = useState({ attempts: 0, accuracy: 100, seconds: 0 });
   const [playMode, setPlayMode] = useState('browse');
+  const [launchTeachMe, setLaunchTeachMe] = useState(false);
   const [homeKey, setHomeKey] = useState(0);
   const [resumeCheckpoint, setResumeCheckpoint] = useState(() => readPlayCheckpoint());
 
@@ -87,20 +88,32 @@ export default function App() {
     }
   }, [studioBuild, screen]);
 
-  const startCase = useCallback((gameCase, mode = 'browse', { keepCheckpoint = false } = {}) => {
+  const startCase = useCallback((gameCase, mode = 'browse', { teachMe = false, skipBriefing = false } = {}) => {
     const cp = readPlayCheckpoint();
-    if (!keepCheckpoint && cp && String(cp.caseId) !== String(gameCase.id)) {
+    if (!teachMe && cp && String(cp.caseId) !== String(gameCase.id)) {
       clearPlayCheckpoint();
       setResumeCheckpoint(null);
     }
-    touchCaseVisited(gameCase.id, 'briefing');
+    touchCaseVisited(gameCase.id, teachMe ? 'whys' : 'briefing');
     setPlayMode(mode);
     setLastMode(mode);
     setCurrentCase(gameCase);
+    setLaunchTeachMe(Boolean(teachMe));
     unlockAmbience();
     startIcuMonitor({ fadeMs: 1800 });
+    if (skipBriefing && teachMe) {
+      setScreen(SCREENS.play);
+      return;
+    }
     setScreen(SCREENS.briefing);
   }, []);
+
+  const startWhysCase = useCallback(
+    (gameCase) => {
+      startCase(gameCase, 'browse', { teachMe: true, skipBriefing: true });
+    },
+    [startCase],
+  );
 
   const resumeSavedSession = useCallback(() => {
     const cp = readPlayCheckpoint();
@@ -135,6 +148,10 @@ export default function App() {
     startIcuMonitor({ fadeMs: 0 });
     setScreen(SCREENS.play);
   }, [currentCase?.id]);
+
+  const clearLaunchTeachMe = useCallback(() => {
+    setLaunchTeachMe(false);
+  }, []);
 
   const switchBriefingCase = useCallback((gameCase) => {
     touchCaseVisited(gameCase.id, 'briefing');
@@ -268,6 +285,7 @@ export default function App() {
         <Home
           key={homeKey}
           onPlay={startCase}
+          onLaunchWhys={startWhysCase}
           resumeCheckpoint={resumeCheckpoint}
           onResumeSession={resumeSavedSession}
           onDiscardSession={discardSavedSession}
@@ -287,6 +305,8 @@ export default function App() {
           key={currentCase.id}
           caseData={currentCase}
           playMode={playMode}
+          initialTeachMe={launchTeachMe}
+          onTeachMeConsumed={clearLaunchTeachMe}
           initialCheckpoint={(() => {
             const cp = resumeCheckpoint || readPlayCheckpoint();
             return cp?.caseId != null && String(cp.caseId) === String(currentCase.id) ? cp : null;

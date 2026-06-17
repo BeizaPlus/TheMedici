@@ -8,7 +8,8 @@ import { useDragGame } from '../hooks/useDragGame.js';
 import { useGridDragGame } from '../hooks/useGridDragGame.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
 import { useCasePortraitSrc } from '../hooks/useCasePortraitSrc.js';
-import { DOCK_CHROME_COLLAPSED_HEIGHT } from '../lib/playDockLayout.js';
+import { DOCK_CHROME_COLLAPSED_HEIGHT, playDockStorageKey } from '../lib/playDockLayout.js';
+import { nudgeVitalsAfterOrder } from '../lib/vitalsProgression.js';
 import { useTeachCompareDockWidth } from '../hooks/useTeachCompareDockWidth.js';
 import { isCorrectGridPlacement, zoneIdForCell, zoneToGridCell } from '../lib/placementGrid.js';
 import { isTorsoDropZone, stackDropZoneForIv } from '../lib/torsoDropZone.js';
@@ -102,12 +103,14 @@ import {
 import CaseContextPanel from './CaseContextPanel.jsx';
 import IcuMonitorStrip from './IcuMonitorStrip.jsx';
 import ClinicalTextControls from './ClinicalTextControls.jsx';
+import ClinicalFontControls from './ClinicalFontControls.jsx';
 import AudioSettingsPanel from './AudioSettingsPanel.jsx';
 import SimulationCreativityControl from './SimulationCreativityControl.jsx';
 import CasePortraitBriefControl from './CasePortraitBriefControl.jsx';
 import OrderResultsTabPanel from './OrderResultsTabPanel.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
+import { readTeachMeTextPrefs, teachMeTextStyle, writeTeachMeTextPrefs } from '../lib/teachMeTextPrefs.js';
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
 import { isLearningMode } from '../lib/learningMode.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
@@ -168,6 +171,7 @@ import {
   fetchCasePortraitStatus,
 } from '../lib/patientRegen.js';
 import { prefetchOrderResult } from '../lib/orderResultApi.js';
+import { fetchOrderWhy } from '../lib/orderWhy.js';
 import { clearCaseChatSession } from '../lib/caseChat.js';
 import { hasIvOrderPlaced } from '../lib/portraitLayers.js';
 
@@ -295,6 +299,8 @@ export default function Play({
   caseData,
   playMode = 'browse',
   initialCheckpoint = null,
+  initialTeachMe = false,
+  onTeachMeConsumed,
   onComplete,
   onQuit,
   onSkipToNext,
@@ -333,7 +339,12 @@ export default function Play({
   const [expandedStackId, setExpandedStackId] = useState(null);
   const [orderResultIvId, setOrderResultIvId] = useState(null);
   const [teachFocusId, setTeachFocusId] = useState(null);
-  const [teachMeMode, setTeachMeMode] = useState(false);
+  const [teachMeMode, setTeachMeMode] = useState(Boolean(initialTeachMe));
+  useEffect(() => {
+    if (!initialTeachMe) return;
+    setTeachMeMode(true);
+    onTeachMeConsumed?.();
+  }, [caseData.id, initialTeachMe, onTeachMeConsumed]);
   const [teachCompareLayout, setTeachCompareLayout] = useState(readTeachCompareLayout);
   const [placementOrder, setPlacementOrder] = useState([]);
   const [orderCommandQuery, setOrderCommandQuery] = useState('');
@@ -378,7 +389,7 @@ export default function Play({
     startDrag: startDockDrag,
     resetLayout: resetDockLayout,
     isDragging: dockDragging,
-  } = usePlayDockLayout();
+  } = usePlayDockLayout({ storageKey: playDockStorageKey(caseData?.id) });
   const expandDockPanel = useCallback(() => {
     setDockHidden(false);
     setDockCollapsed(false);
@@ -631,6 +642,24 @@ export default function Play({
     setDockHidden(false);
   }, [caseData.id]);
 
+  const showOrderWhyInDock = useCallback(
+    (iv) => {
+      if (!iv?.label || !caseData?.id) return;
+      void fetchOrderWhy({
+        caseId: caseData.id,
+        orderId: iv.id,
+        orderLabel: iv.label,
+        caseData,
+        playbookWhy: iv.why || '',
+      }).then(({ why }) => {
+        if (!why) return;
+        setDockChatReply({ question: `Why order ${iv.label}?`, answer: why });
+        setDockReplyExpanded(true);
+      });
+    },
+    [caseData],
+  );
+
   const isDockChatMode = useMemo(() => {
     if (!orderCommandQuery.trim()) return false;
     if (detectLocation(orderCommandQuery)) return false;
@@ -700,7 +729,7 @@ export default function Play({
                 Your placement order #{placementOrder.indexOf(iv.id) + 1}
               </p>
             )}
-            <p className="pill-why-inline-text selectable-text">
+            <p className="pill-why-inline-text teach-me-text-block selectable-text">
               {renderChatMarkdown(iv.why || 'No explanation available yet.')}
             </p>
             {iv.guideline && <p className="pill-why-inline-guideline">Guideline: {iv.guideline}</p>}
@@ -740,6 +769,60 @@ export default function Play({
     return byZone;
   }, [interventions, placed, zones, teachMeMode]);
   const caseFlow = useMemo(() => getCaseFlow(caseData), [caseData]);
+  const baselineVitals = useMemo(
+    () =>
+      caseFlow.vitals ?? {
+        sbp: 110,
+        dbp: 70,
+        hr: 88,
+        rr: 18,
+        temp: 37,
+        spo2: 96,
+        lactate: 1.8,
+      },
+    [caseFlow],
+  );
+  const [liveVitals, setLiveVitals] = useState(baselineVitals);
+  const prevPlacementRef = useRef([]);
+  const prevExtraCountRef = useRef(0);
+
+  useEffect(() => {
+    setLiveVitals(baselineVitals);
+    prevPlacementRef.current = [];
+    prevExtraCountRef.current = 0;
+  }, [caseData?.id, baselineVitals]);
+
+  useEffect(() => {
+    const prev = prevPlacementRef.current;
+    const added = placementOrder.filter((id) => !prev.includes(id));
+    prevPlacementRef.current = placementOrder;
+    if (!added.length) return;
+    setLiveVitals((v) => {
+      let next = { ...v };
+      for (const id of added) {
+        const iv = interventionById[id];
+        next = nudgeVitalsAfterOrder(next, id, iv?.label);
+      }
+      return next;
+    });
+  }, [placementOrder, interventionById]);
+
+  useEffect(() => {
+    const count = extraOrders.length;
+    if (count <= prevExtraCountRef.current) {
+      prevExtraCountRef.current = count;
+      return;
+    }
+    const added = extraOrders.slice(prevExtraCountRef.current);
+    prevExtraCountRef.current = count;
+    setLiveVitals((v) => {
+      let next = { ...v };
+      for (const row of added) {
+        next = nudgeVitalsAfterOrder(next, row.name, row.name);
+      }
+      return next;
+    });
+  }, [extraOrders]);
   const placedResultRows = useMemo(
     () => buildPlacedResultRows({ interventions, placed, pins, interventionById }),
     [interventions, placed, pins, interventionById],
@@ -760,7 +843,7 @@ export default function Play({
       });
     }
   }, [placedResultRows, caseData, caseFlow, teachMeMode]);
-  const vitals = caseFlow.vitals;
+  const vitals = liveVitals;
   const exam = caseFlow.exam;
   const examSummary = useMemo(() => getBriefingExam(caseFlow), [caseFlow]);
   const presentationIntro = useMemo(() => getPresentationIntro(caseData), [caseData]);
@@ -804,7 +887,6 @@ export default function Play({
     setPortraitSrc,
     clearPortraitSrc,
   } = useCasePortraitSrc(caseData);
-  const [portraitRegenBusy, setPortraitRegenBusy] = useState(false);
   const [portraitLayers, setPortraitLayers] = useState(null);
   const hasIvPlaced = useMemo(() => hasIvOrderPlaced(placed), [placed]);
   const [reviewedAt, setReviewedAt] = useState(null);
@@ -880,14 +962,9 @@ export default function Play({
   const threadIsPlayCase = String(threadViewCaseId) === String(caseData.id);
   const [readState, setReadState] = useState('idle');
   const [textPrefs, setTextPrefs] = useState(() => readClinicalTextPrefs());
+  const [teachMeTextPrefs, setTeachMeTextPrefs] = useState(() => readTeachMeTextPrefs());
   const clinicalStyle = useMemo(() => clinicalTextStyle(textPrefs), [textPrefs]);
-  const updateClinicalTextPrefs = useCallback((patch) => {
-    setTextPrefs((prev) => {
-      const next = { ...prev, ...patch };
-      writeClinicalTextPrefs(next);
-      return next;
-    });
-  }, []);
+  const teachMeStyle = useMemo(() => teachMeTextStyle(teachMeTextPrefs), [teachMeTextPrefs]);
   const reviewPanelRef = useRef(null);
   const reviewPanelDragRef = useRef({ dx: 0, dy: 0 });
   const sceneCaptureRef = useRef(null);
@@ -1674,6 +1751,9 @@ export default function Play({
       if (!silentDecoy) {
         setOrderResultIvId(iv.id);
         setDockResultsExpanded(true);
+        if (teachMeMode || isLearningMode()) {
+          showOrderWhyInDock(iv);
+        }
       }
 
       if (!teachMeMode) {
@@ -1704,7 +1784,7 @@ export default function Play({
         ...(viaCommand ? { method: 'command' } : {}),
       });
     },
-    [logDecoyAttempt, logTimeline, teachMeMode, placementOrder.length, zones, dropMode],
+    [logDecoyAttempt, logTimeline, teachMeMode, placementOrder.length, zones, dropMode, showOrderWhyInDock],
   );
 
 
@@ -1963,6 +2043,9 @@ export default function Play({
           correct: true,
           method: 'command',
         });
+        if (teachMeMode || isLearningMode()) {
+          showOrderWhyInDock(stackMatch);
+        }
         return;
       }
       const decoy = findStackMatchForQuery(raw, decoyInterventions, placed);
@@ -2092,6 +2175,7 @@ export default function Play({
       caseData?.id,
       extraOrders,
       total,
+      showOrderWhyInDock,
     ],
   );
 
@@ -3197,38 +3281,27 @@ export default function Play({
       settingsRef={stackCommandRef}
       settingsPopover={
         <div className="settings-popover toolbar-settings-popover" role="dialog" aria-label="Toolbar settings">
-          <div className="settings-popover-row">
-            <button
-              type="button"
-              onClick={() =>
-                updateClinicalTextPrefs({
-                  fontScale: Math.max(0.9, Number((textPrefs.fontScale - 0.08).toFixed(2))),
-                })
-              }
-              aria-label="Decrease text size"
-            >
-              A−
-            </button>
-            <span className="font-size-display">{Math.round(textPrefs.fontScale * 100)}%</span>
-            <button
-              type="button"
-              onClick={() =>
-                updateClinicalTextPrefs({
-                  fontScale: Math.min(1.5, Number((textPrefs.fontScale + 0.08).toFixed(2))),
-                })
-              }
-              aria-label="Increase text size"
-            >
-              A+
-            </button>
-            <button
-              type="button"
-              onClick={() => updateClinicalTextPrefs({ weight: textPrefs.weight === 700 ? 600 : 700 })}
-              className={textPrefs.weight === 700 ? 'active' : ''}
-              aria-label="Toggle bold text"
-            >
-              B
-            </button>
+          <div className="settings-popover-block">
+            <p className="settings-popover-label">Clinical text</p>
+            <ClinicalFontControls
+              compact
+              showLabel={false}
+              prefs={textPrefs}
+              onChange={setTextPrefs}
+              writePrefs={writeClinicalTextPrefs}
+            />
+          </div>
+          <div className="settings-popover-block">
+            <p className="settings-popover-label">Teach Me notes</p>
+            <ClinicalFontControls
+              compact
+              showLabel={false}
+              prefs={teachMeTextPrefs}
+              onChange={setTeachMeTextPrefs}
+              writePrefs={writeTeachMeTextPrefs}
+              resetTo={{ fontScale: 1, weight: 500 }}
+              styleFn={teachMeTextStyle}
+            />
           </div>
           <div className="settings-popover-row settings-popover-row-2">
             <button type="button" onClick={toggleTimedMode}>
@@ -3307,6 +3380,7 @@ export default function Play({
         gridTemplateRows: '1fr',
         ['--algo-h']: `${layout.algorithmPanelHeightPx || 220}px`,
         ['--pill-h']: `${layout.pillRowHeightPx || 52}px`,
+        ...teachMeStyle,
       }}
     >
       <div className="panel-controls-stack">
@@ -3338,7 +3412,6 @@ export default function Play({
         </button>
         <CasePortraitBriefControl
           caseData={caseData}
-          onBusyChange={setPortraitRegenBusy}
           onRegenerated={(result) => {
             if (result?.dataUrl) setPortraitSrc(result.dataUrl);
             if (result?.layers) setPortraitLayers(result.layers);
@@ -3516,12 +3589,6 @@ export default function Play({
           )}
         </div>
         <div className="patient-drop-surface" aria-label="Drop stacks on patient">
-          {portraitRegenBusy && (
-            <div className="portrait-regen-overlay" role="status" aria-live="polite">
-              <span className="portrait-regen-overlay-spinner" aria-hidden />
-              Regenerating patient portrait…
-            </div>
-          )}
           <PatientScene
             scene={caseData.patientScene}
             caseData={caseData}
@@ -3972,7 +4039,7 @@ export default function Play({
                       </span>
                       <strong className="post-review-label">{row.label}</strong>
                     </div>
-                    <div className="post-review-why selectable-text">
+                    <div className="post-review-why teach-me-text-block selectable-text">
                       {renderChatMarkdown(row.why)}
                     </div>
                     {(row.guideline || row.placedOrder != null) && (

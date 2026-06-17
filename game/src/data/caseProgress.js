@@ -381,3 +381,24 @@ export function getRecentCaseHistory({ limit = 30 } = {}) {
     .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime())
     .slice(0, limit);
 }
+
+/** Attempted cases in visit order (most recent first) — for Continue / The Whys menus. */
+export function getAttemptedCaseHistory({ limit = 40 } = {}) {
+  const rows = [];
+  for (const [caseId, rec] of Object.entries(readProgress().cases)) {
+    if (!isCaseAttempted(caseId)) continue;
+    const at = rec?.attemptedAt || rec?.lastVisited || rec?.lastPlayed || null;
+    if (!at) continue;
+    rows.push({
+      caseId,
+      at,
+      completed: Boolean(rec.completed),
+      plays: rec.plays || 0,
+      hasCheckpoint: false,
+      source: rec.attemptedSource || rec.lastVisitSource || 'visit',
+    });
+  }
+  return rows
+    .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime())
+    .slice(0, limit);
+}

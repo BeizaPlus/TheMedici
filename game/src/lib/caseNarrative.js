@@ -18,13 +18,19 @@ export function applySessionToCase(caseData, session = {}) {
     ? session.difficulty
     : 'standard';
   const prepared = getPreparedCase(caseData?.id);
+  const uberAnchorId =
+    !prepared?.vitals && caseData?.uberMeta?.memberCaseIds?.[0]
+      ? String(caseData.uberMeta.memberCaseIds[0]).padStart(3, '0')
+      : null;
+  const anchorPrepared = uberAnchorId ? getPreparedCase(uberAnchorId) : null;
+  const resolvedVitals = prepared?.vitals || anchorPrepared?.vitals || null;
   const narr = prepared?.narrative?.[playRole]?.[difficulty];
 
   const merged = {
     ...caseData,
     playRole,
     sessionDifficulty: difficulty,
-    preparedVitals: prepared?.vitals || null,
+    preparedVitals: resolvedVitals,
     preparedExam: prepared?.exam || null,
     flowTrack: prepared?.flowTrack || caseData.flowTrack,
     dispositionUnits: prepared?.dispositionUnits || caseData.dispositionUnits,
@@ -86,7 +92,7 @@ export function applySessionToCase(caseData, session = {}) {
     category: prepared?.category || caseData?.category,
     diagnosis: merged.diagnosis || prepared?.diagnosis || caseData?.diagnosis || '',
     history: composedHistory,
-    vitals: prepared?.vitals || merged.preparedVitals,
+    vitals: resolvedVitals || {},
     patientVoice,
     preparedExam: merged.preparedExam,
     hasSourceIntro: prepared?.hasSourceIntro || caseData?.preparedMeta?.hasSourceIntro,

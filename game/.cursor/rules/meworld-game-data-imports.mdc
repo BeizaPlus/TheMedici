@@ -1,0 +1,39 @@
+---
+description: MeWorld gameData / uberCases — every symbol used must be imported; smoke must load all cases
+globs:
+  - game/src/data/gameData.js
+  - game/src/lib/uberCases.js
+  - game/scripts/smoke-test.mjs
+  - game/scripts/audit-game-case-load.mjs
+alwaysApply: false
+---
+
+# gameData import discipline
+
+## Rule
+
+Any function called in `game/src/data/gameData.js` **must** appear in the same file's `import` block. Missing imports crash React at runtime (black screen) but pass Vite build.
+
+## Before marking game data work done
+
+```powershell
+cd C:\Users\steve\MeWorld\game
+node scripts/audit-game-case-load.mjs
+node scripts/smoke-test.mjs
+npm run dev   # or dev:study — must pass screenshot smoke before telling Steve ready
+```
+
+See also **`play-case-smoke.mdc`** — agents must share screenshot paths from `docs/smoke-screenshots/`.
+
+`audit-game-case-load.mjs` loads **every** catalog id (including uber U01–U08) through `getCaseById` → `toGameCase` → `enrichUberGameCase`.
+
+## Uber cases
+
+- Definitions: `src/data/uberCases.json`
+- Enrichment: `enrichUberGameCase` in `src/lib/uberCases.js` — **always import** when calling from `gameData.js`
+- Smoke: `uber: toGameCase enriches` in `smoke-test.mjs`
+
+## Study vs main
+
+- **Develop:** `C:\Users\steve\MeWorld\game` · `npm run dev:study`
+- **Frozen study copy:** `MeWorld-study` — refresh with `scripts\create-study-snapshot.ps1` after fixes; do not edit only study and forget main.

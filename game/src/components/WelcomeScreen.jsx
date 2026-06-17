@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState, useEffect, useCallback } from 'react';
 import {
+  FiBookOpen,
   FiCrosshair,
   FiGitBranch,
   FiLogOut,
@@ -13,6 +14,7 @@ import { getBranding } from '../data/gameData.js';
 import {
   getCompletionStats,
   getLastPlayedCaseId,
+  getAttemptedCaseHistory,
   pickRandomId,
   readProgress,
 } from '../data/caseProgress.js';
@@ -54,6 +56,8 @@ import GridPlacementLayer from './GridPlacementLayer.jsx';
 import AudioSettingsPanel from './AudioSettingsPanel.jsx';
 import GlobalUiSettingsPanel from './GlobalUiSettingsPanel.jsx';
 import ResumeSessionBanner from './ResumeSessionBanner.jsx';
+import ContinueHistoryPanel from './ContinueHistoryPanel.jsx';
+import WhysCasePanel from './WhysCasePanel.jsx';
 import {
   createGridItem,
   moveGridItem,
@@ -66,6 +70,7 @@ import { VIDEO_NO_DOWNLOAD_ATTRS } from '../lib/privateVideoSrc.js';
 const NAV = [
   { id: 'play', label: 'Play', Icon: FiZap, action: 'play' },
   { id: 'continue', label: 'Continue', Icon: FiCrosshair, action: 'continue' },
+  { id: 'whys', label: 'The Whys', Icon: FiBookOpen, action: 'whys' },
   { id: 'differential', label: 'Differentials', Icon: FiGitBranch, action: 'differential' },
   { id: 'profiles', label: 'Profiles', Icon: FiUser, action: 'panel' },
   { id: 'settings', label: 'Settings', Icon: FiSettings, action: 'panel' },
@@ -74,6 +79,7 @@ const NAV = [
 
 export default function WelcomeScreen({
   onPlay,
+  onLaunchWhys,
   onOpenCases,
   onOpenReadyCases,
   onOpenStackTestingCases,
@@ -115,7 +121,6 @@ export default function WelcomeScreen({
     if (!el) return;
     el.muted = true;
     el.volume = 0;
-    el.defaultMuted = true;
   }, []);
 
   const captureWelcomeLastFrame = useCallback(() => {
@@ -268,6 +273,17 @@ export default function WelcomeScreen({
     void panel;
     return getCaseVisitHistory({ limit: 12 });
   }, [historyVersion, panel]);
+  const attemptedHistory = useMemo(() => {
+    void historyVersion;
+    return getAttemptedCaseHistory({ limit: 40 });
+  }, [historyVersion]);
+  const attemptedById = useMemo(() => {
+    const map = {};
+    for (const row of attemptedHistory) {
+      if (row?.caseId) map[row.caseId] = row;
+    }
+    return map;
+  }, [attemptedHistory]);
   const audienceLevel = useMemo(() => levelFromSlider(understanding), [understanding]);
   const conditionChoices = useMemo(() => getConditionChoices(audienceLevel), [audienceLevel]);
   useEffect(() => {
@@ -353,15 +369,15 @@ export default function WelcomeScreen({
   };
 
   const handleContinue = () => {
-    if (resumeCheckpoint?.caseId && onResumeSession) {
-      onResumeSession();
-      return;
-    }
-    if (lastCase) {
-      onPlay(lastCase, readProgress().lastMode || 'browse');
-      return;
-    }
-    handlePlay();
+    ensureReadyForCases();
+    setHistoryVersion((v) => v + 1);
+    setPanel('continue');
+  };
+
+  const openWhysPanel = () => {
+    ensureReadyForCases();
+    setHistoryVersion((v) => v + 1);
+    setPanel('whys');
   };
 
   const dismissEntryModal = useCallback(() => {
@@ -395,6 +411,7 @@ export default function WelcomeScreen({
   const runNavAction = (id) => {
     if (id === 'play') handlePlay();
     else if (id === 'continue') handleContinue();
+    else if (id === 'whys') openWhysPanel();
     else if (id === 'differential') {
       ensureReadyForCases();
       onOpenDifferential?.();
@@ -529,7 +546,6 @@ export default function WelcomeScreen({
           src={resolvedPlateVideoSrc}
           poster={plateSrc}
           muted
-          defaultMuted
           playsInline
           loop={plateVideoLoop}
           preload={idleVideoTriggered || videoAtEnd ? 'auto' : 'metadata'}
@@ -750,21 +766,25 @@ export default function WelcomeScreen({
               onMouseEnter={() => setActiveNav(id)}
               onFocus={() => setActiveNav(id)}
               disabled={
-                (id === 'continue' && !lastCase && !resumeCheckpoint?.caseId) ||
+                (id === 'continue' && attemptedHistory.length === 0 && !resumeCheckpoint?.caseId) ||
+                (id === 'whys' && !onLaunchWhys) ||
                 (id === 'differential' && !onOpenDifferential) ||
                 (!audienceReady && id !== 'settings' && id !== 'profiles')
               }
               aria-disabled={
-                (id === 'continue' && !lastCase && !resumeCheckpoint?.caseId) ||
+                (id === 'continue' && attemptedHistory.length === 0 && !resumeCheckpoint?.caseId) ||
+                (id === 'whys' && !onLaunchWhys) ||
                 (id === 'differential' && !onOpenDifferential) ||
                 (!audienceReady && id !== 'settings' && id !== 'profiles')
               }
               title={
-                id === 'continue' && !lastCase && !resumeCheckpoint?.caseId
-                  ? 'No saved session yet'
-                  : id === 'continue' && resumeCheckpoint?.caseId
-                    ? 'Resume your recent in-progress case'
-                    : label
+                id === 'continue' && attemptedHistory.length === 0 && !resumeCheckpoint?.caseId
+                  ? 'No attempted cases yet'
+                  : id === 'whys'
+                    ? 'Curiosity mode — Teach Me rationales'
+                    : id === 'continue' && resumeCheckpoint?.caseId
+                      ? 'Case history and saved sessions'
+                      : label
               }
             >
               <Icon className="welcome-nav-icon" aria-hidden />
@@ -924,6 +944,40 @@ export default function WelcomeScreen({
             </button>
           </div>
         </aside>
+      )}
+      {panel === 'continue' && (
+        <ContinueHistoryPanel
+          history={attemptedHistory}
+          onResumeCheckpoint={() => {
+            setPanel(null);
+            onResumeSession?.();
+          }}
+          onDiscardCheckpoint={() => {
+            onDiscardSession?.();
+            setHistoryVersion((v) => v + 1);
+          }}
+          onOpenCase={(gameCase) => {
+            setPanel(null);
+            onPlay(gameCase, readProgress().lastMode || 'browse');
+          }}
+          onClose={() => setPanel(null)}
+        />
+      )}
+      {panel === 'whys' && (
+        <WhysCasePanel
+          cases={catalog.cases}
+          attemptedById={attemptedById}
+          onLaunchWhys={(gameCase) => {
+            setPanel(null);
+            onLaunchWhys?.(gameCase);
+          }}
+          onBrowseAll={() => {
+            setPanel(null);
+            ensureReadyForCases();
+            onOpenCases?.();
+          }}
+          onClose={() => setPanel(null)}
+        />
       )}
       {panel === 'settings' && (
         <aside className="welcome-panel welcome-panel--settings" aria-label="Settings">

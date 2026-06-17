@@ -1,5 +1,10 @@
 import { useState } from 'react';
 import { readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
+import {
+  readTeachMeTextPrefs,
+  teachMeTextStyle,
+  writeTeachMeTextPrefs,
+} from '../lib/teachMeTextPrefs.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import { readUiPrefs, writeUiPrefs } from '../lib/uiPrefs.js';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
@@ -33,8 +38,12 @@ function readShowCues() {
   }
 }
 
+const TEACH_ME_PREVIEW =
+  'Obtain a 12-lead ECG within 10 minutes. This rules out STEMI, guides antiplatelet choice, and sets the urgency for cath lab activation.';
+
 export default function GlobalUiSettingsPanel({ embedded = false }) {
   const [textPrefs, setTextPrefs] = useState(() => readClinicalTextPrefs());
+  const [teachMeTextPrefs, setTeachMeTextPrefs] = useState(() => readTeachMeTextPrefs());
   const [showCues, setShowCues] = useState(readShowCues);
   const [timedMode, setTimedMode] = useState(() => readUiPrefs().timedMode);
   const [creativityTick, setCreativityTick] = useState(0);
@@ -58,6 +67,9 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
     const defaults = { fontScale: 1.12, weight: 600 };
     writeClinicalTextPrefs(defaults);
     setTextPrefs(defaults);
+    const teachDefaults = { fontScale: 1, weight: 500 };
+    writeTeachMeTextPrefs(teachDefaults);
+    setTeachMeTextPrefs(teachDefaults);
     persistShowCues(true);
     persistTimedMode('timed');
     writeUiPrefs({ simulationCreativity: 55 });
@@ -77,6 +89,24 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
       <div className="global-ui-settings-block">
         <p className="global-ui-settings-label">Clinical text size</p>
         <ClinicalFontControls prefs={textPrefs} onChange={setTextPrefs} showPreview />
+      </div>
+
+      <div className="global-ui-settings-block">
+        <p className="global-ui-settings-label">Teach Me explanation notes</p>
+        <p className="global-ui-settings-note">
+          Stack rationales, Teach Me compare panel, and end-of-case order review notes.
+        </p>
+        <ClinicalFontControls
+          prefs={teachMeTextPrefs}
+          onChange={setTeachMeTextPrefs}
+          writePrefs={writeTeachMeTextPrefs}
+          resetTo={{ fontScale: 1, weight: 500 }}
+          previewText={TEACH_ME_PREVIEW}
+          labelText="Notes"
+          showPreview
+          styleFn={teachMeTextStyle}
+          previewBlockClass="teach-me-text-block"
+        />
       </div>
 
       <label className="global-ui-toggle">

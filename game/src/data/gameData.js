@@ -4,7 +4,7 @@ import { hpiContainsSpoilers } from '../lib/practiceHpi.js';
 import { resolvePatientSceneKey } from '../lib/patientSceneKey.js';
 import { inferPatientSex } from '../lib/patientSex.js';
 import { resolvePlaybook } from './resolvePlaybook.js';
-import { getUberDefinition } from '../lib/uberCases.js';
+import { getUberDefinition, enrichUberGameCase } from '../lib/uberCases.js';
 
 export function getGameConfig() {
   return gameConfig;

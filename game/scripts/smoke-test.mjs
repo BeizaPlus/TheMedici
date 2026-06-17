@@ -93,10 +93,24 @@ async function main() {
     (c) => c.isUber || String(c.id).startsWith("U"),
   ).length;
   const catalogStandardCount = catalog.cases.length - uberCatalogCount;
+  const preparedKeys = Object.keys(prepared.cases || {});
+  const preparedUberCount = preparedKeys.filter((id) => /^U\d/i.test(id)).length;
   ok(
-    prepared.totalCases === catalogStandardCount,
-    "preparedCases: count matches catalog (excludes uber composites)",
-    `${prepared.totalCases} vs ${catalogStandardCount} (+${uberCatalogCount} uber)`,
+    prepared.totalCases === catalog.cases.length,
+    "preparedCases: count matches catalog (incl. uber composites)",
+    `${prepared.totalCases} vs ${catalog.cases.length} (${uberCatalogCount} uber)`,
+  );
+  if (uberCatalogCount > 0) {
+    ok(
+      preparedUberCount === uberCatalogCount,
+      "preparedCases: uber entries present",
+      `${preparedUberCount} vs ${uberCatalogCount}`,
+    );
+  }
+  ok(
+    preparedKeys.length - preparedUberCount === catalogStandardCount,
+    "preparedCases: standard CCS count",
+    `${preparedKeys.length - preparedUberCount} vs ${catalogStandardCount}`,
   );
   const parsedVitals = Object.values(prepared.cases || {}).filter((c) => c.vitalsSource === "parsed").length;
   ok(parsedVitals >= 8, "preparedCases: CCS vitals parsed", `${parsedVitals} parsed`);
@@ -226,6 +240,17 @@ async function main() {
   ok(bad.count === 0, "catalog: every case has at least 3 interventions", `bad.count=${bad.count}`);
   ok(bad.zones === 0, "catalog: correct_zone always valid zone key", `bad.zones=${bad.zones}`);
   ok(bad.guideline === 0, "catalog: guideline present", `bad.guideline=${bad.guideline}`);
+
+  const { toGameCase } = await import(
+    url.pathToFileURL(path.join(root, "src/data/gameData.js")).href
+  );
+  const uberCase = catalog.cases.find((c) => c.isUber || String(c.id).startsWith("U"));
+  if (uberCase) {
+    const uberGame = toGameCase(uberCase, catalog);
+    ok(Boolean(uberGame?.uberMeta?.memberCaseIds?.length), "uber: toGameCase enriches", uberCase.id);
+  } else {
+    ok(true, "uber: toGameCase enriches", "no uber cases in catalog");
+  }
 
   // Queue/reorder logic via caseProgress.js
   globalThis.localStorage = makeLocalStorage();
@@ -378,6 +403,14 @@ async function main() {
     "chat intent: SLE think-aloud monologue",
   );
   ok(!looksLikeTutorQuestion("how long have you had the rash"), "chat intent: patient interview");
+
+  const { spawnSync } = await import("node:child_process");
+  console.log("\n--- Game case load (all catalog ids) ---");
+  const caseLoad = spawnSync(process.execPath, ["scripts/audit-game-case-load.mjs"], {
+    cwd: root,
+    stdio: "inherit",
+  });
+  ok(caseLoad.status === 0, "gameCase: audit-game-case-load", caseLoad.status ? `exit ${caseLoad.status}` : "ok");
 
   if (failCount) {
     console.log(`\n❌ ${failCount} smoke check(s) failed — dev will not start.\n`);

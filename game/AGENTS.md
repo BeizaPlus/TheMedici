@@ -28,6 +28,22 @@ If ports are busy, kill old node processes or use the alternate Vite port shown 
 
 ---
 
+## Study mode vs main game (one codebase)
+
+There is **not** a second game fork — only one source tree:
+
+| What | Path | Role |
+|------|------|------|
+| **Main (develop here)** | `C:\Users\steve\MeWorld\game` | All fixes and features land here first |
+| **Study snapshot** | `C:\Users\steve\MeWorld-study` | Frozen robocopy for stable exam sessions (`START-MEWORLD-STUDY.bat`) |
+| **Refresh snapshot** | `C:\Users\steve\MeWorld\scripts\create-study-snapshot.ps1` | Re-copy main → study after smoke passes |
+
+- **Dev while studying:** `npm run dev:study` on main — API `:3001`, Vite `:5173`, HMR off. You can keep playing on a running server; hard-refresh after agent deploys changes.
+- **Unify when done:** Ship on `MeWorld\game`, run smoke + snapshot script — study copy picks up the same build. Never edit only `MeWorld-study` and forget to port back to main.
+- **Smoke:** `dev:study` disables HMR only — **screenshot smoke still runs** (welcome, play, Continue, Whys, uber U01). Refresh study copy with `scripts\create-study-snapshot.ps1` after main fixes.
+
+---
+
 ## Graphify (codebase knowledge graph)
 
 Installed from [safishamsi/graphify](https://github.com/safishamsi/graphify) · PyPI package **`graphifyy`** · CLI **`graphify`**.

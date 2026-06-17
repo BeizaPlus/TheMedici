@@ -186,7 +186,7 @@ export default function TeachMeComparePanel({
               <p className="teach-compare-rationale-loading">Asking the attending…</p>
             )}
             {whyBody && (
-              <div className="teach-compare-rationale-text selectable-text">
+              <div className="teach-compare-rationale-text teach-me-text-block selectable-text">
                 {renderChatMarkdown(whyBody)}
               </div>
             )}
@@ -250,7 +250,7 @@ export default function TeachMeComparePanel({
                     <span className="teach-compare-critical-stack">{row.label}</span>
                   )}
                   {row.why && (
-                    <div className="teach-compare-critical-why selectable-text">
+                    <div className="teach-compare-critical-why teach-me-text-block selectable-text">
                       {renderChatMarkdown(row.why)}
                     </div>
                   )}

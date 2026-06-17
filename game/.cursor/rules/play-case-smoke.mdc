@@ -1,48 +1,60 @@
 ---
-description: Mandatory welcome → briefing → play scene smoke with screenshots before Steve is told dev is ready
-globs: scripts/smoke-play-case-session.mjs,scripts/start-dev.mjs,src/components/WelcomeScreen.jsx,src/components/Briefing.jsx,src/components/Play.jsx,src/data/gameData.js
+description: Mandatory Playwright screenshot smoke before telling Steve dev/study is ready — catches black/white screens
+globs: scripts/smoke-play-case-session.mjs,scripts/smoke-differential-session.mjs,scripts/smoke-screen-utils.mjs,scripts/start-dev.mjs,src/components/WelcomeScreen.jsx,src/components/ContinueHistoryPanel.jsx,src/components/WhysCasePanel.jsx,src/components/Briefing.jsx,src/components/Play.jsx,src/data/gameData.js,src/lib/caseNarrative.js
 alwaysApply: false
 ---
 
-# Play case smoke (welcome → one case)
+# Screenshot smoke (mandatory before "ready")
 
 ## Rule
 
-Before telling Steve the **main game** is ready, agents must run the full welcome → case pass and **share screenshot paths** (or paste images in chat).
+**Never tell Steve the game or study server is ready** until Playwright screenshot smoke passes and you **paste screenshot paths** (or images) in chat.
+
+Applies to **`npm run dev`** and **`npm run dev:study`** — study mode only disables HMR; it does **not** skip screenshot smoke.
 
 ```powershell
 Set-Location C:\Users\steve\MeWorld\game
-npm run dev   # includes smoke:play-case at end of start-dev.mjs
-# or, servers already up:
+npm run dev          # or: npm run dev:study
+# servers already up:
+npm run smoke:differential-session
 npm run smoke:play-case
 ```
 
-## Flow (Playwright)
+To skip browser smoke only when debugging: `SKIP_PLAY_SMOKE=1` or `--skip-play-smoke` on `start-dev.mjs` — **not** the default for study.
 
-1. Welcome plate (`01-welcome.png`)
-2. Continue as physician (`02-after-physician.png` if first run)
-3. Welcome HUD ready (`03-welcome-ready.png`)
-4. **Play** nav → random case → Briefing (`04-briefing.png`)
-5. **Begin case →** → Play scene with life bar + dock (`05-play-scene.png`)
+## What must pass
 
-Output: `docs/smoke-screenshots/<YYYY-MM-DD>/play-case/`
+| Script | Screenshots | Catches |
+|--------|-------------|---------|
+| `smoke-differential-session.mjs` | `docs/smoke-screenshots/<date>/01-welcome.png` … `06-floating-chat-open.png` | White blank differential |
+| `smoke-play-case-session.mjs` | `docs/smoke-screenshots/<date>/play-case/*.png` | Black/white welcome, briefing, play, **Continue**, **The Whys**, **`?case=U01`** |
 
-## Pair with differential smoke
+Play-case flow includes:
 
-| Script | Path |
-|--------|------|
-| Differentials | `docs/smoke-screenshots/<date>/01-welcome.png` … `06-floating-chat-open.png` |
-| **Play case** | `docs/smoke-screenshots/<date>/play-case/*.png` |
+1. Welcome + blank-screen guards (`smoke-screen-utils.mjs`)
+2. Continue panel (uber case in seeded history)
+3. The Whys panel
+4. Play → briefing → play scene
+5. Uber **U01** deep-link (missing import / null vitals regressions)
 
-Both run from `npm run dev` — do not skip.
+## Study snapshot
 
-## Common failures this catches
+`START-MEWORLD-STUDY.bat` runs **frozen** `MeWorld-study`. After fixes on main:
 
-| Error | Fix |
-|-------|-----|
-| `inferPatientSex is not defined` | Import in `src/data/gameData.js` |
-| `allCaseIds is not defined` | `WelcomeScreen.handlePlay` fallback |
-| Play click does nothing | Stale Vite — `node scripts/free-dev-ports.mjs` + `npm run dev` |
-| White / black screen | `npm run smoke:pre-serve` (vite build) |
+```powershell
+cd C:\Users\steve\MeWorld
+powershell -File scripts\create-study-snapshot.ps1
+```
 
-Optional API 500s on portrait/scene assets are ignored in console filter if play scene mounts.
+Black screen on study = stale snapshot or skipped smoke. Refresh snapshot; do not patch only `MeWorld-study`.
+
+## Common failures
+
+| Symptom | Fix |
+|---------|-----|
+| Black screen | `node scripts/audit-game-case-load.mjs` · uber vitals in `caseNarrative.js` · missing `gameData.js` imports |
+| White screen | `npm run smoke:pre-serve` (vite build) |
+| `enrichUberGameCase is not defined` | Import from `uberCases.js` in `gameData.js` |
+| Study still broken after main fix | Re-run `create-study-snapshot.ps1` |
+
+Pair with: `meworld-game-data-imports.mdc` · `play-case-chat.mdc`

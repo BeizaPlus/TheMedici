@@ -1,6 +1,6 @@
 /** Render attending-tone chat markdown — headings, lists, tables, **bold**, *italic*. */
 export function renderChatMarkdown(text) {
-  const src = String(text || '').trim();
+  const src = normalizeChatMarkdown(String(text || '').trim());
   if (!src) return null;
 
   const blocks = splitMarkdownBlocks(src);
@@ -13,6 +13,17 @@ export function renderChatMarkdown(text) {
       {blocks.map((block, i) => renderBlock(block, i))}
     </div>
   );
+}
+
+/** Fix LLM output like `**## Heading**` and inline `text **## Next` before block parse. */
+function normalizeChatMarkdown(src) {
+  return src
+    .replace(/\*\*(#{1,4}\s+[^*\n]+)\*\*/g, '$1')
+    .replace(/([.!?])\s*(#{1,4}\s+)/g, '$1\n\n$2')
+    .replace(/([^\n])\s+(#{1,4}\s+)/g, (match, before, heading) => {
+      if (before === '*' || before === '#') return match;
+      return `${before}\n\n${heading}`;
+    });
 }
 
 function splitMarkdownBlocks(src) {

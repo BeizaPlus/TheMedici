@@ -59,6 +59,7 @@ export default function CasePortraitBriefPanel({
   const [draft, setDraft] = useState('');
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('');
+  const [progress, setProgress] = useState(0);
 
   const stored = caseId != null ? readCasePortraitBrief(caseId) : { enabled: false, text: '' };
   const enabled = stored.enabled;
@@ -87,22 +88,47 @@ export default function CasePortraitBriefPanel({
     persist({ enabled, text: draft });
   }, [caseId, draft, enabled, persist, stored.enabled, stored.text]);
 
+  useEffect(() => {
+    if (!busy) {
+      setProgress(0);
+      return undefined;
+    }
+    setProgress(4);
+    const started = Date.now();
+    const id = window.setInterval(() => {
+      const elapsed = Date.now() - started;
+      const mapping = status.toLowerCase().includes('mapping');
+      const cap = mapping ? 96 : 88;
+      const rate = mapping ? 0.012 : 0.028;
+      setProgress((prev) => {
+        const eased = cap - (cap - prev) * Math.exp(-rate);
+        const floor = mapping ? 72 : Math.min(88, elapsed / 380);
+        return Math.max(prev, Math.min(cap, Math.max(floor, eased)));
+      });
+    }, 180);
+    return () => window.clearInterval(id);
+  }, [busy, status]);
+
   const handleRegenerate = useCallback(async () => {
     if (busy || !caseId) return;
     persist({ enabled, text: draft });
     setBusy(true);
+    setProgress(2);
     setStatus('Generating portrait with Magnific (Nano Banana)…');
     onBusyChange?.(true);
     try {
       clearVisionZones();
       const result = await regeneratePatientFromCase(caseData, { refresh: true });
       setStatus('Mapping drop zones…');
+      setProgress((p) => Math.max(p, 72));
       const sourceKey = `regen:${caseId}`;
       await detectZonesForDataUrl(result.dataUrl, sourceKey);
+      setProgress(100);
       onRegenerated?.(result);
       setStatus('Portrait updated.');
     } catch (e) {
       setStatus('');
+      setProgress(0);
       onError?.(String(e.message || e));
     } finally {
       setBusy(false);
@@ -158,12 +184,20 @@ export default function CasePortraitBriefPanel({
         <IconRefresh className={busy ? 'spin' : ''} aria-hidden />
         {busy ? 'Regenerating…' : enabled ? 'Regenerate with custom look' : 'Regenerate portrait'}
       </button>
+      {busy && (
+        <div className="portrait-brief-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)} aria-label="Portrait generation progress">
+          <div className="portrait-brief-progress-track">
+            <div className="portrait-brief-progress-fill" style={{ width: `${progress}%` }} />
+          </div>
+          <span className="portrait-brief-progress-pct">{Math.round(progress)}%</span>
+        </div>
+      )}
       {(busy || status) && (
         <p className="portrait-brief-status" role="status" aria-live="polite">
           {busy ? (
             <>
               {status || 'Regenerating…'}
-              <span className="portrait-brief-status-note"> Magnific Nano Banana · usually 20–40 seconds.</span>
+              <span className="portrait-brief-status-note"> Runs in background — close this panel and keep working.</span>
             </>
           ) : (
             status

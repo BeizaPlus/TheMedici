@@ -31,6 +31,10 @@ export function usePlayDockLayout(options = {}) {
   );
 
   useEffect(() => {
+    setLayout(readPlayDockLayout(storageKey));
+  }, [storageKey]);
+
+  useEffect(() => {
     const onResize = () => {
       setLayout((prev) => clampDockLayout(prev));
     };

@@ -54,6 +54,9 @@ echo Freeing ports 3001 / 5173 and starting dev servers...
 echo   API:  http://127.0.0.1:3001
 echo   Game: http://localhost:5173
 echo.
+echo Smoke takes about 3 minutes ^(differential + play-case screenshots^).
+echo Keep this window open the whole time — do NOT open a second launcher.
+echo.
 echo Press Ctrl+C to stop.
 echo.
 
@@ -64,13 +67,15 @@ if %EXITCODE% neq 0 (
   echo.
   echo === Dev server stopped with error %EXITCODE% ===
   echo.
-  echo This usually means API ^(:3001^) or Vite ^(:5173^) exited after smoke — not always missing API keys.
+  echo Smoke may have passed then a server died. Common causes:
+  echo   - Second START-GAME / study window opened ^(kills ports^)
+  echo   - Port 3001 or 5173 taken by another app
   echo.
   echo Try:
-  echo   1. cd game ^&^& node scripts/free-dev-ports.mjs
-  echo   2. Remove SERVE_STATIC=1 from your shell or .env ^(dev needs split ports^)
+  echo   1. Close ALL other MeWorld dev terminals
+  echo   2. cd game ^&^& node scripts/free-dev-ports.mjs
   echo   3. cd game ^&^& npm run dev
-  echo   4. If chat/voice fails: add DEEPSEEK_API_KEY to %ROOT%.env
+  echo   4. Chat/voice only: add DEEPSEEK_API_KEY to %ROOT%.env
   echo.
   pause
   exit /b %EXITCODE%

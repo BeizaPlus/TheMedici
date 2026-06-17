@@ -1,16 +1,17 @@
 /**
- * Welcome → physician → Play (random case) → Briefing → Play scene.
+ * Welcome → nav panels → Play (random case) → Briefing → Play scene → uber U01 deep-link.
  * Screenshots for agent/human verification before "dev is ready".
  *
  * Run with dev servers up:
  *   npm run dev
- *   node scripts/smoke-play-case-session.mjs
+ *   npm run smoke:play-case
  */
 import { chromium } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { auditComponentCss } from './audit-component-css.mjs';
+import { assertRenderable } from './smoke-screen-utils.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -73,6 +74,37 @@ async function openCaseFromWelcome(page) {
   await page.waitForSelector('main.briefing, .briefing-with-scene', { timeout: 45000 });
 }
 
+async function smokeWelcomeNavPanels(page, prefix) {
+  const continueNav = page.locator('.welcome-nav-item').filter({ hasText: 'Continue' });
+  ok(await continueNav.isEnabled({ timeout: 5000 }), 'Continue nav enabled');
+  await continueNav.click();
+  await page.waitForSelector('.welcome-panel--continue', { timeout: 10000 });
+  await assertRenderable(page, ok, 'continue panel');
+  await shot(page, `${prefix}-continue-panel`);
+  await page.locator('.welcome-panel--continue .welcome-panel-close').click();
+  await page.waitForSelector('.welcome-panel--continue', { state: 'hidden', timeout: 5000 });
+
+  const whysNav = page.locator('.welcome-nav-item').filter({ hasText: 'The Whys' });
+  ok(await whysNav.isEnabled({ timeout: 5000 }), 'The Whys nav enabled');
+  await whysNav.click();
+  await page.waitForSelector('.welcome-panel--whys', { timeout: 10000 });
+  await assertRenderable(page, ok, 'whys panel');
+  await shot(page, `${prefix}-whys-panel`);
+  await page.locator('.welcome-panel--whys .welcome-panel-close').click();
+}
+
+async function smokeUberDeepLink(page) {
+  await page.goto(`${WEB}/?case=U01`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await page.waitForSelector('.game-scene, main.briefing, .briefing-with-scene', { timeout: 60000 });
+  await page.waitForTimeout(1500);
+  await assertRenderable(page, ok, 'uber U01 route');
+  await shot(page, '09-uber-u01');
+  const hasPlayOrBriefing =
+    (await page.locator('.game-scene').isVisible().catch(() => false)) ||
+    (await page.locator('main.briefing, .briefing-with-scene').isVisible().catch(() => false));
+  ok(hasPlayOrBriefing, 'uber U01 opens briefing or play');
+}
+
 async function main() {
   console.log('=== Play case session smoke + screenshots ===\n');
 
@@ -85,6 +117,29 @@ async function main() {
   const errors = [];
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  await context.addInitScript(() => {
+    const now = new Date().toISOString();
+    localStorage.setItem(
+      'schoonmaker_progress',
+      JSON.stringify({
+        cases: {
+          '001': { plays: 1, attempted: true, attemptedAt: now, lastVisited: now },
+          U01: { plays: 1, attempted: true, attemptedAt: now, lastVisited: now },
+        },
+        lastMode: 'browse',
+      }),
+    );
+    localStorage.setItem('schoonmaker_onboarding_complete', '1');
+    localStorage.setItem(
+      'schoonmaker_audience_profile',
+      JSON.stringify({
+        level: 'advanced',
+        playRole: 'doctor',
+        difficulty: 'standard',
+        timerSeconds: 150,
+      }),
+    );
+  });
   const page = await context.newPage();
   page.on('pageerror', (e) => errors.push(String(e.message || e)));
   page.on('console', (msg) => {
@@ -98,6 +153,7 @@ async function main() {
 
   await page.goto(WEB, { waitUntil: 'networkidle', timeout: 45000 });
   await page.waitForTimeout(800);
+  await assertRenderable(page, ok, 'welcome load');
   await shot(page, '01-welcome');
 
   const showedOnboarding = await dismissPhysicianOnboarding(page);
@@ -108,11 +164,17 @@ async function main() {
     'welcome hud visible',
   );
   await shot(page, showedOnboarding ? '03-welcome-ready' : '02-welcome-ready');
+  await assertRenderable(page, ok, 'welcome ready');
 
+  await smokeWelcomeNavPanels(page, showedOnboarding ? '04' : '03');
+
+  await page.goto(WEB, { waitUntil: 'networkidle', timeout: 45000 });
+  await page.waitForTimeout(500);
   await openCaseFromWelcome(page);
 
   await page.waitForTimeout(1200);
-  await shot(page, showedOnboarding ? '04-briefing' : '03-briefing');
+  await assertRenderable(page, ok, 'briefing');
+  await shot(page, showedOnboarding ? '05-briefing' : '04-briefing');
 
   const caseLabel = await page.locator('.briefing-case').first().textContent().catch(() => '');
   ok(Boolean(caseLabel?.trim()), 'briefing shows case id', caseLabel?.trim() || 'missing');
@@ -125,13 +187,16 @@ async function main() {
   await page.waitForSelector('.game-scene, div.game', { timeout: 60000 });
   await page.waitForSelector('.game-scene', { timeout: 20000 });
   await page.waitForTimeout(2000);
-  await shot(page, showedOnboarding ? '05-play-scene' : '04-play-scene');
+  await assertRenderable(page, ok, 'play scene');
+  await shot(page, showedOnboarding ? '06-play-scene' : '05-play-scene');
 
   const lifeBar = page.locator('.pack-life-fill, .play-life-top-left').first();
   ok(await lifeBar.isVisible({ timeout: 8000 }), 'play scene mounted (life bar)');
 
   const stacks = page.locator('.scene-order-command-dock, .game-sidebar, .icu-monitor-docked').first();
   ok(await stacks.isVisible({ timeout: 10000 }), 'play chrome visible (dock / sidebar / monitor)');
+
+  await smokeUberDeepLink(page);
 
   if (errors.length) {
     console.log('\n⚠ Browser console errors:');

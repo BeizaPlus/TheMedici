@@ -238,16 +238,17 @@ function clip(text = '', max = 220) {
 }
 
 function formatCardiovascular(vitals = {}, historyLower = '') {
+  const v = vitals && typeof vitals === 'object' ? vitals : {};
   const parts = [];
-  if (vitals.hr != null) {
-    let note = `HR ${vitals.hr}`;
-    if (vitals.hr > 110) note += ', tachycardic';
-    else if (vitals.hr < 60) note += ', bradycardic';
+  if (v.hr != null) {
+    let note = `HR ${v.hr}`;
+    if (v.hr > 110) note += ', tachycardic';
+    else if (v.hr < 60) note += ', bradycardic';
     parts.push(note);
   }
-  if (vitals.sbp != null && vitals.dbp != null) {
-    parts.push(`BP ${vitals.sbp}/${vitals.dbp}`);
-    if (vitals.sbp < 95) parts.push('hypotensive');
+  if (v.sbp != null && v.dbp != null) {
+    parts.push(`BP ${v.sbp}/${v.dbp}`);
+    if (v.sbp < 95) parts.push('hypotensive');
   }
   if (/murmur|jvd|gallop|clutching chest|diaphoretic/i.test(historyLower)) {
     parts.push('cardiac exam guided by presentation acuity');
@@ -352,6 +353,7 @@ function deriveNeuro(historyLower = '', title = '') {
 }
 
 function deriveSkin(historyLower = '', vitals = {}) {
+  const v = vitals && typeof vitals === 'object' ? vitals : {};
   if (/night sweat|weight loss|cachectic|tuberculosis|\btb\b/i.test(historyLower)) {
     return 'No acute rash; night sweats and weight loss noted in history when obtained.';
   }
@@ -359,7 +361,7 @@ function deriveSkin(historyLower = '', vitals = {}) {
     if (/rash|petech/i.test(historyLower)) return 'Skin rash morphology and distribution documented.';
     if (/diaphoretic|clammy|pale/i.test(historyLower)) return 'Diaphoretic or pale skin with perfusion checked.';
   }
-  if (vitals.temp >= 38.5) return 'Warm skin with fever; no purpura on initial survey.';
+  if (v.temp >= 38.5) return 'Warm skin with fever; no purpura on initial survey.';
   return 'No acute rash; capillary refill and perfusion assessed.';
 }
 
@@ -451,6 +453,7 @@ export function resolveCaseExam({
   hasSourceIntro = false,
 } = {}) {
   const key = String(caseId || '').padStart(3, '0');
+  const safeVitals = vitals && typeof vitals === 'object' ? vitals : {};
   const presentationTitle = titleKey(title);
   const dxKey = diagnosisKey(diagnosis);
 
@@ -462,37 +465,37 @@ export function resolveCaseExam({
     const template = DIAGNOSIS_EXAMS[dxKey];
     const derived = deriveExamFromHistory(
       history,
-      vitals,
+      safeVitals,
       presentationTitle,
       category,
       diagnosis,
       patientVoice,
     );
     if (derived) {
-      return mergeExamWithVitals(template, derived, vitals, diagnosis, presentationTitle);
+      return mergeExamWithVitals(template, derived, safeVitals, diagnosis, presentationTitle);
     }
-    return applyVitalsToExam(template, vitals, diagnosis, presentationTitle);
+    return applyVitalsToExam(template, safeVitals, diagnosis, presentationTitle);
   }
 
   if (PRESENTATION_EXAMS[presentationTitle]) {
     const template = PRESENTATION_EXAMS[presentationTitle];
     const derived = deriveExamFromHistory(
       history,
-      vitals,
+      safeVitals,
       presentationTitle,
       category,
       diagnosis,
       patientVoice,
     );
     if (derived) {
-      return mergeExamWithVitals(template, derived, vitals, diagnosis, presentationTitle);
+      return mergeExamWithVitals(template, derived, safeVitals, diagnosis, presentationTitle);
     }
-    return applyVitalsToExam(template, vitals, diagnosis, presentationTitle);
+    return applyVitalsToExam(template, safeVitals, diagnosis, presentationTitle);
   }
 
   const derived = deriveExamFromHistory(
     history,
-    vitals,
+    safeVitals,
     presentationTitle,
     category,
     diagnosis,
@@ -501,10 +504,10 @@ export function resolveCaseExam({
   if (derived) return derived;
 
   if (preparedExam?.length && !isGenericTemplateExam(preparedExam)) {
-    return applyVitalsToExam(preparedExam, vitals, diagnosis, presentationTitle);
+    return applyVitalsToExam(preparedExam, safeVitals, diagnosis, presentationTitle);
   }
 
-  return vitalsBasedExam(vitals, presentationTitle, category, diagnosis, patientVoice);
+  return vitalsBasedExam(safeVitals, presentationTitle, category, diagnosis, patientVoice);
 }
 
 export function isGenericExam(exam) {

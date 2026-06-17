@@ -53,6 +53,13 @@ export function isDockLayoutOnScreen(layout) {
   );
 }
 
+export function playDockStorageKey(caseId) {
+  const raw = String(caseId ?? '').trim();
+  if (!raw) return STORAGE.playDockLayout;
+  const key = /^\d+$/.test(raw) ? raw.padStart(3, '0') : raw;
+  return `${STORAGE.playDockLayout}_${key}`;
+}
+
 export function readPlayDockLayout(storageKey = STORAGE.playDockLayout) {
   try {
     const raw = localStorage.getItem(storageKey);

@@ -1,29 +1,37 @@
 import { clinicalTextStyle, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 
-const PREVIEW_TEXT =
+const CLINICAL_PREVIEW =
   'A 58-year-old man presents to the emergency department with acute chest pain that began 20 minutes ago while at rest. He describes the pain as sharp and worsening with deep breaths.';
 
 export default function ClinicalFontControls({
   prefs,
   onChange,
+  writePrefs = writeClinicalTextPrefs,
+  resetTo = { fontScale: 1.12, weight: 600 },
+  previewText = CLINICAL_PREVIEW,
+  labelText = 'Text',
   compact = false,
   showLabel = true,
   showBold = true,
   showPreview = false,
+  styleFn = clinicalTextStyle,
+  previewBlockClass = 'clinical-text-block',
 }) {
   const bump = (patch) => {
     const next = { ...prefs, ...patch };
-    writeClinicalTextPrefs(next);
+    writePrefs(next);
     onChange?.(next);
   };
 
+  const boldOffWeight = resetTo.weight ?? 600;
+
   const sizeLabel = `${Math.round(prefs.fontScale * 100)}%`;
-  const previewStyle = clinicalTextStyle(prefs);
+  const previewStyle = styleFn(prefs);
 
   return (
     <div className={`clinical-font-controls-wrap ${compact ? 'compact' : ''}`}>
       <div className={`clinical-font-controls ${compact ? 'compact' : ''}`}>
-      {showLabel && <span className="clinical-font-controls-label">Text</span>}
+      {showLabel && <span className="clinical-font-controls-label">{labelText}</span>}
       <button
         type="button"
         className="clinical-font-btn"
@@ -49,8 +57,8 @@ export default function ClinicalFontControls({
         <button
           type="button"
           className={`clinical-font-btn ${prefs.weight === 700 ? 'active' : ''}`}
-          onClick={() => bump({ weight: prefs.weight === 700 ? 600 : 700 })}
-          aria-label="Toggle bold clinical text"
+          onClick={() => bump({ weight: prefs.weight === 700 ? boldOffWeight : 700 })}
+          aria-label="Toggle bold text"
           title="Bold text"
         >
           B
@@ -59,7 +67,7 @@ export default function ClinicalFontControls({
       <button
         type="button"
         className="clinical-font-btn reset"
-        onClick={() => bump({ fontScale: 1.12, weight: 600 })}
+        onClick={() => bump(resetTo)}
         aria-label="Reset text size"
         title="Reset text size"
       >
@@ -69,7 +77,7 @@ export default function ClinicalFontControls({
       {showPreview && (
         <div className="clinical-text-preview" style={previewStyle} aria-live="polite">
           <p className="clinical-text-preview-label">Preview</p>
-          <p className="clinical-text-preview-body clinical-text-block">{PREVIEW_TEXT}</p>
+          <p className={`clinical-text-preview-body ${previewBlockClass}`}>{previewText}</p>
         </div>
       )}
     </div>

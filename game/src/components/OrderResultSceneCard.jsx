@@ -72,6 +72,11 @@ export default function OrderResultSceneCard({
         </div>
       </header>
       <p className="order-result-body">{result?.text || 'No result documented for this order.'}</p>
+      {(teachMeMode || intervention.why) && intervention.why ? (
+        <p className="order-result-why muted">
+          <strong>Why:</strong> {intervention.why}
+        </p>
+      ) : null}
     </div>
   );
 }

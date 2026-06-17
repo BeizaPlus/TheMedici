@@ -35,6 +35,9 @@ export function detectLabProfile(ctx = {}) {
   if (/appendicitis|peritonitis|acute abdomen/.test(blob)) return 'inflammatory';
   if (/uti|pyelonephritis|dysuria|urinary tract/.test(blob)) return 'uti';
   if (/gi bleed|melena|hematemesis|anemia/.test(blob)) return 'anemia';
+  if (/jaundice|yellow baby|hyperbilirubin|neonatal|newborn|breastfeeding jaundice/.test(blob)) {
+    return 'neonatal_jaundice';
+  }
   if (/heart failure|volume overload|edema/.test(blob)) return 'renal_stress';
   if (/pneumonia|copd exacerbation/.test(blob)) return 'infection';
   if (/rash|fever|viral|exanthem/.test(blob)) return 'inflammatory';
@@ -47,6 +50,7 @@ export function panelsInLabel(label) {
     cbc: /cbc|complete blood count|cbc \/|\/ cbc/.test(l),
     bmp: /\bbmp\b|basic metabolic|comprehensive metabolic|\bcmp\b|bmp \/|\/ bmp/.test(l),
     ua: /urinalysis|\bua\b|ua \/|\/ ua/.test(l),
+    retic: /reticulocyte|retic count/.test(l),
   };
 }
 
@@ -145,6 +149,18 @@ export function synthesizeCbc(ctx) {
       plt: pick(caseId, 'plt', 180, 280, 0),
       neut: pick(caseId, 'neut', 62, 74, 0),
       lymph: pick(caseId, 'lymph', 20, 30, 0),
+      retic: pick(caseId, 'retic', 2.5, 6.0, 1),
+    };
+  }
+  if (profile === 'neonatal_jaundice') {
+    return {
+      wbc: pick(caseId, 'wbc', 9.0, 12.5, 1),
+      hgb: pick(caseId, 'hgb', 14.0, 17.0, 1),
+      hct: pick(caseId, 'hct', 42, 50, 1),
+      plt: pick(caseId, 'plt', 220, 340, 0),
+      neut: pick(caseId, 'neut', 38, 52, 0),
+      lymph: pick(caseId, 'lymph', 38, 52, 0),
+      retic: pick(caseId, 'retic', 0.8, 1.8, 1),
     };
   }
   return {
@@ -236,8 +252,11 @@ export function formatBmpLine(bmp, { teachMeMode = false, hint = '' } = {}) {
   return cues.length ? `${base} ${cues.join(' ')}` : base;
 }
 
-export function formatCbcLine(cbc, { teachMeMode = false, hint = '' } = {}) {
-  const base = `WBC ${cbc.wbc} K/µL. Hgb ${cbc.hgb} g/dL. Hct ${cbc.hct}%. Plt ${cbc.plt} K/µL. Neut ${cbc.neut}%. Lymph ${cbc.lymph}%.`;
+export function formatCbcLine(cbc, { teachMeMode = false, hint = '', includeRetic = false } = {}) {
+  let base = `WBC ${cbc.wbc} K/µL. Hgb ${cbc.hgb} g/dL. Hct ${cbc.hct}%. Plt ${cbc.plt} K/µL. Neut ${cbc.neut}%. Lymph ${cbc.lymph}%.`;
+  if (includeRetic || cbc.retic != null) {
+    base += ` Retic ${cbc.retic ?? '—'}%.`;
+  }
   if (!teachMeMode) return base;
   const cues = [];
   if (cbc.wbc >= 12) cues.push('Leukocytosis.');
@@ -294,6 +313,18 @@ function hintForPanel(profile, panel, why) {
   return why.length <= 120 ? why : '';
 }
 
+function ensureCbcRetic(cbc, ctx, profile) {
+  if (cbc.retic != null) return cbc;
+  const { caseId } = ctx;
+  if (profile === 'neonatal_jaundice') {
+    return { ...cbc, retic: pick(caseId, 'retic', 0.8, 1.8, 1) };
+  }
+  if (profile === 'anemia') {
+    return { ...cbc, retic: pick(caseId, 'retic', 2.5, 6.0, 1) };
+  }
+  return { ...cbc, retic: pick(caseId, 'retic', 0.5, 1.5, 1) };
+}
+
 /**
  * Combined or single lab panel text — always returns numeric values.
  */
@@ -304,12 +335,13 @@ export function resolveLabPanelResult(label, ctx, teachMeMode = false) {
 
   const profile = detectLabProfile(ctx);
   const why = ctx.why || '';
-  const opts = { teachMeMode };
+  const opts = { teachMeMode, includeRetic: panels.retic };
 
   if (count >= 2) {
     const sections = [];
     if (panels.cbc) {
-      const cbc = synthesizeCbc(ctx);
+      let cbc = synthesizeCbc(ctx);
+      if (panels.retic) cbc = ensureCbcRetic(cbc, ctx, profile);
       sections.push(
         `CBC: ${formatCbcLine(cbc, { ...opts, hint: hintForPanel(profile, 'cbc', why) })}`,
       );
@@ -330,7 +362,12 @@ export function resolveLabPanelResult(label, ctx, teachMeMode = false) {
   }
 
   if (panels.cbc) {
-    return formatCbcLine(synthesizeCbc(ctx), { ...opts, hint: hintForPanel(profile, 'cbc', why) });
+    let cbc = synthesizeCbc(ctx);
+    if (panels.retic) cbc = ensureCbcRetic(cbc, ctx, profile);
+    return formatCbcLine(cbc, {
+      ...opts,
+      hint: hintForPanel(profile, 'cbc', why),
+    });
   }
   if (panels.bmp) {
     return formatBmpLine(synthesizeBmp(ctx), { ...opts, hint: hintForPanel(profile, 'bmp', why) });
