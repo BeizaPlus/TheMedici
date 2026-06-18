@@ -5,6 +5,7 @@ import DifferentialReviewQueuePanel from './DifferentialReviewQueuePanel.jsx';
 import DifferentialReviewPanel from './DifferentialReviewPanel.jsx';
 import DifferentialRealWorldPanel from './DifferentialRealWorldPanel.jsx';
 import DifferentialMnemonicPanel from './DifferentialMnemonicPanel.jsx';
+import DifferentialTeachMePanel from './DifferentialTeachMePanel.jsx';
 import CasePresentationPanel from './CasePresentationPanel.jsx';
 import { openCcsScreenshot } from '../lib/ccsScreenshot.js';
 import { getRealWorldStories } from '../lib/realWorldCases.js';
@@ -81,15 +82,20 @@ function MobileStudyFeed({
   timelineItems,
   reviewQueue,
   caseStats: _caseStats,
+  // Teach Me props (mobile only)
+  caseDiagnoses,
+  bankTopic,
+  bankTitle,
+  onDiagnosisTap,
 }) {
   // Each section has its own open/closed state — all collapsed by default
   const [openSections, setOpenSections] = useState({});
   const lastStudyTabRequestRef = useRef(0);
   const lastTimelineFocusRef = useRef(0);
 
-  // Reset all sections collapsed when case changes
+  // Reset all sections collapsed when case changes, but open Teach Me by default
   useEffect(() => {
-    setOpenSections({});
+    setOpenSections({ teachme: true });
     lastTimelineFocusRef.current = 0;
     lastStudyTabRequestRef.current = 0;
   }, [caseId]);
@@ -142,6 +148,27 @@ function MobileStudyFeed({
 
   return (
     <div className="diff-mobile-feed" style={clinicalStyle}>
+      {/* Teach Me — mobile only: differential overview + clinical pearls */}
+      <AccordionSection
+        id="teachme"
+        label="Teach Me"
+        badge={caseDiagnoses?.length > 0 ? caseDiagnoses.length : null}
+        open={!!openSections.teachme}
+        onToggle={toggleSection}
+      >
+        <DifferentialTeachMePanel
+          caseId={caseId}
+          topic={bankTopic || topic}
+          title={bankTitle}
+          diagnosis={diagnosis}
+          diagnoses={caseDiagnoses || []}
+          ccsReview={ccsReview}
+          hasReviewText={hasReviewText}
+          clinicalStyle={clinicalStyle}
+          onDiagnosisTap={onDiagnosisTap}
+        />
+      </AccordionSection>
+
       {/* Review */}
       <AccordionSection
         id="review"
@@ -287,6 +314,11 @@ export default function DifferentialStudyPanel({
   reviewQueueTick = 0,
   notesVersion = 0,
   onCaseNotesChanged,
+  // Teach Me props (mobile only)
+  caseDiagnoses,
+  bankTopic,
+  bankTitle,
+  onDiagnosisTap,
 }) {
   const [tab, setTab] = useState('case');
   const [expanded, setExpanded] = useState(false);
@@ -456,6 +488,10 @@ export default function DifferentialStudyPanel({
         remoteStoryCount={remoteStoryCount}
         timelineItems={timelineItems}
         reviewQueue={reviewQueue}
+        caseDiagnoses={caseDiagnoses}
+        bankTopic={bankTopic}
+        bankTitle={bankTitle}
+        onDiagnosisTap={onDiagnosisTap}
       />
     );
   }
