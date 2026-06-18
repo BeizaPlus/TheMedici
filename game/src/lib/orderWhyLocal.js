@@ -1,5 +1,8 @@
 import { STORAGE } from './storageKeys.js';
 
+/** Bump with server ORDER_WHY_PROMPT_VERSION when voice rules change. */
+const LOCAL_VOICE_VERSION = 2;
+
 function readMap() {
   try {
     const raw = localStorage.getItem(STORAGE.orderWhyCache);
@@ -26,7 +29,8 @@ export function readLocalOrderWhy(caseId, orderId) {
   const ok = String(orderId ?? '').trim();
   if (!ck || !ok) return null;
   const row = readMap()?.[ck]?.[ok];
-  return row?.why ? String(row.why) : null;
+  if (row?.why && row.promptVersion === LOCAL_VOICE_VERSION) return String(row.why);
+  return null;
 }
 
 export function writeLocalOrderWhy(caseId, orderId, why, orderLabel = '') {
@@ -40,6 +44,7 @@ export function writeLocalOrderWhy(caseId, orderId, why, orderLabel = '') {
     why: text,
     orderLabel: String(orderLabel || '').trim() || map[ck][ok]?.orderLabel || '',
     cachedAt: new Date().toISOString(),
+    promptVersion: LOCAL_VOICE_VERSION,
   };
   writeMap(map);
 }

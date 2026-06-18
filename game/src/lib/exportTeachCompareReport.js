@@ -206,8 +206,12 @@ const EXPORT_CSS = `
 .tc-export-yours {
   font-size: 0.68rem;
   font-variant-numeric: tabular-nums;
-  color: rgba(255, 255, 255, 0.55);
   text-align: center;
+  font-weight: 700;
+}
+.tc-export-yours-miss {
+  color: #ff5c5c;
+  font-size: 0.82rem;
 }
 .tc-export-badge {
   font-size: 0.58rem;
@@ -673,7 +677,7 @@ function renderStandardRows(report) {
           (r) => `<div class="tc-export-row">
   <span class="tc-export-col-flow"><span class="${flowDotClass(r)}">${r.expectedSeq}</span></span>
   <span class="tc-export-label">${escapeHtml(r.label)}</span>
-  <span class="tc-export-yours">${r.yourSeq != null ? `#${r.yourSeq}` : '—'}</span>
+  <span class="tc-export-yours">${r.isPlaced || r.yourSeq != null ? '✓' : '<span class="tc-export-yours-miss">✕</span>'}</span>
   <span class="tc-export-badge status-${r.status}">${escapeHtml(teachCompareStatusLabel(r.status))}</span>
 </div>`,
         )
@@ -693,7 +697,7 @@ function renderStandardRows(report) {
             (r) => `<div class="tc-export-row">
   <span class="tc-export-col-flow"><span class="${flowDotClass(r, true)}">·</span></span>
   <span class="tc-export-label">${escapeHtml(r.label)}</span>
-  <span class="tc-export-yours">#${r.yourSeq}</span>
+  <span class="tc-export-yours">✓</span>
   <span class="tc-export-badge status-extra">${escapeHtml(teachCompareStatusLabel('extra'))}</span>
 </div>`,
           )

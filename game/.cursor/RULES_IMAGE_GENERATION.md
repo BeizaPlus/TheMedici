@@ -1,0 +1,406 @@
+# MeWorld / Schoonmaker — image generation rules (all agents)
+
+**Read this before any still-image generate, case portrait regen, anatomic plate, character map, or scene-element plate.**
+
+| | |
+|---|---|
+| **Workspace** | `C:\Users\steve\MeWorld\game` |
+| **This file** | `.cursor/RULES_IMAGE_GENERATION.md` (canonical — start here) |
+| **Platform** | **Magnific MCP** (`user-Magnific`) — primary for all stills |
+| **Magnific app** | https://www.magnific.com/app — login, credits, **Connect** agent/MCP |
+| **Fallback stills** | **Higgsfield** `nano_banana_pro` @ **`resolution: "2k"`** — only if Magnific fails or misses brief |
+| **Global Cursor policy** | `C:\Users\steve\.cursor\rules\steve-generation-access.mdc` |
+| **Kojo parity handoff** | `M:\Works\Houdini Projects\TheMind_KOS\resources\talking-images\characters\kojo-oppong\AGENT_HANDOFF-2026-06-09-EAGLE-STYLE.md` |
+
+**Video is separate:** ComfyUI MCP only — see `comfyui-video.mdc`. Do not use Magnific or Higgsfield for MeWorld video.
+
+---
+
+## Copy-paste prompt (next agent)
+
+```
+MeWorld Schoonmaker image generation:
+Read game/.cursor/RULES_IMAGE_GENERATION.md
+RESEARCH FIRST: dev/scene-elements/SCENE_ELEMENT_REGISTRY.json — manufacturer URL or approved asset before any prop/device gen
+Platform: Magnific MCP (images_generate) — Fal expired, no OpenAI image edits
+Upload locals: creations_request_upload → node scripts/magnific-upload-put.mjs → creations_finalize_upload
+Refs: scene/crop lock PNG + identity map (never text-only); pediatric = NO anatomy overlay ref
+Generate: imagen-nano-banana-2 · 16:9 · resolution 2k · count 2 for A/B
+Post: creations_wait → download → fitToBaseplate (1536×864) → .case-portraits/case_NNN.png
+Camera lock: crown→toes, monitor upper-right, IV upper-left — never face-only crop
+```
+
+---
+
+## 0. Research first — mandatory (anti-slop)
+
+**Before generating any image that includes medical equipment, furniture, or devices**, look up a **real product** — do not invent hardware from prompt text alone.
+
+| Step | Action |
+|------|--------|
+| 1 | Open **`dev/scene-elements/SCENE_ELEMENT_REGISTRY.json`** — find the element `id` (monitor, IV pole, stretcher, O2 mask, catheter, gown, …) |
+| 2 | Read `realWorld.manufacturer` / `productLine` / `catalogHint` |
+| 3 | Visit **`referenceSearch.web`** (manufacturer catalog) or save Pinterest refs to `dev/scene-elements/sources/<id>/` + `NOTES.md` with URL |
+| 4 | If `approvedLayer.path` or `characterMap.status: "approved"` exists — **use that asset**; do not regen the prop inline |
+| 5 | Device-specific plates: **`dev/medical-element-plates/MEDICAL_ELEMENT_PLATES.json`** (e.g. Hudson RCI HUD1040 O2, BD Insyte IV) |
+
+**Search order (never skip):**
+
+1. Approved layer in registry  
+2. In-game baseplate / character map already baked in scene  
+3. `dev/medical-element-plates/raw/manifest.json`  
+4. Pinterest → `dev/scene-elements/sources/<id>/`  
+5. **Manufacturer website** → download ref → Magnific upload or `stock_to_creation`  
+
+**Audit missing refs:**
+
+```powershell
+node scripts/audit-scene-element-registry.mjs
+```
+
+**Rule file (detail):** `.cursor/rules/scene-element-reference-lock.mdc`  
+**Do not:** fantasy monitors, wooden IV poles, double O2 tubes, dorsal IV, home furniture, props without a product ref on file.
+
+Portrait gens **inherit** approved scene hardware from the ED baseplate (`patient-scene*.png`) — research applies when creating **new** element maps or replacing baked props, not when swapping patient identity on an approved plate.
+
+---
+
+## 1. Visual signature (never drift)
+
+MeWorld Play patient scenes are **training plates**, not stock hospital photography.
+
+| Element | Rule |
+|---------|------|
+| **Genre** | Cinematic hospital **film-still CGI** — tactile sculptural stylized realism |
+| **Palette** | Muted clinical — cool overhead key, soft fill, balanced gown/skin exposure |
+| **NOT** | Photoreal live-action headswap, plastic AI skin, bright Pixar, OR dove camera, CCTV zoom |
+| **Camera** | High overhead bedside ~**38°** from vertical, foot→head, **16:9** — **never 90° bird's-eye** |
+| **Anatomy** | **Mandatory** `dev/anatomic-plates/prompts/anatomy-composition-lock.txt` on every portrait/baseplate gen |
+| **Framing** | Patient supine **crown through toes** — bare feet at **foot of bed**, pointing along mattress (not at camera) |
+| **Environment** | Lived-in ED game plate — linen wear, scuffs, cable clutter — not sterile showroom |
+| **Scene anchors** | Both bed rails · vitals monitor **upper-right** · IV pole **upper-left** |
+| **Gown** | Light blue short-sleeve hospital gown unless case brief overrides |
+| **Identity change only** | Demographics, distress, hair, cables/mask/IV attachments — **never** camera, bed layout, or room geometry |
+
+### Never invent
+
+- Eye-level portrait or tight face close-up
+- **90° direct overhead / bird's-eye** (feet point at camera — anatomically wrong)
+- Mid-thigh-only crop (legacy — forbidden since 2026-06-16)
+- Dutch angle, poster hero framing, new room layout
+- Adult manikin body with a child face (pediatric cases)
+- Colored anatomy zone overlays on shipped play assets (green/red paint is Photoshop offline only)
+- Fal.ai, OpenAI `gpt-image-1` edits, Adobe cloud generative, localhost URLs as Magnific refs
+
+---
+
+## 2. Approved assets (attach every run)
+
+### Scene / camera lock
+
+| Role | Path | Pixels | When |
+|------|------|--------|------|
+| **Machine spec** | `dev/scene-camera-lock/SCENE_LOCK.json` | — | Read before every gen |
+| **Male play baseplate** | `public/assets/patient/patient-scene.png` | 1536×864 | Runtime + layout ref |
+| **Male crop lock** | `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` | 2752×1536 | Adult male Magnific layout ref |
+| **Female play baseplate** | `public/assets/patient/patient-scene-female.png` | 2048×1152 → crop 1536×864 | Female cases |
+| **Camera prompt** | `dev/scene-camera-lock/prompts/magnific-camera-lock.txt` | — | Paste into every prompt |
+
+### Anatomy scope (adult baseplate gens only — see §6 pediatric)
+
+| Role | Path | Notes |
+|------|------|--------|
+| Male anatomy overlay | `dev/anatomic-plates/raw/male-ed-anatomic-plate-anatomy.png` | IV portal scope — **triggers NSFW filter with child prompts** |
+| Female anatomy overlay | `dev/anatomic-plates/raw/female-ed-anatomic-plate-anatomy.png` | Same |
+| IV portal spec | `dev/anatomic-plates/IV_ACCESS_PORTALS.json` | Red/green zone semantics |
+| Male plate prompt | `dev/anatomic-plates/prompts/male-ed-anatomic-plate.txt` | Clean plate gen |
+| Female plate prompt | `dev/anatomic-plates/prompts/female-ed-anatomic-plate.txt` | Clean plate gen |
+| Pediatric plate prompt | `dev/anatomic-plates/prompts/ped-male-ed-anatomic-plate.txt` | Child body scale |
+
+### Identity maps
+
+| Role | Path | Notes |
+|------|------|--------|
+| Lady registry | `src/data/patientLadyRefs.json` | Case slug → likeness |
+| Lady maps | `public/assets/patient/ladies/*-CHARACTER-MAP.png` | **9:16 likeness only** — scene stays 16:9 |
+| Magnific library lady | `akosuaduku` (character id **1870701**) | When already in library |
+| Pediatric registry | `src/data/patientPediatricRefs.json` | Cases `054`, `089`, … |
+| Kojo face lock (ped male) | `M:\Works\Houdini Projects\TheMind_KOS\resources\talking-images\characters\kojo-oppong\references\kojo-face-likeness-lock.png` | ~24 MB — upload as PNG |
+
+### Scene elements (anti-slop)
+
+| Role | Path |
+|------|------|
+| Element registry | `dev/scene-elements/SCENE_ELEMENT_REGISTRY.json` |
+| Medical device plates | `dev/medical-element-plates/` |
+| Runtime loader | `src/lib/sceneElementRegistry.js` |
+
+Do not re-invent monitor/IV/bed hardware if registry has `status: "approved"`.
+
+---
+
+## 3. Platform & tools
+
+### Use (stills)
+
+| Tool | When |
+|------|------|
+| **Magnific `images_generate`** | Case portraits, anatomic plates, character maps, element heroes |
+| **Magnific `images_models_list`** | Confirm slug before queue |
+| **Magnific `creations_wait`** | Poll job (max `timeoutSeconds: 25` per call — loop until terminal) |
+| **Magnific `creations_show`** | Inline preview for Steve after generate |
+| **`scripts/magnific-upload-put.mjs`** | PUT local PNG to presigned URL (preferred on Windows) |
+| **`server/portraitFrame.js` `fitToBaseplate`** | Center crop/resize to **1536×864** |
+| **Higgsfield `generate_image`** | Fallback — `nano_banana_pro`, **`resolution: "2k"`**, same refs |
+
+**Default model:** `imagen-nano-banana-2` · **`aspectRatio: "16:9"`** · **`resolution: "2k"`** (never omit).
+
+### Do not use (stills)
+
+| Tool | Why |
+|------|-----|
+| **Fal.ai** | Expired — Steve policy |
+| **OpenAI image edits** | Wrong backend / billing dead for this pipeline |
+| **Magnific / Higgsfield video** | MeWorld video = ComfyUI only |
+| **Adobe cloud generative** | Photoshop firewalled offline |
+| **`http://127.0.0.1/...` refs** | Magnific cloud cannot fetch localhost |
+
+### Runtime vs agent batch
+
+| Context | Path |
+|---------|------|
+| **Cursor agents (preferred)** | Magnific MCP OAuth — no API key in chat |
+| **Play Regenerate button** | `MAGNIFIC_API_KEY` in `MeWorld/.env` → `server/magnificImage.js` REST (inline base64 refs) |
+| **No REST key** | Agent MCP batch → write `.case-portraits/case_NNN.png` + `.json` |
+
+---
+
+## 4. Magnific workflow (follow exactly)
+
+1. **Read MCP tool schema** before each call (`mcps/user-Magnific/tools/*.json` in Cursor project).
+2. **Auth:** `user-Magnific` OAuth. **Web login:** https://www.magnific.com/app (credits + home **Connect** for agents). **Cursor:** Settings → MCP → Magnific → Disconnect/Connect → Reload Window → `library_list`.
+3. **Upload locals (>25 MB = reject):**
+   ```
+   creations_request_upload (mimeType: image/png)
+     → node scripts/magnific-upload-put.mjs <localPath> <directUploadUrl>
+     → creations_finalize_upload (path or uploads batch)
+   ```
+   - Use **`curl.exe` PUT** or the Node script — **not** PowerShell `Invoke-WebRequest` on GCS signed URLs.
+   - Stable public URL alternative: `creations_upload_image`.
+4. **Generate:** `images_generate` with `references: [{ type, identifier }]`.
+5. **Poll:** `creations_wait` — repeat until `allTerminal: true`.
+6. **Download:** fetch `results.url` → save disk (URLs expire).
+7. **Post-process:** `fitToBaseplate(buffer)` → ship to cache paths (§8).
+
+### `references[]` order (never text-only)
+
+| Priority | Type | Asset |
+|----------|------|-------|
+| 1 | `image` | Crop lock or play baseplate (layout + camera) |
+| 2 | `image` | Anatomy scope overlay — **adult gens only** (§6) |
+| 3 | `image` or `character` | Identity map (lady 9:16, Kojo face, library character) |
+| 4 | Prompt | `buildPortraitPrompt()` + `magnific-camera-lock.txt` + case/ped blocks |
+
+**`count: 2`** for A/B pick on portraits. One retry per backend, then switch to Higgsfield.
+
+---
+
+## 5. Generation workflows
+
+### A. Per-case patient portrait (default)
+
+**When:** New case, regen from Play, or agent batch pre-cache.
+
+1. Build context: `buildCaseChatContext(caseData)` → `server/casePortrait.js` `buildPortraitPrompt()`.
+2. Resolve baseplate: `readBaseplateBuffer(gameRoot, caseContext)` — male / female / pedMale per `portraitFrame.js`.
+3. Upload refs per §4 + §6 (pediatric vs adult).
+4. `images_generate` · 16:9 · 2k · count 2.
+5. Steve picks → `fitToBaseplate` → save:
+   - `docs/portrait-previews/case-{id}-*.png` (review)
+   - `.case-portraits/case_{id}.png` + update `.case-portraits/case_{id}.json` (`provider: magnific`, demographics).
+
+**CLI preview (server REST — needs `MAGNIFIC_API_KEY`):**
+
+```powershell
+cd C:\Users\steve\MeWorld\game
+node scripts/preview-pediatric-portrait.mjs 089
+```
+
+Agents without REST key: run MCP workflow above manually.
+
+### B. Anatomic IV baseplate (sex-specific)
+
+**When:** New male/female clean plate for Zone Studio.
+
+1. Read `IV_ACCESS_PORTALS.json` + `SCENE_LOCK.json`.
+2. Upload: crop lock + anatomy overlay + identity (female: `akosuaduku`).
+3. Prompt: `dev/anatomic-plates/prompts/*-ed-anatomic-plate.txt`.
+4. Output **clean plate** — no colored overlays (Steve paints zones in Photoshop offline).
+5. Center-crop to 1536×864 · promote to `public/assets/patient/` when zones align.
+
+### C. Lady character map (9:16 likeness)
+
+**When:** New Pinterest ref → register in `patientLadyRefs.json`.
+
+1. Save source → `dev/character-maps/sources/<slug>-REF.png`.
+2. Magnific · **9:16** · 2k · upload Pinterest ref.
+3. Ship → `public/assets/patient/ladies/<slug>-CHARACTER-MAP.png`.
+4. Register `identityPrompt` + optional `caseSlugs` in JSON.
+
+Portrait runtime still uses **16:9 ED baseplate** — map is face/hair/gown identity only.
+
+### D. Scene element hero (anti-slop)
+
+**When:** Registry entry lacks `approvedLayer.path` or `characterMap.status` is not `"approved"`.
+
+**Prerequisite:** Complete **§0 Research first** — manufacturer catalog or saved product ref in `dev/scene-elements/sources/<id>/`.
+
+1. Pinterest / **manufacturer product page** → save refs + URL in `NOTES.md`.
+2. Magnific element map once → Photoshop offline retouch → register `SCENE_ELEMENT_REGISTRY.json`.
+3. Subsequent portrait gens load approved layer — do not re-describe hardware in prompt.
+
+Audit: `node scripts/audit-scene-element-registry.mjs`.
+
+---
+
+### Category / preview match (runtime)
+
+When browsing **Pediatrics** in briefing picker or rendering a pediatric case:
+
+1. `resolvePatientSceneKey()` → `pedMale` / `pedFemale` baseplate (`patient-scene-ped-*.png`).
+2. `resolvePediatricPortraitRef()` — category pattern OR `patientPediatricRefs.json` case id.
+3. Briefing picker **hover** previews that case's portrait + pediatric scene before Begin.
+4. Never show adult `patient-scene.png` behind a pediatric list row or ped case id.
+
+---
+
+## 6. Pediatric portraits (mandatory differences)
+
+Pediatric cases (`patientPediatricRefs.json`, `isPediatric: true`) require **child body scale** — not an adult manikin with a child face.
+
+| Case | Age | Notes |
+|------|-----|-------|
+| `054` | newborn | Swaddled/gown, neonate proportions |
+| `089` | ~6 years | Child-protection burns — **non-graphic** facial erythema only in gens |
+
+### NSFW filter (learned 2026-06-18)
+
+Magnific **rejects** pediatric gens when you attach:
+
+- `*-anatomic-plate-anatomy.png` (exposed anatomy zones), **and/or**
+- Prompts mentioning graphic burns, buttocks injury, nudity, or gore on a child
+
+**Safe pediatric ref stack:**
+
+| Sex | Layout ref | Identity ref | Avoid |
+|-----|------------|--------------|-------|
+| Male | `patient-scene.png` | `kojo-face-likeness-lock.png` | Anatomy overlay |
+| Female | `patient-scene-female.png` | **Text-only** (braids, child proportions) | **Adult Daniella welcome plate + child prompt** (NSFW) |
+
+Male: upload Kojo face lock. Female: use female scene lock only — describe school-age girl in prompt; do not upload adult character plates when the prompt says child.
+
+**Safe prompt language:** fully clothed gown · subtle non-graphic erythema on cheeks · educational medical illustration · no gore · no nudity · child proportions (shorter limbs, smaller frame).
+
+Gold prompt on disk: `docs/portrait-previews/case-089-magnific-prompt.txt`.
+
+Update `patientPediatricRefs.json` prompts — never ship buttocks/graphic injury text to image APIs.
+
+---
+
+## 7. Prompt skeleton (case portrait)
+
+```
+Cinematic hospital film-still CGI. CAMERA LOCK: match reference scene layout exactly —
+16:9 landscape, high overhead bedside view from foot of bed toward head (~38° from vertical),
+patient supine centered crown through toes, bare feet at foot of bed (along mattress, not toward camera),
+both bed rails visible, vitals monitor upper-right, IV pole upper-left, cool clinical overhead lighting.
+Do NOT change camera angle, zoom, bed position, or room layout. NOT 90° bird's-eye overhead.
+
+[PASTE anatomy-composition-lock.txt — mandatory every run]
+
+Lived-in busy ED game environment — subtle wear, not sterile showroom.
+
+[IDENTITY BLOCK — demographics, lady map, or pediatric scale from buildPortraitPrompt()]
+
+Light blue short-sleeve hospital gown, forearms visible, NO peripheral IV unless case requires.
+Tactile sculptural stylized realism, muted clinical palette — NOT photoreal live-action.
+MeWorld Play medical training portrait. No text, watermarks, or extra people.
+```
+
+Append `SCENE ELEMENT LOCK` block from registry when elements are approved.
+
+**Avoid in prompts:** masterpiece, epic, 8k hype without optical specifics, mid-thigh crop, eye-level portrait.
+
+---
+
+## 8. File naming & save locations
+
+```
+public/assets/patient/patient-scene.png              ← male play master (1536×864)
+public/assets/patient/patient-scene-female.png      ← female play master
+public/assets/patient/ladies/<slug>-CHARACTER-MAP.png
+dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png
+dev/anatomic-plates/raw/*-anatomic-plate-anatomy.png
+docs/portrait-previews/case-{id}-pediatric-preview.png   ← agent review
+.case-portraits/case_{id}.png                        ← runtime cache (gitignored)
+.case-portraits/case_{id}.json                       ← provider, persona, frame meta
+```
+
+| Action | Where |
+|--------|--------|
+| Agent review / A/B picks | `docs/portrait-previews/` |
+| Play runtime cache | `.case-portraits/` |
+| Promoted baseplates | `public/assets/patient/` |
+| Anatomic work-in-progress | `dev/anatomic-plates/raw/` → `approved/` |
+| Character map sources | `dev/character-maps/sources/` |
+
+**Export frame:** `BASEPLATE_WIDTH=1536` · `BASEPLATE_HEIGHT=864` · `PORTRAIT_FRAME_VERSION=3` (`server/portraitFrame.js`).
+
+---
+
+## 9. Review delivery (Steve)
+
+1. **`creations_show`** after every `images_generate` — do not wait for full batch silently.
+2. Run **A/B (count: 2)** on portraits; pick winner before upscale or promote.
+3. Open refs in vision context when describing picks.
+4. On approval → `fitToBaseplate` → copy to `.case-portraits/` → set `provider: magnific` in JSON meta.
+5. Validate scene lock before baseplate promote: `node scripts/validate-scene-lock.mjs`.
+
+---
+
+## 10. Success criteria
+
+- [ ] Camera matches `SCENE_LOCK.json` — overhead ~38°, crown→toes, feet visible
+- [ ] Monitor upper-right, IV upper-left, both rails visible
+- [ ] Identity matches case demographics (adult vs pediatric scale correct)
+- [ ] Sculptural clinical CGI — not adult manikin on child case
+- [ ] Generated via Magnific MCP (or HF fallback) — not Fal, not OpenAI edits
+- [ ] Saved at **1536×864** after `fitToBaseplate`
+- [ ] `.case-portraits/case_{id}.json` updated (`provider`, `cachedAt`, `isPediatric` when applicable)
+- [ ] Pediatric gens used safe ref stack (§6) — no anatomy overlay
+
+---
+
+## 11. Related docs (deeper detail — do not duplicate here)
+
+| Doc | Use |
+|-----|-----|
+| **`.cursor/RULES_IMAGE_GENERATION.md`** | **This file — canonical** |
+| `.cursor/rules/meworld-magnific-mcp.mdc` | Cursor glob rule → points here |
+| `.cursor/rules/scene-camera-lock.mdc` | Camera lock enforcement |
+| `.cursor/rules/patient-character-maps.mdc` | Lady 9:16 maps |
+| `.cursor/rules/anatomic-iv-plates.mdc` | IV portal plates + Photoshop zones |
+| `.cursor/rules/scene-element-reference-lock.mdc` | Prop registry anti-slop |
+| `docs/components/PORTRAIT_RULES.md` | Portrait smoke + framing summary |
+| `dev/scene-camera-lock/README.md` | SCENE_LOCK human-readable |
+| `dev/anatomic-plates/README.md` | Anatomic plate pipeline |
+| `dev/character-maps/CHARACTER_MAPS.md` | Lady map workflow |
+| `AGENTS.md` § Case portraits | Runtime API paths + UI |
+| `server/casePortrait.js` | `buildPortraitPrompt()`, cache write |
+| `server/magnificImage.js` | REST path for Play regen |
+
+**BEIZA equivalent (different project):** `M:\Works\Houdini Projects\TheMind_KOS\adobe\Personal Brand\.cursor\RULES_IMAGE_GENERATION.md`
+
+---
+
+*End — image generation agents start here.*

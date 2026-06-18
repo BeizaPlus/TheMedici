@@ -1,6 +1,6 @@
-import { buildImmersaOrderWhySystemPrompt } from './immersaAttendantPrompt.js';
+import { buildImmersaOrderWhySystemPrompt, buildImmersaSecondOpinionOrderWhyPrompt } from './immersaAttendantPrompt.js';
 
-export function buildOrderWhyPrompt({ orderLabel, playbookWhy = '', caseContext = {} }) {
+export function buildOrderWhyPrompt({ orderLabel, playbookWhy = '', caseContext = {}, peerReview = false } = {}) {
   const cc =
     caseContext.chief_complaint ||
     caseContext.title ||
@@ -30,10 +30,15 @@ export function buildOrderWhyPrompt({ orderLabel, playbookWhy = '', caseContext 
   };
 
   return [
-    { role: 'system', content: buildImmersaOrderWhySystemPrompt() },
+    {
+      role: 'system',
+      content: peerReview
+        ? buildImmersaSecondOpinionOrderWhyPrompt()
+        : buildImmersaOrderWhySystemPrompt(),
+    },
     {
       role: 'user',
-      content: `Explain why this order is relevant for this case:\n${JSON.stringify(user, null, 2)}`,
+      content: `Explain why this order belongs in this case. Reply in 2–4 short spoken sentences only (mechanism first).\n${JSON.stringify(user, null, 2)}`,
     },
   ];
 }

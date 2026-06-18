@@ -19,7 +19,7 @@ Or: `C:\Users\steve\MeWorld\START-GAME.bat` / `START-MEWORLD.bat`
 
 - Web: http://localhost:5173 (Vite)
 - API: http://localhost:3001 (Express)
-- `predev` runs `build:data` + `smoke-test.mjs` + `smoke-pre-serve.mjs` (CSS audit + vite build) — must pass before dev starts
+- `predev` runs `build:data` + `smoke-test.mjs` + `smoke-pre-serve.mjs` (CSS audit + vite build) — includes **`smoke-case-story.mjs`**
 - `npm run dev` uses `start-dev.mjs`: API → `smoke:differential` → Vite → `smoke:differential-session` → **`smoke:play-case`** (welcome → briefing → play scene + screenshots) — **servers exit if live smoke fails**
 
 If ports are busy, kill old node processes or use the alternate Vite port shown in the terminal.
@@ -28,19 +28,30 @@ If ports are busy, kill old node processes or use the alternate Vite port shown 
 
 ---
 
-## Study mode vs main game (one codebase)
+## Study mode vs main game (two trees — not one)
 
-There is **not** a second game fork — only one source tree:
+Steve studies from a **frozen snapshot**, not the live git tree. **They diverge** as soon as either is edited.
 
 | What | Path | Role |
 |------|------|------|
-| **Main (develop here)** | `C:\Users\steve\MeWorld\game` | All fixes and features land here first |
-| **Study snapshot** | `C:\Users\steve\MeWorld-study` | Frozen robocopy for stable exam sessions (`START-MEWORLD-STUDY.bat`) |
-| **Refresh snapshot** | `C:\Users\steve\MeWorld\scripts\create-study-snapshot.ps1` | Re-copy main → study after smoke passes |
+| **Main (develop + git)** | `C:\Users\steve\MeWorld\game` | Features, commits, `npm run dev` |
+| **Study snapshot (no git)** | `C:\Users\steve\MeWorld-study\game` | `START-MEWORLD-STUDY.bat` · `npm run dev:study` · HMR off |
+| **Refresh snapshot** | `C:\Users\steve\MeWorld\scripts\create-study-snapshot.ps1` | Robocopy main → study (overwrites study **code**) |
 
-- **Dev while studying:** `npm run dev:study` on main — API `:3001`, Vite `:5173`, HMR off. You can keep playing on a running server; hard-refresh after agent deploys changes.
-- **Unify when done:** Ship on `MeWorld\game`, run smoke + snapshot script — study copy picks up the same build. Never edit only `MeWorld-study` and forget to port back to main.
-- **Smoke:** `dev:study` disables HMR only — **screenshot smoke still runs** (welcome, play, Continue, Whys, uber U01). Refresh study copy with `scripts\create-study-snapshot.ps1` after main fixes.
+**Canonical doc:** `docs/STUDY_MODE.md` — read before any MeWorld agent work.
+
+### Agent rules
+
+| Steve is… | Edit only |
+|-----------|-----------|
+| Studying (`START-MEWORLD-STUDY.bat`, “study mode”) | `MeWorld-study\game` |
+| Developing / shipping | `MeWorld\game` |
+| Said “port to main” / “sync main” | Copy study fixes → main, then commit main |
+
+- **Do not** edit both trees in one session unless Steve asked to sync.
+- **Do not** run `create-study-snapshot.ps1` mid-study (wipes in-progress study code changes).
+- Study `user-data\` and browser localStorage are **separate** from main until copied back.
+- `npm run dev:study` on **main** is not the same as the **MeWorld-study** folder.
 
 ---
 
@@ -216,6 +227,10 @@ Quick backlog (see audit file for full list):
 
 ## Case portraits (Magnific MCP — Kojo parity)
 
+**Canonical image rules:** **`.cursor/RULES_IMAGE_GENERATION.md`**
+
+**Magnific app:** https://www.magnific.com/app
+
 Per-case **House-style cold-open** patient image from the **approved ED baseplate** + case JSON.
 
 | Path | Auth |
@@ -390,7 +405,26 @@ Implementation: `Play.jsx` — `handleDrop`, `commitStackPlacement`, `submitOrde
 | `src/lib/patientFactsFromHpi.js` | Patient demographics for chat |
 | `server/casePortrait.js` | Magnific portrait prompt + cache |
 | `scripts/smoke-test.mjs` | Pre-dev sanity checks |
-| `step3/` | CCS capture toolchain + mirror cache |
+| `scripts/smoke-case-story.mjs` | Case story offline + optional API (`npm run smoke:case-story`) |
+| `docs/smoke-case-story-checklist.md` | Manual walkthrough: compile session → oversight still → storyboard plates |
+
+---
+
+## Case story + storyboard (Teach Me outro)
+
+After a play session, **Case story** compiles attendant chat, patient replies, exam/lab proof, and orders into storycraft prose (5 beats). Images are **on demand** — not auto-generated.
+
+| Piece | Path |
+|-------|------|
+| UI | `CaseStoryPanel.jsx` — Prose \| Storyboard tabs · Edit/twist · **Generate oversight still** · **Generate panel stills** |
+| API | `POST /api/case-story` · `POST /api/case-story-storyboard` |
+| Server | `server/caseStory.js` · `server/caseStoryCache.js` |
+| Session fingerprint | `src/lib/caseStorySessionFingerprint.js` — bust cache when run changes |
+| Storycraft skill | `dev/storycraft-scale/SKILL.md` |
+| Gold case 051 | Offline title *The Man Who Got Peppered* — TIA / embolic shower |
+| Magnific | `MAGNIFIC_API_KEY` in `game/.env` for plates — see `dev/pediatric-portrait-refs/character-maps-pending/README-APPROVAL.md` |
+
+**Teach Me Yours column:** **✕** = not placed · **✓** = placed. Briefing picker: green attempt radio only (no `N orders` / `Attempted` badges).
 
 ---
 

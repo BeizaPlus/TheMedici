@@ -33,9 +33,9 @@ function renderFlowStep(row, onFocusStep) {
       <span className="tc-land-step-num">{row.expectedSeq}</span>
       <span className="tc-land-step-label">{row.label}</span>
       <span className="tc-land-step-badge">{teachCompareStatusLabel(row.status)}</span>
-      {row.yourSeq != null && (
-        <span className="tc-land-step-yours">Yours #{row.yourSeq}</span>
-      )}
+      <span className={`tc-land-step-yours${row.yourSeq != null || row.isPlaced ? ' is-done' : ' is-miss'}`}>
+        {row.yourSeq != null || row.isPlaced ? '✓' : '✕'}
+      </span>
     </button>
   );
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FiChevronDown, FiChevronUp, FiSearch } from 'react-icons/fi';
-import { getAllGameCases, getCategories, getCasesInCategory } from '../data/useCcsCatalog.js';
+import { getAllGameCases, getCategories, getCasesInCategory, getCaseById } from '../data/useCcsCatalog.js';
 import { getCaseRecord, getCompletionStats, pickRandomId } from '../data/caseProgress.js';
 import { IconShuffle } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseProgressTag from './CaseProgressTag.jsx';
@@ -9,15 +9,30 @@ import { isCaseAttempted } from '../data/caseProgress.js';
 import CaseReadyTag from './CaseReadyTag.jsx';
 import { hasCaseSpecificPlaybook } from '../data/resolvePlaybook.js';
 import {
-  getCaseOrderCount,
   getReadyPracticeCases,
   getReadyPracticeCount,
   getStackTestingCount,
   getStackTestingOrderRange,
 } from '../lib/caseReadyPractice.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
+import {
+  formatCaseIdLabel,
+  learnerFacingCaseTitle,
+  shouldShowCaseIds,
+} from '../lib/learningMode.js';
+import {
+  initialBrowseCategoryId,
+  readCaseBrowseContext,
+  rememberCaseBrowse,
+  writeCaseBrowseContext,
+} from '../lib/caseBrowseContext.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import { getAllowedCaseIds, readAudienceProfile } from '../lib/audienceProfile.js';
+import {
+  batchLabel,
+  buildStudyBatches,
+  isUberCatalogId,
+} from '../lib/caseStudyBatches.js';
 
 const PICKER_WIDTH = 400;
 
@@ -47,7 +62,7 @@ function writePickerPos(pos) {
   }
 }
 
-export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
+export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPreviewCase }) {
   const categories = getCategories();
   const audienceProfile = useMemo(() => readAudienceProfile(), []);
   const allCases = useMemo(() => getAllGameCases(), []);
@@ -57,22 +72,27 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
   );
   const allowedSet = useMemo(() => new Set(allowedCaseIds), [allowedCaseIds]);
   const visibleAllCases = useMemo(() => allCases.filter((c) => allowedSet.has(c.id)), [allCases, allowedSet]);
-  const visibleCategories = useMemo(
-    () =>
-      categories
-        .map((cat) => ({
-          ...cat,
-          caseIds: (cat.caseIds || []).filter((id) => allowedSet.has(id)),
-        }))
-        .filter((cat) => cat.caseIds.length > 0),
-    [categories, allowedSet],
-  );
+  const visibleCategories = useMemo(() => {
+    const base = categories
+      .map((cat) => ({
+        ...cat,
+        caseIds: (cat.caseIds || []).filter((id) => allowedSet.has(id)),
+      }))
+      .filter((cat) => cat.caseIds.length > 0);
+    return base;
+  }, [categories, allowedSet]);
   const pickerRef = useRef(null);
   const dragRef = useRef({ dx: 0, dy: 0 });
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState(readPickerPos);
   const [dragging, setDragging] = useState(false);
-  const [categoryId, setCategoryId] = useState(visibleCategories[0]?.id);
+  const [categoryId, setCategoryId] = useState(
+    () => initialBrowseCategoryId(visibleCategories[0]?.id) || visibleCategories[0]?.id,
+  );
+  const [batchIndex, setBatchIndex] = useState(() => {
+    const ctx = readCaseBrowseContext();
+    return typeof ctx?.batchIndex === 'number' ? ctx.batchIndex : 0;
+  });
   const [query, setQuery] = useState('');
   const [readyOnly, setReadyOnly] = useState(false);
   const [checkVersion, setCheckVersion] = useState(0);
@@ -81,21 +101,39 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
 
   useEffect(() => {
     const cat = visibleCategories.find((c) => c.caseIds?.includes(currentCaseId));
-    if (cat) setCategoryId(cat.id);
+    if (cat) {
+      setCategoryId(cat.id);
+      writeCaseBrowseContext({ categoryId: cat.id, caseId: String(currentCaseId) });
+    }
   }, [currentCaseId, visibleCategories]);
 
   const casesInCategory = useMemo(
-    () => (categoryId ? getCasesInCategory(categoryId).filter((c) => allowedSet.has(c.id)) : []),
+    () =>
+      categoryId
+        ? getCasesInCategory(categoryId).filter((c) => allowedSet.has(c.id))
+        : [],
     [categoryId, allowedSet],
   );
+
+  const studyBatches = useMemo(() => buildStudyBatches(casesInCategory), [casesInCategory]);
+
+  useEffect(() => {
+    if (batchIndex >= studyBatches.length) {
+      setBatchIndex(0);
+    }
+  }, [batchIndex, studyBatches.length]);
+
+  const activeBatch = studyBatches[batchIndex] || studyBatches[0] || null;
 
   const filteredCases = useMemo(() => {
     const q = query.trim().toLowerCase();
     let pool;
     if (readyOnly) {
       pool = readyCases.filter((c) => allowedSet.has(c.id));
+    } else if (q) {
+      pool = visibleAllCases.filter((c) => !isUberCatalogId(c.id));
     } else {
-      pool = q ? visibleAllCases : casesInCategory;
+      pool = activeBatch?.cases || casesInCategory;
     }
     if (!q) return pool;
     return pool.filter((c) => {
@@ -108,7 +146,7 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
         (c.diagnosis || '').toLowerCase().includes(q)
       );
     });
-  }, [visibleAllCases, casesInCategory, query, readyOnly, readyCases, allowedSet]);
+  }, [visibleAllCases, casesInCategory, activeBatch, query, readyOnly, readyCases, allowedSet]);
 
   const activeCategory = visibleCategories.find((c) => c.id === categoryId);
   const overallStats = useMemo(() => getCompletionStats(allCases.length), [allCases.length]);
@@ -227,7 +265,10 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
               className="briefing-picker-select"
               value={categoryId || ''}
               onChange={(e) => {
-                setCategoryId(e.target.value);
+                const next = e.target.value;
+                setCategoryId(next);
+                setBatchIndex(0);
+                writeCaseBrowseContext({ categoryId: next, batchIndex: 0 });
                 setQuery('');
               }}
             >
@@ -278,13 +319,36 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
             </button>
           </div>
 
+          {!readyOnly && !query.trim() && categoryId !== 'Uber Cases' && studyBatches.length > 1 && (
+            <div className="briefing-picker-batches" role="tablist" aria-label="Study batches">
+              {studyBatches.map((batch) => (
+                <button
+                  key={batch.batchIndex}
+                  type="button"
+                  role="tab"
+                  className={`briefing-picker-batch-chip${batch.batchIndex === batchIndex ? ' active' : ''}`}
+                  aria-selected={batch.batchIndex === batchIndex}
+                  onClick={() => {
+                    setBatchIndex(batch.batchIndex);
+                    writeCaseBrowseContext({ categoryId, batchIndex: batch.batchIndex });
+                  }}
+                  title={batchLabel(batch)}
+                >
+                  {batch.batchNumber}
+                </button>
+              ))}
+            </div>
+          )}
+
           <p className="briefing-picker-meta">
             {readyOnly
               ? `${filteredCases.length} ready case${filteredCases.length === 1 ? '' : 's'}`
               : query.trim()
                 ? `${filteredCases.length} match${filteredCases.length === 1 ? '' : 'es'}`
-                : activeCategory
-                  ? `${filteredCases.length} in ${activeCategory.label}`
+                : activeCategory && activeBatch
+                  ? studyBatches.length > 1
+                    ? `${activeBatch.cases.length} in batch ${activeBatch.batchNumber} of ${activeBatch.totalBatches} · ${activeBatch.theme} · ${activeCategory.label}`
+                    : `${filteredCases.length} in ${activeCategory.label}`
                   : ''}
           </p>
 
@@ -305,23 +369,29 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase }) {
                   role="option"
                   aria-selected={selected}
                   className={`briefing-picker-row ${selected ? 'selected' : ''} ${rowState} ${attempted ? 'study-done' : ''}`}
-                  onClick={() => onSelectCase(c)}
-                  title={`Switch to ${c.title}`}
+                  onClick={() => {
+                    rememberCaseBrowse(c.id, { categoryId, entry: 'briefing' });
+                    onSelectCase(c);
+                  }}
+                  onMouseEnter={() => onPreviewCase?.(c)}
+                  onMouseLeave={() => onPreviewCase?.(null)}
+                  onFocus={() => onPreviewCase?.(c)}
+                  onBlur={() => onPreviewCase?.(null)}
+                  title={`Switch to ${learnerFacingCaseTitle(c)}`}
                 >
                   <CaseAttemptRadio caseId={c.id} onChange={() => setCheckVersion((v) => v + 1)} />
-                  <span className="briefing-picker-num">#{c.ccsNumber}</span>
-                  <span className="briefing-picker-name" title={toTitleCase(c.title)}>
-                    {toTitleCase(c.title)}
+                  {shouldShowCaseIds() && (
+                    <span className="briefing-picker-num">#{c.ccsNumber}</span>
+                  )}
+                  <span className="briefing-picker-name" title={learnerFacingCaseTitle(c)}>
+                    {learnerFacingCaseTitle(c)}
                     {query.trim() && c.category ? (
                       <span className="briefing-picker-cat"> · {c.category}</span>
                     ) : null}
                   </span>
                   <span className="briefing-picker-status">
-                    <span className="case-stack-count">
-                      {c.stacks?.length || c.interventions?.length || getCaseOrderCount(c)} orders
-                    </span>
                     {hasCaseSpecificPlaybook(c.id) && <CaseReadyTag compact />}
-                    <CaseProgressTag record={rec} showNew />
+                    {!rec?.plays && <CaseProgressTag record={rec} showNew />}
                   </span>
                 </button>
               );

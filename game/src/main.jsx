@@ -17,6 +17,8 @@ import './styles/differential-practice.css';
 import './ui-overrides.css';
 import './styles/scene-toolbar.css';
 import './styles/teach-compare-landscape.css';
+import './styles/medical-sequence.css';
+import './styles/case-story.css';
 
 migrateLegacyStorage();
 void migrateAllLegacyCaseNotes();

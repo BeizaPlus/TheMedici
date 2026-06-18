@@ -1,0 +1,191 @@
+.med-seq-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(4, 6, 12, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.med-seq-panel {
+  width: min(960px, 100%);
+  max-height: min(88vh, 900px);
+  overflow: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(232, 184, 75, 0.35);
+  background: linear-gradient(180deg, #12141c, #0a0c12);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+  padding: 16px 18px 20px;
+}
+
+.med-seq-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.med-seq-kicker {
+  margin: 0;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(232, 184, 75, 0.85);
+}
+
+.med-seq-title {
+  margin: 4px 0 0;
+  font-size: 1.15rem;
+  color: #f2f0ea;
+}
+
+.med-seq-lock {
+  margin: 6px 0 0;
+  font-size: 0.72rem;
+  color: rgba(240, 238, 232, 0.55);
+}
+
+.med-seq-head-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.med-seq-btn {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #e8e6e0;
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.med-seq-btn:hover:not(:disabled) {
+  border-color: rgba(232, 184, 75, 0.45);
+}
+
+.med-seq-btn-close {
+  min-width: 36px;
+}
+
+.med-seq-rw {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(232, 184, 75, 0.08);
+  border: 1px solid rgba(232, 184, 75, 0.2);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(240, 238, 232, 0.88);
+}
+
+.med-seq-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.med-seq-tab {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: transparent;
+  color: rgba(240, 238, 232, 0.65);
+  cursor: pointer;
+}
+
+.med-seq-tab.is-active {
+  border-color: rgba(232, 184, 75, 0.55);
+  color: #e8b84b;
+  background: rgba(232, 184, 75, 0.1);
+}
+
+.med-seq-rail-title {
+  margin: 0 0 10px;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(232, 184, 75, 0.8);
+}
+
+.med-seq-rail-track {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+}
+
+.med-seq-beat {
+  flex: 0 0 min(280px, 85vw);
+  scroll-snap-align: start;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.med-seq-beat-num {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(232, 184, 75, 0.15);
+  color: #e8b84b;
+  font-size: 0.68rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.med-seq-beat-title {
+  margin: 0 0 6px;
+  font-size: 0.88rem;
+  color: #f2f0ea;
+}
+
+.med-seq-beat-caption {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(240, 238, 232, 0.86);
+}
+
+.med-seq-beat-visual {
+  margin: 0 0 6px;
+  font-size: 0.66rem;
+  line-height: 1.4;
+  color: rgba(160, 170, 190, 0.9);
+  font-style: italic;
+}
+
+.med-seq-beat-order {
+  margin: 0;
+  font-size: 0.64rem;
+  color: rgba(232, 184, 75, 0.75);
+}
+
+.med-seq-error {
+  color: #f87171;
+  font-size: 0.8rem;
+}
+
+.med-seq-loading,
+.med-seq-foot {
+  font-size: 0.68rem;
+  color: rgba(240, 238, 232, 0.5);
+}
+
+.teach-compare-export-btn.med-seq-trigger {
+  border-color: rgba(232, 184, 75, 0.4);
+  color: #e8b84b;
+}

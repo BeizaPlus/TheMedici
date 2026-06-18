@@ -428,8 +428,17 @@
 .tc-land-step-yours {
   grid-column: 1 / -1;
   grid-row: 3;
-  font-size: 0.56rem;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.tc-land-step-yours.is-miss {
+  color: #ff5c5c;
+}
+
+.tc-land-step-yours.is-done {
+  color: rgba(143, 230, 175, 0.9);
 }
 
 .tc-land-step.status-match .tc-land-step-badge {

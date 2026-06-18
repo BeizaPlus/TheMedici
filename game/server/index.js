@@ -52,8 +52,31 @@ import {
 import { realWorldVideoProvider } from './youtubeSearchRepair.js';
 import { sanitizeRealWorldStories } from './realWorldStoryQuality.js';
 import { fetchYoutubeTranscript } from './youtubeTranscript.js';
-import { readOrderWhyEntry, writeOrderWhyEntry } from './orderWhyCache.js';
+import { readOrderWhyEntry, writeOrderWhyEntry, readOrderWhyCache } from './orderWhyCache.js';
 import { buildOrderWhyPrompt } from './orderWhy.js';
+import {
+  buildMedicalSequencePrompt,
+  parseMedicalSequenceJson,
+  assertMedicalSequenceDemographics,
+} from './medicalSequence.js';
+import {
+  readMedicalSequenceCache,
+  writeMedicalSequenceCache,
+} from './medicalSequenceCache.js';
+import {
+  buildCaseStoryNarrativePrompt,
+  buildCaseStoryMasterImagePrompt,
+  buildCaseStoryBeatImagePrompt,
+  deriveChapterVisualHint,
+  parseCaseStoryJson,
+  CASE_STORY_PROMPT_VERSION,
+} from './caseStory.js';
+import {
+  readCaseStoryCache,
+  writeCaseStoryCache,
+  caseStoryImagePath,
+  caseStoryBeatImagePath,
+} from './caseStoryCache.js';
 import { readOrderResultEntry, writeOrderResultEntry } from './orderResultCache.js';
 import {
   ORDER_RESULT_PROMPT_VERSION,
@@ -86,7 +109,11 @@ import {
   formatPersonaForChat,
   generatePortraitWithFallback,
   portraitPublicUrl,
+  portraitBaselinePublicUrl,
+  portraitBaselineFileName,
   readPortraitCache,
+  readPortraitBaseline,
+  ensurePortraitBaseline,
   resolvePortraitSex,
   writePortraitCache,
 } from './casePortrait.js';
@@ -197,6 +224,15 @@ const ORDER_RESULT_CACHE_DIR = path.join(GAME_ROOT, '.order-result-cache');
 if (!fs.existsSync(ORDER_RESULT_CACHE_DIR)) {
   fs.mkdirSync(ORDER_RESULT_CACHE_DIR, { recursive: true });
 }
+const MEDICAL_SEQUENCE_CACHE_DIR = path.join(GAME_ROOT, '.medical-sequence-cache');
+if (!fs.existsSync(MEDICAL_SEQUENCE_CACHE_DIR)) {
+  fs.mkdirSync(MEDICAL_SEQUENCE_CACHE_DIR, { recursive: true });
+}
+const CASE_STORY_CACHE_DIR = path.join(GAME_ROOT, '.case-story-cache');
+if (!fs.existsSync(CASE_STORY_CACHE_DIR)) {
+  fs.mkdirSync(CASE_STORY_CACHE_DIR, { recursive: true });
+}
+app.use('/case-story-images', express.static(CASE_STORY_CACHE_DIR));
 
 const MEWORLD_CASES_DIR = path.join(REPO_ROOT, 'data', 'cases');
 const DIFFERENTIAL_REVIEW_PATH = path.join(GAME_ROOT, 'src', 'data', 'differentialReview.json');
@@ -1172,7 +1208,7 @@ app.post('/api/case-chat/message', async (req, res) => {
         session.chatMode === 'patient_sim'
           ? `[ORDER DOCK — patient voice, 1–3 short sentences in lay language. Answer only what was asked.]\n\n`
           : `[ORDER DOCK — ultra-brief tutor reply]
-2–4 short sentences max. No intro ("I am the attendant…"). No disclaimer about not being the patient. No bullet lists unless they asked for a list. Direct answer first. Full teaching is in the Chat tab.
+Mechanism first. 2–4 short spoken sentences max (~75 words). No intro. No disclaimer. No em dashes. No bullet lists unless they asked for a list. Direct answer first. Same voice as Immersa attendant (pathophysiology → bedside anchor). Full teaching is in the Chat tab.
 
 Learner question: `;
       userContent = `${briefLead}${text}`;
@@ -1243,16 +1279,18 @@ app.post('/api/order-why', async (req, res) => {
   const key = chatApiKeyOrError(res);
   if (!key) return;
 
-  const { caseId, orderId, orderLabel, playbookWhy = '', caseContext = null } = req.body || {};
+  const { caseId, orderId, orderLabel, playbookWhy = '', caseContext = null, peerReview = false } =
+    req.body || {};
   const cid = String(caseId ?? '').trim();
   const oid = String(orderId ?? '').trim();
+  const cacheKey = peerReview ? `${oid}__peer` : oid;
   const label = String(orderLabel ?? '').trim();
   if (!cid || !oid || !label) {
     return res.status(400).json({ error: 'Missing caseId, orderId, or orderLabel' });
   }
 
   try {
-    const cached = await readOrderWhyEntry(ORDER_WHY_CACHE_DIR, cid, oid);
+    const cached = await readOrderWhyEntry(ORDER_WHY_CACHE_DIR, cid, cacheKey);
     if (cached?.why) {
       return res.json({
         ok: true,
@@ -1267,12 +1305,15 @@ app.post('/api/order-why', async (req, res) => {
       orderLabel: label,
       playbookWhy,
       caseContext: caseContext && typeof caseContext === 'object' ? caseContext : {},
+      peerReview: Boolean(peerReview),
     });
     const why = await callChatCompletion(key, messages, {
-      maxTokens: 320,
-      temperature: immersaAttendantTemperature(caseContext?.simulationCreativity ?? 55),
+      maxTokens: 200,
+      temperature: peerReview
+        ? Math.min(0.85, immersaAttendantTemperature(caseContext?.simulationCreativity ?? 55) + 0.08)
+        : immersaAttendantTemperature(caseContext?.simulationCreativity ?? 55),
     });
-    const saved = await writeOrderWhyEntry(ORDER_WHY_CACHE_DIR, cid, oid, {
+    const saved = await writeOrderWhyEntry(ORDER_WHY_CACHE_DIR, cid, cacheKey, {
       why,
       orderLabel: label,
     });
@@ -1282,6 +1323,355 @@ app.post('/api/order-why', async (req, res) => {
       cached: false,
       cachedAt: saved?.cachedAt || null,
       provider: chatProvider(),
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/medical-sequence', async (req, res) => {
+  const key = chatApiKeyOrError(res);
+  if (!key) return;
+
+  const {
+    caseId,
+    caseContext = null,
+    orders = [],
+    realWorldStories = [],
+    portraitNote = '',
+    refresh = false,
+  } = req.body || {};
+  const cid = String(caseId ?? '').trim();
+  if (!cid) {
+    return res.status(400).json({ error: 'Missing caseId' });
+  }
+
+  try {
+    if (!refresh) {
+      const cached = await readMedicalSequenceCache(MEDICAL_SEQUENCE_CACHE_DIR, cid);
+      if (cached?.prequel?.length || cached?.missedPath?.length) {
+        try {
+          assertMedicalSequenceDemographics(cached, caseContext || {}, cid);
+          return res.json({
+            ok: true,
+            cached: true,
+            cachedAt: cached.cachedAt || null,
+            patientLock: cached.patientLock || '',
+            prequel: cached.prequel || [],
+            missedPath: cached.missedPath || [],
+            savedPath: cached.savedPath || [],
+            realWorldEcho: cached.realWorldEcho || null,
+          });
+        } catch {
+          /* stale demographics — regenerate */
+        }
+      }
+    }
+
+    const whyCache = (await readOrderWhyCache(ORDER_WHY_CACHE_DIR, cid)) || {};
+    const mergedOrders = (Array.isArray(orders) ? orders : []).map((o) => {
+      const oid = String(o.id || '').trim();
+      const cachedWhy = whyCache[oid]?.why || '';
+      const clientWhy = String(o.why || '').trim();
+      const playbookWhy = String(o.playbookWhy || o.why || '').trim();
+      return {
+        id: oid,
+        label: String(o.label || '').trim(),
+        why: clientWhy || cachedWhy || playbookWhy,
+        playbookWhy,
+      };
+    });
+
+    const messages = buildMedicalSequencePrompt({
+      caseContext: caseContext && typeof caseContext === 'object' ? caseContext : {},
+      orders: mergedOrders,
+      realWorldStories: Array.isArray(realWorldStories) ? realWorldStories : [],
+      portraitNote: String(portraitNote || '').trim(),
+    });
+    const raw = await callChatCompletion(key, messages, { maxTokens: 1400, temperature: 0.32 });
+    const parsed = assertMedicalSequenceDemographics(
+      parseMedicalSequenceJson(raw),
+      caseContext && typeof caseContext === 'object' ? caseContext : {},
+      cid,
+    );
+    await writeMedicalSequenceCache(MEDICAL_SEQUENCE_CACHE_DIR, cid, parsed);
+    return res.json({
+      ok: true,
+      cached: false,
+      ...parsed,
+      provider: chatProvider(),
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/case-story', async (req, res) => {
+  const key = chatApiKeyOrError(res);
+  if (!key) return;
+
+  const {
+    caseId,
+    caseContext = null,
+    sessionContext = null,
+    orders = [],
+    medicalSequence = null,
+    portraitNote = '',
+    sessionFingerprint = '',
+    refresh = false,
+    generateImage = false,
+    imageOnly = false,
+  } = req.body || {};
+  const cid = String(caseId ?? '').trim();
+  if (!cid) return res.status(400).json({ error: 'Missing caseId' });
+
+  const origin = serverOrigin(req);
+  const imgFile = caseStoryImagePath(CASE_STORY_CACHE_DIR, cid);
+  const imgSlug = path.basename(imgFile || '');
+  const fp = String(sessionFingerprint || '').trim();
+
+  try {
+    const cached = await readCaseStoryCache(CASE_STORY_CACHE_DIR, cid, {
+      promptVersion: CASE_STORY_PROMPT_VERSION,
+    });
+    const cacheValid = Boolean(
+      cached?.chapters?.length
+      && (!fp || !cached.sessionFingerprint || cached.sessionFingerprint === fp),
+    );
+    const hasImg = imgFile && fs.existsSync(imgFile);
+
+    if (imageOnly) {
+      if (!cached?.chapters?.length) {
+        return res.status(400).json({ error: 'Compile story first (Refresh), then generate oversight still' });
+      }
+      let masterImageUrl = hasImg ? `${origin}/case-story-images/${imgSlug}` : null;
+      if (generateImage && magnificApiKey() && (!masterImageUrl || refresh)) {
+        const ctx = caseContext && typeof caseContext === 'object' ? caseContext : {};
+        const narrative = cached;
+        const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, cid);
+        let imageBase64;
+        let mimeType = 'image/png';
+        if (cachedPortrait.exists) {
+          const buf = await fsp.readFile(cachedPortrait.pngPath);
+          imageBase64 = buf.toString('base64');
+        } else {
+          const plate = await readBaseplateBuffer(GAME_ROOT, ctx);
+          imageBase64 = plate.buffer.toString('base64');
+          mimeType = plate.mimeType;
+        }
+        const imgPrompt = buildCaseStoryMasterImagePrompt({
+          caseContext: ctx,
+          narrative,
+          portraitNote: String(portraitNote || '').trim(),
+        });
+        const edited = await generateImageEditWithMagnific({
+          imageBase64,
+          mimeType,
+          prompt: imgPrompt,
+          aspectRatio: '16:9',
+          resolution: '2K',
+          referenceText:
+            'THIRD-PERSON 3/4 bedside angle — NOT bird-eye overhead. Match patient likeness; change camera to oversight view only.',
+        });
+        const fitted = await fitToBaseplate(edited);
+        if (imgFile) {
+          await fsp.writeFile(imgFile, fitted);
+          masterImageUrl = `${origin}/case-story-images/${imgSlug}`;
+        }
+        await writeCaseStoryCache(
+          CASE_STORY_CACHE_DIR,
+          cid,
+          { ...cached, masterImageUrl },
+          { promptVersion: CASE_STORY_PROMPT_VERSION },
+        );
+      }
+      return res.json({
+        ok: true,
+        imageOnly: true,
+        masterImageUrl,
+        imageGen: Boolean(magnificApiKey()),
+      });
+    }
+
+    if (!refresh && cacheValid) {
+      return res.json({
+        ok: true,
+        cached: true,
+        cachedAt: cached.cachedAt || null,
+        sessionFingerprint: cached.sessionFingerprint || null,
+        title: cached.title || '',
+        synopsis: cached.synopsis || '',
+        chapters: cached.chapters || [],
+        patientLock: cached.patientLock || '',
+        masterImagePrompt: cached.masterImagePrompt || '',
+        masterImageUrl: hasImg ? `${origin}/case-story-images/${imgSlug}` : null,
+        staleSession: Boolean(fp && cached.sessionFingerprint && cached.sessionFingerprint !== fp),
+      });
+    }
+
+    const messages = buildCaseStoryNarrativePrompt({
+      caseContext: caseContext && typeof caseContext === 'object' ? caseContext : {},
+      sessionContext: sessionContext && typeof sessionContext === 'object' ? sessionContext : {},
+      orders: Array.isArray(orders) ? orders : [],
+      medicalSequence,
+    });
+    const raw = await callChatCompletion(key, messages, { maxTokens: 1200, temperature: 0.34 });
+    const narrative = parseCaseStoryJson(raw);
+
+    let masterImageUrl = hasImg ? `${origin}/case-story-images/${imgSlug}` : null;
+    if (generateImage && magnificApiKey()) {
+      const ctx = caseContext && typeof caseContext === 'object' ? caseContext : {};
+      const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, cid);
+      let imageBase64;
+      let mimeType = 'image/png';
+      if (cachedPortrait.exists) {
+        const buf = await fsp.readFile(cachedPortrait.pngPath);
+        imageBase64 = buf.toString('base64');
+      } else {
+        const plate = await readBaseplateBuffer(GAME_ROOT, ctx);
+        imageBase64 = plate.buffer.toString('base64');
+        mimeType = plate.mimeType;
+      }
+      const imgPrompt = buildCaseStoryMasterImagePrompt({
+        caseContext: ctx,
+        narrative,
+        portraitNote: String(portraitNote || '').trim(),
+      });
+      const edited = await generateImageEditWithMagnific({
+        imageBase64,
+        mimeType,
+        prompt: imgPrompt,
+        aspectRatio: '16:9',
+        resolution: '2K',
+        referenceText:
+          'THIRD-PERSON 3/4 bedside angle — NOT bird-eye overhead. Match patient likeness; change camera to oversight view only.',
+      });
+      const fitted = await fitToBaseplate(edited);
+      if (imgFile) {
+        await fsp.writeFile(imgFile, fitted);
+        masterImageUrl = `${origin}/case-story-images/${imgSlug}`;
+      }
+    }
+
+    await writeCaseStoryCache(
+      CASE_STORY_CACHE_DIR,
+      cid,
+      { ...narrative, masterImageUrl, sessionFingerprint: fp || null },
+      { promptVersion: CASE_STORY_PROMPT_VERSION },
+    );
+    return res.json({
+      ok: true,
+      cached: false,
+      sessionFingerprint: fp || null,
+      ...narrative,
+      masterImageUrl,
+      provider: chatProvider(),
+    });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+app.post('/api/case-story-storyboard', async (req, res) => {
+  const {
+    caseId,
+    caseContext = null,
+    chapters = [],
+    patientLock = '',
+    portraitNote = '',
+    refresh = false,
+    generateImages = false,
+  } = req.body || {};
+  const cid = String(caseId ?? '').trim();
+  if (!cid) return res.status(400).json({ error: 'Missing caseId' });
+
+  const origin = serverOrigin(req);
+  const ctx = caseContext && typeof caseContext === 'object' ? caseContext : {};
+
+  let beatChapters = Array.isArray(chapters) ? chapters : [];
+  let lock = String(patientLock || '').trim();
+  if (!beatChapters.length) {
+    const cached = await readCaseStoryCache(CASE_STORY_CACHE_DIR, cid);
+    if (cached?.chapters?.length) {
+      beatChapters = cached.chapters;
+      lock = lock || String(cached.patientLock || '').trim();
+    }
+  }
+  if (!beatChapters.length) {
+    return res.status(400).json({ error: 'No story chapters — compile Case Story first (Refresh)' });
+  }
+
+  const narrative = { patientLock: lock, chapters: beatChapters };
+  const canGen = Boolean(magnificApiKey());
+
+  try {
+    const beats = [];
+    let imageBase64;
+    let mimeType = 'image/png';
+
+    if (generateImages && canGen) {
+      const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, cid);
+      if (cachedPortrait.exists) {
+        const buf = await fsp.readFile(cachedPortrait.pngPath);
+        imageBase64 = buf.toString('base64');
+      } else {
+        const plate = await readBaseplateBuffer(GAME_ROOT, ctx);
+        imageBase64 = plate.buffer.toString('base64');
+        mimeType = plate.mimeType;
+      }
+    }
+
+    for (const ch of beatChapters.slice(0, 8)) {
+      const beatId = String(ch.id || `c${beats.length + 1}`);
+      const imgFile = caseStoryBeatImagePath(CASE_STORY_CACHE_DIR, cid, beatId);
+      const imgSlug = imgFile ? path.basename(imgFile) : '';
+      let imageUrl = null;
+      const visualHint = deriveChapterVisualHint(ch, {
+        patientLock: lock,
+        caseContext: ctx,
+      });
+
+      if (imgFile && fs.existsSync(imgFile) && !refresh) {
+        imageUrl = `${origin}/case-story-images/${imgSlug}`;
+      } else if (generateImages && canGen && imageBase64) {
+        const imgPrompt = buildCaseStoryBeatImagePrompt({
+          chapter: { ...ch, visualHint },
+          narrative,
+          caseContext: ctx,
+          portraitNote: String(portraitNote || '').trim(),
+        });
+        const edited = await generateImageEditWithMagnific({
+          imageBase64,
+          mimeType,
+          prompt: imgPrompt,
+          aspectRatio: '16:9',
+          resolution: '2K',
+          referenceText:
+            'THIRD-PERSON 3/4 bedside oversight — NOT bird-eye. Match patient likeness; vary scene action per beat only.',
+        });
+        const fitted = await fitToBaseplate(edited);
+        if (imgFile) {
+          await fsp.writeFile(imgFile, fitted);
+          imageUrl = `${origin}/case-story-images/${imgSlug}`;
+        }
+      }
+
+      beats.push({
+        id: beatId,
+        heading: String(ch.heading || '').trim(),
+        body: String(ch.body || '').trim(),
+        visualHint,
+        imageUrl,
+      });
+    }
+
+    return res.json({
+      ok: true,
+      caseId: cid,
+      beats,
+      imageGen: canGen,
+      imagesGenerated: Boolean(generateImages),
+      cameraLock: 'third-person 3/4 oversight from foot of bed',
     });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
@@ -1393,19 +1783,34 @@ app.get('/api/case-clinical/:caseId', async (req, res) => {
   }
 });
 
-function runReadCaseTts({ cacheDir, voiceRef }) {
+function runReadCaseTts({ cacheDir, voiceRef, voiceProfile }) {
   return new Promise((resolve, reject) => {
     const args = [READ_CASE_SCRIPT, '--cache-dir', cacheDir];
     if (voiceRef) {
       args.push('--voice-ref', voiceRef);
     }
+    const profile = String(voiceProfile || '').toLowerCase();
+    const childProfiles = new Set([
+      'patient-child',
+      'patient-child-boy',
+      'patient-child-girl',
+    ]);
+    const env = {
+      ...process.env,
+      CHATTERBOX_ROOT,
+      PYTHONUNBUFFERED: '1',
+    };
+    if (childProfiles.has(profile)) {
+      env.CHATTERBOX_PATIENT_CHILD_MODEL =
+        process.env.CHATTERBOX_PATIENT_CHILD_MODEL || 'expressive';
+      env.CHATTERBOX_CHILD_EXAGGERATION =
+        process.env.CHATTERBOX_CHILD_EXAGGERATION || '0.84';
+      env.CHATTERBOX_CHILD_CFG_WEIGHT = process.env.CHATTERBOX_CHILD_CFG_WEIGHT || '0.28';
+      env.CHATTERBOX_CHILD_TEMPERATURE = process.env.CHATTERBOX_CHILD_TEMPERATURE || '0.88';
+    }
     const child = spawn(CHATTERBOX_PYTHON, args, {
       cwd: path.dirname(READ_CASE_SCRIPT),
-      env: {
-        ...process.env,
-        CHATTERBOX_ROOT,
-        PYTHONUNBUFFERED: '1',
-      },
+      env,
       windowsHide: true,
     });
     let stderr = '';
@@ -1458,7 +1863,7 @@ app.post('/api/read-case', async (req, res) => {
     const needsGeneration = readyBefore < total;
 
     if (needsGeneration) {
-      await runReadCaseTts({ cacheDir: layout.base, voiceRef });
+      await runReadCaseTts({ cacheDir: layout.base, voiceRef, voiceProfile });
       const updated = await readManifest(layout.manifestPath);
       if (updated) Object.assign(manifest, updated);
       syncManifestWithDisk(manifest, layout.chunksDir);
@@ -1669,11 +2074,15 @@ app.get('/api/case-portrait/:caseId', async (req, res) => {
       && layerState.mask
       && (cached.meta?.portraitLayersVersion || 0) >= PORTRAIT_LAYERS_VERSION;
     const url = portraitPublicUrl(caseId, origin);
+    const baseline = await readPortraitBaseline(CASE_PORTRAIT_DIR, caseId);
+    const baselineUrl = baseline.exists ? portraitBaselinePublicUrl(caseId, origin) : null;
     return res.json({
       ok: true,
       exists: true,
       caseId,
       url,
+      baselineUrl,
+      hasBaseline: Boolean(baseline.exists),
       layers: hasLayers
         ? {
             base: url,
@@ -1807,6 +2216,8 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
     portraitBrief = '',
     refresh = false,
     chatMessages = [],
+    sessionContext = null,
+    sessionUpdate = false,
   } = req.body || {};
   const caseId = caseContext?.id ?? caseContext?.ccsNumber;
   if (!caseId) return res.status(400).json({ error: 'Missing case id in caseContext' });
@@ -1849,26 +2260,52 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
     }
 
     const chatKey = DEEPSEEK_API_KEY || OPENAI_API_KEY;
+    const isSessionPortrait = Boolean(
+      sessionUpdate
+      || sessionContext?.hasSessionData
+      || (sessionContext && typeof sessionContext === 'object' && Object.keys(sessionContext).length > 0),
+    );
     const directorBrief = await extractPortraitDirectorBrief(caseContext, {
       chatMessages,
       portraitBrief,
+      sessionContext,
+      sessionUpdate: isSessionPortrait,
       callChat: chatKey
         ? (messages, opts) => callChatCompletion(chatKey, messages, opts)
         : null,
     });
 
-    const plate = await readBaseplateBuffer(GAME_ROOT, caseContext);
-    const fittedInput = await fitToBaseplate(plate.buffer);
-    const editBase64 = bufferToBase64(fittedInput);
+    let editBase64;
+    let editMime = 'image/png';
+    const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, caseId);
+
+    if (isSessionPortrait && cachedPortrait.exists) {
+      await ensurePortraitBaseline(CASE_PORTRAIT_DIR, caseId);
+      const cachedBuf = await fsp.readFile(cachedPortrait.pngPath);
+      editBase64 = bufferToBase64(await fitToBaseplate(cachedBuf));
+    } else {
+      const plate = await readBaseplateBuffer(GAME_ROOT, caseContext);
+      const fittedInput = await fitToBaseplate(plate.buffer);
+      if (isSessionPortrait) {
+        const baselineState = await readPortraitBaseline(CASE_PORTRAIT_DIR, caseId);
+        const baselineName = portraitBaselineFileName(caseId);
+        if (!baselineState.exists && baselineName) {
+          await fsp.writeFile(path.join(CASE_PORTRAIT_DIR, baselineName), fittedInput);
+        }
+      }
+      editBase64 = bufferToBase64(fittedInput);
+      editMime = plate.mimeType || mimeType;
+    }
 
     const basePrompt = buildPortraitPrompt(caseContext, {
       portraitBrief,
       directorBrief,
       variant: 'base',
+      sessionUpdate: isSessionPortrait,
     });
     const { b64: baseB64, provider: portraitProvider } = await generatePortraitWithFallback({
       imageBase64: editBase64,
-      mimeType: 'image/png',
+      mimeType: editMime,
       prompt: basePrompt,
     });
 
@@ -1876,6 +2313,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       portraitBrief,
       directorBrief,
       variant: 'iv',
+      sessionUpdate: isSessionPortrait,
     });
     const { b64: ivB64 } = await generatePortraitWithFallback({
       imageBase64: baseB64,
@@ -1898,11 +2336,15 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       portraitBrief: String(portraitBrief || '').trim() || null,
       portraitLayersVersion: PORTRAIT_LAYERS_VERSION,
       directorBriefSource: directorBrief?.source || null,
+      sessionPortrait: isSessionPortrait,
       chatMessageCount: chatMessages.length,
       provider: portraitProvider || 'magnific',
     };
 
     await writePortraitCache(CASE_PORTRAIT_DIR, caseId, baseB64, meta);
+    if (!isSessionPortrait) {
+      await ensurePortraitBaseline(CASE_PORTRAIT_DIR, caseId);
+    }
     await writePortraitLayer(CASE_PORTRAIT_DIR, caseId, 'iv', ivB64);
     await writeIvMaskLayer(
       CASE_PORTRAIT_DIR,
@@ -1922,11 +2364,17 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
 
     const origin = serverOrigin(req);
     const url = portraitPublicUrl(caseId, origin);
+    const baselineState = await readPortraitBaseline(CASE_PORTRAIT_DIR, caseId);
+    const baselineUrl = baselineState.exists ? portraitBaselinePublicUrl(caseId, origin) : null;
     return res.json({
       ok: true,
       cached: false,
       url,
       dataUrl: url,
+      baselineUrl,
+      hasBaseline: Boolean(baselineState.exists),
+      sessionPortrait: isSessionPortrait,
+      directorBriefSource: directorBrief?.source || null,
       layers: {
         base: url,
         iv: portraitLayerPublicUrl(caseId, 'iv', origin),
@@ -2179,7 +2627,40 @@ app.post('/api/capture-screenshot', async (req, res) => {
       absolute: dir,
       screenshot: pngName,
       meta: metaPath,
+      caseFolder: path.join(CAPTURES_DIR, caseFolder),
     });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+function isPathUnderRoot(targetPath, rootDir) {
+  const resolved = path.resolve(targetPath);
+  const root = path.resolve(rootDir);
+  return resolved === root || resolved.startsWith(`${root}\\`) || resolved.startsWith(`${root}/`);
+}
+
+app.post('/api/open-path', (req, res) => {
+  const { path: targetPath } = req.body || {};
+  if (!targetPath || typeof targetPath !== 'string') {
+    return res.status(400).json({ error: 'Missing path' });
+  }
+  const allowedRoots = [CAPTURES_DIR, path.join(GAME_ROOT, 'docs'), path.join(GAME_ROOT, 'public')];
+  if (!allowedRoots.some((root) => isPathUnderRoot(targetPath, root))) {
+    return res.status(403).json({ error: 'Path not allowed' });
+  }
+  try {
+    if (!fs.existsSync(targetPath)) {
+      return res.status(404).json({ error: 'Path not found' });
+    }
+    if (process.platform === 'win32') {
+      spawn('explorer.exe', [targetPath], { detached: true, stdio: 'ignore' }).unref();
+    } else if (process.platform === 'darwin') {
+      spawn('open', [targetPath], { detached: true, stdio: 'ignore' }).unref();
+    } else {
+      spawn('xdg-open', [targetPath], { detached: true, stdio: 'ignore' }).unref();
+    }
+    return res.json({ ok: true });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
   }

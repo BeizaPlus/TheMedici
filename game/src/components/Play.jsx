@@ -14,6 +14,7 @@ import { nudgeVitalsAfterOrder } from '../lib/vitalsProgression.js';
 import { useTeachCompareDockWidth } from '../hooks/useTeachCompareDockWidth.js';
 import { isCorrectGridPlacement, zoneIdForCell, zoneToGridCell } from '../lib/placementGrid.js';
 import { isTorsoDropZone, stackDropZoneForIv } from '../lib/torsoDropZone.js';
+import { clampPinAwayFromUi } from '../lib/scenePinPlacement.js';
 import SceneGridOverlay from './SceneGridOverlay.jsx';
 import { playWrong, playComplete } from '../lib/audio.js';
 import { mergeZonesForPlay } from '../lib/zoneStudio.js';
@@ -44,7 +45,7 @@ import {
   writeGridItems,
 } from '../lib/gridPlacement.js';
 import { apiUrl } from '../lib/apiBase.js';
-import { nextAttemptNumber, peekAttemptNumber, saveScreenshotToServer, captureElementPng } from '../lib/captureScreenshot.js';
+import { nextAttemptNumber, peekAttemptNumber, saveScreenshotToServer, captureElementPng, openPathInExplorer } from '../lib/captureScreenshot.js';
 import { recordingPublicUrl } from '../lib/caseUserLog.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
@@ -69,6 +70,7 @@ import { useCaseRecording } from '../hooks/useCaseRecording.js';
 import { useCaseChat } from '../hooks/useCaseChat.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
 import { buildChatSessionContext } from '../lib/buildChatSessionContext.js';
+import { buildPortraitSessionContext } from '../lib/buildPortraitSessionContext.js';
 import { consumePlayOpenTab, stashPlayOpenTab } from '../lib/recentChatCases.js';
 import { getCaseVisitHistory } from '../lib/caseVisitHistory.js';
 import {
@@ -88,6 +90,7 @@ import {
   findStackMatchForQuery,
   normCommandText,
   resolveCaseStackOrder,
+  resolvePhysicalExamSectionStack,
   resolveOrderAutocomplete,
 } from '../lib/orderCommandAutocomplete.js';
 import { extraOrderPinId } from '../lib/extraOrderPlacement.js';
@@ -112,8 +115,10 @@ import OrderResultsTabPanel from './OrderResultsTabPanel.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { readTeachMeTextPrefs, teachMeTextStyle, writeTeachMeTextPrefs } from '../lib/teachMeTextPrefs.js';
+import { TEXT_PREFS_CHANGED } from '../lib/textPrefsSync.js';
+import { hydrateCaseNotes } from '../lib/caseNotes.js';
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
-import { isLearningMode } from '../lib/learningMode.js';
+import { computePinDisplayPercent } from '../lib/pinLayout.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { looksLikeTutorQuestion } from '../lib/chatIntentRouting.js';
 import { buildShuffledStackEntries } from '../lib/shuffleStacks.js';
@@ -136,6 +141,8 @@ import CaseTeachingVideoOverlay from './CaseTeachingVideoOverlay.jsx';
 import TeachMeSceneOverlay from './TeachMeSceneOverlay.jsx';
 import TeachMeComparePanel from './TeachMeComparePanel.jsx';
 import TeachMeCompareLandscape from './TeachMeCompareLandscape.jsx';
+import MedicalSequencePanel from './MedicalSequencePanel.jsx';
+import CaseStoryPanel from './CaseStoryPanel.jsx';
 import { sanitizePatientReplyForDisplay } from '../lib/patientReplyText.js';
 import {
   buildTeachCompareReport,
@@ -144,7 +151,6 @@ import {
   printTeachCompareReport,
 } from '../lib/exportTeachCompareReport.js';
 import { readTeachCompareLayout, writeTeachCompareLayout } from '../lib/teachCompareLayout.js';
-import { hydrateCaseNotes } from '../lib/caseNotes.js';
 import {
   endPlaySession,
   fetchPlaySession,
@@ -153,9 +159,11 @@ import {
 } from '../lib/caseUserLog.js';
 import {
   clearPlayCheckpoint,
+  clearCasePlayCheckpoint,
   hydrateCheckpointTimer,
   readPlayCheckpoint,
   writePlayCheckpoint,
+  writeCasePlayCheckpoint,
 } from '../lib/playSessionResume.js';
 import { computePatientLife, patientLifeState } from '../lib/patientLife.js';
 import {
@@ -164,6 +172,7 @@ import {
   toggleReviewCheckedSeq,
 } from '../lib/reviewChecked.js';
 import { getCaseInterventions, isTimedMode, readUiPrefs, writeUiPrefs } from '../lib/uiPrefs.js';
+import { isLearningMode } from '../lib/learningMode.js';
 import { readPlayUiFavorite } from '../lib/playUiFavorite.js';
 import {
   buildSceneSourceSig,
@@ -172,7 +181,6 @@ import {
   fetchCasePortraitStatus,
 } from '../lib/patientRegen.js';
 import { prefetchOrderResult } from '../lib/orderResultApi.js';
-import { fetchOrderWhy } from '../lib/orderWhy.js';
 import { clearCaseChatSession } from '../lib/caseChat.js';
 import { hasIvOrderPlaced } from '../lib/portraitLayers.js';
 
@@ -347,6 +355,8 @@ export default function Play({
     onTeachMeConsumed?.();
   }, [caseData.id, initialTeachMe, onTeachMeConsumed]);
   const [teachCompareLayout, setTeachCompareLayout] = useState(readTeachCompareLayout);
+  const [medicalSequenceOpen, setMedicalSequenceOpen] = useState(false);
+  const [caseStoryOpen, setCaseStoryOpen] = useState(false);
   const [placementOrder, setPlacementOrder] = useState([]);
   const [orderCommandQuery, setOrderCommandQuery] = useState('');
   const [extraOrders, setExtraOrders] = useState([]);
@@ -355,6 +365,8 @@ export default function Play({
   const playUiFavorite = readPlayUiFavorite();
   const teachCompareLandscape = teachMeMode && teachCompareLayout === 'landscape';
   const [stacksVisible, setStacksVisible] = useState(playUiFavorite.stacksVisible);
+  const [stackMoveMode, setStackMoveMode] = useState(false);
+  const pinDragSuppressClickRef = useRef(null);
   const [dragging, setDragging] = useState(false);
   const [timedOut, setTimedOut] = useState(false);
   const [activeDrawer, setActiveDrawer] = useState(null);
@@ -363,6 +375,7 @@ export default function Play({
   const [dockResultsExpanded, setDockResultsExpanded] = useState(false);
   const [dockChatReply, setDockChatReply] = useState(null);
   const [dockReplyExpanded, setDockReplyExpanded] = useState(false);
+  const [dockChatHistoryExpanded, setDockChatHistoryExpanded] = useState(true);
   const [chatPatientMode, setChatPatientModeState] = useState(false);
   const chatPatientModeRef = useRef(false);
   const setChatPatientMode = useCallback((next) => {
@@ -384,6 +397,7 @@ export default function Play({
   const [physicalExamPickerOpen, setPhysicalExamPickerOpen] = useState(false);
   const collapseClickTimerRef = useRef(null);
   const dockRestoreCollapsedRef = useRef(false);
+  const dockHandleDraggedRef = useRef(false);
   const {
     layout: dockLayout,
     persist: persistDockLayout,
@@ -415,15 +429,15 @@ export default function Play({
     setDockCollapsed(true);
   }, [dockLayout, persistDockLayout]);
 
-  const toggleDockPanel = useCallback(() => {
-    if (dockCollapsed) expandDockPanel();
-    else collapseDockPanel();
-  }, [dockCollapsed, expandDockPanel, collapseDockPanel]);
-
-  const hideDockPanel = useCallback(() => {
-    dockRestoreCollapsedRef.current = dockCollapsed;
-    setDockHidden(true);
-  }, [dockCollapsed]);
+  const toggleStackMoveMode = useCallback(() => {
+    setStackMoveMode((on) => {
+      const next = !on;
+      if (next) {
+        showToast('Drag order labels on the patient to reposition', 'ok');
+      }
+      return next;
+    });
+  }, []);
 
   const onCollapsePanelClick = useCallback(() => {
     if (collapseClickTimerRef.current) {
@@ -437,9 +451,10 @@ export default function Play({
         else expandDockPanel();
         return;
       }
-      toggleDockPanel();
+      if (dockCollapsed) expandDockPanel();
+      else collapseDockPanel();
     }, 280);
-  }, [dockHidden, expandDockPanel, collapseDockPanel, toggleDockPanel]);
+  }, [dockHidden, expandDockPanel, collapseDockPanel]);
 
   const onCollapsePanelDoubleClick = useCallback(
     (e) => {
@@ -448,11 +463,25 @@ export default function Play({
         window.clearTimeout(collapseClickTimerRef.current);
         collapseClickTimerRef.current = null;
       }
-      if (dockHidden) return;
-      hideDockPanel();
+      if (dockHidden) {
+        setDockHidden(false);
+        expandDockPanel();
+        return;
+      }
+      if (dockCollapsed) {
+        expandDockPanel();
+        return;
+      }
+      dockRestoreCollapsedRef.current = dockCollapsed;
+      setDockHidden(true);
     },
-    [dockHidden, hideDockPanel],
+    [dockHidden, dockCollapsed, expandDockPanel],
   );
+
+  const onDockChromeClick = useCallback(() => {
+    if (dockDragging || dockHidden || dockHandleDraggedRef.current) return;
+    if (!dockCollapsed) collapseDockPanel();
+  }, [dockDragging, dockHidden, dockCollapsed, collapseDockPanel]);
 
   useEffect(
     () => () => {
@@ -482,6 +511,13 @@ export default function Play({
       return raw === null ? true : raw === '1';
     } catch {
       return true;
+    }
+  });
+  const [scenePinsHidden, setScenePinsHidden] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE.scenePinsHidden) === '1';
+    } catch {
+      return false;
     }
   });
   const [timedMode, setTimedMode] = useState(() => readUiPrefs().timedMode);
@@ -571,6 +607,11 @@ export default function Play({
   }, []);
 
   /** Compare / review taps: focus step + inline attending rationale (no pop-up). */
+  const ensureCompareStep = useCallback((id) => {
+    if (!id) return;
+    setTeachFocusId(id);
+  }, []);
+
   const explainCompareStep = useCallback((id) => {
     if (!id) return;
     setTeachFocusId((prev) => (prev === id ? null : id));
@@ -642,25 +683,17 @@ export default function Play({
     setDockResultsExpanded(false);
     setDockChatReply(null);
     setDockReplyExpanded(false);
+    setDockChatHistoryExpanded(true);
     setDockHidden(false);
   }, [caseData?.id]);
 
   const showOrderWhyInDock = useCallback(
     (iv) => {
-      if (!iv?.label || !caseData?.id) return;
-      void fetchOrderWhy({
-        caseId: caseData.id,
-        orderId: iv.id,
-        orderLabel: iv.label,
-        caseData,
-        playbookWhy: iv.why || '',
-      }).then(({ why }) => {
-        if (!why) return;
-        setDockChatReply({ question: `Why order ${iv.label}?`, answer: why });
-        setDockReplyExpanded(true);
-      });
+      if (!teachMeMode || !iv?.id) return;
+      setTeachFocusId(iv.id);
+      setExpandedStackId(iv.id);
     },
-    [caseData],
+    [teachMeMode],
   );
 
   const isDockChatMode = useMemo(() => {
@@ -686,7 +719,11 @@ export default function Play({
         className={`drag-pill-wrap pack-item ${showDecoyVisual && !blendVisual ? 'pack-item-decoy' : ''} ${placed[iv.id] ? 'is-placed is-expandable' : ''} ${teachMeMode && placed[iv.id] ? 'teach-pill-placed' : ''} ${expandedStackId === iv.id ? 'expanded' : ''} ${isTeachFocused ? 'teach-pill-focused' : ''} ${isTeachNext ? 'teach-pill-next' : ''} ${isTeachLocked ? 'teach-pill-locked' : ''}`}
         data-x="0"
         data-y="0"
-        onClick={() => {
+        onClick={(e) => {
+          if (e.currentTarget?.dataset?.didDrag === 'true') {
+            e.currentTarget.dataset.didDrag = '';
+            return;
+          }
           setExpandedStackId((prev) => (prev === iv.id ? null : iv.id));
         }}
       >
@@ -714,7 +751,7 @@ export default function Play({
             ) : null}
           </span>
         </div>
-        {expandedStackId === iv.id && (
+        {teachMeMode && expandedStackId === iv.id && (
           <div className="pill-why-inline">
             <p className="pill-why-inline-status">
               {!placed[iv.id]
@@ -969,6 +1006,22 @@ export default function Play({
   const [teachMeTextPrefs, setTeachMeTextPrefs] = useState(() => readTeachMeTextPrefs());
   const clinicalStyle = useMemo(() => clinicalTextStyle(textPrefs), [textPrefs]);
   const teachMeStyle = useMemo(() => teachMeTextStyle(teachMeTextPrefs), [teachMeTextPrefs]);
+
+  useEffect(() => {
+    const onPrefs = (e) => {
+      const kind = e?.detail?.kind;
+      if (!kind || kind === 'clinical') setTextPrefs(readClinicalTextPrefs());
+      if (!kind || kind === 'teachMe') setTeachMeTextPrefs(readTeachMeTextPrefs());
+    };
+    window.addEventListener(TEXT_PREFS_CHANGED, onPrefs);
+    return () => window.removeEventListener(TEXT_PREFS_CHANGED, onPrefs);
+  }, []);
+
+  useEffect(() => {
+    if (!threadViewCaseId) return;
+    void hydrateCaseNotes(threadViewCaseId);
+  }, [threadViewCaseId, notesVersion]);
+
   const reviewPanelRef = useRef(null);
   const reviewPanelDragRef = useRef({ dx: 0, dy: 0 });
   const sceneCaptureRef = useRef(null);
@@ -1100,23 +1153,63 @@ export default function Play({
   );
 
   const caseChat = useCaseChat({
-    caseData: threadViewCase,
-    playSessionId: threadIsPlayCase ? playSessionId : null,
-    getSessionContext: threadIsPlayCase ? getChatSessionContext : undefined,
+    caseData,
+    playSessionId,
+    getSessionContext: getChatSessionContext,
     portraitVersion: portraitTick,
     defaultChatMode: 'tutor',
     onModelReady: useCallback((label) => {
-      if (!threadIsPlayCase) return;
       logTimeline({ type: 'chat', role: 'system', text: `Case chat running on ${label}` });
-    }, [logTimeline, threadIsPlayCase]),
+    }, [logTimeline]),
   });
+
+  const getPortraitSessionContext = useCallback(
+    () =>
+      buildPortraitSessionContext({
+        careUnit,
+        orderTimelineEvents,
+        conversationLog,
+        placed,
+        interventions,
+        caseId: caseData?.id,
+        teachMeMode,
+        placementOrder,
+        interventionById,
+        nextExpectedId,
+        reviewResults: reviewed ? reviewResults : null,
+        sessionStartedAt,
+        pins,
+        caseData,
+        chatMessages: caseChat.messages,
+      }),
+    [
+      careUnit,
+      orderTimelineEvents,
+      conversationLog,
+      placed,
+      interventions,
+      caseData,
+      teachMeMode,
+      placementOrder,
+      interventionById,
+      nextExpectedId,
+      reviewed,
+      reviewResults,
+      sessionStartedAt,
+      pins,
+      caseChat.messages,
+    ],
+  );
 
   useEffect(() => {
     if (infoTab === 'chat') {
-      setDockReplyExpanded(false);
       void caseChat.reloadHistory();
+      return;
     }
-  }, [infoTab, caseChat.reloadHistory]);
+    if (caseChat.messages.some((m) => m.role === 'user' || m.role === 'assistant')) {
+      setDockChatHistoryExpanded(true);
+    }
+  }, [infoTab, caseChat.reloadHistory, caseChat.messages]);
 
   const threadChatCases = useMemo(() => {
     const visits = getCaseVisitHistory({ limit: 24 });
@@ -1159,16 +1252,11 @@ export default function Play({
     (item) => {
       const id = String(item?.caseId ?? '').trim();
       if (!id) return;
-      if (id === String(caseData.id)) {
-        setThreadViewCaseId(id);
-        expandDockPanel();
-        setInfoTab('chat');
-        return;
-      }
-      stashPlayOpenTab('chat');
-      onOpenCase?.(id);
+      setThreadViewCaseId(id);
+      expandDockPanel();
+      setInfoTab('chat');
     },
-    [caseData.id, onOpenCase, expandDockPanel],
+    [expandDockPanel],
   );
 
   const misses = Math.max(0, attempts - correctAttempts);
@@ -1519,7 +1607,7 @@ export default function Play({
 
   const confirmExitCase = useCallback(() => {
     const ok = window.confirm(
-      'Exit this case? Your progress is saved — you can resume from the home screen.',
+      'Exit this case? Your progress is saved — you return to the case preview for this patient.',
     );
     if (!ok) return;
     stopCaseReader();
@@ -1529,15 +1617,49 @@ export default function Play({
 
   const handleSkipToNext = useCallback(() => {
     if (!onSkipToNext) return;
-    const ok = window.confirm(
-      'Skip to the next case? This case will be flagged incomplete for review.',
-    );
-    if (!ok) return;
+    const hasProgress =
+      doneCount > 0 ||
+      reviewed ||
+      orderTimelineEvents.length > 0 ||
+      caseChat.messages.length > 0;
+    const msg = reviewed
+      ? 'Go to the next case? Your review on this case is saved — you can return anytime.'
+      : hasProgress
+        ? 'Go to the next case? Your progress is saved — you can resume this case later.'
+        : 'Go to the next case?';
+    if (!window.confirm(msg)) return;
     stopCaseReader();
-    void endCurrentPlaySession({ skipped: true, incomplete: true, placed: doneCount, total });
-    clearPlayCheckpoint();
-    onSkipToNext();
-  }, [onSkipToNext, endCurrentPlaySession, doneCount, total]);
+    const snapshot = buildCheckpoint();
+    writePlayCheckpoint(snapshot);
+    writeCasePlayCheckpoint(caseData.id, snapshot);
+    void (async () => {
+      await endCurrentPlaySession({
+        skipped: true,
+        paused: true,
+        incomplete: !reviewed,
+        reviewed,
+        placed: doneCount,
+        total,
+      });
+      clearPlayCheckpoint();
+      onSkipToNext({
+        sessionEnded: true,
+        reviewed,
+        placed: doneCount,
+        total,
+      });
+    })();
+  }, [
+    onSkipToNext,
+    buildCheckpoint,
+    endCurrentPlaySession,
+    doneCount,
+    total,
+    reviewed,
+    orderTimelineEvents.length,
+    caseChat.messages.length,
+    caseData.id,
+  ]);
 
   useEffect(() => {
     if (!studioCapture) return;
@@ -1617,7 +1739,11 @@ export default function Play({
     onError: (e) => showToast(e?.message || 'Recording failed', 'bad'),
     onRecordingStart: () => {
       expandDockPanel();
-      setInfoTab('chat');
+      if (chatPatientModeRef.current) {
+        setDockChatHistoryExpanded(true);
+      } else {
+        setInfoTab('chat');
+      }
     },
     onNotesChanged: () => setNotesVersion((v) => v + 1),
     onTranscriptReady: async (text) => {
@@ -1706,10 +1832,13 @@ export default function Play({
         effectiveTarget = { zoneId, cx: target.cx, cy: target.cy };
       } else if (dropMode === 'free' && sceneRef.current && clientX != null && clientY != null) {
         const rect = sceneRef.current.getBoundingClientRect();
+        const rawCx = (clientX - rect.left) / rect.width;
+        const rawCy = (clientY - rect.top) / rect.height;
+        const { cx, cy } = clampPinAwayFromUi(rawCx, rawCy, sceneRef.current);
         effectiveTarget = {
           zoneId,
-          cx: Math.max(0.02, Math.min(0.98, (clientX - rect.left) / rect.width)),
-          cy: Math.max(0.02, Math.min(0.98, (clientY - rect.top) / rect.height)),
+          cx,
+          cy,
         };
       } else if (typeof target === 'string') {
         effectiveTarget = dropZone;
@@ -1755,7 +1884,7 @@ export default function Play({
       if (!silentDecoy) {
         setOrderResultIvId(iv.id);
         setDockResultsExpanded(true);
-        if (teachMeMode || isLearningMode()) {
+        if (teachMeMode) {
           showOrderWhyInDock(iv);
         }
       }
@@ -1875,10 +2004,12 @@ export default function Play({
       let placedCount = 0;
 
       for (const label of labels) {
-        const stackMatch = resolveCaseStackOrder(label, interventions, nextPlaced);
+        let stackMatch = resolvePhysicalExamSectionStack(label, interventions, nextPlaced);
+        if (stackMatch && teachMeMode && stackMatch.id !== nextExpectedId) {
+          stackMatch = null;
+        }
         if (stackMatch) {
           if (nextPlaced[stackMatch.id]) continue;
-          if (teachMeMode && stackMatch.id !== nextExpectedId) continue;
           nextPlaced[stackMatch.id] = stackDropZoneForIv(stackMatch, orderIds.length);
           orderIds.push(stackMatch.id);
           pinAdds.push({
@@ -2047,7 +2178,7 @@ export default function Play({
           correct: true,
           method: 'command',
         });
-        if (teachMeMode || isLearningMode()) {
+        if (teachMeMode) {
           showOrderWhyInDock(stackMatch);
         }
         return;
@@ -2154,10 +2285,7 @@ export default function Play({
           logTimeline({ type: 'chat', role: 'user', text: question });
           const displayAnswer =
             chatMode === 'patient_sim' ? sanitizePatientReplyForDisplay(reply) : reply;
-          if (infoTab !== 'chat') {
-            setDockChatReply({ question, answer: displayAnswer || reply });
-            setDockReplyExpanded(true);
-          }
+          setDockChatHistoryExpanded(true);
         } else if (caseChat.error) {
           showToast(caseChat.error, 'bad');
         }
@@ -2217,6 +2345,44 @@ export default function Play({
       (dockResultRows.length ? dockResultRows[dockResultRows.length - 1] : null);
     return row ? neutralStackOrderName(row.iv.label) : '';
   }, [dockResultRows, orderResultIvId]);
+
+  const hasDockChatHistory = useMemo(
+    () => caseChat.messages.some((m) => m.role === 'user' || m.role === 'assistant'),
+    [caseChat.messages],
+  );
+
+  const dockChatThreadPanel = useMemo(
+    () =>
+      hasDockChatHistory ? (
+        <PlayChatNotesTabPanel
+          chat={caseChat}
+          caseData={caseData}
+          caseId={caseData.id}
+          playCaseId={caseData.id}
+          notesVersion={notesVersion}
+          recordingsVersion={recordingsVersion}
+          onTimelineNote={(text) => logTimeline({ type: 'note', text })}
+          onTimelineChat={(text) => logTimeline({ type: 'chat', role: 'user', text })}
+          patientMode={chatPatientMode}
+          onPatientModeChange={setChatPatientMode}
+          defaultChatTarget="tutor"
+          suppressHeader
+          messagesOnly
+          compact
+          teachMeMode={teachMeMode}
+        />
+      ) : null,
+    [
+      hasDockChatHistory,
+      caseChat,
+      caseData,
+      notesVersion,
+      recordingsVersion,
+      chatPatientMode,
+      logTimeline,
+      teachMeMode,
+    ],
+  );
 
   const computePostVideoRows = useCallback((override = null) => {
     const expectedOrder = interventions.map((iv) => iv.id);
@@ -2346,6 +2512,7 @@ export default function Play({
         total,
         completed: true,
       });
+      clearCasePlayCheckpoint(caseData.id);
       clearPlayCheckpoint();
       onComplete(result);
     },
@@ -2459,26 +2626,41 @@ export default function Play({
 
   const handleMovePin = useCallback(
     (ivId, cell) => {
-      const iv = interventions.find((i) => i.id === ivId);
-      if (!iv) return;
+      const iv =
+        interventions.find((i) => i.id === ivId) ||
+        decoyInterventions.find((i) => i.id === ivId);
+      pinDragSuppressClickRef.current = { ivId, at: Date.now() };
       setPlaced((p) => ({ ...p, [ivId]: cell }));
       setReviewed(false);
       setReviewResults({});
       setOrderReview({});
-      setPins((prev) =>
-        prev.map((pin) =>
-          pin.ivId === ivId ? { ...pin, ...cell, label: iv.label, ok: null } : pin,
-        ),
-      );
       setReviewedAt(null);
-      showToast(`Moved ${iv.label}`, '');
+      setPins((prev) => {
+        const hit = prev.find((pin) => pin.ivId === ivId);
+        const label = iv?.label || hit?.label || 'Order';
+        showToast(`Moved ${label}`, '');
+        return prev.map((pin) =>
+          pin.ivId === ivId
+            ? {
+                ...pin,
+                ...cell,
+                cx: cell.cx,
+                cy: cell.cy,
+                zoneId: cell.zoneId || pin.zoneId,
+                label,
+                ok: null,
+              }
+            : pin,
+        );
+      });
     },
-    [interventions],
+    [interventions, decoyInterventions],
   );
 
   usePinReposition({
     sceneRef,
-    enabled: !timedOut && !finalMode && pins.length > 0,
+    enabled: !timedOut && !finalMode && pins.length > 0 && stackMoveMode,
+    pinCount: pins.length,
     onMovePin: handleMovePin,
   });
 
@@ -2691,6 +2873,14 @@ export default function Play({
   }, [dropMode]);
 
   useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE.scenePinsHidden, scenePinsHidden ? '1' : '0');
+    } catch {
+      /* ignore */
+    }
+  }, [scenePinsHidden]);
+
+  useEffect(() => {
     if (!stackSettingsOpen) return undefined;
     const closeOnOutside = (e) => {
       if (!stackCommandRef.current?.contains(e.target)) setStackSettingsOpen(false);
@@ -2854,6 +3044,22 @@ export default function Play({
       </label>
       <button
         type="button"
+        className="teach-compare-export-btn case-story-trigger"
+        onClick={() => setCaseStoryOpen(true)}
+        title="Case story — master narrative and third-person oversight still from full session"
+      >
+        Case story
+      </button>
+      <button
+        type="button"
+        className="teach-compare-export-btn med-seq-trigger"
+        onClick={() => setMedicalSequenceOpen(true)}
+        title="Storyboard prequel, missed path, and saved path from attendant rationales"
+      >
+        Sequence
+      </button>
+      <button
+        type="button"
         className="teach-compare-export-btn"
         onClick={() => void handleCopyTeachCompare()}
         title="Copy standard flow vs your orders"
@@ -2895,7 +3101,26 @@ export default function Play({
   }, [careUnit, caseData, sceneSourceSig, portraitForceSrc, clearPortraitSrc]);
 
   const onDockDragStart = (event) => {
-    if (event.button !== 0 || dockCollapsed) return;
+    if (event.button !== 0) return;
+    dockHandleDraggedRef.current = false;
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const markDragged = (moveEvent) => {
+      if (
+        Math.abs(moveEvent.clientX - startX) > 5 ||
+        Math.abs(moveEvent.clientY - startY) > 5
+      ) {
+        dockHandleDraggedRef.current = true;
+      }
+    };
+    const clearDragListeners = () => {
+      window.removeEventListener('pointermove', markDragged);
+      window.removeEventListener('pointerup', clearDragListeners);
+      window.removeEventListener('pointercancel', clearDragListeners);
+    };
+    window.addEventListener('pointermove', markDragged);
+    window.addEventListener('pointerup', clearDragListeners);
+    window.addEventListener('pointercancel', clearDragListeners);
     startDockDrag('move', event);
   };
 
@@ -3061,6 +3286,14 @@ export default function Play({
     const el = sceneCaptureRef.current;
     if (!el || captureBusy) return;
     setCaptureBusy(true);
+    const gameEl = sceneRef.current?.closest('.game');
+    const pinsWereHidden = Boolean(gameEl?.classList.contains('scene-pins-hidden'));
+    if (pinsWereHidden) {
+      gameEl.classList.remove('scene-pins-hidden');
+      await new Promise((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(resolve));
+      });
+    }
     try {
       const attempt = nextAttemptNumber(caseNumber);
       const result = await saveScreenshotToServer({
@@ -3078,12 +3311,23 @@ export default function Play({
           doneCount,
           total,
           grid: { cols: GRID_COLS, rows: GRID_ROWS },
+          scenePinsHidden: pinsWereHidden,
         },
       });
       showToast(`Saved captures/${result.relative}`, 'ok');
+      const folderToOpen = result.caseFolder || result.absolute;
+      if (folderToOpen) {
+        const opened = await openPathInExplorer(folderToOpen);
+        if (!opened) {
+          showToast('Screenshot saved — could not open folder', '');
+        }
+      }
     } catch (e) {
       showToast(e.message || 'Screenshot failed', 'bad');
     } finally {
+      if (pinsWereHidden && gameEl) {
+        gameEl.classList.add('scene-pins-hidden');
+      }
       setCaptureBusy(false);
     }
   };
@@ -3293,6 +3537,7 @@ export default function Play({
       chatOpen={infoTab === 'chat'}
       recordButtonProps={caseRecording}
       showCues={showCues}
+      scenePinsHidden={scenePinsHidden}
       darkMode={theme === 'dark'}
       freeDrop={dropMode === 'free'}
       settingsOpen={stackSettingsOpen}
@@ -3317,7 +3562,7 @@ export default function Play({
               prefs={teachMeTextPrefs}
               onChange={setTeachMeTextPrefs}
               writePrefs={writeTeachMeTextPrefs}
-              resetTo={{ fontScale: 1, weight: 500 }}
+              resetTo={{ fontScale: 1.24, weight: 500 }}
               styleFn={teachMeTextStyle}
             />
           </div>
@@ -3327,6 +3572,9 @@ export default function Play({
             </button>
             <button type="button" onClick={resetPlacements}>
               Reset placements
+            </button>
+            <button type="button" onClick={() => setCaseStoryOpen(true)}>
+              Case story
             </button>
             <button
               type="button"
@@ -3383,6 +3631,7 @@ export default function Play({
       }}
       onRestart={restartCurrentCase}
       onToggleCues={() => setShowCues((v) => !v)}
+      onToggleScenePins={() => setScenePinsHidden((v) => !v)}
       onToggleTheme={toggleTheme}
       onToggleDropMode={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
       onToggleSettings={() => setStackSettingsOpen((v) => !v)}
@@ -3392,7 +3641,7 @@ export default function Play({
 
   return (
     <div
-      className={`game ${finalMode ? 'final-mode' : ''} ${activeDrawer ? 'drawer-open' : ''}${teachMeMode ? ' teach-me-focus' : ''}${teachCompareLandscape ? ' teach-compare-landscape' : ''}`}
+      className={`game ${finalMode ? 'final-mode' : ''} ${activeDrawer ? 'drawer-open' : ''}${teachMeMode ? ' teach-me-focus' : ''}${teachCompareLandscape ? ' teach-compare-landscape' : ''}${scenePinsHidden ? ' scene-pins-hidden' : ''}`}
       style={{
         gridTemplateColumns: '1fr',
         gridTemplateRows: '1fr',
@@ -3430,6 +3679,7 @@ export default function Play({
         </button>
         <CasePortraitBriefControl
           caseData={caseData}
+          getSessionContext={getPortraitSessionContext}
           onRegenerated={(result) => {
             if (result?.dataUrl) setPortraitSrc(result.dataUrl);
             if (result?.layers) setPortraitLayers(result.layers);
@@ -3455,7 +3705,7 @@ export default function Play({
           className="panel-next-case-btn"
           onClick={handleSkipToNext}
           disabled={!onSkipToNext || finalMode}
-          title="Next case — flag incomplete"
+          title="Next case — saves progress and continues"
           aria-label="Next case"
         >
           <IconSkipForward />
@@ -3481,7 +3731,7 @@ export default function Play({
         </button>
       </div>
       <div
-        className={`game-scene ${vitals.spo2 < 92 || vitals.sbp < 95 || vitals.hr > 120 ? 'icu-alarm' : ''} ${teachMeMode ? 'teach-me-active' : ''}`}
+        className={`game-scene ${vitals.spo2 < 92 || vitals.sbp < 95 || vitals.hr > 120 ? 'icu-alarm' : ''} ${teachMeMode ? 'teach-me-active' : ''}${stackMoveMode ? ' pin-move-mode' : ''}`}
         ref={sceneRef}
       >
         <div className="game-scene-capture" ref={sceneCaptureRef}>
@@ -3538,6 +3788,10 @@ export default function Play({
               setDockChatReply(null);
               setDockReplyExpanded(false);
             }}
+            hasChatHistory={hasDockChatHistory}
+            chatHistoryExpanded={dockChatHistoryExpanded}
+            onToggleChatHistory={() => setDockChatHistoryExpanded((v) => !v)}
+            chatThreadPanel={dockChatThreadPanel}
             onOpenFullChat={() => {
               expandDockPanel();
               setInfoTab('chat');
@@ -3547,6 +3801,11 @@ export default function Play({
             captureBusy={captureBusy}
             patientMode={chatPatientMode}
             onPatientModeChange={setChatPatientMode}
+            patientRecording={caseRecording}
+            stackMoveMode={stackMoveMode}
+            onToggleStackMove={toggleStackMoveMode}
+            scenePinsHidden={scenePinsHidden}
+            onToggleScenePins={() => setScenePinsHidden((v) => !v)}
             caseId={caseData.id}
             caseData={caseData}
           />
@@ -3590,6 +3849,7 @@ export default function Play({
                   teachFocusId={teachFocusId}
                   reviewResults={reviewed ? reviewResults : null}
                   onFocusStep={explainCompareStep}
+                  onEnsureFocus={ensureCompareStep}
                   compact
                   caseId={caseData.id}
                   caseData={caseData}
@@ -3722,26 +3982,26 @@ export default function Play({
           />
         )}
         {pins.map((p, i) => {
-          let leftPct;
-          let topPct;
-          if (p.cx != null && p.cy != null) {
-            leftPct = p.cx * 100;
-            topPct = p.cy * 100;
-          } else {
-            const z = zones[p.zoneId];
-            if (!z) return null;
-            leftPct = frameLeft + z.cx * frameW;
-            topPct = frameTop + z.cy * frameH;
-          }
+          const frame = { left: frameLeft, top: frameTop, w: frameW, h: frameH };
+          const pos = computePinDisplayPercent(p, zones, frame, i);
+          if (!pos) return null;
+          const { leftPct, topPct } = pos;
           return (
             <div
               key={`${p.ivId || p.zoneId}-${i}-${p.label}`}
-              className={`pin ${p.ivId ? 'pin-draggable' : ''} ${useGridPlacement ? 'pin-grid' : ''} ${p.ok === true ? 'ok' : ''} ${p.ok === false ? 'bad' : ''} ${p.ivId ? 'pin-has-result' : ''} ${orderResultIvId === p.ivId ? 'pin-active' : ''}`}
+              className={`pin ${p.ivId ? 'pin-draggable' : ''} ${stackMoveMode && p.ivId ? 'pin-move-active' : ''} ${useGridPlacement ? 'pin-grid' : ''} ${p.ok === true ? 'ok' : ''} ${p.ok === false ? 'bad' : ''} ${p.ivId ? 'pin-has-result' : ''} ${orderResultIvId === p.ivId ? 'pin-active' : ''}`}
               data-iv-id={p.ivId || ''}
               data-x="0"
               data-y="0"
               onClick={() => {
                 if (!p.ivId) return;
+                const suppress = pinDragSuppressClickRef.current;
+                if (
+                  suppress?.ivId === p.ivId &&
+                  Date.now() - suppress.at < 400
+                ) {
+                  return;
+                }
                 setOrderResultIvId(p.ivId);
                 setDockResultsExpanded(true);
               }}
@@ -3749,7 +4009,11 @@ export default function Play({
                 left: `${leftPct}%`,
                 top: `${topPct}%`,
               }}
-              title="Drag pin to reposition on patient"
+              title={
+                stackMoveMode
+                  ? 'Drag to reposition on patient'
+                  : 'Tap for result · enable move icon to drag'
+              }
             >
               <span className="pin-label">{p.label}</span>
             </div>
@@ -4120,7 +4384,12 @@ export default function Play({
           '--dock-chrome-h': `${DOCK_CHROME_COLLAPSED_HEIGHT}px`,
         }}
       >
-        <div className="dock-handle" onPointerDown={onDockDragStart} title="Drag to move panel">
+        <div
+          className="dock-handle"
+          onPointerDown={onDockDragStart}
+          onClick={onDockChromeClick}
+          title="Drag to move · click to collapse · double-click panel button to hide"
+        >
           <span className="dock-handle-grip" aria-hidden>
             ⋮⋮
           </span>
@@ -4144,6 +4413,7 @@ export default function Play({
             examSummary={examSummary}
             textStyle={clinicalStyle}
             locationContext={LOCATIONS[careUnit]?.context}
+            teachMeMode={teachMeMode}
             headerControls={
               <div className="case-panel-care-switch care-switch" role="tablist" aria-label="Care unit">
                 {(caseFlow.dispositionUnits || ['ER', 'OBS', 'ICU', 'WARD']).map((u) => {
@@ -4244,11 +4514,14 @@ export default function Play({
                 onOpenCaseFromRail={handleOpenCaseFromRail}
                 caseRecording={threadIsPlayCase ? caseRecording : null}
                 notesVersion={notesVersion}
+                recordingsVersion={recordingsVersion}
                 onTimelineNote={(text) => logTimeline({ type: 'note', text })}
                 onTimelineChat={(text) => logTimeline({ type: 'chat', role: 'user', text })}
                 patientMode={chatPatientMode}
                 onPatientModeChange={setChatPatientMode}
                 defaultChatTarget="tutor"
+                browseOnly={!threadIsPlayCase}
+                teachMeMode={teachMeMode}
               />
             }
           />
@@ -4340,6 +4613,33 @@ export default function Play({
           </div>
         </div>
       )}
+
+      {teachMeMode && (
+        <MedicalSequencePanel
+          open={medicalSequenceOpen}
+          onClose={() => setMedicalSequenceOpen(false)}
+          caseData={caseData}
+          portraitNote={
+            caseData?.patientScene?.portraitLock
+            || (String(caseData?.id) === '121'
+              ? '~7yo Black school-age boy, case 121 approved likeness'
+              : '')
+          }
+        />
+      )}
+
+      <CaseStoryPanel
+        open={caseStoryOpen}
+        onClose={() => setCaseStoryOpen(false)}
+        caseData={caseData}
+        sessionContext={getPortraitSessionContext()}
+        portraitNote={
+          caseData?.patientScene?.portraitLock
+          || (String(caseData?.id) === '121'
+            ? '~7yo Black school-age boy, case 121 approved likeness'
+            : '')
+        }
+      />
 
     </div>
   );

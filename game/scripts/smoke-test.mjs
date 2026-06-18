@@ -324,7 +324,9 @@ async function main() {
   const bank = loadCaseBank();
   ok(bank.size >= 100, "case bank: loaded scraped cases", `${bank.size} entries`);
 
-  const catalogIds = catalog.cases.map((c) => Number(c.caseNumber));
+  const catalogIds = catalog.cases
+    .map((c) => Number(c.caseNumber))
+    .filter((n) => Number.isFinite(n) && n > 0);
   const sampleSize = Math.min(12, catalogIds.length);
   const shuffled = [...catalogIds].sort(() => Math.random() - 0.5).slice(0, sampleSize);
   let matchOk = 0;
@@ -437,6 +439,12 @@ async function main() {
     stdio: "inherit",
   });
   ok(caseLoad.status === 0, "gameCase: audit-game-case-load", caseLoad.status ? `exit ${caseLoad.status}` : "ok");
+
+  const caseStorySmoke = spawnSync(process.execPath, ["scripts/smoke-case-story.mjs"], {
+    cwd: root,
+    stdio: "inherit",
+  });
+  ok(caseStorySmoke.status === 0, "caseStory: smoke-case-story", caseStorySmoke.status ? `exit ${caseStorySmoke.status}` : "ok");
 
   if (failCount) {
     console.log(`\n❌ ${failCount} smoke check(s) failed — dev will not start.\n`);

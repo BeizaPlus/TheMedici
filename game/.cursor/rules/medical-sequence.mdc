@@ -1,0 +1,31 @@
+# Medical sequence (Teach Me storyboard)
+
+**Not the same as Case Story.**
+
+| Feature | Medical sequence | Case story |
+|---------|------------------|------------|
+| **UI** | Teach Me → Medical sequence panel | Case story panel (oversight / stills) |
+| **Purpose** | Prequel + missed vs saved paths tied to **orders** | Session-aware narrative + optional master image |
+| **Source** | `fetchMedicalSequence` → `/api/medical-sequence` or offline | `fetchCaseStory` → `/api/case-story` |
+| **Voice** | Storyboard beats + attendant mechanisms | Oversight / teaching still |
+
+## Mandatory demographics check
+
+Before serving API/cache/offline sequence:
+
+1. `resolvePatientDemographics(caseData)` — age, `isPediatric`
+2. `validateMedicalSequenceDemographics(sequence, caseData)` — **no infant language for adults**
+3. On failure → regenerate or fall back to `buildMedicalSequenceFromCase` offline builder
+
+**Case 121 only** uses the poor-feeding pediatric template (`buildPoorFeedingPediatricSequence`). All other cases use case-specific offline builder until API returns validated JSON.
+
+## Attendant voice for beats
+
+Use **Immersa explainer** skill (`immersa-explainer`) / `server/prompts/immersa-attendant.md` when writing captions — mechanism from order `why` text, not generic filler.
+
+## Files
+
+- `src/lib/medicalSequence.js` — offline builders + fetch
+- `src/lib/medicalSequenceValidate.js` — age/caption lint
+- `server/medicalSequence.js` — LLM prompt
+- `.medical-sequence-cache/case_{id}.json` — delete after prompt/rule changes

@@ -1,8 +1,10 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { FiMessageSquare, FiSend, FiX } from 'react-icons/fi';
-import { IconCamera, IconFileMedical } from './sceneToolbar/SceneToolbarIcons.jsx';
+import { IconCamera, IconFileMedical, IconArrowsMove, IconPill } from './sceneToolbar/SceneToolbarIcons.jsx';
 import PatientPortraitAvatar from './PatientPortraitAvatar.jsx';
-import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
+import CaseRecordButton from './CaseRecordButton.jsx';
+import PatientReplyPlayButton from './PatientReplyPlayButton.jsx';
+import { renderAttendingMarkdown } from '../lib/chatMessageFormat.jsx';
 import { sanitizePatientReplyForDisplay } from '../lib/patientReplyText.js';
 
 function useDebouncedValue(value, delayMs = 120) {
@@ -12,6 +14,59 @@ function useDebouncedValue(value, delayMs = 120) {
     return () => window.clearTimeout(timer);
   }, [value, delayMs]);
   return debounced;
+}
+
+const MATCH_HINT_LINGER_MS = 1100;
+
+function useLingeringMatchHint(hintText, hasMatch, knownOrder) {
+  const [displayHint, setDisplayHint] = useState('');
+  const [isLingering, setIsLingering] = useState(false);
+  const timerRef = useRef(null);
+  const hadMatchRef = useRef(false);
+  const displayHintRef = useRef('');
+
+  useEffect(() => {
+    const text = String(hintText || '').trim();
+    const isMatch = Boolean(hasMatch || knownOrder);
+
+    if (timerRef.current) {
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+
+    if (text) {
+      hadMatchRef.current = isMatch;
+      displayHintRef.current = text;
+      setDisplayHint(text);
+      setIsLingering(false);
+      return undefined;
+    }
+
+    if (hadMatchRef.current && displayHintRef.current) {
+      setDisplayHint(displayHintRef.current);
+      setIsLingering(true);
+      timerRef.current = window.setTimeout(() => {
+        displayHintRef.current = '';
+        setDisplayHint('');
+        setIsLingering(false);
+        hadMatchRef.current = false;
+      }, MATCH_HINT_LINGER_MS);
+      return () => {
+        if (timerRef.current) window.clearTimeout(timerRef.current);
+      };
+    }
+
+    displayHintRef.current = '';
+    setDisplayHint('');
+    setIsLingering(false);
+    hadMatchRef.current = false;
+    return undefined;
+  }, [hintText, hasMatch, knownOrder]);
+
+  return {
+    displayHint: String(hintText || '').trim() || displayHint,
+    isLingering,
+  };
 }
 
 function SceneOrderCommandDock({
@@ -30,6 +85,10 @@ function SceneOrderCommandDock({
   replyExpanded = false,
   onToggleReplyExpanded,
   onDismissReply,
+  hasChatHistory = false,
+  chatHistoryExpanded = false,
+  onToggleChatHistory,
+  chatThreadPanel = null,
   onOpenFullChat,
   resultsExpanded = false,
   resultsPanel = null,
@@ -37,6 +96,11 @@ function SceneOrderCommandDock({
   onToggleOrderContext,
   patientMode = false,
   onPatientModeChange,
+  patientRecording = null,
+  stackMoveMode = false,
+  onToggleStackMove,
+  scenePinsHidden = false,
+  onToggleScenePins,
   resetKey,
   caseId = null,
   caseData = null,
@@ -55,18 +119,26 @@ function SceneOrderCommandDock({
     onQueryChange?.(debouncedDraft);
   }, [debouncedDraft, onQueryChange]);
 
-  const showDockReply = Boolean(quickReply?.answer && !chatOpen && replyExpanded);
   const hasOrderContext = Boolean(resultsPanel);
   const showOrderContext = hasOrderContext && resultsExpanded;
+  const showChatThread = Boolean(hasChatHistory && chatThreadPanel);
+  const showQuickReply = Boolean(quickReply?.answer && !showChatThread);
   const dockContextOpen =
-    showDockReply || (hasOrderContext && resultsExpanded);
+  showChatThread ||
+    (showQuickReply && replyExpanded) ||
+    (hasOrderContext && resultsExpanded);
   const hintText =
     chatBusy && isChatMode
       ? 'Thinking…'
-      : chatOpen && quickReply?.answer
+      : chatOpen && hasChatHistory
         ? 'Answer in chat →'
         : hint;
-  const showHintRow = Boolean(hintText?.trim());
+  const { displayHint: hintDisplay, isLingering } = useLingeringMatchHint(
+    hintText,
+    hasMatch,
+    knownOrder,
+  );
+  const showHintRow = Boolean(hintDisplay?.trim());
   const replyAnswer =
     quickReply?.answer && patientMode
       ? sanitizePatientReplyForDisplay(quickReply.answer) || quickReply.answer
@@ -78,13 +150,25 @@ function SceneOrderCommandDock({
     >
       <header className="scene-order-command-head" aria-label="Order and chat">
         <div className="scene-order-command-actions">
+          {onToggleStackMove && (
+            <button
+              type="button"
+              className={`scene-order-command-icon-btn${stackMoveMode ? ' is-active' : ''}`}
+              title={stackMoveMode ? 'Pin move on — drag labels on patient' : 'Move order labels on patient'}
+              aria-label={stackMoveMode ? 'Pin move on' : 'Enable pin move on patient'}
+              aria-pressed={stackMoveMode}
+              onClick={() => onToggleStackMove?.()}
+            >
+              <IconArrowsMove />
+            </button>
+          )}
           {onPatientModeChange && (
             <button
               type="button"
               className={`scene-order-command-icon-btn case-chat-patient-btn${patientMode ? ' is-active' : ''}`}
               title={
                 patientMode
-                  ? 'Patient mode ON — simulated patient replies'
+                  ? 'Patient mode ON — talk or type to interview'
                   : 'Tutor chat — click for patient interview mode'
               }
               aria-label={patientMode ? 'Patient mode on' : 'Turn on patient mode'}
@@ -96,10 +180,31 @@ function SceneOrderCommandDock({
                 caseData={caseData}
                 title={
                   patientMode
-                    ? 'Patient mode ON — simulated patient replies'
+                    ? 'Patient mode ON — talk or type to interview'
                     : 'Tutor chat — click for patient interview mode'
                 }
               />
+            </button>
+          )}
+          {patientRecording && (
+            <CaseRecordButton
+              {...patientRecording}
+              variant="toolbar"
+              iconOnly
+              chatMode={patientMode}
+              className={`scene-order-command-icon-btn scene-order-command-mic-btn${patientMode ? ' is-active' : ''}`}
+            />
+          )}
+          {onToggleScenePins && (
+            <button
+              type="button"
+              className={`scene-order-command-icon-btn${scenePinsHidden ? ' is-active' : ''}`}
+              title={scenePinsHidden ? 'Show order labels on patient' : 'Hide order labels on patient'}
+              aria-label={scenePinsHidden ? 'Show order labels on patient' : 'Hide order labels on patient'}
+              aria-pressed={scenePinsHidden}
+              onClick={() => onToggleScenePins?.()}
+            >
+              <IconPill />
             </button>
           )}
           <button
@@ -161,10 +266,10 @@ function SceneOrderCommandDock({
         </button>
         {showHintRow && (
           <div
-            className={`stack-command-match ${hasMatch ? 'has-match' : knownOrder ? 'known-order' : ''}${chatBusy && isChatMode ? ' is-thinking' : ''}`}
+            className={`stack-command-match ${hasMatch ? 'has-match' : knownOrder ? 'known-order' : ''}${isLingering ? ' is-lingering' : ''}${chatBusy && isChatMode ? ' is-thinking' : ''}`}
             aria-live="polite"
           >
-            {hintText}
+            {hintDisplay}
           </div>
         )}
       </form>
@@ -192,7 +297,44 @@ function SceneOrderCommandDock({
         </div>
       )}
 
-      {quickReply?.answer && !chatOpen && (
+      {showChatThread && (
+        <div
+          className={`scene-order-command-reply scene-order-command-chat${chatHistoryExpanded ? ' is-expanded' : ' is-collapsed'}`}
+        >
+          <button
+            type="button"
+            className="scene-order-command-reply-toggle scene-order-command-reply-toggle--icon"
+            onClick={() => onToggleChatHistory?.()}
+            aria-expanded={chatHistoryExpanded}
+            aria-label={chatHistoryExpanded ? 'Hide case chat' : 'Show case chat'}
+          >
+            <span className="scene-order-command-reply-chevron" aria-hidden>
+              {chatHistoryExpanded ? '▴' : '▾'}
+            </span>
+            {!chatHistoryExpanded && (
+              <span className="scene-order-command-reply-toggle-label">Case chat</span>
+            )}
+          </button>
+          {chatHistoryExpanded && (
+            <div className="scene-order-command-reply-body scene-order-command-chat-body">
+              {chatThreadPanel}
+              <div className="scene-order-command-reply-actions">
+                <button
+                  type="button"
+                  className="scene-order-command-icon-btn"
+                  aria-label="Open full chat"
+                  title="Open chat"
+                  onClick={() => onOpenFullChat?.()}
+                >
+                  <FiMessageSquare aria-hidden />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {showQuickReply && (
         <div className={`scene-order-command-reply scene-order-command-context${replyExpanded ? ' is-expanded' : ' is-collapsed'}`}>
           <button
             type="button"
@@ -208,9 +350,16 @@ function SceneOrderCommandDock({
           {replyExpanded && (
             <div className="scene-order-command-reply-body selectable-text">
               <div className="scene-order-command-reply-answer">
-                {renderChatMarkdown(replyAnswer)}
+                {renderAttendingMarkdown(replyAnswer)}
               </div>
               <div className="scene-order-command-reply-actions">
+                {patientMode && (
+                  <PatientReplyPlayButton
+                    caseData={caseData}
+                    text={replyAnswer}
+                    compact
+                  />
+                )}
                 <button
                   type="button"
                   className="scene-order-command-icon-btn"
