@@ -1,5 +1,10 @@
 import fsp from 'fs/promises';
 import path from 'path';
+import {
+  pediatricPortraitPromptBlock,
+  resolvePediatricPortraitRef,
+  pediatricAgeLabel,
+} from '../src/lib/patientPediatricRefs.js';
 import { resolvePortraitSex } from '../src/lib/portraitSex.js';
 import { resolvePatientLadyRef } from '../src/lib/resolvePatientLadyRef.js';
 import {
@@ -229,17 +234,23 @@ export function buildPortraitPrompt(
 ) {
   const facts = caseContext.patientFacts || {};
   const demo = caseContext.patientDemographics || {};
+  const pedRef =
+    demo.pediatricPortraitRef ||
+    resolvePediatricPortraitRef(caseContext.id ?? caseContext.ccsNumber, caseContext);
+  const pedAgeLabel = pedRef ? pediatricAgeLabel(pedRef) : null;
   const age =
+    pedAgeLabel ||
     facts.ageLabel ||
     demo.ageLabel ||
     (facts.age != null ? `${facts.age} ${facts.ageUnit || 'years'}` : demo.isPediatric ? '7 years' : 'adult');
   const sex = resolvePortraitSex(caseContext);
+  const isPediatricCase = Boolean(demo.isPediatric || facts.isPediatric || pedRef?.isPediatric);
   const sexLabel =
     sex === 'female'
-      ? demo.isPediatric || facts.isPediatric
+      ? isPediatricCase
         ? 'girl'
         : 'woman'
-      : demo.isPediatric || facts.isPediatric
+      : isPediatricCase
         ? 'boy'
         : 'man';
   const name = caseContext.patientName || facts.name || 'the patient';
@@ -270,6 +281,7 @@ export function buildPortraitPrompt(
   const ladyBlock = ladyRef?.identityPrompt
     ? `\nFEMALE IDENTITY LOCK (LongMan Atta character ref: ${ladyRef.label}): ${ladyRef.identityPrompt}`
     : '';
+  const pediatricBlock = pediatricPortraitPromptBlock(pedRef);
 
   const ivBlock =
     variant === 'iv'
@@ -286,7 +298,7 @@ ${age} old ${sexLabel} (${sex}) named ${name} in an ED hospital bed${category}.
 Chief complaint: ${cc}. ${contextLine}
 ${distressLine} ${examLine}
 ${poseLine}
-Monitor cables and pulse ox visible, dignified clinical lighting. Patient must clearly present as ${sexLabel}; match reference bed composition exactly.${ladyBlock}
+Monitor cables and pulse ox visible, dignified clinical lighting. Patient must clearly present as ${sexLabel}; match reference bed composition exactly.${pediatricBlock}${ladyBlock}
 ${ivBlock}
 No text, watermark, logos, diagnosis labels, or extra people. No gore or sensational injury.${buildSceneElementPromptBlock(sceneElementIdsForPortrait(caseContext, variant))}`;
 

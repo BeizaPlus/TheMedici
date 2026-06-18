@@ -101,6 +101,8 @@ function defaultPediatricAge(text = '') {
   return { age: 7, ageUnit: 'years' };
 }
 
+import { applyPediatricPortraitRef } from './patientPediatricRefs.js';
+
 /** Ground-truth age band for patient_sim — category, voice, portrait, and HPI. */
 export function resolvePatientDemographics(caseData = {}, persona = null) {
   const corpus = demographicsCorpus(caseData, persona);
@@ -138,7 +140,7 @@ export function resolvePatientDemographics(caseData = {}, persona = null) {
         ? `${age} months old`
         : `${age} years old`;
 
-  return {
+  const base = {
     age,
     ageUnit,
     ageLabel,
@@ -148,6 +150,7 @@ export function resolvePatientDemographics(caseData = {}, persona = null) {
     parentMayBePresent: CHILD_VOICE_RE.test(corpus) || pediatric,
     category: caseData.category || null,
   };
+  return applyPediatricPortraitRef(base, caseData?.id ?? caseData?.ccsNumber, caseData);
 }
 
 /** Pull interview-ready facts from HPI / history text for patient simulation. */
