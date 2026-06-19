@@ -21,23 +21,31 @@ function readPlaybookWhy(caseId, orderId) {
 }
 
 /** Fetch case-specific order rationale — offline playbook + local cache + server. */
-export async function fetchOrderWhy({ caseId, orderId, orderLabel, caseData, playbookWhy = '' }) {
+export async function fetchOrderWhy({
+  caseId,
+  orderId,
+  orderLabel,
+  caseData,
+  playbookWhy = '',
+  peerReview = false,
+} = {}) {
   const cid = normalizeCaseId(caseId);
   const oid = String(orderId ?? '').trim();
+  const cacheKey = peerReview ? `${oid}__peer` : oid;
   if (!cid || !oid || !orderLabel) {
     throw new Error('Missing case or order');
   }
 
-  const hit = memory.get(memKey(cid, oid));
+  const hit = memory.get(memKey(cid, cacheKey));
   if (hit) return { why: hit, cached: true, source: 'memory' };
 
-  const local = readLocalOrderWhy(cid, oid);
+  const local = peerReview ? null : readLocalOrderWhy(cid, oid);
   if (local) {
     memory.set(memKey(cid, oid), local);
     return { why: local, cached: true, source: 'local' };
   }
 
-  const bundled = readPlaybookWhy(cid, oid);
+  const bundled = peerReview ? null : readPlaybookWhy(cid, oid);
   const fallback = String(bundled || playbookWhy || '').trim();
 
   const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
@@ -47,7 +55,7 @@ export async function fetchOrderWhy({ caseId, orderId, orderLabel, caseData, pla
     return { why: fallback, cached: true, source: bundled ? 'playbook-bundle' : 'playbook' };
   }
 
-  if (fallback) {
+  if (fallback && !peerReview) {
     memory.set(memKey(cid, oid), fallback);
   }
 
@@ -62,6 +70,7 @@ export async function fetchOrderWhy({ caseId, orderId, orderLabel, caseData, pla
         orderLabel,
         playbookWhy: fallback || playbookWhy,
         caseContext,
+        peerReview: Boolean(peerReview),
       }),
     });
     const data = await res.json().catch(() => ({}));
@@ -76,8 +85,8 @@ export async function fetchOrderWhy({ caseId, orderId, orderLabel, caseData, pla
       if (fallback) return { why: fallback, cached: true, source: 'playbook-fallback' };
       throw new Error('Empty response');
     }
-    memory.set(memKey(cid, oid), why);
-    writeLocalOrderWhy(cid, oid, why, orderLabel);
+    memory.set(memKey(cid, cacheKey), why);
+    if (!peerReview) writeLocalOrderWhy(cid, oid, why, orderLabel);
     return {
       why,
       cached: Boolean(data.cached),

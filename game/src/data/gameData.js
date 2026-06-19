@@ -132,6 +132,9 @@ export function toGameCase(ccsCase, catalog) {
       });
 
   const sceneCasePayload = {
+    id: ccsCase.id,
+    ccsNumber: ccsCase.caseNumber,
+    category: prepared?.category || ccsCase.category,
     chief_complaint: introText,
     historyText,
     hpi_narrative: hpiNarrative || undefined,

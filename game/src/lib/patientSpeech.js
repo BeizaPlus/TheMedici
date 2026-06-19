@@ -7,7 +7,9 @@ import { extractPatientSpokenText } from './patientReplyText.js';
 /** Voice profile key sent to /api/read-case (maps to Chatterbox clone ref on server). */
 export function patientVoiceProfile(caseData) {
   const demo = resolvePatientDemographics(caseData || {});
-  if (demo.speakAsChild) return 'patient-child';
+  if (demo.speakAsChild) {
+    return inferPatientSex(caseData) === 'female' ? 'patient-child-girl' : 'patient-child-boy';
+  }
   return inferPatientSex(caseData) === 'female' ? 'patient-female' : 'patient-male';
 }
 

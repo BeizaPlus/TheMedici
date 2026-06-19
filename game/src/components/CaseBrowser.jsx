@@ -3,7 +3,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { getCatalog, getCategories, getCasesInCategory, getCaseById } from '../data/useCcsCatalog.js';
 
 import { getLayout } from '../data/gameData.js';
-import { isLearningMode } from '../lib/learningMode.js';
+import { isLearningMode, learnerFacingCaseTitle, shouldShowCaseIds } from '../lib/learningMode.js';
 
 import {
   readProgress,
@@ -37,6 +37,12 @@ import { hasCaseSpecificPlaybook } from '../data/resolvePlaybook.js';
 import CaseProgressTag from './CaseProgressTag.jsx';
 import CaseAttemptRadio from './CaseAttemptRadio.jsx';
 import { getUberDefinitions } from '../lib/uberCases.js';
+import {
+  batchLabel,
+  buildStudyBatches,
+  isUberCatalogId,
+  withoutUberCases,
+} from '../lib/caseStudyBatches.js';
 
 import CaseReadyTag from './CaseReadyTag.jsx';
 
@@ -47,6 +53,12 @@ import CaseSelectionScenePreview from './CaseSelectionScenePreview.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import CaseLandscapeRail from './CaseLandscapeRail.jsx';
 import { getCaseVisitHistory } from '../lib/caseVisitHistory.js';
+import {
+  initialBrowseCategoryId,
+  readCaseBrowseContext,
+  rememberCaseBrowse,
+  writeCaseBrowseContext,
+} from '../lib/caseBrowseContext.js';
 
 
 
@@ -100,9 +112,19 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
                 : 'all',
   );
 
-  const [activeCategory, setActiveCategory] = useState(categories[0]?.id);
+  const [activeCategory, setActiveCategory] = useState(
+    () => initialBrowseCategoryId(categories[0]?.id) || categories[0]?.id,
+  );
+
+  const [batchIndex, setBatchIndex] = useState(() => readCaseBrowseContext()?.batchIndex || 0);
 
   const [selectedId, setSelectedId] = useState(() => {
+    const ctx = readCaseBrowseContext();
+    if (ctx?.caseId && initialFilter === 'all') {
+      const catId = ctx.categoryId || initialBrowseCategoryId(categories[0]?.id);
+      const inCat = getCasesInCategory(catId).some((c) => c.id === ctx.caseId);
+      if (inCat) return ctx.caseId;
+    }
 
     if (initialFilter === 'ready') return readyCases[0]?.id || '001';
 
@@ -164,6 +186,21 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
 
 
+  const categoryCases = useMemo(() => {
+    const inCat = getCasesInCategory(activeCategory);
+    return activeCategory === 'Uber Cases' ? inCat : withoutUberCases(inCat);
+  }, [activeCategory]);
+
+  const studyBatches = useMemo(() => buildStudyBatches(categoryCases), [categoryCases]);
+
+  const activeBatch = studyBatches[batchIndex] || studyBatches[0] || null;
+
+  useEffect(() => {
+    if (batchIndex >= studyBatches.length) {
+      setBatchIndex(0);
+    }
+  }, [batchIndex, studyBatches.length]);
+
   const casesInView = useMemo(() => {
 
     if (listFilter === 'ready') return readyCases;
@@ -178,9 +215,9 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
     if (listFilter === 'uber') return uberCases;
 
-    return getCasesInCategory(activeCategory);
+    return activeBatch?.cases || categoryCases;
 
-  }, [listFilter, activeCategory, readyCases, stackTestingCases, flaggedCases, favoriteCases, recentCases, uberCases]);
+  }, [listFilter, activeBatch, categoryCases, readyCases, stackTestingCases, flaggedCases, favoriteCases, recentCases, uberCases]);
 
 
 
@@ -230,15 +267,17 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
 
   const handleCategory = (id) => {
-
     setListFilter('all');
-
     setActiveCategory(id);
-
-    const first = getCasesInCategory(id)[0];
-
-    if (first) setSelectedId(first.id);
-
+    setBatchIndex(0);
+    writeCaseBrowseContext({ categoryId: id, batchIndex: 0 });
+    const pool =
+      id === 'Uber Cases' ? getCasesInCategory(id) : withoutUberCases(getCasesInCategory(id));
+    const first = pool[0];
+    if (first) {
+      setSelectedId(first.id);
+      writeCaseBrowseContext({ caseId: first.id });
+    }
   };
 
 
@@ -284,8 +323,7 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
   };
 
   const showUberFilter = () => {
-    setListFilter('uber');
-    if (uberCases[0]) setSelectedId(uberCases[0].id);
+    handleCategory('Uber Cases');
   };
 
   const showRecentFilter = () => {
@@ -297,19 +335,13 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
 
   const playCase = useCallback(
-
     (gameCase) => {
-
       if (!gameCase) return;
-
       setLastMode('browse');
-
+      rememberCaseBrowse(gameCase.id, { categoryId: activeCategory, entry: 'browser' });
       onPlay(gameCase, 'browse');
-
     },
-
-    [onPlay],
-
+    [onPlay, activeCategory],
   );
 
 
@@ -502,11 +534,11 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
           type="button"
 
-          className={listFilter === 'uber' ? 'ready-filter-chip active' : 'ready-filter-chip'}
+          className={activeCategory === 'Uber Cases' ? 'ready-filter-chip active' : 'ready-filter-chip'}
 
           onClick={showUberFilter}
 
-          aria-pressed={listFilter === 'uber'}
+          aria-pressed={activeCategory === 'Uber Cases'}
 
         >
 
@@ -890,11 +922,42 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
                         : 'Flag cases during play to build your review list'
 
-                      : `${activeCategoryMeta?.count || 0} cases in this category`}
+                      : listFilter === 'all' && activeBatch
+
+                        ? studyBatches.length > 1
+
+                          ? `Batch ${activeBatch.batchNumber} of ${activeBatch.totalBatches} · ${activeBatch.cases.length} cases · ${activeBatch.theme}`
+
+                          : `${categoryCases.length} in ${activeCategoryMeta?.label || 'category'}`
+
+                        : `${activeCategoryMeta?.count || 0} cases in this category`}
 
             </p>
 
           </div>
+
+          {listFilter === 'all' && activeCategory !== 'Uber Cases' && studyBatches.length > 1 && (
+            <div className="shell-batch-strip" role="tablist" aria-label="Study batches of four">
+              {studyBatches.map((batch) => (
+                <button
+                  key={batch.batchIndex}
+                  type="button"
+                  role="tab"
+                  className={`shell-batch-chip${batch.batchIndex === batchIndex ? ' active' : ''}`}
+                  aria-selected={batch.batchIndex === batchIndex}
+                  title={batchLabel(batch)}
+                  onClick={() => {
+                    setBatchIndex(batch.batchIndex);
+                    writeCaseBrowseContext({ categoryId: activeCategory, batchIndex: batch.batchIndex });
+                    const first = batch.cases[0];
+                    if (first) setSelectedId(first.id);
+                  }}
+                >
+                  {batch.batchNumber}
+                </button>
+              ))}
+            </div>
+          )}
 
           <div
 
@@ -958,11 +1021,11 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
                   <CaseAttemptRadio caseId={c.id} onChange={() => setCheckVersion((v) => v + 1)} />
 
-                  <span className="case-num">#{c.ccsNumber}</span>
+                  {shouldShowCaseIds() && <span className="case-num">#{c.ccsNumber}</span>}
 
-                  <span className="case-name" title={toTitleCase(c.title)}>
+                  <span className="case-name" title={learnerFacingCaseTitle(c)}>
 
-                    {toTitleCase(c.title)}
+                    {learnerFacingCaseTitle(c)}
 
                   </span>
 
@@ -996,7 +1059,7 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
                     <span className="case-stack-count">{orderCount} orders</span>
 
-                    {isUber && c.uberMeta?.domains?.length > 0 && (
+                    {isUber && shouldShowCaseIds() && c.uberMeta?.domains?.length > 0 && (
                       <span className="case-stack-count case-stack-count--uber">
                         {c.uberMeta.domains.length} domains
                       </span>
@@ -1045,16 +1108,18 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
                   </p>
                 )}
 
-                {selectedDiagnosis && (
+                {selectedDiagnosis && !isLearningMode() && (
                   <p className="preview-diagnosis">CCS track: {selectedDiagnosis}</p>
                 )}
 
                 {selected.category && <p className="preview-category">{selected.category}</p>}
 
-                <p className="preview-label">Case {selected.ccsNumber}</p>
+                {shouldShowCaseIds() && (
+                  <p className="preview-label">Case {selected.ccsNumber}</p>
+                )}
 
-                <h2 className="preview-title" title={toTitleCase(selected.title)}>
-                  {toTitleCase(selected.title)}
+                <h2 className="preview-title" title={learnerFacingCaseTitle(selectedGameCase || selected)}>
+                  {learnerFacingCaseTitle(selectedGameCase || selected)}
                 </h2>
 
                 <p className="preview-stack-count">
@@ -1092,7 +1157,7 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
                   disabled={!selectedGameCase}
                   onClick={() => playCase(selectedGameCase)}
                 >
-                  ▶ Play case #{selected.ccsNumber}
+                  ▶ Play{shouldShowCaseIds() ? ` case #${selected.ccsNumber}` : ''}
                 </button>
               </div>
               </div>

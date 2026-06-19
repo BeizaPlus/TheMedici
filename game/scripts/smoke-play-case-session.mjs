@@ -76,22 +76,14 @@ async function openCaseFromWelcome(page) {
 }
 
 async function smokeWelcomeNavPanels(page, prefix) {
-  const continueNav = page.locator('.welcome-nav-item').filter({ hasText: 'Continue' });
-  ok(await continueNav.isEnabled({ timeout: 5000 }), 'Continue nav enabled');
-  await continueNav.click();
-  await page.waitForSelector('.welcome-panel--continue', { timeout: 10000 });
-  await assertRenderable(page, ok, 'continue panel');
-  await shot(page, `${prefix}-continue-panel`);
-  await page.locator('.welcome-panel--continue .welcome-panel-close').click();
-  await page.waitForSelector('.welcome-panel--continue', { state: 'hidden', timeout: 5000 });
-
-  const whysNav = page.locator('.welcome-nav-item').filter({ hasText: 'The Whys' });
-  ok(await whysNav.isEnabled({ timeout: 5000 }), 'The Whys nav enabled');
-  await whysNav.click();
-  await page.waitForSelector('.welcome-panel--whys', { timeout: 10000 });
-  await assertRenderable(page, ok, 'whys panel');
-  await shot(page, `${prefix}-whys-panel`);
-  await page.locator('.welcome-panel--whys .welcome-panel-close').click();
+  const timelineNav = page.locator('.welcome-nav-item').filter({ hasText: 'Timeline' });
+  ok(await timelineNav.isEnabled({ timeout: 5000 }), 'Timeline nav enabled');
+  await timelineNav.click();
+  await page.waitForSelector('.welcome-panel--timeline', { timeout: 10000 });
+  await assertRenderable(page, ok, 'timeline panel');
+  await shot(page, `${prefix}-timeline-panel`);
+  await page.locator('.welcome-panel--timeline .welcome-panel-close').click();
+  await page.waitForSelector('.welcome-panel--timeline', { state: 'hidden', timeout: 5000 });
 }
 
 async function smokeUberDeepLink(page) {

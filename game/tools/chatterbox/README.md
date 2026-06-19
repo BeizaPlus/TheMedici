@@ -24,15 +24,25 @@ Chatterbox Turbo ships **one unprompted default voice** (`voice-ref none`). It d
 | Narrator / Read case | `CHATTERBOX_VOICE_REF` | `none` |
 | Male patient | `CHATTERBOX_PATIENT_VOICE_MALE` | `VoiceClone_STEF_AMP_under25MB.flac` if present |
 | Female patient | `CHATTERBOX_PATIENT_VOICE_FEMALE` | `none` (unprompted) until you add a clip |
-| Pediatric | `CHATTERBOX_PATIENT_VOICE_CHILD` | `none` |
+| Pediatric | `CHATTERBOX_PATIENT_VOICE_CHILD` | `game/assets/voices/patient-child-black-girl-6yo.wav` when present |
 
-Patient mode in Play **auto-speaks** replies via Chatterbox (toggle: Settings → Audio → Patient auto-speak). Browser speech fallback picks OS male/female voices if Chatterbox is offline.
+Patient mode in Play shows **text first**; tap **▶** on a reply to hear Chatterbox (Settings → Audio → Patient auto-speak to play automatically). Scene dock mic uses the same Whisper stack as voice notes when patient mode is on.
+
+### Child voice setup
+
+```powershell
+cd C:\Users\steve\MeWorld\game
+python tools\chatterbox\fetch_patient_child_voice.py
+```
+
+Downloads a ~6yo reference clip (CHILDES OCSC) and saves to `assets/voices/`. Replace with your own 10–20s WAV for a closer match; set `CHATTERBOX_PATIENT_VOICE_CHILD` in `.env` if the file lives elsewhere.
 
 ## Files
 
 | File | Role |
 |------|------|
 | `read_case_tts.py` | CLI: text file → WAV via Chatterbox Turbo |
+| `fetch_patient_child_voice.py` | Download ~6yo child reference → `assets/voices/` |
 | `.case-tts-cache/` (repo root) | Cached narrations served at `/case-tts/` |
 
 ## Cache layout

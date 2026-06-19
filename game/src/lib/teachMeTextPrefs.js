@@ -1,7 +1,8 @@
 import { STORAGE } from './storageKeys.js';
+import { notifyTextPrefsChanged } from './textPrefsSync.js';
 
-/** Base ~0.75rem — stack rationale + Teach Me compare notes */
-const DEFAULT = { fontScale: 1, weight: 500 };
+/** Steve default — legible Teach Me / rationale copy (~124%). */
+const DEFAULT = { fontScale: 1.24, weight: 500 };
 
 export function readTeachMeTextPrefs() {
   try {
@@ -22,6 +23,7 @@ export function readTeachMeTextPrefs() {
 export function writeTeachMeTextPrefs(prefs) {
   try {
     localStorage.setItem(STORAGE.teachMeTextPrefs, JSON.stringify(prefs));
+    notifyTextPrefsChanged({ kind: 'teachMe', prefs });
   } catch {
     /* ignore */
   }

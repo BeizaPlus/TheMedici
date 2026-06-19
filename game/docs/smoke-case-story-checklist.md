@@ -42,7 +42,7 @@
 | C1 | Tap **Generate oversight still** | ☐ |
 | C2 | Plate shows `Rendering oversight still…` until done | ☐ |
 | C3 | Image appears — **3/4 foot-of-bed angle**, not bird’s-eye | ☐ |
-| C4 | Likeness matches play portrait | ☐ |
+| C4 | Likeness matches play portrait / **master character lock** | ☐ |
 
 *Requires `MAGNIFIC_API_KEY` in `game\.env`.*
 
@@ -57,8 +57,8 @@
 | D3 | Plates show `Plate — tap Generate panel stills` (empty until you trigger) | ☐ |
 | D4 | Tap **Generate panel stills** | ☐ |
 | D5 | Each panel animates `Rendering…` then fills with still | ☐ |
-| D6 | Same **camera lock** on every panel | ☐ |
-| D7 | **Regenerate panel stills** replaces cached beat PNGs | ☐ |
+| D6 | Same **patient identity** on every panel (hair, age, gown) — framing may vary per beat | ☐ |
+| D7 | **Regenerate panel stills** replaces cached beat PNGs (API `refresh: true`) | ☐ |
 
 ---
 
@@ -107,3 +107,4 @@ Then launch: **`START-MEWORLD-STUDY.bat`**
 | Generate buttons disabled | Add `MAGNIFIC_API_KEY`; restart API |
 | Stale story after new orders | **Refresh** (fingerprint busts cache) |
 | Storyboard 400 | Compile prose first (**Refresh** on Prose tab) |
+| Character drift between beats | Add/update `dev/case-story/case_XXX-CHARACTER-LOCK.md`; regen with `node scripts/generate-case-story-images.mjs 051 --beat=c3 --force` |

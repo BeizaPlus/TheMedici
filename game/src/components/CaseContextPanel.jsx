@@ -10,6 +10,11 @@ import {
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { formatExamForDisplay } from '../lib/caseBriefing.js';
+import {
+  formatCaseIdLabel,
+  learnerFacingCaseTitle,
+  shouldShowCaseIds,
+} from '../lib/learningMode.js';
 
 const CASE_TAB_DEFS = [
   { id: 'hpi', label: 'HPI', Icon: IconClipboardPulse },
@@ -55,6 +60,7 @@ export default function CaseContextPanel({
   footer = null,
   activeTab: controlledTab,
   onTabChange,
+  teachMeMode = false,
 }) {
   const [infoTab, setInfoTab] = useState(defaultTab);
   const isControlled = controlledTab != null && typeof onTabChange === 'function';
@@ -94,6 +100,10 @@ export default function CaseContextPanel({
 
   const readBusy = readState === 'generating';
   const readPlaying = readState === 'playing';
+  const caseIdLabel = formatCaseIdLabel(caseData, { teachMeMode });
+  const displayTitle = learnerFacingCaseTitle(caseData, { teachMeMode });
+  const showUberTeachMeta =
+    teachMeMode && shouldShowCaseIds({ teachMeMode }) && caseData?.uberMeta?.segments?.length > 0;
 
   return (
     <div
@@ -103,9 +113,11 @@ export default function CaseContextPanel({
       {!hideHeader && (
         <div className="case-context-header">
           <div className="pack-heading-row">
-            <p className="sidebar-case-id">
-              Case {caseData.ccsNumber || caseData.id}
-            </p>
+            {caseIdLabel ? (
+              <p className="sidebar-case-id">Case {caseIdLabel}</p>
+            ) : (
+              <p className="sidebar-case-id sidebar-case-id--learner">Case</p>
+            )}
             {headerControls}
             {onReadCase &&
             !isChat &&
@@ -126,10 +138,19 @@ export default function CaseContextPanel({
               <span className="pack-tag">{brandName}</span>
             ) : null}
           </div>
-          <h2 className="sidebar-title" title={toTitleCase(caseData.title)}>
-            {toTitleCase(caseData.title)}
+          <h2 className="sidebar-title" title={displayTitle}>
+            {displayTitle}
           </h2>
           {locationContext && <p className="case-location-context">{locationContext}</p>}
+          {showUberTeachMeta && (
+            <ul className="briefing-uber-segments case-context-uber-segments" aria-label="Composite case threads (teach mode)">
+              {caseData.uberMeta.segments.map((seg) => (
+                <li key={seg.id}>
+                  <span className="briefing-uber-seg-num">#{seg.ccsNumber}</span> {seg.label}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
       <div className="case-info-tabs-row">

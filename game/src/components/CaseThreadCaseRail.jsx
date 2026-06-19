@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { IconMessage } from './sceneToolbar/SceneToolbarIcons.jsx';
-import { toTitleCase } from '../lib/clinicalTextFormat.js';
+import { learnerFacingCaseTitle, shouldShowCaseIds } from '../lib/learningMode.js';
+import { getCaseById } from '../data/useCcsCatalog.js';
 
 export default function CaseThreadCaseRail({
   items = [],
@@ -9,6 +10,7 @@ export default function CaseThreadCaseRail({
   onSelectCase,
   onOpenCaseChat,
   ariaLabel = 'Cases with chat',
+  teachMeMode = false,
 }) {
   const railRef = useRef(null);
   const dragRef = useRef(null);
@@ -47,9 +49,13 @@ export default function CaseThreadCaseRail({
 
   if (!items.length) return null;
 
+  const showIds = shouldShowCaseIds({ teachMeMode });
+
   return (
     <div className="case-thread-case-rail-wrap">
-      <p className="case-thread-case-rail-label">History · drag sideways · tap ↗ to open case</p>
+      <p className="case-thread-case-rail-label">
+        History · drag sideways · tap chip to view that case&apos;s chat (stay on current case)
+      </p>
       <div
         ref={railRef}
         className="case-thread-case-rail"
@@ -62,6 +68,11 @@ export default function CaseThreadCaseRail({
       >
         {items.map((item) => {
           const id = String(item.caseId);
+          const gameCase = getCaseById(id);
+          const chipTitle = learnerFacingCaseTitle(
+            gameCase || { title: item.title },
+            { teachMeMode },
+          );
           const active = String(activeCaseId) === id;
           const isPlayCase = playCaseId != null && String(playCaseId) === id;
           return (
@@ -79,12 +90,14 @@ export default function CaseThreadCaseRail({
                   onSelectCase?.(id);
                 }}
                 onDoubleClick={() => {
-                  onOpenCaseChat?.(item);
+                  onSelectCase?.(id);
                 }}
-                title={`${toTitleCase(item.title)} — double-click to open case`}
+                title={`${chipTitle} — tap to view chat · double-click chip body`}
               >
-                <span className="case-thread-case-chip-num">#{item.ccsNumber ?? id}</span>
-                <span className="case-thread-case-chip-title">{toTitleCase(item.title)}</span>
+                {showIds && (
+                  <span className="case-thread-case-chip-num">#{item.ccsNumber ?? id}</span>
+                )}
+                <span className="case-thread-case-chip-title">{chipTitle}</span>
                 {item.messageCount > 0 ? (
                   <span className="case-thread-case-chip-count">{item.messageCount}</span>
                 ) : item.plays > 0 ? (
@@ -97,8 +110,8 @@ export default function CaseThreadCaseRail({
                 <button
                   type="button"
                   className="case-thread-case-chat-btn"
-                  title={`Open case #${item.ccsNumber ?? id} and chat`}
-                  aria-label={`Open case ${item.ccsNumber ?? id} chat`}
+                  title={`View chat history for case #${item.ccsNumber ?? id} (stay on current case)`}
+                  aria-label={`View case ${item.ccsNumber ?? id} chat history`}
                   onClick={(e) => {
                     e.stopPropagation();
                     onOpenCaseChat(item);

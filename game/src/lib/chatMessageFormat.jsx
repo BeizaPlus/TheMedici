@@ -15,15 +15,65 @@ export function renderChatMarkdown(text) {
   );
 }
 
+/** Same markdown renderer with attending-panel typography (Teach Me / order rationale). */
+export function renderAttendingMarkdown(text, { className = '' } = {}) {
+  const body = renderChatMarkdown(text);
+  if (!body) return null;
+  const extra = String(className || '').trim();
+  return (
+    <div className={`attending-md-block teach-me-text-block selectable-text${extra ? ` ${extra}` : ''}`}>
+      {body}
+    </div>
+  );
+}
+
 /** Fix LLM output like `**## Heading**` and inline `text **## Next` before block parse. */
 function normalizeChatMarkdown(src) {
-  return src
+  let s = src
     .replace(/\*\*(#{1,4}\s+[^*\n]+)\*\*/g, '$1')
     .replace(/([.!?])\s*(#{1,4}\s+)/g, '$1\n\n$2')
     .replace(/([^\n])\s+(#{1,4}\s+)/g, (match, before, heading) => {
       if (before === '*' || before === '#') return match;
       return `${before}\n\n${heading}`;
     });
+  // Break prose from pipe tables so GFM rows are not swallowed into one paragraph.
+  s = s.replace(/([^\n|])\n(\|[^\n]+\|)/g, '$1\n\n$2');
+  s = s.replace(/(\*\*[^*]+\*\*)\n(\|)/g, '$1\n\n$2');
+  // Normalize double-pipe table rows from some LLM outputs: `|| A | B |` → `| A | B |`
+  s = s.replace(/^\|\|/gm, '|').replace(/\|\|$/gm, '|');
+  return s;
+}
+
+function isTableSeparatorLine(trimmed) {
+  return /^\|?[\s\-:|]+\|?$/.test(trimmed) && trimmed.replace(/[\s\-:|]/g, '').length === 0;
+}
+
+function isTableRowLine(trimmed) {
+  if (!trimmed.includes('|')) return false;
+  const cells = trimmed
+    .replace(/^\|/, '')
+    .replace(/\|$/, '')
+    .split('|')
+    .map((c) => c.trim())
+    .filter(Boolean);
+  return cells.length >= 2;
+}
+
+function collectTableLines(lines, startIndex) {
+  const tableLines = [];
+  let i = startIndex;
+  while (i < lines.length) {
+    const t = lines[i].trim();
+    if (!t) break;
+    if (isTableSeparatorLine(t)) {
+      i += 1;
+      continue;
+    }
+    if (!isTableRowLine(t)) break;
+    tableLines.push(t);
+    i += 1;
+  }
+  return { tableLines, nextIndex: i };
 }
 
 function splitMarkdownBlocks(src) {
@@ -53,15 +103,16 @@ function splitMarkdownBlocks(src) {
       continue;
     }
 
-    if (trimmed.includes('|') && i + 1 < lines.length && /^\|?[\s\-:|]+\|?$/.test(lines[i + 1].trim())) {
-      const tableLines = [trimmed];
-      i += 1;
-      while (i < lines.length && lines[i].trim().includes('|')) {
-        tableLines.push(lines[i].trim());
-        i += 1;
+    if (isTableRowLine(trimmed)) {
+      const peek = i + 1 < lines.length ? lines[i + 1].trim() : '';
+      if (isTableSeparatorLine(peek) || isTableRowLine(peek)) {
+        const { tableLines, nextIndex } = collectTableLines(lines, i);
+        if (tableLines.length >= 1) {
+          blocks.push(parseTable(tableLines));
+          i = nextIndex;
+          continue;
+        }
       }
-      blocks.push(parseTable(tableLines));
-      continue;
     }
 
     if (/^[-*•]\s+/.test(trimmed)) {
@@ -102,13 +153,13 @@ function isBlockStart(trimmed) {
     || /^#{1,4}\s+/.test(trimmed)
     || /^[-*•]\s+/.test(trimmed)
     || /^\d+[.)]\s+/.test(trimmed)
-    || (trimmed.includes('|') && trimmed.split('|').length > 2)
+    || isTableRowLine(trimmed)
   );
 }
 
 function parseTable(tableLines) {
   const rows = tableLines
-    .filter((ln, idx) => !(idx === 1 && /^\|?[\s\-:|]+\|?$/.test(ln)))
+    .filter((ln) => !isTableSeparatorLine(ln))
     .map((ln) =>
       ln
         .replace(/^\|/, '')
@@ -203,6 +254,18 @@ function renderInline(chunk, keyPrefix = '') {
     if (part.startsWith('[') && part.includes('](') && part.endsWith(')')) {
       const m = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
       if (m) {
+        const href = m[2];
+        const label = m[1];
+        if (/\.(webm|mp3|wav|m4a|ogg)(\?|$)/i.test(href) || /\/user-data\//i.test(href)) {
+          nodes.push(
+            <span key={`${keyPrefix}aud${key++}`} className="case-chat-md-audio-wrap">
+              <audio className="case-chat-md-audio" controls preload="metadata" src={href}>
+                <a href={href}>{label}</a>
+              </audio>
+            </span>,
+          );
+          continue;
+        }
         nodes.push(
           <a
             key={`${keyPrefix}a${key++}`}

@@ -17,11 +17,34 @@ function matchCategoryPattern(category = '') {
         ageYears: row.ageYears ?? refsBundle.defaultAgeYears ?? 7,
         label: row.label || 'pediatric patient',
         prompt: row.prompt || '',
+        memorableAccessory: String(row.memorableAccessory || '').trim() || null,
         source: 'category',
       };
     }
   }
   return null;
+}
+
+/** Shipped photoreal temperament character map by slug (identity ref — not runtime Play scene). */
+export function resolvePediatricCharacterMap(slug) {
+  const key = String(slug ?? '').trim();
+  if (!key) return null;
+  const row = (refsBundle.temperamentCharacterMaps || []).find((r) => r.slug === key);
+  if (!row || row.status !== 'approved') return null;
+  const assetBase = refsBundle.assetBase || '/assets/patient/pediatric';
+  const mapFile = row.mapFile || `${key}-CHARACTER-MAP.png`;
+  const mapFileAlt2 = row.mapFileAlt2 || `${key}-CHARACTER-MAP-alt2.png`;
+  return {
+    slug: key,
+    file: mapFile,
+    mapFileAlt2,
+    publicUrl: `${assetBase}/${mapFile}`,
+    publicUrlAlt2: `${assetBase}/${mapFileAlt2}`,
+    refImage: row.refImage || null,
+    use: row.use || null,
+    canonicalAlt: row.canonicalAlt ?? 1,
+    status: row.status,
+  };
 }
 
 /** Per-case pediatric portrait lock from patientPediatricRefs.json */
@@ -34,6 +57,9 @@ export function resolvePediatricPortraitRef(caseId, caseData = {}) {
       ageYears: byId.ageYears ?? refsBundle.defaultAgeYears ?? 7,
       label: byId.label || 'pediatric patient',
       prompt: String(byId.prompt || '').trim(),
+      memorableAccessory: String(byId.memorableAccessory || '').trim() || null,
+      ethnicityCue: String(byId.ethnicityCue || '').trim() || null,
+      portraitRefSlug: byId.portraitRefSlug || null,
       isPediatric: true,
       source: 'caseId',
     };
@@ -41,6 +67,15 @@ export function resolvePediatricPortraitRef(caseId, caseData = {}) {
   const fromCategory = matchCategoryPattern(caseData?.category);
   if (fromCategory) {
     return { caseId: id || null, ...fromCategory, isPediatric: true };
+  }
+  return null;
+}
+
+export function resolvePediatricMemorableAccessory(caseId, caseData = {}) {
+  const ref = resolvePediatricPortraitRef(caseId, caseData);
+  if (ref?.memorableAccessory) return ref.memorableAccessory;
+  if (refsBundle.accessoryRule && ref?.isPediatric) {
+    return refsBundle.categoryPatterns?.[0]?.memorableAccessory || null;
   }
   return null;
 }
@@ -85,5 +120,21 @@ export function pediatricPortraitPromptBlock(ref) {
 PEDIATRIC BODY-SCALE LOCK (mandatory — not an adult manikin):
 ${ref.prompt}
 ${ageLine ? `Apparent age: ${ageLine}.` : ''}
-Child proportions — smaller head-to-body ratio than adult, shorter limbs, pediatric hospital gown on pediatric ED stretcher.`;
+Child proportions — smaller head-to-body ratio than adult, shorter limbs, pediatric hospital gown on pediatric ED stretcher.
+Use pediatric baseplate scene (pedMale/pedFemale) — same ~38° bedside camera as adult plates, never 90° bird's-eye overhead.`;
+}
+
+/** Memorable accessory / comfort object — makes pediatric cases stick (Steve rule 2026-06). */
+export function pediatricPortraitAccessoryBlock(ref) {
+  if (!ref?.memorableAccessory && !refsBundle.accessoryRule) return '';
+  const accessory = ref?.memorableAccessory;
+  const rule = refsBundle.accessoryRule || '';
+  const ethnicity = ref?.ethnicityCue
+    ? `\nEthnicity / face character (dignified, not caricature): ${ref.ethnicityCue}`
+    : '';
+  return `
+PEDIATRIC MEMORABLE ACCESSORY (mandatory for child cases):
+${accessory || 'One comfort object on bedside table or pillow — stuffed toy, blanket, or personal item.'}
+${rule ? `Rule: ${rule}` : ''}${ethnicity}
+Place accessory on bedside table or pillow — never in front of monitor or IV zones.`;
 }

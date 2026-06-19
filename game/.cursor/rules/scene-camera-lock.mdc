@@ -6,14 +6,16 @@ alwaysApply: false
 
 # Scene camera lock (MeWorld Play)
 
+**Canonical:** **`.cursor/RULES_IMAGE_GENERATION.md`** §1–2.
+
 ## Canonical masters
 
 | Sex | Baseplate | Export |
 |-----|-----------|--------|
 | Male | `public/assets/patient/patient-scene.png` | 1536×864 |
-| Female | `public/assets/patient/patient-scene-female.png` | crop → 1536×864 |
+| Female runtime | `public/assets/patient/patient-scene-female.png` | crop → 1536×864 (display only — **not** Magnific gen input) |
 
-**Male crop lock (Steve-approved):** `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` (2752×1536) — **base framing reference** for all new male gens and crops.
+**Magnific layout lock (all adult gens):** `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` (2752×1536) — male **and** female. Never attach `patient-scene-female.png` as gen input (POV clinician feet artifact).
 
 Spec: **`dev/scene-camera-lock/SCENE_LOCK.json`** · README in same folder.
 
@@ -32,12 +34,11 @@ Patient demographics, distress, gown, mask/IV/cables, hair. Lady **face** from `
 ## Every generation
 
 1. Read `SCENE_LOCK.json` or `getCameraLockPrompt('magnific'|'openai')` from `src/lib/sceneCameraLock.js`  
-2. **Male:** attach **`male-ed-anatomic-plate-a.png`** as **`image` reference** (crop lock)  
-3. **Female:** attach `patient-scene-female.png` as layout lock + same crown-through-toes zoom  
-4. Paste prompt block from `dev/scene-camera-lock/prompts/`  
-5. Post: center crop to **1536×864** — preserve full patient including toes (`fitToBaseplate`)  
-6. Run `node scripts/validate-scene-lock.mjs` before promote
+2. **All adult gens (male + female):** attach **`male-ed-anatomic-plate-a.png`** as **`image` reference** (crop lock) — **never** `patient-scene-female.png` for Magnific input  
+3. Paste `FORBIDDEN_COMPOSITION` / `getForbiddenCompositionPromptBlock()` + prompt block from `dev/scene-camera-lock/prompts/`  
+4. Post: center crop to **1536×864** — preserve full patient including toes (`fitToBaseplate`)  
+5. Run `node scripts/validate-scene-lock.mjs` before promote
 
 ## Forbidden
 
-Eye-level portrait, tight face crop, **mid-thigh-only crop**, dutch angle, new room layout, non–16:9 export without updating zones.
+Eye-level portrait, tight face crop, **mid-thigh-only crop**, dutch angle, new room layout, non–16:9 export without updating zones, **POV clinician/examiner feet at frame bottom**, standing-over-patient camera, using `patient-scene-female.png` as Magnific gen layout lock.

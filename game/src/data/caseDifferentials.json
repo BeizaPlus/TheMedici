@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "cases": {
+    "143": {
+      "title": "Differentials — poor feeding neonate",
+      "subtitle": "Near-miss diagnoses to process before you close the case.",
+      "items": [
+        {
+          "id": "malrotation",
+          "label": "Duodenal obstruction / malrotation",
+          "why": "Vomiting after feeds — but classically **bilious** emesis and surgical abdomen. Timing overlaps, yet you will not see elevated galactose or deficient **GALT** on RBCs.",
+          "discriminator": "Obstruction = mechanical blockage after feeds. Galactosemia = **milk sugar toxin** → jaundice, hepatomegaly, cataracts, sepsis risk."
+        },
+        {
+          "id": "sepsis",
+          "label": "E. coli sepsis (galactosemic infants)",
+          "why": "Galactosemic neonates are at **increased sepsis risk** — fever, tachycardia, lethargy overlap. Blood cultures may still be sent, but the **newborn screen / galactose level** and **GALT assay** anchor the metabolic diagnosis.",
+          "discriminator": "Treat infection if present — but do not miss stopping **galactose** while you work up sepsis."
+        },
+        {
+          "id": "biliary",
+          "label": "Biliary atresia / obstructive cholestasis",
+          "why": "Conjugated hyperbilirubin and acholic stools — persistent jaundice beyond the first weeks. This infant's crisis tracks **milk feeds** and metabolic toxin, not isolated bile duct obliteration.",
+          "discriminator": "Feed-locked symptoms + elevated galactose → metabolic, not primary surgical biliary disease."
+        },
+        {
+          "id": "hypoglycemia",
+          "label": "Hypoglycemia from blocked gluconeogenesis",
+          "why": "Not a separate diagnosis — it is a **consequence** of GALT blockade. Hepatocytes cannot route galactose into glycolysis → **ATP crash** → lethargy, poor feeding, seizures.",
+          "discriminator": "Check glucose, but the fix is still **eliminate galactose** and confirm **GALT** deficiency."
+        }
+      ]
+    }
+  }
+}

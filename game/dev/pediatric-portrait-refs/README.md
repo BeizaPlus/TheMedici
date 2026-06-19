@@ -32,7 +32,11 @@ Configured in `src/data/patientPediatricRefs.json` per case + category default.
 | `ref-ped-boy-laugh-missing-teeth.png` | Gap-tooth laugh — cooperative school-age boy |
 | `ref-ped-toddler-skeptical-pout.png` | Skeptical pout — uncooperative toddler |
 
-## Character maps (pending Steve approval)
+## Character maps
+
+**Shipped (2026-06-18):** `ped-boy-post-ictal`, `ped-girl-disgust`, `ped-boy-laugh` → `public/assets/patient/pediatric/` (alt1 canonical + alt2 backup).
+
+**Still pending:** `ped-toddler-skeptical` — compare alt1 vs alt2 in `character-maps-pending/`.
 
 Generate 9:16 contact sheets (Magnific `imagen-nano-banana-2`, count:2 A/B):
 

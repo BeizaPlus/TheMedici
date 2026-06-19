@@ -5,6 +5,7 @@ import CasePortraitBriefPanel from './CasePortraitBriefPanel.jsx';
 /** Fixed-stack user button + popover for patient portrait brief/regen. */
 export default function CasePortraitBriefControl({
   caseData,
+  getSessionContext,
   onRegenerated,
   onError,
   onBusyChange,
@@ -54,7 +55,6 @@ export default function CasePortraitBriefControl({
           <IconUser />
         </span>
         {busy && <span className="panel-portrait-busy-ring" aria-hidden />}
-        <span className="panel-portrait-mode-label">Portrait</span>
       </button>
       <div
         className={`portrait-brief-popover${open ? '' : ' is-closed'}`}
@@ -64,6 +64,7 @@ export default function CasePortraitBriefControl({
       >
         <CasePortraitBriefPanel
           caseData={caseData}
+          getSessionContext={getSessionContext}
           compact
           onBusyChange={handleBusyChange}
           onRegenerated={(result) => {

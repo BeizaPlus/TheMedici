@@ -76,7 +76,12 @@ import {
   writeCaseStoryCache,
   caseStoryImagePath,
   caseStoryBeatImagePath,
+  resolveCaseStoryBeatImagePath,
 } from './caseStoryCache.js';
+import {
+  readCaseStoryCharacterLock,
+  readMasterImageBase64,
+} from './caseStoryCharacterLock.js';
 import { readOrderResultEntry, writeOrderResultEntry } from './orderResultCache.js';
 import {
   ORDER_RESULT_PROMPT_VERSION,
@@ -140,6 +145,7 @@ import {
   bufferToBase64,
   fitToBaseplate,
   readBaseplateBuffer,
+  readGenerationLayoutBuffer,
 } from './portraitFrame.js';
 import {
   caseBriefFileName,
@@ -1448,6 +1454,7 @@ app.post('/api/case-story', async (req, res) => {
       if (generateImage && magnificApiKey() && (!masterImageUrl || refresh)) {
         const ctx = caseContext && typeof caseContext === 'object' ? caseContext : {};
         const narrative = cached;
+        const characterLockMarkdown = (await readCaseStoryCharacterLock(GAME_ROOT, cid)) || '';
         const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, cid);
         let imageBase64;
         let mimeType = 'image/png';
@@ -1455,7 +1462,7 @@ app.post('/api/case-story', async (req, res) => {
           const buf = await fsp.readFile(cachedPortrait.pngPath);
           imageBase64 = buf.toString('base64');
         } else {
-          const plate = await readBaseplateBuffer(GAME_ROOT, ctx);
+          const plate = await readGenerationLayoutBuffer(GAME_ROOT, ctx);
           imageBase64 = plate.buffer.toString('base64');
           mimeType = plate.mimeType;
         }
@@ -1463,6 +1470,7 @@ app.post('/api/case-story', async (req, res) => {
           caseContext: ctx,
           narrative,
           portraitNote: String(portraitNote || '').trim(),
+          characterLockMarkdown,
         });
         const edited = await generateImageEditWithMagnific({
           imageBase64,
@@ -1471,7 +1479,7 @@ app.post('/api/case-story', async (req, res) => {
           aspectRatio: '16:9',
           resolution: '2K',
           referenceText:
-            'THIRD-PERSON 3/4 bedside angle — NOT bird-eye overhead. Match patient likeness; change camera to oversight view only.',
+            'MASTER IDENTITY MAP — match patient likeness exactly. THIRD-PERSON 3/4 bedside — NOT bird-eye overhead.',
         });
         const fitted = await fitToBaseplate(edited);
         if (imgFile) {
@@ -1521,6 +1529,7 @@ app.post('/api/case-story', async (req, res) => {
     let masterImageUrl = hasImg ? `${origin}/case-story-images/${imgSlug}` : null;
     if (generateImage && magnificApiKey()) {
       const ctx = caseContext && typeof caseContext === 'object' ? caseContext : {};
+      const characterLockMarkdown = (await readCaseStoryCharacterLock(GAME_ROOT, cid)) || '';
       const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, cid);
       let imageBase64;
       let mimeType = 'image/png';
@@ -1528,7 +1537,7 @@ app.post('/api/case-story', async (req, res) => {
         const buf = await fsp.readFile(cachedPortrait.pngPath);
         imageBase64 = buf.toString('base64');
       } else {
-        const plate = await readBaseplateBuffer(GAME_ROOT, ctx);
+        const plate = await readGenerationLayoutBuffer(GAME_ROOT, ctx);
         imageBase64 = plate.buffer.toString('base64');
         mimeType = plate.mimeType;
       }
@@ -1536,6 +1545,7 @@ app.post('/api/case-story', async (req, res) => {
         caseContext: ctx,
         narrative,
         portraitNote: String(portraitNote || '').trim(),
+        characterLockMarkdown,
       });
       const edited = await generateImageEditWithMagnific({
         imageBase64,
@@ -1544,7 +1554,7 @@ app.post('/api/case-story', async (req, res) => {
         aspectRatio: '16:9',
         resolution: '2K',
         referenceText:
-          'THIRD-PERSON 3/4 bedside angle — NOT bird-eye overhead. Match patient likeness; change camera to oversight view only.',
+          'MASTER IDENTITY MAP — match patient likeness exactly. THIRD-PERSON 3/4 bedside — NOT bird-eye overhead.',
       });
       const fitted = await fitToBaseplate(edited);
       if (imgFile) {
@@ -1608,30 +1618,39 @@ app.post('/api/case-story-storyboard', async (req, res) => {
     const beats = [];
     let imageBase64;
     let mimeType = 'image/png';
+    let characterLockMarkdown = '';
 
     if (generateImages && canGen) {
-      const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, cid);
-      if (cachedPortrait.exists) {
-        const buf = await fsp.readFile(cachedPortrait.pngPath);
-        imageBase64 = buf.toString('base64');
+      characterLockMarkdown = (await readCaseStoryCharacterLock(GAME_ROOT, cid)) || '';
+      const masterRef = await readMasterImageBase64(CASE_STORY_CACHE_DIR, cid);
+      if (masterRef) {
+        imageBase64 = masterRef.buffer.toString('base64');
+        mimeType = masterRef.mimeType;
       } else {
-        const plate = await readBaseplateBuffer(GAME_ROOT, ctx);
-        imageBase64 = plate.buffer.toString('base64');
-        mimeType = plate.mimeType;
+        const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, cid);
+        if (cachedPortrait.exists) {
+          const buf = await fsp.readFile(cachedPortrait.pngPath);
+          imageBase64 = buf.toString('base64');
+        } else {
+          const plate = await readGenerationLayoutBuffer(GAME_ROOT, ctx);
+          imageBase64 = plate.buffer.toString('base64');
+          mimeType = plate.mimeType;
+        }
       }
     }
 
     for (const ch of beatChapters.slice(0, 8)) {
       const beatId = String(ch.id || `c${beats.length + 1}`);
+      const resolvedFile = resolveCaseStoryBeatImagePath(CASE_STORY_CACHE_DIR, cid, beatId);
       const imgFile = caseStoryBeatImagePath(CASE_STORY_CACHE_DIR, cid, beatId);
-      const imgSlug = imgFile ? path.basename(imgFile) : '';
+      const imgSlug = resolvedFile ? path.basename(resolvedFile) : '';
       let imageUrl = null;
       const visualHint = deriveChapterVisualHint(ch, {
         patientLock: lock,
         caseContext: ctx,
       });
 
-      if (imgFile && fs.existsSync(imgFile) && !refresh) {
+      if (resolvedFile && fs.existsSync(resolvedFile) && !refresh) {
         imageUrl = `${origin}/case-story-images/${imgSlug}`;
       } else if (generateImages && canGen && imageBase64) {
         const imgPrompt = buildCaseStoryBeatImagePrompt({
@@ -1639,6 +1658,7 @@ app.post('/api/case-story-storyboard', async (req, res) => {
           narrative,
           caseContext: ctx,
           portraitNote: String(portraitNote || '').trim(),
+          characterLockMarkdown,
         });
         const edited = await generateImageEditWithMagnific({
           imageBase64,
@@ -1647,7 +1667,7 @@ app.post('/api/case-story-storyboard', async (req, res) => {
           aspectRatio: '16:9',
           resolution: '2K',
           referenceText:
-            'THIRD-PERSON 3/4 bedside oversight — NOT bird-eye. Match patient likeness; vary scene action per beat only.',
+            'STORYBOARD BEAT — match master reference patient identity exactly. Vary rule-of-thirds framing only.',
         });
         const fitted = await fitToBaseplate(edited);
         if (imgFile) {
@@ -2284,7 +2304,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       const cachedBuf = await fsp.readFile(cachedPortrait.pngPath);
       editBase64 = bufferToBase64(await fitToBaseplate(cachedBuf));
     } else {
-      const plate = await readBaseplateBuffer(GAME_ROOT, caseContext);
+      const plate = await readGenerationLayoutBuffer(GAME_ROOT, caseContext);
       const fittedInput = await fitToBaseplate(plate.buffer);
       if (isSessionPortrait) {
         const baselineState = await readPortraitBaseline(CASE_PORTRAIT_DIR, caseId);

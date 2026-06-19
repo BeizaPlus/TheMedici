@@ -16,6 +16,8 @@ Do not run npm create, npx create-*, or vite anywhere.
 
 **Feature audit checklist (requested vs shipped):** `docs/FEATURE_REQUEST_AUDIT.md` — update checkboxes when testing or shipping.
 
+**Image generation (all stills / portraits / plates):** **`.cursor/RULES_IMAGE_GENERATION.md`** — Magnific MCP, camera lock, pediatric NSFW rules. **Magnific app:** https://www.magnific.com/app
+
 ---
 
 ## GIT RULES
@@ -87,7 +89,7 @@ Cursor rules in `game/.cursor/rules/` — agents must read the matching rule **b
 | `practice-presentation.mdc` | `practice_hpi` vs `hpi_narrative`; HPI tab never spoils diagnosis/treatment |
 | `play-case-chat.mdc` | Play stethoscope = Differential parity; chat session auto-recovery |
 | `patient-character-maps.mdc` | Pinterest → Magnific MCP map → `patientLadyRefs.json` |
-| `meworld-magnific-mcp.mdc` | Portrait gens — Kojo upload + `images_generate` @ 2k (not OpenAI) |
+| `meworld-magnific-mcp.mdc` | Portrait gens — see **`.cursor/RULES_IMAGE_GENERATION.md`** |
 | `scene-element-reference-lock.mdc` | Pinterest/product refs → element maps → load on next run (bed, monitor, IV, O2, table) |
 | `anatomic-iv-plates.mdc` | Sex-specific ED baseplates + IV zone scope |
 | `dev-server-guard.mdc` | Ports 5173/3001, `npm run dev` smoke chain |
@@ -176,7 +178,7 @@ Once something works on the demo/proof page, do not leave it as a one-off:
 - Never rebuild the UI from scratch
 - Never create a parallel version of the app
 - Never create files in Downloads\ as the primary output
-- Never use OpenAI for **chat/tutor** — case chat uses DeepSeek or OpenAI from `.env` per `server/index.js`; **case portraits** use OpenAI `gpt-image-1` only (`casePortrait.js`)
+- Never use OpenAI for **chat/tutor** — case chat uses DeepSeek or OpenAI from `.env` per `server/index.js`; **case portraits** use **Magnific** (`casePortrait.js` + `magnificImage.js`) — see **`.cursor/RULES_IMAGE_GENERATION.md`**
 - Never use absolute paths like C:\Users\steve\ in source code
 - Never overwrite preparedCases.json without backing it up first
 - Never run a script that modifies all 181 cases without
@@ -252,7 +254,7 @@ npm run build:differential-review
 
 ## CASE PORTRAITS + PATIENT CHAT
 
-**Portraits:** OpenAI `gpt-image-1` edit per case — `server/casePortrait.js`, cache `.case-portraits/`. Auto on Briefing/Play.
+**Portraits:** Magnific MCP / REST per **`.cursor/RULES_IMAGE_GENERATION.md`** — `server/casePortrait.js`, cache `.case-portraits/`. Auto on Briefing/Play.
 
 **Custom look:** `CasePortraitBriefPanel` — Play gear + Briefing footer. Auto/Custom toggle; `casePortraitBrief.js` → `portraitBrief` in regen API. Scene overlay while regenerating.
 

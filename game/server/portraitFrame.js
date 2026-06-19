@@ -1,6 +1,7 @@
 import fsp from 'fs/promises';
 import path from 'path';
 import sharp from 'sharp';
+import { getCropLockRelPath } from '../src/lib/sceneCameraLock.js';
 import { resolvePatientSceneKey } from '../src/lib/patientSceneKey.js';
 
 /** Canonical play viewport frame — see `dev/scene-camera-lock/SCENE_LOCK.json`. */
@@ -33,6 +34,28 @@ export async function readBaseplateBuffer(gameRoot, caseContext = {}) {
     const buf = await fsp.readFile(fallbackAbs);
     return { buffer: buf, mimeType: 'image/png', relPath: fallbackRel, sex: fallbackKey };
   }
+}
+
+/**
+ * Magnific layout input for portrait/scene gens.
+ * Adult male + female: always male anatomic crop lock (never patient-scene-female.png — POV feet artifact).
+ * Pediatric: ped baseplate from readBaseplateBuffer.
+ */
+export async function readGenerationLayoutBuffer(gameRoot, caseContext = {}) {
+  const sceneKey = resolvePatientSceneKey(caseContext);
+  if (sceneKey === 'pedMale' || sceneKey === 'pedFemale') {
+    return readBaseplateBuffer(gameRoot, caseContext);
+  }
+  const rel = getCropLockRelPath('male');
+  const abs = path.join(gameRoot, rel);
+  const buf = await fsp.readFile(abs);
+  return {
+    buffer: buf,
+    mimeType: 'image/png',
+    relPath: rel,
+    sex: sceneKey,
+    layoutSource: 'cropLock',
+  };
 }
 
 /** Resize/crop any PNG to the approved 16:9 baseplate dimensions. */

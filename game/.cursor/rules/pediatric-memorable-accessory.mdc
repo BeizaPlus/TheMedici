@@ -1,0 +1,31 @@
+---
+description: Pediatric patients must use ped baseplate + one memorable accessory per case. Pinterest ethnicity refs live under dev/pediatric-portrait-refs/.
+globs:
+  - src/data/patientPediatricRefs.json
+  - src/lib/patientPediatricRefs.js
+  - src/data/gameData.js
+  - server/casePortrait.js
+  - dev/pediatric-portrait-refs/**
+alwaysApply: false
+---
+
+# Pediatric memorable accessory (Steve rule)
+
+**Canonical data:** `src/data/patientPediatricRefs.json`  
+**Refs + Pinterest:** `dev/pediatric-portrait-refs/README.md`
+
+## Scene plate (non-negotiable)
+
+- Category **Pediatrics** → `resolvePatientSceneKey()` → **`pedMale` / `pedFemale`**
+- `toGameCase()` must pass **`id`**, **`category`**, **`ccsNumber`** into `getPatientSceneForCase()`
+- Camera: **~38° foot-of-bed** — **never** 90° bird-eye
+
+## Memorable accessory (every pediatric portrait)
+
+One dignity-preserving detail per child: toy bed on table (181), glasses, gum bubble, hat, stuffed toy, blanket.
+
+Wire: `pediatricPortraitAccessoryBlock()` in `buildPortraitPrompt`.
+
+## Ethnicity templates
+
+Pinterest: *children photography unique ethnicities* — mood refs in `dev/pediatric-portrait-refs/`. Magnific edit onto ED baseplate only.

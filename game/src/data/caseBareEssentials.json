@@ -141,6 +141,59 @@
           "why": "Cannot discharge to unsafe environment — inpatient specialist care unit."
         }
       ]
+    },
+    "143": {
+      "title": "Critical — galactosemia neonate",
+      "subtitle": "Stop galactose, confirm GALT, measure liver injury (LFTs). Miss LFTs = you cannot prove hepatic damage.",
+      "criticalInterventionIds": [
+        "newborn-screen-galactose-level",
+        "galt-enzyme-assay-rbcs",
+        "lfts-bmp-bilirubin",
+        "eliminate-galactose-soy-formula"
+      ],
+      "criticalExamLabelPatterns": ["general appearance", "skin", "abdomen", "heent", "neuro"],
+      "items": [
+        {
+          "id": "screen",
+          "shortLabel": "Newborn screen / galactose",
+          "matchInterventionIds": ["newborn-screen-galactose-level"],
+          "matchLabels": ["newborn screen", "galactose level"],
+          "why": "Elevated galactose after **milk feeds** — first metabolic clue."
+        },
+        {
+          "id": "galt",
+          "shortLabel": "GALT enzyme assay (RBCs)",
+          "matchInterventionIds": ["galt-enzyme-assay-rbcs"],
+          "matchLabels": ["galt", "galactose-1-phosphate uridylyltransferase"],
+          "why": "Deficient **GALT** confirms diagnosis — not “gout enzymes”; this is red-cell enzyme activity."
+        },
+        {
+          "id": "lfts",
+          "shortLabel": "LFTs / BMP / Bilirubin",
+          "matchInterventionIds": ["lfts-bmp-bilirubin"],
+          "matchLabels": ["lfts", "bilirubin", "bmp"],
+          "why": "**Critical** — galactose-1-phosphate poisons hepatocytes; you must document jaundice, transaminases, and bilirubin fraction."
+        },
+        {
+          "id": "soy",
+          "shortLabel": "Eliminate galactose — soy formula",
+          "matchInterventionIds": ["eliminate-galactose-soy-formula"],
+          "matchLabels": ["soy formula", "eliminate galactose"],
+          "why": "Remove the toxin source immediately — breast milk and cow's milk formula must stop."
+        },
+        {
+          "id": "skin-exam",
+          "shortLabel": "Skin / jaundice exam",
+          "matchLabels": ["physical exam: skin", "skin"],
+          "why": "See **jaundice** and icterus — ties exam to the liver injury you are treating."
+        },
+        {
+          "id": "general-exam",
+          "shortLabel": "General appearance",
+          "matchLabels": ["general appearance", "physical exam: general"],
+          "why": "Lethargy, poor feeding, toxic neonate — document what you see before labs return."
+        }
+      ]
     }
   },
   "diagnosisPatterns": [

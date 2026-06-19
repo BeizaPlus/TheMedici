@@ -2,12 +2,16 @@
 
 Lady likeness contact sheets for OpenAI portrait generation (`server/casePortrait.js` → `patientLadyRefs.json`).
 
+**Magnific app:** https://www.magnific.com/app
+
 ## Workflow
 
 1. **Source ref** — Pinterest or approved photo → `sources/<slug>-REF.png`
 2. **Character map** — Magnific `imagen-nano-banana-2` · 9:16 · 2k · ref-guided contact sheet (4 angles, white bg)
 3. **Ship** — PNG → `public/assets/patient/ladies/<slug>-CHARACTER-MAP.png`
 4. **Register** — row in `src/data/patientLadyRefs.json` (`identityPrompt` + optional `caseSlugs`)
+
+**Two-step style rule:** Maps are photoreal identity only. Game scenes use stylized MeWorld CGI — see **`CHARACTER_MAP_TO_GAME_STYLE.md`**.
 
 ## Maps
 

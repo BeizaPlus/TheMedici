@@ -1,12 +1,16 @@
 import fsp from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import {
   pediatricPortraitPromptBlock,
+  pediatricPortraitAccessoryBlock,
   resolvePediatricPortraitRef,
   pediatricAgeLabel,
 } from '../src/lib/patientPediatricRefs.js';
 import { resolvePortraitSex } from '../src/lib/portraitSex.js';
 import { resolvePatientLadyRef } from '../src/lib/resolvePatientLadyRef.js';
+import { resolvePatientUberRef } from '../src/lib/resolvePatientUberRef.js';
 import {
   BASEPLATE_HEIGHT,
   BASEPLATE_WIDTH,
@@ -15,12 +19,36 @@ import {
   fitToBaseplate,
 } from './portraitFrame.js';
 import { generateImageEditWithMagnific, magnificApiKey } from './magnificImage.js';
-import { getLandscapeFramePrompt } from '../src/lib/sceneCameraLock.js';
+import {
+  FORBIDDEN_COMPOSITION,
+  getCaseInspectionPhilosophyPromptBlock,
+  getForbiddenCompositionPromptBlock,
+  getForbiddenRenderStylePromptBlock,
+  getGameSceneLandscapeFramePrompt,
+  getGameSceneMagnificReferenceText,
+  getGameScenePromptBlock,
+  getHospitalWardrobePrompt,
+  getLandscapeFramePrompt,
+} from '../src/lib/sceneCameraLock.js';
 import {
   buildSceneElementPromptBlock,
   sceneElementIdsForPortrait,
 } from './sceneElementRegistry.js';
+import { buildClinicalAccuracyPromptBlock } from './clinicalAccuracyRules.js';
 export { resolvePortraitSex };
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ANATOMY_COMPOSITION_LOCK = fs
+  .readFileSync(
+    path.join(__dirname, '../dev/anatomic-plates/prompts/anatomy-composition-lock.txt'),
+    'utf8',
+  )
+  .trim();
+
+const DEFAULT_POSE_LINE =
+  'Patient supine on mattress — head toward top of frame, feet toward bottom; legs along bed length with natural knee bend; bare feet on mattress with toes slightly visible at bottom frame edge; arms at sides.';
+
+const SOLO_PATIENT_LOCK = `CRITICAL COMPOSITION: ONLY the patient lies on the stretcher — NO standing people, NO parents at bedside, NO staff, NO second person on the bed, NO feet of a standing person at the foot of the frame, NO one standing on the patient. Equipment only (monitor, IV pole). ${FORBIDDEN_COMPOSITION}`;
 
 export function normalizeCaseId(caseId) {
   const s = String(caseId || '').trim();
@@ -32,6 +60,46 @@ export function normalizeCaseId(caseId) {
 export function portraitFileName(caseId) {
   const slug = normalizeCaseId(caseId);
   return slug ? `${slug}.png` : null;
+}
+
+export function portraitBaselineFileName(caseId) {
+  const slug = normalizeCaseId(caseId);
+  return slug ? `${slug}-baseline.png` : null;
+}
+
+export function portraitBaselinePublicUrl(caseId, origin) {
+  const fileName = portraitBaselineFileName(caseId);
+  if (!fileName) return null;
+  const port = Number(process.env.PORT || process.env.SPORTMAKER_API_PORT || 3001);
+  const base =
+    origin
+    || process.env.PUBLIC_URL?.replace(/\/$/, '')
+    || `http://127.0.0.1:${port}`;
+  return `${base}/case-portraits/${fileName}`;
+}
+
+export async function readPortraitBaseline(portraitDir, caseId) {
+  const fileName = portraitBaselineFileName(caseId);
+  if (!fileName) return { exists: false, fileName: null, pngPath: null };
+  const pngPath = path.join(portraitDir, fileName);
+  try {
+    await fsp.access(pngPath);
+    return { exists: true, fileName, pngPath };
+  } catch {
+    return { exists: false, fileName, pngPath };
+  }
+}
+
+/** Copy current portrait to baseline once — preserves arrival look for before/after. */
+export async function ensurePortraitBaseline(portraitDir, caseId) {
+  const existing = await readPortraitBaseline(portraitDir, caseId);
+  if (existing.exists) return { ...existing, created: false };
+  const cached = await readPortraitCache(portraitDir, caseId);
+  if (!cached.exists) return { exists: false, created: false };
+  const baselineName = portraitBaselineFileName(caseId);
+  const baselinePath = path.join(portraitDir, baselineName);
+  await fsp.copyFile(cached.pngPath, baselinePath);
+  return { exists: true, fileName: baselineName, pngPath: baselinePath, created: true };
 }
 
 export function portraitPublicUrl(caseId, origin) {
@@ -73,7 +141,9 @@ function voiceToneForComplaint(cc, { speakAsChild = false } = {}) {
   if (/chest pain|mi|acs/.test(ccLower)) return 'anxious, guarded, speaks in short phrases';
   if (/dyspnea|shortness|breath/.test(ccLower)) return 'breathless, pauses between short sentences';
   if (/abdominal|belly|nausea|vomit|bleed/.test(ccLower)) return 'uncomfortable, quiet, may wince';
-  if (/altered|confusion/.test(ccLower)) return 'confused, slow responses, may repeat questions';
+  if (/altered|confusion|ams|seizure|obtunded/i.test(ccLower)) {
+    return 'confused, slow responses; may minimize alcohol and drug use until labs prove otherwise — cooperative but defensive';
+  }
   if (/fever|infection/.test(ccLower)) return 'fatigued, weak voice, intermittently alert';
   return 'tired but cooperative, answers in plain language';
 }
@@ -95,7 +165,7 @@ export function buildPortraitPersona(caseContext = {}, visionDetails = null) {
     'undifferentiated complaint';
   const presentationCue = presentationCueForComplaint(cc);
   const composition =
-    'Single patient in hospital gown on ED stretcher; monitor cables and pulse ox visible; dignified clinical lighting; overhead/wide bedside framing.';
+    'Lived-in busy ED training plate — off-center ~38° bedside view with slight 3/4 depth; crown-through-toes with toes at bottom edge (not dead-center MCU, not 90° bird\'s-eye).';
   const isPediatric = Boolean(demo.isPediatric || facts.isPediatric);
   const speakAsChild = Boolean(demo.speakAsChild || facts.speakAsChild);
 
@@ -226,11 +296,13 @@ export const PORTRAIT_ASPECT = '16:9';
 export const PORTRAIT_OPENAI_SIZE = '1536x1024';
 
 const LANDSCAPE_FRAME = getLandscapeFramePrompt();
+const GAME_SCENE_LANDSCAPE_FRAME = getGameSceneLandscapeFramePrompt('magnific');
+const CASE_INSPECTION_BLOCK = getCaseInspectionPhilosophyPromptBlock();
 
 /** House-style cold-open portrait prompt from case presentation context. */
 export function buildPortraitPrompt(
   caseContext = {},
-  { portraitBrief = '', directorBrief = null, variant = 'base' } = {},
+  { portraitBrief = '', directorBrief = null, variant = 'base', sessionUpdate = false } = {},
 ) {
   const facts = caseContext.patientFacts || {};
   const demo = caseContext.patientDemographics || {};
@@ -272,16 +344,18 @@ export function buildPortraitPrompt(
       : '';
   const distressLine = director?.distress ? `Distress: ${director.distress}.` : `Show ${presentationCue}.`;
   const examLine = director?.skinAndExam ? `${director.skinAndExam}` : '';
-  const poseLine =
-    director?.pose ||
-    `Single ${sexLabel} patient in hospital gown lying supine on stretcher.`;
+  const poseLine = director?.pose || DEFAULT_POSE_LINE;
 
   const custom = String(portraitBrief || caseContext.portraitBrief || '').trim();
-  const ladyRef = resolvePatientLadyRef(caseContext, { sex });
-  const ladyBlock = ladyRef?.identityPrompt
-    ? `\nFEMALE IDENTITY LOCK (LongMan Atta character ref: ${ladyRef.label}): ${ladyRef.identityPrompt}`
-    : '';
+  const uberRef = resolvePatientUberRef(caseContext);
+  const ladyRef = uberRef ? null : resolvePatientLadyRef(caseContext, { sex });
+  const identityBlock = uberRef?.identityPrompt
+    ? `\nUBER IDENTITY LOCK (unique face ref: ${uberRef.label}): ${uberRef.identityPrompt}`
+    : ladyRef?.identityPrompt
+      ? `\nFEMALE IDENTITY LOCK (LongMan Atta character ref: ${ladyRef.label}): ${ladyRef.identityPrompt}`
+      : '';
   const pediatricBlock = pediatricPortraitPromptBlock(pedRef);
+  const pediatricAccessoryBlock = pediatricPortraitAccessoryBlock(pedRef);
 
   const ivBlock =
     variant === 'iv'
@@ -293,13 +367,46 @@ Patient otherwise identical to arrival state.`
       : `
 NO IV lines, catheters, central lines, or IV fluids — patient as they ARRIVED to the ED.`;
 
-  const base = `Photorealistic emergency medicine training scene. ${LANDSCAPE_FRAME}
+  const sessionUpdateBlock =
+    (sessionUpdate || director?.sessionUpdate) && director
+      ? `
+SESSION PORTRAIT UPDATE (before/after teaching — edit reference in place):
+LOCK IDENTICAL: camera angle, 16:9 framing, bed rails, monitor upper-right, patient identity, age, sex, ethnicity, hair, gown.
+UPDATE ONLY clinical appearance from this encounter:
+${director.visibleFindings || 'discovered exam and presentation findings'}.
+${director.distress ? `Distress: ${director.distress}.` : ''}
+${director.skinAndExam || ''}
+${director.pose ? `Pose: ${director.pose}` : 'Supine on ED stretcher unless session findings require a different posture (e.g. lethargic neonate flat, not sitting up).'}
+Do not add diagnosis text labels or watermarks.`
+      : '';
+
+  const useGameSceneLock = Boolean(uberRef);
+  const frameBlock = useGameSceneLock ? GAME_SCENE_LANDSCAPE_FRAME : LANDSCAPE_FRAME;
+  const cameraLockBlock = useGameSceneLock
+    ? getGameScenePromptBlock({ includeOptics: true, includeInspection: false })
+    : '';
+  const wardrobeBlock = getHospitalWardrobePrompt({
+    sex,
+    isPediatric: isPediatricCase,
+  });
+  const clinicalBlock = buildClinicalAccuracyPromptBlock({ scene: 'ed' });
+
+  const base = `Cinematic hospital film-still CGI — MeWorld game style: tactile sculptural stylized clinical realism, muted palette (NOT photoreal live-action headswap). ${frameBlock}
+${getForbiddenRenderStylePromptBlock()}
+${CASE_INSPECTION_BLOCK}
+${ANATOMY_COMPOSITION_LOCK}
+${clinicalBlock}
+${cameraLockBlock ? `\n${cameraLockBlock}\n` : ''}
 ${age} old ${sexLabel} (${sex}) named ${name} in an ED hospital bed${category}.
+Wardrobe: ${wardrobeBlock}
 Chief complaint: ${cc}. ${contextLine}
 ${distressLine} ${examLine}
 ${poseLine}
-Monitor cables and pulse ox visible, dignified clinical lighting. Patient must clearly present as ${sexLabel}; match reference bed composition exactly.${pediatricBlock}${ladyBlock}
+Monitor cables and pulse ox visible, dignified clinical lighting. Patient must clearly present as ${sexLabel}; match reference bed composition exactly.${pediatricBlock}${pediatricAccessoryBlock}${identityBlock}
 ${ivBlock}
+${sessionUpdateBlock}
+${SOLO_PATIENT_LOCK}
+${getForbiddenCompositionPromptBlock()}
 No text, watermark, logos, diagnosis labels, or extra people. No gore or sensational injury.${buildSceneElementPromptBlock(sceneElementIdsForPortrait(caseContext, variant))}`;
 
   if (!custom) return base;
@@ -404,13 +511,19 @@ export async function writePortraitCache(portraitDir, caseId, outB64, meta = {})
 
 export function buildPortraitMeta(caseContext = {}) {
   const sex = resolvePortraitSex(caseContext);
-  const ladyRef = resolvePatientLadyRef(caseContext, { sex });
+  const uberRef = resolvePatientUberRef(caseContext);
+  const ladyRef = uberRef ? null : resolvePatientLadyRef(caseContext, { sex });
   return {
     patientSex: sex,
     portraitAspect: PORTRAIT_ASPECT,
     portraitFrameVersion: PORTRAIT_FRAME_VERSION,
     portraitWidth: BASEPLATE_WIDTH,
     portraitHeight: BASEPLATE_HEIGHT,
+    uberRefSlug: uberRef?.slug || null,
+    uberRefUrl: uberRef?.publicUrl || null,
+    uberGameSceneFile: uberRef?.gameSceneFile || null,
+    uberGameSceneUrl: uberRef?.gameSceneUrl || null,
+    uberGameSceneStatus: uberRef?.gameSceneStatus || null,
     ladyRefSlug: ladyRef?.slug || null,
     ladyRefUrl: ladyRef?.publicUrl || null,
   };
@@ -422,8 +535,7 @@ async function generatePortraitWithMagnific({ imageBase64, mimeType, prompt }) {
     prompt,
     aspectRatio: PORTRAIT_ASPECT,
     resolution: process.env.MAGNIFIC_PORTRAIT_RESOLUTION || '2K',
-    referenceText:
-      'ED training baseplate — keep camera lock, bed rails, monitor upper-right, IV upper-left; change patient only.',
+    referenceText: getGameSceneMagnificReferenceText(),
   });
   const fitted = await fitToBaseplate(buf);
   return bufferToBase64(fitted);

@@ -3,6 +3,16 @@ import { toPng } from 'html-to-image';
 import { STORAGE } from './storageKeys.js';
 import { apiUrl } from './apiBase.js';
 
+export async function openPathInExplorer(targetPath) {
+  if (!targetPath) return false;
+  const resp = await fetch(apiUrl('/api/open-path'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path: targetPath }),
+  });
+  return resp.ok;
+}
+
 const ATTEMPT_KEY = STORAGE.captureAttempt;
 
 export function nextAttemptNumber(caseNumber) {

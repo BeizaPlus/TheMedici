@@ -5,6 +5,7 @@ import {
   readCasePortraitBrief,
   writeCasePortraitBrief,
 } from '../lib/casePortraitBrief.js';
+import { readCasePortraitBaseline } from '../lib/casePortraitBaseline.js';
 import { regeneratePatientFromCase } from '../lib/patientRegen.js';
 import { apiUrl } from '../lib/apiBase.js';
 
@@ -47,8 +48,40 @@ async function detectZonesForDataUrl(dataUrl, sourceKey) {
   return normalized;
 }
 
+function PortraitBeforeAfter({ beforeSrc, afterSrc }) {
+  const [pos, setPos] = useState(50);
+  if (!beforeSrc || !afterSrc || beforeSrc === afterSrc) return null;
+  return (
+    <div className="portrait-brief-compare" aria-label="Before and after portrait comparison">
+      <div className="portrait-brief-compare-head">
+        <span>Before / after</span>
+        <span className="portrait-brief-compare-labels">
+          <span>Arrival</span>
+          <span>After workup</span>
+        </span>
+      </div>
+      <div className="portrait-brief-compare-stage">
+        <img src={afterSrc} alt="" className="portrait-brief-compare-after" />
+        <div className="portrait-brief-compare-before-wrap" style={{ width: `${pos}%` }}>
+          <img src={beforeSrc} alt="" className="portrait-brief-compare-before" />
+        </div>
+        <input
+          type="range"
+          className="portrait-brief-compare-slider"
+          min={8}
+          max={92}
+          value={pos}
+          onChange={(e) => setPos(Number(e.target.value))}
+          aria-label="Compare before and after portrait"
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function CasePortraitBriefPanel({
   caseData,
+  getSessionContext,
   onRegenerated,
   onError,
   onBusyChange,
@@ -60,13 +93,23 @@ export default function CasePortraitBriefPanel({
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('');
   const [progress, setProgress] = useState(0);
+  const [compare, setCompare] = useState({ before: null, after: null });
 
   const stored = caseId != null ? readCasePortraitBrief(caseId) : { enabled: false, text: '' };
   const enabled = stored.enabled;
+  const sessionSnapshot = typeof getSessionContext === 'function' ? getSessionContext() : null;
+  const hasSessionData = Boolean(sessionSnapshot?.hasSessionData);
+  const storedBaseline = caseId != null ? readCasePortraitBaseline(caseId) : null;
 
   useEffect(() => {
     setDraft(stored.text);
   }, [caseId, tick, stored.text]);
+
+  useEffect(() => {
+    if (storedBaseline && compare.before !== storedBaseline) {
+      setCompare((prev) => ({ ...prev, before: storedBaseline }));
+    }
+  }, [storedBaseline, compare.before]);
 
   const persist = useCallback(
     (next) => {
@@ -114,18 +157,35 @@ export default function CasePortraitBriefPanel({
     persist({ enabled, text: draft });
     setBusy(true);
     setProgress(2);
-    setStatus('Generating portrait with Magnific (Nano Banana)…');
+    const sessionContext = typeof getSessionContext === 'function' ? getSessionContext() : null;
+    const useSession = Boolean(sessionContext?.hasSessionData) && !enabled;
+    setStatus(
+      useSession
+        ? 'Scanning notes, exams, and orders — updating portrait…'
+        : 'Generating portrait with Magnific (Nano Banana)…',
+    );
     onBusyChange?.(true);
     try {
       clearVisionZones();
-      const result = await regeneratePatientFromCase(caseData, { refresh: true });
+      const beforeSrc = readCasePortraitBaseline(caseId) || compare.before;
+      const result = await regeneratePatientFromCase(caseData, {
+        refresh: true,
+        sessionContext: useSession ? sessionContext : null,
+        sessionUpdate: useSession,
+      });
       setStatus('Mapping drop zones…');
       setProgress((p) => Math.max(p, 72));
       const sourceKey = `regen:${caseId}`;
       await detectZonesForDataUrl(result.dataUrl, sourceKey);
       setProgress(100);
+      if (result.baselineUrl || beforeSrc) {
+        setCompare({
+          before: result.baselineUrl || beforeSrc,
+          after: result.dataUrl,
+        });
+      }
       onRegenerated?.(result);
-      setStatus('Portrait updated.');
+      setStatus(useSession ? 'Portrait updated from session findings.' : 'Portrait updated.');
     } catch (e) {
       setStatus('');
       setProgress(0);
@@ -133,11 +193,20 @@ export default function CasePortraitBriefPanel({
     } finally {
       setBusy(false);
       onBusyChange?.(false);
-      window.setTimeout(() => setStatus((s) => (s === 'Portrait updated.' ? '' : s)), 4000);
+      window.setTimeout(() => setStatus((s) => (s.endsWith('updated.') || s.endsWith('findings.') ? '' : s)), 5000);
     }
-  }, [busy, caseData, caseId, draft, enabled, onBusyChange, onError, onRegenerated, persist]);
+  }, [busy, caseData, caseId, compare.before, draft, enabled, getSessionContext, onBusyChange, onError, onRegenerated, persist]);
 
   if (!caseId) return null;
+
+  const regenDisabled = busy || (enabled && !draft.trim());
+  const regenLabel = busy
+    ? 'Regenerating…'
+    : hasSessionData && !enabled
+      ? 'Update portrait from session'
+      : enabled
+        ? 'Regenerate with custom look'
+        : 'Regenerate portrait';
 
   return (
     <div
@@ -161,7 +230,9 @@ export default function CasePortraitBriefPanel({
       <p className="portrait-brief-hint">
         {enabled
           ? 'Describe how this patient must look — age, pose, distress, clothing — then regenerate.'
-          : 'Uses case demographics and chief complaint. Turn on Custom to override.'}
+          : hasSessionData
+            ? 'Scans your notes, physical exams, orders, and chat — same pose and framing, updated findings for before/after.'
+            : 'Uses case demographics and chief complaint. Turn on Custom to override.'}
       </p>
       {enabled && (
         <textarea
@@ -178,12 +249,19 @@ export default function CasePortraitBriefPanel({
         type="button"
         className="portrait-brief-regen"
         onClick={() => void handleRegenerate()}
-        disabled={busy || (enabled && !draft.trim())}
-        title="Regenerate this case's patient image with Magnific Nano Banana"
+        disabled={regenDisabled}
+        title={
+          hasSessionData && !enabled
+            ? 'Summarize session findings and update portrait (same posture, discovered findings)'
+            : 'Regenerate this case\'s patient image with Magnific Nano Banana'
+        }
       >
         <IconRefresh className={busy ? 'spin' : ''} aria-hidden />
-        {busy ? 'Regenerating…' : enabled ? 'Regenerate with custom look' : 'Regenerate portrait'}
+        {regenLabel}
       </button>
+      {compare.before && compare.after && (
+        <PortraitBeforeAfter beforeSrc={compare.before} afterSrc={compare.after} />
+      )}
       {busy && (
         <div className="portrait-brief-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)} aria-label="Portrait generation progress">
           <div className="portrait-brief-progress-track">

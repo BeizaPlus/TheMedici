@@ -61,6 +61,20 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+/** Magnific REST caps prompt at 3000 chars — preserve CHARACTER LOCK tail when trimming. */
+function trimMagnificPrompt(prompt, max = 2990) {
+  const text = String(prompt || '');
+  if (text.length <= max) return text;
+  const marker = 'CHARACTER LOCK';
+  const idx = text.indexOf(marker);
+  if (idx >= 0) {
+    const tail = text.slice(idx);
+    const headBudget = max - tail.length - 4;
+    if (headBudget > 400) return `${text.slice(0, headBudget)}\n…\n${tail}`;
+  }
+  return text.slice(0, max);
+}
+
 async function pollMagnificTask(taskPath, taskId, { timeoutMs = 180000 } = {}) {
   const key = magnificApiKey();
   const started = Date.now();
@@ -70,6 +84,10 @@ async function pollMagnificTask(taskPath, taskId, { timeoutMs = 180000 } = {}) {
     });
     if (!r.ok) {
       const err = await r.text();
+      if (r.status === 429) {
+        await sleep(8000);
+        continue;
+      }
       throw new Error(`Magnific task poll failed: ${err || r.status}`);
     }
     const payload = await r.json();
@@ -126,27 +144,38 @@ export async function generateImageEditWithMagnific({
   ];
 
   const body = {
-    prompt,
+    prompt: trimMagnificPrompt(prompt),
     aspect_ratio: aspectRatio,
     resolution,
     reference_images,
   };
 
-  const r = await fetch(`https://api.magnific.com${taskPath}`, {
-    method: 'POST',
-    headers: {
-      'x-magnific-api-key': key,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
+  let created;
+  for (let attempt = 0; attempt < 6; attempt += 1) {
+    const r = await fetch(`https://api.magnific.com${taskPath}`, {
+      method: 'POST',
+      headers: {
+        'x-magnific-api-key': key,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
 
-  if (!r.ok) {
-    const err = await r.text();
-    throw new Error(`Magnific image create failed: ${err || r.status}`);
+    if (r.status === 429) {
+      await sleep(8000 + attempt * 4000);
+      continue;
+    }
+
+    if (!r.ok) {
+      const err = await r.text();
+      throw new Error(`Magnific image create failed: ${err || r.status}`);
+    }
+
+    created = await r.json();
+    break;
   }
 
-  const created = await r.json();
+  if (!created) throw new Error('Magnific image create failed: rate limited after retries');
   const taskId = created?.data?.task_id || created?.task_id;
   if (!taskId) throw new Error('Magnific did not return task_id');
 

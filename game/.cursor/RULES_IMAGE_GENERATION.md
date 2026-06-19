@@ -102,8 +102,8 @@ MeWorld Play patient scenes are **training plates**, not stock hospital photogra
 |------|------|--------|------|
 | **Machine spec** | `dev/scene-camera-lock/SCENE_LOCK.json` | — | Read before every gen |
 | **Male play baseplate** | `public/assets/patient/patient-scene.png` | 1536×864 | Runtime + layout ref |
-| **Male crop lock** | `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` | 2752×1536 | Adult male Magnific layout ref |
-| **Female play baseplate** | `public/assets/patient/patient-scene-female.png` | 2048×1152 → crop 1536×864 | Female cases |
+| **Male crop lock (ALL adult gens)** | `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` | 2752×1536 | Adult male **and female** Magnific layout ref — **never** `patient-scene-female.png` for gen input (POV feet artifact) |
+| **Female play baseplate** | `public/assets/patient/patient-scene-female.png` | 2048×1152 → crop 1536×864 | Runtime display only — **not** Magnific layout lock |
 | **Camera prompt** | `dev/scene-camera-lock/prompts/magnific-camera-lock.txt` | — | Paste into every prompt |
 
 ### Anatomy scope (adult baseplate gens only — see §6 pediatric)
@@ -241,6 +241,8 @@ Agents without REST key: run MCP workflow above manually.
 ### C. Lady character map (9:16 likeness)
 
 **When:** New Pinterest ref → register in `patientLadyRefs.json`.
+
+**Style:** Photoreal contact sheet — **identity only**. Game portraits use stylized MeWorld CGI on 16:9 baseplates. **Read `dev/character-maps/CHARACTER_MAP_TO_GAME_STYLE.md`** before shipping maps or running portrait gens.
 
 1. Save source → `dev/character-maps/sources/<slug>-REF.png`.
 2. Magnific · **9:16** · 2k · upload Pinterest ref.
@@ -395,6 +397,7 @@ docs/portrait-previews/case-{id}-pediatric-preview.png   ← agent review
 | `dev/scene-camera-lock/README.md` | SCENE_LOCK human-readable |
 | `dev/anatomic-plates/README.md` | Anatomic plate pipeline |
 | `dev/character-maps/CHARACTER_MAPS.md` | Lady map workflow |
+| `dev/character-maps/CHARACTER_MAP_TO_GAME_STYLE.md` | **Two-step:** photoreal map → stylized game scene |
 | `AGENTS.md` § Case portraits | Runtime API paths + UI |
 | `server/casePortrait.js` | `buildPortraitPrompt()`, cache write |
 | `server/magnificImage.js` | REST path for Play regen |

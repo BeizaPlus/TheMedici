@@ -1,7 +1,17 @@
 /** Case story — master narrative + third-person oversight still after session. */
 
+import {
+  beatCompositionDirective,
+  buildCharacterLockPromptSection,
+} from './caseStoryCharacterLock.js';
+import {
+  buildClinicalAccuracyPromptBlock,
+  isHomeStoryBeat,
+} from './clinicalAccuracyRules.js';
+import { getForbiddenRenderStylePromptBlock } from '../src/lib/sceneCameraLock.js';
+
 /** Bump when narrative prompt / storycraft rules change — stale cache ignored. */
-export const CASE_STORY_PROMPT_VERSION = 4;
+export const CASE_STORY_PROMPT_VERSION = 6;
 
 const STORYCRAFT_SYSTEM = `You are a clinical storyteller for MeWorld emergency medicine training (Storycraft Scale).
 
@@ -30,7 +40,19 @@ const THIRD_PERSON_CAMERA = `THIRD-PERSON OVERSIGHT CAMERA (mandatory):
 NOT bird's-eye 90° overhead — NOT camera standing directly above the patient.
 Clinician-height beside the bed (~1.4m), 3/4 angle from foot of stretcher looking toward head.
 Patient supine on ED stretcher, room depth visible — monitor upper-right, IV upper-left, both rails.
-16:9 cinematic medical training still — MeWorld game style, sculptural tactile realism, muted clinical palette.`;
+16:9 cinematic medical training still — MeWorld game style, sculptural tactile realism, muted clinical palette.
+IN-GAME ONLY: smooth 3D sculptural CGI — NO uniform outlines, cel-shade, comic book, ink strokes, NPR illustration (comic strip style parked — see COMIC_STRIP_STYLE_FUTURE.md).`;
+
+const COMPOSITION_VARIETY = `COMPOSITION (vary per beat — NOT every panel dead-center):
+Avoid symmetrical foot-of-bed centerline on every still. Use rule-of-thirds: subject left-third, right-third, or lower third.
+Alternate MCU, medium three-quarter, wide establishing, foreground occlusion (rail, paperwork, equipment).
+Shallow depth of field — name foreground blur, midground subject, background room depth.`;
+
+const HOME_SCENE_CAMERA = `HOME SCENE CAMERA (pre-hospital beats only):
+Domestic interior — bedroom or living room, natural morning window light.
+Third-person cinematic still — same MeWorld sculptural tactile realism, muted palette.
+Patient in home clothes or pajamas — NOT hospital gown, NOT stretcher, NOT ED equipment.
+16:9 cinematic still — environmental storytelling (fallen cane, bedside table, quiet isolation).`;
 
 function formatSessionBlock(sessionContext = {}) {
   const parts = [];
@@ -130,18 +152,27 @@ export function buildCaseStoryMasterImagePrompt({
   caseContext = {},
   narrative = {},
   portraitNote = '',
+  characterLockMarkdown = '',
 } = {}) {
   const visual =
     narrative.masterImagePrompt
     || `${caseContext.title || 'ED patient'} on stretcher, clinical distress appropriate to presentation`;
+  const lockSection = buildCharacterLockPromptSection(characterLockMarkdown);
+  const clinicalBlock = buildClinicalAccuracyPromptBlock({ scene: 'ed' });
 
   return `${THIRD_PERSON_CAMERA}
+
+${getForbiddenRenderStylePromptBlock()}
+
+${clinicalBlock}
 
 ${visual}
 
 Patient lock: ${narrative.patientLock || portraitNote || 'match reference patient likeness exactly'}.
+${lockSection ? `\n${lockSection}\n` : ''}
 ${caseContext.category === 'Pediatrics' ? 'Pediatric body proportions — school-age child, NOT adult body.' : ''}
-ONLY the patient on the stretcher — no standing staff on the bed, no extra feet at frame bottom.`;
+ONLY the patient on the stretcher — no standing staff on the bed, no extra feet at frame bottom.
+Master still establishes character identity map for all storyboard beats.`;
 }
 
 export function deriveChapterVisualHint(chapter, { patientLock = '', caseContext = {} } = {}) {
@@ -163,21 +194,39 @@ export function buildCaseStoryBeatImagePrompt({
   narrative = {},
   caseContext = {},
   portraitNote = '',
+  characterLockMarkdown = '',
 } = {}) {
   const visual = deriveChapterVisualHint(chapter, {
     patientLock: narrative.patientLock || portraitNote,
     caseContext,
   });
   const heading = String(chapter.heading || 'Beat').trim();
-  return `${THIRD_PERSON_CAMERA}
+  const beatId = String(chapter.id || '').trim();
+  const composition = beatCompositionDirective(beatId, { lockMarkdown: characterLockMarkdown });
+  const lockSection = buildCharacterLockPromptSection(characterLockMarkdown, { beatsOnly: true });
+  const homeBeat = isHomeStoryBeat(chapter);
+  const cameraBlock = homeBeat ? HOME_SCENE_CAMERA : THIRD_PERSON_CAMERA;
+  const clinicalBlock = buildClinicalAccuracyPromptBlock({
+    scene: homeBeat ? 'home' : 'ed',
+    beatId,
+    chapter,
+  });
 
-STORYBOARD PANEL — "${heading}":
-${visual}
+  return `${cameraBlock}
 
-Patient lock: ${narrative.patientLock || portraitNote || 'match reference patient likeness exactly'}.
+${getForbiddenRenderStylePromptBlock()}
+
+${clinicalBlock}
+
+${homeBeat ? '' : `${COMPOSITION_VARIETY}\n\n`}STORYBOARD — "${heading}" (${beatId || 'beat'}): ${visual}
+
+FRAMING: ${composition}
+
+Patient: ${narrative.patientLock || portraitNote || 'match master likeness'}.
+${lockSection ? `\n${lockSection}\n` : ''}
 ${caseContext.category === 'Pediatrics' ? 'Pediatric body proportions — school-age child, NOT adult body.' : ''}
-MeWorld sculptural clinical still — one frozen moment from this beat. Same oversight angle every panel.
-ONLY the patient (and implied family in depth if beat requires) — no clinician standing on the bed.`;
+MeWorld sculptural ${homeBeat ? 'domestic' : 'clinical'} still — one frozen moment from this beat. Match master reference likeness exactly.
+${homeBeat ? 'Home interior — no hospital equipment.' : 'ONLY the patient (and implied family in depth if beat requires) — no clinician standing on the bed.'}`;
 }
 
 export function parseCaseStoryJson(raw) {

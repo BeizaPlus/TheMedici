@@ -4,9 +4,11 @@ import {
   generateCasePortraitFromAvatarSource,
   readStoredCaseAvatarSource,
 } from './caseAvatar.js';
+import { writeCasePortraitBaseline } from './casePortraitBaseline.js';
 import { resolvePortraitBriefForApi } from './casePortraitBrief.js';
 import { getBuiltInPatientSrc, isValidSceneSrc, portraitCacheBust } from './patientImage.js';
 import { portraitCacheNeedsLayers, PORTRAIT_LAYERS_VERSION } from './portraitLayers.js';
+import { resolvePatientSceneKey } from './patientSceneKey.js';
 import { inferPatientSex } from './patientSex.js';
 import { STORAGE } from './storageKeys.js';
 import { apiUrl } from './apiBase.js';
@@ -116,6 +118,8 @@ export async function fetchCasePortraitStatus(caseId) {
       return {
         exists: true,
         url: busted,
+        baselineUrl: data.baselineUrl || null,
+        hasBaseline: Boolean(data.hasBaseline),
         layers: data.layers || null,
         analysis: data.analysis || null,
         persona: data.persona || null,
@@ -139,6 +143,7 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
   if (!caseId) return null;
 
   const expectedSex = inferPatientSex(caseData);
+  const expectedSceneKey = resolvePatientSceneKey(caseData);
   const MIN_PORTRAIT_FRAME_VERSION = 3;
 
   const storePortraitUrl = (status) => {
@@ -168,7 +173,17 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
       }
     }
     const local = readCaseRegenImage(caseId);
-    if (isValidSceneSrc(local) && local.includes('/case-portraits/')) {
+    const builtinSrc = getBuiltInPatientSrc(caseData) || '';
+    const needsPedPlate = expectedSceneKey.startsWith('ped');
+    const localLooksAdultPlate =
+      local
+      && needsPedPlate
+      && !local.includes('ped-')
+      && !local.includes('/case-portraits/')
+      && builtinSrc.includes('ped-');
+    if (localLooksAdultPlate) {
+      clearCaseRegenImage(caseId);
+    } else if (isValidSceneSrc(local) && local.includes('/case-portraits/')) {
       return local;
     }
     if (isValidSceneSrc(local)) {
@@ -199,12 +214,22 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
 }
 
 /** Base template image + case JSON → analyzed & reconstructed patient (once cached per case/context). */
-export async function regeneratePatientFromCase(caseData, { refresh = false } = {}) {
+export async function regeneratePatientFromCase(
+  caseData,
+  {
+    refresh = false,
+    sessionContext = null,
+    sessionUpdate = false,
+  } = {},
+) {
   const payload = await fetchBuiltInImagePayload(caseData);
   const caseContext = buildCaseChatContext(caseData);
   const chatMessages = await loadPersistedChatHistory(caseData?.id);
 
   const portraitBrief = resolvePortraitBriefForApi(caseData.id);
+  const useSession =
+    sessionUpdate
+    || Boolean(sessionContext?.hasSessionData);
 
   const r = await fetch(apiUrl('/api/regenerate-patient-from-case'), {
     method: 'POST',
@@ -215,6 +240,8 @@ export async function regeneratePatientFromCase(caseData, { refresh = false } = 
       caseContext,
       portraitBrief,
       chatMessages,
+      sessionContext,
+      sessionUpdate: useSession,
       refresh,
     }),
   });
@@ -229,8 +256,13 @@ export async function regeneratePatientFromCase(caseData, { refresh = false } = 
   const busted = portraitCacheBust(resolvedUrl, data.cachedAt || data.patientSex || caseData.id);
   writeCaseRegenImage(caseData.id, busted);
   if (data.persona) writeCasePortraitPersona(caseData.id, data.persona);
+  if (data.baselineUrl) writeCasePortraitBaseline(caseData.id, data.baselineUrl);
   return {
     dataUrl: busted,
+    baselineUrl: data.baselineUrl || null,
+    hasBaseline: Boolean(data.hasBaseline || data.baselineUrl),
+    sessionPortrait: Boolean(data.sessionPortrait),
+    directorBriefSource: data.directorBriefSource || null,
     cached: Boolean(data.cached),
     layers: data.layers || null,
     analysis: data.analysis || null,

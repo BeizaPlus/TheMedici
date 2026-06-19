@@ -19,6 +19,7 @@ One doc. Six passes. Run **Pass A** automated; verify **B–F** before telling S
 | Briefing → Begin → play scene | same |
 | Uber `?case=U01` deep-link | same |
 | Dock + sidebar chrome visible | same |
+| **Global scrollbars** (Welcome Timeline + Play) — thin gold pill, not white OS bar | Manual — `docs/GLOBAL_UI_STYLE.md` |
 
 Paste `docs/smoke-screenshots/<date>/play-case/run-*/` path in chat.
 

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
+import { renderAttendingMarkdown } from '../lib/chatMessageFormat.jsx';
 import CasePictureInline from './CasePictureInline.jsx';
 
 const CASEPIC_RE = /casepic:(pic-[^\s]+)/g;
@@ -37,7 +37,7 @@ export default function ChatMessageContent({ content }) {
   if (!segments.length) return null;
 
   if (segments.length === 1 && segments[0].type === 'text') {
-    return renderChatMarkdown(segments[0].value);
+    return renderAttendingMarkdown(segments[0].value);
   }
 
   return (
@@ -47,7 +47,7 @@ export default function ChatMessageContent({ content }) {
           <CasePictureInline key={`${seg.id}-${i}`} pictureId={seg.id} />
         ) : (
           <span key={`text-${i}`} className="case-chat-message-text">
-            {renderChatMarkdown(seg.value)}
+            {renderAttendingMarkdown(seg.value)}
           </span>
         ),
       )}

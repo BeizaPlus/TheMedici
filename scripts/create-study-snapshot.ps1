@@ -55,55 +55,48 @@ foreach ($envPath in @(
 $readme = @"
 # MeWorld study snapshot ($Stamp)
 
-**Frozen copy for studying.** Agents and \`git pull\` on \`C:\Users\steve\MeWorld\` do **not** change this folder.
+**Frozen copy for studying.** ``git pull`` on ``C:\Users\steve\MeWorld\`` does **not** change this folder.
 
-## Launch
+**Full agent rules:** ``game\docs\STUDY_MODE.md``
 
-Double-click:
+## Launch (Steve)
 
-\`\`\`
-C:\Users\steve\MeWorld\START-MEWORLD-STUDY.bat
-\`\`\`
+Double-click ``C:\Users\steve\MeWorld\START-MEWORLD-STUDY.bat`` or:
 
-Or:
-
-\`\`\`powershell
+``````powershell
 cd C:\Users\steve\MeWorld-study\game
 npm run dev:study
-\`\`\`
+``````
 
-\`dev:study\` disables live reload — the page won't refresh under you mid-case.
+``dev:study`` = no live reload mid-case · API :3001 · game :5173
 
-## Git reference (main repo only)
+## Agents — while Steve is studying
 
-| Ref | Commit |
-|-----|--------|
-| Branch \`study/freeze-2026-06-17\` | checkpoint before study |
-| Tag \`study-2026-06-17\` | same |
+| Do | Don't |
+|----|--------|
+| Edit **``MeWorld-study\game`` only** | Edit ``MeWorld\game`` |
+| ``node scripts\list-chat-histories.mjs`` to inspect chats | Run this script mid-session (overwrites study code) |
+| Port to main when Steve asks | Assume study = main |
 
-## Refresh this snapshot
+## Progress
 
-When you want to re-freeze from latest main:
+- ``game\user-data\cases\*.json`` — chat on disk
+- ``game\user-data\cases\notes\`` — notes
+- localStorage ``schoonmaker_case_chat_history`` — browser cache
 
-\`\`\`powershell
+## Refresh from main
+
+``````powershell
 cd C:\Users\steve\MeWorld
 powershell -File scripts\create-study-snapshot.ps1
-\`\`\`
+``````
 
-**Portrait gens:** study copy uses **Magnific** (\`MAGNIFIC_API_KEY\` in \`.env\`) — not OpenAI image edits. Add the key to \`MeWorld\.env\` before refreshing if portraits fail.
-
-## Merge later
-
-1. **Your progress** — \`game\user-data\` and browser localStorage (progress-export.html) live in this copy while you study.
-2. **New features** — develop in \`C:\Users\steve\MeWorld\`; when ready:
-   - Copy \`user-data\` back into main, or
-   - \`git merge main\` on branch \`study/freeze-2026-06-17\` in the main repo, or
-   - Re-run this script to take a fresh snapshot from updated main.
+Back up ``user-data`` first if needed. Portrait gens: ``MAGNIFIC_API_KEY`` in ``MeWorld\.env``.
 
 ## Do not
 
-- \`git pull\` inside \`MeWorld-study\` (no .git here by design)
-- Point agents at both folders in one session — pick **study** or **main**
+- ``git pull`` here (no .git)
+- Edit main and study in one agent task without Steve asking
 "@
 
 Set-Content -Path (Join-Path $Target "STUDY_SNAPSHOT.md") -Value $readme -Encoding UTF8

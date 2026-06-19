@@ -15,7 +15,14 @@ import {
   looksLikePatientStageReply,
   sanitizePatientReplyForDisplay,
 } from '../lib/patientReplyText.js';
+import { formatCaseIdLabel, shouldShowCaseIds } from '../lib/learningMode.js';
 import { mergeSessionThread, parseNoteBubbleContent } from '../lib/caseSessionThread.js';
+import { hydrateCaseNotes } from '../lib/caseNotes.js';
+import {
+  fetchCaseUserData,
+  listCaseRecordingsFromUserData,
+  loadPersistedChatHistory,
+} from '../lib/caseUserLog.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { looksLikeTutorQuestion } from '../lib/chatIntentRouting.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
@@ -84,6 +91,27 @@ function ThreadNoteBubble({ content }) {
   );
 }
 
+function ThreadVoiceBubble({ recording }) {
+  const src = recording?.src;
+  const slot = recording?.slot;
+  const attempt = recording?.attempt;
+  const secs = Math.round((recording?.durationMs || 0) / 1000);
+  return (
+    <div className="case-chat-bubble note case-thread-voice">
+      <div className="case-thread-voice-head">
+        <span className="case-thread-voice-label">Voice note #{slot || '?'}</span>
+        {attempt ? <span className="case-thread-voice-meta">Run {attempt}</span> : null}
+        <span className="case-thread-voice-meta">{secs}s</span>
+      </div>
+      {src ? (
+        <audio className="case-chat-md-audio case-thread-voice-audio" controls preload="metadata" src={src} />
+      ) : (
+        <p className="case-chat-tab-empty">Recording file unavailable</p>
+      )}
+    </div>
+  );
+}
+
 export default function CaseSessionThread({
   chat,
   caseData,
@@ -94,6 +122,7 @@ export default function CaseSessionThread({
   onSelectThreadCase,
   caseRecording,
   notesVersion = 0,
+  recordingsVersion = 0,
   onTimelineNote,
   fillTab = false,
   suppressHeader = false,
@@ -104,29 +133,36 @@ export default function CaseSessionThread({
   onPatientModeChange,
   onOpenCaseFromRail,
   onTimelineChat,
+  browseOnly = false,
+  teachMeMode = false,
 }) {
+  const chatApi = chat || {};
   const {
     available,
-    messages,
-    busy,
+    messages = [],
+    busy = false,
     error,
-    historyLoaded,
-    sendMessage,
-    appendNote,
+    historyLoaded = true,
+    sendMessage = async () => null,
+    appendNote = async () => null,
     reloadHistory,
-  } = chat;
+  } = chatApi;
   const listRef = useRef(null);
   const inputRef = useRef(null);
   const [readingIdx, setReadingIdx] = useState(null);
+  const [archivedMessages, setArchivedMessages] = useState([]);
+  const [recordings, setRecordings] = useState([]);
+  const [notesReady, setNotesReady] = useState(false);
   const [draft, setDraft] = useState('');
   const [tutorRouteHint, setTutorRouteHint] = useState('');
   const [collapsed, setCollapsed] = useState(() =>
     fillTab ? false : readCollapsed(STORAGE.threadCollapsed, true),
   );
 
-  const caseLabel = caseData?.ccsNumber || caseData?.id;
+  const caseLabel = formatCaseIdLabel(caseData, { teachMeMode });
   const playCaseLabel = useMemo(() => {
     if (playCaseId == null) return null;
+    if (!shouldShowCaseIds({ teachMeMode })) return null;
     const gc = getCaseById(playCaseId);
     return gc?.ccsNumber ?? playCaseId;
   }, [playCaseId]);
@@ -136,19 +172,54 @@ export default function CaseSessionThread({
     threadViewCaseId != null &&
     String(threadViewCaseId) !== String(playCaseId);
 
-  const thread = useMemo(
-    () => mergeSessionThread(messages, caseId),
-    [messages, caseId, notesVersion],
-  );
+  const thread = useMemo(() => {
+    const chatRows = browseOnly ? archivedMessages : messages || [];
+    return mergeSessionThread(
+      chatRows.map((m) => ({
+        role: m.role,
+        content: m.content,
+        at: m.at || null,
+      })),
+      caseId,
+      { recordings },
+    );
+  }, [browseOnly, messages, archivedMessages, caseId, recordings, notesVersion]);
+
+  const threadReady = historyLoaded && notesReady;
+
+  useEffect(() => {
+    let cancelled = false;
+    setNotesReady(false);
+    void (async () => {
+      await hydrateCaseNotes(caseId);
+      if (browseOnly) {
+        const rows = await loadPersistedChatHistory(caseId);
+        if (!cancelled) {
+          setArchivedMessages(
+            rows.map((m) => ({
+              role: m.role,
+              content: m.content,
+              at: m.at || null,
+            })),
+          );
+        }
+      } else {
+        setArchivedMessages([]);
+      }
+      const userData = await fetchCaseUserData(caseId);
+      if (cancelled) return;
+      setRecordings(listCaseRecordingsFromUserData(userData));
+      setNotesReady(true);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [caseId, notesVersion, recordingsVersion, browseOnly]);
 
   useEffect(() => {
     if (!listRef.current || collapsed) return;
     listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [thread, busy, collapsed]);
-
-  useEffect(() => {
-    void reloadHistory?.();
-  }, [notesVersion, reloadHistory]);
 
   useEffect(() => () => stopCaseReader(), []);
 
@@ -199,7 +270,7 @@ export default function CaseSessionThread({
 
   const submitDraft = useCallback(async () => {
     const text = draft.trim();
-    if (!text || busy) return;
+    if (!text || busy || browseOnly) return;
     setDraft('');
 
     const cmd = parseChatModeCommand(text);
@@ -248,10 +319,12 @@ export default function CaseSessionThread({
     sendMessage,
     appendNoteEntry,
     onTimelineChat,
+    browseOnly,
   ]);
 
   const expanded = suppressHeader || fillTab || !collapsed;
   const quietChatChrome = defaultChatTarget === 'tutor';
+  const flatDockMessages = compact && messagesOnly;
 
   return (
     <div
@@ -344,11 +417,27 @@ export default function CaseSessionThread({
               playCaseId={playCaseId}
               onSelectCase={onSelectThreadCase}
               onOpenCaseChat={onOpenCaseFromRail}
+              teachMeMode={teachMeMode}
             />
           )}
           {viewingOtherCase && (
             <p className="case-chat-banner case-thread-view-banner">
-              Chat for case #{caseLabel} — your play session is still case #{playCaseLabel}.
+              {caseLabel && playCaseLabel ? (
+                <>
+                  Viewing chat for case #{caseLabel} — you are still playing case #{playCaseLabel}. Tap #
+                  {playCaseLabel} to return to this case&apos;s live chat.
+                </>
+              ) : (
+                <>
+                  Viewing another case&apos;s chat history — tap your active case chip to return to live
+                  chat.
+                </>
+              )}
+            </p>
+          )}
+          {browseOnly && !viewingOtherCase && (
+            <p className="case-chat-banner case-thread-view-banner">
+              Read-only history — switch to the active case chip to continue chatting.
             </p>
           )}
           {available === false && (
@@ -369,8 +458,8 @@ export default function CaseSessionThread({
           )}
 
           <div className={`case-chat-messages selectable-text${compact ? ' case-chat-messages--compact' : ''}`} ref={listRef}>
-            {!historyLoaded && <p className="case-chat-tab-empty">Loading…</p>}
-            {historyLoaded && thread.length === 0 && !busy && !quietChatChrome && (
+            {!threadReady && <p className="case-chat-tab-empty">Loading…</p>}
+            {threadReady && thread.length === 0 && !busy && !quietChatChrome && (
               <p className="case-chat-tab-empty">
                 Talk to the patient — ask age, travel, smoking, symptoms — or jot a clinical note.
               </p>
@@ -381,6 +470,11 @@ export default function CaseSessionThread({
               </p>
             )}
             {thread.map((m, i) => {
+              if (m.role === 'voice') {
+                return (
+                  <ThreadVoiceBubble key={m.id || `voice-${i}`} recording={m.recording} />
+                );
+              }
               if (m.role === 'note') {
                 return <ThreadNoteBubble key={m.id || `note-${i}`} content={m.content} />;
               }
@@ -392,12 +486,16 @@ export default function CaseSessionThread({
               return (
                 <div
                   key={m.id || `${m.role}-${i}`}
-                  className={`case-chat-bubble ${m.role}`}
+                  className={
+                    flatDockMessages
+                      ? `case-chat-flat case-chat-flat--${m.role}`
+                      : `case-chat-bubble ${m.role}`
+                  }
                 >
-                  <div className="case-chat-bubble-text">
+                  <div className={flatDockMessages ? 'case-chat-flat-text' : 'case-chat-bubble-text'}>
                     <ChatMessageContent content={bubbleText} />
                   </div>
-                  {m.role === 'assistant' && (
+                  {m.role === 'assistant' && !flatDockMessages && (
                     <div className="case-chat-bubble-actions">
                       <button
                         type="button"
@@ -458,7 +556,7 @@ export default function CaseSessionThread({
             {busy && <div className="case-chat-bubble assistant typing">Thinking…</div>}
           </div>
 
-          {!messagesOnly && (
+          {!messagesOnly && !browseOnly && (
           <form
             className="case-chat-form"
             onPaste={handlePicturePaste}

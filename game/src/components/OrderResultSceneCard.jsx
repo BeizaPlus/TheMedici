@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
 import { neutralStackOrderName } from '../lib/stackDecoys.js';
 import {
   buildOrderResultPrintPayload,
   printOrderResultReport,
 } from '../lib/exportOrderResult.js';
 import { useOrderResult } from '../hooks/useOrderResult.js';
+import { renderAttendingMarkdown } from '../lib/chatMessageFormat.jsx';
 
 export default function OrderResultSceneCard({
   intervention,
@@ -17,6 +19,11 @@ export default function OrderResultSceneCard({
   teachMeMode = false,
 }) {
   const { result, loading } = useOrderResult(intervention, { caseData, caseFlow, teachMeMode });
+  const [whyOpen, setWhyOpen] = useState(false);
+
+  useEffect(() => {
+    setWhyOpen(false);
+  }, [intervention?.id]);
 
   if (!intervention) return null;
 
@@ -71,11 +78,28 @@ export default function OrderResultSceneCard({
           )}
         </div>
       </header>
-      <p className="order-result-body">{result?.text || 'No result documented for this order.'}</p>
-      {(teachMeMode || intervention.why) && intervention.why ? (
-        <p className="order-result-why muted">
-          <strong>Why:</strong> {intervention.why}
-        </p>
+      <div className="order-result-body">
+        {renderAttendingMarkdown(result?.text || 'No result documented for this order.')}
+      </div>
+      {teachMeMode && intervention.why ? (
+        <div className="order-result-why-wrap">
+          <button
+            type="button"
+            className="order-result-why-toggle"
+            onClick={() => setWhyOpen((v) => !v)}
+            aria-expanded={whyOpen}
+          >
+            <span className="order-result-why-chevron" aria-hidden>
+              {whyOpen ? '▴' : '▾'}
+            </span>
+            Why
+          </button>
+          {whyOpen ? (
+            <div className="order-result-why muted">
+              {renderAttendingMarkdown(`**Why:** ${intervention.why}`)}
+            </div>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );

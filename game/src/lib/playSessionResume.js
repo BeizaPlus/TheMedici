@@ -50,6 +50,67 @@ export function clearPlayCheckpoint() {
   }
 }
 
+function readCaseCheckpointMap() {
+  try {
+    const raw = localStorage.getItem(STORAGE.casePlayCheckpoints);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeCaseCheckpointMap(map) {
+  try {
+    localStorage.setItem(STORAGE.casePlayCheckpoints, JSON.stringify(map));
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Per-case saved play state — survives "next case" navigation. */
+export function writeCasePlayCheckpoint(caseId, payload) {
+  if (caseId == null || caseId === '' || !payload) return null;
+  const id = String(caseId);
+  const map = readCaseCheckpointMap();
+  const next = {
+    version: CHECKPOINT_VERSION,
+    savedAt: new Date().toISOString(),
+    ...payload,
+    caseId: id,
+  };
+  map[id] = next;
+  writeCaseCheckpointMap(map);
+  return next;
+}
+
+export function readCasePlayCheckpoint(caseId) {
+  if (caseId == null || caseId === '') return null;
+  const row = readCaseCheckpointMap()[String(caseId)];
+  if (!row || row.version !== CHECKPOINT_VERSION) return null;
+  if (row.savedAt) {
+    const age = Date.now() - new Date(row.savedAt).getTime();
+    if (age > MAX_AGE_MS) {
+      clearCasePlayCheckpoint(caseId);
+      return null;
+    }
+  }
+  return row;
+}
+
+export function clearCasePlayCheckpoint(caseId) {
+  if (caseId == null || caseId === '') return;
+  const id = String(caseId);
+  const map = readCaseCheckpointMap();
+  if (!map[id]) return;
+  delete map[id];
+  writeCaseCheckpointMap(map);
+}
+
+export function listCasePlayCheckpointIds() {
+  return Object.keys(readCaseCheckpointMap());
+}
+
 export function hasPlayCheckpoint() {
   return Boolean(readPlayCheckpoint()?.caseId);
 }

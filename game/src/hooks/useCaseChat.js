@@ -24,6 +24,7 @@ function toUiMessages(rows, { patientMode = false } = {}) {
   if (!rows?.length) return [];
   return rows.map((m) => ({
     role: m.role,
+    at: m.at || null,
     content:
       m.role === 'assistant'
         ? normalizeAssistantContent(m.content, { patientMode })
@@ -70,9 +71,9 @@ export function useCaseChat({
   }, [onModelReady]);
 
   const persistMessage = useCallback(
-    (role, content) => {
-      if (!caseId || !content) return;
-      void logChatMessage(caseId, playSessionId, role, content);
+    async (role, content) => {
+      if (!caseId || !content) return null;
+      return logChatMessage(caseId, playSessionId, role, content);
     },
     [caseId, playSessionId],
   );
@@ -132,7 +133,8 @@ export function useCaseChat({
       appendCaseNotesBlock(caseId, trimmed, { header });
       const stamp = new Date().toLocaleTimeString();
       const formatted = `**${header} · ${stamp}**\n${trimmed}`;
-      setMessages((prev) => [...prev, { role: 'note', content: formatted }]);
+      const at = new Date().toISOString();
+      setMessages((prev) => [...prev, { role: 'note', content: formatted, at }]);
       persistMessage('note', formatted);
       return trimmed;
     },
@@ -160,8 +162,8 @@ export function useCaseChat({
       const sid = await ensureCaseChatSession(caseData, { chatMode });
       setSessionId((prev) => (prev !== sid ? sid : prev));
 
-      setMessages((prev) => [...prev, { role: 'user', content: trimmed }]);
-      persistMessage('user', trimmed);
+      setMessages((prev) => [...prev, { role: 'user', content: trimmed, at: new Date().toISOString() }]);
+      await persistMessage('user', trimmed);
 
       const sessionContext = dockBrief
         ? { dockBrief: true }
@@ -183,20 +185,22 @@ export function useCaseChat({
       if (chatMode === 'tutor' && !String(shown || reply || '').trim()) {
         throw new Error('Tutor returned empty — retry or check API keys');
       }
-      setMessages((prev) => [...prev, { role: 'assistant', content: shown || reply }]);
-      persistMessage('assistant', shown || reply);
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: shown || reply, at: new Date().toISOString() },
+      ]);
+      await persistMessage('assistant', shown || reply);
       if (chatMode === 'patient_sim' && shown) {
         void prefetchPatientReplyAudio({ caseData, text: shown });
         void speakPatientReply({ caseData, text: shown });
       }
-      void reloadHistory();
       if (notesMode && caseId) {
         const stamp = new Date().toLocaleTimeString();
         appendCaseNotesBlock(caseId, reply, { header: `Chat · ${stamp}` });
       }
       return reply;
     },
-    [caseData, persistMessage, caseId, reloadHistory, getSessionContext, defaultMode],
+    [caseData, persistMessage, caseId, getSessionContext, defaultMode],
   );
 
   const drainSendQueue = useCallback(async () => {

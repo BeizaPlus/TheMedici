@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "description": "Psychiatric case pool — game scenes and lunatic-pass intro loops. NOT primary Uber U01–U08.",
+  "assetBase": "/assets/patient/psychiatric",
+  "devPendingDir": "dev/uber-portrait-refs/psychiatric-intro-pending",
+  "caseSlugs": {
+    "107": "distorted-excluded-do-not-gen"
+  },
+  "refs": {
+    "distorted-excluded-do-not-gen": {
+      "label": "Psychiatric lunatic-pass (distorted)",
+      "gameSceneFile": "distorted-excluded-do-not-gen-GAME-SCENE.png",
+      "gameSceneStatus": "approved-pending-ship",
+      "gameSceneAlt": "alt1-gamepass-v3",
+      "lunaticIntroFile": "distorted-excluded-do-not-gen-LUNATIC-INTRO-15s-comfy.mp4",
+      "lunaticIntroStatus": "pending",
+      "lunaticIntroDurationSec": 15,
+      "pendingOnly": true
+    }
+  }
+}

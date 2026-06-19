@@ -7,7 +7,7 @@ export default function ClinicalFontControls({
   prefs,
   onChange,
   writePrefs = writeClinicalTextPrefs,
-  resetTo = { fontScale: 1.12, weight: 600 },
+  resetTo = { fontScale: 1.38, weight: 600 },
   previewText = CLINICAL_PREVIEW,
   labelText = 'Text',
   compact = false,

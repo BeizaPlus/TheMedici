@@ -13,6 +13,8 @@ alwaysApply: false
 
 # MeWorld Magnific MCP — same workflow as Kojo
 
+**Canonical doc:** **`.cursor/RULES_IMAGE_GENERATION.md`** — read that first; this file is the Cursor glob pointer.
+
 **Global policy:** `steve-generation-access.mdc` · Kojo reference: `kojo-oppong.mdc` + `AGENT_HANDOFF-2026-06-09-EAGLE-STYLE.md`
 
 | Task | Primary | Fallback |
@@ -24,6 +26,7 @@ alwaysApply: false
 
 ## MCP auth (Cursor agents)
 
+- **Magnific app:** https://www.magnific.com/app — Steve login, credits, home **Connect** for AI agents
 - Server: **`user-Magnific`** · OAuth — **no API key** in chat
 - Reauth: Cursor → Settings → MCP → Magnific → Disconnect / Connect → Reload Window → `library_list` verify
 - Read tool schema under `mcps/user-Magnific/tools/` before every call
@@ -55,7 +58,7 @@ Or `creations_upload_image` when you have a stable public URL.
 1. **`image`** — crop lock / baseplate  
    - Male: `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png`  
    - Female layout: `public/assets/patient/patient-scene-female.png`
-2. **`image`** (optional) — anatomy scope `*-anatomic-plate-anatomy.png`
+2. **`image`** (optional) — anatomy scope `*-anatomic-plate-anatomy.png` — **adult gens only; never pediatric** (NSFW filter)
 3. **`character`** — lady map from `patientLadyRefs.json` when female case
 4. Prompt: `server/casePortrait.js` `buildPortraitPrompt()` + `dev/scene-camera-lock/prompts/magnific-camera-lock.txt`
 

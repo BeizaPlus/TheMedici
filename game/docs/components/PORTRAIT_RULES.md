@@ -1,6 +1,10 @@
 # Portrait rules — Magnific + scene lock
 
-**Rule file:** `.cursor/rules/patient-character-maps.mdc`  
+**Canonical:** **`.cursor/RULES_IMAGE_GENERATION.md`** — all agents start there.
+
+**Magnific app:** https://www.magnific.com/app
+
+**Rule files:** `.cursor/rules/patient-character-maps.mdc` · `meworld-magnific-mcp.mdc`  
 **Character maps:** `dev/character-maps/CHARACTER_MAPS.md`
 
 ## Pipeline

@@ -97,6 +97,7 @@ export function enrichUberGameCase(gameCase, ccsCase, catalog) {
     interventions:
       mergedInterventions.length > 0 ? mergedInterventions : gameCase.interventions,
     algorithm: buildAlgorithm(playbookForAlgo, zones),
+    uberFaceSlug: uber.faceSlug || null,
     uberMeta: {
       id: uber.id,
       domains: uber.domains,
@@ -104,6 +105,7 @@ export function enrichUberGameCase(gameCase, ccsCase, catalog) {
       segments,
       patientName: uber.patientName,
       briefingNote: uber.briefingNote,
+      faceSlug: uber.faceSlug || null,
     },
   };
 }

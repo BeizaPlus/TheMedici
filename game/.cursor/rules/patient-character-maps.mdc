@@ -10,7 +10,11 @@ alwaysApply: false
 
 # Patient character maps (lady likeness)
 
+**Canonical:** **`.cursor/RULES_IMAGE_GENERATION.md`** § Workflow C.
+
 **Docs:** `dev/character-maps/CHARACTER_MAPS.md`
+
+**Magnific app:** https://www.magnific.com/app
 
 ## Pipeline (every new ref)
 
@@ -27,8 +31,9 @@ alwaysApply: false
 ## Runtime
 
 - `resolvePatientLadyRef.js` + `server/casePortrait.js` pick slug by case id / region / rotation
-- Portrait must still use **approved 16:9 ED baseplate** (`SCENE_LOCK.json`) — character map is **identity only**, not camera
-- **Framing lock (Steve 2026-06-16):** crown → toes, bare feet visible at bottom — same as male crop lock. Female gens use `patient-scene-female.png` + `female-ed-anatomic-plate.txt`; never mid-thigh or face-only crop
+- Portrait must still use **approved 16:9 ED baseplate** (`SCENE_LOCK.json`) — character map is **identity only**, not camera or render style
+- **Two-step pipeline:** `dev/character-maps/CHARACTER_MAP_TO_GAME_STYLE.md` — photoreal map → stylized MeWorld CGI scene
+- **Framing lock (Steve 2026-06-16):** crown → toes, bare feet visible at bottom — same as male crop lock. Female **Magnific gens** use `male-ed-anatomic-plate-a.png` crop lock + `female-ed-anatomic-plate.txt`; **never** `patient-scene-female.png` as gen input (POV feet). Never mid-thigh or face-only crop
 
 ## Forward work
 

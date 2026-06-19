@@ -44,8 +44,8 @@ const SLUGS = [
 
 const only = process.argv.find((a) => a.startsWith('--only='))?.split('=')[1];
 
-function loadMeWorldEnv() {
-  const envPath = path.join(root, '..', '.env');
+function loadGameEnv() {
+  const envPath = path.join(root, '.env');
   if (!fs.existsSync(envPath)) return;
   for (const line of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
     const trimmed = line.trim();
@@ -58,12 +58,12 @@ function loadMeWorldEnv() {
 }
 
 function mapPrompt(identity) {
-  return `Character contact sheet on pure white background: four views of the same child (front face, three-quarter left, three-quarter right, profile). ${identity}. Preserve face likeness, skin tone, and hair from reference. Dignified medical education portrait. No hospital room, no text, no watermark.`;
+  return `Photorealistic character contact sheet on pure white background (identity reference only — NOT MeWorld game CGI style): four views of the same child (front face, three-quarter left, three-quarter right, profile). ${identity}. Preserve face likeness, skin tone, and hair from reference. Dignified medical education portrait. No hospital room, no text, no watermark.`;
 }
 
 async function main() {
   loadMasterEnv();
-  loadMeWorldEnv();
+  loadGameEnv();
 
   const { generateImageEditWithMagnific, magnificApiKey } = await import(
     pathToFileURL(path.join(root, 'server', 'magnificImage.js')).href
@@ -111,10 +111,14 @@ async function main() {
     }
   }
 
+  const pngFiles = fs.readdirSync(outDir).filter((f) => f.endsWith('.png'));
   const manifest = {
     generatedAt: new Date().toISOString(),
     slugs: targets.map((t) => t.slug),
-    note: 'Pick one alt per slug → public/assets/patient/pediatric/<slug>-CHARACTER-MAP.png',
+    shipTarget: 'public/assets/patient/pediatric/<slug>-CHARACTER-MAP.png',
+    note: 'Pick one alt per slug → ship after approval. Maps are photoreal identity only — game scenes use stylized MeWorld CGI (CHARACTER_MAP_TO_GAME_STYLE.md).',
+    pngCount: pngFiles.length,
+    expectedPngCount: targets.length * 2,
   };
   fs.writeFileSync(path.join(outDir, 'APPROVAL_MANIFEST.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 

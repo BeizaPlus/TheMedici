@@ -21,7 +21,16 @@ const SYNONYM_GROUPS = [
   ['general exam', 'general appearance', 'physical exam general appearance'],
   ['pregnancy', 'pregnancy test', 'preg test', 'hcg', 'beta hcg'],
   ['thyroid test', 'thyroid', 'tsh', 'thyroid stimulating hormone'],
-  ['liver panel', 'lfts', 'liver function tests'],
+  ['liver panel', 'lfts', 'liver function tests', 'lft bmp bilirubin'],
+  [
+    'galt enzyme assay',
+    'galt enzyme',
+    'galt rbcs',
+    'galactose enzyme',
+    'gout enzyme',
+    'gout enzymes',
+    'galactose 1 phosphate uridylyltransferase',
+  ],
   ['kcl', 'potassium chloride'],
   ['k citrate', 'potassium citrate'],
   ['k phosphate', 'potassium phosphate'],
@@ -358,6 +367,36 @@ export function resolveCaseStackOrder(query, stacks = [], placed = {}) {
     findStackMatchForQuery(query, stacks, placed) ||
     findStackMatchForQuery(query, stacks, {}, { includePlaced: true })
   );
+}
+
+/**
+ * Physical exam bulk picker — match only when the CCS section aligns with a case stack.
+ * Avoids generic "Physical Exam" alias matching every section to one Neuro stack.
+ */
+export function resolvePhysicalExamSectionStack(query, stacks = [], placed = {}) {
+  const t = normCommandText(query);
+  if (!t.includes('physical exam')) return null;
+
+  for (const stack of stacks) {
+    if (placed[stack.id]) continue;
+    if (normCommandText(stack.label) === t) return stack;
+  }
+
+  const sectionPart = String(query).split(':').slice(1).join(':').trim();
+  if (!sectionPart) return null;
+  const sectionNorm = normCommandText(sectionPart);
+
+  for (const stack of stacks) {
+    if (placed[stack.id]) continue;
+    const label = String(stack.label || '');
+    if (!/physical exam/i.test(label)) continue;
+    const stackSection = label.split(':').slice(1).join(':').trim();
+    if (!stackSection) continue;
+    if (normCommandText(stackSection) === sectionNorm) return stack;
+    if (scoreOrderAliasMatch(sectionPart, stackSection, [stackSection]) >= 40000) return stack;
+  }
+
+  return null;
 }
 
 function queryMatchesAnyCaseStack(query, caseStacks = [], placed = {}) {

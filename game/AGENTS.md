@@ -240,6 +240,10 @@ Per-case **House-style cold-open** patient image from the **approved ED baseplat
 
 **Rule:** `.cursor/rules/meworld-magnific-mcp.mdc` · **No OpenAI image edits.** Fal legacy fallback only if Magnific unavailable.
 
+### TV / CCS presenter stills (Magnific REST + broadcast degrade)
+
+BEIZA on-brand **Kwabena / POLYMATH** TV feed stills for CCS intros — **one** Magnific REST call, then `npm run tv:degrade`. Not MCP. Full pipeline: **`dev/tv-presentations/AGENT_HANDOFF_TV_PRESENTATION.md`**.
+
 | Baseplate | Path | Frame |
 |-----------|------|-------|
 | Male default | `public/assets/patient/patient-scene.png` | **1536×864 (16:9)** |
@@ -280,6 +284,20 @@ Example custom brief (case 25 sickle cell): *6-year-old boy, curled on stretcher
 | Server | `server/casePortrait.js` + `resolvePatientLadyRef.js` |
 
 Pinterest ref → Magnific 9:16 contact sheet → register slug + `identityPrompt`. Case **140** → `pinterest-cornrows-star`. Rule: `patient-character-maps.mdc`.
+
+### Uber unique faces (U01–U08)
+
+| Piece | Path |
+|-------|------|
+| Registry | `src/data/patientUberRefs.json` |
+| Source photos | `dev/uber-portrait-refs/sources/01-…15-*.png` |
+| Index | `dev/uber-portrait-refs/UBER_FACE_INDEX.md` |
+| Manifest | `src/data/uberCases.json` (`faceSlug` per composite) |
+| Resolver | `src/lib/resolvePatientUberRef.js` → `server/casePortrait.js` |
+| Ship target | `public/assets/patient/uber/*-CHARACTER-MAP.png` |
+| Gen script | `node scripts/generate-uber-character-maps.mjs` (after MCP restart + `MAGNIFIC_API_KEY`) |
+
+**Excluded:** `08-distorted-excluded-do-not-gen.png` — never send to Magnific. **Bank** slugs (`*-bank`) are alternates only.
 
 ### Scene element registry (anti-slop)
 
@@ -418,10 +436,12 @@ After a play session, **Case story** compiles attendant chat, patient replies, e
 |-------|------|
 | UI | `CaseStoryPanel.jsx` — Prose \| Storyboard tabs · Edit/twist · **Generate oversight still** · **Generate panel stills** |
 | API | `POST /api/case-story` · `POST /api/case-story-storyboard` |
-| Server | `server/caseStory.js` · `server/caseStoryCache.js` |
+| Server | `server/caseStory.js` · `server/caseStoryCache.js` · `server/caseStoryCharacterLock.js` |
+| Character lock | `dev/case-story/case_XXX-CHARACTER-LOCK.md` — master = identity map; beats ref master + lock |
+| Batch CLI | `scripts/generate-case-story-images.mjs` — skips existing PNGs unless `--force` |
 | Session fingerprint | `src/lib/caseStorySessionFingerprint.js` — bust cache when run changes |
 | Storycraft skill | `dev/storycraft-scale/SKILL.md` |
-| Gold case 051 | Offline title *The Man Who Got Peppered* — TIA / embolic shower |
+| Gold case 051 | Offline title *The Man Who Got Peppered* — TIA / embolic shower · lock: `dev/case-story/case_051-CHARACTER-LOCK.md` |
 | Magnific | `MAGNIFIC_API_KEY` in `game/.env` for plates — see `dev/pediatric-portrait-refs/character-maps-pending/README-APPROVAL.md` |
 
 **Teach Me Yours column:** **✕** = not placed · **✓** = placed. Briefing picker: green attempt radio only (no `N orders` / `Attempted` badges).

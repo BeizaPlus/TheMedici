@@ -13,6 +13,7 @@ import {
 import { getPresentationHistory } from '../lib/casePresentation.js';
 import CasePortraitBriefControl from './CasePortraitBriefControl.jsx';
 import { clinicalTextStyle, readClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
+import { TEXT_PREFS_CHANGED } from '../lib/textPrefsSync.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { unlockAmbience } from '../lib/audio.js';
 import { getCaseFlow } from '../data/caseFlows.js';
@@ -24,9 +25,13 @@ import {
   getBriefingHpi,
   getBriefingNoteSections,
 } from '../lib/caseBriefing.js';
-import { isLearningMode } from '../lib/learningMode.js';
+import { isLearningMode, learnerFacingCaseTitle, formatCaseIdLabel } from '../lib/learningMode.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
 import { useCasePortraitSrc } from '../hooks/useCasePortraitSrc.js';
+import PsychiatricLunaticIntro, {
+  shouldSkipPsychiatricLunaticIntro,
+} from './PsychiatricLunaticIntro.jsx';
+import { resolvePsychiatricLunaticIntro } from '../lib/resolvePatientPsychiatricRef.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
   BRIEFING_UI_ELEMENTS,
@@ -78,16 +83,21 @@ function studioOnlyPosition(entry, layoutStudio) {
 
 export default function Briefing({ caseData, onBegin, onBack, onSelectCase, studioCapture = false }) {
   const brand = getBranding();
-  const {
-    portraitForceSrc,
-    setPortraitSrc,
-    clearPortraitSrc,
-  } = useCasePortraitSrc(caseData);
+  const [pickerPreviewCase, setPickerPreviewCase] = useState(null);
+  const displayCase = pickerPreviewCase || caseData;
+  const psychIntro = useMemo(() => resolvePsychiatricLunaticIntro(displayCase), [displayCase]);
+  const [lunaticIntroDone, setLunaticIntroDone] = useState(() =>
+    shouldSkipPsychiatricLunaticIntro(displayCase?.id),
+  );
+  const { portraitForceSrc, clearPortraitSrc } = useCasePortraitSrc(displayCase, {
+    preferUberPreviewPlate: true,
+  });
+  const { setPortraitSrc } = useCasePortraitSrc(caseData);
   const [portraitRegenBusy, setPortraitRegenBusy] = useState(false);
   const [portraitRegenMsg, setPortraitRegenMsg] = useState('');
   const [readState, setReadState] = useState('idle');
   const [readMsg, setReadMsg] = useState('');
-  const [textPrefs] = useState(() => readClinicalTextPrefs());
+  const [textPrefs, setTextPrefs] = useState(() => readClinicalTextPrefs());
   const [uiLayout, setUiLayout] = useState(() => sanitizeBriefingUiLayout(readBriefingUiLayout()));
   const [layoutStudio, setLayoutStudio] = useState(false);
   const [selectedUiId, setSelectedUiId] = useState('case-hero');
@@ -108,6 +118,20 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
   }, [caseData?.id]);
 
   useEffect(() => () => stopCaseReader(), []);
+
+  useEffect(() => {
+    const onPrefs = () => setTextPrefs(readClinicalTextPrefs());
+    window.addEventListener(TEXT_PREFS_CHANGED, onPrefs);
+    return () => window.removeEventListener(TEXT_PREFS_CHANGED, onPrefs);
+  }, []);
+
+  useEffect(() => {
+    setPickerPreviewCase(null);
+  }, [caseData?.id]);
+
+  useEffect(() => {
+    setLunaticIntroDone(shouldSkipPsychiatricLunaticIntro(displayCase?.id));
+  }, [displayCase?.id]);
 
   useEffect(() => {
     let cancelled = false;
@@ -396,8 +420,8 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
           </div>
         )}
         <PatientScene
-          scene={caseData.patientScene}
-          caseData={caseData}
+          scene={displayCase.patientScene}
+          caseData={displayCase}
           className="briefing-scene-img"
           forceSrc={portraitForceSrc}
           showVideoBackground={false}
@@ -405,6 +429,15 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             if (portraitForceSrc) clearPortraitSrc();
           }}
         />
+        {psychIntro?.enabled && !lunaticIntroDone && (
+          <PsychiatricLunaticIntro
+            anchorUrl={psychIntro.anchorUrl}
+            videoUrl={psychIntro.videoUrl}
+            durationSec={psychIntro.durationSec}
+            caseId={psychIntro.caseId}
+            onComplete={() => setLunaticIntroDone(true)}
+          />
+        )}
         <div className="briefing-scene-dim" />
         <div
           className={`briefing-case-hero ${uiShellClass('case-hero', uiLayout['case-hero'], layoutStudio)}`}
@@ -413,12 +446,16 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
           onPointerDown={(e) => startUiDrag('case-hero', e)}
         >
           <p className="briefing-case">
-            CCS Case {caseData.ccsNumber || caseData.id}
+            {formatCaseIdLabel(caseData) ? (
+              <>CCS Case {formatCaseIdLabel(caseData)}</>
+            ) : (
+              <>Case briefing</>
+            )}
             {caseData.category ? ` · ${caseData.category}` : ''}
             {caseData.timeLimit ? ` · ${caseData.timeLimit}` : ''}
           </p>
-          <h1>{toTitleCase(caseData.title)}</h1>
-          {caseData.uberMeta && (
+          <h1>{learnerFacingCaseTitle(caseData)}</h1>
+          {caseData.uberMeta && !isLearningMode() && (
             <div className="briefing-uber-meta">
               <p className="briefing-uber-note">{caseData.uberMeta.briefingNote}</p>
               <ul className="briefing-uber-segments">
@@ -440,7 +477,11 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
           data-briefing-ui="case-picker"
           onPointerDown={(e) => startUiDrag('case-picker', e)}
         >
-          <BriefingCasePicker currentCaseId={caseData.id} onSelectCase={onSelectCase} />
+          <BriefingCasePicker
+            currentCaseId={caseData.id}
+            onSelectCase={onSelectCase}
+            onPreviewCase={setPickerPreviewCase}
+          />
         </div>
       )}
 

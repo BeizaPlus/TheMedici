@@ -20,6 +20,12 @@
   --welcome-panel: rgba(10, 10, 16, 0.72);
   --welcome-panel-solid: rgba(12, 12, 20, 0.82);
   --font: 'Archivo', sans-serif;
+  /* Scrollbars — global (Welcome, Timeline, Play, modals). See docs/GLOBAL_UI_STYLE.md */
+  --scrollbar-size: 8px;
+  --scrollbar-track: rgba(255, 255, 255, 0.06);
+  --scrollbar-thumb: rgba(232, 184, 75, 0.32);
+  --scrollbar-thumb-hover: rgba(232, 184, 75, 0.52);
+  --scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 [data-theme='light'] {
@@ -40,6 +46,10 @@
   );
   --welcome-panel: rgba(255, 255, 255, 0.78);
   --welcome-panel-solid: rgba(255, 255, 255, 0.9);
+  --scrollbar-track: rgba(0, 0, 0, 0.06);
+  --scrollbar-thumb: rgba(154, 114, 9, 0.35);
+  --scrollbar-thumb-hover: rgba(154, 114, 9, 0.55);
+  --scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 * {
@@ -47,6 +57,47 @@
   margin: 0;
   padding: 0;
   font-family: 'Archivo', sans-serif;
+}
+
+/* Global scrollbars — entire #root shell (Welcome Timeline, settings, Play, modals).
+   Never rely on OS default (white track + arrow buttons). docs/GLOBAL_UI_STYLE.md */
+#root,
+#root * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
+}
+
+#root::-webkit-scrollbar,
+#root *::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+#root::-webkit-scrollbar-track,
+#root *::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
+}
+
+#root::-webkit-scrollbar-thumb,
+#root *::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+#root::-webkit-scrollbar-thumb:hover,
+#root *::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+  background-clip: padding-box;
+}
+
+#root::-webkit-scrollbar-button,
+#root *::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
 }
 
 html,
@@ -812,6 +863,90 @@ button {
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.35) 100%);
+}
+
+/* Psychiatric lunatic-pass intro overlay (pending — case 107) */
+.psych-lunatic-intro {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.psych-lunatic-intro-anchor,
+.psych-lunatic-intro-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+.psych-lunatic-intro-shake {
+  position: absolute;
+  inset: 0;
+  animation: psych-lunatic-shake 15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.psych-lunatic-intro-throw {
+  position: absolute;
+  left: 58%;
+  top: 42%;
+  width: 18%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(220, 210, 190, 0.95) 0%, rgba(180, 160, 130, 0.4) 55%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.2) translateZ(0);
+  animation: psych-lunatic-throw 15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.psych-lunatic-intro-spill {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 20%, rgba(180, 200, 210, 0.55) 0%, transparent 55%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.35) 0%, transparent 40%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: psych-lunatic-spill 15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.psych-lunatic-intro-skip {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 4;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+@keyframes psych-lunatic-shake {
+  0%, 6%, 13%, 100% { transform: translate(0, 0); }
+  2% { transform: translate(-4px, 2px) rotate(-0.4deg); }
+  3% { transform: translate(5px, -3px) rotate(0.5deg); }
+  4% { transform: translate(-6px, 1px) rotate(-0.6deg); }
+  5% { transform: translate(4px, 2px) rotate(0.3deg); }
+  7% { transform: translate(-3px, -2px); }
+  8% { transform: translate(2px, 1px); }
+}
+
+@keyframes psych-lunatic-throw {
+  0%, 8%, 100% { opacity: 0; transform: scale(0.2) translate(-30%, 20%); }
+  12% { opacity: 1; transform: scale(0.6) translate(-10%, 0); }
+  18% { opacity: 0.9; transform: scale(1.8) translate(10%, -15%); }
+  24% { opacity: 0; transform: scale(3.2) translate(25%, -35%); }
+}
+
+@keyframes psych-lunatic-spill {
+  0%, 20%, 100% { opacity: 0; filter: blur(0); }
+  26% { opacity: 0.85; filter: blur(1px); }
+  32% { opacity: 1; filter: blur(2px); }
+  42% { opacity: 0.55; filter: blur(1px); }
+  52% { opacity: 0.1; filter: blur(0); }
 }
 
 .briefing-layout {
@@ -5778,15 +5913,6 @@ button {
 .welcome-entry-modal .btn-primary,
 .welcome-entry-modal .btn-ghost {
   align-self: flex-start;
-}
-
-.welcome-entry-modal::-webkit-scrollbar {
-  width: 10px;
-}
-
-.welcome-entry-modal::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 999px;
 }
 
 .welcome-onboarding-slim {

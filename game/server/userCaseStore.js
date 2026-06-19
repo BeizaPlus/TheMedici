@@ -88,6 +88,41 @@ function caseFilePath(caseId) {
   return path.join(USER_CASES_DIR, `${String(caseId).padStart(3, '0')}.json`);
 }
 
+function caseLiveDir(caseId) {
+  return path.join(USER_CASES_DIR, String(caseId).padStart(3, '0'), 'live');
+}
+
+/** Rolling snapshot — `cases/143/live/snapshot.json` mirrors active work for one case. */
+async function writeCaseLiveSnapshot(caseId, data) {
+  try {
+    const dir = caseLiveDir(caseId);
+    await fsp.mkdir(dir, { recursive: true });
+    const snapshot = {
+      caseId: String(caseId),
+      updatedAt: new Date().toISOString(),
+      title: data.title || '',
+      stats: data.stats || {},
+      chatMessages: data.stats?.chatMessages ?? (data.chatHistory?.length || 0),
+      chatTail: (data.chatHistory || []).slice(-40),
+      openSessions: (data.sessions || []).filter((s) => !s.endedAt).map((s) => ({
+        id: s.id,
+        startedAt: s.startedAt,
+        attempt: s.attempt,
+      })),
+      lastSession: (data.sessions || []).length
+        ? data.sessions[data.sessions.length - 1]
+        : null,
+    };
+    await fsp.writeFile(
+      path.join(dir, 'snapshot.json'),
+      JSON.stringify(snapshot, null, 2),
+      'utf8',
+    );
+  } catch {
+    /* non-fatal */
+  }
+}
+
 function defaultCaseUser(caseId, meta = {}) {
   return {
     caseId: String(caseId),
@@ -181,6 +216,7 @@ export async function writeCaseUser(caseId, data) {
   ensureUserDirs();
   const next = { ...data, updatedAt: new Date().toISOString() };
   await fsp.writeFile(caseFilePath(caseId), JSON.stringify(next, null, 2), 'utf8');
+  await writeCaseLiveSnapshot(caseId, next);
   return next;
 }
 

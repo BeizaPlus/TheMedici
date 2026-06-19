@@ -13,6 +13,8 @@ import { resolveSimulationCreativity } from './simulationCreativity.js';
 import { getActiveNameRegion } from './patientNameRegions.js';
 import { resolvePracticeHpi } from './practiceHpi.js';
 import { isLearningMode, sanitizeCaseForLearning } from './learningMode.js';
+import { isUberCase } from './uberCases.js';
+import { readLocalCaseBrief } from './caseBrief.js';
 import { STORAGE } from './storageKeys.js';
 import { apiUrl } from './apiBase.js';
 const sessions = new Map();
@@ -82,6 +84,7 @@ export function buildCaseChatContext(caseData, {
     clinical_hpi_narrative: enriched.clinical_hpi_narrative,
     vitalsText: caseData?.vitalsText,
     learningMode,
+    uberFaceSlug: caseData?.uberFaceSlug || caseData?.uberMeta?.faceSlug || null,
     vitals: flow?.vitals || prepared?.vitals || caseData?.vitals,
     exam: flow?.exam,
     flowTrack: flow?.flowTrack,
@@ -239,11 +242,14 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
   const patientPersona = await resolvePatientPersona(caseData);
   const caseDiscussion = buildCaseDiscussionContext(caseId);
   const draftContext = buildCaseChatContext(caseData, { patientPersona, caseDiscussion, chatMode: mode });
-  const caseBriefMarkdown = await resolveCaseBriefMarkdown(caseId, {
-    caseDiscussion,
-    caseContext: draftContext,
-    refresh: false,
-  });
+  let caseBriefMarkdown = readLocalCaseBrief(caseId);
+  if (!caseBriefMarkdown && !isUberCase(caseId)) {
+    caseBriefMarkdown = await resolveCaseBriefMarkdown(caseId, {
+      caseDiscussion,
+      caseContext: draftContext,
+      refresh: false,
+    });
+  }
   const caseContext = buildCaseChatContext(caseData, {
     patientPersona,
     caseDiscussion,

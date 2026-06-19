@@ -1,6 +1,8 @@
 import { STORAGE } from './storageKeys.js';
+import { notifyTextPrefsChanged } from './textPrefsSync.js';
 
-const DEFAULT = { fontScale: 1.12, weight: 600 };
+/** Steve default — legible clinical copy (~138%). */
+const DEFAULT = { fontScale: 1.38, weight: 600 };
 
 export function readClinicalTextPrefs() {
   try {
@@ -21,6 +23,7 @@ export function readClinicalTextPrefs() {
 export function writeClinicalTextPrefs(prefs) {
   try {
     localStorage.setItem(STORAGE.clinicalTextPrefs, JSON.stringify(prefs));
+    notifyTextPrefsChanged({ kind: 'clinical', prefs });
   } catch {
     /* ignore */
   }

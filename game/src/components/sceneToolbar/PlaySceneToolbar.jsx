@@ -5,6 +5,7 @@ import {
   IconLockOpen,
   IconMessage,
   IconMoon,
+  IconPill,
   IconRotate,
   IconSettings,
   IconStethoscope,
@@ -40,6 +41,7 @@ export default function PlaySceneToolbar({
   stacksOpen,
   chatOpen,
   showCues,
+  scenePinsHidden = false,
   darkMode,
   freeDrop,
   settingsOpen,
@@ -52,6 +54,7 @@ export default function PlaySceneToolbar({
   onToggleChat,
   onRestart,
   onToggleCues,
+  onToggleScenePins,
   onToggleTheme,
   onToggleDropMode,
   onToggleSettings,
@@ -100,6 +103,15 @@ export default function PlaySceneToolbar({
       </ToolbarGroup>
 
       <ToolbarGroup label="Display and settings">
+        <ToolbarBtn
+          active={scenePinsHidden}
+          onClick={onToggleScenePins}
+          title={scenePinsHidden ? 'Show scene stack labels' : 'Hide scene stack labels'}
+          aria-label={scenePinsHidden ? 'Show scene stack labels' : 'Hide scene stack labels'}
+          aria-pressed={scenePinsHidden}
+        >
+          <IconPill />
+        </ToolbarBtn>
         <ToolbarBtn
           active={!showCues}
           onClick={onToggleCues}

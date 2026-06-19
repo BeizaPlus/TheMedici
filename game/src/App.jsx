@@ -16,9 +16,14 @@ import { runEvalSuite } from './data/evalSuite.js';
 import { isStudioApp, playerAppHref } from './lib/appMode.js';
 import {
   clearPlayCheckpoint,
+  clearCasePlayCheckpoint,
   readPlayCheckpoint,
+  readCasePlayCheckpoint,
+  writeCasePlayCheckpoint,
+  listCasePlayCheckpointIds,
 } from './lib/playSessionResume.js';
 import { endPlaySession } from './lib/caseUserLog.js';
+import { rememberCaseBrowse } from './lib/caseBrowseContext.js';
 import { startIcuMonitor, endSessionMonitor, unlockAmbience, prefetchMonitorAudio } from './lib/audio.js';
 
 const SCREENS = {
@@ -95,6 +100,7 @@ export default function App() {
       setResumeCheckpoint(null);
     }
     touchCaseVisited(gameCase.id, teachMe ? 'whys' : 'briefing');
+    rememberCaseBrowse(gameCase.id, { entry: screen === SCREENS.home ? 'browser' : 'briefing' });
     setPlayMode(mode);
     setLastMode(mode);
     setCurrentCase(gameCase);
@@ -106,17 +112,19 @@ export default function App() {
       return;
     }
     setScreen(SCREENS.briefing);
-  }, []);
-
-  const startWhysCase = useCallback(
-    (gameCase) => {
-      startCase(gameCase, 'browse', { teachMe: true, skipBriefing: true });
-    },
-    [startCase],
-  );
+  }, [screen]);
 
   const resumeSavedSession = useCallback(() => {
-    const cp = readPlayCheckpoint();
+    let cp = readPlayCheckpoint();
+    if (!cp?.caseId) {
+      let best = null;
+      for (const id of listCasePlayCheckpointIds()) {
+        const row = readCasePlayCheckpoint(id);
+        if (!row?.savedAt) continue;
+        if (!best || new Date(row.savedAt) > new Date(best.savedAt)) best = row;
+      }
+      cp = best;
+    }
     if (!cp?.caseId) return;
     const gameCase = getCaseById(cp.caseId);
     if (!gameCase) {
@@ -165,6 +173,7 @@ export default function App() {
     (result) => {
       if (currentCase?.id) {
         recordCaseComplete(currentCase.id, result);
+        clearCasePlayCheckpoint(currentCase.id);
       }
       clearPlayCheckpoint();
       setResumeCheckpoint(null);
@@ -189,6 +198,16 @@ export default function App() {
     setHomeKey((k) => k + 1);
   }, [refreshResumeCheckpoint]);
 
+  /** Exit play → case briefing preview (same case), not welcome home. */
+  const exitToCasePreview = useCallback(() => {
+    endSessionMonitor({ fadeMs: 900 });
+    if (currentCase?.id) {
+      rememberCaseBrowse(currentCase.id, { entry: 'briefing' });
+    }
+    refreshResumeCheckpoint();
+    setScreen(SCREENS.briefing);
+  }, [currentCase?.id, refreshResumeCheckpoint]);
+
   const openCaseFromPlay = useCallback(
     (caseId) => {
       const gameCase = getCaseById(caseId);
@@ -198,34 +217,54 @@ export default function App() {
     [startCase],
   );
 
-  const skipToNextCase = useCallback(() => {
-    if (!currentCase?.id) return;
-    const cp = readPlayCheckpoint();
-    if (cp?.playSessionId && String(cp.caseId) === String(currentCase.id)) {
-      void endPlaySession(currentCase.id, cp.playSessionId, { skipped: true, incomplete: true });
-    }
-    markCaseIncomplete(currentCase.id);
-    clearPlayCheckpoint();
-    setResumeCheckpoint(null);
+  const skipToNextCase = useCallback(
+    (meta = {}) => {
+      if (!currentCase?.id) return;
+      const caseId = currentCase.id;
 
-    const allCases = getAllGameCases();
-    const idx = allCases.findIndex((c) => String(c.id) === String(currentCase.id));
-    const nextCase =
-      idx >= 0 && allCases.length > 1
-        ? allCases[(idx + 1) % allCases.length]
-        : null;
+      if (!meta?.sessionEnded) {
+        const cp = readPlayCheckpoint();
+        if (cp?.playSessionId && String(cp.caseId) === String(caseId)) {
+          void endPlaySession(caseId, cp.playSessionId, {
+            skipped: true,
+            paused: true,
+            incomplete: !meta?.reviewed,
+            reviewed: Boolean(meta?.reviewed),
+            placed: meta?.placed,
+            total: meta?.total,
+          });
+        }
+      }
 
-    if (!nextCase) {
-      goHome();
-      return;
-    }
+      if (meta?.reviewed) {
+        touchCaseVisited(caseId, 'play');
+      } else {
+        markCaseIncomplete(caseId);
+      }
 
-    setCurrentCase(nextCase);
-    touchCaseVisited(nextCase.id, 'play');
-    unlockAmbience();
-    startIcuMonitor({ fadeMs: 0 });
-    setScreen(SCREENS.play);
-  }, [currentCase, goHome]);
+      clearPlayCheckpoint();
+      setResumeCheckpoint(null);
+
+      const allCases = getAllGameCases();
+      const idx = allCases.findIndex((c) => String(c.id) === String(caseId));
+      const nextCase =
+        idx >= 0 && allCases.length > 1
+          ? allCases[(idx + 1) % allCases.length]
+          : null;
+
+      if (!nextCase) {
+        goHome();
+        return;
+      }
+
+      setCurrentCase(nextCase);
+      touchCaseVisited(nextCase.id, 'play');
+      unlockAmbience();
+      startIcuMonitor({ fadeMs: 0 });
+      setScreen(SCREENS.play);
+    },
+    [currentCase, goHome],
+  );
 
   const playNextInMode = useCallback(() => {
     const catalog = getCatalog();
@@ -285,7 +324,6 @@ export default function App() {
         <Home
           key={homeKey}
           onPlay={startCase}
-          onLaunchWhys={startWhysCase}
           resumeCheckpoint={resumeCheckpoint}
           onResumeSession={resumeSavedSession}
           onDiscardSession={discardSavedSession}
@@ -308,11 +346,14 @@ export default function App() {
           initialTeachMe={launchTeachMe}
           onTeachMeConsumed={clearLaunchTeachMe}
           initialCheckpoint={(() => {
-            const cp = resumeCheckpoint || readPlayCheckpoint();
-            return cp?.caseId != null && String(cp.caseId) === String(currentCase.id) ? cp : null;
+            const active = resumeCheckpoint || readPlayCheckpoint();
+            if (active?.caseId != null && String(active.caseId) === String(currentCase.id)) {
+              return active;
+            }
+            return readCasePlayCheckpoint(currentCase.id);
           })()}
           onComplete={finishCase}
-          onQuit={goHome}
+          onQuit={exitToCasePreview}
           onSkipToNext={skipToNextCase}
           onOpenCase={openCaseFromPlay}
           studioCapture={studioBuild}

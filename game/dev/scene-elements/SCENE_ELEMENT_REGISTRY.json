@@ -54,8 +54,8 @@
         "pinterest": ["boy hospital gown stretcher pediatric ed"],
         "gameRefs": ["M:/Works/Houdini Projects/TheMind_KOS/resources/talking-images/characters/kojo-oppong/references/kojo-face-likeness-lock.png"]
       },
-      "characterMap": { "status": "pending", "path": null, "sourcesDir": "dev/scene-elements/sources/patient-ped-male/" },
-      "approvedLayer": { "path": null, "compositeSlot": "baseplate", "fallback": "public/assets/patient/patient-scene.png" },
+      "characterMap": { "status": "approved", "path": "public/assets/patient/patient-scene-ped-male.png", "sourcesDir": "dev/scene-elements/sources/patient-ped-male/", "approvedAt": "2026-06-18" },
+      "approvedLayer": { "path": "public/assets/patient/patient-scene-ped-male.png", "compositeSlot": "baseplate" },
       "antiSlop": ["adult proportions", "teen face", "wrong Kojo likeness"]
     },
     {
@@ -67,8 +67,8 @@
         "pinterest": ["girl hospital gown stretcher pediatric ed"],
         "gameRefs": ["M:/Works/Houdini Projects/TheMind_KOS/resources/talking-images/characters/daniella/stills/93-meworld-welcome-plate-daniella-pick.png"]
       },
-      "characterMap": { "status": "pending", "path": null, "sourcesDir": "dev/scene-elements/sources/patient-ped-female/" },
-      "approvedLayer": { "path": null, "compositeSlot": "baseplate", "fallback": "public/assets/patient/patient-scene-female.png" },
+      "characterMap": { "status": "approved", "path": "public/assets/patient/patient-scene-ped-female.png", "sourcesDir": "dev/scene-elements/sources/patient-ped-female/", "approvedAt": "2026-06-18", "note": "Scene-lock ref only — do not attach adult Daniella plate with child prompt (NSFW filter)" },
+      "approvedLayer": { "path": "public/assets/patient/patient-scene-ped-female.png", "compositeSlot": "baseplate" },
       "antiSlop": ["adult proportions", "wrong Daniella likeness"]
     },
     {

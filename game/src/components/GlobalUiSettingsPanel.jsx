@@ -64,10 +64,10 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
   };
 
   const resetAllUi = () => {
-    const defaults = { fontScale: 1.12, weight: 600 };
+    const defaults = { fontScale: 1.38, weight: 600 };
     writeClinicalTextPrefs(defaults);
     setTextPrefs(defaults);
-    const teachDefaults = { fontScale: 1, weight: 500 };
+    const teachDefaults = { fontScale: 1.24, weight: 500 };
     writeTeachMeTextPrefs(teachDefaults);
     setTeachMeTextPrefs(teachDefaults);
     persistShowCues(true);
@@ -100,7 +100,7 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
           prefs={teachMeTextPrefs}
           onChange={setTeachMeTextPrefs}
           writePrefs={writeTeachMeTextPrefs}
-          resetTo={{ fontScale: 1, weight: 500 }}
+          resetTo={{ fontScale: 1.24, weight: 500 }}
           previewText={TEACH_ME_PREVIEW}
           labelText="Notes"
           showPreview

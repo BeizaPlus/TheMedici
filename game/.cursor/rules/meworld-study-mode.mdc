@@ -1,0 +1,32 @@
+---
+description: MeWorld study snapshot — edit MeWorld-study only while Steve is studying
+alwaysApply: true
+---
+
+# MeWorld study mode (agents)
+
+**Canonical doc:** `game/docs/STUDY_MODE.md`
+
+## Which folder?
+
+| Steve signal | Edit only |
+|--------------|-----------|
+| `START-MEWORLD-STUDY.bat`, `MeWorld-study`, "study mode", "while I'm studying" | `C:\Users\steve\MeWorld-study\game` |
+| Feature dev, git commit, `npm run dev` on main | `C:\Users\steve\MeWorld\game` |
+| "Port to main" / "sync main" | Copy study changes → main, commit main |
+
+## Never
+
+- Edit **both** `MeWorld` and `MeWorld-study` in one task without Steve asking
+- Run `create-study-snapshot.ps1` mid-study (overwrites study code)
+- Assume study and main are the same level — they **diverge**
+
+## Chat history paths
+
+- Disk: `user-data/cases/NNN.json` → `chatHistory`
+- Browser: localStorage `schoonmaker_case_chat_history`
+- List script: `node scripts/list-chat-histories.mjs`
+
+## After code edits
+
+`graphify update .` from `C:\Users\steve\MeWorld` (main) or teleprompter-station (recording repo).

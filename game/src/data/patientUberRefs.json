@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "description": "Unique-face reference bank for Uber Cases (U01–U08). Source photos in dev/uber-portrait-refs/sources/. After MCP restart: Magnific character-map pass per slug → public/assets/patient/uber/.",
+  "assetBase": "/assets/patient/uber",
+  "devSourceDir": "dev/uber-portrait-refs/sources",
+  "sceneAspect": "16:9",
+  "magnificApp": "https://www.magnific.com/app",
+  "rules": [
+    "Dignified clinical training likeness — hospital gown on ED baseplate, never caricature in final portrait",
+    "Exclude slug 08-distorted-excluded-do-not-gen from all generation",
+    "Bank slugs (*-bank) are alternates — swap into caseSlugs after character-map approval",
+    "Read game/.cursor/RULES_IMAGE_GENERATION.md before any gen"
+  ],
+  "caseSlugs": {
+    "U01": "copper-afro-headwrap-africa",
+    "U02": "vitiligo-wink-diastema",
+    "U03": "hijab-albino-freckles",
+    "U04": "albino-male-freckles-profile",
+    "U05": "hijab-albino-freckles",
+    "U06": "craniofacial-asymmetry-goatee",
+    "U07": "nevus-speckled-laugh",
+    "U08": "subway-afro-dandy"
+  },
+  "bankSlugs": [
+    "strongman-caricature-bank",
+    "elder-bush-brows-mustache-bank",
+    "elder-asian-conical-hat-bank",
+    "amputee-crutches-rollerblade-bank",
+    "santa-beard-grass-fullbody-bank",
+    "station-mega-afro-beard-bank",
+    "pipe-tweed-mustache-bank"
+  ],
+  "excludedSlugs": [
+    "distorted-excluded-do-not-gen"
+  ],
+  "refs": {
+    "hijab-albino-freckles": {
+      "sourceFile": "01-hijab-albino-freckles.png",
+      "mapFile": "hijab-albino-freckles-CHARACTER-MAP.png",
+      "label": "Hijab · albinism · freckles",
+      "sex": "female",
+      "uberCases": [
+        "U03",
+        "U05"
+      ],
+      "identityPrompt": "Match likeness: young woman with albinism, dense freckles on nose and cheeks, light blonde brows, floral cream hijab. Dignified ED portrait — hospital gown, face identity unchanged, MeWorld sculptural clinical still.",
+      "gameSceneFile": "hijab-albino-freckles-GAME-SCENE.png",
+      "gameSceneStatus": "approved",
+      "gameSceneAlt": "alt2-v2",
+      "gameSceneShippedFrom": "hijab-albino-freckles-GAME-SCENE-alt2-v2-20260618-approved-pending-ship.png",
+      "gameSceneShippedAt": "2026-06-18"
+    },
+    "vitiligo-wink-diastema": {
+      "sourceFile": "02-vitiligo-wink-diastema.png",
+      "mapFile": "vitiligo-wink-diastema-CHARACTER-MAP.png",
+      "label": "Vitiligo · gap teeth · wink",
+      "sex": "male",
+      "uberCases": [
+        "U02"
+      ],
+      "identityPrompt": "Match likeness: young Black man, symmetric vitiligo patches around eyes and chin, gap between upper front teeth, short buzz cut, warm expression. Hospital gown on stretcher; preserve skin pattern and face.",
+      "gameSceneFile": "vitiligo-wink-diastema-GAME-SCENE.png",
+      "gameSceneStatus": "approved",
+      "gameSceneAlt": "alt2",
+      "gameSceneShippedFrom": "vitiligo-wink-diastema-GAME-SCENE-alt2-approved-pending-ship.png",
+      "gameSceneShippedAt": "2026-06-18"
+    },
+    "nevus-speckled-laugh": {
+      "sourceFile": "03-nevus-speckled-laugh.png",
+      "mapFile": "nevus-speckled-laugh-CHARACTER-MAP.png",
+      "label": "Speckled pigmentation · joyful",
+      "sex": "female",
+      "uberCases": [
+        "U07"
+      ],
+      "identityPrompt": "Match likeness: person with extensive speckled pigmentation on face and scalp, joyful closed-eye smile, purple knit top replaced by hospital gown. Memorable dermatology-training face — dignified, not caricature.",
+      "gameSceneFile": "nevus-speckled-laugh-GAME-SCENE.png",
+      "gameSceneStatus": "approved",
+      "gameSceneAlt": "alt2-anamorphic-v2",
+      "gameSceneShippedFrom": "nevus-speckled-laugh-GAME-SCENE-alt2-anamorphic-v2-20260618-approved-pending-ship.png",
+      "gameSceneShippedAt": "2026-06-18"
+    },
+    "albino-male-freckles-profile": {
+      "sourceFile": "04-albino-male-freckles-profile.png",
+      "mapFile": "albino-male-freckles-profile-CHARACTER-MAP.png",
+      "label": "Albino male · freckles · profile",
+      "sex": "male",
+      "uberCases": [
+        "U04"
+      ],
+      "identityPrompt": "Match likeness: young man with albinism, pale buzzed hair, dense sun freckles, light eyes, three-quarter profile energy. Hospital gown; same freckle pattern and bone structure.",
+      "gameSceneFile": "albino-male-freckles-profile-GAME-SCENE.png",
+      "gameSceneStatus": "approved",
+      "gameSceneAlt": "alt2",
+      "gameSceneShippedFrom": "albino-male-freckles-profile-GAME-SCENE-alt2-approved-pending-ship.png",
+      "gameSceneShippedAt": "2026-06-18"
+    },
+    "craniofacial-asymmetry-goatee": {
+      "sourceFile": "07-craniofacial-asymmetry-goatee.png",
+      "mapFile": "craniofacial-asymmetry-goatee-CHARACTER-MAP.png",
+      "gameSceneFile": "craniofacial-asymmetry-goatee-GAME-SCENE.png",
+      "gameSceneStatus": "approved",
+      "gameSceneAlt": "alt2",
+      "label": "Craniofacial asymmetry · goatee",
+      "sex": "male",
+      "uberCases": [
+        "U06"
+      ],
+      "identityPrompt": "Match likeness: older man with pronounced facial asymmetry, bulbous nose, white goatee, fair skin. Respectful clinical portrait on ED stretcher — same asymmetry and grooming.",
+      "gameSceneShippedFrom": "craniofacial-asymmetry-goatee-GAME-SCENE-alt2-approved-pending-ship.png",
+      "gameSceneShippedAt": "2026-06-18"
+    },
+    "copper-afro-headwrap-africa": {
+      "sourceFile": "14-copper-afro-headwrap-africa.png",
+      "mapFile": "copper-afro-headwrap-africa-CHARACTER-MAP.png",
+      "label": "Copper afro · headwrap · Africa pendant",
+      "sex": "female",
+      "uberCases": [
+        "U01"
+      ],
+      "identityPrompt": "Match likeness: Black woman, voluminous copper-red afro, patterned green headwrap, gold Africa-map pendant, freckles, nose ring. Hospital gown; preserve afro silhouette and jewelry unless brief omits.",
+      "gameSceneFile": "copper-afro-headwrap-africa-GAME-SCENE.png",
+      "gameSceneStatus": "approved",
+      "gameSceneAlt": "alt2-3d-v3",
+      "gameSceneShippedFrom": "copper-afro-headwrap-africa-GAME-SCENE-alt2-3d-v3-20260618-approved-pending-ship.png",
+      "gameSceneShippedAt": "2026-06-18"
+    },
+    "subway-afro-dandy": {
+      "sourceFile": "12-subway-afro-dandy.png",
+      "mapFile": "subway-afro-dandy-CHARACTER-MAP.png",
+      "label": "Subway afro · retro dandy",
+      "sex": "male",
+      "uberCases": [
+        "U08"
+      ],
+      "identityPrompt": "Match likeness: young Black man, large heart-shaped afro, patterned vintage shirt replaced by hospital gown, gold ascot omitted, calm direct gaze. Memorable psychiatry-training presence.",
+      "gameSceneFile": "subway-afro-dandy-GAME-SCENE.png",
+      "gameSceneStatus": "approved",
+      "gameSceneAlt": "alt1",
+      "gameSceneShippedFrom": "subway-afro-dandy-GAME-SCENE-alt1-approved-pending-ship.png",
+      "gameSceneShippedAt": "2026-06-18"
+    },
+    "strongman-caricature-bank": {
+      "sourceFile": "05-strongman-caricature-bank.png",
+      "mapFile": null,
+      "label": "BANK — strongman caricature (review before gen)",
+      "status": "bank-only",
+      "identityPrompt": "Reference only — soften to dignified clinical likeness if promoted; do not copy exaggerated prosthetic proportions literally."
+    },
+    "elder-bush-brows-mustache-bank": {
+      "sourceFile": "06-elder-bush-brows-mustache-bank.png",
+      "mapFile": null,
+      "label": "BANK — elder bushy brows",
+      "status": "bank-only"
+    },
+    "elder-asian-conical-hat-bank": {
+      "sourceFile": "09-elder-asian-conical-hat-bank.png",
+      "mapFile": null,
+      "label": "BANK — elder Asian conical hat",
+      "status": "bank-only"
+    },
+    "amputee-crutches-rollerblade-bank": {
+      "sourceFile": "10-amputee-crutches-rollerblade-bank.png",
+      "mapFile": null,
+      "label": "BANK — amputee athlete (full-body ref)",
+      "status": "bank-only",
+      "note": "Crop to head-and-shoulders for ED plate; preserve limb difference in chart not portrait unless brief requests"
+    },
+    "santa-beard-grass-fullbody-bank": {
+      "sourceFile": "11-santa-beard-grass-fullbody-bank.png",
+      "mapFile": null,
+      "label": "BANK — long white beard full body",
+      "status": "bank-only"
+    },
+    "station-mega-afro-beard-bank": {
+      "sourceFile": "13-station-mega-afro-beard-bank.png",
+      "mapFile": null,
+      "label": "BANK — mega afro + long beard",
+      "status": "bank-only"
+    },
+    "pipe-tweed-mustache-bank": {
+      "sourceFile": "15-pipe-tweed-mustache-bank.png",
+      "mapFile": null,
+      "label": "BANK — pipe + tweed mustache",
+      "status": "bank-only"
+    },
+    "distorted-excluded-do-not-gen": {
+      "sourceFile": "08-distorted-excluded-do-not-gen.png",
+      "mapFile": null,
+      "label": "EXCLUDED — warped reference",
+      "status": "excluded",
+      "identityPrompt": "DO NOT USE for Magnific or portrait generation."
+    }
+  }
+}

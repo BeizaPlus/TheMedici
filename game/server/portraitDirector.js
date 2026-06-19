@@ -17,6 +17,44 @@ function chatSnippet(chatMessages = [], limit = 12) {
     .join('\n');
 }
 
+function sessionOrderLines(sessionContext = {}) {
+  const lines = [];
+  if (sessionContext.learnerNotes) {
+    lines.push(`Learner notes:\n${clip(sessionContext.learnerNotes, 2200)}`);
+  }
+  if (sessionContext.physicalExamFindings?.length) {
+    lines.push('Physical exam findings discovered this session:');
+    for (const row of sessionContext.physicalExamFindings) {
+      lines.push(`- ${row.label}: ${clip(row.text, 240)}`);
+    }
+  }
+  if (sessionContext.orderResults?.length) {
+    lines.push('Orders and results this session:');
+    for (const row of sessionContext.orderResults.slice(0, 28)) {
+      lines.push(`- [${row.kind || 'order'}] ${row.label}: ${clip(row.text, 200)}`);
+    }
+  }
+  if (sessionContext.stacksPlaced?.length) {
+    lines.push(`Stacks placed: ${sessionContext.stacksPlaced.join('; ')}`);
+  }
+  if (sessionContext.ordersTimeline?.length) {
+    lines.push(
+      `Order timeline: ${sessionContext.ordersTimeline
+        .slice(-16)
+        .map((o) => o.label)
+        .join(' → ')}`,
+    );
+  }
+  const chat = sessionContext.chatMessages?.length
+    ? sessionContext.chatMessages
+        .slice(-14)
+        .map((m) => `${m.role}: ${clip(m.content, 180)}`)
+        .join('\n')
+    : '';
+  if (chat) lines.push(`Patient chat:\n${chat}`);
+  return lines.filter(Boolean).join('\n');
+}
+
 function stripDiagnosisSpoilers(text, learningMode = true) {
   if (!learningMode || !text) return text;
   return String(text).replace(DIAGNOSIS_BLOCKLIST, '[finding]');
@@ -60,25 +98,65 @@ export function buildPortraitDirectorBriefFallback(caseContext = {}, { chatMessa
   };
 }
 
+function mergeSessionIntoFallback(fallback, sessionContext, learning) {
+  const sessionBlock = sessionOrderLines(sessionContext);
+  if (!sessionBlock) return fallback;
+  const safe = stripDiagnosisSpoilers(sessionBlock, learning);
+  return {
+    ...fallback,
+    visibleFindings: [fallback.visibleFindings, safe].filter(Boolean).join('\n'),
+    sessionUpdate: true,
+    source: 'session+fallback',
+  };
+}
+
 export async function extractPortraitDirectorBrief(
   caseContext = {},
-  { chatMessages = [], portraitBrief = '', callChat = null } = {},
+  {
+    chatMessages = [],
+    portraitBrief = '',
+    sessionContext = null,
+    sessionUpdate = false,
+    callChat = null,
+  } = {},
 ) {
-  const fallback = buildPortraitDirectorBriefFallback(caseContext, { chatMessages });
+  let fallback = buildPortraitDirectorBriefFallback(caseContext, { chatMessages });
+  const learning = caseContext.learningMode !== false;
+  const hasSession =
+    sessionContext?.hasSessionData
+    || sessionOrderLines(sessionContext || '').length > 0;
+
+  if (hasSession) {
+    fallback = mergeSessionIntoFallback(fallback, sessionContext, learning);
+  }
+
   const custom = String(portraitBrief || caseContext.portraitBrief || '').trim();
   if (custom) {
     return {
       ...fallback,
       visibleFindings: `${fallback.visibleFindings}\nUser direction: ${clip(custom, 400)}`,
-      source: 'custom+fallback',
+      sessionUpdate: Boolean(sessionUpdate || hasSession),
+      source: hasSession ? 'custom+session+fallback' : 'custom+fallback',
     };
   }
 
   if (typeof callChat !== 'function') return fallback;
 
   const chat = chatSnippet(chatMessages, 14);
-  const learning = caseContext.learningMode !== false;
-  const system = `You are a clinical photographer and ED physician preparing a patient portrait brief.
+  const sessionBlock = sessionOrderLines(sessionContext || '');
+  const isSessionPortrait = Boolean(sessionUpdate || hasSession);
+
+  const system = isSessionPortrait
+    ? `You are a clinical photographer updating an ED patient portrait AFTER a learner's workup.
+Return JSON only with keys: visibleFindings, distress, pose, skinAndExam, companionsInFrame.
+Rules:
+- Summarize ALL session notes, physical exam findings, labs, and patient chat into visible appearance cues.
+- SAME patient identity, age, sex, ethnicity — same ED bed camera lock as the reference image.
+- Pose may change ONLY if findings require it (e.g. lethargic neonate supine, not sitting up; dyspneic patient more upright).
+- skinAndExam: map each discovered finding to the correct body region (jaundice → skin/sclera, hepatomegaly → abdomen contour, etc.).
+- Use ONLY facts from the session data — no invented results.
+${learning ? '- LEARNING MODE: never name a final diagnosis; describe appearance and exam findings only.' : ''}`
+    : `You are a clinical photographer and ED physician preparing a patient portrait brief.
 Return JSON only with keys: visibleFindings, distress, pose, skinAndExam, companionsInFrame.
 Rules:
 - Use ONLY facts from case presentation and patient chat — no invented labs or diagnosis names.
@@ -91,6 +169,10 @@ ${learning ? '- LEARNING MODE: never name a final diagnosis; describe appearance
     `Chief complaint: ${fallback.chiefComplaint}`,
     `HPI: ${clip(caseContext.clinical_hpi_narrative || caseContext.hpiExcerpt || '', 500)}`,
     chat ? `Recent patient chat:\n${chat}` : '',
+    sessionBlock ? `SESSION SO FAR (notes, exams, orders — integrate into portrait):\n${sessionBlock}` : '',
+    isSessionPortrait
+      ? 'This is a SESSION UPDATE portrait: keep framing identical to arrival; show discovered findings for a clear before/after teaching image.'
+      : '',
   ]
     .filter(Boolean)
     .join('\n\n');
@@ -101,7 +183,7 @@ ${learning ? '- LEARNING MODE: never name a final diagnosis; describe appearance
         { role: 'system', content: system },
         { role: 'user', content: user },
       ],
-      { maxTokens: 480, temperature: 0.25 },
+      { maxTokens: 560, temperature: 0.25 },
     );
     const parsed = JSON.parse(String(raw || '').trim());
     return {
@@ -114,7 +196,8 @@ ${learning ? '- LEARNING MODE: never name a final diagnosis; describe appearance
       pose: parsed.pose || fallback.pose,
       skinAndExam: parsed.skinAndExam || fallback.skinAndExam,
       companionsInFrame: parsed.companionsInFrame || null,
-      source: 'llm',
+      sessionUpdate: isSessionPortrait,
+      source: isSessionPortrait ? 'llm+session' : 'llm',
     };
   } catch {
     return fallback;

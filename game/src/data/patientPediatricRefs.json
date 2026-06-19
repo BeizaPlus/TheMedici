@@ -1,11 +1,122 @@
 {
-  "note": "Pediatric portrait scale — identity prompts for child cases. Scene lock still 16:9 ED baseplate.",
+  "note": "Pediatric portrait scale + memorable accessory per case. Scene lock: 16:9 ED baseplate ~38° foot-of-bed (never bird-eye).",
+  "pinterestBoard": "https://www.pinterest.com/search/pins/?q=children%20photography%20unique%20ethnicitiies",
+  "assetBase": "/assets/patient/pediatric",
+  "temperamentCharacterMaps": [
+    {
+      "slug": "ped-boy-post-ictal",
+      "refImage": "dev/pediatric-portrait-refs/ref-ped-boy-post-ictal-eyes.png",
+      "status": "approved",
+      "mapFile": "ped-boy-post-ictal-CHARACTER-MAP.png",
+      "mapFileAlt2": "ped-boy-post-ictal-CHARACTER-MAP-alt2.png",
+      "canonicalAlt": 1,
+      "shippedAt": "2026-06-18",
+      "use": "Post-ictal / AMS pediatric temperament — eyes up, confused affect"
+    },
+    {
+      "slug": "ped-girl-disgust",
+      "refImage": "dev/pediatric-portrait-refs/ref-ped-girl-disgust-expression.png",
+      "status": "approved",
+      "mapFile": "ped-girl-disgust-CHARACTER-MAP.png",
+      "mapFileAlt2": "ped-girl-disgust-CHARACTER-MAP-alt2.png",
+      "canonicalAlt": 1,
+      "shippedAt": "2026-06-18",
+      "use": "Disgust / procedure resistance — interview training"
+    },
+    {
+      "slug": "ped-boy-laugh",
+      "refImage": "dev/pediatric-portrait-refs/ref-ped-boy-laugh-missing-teeth.png",
+      "status": "approved",
+      "mapFile": "ped-boy-laugh-CHARACTER-MAP.png",
+      "mapFileAlt2": "ped-boy-laugh-CHARACTER-MAP-alt2.png",
+      "canonicalAlt": 1,
+      "shippedAt": "2026-06-18",
+      "use": "Gap-tooth laugh — cooperative child affect"
+    },
+    {
+      "slug": "ped-toddler-skeptical",
+      "refImage": "dev/pediatric-portrait-refs/ref-ped-toddler-skeptical-pout.png",
+      "status": "pending-approval",
+      "use": "Skeptical pout — uncooperative toddler temperament"
+    }
+  ],
   "defaultAgeYears": 7,
+  "accessoryRule": "Every pediatric portrait includes ONE dignified memorable accessory or comfort object — on the bedside table, at the pillow, or worn. Makes the case stick in memory. Not clutter; never blocks IV/monitor zones; no standing extra people.",
+  "accessoryTemplates": [
+    {
+      "id": "companion-bed",
+      "label": "Toy bed on bedside table",
+      "prompt": "miniature toy doll bed or small wooden bed on the bedside table — comfort object that came to the hospital with the child",
+      "caseHint": "enuresis, sleep, anxiety"
+    },
+    {
+      "id": "handmade-glasses",
+      "label": "Handmade wire-frame glasses",
+      "prompt": "child wearing creative handmade wire-and-wood glasses (dignified, not costume parody) — memorable clinic accessory",
+      "caseHint": "school-age, vision, personality"
+    },
+    {
+      "id": "chewing-gum-bubble",
+      "label": "Chewing-gum bubble",
+      "prompt": "small white chewing-gum bubble at lips — playful but calm child, memorable portrait detail",
+      "caseHint": "older child, relaxed affect"
+    },
+    {
+      "id": "pattern-hat",
+      "label": "Patterned knit hat",
+      "prompt": "colorful patterned knit hat or headwrap — cultural dignity, memorable silhouette",
+      "caseHint": "unique ethnicity, outdoor-to-ED transfer"
+    },
+    {
+      "id": "stuffed-companion",
+      "label": "Small stuffed animal",
+      "prompt": "small worn stuffed animal on pillow or held loosely in one hand — comfort object",
+      "caseHint": "younger child, fear, admission"
+    }
+  ],
   "caseIds": {
-    "054": { "ageYears": 0, "label": "term newborn", "prompt": "term newborn infant, jaundiced skin, swaddled or gown, proportional neonate on ED warmer" },
-    "089": { "ageYears": 6, "label": "school-age child", "prompt": "school-age child approximately 6 years old, smaller body proportions than adult, burn injuries on face and buttocks per case, hospital gown, frightened but stable" }
+    "054": {
+      "ageYears": 0,
+      "label": "term newborn",
+      "prompt": "term newborn infant, jaundiced skin, swaddled or gown, proportional neonate on ED warmer",
+      "memorableAccessory": "soft receiving blanket folded at bedside — parent comfort item"
+    },
+    "089": {
+      "ageYears": 6,
+      "label": "school-age child",
+      "prompt": "school-age child approximately 6 years old, smaller body proportions than adult, fully clothed hospital gown, subtle non-graphic facial erythema for clinical training (no gore, no nudity), frightened but stable",
+      "memorableAccessory": "small stuffed animal on the bedside table"
+    },
+    "143": {
+      "ageYears": 0,
+      "label": "term newborn",
+      "prompt": "term newborn infant, lethargic, jaundiced sclera and skin, supine on ED stretcher — not sitting up, neonate proportions",
+      "memorableAccessory": "soft knit blanket corner visible at pillow — parent brought it"
+    },
+    "181": {
+      "ageYears": 8,
+      "label": "school-age boy",
+      "prompt": "school-age boy approximately 8 years old, child body proportions, pediatric hospital gown, tired from poor sleep, supine on ED stretcher",
+      "memorableAccessory": "miniature toy doll bed on the wooden bedside table — his comfort object that came to the hospital with him; life is beautiful, dignified",
+      "ethnicityCue": "memorable unique child face — warm natural skin tones, dignified documentary portrait energy",
+      "portraitRefSlug": "enuresis-companion-bed"
+    },
+    "121": {
+      "ageYears": 7,
+      "label": "school-age boy",
+      "prompt": "school-age boy approximately 7 years old, Black child, natural dignified face, pediatric hospital gown, weak tired affect from poor feeding, supine on ED resuscitation stretcher — Steve-approved case 121 portrait",
+      "memorableAccessory": "small comfort item on bedside table or pillow — blanket or worn toy, never blocking monitor or IV zones",
+      "ethnicityCue": "warm natural skin tones, memorable unique child face — approved Poor Feeding pediatric reference",
+      "portraitRefSlug": "case-121-poor-feeding",
+      "portraitRefImage": "dev/pediatric-portrait-refs/ref-case-121-poor-feeding-approved.png"
+    }
   },
   "categoryPatterns": [
-    { "match": "pediatrics|neonatology|child|newborn|infant", "ageYears": 7, "prompt": "pediatric patient child proportions, not adult ED manikin" }
+    {
+      "match": "pediatrics|neonatology|child|newborn|infant",
+      "ageYears": 7,
+      "prompt": "pediatric patient child proportions, not adult ED manikin",
+      "memorableAccessory": "one small comfort object on bedside table or pillow — stuffed toy, blanket, or personal item that makes this child memorable"
+    }
   ]
 }

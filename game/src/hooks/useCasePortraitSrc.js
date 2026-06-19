@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CASE_AVATAR_EVENT } from '../lib/caseAvatar.js';
 import { resolveSceneSrc } from '../lib/patientImage.js';
+import { resolvePsychiatricCasePreviewScene } from '../lib/resolvePatientPsychiatricRef.js';
+import { resolveUberCasePreviewScene } from '../lib/resolvePatientUberRef.js';
 import {
   clearCaseRegenImage,
   ensureCasePortrait,
@@ -11,14 +13,19 @@ import {
 /**
  * One portrait pipeline for case browser preview, briefing, and play ER scene.
  * Loads server cache → localStorage, then resolves sex-aware template fallback.
+ * When preferUberPreviewPlate is true and a shipped GAME-SCENE exists, skip server gen (Tier A).
  */
-export function useCasePortraitSrc(caseData) {
+export function useCasePortraitSrc(caseData, { preferUberPreviewPlate = false } = {}) {
   const caseId = caseData?.id;
+  const psychPreview = preferUberPreviewPlate ? resolvePsychiatricCasePreviewScene(caseData) : null;
+  const uberPreview =
+    preferUberPreviewPlate && !psychPreview ? resolveUberCasePreviewScene(caseData) : null;
+  const tierAPreview = psychPreview || uberPreview;
   const [portraitTick, setPortraitTick] = useState(0);
   const bumpPortrait = useCallback(() => setPortraitTick((n) => n + 1), []);
 
   useEffect(() => {
-    if (!caseId) return undefined;
+    if (!caseId || tierAPreview?.url) return undefined;
     let cancelled = false;
     void ensureCasePortrait(caseData).then((url) => {
       if (!cancelled && url) bumpPortrait();
@@ -26,7 +33,7 @@ export function useCasePortraitSrc(caseData) {
     return () => {
       cancelled = true;
     };
-  }, [caseId, caseData?.patientSex, caseData, bumpPortrait]);
+  }, [caseId, caseData?.patientSex, caseData, bumpPortrait, tierAPreview?.url]);
 
   useEffect(() => {
     if (!caseId) return undefined;
@@ -41,8 +48,9 @@ export function useCasePortraitSrc(caseData) {
 
   const portraitForceSrc = useMemo(() => {
     void portraitTick;
+    if (tierAPreview?.url) return tierAPreview.url;
     return caseId ? readCaseRegenImage(caseId) : null;
-  }, [caseId, portraitTick]);
+  }, [caseId, portraitTick, tierAPreview?.url]);
 
   const portraitDisplaySrc = useMemo(
     () =>

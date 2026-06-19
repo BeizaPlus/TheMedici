@@ -51,12 +51,21 @@ Placed order pins: class `pin-draggable` — drag anywhere on patient to reposit
 
 ## Persistence
 
-| Setting | Storage key |
-|---------|-------------|
+| Setting | Storage key / path |
+|---------|-------------------|
 | Dock position per case | `schoonmaker_play_dock_layout_{caseId}` |
 | Clinical font | `schoonmaker_clinical_text_prefs` (localStorage JSON) |
 | Teach Me notes font | `schoonmaker_teach_me_text_prefs` |
-| Case chat history | `schoonmaker_case_chat_history` — per case id |
+| Case chat history (browser) | `schoonmaker_case_chat_history` — per case id (`002` normalized) |
+| Case chat history (disk) | `user-data/cases/NNN.json` → `chatHistory[]` |
+| Case notes (disk) | `user-data/cases/notes/NNN.md` |
+| Voice recordings | `user-data/recordings/NNN/*.webm` |
+
+**Inspect all on-disk chats:** `node scripts/list-chat-histories.mjs`
+
+**Case rail** (Chat tab): chips = recent cases; tap chip or message icon → view that case’s thread without leaving current play case. Requires normalized case ids (`2` = `002`) — see `normalizeCaseProgressId` in `caseUserLog.js`.
+
+**Dock chat expander:** flat markdown (no bubbles) — `.scene-order-command-chat` in `ui-overrides.css`.
 
 Font prefs **re-read from localStorage on case change** — never reset to default.
 
@@ -70,6 +79,7 @@ Font prefs **re-read from localStorage on case change** — never reset to defau
 
 ## Related
 
+- `docs/STUDY_MODE.md` — study folder vs main (agents)
 - `.cursor/rules/play-case-chat.mdc`
 - `docs/components/PORTRAIT_RULES.md`
 - `docs/components/TEAM_CASE_DISCUSSION.md`

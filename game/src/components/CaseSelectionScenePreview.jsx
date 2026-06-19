@@ -1,9 +1,9 @@
 import PatientScene from './PatientScene.jsx';
 import { useCasePortraitSrc } from '../hooks/useCasePortraitSrc.js';
 
-/** Case browser / picker hero — same portrait pipeline as briefing + play ER. */
+/** Case browser / picker hero — Tier A shipped GAME-SCENE when wired; else portrait pipeline. */
 export default function CaseSelectionScenePreview({ gameCase }) {
-  const { portraitForceSrc } = useCasePortraitSrc(gameCase);
+  const { portraitForceSrc } = useCasePortraitSrc(gameCase, { preferUberPreviewPlate: true });
 
   return (
     <div className="case-detail-scene" aria-hidden={false}>

@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "builtAt": "2026-06-17T11:33:06.065Z",
-  "totalCases": 181,
+  "builtAt": "2026-06-19T01:48:42.979Z",
+  "totalCases": 189,
   "caseBankMerged": 181,
   "caseBankSource": "ollama-case-bank",
   "caseBankDir": "C:\\Users\\steve\\MeWorld\\game\\data\\cases",
@@ -36872,6 +36872,1214 @@
             "vitalsText": "",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
             "objective": "High-acuity workup: Complete diagnosis and treatment orders for Cauda Equina Syndrome."
+          }
+        }
+      }
+    },
+    "U01": {
+      "id": "U01",
+      "title": "Elena — Neuro & Weakness",
+      "category": "Uber Cases",
+      "presentationKey": "Elena — Neuro & Weakness",
+      "playbookKey": "Elena — Neuro & Weakness",
+      "diagnosis": null,
+      "caseBankSource": null,
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 101,
+        "dbp": 64,
+        "hr": 90,
+        "rr": 17,
+        "temp": 37.1,
+        "spo2": 93,
+        "lactate": 1.7
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Acutely ill appearance consistent with elena — neuro & weakness."
+        ],
+        [
+          "Cardiovascular",
+          "HR 90; BP 101/64."
+        ],
+        [
+          "Respiratory",
+          "RR 17; SpO₂ 93%; hypoxemic."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Motor strength and reflexes tested for fatigability and focal deficits."
+        ],
+        [
+          "Skin",
+          "No acute rash; capillary refill and perfusion assessed."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+      "objective": "Identify and treat life threats within the time limit.",
+      "interventionIds": [
+        "monitor",
+        "iv",
+        "labs",
+        "imaging",
+        "admit"
+      ],
+      "interventions": [
+        {
+          "id": "monitor",
+          "label": "Cardiac Monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Continuous vitals.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv",
+          "label": "IV Access + Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Two large-bore if shock.",
+          "guideline": "ATLS"
+        },
+        {
+          "id": "labs",
+          "label": "Stat Labs",
+          "correct_zone": "zone-blood",
+          "why": "CBC, BMP, lactate.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "imaging",
+          "label": "Bedside / CT imaging",
+          "correct_zone": "zone-monitor",
+          "why": "Targeted imaging.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "admit",
+          "label": "Admit / Disposition",
+          "correct_zone": "zone-icu",
+          "why": "Match acuity.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Elena — Neuro & Weakness — emergency presentation.",
+            "hpi": "Elena — Neuro & Weakness — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Elena — Neuro & Weakness — emergency presentation.",
+            "hpi": "Elena — Neuro & Weakness — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Elena — Neuro & Weakness — emergency presentation.",
+            "hpi": "Elena — Neuro & Weakness — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Elena — Neuro & Weakness — emergency presentation.",
+            "hpi": "Elena — Neuro & Weakness — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Share your symptoms clearly with the team."
+          },
+          "standard": {
+            "intro": "Elena — Neuro & Weakness — emergency presentation.",
+            "hpi": "Elena — Neuro & Weakness — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Elena — Neuro & Weakness — emergency presentation.",
+            "hpi": "Elena — Neuro & Weakness — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        }
+      }
+    },
+    "U02": {
+      "id": "U02",
+      "title": "James — Cardiopulmonary Acute",
+      "category": "Uber Cases",
+      "presentationKey": "James — Cardiopulmonary Acute",
+      "playbookKey": "James — Cardiopulmonary Acute",
+      "diagnosis": null,
+      "caseBankSource": null,
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 101,
+        "dbp": 64,
+        "hr": 90,
+        "rr": 17,
+        "temp": 37.1,
+        "spo2": 93,
+        "lactate": 1.7
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Acutely ill appearance consistent with james — cardiopulmonary acute."
+        ],
+        [
+          "Cardiovascular",
+          "HR 90; BP 101/64."
+        ],
+        [
+          "Respiratory",
+          "RR 17; SpO₂ 93%; hypoxemic."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Alert and oriented unless perfusion or metabolic derangement present."
+        ],
+        [
+          "Skin",
+          "No acute rash; capillary refill and perfusion assessed."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+      "objective": "Identify and treat life threats within the time limit.",
+      "interventionIds": [
+        "monitor",
+        "iv",
+        "labs",
+        "imaging",
+        "admit"
+      ],
+      "interventions": [
+        {
+          "id": "monitor",
+          "label": "Cardiac Monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Continuous vitals.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv",
+          "label": "IV Access + Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Two large-bore if shock.",
+          "guideline": "ATLS"
+        },
+        {
+          "id": "labs",
+          "label": "Stat Labs",
+          "correct_zone": "zone-blood",
+          "why": "CBC, BMP, lactate.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "imaging",
+          "label": "Bedside / CT imaging",
+          "correct_zone": "zone-monitor",
+          "why": "Targeted imaging.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "admit",
+          "label": "Admit / Disposition",
+          "correct_zone": "zone-icu",
+          "why": "Match acuity.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "James — Cardiopulmonary Acute — emergency presentation.",
+            "hpi": "James — Cardiopulmonary Acute — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "James — Cardiopulmonary Acute — emergency presentation.",
+            "hpi": "James — Cardiopulmonary Acute — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "James — Cardiopulmonary Acute — emergency presentation.",
+            "hpi": "James — Cardiopulmonary Acute — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "James — Cardiopulmonary Acute — emergency presentation.",
+            "hpi": "James — Cardiopulmonary Acute — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Share your symptoms clearly with the team."
+          },
+          "standard": {
+            "intro": "James — Cardiopulmonary Acute — emergency presentation.",
+            "hpi": "James — Cardiopulmonary Acute — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "James — Cardiopulmonary Acute — emergency presentation.",
+            "hpi": "James — Cardiopulmonary Acute — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        }
+      }
+    },
+    "U03": {
+      "id": "U03",
+      "title": "Maria — GI & Abdomen",
+      "category": "Uber Cases",
+      "presentationKey": "Maria — GI & Abdomen",
+      "playbookKey": "Maria — GI & Abdomen",
+      "diagnosis": null,
+      "caseBankSource": null,
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 101,
+        "dbp": 64,
+        "hr": 90,
+        "rr": 17,
+        "temp": 37.1,
+        "spo2": 93,
+        "lactate": 1.7
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Acutely ill appearance consistent with maria — gi & abdomen."
+        ],
+        [
+          "Cardiovascular",
+          "HR 90; BP 101/64."
+        ],
+        [
+          "Respiratory",
+          "RR 17; SpO₂ 93%; hypoxemic."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Alert and oriented unless perfusion or metabolic derangement present."
+        ],
+        [
+          "Skin",
+          "No acute rash; capillary refill and perfusion assessed."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+      "objective": "Identify and treat life threats within the time limit.",
+      "interventionIds": [
+        "monitor",
+        "iv",
+        "labs",
+        "imaging",
+        "admit"
+      ],
+      "interventions": [
+        {
+          "id": "monitor",
+          "label": "Cardiac Monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Continuous vitals.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv",
+          "label": "IV Access + Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Two large-bore if shock.",
+          "guideline": "ATLS"
+        },
+        {
+          "id": "labs",
+          "label": "Stat Labs",
+          "correct_zone": "zone-blood",
+          "why": "CBC, BMP, lactate.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "imaging",
+          "label": "Bedside / CT imaging",
+          "correct_zone": "zone-monitor",
+          "why": "Targeted imaging.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "admit",
+          "label": "Admit / Disposition",
+          "correct_zone": "zone-icu",
+          "why": "Match acuity.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Maria — GI & Abdomen — emergency presentation.",
+            "hpi": "Maria — GI & Abdomen — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Maria — GI & Abdomen — emergency presentation.",
+            "hpi": "Maria — GI & Abdomen — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Maria — GI & Abdomen — emergency presentation.",
+            "hpi": "Maria — GI & Abdomen — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Maria — GI & Abdomen — emergency presentation.",
+            "hpi": "Maria — GI & Abdomen — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Share your symptoms clearly with the team."
+          },
+          "standard": {
+            "intro": "Maria — GI & Abdomen — emergency presentation.",
+            "hpi": "Maria — GI & Abdomen — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Maria — GI & Abdomen — emergency presentation.",
+            "hpi": "Maria — GI & Abdomen — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        }
+      }
+    },
+    "U04": {
+      "id": "U04",
+      "title": "David — Neuro Headache & AMS",
+      "category": "Uber Cases",
+      "presentationKey": "David — Neuro Headache & AMS",
+      "playbookKey": "David — Neuro Headache & AMS",
+      "diagnosis": null,
+      "caseBankSource": null,
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 101,
+        "dbp": 64,
+        "hr": 90,
+        "rr": 17,
+        "temp": 37.1,
+        "spo2": 93,
+        "lactate": 1.7
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Acutely ill appearance consistent with david — neuro headache & ams."
+        ],
+        [
+          "Cardiovascular",
+          "HR 90; BP 101/64."
+        ],
+        [
+          "Respiratory",
+          "RR 17; SpO₂ 93%; hypoxemic."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Mental status intact; cranial nerves and neck stiffness assessed."
+        ],
+        [
+          "Skin",
+          "No acute rash; capillary refill and perfusion assessed."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+      "objective": "Identify and treat life threats within the time limit.",
+      "interventionIds": [
+        "monitor",
+        "iv",
+        "labs",
+        "imaging",
+        "admit"
+      ],
+      "interventions": [
+        {
+          "id": "monitor",
+          "label": "Cardiac Monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Continuous vitals.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv",
+          "label": "IV Access + Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Two large-bore if shock.",
+          "guideline": "ATLS"
+        },
+        {
+          "id": "labs",
+          "label": "Stat Labs",
+          "correct_zone": "zone-blood",
+          "why": "CBC, BMP, lactate.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "imaging",
+          "label": "Bedside / CT imaging",
+          "correct_zone": "zone-monitor",
+          "why": "Targeted imaging.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "admit",
+          "label": "Admit / Disposition",
+          "correct_zone": "zone-icu",
+          "why": "Match acuity.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "David — Neuro Headache & AMS — emergency presentation.",
+            "hpi": "David — Neuro Headache & AMS — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "David — Neuro Headache & AMS — emergency presentation.",
+            "hpi": "David — Neuro Headache & AMS — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "David — Neuro Headache & AMS — emergency presentation.",
+            "hpi": "David — Neuro Headache & AMS — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "David — Neuro Headache & AMS — emergency presentation.",
+            "hpi": "David — Neuro Headache & AMS — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Share your symptoms clearly with the team."
+          },
+          "standard": {
+            "intro": "David — Neuro Headache & AMS — emergency presentation.",
+            "hpi": "David — Neuro Headache & AMS — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "David — Neuro Headache & AMS — emergency presentation.",
+            "hpi": "David — Neuro Headache & AMS — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        }
+      }
+    },
+    "U05": {
+      "id": "U05",
+      "title": "Aisha — Women's & GU",
+      "category": "Uber Cases",
+      "presentationKey": "Aisha — Women's & GU",
+      "playbookKey": "Aisha — Women's & GU",
+      "diagnosis": null,
+      "caseBankSource": null,
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 101,
+        "dbp": 64,
+        "hr": 90,
+        "rr": 17,
+        "temp": 37.1,
+        "spo2": 93,
+        "lactate": 1.7
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Acutely ill appearance consistent with aisha — women's & gu."
+        ],
+        [
+          "Cardiovascular",
+          "HR 90; BP 101/64."
+        ],
+        [
+          "Respiratory",
+          "RR 17; SpO₂ 93%; hypoxemic."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Alert and oriented unless perfusion or metabolic derangement present."
+        ],
+        [
+          "Skin",
+          "No acute rash; capillary refill and perfusion assessed."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+      "objective": "Identify and treat life threats within the time limit.",
+      "interventionIds": [
+        "monitor",
+        "iv",
+        "labs",
+        "imaging",
+        "admit"
+      ],
+      "interventions": [
+        {
+          "id": "monitor",
+          "label": "Cardiac Monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Continuous vitals.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv",
+          "label": "IV Access + Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Two large-bore if shock.",
+          "guideline": "ATLS"
+        },
+        {
+          "id": "labs",
+          "label": "Stat Labs",
+          "correct_zone": "zone-blood",
+          "why": "CBC, BMP, lactate.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "imaging",
+          "label": "Bedside / CT imaging",
+          "correct_zone": "zone-monitor",
+          "why": "Targeted imaging.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "admit",
+          "label": "Admit / Disposition",
+          "correct_zone": "zone-icu",
+          "why": "Match acuity.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Aisha — Women's & GU — emergency presentation.",
+            "hpi": "Aisha — Women's & GU — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Aisha — Women's & GU — emergency presentation.",
+            "hpi": "Aisha — Women's & GU — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Aisha — Women's & GU — emergency presentation.",
+            "hpi": "Aisha — Women's & GU — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Aisha — Women's & GU — emergency presentation.",
+            "hpi": "Aisha — Women's & GU — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Share your symptoms clearly with the team."
+          },
+          "standard": {
+            "intro": "Aisha — Women's & GU — emergency presentation.",
+            "hpi": "Aisha — Women's & GU — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Aisha — Women's & GU — emergency presentation.",
+            "hpi": "Aisha — Women's & GU — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        }
+      }
+    },
+    "U06": {
+      "id": "U06",
+      "title": "Robert — MSK Pain Marathon",
+      "category": "Uber Cases",
+      "presentationKey": "Robert — MSK Pain Marathon",
+      "playbookKey": "Robert — MSK Pain Marathon",
+      "diagnosis": null,
+      "caseBankSource": null,
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 101,
+        "dbp": 64,
+        "hr": 90,
+        "rr": 17,
+        "temp": 37.1,
+        "spo2": 93,
+        "lactate": 1.7
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Acutely ill appearance consistent with robert — msk pain marathon."
+        ],
+        [
+          "Cardiovascular",
+          "HR 90; BP 101/64."
+        ],
+        [
+          "Respiratory",
+          "RR 17; SpO₂ 93%; hypoxemic."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Alert and oriented unless perfusion or metabolic derangement present."
+        ],
+        [
+          "Skin",
+          "No acute rash; capillary refill and perfusion assessed."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+      "objective": "Identify and treat life threats within the time limit.",
+      "interventionIds": [
+        "monitor",
+        "iv",
+        "labs",
+        "imaging",
+        "admit"
+      ],
+      "interventions": [
+        {
+          "id": "monitor",
+          "label": "Cardiac Monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Continuous vitals.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv",
+          "label": "IV Access + Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Two large-bore if shock.",
+          "guideline": "ATLS"
+        },
+        {
+          "id": "labs",
+          "label": "Stat Labs",
+          "correct_zone": "zone-blood",
+          "why": "CBC, BMP, lactate.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "imaging",
+          "label": "Bedside / CT imaging",
+          "correct_zone": "zone-monitor",
+          "why": "Targeted imaging.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "admit",
+          "label": "Admit / Disposition",
+          "correct_zone": "zone-icu",
+          "why": "Match acuity.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Robert — MSK Pain Marathon — emergency presentation.",
+            "hpi": "Robert — MSK Pain Marathon — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Robert — MSK Pain Marathon — emergency presentation.",
+            "hpi": "Robert — MSK Pain Marathon — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Robert — MSK Pain Marathon — emergency presentation.",
+            "hpi": "Robert — MSK Pain Marathon — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Robert — MSK Pain Marathon — emergency presentation.",
+            "hpi": "Robert — MSK Pain Marathon — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Share your symptoms clearly with the team."
+          },
+          "standard": {
+            "intro": "Robert — MSK Pain Marathon — emergency presentation.",
+            "hpi": "Robert — MSK Pain Marathon — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Robert — MSK Pain Marathon — emergency presentation.",
+            "hpi": "Robert — MSK Pain Marathon — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        }
+      }
+    },
+    "U07": {
+      "id": "U07",
+      "title": "Sophie — Fever, Rash & ID",
+      "category": "Uber Cases",
+      "presentationKey": "Sophie — Fever, Rash & ID",
+      "playbookKey": "Sophie — Fever, Rash & ID",
+      "diagnosis": null,
+      "caseBankSource": null,
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 101,
+        "dbp": 64,
+        "hr": 90,
+        "rr": 17,
+        "temp": 37.1,
+        "spo2": 93,
+        "lactate": 1.7
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Acutely ill appearance consistent with sophie — fever, rash & id."
+        ],
+        [
+          "Cardiovascular",
+          "HR 90; BP 101/64."
+        ],
+        [
+          "Respiratory",
+          "RR 17; SpO₂ 93%; hypoxemic."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Alert and oriented unless perfusion or metabolic derangement present."
+        ],
+        [
+          "Skin",
+          "Skin rash morphology and distribution documented."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+      "objective": "Identify and treat life threats within the time limit.",
+      "interventionIds": [
+        "monitor",
+        "iv",
+        "labs",
+        "imaging",
+        "admit"
+      ],
+      "interventions": [
+        {
+          "id": "monitor",
+          "label": "Cardiac Monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Continuous vitals.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv",
+          "label": "IV Access + Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Two large-bore if shock.",
+          "guideline": "ATLS"
+        },
+        {
+          "id": "labs",
+          "label": "Stat Labs",
+          "correct_zone": "zone-blood",
+          "why": "CBC, BMP, lactate.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "imaging",
+          "label": "Bedside / CT imaging",
+          "correct_zone": "zone-monitor",
+          "why": "Targeted imaging.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "admit",
+          "label": "Admit / Disposition",
+          "correct_zone": "zone-icu",
+          "why": "Match acuity.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "hpi": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "hpi": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "hpi": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "hpi": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Share your symptoms clearly with the team."
+          },
+          "standard": {
+            "intro": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "hpi": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "hpi": "Sophie — Fever, Rash & ID — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        }
+      }
+    },
+    "U08": {
+      "id": "U08",
+      "title": "Marcus — Psych & Behavior",
+      "category": "Uber Cases",
+      "presentationKey": "Marcus — Psych & Behavior",
+      "playbookKey": "Marcus — Psych & Behavior",
+      "diagnosis": null,
+      "caseBankSource": null,
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 101,
+        "dbp": 64,
+        "hr": 90,
+        "rr": 17,
+        "temp": 37.1,
+        "spo2": 93,
+        "lactate": 1.7
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Acutely ill appearance consistent with marcus — psych & behavior."
+        ],
+        [
+          "Cardiovascular",
+          "HR 90; BP 101/64."
+        ],
+        [
+          "Respiratory",
+          "RR 17; SpO₂ 93%; hypoxemic."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Alert and oriented unless perfusion or metabolic derangement present."
+        ],
+        [
+          "Skin",
+          "No acute rash; capillary refill and perfusion assessed."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+      "objective": "Identify and treat life threats within the time limit.",
+      "interventionIds": [
+        "monitor",
+        "iv",
+        "labs",
+        "imaging",
+        "admit"
+      ],
+      "interventions": [
+        {
+          "id": "monitor",
+          "label": "Cardiac Monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Continuous vitals.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv",
+          "label": "IV Access + Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Two large-bore if shock.",
+          "guideline": "ATLS"
+        },
+        {
+          "id": "labs",
+          "label": "Stat Labs",
+          "correct_zone": "zone-blood",
+          "why": "CBC, BMP, lactate.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "imaging",
+          "label": "Bedside / CT imaging",
+          "correct_zone": "zone-monitor",
+          "why": "Targeted imaging.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "admit",
+          "label": "Admit / Disposition",
+          "correct_zone": "zone-icu",
+          "why": "Match acuity.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Marcus — Psych & Behavior — emergency presentation.",
+            "hpi": "Marcus — Psych & Behavior — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Marcus — Psych & Behavior — emergency presentation.",
+            "hpi": "Marcus — Psych & Behavior — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Marcus — Psych & Behavior — emergency presentation.",
+            "hpi": "Marcus — Psych & Behavior — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Marcus — Psych & Behavior — emergency presentation.",
+            "hpi": "Marcus — Psych & Behavior — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit. Share your symptoms clearly with the team."
+          },
+          "standard": {
+            "intro": "Marcus — Psych & Behavior — emergency presentation.",
+            "hpi": "Marcus — Psych & Behavior — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
+            "objective": "Identify and treat life threats within the time limit."
+          },
+          "hard": {
+            "intro": "Marcus — Psych & Behavior — emergency presentation.",
+            "hpi": "Marcus — Psych & Behavior — emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify and treat life threats within the time limit."
           }
         }
       }

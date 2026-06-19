@@ -61,6 +61,13 @@ export function buildCaseStoryOffline(caseData, { sessionContext = {} } = {}) {
     : is051
       ? [
           {
+            id: 'c0',
+            heading: 'At home',
+            body: 'Four weeks before the ED, he hit the bedroom floor getting up to urinate at night. His wife found him in the morning — embarrassed, quiet, unchanged. They left with a cane and no scan. The man who balanced his own books began answering less; by the time his daughter noticed the glassy stare, the small strokes had already started peppering his brain.',
+            visualHint:
+              'Same 70-year-old Caucasian man at home — bedroom or living room, morning light, withdrawn on edge of bed or near fallen cane — casual home clothes or pajamas, NOT hospital gown, NOT stretcher',
+          },
+          {
             id: 'c1',
             heading: 'Disruption',
             body: 'His daughter brought him because he stopped answering. The man who used to balance his own books now stares through people as if the room were glass. Four weeks earlier he hit the bedroom floor getting up to urinate — they found him in the morning and left with a cane prescription, not a question.',
@@ -79,7 +86,7 @@ export function buildCaseStoryOffline(caseData, { sessionContext = {} } = {}) {
             heading: 'Escalation',
             body: 'CT head is clean, so hemorrhage does not explain the fog. Duplex names the stenosis. Telemetry catches atrial fibrillation in brief paroxysms — emboli looking for an exit. MRI with DWI shows the truth: the brain got peppered with tiny infarcts, scattered like grains on a plate.',
             visualHint:
-              'Same likeness on stretcher, telemetry leads, MRI/DWI metaphor — scattered specks on monitor glow, third-person oversight angle unchanged',
+              'Same likeness on stretcher, hospital gown open at chest — telemetry electrodes on BARE SKIN only (NOT over shirt); vitals monitor upper-right shows numeric HR, SpO2, and ECG waveform trace; secondary screen may hint DWI specks — third-person oversight angle unchanged',
           },
           {
             id: 'c4',

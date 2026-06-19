@@ -159,6 +159,26 @@ export function recordingPublicUrl(relativePath) {
   return base ? `${base}/user-data/${path}` : `/user-data/${path}`;
 }
 
+/** All voice recordings for a case — flat list, oldest first. */
+export function listCaseRecordingsFromUserData(data) {
+  if (!data) return [];
+  let rows = [];
+  if (Array.isArray(data.recordings) && data.recordings.length) {
+    rows = data.recordings.map((rec) => ({ ...rec }));
+  } else if (Array.isArray(data.sessions)) {
+    data.sessions.forEach((session) => {
+      (session.recordings || []).forEach((rec) => {
+        rows.push({ ...rec, attempt: session.attempt, sessionId: session.id });
+      });
+    });
+  }
+  rows.sort(
+    (a, b) =>
+      String(a.at || '').localeCompare(String(b.at || '')) || (a.slot || 0) - (b.slot || 0),
+  );
+  return rows;
+}
+
 function mergeChatRows(...lists) {
   const out = [];
   const seen = new Set();

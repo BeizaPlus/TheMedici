@@ -17,18 +17,69 @@ export function caseStoryImagePath(cacheDir, caseId) {
   return slug ? path.join(cacheDir, `${slug}-master.png`) : null;
 }
 
-export function caseStoryBeatImagePath(cacheDir, caseId, beatId) {
+export function caseStoryBeatImagePath(cacheDir, caseId, beatId, { variant } = {}) {
   const slug = normalizeCaseFile(caseId);
   const bid = String(beatId || '')
     .trim()
     .replace(/[^a-zA-Z0-9_-]/g, '');
   if (!slug || !bid) return null;
-  return path.join(cacheDir, `${slug}-beat-${bid}.png`);
+  const variantSuffix = variant ? `-${String(variant).replace(/[^a-zA-Z0-9_-]/g, '')}` : '';
+  return path.join(cacheDir, `${slug}-beat-${bid}${variantSuffix}.png`);
 }
 
 export function caseStoryBeatImageSlug(caseId, beatId) {
   const file = caseStoryBeatImagePath('/tmp', caseId, beatId);
   return file ? path.basename(file) : null;
+}
+
+/**
+ * Prefer highest `-vN` variant over canonical beat PNG (Steve approval workflow).
+ * e.g. case_051-beat-c3-v3.png wins over case_051-beat-c3.png
+ */
+export function resolveCaseStoryBeatImagePath(cacheDir, caseId, beatId) {
+  const canonical = caseStoryBeatImagePath(cacheDir, caseId, beatId);
+  if (!canonical || !cacheDir) return canonical;
+  const slug = normalizeCaseFile(caseId);
+  const bid = String(beatId || '')
+    .trim()
+    .replace(/[^a-zA-Z0-9_-]/g, '');
+  if (!slug || !bid) return canonical;
+
+  let bestPath = fs.existsSync(canonical) ? canonical : null;
+  let bestScore = bestPath ? 0 : -1;
+
+  let entries = [];
+  try {
+    entries = fs.readdirSync(cacheDir);
+  } catch {
+    return canonical;
+  }
+
+  const prefix = `${slug}-beat-${bid}`;
+  for (const name of entries) {
+    if (!name.startsWith(prefix) || !name.endsWith('.png')) continue;
+    const rest = name.slice(prefix.length, -4);
+    let score = 0;
+    if (rest === '') {
+      score = 0;
+    } else if (rest.startsWith('-')) {
+      const tag = rest.slice(1);
+      const vMatch = /^v(\d+)$/.exec(tag);
+      if (vMatch) {
+        score = parseInt(vMatch[1], 10);
+      } else {
+        score = 1;
+      }
+    } else {
+      continue;
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestPath = path.join(cacheDir, name);
+    }
+  }
+
+  return bestPath || canonical;
 }
 
 export async function readCaseStoryCache(cacheDir, caseId, { promptVersion } = {}) {

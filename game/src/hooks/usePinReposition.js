@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import interact from 'interactjs';
-import { isPointerOverPatient } from '../lib/stackDragHelpers.js';
+import { clampPinAwayFromUi } from '../lib/scenePinPlacement.js';
 
 /** Drag placed order pins to reposition on the patient scene (free + zone modes). */
-export function usePinReposition({ sceneRef, enabled, onMovePin }) {
+export function usePinReposition({ sceneRef, enabled, pinCount = 0, onMovePin }) {
   const onMovePinRef = useRef(onMovePin);
   onMovePinRef.current = onMovePin;
 
@@ -30,10 +30,18 @@ export function usePinReposition({ sceneRef, enabled, onMovePin }) {
           const el = event.target;
           const ivId = el.dataset.ivId;
           el.classList.remove('pin-dragging');
-          if (!ivId) return;
+          if (!ivId || !scene) return;
 
-          const overPatient = isPointerOverPatient(scene, event.clientX, event.clientY);
-          if (!overPatient) {
+          const rect = scene.getBoundingClientRect();
+          if (!rect.width || !rect.height) return;
+
+          const insideScene =
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom;
+
+          if (!insideScene) {
             el.style.transition = 'transform 0.25s ease';
             el.style.transform = 'translate(-50%, -100%)';
             el.setAttribute('data-x', '0');
@@ -44,9 +52,9 @@ export function usePinReposition({ sceneRef, enabled, onMovePin }) {
             return;
           }
 
-          const rect = scene.getBoundingClientRect();
-          const cx = Math.max(0.04, Math.min(0.96, (event.clientX - rect.left) / rect.width));
-          const cy = Math.max(0.06, Math.min(0.96, (event.clientY - rect.top) / rect.height));
+          const rawCx = (event.clientX - rect.left) / rect.width;
+          const rawCy = (event.clientY - rect.top) / rect.height;
+          const { cx, cy } = clampPinAwayFromUi(rawCx, rawCy, scene);
           el.style.left = `${cx * 100}%`;
           el.style.top = `${cy * 100}%`;
           el.style.transform = 'translate(-50%, -100%)';
@@ -60,5 +68,5 @@ export function usePinReposition({ sceneRef, enabled, onMovePin }) {
     return () => {
       interact('.pin.pin-draggable').unset();
     };
-  }, [enabled, sceneRef]);
+  }, [enabled, sceneRef, pinCount]);
 }
