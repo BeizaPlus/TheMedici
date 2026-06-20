@@ -4,7 +4,8 @@ import { getCaseDifferentials } from '../lib/caseDifferentials.js';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 import { buildTeachCompareRows, teachCompareStatusLabel } from '../lib/teachMeCompare.js';
 import { fetchOrderWhy } from '../lib/orderWhy.js';
-import SecondOpinionDepthControl, { useSecondOpinionDepth } from './SecondOpinionDepthControl.jsx';
+import { LOCKED_SECOND_OPINION_DEPTH } from '../lib/secondOpinionPrefs.js';
+import { FIRST_OPINION_DEPTH_EVENT, useFirstOpinionDepth } from './FirstOpinionDepthControl.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { IconRefresh, IconStethoscopeSecond, IconVolume2 } from './sceneToolbar/SceneToolbarIcons.jsx';
 
@@ -94,9 +95,18 @@ export default function TeachMeComparePanel({
   const [peerLoading, setPeerLoading] = useState(null);
   const [whyError, setWhyError] = useState('');
   const [readState, setReadState] = useState('idle');
-  const [secondOpinionDepth, setSecondOpinionDepth] = useSecondOpinionDepth();
+  const [firstOpinionDepth] = useFirstOpinionDepth();
   const panelRef = useRef(null);
   const autoReadOrderIdsRef = useRef(new Set());
+
+  const primaryKey = useCallback(
+    (orderId) => `${orderId}__d${firstOpinionDepth}`,
+    [firstOpinionDepth],
+  );
+  const peerKeyFor = useCallback(
+    (orderId) => `${orderId}__d${LOCKED_SECOND_OPINION_DEPTH}`,
+    [],
+  );
 
   const focusedRow = useMemo(
     () => rows.find((r) => r.id === teachFocusId) || null,
@@ -119,16 +129,26 @@ export default function TeachMeComparePanel({
   }, [caseId]);
 
   useEffect(() => {
+    const onDepth = () => {
+      setWhyByOrder({});
+      autoReadOrderIdsRef.current = new Set();
+    };
+    window.addEventListener(FIRST_OPINION_DEPTH_EVENT, onDepth);
+    return () => window.removeEventListener(FIRST_OPINION_DEPTH_EVENT, onDepth);
+  }, []);
+
+  useEffect(() => {
     if (!teachFocusId || !caseId || !focusedRow) return undefined;
 
     const playbookWhy = String(focusedRow.why || '').trim();
     const hasPlaybook =
       playbookWhy && playbookWhy !== 'No rationale available yet.';
-    if (!whyByOrder[teachFocusId] && hasPlaybook) {
-      setWhyByOrder((prev) => ({ ...prev, [teachFocusId]: playbookWhy }));
+    const pk = primaryKey(teachFocusId);
+    if (!whyByOrder[pk] && hasPlaybook) {
+      setWhyByOrder((prev) => ({ ...prev, [pk]: playbookWhy }));
     }
 
-    if (whyByOrder[teachFocusId]) return undefined;
+    if (whyByOrder[pk]) return undefined;
 
     let cancelled = false;
     setWhyLoading(teachFocusId);
@@ -139,16 +159,17 @@ export default function TeachMeComparePanel({
       orderLabel: focusedRow.label,
       caseData,
       playbookWhy: focusedRow.why,
+      firstOpinionDepth,
     })
       .then(({ why }) => {
         if (!cancelled && String(why || '').trim()) {
-          setWhyByOrder((prev) => ({ ...prev, [teachFocusId]: why }));
+          setWhyByOrder((prev) => ({ ...prev, [pk]: why }));
         }
       })
       .catch((e) => {
         if (!cancelled) {
           if (hasPlaybook) {
-            setWhyByOrder((prev) => ({ ...prev, [teachFocusId]: playbookWhy }));
+            setWhyByOrder((prev) => ({ ...prev, [pk]: playbookWhy }));
           } else {
             setWhyError(String(e.message || e));
           }
@@ -161,13 +182,13 @@ export default function TeachMeComparePanel({
     return () => {
       cancelled = true;
     };
-  }, [teachFocusId, caseId, caseData, focusedRow, whyByOrder]);
+  }, [teachFocusId, caseId, caseData, focusedRow, whyByOrder, firstOpinionDepth, primaryKey]);
 
   useEffect(() => () => stopCaseReader(), []);
 
   const primaryWhy =
-    (teachFocusId && (whyByOrder[teachFocusId] || focusedRow?.why)) || '';
-  const peerKey = teachFocusId ? `${teachFocusId}__d${secondOpinionDepth}` : '';
+    (teachFocusId && (whyByOrder[primaryKey(teachFocusId)] || focusedRow?.why)) || '';
+  const peerKey = teachFocusId ? peerKeyFor(teachFocusId) : '';
   const peerWhy = (peerKey && peerByOrder[peerKey]) || '';
 
   const playAttendingVoice = useCallback(
@@ -189,7 +210,7 @@ export default function TeachMeComparePanel({
   useEffect(() => {
     if (!teachFocusId || !caseId || whyLoading === teachFocusId) return undefined;
     const text = String(
-      whyByOrder[teachFocusId] || focusedRow?.why || '',
+      whyByOrder[primaryKey(teachFocusId)] || focusedRow?.why || '',
     ).trim();
     if (!text || text === 'No rationale available yet.') return undefined;
     let cancelled = false;
@@ -199,21 +220,22 @@ export default function TeachMeComparePanel({
     return () => {
       cancelled = true;
     };
-  }, [teachFocusId, caseId, whyByOrder, whyLoading, focusedRow?.why, playAttendingVoice]);
+  }, [teachFocusId, caseId, whyByOrder, whyLoading, focusedRow?.why, playAttendingVoice, primaryKey]);
 
   const handleListen = useCallback(
     async (event, row) => {
       event.stopPropagation();
       if (!row || !caseId) return;
-      const rowPeerKey = `${row.id}__d${secondOpinionDepth}`;
+      const pk = primaryKey(row.id);
+      const rowPeerKey = peerKeyFor(row.id);
       const text =
         peerByOrder[rowPeerKey] ||
-        whyByOrder[row.id] ||
+        whyByOrder[pk] ||
         row.why ||
         row.label;
       if (!String(text).trim()) return;
       if (whyLoading === row.id) return;
-      if (!whyByOrder[row.id] && !row.why) {
+      if (!whyByOrder[pk] && !row.why) {
         setWhyLoading(row.id);
         try {
           const { why } = await fetchOrderWhy({
@@ -222,8 +244,9 @@ export default function TeachMeComparePanel({
             orderLabel: row.label,
             caseData,
             playbookWhy: row.why,
+            firstOpinionDepth,
           });
-          setWhyByOrder((prev) => ({ ...prev, [row.id]: why }));
+          setWhyByOrder((prev) => ({ ...prev, [pk]: why }));
           await playAttendingVoice(row.id, why, { force: true });
         } catch (e) {
           setWhyError(String(e.message || e));
@@ -234,20 +257,19 @@ export default function TeachMeComparePanel({
       }
       await playAttendingVoice(row.id, text, { force: true });
     },
-    [caseId, caseData, peerByOrder, whyByOrder, whyLoading, secondOpinionDepth, playAttendingVoice],
+    [caseId, caseData, peerByOrder, whyByOrder, whyLoading, firstOpinionDepth, playAttendingVoice, primaryKey, peerKeyFor],
   );
 
   const handlePeer = useCallback(
-    async (event, row, depthOverride = null) => {
+    async (event, row) => {
       event?.stopPropagation?.();
       if (!row || !caseId || peerLoading === row.id) return;
-      const depth = depthOverride ?? secondOpinionDepth;
-      const peerKey = `${row.id}__d${depth}`;
+      const pKey = peerKeyFor(row.id);
       const alreadyFocused = teachFocusId === row.id;
       if (!alreadyFocused) {
         (onEnsureFocus || onFocusStep)?.(row.id);
       }
-      if (peerByOrder[peerKey]) {
+      if (peerByOrder[pKey]) {
         return;
       }
       setPeerLoading(row.id);
@@ -260,36 +282,26 @@ export default function TeachMeComparePanel({
           caseData,
           playbookWhy: row.why,
           peerReview: true,
-          secondOpinionDepth: depth,
         });
-        setPeerByOrder((prev) => ({ ...prev, [peerKey]: why }));
+        setPeerByOrder((prev) => ({ ...prev, [pKey]: why }));
       } catch (e) {
         setWhyError(String(e.message || e));
       } finally {
         setPeerLoading(null);
       }
     },
-    [caseId, caseData, onEnsureFocus, onFocusStep, peerByOrder, peerLoading, teachFocusId, secondOpinionDepth],
-  );
-
-  const handleSecondOpinionDepth = useCallback(
-    (depth) => {
-      if (!teachFocusId || !focusedRow) return;
-      const peerKey = `${teachFocusId}__d${depth}`;
-      if (peerByOrder[peerKey]) return;
-      void handlePeer(null, focusedRow, depth);
-    },
-    [focusedRow, handlePeer, peerByOrder, teachFocusId],
+    [caseId, caseData, onEnsureFocus, onFocusStep, peerByOrder, peerLoading, teachFocusId, peerKeyFor],
   );
 
   const refreshFirstOpinion = useCallback(
     async (row) => {
       if (!row || !caseId || whyLoading === row.id) return;
+      const pk = primaryKey(row.id);
       setWhyLoading(row.id);
       setWhyError('');
       setWhyByOrder((prev) => {
         const next = { ...prev };
-        delete next[row.id];
+        delete next[pk];
         return next;
       });
       try {
@@ -299,9 +311,10 @@ export default function TeachMeComparePanel({
           orderLabel: row.label,
           caseData,
           playbookWhy: row.why,
+          firstOpinionDepth,
           forceRefresh: true,
         });
-        setWhyByOrder((prev) => ({ ...prev, [row.id]: why }));
+        setWhyByOrder((prev) => ({ ...prev, [pk]: why }));
         await playAttendingVoice(row.id, why, { force: true });
       } catch (e) {
         setWhyError(String(e.message || e));
@@ -309,19 +322,18 @@ export default function TeachMeComparePanel({
         setWhyLoading(null);
       }
     },
-    [caseId, caseData, whyLoading, playAttendingVoice],
+    [caseId, caseData, whyLoading, playAttendingVoice, firstOpinionDepth, primaryKey],
   );
 
   const refreshSecondOpinion = useCallback(
-    async (row, depthOverride = null) => {
+    async (row) => {
       if (!row || !caseId || peerLoading === row.id) return;
-      const depth = depthOverride ?? secondOpinionDepth;
-      const peerKey = `${row.id}__d${depth}`;
+      const pKey = peerKeyFor(row.id);
       setPeerLoading(row.id);
       setWhyError('');
       setPeerByOrder((prev) => {
         const next = { ...prev };
-        delete next[peerKey];
+        delete next[pKey];
         return next;
       });
       try {
@@ -332,17 +344,16 @@ export default function TeachMeComparePanel({
           caseData,
           playbookWhy: row.why,
           peerReview: true,
-          secondOpinionDepth: depth,
           forceRefresh: true,
         });
-        setPeerByOrder((prev) => ({ ...prev, [peerKey]: why }));
+        setPeerByOrder((prev) => ({ ...prev, [pKey]: why }));
       } catch (e) {
         setWhyError(String(e.message || e));
       } finally {
         setPeerLoading(null);
       }
     },
-    [caseId, caseData, peerLoading, secondOpinionDepth],
+    [caseId, caseData, peerLoading, peerKeyFor],
   );
 
   const renderRow = (row) => {
@@ -387,7 +398,7 @@ export default function TeachMeComparePanel({
                 <button
                   type="button"
                   className={`teach-compare-icon-btn${peerWhy ? ' is-active' : ''}`}
-                  title="Second opinion — peer attending (depth slider below)"
+                  title="Second opinion — brief peer attending punch"
                   aria-label="Second opinion"
                   disabled={peerLoading === row.id}
                   onClick={(e) => void handlePeer(e, row)}
@@ -425,11 +436,6 @@ export default function TeachMeComparePanel({
                 {renderChatMarkdown(primaryWhy)}
               </div>
             )}
-            <SecondOpinionDepthControl
-              id="second-opinion-depth-teach"
-              className="teach-compare-second-opinion-controls"
-              onDepthChange={handleSecondOpinionDepth}
-            />
             {peerLoading === row.id && !peerWhy && (
               <p className="teach-compare-rationale-loading">Loading second opinion…</p>
             )}

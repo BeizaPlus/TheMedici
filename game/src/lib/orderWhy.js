@@ -1,7 +1,16 @@
 import playbookBundle from '../data/orderWhyPlaybook.json' with { type: 'json' };
 import { apiUrl } from './apiBase.js';
 import { buildCaseChatContext } from './caseChat.js';
-import { readLocalOrderWhy, writeLocalOrderWhy } from './orderWhyLocal.js';
+import { readFirstOpinionDepth } from './firstOpinionPrefs.js';
+import { LOCKED_SECOND_OPINION_DEPTH } from './secondOpinionPrefs.js';
+import {
+  clearLocalOrderWhy,
+  readLocalOrderWhy,
+  readLocalPeerOrderWhy,
+  writeLocalOrderWhy,
+  writeLocalPeerOrderWhy,
+} from './orderWhyLocal.js';
+import { persistOrderWhyToCaseNotes } from './orderWhyNotes.js';
 
 const memory = new Map();
 
@@ -20,7 +29,7 @@ function readPlaybookWhy(caseId, orderId) {
   return playbookBundle?.cases?.[ck]?.[ok]?.why || null;
 }
 
-/** Fetch case-specific order rationale — offline playbook + local cache + server. */
+/** Fetch case-specific order rationale — shipped playbook first; API for refresh or second opinion. */
 export async function fetchOrderWhy({
   caseId,
   orderId,
@@ -28,21 +37,56 @@ export async function fetchOrderWhy({
   caseData,
   playbookWhy = '',
   peerReview = false,
+  secondOpinionDepth = LOCKED_SECOND_OPINION_DEPTH,
+  firstOpinionDepth = readFirstOpinionDepth(),
+  forceRefresh = false,
 } = {}) {
   const cid = normalizeCaseId(caseId);
   const oid = String(orderId ?? '').trim();
-  const cacheKey = peerReview ? `${oid}__peer` : oid;
+  const peerDepthIdx = LOCKED_SECOND_OPINION_DEPTH;
+  const firstDepthIdx = Math.max(0, Math.min(3, Number(firstOpinionDepth) || 0));
+  const cacheKey = peerReview ? `${oid}__peer__d${peerDepthIdx}` : `${oid}__d${firstDepthIdx}`;
   if (!cid || !oid || !orderLabel) {
     throw new Error('Missing case or order');
   }
 
-  const hit = memory.get(memKey(cid, cacheKey));
-  if (hit) return { why: hit, cached: true, source: 'memory' };
+  if (forceRefresh) {
+    memory.delete(memKey(cid, cacheKey));
+    clearLocalOrderWhy(cid, oid, {
+      peerReview,
+      secondOpinionDepth: peerDepthIdx,
+      firstOpinionDepth: firstDepthIdx,
+    });
+  }
 
-  const local = peerReview ? null : readLocalOrderWhy(cid, oid);
-  if (local) {
-    memory.set(memKey(cid, oid), local);
-    return { why: local, cached: true, source: 'local' };
+  if (!forceRefresh) {
+    const hit = memory.get(memKey(cid, cacheKey));
+    if (hit) return { why: hit, cached: true, source: 'memory' };
+
+    if (peerReview) {
+      const peerLocal = readLocalPeerOrderWhy(cid, oid, peerDepthIdx);
+      if (peerLocal) {
+        memory.set(memKey(cid, cacheKey), peerLocal);
+        return { why: peerLocal, cached: true, source: 'local-peer' };
+      }
+    } else {
+      const local = readLocalOrderWhy(cid, oid, firstDepthIdx);
+      if (local) {
+        memory.set(memKey(cid, cacheKey), local);
+        return { why: local, cached: true, source: 'local' };
+      }
+
+      const bundled = readPlaybookWhy(cid, oid);
+      const fallback = String(bundled || playbookWhy || '').trim();
+      if (fallback) {
+        memory.set(memKey(cid, cacheKey), fallback);
+        return {
+          why: fallback,
+          cached: true,
+          source: bundled ? 'playbook-bundle' : 'playbook',
+        };
+      }
+    }
   }
 
   const bundled = peerReview ? null : readPlaybookWhy(cid, oid);
@@ -51,12 +95,8 @@ export async function fetchOrderWhy({
   const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
   if (offline) {
     if (!fallback) throw new Error('Offline — no cached rationale for this order');
-    memory.set(memKey(cid, oid), fallback);
+    memory.set(memKey(cid, cacheKey), fallback);
     return { why: fallback, cached: true, source: bundled ? 'playbook-bundle' : 'playbook' };
-  }
-
-  if (fallback && !peerReview) {
-    memory.set(memKey(cid, oid), fallback);
   }
 
   try {
@@ -71,29 +111,44 @@ export async function fetchOrderWhy({
         playbookWhy: fallback || playbookWhy,
         caseContext,
         peerReview: Boolean(peerReview),
+        secondOpinionDepth: peerDepthIdx,
+        firstOpinionDepth: firstDepthIdx,
+        forceRefresh: Boolean(forceRefresh),
       }),
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
-      if (fallback) {
+      if (fallback && !peerReview) {
         return { why: fallback, cached: true, source: 'playbook-fallback' };
       }
       throw new Error(data.error || `Order why failed (${res.status})`);
     }
     const why = String(data.why || '').trim();
     if (!why) {
-      if (fallback) return { why: fallback, cached: true, source: 'playbook-fallback' };
+      if (fallback && !peerReview) return { why: fallback, cached: true, source: 'playbook-fallback' };
       throw new Error('Empty response');
     }
     memory.set(memKey(cid, cacheKey), why);
-    if (!peerReview) writeLocalOrderWhy(cid, oid, why, orderLabel);
+    if (peerReview) {
+      writeLocalPeerOrderWhy(cid, oid, peerDepthIdx, why, orderLabel);
+    } else {
+      writeLocalOrderWhy(cid, oid, firstDepthIdx, why, orderLabel);
+    }
+    persistOrderWhyToCaseNotes(cid, {
+      orderId: oid,
+      orderLabel,
+      why,
+      peerReview,
+      secondOpinionDepth: peerDepthIdx,
+      firstOpinionDepth: firstDepthIdx,
+    });
     return {
       why,
       cached: Boolean(data.cached),
       source: data.cached ? 'server-cache' : 'deepseek',
     };
   } catch (err) {
-    if (fallback) {
+    if (fallback && !peerReview) {
       return { why: fallback, cached: true, source: 'playbook-fallback' };
     }
     throw err;

@@ -242,10 +242,11 @@ app.use('/case-briefs', express.static(CASE_BRIEF_DIR));
 
 const ORDER_WHY_CACHE_DIR = path.join(GAME_ROOT, '.order-why-cache');
 /** Bump when mechanism / storycraft / opinion length rules change — bust stale order-why cache. */
-const ORDER_WHY_PROMPT_VERSION = 'teach-me-v9';
-/** First opinion = interconnected arc; second opinion = brief punch per depth slider. */
-const FIRST_OPINION_MAX_TOKENS = 520;
+const ORDER_WHY_PROMPT_VERSION = 'teach-me-v10';
+/** First opinion = interconnected arc (depth slider); second opinion = locked brief punch. */
+const FIRST_OPINION_MAX_TOKENS = [280, 380, 480, 520];
 const SECOND_OPINION_MAX_TOKENS = [120, 160, 200, 240];
+const LOCKED_SECOND_OPINION_DEPTH = 0;
 if (!fs.existsSync(ORDER_WHY_CACHE_DIR)) {
   fs.mkdirSync(ORDER_WHY_CACHE_DIR, { recursive: true });
 }
@@ -1331,15 +1332,16 @@ app.post('/api/order-why', async (req, res) => {
   const key = chatApiKeyOrError(res);
   if (!key) return;
 
-  const { caseId, orderId, orderLabel, playbookWhy = '', caseContext = null, peerReview = false, secondOpinionDepth = 2, forceRefresh = false } =
+  const { caseId, orderId, orderLabel, playbookWhy = '', caseContext = null, peerReview = false, secondOpinionDepth = 0, firstOpinionDepth = 3, forceRefresh = false } =
     req.body || {};
   const cid = String(caseId ?? '').trim();
   const oid = String(orderId ?? '').trim();
-  const depthIdx = Math.max(0, Math.min(3, Number(secondOpinionDepth) || 0));
-  const depthConfig = { maxTokens: SECOND_OPINION_MAX_TOKENS[depthIdx] ?? 160 };
+  const peerDepthIdx = LOCKED_SECOND_OPINION_DEPTH;
+  const firstDepthIdx = Math.max(0, Math.min(3, Number(firstOpinionDepth) || 0));
+  const depthConfig = { maxTokens: SECOND_OPINION_MAX_TOKENS[peerDepthIdx] ?? 120 };
   const cacheKey = peerReview
-    ? `${oid}__peer__d${depthIdx}__${ORDER_WHY_PROMPT_VERSION}`
-    : `${oid}__${ORDER_WHY_PROMPT_VERSION}`;
+    ? `${oid}__peer__d${peerDepthIdx}__${ORDER_WHY_PROMPT_VERSION}`
+    : `${oid}__d${firstDepthIdx}__${ORDER_WHY_PROMPT_VERSION}`;
   const label = String(orderLabel ?? '').trim();
   if (!cid || !oid || !label) {
     return res.status(400).json({ error: 'Missing caseId, orderId, or orderLabel' });
@@ -1365,10 +1367,13 @@ app.post('/api/order-why', async (req, res) => {
       playbookWhy,
       caseContext: caseContext && typeof caseContext === 'object' ? caseContext : {},
       peerReview: Boolean(peerReview),
-      secondOpinionDepth: depthIdx,
+      secondOpinionDepth: peerDepthIdx,
+      firstOpinionDepth: firstDepthIdx,
     });
     const why = await callChatCompletion(key, messages, {
-      maxTokens: peerReview ? depthConfig.maxTokens : FIRST_OPINION_MAX_TOKENS,
+      maxTokens: peerReview
+        ? depthConfig.maxTokens
+        : FIRST_OPINION_MAX_TOKENS[firstDepthIdx] ?? 520,
       temperature: peerReview
         ? Math.min(0.72, immersaAttendantTemperature(caseContext?.simulationCreativity ?? 55))
         : immersaAttendantTemperature(caseContext?.simulationCreativity ?? 55),

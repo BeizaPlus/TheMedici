@@ -40,6 +40,8 @@ export const STORAGE = {
   scenePinsHidden: 'schoonmaker_scene_pins_hidden',
   caseChatHistory: 'schoonmaker_case_chat_history',
   orderWhyCache: 'schoonmaker_order_why_cache',
+  secondOpinionDepth: 'schoonmaker_second_opinion_depth',
+  firstOpinionDepth: 'schoonmaker_first_opinion_depth',
   caseNotes: 'schoonmaker_case_notes',
   caseNotesIndex: 'schoonmaker_case_notes_index',
   caseNotesMigrated: 'schoonmaker_case_notes_disk_migrated',
@@ -59,6 +61,9 @@ export const STORAGE = {
   differentialNotesSync: 'schoonmaker_differential_notes_sync',
   casePictureNotesIndex: 'schoonmaker_case_picture_notes_index',
   caseStoryOverrides: 'schoonmaker_case_story_overrides',
+  caseStoryStarted: 'schoonmaker_case_story_started',
+  physicalExamPinLayout: 'schoonmaker_physical_exam_pin_layout',
+  teachingMoments: 'schoonmaker_teaching_moments',
 };
 
 const LEGACY = {

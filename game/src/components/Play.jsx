@@ -110,7 +110,7 @@ import ClinicalTextControls from './ClinicalTextControls.jsx';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
 import AudioSettingsPanel from './AudioSettingsPanel.jsx';
 import SimulationCreativityControl from './SimulationCreativityControl.jsx';
-import SecondOpinionDepthControl from './SecondOpinionDepthControl.jsx';
+import FirstOpinionDepthControl from './FirstOpinionDepthControl.jsx';
 import CasePortraitBriefControl from './CasePortraitBriefControl.jsx';
 import OrderResultsTabPanel from './OrderResultsTabPanel.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
@@ -3702,8 +3702,8 @@ export default function Play({
             </button>
           </div>
           <div className="settings-popover-block">
-            <p className="settings-popover-label">Second opinion depth</p>
-            <SecondOpinionDepthControl id="second-opinion-depth-scene" compact />
+            <p className="settings-popover-label">Attending depth</p>
+            <FirstOpinionDepthControl id="first-opinion-depth-scene" compact />
           </div>
           <div className="settings-popover-block">
             <SimulationCreativityControl

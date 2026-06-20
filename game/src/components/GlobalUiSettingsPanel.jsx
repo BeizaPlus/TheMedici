@@ -9,6 +9,7 @@ import { STORAGE } from '../lib/storageKeys.js';
 import { readUiPrefs, writeUiPrefs } from '../lib/uiPrefs.js';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
 import SimulationCreativityControl from './SimulationCreativityControl.jsx';
+import FirstOpinionDepthControl from './FirstOpinionDepthControl.jsx';
 
 function isFavoriteLayoutSaved() {
   try {
@@ -107,6 +108,14 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
           styleFn={teachMeTextStyle}
           previewBlockClass="teach-me-text-block"
         />
+      </div>
+
+      <div className="global-ui-settings-block">
+        <p className="global-ui-settings-label">Attending depth</p>
+        <p className="global-ui-settings-note">
+          First opinion when you open a treatment stack — interconnected teaching arc. One global length for all orders. Second opinion stays brief (locked punch).
+        </p>
+        <FirstOpinionDepthControl id="first-opinion-depth-global" compact />
       </div>
 
       <label className="global-ui-toggle">
