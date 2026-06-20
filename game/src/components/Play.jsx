@@ -110,6 +110,7 @@ import ClinicalTextControls from './ClinicalTextControls.jsx';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
 import AudioSettingsPanel from './AudioSettingsPanel.jsx';
 import SimulationCreativityControl from './SimulationCreativityControl.jsx';
+import SecondOpinionDepthControl from './SecondOpinionDepthControl.jsx';
 import CasePortraitBriefControl from './CasePortraitBriefControl.jsx';
 import OrderResultsTabPanel from './OrderResultsTabPanel.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
@@ -127,7 +128,14 @@ import {
   resolveStackDecoys,
   stackPillDisplayLabel,
 } from '../lib/stackDecoys.js';
+import { applyLayoutToPhysicalExamPin,
+  capturePhysicalExamLayoutFromPins,
+  formatPhysicalExamLayoutJson,
+  persistPhysicalExamSectionMove,
+  writePhysicalExamPinLayout,
+} from '../lib/physicalExamPinLayout.js';
 import PhysicalExamPickerDialog from './PhysicalExamPickerDialog.jsx';
+import { addTeachingMoment } from '../lib/teachingMoments.js';
 import {
   CCS_PHYSICAL_EXAM_SECTIONS,
   isPhysicalExamPickerTrigger,
@@ -143,6 +151,7 @@ import TeachMeComparePanel from './TeachMeComparePanel.jsx';
 import TeachMeCompareLandscape from './TeachMeCompareLandscape.jsx';
 import MedicalSequencePanel from './MedicalSequencePanel.jsx';
 import CaseStoryPanel from './CaseStoryPanel.jsx';
+import { markCaseStoryStarted, readCaseStoryStarted } from '../lib/caseStoryStarted.js';
 import { sanitizePatientReplyForDisplay } from '../lib/patientReplyText.js';
 import {
   buildTeachCompareReport,
@@ -357,6 +366,15 @@ export default function Play({
   const [teachCompareLayout, setTeachCompareLayout] = useState(readTeachCompareLayout);
   const [medicalSequenceOpen, setMedicalSequenceOpen] = useState(false);
   const [caseStoryOpen, setCaseStoryOpen] = useState(false);
+  const [caseStoryStarted, setCaseStoryStarted] = useState(() =>
+    readCaseStoryStarted(caseData?.id),
+  );
+
+  const openCaseStory = useCallback(() => {
+    markCaseStoryStarted(caseData?.id);
+    setCaseStoryStarted(true);
+    setCaseStoryOpen(true);
+  }, [caseData?.id]);
   const [placementOrder, setPlacementOrder] = useState([]);
   const [orderCommandQuery, setOrderCommandQuery] = useState('');
   const [extraOrders, setExtraOrders] = useState([]);
@@ -685,7 +703,14 @@ export default function Play({
     setDockReplyExpanded(false);
     setDockChatHistoryExpanded(true);
     setDockHidden(false);
+    setTeachFocusId(null);
   }, [caseData?.id]);
+
+  useEffect(() => {
+    if (!caseData?.id) return;
+    if (teachMeMode) collapseDockPanel();
+    else setDockCollapsed(false);
+  }, [caseData?.id, teachMeMode, collapseDockPanel]);
 
   const showOrderWhyInDock = useCallback(
     (iv) => {
@@ -724,7 +749,9 @@ export default function Play({
             e.currentTarget.dataset.didDrag = '';
             return;
           }
+          const opening = expandedStackId !== iv.id;
           setExpandedStackId((prev) => (prev === iv.id ? null : iv.id));
+          if (opening && teachMeMode) showOrderWhyInDock(iv);
         }}
       >
         <div
@@ -926,7 +953,7 @@ export default function Play({
     portraitTick,
     setPortraitSrc,
     clearPortraitSrc,
-  } = useCasePortraitSrc(caseData);
+  } = useCasePortraitSrc(caseData, { preferUberPlayPlate: true });
   const [portraitLayers, setPortraitLayers] = useState(null);
   const hasIvPlaced = useMemo(() => hasIvOrderPlaced(placed), [placed]);
   const [reviewedAt, setReviewedAt] = useState(null);
@@ -1864,22 +1891,27 @@ export default function Play({
       setTeachFocusId(null);
 
       const pinLabel = neutralStackOrderName(iv.label);
-      const pinPayload = isGrid
-        ? { ...effectiveTarget, label: pinLabel, ivId: iv.id, ok: null }
-        : effectiveTarget?.cx != null
-          ? {
-              cx: effectiveTarget.cx,
-              cy: effectiveTarget.cy,
-              zoneId: effectiveTarget.zoneId || zoneId,
-              label: pinLabel,
-              ivId: iv.id,
-              ok: null,
-            }
-          : { zoneId: effectiveTarget, label: pinLabel, ivId: iv.id, ok: null };
+      const pinPayload = applyLayoutToPhysicalExamPin(
+        isGrid
+          ? { ...effectiveTarget, label: pinLabel, ivId: iv.id, ok: null }
+          : effectiveTarget?.cx != null
+            ? {
+                cx: effectiveTarget.cx,
+                cy: effectiveTarget.cy,
+                zoneId: effectiveTarget.zoneId || zoneId,
+                label: pinLabel,
+                ivId: iv.id,
+                ok: null,
+              }
+            : { zoneId: effectiveTarget, label: pinLabel, ivId: iv.id, ok: null },
+      );
       setPins((prev) => [
         ...prev.filter((pin) => pin.ivId !== iv.id && pin.label !== iv.label),
         pinPayload,
       ]);
+      if (!silentDecoy) {
+        setStackMoveMode(true);
+      }
 
       if (!silentDecoy) {
         setOrderResultIvId(iv.id);
@@ -2012,12 +2044,14 @@ export default function Play({
           if (nextPlaced[stackMatch.id]) continue;
           nextPlaced[stackMatch.id] = stackDropZoneForIv(stackMatch, orderIds.length);
           orderIds.push(stackMatch.id);
-          pinAdds.push({
-            zoneId: stackDropZoneForIv(stackMatch, orderIds.length - 1),
-            label: stackMatch.label,
-            ivId: stackMatch.id,
-            ok: null,
-          });
+          pinAdds.push(
+            applyLayoutToPhysicalExamPin({
+              zoneId: stackDropZoneForIv(stackMatch, orderIds.length - 1),
+              label: stackMatch.label,
+              ivId: stackMatch.id,
+              ok: null,
+            }),
+          );
           events.push({
             type: 'stack',
             stackId: stackMatch.id,
@@ -2033,12 +2067,14 @@ export default function Play({
         if (decoy) {
           if (nextPlaced[decoy.id]) continue;
           nextPlaced[decoy.id] = decoy.correct_zone || 'zone-monitor';
-          pinAdds.push({
-            zoneId: decoy.correct_zone || 'zone-monitor',
-            label: decoy.label,
-            ivId: decoy.id,
-            ok: null,
-          });
+          pinAdds.push(
+            applyLayoutToPhysicalExamPin({
+              zoneId: decoy.correct_zone || 'zone-monitor',
+              label: decoy.label,
+              ivId: decoy.id,
+              ok: null,
+            }),
+          );
           events.push({ type: 'extra_order', label: decoy.label });
           placedCount += 1;
           continue;
@@ -2051,12 +2087,14 @@ export default function Play({
         const ivId = extraOrderPinId(label);
         const zoneId = stackDropZoneForIv(null, orderIds.length + extras.length);
         nextPlaced[ivId] = zoneId;
-        pinAdds.push({
-          zoneId,
-          label,
-          ivId,
-          ok: null,
-        });
+        pinAdds.push(
+          applyLayoutToPhysicalExamPin({
+            zoneId,
+            label,
+            ivId,
+            ok: null,
+          }),
+        );
         events.push({ type: 'extra_order', label, category: 'physical_exam' });
         placedCount += 1;
       }
@@ -2091,6 +2129,7 @@ export default function Play({
           }
           return next;
         });
+        setStackMoveMode(true);
       }
       setReviewed(false);
       setReviewResults({});
@@ -2160,8 +2199,14 @@ export default function Play({
         setPlacementOrder((prev) => (prev.includes(stackMatch.id) ? prev : [...prev, stackMatch.id]));
         setPins((prev) => [
           ...prev.filter((pin) => pin.ivId !== stackMatch.id && pin.label !== stackMatch.label),
-          { zoneId: dropZone, label: stackMatch.label, ivId: stackMatch.id, ok: null },
+          applyLayoutToPhysicalExamPin({
+            zoneId: dropZone,
+            label: stackMatch.label,
+            ivId: stackMatch.id,
+            ok: null,
+          }),
         ]);
+        setStackMoveMode(true);
         setReviewed(false);
         setReviewResults({});
         setOrderReview({});
@@ -2219,8 +2264,9 @@ export default function Play({
         setPlaced((p) => ({ ...p, [ivId]: zoneId }));
         setPins((prev) => [
           ...prev.filter((pin) => pin.ivId !== ivId && pin.label !== label),
-          { zoneId, label, ivId, ok: null },
+          applyLayoutToPhysicalExamPin({ zoneId, label, ivId, ok: null }),
         ]);
+        setStackMoveMode(true);
         setOrderCommandQuery('');
         setReviewed(false);
         setReviewResults({});
@@ -2285,6 +2331,12 @@ export default function Play({
           logTimeline({ type: 'chat', role: 'user', text: question });
           const displayAnswer =
             chatMode === 'patient_sim' ? sanitizePatientReplyForDisplay(reply) : reply;
+          setDockChatReply({
+            answer: displayAnswer,
+            question,
+            orderLabel: question,
+          });
+          setDockReplyExpanded(true);
           setDockChatHistoryExpanded(true);
         } else if (caseChat.error) {
           showToast(caseChat.error, 'bad');
@@ -2311,6 +2363,20 @@ export default function Play({
     ],
   );
 
+  const pinTeachingMoment = useCallback(
+    ({ prompt = '', answer = '', orderLabel = '', channel = '' } = {}) => {
+      if (!caseData?.id) return;
+      const text = String(answer || '').trim();
+      if (!text) {
+        showToast('Nothing to pin yet', 'bad');
+        return;
+      }
+      addTeachingMoment(caseData.id, { prompt, answer: text, orderLabel, channel });
+      showToast('Pinned for Case Story ⭐', 'ok');
+    },
+    [caseData?.id],
+  );
+
   const dockResultRows = useMemo(() => {
     if (teachMeMode && interventions.length > 0) {
       return interventions.map((iv) => ({
@@ -2327,6 +2393,9 @@ export default function Play({
         resultRows={dockResultRows}
         activeIvId={orderResultIvId}
         onSelectIvId={setOrderResultIvId}
+        onSelectIv={(iv) => {
+          if (teachMeMode && iv?.id) showOrderWhyInDock(iv);
+        }}
         caseData={caseData}
         caseFlow={caseFlow}
         portraitSrc={portraitDisplaySrc}
@@ -2334,9 +2403,10 @@ export default function Play({
         teachMeMode={teachMeMode}
         compact
         hideKicker
+        onPinTeachingMoment={pinTeachingMoment}
       />
     ),
-    [dockResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode],
+    [dockResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode, pinTeachingMoment, showOrderWhyInDock],
   );
 
   const dockOrderContextLabel = useMemo(() => {
@@ -2639,7 +2709,7 @@ export default function Play({
         const hit = prev.find((pin) => pin.ivId === ivId);
         const label = iv?.label || hit?.label || 'Order';
         showToast(`Moved ${label}`, '');
-        return prev.map((pin) =>
+        const next = prev.map((pin) =>
           pin.ivId === ivId
             ? {
                 ...pin,
@@ -2652,6 +2722,11 @@ export default function Play({
               }
             : pin,
         );
+        const moved = next.find((pin) => pin.ivId === ivId);
+        if (moved && cell.cx != null && cell.cy != null) {
+          persistPhysicalExamSectionMove(moved, cell.cx, cell.cy);
+        }
+        return next;
       });
     },
     [interventions, decoyInterventions],
@@ -2659,10 +2734,28 @@ export default function Play({
 
   usePinReposition({
     sceneRef,
-    enabled: !timedOut && !finalMode && pins.length > 0 && stackMoveMode,
+    enabled:
+      !timedOut && !finalMode && pins.length > 0 && (stackMoveMode || !teachMeMode),
     pinCount: pins.length,
     onMovePin: handleMovePin,
   });
+
+  const savePhysicalExamLayout = useCallback(async () => {
+    const sections = capturePhysicalExamLayoutFromPins(pins);
+    const count = Object.keys(sections).length;
+    if (!count) {
+      showToast('Place physical exam sections and drag labels first (move icon)', 'bad');
+      return;
+    }
+    writePhysicalExamPinLayout(sections);
+    const json = formatPhysicalExamLayoutJson(sections);
+    try {
+      await navigator.clipboard.writeText(json);
+      showToast(`Saved ${count} PE positions — clipboard + this browser`, 'ok');
+    } catch {
+      showToast(`Saved ${count} PE positions in this browser`, 'ok');
+    }
+  }, [pins]);
 
   const returnStackToDock = useCallback(
     (ivId, { wrap } = {}) => {
@@ -3044,8 +3137,8 @@ export default function Play({
       </label>
       <button
         type="button"
-        className="teach-compare-export-btn case-story-trigger"
-        onClick={() => setCaseStoryOpen(true)}
+        className={`teach-compare-export-btn case-story-trigger${caseStoryStarted ? ' is-started' : ''}`}
+        onClick={openCaseStory}
         title="Case story — master narrative and third-person oversight still from full session"
       >
         Case story
@@ -3429,14 +3522,14 @@ export default function Play({
   }, []);
 
   useEffect(() => {
-    if (teachMeMode) return;
-    setTeachFocusId(null);
-  }, [teachMeMode]);
+    setCaseStoryStarted(readCaseStoryStarted(caseData?.id));
+  }, [caseData?.id]);
 
   useEffect(() => {
-    if (!teachMeMode || !nextExpectedId) return;
-    setTeachFocusId((prev) => (prev && !placed[prev] ? prev : nextExpectedId));
-  }, [teachMeMode, nextExpectedId, placed]);
+    if (!teachMeMode) {
+      setTeachFocusId(null);
+    }
+  }, [teachMeMode]);
 
   useEffect(() => {
     if (!timedModeEnabled || teachMeMode || timedOut || doneCount >= total || timeLeft <= 0) return undefined;
@@ -3573,7 +3666,7 @@ export default function Play({
             <button type="button" onClick={resetPlacements}>
               Reset placements
             </button>
-            <button type="button" onClick={() => setCaseStoryOpen(true)}>
+            <button type="button" onClick={openCaseStory}>
               Case story
             </button>
             <button
@@ -3609,6 +3702,10 @@ export default function Play({
             </button>
           </div>
           <div className="settings-popover-block">
+            <p className="settings-popover-label">Second opinion depth</p>
+            <SecondOpinionDepthControl id="second-opinion-depth-scene" compact />
+          </div>
+          <div className="settings-popover-block">
             <SimulationCreativityControl
               caseId={caseData.id}
               showCaseOverride
@@ -3641,7 +3738,7 @@ export default function Play({
 
   return (
     <div
-      className={`game ${finalMode ? 'final-mode' : ''} ${activeDrawer ? 'drawer-open' : ''}${teachMeMode ? ' teach-me-focus' : ''}${teachCompareLandscape ? ' teach-compare-landscape' : ''}${scenePinsHidden ? ' scene-pins-hidden' : ''}`}
+      className={`game ${finalMode ? 'final-mode' : ''} ${activeDrawer ? 'drawer-open' : ''}${teachMeMode ? ' teach-me-focus' : ''}${teachCompareLandscape ? ' teach-compare-landscape' : ''}${exportUseLiveScene ? ' live-scene-export' : ''}${scenePinsHidden ? ' scene-pins-hidden' : ''}`}
       style={{
         gridTemplateColumns: '1fr',
         gridTemplateRows: '1fr',
@@ -3804,6 +3901,8 @@ export default function Play({
             patientRecording={caseRecording}
             stackMoveMode={stackMoveMode}
             onToggleStackMove={toggleStackMoveMode}
+            onSavePhysicalExamLayout={savePhysicalExamLayout}
+            onPinTeachingMoment={pinTeachingMoment}
             scenePinsHidden={scenePinsHidden}
             onToggleScenePins={() => setScenePinsHidden((v) => !v)}
             caseId={caseData.id}
@@ -3993,6 +4092,12 @@ export default function Play({
               data-iv-id={p.ivId || ''}
               data-x="0"
               data-y="0"
+              onPointerDown={(e) => {
+                if (!p.ivId) return;
+                if (stackMoveMode || !teachMeMode) {
+                  e.preventDefault();
+                }
+              }}
               onClick={() => {
                 if (!p.ivId) return;
                 const suppress = pinDragSuppressClickRef.current;
@@ -4004,15 +4109,19 @@ export default function Play({
                 }
                 setOrderResultIvId(p.ivId);
                 setDockResultsExpanded(true);
+                if (teachMeMode) {
+                  const iv = interventionById[p.ivId];
+                  if (iv) showOrderWhyInDock(iv);
+                }
               }}
               style={{
                 left: `${leftPct}%`,
                 top: `${topPct}%`,
               }}
               title={
-                stackMoveMode
+                stackMoveMode || !teachMeMode
                   ? 'Drag to reposition on patient'
-                  : 'Tap for result · enable move icon to drag'
+                  : 'Tap move icon (arrows) then drag labels'
               }
             >
               <span className="pin-label">{p.label}</span>
@@ -4616,6 +4725,7 @@ export default function Play({
 
       {teachMeMode && (
         <MedicalSequencePanel
+          key={caseData?.id}
           open={medicalSequenceOpen}
           onClose={() => setMedicalSequenceOpen(false)}
           caseData={caseData}
@@ -4629,6 +4739,7 @@ export default function Play({
       )}
 
       <CaseStoryPanel
+        key={caseData?.id}
         open={caseStoryOpen}
         onClose={() => setCaseStoryOpen(false)}
         caseData={caseData}

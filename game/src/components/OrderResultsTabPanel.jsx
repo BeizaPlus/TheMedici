@@ -5,6 +5,7 @@ export default function OrderResultsTabPanel({
   resultRows = [],
   activeIvId = null,
   onSelectIvId,
+  onSelectIv = null,
   caseData,
   caseFlow,
   portraitSrc = '',
@@ -12,6 +13,7 @@ export default function OrderResultsTabPanel({
   teachMeMode = false,
   compact = false,
   hideKicker = false,
+  onPinTeachingMoment = null,
 }) {
   const hasRows = resultRows.length > 0;
   const activeRow =
@@ -42,6 +44,7 @@ export default function OrderResultsTabPanel({
                   onClick={() => {
                     if (row.teachPending) return;
                     onSelectIvId?.(row.iv.id);
+                    onSelectIv?.(row.iv);
                   }}
                   aria-selected={isActive}
                   disabled={row.teachPending}
@@ -66,6 +69,7 @@ export default function OrderResultsTabPanel({
               className={`order-result-tab-card${compact ? ' order-result-tab-card--dock' : ''}`}
               hideClose
               teachMeMode={teachMeMode}
+              onPinTeachingMoment={onPinTeachingMoment}
             />
           )}
         </>

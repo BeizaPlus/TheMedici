@@ -3,6 +3,7 @@ import { apiUrl } from './apiBase.js';
 import { buildCaseChatContext } from './caseChat.js';
 import { mergeCaseStoryWithOverride } from './caseStoryOverrides.js';
 import { caseStorySessionFingerprint } from './caseStorySessionFingerprint.js';
+import { storyNarrativeMatchesCase } from './caseStoryCanonical.js';
 
 function normalizeCaseId(caseId) {
   const raw = String(caseId ?? '').trim();
@@ -32,11 +33,17 @@ export function buildCaseStoryOffline(caseData, { sessionContext = {} } = {}) {
 
   const is001 = cid === '001';
   const is051 = cid === '051';
+  const is153 = cid === '153';
+  const is176 = cid === '176';
   const patientLock = is001
     ? 'Adult male, diaphoretic, in extremis — tension pneumothorax presentation'
     : is051
       ? '70-year-old Caucasian man, hospital gown, withdrawn expression, no focal deficits'
-      : `${caseData?.category || 'ED'} patient — same likeness as play portrait`;
+      : is153
+        ? "N'Gavu — young Black man, mustard-yellow party jacket likeness, thin mustache, hospital gown, blistered hands and forearms — beer bottles on bedside table, yellow shirt on chair"
+        : is176
+        ? 'Young Black man, subway-afro-dandy likeness — large heart-shaped afro, calm direct gaze; light blue hospital gown on ED stretcher; forearm animal bite wound with cellulitis visible where appropriate; same likeness throughout; clinical stress'
+        : `${caseData?.category || 'ED'} patient — same likeness as play portrait`;
 
   const chapters = is001
     ? [
@@ -105,6 +112,100 @@ export function buildCaseStoryOffline(caseData, { sessionContext = {} } = {}) {
               'Family at bedside in depth, patient same likeness, emotional relief mixed with fear — third-person oversight, room depth visible',
           },
         ]
+      : is153
+        ? [
+            {
+              id: 'c0',
+              heading: 'Village party',
+              body: "N'Gavu was out with friends from the village — beer all night, yellow jacket, nothing felt wrong. He drank like he always does after work.",
+              visualHint:
+                "N'Gavu in mustard-yellow party jacket with brown beer bottle, night party or pool hall — same face, NOT hospital gown",
+            },
+            {
+              id: 'c1',
+              heading: 'Disruption',
+              body: "The next afternoon, walking home in the sun, his hands and face began to peel and blister. By evening he could not stand light on his forearms.",
+              visualHint:
+                "Same N'Gavu squinting in afternoon sun, yellow jacket, blistering forearms starting — outdoor village path",
+            },
+            {
+              id: 'c2',
+              heading: 'Embodiment',
+              body: "In the ED he winces when the triage window lights his arms. He took off the yellow shirt for the gown — it hangs on the chair. His beer bottles are on the side table; he says they are his property.",
+              visualHint:
+                "N'Gavu supine in hospital gown on stretcher, mustard-yellow shirt on bedside chair, two beer bottles on overbed table, shields blistered forearms from window light",
+            },
+            {
+              id: 'c3',
+              heading: 'Escalation',
+              body: 'Fragile bullae on sun-exposed skin, milia on the hands, darker patches and coarse hair on the dorsal hands — the pattern whispers porphyrin, not a simple sunburn.',
+              visualHint:
+                "Close on N'Gavu's blistered dorsal hands and forearms, same face visible, ED bay, monitor upper-right",
+            },
+            {
+              id: 'c4',
+              heading: 'Crisis point',
+              body: 'If porphyrins keep building while orders wait, every photon through the glass keeps injuring skin — and alcohol may still be driving the trigger until you prove otherwise.',
+              visualHint:
+                "N'Gavu tense on stretcher, eyes toward bright window, beer bottles still on side table, clinical stress",
+            },
+            {
+              id: 'c5',
+              heading: 'Recontextualization',
+              body: placed.length
+                ? `With ${placed.slice(0, 4).join(', ')} on the board, the story shifts from "bad sunburn" to porphyria cutanea tarda — sun, alcohol, and a trigger you can treat.`
+                : "The peeling was never just sun — porphyrins in skin, alcohol as trigger, light as the weapon. Name it and the pathway opens.",
+              visualHint:
+                "N'Gavu calmer in dimmed bay, yellow shirt still on chair, forearms settling, relief mixed with shame — wide bedside depth",
+            },
+          ]
+      : is176
+        ? [
+            {
+              id: 'c0',
+              heading: 'The bite',
+              body: 'He was walking home when a stray dog lunged at his forearm. He wrapped the arm in a shirt and came straight to the ED — the animal ran off, so nobody can say whether it was rabid.',
+              visualHint:
+                'Same subway-afro-dandy likeness in street clothes, urban evening, forearm wrapped in cloth, anxious but composed — NOT hospital gown, NOT stretcher',
+            },
+            {
+              id: 'c1',
+              heading: 'Arrival',
+              body: 'He arrives tachycardic and hypotensive with a deep forearm puncture, spreading erythema, and hypoxia that reads like sepsis before you have cultures. The wound is not the only problem — perfusion and airway come first.',
+              visualHint:
+                'Subway-afro-dandy likeness on ED stretcher, forearm bite wound visible, hospital gown, monitor upper-right, IV upper-left — third-person 3/4 from foot of bed, clinical stress',
+            },
+            {
+              id: 'c2',
+              heading: 'Embodiment',
+              body: 'On exam the punctures are deep with surrounding cellulitis — warm, tender, tracking erythema. You document the wound, tetanus status, and whether the animal can be traced before anyone reaches for empiric antibiotics without cultures.',
+              visualHint:
+                'Same likeness supine, forearm exposed with bite marks and cellulitis, trauma bay gown, clinician-height 3/4 angle from beside stretcher rail',
+            },
+            {
+              id: 'c3',
+              heading: 'Escalation',
+              body: 'Stabilization and wound care run on one channel; tetanus and rabies prophylaxis run on another. Rabies antibodies alone do not replace immune globulin plus vaccine — and antibiotics before culture risk resistance when cellulitis is already declared.',
+              visualHint:
+                'Same likeness, forearm wound dressing visible, vitals monitor with tachycardia, wide establishing — patient right-third, room depth',
+            },
+            {
+              id: 'c4',
+              heading: 'Crisis point',
+              body: 'If ABCs slip while the team debates prophylaxis, the case becomes about shock — not the dog. Two large-bore IVs, oxygen, cultures with debridement, and ID consult for rabies PEP must each land on the board in the right order.',
+              visualHint:
+                'Same patient lower third on stretcher, oxygen delivery implied, forearm wound in frame, urgent trauma bay — foreground rail occlusion',
+            },
+            {
+              id: 'c5',
+              heading: 'Recontextualization',
+              body: placed.length
+                ? `With ${placed.slice(0, 4).join(', ')} placed, the story shifts from "dog bite" to a bundled teaching case: acute stabilization, wound culture discipline, tetanus update, and rabies PEP when the animal cannot be ruled out.`
+                : 'The bite was never just a laceration — it was sepsis risk, cellulitis, tetanus gap, and rabies exposure in one forearm. Naming each channel changes what the team orders next.',
+              visualHint:
+                'Same subway-afro-dandy likeness calmer on stretcher, dressed forearm, family or staff soft-focus mid-background — wide with depth, emotional relief mixed with vigilance',
+            },
+          ]
       : [
         {
           id: 'c1',
@@ -122,18 +223,26 @@ export function buildCaseStoryOffline(caseData, { sessionContext = {} } = {}) {
 
   return {
     caseId: cid,
-    title: is001 ? 'Chest under pressure' : is051 ? 'The Man Who Got Peppered' : caseData?.title || 'Case story',
+    title: is001 ? 'Chest under pressure' : is051 ? 'The Man Who Got Peppered' : is153 ? "The Man Who Burned in the Sun" : is176 ? 'The Bite That Would Not Wait' : caseData?.title || 'Case story',
     synopsis: is001
       ? 'Tension pneumothorax — a clinical diagnosis made at the bedside when breath sounds vanish and perfusion teeters.'
       : is051
         ? 'His family thought he stopped talking. The MRI showed his brain had been peppered with embolic showers — TIA on the clock, not a mood change.'
-        : String(caseData?.diagnosis || caseData?.clinical_tip || caseData?.title || '').slice(0, 280),
+        : is153
+          ? "N'Gavu partied with his village, drank in the sun, and woke to skin that blisters in daylight — porphyria cutanea tarda, not a sunburn he can shrug off."
+          : is176
+          ? 'A stray-dog forearm bite arrives septic and hypoxic — cellulitis, tetanus, and rabies prophylaxis each demand their own channel after ABCs.'
+          : String(caseData?.diagnosis || caseData?.clinical_tip || caseData?.title || '').slice(0, 280),
     chapters,
     patientLock,
     masterImagePrompt: is001
       ? 'Adult male supine on ED stretcher, severe respiratory distress, diaphoretic, accessory muscle use — third-person 3/4 view from beside bed, monitor glow, NOT overhead bird-eye'
       : is051
         ? '70-year-old Caucasian man supine on ED stretcher, withdrawn gaze, hospital gown — third-person 3/4 clinical oversight from foot of bed, monitor upper-right, family tension implied in room depth, NOT bird-eye'
+        : is153
+          ? "N'Gavu supine on ED stretcher, hospital gown, blistered forearms, mustard-yellow shirt on bedside chair, beer bottles on overbed table — third-person 3/4 from foot of bed, window light dimmed, MeWorld sculptural CGI"
+          : is176
+          ? 'Young Black man subway-afro-dandy likeness supine on ED trauma stretcher, large heart-shaped afro, light blue hospital gown, forearm animal bite wound with cellulitis visible — third-person 3/4 from foot of bed, monitor upper-right, clinical stress, NOT bird-eye'
         : `Patient on ED stretcher, third-person clinical oversight angle, ${caseData?.title || 'case'} presentation`,
     orders,
     source: 'offline',
@@ -200,9 +309,20 @@ export async function fetchCaseStory({
       patientLock: data.patientLock || offline.patientLock,
       masterImagePrompt: data.masterImagePrompt || offline.masterImagePrompt,
       masterImageUrl: data.masterImageUrl || null,
+      oversightBeatId: data.oversightBeatId || null,
+      oversightSource: data.oversightSource || null,
       sessionFingerprint: data.sessionFingerprint || sessionFingerprint,
       source: data.cached ? 'cache' : 'api',
+      readiness: data.readiness || null,
+      lateralityOk: data.lateralityOk,
+      lateralityIssues: data.lateralityIssues || [],
     };
+    if (!storyNarrativeMatchesCase(caseData.id, merged)) {
+      return mergeCaseStoryWithOverride(
+        { ...offline, source: 'offline-canonical' },
+        caseData.id,
+      );
+    }
     return mergeCaseStoryWithOverride(merged, caseData.id);
   } catch {
     return mergeCaseStoryWithOverride(offline, caseData.id);
@@ -245,6 +365,7 @@ export async function fetchCaseStoryStoryboard({
       portraitNote,
       refresh,
       generateImages,
+      gridPlate: true,
     }),
   });
   const data = await res.json().catch(() => ({}));

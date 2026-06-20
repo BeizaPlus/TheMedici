@@ -4,7 +4,11 @@
   "title": "Skin Lesions",
   "diagnosis": "Porphyria Cutanea Tarda",
   "confidence": "screenshot",
-  "source": "data/cases/case_N.json (DeepSeek)",
+  "source": "data/cases/case_N.json (DeepSeek) + N'Gavu village character lock",
+  "patient_sex": "male",
+  "patient_name_default": "N'Gavu",
+  "uber_face_slug": "ngavu-yellow-party",
+  "portrait_note": "N'Gavu — young Black man, mustard-yellow party jacket likeness, thin mustache, tired bloodshot eyes; hospital gown on ED stretcher; blistered dorsal hands and forearms, fragile skin; mustard-yellow shirt draped on bedside chair; two brown beer bottles on overbed side table (patient property); MeWorld sculptural CGI clinical still",
   "correct_orders": [
     "Urine porphyrins",
     "Plasma porphyrins",
@@ -14,29 +18,37 @@
   ],
   "should_avoid": [],
   "rationale": {
-    "Urine porphyrins": "Elevated uroporphyrins.",
-    "Plasma porphyrins": "Peak at 620nm — diagnostic.",
-    "HCV / HIV / Iron studies": "Screen for PCT triggers.",
-    "Phlebotomy": "First-line. Target ferritin low-normal.",
-    "Sun protection / Avoid alcohol": "Photosensitivity management."
+    "Urine porphyrins": "Porphyrins keep building in the skin until you measure them — elevated uroporphyrins confirm the photosensitive pathway.",
+    "Plasma porphyrins": "Circulating porphyrin peak at 620 nm locks the diagnosis when urine is equivocal.",
+    "HCV / HIV / Iron studies": "Acquired PCT is often triggered by alcohol, iron overload, or silent hepatitis — the rash is not the whole story.",
+    "Phlebotomy": "First-line when iron overload is driving the process — target ferritin low-normal.",
+    "Sun protection / Avoid alcohol": "Sunlight activates porphyrins in skin; alcohol keeps the trigger running — both must stop."
   },
-  "hpi": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
-  "hpi_narrative": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a man from our village who came to the ED after a weekend of drinking with friends. He was partying — beer all night — and thought nothing of it until the next afternoon, walking home in the sun, when his skin began to peel and blister on his hands, face, and forearms. Light through the window still hurts. He took off his yellow party shirt when they put him in a gown; it hangs by the bedside. His beer bottles sit on the side table — his property, he says. On exam: fragile bullae and erosions on sun-exposed skin, milia, hyperpigmentation, and hypertrichosis on the dorsal hands. PCT is the most common porphyria — uroporphyrinogen decarboxylase deficiency leads to uroporphyrin accumulation in skin and photosensitivity. Acquired triggers: alcohol, hepatitis C, HIV, hemochromatosis, estrogen. Diagnosis: elevated urine porphyrins, plasma porphyrin peak at 620 nm. Treatment: phlebotomy for iron overload, sun avoidance, stop alcohol, screen HCV/HIV/iron.",
+  "hpi_narrative": "{{patient_name}} is a man from our village who came to the ED after a weekend of drinking with friends. He was partying — beer all night — and thought nothing of it until the next afternoon, walking home in the sun, when his skin began to peel and blister on his hands, face, and forearms. Light through the window still hurts. He took off his yellow party shirt when they put him in a gown; it hangs by the bedside. His beer bottles sit on the side table — his property, he says. On exam: fragile bullae and erosions on sun-exposed skin, milia, hyperpigmentation, and hypertrichosis on the dorsal hands. PCT is the most common porphyria — uroporphyrinogen decarboxylase deficiency leads to uroporphyrin accumulation in skin and photosensitivity. Acquired triggers: alcohol, hepatitis C, HIV, hemochromatosis, estrogen. Diagnosis: elevated urine porphyrins, plasma porphyrin peak at 620 nm. Treatment: phlebotomy for iron overload, sun avoidance, stop alcohol, screen HCV/HIV/iron.",
+  "physical_exam": [
+    ["General", "Tired-appearing adult man, winces when daylight hits his forearms."],
+    ["Skin", "Fragile vesicles and erosions on dorsal hands, forearms, and face; milia on hands; hyperpigmented macules; hypertrichosis on dorsal hands; skin peels with light pressure."],
+    ["Cardiovascular", "HR 114, tachycardic; BP 119/76."],
+    ["Respiratory", "RR 23, mildly tachypneic; SpO₂ 99%."],
+    ["Abdomen", "Soft, non-distended."],
+    ["Neuro", "Alert; oriented; no focal deficit."]
+  ],
   "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp": null,
-    "rr": null,
-    "temp": null
+    "hr": 114,
+    "spo2": 99,
+    "bp": "119/76",
+    "rr": 23,
+    "temp": 37.7
   },
+  "vitals_text": "Pulse: 114 beats/min Blood pressure 119/76 mmHg Respiratory rate: 23 /minute Temperature: 37.7 C SpO2: 99% Lactate: 1.7 mmol/L",
   "patient_voice": {
-    "chief_complaint": "Fragile, blistering skin on sun-exposed areas",
-    "history": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused b…",
-    "pain": "Fragile, blistering skin on sun-exposed areas"
+    "chief_complaint": "My skin blisters in the sun — it started after we were drinking",
+    "history": "{{patient_name}} says he was out with friends from the village drinking beer all weekend. He felt fine until yesterday afternoon in the sun — then his hands and face started peeling and blistering. The light hurts now. He brought his yellow shirt and his bottles — they're still with him at the bedside.",
+    "pain": "Burning on the hands and forearms near any light"
   },
   "ccs_category": "Dermatology / Hepatology",
-  "chief_complaint": "Fragile, blistering skin on sun-exposed areas",
+  "chief_complaint": "Skin blistering and peeling on sun-exposed areas after heavy alcohol use",
   "case_summary": null,
   "decoys": [],
   "distractors": [],
@@ -45,41 +57,31 @@
       "label": "Urine porphyrins",
       "type": "correctlyOrdered",
       "finding": "Elevated uroporphyrins.",
-      "aliases": [
-        "Porphyrins"
-      ]
+      "aliases": ["Porphyrins"]
     },
     {
       "label": "Plasma porphyrins",
       "type": "correctlyOrdered",
       "finding": "Peak at 620nm — diagnostic.",
-      "aliases": [
-        "Plasma porphyrins"
-      ]
+      "aliases": ["Plasma porphyrins"]
     },
     {
       "label": "HCV / HIV / Iron studies",
       "type": "correctlyOrdered",
       "finding": "Screen for PCT triggers.",
-      "aliases": [
-        "Screen"
-      ]
+      "aliases": ["Screen"]
     },
     {
       "label": "Phlebotomy",
       "type": "correctlyOrdered",
       "finding": "First-line. Target ferritin low-normal.",
-      "aliases": [
-        "Phlebotomy"
-      ]
+      "aliases": ["Phlebotomy"]
     },
     {
       "label": "Sun protection / Avoid alcohol",
       "type": "correctlyOrdered",
       "finding": "Photosensitivity management.",
-      "aliases": [
-        "Sun avoidance"
-      ]
+      "aliases": ["Sun avoidance"]
     }
   ],
   "order_sets": [
@@ -91,8 +93,6 @@
   ],
   "complete": true,
   "extraction_method": "deepseek_direct",
-  "enrichment_sources": [
-    "deepseek"
-  ],
-  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Porphyria Cutanea Tarda."
+  "enrichment_sources": ["deepseek", "ngavu-character-lock"],
+  "extraction_notes": "Case 153 PCT — patient locked to N'Gavu (village party / yellow jacket / beer trigger)."
 }

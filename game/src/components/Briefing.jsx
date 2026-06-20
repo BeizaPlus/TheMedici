@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { apiUrl } from '../lib/apiBase.js';
 import PatientScene from './PatientScene.jsx';
 import BriefingCasePicker from './BriefingCasePicker.jsx';
-import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
 import { IconDoorExit } from './sceneToolbar/SceneToolbarIcons.jsx';
 import {
@@ -530,6 +529,8 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             examSummary={examSummary}
             notesSections={notesSections}
             hideHeader
+            bookmarkCaseId={caseData.id}
+            defaultBodyCollapsed
             textStyle={textStyle}
             defaultTab="hpi"
             readLabel="Read case"
@@ -558,7 +559,6 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
                   >
                     Begin case →
                   </button>
-                  <CaseReviewFlagButton caseId={caseData.id} compact />
                 </div>
               </div>
             }

@@ -4,6 +4,7 @@ import {
   fetchCaseStoryMasterImage,
   fetchCaseStoryStoryboard,
 } from '../lib/caseStory.js';
+import { apiUrl } from '../lib/apiBase.js';
 import { chaptersToStoryboardBeats } from '../lib/caseStorySessionFingerprint.js';
 import {
   clearCaseStoryOverride,
@@ -48,53 +49,74 @@ function ImagePlate({ loading, label, onGenerate, disabled }) {
 
 function StoryboardPanel({
   beats,
+  gridImageUrl,
   imageGen,
   imagesLoading,
   onGenerateImages,
   onRefreshImages,
 }) {
-  const hasImages = beats?.some((b) => b.imageUrl);
+  const hasGrid = Boolean(gridImageUrl);
   return (
     <section className="case-story-storyboard">
       <div className="case-story-storyboard-head">
         <p className="case-story-storyboard-lock">
-          Camera lock: third-person 3/4 oversight from foot of bed — same angle every panel.
+          Camera: smart angle per beat — one 2×3 storyboard plate (six panels, varied composition; same MeWorld sculptural style).
           Story text compiles from this session (attendant chat, patient replies, exam/lab proof).
         </p>
         <div className="case-story-storyboard-actions">
           <button
             type="button"
             className="case-story-btn case-story-btn-primary"
-            onClick={hasImages ? onRefreshImages : onGenerateImages}
+            onClick={hasGrid ? onRefreshImages : onGenerateImages}
             disabled={imagesLoading || !imageGen}
           >
             {imagesLoading
-              ? 'Generating panel stills…'
-              : hasImages
-                ? 'Regenerate panel stills'
-                : 'Generate panel stills'}
+              ? 'Rendering 2×3 plate…'
+              : hasGrid
+                ? 'Regenerate 2×3 plate'
+                : 'Generate 2×3 storyboard plate'}
           </button>
         </div>
       </div>
 
       {!imageGen && (
         <p className="case-story-storyboard-note">
-          Magnific API key not set — captions and visual hints only. Add MAGNIFIC_API_KEY to render plates.
+          Image generation unavailable on the API server — check MAGNIFIC_API_KEY and restart the API. Captions and visual hints still work.
         </p>
       )}
 
-      <div className="case-story-storyboard-grid">
+      {imagesLoading && (
+        <div className="case-story-gen-progress" role="status" aria-busy="true">
+          <div className="case-story-gen-progress-track">
+            <div className="case-story-gen-progress-bar" />
+          </div>
+          <p className="case-story-gen-progress-label">
+            Sending 2×3 storyboard plate to Magnific — usually 1–3 minutes…
+          </p>
+        </div>
+      )}
+
+      {hasGrid && (
+        <figure className="case-story-grid-plate">
+          <img src={gridImageUrl} alt="Case story 2×3 storyboard plate" />
+          <figcaption>Six beats · one plate · panels read left-to-right, top-to-bottom</figcaption>
+        </figure>
+      )}
+
+      <div className="case-story-storyboard-grid case-story-storyboard-grid--captions">
         {(beats || []).map((beat, i) => (
           <article key={beat.id || i} className="case-story-storyboard-panel">
             <span className="case-story-storyboard-num">{i + 1}</span>
-            {beat.imageUrl ? (
-              <figure className="case-story-storyboard-figure">
-                <img src={beat.imageUrl} alt={beat.heading || `Panel ${i + 1}`} />
-              </figure>
-            ) : (
-              <div className={`case-story-storyboard-placeholder${imagesLoading ? ' is-busy' : ''}`}>
-                {imagesLoading ? 'Rendering…' : 'Plate — tap Generate panel stills'}
-              </div>
+            {!hasGrid && (
+              beat.imageUrl ? (
+                <figure className="case-story-storyboard-figure">
+                  <img src={beat.imageUrl} alt={beat.heading || `Panel ${i + 1}`} />
+                </figure>
+              ) : (
+                <div className={`case-story-storyboard-placeholder${imagesLoading ? ' is-busy' : ''}`}>
+                  {imagesLoading ? 'Rendering…' : 'Included in 2×3 plate above'}
+                </div>
+              )
             )}
             <h3>{beat.heading}</h3>
             <p className="case-story-storyboard-caption">{beat.body}</p>
@@ -107,6 +129,60 @@ function StoryboardPanel({
         ))}
       </div>
     </section>
+  );
+}
+
+function StoryReadinessChecklist({ readiness, lateralityIssues = [] }) {
+  if (!readiness) return null;
+  const items = [
+    {
+      ok: readiness.hasCharacterMap,
+      label: readiness.hasCharacterMap
+        ? `Character map · ${readiness.characterMapFile || 'shipped'}`
+        : 'Character map (white-bg) — missing for this case',
+    },
+    {
+      ok: readiness.hasNarrative,
+      label: readiness.hasNarrative ? 'Story compiled' : 'Story not compiled — Refresh',
+    },
+    {
+      ok: !readiness.laterality?.locked || readiness.lateralityOk,
+      label: readiness.laterality?.locked
+        ? `Laterality lock · ${readiness.laterality.label}`
+        : 'Laterality · not locked in case context',
+    },
+    {
+      ok: readiness.hasGridPlate || readiness.hasMasterImage,
+      label: readiness.hasGridPlate
+        ? '2×3 storyboard plate'
+        : readiness.hasMasterImage
+          ? readiness.oversightSource === 'beat' && readiness.oversightBeatId
+            ? `Oversight still · beat ${readiness.oversightBeatId}`
+            : 'Master oversight still'
+          : 'Images · generate storyboard',
+    },
+  ];
+  return (
+    <div
+      className={`case-story-readiness${readiness.readyForReview ? ' is-ready' : ''}`}
+      role="status"
+    >
+      <p className="case-story-readiness-title">
+        {readiness.readyForReview ? 'Ready for review' : 'Story checklist'}
+      </p>
+      <ul className="case-story-readiness-list">
+        {items.map((row) => (
+          <li key={row.label} className={row.ok ? 'ok' : 'pending'}>
+            {row.ok ? '✓' : '○'} {row.label}
+          </li>
+        ))}
+      </ul>
+      {lateralityIssues.length > 0 && (
+        <p className="case-story-readiness-warn">
+          Laterality drift: {lateralityIssues.join(' · ')}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -126,6 +202,7 @@ export default function CaseStoryPanel({
   const [draft, setDraft] = useState(null);
   const [view, setView] = useState('prose');
   const [storyboardBeats, setStoryboardBeats] = useState(null);
+  const [gridImageUrl, setGridImageUrl] = useState(null);
   const [imagesLoading, setImagesLoading] = useState(false);
   const [imageGen, setImageGen] = useState(true);
   const hasOverride = Boolean(readCaseStoryOverride(caseData?.id));
@@ -156,6 +233,7 @@ export default function CaseStoryPanel({
         });
         setStory(applyStory(data));
         setStoryboardBeats(null);
+      setGridImageUrl(null);
         if (editing) {
           setDraft(emptyDraft(applyStory(data)));
         }
@@ -202,6 +280,7 @@ export default function CaseStoryPanel({
       });
       setImageGen(data.imageGen !== false);
       setStoryboardBeats(data.beats || previewBeats);
+      setGridImageUrl(data.gridImageUrl || null);
     } catch {
       setStoryboardBeats(previewBeats);
     }
@@ -224,6 +303,10 @@ export default function CaseStoryPanel({
         });
         setImageGen(data.imageGen !== false);
         setStoryboardBeats(data.beats || previewBeats);
+        setGridImageUrl(data.gridImageUrl || null);
+        if (data.readiness) {
+          setStory((prev) => (prev ? { ...prev, readiness: data.readiness } : prev));
+        }
       } catch (e) {
         setError(String(e.message || e));
       } finally {
@@ -239,10 +322,20 @@ export default function CaseStoryPanel({
       setDraft(null);
       setView('prose');
       setStoryboardBeats(null);
+      setGridImageUrl(null);
+      setStory(null);
+      setError('');
       return;
     }
     void compileStory(false);
-  }, [open, compileStory]);
+    fetch(apiUrl('/api/health'))
+      .then((r) => r.json())
+      .then((h) => {
+        if (h?.magnific) setImageGen(true);
+        else if (h && h.magnific === false) setImageGen(false);
+      })
+      .catch(() => {});
+  }, [open, caseData?.id, compileStory]);
 
   useEffect(() => {
     if (view === 'storyboard' && story?.chapters?.length) {
@@ -358,6 +451,13 @@ export default function CaseStoryPanel({
         </header>
 
         {!editing && (
+          <StoryReadinessChecklist
+            readiness={story?.readiness}
+            lateralityIssues={story?.lateralityIssues || story?.readiness?.lateralityIssues}
+          />
+        )}
+
+        {!editing && (
           <div className="case-story-view-tabs" role="tablist">
             <button
               type="button"
@@ -441,6 +541,7 @@ export default function CaseStoryPanel({
             )}
             <StoryboardPanel
               beats={beats}
+              gridImageUrl={gridImageUrl}
               imageGen={imageGen}
               imagesLoading={imagesLoading}
               onGenerateImages={() => void generatePanelImages(false)}
@@ -454,7 +555,11 @@ export default function CaseStoryPanel({
             {story?.masterImageUrl ? (
               <figure className="case-story-master">
                 <img src={story.masterImageUrl} alt="Third-person oversight view of patient" />
-                <figcaption>Master oversight view — third-person clinical angle</figcaption>
+                <figcaption>
+                  {story.oversightSource === 'beat' && story.oversightBeatId
+                    ? `Recontextualization beat (${story.oversightBeatId}) — third-person oversight`
+                    : 'Master oversight view — third-person clinical angle'}
+                </figcaption>
               </figure>
             ) : (
               <ImagePlate

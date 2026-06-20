@@ -25,6 +25,7 @@ import {
   appendTimelineEvent,
   endCaseSession,
   getOverallStats,
+  listCaseVisitSummaries,
   readCaseNotesText,
   readCaseUser,
   saveRecording,
@@ -58,7 +59,10 @@ import {
   buildMedicalSequencePrompt,
   parseMedicalSequenceJson,
   assertMedicalSequenceDemographics,
+  sequenceFailsDrowningContentCheck,
+  MEDICAL_SEQUENCE_PROMPT_VERSION,
 } from './medicalSequence.js';
+import { buildMedicalSequenceOffline } from '../src/lib/medicalSequence.js';
 import {
   readMedicalSequenceCache,
   writeMedicalSequenceCache,
@@ -67,21 +71,32 @@ import {
   buildCaseStoryNarrativePrompt,
   buildCaseStoryMasterImagePrompt,
   buildCaseStoryBeatImagePrompt,
+  buildCaseStoryGridPlatePrompt,
   deriveChapterVisualHint,
   parseCaseStoryJson,
   CASE_STORY_PROMPT_VERSION,
 } from './caseStory.js';
+import { storyNarrativeMatchesCase } from '../src/lib/caseStoryCanonical.js';
+import { buildCaseStoryOffline } from '../src/lib/caseStory.js';
 import {
   readCaseStoryCache,
   writeCaseStoryCache,
   caseStoryImagePath,
   caseStoryBeatImagePath,
+  caseStoryGridImagePath,
   resolveCaseStoryBeatImagePath,
+  buildCaseStoryOversightImageUrl,
 } from './caseStoryCache.js';
 import {
   readCaseStoryCharacterLock,
   readMasterImageBase64,
 } from './caseStoryCharacterLock.js';
+import { resolveCaseStoryMagnificRefs } from './caseStoryImageRefs.js';
+import { buildCaseStoryReadiness } from './caseStoryReadiness.js';
+import {
+  auditCaseStoryLaterality,
+  resolveLateralityLock,
+} from '../src/lib/caseStoryLaterality.js';
 import { readOrderResultEntry, writeOrderResultEntry } from './orderResultCache.js';
 import {
   ORDER_RESULT_PROMPT_VERSION,
@@ -95,12 +110,14 @@ import {
 import {
   buildImmersaAttendantSystemPrompt,
   immersaAttendantTemperature,
+  IMMERSA_ATTENDANT_DOCK_BRIEF_VOICE,
 } from './immersaAttendantPrompt.js';
 import {
   buildImmersaPatientSystemPrompt,
   immersaPatientTemperature,
 } from './immersaPatientPrompt.js';
 import { APP_PRODUCT_NAME } from '../src/lib/appBrand.js';
+import { resolvePatientUberRef } from '../src/lib/resolvePatientUberRef.js';
 import { splitPatientReply } from '../src/lib/patientReplyText.js';
 import { appendPatientStageEntry } from './patientStageCache.js';
 import {
@@ -108,6 +125,7 @@ import {
   buildPortraitMeta,
   buildPortraitPersona,
   buildPortraitPrompt,
+  buildPortraitMagnificExtras,
   buildVideoAvatarPrompt,
   extractPersonaFromPortraitImage,
   fetchYouTubeThumbnailBase64,
@@ -223,6 +241,11 @@ ensureBriefDir(CASE_BRIEF_DIR);
 app.use('/case-briefs', express.static(CASE_BRIEF_DIR));
 
 const ORDER_WHY_CACHE_DIR = path.join(GAME_ROOT, '.order-why-cache');
+/** Bump when mechanism / storycraft / opinion length rules change — bust stale order-why cache. */
+const ORDER_WHY_PROMPT_VERSION = 'teach-me-v9';
+/** First opinion = interconnected arc; second opinion = brief punch per depth slider. */
+const FIRST_OPINION_MAX_TOKENS = 520;
+const SECOND_OPINION_MAX_TOKENS = [120, 160, 200, 240];
 if (!fs.existsSync(ORDER_WHY_CACHE_DIR)) {
   fs.mkdirSync(ORDER_WHY_CACHE_DIR, { recursive: true });
 }
@@ -392,6 +415,17 @@ function simulationCreativityBand(score) {
   if (c < 30) return { band: 'strict', temperature: 0.28 };
   if (c < 65) return { band: 'balanced', temperature: 0.48 };
   return { band: 'immersive', temperature: 0.78 };
+}
+
+function hydrateCaseStoryContext(caseId, caseContext) {
+  const raw = String(caseId ?? caseContext?.id ?? '').trim();
+  const padded = /^\d+$/.test(raw) ? raw.padStart(3, '0') : raw;
+  const base = caseContext && typeof caseContext === 'object' ? caseContext : {};
+  return {
+    ...base,
+    id: padded || base.id,
+    ccsNumber: padded || base.ccsNumber,
+  };
 }
 
 function sanitizeCaseContextForPrompt(caseContext) {
@@ -739,6 +773,16 @@ app.get('/api/user/stats', async (_req, res) => {
   }
 });
 
+app.get('/api/user/visits', async (req, res) => {
+  const limit = Math.min(80, Math.max(1, Number(req.query.limit) || 40));
+  try {
+    const visits = await listCaseVisitSummaries({ limit });
+    return res.json({ ok: true, visits });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
 app.get('/api/user/case/:caseId', async (req, res) => {
   const caseId = String(req.params.caseId || '').trim();
   if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
@@ -822,7 +866,9 @@ app.put('/api/user/case/:caseId/notes', async (req, res) => {
   const caseId = String(req.params.caseId || '').trim();
   if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
   try {
-    const saved = await writeCaseNotesText(caseId, req.body?.text ?? '');
+    const saved = await writeCaseNotesText(caseId, req.body?.text ?? '', {
+      allowClear: Boolean(req.body?.allowClear),
+    });
     return res.json({ ok: true, caseId, ...saved });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
@@ -1214,7 +1260,7 @@ app.post('/api/case-chat/message', async (req, res) => {
         session.chatMode === 'patient_sim'
           ? `[ORDER DOCK — patient voice, 1–3 short sentences in lay language. Answer only what was asked.]\n\n`
           : `[ORDER DOCK — ultra-brief tutor reply]
-Mechanism first. 2–4 short spoken sentences max (~75 words). No intro. No disclaimer. No em dashes. No bullet lists unless they asked for a list. Direct answer first. Same voice as Immersa attendant (pathophysiology → bedside anchor). Full teaching is in the Chat tab.
+${IMMERSA_ATTENDANT_DOCK_BRIEF_VOICE}
 
 Learner question: `;
       userContent = `${briefLead}${text}`;
@@ -1285,38 +1331,46 @@ app.post('/api/order-why', async (req, res) => {
   const key = chatApiKeyOrError(res);
   if (!key) return;
 
-  const { caseId, orderId, orderLabel, playbookWhy = '', caseContext = null, peerReview = false } =
+  const { caseId, orderId, orderLabel, playbookWhy = '', caseContext = null, peerReview = false, secondOpinionDepth = 2, forceRefresh = false } =
     req.body || {};
   const cid = String(caseId ?? '').trim();
   const oid = String(orderId ?? '').trim();
-  const cacheKey = peerReview ? `${oid}__peer` : oid;
+  const depthIdx = Math.max(0, Math.min(3, Number(secondOpinionDepth) || 0));
+  const depthConfig = { maxTokens: SECOND_OPINION_MAX_TOKENS[depthIdx] ?? 160 };
+  const cacheKey = peerReview
+    ? `${oid}__peer__d${depthIdx}__${ORDER_WHY_PROMPT_VERSION}`
+    : `${oid}__${ORDER_WHY_PROMPT_VERSION}`;
   const label = String(orderLabel ?? '').trim();
   if (!cid || !oid || !label) {
     return res.status(400).json({ error: 'Missing caseId, orderId, or orderLabel' });
   }
 
   try {
-    const cached = await readOrderWhyEntry(ORDER_WHY_CACHE_DIR, cid, cacheKey);
-    if (cached?.why) {
-      return res.json({
-        ok: true,
-        why: cached.why,
-        cached: true,
-        cachedAt: cached.cachedAt,
-        provider: 'cache',
-      });
+    if (!forceRefresh) {
+      const cached = await readOrderWhyEntry(ORDER_WHY_CACHE_DIR, cid, cacheKey);
+      if (cached?.why) {
+        return res.json({
+          ok: true,
+          why: cached.why,
+          cached: true,
+          cachedAt: cached.cachedAt,
+          provider: 'cache',
+        });
+      }
     }
 
     const messages = buildOrderWhyPrompt({
       orderLabel: label,
+      orderId: oid,
       playbookWhy,
       caseContext: caseContext && typeof caseContext === 'object' ? caseContext : {},
       peerReview: Boolean(peerReview),
+      secondOpinionDepth: depthIdx,
     });
     const why = await callChatCompletion(key, messages, {
-      maxTokens: 200,
+      maxTokens: peerReview ? depthConfig.maxTokens : FIRST_OPINION_MAX_TOKENS,
       temperature: peerReview
-        ? Math.min(0.85, immersaAttendantTemperature(caseContext?.simulationCreativity ?? 55) + 0.08)
+        ? Math.min(0.72, immersaAttendantTemperature(caseContext?.simulationCreativity ?? 55))
         : immersaAttendantTemperature(caseContext?.simulationCreativity ?? 55),
     });
     const saved = await writeOrderWhyEntry(ORDER_WHY_CACHE_DIR, cid, cacheKey, {
@@ -1355,9 +1409,26 @@ app.post('/api/medical-sequence', async (req, res) => {
   try {
     if (!refresh) {
       const cached = await readMedicalSequenceCache(MEDICAL_SEQUENCE_CACHE_DIR, cid);
-      if (cached?.prequel?.length || cached?.missedPath?.length) {
+      const cacheOk =
+        cached?.prequel?.length &&
+        (cached.promptVersion || 1) >= MEDICAL_SEQUENCE_PROMPT_VERSION;
+      if (cacheOk) {
         try {
           assertMedicalSequenceDemographics(cached, caseContext || {}, cid);
+          if (sequenceFailsDrowningContentCheck(cached, caseContext || {})) {
+            throw new Error('stale drowning template');
+          }
+          const seqBlob = {
+            title: cached.title,
+            patientLock: cached.patientLock,
+            chapters: [
+              ...(cached.prequel || []).map((b) => ({ body: b.caption, heading: b.title })),
+              ...(cached.missedPath || []).map((b) => ({ body: b.caption, heading: b.title })),
+            ],
+          };
+          if (!storyNarrativeMatchesCase(cid, seqBlob)) {
+            throw new Error('stale wrong-case template');
+          }
           return res.json({
             ok: true,
             cached: true,
@@ -1369,7 +1440,7 @@ app.post('/api/medical-sequence', async (req, res) => {
             realWorldEcho: cached.realWorldEcho || null,
           });
         } catch {
-          /* stale demographics — regenerate */
+          /* stale demographics or wrong template — regenerate */
         }
       }
     }
@@ -1394,12 +1465,33 @@ app.post('/api/medical-sequence', async (req, res) => {
       realWorldStories: Array.isArray(realWorldStories) ? realWorldStories : [],
       portraitNote: String(portraitNote || '').trim(),
     });
-    const raw = await callChatCompletion(key, messages, { maxTokens: 1400, temperature: 0.32 });
-    const parsed = assertMedicalSequenceDemographics(
-      parseMedicalSequenceJson(raw),
-      caseContext && typeof caseContext === 'object' ? caseContext : {},
-      cid,
-    );
+    let parsed;
+    try {
+      const raw = await callChatCompletion(key, messages, { maxTokens: 1400, temperature: 0.32 });
+      parsed = assertMedicalSequenceDemographics(
+        parseMedicalSequenceJson(raw),
+        caseContext && typeof caseContext === 'object' ? caseContext : {},
+        cid,
+      );
+      if (sequenceFailsDrowningContentCheck(parsed, caseContext || {})) {
+        throw new Error('LLM returned AMS template for drowning case');
+      }
+    } catch {
+      const stub = {
+        id: cid,
+        ...((caseContext && typeof caseContext === 'object' ? caseContext : {})),
+        hpi_narrative:
+          caseContext?.hpiExcerpt ||
+          caseContext?.clinical_hpi_narrative ||
+          caseContext?.historyText ||
+          '',
+      };
+      const enriched = Object.fromEntries(
+        mergedOrders.filter((o) => o.why).map((o) => [o.id, o.why]),
+      );
+      parsed = buildMedicalSequenceOffline(stub, { enrichedWhys: enriched });
+    }
+    parsed.promptVersion = MEDICAL_SEQUENCE_PROMPT_VERSION;
     await writeMedicalSequenceCache(MEDICAL_SEQUENCE_CACHE_DIR, cid, parsed);
     return res.json({
       ok: true,
@@ -1433,8 +1525,9 @@ app.post('/api/case-story', async (req, res) => {
 
   const origin = serverOrigin(req);
   const imgFile = caseStoryImagePath(CASE_STORY_CACHE_DIR, cid);
-  const imgSlug = path.basename(imgFile || '');
   const fp = String(sessionFingerprint || '').trim();
+  const oversightFor = (narrative) =>
+    buildCaseStoryOversightImageUrl(CASE_STORY_CACHE_DIR, cid, narrative, origin);
 
   try {
     const cached = await readCaseStoryCache(CASE_STORY_CACHE_DIR, cid, {
@@ -1442,30 +1535,25 @@ app.post('/api/case-story', async (req, res) => {
     });
     const cacheValid = Boolean(
       cached?.chapters?.length
-      && (!fp || !cached.sessionFingerprint || cached.sessionFingerprint === fp),
+      && (!fp || !cached.sessionFingerprint || cached.sessionFingerprint === fp)
+      && storyNarrativeMatchesCase(cid, cached),
     );
-    const hasImg = imgFile && fs.existsSync(imgFile);
-
     if (imageOnly) {
       if (!cached?.chapters?.length) {
         return res.status(400).json({ error: 'Compile story first (Refresh), then generate oversight still' });
       }
-      let masterImageUrl = hasImg ? `${origin}/case-story-images/${imgSlug}` : null;
-      if (generateImage && magnificApiKey() && (!masterImageUrl || refresh)) {
-        const ctx = caseContext && typeof caseContext === 'object' ? caseContext : {};
+      let oversight = oversightFor(cached);
+      if (generateImage && magnificApiKey() && (!oversight?.url || refresh)) {
+        const ctx = hydrateCaseStoryContext(cid, caseContext);
         const narrative = cached;
         const characterLockMarkdown = (await readCaseStoryCharacterLock(GAME_ROOT, cid)) || '';
-        const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, cid);
-        let imageBase64;
-        let mimeType = 'image/png';
-        if (cachedPortrait.exists) {
-          const buf = await fsp.readFile(cachedPortrait.pngPath);
-          imageBase64 = buf.toString('base64');
-        } else {
-          const plate = await readGenerationLayoutBuffer(GAME_ROOT, ctx);
-          imageBase64 = plate.buffer.toString('base64');
-          mimeType = plate.mimeType;
-        }
+        const refs = await resolveCaseStoryMagnificRefs({
+          gameRoot: GAME_ROOT,
+          caseContext: ctx,
+          cacheDir: CASE_STORY_CACHE_DIR,
+          caseId: cid,
+          mode: 'master',
+        });
         const imgPrompt = buildCaseStoryMasterImagePrompt({
           caseContext: ctx,
           narrative,
@@ -1473,35 +1561,47 @@ app.post('/api/case-story', async (req, res) => {
           characterLockMarkdown,
         });
         const edited = await generateImageEditWithMagnific({
-          imageBase64,
-          mimeType,
+          imageBase64: refs.imageBase64,
+          mimeType: refs.mimeType,
           prompt: imgPrompt,
           aspectRatio: '16:9',
           resolution: '2K',
-          referenceText:
-            'MASTER IDENTITY MAP — match patient likeness exactly. THIRD-PERSON 3/4 bedside — NOT bird-eye overhead.',
+          referenceText: refs.referenceText,
+          extraReferenceImages: refs.extraReferenceImages,
         });
         const fitted = await fitToBaseplate(edited);
         if (imgFile) {
           await fsp.writeFile(imgFile, fitted);
-          masterImageUrl = `${origin}/case-story-images/${imgSlug}`;
         }
         await writeCaseStoryCache(
           CASE_STORY_CACHE_DIR,
           cid,
-          { ...cached, masterImageUrl },
+          { ...cached },
           { promptVersion: CASE_STORY_PROMPT_VERSION },
         );
+        oversight = oversightFor(cached);
       }
       return res.json({
         ok: true,
         imageOnly: true,
-        masterImageUrl,
+        masterImageUrl: oversight?.url || null,
+        oversightBeatId: oversight?.beatId || null,
+        oversightSource: oversight?.source || null,
         imageGen: Boolean(magnificApiKey()),
       });
     }
 
     if (!refresh && cacheValid) {
+      const ctx = hydrateCaseStoryContext(cid, caseContext);
+      const readiness = await buildCaseStoryReadiness({
+        gameRoot: GAME_ROOT,
+        cacheDir: CASE_STORY_CACHE_DIR,
+        caseId: cid,
+        caseContext: ctx,
+        narrative: cached,
+        promptVersion: CASE_STORY_PROMPT_VERSION,
+      });
+      const oversight = oversightFor(cached);
       return res.json({
         ok: true,
         cached: true,
@@ -1512,69 +1612,101 @@ app.post('/api/case-story', async (req, res) => {
         chapters: cached.chapters || [],
         patientLock: cached.patientLock || '',
         masterImagePrompt: cached.masterImagePrompt || '',
-        masterImageUrl: hasImg ? `${origin}/case-story-images/${imgSlug}` : null,
+        masterImageUrl: oversight?.url || null,
+        oversightBeatId: oversight?.beatId || null,
+        oversightSource: oversight?.source || null,
         staleSession: Boolean(fp && cached.sessionFingerprint && cached.sessionFingerprint !== fp),
+        readiness,
+        lateralityOk: readiness.lateralityOk,
+        lateralityIssues: readiness.lateralityIssues,
       });
     }
 
+    const ctxForStory = hydrateCaseStoryContext(cid, caseContext);
+    const characterLockMarkdown = (await readCaseStoryCharacterLock(GAME_ROOT, cid)) || '';
     const messages = buildCaseStoryNarrativePrompt({
-      caseContext: caseContext && typeof caseContext === 'object' ? caseContext : {},
+      caseContext: ctxForStory,
       sessionContext: sessionContext && typeof sessionContext === 'object' ? sessionContext : {},
       orders: Array.isArray(orders) ? orders : [],
       medicalSequence,
+      characterLockMarkdown,
     });
     const raw = await callChatCompletion(key, messages, { maxTokens: 1200, temperature: 0.34 });
-    const narrative = parseCaseStoryJson(raw);
+    let narrative = parseCaseStoryJson(raw);
+    if (!storyNarrativeMatchesCase(cid, narrative)) {
+      const offline = buildCaseStoryOffline({ ...ctxForStory, id: cid }, { sessionContext });
+      narrative = {
+        title: offline.title,
+        synopsis: offline.synopsis,
+        chapters: offline.chapters,
+        patientLock: offline.patientLock,
+        masterImagePrompt: offline.masterImagePrompt || '',
+      };
+    }
+    const laterality = resolveLateralityLock({
+      caseId: cid,
+      caseContext: ctxForStory,
+      characterLockMarkdown,
+    });
+    const lateralityAudit = auditCaseStoryLaterality(narrative, laterality);
 
-    let masterImageUrl = hasImg ? `${origin}/case-story-images/${imgSlug}` : null;
-    if (generateImage && magnificApiKey()) {
-      const ctx = caseContext && typeof caseContext === 'object' ? caseContext : {};
-      const characterLockMarkdown = (await readCaseStoryCharacterLock(GAME_ROOT, cid)) || '';
-      const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, cid);
-      let imageBase64;
-      let mimeType = 'image/png';
-      if (cachedPortrait.exists) {
-        const buf = await fsp.readFile(cachedPortrait.pngPath);
-        imageBase64 = buf.toString('base64');
-      } else {
-        const plate = await readGenerationLayoutBuffer(GAME_ROOT, ctx);
-        imageBase64 = plate.buffer.toString('base64');
-        mimeType = plate.mimeType;
-      }
+    let oversight = oversightFor(narrative);
+    if (generateImage && magnificApiKey() && !oversight?.url) {
+      const refs = await resolveCaseStoryMagnificRefs({
+        gameRoot: GAME_ROOT,
+        caseContext: ctxForStory,
+        cacheDir: CASE_STORY_CACHE_DIR,
+        caseId: cid,
+        mode: 'master',
+      });
       const imgPrompt = buildCaseStoryMasterImagePrompt({
-        caseContext: ctx,
+        caseContext: ctxForStory,
         narrative,
         portraitNote: String(portraitNote || '').trim(),
         characterLockMarkdown,
       });
       const edited = await generateImageEditWithMagnific({
-        imageBase64,
-        mimeType,
+        imageBase64: refs.imageBase64,
+        mimeType: refs.mimeType,
         prompt: imgPrompt,
         aspectRatio: '16:9',
         resolution: '2K',
-        referenceText:
-          'MASTER IDENTITY MAP — match patient likeness exactly. THIRD-PERSON 3/4 bedside — NOT bird-eye overhead.',
+        referenceText: refs.referenceText,
+        extraReferenceImages: refs.extraReferenceImages,
       });
       const fitted = await fitToBaseplate(edited);
       if (imgFile) {
         await fsp.writeFile(imgFile, fitted);
-        masterImageUrl = `${origin}/case-story-images/${imgSlug}`;
       }
+      oversight = oversightFor(narrative);
     }
 
     await writeCaseStoryCache(
       CASE_STORY_CACHE_DIR,
       cid,
-      { ...narrative, masterImageUrl, sessionFingerprint: fp || null },
+      { ...narrative, sessionFingerprint: fp || null },
       { promptVersion: CASE_STORY_PROMPT_VERSION },
     );
+    const readiness = await buildCaseStoryReadiness({
+      gameRoot: GAME_ROOT,
+      cacheDir: CASE_STORY_CACHE_DIR,
+      caseId: cid,
+      caseContext: ctxForStory,
+      narrative,
+      promptVersion: CASE_STORY_PROMPT_VERSION,
+    });
     return res.json({
       ok: true,
       cached: false,
       sessionFingerprint: fp || null,
       ...narrative,
-      masterImageUrl,
+      masterImageUrl: oversight?.url || null,
+      oversightBeatId: oversight?.beatId || null,
+      oversightSource: oversight?.source || null,
+      laterality,
+      lateralityOk: lateralityAudit.ok,
+      lateralityIssues: lateralityAudit.issues,
+      readiness,
       provider: chatProvider(),
     });
   } catch (e) {
@@ -1591,12 +1723,13 @@ app.post('/api/case-story-storyboard', async (req, res) => {
     portraitNote = '',
     refresh = false,
     generateImages = false,
+    gridPlate = true,
   } = req.body || {};
   const cid = String(caseId ?? '').trim();
   if (!cid) return res.status(400).json({ error: 'Missing caseId' });
 
   const origin = serverOrigin(req);
-  const ctx = caseContext && typeof caseContext === 'object' ? caseContext : {};
+  const ctx = hydrateCaseStoryContext(cid, caseContext);
 
   let beatChapters = Array.isArray(chapters) ? chapters : [];
   let lock = String(patientLock || '').trim();
@@ -1613,66 +1746,106 @@ app.post('/api/case-story-storyboard', async (req, res) => {
 
   const narrative = { patientLock: lock, chapters: beatChapters };
   const canGen = Boolean(magnificApiKey());
+  const useGridPlate = Boolean(gridPlate !== false && generateImages);
 
   try {
     const beats = [];
-    let imageBase64;
-    let mimeType = 'image/png';
-    let characterLockMarkdown = '';
+    let gridImageUrl = null;
+    const gridFile = caseStoryGridImagePath(CASE_STORY_CACHE_DIR, cid);
+    const gridSlug = gridFile ? path.basename(gridFile) : '';
 
-    if (generateImages && canGen) {
-      characterLockMarkdown = (await readCaseStoryCharacterLock(GAME_ROOT, cid)) || '';
-      const masterRef = await readMasterImageBase64(CASE_STORY_CACHE_DIR, cid);
-      if (masterRef) {
-        imageBase64 = masterRef.buffer.toString('base64');
-        mimeType = masterRef.mimeType;
+    if (useGridPlate && canGen) {
+      if (gridFile && fs.existsSync(gridFile) && !refresh) {
+        gridImageUrl = `${origin}/case-story-images/${gridSlug}`;
       } else {
-        const cachedPortrait = await readPortraitCache(CASE_PORTRAIT_DIR, cid);
-        if (cachedPortrait.exists) {
-          const buf = await fsp.readFile(cachedPortrait.pngPath);
-          imageBase64 = buf.toString('base64');
-        } else {
-          const plate = await readGenerationLayoutBuffer(GAME_ROOT, ctx);
-          imageBase64 = plate.buffer.toString('base64');
-          mimeType = plate.mimeType;
+        const characterLockMarkdown = (await readCaseStoryCharacterLock(GAME_ROOT, cid)) || '';
+        const refs = await resolveCaseStoryMagnificRefs({
+          gameRoot: GAME_ROOT,
+          caseContext: ctx,
+          cacheDir: CASE_STORY_CACHE_DIR,
+          caseId: cid,
+          mode: 'grid',
+        });
+
+        const cachedStory = await readCaseStoryCache(CASE_STORY_CACHE_DIR, cid);
+        const imgPrompt = buildCaseStoryGridPlatePrompt({
+          chapters: beatChapters,
+          narrative: {
+            ...narrative,
+            title: cachedStory?.title || ctx.title || '',
+            synopsis: cachedStory?.synopsis || '',
+          },
+          caseContext: ctx,
+          portraitNote: String(portraitNote || '').trim(),
+          characterLockMarkdown,
+        });
+        const edited = await generateImageEditWithMagnific({
+          imageBase64: refs.imageBase64,
+          mimeType: refs.mimeType,
+          prompt: imgPrompt,
+          aspectRatio: '3:2',
+          resolution: '2K',
+          referenceText: refs.referenceText,
+          extraReferenceImages: refs.extraReferenceImages,
+        });
+        const fitted = await fitToBaseplate(edited);
+        if (gridFile) {
+          await fsp.writeFile(gridFile, fitted);
+          gridImageUrl = `${origin}/case-story-images/${gridSlug}`;
         }
       }
     }
 
     for (const ch of beatChapters.slice(0, 8)) {
       const beatId = String(ch.id || `c${beats.length + 1}`);
-      const resolvedFile = resolveCaseStoryBeatImagePath(CASE_STORY_CACHE_DIR, cid, beatId);
-      const imgFile = caseStoryBeatImagePath(CASE_STORY_CACHE_DIR, cid, beatId);
-      const imgSlug = resolvedFile ? path.basename(resolvedFile) : '';
-      let imageUrl = null;
       const visualHint = deriveChapterVisualHint(ch, {
         patientLock: lock,
         caseContext: ctx,
       });
 
-      if (resolvedFile && fs.existsSync(resolvedFile) && !refresh) {
-        imageUrl = `${origin}/case-story-images/${imgSlug}`;
-      } else if (generateImages && canGen && imageBase64) {
-        const imgPrompt = buildCaseStoryBeatImagePrompt({
-          chapter: { ...ch, visualHint },
-          narrative,
-          caseContext: ctx,
-          portraitNote: String(portraitNote || '').trim(),
-          characterLockMarkdown,
-        });
-        const edited = await generateImageEditWithMagnific({
-          imageBase64,
-          mimeType,
-          prompt: imgPrompt,
-          aspectRatio: '16:9',
-          resolution: '2K',
-          referenceText:
-            'STORYBOARD BEAT — match master reference patient identity exactly. Vary rule-of-thirds framing only.',
-        });
-        const fitted = await fitToBaseplate(edited);
-        if (imgFile) {
-          await fsp.writeFile(imgFile, fitted);
+      let imageUrl = null;
+      if (!useGridPlate && generateImages && canGen) {
+        const resolvedFile = resolveCaseStoryBeatImagePath(CASE_STORY_CACHE_DIR, cid, beatId);
+        const imgFile = caseStoryBeatImagePath(CASE_STORY_CACHE_DIR, cid, beatId);
+        const imgSlug = resolvedFile ? path.basename(resolvedFile) : '';
+        let imageBase64;
+        let mimeType = 'image/png';
+        const characterLockMarkdown = (await readCaseStoryCharacterLock(GAME_ROOT, cid)) || '';
+
+        if (resolvedFile && fs.existsSync(resolvedFile) && !refresh) {
           imageUrl = `${origin}/case-story-images/${imgSlug}`;
+        } else {
+          const characterLockMarkdown = (await readCaseStoryCharacterLock(GAME_ROOT, cid)) || '';
+          const refs = await resolveCaseStoryMagnificRefs({
+            gameRoot: GAME_ROOT,
+            caseContext: ctx,
+            cacheDir: CASE_STORY_CACHE_DIR,
+            caseId: cid,
+            mode: 'beat',
+          });
+          if (refs.imageBase64) {
+            const imgPrompt = buildCaseStoryBeatImagePrompt({
+              chapter: { ...ch, visualHint },
+              narrative,
+              caseContext: ctx,
+              portraitNote: String(portraitNote || '').trim(),
+              characterLockMarkdown,
+            });
+            const edited = await generateImageEditWithMagnific({
+              imageBase64: refs.imageBase64,
+              mimeType: refs.mimeType,
+              prompt: imgPrompt,
+              aspectRatio: '16:9',
+              resolution: '2K',
+              referenceText: refs.referenceText,
+              extraReferenceImages: refs.extraReferenceImages,
+            });
+            const fitted = await fitToBaseplate(edited);
+            if (imgFile) {
+              await fsp.writeFile(imgFile, fitted);
+              imageUrl = `${origin}/case-story-images/${imgSlug}`;
+            }
+          }
         }
       }
 
@@ -1682,16 +1855,29 @@ app.post('/api/case-story-storyboard', async (req, res) => {
         body: String(ch.body || '').trim(),
         visualHint,
         imageUrl,
+        panelIndex: beats.length,
       });
     }
+
+    const readiness = await buildCaseStoryReadiness({
+      gameRoot: GAME_ROOT,
+      cacheDir: CASE_STORY_CACHE_DIR,
+      caseId: cid,
+      caseContext: ctx,
+      narrative: { ...narrative, chapters: beatChapters },
+      promptVersion: CASE_STORY_PROMPT_VERSION,
+    });
 
     return res.json({
       ok: true,
       caseId: cid,
       beats,
+      gridImageUrl,
+      gridPlate: useGridPlate,
       imageGen: canGen,
       imagesGenerated: Boolean(generateImages),
-      cameraLock: 'third-person 3/4 oversight from foot of bed',
+      cameraLock: 'smart per-beat camera — 2×3 grid plate, MeWorld sculptural CGI',
+      readiness,
     });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
@@ -2116,6 +2302,7 @@ app.get('/api/case-portrait/:caseId', async (req, res) => {
       provider: cached.meta?.provider || 'magnific',
       sourceVideo: cached.meta?.sourceVideo || null,
       patientSex: cached.meta?.patientSex || cached.meta?.analysis?.sex || null,
+      uberRefSlug: cached.meta?.uberRefSlug || null,
       ladyRefSlug: cached.meta?.ladyRefSlug || null,
       portraitFrameVersion: cached.meta?.portraitFrameVersion || 1,
       portraitLayersVersion: cached.meta?.portraitLayersVersion || 0,
@@ -2250,12 +2437,16 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId);
       const cachedSex = cached.meta?.patientSex || cached.meta?.analysis?.sex || null;
       const sexMismatch = cachedSex && portraitSex && cachedSex !== portraitSex;
+      const expectedUber =
+        caseContext?.uberFaceSlug || resolvePatientUberRef(caseContext || {})?.slug || null;
+      const cachedUber = cached.meta?.uberRefSlug || null;
+      const uberMismatch = expectedUber && cachedUber !== expectedUber;
       const frameStale = (cached.meta?.portraitFrameVersion || 1) < PORTRAIT_FRAME_VERSION;
       const layersStale =
         (cached.meta?.portraitLayersVersion || 0) < PORTRAIT_LAYERS_VERSION
         || !layerState.iv
         || !layerState.mask;
-      if (cached.exists && !sexMismatch && !frameStale && !layersStale) {
+      if (cached.exists && !sexMismatch && !uberMismatch && !frameStale && !layersStale) {
         const origin = serverOrigin(req);
         const url = portraitPublicUrl(caseId, origin);
         const persona = cached.meta?.persona || cached.meta?.analysis?.persona || buildPortraitPersona(caseContext);
@@ -2323,10 +2514,12 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       variant: 'base',
       sessionUpdate: isSessionPortrait,
     });
+    const portraitExtras = await buildPortraitMagnificExtras(GAME_ROOT, caseContext);
     const { b64: baseB64, provider: portraitProvider } = await generatePortraitWithFallback({
       imageBase64: editBase64,
       mimeType: editMime,
       prompt: basePrompt,
+      extraReferenceImages: portraitExtras,
     });
 
     const ivPrompt = buildPortraitPrompt(caseContext, {
@@ -2339,6 +2532,7 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
       imageBase64: baseB64,
       mimeType: 'image/png',
       prompt: ivPrompt,
+      extraReferenceImages: portraitExtras,
     });
 
     let visionPersona = null;

@@ -15,6 +15,7 @@ import {
   learnerFacingCaseTitle,
   shouldShowCaseIds,
 } from '../lib/learningMode.js';
+import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 
 const CASE_TAB_DEFS = [
   { id: 'hpi', label: 'HPI', Icon: IconClipboardPulse },
@@ -61,8 +62,13 @@ export default function CaseContextPanel({
   activeTab: controlledTab,
   onTabChange,
   teachMeMode = false,
+  /** Briefing — icon-only bookmark in tab row (no Review later text). */
+  bookmarkCaseId = null,
+  /** Briefing / study entry — hide HPI body until user picks a tab. */
+  defaultBodyCollapsed = false,
 }) {
   const [infoTab, setInfoTab] = useState(defaultTab);
+  const [bodyCollapsed, setBodyCollapsed] = useState(defaultBodyCollapsed);
   const isControlled = controlledTab != null && typeof onTabChange === 'function';
   const tab = isControlled ? controlledTab : infoTab;
   const setTab = isControlled ? onTabChange : setInfoTab;
@@ -80,6 +86,10 @@ export default function CaseContextPanel({
   useEffect(() => {
     if (!isControlled) setInfoTab(defaultTab);
   }, [defaultTab, caseData?.id, isControlled]);
+
+  useEffect(() => {
+    setBodyCollapsed(defaultBodyCollapsed);
+  }, [caseData?.id, defaultBodyCollapsed]);
 
   const hpiNarrative =
     (typeof hpiText === 'string' && hpiText.trim()) ||
@@ -104,6 +114,11 @@ export default function CaseContextPanel({
   const displayTitle = learnerFacingCaseTitle(caseData, { teachMeMode });
   const showUberTeachMeta =
     teachMeMode && shouldShowCaseIds({ teachMeMode }) && caseData?.uberMeta?.segments?.length > 0;
+
+  const selectTab = (id) => {
+    setTab(id);
+    if (defaultBodyCollapsed) setBodyCollapsed(false);
+  };
 
   return (
     <div
@@ -153,6 +168,18 @@ export default function CaseContextPanel({
           )}
         </div>
       )}
+      {hideHeader && isBriefing && (
+        <div className="case-context-compact-head">
+          {caseIdLabel ? (
+            <p className="sidebar-case-id">Case {caseIdLabel}</p>
+          ) : (
+            <p className="sidebar-case-id sidebar-case-id--learner">Case</p>
+          )}
+          <h2 className="sidebar-title case-context-compact-title" title={displayTitle}>
+            {displayTitle}
+          </h2>
+        </div>
+      )}
       <div className="case-info-tabs-row">
       <div className="case-info-tabs" role="tablist" aria-label="Case context tabs">
         {CASE_TAB_DEFS.filter((def) => {
@@ -165,7 +192,7 @@ export default function CaseContextPanel({
             key={id}
             type="button"
             className={tab === id ? 'case-info-tab active case-info-tab--icon' : 'case-info-tab case-info-tab--icon'}
-            onClick={() => setTab(id)}
+            onClick={() => selectTab(id)}
             aria-selected={tab === id}
             aria-label={label}
             title={label}
@@ -173,6 +200,13 @@ export default function CaseContextPanel({
             <Icon className="case-info-tab-icon" />
           </button>
         ))}
+        {isBriefing && bookmarkCaseId ? (
+          <CaseReviewFlagButton
+            caseId={bookmarkCaseId}
+            iconOnly
+            className="case-info-tab-bookmark"
+          />
+        ) : null}
       </div>
       {hideHeader &&
         onReadCase &&
@@ -193,6 +227,7 @@ export default function CaseContextPanel({
         )}
       </div>
       </div>
+      {!bodyCollapsed && (
       <div className="case-context-body-wrap">
       {tab === 'hpi' && !isTreatment && !isChat && !isNotes && (
         <div className="hpi-text case-context-body clinical-text-block" style={textStyle}>
@@ -266,6 +301,7 @@ export default function CaseContextPanel({
         </div>
       )}
       </div>
+      )}
       {footer}
     </div>
   );

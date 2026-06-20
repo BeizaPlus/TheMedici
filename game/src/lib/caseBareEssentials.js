@@ -4,19 +4,19 @@ import { neutralStackOrderName } from './stackDecoys.js';
 export const ORDER_TIER_META = {
   critical: {
     id: 'critical',
-    label: 'Critical',
-    hint: 'Case-specific orders — treatments, consults, must-not-miss',
+    label: 'Case specific',
+    hint: 'Treatments, consults, and must-not-miss orders for this case',
     defaultCollapsed: false,
   },
   general: {
     id: 'general',
     label: 'General',
-    hint: 'Physical exams and core workflow',
-    defaultCollapsed: false,
+    hint: 'Physical exams and sex-specific workflow',
+    defaultCollapsed: true,
   },
   misc: {
     id: 'misc',
-    label: 'Misc',
+    label: 'Miscellaneous',
     hint: 'Labs, imaging, and diagnostic tests',
     defaultCollapsed: true,
   },
@@ -86,6 +86,13 @@ function labelMatchesMisc(label, patterns = []) {
 
 function interventionByIdMap(interventions = []) {
   return Object.fromEntries(interventions.map((iv) => [iv.id, iv]));
+}
+
+/** Sex / pregnancy screening workflow → General tier (with physical exams). */
+export function isSexRelatedGeneralIntervention(iv) {
+  if (!iv) return false;
+  const label = String(iv.label || '');
+  return /\bhcg\b|\bpregnancy test\b|\bsexual history\b|\bpelvic exam\b|\bstd\b/i.test(label);
 }
 
 /** Physical exam stacks → General tier. */
@@ -173,6 +180,12 @@ const TREATMENT_ORDER_PATTERNS = [
   /\bbreastfeeding optim/i,
   /\bcaregiver support\b/i,
   /\badvance care planning\b/i,
+  /\bfactor viii\b/i,
+  /\bddavp\b/i,
+  /\bdesmopressin\b/i,
+  /\bavoid nsaid/i,
+  /\bavoid im\b/i,
+  /\bbleeding precaution/i,
 ];
 
 /** Medications, admits, CPS, and definitive treatments → Critical tier (visible in Teach Me). */
@@ -187,14 +200,48 @@ export function isTreatmentOrderIntervention(iv) {
  * Rule of thumb: physical → general, tests → misc, case-specific → critical.
  * Explicit caseBareEssentials entries always win for critical/misc overrides.
  */
+function resolveGeneralInterventionIds(
+  caseData = {},
+  interventions = [],
+  criticalIds = new Set(),
+  miscIds = new Set(),
+) {
+  const caseId = normalizeCaseId(caseData.id);
+  const caseSpec = essentialsData.cases?.[caseId];
+  const ids = new Set(caseSpec?.generalInterventionIds || []);
+
+  const patterns = [
+    ...(essentialsData.generalLabelPatterns || []),
+    ...(caseSpec?.generalLabelPatterns || []),
+  ];
+
+  for (const iv of interventions) {
+    if (!iv?.id || criticalIds.has(iv.id) || miscIds.has(iv.id)) continue;
+    if (ids.has(iv.id)) continue;
+    if (isPhysicalExamIntervention(iv)) {
+      ids.add(iv.id);
+      continue;
+    }
+    if (isSexRelatedGeneralIntervention(iv)) {
+      ids.add(iv.id);
+      continue;
+    }
+    if (labelMatchesMisc(iv.label, patterns)) ids.add(iv.id);
+  }
+
+  return ids;
+}
+
 export function classifyInterventionTier(
   iv,
-  { criticalIds = new Set(), miscIds = new Set() } = {},
+  { criticalIds = new Set(), miscIds = new Set(), generalIds = new Set() } = {},
 ) {
   if (!iv?.id) return 'general';
   if (criticalIds.has(iv.id)) return 'critical';
+  if (generalIds.has(iv.id)) return 'general';
   if (isTreatmentOrderIntervention(iv)) return 'critical';
   if (isPhysicalExamIntervention(iv)) return 'general';
+  if (isSexRelatedGeneralIntervention(iv)) return 'general';
   if (miscIds.has(iv.id) || isTestOrderIntervention(iv)) return 'misc';
   return 'critical';
 }
@@ -226,16 +273,22 @@ export function groupTeachCompareRowsByTier({
 } = {}) {
   const criticalIds = resolveCriticalInterventionIds(caseData, interventions);
   const miscIds = resolveMiscInterventionIds(caseData, interventions, criticalIds);
+  const generalIds = resolveGeneralInterventionIds(
+    caseData,
+    interventions,
+    criticalIds,
+    miscIds,
+  );
   const ivById = interventionByIdMap(interventions);
 
   const buckets = { critical: [], general: [], misc: [] };
   for (const row of rows) {
     const iv = ivById[row.id] || row.iv || { id: row.id, label: row.label };
-    const tier = classifyInterventionTier(iv, { criticalIds, miscIds });
+    const tier = classifyInterventionTier(iv, { criticalIds, miscIds, generalIds });
     buckets[tier].push(row);
   }
 
-  return ['critical', 'general', 'misc']
+  return ['general', 'critical', 'misc']
     .map((key) => {
       const meta = ORDER_TIER_META[key];
       const tierRows = buckets[key];

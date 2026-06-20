@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { buildBareEssentialsRows } from '../lib/caseBareEssentials.js';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { buildBareEssentialsRows, groupTeachCompareRowsByTier, ORDER_TIER_META } from '../lib/caseBareEssentials.js';
 import { getCaseDifferentials } from '../lib/caseDifferentials.js';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 import { buildTeachCompareRows, teachCompareStatusLabel } from '../lib/teachMeCompare.js';
 import { fetchOrderWhy } from '../lib/orderWhy.js';
+import SecondOpinionDepthControl, { useSecondOpinionDepth } from './SecondOpinionDepthControl.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
-import { IconUsersGroup, IconVolume2 } from './sceneToolbar/SceneToolbarIcons.jsx';
+import { IconRefresh, IconStethoscopeSecond, IconVolume2 } from './sceneToolbar/SceneToolbarIcons.jsx';
 
 function flowDotClass(row, focused) {
   const parts = ['teach-flow-dot'];
@@ -74,6 +75,17 @@ export default function TeachMeComparePanel({
     [interventions, interventionById, placementOrder, placed, nextExpectedId, reviewResults],
   );
 
+  const flowTiers = useMemo(
+    () => groupTeachCompareRowsByTier({ rows, caseData, interventions }),
+    [rows, caseData, interventions],
+  );
+
+  const [tierOpen, setTierOpen] = useState(() => ({
+    general: !ORDER_TIER_META.general.defaultCollapsed,
+    critical: !ORDER_TIER_META.critical.defaultCollapsed,
+    misc: !ORDER_TIER_META.misc.defaultCollapsed,
+  }));
+
   const differentials = useMemo(() => getCaseDifferentials(caseData), [caseData]);
   const [diffOpen, setDiffOpen] = useState(false);
   const [whyByOrder, setWhyByOrder] = useState({});
@@ -82,6 +94,9 @@ export default function TeachMeComparePanel({
   const [peerLoading, setPeerLoading] = useState(null);
   const [whyError, setWhyError] = useState('');
   const [readState, setReadState] = useState('idle');
+  const [secondOpinionDepth, setSecondOpinionDepth] = useSecondOpinionDepth();
+  const panelRef = useRef(null);
+  const autoReadOrderIdsRef = useRef(new Set());
 
   const focusedRow = useMemo(
     () => rows.find((r) => r.id === teachFocusId) || null,
@@ -89,7 +104,30 @@ export default function TeachMeComparePanel({
   );
 
   useEffect(() => {
+    setWhyByOrder({});
+    setPeerByOrder({});
+    setWhyError('');
+    setWhyLoading(null);
+    setPeerLoading(null);
+    autoReadOrderIdsRef.current = new Set();
+    setTierOpen({
+      general: !ORDER_TIER_META.general.defaultCollapsed,
+      critical: !ORDER_TIER_META.critical.defaultCollapsed,
+      misc: !ORDER_TIER_META.misc.defaultCollapsed,
+    });
+    if (panelRef.current) panelRef.current.scrollTop = 0;
+  }, [caseId]);
+
+  useEffect(() => {
     if (!teachFocusId || !caseId || !focusedRow) return undefined;
+
+    const playbookWhy = String(focusedRow.why || '').trim();
+    const hasPlaybook =
+      playbookWhy && playbookWhy !== 'No rationale available yet.';
+    if (!whyByOrder[teachFocusId] && hasPlaybook) {
+      setWhyByOrder((prev) => ({ ...prev, [teachFocusId]: playbookWhy }));
+    }
+
     if (whyByOrder[teachFocusId]) return undefined;
 
     let cancelled = false;
@@ -103,12 +141,18 @@ export default function TeachMeComparePanel({
       playbookWhy: focusedRow.why,
     })
       .then(({ why }) => {
-        if (!cancelled) {
+        if (!cancelled && String(why || '').trim()) {
           setWhyByOrder((prev) => ({ ...prev, [teachFocusId]: why }));
         }
       })
       .catch((e) => {
-        if (!cancelled) setWhyError(String(e.message || e));
+        if (!cancelled) {
+          if (hasPlaybook) {
+            setWhyByOrder((prev) => ({ ...prev, [teachFocusId]: playbookWhy }));
+          } else {
+            setWhyError(String(e.message || e));
+          }
+        }
       })
       .finally(() => {
         if (!cancelled) setWhyLoading(null);
@@ -123,14 +167,47 @@ export default function TeachMeComparePanel({
 
   const primaryWhy =
     (teachFocusId && (whyByOrder[teachFocusId] || focusedRow?.why)) || '';
-  const peerWhy = (teachFocusId && peerByOrder[teachFocusId]) || '';
+  const peerKey = teachFocusId ? `${teachFocusId}__d${secondOpinionDepth}` : '';
+  const peerWhy = (peerKey && peerByOrder[peerKey]) || '';
+
+  const playAttendingVoice = useCallback(
+    async (orderId, text, { force = false } = {}) => {
+      const trimmed = String(text || '').trim();
+      if (!orderId || !caseId || !trimmed) return;
+      if (!force && autoReadOrderIdsRef.current.has(orderId)) return;
+      autoReadOrderIdsRef.current.add(orderId);
+      await readCaseAloud({
+        caseId,
+        section: 'teach-why',
+        text: trimmed,
+        onState: setReadState,
+      });
+    },
+    [caseId],
+  );
+
+  useEffect(() => {
+    if (!teachFocusId || !caseId || whyLoading === teachFocusId) return undefined;
+    const text = String(
+      whyByOrder[teachFocusId] || focusedRow?.why || '',
+    ).trim();
+    if (!text || text === 'No rationale available yet.') return undefined;
+    let cancelled = false;
+    void playAttendingVoice(teachFocusId, text).then(() => {
+      if (cancelled) stopCaseReader();
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [teachFocusId, caseId, whyByOrder, whyLoading, focusedRow?.why, playAttendingVoice]);
 
   const handleListen = useCallback(
     async (event, row) => {
       event.stopPropagation();
       if (!row || !caseId) return;
+      const rowPeerKey = `${row.id}__d${secondOpinionDepth}`;
       const text =
-        peerByOrder[row.id] ||
+        peerByOrder[rowPeerKey] ||
         whyByOrder[row.id] ||
         row.why ||
         row.label;
@@ -147,12 +224,7 @@ export default function TeachMeComparePanel({
             playbookWhy: row.why,
           });
           setWhyByOrder((prev) => ({ ...prev, [row.id]: why }));
-          await readCaseAloud({
-            caseId,
-            section: 'teach-why',
-            text: why,
-            onState: setReadState,
-          });
+          await playAttendingVoice(row.id, why, { force: true });
         } catch (e) {
           setWhyError(String(e.message || e));
         } finally {
@@ -160,25 +232,22 @@ export default function TeachMeComparePanel({
         }
         return;
       }
-      await readCaseAloud({
-        caseId,
-        section: 'teach-why',
-        text,
-        onState: setReadState,
-      });
+      await playAttendingVoice(row.id, text, { force: true });
     },
-    [caseId, caseData, peerByOrder, whyByOrder, whyLoading],
+    [caseId, caseData, peerByOrder, whyByOrder, whyLoading, secondOpinionDepth, playAttendingVoice],
   );
 
   const handlePeer = useCallback(
-    async (event, row) => {
-      event.stopPropagation();
+    async (event, row, depthOverride = null) => {
+      event?.stopPropagation?.();
       if (!row || !caseId || peerLoading === row.id) return;
+      const depth = depthOverride ?? secondOpinionDepth;
+      const peerKey = `${row.id}__d${depth}`;
       const alreadyFocused = teachFocusId === row.id;
       if (!alreadyFocused) {
         (onEnsureFocus || onFocusStep)?.(row.id);
       }
-      if (peerByOrder[row.id]) {
+      if (peerByOrder[peerKey]) {
         return;
       }
       setPeerLoading(row.id);
@@ -191,15 +260,89 @@ export default function TeachMeComparePanel({
           caseData,
           playbookWhy: row.why,
           peerReview: true,
+          secondOpinionDepth: depth,
         });
-        setPeerByOrder((prev) => ({ ...prev, [row.id]: why }));
+        setPeerByOrder((prev) => ({ ...prev, [peerKey]: why }));
       } catch (e) {
         setWhyError(String(e.message || e));
       } finally {
         setPeerLoading(null);
       }
     },
-    [caseId, caseData, onEnsureFocus, onFocusStep, peerByOrder, peerLoading, teachFocusId],
+    [caseId, caseData, onEnsureFocus, onFocusStep, peerByOrder, peerLoading, teachFocusId, secondOpinionDepth],
+  );
+
+  const handleSecondOpinionDepth = useCallback(
+    (depth) => {
+      if (!teachFocusId || !focusedRow) return;
+      const peerKey = `${teachFocusId}__d${depth}`;
+      if (peerByOrder[peerKey]) return;
+      void handlePeer(null, focusedRow, depth);
+    },
+    [focusedRow, handlePeer, peerByOrder, teachFocusId],
+  );
+
+  const refreshFirstOpinion = useCallback(
+    async (row) => {
+      if (!row || !caseId || whyLoading === row.id) return;
+      setWhyLoading(row.id);
+      setWhyError('');
+      setWhyByOrder((prev) => {
+        const next = { ...prev };
+        delete next[row.id];
+        return next;
+      });
+      try {
+        const { why } = await fetchOrderWhy({
+          caseId,
+          orderId: row.id,
+          orderLabel: row.label,
+          caseData,
+          playbookWhy: row.why,
+          forceRefresh: true,
+        });
+        setWhyByOrder((prev) => ({ ...prev, [row.id]: why }));
+        await playAttendingVoice(row.id, why, { force: true });
+      } catch (e) {
+        setWhyError(String(e.message || e));
+      } finally {
+        setWhyLoading(null);
+      }
+    },
+    [caseId, caseData, whyLoading, playAttendingVoice],
+  );
+
+  const refreshSecondOpinion = useCallback(
+    async (row, depthOverride = null) => {
+      if (!row || !caseId || peerLoading === row.id) return;
+      const depth = depthOverride ?? secondOpinionDepth;
+      const peerKey = `${row.id}__d${depth}`;
+      setPeerLoading(row.id);
+      setWhyError('');
+      setPeerByOrder((prev) => {
+        const next = { ...prev };
+        delete next[peerKey];
+        return next;
+      });
+      try {
+        const { why } = await fetchOrderWhy({
+          caseId,
+          orderId: row.id,
+          orderLabel: row.label,
+          caseData,
+          playbookWhy: row.why,
+          peerReview: true,
+          secondOpinionDepth: depth,
+          forceRefresh: true,
+        });
+        setPeerByOrder((prev) => ({ ...prev, [peerKey]: why }));
+      } catch (e) {
+        setWhyError(String(e.message || e));
+      } finally {
+        setPeerLoading(null);
+      }
+    },
+    [caseId, caseData, peerLoading, secondOpinionDepth],
   );
 
   const renderRow = (row) => {
@@ -243,13 +386,13 @@ export default function TeachMeComparePanel({
                 </button>
                 <button
                   type="button"
-                  className={`teach-compare-icon-btn${peerByOrder[row.id] ? ' is-active' : ''}`}
-                  title="Second opinion — peer attending"
+                  className={`teach-compare-icon-btn${peerWhy ? ' is-active' : ''}`}
+                  title="Second opinion — peer attending (depth slider below)"
                   aria-label="Second opinion"
                   disabled={peerLoading === row.id}
                   onClick={(e) => void handlePeer(e, row)}
                 >
-                  <IconUsersGroup />
+                  <IconStethoscopeSecond />
                 </button>
               </span>
             )}
@@ -263,16 +406,52 @@ export default function TeachMeComparePanel({
             )}
             {primaryWhy && (
               <div className="teach-compare-rationale-body teach-me-text-block selectable-text">
+                <div className="teach-compare-rationale-head">
+                  <span className="teach-compare-rationale-head-label">Attending</span>
+                  <button
+                    type="button"
+                    className="teach-compare-icon-btn teach-compare-refresh-btn"
+                    title="Regenerate attending rationale (uses case context + DeepSeek when online)"
+                    aria-label="Refresh attending rationale"
+                    disabled={whyLoading === row.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      void refreshFirstOpinion(row);
+                    }}
+                  >
+                    <IconRefresh />
+                  </button>
+                </div>
                 {renderChatMarkdown(primaryWhy)}
               </div>
             )}
+            <SecondOpinionDepthControl
+              id="second-opinion-depth-teach"
+              className="teach-compare-second-opinion-controls"
+              onDepthChange={handleSecondOpinionDepth}
+            />
             {peerLoading === row.id && !peerWhy && (
               <p className="teach-compare-rationale-loading">Loading second opinion…</p>
             )}
             {peerWhy && peerWhy !== primaryWhy && (
               <div className="teach-compare-rationale-peer">
-                <p className="teach-compare-rationale-peer-label">Second opinion</p>
-                <div className="teach-me-text-block selectable-text">
+                <div className="teach-compare-rationale-head">
+                  <p className="teach-compare-rationale-peer-label">Second opinion</p>
+                  <button
+                    type="button"
+                    className="teach-compare-icon-btn teach-compare-refresh-btn"
+                    title="Regenerate second opinion (real-time when online)"
+                    aria-label="Refresh second opinion"
+                    disabled={peerLoading === row.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      void refreshSecondOpinion(row);
+                    }}
+                  >
+                    <IconRefresh />
+                  </button>
+                </div>
+                <div className="teach-me-text-block second-opinion-body selectable-text">
                   {renderChatMarkdown(peerWhy)}
                 </div>
               </div>
@@ -284,7 +463,10 @@ export default function TeachMeComparePanel({
   };
 
   return (
-    <div className={`teach-compare-panel${compact ? ' teach-compare-panel--compact' : ''}`}>
+    <div
+      ref={panelRef}
+      className={`teach-compare-panel${compact ? ' teach-compare-panel--compact' : ''}`}
+    >
       {rows.length > 0 && (
         <section className="teach-compare-flow" aria-label="Standard flow sequence">
           <div className="teach-compare-head" aria-hidden>
@@ -293,7 +475,32 @@ export default function TeachMeComparePanel({
             <span className="teach-compare-col-yours">Yours</span>
             <span className="teach-compare-col-badge">Status</span>
           </div>
-          <ul className="teach-compare-list">{rows.map(renderRow)}</ul>
+          {flowTiers.map((tier) => (
+            <section key={tier.id} className={`teach-compare-tier tier-${tier.id}`}>
+              <button
+                type="button"
+                className="teach-compare-tier-head"
+                onClick={() => setTierOpen((prev) => ({ ...prev, [tier.id]: !prev[tier.id] }))}
+                aria-expanded={Boolean(tierOpen[tier.id])}
+              >
+                <span className="teach-compare-tier-chevron" aria-hidden>
+                  {tierOpen[tier.id] ? '▾' : '▸'}
+                </span>
+                <span className="teach-compare-tier-label">{tier.label}</span>
+                <span className="teach-compare-tier-count">
+                  {tier.placedCount}/{tier.total}
+                </span>
+                {tier.hint ? (
+                  <span className="teach-compare-tier-hint">{tier.hint}</span>
+                ) : null}
+              </button>
+              {tierOpen[tier.id] && (
+                <ul className="teach-compare-list teach-compare-list-tier">
+                  {tier.rows.map(renderRow)}
+                </ul>
+              )}
+            </section>
+          ))}
           {extras.length > 0 && (
             <>
               <p className="teach-compare-extra-kicker">Outside standard set</p>
