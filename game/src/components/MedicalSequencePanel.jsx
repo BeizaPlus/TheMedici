@@ -65,9 +65,13 @@ export default function MedicalSequencePanel({ open, onClose, caseData, portrait
   );
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      setSequence(null);
+      setError('');
+      return;
+    }
     void load(false);
-  }, [open, load]);
+  }, [open, caseData?.id, load]);
 
   if (!open) return null;
 

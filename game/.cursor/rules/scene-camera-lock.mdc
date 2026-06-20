@@ -13,9 +13,13 @@ alwaysApply: false
 | Sex | Baseplate | Export |
 |-----|-----------|--------|
 | Male | `public/assets/patient/patient-scene.png` | 1536×864 |
-| Female runtime | `public/assets/patient/patient-scene-female.png` | crop → 1536×864 (display only — **not** Magnific gen input) |
+| Female / pedFemale runtime | `public/assets/patient/patient-scene-source-square.png` | 1536×864 (in-case proper — **not** forbidden plates) |
 
-**Magnific layout lock (all adult gens):** `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` (2752×1536) — male **and** female. Never attach `patient-scene-female.png` as gen input (POV clinician feet artifact).
+**FORBIDDEN (hard ban — never runtime, never Magnific input):**
+- `patient-scene-female.png` — POV standing-on-patient / clinician feet artifact
+- `patient-scene-ped-female.png` — same failure mode
+
+**Magnific layout lock (all adult + pedFemale gens):** `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` (2752×1536). Never attach the forbidden plates.
 
 Spec: **`dev/scene-camera-lock/SCENE_LOCK.json`** · README in same folder.
 
@@ -41,4 +45,4 @@ Patient demographics, distress, gown, mask/IV/cables, hair. Lady **face** from `
 
 ## Forbidden
 
-Eye-level portrait, tight face crop, **mid-thigh-only crop**, dutch angle, new room layout, non–16:9 export without updating zones, **POV clinician/examiner feet at frame bottom**, standing-over-patient camera, using `patient-scene-female.png` as Magnific gen layout lock.
+Eye-level portrait, tight face crop, **mid-thigh-only crop**, dutch angle, new room layout, non–16:9 export without updating zones, **POV clinician/examiner feet at frame bottom**, standing-over-patient camera, **`patient-scene-female.png`**, **`patient-scene-ped-female.png`** (runtime or Magnific).

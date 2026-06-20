@@ -23,9 +23,12 @@ Before serving API/cache/offline sequence:
 
 Use **Immersa explainer** skill (`immersa-explainer`) / `server/prompts/immersa-attendant.md` when writing captions — mechanism from order `why` text, not generic filler.
 
+**Patient consequences (mandatory):** See `medical-sequence-consequences.mdc` — missed path = what worsens at bedside while order waits; saved path = visible improvement. Never `visualHint` that only repeats patientLock + "ED stretcher, clinical stress".
+
 ## Files
 
 - `src/lib/medicalSequence.js` — offline builders + fetch
+- `src/lib/medicalSequenceConsequences.js` — patient-consequence captions + visual hints (offline + LLM guide)
 - `src/lib/medicalSequenceValidate.js` — age/caption lint
 - `server/medicalSequence.js` — LLM prompt
 - `.medical-sequence-cache/case_{id}.json` — delete after prompt/rule changes

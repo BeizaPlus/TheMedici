@@ -1,0 +1,53 @@
+---
+description: Medical sequence missed/saved beats — patient consequences at bedside, not generic likeness stubs
+globs: game/server/medicalSequence.js,game/src/lib/medicalSequence*.js,game/src/components/MedicalSequencePanel.jsx,game/.medical-sequence-cache/**
+alwaysApply: false
+---
+
+# Medical sequence — patient consequences (not memorization)
+
+**Applies to:** Medical Sequence panel (`missedPath`, `savedPath`), `server/medicalSequence.js`, `src/lib/medicalSequenceConsequences.js`
+
+## Core rule
+
+**Never** use generic `visualHint` stubs like:
+`adult patient, male, Emergency Medicine — same patient likeness throughout, ED stretcher, clinical stress`
+
+That is useless for learning. Every beat must answer: **what is happening to the patient right now?**
+
+## Missed path (`IF ORDERS MISSED`)
+
+For each delayed order, describe **bedside consequence**:
+
+| Order type | Missed — patient sees/feels |
+|------------|----------------------------|
+| Urine porphyrins | Porphyrins keep building in skin; blisters worsen near light/windows; pain persists |
+| Plasma porphyrins | Circulating load rises; diagnostic peak not captured yet |
+| HCV / HIV / Iron | Silent infection or iron overload stays hidden — rash is not the whole story |
+| Glucose | Lethargy deepens; brain fuel falls without a bedside check |
+| Imaging | Team treats without the picture; reversible causes stay invisible |
+
+**Caption** = mechanism in patient language (1–2 sentences).  
+**visualHint** = camera + visible patient moment + `MeWorld sculptural 3D CGI` tail — **vary angle per beat** (MCU, wide 3/4, close on lesion, etc.).
+
+## Saved path (`IF STABILIZED IN TIME`)
+
+Mirror the missed beat with **improvement**:
+
+- Urine porphyrins → levels trend down, blistering eases  
+- Plasma porphyrins → peak captured, diagnosis locks  
+- HCV/HIV/Iron → trigger found and treatable  
+- Glucose → alertness returns after correction  
+
+## Likeness
+
+`patientLock` line in header is for **identity only**.  
+`visualHint` must describe **action + consequence**, not repeat the lock string.
+
+## Image gen (when wired)
+
+All medical-sequence stills: **MeWorld game sculptural CGI** — same lock as case story / play scenes. No photoreal, no stock hospital photography.
+
+## Prompt version
+
+Bump `MEDICAL_SEQUENCE_PROMPT_VERSION` when changing this rule. Delete `.medical-sequence-cache/case_*.json` after bump.

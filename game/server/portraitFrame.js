@@ -1,7 +1,7 @@
 import fsp from 'fs/promises';
 import path from 'path';
 import sharp from 'sharp';
-import { getCropLockRelPath } from '../src/lib/sceneCameraLock.js';
+import { getCropLockRelPath, sanitizeScenePlateRelPath } from '../src/lib/sceneCameraLock.js';
 import { resolvePatientSceneKey } from '../src/lib/patientSceneKey.js';
 
 /** Canonical play viewport frame — see `dev/scene-camera-lock/SCENE_LOCK.json`. */
@@ -11,13 +11,14 @@ export const PORTRAIT_FRAME_VERSION = 3;
 
 const BASEPLATE_FILES = {
   male: 'public/assets/patient/patient-scene.png',
-  female: 'public/assets/patient/patient-scene-female.png',
+  female: 'public/assets/patient/patient-scene-source-square.png',
   pedMale: 'public/assets/patient/patient-scene-ped-male.png',
-  pedFemale: 'public/assets/patient/patient-scene-ped-female.png',
+  pedFemale: 'public/assets/patient/patient-scene-source-square.png',
 };
 
 export function baseplateRelPath(sceneKey = 'male') {
-  return BASEPLATE_FILES[sceneKey] || BASEPLATE_FILES.male;
+  const rel = BASEPLATE_FILES[sceneKey] || BASEPLATE_FILES.male;
+  return sanitizeScenePlateRelPath(rel, { sceneKey });
 }
 
 export async function readBaseplateBuffer(gameRoot, caseContext = {}) {
@@ -28,7 +29,7 @@ export async function readBaseplateBuffer(gameRoot, caseContext = {}) {
     const buf = await fsp.readFile(abs);
     return { buffer: buf, mimeType: 'image/png', relPath: rel, sex: sceneKey };
   } catch {
-    const fallbackKey = sceneKey.startsWith('ped') ? 'male' : sceneKey === 'female' ? 'female' : 'male';
+    const fallbackKey = sceneKey.startsWith('ped') ? 'pedMale' : 'male';
     const fallbackRel = baseplateRelPath(fallbackKey);
     const fallbackAbs = path.join(gameRoot, fallbackRel);
     const buf = await fsp.readFile(fallbackAbs);
@@ -43,7 +44,7 @@ export async function readBaseplateBuffer(gameRoot, caseContext = {}) {
  */
 export async function readGenerationLayoutBuffer(gameRoot, caseContext = {}) {
   const sceneKey = resolvePatientSceneKey(caseContext);
-  if (sceneKey === 'pedMale' || sceneKey === 'pedFemale') {
+  if (sceneKey === 'pedMale') {
     return readBaseplateBuffer(gameRoot, caseContext);
   }
   const rel = getCropLockRelPath('male');

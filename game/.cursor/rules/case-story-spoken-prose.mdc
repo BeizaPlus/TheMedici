@@ -1,0 +1,51 @@
+---
+description: Case story narrative — spoken English prose for read-aloud chapter bodies (not chart shorthand)
+globs: game/server/caseStory.js,game/dev/storycraft-scale/**,game/.case-story-cache/**,game/src/lib/caseStory.js
+alwaysApply: false
+---
+
+# Case story spoken prose (MeWorld)
+
+**Code:** `SPOKEN_ENGLISH_VOICE` in `server/caseStory.js` · **Version:** `CASE_STORY_PROMPT_VERSION` (bump on rule changes)
+
+## Priority
+
+Case story **chapter bodies** are captions the learner reads aloud. They must sound like natural spoken English — not stiff clinical journalese or telegraphic vitals.
+
+## Required
+
+| Rule | Example |
+|------|---------|
+| Complete sentences + copulas | "his right leg **is** stiff" — not "leg stiff" |
+| Vitals with verbs | "the triage nurse **takes** vitals and notes borderline low blood pressure" |
+| Read-aloud test | Rewrite any sentence that sounds awkward when spoken |
+| Embodied qualia first | face clenched with each step, grabs doorframe, eases into chair |
+| Active clinicians | "Dr. Oppong kneels beside him" — not passive labels |
+
+## Banned
+
+- "quiet tachycardia" and similar noun-stack vitals without a spoken clause
+- Telegraphic vitals lists with no verbs ("HR 116, BP 82/50" alone)
+- Dropped is/are/was ("vitals soft", "face pale")
+- HPI paste or chart-note bullet rhythm
+
+## OK patterns
+
+- "SpO₂ hovers just under 95%"
+- "a seven-mile walk three days ago — something he usually does without trouble"
+- Mechanism teaching threaded through spoken sentences (Immersa voice)
+
+## Agent workflow
+
+1. After editing `STORYCRAFT_SYSTEM` or `SPOKEN_ENGLISH_VOICE`, bump `CASE_STORY_PROMPT_VERSION`.
+2. Cached stories in `.case-story-cache/` invalidate on version mismatch — learner **Refresh** recompiles.
+3. Do not hand-edit cached JSON for voice fixes unless Steve asks — prefer prompt bump + recompile.
+
+## Six chapters (2×3 grid)
+
+API narratives must return **exactly 6 chapters** (`c1`–`c6`): Disruption → Embodiment → Escalation → Crisis point → Mechanism turn → Recontextualization. One chapter = one panel on the Magnific 2×3 plate. Vary `visualHint` camera per chapter — not identical foot-of-bed on every beat.
+
+## Related
+
+- `dev/storycraft-scale/SKILL.md` — storycraft beats + spoken English
+- `.cursor/rules/case-story-camera-lock.mdc` — image framing + game sculptural CGI lock

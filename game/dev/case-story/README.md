@@ -4,9 +4,20 @@ After a play session, **Case story** compiles five beats. Images are **on demand
 
 ## Character continuity (Layer 2)
 
+**Non-negotiable:** Every case story master, beat, and grid gen must attach the **actual CHARACTER-MAP** for the case uber slug — face/hair/age/skin locked across all beats.
+
+| Priority | Path | When |
+|----------|------|------|
+| 1 | `public/assets/patient/uber/<slug>-CHARACTER-MAP.png` | Shipped after Steve approval |
+| 2 | `dev/uber-portrait-refs/character-maps-pending/<slug>-CHARACTER-MAP-alt1.png` | Pending review (prefer alt1) |
+| 3 | `…/character-maps-pending/<slug>-CHARACTER-MAP-alt2.png` | If alt1 missing |
+| — | `*-caricature.png` | **Never** — reject for story gens |
+
+Code: `server/caseStoryCharacterMap.js` → `resolveCaseStoryCharacterMap()` · Magnific ref in `caseStoryImageRefs.js`.
+
 1. **Master still** (`case_XXX-master.png`) establishes patient **identity map** — hair, face, gown, age.
-2. **Character lock markdown** (`case_XXX-CHARACTER-LOCK.md`) holds verbatim description + per-beat composition notes.
-3. **Beat stills** (`case_XXX-beat-cN.png`) must reference **master + lock doc** — not re-invent the patient from portrait alone.
+2. **Character lock markdown** (`case_XXX-CHARACTER-LOCK.md`) holds verbatim description + per-beat composition notes; cite the **map file path** in the lock doc.
+3. **Beat stills** (`case_XXX-beat-cN.png`) must reference **CHARACTER-MAP + master + lock doc** — not re-invent the patient from portrait alone.
 
 Gold example: **`case_051-CHARACTER-LOCK.md`** (TIA / *The Man Who Got Peppered*).
 

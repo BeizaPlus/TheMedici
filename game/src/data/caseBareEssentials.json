@@ -13,6 +13,17 @@
     "safe sex",
     "reassure patient"
   ],
+  "generalLabelPatterns": [
+    "supportive care",
+    "rice",
+    "joint immobilization",
+    "immobilization",
+    "hcg",
+    "pregnancy test",
+    "sexual history",
+    "pelvic exam",
+    "std screen"
+  ],
   "cases": {
     "004": {
       "title": "Non-negotiables — acute DKA",
@@ -89,6 +100,70 @@
           "matchInterventionIds": ["allopurinol-after-acute-flare"],
           "matchLabels": ["allopurinol"],
           "why": "Urate lowering after the acute flare settles — not during the attack."
+        }
+      ]
+    },
+    "U06": {
+      "title": "Uber — marathon MSK marathon workup",
+      "subtitle": "Four pain domains + collapse physiology. Miss a thread → wrong disposition.",
+      "criticalInterventionIds": [
+        "arthrocentesis-synovial-fluid-analysis",
+        "physical-exam-extremities-knee",
+        "duplex-ultrasound-lower-extremities-venous",
+        "physical-exam-spine-neuro",
+        "physical-exam-neuro-slr",
+        "mri-lumbar-spine",
+        "ck-serum",
+        "aggressive-iv-fluids",
+        "bnp-serum"
+      ],
+      "items": [
+        {
+          "id": "knee-arthro",
+          "shortLabel": "Knee exam + arthrocentesis",
+          "matchInterventionIds": [
+            "physical-exam-extremities-knee",
+            "arthrocentesis-synovial-fluid-analysis"
+          ],
+          "why": "Hot monoarticular knee after fall — crystals vs septic joint before antibiotics."
+        },
+        {
+          "id": "leg-duplex",
+          "shortLabel": "Venous duplex (leg)",
+          "matchInterventionIds": ["duplex-ultrasound-lower-extremities-venous"],
+          "matchLabels": ["duplex", "venous", "doppler"],
+          "why": "Immobilization after fall — DVT competes with cellulitis in the leg-pain thread."
+        },
+        {
+          "id": "spine-exam",
+          "shortLabel": "Spine / neuro exam",
+          "matchInterventionIds": ["physical-exam-spine-neuro", "physical-exam-neuro-slr"],
+          "matchLabels": ["spine", "slr", "neuro"],
+          "why": "Cliff fall + chronic back — radiculopathy and cauda equina red flags."
+        },
+        {
+          "id": "mri-lumbar",
+          "shortLabel": "MRI lumbar spine",
+          "matchInterventionIds": ["mri-lumbar-spine"],
+          "why": "Chronic back with new trauma — disc, fracture, or cord compression."
+        },
+        {
+          "id": "rhabdo-panel",
+          "shortLabel": "CK + renal panel + fluids",
+          "matchInterventionIds": ["ck-serum", "bmp-ua-ca-phos", "aggressive-iv-fluids"],
+          "why": "Marathon exertion + dark urine — rhabdo before AKI closes the case."
+        },
+        {
+          "id": "cardiac-screen",
+          "shortLabel": "BNP ± echo",
+          "matchInterventionIds": ["bnp-serum", "echocardiogram", "bnp"],
+          "why": "40yo with ignored dyspnea — occult HF unmasked by marathon stress."
+        },
+        {
+          "id": "pyelo-workup",
+          "shortLabel": "UA / urine culture",
+          "matchInterventionIds": ["urinalysis", "urine-culture"],
+          "why": "Back-pain thread — ascending UTI/pyelonephritis vs mechanical fall."
         }
       ]
     },
@@ -192,6 +267,48 @@
           "shortLabel": "General appearance",
           "matchLabels": ["general appearance", "physical exam: general"],
           "why": "Lethargy, poor feeding, toxic neonate — document what you see before labs return."
+        }
+      ]
+    },
+    "166": {
+      "title": "Critical — hemophilia A hemarthrosis",
+      "subtitle": "Factor replacement and bleeding precautions are non-negotiable. Coags in Misc; exam + RICE in General.",
+      "criticalInterventionIds": [
+        "factor-viii-concentrate",
+        "ddavp-mild-hemophilia-a",
+        "avoid-nsaids",
+        "avoid-im-injections"
+      ],
+      "miscInterventionIds": [
+        "pt-ptt-platelets",
+        "mixing-study",
+        "factor-viii-assay"
+      ],
+      "generalInterventionIds": [
+        "physical-exam-extremities-joints",
+        "supportive-care-rice-joint-immobilizatio"
+      ],
+      "items": [
+        {
+          "id": "factor",
+          "shortLabel": "Factor VIII concentrate",
+          "matchInterventionIds": ["factor-viii-concentrate"],
+          "matchLabels": ["factor viii concentrate", "factor 8"],
+          "why": "Active hemarthrosis — replace Factor VIII before cartilage damage."
+        },
+        {
+          "id": "avoid-nsaid",
+          "shortLabel": "Avoid NSAIDs",
+          "matchInterventionIds": ["avoid-nsaids"],
+          "matchLabels": ["avoid nsaid"],
+          "why": "Antiplatelet effect — acetaminophen only."
+        },
+        {
+          "id": "avoid-im",
+          "shortLabel": "Avoid IM injections",
+          "matchInterventionIds": ["avoid-im-injections"],
+          "matchLabels": ["avoid im"],
+          "why": "IM route causes hematoma in hemophilia."
         }
       ]
     }

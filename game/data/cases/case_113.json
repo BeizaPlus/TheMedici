@@ -2,9 +2,11 @@
   "id": 113,
   "topic": "Drowning",
   "title": "Drowning",
-  "diagnosis": "Drowning (Near-Drowning)",
-  "confidence": "screenshot",
-  "source": "data/cases/case_N.json (DeepSeek)",
+  "diagnosis": "Drowning with submersion injury after dock jump",
+  "confidence": "uword-mechanism-enriched",
+  "source": "Immersa mechanism rewrite — dock jump + submersion (case 113)",
+  "patient_sex": "male",
+  "patient_name_default": "Ethan Brooks",
   "correct_orders": [
     "ABCs / Oxygen / Airway",
     "C-spine precautions",
@@ -13,84 +15,82 @@
     "Rewarming (if hypothermic)",
     "Observation (all victims)"
   ],
-  "should_avoid": [],
+  "should_avoid": [
+    "Clear C-spine without inline stabilization when jump mechanism present",
+    "Discharge after brief lucid interval without observation"
+  ],
   "rationale": {
-    "ABCs / Oxygen / Airway": "Intubate if hypoxic, unable to protect airway.",
-    "C-spine precautions": "If diving mechanism.",
-    "CXR": "Pulmonary edema, aspiration.",
-    "ABG": "Assess oxygenation.",
-    "Rewarming (if hypothermic)": "Passive or active rewarming.",
-    "Observation (all victims)": "Can deteriorate hours later. Admit."
+    "ABCs / Oxygen / Airway": "Submersion stops gas exchange — hypoxia drives brain injury. Restore oxygenation and protect the airway before surfactant washout and cerebral hypoxia compound.",
+    "C-spine precautions": "Feet-first jump into shallow water transmits axial load through the cervical spine at impact — collar and inline stabilization prevent secondary cord injury if vertebrae were fractured at entry.",
+    "CXR": "Aspiration and surfactant loss after submersion produce infiltrates and non-cardiogenic pulmonary edema — the CXR shows the pulmonary consequence of the drowning phase.",
+    "ABG": "Quantifies hypoxemia and ventilation-perfusion mismatch after aspiration.",
+    "Rewarming (if hypothermic)": "Cold lake water drops core temperature — rewarming treats thermodynamic stress that worsens perfusion and coagulation.",
+    "Observation (all victims)": "Delayed pulmonary edema can appear after a lucid interval — lung injury from surfactant loss continues even when the child looks better."
   },
-  "hpi": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in liquid. Outcome: death, survival with morbidity, or survival without morbidity. NOT 'near-drowning' in current terminology. Fresh water vs salt water distinction clinically irrelevant — both cause pulmonary surfactant washout → ARDS. Key: hypoxic brain injury determines prognosis. Management: ABCs, oxygen, BVM or intubation if needed. C-spine precautions if diving mechanism. CXR (pulmonary edema vs aspiration pneumonia). Rewarming if hypothermic. All drowning victims need observation — even asymptomatic can deteriorate (secondary drowning from pulmonary edema). Admit for observation. Prevention counseling.",
-  "hpi_narrative": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in liquid. Outcome: death, survival with morbidity, or survival without morbidity. NOT 'near-drowning' in current terminology. Fresh water vs salt water distinction clinically irrelevant — both cause pulmonary surfactant washout → ARDS. Key: hypoxic brain injury determines prognosis. Management: ABCs, oxygen, BVM or intubation if needed. C-spine precautions if diving mechanism. CXR (pulmonary edema vs aspiration pneumonia). Rewarming if hypothermic. All drowning victims need observation — even asymptomatic can deteriorate (secondary drowning from pulmonary edema). Admit for observation. Prevention counseling.",
-  "physical_exam": [],
+  "hpi": "Ethan Brooks is a 10-year-old boy rescued from a lake after jumping feet-first from a dock into shallow water, then submerging. Bystanders say he surfaced once, coughed violently, and became confused. On arrival he is tachypneic with SpO₂ in the high 80s, hypotensive, and intermittently lethargic. The entry matters: water arrests the body in milliseconds — near-incompressible at impact — so axial force can travel through the neck even without obvious external trauma. After impact, submersion caused aspiration and surfactant washout. No witnessed tonic-clonic activity. Parents report he is a strong swimmer but misjudged depth.",
+  "hpi_narrative": "Ethan Brooks is a 10-year-old boy rescued from a lake after jumping feet-first from a dock into shallow water, then submerging. Bystanders say he surfaced once, coughed violently, and became confused. On arrival he is tachypneic with SpO₂ in the high 80s, hypotensive, and intermittently lethargic.\n\nMechanism — two phases: (1) **Impact:** kinetic energy from the jump converts to sudden deceleration at the water surface; axial loading through the cervical spine can fracture or dislocate vertebrae in shallow or awkward entries — C-spine precautions address injury from physics, not only visible trauma. (2) **Submersion:** loss of airway protection → aspiration → surfactant washout → V/Q mismatch and hypoxemic brain injury.\n\nWorkup: ABCs and oxygen, C-spine immobilization for jump mechanism, CXR and ABG for pulmonary injury, rewarming if hypothermic, mandatory observation for delayed pulmonary edema.",
+  "physical_exam": [
+    ["General", "Ill-appearing school-age boy, wet clothing removed, mild confusion"],
+    ["HEENT", "No scalp laceration; cervical tenderness not reliably assessed pre-collar"],
+    ["Cardiovascular", "Tachycardia, hypotension — hypoxia and cold stress"],
+    ["Respiratory", "Tachypnea, crackles at bases, increased work of breathing, SpO₂ low"],
+    ["Neuro", "GCS reduced — hypoxic encephalopathy; moves all extremities pre-immobilization"],
+    ["Skin", "Cool to touch — cold water exposure"]
+  ],
   "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp": null,
-    "rr": null,
-    "temp": null
+    "hr": 116,
+    "spo2": 87,
+    "bp": "82/50",
+    "rr": 24,
+    "temp": 35.8
   },
+  "vitals_text": "Pulse: 116 beats/min\nBlood pressure, systolic: 82 mm Hg\nBlood pressure, diastolic: 50 mm Hg\nRespiratory rate: 24 /minute\nTemperature: 35.8 C (96.4 F)\nSpO2: 87%",
   "patient_voice": {
-    "chief_complaint": "Submersion injury with respiratory distress",
-    "history": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in l…",
-    "pain": "Submersion injury with respiratory distress"
+    "chief_complaint": "I jumped in the lake and couldn't breathe right after.",
+    "history": "I jumped off the dock like I always do. The water felt hard. I went under and swallowed water. My chest burns and my neck hurts.",
+    "pain": "Chest tight and burning — hard to catch my breath."
   },
   "ccs_category": "Pediatrics / Emergency Medicine",
-  "chief_complaint": "Submersion injury with respiratory distress",
-  "case_summary": null,
+  "chief_complaint": "Submersion after dock jump — respiratory distress and confusion",
+  "case_summary": "Child with drowning after feet-first dock jump into shallow water — impact-phase C-spine risk plus submersion hypoxia and aspiration.",
   "decoys": [],
   "distractors": [],
   "stacks": [
     {
       "label": "ABCs / Oxygen / Airway",
       "type": "correctlyOrdered",
-      "finding": "Intubate if hypoxic, unable to protect airway.",
-      "aliases": [
-        "Airway",
-        "O2"
-      ]
+      "finding": "Hypoxia from submersion — secure airway and oxygenate before brain injury worsens.",
+      "aliases": ["Airway", "O2", "BVM"]
     },
     {
       "label": "C-spine precautions",
       "type": "correctlyOrdered",
-      "finding": "If diving mechanism.",
-      "aliases": [
-        "C-spine"
-      ]
+      "finding": "Jump into shallow water → axial cervical load at impact — immobilize until cleared.",
+      "aliases": ["C-spine", "Cervical collar"]
     },
     {
       "label": "CXR",
       "type": "correctlyOrdered",
-      "finding": "Pulmonary edema, aspiration.",
-      "aliases": [
-        "CXR"
-      ]
+      "finding": "Aspiration and surfactant washout — infiltrates and pulmonary edema pattern.",
+      "aliases": ["CXR", "Chest X-ray"]
     },
     {
       "label": "ABG",
       "type": "correctlyOrdered",
-      "finding": "Assess oxygenation.",
-      "aliases": [
-        "ABG"
-      ]
+      "finding": "Quantify hypoxemia and ventilation-perfusion mismatch.",
+      "aliases": ["ABG"]
     },
     {
       "label": "Rewarming (if hypothermic)",
       "type": "correctlyOrdered",
-      "finding": "Passive or active rewarming.",
-      "aliases": [
-        "Rewarming"
-      ]
+      "finding": "Cold water exposure — active or passive rewarming as needed.",
+      "aliases": ["Rewarming"]
     },
     {
       "label": "Observation (all victims)",
       "type": "correctlyOrdered",
-      "finding": "Can deteriorate hours later. Admit.",
-      "aliases": [
-        "Observation"
-      ]
+      "finding": "Delayed pulmonary edema after lucid interval — admit for monitoring.",
+      "aliases": ["Observation", "Admit"]
     }
   ],
   "order_sets": [
@@ -102,9 +102,7 @@
     "Observation (all victims)"
   ],
   "complete": true,
-  "extraction_method": "deepseek_direct",
-  "enrichment_sources": [
-    "deepseek"
-  ],
-  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Drowning (Near-Drowning)."
+  "extraction_method": "immersa_mechanism_rewrite",
+  "enrichment_sources": ["mechanismTeaching.json"],
+  "extraction_notes": "Dock jump axial-load + submersion mechanism — C-spine and observation tied to physics."
 }

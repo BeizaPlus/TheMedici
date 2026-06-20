@@ -6,6 +6,8 @@ import {
 } from '../lib/exportOrderResult.js';
 import { useOrderResult } from '../hooks/useOrderResult.js';
 import { renderAttendingMarkdown } from '../lib/chatMessageFormat.jsx';
+import { formatResultWhyExpand } from '../lib/resultWhyText.js';
+import { readOrderStoryPinned } from '../lib/caseStoryStarted.js';
 
 export default function OrderResultSceneCard({
   intervention,
@@ -17,13 +19,20 @@ export default function OrderResultSceneCard({
   className = '',
   hideClose = false,
   teachMeMode = false,
+  onPinTeachingMoment = null,
 }) {
   const { result, loading } = useOrderResult(intervention, { caseData, caseFlow, teachMeMode });
   const [whyOpen, setWhyOpen] = useState(false);
+  const [storyPinned, setStoryPinned] = useState(() =>
+    readOrderStoryPinned(caseData?.id, neutralStackOrderName(intervention?.label || '')),
+  );
 
   useEffect(() => {
     setWhyOpen(false);
-  }, [intervention?.id]);
+    setStoryPinned(
+      readOrderStoryPinned(caseData?.id, neutralStackOrderName(intervention?.label || '')),
+    );
+  }, [intervention?.id, caseData?.id, intervention?.label]);
 
   if (!intervention) return null;
 
@@ -58,6 +67,23 @@ export default function OrderResultSceneCard({
           <h3 className="order-result-title">{label}</h3>
         </div>
         <div className="order-result-scene-actions">
+          {onPinTeachingMoment && result?.text && !loading && (
+            <button
+              type="button"
+              className={`order-result-pin-story${storyPinned ? ' is-pinned' : ''}`}
+              title={storyPinned ? 'Pinned for Case Story ⭐' : 'Pin for Case Story ⭐'}
+              onClick={() => {
+                onPinTeachingMoment({
+                  orderLabel: label,
+                  answer: result.text,
+                  channel: intervention.teachingChannel || '',
+                });
+                setStoryPinned(true);
+              }}
+            >
+              ⭐ Story
+            </button>
+          )}
           <button
             type="button"
             className="order-result-print"
@@ -80,6 +106,11 @@ export default function OrderResultSceneCard({
       </header>
       <div className="order-result-body">
         {renderAttendingMarkdown(result?.text || 'No result documented for this order.')}
+        {teachMeMode && whyOpen && intervention.why ? (
+          <div className="order-result-why-body">
+            {renderAttendingMarkdown(formatResultWhyExpand(intervention.why))}
+          </div>
+        ) : null}
       </div>
       {teachMeMode && intervention.why ? (
         <div className="order-result-why-wrap">
@@ -94,11 +125,6 @@ export default function OrderResultSceneCard({
             </span>
             Why
           </button>
-          {whyOpen ? (
-            <div className="order-result-why muted">
-              {renderAttendingMarkdown(`**Why:** ${intervention.why}`)}
-            </div>
-          ) : null}
         </div>
       ) : null}
     </div>

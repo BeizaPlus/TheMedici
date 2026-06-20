@@ -1,150 +1,522 @@
 {
+
   "version": 1,
+
   "description": "Eight composite patients — one session spans multiple CCS domains. Merged order stacks at play time.",
+
   "cases": [
+
     {
+
       "id": "U01",
-      "title": "Elena — Neuro & Weakness",
+
+      "title": "Elena — Progressive Weakness",
+
+      "presentationTitle": "Progressive Weakness",
+
       "patientName": "Elena Vasquez",
+
       "domains": ["Neurology", "MSK & General"],
+
       "anchorId": "007",
+
       "memberCaseIds": ["007", "046", "041", "068"],
+
       "segmentLabels": [
+
         "Generalized weakness (MG workup)",
+
         "Weakness in extremities (GBS pattern)",
+
         "Nonspecific weakness",
+
         "Muscle weakness — fatigability"
+
       ],
+
       "briefingNote": "One patient, four weakness presentations you would otherwise drill as separate CCS cases.",
+
       "objective": "Stabilize and work up progressive weakness across neuromuscular differentials — MG, GBS, and mimics.",
-      "chiefComplaint": "Progressive weakness over weeks — ptosis, limb fatigability, and dyspnea on exertion.",
+
+      "chiefComplaint": "Progressive weakness over weeks with ptosis, limb fatigability, and dyspnea on exertion.",
+
       "faceSlug": "copper-afro-headwrap-africa"
+
     },
+
     {
+
       "id": "U02",
-      "title": "James — Cardiopulmonary Acute",
+
+      "title": "James — Chest Pain and Dyspnea",
+
+      "presentationTitle": "Chest Pain and Dyspnea",
+
       "patientName": "James Okonkwo",
+
       "domains": ["Cardiopulmonary", "Emergency Medicine"],
+
       "anchorId": "001",
+
       "memberCaseIds": ["001", "023", "053", "126"],
+
       "segmentLabels": [
+
         "Chest pain — ACS rule-out",
+
         "Shortness of breath — acute dyspnea",
+
         "SOB with cardiac risk",
+
         "Respiratory distress escalation"
+
       ],
+
       "briefingNote": "Chest pain and dyspnea in one admission — cardio + pulmonary orders without switching patients.",
+
       "objective": "Evaluate chest pain and dyspnea with overlapping cardiac and pulmonary pathways.",
+
       "chiefComplaint": "Substernal chest pressure and worsening shortness of breath over 24 hours.",
+
       "faceSlug": "vitiligo-wink-diastema"
+
     },
+
     {
+
       "id": "U03",
-      "title": "Maria — GI & Abdomen",
+
+      "title": "Maria — Abdominal Pain",
+
+      "presentationTitle": "Abdominal Pain",
+
       "patientName": "Maria Santos",
+
       "domains": ["GI & Abdomen", "Emergency Medicine"],
+
       "anchorId": "004",
+
       "memberCaseIds": ["004", "019", "032", "084"],
+
       "segmentLabels": [
+
         "Abdominal pain — initial ED",
+
         "Abdominal pain — surgical screen",
+
         "Abdominal pain — inflammatory",
+
         "Abdominal pain — complicated course"
+
       ],
+
       "briefingNote": "Four abdominal-pain CCS variants merged — efficient surgical / medical / OB-GYN screening.",
+
       "objective": "Diagnose and manage abdominal pain across surgical, inflammatory, and obstructive etiologies.",
+
       "chiefComplaint": "Progressive abdominal pain with nausea — location and character evolve during the stay.",
+
       "faceSlug": "hijab-albino-freckles"
+
     },
+
     {
+
       "id": "U04",
-      "title": "David — Neuro Headache & AMS",
+
+      "title": "David — Severe Headache",
+
+      "presentationTitle": "Severe Headache",
+
       "patientName": "David Kim",
+
       "domains": ["Neurology", "Emergency Medicine"],
+
       "anchorId": "005",
+
       "memberCaseIds": ["005", "034", "002", "049"],
+
       "segmentLabels": [
+
         "Headache — primary workup",
+
         "Headache — secondary red flags",
+
         "Altered mental status overlap",
+
         "Severe headache — neuro imaging"
+
       ],
+
       "briefingNote": "Headache and AMS threads in one neuro admission — SAH, meningitis, and mass lesions.",
+
       "objective": "Rule out life-threatening headache and AMS causes before symptomatic treatment.",
+
       "chiefComplaint": "Worst headache of life with intermittent confusion and photophobia.",
+
       "faceSlug": "albino-male-freckles-profile"
+
     },
+
     {
+
       "id": "U05",
-      "title": "Aisha — Women's & GU",
+
+      "title": "Aisha — Pelvic Pain",
+
+      "presentationTitle": "Pelvic Pain",
+
       "patientName": "Aisha Patel",
+
       "domains": ["OB/GYN", "Genitourinary"],
+
       "anchorId": "003",
+
       "memberCaseIds": ["003", "028", "008", "164"],
+
       "segmentLabels": [
+
         "Pelvic pain — gynecologic",
+
         "Pelvic pain — pregnancy-related",
+
         "Dysuria / UTI workup",
+
         "Pelvic pain — complex"
+
       ],
+
       "briefingNote": "Pelvic and urinary complaints in one reproductive-age patient — OB, GU, and STI overlap.",
+
       "objective": "Evaluate pelvic pain and urinary symptoms with pregnancy and infection rule-outs.",
+
       "chiefComplaint": "Lower abdominal and pelvic pain with dysuria for several days.",
+
       "faceSlug": "hijab-albino-freckles"
+
     },
+
     {
+
       "id": "U06",
-      "title": "Robert — MSK Pain Marathon",
+
+      "title": "Robert — Marathon Collapse",
+
+      "presentationTitle": "Marathon Collapse",
+
       "patientName": "Robert Hayes",
+
       "domains": ["MSK & General", "Neurology"],
+
       "anchorId": "042",
+
       "memberCaseIds": ["042", "079", "069", "098"],
+
       "segmentLabels": [
+
         "Knee pain — trauma vs septic",
+
         "Back pain — radiculopathy",
+
         "Leg pain — vascular vs neuro",
+
         "Chronic back pain — red flags"
+
       ],
-      "briefingNote": "Knee, back, and leg pain in one patient — ortho, neuro, and vascular screens combined.",
-      "objective": "Differentiate mechanical, inflammatory, vascular, and neurologic limb and spine pain.",
-      "chiefComplaint": "Knee swelling after a fall, with new leg pain and progressive low back stiffness.",
+
+      "briefingNote": "Marathon collapse on a hot day — knee trauma, leg vascular vs infectious, acute and chronic back pain, rhabdo, and occult heart failure in one thorough admission.",
+
+      "objective": "Work up marathon collapse with four MSK pain domains — knee septic/crystal, leg vascular vs cellulitis, acute and chronic back, plus rhabdo and cardiac screen.",
+
+      "chiefComplaint": "Collapsed during a marathon with a hot swollen knee, leg pain, low back pain after a fall, and dark urine.",
+
       "faceSlug": "craniofacial-asymmetry-goatee"
+
     },
+
     {
+
       "id": "U07",
-      "title": "Sophie — Fever, Rash & ID",
+
+      "title": "Sophie — Fever and Rash",
+
+      "presentationTitle": "Fever and Rash",
+
       "patientName": "Sophie Laurent",
+
       "domains": ["ID & Dermatology", "Emergency Medicine"],
+
       "anchorId": "006",
+
       "memberCaseIds": ["006", "110", "127", "141"],
+
       "segmentLabels": [
+
         "Rash and lethargy — pediatric-style ID",
+
         "Fever with rash — adult",
+
         "Diffuse rash — drug vs infection",
+
         "Rash — disseminated infection"
+
       ],
+
       "briefingNote": "Fever and rash variants in one admission — meningococcemia, viral exanthem, and drug reaction.",
+
       "objective": "Stabilize febrile rash and identify infectious vs allergic etiologies.",
+
       "chiefComplaint": "Fever, diffuse rash, and lethargy worsening over 48 hours.",
+
       "faceSlug": "nevus-speckled-laugh"
+
     },
+
     {
+
       "id": "U08",
-      "title": "Marcus — Psych & Behavior",
+
+      "title": "Marcus — Anxiety and Low Mood",
+
+      "presentationTitle": "Anxiety and Low Mood",
+
       "patientName": "Marcus Webb",
+
       "domains": ["Psychiatry & Social", "Neurology"],
+
       "anchorId": "065",
+
       "memberCaseIds": ["065", "128", "160", "033"],
+
       "segmentLabels": [
+
         "Anxiety — medical rule-out",
+
         "Depression — safety assessment",
+
         "Anxiety — complicated",
+
         "AMS — organic vs psychiatric"
+
       ],
+
       "briefingNote": "Psychiatric presentations with mandatory medical and AMS rule-outs in one encounter.",
+
       "objective": "Assess anxiety and depression while excluding organic AMS and substance causes.",
+
       "chiefComplaint": "Panic attacks, low mood, and episodes of confusion — family worried about safety.",
+
       "faceSlug": "subway-afro-dandy"
+
+    },
+
+    {
+
+      "id": "U09",
+
+      "title": "Maya — School Refusal",
+
+      "presentationTitle": "School Refusal",
+
+      "patientName": "Maya Chen",
+
+      "domains": ["Psychiatry & Social", "Pediatrics"],
+
+      "anchorId": "192",
+
+      "memberCaseIds": ["192", "160", "181", "089", "128"],
+
+      "segmentLabels": [
+
+        "School refusal — GAD workup (anchor)",
+
+        "Excessive worry — adult GAD patterns",
+
+        "Sleep disturbance & nightmares",
+
+        "School-age anxiety — somatic cues",
+
+        "Depression overlap — safety screen"
+
+      ],
+
+      "briefingNote": "One pediatric patient — worry, refusal, sleep, and focus threads you'd otherwise drill as separate psych items.",
+
+      "objective": "Evaluate school refusal and multi-domain anxiety; rule out medical causes; plan psychotherapy and stepped pharmacotherapy.",
+
+      "chiefComplaint": "Morning stomachaches, won't go to school, worries constantly that kids will laugh at her.",
+
+      "pediatricFaceSlug": "ped-girl-disgust"
+
+    },
+
+    {
+
+      "id": "U10",
+
+      "title": "Jordan — Mood Crash",
+
+      "presentationTitle": "Mood Crash",
+
+      "patientName": "Jordan Reyes",
+
+      "domains": ["Psychiatry & Social"],
+
+      "anchorId": "193",
+
+      "memberCaseIds": ["193", "159", "172", "040", "160"],
+
+      "segmentLabels": [
+
+        "Manic-depressive thread (anchor)",
+
+        "Bipolar I manic episode",
+
+        "Suicide safety / near-hanging",
+
+        "Panic disorder rule-out",
+
+        "Chronic worry overlap"
+
+      ],
+
+      "briefingNote": "One college-age patient — mood cycling, suicide safety, panic chest pain, and worry threads you'd otherwise drill as separate psych items.",
+
+      "objective": "Recognize bipolar spectrum, avoid antidepressant trap, assess suicide risk, and rule out panic masquerading as chest pain.",
+
+      "chiefComplaint": "Depressive crash after sleepless spending spree, passive death wishes, recent chest tightness.",
+
+      "faceSlug": "vitiligo-wink-diastema",
+
+      "patientSex": "male"
+
+    },
+
+    {
+
+      "id": "U11",
+
+      "title": "Darius — Paranoia and Voices",
+
+      "presentationTitle": "Paranoia and Voices",
+
+      "patientName": "Darius Webb",
+
+      "domains": ["Psychiatry & Social", "Neurology"],
+
+      "anchorId": "194",
+
+      "memberCaseIds": ["194", "065", "033", "107", "109"],
+
+      "segmentLabels": [
+
+        "Psychosis presentation (anchor)",
+
+        "Schizophrenia workup",
+
+        "AMS organic rule-out",
+
+        "Psychiatric emergency",
+
+        "Substance/tox screen"
+
+      ],
+
+      "briefingNote": "Psychosis with mandatory organic, tox, and emergency overlap — one admission spans five CCS psych/neuro threads.",
+
+      "objective": "Evaluate new psychosis with command hallucinations; rule out encephalitis, tox, and metabolic causes before anchoring on primary psychotic disorder.",
+
+      "chiefComplaint": "Paranoia, command auditory hallucinations, social withdrawal, poor intake.",
+
+      "faceSlug": "copper-afro-headwrap-africa",
+
+      "patientSex": "male"
+
+    },
+
+    {
+
+      "id": "U12",
+
+      "title": "Tom — Alcohol Withdrawal",
+
+      "presentationTitle": "Alcohol Withdrawal",
+
+      "patientName": "Tom Hayes",
+
+      "domains": ["Psychiatry & Social", "Neurology"],
+
+      "anchorId": "195",
+
+      "memberCaseIds": ["195", "035", "109", "172"],
+
+      "segmentLabels": [
+
+        "Alcohol withdrawal presentation (anchor)",
+
+        "Delirium tremens / seizure risk",
+
+        "Sedative overdose overlap",
+
+        "Safety after intentional use"
+
+      ],
+
+      "briefingNote": "Alcohol withdrawal, DT risk, sedative tox overlap, and post-intentional safety in one chronic-use patient.",
+
+      "objective": "Manage alcohol withdrawal with CIWA benzos and thiamine; monitor for DT; address sedative overdose overlap and safety.",
+
+      "chiefComplaint": "Tremor, diaphoresis, visual hallucinations 36 hours after last drink — prior DT.",
+
+      "faceSlug": "craniofacial-asymmetry-goatee",
+
+      "patientSex": "male"
+
+    },
+
+    {
+
+      "id": "U13",
+
+      "title": "Amina — Trauma Symptoms",
+
+      "presentationTitle": "Trauma Symptoms",
+
+      "patientName": "Amina Laurent",
+
+      "domains": ["Psychiatry & Social"],
+
+      "anchorId": "196",
+
+      "memberCaseIds": ["196", "112", "128", "160", "172"],
+
+      "segmentLabels": [
+
+        "Trauma-related symptoms (anchor)",
+
+        "Sexual assault / forensic pathway",
+
+        "Endocrine depression mimic",
+
+        "Anxiety comorbidity",
+
+        "Safety & capacity"
+
+      ],
+
+      "briefingNote": "Trauma, forensic, endocrine mimic, anxiety, and capacity threads merged for one adult patient — trauma-informed throughout.",
+
+      "objective": "Care for post-assault PTSD symptoms and dissociation; offer forensic pathway; rule out medical mimics; assess capacity and safety for discharge.",
+
+      "chiefComplaint": "Intrusive trauma memories, dissociative episodes, hypervigilance, mirror preoccupation.",
+
+      "faceSlug": "nevus-speckled-laugh",
+
+      "patientSex": "female"
+
     }
+
   ]
+
 }
+

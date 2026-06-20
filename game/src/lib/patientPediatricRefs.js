@@ -1,8 +1,10 @@
 import refsBundle from '../data/patientPediatricRefs.json' with { type: 'json' };
+import { getUberDefinition } from './uberCases.js';
 
 function normalizePediatricCaseId(caseId) {
   const raw = String(caseId ?? '').trim();
   if (!raw) return '';
+  if (/^U\d+$/i.test(raw)) return raw.toUpperCase();
   const digits = raw.replace(/^case_/i, '').replace(/^0+/, '') || raw.replace(/^case_/i, '');
   return /^\d+$/.test(digits) ? digits.padStart(3, '0') : raw;
 }
@@ -59,10 +61,17 @@ export function resolvePediatricPortraitRef(caseId, caseData = {}) {
       prompt: String(byId.prompt || '').trim(),
       memorableAccessory: String(byId.memorableAccessory || '').trim() || null,
       ethnicityCue: String(byId.ethnicityCue || '').trim() || null,
-      portraitRefSlug: byId.portraitRefSlug || null,
+      portraitRefSlug: byId.portraitRefSlug || byId.temperamentSlug || null,
+      temperamentSlug: byId.temperamentSlug || byId.portraitRefSlug || null,
       isPediatric: true,
       source: 'caseId',
     };
+  }
+  if (id && /^U\d+$/i.test(id)) {
+    const uber = getUberDefinition(id);
+    if (uber?.anchorId) {
+      return resolvePediatricPortraitRef(uber.anchorId, caseData);
+    }
   }
   const fromCategory = matchCategoryPattern(caseData?.category);
   if (fromCategory) {

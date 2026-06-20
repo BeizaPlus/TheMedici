@@ -1,4 +1,5 @@
 import uberManifest from '../data/uberCases.json' with { type: 'json' };
+import uberExtensions from '../data/uberCaseExtensions.json' with { type: 'json' };
 import { getPreparedCase } from './caseNarrative.js';
 import { resolvePlaybook } from '../data/resolvePlaybook.js';
 import { buildAlgorithm, getZones } from '../data/gameData.js';
@@ -31,8 +32,13 @@ function normalizeMemberId(id) {
   return /^\d+$/.test(raw) ? raw.padStart(3, '0') : raw;
 }
 
+export function getUberCaseExtension(caseId) {
+  const raw = String(caseId ?? '').trim();
+  return uberExtensions.cases?.[raw] || uberExtensions.cases?.[raw.toUpperCase()] || null;
+}
+
 /** Merge interventions from member CCS cases (deduped by id or label). */
-export function mergeMemberInterventions(memberCaseIds, catalog) {
+export function mergeMemberInterventions(memberCaseIds, catalog, uberCaseId = null) {
   const seen = new Set();
   const merged = [];
 
@@ -56,6 +62,14 @@ export function mergeMemberInterventions(memberCaseIds, catalog) {
     }
   }
 
+  const ext = uberCaseId ? getUberCaseExtension(uberCaseId) : null;
+  for (const iv of ext?.additionalInterventions || []) {
+    const key = iv.id || iv.label;
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    merged.push(iv);
+  }
+
   return merged;
 }
 
@@ -66,7 +80,8 @@ export function enrichUberGameCase(gameCase, ccsCase, catalog) {
 
   const anchorId = normalizeMemberId(uber.anchorId);
   const anchorCcs = catalog?.cases?.find((c) => c.id === anchorId);
-  const mergedInterventions = mergeMemberInterventions(uber.memberCaseIds, catalog);
+  const mergedInterventions = mergeMemberInterventions(uber.memberCaseIds, catalog, uber.id);
+  const ext = getUberCaseExtension(uber.id);
   const zones = getZones();
 
   const segments = (uber.memberCaseIds || []).map((rawId, i) => {
@@ -93,19 +108,32 @@ export function enrichUberGameCase(gameCase, ccsCase, catalog) {
     patient_name_default: uber.patientName || gameCase.patient_name_default,
     diagnosis: gameCase.diagnosis || `Multi-domain · ${uber.domains.join(' · ')}`,
     objective: uber.objective || gameCase.objective,
-    chief_complaint: uber.chiefComplaint || gameCase.chief_complaint,
+    chief_complaint: ext?.chiefComplaint || uber.chiefComplaint || gameCase.chief_complaint,
+    presentationTitle: uber.presentationTitle || ext?.presentationTitle || null,
+    practice_hpi: ext?.hpiNarrative || gameCase.practice_hpi || '',
+    hpi_narrative: ext?.hpiNarrative || gameCase.hpi_narrative,
+    clinical_hpi_narrative: ext?.hpiNarrative || gameCase.clinical_hpi_narrative || gameCase.hpi_narrative,
+    historyText: ext?.hpiNarrative || gameCase.historyText,
+    clinical_tip: ext?.clinicalTip || gameCase.clinical_tip,
+    vitals: ext?.vitals ? { ...gameCase.vitals, ...ext.vitals } : gameCase.vitals,
     interventions:
       mergedInterventions.length > 0 ? mergedInterventions : gameCase.interventions,
     algorithm: buildAlgorithm(playbookForAlgo, zones),
     uberFaceSlug: uber.faceSlug || null,
+    uberPediatricFaceSlug: uber.pediatricFaceSlug || null,
+    patientSex: uber.patientSex || (uber.pediatricFaceSlug ? 'female' : gameCase.patientSex),
     uberMeta: {
       id: uber.id,
       domains: uber.domains,
       memberCaseIds: uber.memberCaseIds.map(normalizeMemberId),
       segments,
       patientName: uber.patientName,
+      presentationTitle: uber.presentationTitle || ext?.presentationTitle || null,
       briefingNote: uber.briefingNote,
+      compositeHpi: Boolean(ext?.hpiNarrative),
+      extensionOrderCount: ext?.additionalInterventions?.length || 0,
       faceSlug: uber.faceSlug || null,
+      pediatricFaceSlug: uber.pediatricFaceSlug || null,
     },
   };
 }

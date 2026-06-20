@@ -1,0 +1,33 @@
+---
+description: Banned cached case portraits in .case-portraits — never serve or reuse. Use when portrait gen, regen, audit, or Steve rejects distorted/robotic plates.
+globs:
+  - "**/.case-portraits/**"
+  - "**/casePortrait.js"
+  - "**/portraitLayers.js"
+  - "**/portraitDirector.js"
+alwaysApply: false
+---
+
+# Case portrait ban list (mandatory)
+
+**Canonical:** `dev/case-portraits/BANNED.md` + `server/bannedCasePortraits.js`
+
+## Before serving or screenshotting a cached portrait
+
+1. Check `isCasePortraitBanned(caseId)` — if banned, cache is **invalid** (treat as missing; regen only after Steve removes ban).
+2. Run `node scripts/purge-banned-case-portraits.mjs` after updating the ban list.
+
+## Never ship these failure modes
+
+- Robotic / stock / photoreal headswap — not MeWorld sculptural CGI
+- Distorted faces or destroyed IV layers
+- ECG electrodes **on clothing** — bare chest / gown open (`CLINICAL_ACCURACY_RULES.md`)
+- Same generated face copied across unrelated case IDs without uber lock
+
+## Uber / catalog cases
+
+Regen **only** from shipped `*-GAME-SCENE.png` + `CHARACTER-MAP` — not generic `patient-scene-female.png` Magnific edit.
+
+## `*_mask.png` is not an O₂ mask
+
+Internal alpha for IV layer compositing (`deriveIvMaskFromDiff`). Delete with base/iv when banning.

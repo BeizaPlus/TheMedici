@@ -42,6 +42,7 @@ export function buildTeachCompareRows({
       status,
       isPlaced,
       reviewedOk,
+      teachingChannel: iv.teachingChannel || null,
       iv,
     };
   }).filter(Boolean);

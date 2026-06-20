@@ -1,0 +1,17 @@
+# Uber cases — thorough composite workups
+
+Uber cases (`U01`–`U08` in `src/data/uberCases.json`) merge multiple CCS member stacks **plus** composite-only orders from `src/data/uberCaseExtensions.json`.
+
+## Rule
+
+An Uber admission must let the learner hit **every segment label** in one session — not only the anchor member diagnosis.
+
+- Member merge = baseline (`mergeMemberInterventions` in `src/lib/uberCases.js`).
+- **Extensions** = narrative HPI + `additionalInterventions` for cross-domain orders the members do not carry (e.g. U06: venous duplex, CK/rhabdo, BNP/echo, spine neuro exam).
+- **Bare essentials** = `caseBareEssentials.json` entry per Uber id (e.g. `U06`) so Teach Me critical tier surfaces all threads.
+
+## U06 reference (MSK Pain Marathon)
+
+Segments: knee #042, back #079, leg #069, chronic back #098 — plus marathon collapse (heat, rhabdo, occult HF, fall mechanism).
+
+When extending other Uber cases, follow the same pattern: rich `hpiNarrative`, vitals that match the story, 8–15 extension orders that close gaps between segment labels and member diagnoses.

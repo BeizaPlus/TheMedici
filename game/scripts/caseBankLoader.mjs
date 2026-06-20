@@ -6,6 +6,7 @@ import path from 'path';
 import { CASE_BANK_DIR, CASE_BANK_MASTER } from './paths.mjs';
 import { isGenericDuplicateWhy, resolveOrderWhy } from './orderRationale.mjs';
 import { neutralStackOrderName } from '../src/lib/stackDecoys.js';
+import { expandOrderList, inferTeachingChannel } from '../src/lib/orderTeachingChannel.js';
 
 export { CASE_BANK_DIR, CASE_BANK_MASTER };
 
@@ -46,16 +47,12 @@ export function filterBankOrders(orders = []) {
 }
 
 export function ordersToInterventions(orders = [], rationale = {}, entry = null) {
-  return filterBankOrders(orders).map((order, idx) => {
-    const rawLabel = typeof order === 'string' ? order : order?.order || order?.label || '';
-    const label = neutralStackOrderName(rawLabel);
+  const expanded = expandOrderList(orders, rationale);
+  return expanded.map((row, idx) => {
+    const label = neutralStackOrderName(row.label);
     if (!label) return null;
     const id = slugify(label, idx);
-    let why =
-      rationale[rawLabel] ||
-      rationale[label] ||
-      (typeof order === 'object' ? order.rationale || order.why : '') ||
-      '';
+    let why = row.why || '';
     if (entry && (!why || isGenericDuplicateWhy(why, entry))) {
       why = resolveOrderWhy(label, rationale, entry, 'correct');
     }
@@ -64,10 +61,8 @@ export function ordersToInterventions(orders = [], rationale = {}, entry = null)
       label,
       correct_zone: inferZone(label),
       why: why || 'Required for this case presentation.',
-      guideline: typeof order === 'object' ? order.guideline || 'ACEP' : 'ACEP',
-      optional: typeof order === 'object' ? Boolean(order.optional) : false,
-      affects_grade: typeof order === 'object' ? order.affects_grade : undefined,
-      sourceSection: typeof order === 'object' ? order.section : undefined,
+      guideline: 'ACEP',
+      teachingChannel: row.teachingChannel || inferTeachingChannel(label),
     };
   }).filter(Boolean);
 }

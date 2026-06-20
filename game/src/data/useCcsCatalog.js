@@ -1,7 +1,9 @@
 import catalog from './ccsCatalog.json' with { type: 'json' };
+import uwordTraumaTox from './uwordTraumaToxCases.json' with { type: 'json' };
 import { toGameCase } from './gameData.js';
 import { applySessionToCase } from '../lib/caseNarrative.js';
 import { readAudienceProfile } from '../lib/audienceProfile.js';
+import { caseCatalogLane } from '../lib/caseCatalogLanes.js';
 
 function withSession(gameCase) {
   const session = readAudienceProfile() || {};
@@ -35,13 +37,42 @@ export function getCaseById(id) {
   return raw ? withSession(toGameCase(raw, catalog)) : null;
 }
 
-export function getCasesInCategory(categoryId) {
+export function getCasesInCategory(categoryId, { lane } = {}) {
   const cat = catalog.categories.find((c) => c.id === categoryId);
   if (!cat) return [];
-  return cat.caseIds
+
+  const coreRows = cat.caseIds
     .map((id) => catalog.cases.find((c) => c.id === id))
     .filter(Boolean)
     .map((c) => withSession(toGameCase(c, catalog)));
+
+  const extendedRows =
+    categoryId === uwordTraumaTox.category
+      ? (uwordTraumaTox.cases || [])
+          .filter((row) => row?.id)
+          .map((row) =>
+            withSession(
+              toGameCase(
+                {
+                  ...row,
+                  category: categoryId,
+                  catalogLane: 'extended',
+                  isUword: true,
+                },
+                catalog,
+              ),
+            ),
+          )
+      : [];
+
+  const pool = lane === 'extended' ? extendedRows : lane === 'core' ? coreRows : [...coreRows, ...extendedRows];
+
+  if (!lane) return pool;
+  return filterCasesByLane(pool, lane);
+}
+
+function filterCasesByLane(cases, laneId) {
+  return cases.filter((c) => caseCatalogLane(c) === laneId);
 }
 
 export function getAllGameCases() {

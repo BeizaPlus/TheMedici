@@ -2,6 +2,17 @@
 
 import { sequenceFailsDemographicsCheck } from '../src/lib/medicalSequenceValidate.js';
 
+export const MEDICAL_SEQUENCE_PROMPT_VERSION = 3;
+
+/** Reject cached LLM output that applied AMS/alcohol template to drowning cases. */
+export function sequenceFailsDrowningContentCheck(parsed, caseContext = {}) {
+  const blob = `${caseContext.title || ''} ${caseContext.diagnosis || ''} ${caseContext.presentationKey || ''} ${caseContext.hpiExcerpt || caseContext.clinical_hpi_narrative || caseContext.historyText || ''}`.toLowerCase();
+  if (!/drown|submersion|near-drown|water rescue/.test(blob)) return false;
+  const beats = [...(parsed?.prequel || []), ...(parsed?.missedPath || []), ...(parsed?.savedPath || [])];
+  const text = beats.map((b) => `${b.title || ''} ${b.caption || ''}`).join(' ').toLowerCase();
+  return /alcohol|tox screen|toxicology|weeks of decline|seizure|post.?ictal|metabolic\/tox/.test(text);
+}
+
 export function caseDataStubFromContext(caseContext = {}, caseId = '') {
   return {
     id: caseId,
@@ -55,11 +66,12 @@ Rules:
 - **Demographics lock (mandatory):** Read age/sex from case HPI and category. Adults (≥13y) never appear as infants — no wet diapers, bottles, "mom's arms" for a 70-year-old. Pediatric beats only for Pediatrics / age <13.
 - Use attendant **mechanism** from order rationales (Immersa explainer voice) — tie missed/saved beats to specific orders.
 - Same patient likeness throughout (age, sex, ethnicity from case).
-- **prequel**: 2–4 beats at home / before arrival — must match chief complaint (AMS → weeks of decline + seizure; poor feeding → only if pediatric).
-- **missedPath**: 4–8 beats — cumulative deterioration if emergent orders are delayed. Use attendant mechanisms.
-- **savedPath**: 3–6 beats — stabilization when standard flow orders happen on time.
+- **prequel**: 2–4 beats at home / before arrival — must match chief complaint. **Drowning/submersion:** water rescue, wet patient, EMS oxygen — NEVER weeks-of-decline AMS, alcohol, or tox-screen beats. **AMS:** weeks of decline + seizure only when NOT drowning.
+- **missedPath**: one beat per standard-flow order (3–6) — **patient consequence while the order waits**, NOT lab jargon alone. Example (porphyria): urine porphyrins delayed → porphyrins keep building in skin, blisters worsen near light; plasma porphyrins delayed → circulating load keeps rising; HCV/HIV/iron delayed → silent infection or iron overload may stay hidden. Title pattern: "{Order} delayed".
+- **savedPath**: mirror missed beats — **visible improvement** when each order lands on time (levels drop, patient calmer, trigger found).
 - **realWorldEcho**: one optional real-world teaching parallel if stories provided.
-- Each beat: short title (≤8 words), caption (1–2 sentences, patient-centered), visualHint (camera + action, same likeness).
+- **visualHint (mandatory):** describe what the patient looks like RIGHT NOW — smart camera angle per beat (MCU, wide 3/4, close on lesion) + MeWorld sculptural CGI clinical still. **Never** repeat only the patientLock string or "ED stretcher, clinical stress".
+- **caption:** mechanism in patient language — what they feel/see at the bedside. No memorization lists.
 - Do NOT invent impossible anatomy.
 
 Return ONLY valid JSON (no markdown fence):

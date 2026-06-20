@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "description": "Composite-only orders and narrative for Uber cases — merged on top of member CCS stacks.",
+  "cases": {
+    "U06": {
+      "chiefComplaint": "Collapsed during a marathon with a hot swollen knee, leg pain, low back pain after a fall, and dark urine.",
+      "hpiNarrative": "Robert Hayes is a 40-year-old man who collapsed at mile 22 of a charity marathon on a hot afternoon. Witnesses say he stumbled, looked confused, then veered off the course and fell down a rocky embankment — alone for ~45 minutes before rescue.\n\nOn arrival: hot monoarticular knee swelling after impact, diffuse thigh and anterior shin pain worse with weight-bearing, new midline low back pain with paraspinal tenderness (mechanism: axial load + tumble), and cola-colored urine. He reports chronic low-grade lumbar stiffness since a motor-vehicle accident ~30 years ago. He joined the marathon to \"get fit\" despite untreated exertional dyspnea and ankle swelling he has ignored for months.\n\nWorkup threads in one admission:\n• Knee (#042): hot joint — arthrocentesis before closing septic vs crystal.\n• Acute back (#079): fever/flank pattern vs mechanical fall — UA, cultures, CT if complicated.\n• Leg (#069): unilateral erythema vs DVT vs compartment — mark borders, venous duplex, ABI if pulses asymmetric.\n• Chronic back (#098): radiculopathy red flags after new trauma — SLR, MRI lumbar if deficit.\n• Marathon collapse: heat illness, rhabdomyolysis (CK, aggressive fluids), occult HF (BNP, echo), spine imaging if neuro deficit.",
+      "clinicalTip": "Uber MSK marathon — four CCS pain domains plus collapse physiology. Synovial fluid, venous duplex, CK/renal panel, spine neuro exam, and cardiac screen belong in the same workup.",
+      "vitals": {
+        "sbp": 98,
+        "dbp": 62,
+        "hr": 118,
+        "rr": 24,
+        "temp": 39.1,
+        "spo2": 93,
+        "lactate": 3.4
+      },
+      "additionalInterventions": [
+        {
+          "id": "intravenous-access",
+          "label": "Intravenous access",
+          "correct_zone": "zone-iv-bag",
+          "why": "Large-bore access for fluids, antibiotics, and analgesia — marathon collapse with rhabdo risk.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "marathon-collapse"
+        },
+        {
+          "id": "ck-serum",
+          "label": "CK, serum",
+          "correct_zone": "zone-blood",
+          "why": "Extreme exertion + immobilization after fall — rhabdomyolysis drives AKI and hyperkalemia.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "marathon-collapse"
+        },
+        {
+          "id": "bmp-ua-ca-phos",
+          "label": "BMP / UA / Ca / Phos",
+          "correct_zone": "zone-blood",
+          "why": "Myoglobinuria (blood+ dipstick, no RBCs), creatinine rise, electrolyte shifts in rhabdo.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "marathon-collapse"
+        },
+        {
+          "id": "aggressive-iv-fluids",
+          "label": "Aggressive IV fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Crystalloid resuscitation — target urine output to flush myoglobin before pigment nephropathy.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "marathon-collapse"
+        },
+        {
+          "id": "duplex-ultrasound-lower-extremities-venous",
+          "label": "Duplex ultrasound, lower extremities, venous",
+          "correct_zone": "zone-monitor",
+          "why": "Leg pain + immobilization after fall — rule out DVT before attributing pain to cellulitis alone.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "leg-vascular"
+        },
+        {
+          "id": "ankle-brachial-index-arterial-doppler-lo",
+          "label": "Ankle-brachial index / Arterial Doppler, lower extremities",
+          "correct_zone": "zone-monitor",
+          "why": "Pulse asymmetry or cool foot — arterial insufficiency vs neurogenic claudication in leg-pain thread.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "leg-vascular"
+        },
+        {
+          "id": "physical-exam-spine-neuro",
+          "label": "Physical Exam: Spine / Neuro",
+          "correct_zone": "zone-custom-1",
+          "why": "Fall mechanism + chronic back history — motor/sensory level, rectal tone, straight leg raise.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "back-radiculopathy"
+        },
+        {
+          "id": "bnp-serum",
+          "label": "BNP, serum",
+          "correct_zone": "zone-blood",
+          "why": "Undiagnosed HF — exertional dyspnea masked as deconditioning until marathon stress.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "cardiac-screen"
+        },
+        {
+          "id": "echocardiogram",
+          "label": "Echocardiogram",
+          "correct_zone": "zone-monitor",
+          "why": "If BNP elevated or pulmonary edema — quantify EF and wall motion after exertional collapse.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "cardiac-screen"
+        },
+        {
+          "id": "ct-chest",
+          "label": "CT chest",
+          "correct_zone": "zone-monitor",
+          "why": "When back pain + fever — alternative source; also PE screen if hypoxic with leg pain post-immobilization.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "back-radiculopathy"
+        },
+        {
+          "id": "ecg",
+          "label": "ECG",
+          "correct_zone": "zone-monitor",
+          "why": "Tachycardia, electrolytes from rhabdo, occult ischemia in 40yo with untreated HF.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "marathon-collapse"
+        }
+      ]
+    }
+  }
+}

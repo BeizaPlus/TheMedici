@@ -17,8 +17,18 @@ if (-not (Test-Path "$Source\game\package.json")) {
 
 $excludeDirs = @(
   "node_modules", "__pycache__", "dist", ".vite", ".git",
-  "MeWorld-study"
+  "MeWorld-study", "user-data", "progress-stash"
 )
+
+# Stash study progress before code refresh — never overwrite Steve's notes/sessions.
+$studyUserData = Join-Path $Target "game\user-data"
+$stashRoot = Join-Path $Target "progress-stash"
+if (Test-Path $studyUserData) {
+  $stashDir = Join-Path $stashRoot ("user-data-" + (Get-Date -Format "yyyyMMdd-HHmmss"))
+  New-Item -ItemType Directory -Path $stashRoot -Force | Out-Null
+  Write-Host "Stashing study user-data (notes, chats, sessions) ->" $stashDir -ForegroundColor Yellow
+  & robocopy $studyUserData $stashDir /E /R:1 /W:1 /NFL /NDL /NJH /NJS /NC /NS /NP | Out-Null
+}
 
 $robocopyArgs = @(
   $Source, $Target,
@@ -80,9 +90,13 @@ npm run dev:study
 
 ## Progress
 
-- ``game\user-data\cases\*.json`` — chat on disk
-- ``game\user-data\cases\notes\`` — notes
-- localStorage ``schoonmaker_case_chat_history`` — browser cache
+- ``game\user-data\cases\*.json`` — chat + sessions on disk (API server)
+- ``game\user-data\cases\notes\`` — journal / voice transcripts (**never wiped by snapshot refresh**)
+- ``progress-stash\user-data-*`` — timestamped backup before each snapshot refresh
+- localStorage ``schoonmaker_case_chat_history`` — browser cache (per port: study :5173, main :5174)
+- **Timeline** merges browser progress + ``GET /api/user/visits`` from **this tree's** user-data
+
+**Snapshot refresh** copies code from main but **excludes** ``game\user-data`` — study notes and sessions stay put. Main ``MeWorld\game\user-data`` is never touched by this script.
 
 ## Refresh from main
 

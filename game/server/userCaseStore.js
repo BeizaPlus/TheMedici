@@ -33,10 +33,26 @@ export async function readCaseNotesText(caseId) {
   }
 }
 
-export async function writeCaseNotesText(caseId, text) {
+export async function writeCaseNotesText(caseId, text, { allowClear = false } = {}) {
   ensureUserDirs();
   const trimmed = String(text || '');
   const fp = notesFilePath(caseId);
+  let existing = '';
+  try {
+    existing = await fsp.readFile(fp, 'utf8');
+  } catch {
+    existing = '';
+  }
+  if (!allowClear && existing.trim() && !trimmed.trim()) {
+    const stat = await fsp.stat(fp);
+    return {
+      text: existing,
+      href: notesPublicHref(caseId),
+      bytes: stat.size,
+      updatedAt: new Date().toISOString(),
+      preserved: true,
+    };
+  }
   if (!trimmed.trim()) {
     try {
       await fsp.unlink(fp);
@@ -404,4 +420,50 @@ export async function getOverallStats() {
     }
   }
   return agg;
+}
+
+/** Per-case last activity from on-disk sessions (study / main each have their own user-data). */
+export async function listCaseVisitSummaries({ limit = 60 } = {}) {
+  ensureUserDirs();
+  let files = [];
+  try {
+    files = await fsp.readdir(USER_CASES_DIR);
+  } catch {
+    return [];
+  }
+
+  const rows = [];
+  for (const file of files) {
+    if (!file.endsWith('.json')) continue;
+    const caseId = file.replace(/\.json$/i, '');
+    try {
+      const data = JSON.parse(
+        await fsp.readFile(path.join(USER_CASES_DIR, file), 'utf8'),
+      );
+      let at = data.stats?.lastPlayedAt || data.updatedAt || null;
+      for (const session of data.sessions || []) {
+        const sessionAt = session.endedAt || session.startedAt;
+        if (sessionAt && (!at || sessionAt > at)) at = sessionAt;
+      }
+      const tailChat = (data.chatHistory || []).slice(-1)[0];
+      if (tailChat?.at && (!at || tailChat.at > at)) at = tailChat.at;
+
+      if (!at) continue;
+      rows.push({
+        caseId: String(data.caseId ?? caseId),
+        at,
+        completed: false,
+        plays: data.stats?.sessions || 0,
+        chatMessages: data.stats?.chatMessages ?? (data.chatHistory?.length || 0),
+        source: 'server',
+        title: data.title || '',
+      });
+    } catch {
+      /* skip corrupt case file */
+    }
+  }
+
+  return rows
+    .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime())
+    .slice(0, limit);
 }

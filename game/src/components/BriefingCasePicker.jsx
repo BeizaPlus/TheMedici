@@ -33,6 +33,10 @@ import {
   buildStudyBatches,
   isUberCatalogId,
 } from '../lib/caseStudyBatches.js';
+import {
+  CATALOG_LANES,
+  categoryHasLaneTabs,
+} from '../lib/caseCatalogLanes.js';
 
 const PICKER_WIDTH = 400;
 
@@ -93,6 +97,10 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
     const ctx = readCaseBrowseContext();
     return typeof ctx?.batchIndex === 'number' ? ctx.batchIndex : 0;
   });
+  const [catalogLaneTab, setCatalogLaneTab] = useState(() => {
+    const ctx = readCaseBrowseContext();
+    return ctx?.catalogLane === 'extended' ? 'extended' : 'core';
+  });
   const [query, setQuery] = useState('');
   const [readyOnly, setReadyOnly] = useState(false);
   const [checkVersion, setCheckVersion] = useState(0);
@@ -107,12 +115,15 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
     }
   }, [currentCaseId, visibleCategories]);
 
+  const laneTabsActive = categoryHasLaneTabs(categoryId);
+
   const casesInCategory = useMemo(
     () =>
       categoryId
-        ? getCasesInCategory(categoryId).filter((c) => allowedSet.has(c.id))
+        ? getCasesInCategory(categoryId, laneTabsActive ? { lane: catalogLaneTab } : {})
+            .filter((c) => allowedSet.has(c.id))
         : [],
-    [categoryId, allowedSet],
+    [categoryId, allowedSet, catalogLaneTab, laneTabsActive],
   );
 
   const studyBatches = useMemo(() => buildStudyBatches(casesInCategory), [casesInCategory]);
@@ -268,7 +279,8 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
                 const next = e.target.value;
                 setCategoryId(next);
                 setBatchIndex(0);
-                writeCaseBrowseContext({ categoryId: next, batchIndex: 0 });
+                setCatalogLaneTab('core');
+                writeCaseBrowseContext({ categoryId: next, batchIndex: 0, catalogLane: 'core' });
                 setQuery('');
               }}
             >
@@ -319,6 +331,28 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
             </button>
           </div>
 
+          {laneTabsActive && !readyOnly && !query.trim() && (
+            <div className="briefing-picker-lanes" role="tablist" aria-label="Case source lane">
+              {Object.values(CATALOG_LANES).map((lane) => (
+                <button
+                  key={lane.id}
+                  type="button"
+                  role="tab"
+                  className={`briefing-picker-lane-chip${catalogLaneTab === lane.id ? ' active' : ''}`}
+                  aria-selected={catalogLaneTab === lane.id}
+                  aria-label={lane.ariaLabel}
+                  onClick={() => {
+                    setCatalogLaneTab(lane.id);
+                    setBatchIndex(0);
+                    writeCaseBrowseContext({ categoryId, batchIndex: 0, catalogLane: lane.id });
+                  }}
+                >
+                  {lane.label}
+                </button>
+              ))}
+            </div>
+          )}
+
           {!readyOnly && !query.trim() && categoryId !== 'Uber Cases' && studyBatches.length > 1 && (
             <div className="briefing-picker-batches" role="tablist" aria-label="Study batches">
               {studyBatches.map((batch) => (
@@ -348,13 +382,19 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
                 : activeCategory && activeBatch
                   ? studyBatches.length > 1
                     ? `${activeBatch.cases.length} in batch ${activeBatch.batchNumber} of ${activeBatch.totalBatches} · ${activeBatch.theme} · ${activeCategory.label}`
-                    : `${filteredCases.length} in ${activeCategory.label}`
+                    : laneTabsActive
+                      ? `${filteredCases.length} in ${activeCategory.label} · ${CATALOG_LANES[catalogLaneTab]?.label || 'Core'}`
+                      : `${filteredCases.length} in ${activeCategory.label}`
                   : ''}
           </p>
 
           <div className="briefing-picker-list" role="listbox" aria-label="Cases in category">
             {filteredCases.length === 0 && (
-              <p className="briefing-picker-empty">No cases match your search.</p>
+              <p className="briefing-picker-empty">
+                {catalogLaneTab === 'extended'
+                  ? 'Scenario cases are importing from the archive — run inventory-uword-trauma-tox, then promote.'
+                  : 'No cases match your search.'}
+              </p>
             )}
             {filteredCases.map((c) => {
               const rec = getCaseRecord(c.id);

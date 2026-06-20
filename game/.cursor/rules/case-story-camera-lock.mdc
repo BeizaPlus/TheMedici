@@ -1,0 +1,54 @@
+---
+description: Case story image gen — crown-through-toes inspection framing FIRST; then character map + laterality
+globs: game/.case-story-cache/**,game/dev/case-story/**,game/server/caseStory.js,game/server/caseStory*.js,game/scripts/generate-case-story-images.mjs,game/src/components/CaseStoryPanel.jsx,game/src/lib/caseStory*.js
+alwaysApply: false
+---
+
+# Case story camera lock (MeWorld)
+
+**Parent rule:** `scene-camera-lock.mdc` · **Code:** `CASE_STORY_INSPECTION_FRAMING_BLOCK` in `src/lib/sceneCameraLock.js`
+
+## Priority order (non-negotiable)
+
+When generating or approving **case story** master, beat, or grid images:
+
+1. **Toe / inspection framing FIRST** — full supine body **crown through toes**; patient's **own bare toes** slightly visible at **bottom frame edge** on mattress. Mid-thigh crop without toes = **FAIL** → regen wider.
+2. **Character map (mandatory for scene consistency)** — white-bg `*-CHARACTER-MAP.png` for the case uber slug:
+   - Shipped: `public/assets/patient/uber/<slug>-CHARACTER-MAP.png`
+   - Pending: `dev/uber-portrait-refs/character-maps-pending/<slug>-CHARACTER-MAP-alt1.png` (or alt2)
+   - Wired in `server/caseStoryCharacterMap.js` — Magnific always gets map ref when file exists
+   - **Never** use `*-caricature*` or unapproved alts
+3. **Laterality** — wound side locked from case context (e.g. case 176 = **right forearm**); audit prose + visualHints on compile.
+4. **Likeness + beat composition** — character lock doc, master ref chain, per-beat left/right-third variety.
+
+## Hard bans (same as play scene lock)
+
+- POV clinician / examiner feet at frame bottom
+- Standing-over-patient camera
+- Mid-thigh-only crop hiding feet
+- Copying legacy reference clinician feet — **patient toes on mattress only**
+
+## Approved gold (case 176)
+
+| Asset | Role |
+|-------|------|
+| `case_176-beat-c5.png` | **Oversight hero** — loads in Case Story prose when shipped; approved with toes visible |
+| `subway-afro-dandy-GAME-SCENE.png` | Identity + camera north star |
+| `dev/case-story/case_176-CHARACTER-LOCK.md` | Wound laterality + per-beat composition |
+
+Do **not** replace `case_176-beat-c5.png` with a tighter crop that crops toes off.
+
+## Agent workflow
+
+1. Read `dev/case-story/case_*-CHARACTER-LOCK.md` when present.
+2. Run `node scripts/generate-case-story-images.mjs <caseId>` — prompts already inject `CASE_STORY_INSPECTION_FRAMING_BLOCK`.
+3. Before marking ready: zoom-check bottom edge for **patient toes** (not empty mid-thigh cutoff).
+4. Bump `CASE_STORY_PROMPT_VERSION` in `server/caseStory.js` when changing story prompt rules.
+5. **Spoken prose:** chapter bodies must pass read-aloud test — see `case-story-spoken-prose.mdc` + `SPOKEN_ENGLISH_VOICE` in `caseStory.js`.
+
+## Related
+
+- `case-story-spoken-prose.mdc` — narrative voice (complete sentences, vitals with verbs)
+- `patient-character-maps.mdc` — white-bg map attachment
+- `src/lib/caseStoryLaterality.js` — laterality lock + audit
+- `server/caseStoryReadiness.js` — story checklist in Case Story panel

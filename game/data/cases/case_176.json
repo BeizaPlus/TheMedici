@@ -3,10 +3,14 @@
   "topic": "Animal Bite",
   "title": "Animal Bite",
   "diagnosis": "Rabies, Cellulitis, Tetanus",
+  "uberFaceSlug": "subway-afro-dandy",
+  "patient_sex": "male",
+  "portraitNote": "Match subway-afro-dandy likeness: young Black man, large heart-shaped afro, calm direct gaze, light blue hospital gown on ED stretcher. Forearm animal bite wound with surrounding cellulitis visible where appropriate. Same face and afro silhouette throughout — clinical stress, trauma bay.",
   "confidence": "screenshot",
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Stabilize the patient: ensure airway, breathing, and circulatory status; administer tetanus prophylaxis if needed",
+    "Stabilize the patient: ensure airway, breathing, and circulatory status",
+    "Administer tetanus prophylaxis if needed",
     "Obtain a complete blood count (CBC) and serum glucose level",
     "Culture and debridement of the wound if appropriate",
     "Consult Infectious Disease specialist for potential rabies prophylaxis",
@@ -17,7 +21,9 @@
     "Initiate antibiotics prior to culture results due to risk of developing antibiotic-resistant infections"
   ],
   "rationale": {
-    "Stabilize the patient": "To address any immediate life-threatening issues and administer tetanus prophylaxis",
+    "Stabilize the patient": "Primary survey — airway, breathing, circulation before wound-specific care.",
+    "Stabilize the patient: ensure airway, breathing, and circulatory status": "Primary survey — airway, breathing, circulation before wound-specific care.",
+    "Administer tetanus prophylaxis if needed": "Wound prophylaxis channel — separate from ABC stabilization; both required for animal bites.",
     "Obtain CBC and serum glucose level": "To monitor for infection or complications",
     "Culture and debridement of the wound": "To diagnose potential infections and remove necrotic tissue",
     "Consult Infectious Disease specialist": "For potential rabies prophylaxis if the animal cannot be traced or if it is a known rabid animal",
@@ -53,7 +59,14 @@
       "No acute rash; capillary refill and perfusion assessed."
     ]
   ],
-  "vitals": null,
+  "vitals": {
+    "hr": 116,
+    "spo2": 87,
+    "bp": "82/50",
+    "rr": 24,
+    "temp": 37.4
+  },
+  "vitals_text": "Pulse: 116 beats/min\nBlood pressure 82/50 mmHg\nRespiratory rate: 24 /minute\nTemperature: 37.4 C (99.3 F)\nSpO2: 87%\nLactate: 2.5 mmol/L",
   "patient_voice": null,
   "ccs_category": null,
   "chief_complaint": null,
@@ -62,7 +75,8 @@
   "distractors": [],
   "stacks": [],
   "order_sets": [
-    "Stabilize the patient: ensure airway, breathing, and circulatory status; administer tetanus prophylaxis if needed",
+    "Stabilize the patient: ensure airway, breathing, and circulatory status",
+    "Administer tetanus prophylaxis if needed",
     "Obtain a complete blood count (CBC) and serum glucose level",
     "Culture and debridement of the wound if appropriate",
     "Consult Infectious Disease specialist for potential rabies prophylaxis",

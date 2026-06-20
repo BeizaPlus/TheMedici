@@ -14,6 +14,14 @@
 
 **They are not the same level.** Study is a point-in-time copy. Main and study **diverge** as soon as either is edited. `user-data\`, browser localStorage, and uncommitted code are **not** automatically shared.
 
+| Data | Study (`:5173` / API `:3001`) | Main preview (`:5174` / API `:3002`) |
+|------|-------------------------------|--------------------------------------|
+| **user-data** (notes, chats, sessions) | `MeWorld-study\game\user-data\` | `MeWorld\game\user-data\` |
+| **localStorage** (progress, timeline cache) | `localhost:5173` origin | `localhost:5174` origin |
+| **Timeline panel** | Merges localStorage + **this API's** `/api/user/visits` | Same, from main tree |
+
+**Notes are never wiped by snapshot refresh.** `create-study-snapshot.ps1` stashes study `user-data` to `progress-stash\` and **excludes** `user-data` from the robocopy mirror. Main `user-data` is never touched by that script. Server rejects empty PUT that would erase existing notes unless `allowClear: true`.
+
 ---
 
 ## Steve’s study workflow (agreed)
@@ -29,8 +37,8 @@
 
 3. **When study ends** — choose one:
    - **Promote fixes:** copy changed files from `MeWorld-study\game` → `MeWorld\game`, commit on main  
-   - **Re-freeze:** `cd C:\Users\steve\MeWorld` → `powershell -File scripts\create-study-snapshot.ps1` (refreshes study from main; **backs up `user-data` first** if you care about study-only progress)  
-   - **Progress only:** copy `MeWorld-study\game\user-data\` → `MeWorld\game\user-data\`
+   - **Re-freeze:** `cd C:\Users\steve\MeWorld` → `powershell -File scripts\create-study-snapshot.ps1` (refreshes study **code**; **backs up + preserves** study `user-data`)  
+   - **Progress only:** copy `MeWorld-study\game\user-data\` → `MeWorld\game\user-data\` (only if Steve explicitly wants to merge study sweat into main)
 
 ---
 
@@ -64,6 +72,17 @@
 **Cursor rules:** `MeWorld\.cursor\rules\graphify.mdc` · `game\.cursor\rules\graphify.mdc` (copied in study snapshot).
 
 **After code edits** in whichever tree you touched → run `graphify update .` from that tree’s root (AST-only, no API cost).
+
+---
+
+## Case story & study session
+
+When compiling or generating **case story** beats (master / c1–c6 / grid), agents must attach the **CHARACTER-MAP** for scene consistency:
+
+1. `public/assets/patient/uber/<slug>-CHARACTER-MAP.png` if shipped
+2. Else `dev/uber-portrait-refs/character-maps-pending/<slug>-CHARACTER-MAP-alt1.png` (or alt2)
+
+See `dev/case-story/README.md` · rule `case-story-camera-lock.mdc` · `server/caseStoryCharacterMap.js`.
 
 ---
 

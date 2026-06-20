@@ -1,5 +1,5 @@
 ---
-description: MeWorld patient portraits — Magnific MCP (Kojo parity). OAuth in Cursor; not OpenAI image edits.
+description: MeWorld patient portraits — Magnific MCP (Kojo parity). OAuth in Cursor; REST key in docs/WHERE_IS_THE_API.md.
 globs:
   - server/casePortrait.js
   - server/magnificImage.js
@@ -12,6 +12,8 @@ alwaysApply: false
 ---
 
 # MeWorld Magnific MCP — same workflow as Kojo
+
+**API key on disk (batch scripts):** **`docs/WHERE_IS_THE_API.md`** — `C:\Users\steve\.cursor\master.env` · verify with `npm run verify:magnific`
 
 **Canonical doc:** **`.cursor/RULES_IMAGE_GENERATION.md`** — read that first; this file is the Cursor glob pointer.
 

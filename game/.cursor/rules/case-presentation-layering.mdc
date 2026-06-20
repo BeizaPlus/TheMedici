@@ -1,0 +1,31 @@
+# Case presentation layering (UWorld-style)
+
+Learner-facing cases follow **progressive disclosure** — same pattern as standard CCS cases (e.g. "Blood In Urine" + bay location only at entry).
+
+## Play dock (default)
+
+| Surface | Shows |
+|--------|--------|
+| **Header** | `presentationTitle` or chief complaint only + location (ER / OBS / ICU / WARD) |
+| **Orders tab (default)** | Stacks — drag to patient. No HPI wall of text. |
+| **HPI tab** | Full practice HPI when learner clicks clipboard-pulse icon |
+| **Exam tab** | Physical exam when learner clicks stethoscope |
+| **Thread / results** | Only after those tabs are opened |
+
+## Spoiler bans (learning mode)
+
+- No composite uber titles (`Robert — MSK Pain Marathon`) in learner UI
+- No `— emergency presentation` stub lines as HPI
+- No `briefingNote`, segment list, diagnosis, or objective until teach mode / case complete
+
+## Data
+
+- **Uber:** `presentationTitle` in `src/data/uberCases.json` (UWorld-style chief complaint header)
+- **Internal title:** `title` field stays for teach mode / catalog authoring
+- **Full story:** `uberCaseExtensions.json` `hpiNarrative` → `practice_hpi` at play time
+
+## Code
+
+- `learnerFacingCaseTitle()` → `learnerPresentationTitle()` in learning mode
+- `getBriefingHpi()` / `resolvePracticeHpi()` reject placeholder stubs
+- Teach mode: full composite title + segment labels OK

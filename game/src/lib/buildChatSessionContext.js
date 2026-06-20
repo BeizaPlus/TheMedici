@@ -11,7 +11,7 @@ function formatTimelineElapsed(at, sessionStartedAt) {
   return `T+${m}:${String(s).padStart(2, '0')}`;
 }
 
-/** Snapshot of play session for case-chat — orders, scene, notes, activity. */
+import { readTeachingMoments } from './teachingMoments.js';
 export function buildChatSessionContext({
   careUnit = '',
   orderTimelineEvents = [],
@@ -44,6 +44,7 @@ export function buildChatSessionContext({
   }));
 
   const learnerNotes = caseId ? readCaseNotes(caseId).trim().slice(-6000) : '';
+  const teachingMoments = caseId ? readTeachingMoments(caseId) : [];
   const caseDiscussion = caseId ? buildCaseDiscussionContext(caseId) : null;
 
   const ctx = {
@@ -53,6 +54,7 @@ export function buildChatSessionContext({
     stacksPlaced,
     sessionActivity,
     learnerNotes: learnerNotes || null,
+    teachingMoments,
     caseDiscussion,
   };
 

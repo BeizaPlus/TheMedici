@@ -1,3 +1,5 @@
+import { getPhysicalExamPinPosition, sectionIdForPin } from './physicalExamPinLayout.js';
+
 /** Keep stack pins off the patient torso and out from under dock UI. */
 
 const PATIENT_KEEP_OUT = { x0: 0.26, y0: 0.18, x1: 0.74, y1: 0.8 };
@@ -46,6 +48,14 @@ export function computePinDisplayPercent(pin, zones, frame, index = 0) {
   const ry = (topPct - frameTop) / frameH;
 
   if (isPhysicalExamPin(pin)) {
+    const sectionId = sectionIdForPin(pin);
+    const saved = sectionId ? getPhysicalExamPinPosition(sectionId) : null;
+    if (saved) {
+      return {
+        leftPct: saved.cx * 100,
+        topPct: saved.cy * 100,
+      };
+    }
     const rail = index % 2 === 0 ? 0.04 : 0.9;
     const stack = Math.floor(index / 2);
     return {

@@ -5,6 +5,8 @@
   "diagnosis": "Autosomal Dominant Polycystic Kidney Disease",
   "confidence": "screenshot",
   "source": "data/cases/case_N.json (DeepSeek)",
+  "patient_sex": "male",
+  "patient_name_default": "Daniel Okonkwo",
   "correct_orders": [
     "Physical Exam: Abdomen / Flank",
     "Renal US",
@@ -24,19 +26,27 @@
     "ACEI/ARB for HTN": "BP control, nephroprotective.",
     "Genetic counseling": "Autosomal dominant. 50% risk to offspring."
   },
-  "hpi": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
-  "hpi_narrative": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
-  "physical_exam": [],
+  "hpi": "{{patient_name}} is a 28-year-old man with gross hematuria, bilateral flank pain, and hypertension on repeat clinic readings. Exam shows palpable bilateral flank fullness. His father has autosomal dominant polycystic kidney disease (ADPKD). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
+  "hpi_narrative": "{{patient_name}} is a 28-year-old man with gross hematuria, bilateral flank pain, and hypertension on repeat clinic readings. Exam shows palpable bilateral flank fullness. His father has autosomal dominant polycystic kidney disease (ADPKD). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
+  "physical_exam": [
+    ["General", "Young man, uncomfortable with flank pain; no acute distress beyond pain"],
+    ["Cardiovascular", "Hypertensive on monitor; tachycardic but regular rhythm"],
+    ["Respiratory", "Non-labored breathing"],
+    ["Abdomen", "Palpable bilateral flank masses; CVA tenderness; no peritoneal signs"],
+    ["Neuro", "Alert and oriented"],
+    ["Skin", "No rash; warm and well perfused"]
+  ],
   "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp": null,
-    "rr": null,
-    "temp": null
+    "hr": 98,
+    "spo2": 95,
+    "bp": "162/98",
+    "rr": 19,
+    "temp": 37.3
   },
+  "vitals_text": "Pulse: 98 beats/min\nBlood pressure 162/98 mmHg\nRespiratory rate: 19 /minute\nTemperature: 37.3 C (99.1 F)\nSpO2: 95%\nLactate: 2.3 mmol/L",
   "patient_voice": {
     "chief_complaint": "Hematuria, flank pain, bilateral flank masses",
-    "history": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most comm…",
+    "history": "{{patient_name}} is a 28-year-old man with blood in his urine, pain in both sides of his back, and high blood pressure. His dad has polycystic kidney disease.",
     "pain": "Hematuria, flank pain, bilateral flank masses"
   },
   "ccs_category": "Nephrology / Genetics",

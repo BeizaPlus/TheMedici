@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { FiMessageSquare, FiSend, FiX } from 'react-icons/fi';
+import { FiMessageSquare, FiSend, FiX, FiStar } from 'react-icons/fi';
 import { IconCamera, IconFileMedical, IconArrowsMove, IconPill } from './sceneToolbar/SceneToolbarIcons.jsx';
 import PatientPortraitAvatar from './PatientPortraitAvatar.jsx';
 import CaseRecordButton from './CaseRecordButton.jsx';
@@ -99,6 +99,8 @@ function SceneOrderCommandDock({
   patientRecording = null,
   stackMoveMode = false,
   onToggleStackMove,
+  onSavePhysicalExamLayout,
+  onPinTeachingMoment,
   scenePinsHidden = false,
   onToggleScenePins,
   resetKey,
@@ -160,6 +162,17 @@ function SceneOrderCommandDock({
               onClick={() => onToggleStackMove?.()}
             >
               <IconArrowsMove />
+            </button>
+          )}
+          {onSavePhysicalExamLayout && (
+            <button
+              type="button"
+              className="scene-order-command-icon-btn"
+              title="Save physical exam label positions globally (clipboard + browser)"
+              aria-label="Save physical exam layout"
+              onClick={() => onSavePhysicalExamLayout?.()}
+            >
+              <IconFileMedical />
             </button>
           )}
           {onPatientModeChange && (
@@ -353,6 +366,23 @@ function SceneOrderCommandDock({
                 {renderAttendingMarkdown(replyAnswer)}
               </div>
               <div className="scene-order-command-reply-actions">
+                {!patientMode && onPinTeachingMoment && replyAnswer && (
+                  <button
+                    type="button"
+                    className="scene-order-command-icon-btn teaching-moment-pin"
+                    aria-label="Pin for case story"
+                    title="Pin this teaching beat for Case Story ⭐"
+                    onClick={() =>
+                      onPinTeachingMoment({
+                        prompt: quickReply?.question || '',
+                        answer: replyAnswer,
+                        orderLabel: quickReply?.orderLabel || '',
+                      })
+                    }
+                  >
+                    <FiStar aria-hidden />
+                  </button>
+                )}
                 {patientMode && (
                   <PatientReplyPlayButton
                     caseData={caseData}

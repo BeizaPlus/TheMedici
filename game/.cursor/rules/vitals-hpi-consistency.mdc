@@ -1,0 +1,72 @@
+---
+description: ICU monitor vitals must match HPI and exam for simulation realism. Use when editing cases, preparedCases, vitals, or build-prepared-cases.
+globs:
+  - data/cases/**/*.json
+  - src/data/preparedCases.json
+  - scripts/build-prepared-cases.mjs
+  - src/lib/vitalsParse.js
+---
+
+# Vitals ↔ HPI consistency (MeWorld exam mode)
+
+## Rule
+
+**Monitor vitals are ground truth in exam/simulation mode.** If the HPI, chief complaint, physical exam, or patient voice says hypertensive, hypotensive, septic, hypoxic, febrile, or bradycardic — the structured `vitals` on the case must show that pattern.
+
+Learners trust the bedside monitor. Contradictions (e.g. HPI: "severe hypertension 189/99" but monitor 101/64) break immersion and teaching.
+
+## Resolution order (`scripts/build-prepared-cases.mjs`)
+
+1. Parse `vitals` string or `vitals_text` from case bank (CCS inline + slash formats)
+2. Merge structured `vitals` object from `data/cases/case_*.json` when present
+3. Extract embedded vitals from `physical_exam` rows (`HR 116; BP 82/50; SpO₂ 87%`)
+4. **`AUTHORED_VITALS['NNN']`** — locks vitals on rebuild when HPI requires values templates cannot supply
+5. Category template — **last resort only**
+
+After build, check `vitalsSource` in `preparedCases.json`:
+
+| `vitalsSource` | Meaning |
+|----------------|---------|
+| `authored` | Locked — HPI-aligned override |
+| `parsed` | From `vitals_text` / CCS string |
+| `bank-object` | From case JSON `vitals` object |
+| `exam-embedded` | From physical exam vitals strings |
+| `template` | Category default — **audit if HPI mentions specific hemodynamics** |
+
+## When adding or fixing a case
+
+1. Read HPI + exam + chief complaint for explicit vitals language
+2. Set `data/cases/case_N.json`:
+   - `vitals` object (`bp` as `"sbp/dbp"` string or separate fields)
+   - `vitals_text` human-readable block (matches monitor)
+   - `patient_sex` when narrative uses he/she/man/woman
+3. Add `AUTHORED_VITALS['NNN']` in `build-prepared-cases.mjs` for cases that must survive rebuild
+4. Rebuild: `node scripts/build-prepared-cases.mjs`
+5. Audit: `node scripts/audit-vitals-hpi.mjs`
+
+## Gold reference
+
+- **Case 086** — ADPKD, hypertensive young man: `162/98`, male, exam says hypertensive on monitor
+- Source: `data/cases/case_86.json` + `AUTHORED_VITALS['086']`
+
+## Audit checklist
+
+Run `node scripts/audit-vitals-hpi.mjs` after case bank changes. Fix **clear clinical contradictions** first:
+
+- HPI hypertensive → SBP ≥ 140 (or stated value)
+- HPI hypotensive / shock / variceal bleed → SBP &lt; 100, HR ≥ 100
+- HPI septic shock → fever or hypothermia, HR ≥ 100, lactate ≥ 2.5
+- HPI hypoxic / drowning / tension pneumo → SpO₂ ≤ 92 when narrative says so
+- Narrative male/female → `patient_sex` matches
+
+Do not flatten intentional teaching nuance unless it is an obvious error.
+
+## Parser
+
+`src/lib/vitalsParse.js` must parse CCS formats:
+
+- `Blood pressure, systolic: 82 mm Hg` / `diastolic: 50 mm Hg`
+- `Blood pressure 162/98 mmHg`
+- `Pulse: 116 beats/min` (same line)
+
+Keep build script parser in sync when changing `vitalsParse.js`.

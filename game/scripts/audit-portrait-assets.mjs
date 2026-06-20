@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import crypto from 'node:crypto';
+import { isCasePortraitBanned } from '../server/bannedCasePortraits.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -26,8 +27,13 @@ async function meta(p) {
 }
 
 async function main() {
+  const forbidden = new Set([
+    'patient-scene-female.png',
+    'patient-scene-ped-female.png',
+  ]);
   const plates = [
     'patient-scene.png',
+    'patient-scene-source-square.png',
     'patient-scene-female.png',
     'patient-scene-ped-male.png',
     'patient-scene-ped-female.png',
@@ -43,7 +49,8 @@ async function main() {
     }
   }
   for (const r of rows) {
-    console.log(`${r.name}: ${r.width}x${r.height} ${r.size}B hash=${r.hash}`);
+    const tag = forbidden.has(r.name) ? ' ⛔ FORBIDDEN — do not use in game' : '';
+    console.log(`${r.name}: ${r.width}x${r.height} ${r.size}B hash=${r.hash}${tag}`);
   }
   const byHash = new Map();
   for (const r of rows) {
@@ -63,6 +70,11 @@ async function main() {
     const files = await fs.readdir(portraitDir);
     for (const f of files.filter((x) => x.endsWith('.png') && !x.includes('_iv') && !x.includes('_mask') && !x.includes('baseline'))) {
       const p = path.join(portraitDir, f);
+      const caseSlug = f.replace(/^case_/, '').replace(/\.png$/i, '');
+      if (isCasePortraitBanned(caseSlug)) {
+        console.log(`  ⛔ BANNED ${f} — purge via scripts/purge-banned-case-portraits.mjs`);
+        continue;
+      }
       const { hash } = await hashFile(p);
       if (pedMale && hash === pedMale.hash) {
         console.log(`  ${f} — unchanged from ped-male baseplate`);

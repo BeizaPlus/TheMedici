@@ -28,12 +28,13 @@
   "hpi_narrative": "{{patient_name}} presents with altered mental status, fever (or hypothermia), tachycardia, tachypnea, and hypotension unresponsive to fluid resuscitation — requiring vasopressors to maintain MAP ≥65. Lactate is elevated (>2 mmol/L) indicating tissue hypoperfusion. Sepsis = SIRS + infection. Septic shock = sepsis + persistent hypotension despite fluids + lactate >2. Source must be identified: blood cultures x2, urine culture, CXR, and cultures from any suspected site (sputum, wound, CSF). Empiric broad-spectrum antibiotics within 1 HOUR of recognition — every hour delay increases mortality 7-8%. Initial resuscitation: 30 mL/kg IV crystalloid bolus. If still hypotensive → start vasopressors (norepinephrine first-line). Monitor lactate clearance (goal >20% decrease). Measure ScvO2. Admit to ICU. Source control: remove lines, drain abscess, debridement if needed.",
   "physical_exam": [],
   "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp": null,
-    "rr": null,
-    "temp": null
+    "hr": 124,
+    "spo2": 93,
+    "bp": "86/48",
+    "rr": 26,
+    "temp": 39.2
   },
+  "vitals_text": "Pulse: 124 beats/min\nBlood pressure 86/48 mmHg\nRespiratory rate: 26 /minute\nTemperature: 39.2 C (102.6 F)\nSpO2: 93%\nLactate: 4.6 mmol/L",
   "patient_voice": {
     "chief_complaint": "AMS, fever, hypotension, tachycardia",
     "history": "{{patient_name}} presents with altered mental status, fever (or hypothermia), tachycardia, tachypnea, and hypotension unresponsive to fluid resuscitation — requiring vasopressors to maintain MAP ≥65.…",
