@@ -17,6 +17,51 @@ export function caseStoryImagePath(cacheDir, caseId) {
   return slug ? path.join(cacheDir, `${slug}-master.png`) : null;
 }
 
+/** Beat id for the prose oversight hero — explicit cache field or last story chapter. */
+export function resolveCaseStoryOversightBeatId(narrative = {}) {
+  const explicit = String(narrative?.oversightBeatId || '').trim();
+  if (explicit) return explicit;
+  const chapters = (narrative?.chapters || []).filter((c) => c?.id && c.id !== 'twist');
+  if (!chapters.length) return null;
+  return String(chapters[chapters.length - 1].id).trim() || null;
+}
+
+/**
+ * Shipped oversight still for Case Story prose — prefers final beat PNG (e.g. c5) over master.
+ */
+export function resolveCaseStoryOversightImagePath(cacheDir, caseId, narrative = {}) {
+  const beatId = resolveCaseStoryOversightBeatId(narrative);
+  if (beatId) {
+    const beatPath = resolveCaseStoryBeatImagePath(cacheDir, caseId, beatId);
+    if (beatPath && fs.existsSync(beatPath)) {
+      return { path: beatPath, source: 'beat', beatId };
+    }
+  }
+  const masterPath = caseStoryImagePath(cacheDir, caseId);
+  if (masterPath && fs.existsSync(masterPath)) {
+    return { path: masterPath, source: 'master', beatId: null };
+  }
+  return { path: null, source: null, beatId: null };
+}
+
+export function buildCaseStoryOversightImageUrl(cacheDir, caseId, narrative, origin) {
+  const ref = resolveCaseStoryOversightImagePath(cacheDir, caseId, narrative);
+  if (!ref.path) return null;
+  const base = String(origin || '').replace(/\/$/, '');
+  return {
+    url: `${base}/case-story-images/${path.basename(ref.path)}`,
+    source: ref.source,
+    beatId: ref.beatId,
+    file: path.basename(ref.path),
+  };
+}
+
+/** One 2×3 composite storyboard plate (all beats in a single Magnific render). */
+export function caseStoryGridImagePath(cacheDir, caseId) {
+  const slug = normalizeCaseFile(caseId);
+  return slug ? path.join(cacheDir, `${slug}-grid-2x3.png`) : null;
+}
+
 export function caseStoryBeatImagePath(cacheDir, caseId, beatId, { variant } = {}) {
   const slug = normalizeCaseFile(caseId);
   const bid = String(beatId || '')

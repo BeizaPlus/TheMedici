@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MeWorld — Case image approval</title>
+  <style>
+    :root {
+      --bg: #0e0e12;
+      --card: #16161c;
+      --border: rgba(232, 184, 75, 0.25);
+      --gold: #e8b84b;
+      --text: #f0eee8;
+      --muted: rgba(240, 238, 232, 0.55);
+      --bad: #e85b5b;
+      --ok: #5be88a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, Segoe UI, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px 24px 48px;
+    }
+    h1 { font-size: 1.25rem; margin: 0 0 4px; color: var(--gold); }
+    .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 16px; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .toolbar label { font-size: 0.8rem; color: var(--muted); }
+    .toolbar select, .toolbar button {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+    .toolbar button { cursor: pointer; }
+    .toolbar button:hover { border-color: var(--gold); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      transition: border-color 0.15s;
+    }
+    .card:hover { border-color: var(--gold); }
+    .card.is-approved { border-color: var(--ok); }
+    .card.is-warn { border-color: var(--bad); }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .case-id { font-weight: 700; font-size: 1.1rem; }
+    .case-title { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+    .flags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+    .flag {
+      font-size: 0.62rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .flag.bad { background: rgba(232, 91, 91, 0.2); color: #ffb0b0; }
+    .flag.ok { background: rgba(91, 232, 138, 0.15); color: #b8ffd0; }
+    .img-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .beat-strip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      margin-top: 8px;
+      padding-bottom: 4px;
+    }
+    .beat-strip img {
+      height: 56px;
+      width: auto;
+      border-radius: 4px;
+      cursor: zoom-in;
+      flex: 0 0 auto;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    figure { margin: 0; }
+    figcaption {
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #000;
+      cursor: zoom-in;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .thumb.missing {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.7rem;
+      min-height: 72px;
+    }
+    .approve-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+    .approve-row input { accent-color: var(--gold); }
+    .meta { font-size: 0.68rem; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img {
+      max-width: min(96vw, 1400px);
+      max-height: 92vh;
+      border-radius: 8px;
+    }
+    #lightbox p {
+      position: absolute;
+      bottom: 16px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Case image approval</h1>
+  <p class="sub">Portrait · uber CHARACTER-MAP · case story grid/beats — scroll and approve without opening each case in play.<br />
+  <strong>URL:</strong> <code>/case-image-approval/index.html</code> (trailing slash alone loads the React app).</p>
+  <div class="toolbar">
+    <label>Filter
+      <select id="filter">
+        <option value="all">All cases</option>
+        <option value="needs">Needs review</option>
+        <option value="uber-mismatch">Uber mismatch</option>
+        <option value="no-story">Story images missing</option>
+        <option value="approved">Approved only</option>
+      </select>
+    </label>
+    <button type="button" id="refresh">Reload manifest</button>
+    <span id="stats" class="sub"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div id="lightbox" role="dialog" aria-label="Image preview">
+    <img id="lightbox-img" alt="" />
+    <p id="lightbox-cap"></p>
+  </div>
+  <script>
+    const APPROVAL_KEY = 'meworld_case_image_approval_v1';
+    const grid = document.getElementById('grid');
+    const filterEl = document.getElementById('filter');
+    const statsEl = document.getElementById('stats');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCap = document.getElementById('lightbox-cap');
+
+    function readApprovals() {
+      try { return JSON.parse(localStorage.getItem(APPROVAL_KEY) || '{}'); }
+      catch { return {}; }
+    }
+    function writeApprovals(map) {
+      localStorage.setItem(APPROVAL_KEY, JSON.stringify(map));
+    }
+
+    function portraitUrl(file) {
+      return file ? `/case-portraits/${file}` : null;
+    }
+    function storyUrl(file) {
+      return file ? `/case-story-images/${file}` : null;
+    }
+
+    function imgFigure(caption, src, alt) {
+      if (!src) {
+        return `<figure><figcaption>${caption}</figcaption><div class="thumb missing">—</div></figure>`;
+      }
+      return `<figure><figcaption>${caption}</figcaption><img class="thumb" src="${src}" alt="${alt}" loading="lazy" data-cap="${caption}" /></figure>`;
+    }
+
+    function renderCard(c, approvals) {
+      const approved = Boolean(approvals[c.id]);
+      const warn = c.flags.uberMismatch || c.flags.needsPortraitRegen;
+      const p = c.portrait;
+      const beats = (c.story.beats || []).map((b) => storyUrl(b));
+      const beatStrip = beats.length
+        ? `<div class="beat-strip">${beats.map((src, i) => `<img src="${src}" alt="beat ${i}" data-cap="Beat ${i}" loading="lazy" />`).join('')}</div>`
+        : '';
+      return `
+        <article class="card${approved ? ' is-approved' : ''}${warn && !approved ? ' is-warn' : ''}" data-id="${c.id}">
+          <div class="card-head">
+            <div>
+              <div class="case-id">Case ${c.id}</div>
+              <div class="case-title">${c.title || ''}</div>
+            </div>
+            <label class="approve-row">
+              <input type="checkbox" data-approve="${c.id}" ${approved ? 'checked' : ''} /> OK
+            </label>
+          </div>
+          <div class="flags">
+            ${c.expectedUber ? `<span class="flag">uber: ${c.expectedUber}</span>` : ''}
+            ${c.flags.uberMismatch ? '<span class="flag bad">uber mismatch</span>' : ''}
+            ${c.flags.hasStoryGrid ? '<span class="flag ok">story grid</span>' : '<span class="flag bad">no grid</span>'}
+            ${c.flags.beatCount ? `<span class="flag ok">${c.flags.beatCount} beats</span>` : ''}
+          </div>
+          <div class="img-row">
+            ${imgFigure('Play portrait', portraitUrl(p?.file), `Case ${c.id} portrait`)}
+            ${imgFigure('CHARACTER-MAP', c.charMapUrl, `Case ${c.id} char map`)}
+            ${imgFigure('Story master', storyUrl(c.story.master), 'master')}
+            ${imgFigure('Story 2×3 grid', storyUrl(c.story.grid), 'grid')}
+          </div>
+          ${beatStrip}
+          <p class="meta">
+            Portrait uber: <strong>${p?.uberRefSlug || 'null'}</strong>
+            ${p?.patientName ? ` · persona: ${p.patientName}` : ''}
+            ${p?.cachedAt ? `<br>Cached: ${p.cachedAt}` : ''}
+          </p>
+        </article>`;
+    }
+
+    function passesFilter(c, mode, approvals) {
+      if (mode === 'approved') return approvals[c.id];
+      if (mode === 'needs') return !approvals[c.id] && (c.flags.needsPortraitRegen || c.flags.needsStoryImages || c.flags.uberMismatch);
+      if (mode === 'uber-mismatch') return c.flags.uberMismatch;
+      if (mode === 'no-story') return c.flags.needsStoryImages;
+      return true;
+    }
+
+    async function load() {
+      const res = await fetch('./manifest.json?' + Date.now());
+      const data = await res.json();
+      const approvals = readApprovals();
+      const mode = filterEl.value;
+      const list = data.cases.filter((c) => passesFilter(c, mode, approvals));
+      grid.innerHTML = list.map((c) => renderCard(c, approvals)).join('');
+      statsEl.textContent = `${list.length} shown · ${data.caseCount} total · manifest ${data.generatedAt}`;
+      grid.querySelectorAll('[data-approve]').forEach((el) => {
+        el.addEventListener('change', () => {
+          const id = el.dataset.approve;
+          const map = readApprovals();
+          if (el.checked) map[id] = { at: new Date().toISOString() };
+          else delete map[id];
+          writeApprovals(map);
+          load();
+        });
+      });
+      grid.querySelectorAll('.thumb[src], .beat-strip img[src]').forEach((img) => {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.src;
+          lightboxCap.textContent = img.dataset.cap || '';
+          lightbox.classList.add('open');
+        });
+      });
+    }
+
+    lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+    filterEl.addEventListener('change', load);
+    document.getElementById('refresh').addEventListener('click', load);
+    load();
+  </script>
+</body>
+</html>

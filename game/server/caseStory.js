@@ -8,35 +8,63 @@ import {
   buildClinicalAccuracyPromptBlock,
   isHomeStoryBeat,
 } from './clinicalAccuracyRules.js';
-import { getForbiddenRenderStylePromptBlock } from '../src/lib/sceneCameraLock.js';
+import { CASE_STORY_INSPECTION_FRAMING_BLOCK } from '../src/lib/sceneCameraLock.js';
+import { getForbiddenRenderStylePromptBlock, getGameEngineStylizationPassPromptBlock, getGameSceneCameraLockPromptBlock } from '../src/lib/sceneCameraLock.server.js';
+import { buildStorycraftMechanismPreflight, buildMechanismTeachingPromptBlock } from './mechanismTeaching.js';
+import {
+  buildLateralityPromptBlock,
+  auditCaseStoryLaterality,
+  resolveLateralityLock,
+} from '../src/lib/caseStoryLaterality.js';
 
 /** Bump when narrative prompt / storycraft rules change — stale cache ignored. */
-export const CASE_STORY_PROMPT_VERSION = 6;
+export const CASE_STORY_PROMPT_VERSION = 12;
 
-const STORYCRAFT_SYSTEM = `You are a clinical storyteller for MeWorld emergency medicine training (Storycraft Scale).
+const SPOKEN_ENGLISH_VOICE = `SPOKEN ENGLISH VOICE (mandatory — chapter bodies are read aloud):
+- Write every chapter **body** as **spoken prose**: complete sentences a narrator can read naturally — NOT chart shorthand, HPI paste, or telegraphic vitals lists.
+- **Read-aloud test:** if a sentence sounds awkward when spoken, rewrite it before returning JSON.
+- **Copulas required:** "his right leg **is** stiff" — never drop is/are/was ("leg stiff", "face pale", "vitals soft").
+- **Vitals with verbs:** weave numbers into running prose — "the triage nurse **takes** vitals and notes borderline low blood pressure", "his heart rate **is** 110", "SpO₂ **hovers** just under 95%". NEVER bare noun-stack labels like "quiet tachycardia", "soft hypotension", or "deceptively soft vitals" without a spoken clause.
+- **Banned phrases:** "quiet tachycardia", telegraphic vitals dumps with no verbs ("HR 116, BP 82/50" alone), journal-style participial chains without a clear subject.
+- **Embodied qualia first:** show the patient moving through space — face clenched with each step, barely able to move, grabs the doorframe, eases into a chair exhaling slowly — before abstract pathophysiology.
+- **Clinicians act:** "Dr. Oppong kneels beside him" — nurses **take**, **note**, **place**; active verbs, not passive labels.
+- Mechanism teaching stays Immersa/MeWorld — threaded through spoken sentences, not stacked adjectives.
+
+Gold arrival beat (tone only — adapt patient, injury, and vitals to THIS case):
+"He limps into triage — his right leg is stiff, and his face clenches with every step. He can barely move; one hand stays on the doorframe until he eases into the chair and exhales slowly, still tired from the marathon. The triage nurse takes vitals and notes borderline low blood pressure while his SpO₂ hovers just under 95%."`;
+
+const STORYCRAFT_SYSTEM = `${buildStorycraftMechanismPreflight()}
+
+You are a clinical storyteller for MeWorld emergency medicine training (Storycraft Scale).
 
 After the learner finishes (or pauses) a case, write a **case story** — third-person oversight prose the learner reads like a short clinical episode, NOT a chart note or order list.
 
+${SPOKEN_ENGLISH_VOICE}
+
 Storycraft rules (mandatory):
-- **5 beats** mapped to chapters: Disruption → Embodiment → Escalation → Crisis point → Recontextualization
+- **Exactly 6 chapters** (ids c1–c6) — one per 2×3 storyboard panel: Disruption → Embodiment → Escalation → Crisis point → Mechanism turn → Recontextualization. Never return fewer than six chapters.
 - **Qualia:** at least one embodied sensory detail (cold floor, hollow stare, bruit under the stethoscope)
 - **Sequence logic:** each beat causes the next ("because" not "and then")
 - **Tellability:** one memorable true image or phrase tied to mechanism (e.g. scattered DWI specks = brain "peppered" with emboli for TIA)
 - **Title:** short, human; witty clinical pun OK if accurate (e.g. TIA/embolic case → "The Man Who Got Peppered" not generic "Altered Mental Status")
-- Third person. No bullet lists in chapter bodies. No "as an AI".
+- **Order channels:** acute/ABCs separate from prophylaxis and workup — do not collapse into one beat when learner flagged teaching moments or orders span channels.
+- **Laterality:** when case context locks injury side (e.g. right forearm bite), every chapter body and visualHint must keep the same side — never mirror to the opposite limb.
+- **ED visualHint framing:** crown through toes — patient's bare feet/toes visible at bottom frame edge on mattress (inspection gold). Mid-thigh crop without toes = FAIL.
 
 Return ONLY valid JSON:
 {
   "title": "short episode title",
   "synopsis": "2-3 sentences — emotional + clinical hook",
   "chapters": [
-    { "id": "c1", "heading": "Arrival", "body": "2-4 sentences third-person clinical prose", "visualHint": "third-person 3/4 oversight camera — location, action, props for THIS beat only" }
+    { "id": "c1", "heading": "Disruption", "body": "2-4 sentences third-person spoken prose — complete sentences, read-aloud natural", "visualHint": "smart camera for THIS beat only — MCU, wide 3/4, or close on finding; vary angle across the six chapters" }
   ],
   "masterImagePrompt": "One paragraph visual brief for third-person oversight still — patient likeness, distress, props — NO bird's-eye overhead",
   "patientLock": "age, sex, ethnicity, gown — likeness lock for image gen"
 }`;
 
-const THIRD_PERSON_CAMERA = `THIRD-PERSON OVERSIGHT CAMERA (mandatory):
+const THIRD_PERSON_CAMERA = `${CASE_STORY_INSPECTION_FRAMING_BLOCK}
+
+THIRD-PERSON OVERSIGHT CAMERA (mandatory):
 NOT bird's-eye 90° overhead — NOT camera standing directly above the patient.
 Clinician-height beside the bed (~1.4m), 3/4 angle from foot of stretcher looking toward head.
 Patient supine on ED stretcher, room depth visible — monitor upper-right, IV upper-left, both rails.
@@ -102,6 +130,18 @@ function formatSessionBlock(sessionContext = {}) {
     parts.push(`Teach Me standard flow: ${JSON.stringify(sessionContext.standardFlow).slice(0, 600)}`);
   }
 
+  const moments = sessionContext?.teachingMoments || [];
+  if (moments.length) {
+    parts.push(
+      `Learner-flagged teaching moments (MUST appear in story — mechanism beats, not footnotes):\n${moments
+        .map((m) => {
+          const head = m.orderLabel || m.prompt || 'Moment';
+          return `- ${head}: ${String(m.answer || '').slice(0, 420)}`;
+        })
+        .join('\n')}`,
+    );
+  }
+
   return parts.length ? parts.join('\n\n') : '(no session activity yet — use case HPI only)';
 }
 
@@ -110,9 +150,13 @@ export function buildCaseStoryNarrativePrompt({
   sessionContext = {},
   orders = [],
   medicalSequence = null,
+  characterLockMarkdown = '',
 } = {}) {
   const orderBlock = orders
-    .map((o, i) => `${i + 1}. ${o.label}${o.why ? ` — ${String(o.why).slice(0, 200)}` : ''}`)
+    .map(
+      (o, i) =>
+        `${i + 1}. [${o.teachingChannel || 'workup'}] ${o.label}${o.why ? ` — ${String(o.why).slice(0, 200)}` : ''}`,
+    )
     .join('\n');
 
   const placed = Array.isArray(sessionContext?.stacksPlaced)
@@ -120,6 +164,12 @@ export function buildCaseStoryNarrativePrompt({
     : '';
 
   const sessionBlock = formatSessionBlock(sessionContext);
+
+  const caseId = caseContext?.id ?? caseContext?.ccsNumber ?? '';
+  const mechanismBlock = buildMechanismTeachingPromptBlock(caseId);
+  const lateralityBlock = buildLateralityPromptBlock(
+    resolveLateralityLock({ caseId, caseContext, characterLockMarkdown }),
+  );
 
   return [
     {
@@ -134,6 +184,8 @@ Category: ${caseContext.category || '—'}
 Diagnosis: ${String(caseContext.diagnosis || caseContext.clinical_tip || '').slice(0, 400)}
 HPI: ${String(caseContext.hpiExcerpt || caseContext.clinical_hpi_narrative || caseContext.historyText || '').slice(0, 700)}
 Vitals: ${String(caseContext.vitalsText || JSON.stringify(caseContext.vitals || {})).slice(0, 200)}
+${mechanismBlock ? `\n${mechanismBlock}\n` : ''}
+${lateralityBlock ? `\n${lateralityBlock}\n` : ''}
 
 STANDARD FLOW ORDERS
 ${orderBlock || '(none)'}
@@ -159,16 +211,25 @@ export function buildCaseStoryMasterImagePrompt({
     || `${caseContext.title || 'ED patient'} on stretcher, clinical distress appropriate to presentation`;
   const lockSection = buildCharacterLockPromptSection(characterLockMarkdown);
   const clinicalBlock = buildClinicalAccuracyPromptBlock({ scene: 'ed' });
+  const lateralityBlock = buildLateralityPromptBlock(
+    resolveLateralityLock({ caseId: caseContext?.id, caseContext, characterLockMarkdown }),
+  );
+  const gameStyleBlock = `${getGameEngineStylizationPassPromptBlock()}\n\n${getGameSceneCameraLockPromptBlock()}`;
+  const likenessLine = lockSection.trim()
+    ? 'CHARACTER LOCK likeness mandatory — sepia caricature identity from white-bg map overrides chart age/ethnicity in prose.'
+    : `Patient lock: ${narrative.patientLock || portraitNote || 'match reference patient likeness exactly'}.`;
 
   return `${THIRD_PERSON_CAMERA}
 
 ${getForbiddenRenderStylePromptBlock()}
 
+${gameStyleBlock}
+
 ${clinicalBlock}
 
-${visual}
+${lateralityBlock ? `${lateralityBlock}\n\n` : ''}${visual}
 
-Patient lock: ${narrative.patientLock || portraitNote || 'match reference patient likeness exactly'}.
+${likenessLine}
 ${lockSection ? `\n${lockSection}\n` : ''}
 ${caseContext.category === 'Pediatrics' ? 'Pediatric body proportions — school-age child, NOT adult body.' : ''}
 ONLY the patient on the stretcher — no standing staff on the bed, no extra feet at frame bottom.
@@ -211,14 +272,21 @@ export function buildCaseStoryBeatImagePrompt({
     beatId,
     chapter,
   });
+  const lateralityBlock = buildLateralityPromptBlock(
+    resolveLateralityLock({ caseId: caseContext?.id, caseContext, characterLockMarkdown }),
+  );
+
+  const gameStyleBlock = `${getGameEngineStylizationPassPromptBlock()}\n\n${getGameSceneCameraLockPromptBlock()}`;
 
   return `${cameraBlock}
 
 ${getForbiddenRenderStylePromptBlock()}
 
+${gameStyleBlock}
+
 ${clinicalBlock}
 
-${homeBeat ? '' : `${COMPOSITION_VARIETY}\n\n`}STORYBOARD — "${heading}" (${beatId || 'beat'}): ${visual}
+${lateralityBlock ? `${lateralityBlock}\n\n` : ''}${homeBeat ? '' : `${COMPOSITION_VARIETY}\n\n`}STORYBOARD — "${heading}" (${beatId || 'beat'}): ${visual}
 
 FRAMING: ${composition}
 
@@ -227,6 +295,74 @@ ${lockSection ? `\n${lockSection}\n` : ''}
 ${caseContext.category === 'Pediatrics' ? 'Pediatric body proportions — school-age child, NOT adult body.' : ''}
 MeWorld sculptural ${homeBeat ? 'domestic' : 'clinical'} still — one frozen moment from this beat. Match master reference likeness exactly.
 ${homeBeat ? 'Home interior — no hospital equipment.' : 'ONLY the patient (and implied family in depth if beat requires) — no clinician standing on the bed.'}`;
+}
+
+const GRID_PLATE_CAMERA = `2×3 STORYBOARD GRID PLATE (single image — six equal panels, thin dark gutters between cells):
+- Layout: 2 rows × 3 columns reading left-to-right, top-to-bottom (panels numbered 1–6).
+- Same patient likeness in every panel — continuity lock across the grid.
+- Smart camera per panel — vary MCU, wide 3/4, over-shoulder, close on finding; NOT identical foot-of-bed angle on every cell. NOT bird's-eye overhead.
+- MeWorld sculptural CGI — muted clinical palette, tactile fabric/skin, NO comic ink outlines, NO photoreal stock photography.
+- NO paragraph text inside panels — optional tiny panel numbers 1–6 only.
+- Each panel is one frozen story beat — rule-of-thirds within each cell.`;
+
+/** One Magnific call — full session storyboard as 2×3 grid. */
+export function buildCaseStoryGridPlatePrompt({
+  chapters = [],
+  narrative = {},
+  caseContext = {},
+  portraitNote = '',
+  characterLockMarkdown = '',
+} = {}) {
+  const beats = (Array.isArray(chapters) ? chapters : []).slice(0, 6);
+  if (beats.length < 6) {
+    console.warn(`[case-story] Grid plate expects 6 chapters; got ${beats.length} — padding (regenerate narrative with prompt v${CASE_STORY_PROMPT_VERSION})`);
+  }
+  while (beats.length < 6) {
+    const i = beats.length;
+    beats.push({
+      id: `pad${i + 1}`,
+      heading: i === 5 ? 'Recontextualization' : 'Beat',
+      body: narrative.synopsis || 'Same patient — maintain likeness and ED bay continuity.',
+      visualHint: 'Same patient likeness — atmospheric bridge panel, no new characters',
+    });
+  }
+
+  const panelLines = beats.map((ch, i) => {
+    const hint = deriveChapterVisualHint(ch, {
+      patientLock: narrative.patientLock || portraitNote,
+      caseContext,
+    });
+    const heading = String(ch.heading || `Beat ${i + 1}`).trim();
+    return `Panel ${i + 1}: ${heading} — ${hint.slice(0, 220)}`;
+  });
+
+  const lockSection = buildCharacterLockPromptSection(characterLockMarkdown);
+  const clinicalBlock = buildClinicalAccuracyPromptBlock({ scene: 'ed' });
+  const lateralityBlock = buildLateralityPromptBlock(
+    resolveLateralityLock({ caseId: caseContext?.id, caseContext, characterLockMarkdown }),
+  );
+  const ped =
+    caseContext.category === 'Pediatrics' || /pediatric|child|drown/i.test(String(caseContext.category))
+      ? 'Pediatric body proportions — school-age child in every panel, NOT adult body.'
+      : '';
+
+  const gameStyleBlock = `${getGameEngineStylizationPassPromptBlock()}\n\n${getGameSceneCameraLockPromptBlock()}`;
+
+  return `${GRID_PLATE_CAMERA}
+
+${getForbiddenRenderStylePromptBlock()}
+
+${gameStyleBlock}
+
+${clinicalBlock}
+
+${lateralityBlock ? `${lateralityBlock}\n\n` : ''}${panelLines.join('\n')}
+
+Episode: ${narrative.title || caseContext.title || 'Case story'}.
+Patient lock: ${narrative.patientLock || portraitNote || 'match reference likeness exactly'}.
+${ped}
+${lockSection ? `\n${lockSection}\n` : ''}
+Render ONE image containing all six panels — cinematic case storyboard plate for MeWorld Case Story mode.`;
 }
 
 export function parseCaseStoryJson(raw) {

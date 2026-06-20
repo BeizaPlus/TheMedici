@@ -74,6 +74,8 @@ import {
 
 } from '../server/caseStoryCharacterLock.js';
 
+import { readCaseStoryCharacterMapBuffer } from '../server/caseStoryCharacterMap.js';
+
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -250,21 +252,109 @@ const saved = [];
 
 const skipped = [];
 
+const refLockMaster =
+
+  'MASTER IDENTITY MAP — match this patient exactly: hair, face, age, gown, skin. Change composition per beat only.';
+
+const refLockBeat =
+
+  'STORYBOARD BEAT — match master reference patient identity exactly. Vary camera position and rule-of-thirds framing only.';
 
 
-async function resolvePortraitReference() {
+
+async function resolvePortraitReference({ mode = 'master' } = {}) {
+
+  const charMap = await readCaseStoryCharacterMapBuffer(root, caseContext);
+
+  if (mode === 'master' && charMap) {
+
+    console.log(`Character map: ${charMap.file}`);
+
+    return {
+
+      imageBase64: charMap.imageBase64,
+
+      mimeType: charMap.mimeType,
+
+      referenceText:
+
+        'WHITE-BG CHARACTER MAP — master identity for case story. THIRD-PERSON 3/4 bedside — NOT bird-eye overhead.',
+
+      extraReferenceImages: [],
+
+    };
+
+  }
+
+
 
   if (cachedPortrait.exists) {
 
     const buf = await fsp.readFile(cachedPortrait.pngPath);
 
-    return { imageBase64: buf.toString('base64'), mimeType: 'image/png' };
+    const base = { imageBase64: buf.toString('base64'), mimeType: 'image/png' };
+
+    if (charMap) {
+
+      return {
+
+        ...base,
+
+        referenceText: refLockBeat,
+
+        extraReferenceImages: [
+
+          {
+
+            image: `data:image/png;base64,${charMap.imageBase64}`,
+
+            mime_type: 'image/png',
+
+            text: 'WHITE-BG CHARACTER MAP — likeness lock; preserve laterality from prompt.',
+
+          },
+
+        ],
+
+      };
+
+    }
+
+    return { ...base, referenceText: refLockBeat, extraReferenceImages: [] };
 
   }
 
+
+
   const plate = await readGenerationLayoutBuffer(root, caseContext);
 
-  return { imageBase64: plate.buffer.toString('base64'), mimeType: plate.mimeType };
+  return {
+
+    imageBase64: plate.buffer.toString('base64'),
+
+    mimeType: plate.mimeType,
+
+    referenceText: refLockMaster,
+
+    extraReferenceImages: charMap
+
+      ? [
+
+          {
+
+            image: `data:image/png;base64,${charMap.imageBase64}`,
+
+            mime_type: 'image/png',
+
+            text: 'WHITE-BG CHARACTER MAP — likeness lock.',
+
+          },
+
+        ]
+
+      : [],
+
+  };
 
 }
 
@@ -316,16 +406,6 @@ async function genAndSave(outPath, prompt, referenceText, { imageBase64, mimeTyp
 
 
 
-const refLockMaster =
-
-  'MASTER IDENTITY MAP — match this patient exactly: hair, face, age, gown, skin. Change composition per beat only.';
-
-const refLockBeat =
-
-  'STORYBOARD BEAT — match master reference patient identity exactly. Vary camera position and rule-of-thirds framing only.';
-
-
-
 if (!beatFilter && !beatsOnly) {
 
   const masterFile = caseStoryImagePath(cacheDir, caseId);
@@ -342,7 +422,7 @@ if (!beatFilter && !beatsOnly) {
 
   });
 
-  const portraitRef = await resolvePortraitReference();
+  const portraitRef = await resolvePortraitReference({ mode: 'master' });
 
   await genAndSave(
 
@@ -350,7 +430,7 @@ if (!beatFilter && !beatsOnly) {
 
     masterPrompt,
 
-    `${refLockMaster} THIRD-PERSON 3/4 bedside oversight — NOT bird-eye overhead.`,
+    portraitRef.referenceText || `${refLockMaster} THIRD-PERSON 3/4 bedside oversight — NOT bird-eye overhead.`,
 
     portraitRef,
 
@@ -376,7 +456,27 @@ if (!masterOnly) {
 
     beatImageBase64 = masterRef.buffer.toString('base64');
 
-    console.log(`Beat reference: ${path.basename(masterRef.path)} (character map)`);
+    console.log(`Beat reference: ${path.basename(masterRef.path)}`);
+
+    const charMap = await readCaseStoryCharacterMapBuffer(root, caseContext);
+
+    if (charMap) {
+
+      beatExtraRefs = [
+
+        {
+
+          image: `data:image/png;base64,${charMap.imageBase64}`,
+
+          mime_type: 'image/png',
+
+          text: 'WHITE-BG CHARACTER MAP — likeness lock; preserve laterality from prompt.',
+
+        },
+
+      ];
+
+    }
 
   } else {
 
@@ -387,28 +487,6 @@ if (!masterOnly) {
     beatImageBase64 = portraitRef.imageBase64;
 
     beatMimeType = portraitRef.mimeType;
-
-  }
-
-
-
-  if (cachedPortrait.exists && masterRef) {
-
-    const portraitBuf = await fsp.readFile(cachedPortrait.pngPath);
-
-    beatExtraRefs = [
-
-      {
-
-        image: `data:image/png;base64,${portraitBuf.toString('base64')}`,
-
-        mime_type: 'image/png',
-
-        text: 'Secondary likeness — master reference is primary identity lock',
-
-      },
-
-    ];
 
   }
 

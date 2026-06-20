@@ -34,6 +34,7 @@ export const DEFAULT_BEAT_COMPOSITION = {
   c3: 'Wide establishing — patient right-third, room depth and equipment visible',
   c4: 'Medium — patient lower third, foreground prop or rail occlusion for depth',
   c5: 'Wide with family or context in mid-background — patient upper-left third',
+  c6: 'MCU resolution — patient calmer, treatment implied, emotional beat — rule-of-thirds, not dead-center',
 };
 
 export function beatCompositionDirective(beatId, { lockMarkdown = '' } = {}) {

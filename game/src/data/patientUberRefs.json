@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Unique-face reference bank for Uber Cases (U01–U08). Source photos in dev/uber-portrait-refs/sources/. After MCP restart: Magnific character-map pass per slug → public/assets/patient/uber/.",
+  "description": "Unique-face reference bank for Uber Cases (U01–U13). Source photos in dev/uber-portrait-refs/sources/. After MCP restart: Magnific character-map pass per slug → public/assets/patient/uber/.",
   "assetBase": "/assets/patient/uber",
   "devSourceDir": "dev/uber-portrait-refs/sources",
   "sceneAspect": "16:9",
@@ -19,7 +19,15 @@
     "U05": "hijab-albino-freckles",
     "U06": "craniofacial-asymmetry-goatee",
     "U07": "nevus-speckled-laugh",
-    "U08": "subway-afro-dandy"
+    "U08": "subway-afro-dandy",
+    "U10": "vitiligo-wink-diastema",
+    "U11": "copper-afro-headwrap-africa",
+    "U12": "craniofacial-asymmetry-goatee",
+    "U13": "nevus-speckled-laugh",
+    "176": "subway-afro-dandy",
+    "086": "adpkd-long-nose-elder",
+    "153": "ngavu-yellow-party",
+    "166": "hemarthrosis-athlete-knee"
   },
   "bankSlugs": [
     "strongman-caricature-bank",
@@ -48,7 +56,10 @@
       "gameSceneStatus": "approved",
       "gameSceneAlt": "alt2-v2",
       "gameSceneShippedFrom": "hijab-albino-freckles-GAME-SCENE-alt2-v2-20260618-approved-pending-ship.png",
-      "gameSceneShippedAt": "2026-06-18"
+      "gameSceneShippedAt": "2026-06-18",
+      "gamePlaySceneFile": "hijab-albino-freckles-GAME-PLAY-SCENE.png",
+      "gamePlaySceneStatus": "approved",
+      "gamePlaySceneShippedFrom": "hijab-albino-freckles-GAME-SCENE-alt1.png"
     },
     "vitiligo-wink-diastema": {
       "sourceFile": "02-vitiligo-wink-diastema.png",
@@ -56,14 +67,18 @@
       "label": "Vitiligo · gap teeth · wink",
       "sex": "male",
       "uberCases": [
-        "U02"
+        "U02",
+        "U10"
       ],
       "identityPrompt": "Match likeness: young Black man, symmetric vitiligo patches around eyes and chin, gap between upper front teeth, short buzz cut, warm expression. Hospital gown on stretcher; preserve skin pattern and face.",
       "gameSceneFile": "vitiligo-wink-diastema-GAME-SCENE.png",
       "gameSceneStatus": "approved",
       "gameSceneAlt": "alt2",
       "gameSceneShippedFrom": "vitiligo-wink-diastema-GAME-SCENE-alt2-approved-pending-ship.png",
-      "gameSceneShippedAt": "2026-06-18"
+      "gameSceneShippedAt": "2026-06-18",
+      "gamePlaySceneFile": "vitiligo-wink-diastema-GAME-PLAY-SCENE.png",
+      "gamePlaySceneStatus": "approved",
+      "gamePlaySceneShippedFrom": "vitiligo-wink-diastema-GAME-SCENE-alt1.png"
     },
     "nevus-speckled-laugh": {
       "sourceFile": "03-nevus-speckled-laugh.png",
@@ -71,14 +86,18 @@
       "label": "Speckled pigmentation · joyful",
       "sex": "female",
       "uberCases": [
-        "U07"
+        "U07",
+        "U13"
       ],
       "identityPrompt": "Match likeness: person with extensive speckled pigmentation on face and scalp, joyful closed-eye smile, purple knit top replaced by hospital gown. Memorable dermatology-training face — dignified, not caricature.",
       "gameSceneFile": "nevus-speckled-laugh-GAME-SCENE.png",
       "gameSceneStatus": "approved",
       "gameSceneAlt": "alt2-anamorphic-v2",
       "gameSceneShippedFrom": "nevus-speckled-laugh-GAME-SCENE-alt2-anamorphic-v2-20260618-approved-pending-ship.png",
-      "gameSceneShippedAt": "2026-06-18"
+      "gameSceneShippedAt": "2026-06-18",
+      "gamePlaySceneFile": "nevus-speckled-laugh-GAME-PLAY-SCENE.png",
+      "gamePlaySceneStatus": "approved",
+      "gamePlaySceneShippedFrom": "nevus-speckled-laugh-GAME-SCENE-alt1.png"
     },
     "albino-male-freckles-profile": {
       "sourceFile": "04-albino-male-freckles-profile.png",
@@ -93,7 +112,10 @@
       "gameSceneStatus": "approved",
       "gameSceneAlt": "alt2",
       "gameSceneShippedFrom": "albino-male-freckles-profile-GAME-SCENE-alt2-approved-pending-ship.png",
-      "gameSceneShippedAt": "2026-06-18"
+      "gameSceneShippedAt": "2026-06-18",
+      "gamePlaySceneFile": "albino-male-freckles-profile-GAME-PLAY-SCENE.png",
+      "gamePlaySceneStatus": "approved",
+      "gamePlaySceneShippedFrom": "albino-male-freckles-profile-GAME-SCENE-alt1.png"
     },
     "craniofacial-asymmetry-goatee": {
       "sourceFile": "07-craniofacial-asymmetry-goatee.png",
@@ -104,11 +126,15 @@
       "label": "Craniofacial asymmetry · goatee",
       "sex": "male",
       "uberCases": [
-        "U06"
+        "U06",
+        "U12"
       ],
       "identityPrompt": "Match likeness: older man with pronounced facial asymmetry, bulbous nose, white goatee, fair skin. Respectful clinical portrait on ED stretcher — same asymmetry and grooming.",
       "gameSceneShippedFrom": "craniofacial-asymmetry-goatee-GAME-SCENE-alt2-approved-pending-ship.png",
-      "gameSceneShippedAt": "2026-06-18"
+      "gameSceneShippedAt": "2026-06-18",
+      "gamePlaySceneFile": "craniofacial-asymmetry-goatee-GAME-PLAY-SCENE.png",
+      "gamePlaySceneStatus": "approved",
+      "gamePlaySceneShippedFrom": "craniofacial-asymmetry-goatee-GAME-SCENE-alt1.png"
     },
     "copper-afro-headwrap-africa": {
       "sourceFile": "14-copper-afro-headwrap-africa.png",
@@ -116,14 +142,18 @@
       "label": "Copper afro · headwrap · Africa pendant",
       "sex": "female",
       "uberCases": [
-        "U01"
+        "U01",
+        "U11"
       ],
       "identityPrompt": "Match likeness: Black woman, voluminous copper-red afro, patterned green headwrap, gold Africa-map pendant, freckles, nose ring. Hospital gown; preserve afro silhouette and jewelry unless brief omits.",
       "gameSceneFile": "copper-afro-headwrap-africa-GAME-SCENE.png",
       "gameSceneStatus": "approved",
       "gameSceneAlt": "alt2-3d-v3",
       "gameSceneShippedFrom": "copper-afro-headwrap-africa-GAME-SCENE-alt2-3d-v3-20260618-approved-pending-ship.png",
-      "gameSceneShippedAt": "2026-06-18"
+      "gameSceneShippedAt": "2026-06-18",
+      "gamePlaySceneFile": "copper-afro-headwrap-africa-GAME-PLAY-SCENE.png",
+      "gamePlaySceneStatus": "approved",
+      "gamePlaySceneShippedFrom": "copper-afro-headwrap-africa-GAME-SCENE-alt1.png"
     },
     "subway-afro-dandy": {
       "sourceFile": "12-subway-afro-dandy.png",
@@ -133,12 +163,57 @@
       "uberCases": [
         "U08"
       ],
+      "catalogCases": [
+        "176"
+      ],
       "identityPrompt": "Match likeness: young Black man, large heart-shaped afro, patterned vintage shirt replaced by hospital gown, gold ascot omitted, calm direct gaze. Memorable psychiatry-training presence.",
       "gameSceneFile": "subway-afro-dandy-GAME-SCENE.png",
       "gameSceneStatus": "approved",
+      "gamePlaySceneFile": "subway-afro-dandy-GAME-PLAY-SCENE.png",
+      "gamePlaySceneStatus": "approved",
       "gameSceneAlt": "alt1",
-      "gameSceneShippedFrom": "subway-afro-dandy-GAME-SCENE-alt1-approved-pending-ship.png",
+      "gamePlaySceneShippedFrom": "subway-afro-dandy-GAME-SCENE-alt1-approved-pending-ship.png",
       "gameSceneShippedAt": "2026-06-18"
+    },
+    "adpkd-long-nose-elder": {
+      "sourceFile": "16-adpkd-long-nose-elder-caricature-ref.png",
+      "mapFile": "adpkd-long-nose-elder-CHARACTER-MAP.png",
+      "label": "ADPKD case 086 · sepia caricature elder",
+      "sex": "male",
+      "catalogCases": [
+        "086"
+      ],
+      "identityPrompt": "Match likeness: elderly man, sepia editorial caricature sketch — enormous protruding ear, long bulbous hooked nose, thick lower lip, deep forehead wrinkles, round thick-rim glasses, checkered shirt with cross-hatch ink. Memorable nephrology-training face for case 086 ADPKD; dignified game caricature on white background.",
+      "characterMapStatus": "approved",
+      "characterMapShippedFrom": "adpkd-long-nose-elder-CHARACTER-MAP-alt2-caricature.png",
+      "characterMapShippedAt": "2026-06-19",
+      "status": "approved"
+    },
+    "ngavu-yellow-party": {
+      "sourceFile": "17-ngavu-yellow-jacket-party.png",
+      "mapFile": "ngavu-yellow-party-CHARACTER-MAP.png",
+      "label": "N'Gavu · yellow jacket · village party PCT",
+      "sex": "male",
+      "catalogCases": [
+        "153"
+      ],
+      "identityPrompt": "Match likeness: N'Gavu — young Black man, mustard-yellow textured party jacket (hospital gown in ED), thin mustache, tired bloodshot eyes, direct gaze. Village party backstory — beer bottles as patient property on bedside table; mustard-yellow shirt draped on chair beside stretcher. Blistered dorsal hands and forearms, fragile photosensitive skin on sun-exposed areas. MeWorld sculptural CGI — dignified clinical training portrait, NOT photoreal stock.",
+      "characterMapStatus": "approved",
+      "characterMapShippedFrom": "17-ngavu-yellow-jacket-party.png",
+      "characterMapShippedAt": "2026-06-19",
+      "status": "approved"
+    },
+    "hemarthrosis-athlete-knee": {
+      "sourceFile": "19-hemarthrosis-athlete-knee.png",
+      "mapFile": "hemarthrosis-athlete-knee-CHARACTER-MAP.png",
+      "label": "Athlete · hemarthrosis knee · case 166",
+      "sex": "male",
+      "catalogCases": [
+        "166"
+      ],
+      "identityPrompt": "Match likeness: young athletic Black man, shaved head, anguished expression clutching swollen knee — hemarthrosis athlete reference. Hospital gown on ED stretcher; swollen right knee, prior surgical scar optional. MeWorld sculptural CGI clinical still — dignified training portrait, NOT photoreal meme.",
+      "characterMapStatus": "pending-approval",
+      "status": "approved-pending-map"
     },
     "strongman-caricature-bank": {
       "sourceFile": "05-strongman-caricature-bank.png",
