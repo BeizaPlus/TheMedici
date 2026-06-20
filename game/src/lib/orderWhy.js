@@ -18,6 +18,16 @@ function memKey(caseId, orderId) {
   return `${caseId}::${orderId}`;
 }
 
+/** Drop cached first-opinion entries when attending depth changes (playbook may have been stored at wrong depth). */
+export function clearFirstOpinionMemoryForCase(caseId) {
+  const cid = normalizeCaseId(caseId);
+  if (!cid) return;
+  const prefix = `${cid}::`;
+  for (const key of memory.keys()) {
+    if (key.startsWith(prefix) && !key.includes('__peer__')) memory.delete(key);
+  }
+}
+
 function normalizeCaseId(caseId) {
   const raw = String(caseId ?? '').trim();
   return /^\d+$/.test(raw) ? raw.padStart(3, '0') : raw;
@@ -76,15 +86,18 @@ export async function fetchOrderWhy({
         return { why: local, cached: true, source: 'local' };
       }
 
-      const bundled = readPlaybookWhy(cid, oid);
-      const fallback = String(bundled || playbookWhy || '').trim();
-      if (fallback) {
-        memory.set(memKey(cid, cacheKey), fallback);
-        return {
-          why: fallback,
-          cached: true,
-          source: bundled ? 'playbook-bundle' : 'playbook',
-        };
+      // Brief (depth 0) may use shipped playbook one-liner; deeper settings need API expansion.
+      if (firstDepthIdx === 0) {
+        const bundled = readPlaybookWhy(cid, oid);
+        const fallback = String(bundled || playbookWhy || '').trim();
+        if (fallback) {
+          memory.set(memKey(cid, cacheKey), fallback);
+          return {
+            why: fallback,
+            cached: true,
+            source: bundled ? 'playbook-bundle' : 'playbook',
+          };
+        }
       }
     }
   }

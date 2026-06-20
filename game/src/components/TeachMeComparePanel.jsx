@@ -3,7 +3,7 @@ import { buildBareEssentialsRows, groupTeachCompareRowsByTier, ORDER_TIER_META }
 import { getCaseDifferentials } from '../lib/caseDifferentials.js';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 import { buildTeachCompareRows, teachCompareStatusLabel } from '../lib/teachMeCompare.js';
-import { fetchOrderWhy } from '../lib/orderWhy.js';
+import { fetchOrderWhy, clearFirstOpinionMemoryForCase } from '../lib/orderWhy.js';
 import { LOCKED_SECOND_OPINION_DEPTH } from '../lib/secondOpinionPrefs.js';
 import { FIRST_OPINION_DEPTH_EVENT, useFirstOpinionDepth } from './FirstOpinionDepthControl.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
@@ -130,12 +130,13 @@ export default function TeachMeComparePanel({
 
   useEffect(() => {
     const onDepth = () => {
+      if (caseId) clearFirstOpinionMemoryForCase(caseId);
       setWhyByOrder({});
       autoReadOrderIdsRef.current = new Set();
     };
     window.addEventListener(FIRST_OPINION_DEPTH_EVENT, onDepth);
     return () => window.removeEventListener(FIRST_OPINION_DEPTH_EVENT, onDepth);
-  }, []);
+  }, [caseId]);
 
   useEffect(() => {
     if (!teachFocusId || !caseId || !focusedRow) return undefined;
@@ -144,9 +145,6 @@ export default function TeachMeComparePanel({
     const hasPlaybook =
       playbookWhy && playbookWhy !== 'No rationale available yet.';
     const pk = primaryKey(teachFocusId);
-    if (!whyByOrder[pk] && hasPlaybook) {
-      setWhyByOrder((prev) => ({ ...prev, [pk]: playbookWhy }));
-    }
 
     if (whyByOrder[pk]) return undefined;
 
@@ -168,7 +166,7 @@ export default function TeachMeComparePanel({
       })
       .catch((e) => {
         if (!cancelled) {
-          if (hasPlaybook) {
+          if (hasPlaybook && firstOpinionDepth === 0) {
             setWhyByOrder((prev) => ({ ...prev, [pk]: playbookWhy }));
           } else {
             setWhyError(String(e.message || e));
@@ -187,7 +185,7 @@ export default function TeachMeComparePanel({
   useEffect(() => () => stopCaseReader(), []);
 
   const primaryWhy =
-    (teachFocusId && (whyByOrder[primaryKey(teachFocusId)] || focusedRow?.why)) || '';
+    (teachFocusId && whyByOrder[primaryKey(teachFocusId)]) || '';
   const peerKey = teachFocusId ? peerKeyFor(teachFocusId) : '';
   const peerWhy = (peerKey && peerByOrder[peerKey]) || '';
 
@@ -209,9 +207,7 @@ export default function TeachMeComparePanel({
 
   useEffect(() => {
     if (!teachFocusId || !caseId || whyLoading === teachFocusId) return undefined;
-    const text = String(
-      whyByOrder[primaryKey(teachFocusId)] || focusedRow?.why || '',
-    ).trim();
+    const text = String(whyByOrder[primaryKey(teachFocusId)] || '').trim();
     if (!text || text === 'No rationale available yet.') return undefined;
     let cancelled = false;
     void playAttendingVoice(teachFocusId, text).then(() => {
@@ -220,7 +216,7 @@ export default function TeachMeComparePanel({
     return () => {
       cancelled = true;
     };
-  }, [teachFocusId, caseId, whyByOrder, whyLoading, focusedRow?.why, playAttendingVoice, primaryKey]);
+  }, [teachFocusId, caseId, whyByOrder, whyLoading, playAttendingVoice, primaryKey]);
 
   const handleListen = useCallback(
     async (event, row) => {
