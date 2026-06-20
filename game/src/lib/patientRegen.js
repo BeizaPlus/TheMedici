@@ -1,3 +1,4 @@
+import { resolvePatientUberRef } from './resolvePatientUberRef.js';
 import { buildCaseChatContext, writeCasePortraitPersona } from './caseChat.js';
 import { loadPersistedChatHistory } from './caseUserLog.js';
 import {
@@ -126,6 +127,7 @@ export async function fetchCasePortraitStatus(caseId) {
         cachedAt: data.cachedAt || null,
         sourceVideo: data.sourceVideo || null,
         patientSex: data.patientSex || null,
+        uberRefSlug: data.uberRefSlug || null,
         ladyRefSlug: data.ladyRefSlug || null,
         portraitFrameVersion: data.portraitFrameVersion || 1,
         portraitLayersVersion: data.portraitLayersVersion || 0,
@@ -143,6 +145,7 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
   if (!caseId) return null;
 
   const expectedSex = inferPatientSex(caseData);
+  const expectedUber = caseData?.uberFaceSlug || resolvePatientUberRef(caseData)?.slug || null;
   const expectedSceneKey = resolvePatientSceneKey(caseData);
   const MIN_PORTRAIT_FRAME_VERSION = 3;
 
@@ -160,6 +163,8 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
     const status = await fetchCasePortraitStatus(caseId);
     if (status.exists && status.url) {
       if (status.patientSex && status.patientSex !== expectedSex) {
+        clearCaseRegenImage(caseId);
+      } else if (expectedUber && status.uberRefSlug !== expectedUber) {
         clearCaseRegenImage(caseId);
       } else if (
         status.portraitFrameVersion != null

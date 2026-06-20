@@ -19,6 +19,7 @@ import {
   fitToBaseplate,
 } from './portraitFrame.js';
 import { generateImageEditWithMagnific, magnificApiKey } from './magnificImage.js';
+import { readCaseStoryCharacterMapBuffer } from './caseStoryCharacterMap.js';
 import {
   FORBIDDEN_COMPOSITION,
   getCaseInspectionPhilosophyPromptBlock,
@@ -29,12 +30,13 @@ import {
   getGameScenePromptBlock,
   getHospitalWardrobePrompt,
   getLandscapeFramePrompt,
-} from '../src/lib/sceneCameraLock.js';
+} from '../src/lib/sceneCameraLock.server.js';
 import {
   buildSceneElementPromptBlock,
   sceneElementIdsForPortrait,
 } from './sceneElementRegistry.js';
 import { buildClinicalAccuracyPromptBlock } from './clinicalAccuracyRules.js';
+import { isCasePortraitBanned } from './bannedCasePortraits.js';
 export { resolvePortraitSex };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -380,7 +382,7 @@ ${director.pose ? `Pose: ${director.pose}` : 'Supine on ED stretcher unless sess
 Do not add diagnosis text labels or watermarks.`
       : '';
 
-  const useGameSceneLock = Boolean(uberRef);
+  const useGameSceneLock = Boolean(uberRef?.gameSceneUrl || uberRef?.gameSceneFile);
   const frameBlock = useGameSceneLock ? GAME_SCENE_LANDSCAPE_FRAME : LANDSCAPE_FRAME;
   const cameraLockBlock = useGameSceneLock
     ? getGameScenePromptBlock({ includeOptics: true, includeInspection: false })
@@ -477,6 +479,9 @@ export function buildPortraitAnalysis(caseContext = {}, persona = null) {
 export async function readPortraitCache(portraitDir, caseId) {
   const fileName = portraitFileName(caseId);
   if (!fileName) return { exists: false, fileName: null, meta: null };
+  if (isCasePortraitBanned(caseId)) {
+    return { exists: false, fileName, pngPath: path.join(portraitDir, fileName), meta: null, banned: true };
+  }
   const pngPath = path.join(portraitDir, fileName);
   const metaPath = path.join(portraitDir, fileName.replace(/\.png$/i, '.json'));
   try {
@@ -528,7 +533,21 @@ export function buildPortraitMeta(caseContext = {}) {
     ladyRefUrl: ladyRef?.publicUrl || null,
   };
 }
-async function generatePortraitWithMagnific({ imageBase64, mimeType, prompt }) {
+/** Magnific extra refs — uber CHARACTER-MAP when no shipped GAME-SCENE yet. */
+export async function buildPortraitMagnificExtras(gameRoot, caseContext = {}) {
+  const characterMap = await readCaseStoryCharacterMapBuffer(gameRoot, caseContext);
+  if (!characterMap?.imageBase64) return [];
+  return [
+    {
+      image: `data:image/png;base64,${characterMap.imageBase64}`,
+      mime_type: 'image/png',
+      text:
+        'WHITE-BG CHARACTER MAP — match face, hair, age, skin tone, ethnicity, and likeness exactly in the ED scene.',
+    },
+  ];
+}
+
+async function generatePortraitWithMagnific({ imageBase64, mimeType, prompt, extraReferenceImages = [] }) {
   const buf = await generateImageEditWithMagnific({
     imageBase64,
     mimeType,
@@ -536,6 +555,7 @@ async function generatePortraitWithMagnific({ imageBase64, mimeType, prompt }) {
     aspectRatio: PORTRAIT_ASPECT,
     resolution: process.env.MAGNIFIC_PORTRAIT_RESOLUTION || '2K',
     referenceText: getGameSceneMagnificReferenceText(),
+    extraReferenceImages,
   });
   const fitted = await fitToBaseplate(buf);
   return bufferToBase64(fitted);
@@ -575,7 +595,13 @@ async function generatePortraitWithFal({ imageBase64, mimeType, prompt }) {
 }
 
 /** Magnific Nano Banana Pro first; legacy fal fallback when Magnific fails or is unset. */
-export async function generatePortraitWithFallback(opts) {
+export async function generatePortraitWithFallback({
+  imageBase64,
+  mimeType,
+  prompt,
+  extraReferenceImages = [],
+} = {}) {
+  const opts = { imageBase64, mimeType, prompt, extraReferenceImages };
   if (magnificApiKey()) {
     try {
       return { b64: await generatePortraitWithMagnific(opts), provider: 'magnific' };
