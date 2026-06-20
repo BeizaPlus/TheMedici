@@ -119,6 +119,10 @@ What else would you expect to see if the ammonia is high enough to produce aster
 ## Integration Notes for Cursor
 
 - This skill defines the **system prompt voice** for the Immersa AI attendant
+- **Architecture checklist:** `docs/BRILLIANT_ATTENDING_ARCHITECTURE.md` (touchpoints, voice locks, file index)
+- **First opinion vs second opinion (Teach Me):**
+  - **First opinion** (`IMMERSA_FIRST_OPINION_VOICE`): interconnected first-principles arc — 4–8 sentences, mechanism chains
+  - **Second opinion** (`IMMERSA_SECOND_OPINION_VOICE`): brief punch — 2–4 sentences max (gold: FVIII / hemarthrosis example)
 - Paste this content as the system prompt for any attendant API call
 - The model should be `claude-sonnet-4-6` or higher
 - Combine with case-specific context: patient data, vitals, lab values, working diagnosis

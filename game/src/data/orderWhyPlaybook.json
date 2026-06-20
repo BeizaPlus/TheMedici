@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-06-19T01:48:43.337Z",
+  "builtAt": "2026-06-19T19:15:01.739Z",
   "cases": {
     "100": {
       "physical-exam-pelvic": {
@@ -414,32 +414,32 @@
     },
     "113": {
       "abcs-oxygen-airway": {
-        "why": "Intubate if hypoxic, unable to protect airway.",
+        "why": "Submersion stops gas exchange — hypoxia drives brain injury. Restore oxygenation and protect the airway before surfactant washout and cerebral hypoxia compound.",
         "orderLabel": "ABCs / Oxygen / Airway",
         "source": "playbook"
       },
       "c-spine-precautions": {
-        "why": "If diving mechanism.",
+        "why": "Feet-first jump into shallow water transmits axial load through the cervical spine at impact — collar and inline stabilization prevent secondary cord injury if vertebrae were fractured at entry.",
         "orderLabel": "C-spine precautions",
         "source": "playbook"
       },
       "cxr": {
-        "why": "Pulmonary edema, aspiration.",
+        "why": "Aspiration and surfactant loss after submersion produce infiltrates and non-cardiogenic pulmonary edema — the CXR shows the pulmonary consequence of the drowning phase.",
         "orderLabel": "CXR",
         "source": "playbook"
       },
       "abg": {
-        "why": "Assess oxygenation.",
+        "why": "Quantifies hypoxemia and ventilation-perfusion mismatch after aspiration.",
         "orderLabel": "ABG",
         "source": "playbook"
       },
       "rewarming-if-hypothermic": {
-        "why": "Passive or active rewarming.",
+        "why": "Cold lake water drops core temperature — rewarming treats thermodynamic stress that worsens perfusion and coagulation.",
         "orderLabel": "Rewarming (if hypothermic)",
         "source": "playbook"
       },
       "observation-all-victims": {
-        "why": "Can deteriorate hours later. Admit.",
+        "why": "Delayed pulmonary edema can appear after a lucid interval — lung injury from surfactant loss continues even when the child looks better.",
         "orderLabel": "Observation (all victims)",
         "source": "playbook"
       }
@@ -556,9 +556,14 @@
         "orderLabel": "IV access ×2",
         "source": "playbook"
       },
-      "order-time-sensitive-interventions-first": {
-        "why": "Stabilizing the patient's vital signs is crucial in managing chest pain cases.",
-        "orderLabel": "order: time-sensitive interventions first",
+      "iv-access": {
+        "why": "Vascular access for fluids and meds during the acute phase.",
+        "orderLabel": "IV access",
+        "source": "playbook"
+      },
+      "fingerstick-glucose": {
+        "why": "Reversible hypoglycemia must be excluded early in acute presentations.",
+        "orderLabel": "Fingerstick glucose",
         "source": "playbook"
       }
     },
@@ -1629,27 +1634,27 @@
     },
     "153": {
       "urine-porphyrins": {
-        "why": "Elevated uroporphyrins.",
+        "why": "Porphyrins keep building in the skin until you measure them — elevated uroporphyrins confirm the photosensitive pathway.",
         "orderLabel": "Urine porphyrins",
         "source": "playbook"
       },
       "plasma-porphyrins": {
-        "why": "Peak at 620nm — diagnostic.",
+        "why": "Circulating porphyrin peak at 620 nm locks the diagnosis when urine is equivocal.",
         "orderLabel": "Plasma porphyrins",
         "source": "playbook"
       },
       "hcv-hiv-iron-studies": {
-        "why": "Screen for PCT triggers.",
+        "why": "Acquired PCT is often triggered by alcohol, iron overload, or silent hepatitis — the rash is not the whole story.",
         "orderLabel": "HCV / HIV / Iron studies",
         "source": "playbook"
       },
       "phlebotomy": {
-        "why": "First-line. Target ferritin low-normal.",
+        "why": "First-line when iron overload is driving the process — target ferritin low-normal.",
         "orderLabel": "Phlebotomy",
         "source": "playbook"
       },
       "sun-protection-avoid-alcohol": {
-        "why": "Photosensitivity management.",
+        "why": "Sunlight activates porphyrins in skin; alcohol keeps the trigger running — both must stop.",
         "orderLabel": "Sun protection / Avoid alcohol",
         "source": "playbook"
       }
@@ -1915,28 +1920,48 @@
     },
     "166": {
       "pt-ptt-platelets": {
-        "why": "PTT prolonged, PT normal, Plt normal.",
+        "why": "PTT prolonged, PT normal, Plt normal — isolated intrinsic pathway defect before you commit to factor replacement.",
         "orderLabel": "PT/PTT / Platelets",
         "source": "playbook"
       },
       "mixing-study": {
-        "why": "PTT corrects — excludes inhibitor.",
+        "why": "PTT corrects — excludes inhibitor; if it fails to correct, think acquired inhibitor not classic hemophilia A.",
         "orderLabel": "Mixing study",
         "source": "playbook"
       },
       "factor-viii-assay": {
-        "why": "Low FVIII — confirms diagnosis.",
+        "why": "Low FVIII activity confirms hemophilia A and guides severity.",
         "orderLabel": "Factor VIII assay",
         "source": "playbook"
       },
-      "factor-viii-concentrate-ddavp": {
-        "why": "Replacement or desmopressin for mild.",
-        "orderLabel": "Factor VIII concentrate / DDAVP",
+      "factor-viii-concentrate": {
+        "why": "Definitive hemostasis for active hemarthrosis — replace what the joint cannot clot without.",
+        "orderLabel": "Factor VIII concentrate",
         "source": "playbook"
       },
-      "avoid-asa-nsaids-im-injections": {
-        "why": "Bleeding precautions.",
-        "orderLabel": "Avoid ASA/NSAIDs/IM injections",
+      "ddavp-mild-hemophilia-a": {
+        "why": "Mild disease may respond to desmopressin releasing stored VIII and vWF — not enough alone for severe bleed.",
+        "orderLabel": "DDAVP (mild hemophilia A)",
+        "source": "playbook"
+      },
+      "avoid-nsaids": {
+        "why": "Antiplatelet effect worsens bleeding — acetaminophen only for pain.",
+        "orderLabel": "Avoid NSAIDs",
+        "source": "playbook"
+      },
+      "avoid-im-injections": {
+        "why": "Intramuscular hematoma risk — IV and PO routes only.",
+        "orderLabel": "Avoid IM injections",
+        "source": "playbook"
+      },
+      "physical-exam-extremities-joints": {
+        "why": "Document swollen painful knee, range of motion, and prior hemarthrosis sites — exam drives urgency of factor.",
+        "orderLabel": "Physical exam: extremities / joints",
+        "source": "playbook"
+      },
+      "supportive-care-rice-joint-immobilizatio": {
+        "why": "Rest, ice, compression, elevation, and splint while factor works — protects cartilage from repeat bleed.",
+        "orderLabel": "Supportive care (RICE, joint immobilization)",
         "source": "playbook"
       }
     },
@@ -2325,8 +2350,13 @@
     },
     "176": {
       "stabilize-the-patient-ensure-airway-brea": {
-        "why": "Appropriate CCS order for Rabies, Cellulitis, Tetanus: Stabilize the patient: ensure airway, breathing, and circulatory status; administer tetanus prophylaxis if needed.",
-        "orderLabel": "Stabilize the patient: ensure airway, breathing, and circulatory status; administer tetanus prophylaxis if needed",
+        "why": "Primary survey — airway, breathing, circulation before wound-specific care.",
+        "orderLabel": "Stabilize the patient: ensure airway, breathing, and circulatory status",
+        "source": "playbook"
+      },
+      "administer-tetanus-prophylaxis-if-needed": {
+        "why": "Wound prophylaxis channel — separate from ABC stabilization; both required for animal bites.",
+        "orderLabel": "Administer tetanus prophylaxis if needed",
         "source": "playbook"
       },
       "obtain-a-complete-blood-count-cbc-and-se": {
@@ -2393,9 +2423,14 @@
         "orderLabel": "Oxygen",
         "source": "playbook"
       },
-      "order-order-time-sensitive-interventions": {
-        "why": "As mentioned in 'How to Use It on Exam Day', immediate action includes ordering oxygen, setting up IV access, and checking glucose levels.",
-        "orderLabel": "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)",
+      "iv-access": {
+        "why": "Vascular access for fluids and meds during the acute phase.",
+        "orderLabel": "IV access",
+        "source": "playbook"
+      },
+      "fingerstick-glucose": {
+        "why": "Reversible hypoglycemia must be excluded early in acute presentations.",
+        "orderLabel": "Fingerstick glucose",
         "source": "playbook"
       }
     },
@@ -2440,9 +2475,14 @@
         "orderLabel": "Oxygen",
         "source": "playbook"
       },
-      "order-order-time-sensitive-interventions": {
-        "why": "IV access is crucial for administering fluids, medications, and blood products if needed. A glucose check can help rule out diabetes as a potential cause of the abdominal pain.",
-        "orderLabel": "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)",
+      "iv-access": {
+        "why": "Vascular access for fluids and meds during the acute phase.",
+        "orderLabel": "IV access",
+        "source": "playbook"
+      },
+      "fingerstick-glucose": {
+        "why": "Reversible hypoglycemia must be excluded early in acute presentations.",
+        "orderLabel": "Fingerstick glucose",
         "source": "playbook"
       }
     },
@@ -2497,6 +2537,186 @@
       "adenotonsillectomy-cpap": {
         "why": "Treat underlying OSA → enuresis resolves.",
         "orderLabel": "Adenotonsillectomy / CPAP",
+        "source": "playbook"
+      }
+    },
+    "192": {
+      "gad-7-anxiety-screening-child-appropriat": {
+        "why": "Quantify worry severity and track response — use developmentally appropriate anxiety screen alongside clinical interview.",
+        "orderLabel": "GAD-7 / anxiety screening (child-appropriate)",
+        "source": "playbook"
+      },
+      "tsh-basic-metabolic-panel": {
+        "why": "Morning stomachaches and restlessness can reflect hyperthyroidism or anemia — rule out medical drivers before anchoring on anxiety.",
+        "orderLabel": "TSH / basic metabolic panel",
+        "source": "playbook"
+      },
+      "cbt-psychotherapy-referral": {
+        "why": "First-line for pediatric GAD — exposure for school refusal, cognitive restructuring for catastrophizing about peer judgment.",
+        "orderLabel": "CBT / psychotherapy referral",
+        "source": "playbook"
+      },
+      "school-psychologist-504-coordination": {
+        "why": "School refusal needs coordinated return-to-school plan, accommodations, and teacher communication — not home isolation.",
+        "orderLabel": "School psychologist / 504 coordination",
+        "source": "playbook"
+      },
+      "ssri-consideration-sertraline-fluoxetine": {
+        "why": "Stepped care when psychotherapy alone is insufficient — sertraline or fluoxetine are first-line SSRIs for child GAD; monitor activation and suicidality early.",
+        "orderLabel": "SSRI consideration (sertraline / fluoxetine)",
+        "source": "playbook"
+      },
+      "sleep-hygiene-nightmare-screen": {
+        "why": "Sleep-onset worry and bad dreams perpetuate daytime irritability and concentration problems — screen for nightmare disorder and coach sleep routine.",
+        "orderLabel": "Sleep hygiene / nightmare screen",
+        "source": "playbook"
+      },
+      "safety-assessment": {
+        "why": "No acute suicidal ideation reported, but document safety, protective factors, and family psychiatric history — mother with depression raises genetic and modeling risk.",
+        "orderLabel": "Safety assessment",
+        "source": "playbook"
+      }
+    },
+    "193": {
+      "phq-9-safety-assessment-suicide-screen": {
+        "why": "Quantify depression severity and document passive death wishes — mandatory before disposition in young adult with mood crash.",
+        "orderLabel": "PHQ-9 / safety assessment (suicide screen)",
+        "source": "playbook"
+      },
+      "tsh-bmp-tox-screen-urine-drug-screen": {
+        "why": "Rule out hyperthyroidism, stimulant use, and metabolic mimics before anchoring on primary mood disorder.",
+        "orderLabel": "TSH / BMP / tox screen / urine drug screen",
+        "source": "playbook"
+      },
+      "mood-stabilizer-lithium-valproate": {
+        "why": "Family history of bipolar and prior manic behavior ( sleepless spending spree ) — mood stabilizer is backbone therapy, not antidepressant alone.",
+        "orderLabel": "Mood stabilizer (lithium / valproate)",
+        "source": "playbook"
+      },
+      "avoid-antidepressant-monotherapy-in-bipo": {
+        "why": "Classic bipolar trap: antidepressant without stabilizer can precipitate mania or rapid cycling — teach mechanism before prescribing.",
+        "orderLabel": "Avoid antidepressant monotherapy in bipolar",
+        "source": "playbook"
+      },
+      "ecg-chest-pain-rule-out-panic-vs-cardiac": {
+        "why": "Last week's ED visit for chest tightness may reflect panic physiology — still obtain ECG and risk-stratify; panic disorder often overlaps mood disorders.",
+        "orderLabel": "ECG + chest pain rule-out (panic vs cardiac)",
+        "source": "playbook"
+      },
+      "lithium-level-renal-thyroid-monitoring-p": {
+        "why": "If lithium chosen, plan levels 0.6–1.0 mEq/L, baseline renal function, and TSH — teaching beat for long-term bipolar care.",
+        "orderLabel": "Lithium level / renal / thyroid monitoring plan",
+        "source": "playbook"
+      },
+      "psychiatry-referral-disposition-by-risk": {
+        "why": "College-age patient with passive SI needs outpatient psychiatry or higher level of care based on risk — document plan and supports.",
+        "orderLabel": "Psychiatry referral / disposition by risk",
+        "source": "playbook"
+      }
+    },
+    "194": {
+      "collateral-history-friend-interview": {
+        "why": "Friend reports eight months of withdrawal and poor intake — essential when patient is guarded or internally preoccupied.",
+        "orderLabel": "Collateral history / friend interview",
+        "source": "playbook"
+      },
+      "cbc-bmp-tsh-lfts-tox-screen": {
+        "why": "Rule out metabolic, infectious, thyroid, and substance-induced psychosis before anchoring on schizophrenia spectrum.",
+        "orderLabel": "CBC / BMP / TSH / LFTs / tox screen",
+        "source": "playbook"
+      },
+      "ct-mri-brain-lp-encephalitis-rule-out": {
+        "why": "New psychosis with altered behavior warrants neuroimaging; autoimmune encephalitis and delirium belong on differential.",
+        "orderLabel": "CT/MRI brain ± LP (encephalitis rule-out)",
+        "source": "playbook"
+      },
+      "antipsychotic-risperidone-olanzapine": {
+        "why": "Second-generation antipsychotic for acute positive symptoms — monitor metabolic effects.",
+        "orderLabel": "Antipsychotic (risperidone / olanzapine)",
+        "source": "playbook"
+      },
+      "catatonia-screen-benzodiazepine-if-catat": {
+        "why": "Optional teaching beat — immobility, mutism, or waxy flexibility respond to lorazepam trial while arranging admission.",
+        "orderLabel": "Catatonia screen / benzodiazepine if catatonic",
+        "source": "playbook"
+      },
+      "psychiatry-admission-1-1-observation": {
+        "why": "Command hallucinations and poor self-care warrant inpatient safety and structured workup.",
+        "orderLabel": "Psychiatry admission / 1:1 observation",
+        "source": "playbook"
+      }
+    },
+    "195": {
+      "ciwa-ar-protocol-symptom-triggered-benzo": {
+        "why": "Last drink 36 hours ago with tremor and diaphoresis — scale-guided lorazepam or diazepam reduces seizure and DT risk.",
+        "orderLabel": "CIWA-Ar protocol / symptom-triggered benzodiazepines",
+        "source": "playbook"
+      },
+      "thiamine-folate-multivitamin-wernicke-pr": {
+        "why": "Give thiamine before glucose in at-risk drinkers — prevents Wernicke encephalopathy.",
+        "orderLabel": "Thiamine / folate / multivitamin (Wernicke prevention)",
+        "source": "playbook"
+      },
+      "bmp-magnesium-lfts-ethanol-level": {
+        "why": "Correct hypomagnesemia and assess hepatic injury; low ethanol level confirms withdrawal timing.",
+        "orderLabel": "BMP / magnesium / LFTs / ethanol level",
+        "source": "playbook"
+      },
+      "seizure-precautions-icu-if-severe-dt-ris": {
+        "why": "History of prior DT — lower threshold for ICU and continuous monitoring.",
+        "orderLabel": "Seizure precautions / ICU if severe DT risk",
+        "source": "playbook"
+      },
+      "monitor-for-delirium-tremens": {
+        "why": "Visual hallucinations today — track autonomic instability, agitation, and fever for DT progression.",
+        "orderLabel": "Monitor for delirium tremens",
+        "source": "playbook"
+      },
+      "addiction-medicine-psychiatry-consult": {
+        "why": "Link to detox, counseling, and relapse prevention after medical stabilization.",
+        "orderLabel": "Addiction medicine / psychiatry consult",
+        "source": "playbook"
+      },
+      "safety-assessment-after-intentional-rela": {
+        "why": "Document intent, supports, and safety if withdrawal followed deliberate drinking.",
+        "orderLabel": "Safety assessment after intentional relapse",
+        "source": "playbook"
+      }
+    },
+    "196": {
+      "trauma-informed-safety-assessment": {
+        "why": "Intrusive memories and hypervigilance after assault — assess current safety, stalking risk, and acute distress in a patient-centered manner.",
+        "orderLabel": "Trauma-informed safety assessment",
+        "source": "playbook"
+      },
+      "forensic-pathway-sane-consult-if-acute-a": {
+        "why": "If within forensic window, offer evidence collection and STI prophylaxis with explicit consent — parallel to psych care.",
+        "orderLabel": "Forensic pathway / SANE consult (if acute assault)",
+        "source": "playbook"
+      },
+      "ptsd-screen-trauma-focused-psychotherapy": {
+        "why": "First-line long-term treatment is trauma-focused CBT, CPT, or EMDR — not benzo dependence.",
+        "orderLabel": "PTSD screen / trauma-focused psychotherapy referral",
+        "source": "playbook"
+      },
+      "tsh-bmp-endocrine-depression-rule-out": {
+        "why": "Fatigue and mood symptoms warrant basic medical screen — overlap teaching with endocrine depression mimic segment.",
+        "orderLabel": "TSH / BMP — endocrine depression rule-out",
+        "source": "playbook"
+      },
+      "capacity-assessment-for-discharge": {
+        "why": "Dissociative episodes raise questions about decision-making — document capacity for discharge planning.",
+        "orderLabel": "Capacity assessment for discharge",
+        "source": "playbook"
+      },
+      "crisis-counseling-social-work": {
+        "why": "Link shelter, legal advocacy, and follow-up within days — trauma-informed voice throughout.",
+        "orderLabel": "Crisis counseling / social work",
+        "source": "playbook"
+      },
+      "bdd-differential-psychiatry-consult-for-": {
+        "why": "Mirror fixation and appearance preoccupation may reflect trauma-related shame or body dysmorphic overlap — psychiatry clarifies diagnosis.",
+        "orderLabel": "BDD differential — psychiatry consult for mirror preoccupation",
         "source": "playbook"
       }
     },
@@ -7104,9 +7324,14 @@
         "orderLabel": "Oxygen",
         "source": "playbook"
       },
-      "order-order-time-sensitive-interventions": {
-        "why": "IV access and glucose check are also important for immediate stabilization of the patient.",
-        "orderLabel": "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)",
+      "iv-access": {
+        "why": "Vascular access for fluids and meds during the acute phase.",
+        "orderLabel": "IV access",
+        "source": "playbook"
+      },
+      "fingerstick-glucose": {
+        "why": "Reversible hypoglycemia must be excluded early in acute presentations.",
+        "orderLabel": "Fingerstick glucose",
         "source": "playbook"
       }
     },
@@ -9049,6 +9274,141 @@
         "source": "playbook"
       }
     },
+    "U09": {
+      "monitor": {
+        "why": "Continuous vitals.",
+        "orderLabel": "Cardiac Monitor",
+        "source": "playbook"
+      },
+      "iv": {
+        "why": "Two large-bore if shock.",
+        "orderLabel": "IV Access + Fluids",
+        "source": "playbook"
+      },
+      "labs": {
+        "why": "CBC, BMP, lactate.",
+        "orderLabel": "Stat Labs",
+        "source": "playbook"
+      },
+      "imaging": {
+        "why": "Targeted imaging.",
+        "orderLabel": "Bedside / CT imaging",
+        "source": "playbook"
+      },
+      "admit": {
+        "why": "Match acuity.",
+        "orderLabel": "Admit / Disposition",
+        "source": "playbook"
+      }
+    },
+    "U10": {
+      "monitor": {
+        "why": "Continuous vitals.",
+        "orderLabel": "Cardiac Monitor",
+        "source": "playbook"
+      },
+      "iv": {
+        "why": "Two large-bore if shock.",
+        "orderLabel": "IV Access + Fluids",
+        "source": "playbook"
+      },
+      "labs": {
+        "why": "CBC, BMP, lactate.",
+        "orderLabel": "Stat Labs",
+        "source": "playbook"
+      },
+      "imaging": {
+        "why": "Targeted imaging.",
+        "orderLabel": "Bedside / CT imaging",
+        "source": "playbook"
+      },
+      "admit": {
+        "why": "Match acuity.",
+        "orderLabel": "Admit / Disposition",
+        "source": "playbook"
+      }
+    },
+    "U11": {
+      "monitor": {
+        "why": "Continuous vitals.",
+        "orderLabel": "Cardiac Monitor",
+        "source": "playbook"
+      },
+      "iv": {
+        "why": "Two large-bore if shock.",
+        "orderLabel": "IV Access + Fluids",
+        "source": "playbook"
+      },
+      "labs": {
+        "why": "CBC, BMP, lactate.",
+        "orderLabel": "Stat Labs",
+        "source": "playbook"
+      },
+      "imaging": {
+        "why": "Targeted imaging.",
+        "orderLabel": "Bedside / CT imaging",
+        "source": "playbook"
+      },
+      "admit": {
+        "why": "Match acuity.",
+        "orderLabel": "Admit / Disposition",
+        "source": "playbook"
+      }
+    },
+    "U12": {
+      "monitor": {
+        "why": "Continuous vitals.",
+        "orderLabel": "Cardiac Monitor",
+        "source": "playbook"
+      },
+      "iv": {
+        "why": "Two large-bore if shock.",
+        "orderLabel": "IV Access + Fluids",
+        "source": "playbook"
+      },
+      "labs": {
+        "why": "CBC, BMP, lactate.",
+        "orderLabel": "Stat Labs",
+        "source": "playbook"
+      },
+      "imaging": {
+        "why": "Targeted imaging.",
+        "orderLabel": "Bedside / CT imaging",
+        "source": "playbook"
+      },
+      "admit": {
+        "why": "Match acuity.",
+        "orderLabel": "Admit / Disposition",
+        "source": "playbook"
+      }
+    },
+    "U13": {
+      "monitor": {
+        "why": "Continuous vitals.",
+        "orderLabel": "Cardiac Monitor",
+        "source": "playbook"
+      },
+      "iv": {
+        "why": "Two large-bore if shock.",
+        "orderLabel": "IV Access + Fluids",
+        "source": "playbook"
+      },
+      "labs": {
+        "why": "CBC, BMP, lactate.",
+        "orderLabel": "Stat Labs",
+        "source": "playbook"
+      },
+      "imaging": {
+        "why": "Targeted imaging.",
+        "orderLabel": "Bedside / CT imaging",
+        "source": "playbook"
+      },
+      "admit": {
+        "why": "Match acuity.",
+        "orderLabel": "Admit / Disposition",
+        "source": "playbook"
+      }
+    },
     "case_004": {
       "cbc-with-differential": {
         "why": "In DKA, a CBC with differential is essential to evaluate for an underlying infection, which is a common precipitant of the crisis. Your patient's tachycardia and elevated glucose could be explained by DKA alone, but a high white count may signal a concurrent infection requiring antibiotics. This helps distinguish a stress leukocytosis from a true infectious process.",
@@ -9169,6 +9529,28 @@
       "physical-exam-heent-neck": {
         "why": "This patient has periorbital edema, a hallmark of nephritic syndrome, and the HEENT/Neck exam is critical to assess for hypertensive retinopathy from acute hypertension and to evaluate for jugular venous distension indicating fluid overload. You are ruling out papilledema from malignant hypertension and checking for signs of volume overload that would guide diuretic therapy.",
         "orderLabel": "Physical Exam: HEENT / Neck",
+        "source": "llm-cache"
+      }
+    },
+    "case_045": {
+      "physical-exam-neuro-psych__teach-me-v5": {
+        "why": "Mr. Babatunde Zubairu is awake now — pulse 102, BP 110/70, SpO₂ 96% — but he was found unresponsive with pinpoint pupils and a respiratory rate below 12. That triad is the opioid toxidrome, and it means his brainstem was flooded with mu-receptor agonists, suppressing the locus coeruleus and the pre-Bötzinger complex. The neuro exam is the only way to confirm he has fully emerged from that suppression — not just breathing on his own, but tracking, following commands, and protecting his airway without drift.\n\nYou need to see that his pupils are equal and reactive again — the miosis should reverse as naloxone clears the receptors. You need to check his mental status every 15 minutes for the next hour, because naloxone has a shorter half-life than most opioids, and he could slip back into respiratory depression before the next dose is due. The exam isn't a checkbox — it is the bedside monitor for re-toxication. If his pupils start to pinch again or his alertness fades, you have your answer before the pulse ox drops.\n\nWhat specific finding on the neuro exam would tell you he's at risk of re-sedating before his respiratory rate changes?",
+        "orderLabel": "Physical Exam: Neuro / Psych",
+        "source": "llm-cache"
+      },
+      "physical-exam-general-appearance__teach-me-v5": {
+        "why": "Mr. Babatunde Zubairu is here with a pulse of 102, blood pressure 110/70, and a respiratory rate of 20 — but he was found unresponsive. Those vitals tell us his body is compensating, but his brain is not awake. The first step isn't a scan or a lab — it's a **general appearance** exam, because your eyes are the most sensitive diagnostic instrument you have in the first 30 seconds.\n\nThis order belongs because the mechanism of unresponsiveness is a **failure of arousal or content** in the brainstem or cortex. You need to know *which* before you can treat *what*. Is he posturing? Are his eyes open but not tracking? Is he breathing in a Cheyne-Stokes pattern that points to a metabolic cause? Each of those physical findings slams the door on entire categories of differential — and the general appearance exam is how you open those doors.\n\nAt the bedside, you'll watch his breathing pattern, his posture, and his response to voice or sternal rub within seconds. That single observation — is he localizing, withdrawing, posturing, or flaccid? — will tell you if this is opioid toxidrome (pinpoint pupils, respiratory depression) or a structural lesion (asymmetric posturing, gaze deviation). The order buys you a diagnosis before the first needle goes in. What do you see when you look at him?",
+        "orderLabel": "Physical Exam: General Appearance",
+        "source": "llm-cache"
+      },
+      "physical-exam-neuro-psych__peer": {
+        "why": "Mr. Babatunde Zubairu is sitting in front of you with a pulse of 102, a blood pressure of 110/70, and an SpO₂ of 96% on room air — but his respiratory rate is down at 20, and he was found unresponsive. You cannot clear a toxidrome with a quick glance at the monitor; you need to see the pupils yourself.\n\nThe opioid toxidrome works by depressing the brainstem — specifically the pontine respiratory center and the Edinger-Westphal nucleus that controls pupillary constriction. Pinpoint pupils and a low respiratory rate are the same mechanism, two outputs. But you cannot trust the triage note or the paramedic's handoff; you must confirm the pupils are *actually* 1–2 mm and reactive, because a fixed and dilated pupil would flip your differential to a structural brainstem lesion or anticholinergic poisoning.\n\nSo you order a focused neuro exam: check pupil size and reactivity, assess the level of consciousness with the AVPU scale, and look for needle tracks on the arms. That exam is the fastest way to lock in the opioid toxidrome before you reach for naloxone. The bedside change? You go from *suspecting* opioid overdose to *knowing* it, and you titrate naloxone based on how the respiratory drive and pupil size respond — not on a guess.",
+        "orderLabel": "Physical Exam: Neuro / Psych",
+        "source": "llm-cache"
+      },
+      "physical-exam-general-appearance__peer": {
+        "why": "Mr. Babatunde Zubairu is awake now — pulse 102, BP 110/70, RR 20, SpO₂ 96% — but he was found unresponsive with pinpoint pupils and respiratory depression. The general appearance exam is your first look at whether he is *back* or still drifting.\n\nStart from the doorway. Is he sitting up? Slumped? Making eye contact? The opioid toxidrome suppresses the reticular activating system — when you reverse it with naloxone, the brainstem wakes up, but higher cortical function may lag. A patient who tracks you with their eyes is different from one who stares through you.\n\nLook for the physical residue of the overdose: needle tracks in the antecubital fossa or between the toes, track marks on the neck. Those are not just historical — they tell you the injection route, which affects how fast the opioid hit the brain (IV = seconds, IM = minutes). If he has fresh puncture sites, the risk of re-overdose is higher because the drug depot in fat or muscle can re-equilibrate after naloxone wears off.\n\nAlso check his pupils now. If they are still 1–2 mm despite naloxone, the opioid is still bound or a longer-acting agent (methadone, fentanyl) is on board. If they are 4–5 mm and reactive, you have effectively reversed him — but that window is short.\n\nThe general appearance is not cosmetic. It is your first neurologic exam before you do the formal one. What do you see when you walk in the room?",
+        "orderLabel": "Physical Exam: General Appearance",
         "source": "llm-cache"
       }
     },
@@ -9369,6 +9751,43 @@
         "source": "llm-cache"
       }
     },
+    "case_176": {
+      "stabilize-the-patient-ensure-airway-brea__teach-me-v3": {
+        "why": "Before a single stitch or dose of antibiotics, you have to answer one question: is this patient about to die from something other than the bite?\n\nThe airway, breathing, and circulation you're checking is the same ABC sequence that applies to every trauma — but here, the threat is hidden. The bite itself can lacerate an artery (especially on the face, neck, or hand), cause a tension pneumothorax if the chest wall is punctured, or trigger anaphylaxis from venomous saliva. You can't treat the wound until you know the patient won't arrest from the injury's mechanical consequences.\n\nSo the order is mechanical, not pharmacological. You're literally ruling out the three ways the bite could kill before you address the wound. Once ABCs are secure, the patient is physiologically stable enough to tolerate wound exploration, irrigation, and tetanus prophylaxis — all of which cause pain and vagal stress. If you start cleaning a face laceration and the patient's airway is compromised from a hematoma, you've made things worse.\n\nWhat would you look for to know the airway is truly safe in a patient with a neck bite?",
+        "orderLabel": "Stabilize the patient: ensure airway, breathing, and circulatory status",
+        "source": "llm-cache"
+      },
+      "stabilize-the-patient-ensure-airway-brea__peer": {
+        "why": "\"Stabilize\" isn't a checkbox — it's a physics-first reset.\n\nThe bite has already broken skin and delivered bacteria deep into tissue. But before we worry about *which* bacteria, we need to know if the patient is perfusing well enough to mount an immune response at all. That's the ABC logic: airway, breathing, circulation. If the patient is hypotensive from blood loss or in respiratory distress from anaphylaxis, the wound is irrelevant — the body can't fight infection without oxygen delivery.\n\nSo the order says: pause the wound inspection. Assess the machine first. Is the airway patent? Are breath sounds equal? Is there a pulse? This isn't just protocol — it's the hierarchy of what kills fastest. A compromised airway kills in minutes. Infection kills in hours.\n\nOnce ABCs are confirmed stable, *then* you can shift focus to the bite — irrigation, debridement, antibiotics. But without this initial stabilization, you're treating a local problem in a patient whose systemic engine is failing. That's why this order belongs first: it buys you the time to think.",
+        "orderLabel": "Stabilize the patient: ensure airway, breathing, and circulatory status",
+        "source": "llm-cache"
+      },
+      "administer-tetanus-prophylaxis-if-needed__teach-me-v3": {
+        "why": "The tetanus bacterium, *Clostridium tetani*, lives in soil and animal saliva. An animal bite drives those spores deep into devitalized tissue — the puncture wound creates a low-oxygen environment. Spores germinate, produce tetanospasmin toxin, and that toxin travels up motor nerves to block inhibitory signaling. The result: uncontrollable muscle rigidity and spasm.\n\nThis order belongs because the wound is a direct inoculation event. The bite itself is the mechanism — we're not treating the wound's surface, we're preventing germination inside it. Tetanus prophylaxis isn't about the bite's size or appearance; it's about the anaerobic pocket created by the puncture. If the patient's vaccination status is uncertain or >5 years since last dose, we give Tdap or Td and tetanus immune globulin for dirty wounds like this.\n\nThe bedside change: you don't wait for trismus or opisthotonos. You stop the toxin before it reaches the spinal cord. One dose of prophylaxis now prevents a week in the ICU.",
+        "orderLabel": "Administer tetanus prophylaxis if needed",
+        "source": "llm-cache"
+      },
+      "obtain-a-complete-blood-count-cbc-and-se__teach-me-v3": {
+        "why": "This isn't a routine lab draw — it's a **triage signal** for two distinct emergencies hiding behind a bite wound.\n\nFirst, the **CBC**: a bite is a **direct inoculation** of oral flora into vascular tissue. If the neutrophil count is climbing, that tells you the immune system has already lost the local fight — bacteria are replicating faster than tissue macrophages can clear them. A rising white count doesn't diagnose infection; it diagnoses **systemic inflammatory response**, which changes your management from \"clean and observe\" to **IV antibiotics and possible operative washout**.\n\nSecond, the **serum glucose**: here's the mechanism most people miss. Rabies virus has a **predilection for the limbic system and autonomic centers**. One of its earliest systemic effects is **dysautonomia** — erratic catecholamine surges that drive glucose up before any neurologic symptom appears. A random hyperglycemia in a bite patient with no diabetes history is a **red flag for CNS involvement** long before they develop hydrophobia or agitation.\n\nAt the bedside, these two numbers tell you: *are we still managing a local wound, or has this become a systemic emergency?* The CBC answers \"infection,\" the glucose answers \"neuroinvasion.\" Together, they force a decision point — discharge with wound care, or admit for escalation.",
+        "orderLabel": "Obtain a complete blood count (CBC) and serum glucose level",
+        "source": "llm-cache"
+      },
+      "culture-and-debridement-of-the-wound-if-__teach-me-v3": {
+        "why": "Let’s talk about why culture and debridement is the first move here, not an afterthought.\n\nA dog or cat bite isn’t a clean puncture. It’s a crush-and-tear mechanism. The tooth drives oral flora — *Pasteurella*, *Staphylococcus*, anaerobes — deep into tissue that’s already devitalized by pressure. Debridement removes that dead tissue, which is essentially bacterial fertilizer. Without it, antibiotics alone can’t penetrate the biofilm that forms in the wound’s anaerobic pockets.\n\nCulturing isn’t reflex. It’s targeted. You culture because empiric coverage fails in about 30% of deep bite wounds — especially if the patient presents late, has diabetes, or the bite is over a joint or tendon sheath. The culture tells you which organism survived your initial amoxicillin-clavulanate, so you can pivot precisely.\n\nAt the bedside: debridement and culture turn a blind, infected cavity into a clean, visible wound that can heal. Without them, you’re treating a black box. With them, you own the microbiology and the tissue health.",
+        "orderLabel": "Culture and debridement of the wound if appropriate",
+        "source": "llm-cache"
+      },
+      "consult-infectious-disease-specialist-fo__teach-me-v3": {
+        "why": "The rabies virus is a bullet — once it enters a peripheral nerve, it travels up the axon at roughly 12–24 mm per day, hidden from the immune system the entire way. By the time symptoms appear, it has already reached the central nervous system, where it is nearly 100% fatal. There is no treatment for established rabies. There is only prophylaxis before the virus crosses into the brain.\n\nThat's why this consult isn't about treating an infection — it's about outrunning a timer. The Infectious Disease specialist determines three things: whether the animal's risk profile warrants post-exposure prophylaxis, whether the bite's location (face, hand, or neck) shortens the window because of denser nerve supply, and whether the patient's immunization history is reliable. Each variable shifts the risk-to-benefit calculus.\n\nAt the bedside, the decision changes everything. An unvaccinated patient with a bat bite in the neck gets rabies immunoglobulin infiltrated *into the wound itself* and a four-dose vaccine series over 14 days. A fully vaccinated patient with a dog bite on the leg may need only a booster. The specialist maps the virus's potential path against the clock — and that map determines whether the patient leaves the ED with a shot schedule or with a watch-and-wait plan that carries a different kind of weight.",
+        "orderLabel": "Consult Infectious Disease specialist for potential rabies prophylaxis",
+        "source": "llm-cache"
+      },
+      "oxygen__teach-me-v3": {
+        "why": "Let’s start with what the bite actually does to the body—not the wound itself, but the *whole-body response*.\n\nA large animal bite—especially a crush or puncture from a dog or large cat—triggers a massive sympathetic surge. Pain, fear, and tissue destruction dump catecholamines. That drives tachypnea and a shallow, inefficient breathing pattern. The patient is working hard to move air, but they’re not moving it well.\n\nNow add the mechanism of injury: a bite to the face, neck, or chest can cause direct airway compromise—swelling, hematoma, or even tracheal deviation. But even a limb bite can drop oxygen saturation if the patient is hyperventilating from pain and mismatch.\n\nOxygen here isn’t about fixing a lung problem. It’s about buying time. You raise the FiO₂ to widen the margin before desaturation hits. While you’re irrigating, assessing nerve and vessel integrity, and deciding on antibiotics, the patient’s oxygen reserve is your safety buffer.\n\nAt the bedside: you place the nasal cannula or non-rebreather, and you watch the respiratory rate drop. That’s the catecholamine storm settling because the brain senses it doesn’t have to panic-breathe anymore. The pulse oximeter stays above 97%, and you can focus on the wound without the patient crashing from exhaustion.\n\nSo the order belongs because the bite isn’t just a local injury—it’s a systemic stressor that steals oxygen reserve. Oxygen restores that reserve before you need it.",
+        "orderLabel": "Oxygen",
+        "source": "llm-cache"
+      }
+    },
     "case_4": {
       "genitalia_exam": {
         "why": "In a young woman with lower abdominal pain, a genital exam is essential to evaluate for pelvic causes such as ovarian torsion, ectopic pregnancy, or pelvic inflammatory disease. This exam can reveal cervical motion tenderness, adnexal masses, or discharge that would not be detected on an abdominal exam alone. Ruling out these gynecologic emergencies is critical before attributing the pain to a gastrointestinal source.",
@@ -9377,6 +9796,6 @@
       }
     }
   },
-  "caseCount": 200,
-  "entryCount": 1795
+  "caseCount": 212,
+  "entryCount": 1874
 }

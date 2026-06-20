@@ -8,6 +8,20 @@ Medical training game: **181 CCS cases**, drag-and-place clinical orders onto a 
 
 ---
 
+## Image generation — where is the API?
+
+Steve already set this up. **Other agents:** read **`docs/WHERE_IS_THE_API.md`** first.
+
+| What | Where |
+|------|--------|
+| **API key** | `C:\Users\steve\.cursor\master.env` → `MAGNIFIC_API_KEY` (fallback: `game/.env`) |
+| **Verify** | `npm run verify:magnific` |
+| **Run gens** | `npm run gen:uber-scenes` · `gen:uber-maps` · `gen:ped-maps` · `process:tv-presentations` |
+| **TV presenter pass** | **`docs/SHARE_WITH_NEXT_AGENT_TV.md`** — copy-paste for next agent |
+| **Full rules** | `.cursor/RULES_IMAGE_GENERATION.md` |
+
+---
+
 ## Run the app
 
 ```powershell
@@ -329,6 +343,7 @@ Case chat in Play and Differentials (DeepSeek or OpenAI from `.env`). **Play def
 | Demographics | `src/lib/patientFactsFromHpi.js` — `resolvePatientDemographics()`, `extractPatientFacts()` |
 | Prompt (patient) | `server/prompts/immersa-patient.md` + `server/immersaPatientPrompt.js` — Immersa patient voice (3 laws, temp ~0.85) |
 | Prompt (tutor) | `server/prompts/immersa-attendant.md` + `server/immersaAttendantPrompt.js` — Immersa explainer/attendant (mechanism-first, temp ~0.7); order-why tooltips use same voice |
+| **Brilliant attending checklist** | **`docs/BRILLIANT_ATTENDING_ARCHITECTURE.md`** — voice locks, explanation stack, touchpoints, per-case mechanism data |
 | Practice HPI | `resolvePracticeHpi()` in `caseChat.js` — patient interview uses spoiler-free `practice_hpi` when learning mode on |
 | Pediatric | `Pediatrics` category + child `patient_voice` → infer ~6–7 yo if HPI has no explicit age; never invent adult age |
 | Persona cache | Portrait vision + `PORTRAIT_PERSONA_VERSION` in `caseChat.js` |

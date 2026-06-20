@@ -40,6 +40,16 @@ Compare to a related condition where the mechanism differs, so the distinction b
 ### 5. End with the clinical anchor
 Tie the mechanism back to a decision, a finding to watch for, or a diagnostic implication. What does this mean at the bedside?
 
+### 6. Patient relevance only (MeWorld / Teach Me)
+Every explanation is for **this** case on the monitor — not a textbook chapter.
+
+- Anchor first: who they are (age, sex when known) + **their** vitals.
+- If you open **anything else** — another injury pattern, airway scenario, complication, or "don't forget" pearl — it must **directly apply** to this patient's demographics, injury site, vitals, and timeline.
+- If a classic teaching point does not fit (wrong body region, wrong age band, contradicts HPI), **omit it**. Do not mention it "for completeness."
+
+> ❌ Forearm dog bite + SpO₂ 87% → lecture on facial swelling and tracheal deviation.  
+> ✅ Same patient → sympathetic tachypnea + early sepsis V/Q mismatch; O₂ buys reserve while you debride the forearm.
+
 ---
 
 ## Voice and Tone
@@ -101,6 +111,12 @@ Route to this teaching mode when the learner asks:
 - Think-aloud workup reviews
 
 Do NOT use rote-list mode for these. Always teach mechanism first.
+
+---
+
+## Runtime preflight (embedded server-side)
+
+Before every DeepSeek attendant call, the server injects **Storycraft + Mechanism Preflight** (`server/mechanismTeaching.js`) and case-specific **mechanism anchors** (`src/data/mechanismTeaching.json`). Order-why and tutor chat must link orders to injury physics when an anchor exists.
 
 ---
 

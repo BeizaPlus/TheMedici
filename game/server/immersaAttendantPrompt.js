@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  buildMechanismTeachingPromptBlock,
+  buildStorycraftMechanismPreflight,
+} from './mechanismTeaching.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -28,7 +32,16 @@ export function buildImmersaAttendantSystemPrompt(ctx, { formatCaseDiscussionFor
   const formatDiscussion =
     typeof formatCaseDiscussionForChat === 'function' ? formatCaseDiscussionForChat : () => '';
 
+  const caseId = ctx?.id ?? ctx?.ccsNumber ?? '';
+  const mechanismBlock = buildMechanismTeachingPromptBlock(caseId);
+  const preflight = buildStorycraftMechanismPreflight();
+
   return `${loadImmersaAttendantCorePrompt()}
+
+---
+
+${preflight}
+${mechanismBlock}
 
 ---
 
@@ -70,28 +83,72 @@ ${ctx?.vitalsText ? `### VITALS\n${ctx.vitalsText}\n` : ''}${
 ${JSON.stringify(ctx, null, 2)}`;
 }
 
-/** Voice lock for order-why + dock brief (writing-system: spoken, mechanism-first). */
-export const IMMERSA_ATTENDANT_BRIEF_VOICE = `
-Voice lock (mandatory):
-- 2–4 short spoken sentences. Max ~75 words unless the learner asked for a list.
-- Lead with mechanism or what this order rules in/out. Never open with "This patient has a history of…"
-- Short sentences. Direct. No em dashes. No passive hedging ("it is thought that").
-- No bullet lists unless they asked for a list. No "as an AI". No patient first person.`;
+/** Teach Me first opinion — first-principles interconnected arc (opening attending). */
+export const IMMERSA_FIRST_OPINION_VOICE = `
+Voice lock (first opinion / opening attending — interconnected teaching):
+- This is the learner's FIRST attending beat when they open an order — expansive, structured, NOT dock-brief and NOT second-opinion brief.
+- **Interconnected approach:** mechanism chains where each sentence forces the next ("because" / "so") — one process, not unrelated bullets.
+- **Open with this patient:** demographics + vitals from the JSON (BP, HR, RR, SpO₂, lactate when present) — then mechanism. Never a generic lecture that ignores the numbers on the monitor.
+- **Relevance only:** Every sentence must apply to THIS patient. If you bring up another injury site, complication, or classic teaching pearl, it must match their demographics, wound location, vitals, and timeline — otherwise leave it out entirely.
+- Walk the full explanation stack: (0) patient anchor — who + vitals, (1) physics/biology that forces the finding, (2) spatial or pressure logic for THIS injury site, (3) link to other findings in THIS case, (4) clinical anchor — what changes at the bedside when this order is placed.
+- 4–8 sentences OR 2–3 short paragraphs. Max ~220 words unless they asked for a list.
+- Never open with "This patient has a history of…" or bare guideline recitation.
+- Short sentences. Direct. Joy in mechanism. One optional question back to the learner.
+- No em dashes. No "as an AI". No patient first person.`;
 
-/** Short attendant voice for inline order-why tooltips. */
-export function buildImmersaOrderWhySystemPrompt() {
+/** Alias — Teach Me compare primary rationale uses first-opinion voice. */
+export const IMMERSA_TEACH_ME_VOICE = IMMERSA_FIRST_OPINION_VOICE;
+
+/** Second opinion — brief peer mechanism punch (shorter than first opinion). */
+export const IMMERSA_SECOND_OPINION_VOICE = `
+Voice lock (second opinion — brief mechanism punch):
+- 2–4 sentences total. Default ~65 words — NEVER a lecture and NEVER longer than the first opinion.
+- Lead with the forcing mechanism: abnormal value or pathway defect → what breaks at the tissue → what you see clinically.
+- Rule-out logic in one tight clause is welcome ("normal PT and platelets already ruled out…").
+- Gold shape: "Low FVIII means the intrinsic pathway can't form a stable clot in the joint space — that's why you see hemarthrosis with trivial trauma. A normal PT and platelets already ruled out the liver, vitamin K, and platelet causes."
+- No intro filler. No guideline dump. Disagree politely in one sentence if warranted. Never repeat the first opinion verbatim.`;
+
+/** Order dock — one beat only; clinical shorthand OK. */
+export const IMMERSA_ATTENDANT_DOCK_BRIEF_VOICE = `
+Voice lock (order dock — ultra-brief):
+- 2–3 short spoken sentences. Max ~60 words.
+- One mechanism link to this order, then bedside anchor. No intro.
+- Abbreviations encouraged (ACEI, ARB, UA, BMP, RBC, ADPKD, CT, US) — ward shorthand is fine.`;
+
+/** Second opinion — expand only blocking acronyms; stay brief. */
+export const IMMERSA_SECOND_OPINION_ABBREV_VOICE = `
+Abbreviation pedagogy (second opinion — only when needed for the punch):
+- Stay inside the 2–4 sentence budget. Expand a subspecialty acronym only if the mechanism punch requires it.
+- Prefer pathway names over spelling out (FVIII, PT, intrinsic pathway) when the learner can decode from context.
+- Common ward shorthand needs no expansion: RBCs, WBCs, BMP, UA, CBC, BP, HR, SpO₂, Cr, IV, ED.`;
+
+/** Order-why + Teach Me compare — first opinion (dock uses DOCK_BRIEF only). */
+export const IMMERSA_ATTENDANT_BRIEF_VOICE = IMMERSA_FIRST_OPINION_VOICE;
+
+/** Primary order-why in Teach Me — first-principles interconnected arc (second opinion is brief punch). */
+export function buildImmersaOrderWhySystemPrompt(caseId = '') {
+  const mechanismBlock = buildMechanismTeachingPromptBlock(caseId);
+  const preflight = buildStorycraftMechanismPreflight();
   return `${loadImmersaAttendantCorePrompt()}
-${IMMERSA_ATTENDANT_BRIEF_VOICE}
+${preflight}
+${mechanismBlock}
+${IMMERSA_FIRST_OPINION_VOICE}
 
-You are explaining why ONE specific order belongs in THIS case during Teach Me / standard-flow compare.
-End on what the order changes at the bedside for this presentation.`;
+You are the primary attending explaining why ONE order belongs in THIS case.
+Give the interconnected first-principles teaching arc — the learner can request a brief second opinion for a tight mechanism punch.`;
 }
 
-/** Peer attending — second lens on the same order (higher temperature on server). */
-export function buildImmersaSecondOpinionOrderWhyPrompt() {
+/** Peer attending — brief punch; depth slider only varies within 2–4 sentences. */
+export function buildImmersaSecondOpinionOrderWhyPrompt(caseId = '', { maxWords = 65 } = {}) {
+  const mechanismBlock = buildMechanismTeachingPromptBlock(caseId);
+  const preflight = buildStorycraftMechanismPreflight();
   return `${loadImmersaAttendantCorePrompt()}
-${IMMERSA_ATTENDANT_BRIEF_VOICE}
+${preflight}
+${mechanismBlock}
+${IMMERSA_SECOND_OPINION_VOICE}
+${IMMERSA_SECOND_OPINION_ABBREV_VOICE}
 
 You are a second attending peer-reviewing ONE order in THIS case.
-Offer a fresh mechanism angle, nuance, or contraindication. Disagree politely when warranted.`;
+The primary attendant already gave the interconnected teaching arc — you add a brief mechanism punch or corrective angle only.
+Hard cap: 4 sentences. Max ~${maxWords} words. Never repeat the first opinion verbatim.`;
 }

@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "description": "Case-specific mechanism anchors — injected into Immersa attendant + order-why before DeepSeek. Immersa rewrite only; not learner-facing labels.",
+  "preflightNote": "Storycraft Scale preflight runs on every attendant DeepSeek call (see server/mechanismTeaching.js).",
+  "cases": {
+    "113": {
+      "title": "Drowning",
+      "injuryMechanism": "Ten-year-old jumped from a dock into shallow lake water — feet-first entry with axial load through the cervical spine at impact, then brief submersion with aspiration and hypoxia.",
+      "physicsBeats": [
+        "Jump from height → kinetic energy converts to sudden deceleration when water surface arrests the body (water is nearly incompressible at impact — feels like hitting a wall, not a pillow).",
+        "Axial loading through the head/neck on a shallow or awkward entry can fracture or dislocate cervical vertebrae even without obvious external trauma.",
+        "Submersion after the impact → loss of airway protection → aspiration of water → surfactant washout and V/Q mismatch → hypoxemia and altered mental status.",
+        "Hypoxic brain injury and delayed pulmonary edema can evolve over hours — observation is not optional."
+      ],
+      "managementLinks": {
+        "c-spine-precautions": "Collar and inline stabilization limit secondary cord injury if an unstable C-spine fracture exists from the jump impact — you immobilize because the physics of the entry can break the spine before drowning steals the airway.",
+        "abcs-oxygen-airway": "Hypoxia from submersion drives prognosis — restore oxygenation and protect the airway before surfactant injury and cerebral hypoxia compound.",
+        "cxr": "Aspiration and surfactant loss produce infiltrates — the CXR shows the pulmonary consequence of the submersion phase.",
+        "abg": "Quantifies hypoxemia and ventilation-perfusion mismatch after aspiration.",
+        "rewarming-if-hypothermic": "Cold water drops core temperature — rewarming treats the thermodynamic stress that worsens perfusion and coagulation.",
+        "observation-all-victims": "Delayed pulmonary edema can appear after a lucid interval — the mechanism continues in the lungs even when the child looks better."
+      },
+      "teachingHook": "Picture the jump: the water surface stops the body in milliseconds — that is when the neck can fail. Then the head goes under and the lungs take over the injury story."
+    },
+    "176": {
+      "title": "Animal Bite",
+      "injuryMechanism": "Young adult male — large dog bite to the right forearm about three hours before arrival. Crush-puncture contamination drives cellulitis and early sepsis: hypotension, tachycardia, tachypnea, hypoxemia, and elevated lactate — a whole-body inflammatory and sympathetic response, not an isolated skin wound.",
+      "patientAnchor": {
+        "demographics": "Young Black man, adult — subway-afro-dandy likeness; calm but clearly ill",
+        "injurySite": "Right forearm dog bite with surrounding cellulitis (NOT face/neck — do not default to facial airway compromise unless swelling threatens the upper airway)",
+        "vitals": "BP 82/50 · HR 116 · RR 24 · SpO₂ 87% room air · lactate 4.5"
+      },
+      "physicsBeats": [
+        "Dog crush-puncture inoculates deep tissue with oral flora — pain and tissue injury trigger catecholamine surge (fear + pain + cytokines).",
+        "Tachypnea with SpO₂ 87%: he is moving air fast from sympathetic drive and early V/Q mismatch from sepsis — not necessarily primary lung disease.",
+        "BP 82/50 with HR 116 and lactate 4.5: perfusion is failing from systemic inflammatory response — fluids and source control matter as much as the local wound.",
+        "Forearm injury spares the airway structurally, but exhaustion and hypoxemia can still steal reserve while you irrigate and debride."
+      ],
+      "managementLinks": {
+        "oxygen": "His SpO₂ is 87% with RR 24 — supplemental O₂ widens reserve while catecholamine-driven tachypnea settles; you are buying margin before debridement and resuscitation, not treating a primary parenchymal lung disease.",
+        "stabilize": "ABC first with these vitals: hypotensive and hypoxic — airway patent now but breathing is inefficient; circulation needs volume before cellulitis spreads.",
+        "stabilize-the-patient-ensure-airway-brea": "Same as stabilize — anchor to BP 82/50 and SpO₂ 87%, not a generic trauma lecture.",
+        "iv-access": "Two large-bore lines for fluid resuscitation — lactate 4.5 signals you need vascular access now.",
+        "iv-access-x2": "Two large-bore lines for fluid resuscitation — lactate 4.5 signals you need vascular access now.",
+        "cbc": "CBC and glucose with systemic illness — leukocytosis and stress hyperglycemia fit sepsis physiology in this presentation.",
+        "obtain-a-complete-blood-count-cbc-and-se": "CBC and glucose with systemic illness — leukocytosis and stress hyperglycemia fit sepsis physiology in this presentation.",
+        "culture": "Culture the wound after stabilization — forearm source drives bacteremia risk with this lactate.",
+        "culture-and-debridement-of-the-wound-if-": "Irrigate and debride the forearm source after ABCs — cellulitis is the sepsis driver.",
+        "tetanus": "Tetanus prophylaxis is wound-channel — separate beat from oxygen and fluids.",
+        "administer-tetanus-prophylaxis-if-needed": "Tetanus prophylaxis is wound-channel — separate beat from oxygen and fluids.",
+        "rabies": "ID consult for rabies PEP — dog bite timeline (~3h) matters; place after stabilization.",
+        "consult-infectious-disease-specialist-fo": "ID for rabies immunoglobulin + vaccine series after ABCs and source control."
+      },
+      "teachingHook": "Look at the monitor first: 87% on room air with lactate 4.5 — the bite is on the forearm, but the body is already fighting systemically."
+    }
+  }
+}

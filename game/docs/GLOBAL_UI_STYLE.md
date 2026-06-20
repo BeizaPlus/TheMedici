@@ -24,7 +24,9 @@ If Play looks polished but Welcome Timeline looks like a different app, that is 
 | `--green` | `#3ecf8e` | Success / mastered |
 | `--text` | `#f4f4f6` | Body |
 | `--muted` | `#8b8b9a` | Secondary copy |
-| `--font` | Archivo | **Only** UI font (already on `*`) |
+| `--font` | Archivo (Google CDN) | Body + UI (already on `*`) |
+| `--font-display` | Sedimenti (bundled OTF) | Case hero / briefing titles |
+| `--font-sedimenti` | Sedimenti (bundled OTF) | Second opinion body (Teach Me compare) |
 
 Light theme overrides live under `[data-theme='light']` — same token names.
 
@@ -81,11 +83,16 @@ Border radius: **10px** cards inside panels; **999px** pills and scrollbar thumb
 
 ## Typography
 
-- **Headings:** Archivo 700–900, sentence case in UI (case titles may be uppercase in catalog).
+- **Body / UI:** Archivo 400–900 via Google Fonts CDN (`--font`).
+- **Case display titles:** **Sedimenti** (personal license, bundled OTF) via `--font-display` — `public/fonts/sedimenti/Sedimenti-Regular.otf`; `@font-face` in `src/fonts.css`.
+- **Second opinion body:** **Sedimenti** via `--font-sedimenti` on `.second-opinion-body` in Teach Me compare.
+- **Where display font applies:** `.briefing-case-hero h1`, `.briefing h1`, `.briefing-with-scene h1`, `.briefing-minimal h1`, `.preview-title`, `.tc-land-case-title` — not list rows (`.case-name`, `.briefing-picker-name`).
+- **Retired for titles:** Bruno Ace (OFL) — still on disk but not `--font-display` default.
+- **Headings (non-case-hero):** Archivo 700–900, sentence case in UI (catalog labels may be uppercase).
 - **Kick / date:** gold, ~0.72rem (see `.welcome-case-timeline-when`).
 - **Meta line:** ~0.64rem, 48% white (see `.welcome-case-timeline-meta`).
 
-Avoid mixing system UI font or Roboto in new components.
+Avoid mixing system UI font or Roboto in new components. Do not load Bruno Ace from CDN — bundle only.
 
 ---
 
