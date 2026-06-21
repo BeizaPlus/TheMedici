@@ -5,6 +5,7 @@ import {
   buildMechanismTeachingPromptBlock,
   buildStorycraftMechanismPreflight,
 } from './mechanismTeaching.js';
+import { buildAttendingStylePromptBlock } from './attendingStylePrompt.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -35,6 +36,12 @@ export function buildImmersaAttendantSystemPrompt(ctx, { formatCaseDiscussionFor
   const caseId = ctx?.id ?? ctx?.ccsNumber ?? '';
   const mechanismBlock = buildMechanismTeachingPromptBlock(caseId);
   const preflight = buildStorycraftMechanismPreflight();
+  const styleBlock =
+    ctx?.attendingStyleLeans && typeof ctx.attendingStyleLeans === 'object'
+      ? buildAttendingStylePromptBlock(ctx.attendingStyleLeans, {
+          slotLabel: ctx.attendingStyleLabel || ctx.attendingStyleSlot || null,
+        })
+      : '';
 
   return `${loadImmersaAttendantCorePrompt()}
 
@@ -42,6 +49,7 @@ export function buildImmersaAttendantSystemPrompt(ctx, { formatCaseDiscussionFor
 
 ${preflight}
 ${mechanismBlock}
+${styleBlock ? `\n---\n\n${styleBlock}\n` : ''}
 
 ---
 

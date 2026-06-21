@@ -29,6 +29,7 @@ function devChildEnv(overrides = {}) {
   env.VITE_DEV_PORT = VITE_PORT;
   env.VITE_STRICT_PORT = '1';
   env.VITE_DISABLE_HMR = '1';
+  env.VITE_STUDY_MODE = '1';
   if (overrides.PORT === '') {
     delete env.PORT;
   } else {

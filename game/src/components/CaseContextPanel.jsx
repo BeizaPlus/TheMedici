@@ -3,6 +3,7 @@ import { FiVolume2 } from 'react-icons/fi';
 import {
   IconClipboardPulse,
   IconMessage,
+  IconRealtime,
   IconClipboardList,
   IconStethoscope,
   IconFileMedical,
@@ -27,6 +28,7 @@ const CASE_TAB_DEFS = [
   { id: 'treatment', label: 'Orders', Icon: IconClipboardList },
   { id: 'results', label: 'Results', Icon: IconFileMedical },
   { id: 'chat', label: 'Thread', Icon: IconMessage },
+  { id: 'realtime', label: 'Real-time', Icon: IconRealtime },
 ];
 
 import { APP_PRODUCT_NAME } from '../lib/appBrand.js';
@@ -56,10 +58,12 @@ export default function CaseContextPanel({
   showTreatmentTab = false,
   showResultsTab = false,
   showChatTab = false,
+  showRealtimeTab = false,
   treatmentPanel = null,
   resultsPanel = null,
   treatmentSummaryText = '',
   chatPanel = null,
+  realtimePanel = null,
   /** Briefing Notes tab — array of { title, body } from getBriefingNoteSections */
   notesSections = null,
   footer = null,
@@ -82,6 +86,7 @@ export default function CaseContextPanel({
   const treatmentEnabled = !isBriefing && showTreatmentTab;
   const resultsEnabled = !isBriefing && showResultsTab;
   const chatEnabled = !isBriefing && showChatTab;
+  const realtimeEnabled = !isBriefing && showRealtimeTab;
   const notesEnabled = isBriefing && Array.isArray(notesSections) && notesSections.length > 0;
   const differentialEnabled = caseHasDifferentials(caseData);
   const differentialLearningSafe = isBriefing || (teachMeMode === false && isLearningMode());
@@ -90,6 +95,7 @@ export default function CaseContextPanel({
   const isTreatment = tab === 'treatment';
   const isResults = tab === 'results';
   const isChat = tab === 'chat';
+  const isRealtime = tab === 'realtime';
   const stacksWide = isTreatment && Boolean(treatmentPanel);
 
   useEffect(() => {
@@ -146,7 +152,7 @@ export default function CaseContextPanel({
 
   return (
     <div
-      className={`sidebar-top clinical-pack-top case-context-panel ${treatmentEnabled && treatmentPanel ? 'case-context-panel--play' : ''}${stacksWide ? ' case-context-panel--stacks-wide' : ''}${isChat ? ' case-context-panel--chat-tab' : ''}`.trim()}
+      className={`sidebar-top clinical-pack-top case-context-panel ${treatmentEnabled && treatmentPanel ? 'case-context-panel--play' : ''}${stacksWide ? ' case-context-panel--stacks-wide' : ''}${isChat ? ' case-context-panel--chat-tab' : ''}${isRealtime ? ' case-context-panel--realtime-tab' : ''}`.trim()}
     >
       <div className="case-context-chrome">
       {!hideHeader && (
@@ -160,6 +166,7 @@ export default function CaseContextPanel({
             {headerControls}
             {onReadCase &&
             !isChat &&
+            !isRealtime &&
             !isResults &&
             (tab !== 'treatment' || !treatmentPanel) ? (
               <button
@@ -214,6 +221,7 @@ export default function CaseContextPanel({
           if (def.id === 'treatment') return treatmentEnabled;
           if (def.id === 'results') return resultsEnabled;
           if (def.id === 'chat') return chatEnabled;
+          if (def.id === 'realtime') return realtimeEnabled;
           return true;
         }).concat(notesEnabled ? [{ id: 'notes', label: 'Notes', Icon: IconNotes }] : [])
           .concat(differentialEnabled ? [{ id: 'differential', label: 'Differentials', Icon: IconDifferentialStack }] : [])
@@ -242,6 +250,7 @@ export default function CaseContextPanel({
       {hideHeader &&
         onReadCase &&
         !isChat &&
+        !isRealtime &&
         !isResults &&
         (tab !== 'treatment' || !treatmentPanel) && (
           <button
@@ -260,12 +269,12 @@ export default function CaseContextPanel({
       </div>
       {!bodyCollapsed && (
       <div className="case-context-body-wrap">
-      {tab === 'hpi' && !isTreatment && !isChat && !isNotes && !isDifferential && (
+      {tab === 'hpi' && !isTreatment && !isChat && !isRealtime && !isNotes && !isDifferential && (
         <div className="hpi-text case-context-body clinical-text-block" style={textStyle}>
           {hpiNarrative || 'HPI not yet available for this case.'}
         </div>
       )}
-      {tab === 'exam' && !isTreatment && !isChat && !isNotes && !isDifferential && (
+      {tab === 'exam' && !isTreatment && !isChat && !isRealtime && !isNotes && !isDifferential && (
         <div className="hpi-text case-context-body clinical-text-block exam-by-system" style={textStyle}>
           {hasStructuredExam
             ? formatExamForDisplay(
@@ -295,7 +304,7 @@ export default function CaseContextPanel({
           />
         </div>
       )}
-      {tab !== 'hpi' && tab !== 'exam' && !isTreatment && !isChat && !isNotes && !isDifferential && (
+      {tab !== 'hpi' && tab !== 'exam' && !isTreatment && !isChat && !isRealtime && !isNotes && !isDifferential && (
         <p className="sub case-context-body clinical-text-block" style={textStyle} title={bodyText}>
           {bodyText}
         </p>
@@ -313,6 +322,14 @@ export default function CaseContextPanel({
           {chatPanel}
         </div>
       )}
+      {realtimeEnabled && realtimePanel && (
+        <div
+          className={`case-realtime-tab-wrap${isRealtime ? '' : ' case-realtime-tab-wrap--hidden'}`}
+          aria-hidden={!isRealtime}
+        >
+          {realtimePanel}
+        </div>
+      )}
       {isTreatment && treatmentPanel && (
         <div className="case-treatment-stacks sidebar-stacks">{treatmentPanel}</div>
       )}
@@ -324,7 +341,7 @@ export default function CaseContextPanel({
           {resultsPanel}
         </div>
       )}
-      {showStats && !stacksWide && !isChat && (
+      {showStats && !stacksWide && !isChat && !isRealtime && (
         <div className="pack-stats">
           <span>
             Stacks left <strong>{readyCount}</strong>

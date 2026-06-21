@@ -30,6 +30,7 @@
    - Runs `MeWorld-study\game` with `npm run dev:study`  
    - **HMR off** — page won’t hot-reload mid-case  
    - API `:3001` · game `:5173`
+   - API `:3001` · game `http://localhost:5173` — **no in-app banner**; study vs main dev is the **address bar port** (`:5173` study · `:5174` main dev). Tab title: `MeWorld Study · localhost:5173`.
 
 2. **While studying** — agents implement fixes **only** under `MeWorld-study\game`  
    - **Do not** edit `MeWorld\game` unless Steve explicitly says “port to main”, “sync main”, or “update main”  

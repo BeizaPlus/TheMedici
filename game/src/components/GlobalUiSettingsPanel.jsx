@@ -9,7 +9,9 @@ import { STORAGE } from '../lib/storageKeys.js';
 import { readUiPrefs, writeUiPrefs } from '../lib/uiPrefs.js';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
 import SimulationCreativityControl from './SimulationCreativityControl.jsx';
+import CollapsibleSettingsSection from './CollapsibleSettingsSection.jsx';
 import FirstOpinionDepthControl from './FirstOpinionDepthControl.jsx';
+import AttendingStyleControl from './AttendingStyleControl.jsx';
 
 function isFavoriteLayoutSaved() {
   try {
@@ -87,13 +89,11 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
         Text size and gameplay defaults apply across briefing, case play, and notes.
       </p>
 
-      <div className="global-ui-settings-block">
-        <p className="global-ui-settings-label">Clinical text size</p>
+      <CollapsibleSettingsSection title="Clinical text size">
         <ClinicalFontControls prefs={textPrefs} onChange={setTextPrefs} showPreview />
-      </div>
+      </CollapsibleSettingsSection>
 
-      <div className="global-ui-settings-block">
-        <p className="global-ui-settings-label">Teach Me explanation notes</p>
+      <CollapsibleSettingsSection title="Teach Me explanation notes">
         <p className="global-ui-settings-note">
           Stack rationales, Teach Me compare panel, and end-of-case order review notes.
         </p>
@@ -108,15 +108,21 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
           styleFn={teachMeTextStyle}
           previewBlockClass="teach-me-text-block"
         />
-      </div>
+      </CollapsibleSettingsSection>
 
-      <div className="global-ui-settings-block">
-        <p className="global-ui-settings-label">Attending depth</p>
+      <CollapsibleSettingsSection title="Attending depth" defaultOpen>
         <p className="global-ui-settings-note">
           First opinion when you open a treatment stack — interconnected teaching arc. One global length for all orders. Second opinion stays brief (locked punch).
         </p>
         <FirstOpinionDepthControl id="first-opinion-depth-global" compact />
-      </div>
+      </CollapsibleSettingsSection>
+
+      <CollapsibleSettingsSection title="Attending style" defaultOpen>
+        <p className="global-ui-settings-note">
+          Physics, biochemistry, abstraction, and meaning leans — two slots (A/B). Saved in this browser; refresh keeps your settings.
+        </p>
+        <AttendingStyleControl compact />
+      </CollapsibleSettingsSection>
 
       <label className="global-ui-toggle">
         <input

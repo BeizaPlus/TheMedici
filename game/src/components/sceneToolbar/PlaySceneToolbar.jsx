@@ -10,6 +10,7 @@ import {
   IconSettings,
   IconStethoscope,
   IconLabFlask,
+  IconBibliography,
 } from './SceneToolbarIcons.jsx';
 import CaseRecordButton from '../CaseRecordButton.jsx';
 
@@ -48,6 +49,11 @@ export default function PlaySceneToolbar({
   settingsOpen,
   settingsRef,
   settingsPopover,
+  bibliographyOpen = false,
+  bibliographyRef,
+  bibliographyPopover = null,
+  showBibliography = false,
+  onToggleBibliography,
   recordButtonProps,
   onToggleExam,
   onToggleLabs,
@@ -102,6 +108,20 @@ export default function PlaySceneToolbar({
         <ToolbarBtn active={chatOpen} onClick={onToggleChat} title="Case thread" aria-label="Case thread">
           <IconMessage />
         </ToolbarBtn>
+        {showBibliography && onToggleBibliography ? (
+          <span className="toolbar-bibliography-wrap" ref={bibliographyRef}>
+            <ToolbarBtn
+              active={bibliographyOpen}
+              onClick={onToggleBibliography}
+              title="Bibliography & sources"
+              aria-label="Bibliography and sources"
+              aria-expanded={bibliographyOpen}
+            >
+              <IconBibliography />
+            </ToolbarBtn>
+            {bibliographyOpen && bibliographyPopover}
+          </span>
+        ) : null}
         {recordButtonProps ? (
           <CaseRecordButton {...recordButtonProps} variant="toolbar" iconOnly />
         ) : null}

@@ -311,7 +311,7 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
               aria-label="Shuffle category — prefer cases you have not attempted"
             >
               <IconShuffle />
-              <span>Shuffle</span>
+              <span>Shuffle category</span>
             </button>
             <button
               type="button"
@@ -319,10 +319,10 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
               onClick={() => shuffleCase('all')}
               disabled={!visibleAllCases.length}
               title="Random unattempted case across the full library"
-              aria-label="Shuffle all — prefer cases you have not attempted"
+              aria-label="Shuffle global — prefer cases you have not attempted"
             >
               <IconShuffle />
-              <span>Shuffle all</span>
+              <span>Shuffle global</span>
             </button>
           </div>
 

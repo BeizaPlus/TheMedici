@@ -21,6 +21,8 @@ export function useGridDragGame({
   enabled,
   snapBackMs = 380,
   overlap = 0.15,
+  placedCount = 0,
+  dockRevision = '',
   onDrop,
   onMovePin,
   onReturnToDock,
@@ -112,6 +114,10 @@ export function useGridDragGame({
             return;
           }
 
+          wrap.dataset.dragStartX = String(event.clientX);
+          wrap.dataset.dragStartY = String(event.clientY);
+          wrap.dataset.didDrag = '';
+
           cleanupDragGhosts();
           pill.classList.add('dragging');
           wrap.classList.add('stack-drag-source');
@@ -134,6 +140,15 @@ export function useGridDragGame({
         move(event) {
           const session = dragSessionRef.current;
           if (!session) return;
+          const wrap = session.wrap;
+          const startX = Number(wrap?.dataset?.dragStartX || 0);
+          const startY = Number(wrap?.dataset?.dragStartY || 0);
+          if (
+            Math.abs(event.clientX - startX) > 6 ||
+            Math.abs(event.clientY - startY) > 6
+          ) {
+            wrap.dataset.didDrag = 'true';
+          }
           session.lastX = event.clientX;
           session.lastY = event.clientY;
           moveDragGhost(session.ghost, event.clientX, event.clientY);
@@ -298,5 +313,5 @@ export function useGridDragGame({
       cleanupDragGhosts();
       dragSessionRef.current = null;
     };
-  }, [enabled, sceneRef, overlap, snapBackMs]);
+  }, [enabled, sceneRef, overlap, snapBackMs, placedCount, dockRevision]);
 }

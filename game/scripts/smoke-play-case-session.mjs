@@ -86,6 +86,70 @@ async function smokeWelcomeNavPanels(page, prefix) {
   await page.waitForSelector('.welcome-panel--timeline', { state: 'hidden', timeout: 5000 });
 }
 
+async function smokePlaySettingsToggles(page, prefix) {
+  const settingsBtn = page.getByRole('button', { name: /^Settings$/i });
+  ok(await settingsBtn.isVisible({ timeout: 8000 }), 'play settings button visible');
+  await settingsBtn.click();
+  await page.waitForSelector('.toolbar-settings-popover', { timeout: 5000 });
+
+  async function readToggleState(locator) {
+    return locator.first().evaluate((el) => ({
+      pressed: el.getAttribute('aria-pressed') === 'true',
+      active: el.classList.contains('settings-popover-btn--on'),
+      label: el.textContent?.trim() || '',
+    }));
+  }
+
+  async function assertToggleTwoWay(locator, name) {
+    ok((await locator.count()) > 0, `${name} toggle present`);
+    const before = await readToggleState(locator);
+    await locator.first().click();
+    await page.waitForTimeout(200);
+    const mid = await readToggleState(locator);
+    const changed =
+      before.pressed !== mid.pressed ||
+      before.active !== mid.active ||
+      before.label !== mid.label;
+    ok(changed, `${name} toggle changes state on first click`, `${before.label} → ${mid.label}`);
+    if (mid.pressed || mid.active) {
+      ok(mid.pressed && mid.active, `${name} toggle ON shows pressed + active class`, mid.label);
+      await shot(page, `${prefix}-${name.toLowerCase().replace(/\s+/g, '-')}-on`);
+    }
+    await locator.first().click();
+    await page.waitForTimeout(200);
+    const after = await readToggleState(locator);
+    const restored =
+      after.pressed !== mid.pressed ||
+      after.active !== mid.active ||
+      after.label !== mid.label;
+    ok(restored, `${name} toggle changes state on second click`, `${mid.label} → ${after.label}`);
+    ok(
+      after.pressed === before.pressed &&
+        after.active === before.active &&
+        after.label === before.label,
+      `${name} toggle round-trip restores initial state`,
+      after.label,
+    );
+  }
+
+  await assertToggleTwoWay(
+    page.locator('.toolbar-settings-popover button').filter({
+      hasText: /^(Timed: ON|Untimed)$/,
+    }),
+    'Timed',
+  );
+
+  await assertToggleTwoWay(
+    page.locator('.toolbar-settings-popover button').filter({
+      hasText: /^(Deterioration: ON|Simulate deterioration)$/,
+    }),
+    'Deterioration',
+  );
+
+  await settingsBtn.click();
+  await page.waitForSelector('.toolbar-settings-popover', { state: 'hidden', timeout: 5000 }).catch(() => {});
+}
+
 async function smokeUberDeepLink(page) {
   await page.goto(`${WEB}/?case=U01`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await page.waitForSelector('.game-scene, main.briefing, .briefing-with-scene', { timeout: 60000 });
@@ -188,6 +252,8 @@ async function main() {
 
   const stacks = page.locator('.scene-order-command-dock, .game-sidebar, .icu-monitor-docked').first();
   ok(await stacks.isVisible({ timeout: 10000 }), 'play chrome visible (dock / sidebar / monitor)');
+
+  await smokePlaySettingsToggles(page, showedOnboarding ? '07' : '06');
 
   await smokeUberDeepLink(page);
 

@@ -1,8 +1,6 @@
 import OrderResultSceneCard from './OrderResultSceneCard.jsx';
 import LabTrendGraphPanel from './LabTrendGraphPanel.jsx';
-import HyperkMembranePhysiologyPanel from './HyperkMembranePhysiologyPanel.jsx';
 import { neutralStackOrderName } from '../lib/stackDecoys.js';
-import { hasClinicalTrajectory } from '../lib/clinicalTrajectory/index.js';
 import { useState } from 'react';
 import { buildTrendSeries } from '../lib/clinicalTrajectory/index.js';
 
@@ -76,13 +74,6 @@ export default function OrderResultsTabPanel({
               points={trendSeries}
               metric={trendMetric}
               onMetricChange={setTrendMetric}
-            />
-          )}
-          {hasClinicalTrajectory(caseData?.id) && (
-            <HyperkMembranePhysiologyPanel
-              caseId={caseData?.id}
-              orderLog={orderLog}
-              trajectorySnapshots={trajectorySnapshots}
             />
           )}
           {activeRow && !activeRow.teachPending && (

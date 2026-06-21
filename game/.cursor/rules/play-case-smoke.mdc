@@ -36,6 +36,21 @@ Play-case flow includes:
 3. The Whys panel
 4. Play → briefing → play scene
 5. Uber **U01** deep-link (missing import / null vitals regressions)
+6. **Settings toggles** — Timed ON/OFF and Simulate deterioration ON/OFF (`settings-popover-btn--on`, `aria-pressed`)
+
+## Button & toggle smoke (mandatory)
+
+During play-case smoke, **click every toggle both ways** before calling dev ready:
+
+| Control | Verify |
+|---------|--------|
+| Timed / Untimed | `aria-pressed` + `settings-popover-btn--on` when ON |
+| Simulate deterioration | Same — label flips `Deterioration: ON` |
+| Any new toolbar button | Click ON and OFF (or open/close) — screenshot both states |
+
+If a button has no visible pressed/disabled state when clicked, **fix the UI** before shipping — do not skip because smoke “passed” visually.
+
+**Chat thread persistence** is covered separately (Pass D in `docs/smoke-play-pass-checklist.md`) — no extra smoke unless chat storage changes.
 
 ## Study snapshot
 

@@ -11,6 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 if (process.argv.includes('--no-hmr')) {
   process.env.VITE_DISABLE_HMR = '1';
+  process.env.VITE_STUDY_MODE = '1';
 }
 const API = process.env.API_BASE || 'http://127.0.0.1:3001';
 const WEB = process.env.WEB_BASE || 'http://127.0.0.1:5173';

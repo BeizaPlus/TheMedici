@@ -113,6 +113,27 @@ export function IconMessage(props) {
   );
 }
 
+/** Tabler: chart-line — real-time mechanism graph — https://tabler.io/icons/icon/chart-line */
+export function IconRealtime(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M4 19l16 0" />
+      <path d="M4 15l4 -6l4 2l4 -5l4 4" />
+    </svg>
+  );
+}
+
+/** Tabler: book-2 — case bibliography & sources — https://tabler.io/icons/icon/book-2 */
+export function IconBibliography(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M19 4v16h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12z" />
+      <path d="M19 16h-12a2 2 0 0 0 -2 2" />
+      <path d="M9 8h6" />
+    </svg>
+  );
+}
+
 export function IconMicrophone(props) {
   return (
     <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>

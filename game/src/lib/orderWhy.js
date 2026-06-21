@@ -2,6 +2,10 @@ import playbookBundle from '../data/orderWhyPlaybook.json' with { type: 'json' }
 import { apiUrl } from './apiBase.js';
 import { buildCaseChatContext } from './caseChat.js';
 import { readFirstOpinionDepth } from './firstOpinionPrefs.js';
+import {
+  attendingStyleFingerprint,
+  readActiveAttendingStyleLeans,
+} from './attendingStylePrefs.js';
 import { LOCKED_SECOND_OPINION_DEPTH } from './secondOpinionPrefs.js';
 import {
   clearLocalOrderWhy,
@@ -49,6 +53,7 @@ export async function fetchOrderWhy({
   peerReview = false,
   secondOpinionDepth = LOCKED_SECOND_OPINION_DEPTH,
   firstOpinionDepth = readFirstOpinionDepth(),
+  attendingStyleLeans = readActiveAttendingStyleLeans(),
   forceRefresh = false,
   patientAnchorDone = false,
 } = {}) {
@@ -56,7 +61,10 @@ export async function fetchOrderWhy({
   const oid = String(orderId ?? '').trim();
   const peerDepthIdx = LOCKED_SECOND_OPINION_DEPTH;
   const firstDepthIdx = Math.max(0, Math.min(3, Number(firstOpinionDepth) || 0));
-  const cacheKey = peerReview ? `${oid}__peer__d${peerDepthIdx}` : `${oid}__d${firstDepthIdx}`;
+  const styleFp = attendingStyleFingerprint(attendingStyleLeans);
+  const cacheKey = peerReview
+    ? `${oid}__peer__d${peerDepthIdx}__${styleFp}`
+    : `${oid}__d${firstDepthIdx}__${styleFp}`;
   if (!cid || !oid || !orderLabel) {
     throw new Error('Missing case or order');
   }

@@ -10,6 +10,7 @@ import { briefCacheKey, resolveCaseBriefMarkdown } from './caseBrief.js';
 import { buildCaseDiscussionContext, discussionCacheKey } from './caseDiscussionContext.js';
 import { enrichmentCacheKey } from './differentialChatEnrichment.js';
 import { resolveSimulationCreativity } from './simulationCreativity.js';
+import { readActiveAttendingStyleLeans, readAttendingStylePrefs } from './attendingStylePrefs.js';
 import { formatVitalsLine } from './vitalsParse.js';
 import { getActiveNameRegion } from './patientNameRegions.js';
 import { resolvePracticeHpi } from './practiceHpi.js';
@@ -61,6 +62,10 @@ export function buildCaseChatContext(caseData, {
   );
   const patientDemographics = resolvePatientDemographics(enrichedForPatient, patientPersona);
   const simulationCreativity = resolveSimulationCreativity(caseData?.id);
+  const attendingStylePrefs = readAttendingStylePrefs();
+  const attendingStyleLeans = { ...attendingStylePrefs.slots[attendingStylePrefs.activeSlot].leans };
+  const attendingStyleSlot = attendingStylePrefs.activeSlot;
+  const attendingStyleLabel = attendingStylePrefs.slots[attendingStylePrefs.activeSlot].label;
   const cleanHpi = interviewHpi.trim();
   const patientVoiceRaw = prepared?.patient_voice || caseData?.patient_voice || null;
   const patientVoice =
@@ -78,6 +83,9 @@ export function buildCaseChatContext(caseData, {
     sessionDifficulty: caseData?.sessionDifficulty || 'standard',
     chatMode: chatMode === 'patient_sim' ? 'patient_sim' : 'tutor',
     simulationCreativity,
+    attendingStyleLeans,
+    attendingStyleSlot,
+    attendingStyleLabel,
     patientName: resolvePatientName(caseData),
     patientFacts,
     patientDemographics,

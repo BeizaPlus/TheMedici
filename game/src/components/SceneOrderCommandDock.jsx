@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { FiMessageSquare, FiSend, FiX, FiStar } from 'react-icons/fi';
+import { FiMessageSquare, FiSend, FiX, FiStar, FiActivity } from 'react-icons/fi';
 import { IconCamera, IconFileMedical, IconArrowsMove, IconPill, IconLabFlask } from './sceneToolbar/SceneToolbarIcons.jsx';
 import PatientPortraitAvatar from './PatientPortraitAvatar.jsx';
 import CaseRecordButton from './CaseRecordButton.jsx';
@@ -104,6 +104,9 @@ function SceneOrderCommandDock({
   onPinTeachingMoment,
   scenePinsHidden = false,
   onToggleScenePins,
+  mechanismPreviewAvailable = false,
+  mechanismPreviewActive = false,
+  onToggleMechanismPreview,
   resetKey,
   caseId = null,
   caseData = null,
@@ -195,6 +198,22 @@ function SceneOrderCommandDock({
               onClick={() => onOpenLabPicker?.()}
             >
               <IconLabFlask />
+            </button>
+          )}
+          {mechanismPreviewAvailable && onToggleMechanismPreview && !patientMode && (
+            <button
+              type="button"
+              className={`scene-order-command-icon-btn scene-order-command-mechanism-btn${mechanismPreviewActive ? ' is-active' : ''}`}
+              title={
+                mechanismPreviewActive
+                  ? 'Action potential preview on — tap to show order results'
+                  : 'Action potential — live mechanism preview for placed orders'
+              }
+              aria-label={mechanismPreviewActive ? 'Hide action potential preview' : 'Show action potential preview'}
+              aria-pressed={mechanismPreviewActive}
+              onClick={() => onToggleMechanismPreview?.()}
+            >
+              <FiActivity aria-hidden />
             </button>
           )}
           {onPatientModeChange && (

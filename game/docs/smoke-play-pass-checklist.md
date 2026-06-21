@@ -105,6 +105,29 @@ Full case-story sequence: **`docs/smoke-case-story-checklist.md`**
 
 ---
 
+## Pass H — Buttons & toggles (automated + spot-check)
+
+**Rule:** Every clickable control the learner uses must be exercised in smoke — especially **two-state toggles** (ON and OFF). A toggle is not done until both states are clicked and verified.
+
+| Control | Where | Pass criteria |
+|---------|-------|----------------|
+| **Timed / Untimed** | Play → Settings popover | Click ON → `aria-pressed="true"` + `settings-popover-btn--on` · click OFF → pressed state clears |
+| **Simulate deterioration** | same | ON shows `Deterioration: ON` + active class · OFF restores label |
+| **Learning mode** | Welcome → Settings | Toggle both ways; briefing respects spoiler-safe mode when ON |
+| **Scene stack labels** | Play toolbar pill icon | Hide/show labels both work |
+| **Sidebar collapse / hide** | Play dock | Single-click collapse · double-click full hide |
+| **Shuffle category / global** | Briefing picker | Each opens a different unattempted case when pool allows |
+
+**Automated:** `smoke-play-case-session.mjs` covers Timed + Deterioration toggles on play scene (screenshots both states).
+
+**Still manual:** Welcome settings, dock collapse, shuffle buttons — verify before “ready” if you touched those files.
+
+**Chat persistence:** Pass D — thread survives navigation (no re-smoke needed unless chat storage changes).
+
+**Screenshot + blank guards:** Pass A — `assertRenderable` blocks white/black screens (`smoke-screen-utils.mjs`). Always paste `docs/smoke-screenshots/<date>/` paths in chat.
+
+---
+
 ## Study vs main
 
 Studying → edit `MeWorld-study\game` only. Port to main when Steve asks.

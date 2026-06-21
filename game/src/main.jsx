@@ -32,6 +32,11 @@ try {
 applyDeviceProfile();
 applyTheme(readTheme());
 
+if (import.meta.env.VITE_STUDY_MODE === '1') {
+  const port = import.meta.env.VITE_DEV_PORT || '5173';
+  document.title = `MeWorld Study · localhost:${port}`;
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />

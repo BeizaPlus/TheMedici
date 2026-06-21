@@ -42,6 +42,7 @@ export const STORAGE = {
   orderWhyCache: 'schoonmaker_order_why_cache',
   secondOpinionDepth: 'schoonmaker_second_opinion_depth',
   firstOpinionDepth: 'schoonmaker_first_opinion_depth',
+  attendingStylePrefs: 'schoonmaker_attending_style_prefs',
   caseNotes: 'schoonmaker_case_notes',
   caseNotesIndex: 'schoonmaker_case_notes_index',
   caseNotesMigrated: 'schoonmaker_case_notes_disk_migrated',

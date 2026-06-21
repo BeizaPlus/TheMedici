@@ -115,6 +115,16 @@ Back up ``user-data`` first if needed. Portrait gens: ``MAGNIFIC_API_KEY`` in ``
 
 Set-Content -Path (Join-Path $Target "STUDY_SNAPSHOT.md") -Value $readme -Encoding UTF8
 
+$studyMeta = @{
+  snapshotAt = (Get-Date -Format "yyyy-MM-dd")
+  mainDevWeb = "http://localhost:5173"
+  mainDevApi = "http://127.0.0.1:3001"
+  refreshCadenceDays = 7
+} | ConvertTo-Json
+$metaPath = Join-Path $Source "game\public\study-environment.json"
+Set-Content -Path $metaPath -Value $studyMeta -Encoding UTF8
+Write-Host "Wrote study banner meta -> game\public\study-environment.json ($Stamp)"
+
 Write-Host ""
 Write-Host "Done. Study folder ready:" -ForegroundColor Green
 Write-Host "  $Target"

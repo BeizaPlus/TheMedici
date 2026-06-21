@@ -99,6 +99,7 @@ import {
   buildMeasureSnapshots,
   buildOrderLog,
   getTrajectorySpec,
+  hasClinicalTrajectory,
 } from '../lib/clinicalTrajectory/index.js';
 import { enrichResultRowsWithTrajectory } from '../lib/clinicalTrajectory/enrichRows.js';
 import { readExportUseLiveScene, writeExportUseLiveScene } from '../lib/exportLiveScenePrefs.js';
@@ -117,13 +118,18 @@ import ClinicalFontControls from './ClinicalFontControls.jsx';
 import AudioSettingsPanel from './AudioSettingsPanel.jsx';
 import SimulationCreativityControl from './SimulationCreativityControl.jsx';
 import FirstOpinionDepthControl from './FirstOpinionDepthControl.jsx';
+import AttendingStyleControl from './AttendingStyleControl.jsx';
 import CaseBibliographyPanel from './CaseBibliographyPanel.jsx';
+import CollapsibleSettingsSection from './CollapsibleSettingsSection.jsx';
+import RealtimeMechanismPanel from './RealtimeMechanismPanel.jsx';
 import CasePortraitBriefControl from './CasePortraitBriefControl.jsx';
 import OrderResultsTabPanel from './OrderResultsTabPanel.jsx';
+import { caseHasBibliography } from '../lib/caseBibliography.js';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
 import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
 import { readTeachMeTextPrefs, teachMeTextStyle, writeTeachMeTextPrefs } from '../lib/teachMeTextPrefs.js';
 import { TEXT_PREFS_CHANGED } from '../lib/textPrefsSync.js';
+import { clearFirstOpinionMemoryForCase } from '../lib/orderWhy.js';
 import { hydrateCaseNotes } from '../lib/caseNotes.js';
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
 import { computePinDisplayPercent } from '../lib/pinLayout.js';
@@ -393,6 +399,7 @@ export default function Play({
   const [extraOrders, setExtraOrders] = useState([]);
   const [decoyAttempts, setDecoyAttempts] = useState([]);
   const [stackSettingsOpen, setStackSettingsOpen] = useState(false);
+  const [bibliographyOpen, setBibliographyOpen] = useState(false);
   const playUiFavorite = readPlayUiFavorite();
   const teachCompareLandscape = teachMeMode && teachCompareLayout === 'landscape';
   const [stacksVisible, setStacksVisible] = useState(playUiFavorite.stacksVisible);
@@ -404,6 +411,7 @@ export default function Play({
   const [vitalsHighlight, setVitalsHighlight] = useState(false);
   const [logOpen, setLogOpen] = useState(false);
   const [dockResultsExpanded, setDockResultsExpanded] = useState(false);
+  const caseHasClinicalTrajectory = hasClinicalTrajectory(caseData?.id);
   const [dockChatReply, setDockChatReply] = useState(null);
   const [dockReplyExpanded, setDockReplyExpanded] = useState(false);
   const [dockChatHistoryExpanded, setDockChatHistoryExpanded] = useState(true);
@@ -422,6 +430,7 @@ export default function Play({
   const [playSessionId, setPlaySessionId] = useState(() => playBoot.sessionId);
   const playSessionIdRef = useRef(playBoot.sessionId);
   const stackCommandRef = useRef(null);
+  const bibliographyRef = useRef(null);
   const expandedDockHeightRef = useRef(null);
   const [dockCollapsed, setDockCollapsed] = useState(false);
   const [dockHidden, setDockHidden] = useState(false);
@@ -3154,11 +3163,15 @@ export default function Play({
     canStartDrag: canStartStackDrag,
   });
 
+  const dragDockRevision = `${placementOrder.length}:${expandedStackId ?? ''}:${orderResultIvId ?? ''}`;
+
   useGridDragGame({
     sceneRef,
     enabled: !timedOut && useGridPlacement,
     overlap: dragCfg.overlap,
     snapBackMs: dragCfg.snapBackMs,
+    placedCount: placementOrder.length,
+    dockRevision: dragDockRevision,
     onDrop: handleDrop,
     onMovePin: handleMovePin,
     onReturnToDock: returnStackToDock,
@@ -3192,13 +3205,16 @@ export default function Play({
   }, [scenePinsHidden]);
 
   useEffect(() => {
-    if (!stackSettingsOpen) return undefined;
+    if (!stackSettingsOpen && !bibliographyOpen) return undefined;
     const closeOnOutside = (e) => {
-      if (!stackCommandRef.current?.contains(e.target)) setStackSettingsOpen(false);
+      if (stackCommandRef.current?.contains(e.target)) return;
+      if (bibliographyRef.current?.contains(e.target)) return;
+      setStackSettingsOpen(false);
+      setBibliographyOpen(false);
     };
     document.addEventListener('pointerdown', closeOnOutside);
     return () => document.removeEventListener('pointerdown', closeOnOutside);
-  }, [stackSettingsOpen]);
+  }, [stackSettingsOpen, bibliographyOpen]);
 
   useEffect(() => {
     const onFs = () => {
@@ -3855,8 +3871,7 @@ export default function Play({
       settingsRef={stackCommandRef}
       settingsPopover={
         <div className="settings-popover toolbar-settings-popover" role="dialog" aria-label="Toolbar settings">
-          <div className="settings-popover-block">
-            <p className="settings-popover-label">Clinical text</p>
+          <CollapsibleSettingsSection title="Clinical text">
             <ClinicalFontControls
               compact
               showLabel={false}
@@ -3864,9 +3879,8 @@ export default function Play({
               onChange={setTextPrefs}
               writePrefs={writeClinicalTextPrefs}
             />
-          </div>
-          <div className="settings-popover-block">
-            <p className="settings-popover-label">Teach Me notes</p>
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Teach Me notes">
             <ClinicalFontControls
               compact
               showLabel={false}
@@ -3876,77 +3890,94 @@ export default function Play({
               resetTo={{ fontScale: 1.24, weight: 500 }}
               styleFn={teachMeTextStyle}
             />
-          </div>
-          <div className="settings-popover-row settings-popover-row-2">
-            <button
-              type="button"
-              className={timedModeEnabled ? 'active settings-popover-btn--on' : ''}
-              aria-pressed={timedModeEnabled}
-              onClick={toggleTimedMode}
-            >
-              {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
-            </button>
-            <button type="button" onClick={resetPlacements}>
-              Reset placements
-            </button>
-            <button type="button" onClick={openCaseStory}>
-              Case story
-            </button>
-            <button
-              type="button"
-              className={simDeteriorationActive ? 'active settings-popover-btn--on' : ''}
-              aria-pressed={simDeteriorationActive}
-              onClick={() => {
-                const death = document.getElementById('death');
-                const idleSlots = document.querySelectorAll('.idle-slot');
-                if (simDeteriorationActive) {
-                  if (death) {
-                    death.style.opacity = '0';
-                    death.style.zIndex = '0';
-                    death.pause();
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Case controls" defaultOpen>
+            <div className="settings-popover-row settings-popover-row-2">
+              <button
+                type="button"
+                className={timedModeEnabled ? 'active settings-popover-btn--on' : ''}
+                aria-pressed={timedModeEnabled}
+                onClick={toggleTimedMode}
+              >
+                {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
+              </button>
+              <button type="button" onClick={resetPlacements}>
+                Reset placements
+              </button>
+              <button type="button" onClick={openCaseStory}>
+                Case story
+              </button>
+              <button
+                type="button"
+                className={simDeteriorationActive ? 'active settings-popover-btn--on' : ''}
+                aria-pressed={simDeteriorationActive}
+                onClick={() => {
+                  const death = document.getElementById('death');
+                  const idleSlots = document.querySelectorAll('.idle-slot');
+                  if (simDeteriorationActive) {
+                    if (death) {
+                      death.style.opacity = '0';
+                      death.style.zIndex = '0';
+                      death.pause();
+                    }
+                    idleSlots.forEach((slot) => {
+                      slot.style.opacity = '1';
+                    });
+                    setSimDeteriorationActive(false);
+                    return;
                   }
+                  setSimDeteriorationActive(true);
                   idleSlots.forEach((slot) => {
-                    slot.style.opacity = '1';
+                    slot.pause();
+                    slot.style.opacity = '0';
                   });
-                  setSimDeteriorationActive(false);
-                  return;
-                }
-                setSimDeteriorationActive(true);
-                idleSlots.forEach((slot) => {
-                  slot.pause();
-                  slot.style.opacity = '0';
-                });
-                if (!death) return;
-                death.style.opacity = '1';
-                death.style.zIndex = '2';
-                death.currentTime = 0;
-                death.play().catch(() => {});
-              }}
-            >
-              {simDeteriorationActive ? 'Deterioration: ON' : 'Simulate deterioration'}
-            </button>
-          </div>
-          <div className="settings-popover-block">
-            <p className="settings-popover-label">Attending depth</p>
+                  if (!death) return;
+                  death.style.opacity = '1';
+                  death.style.zIndex = '2';
+                  death.currentTime = 0;
+                  death.play().catch(() => {});
+                }}
+              >
+                {simDeteriorationActive ? 'Deterioration: ON' : 'Simulate deterioration'}
+              </button>
+            </div>
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Attending depth" defaultOpen>
             <FirstOpinionDepthControl id="first-opinion-depth-scene" compact />
-          </div>
-          <div className="settings-popover-block">
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Attending style" defaultOpen>
+            <AttendingStyleControl
+              compact
+              onStyleChange={() => {
+                if (caseData?.id) clearFirstOpinionMemoryForCase(caseData.id);
+                void caseChat.resetSession?.();
+              }}
+            />
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Case creativity">
             <SimulationCreativityControl
               caseId={caseData.id}
               showCaseOverride
               onCreativityChange={() => void caseChat.resetSession?.()}
             />
-          </div>
-          <div className="settings-popover-block settings-popover-block--bibliography">
-            <p className="settings-popover-label">Bibliography &amp; sources</p>
-            <p className="settings-popover-note">
-              Case composition threads, attending playbook citations, and First Aid pages.
-            </p>
-            <CaseBibliographyPanel caseData={caseData} compact />
-          </div>
-          <AudioSettingsPanel embedded showGameSounds={false} />
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Audio">
+            <AudioSettingsPanel embedded showGameSounds={false} />
+          </CollapsibleSettingsSection>
         </div>
       }
+      showBibliography={caseHasBibliography(caseData)}
+      bibliographyOpen={bibliographyOpen}
+      bibliographyRef={bibliographyRef}
+      bibliographyPopover={
+        <div className="settings-popover toolbar-bibliography-popover" role="dialog" aria-label="Bibliography and sources">
+          <CaseBibliographyPanel caseData={caseData} compact />
+        </div>
+      }
+      onToggleBibliography={() => {
+        setBibliographyOpen((v) => !v);
+        setStackSettingsOpen(false);
+      }}
       onToggleExam={() => setPhysicalExamPickerOpen(true)}
       onToggleLabs={() => setLabPickerOpen(true)}
       onToggleHistory={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
@@ -3964,7 +3995,10 @@ export default function Play({
       onToggleScenePins={() => setScenePinsHidden((v) => !v)}
       onToggleTheme={toggleTheme}
       onToggleDropMode={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
-      onToggleSettings={() => setStackSettingsOpen((v) => !v)}
+      onToggleSettings={() => {
+        setStackSettingsOpen((v) => !v);
+        setBibliographyOpen(false);
+      }}
       stacksDisabled={commandUiLocked}
     />
   );
@@ -4777,6 +4811,14 @@ export default function Play({
             defaultTab="treatment"
             showTreatmentTab
             showChatTab
+            showRealtimeTab={caseHasClinicalTrajectory}
+            realtimePanel={
+              <RealtimeMechanismPanel
+                caseId={caseData?.id}
+                orderLog={clinicalOrderLog}
+                trajectorySnapshots={trajectorySnapshots}
+              />
+            }
             activeTab={infoTab}
             onTabChange={(tab) => {
               if (tab === 'treatment' && commandUiLocked) return;

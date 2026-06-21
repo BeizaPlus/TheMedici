@@ -55,6 +55,7 @@ import { sanitizeRealWorldStories } from './realWorldStoryQuality.js';
 import { fetchYoutubeTranscript } from './youtubeTranscript.js';
 import { readOrderWhyEntry, writeOrderWhyEntry, readOrderWhyCache } from './orderWhyCache.js';
 import { buildOrderWhyPrompt } from './orderWhy.js';
+import { attendingStyleFingerprint } from './attendingStylePrompt.js';
 import {
   buildMedicalSequencePrompt,
   parseMedicalSequenceJson,
@@ -1349,9 +1350,10 @@ app.post('/api/order-why', async (req, res) => {
   const peerDepthIdx = LOCKED_SECOND_OPINION_DEPTH;
   const firstDepthIdx = Math.max(0, Math.min(3, Number(firstOpinionDepth) || 0));
   const depthConfig = { maxTokens: SECOND_OPINION_MAX_TOKENS[peerDepthIdx] ?? 120 };
+  const styleFp = attendingStyleFingerprint(caseContext?.attendingStyleLeans);
   const cacheKey = peerReview
-    ? `${oid}__peer__d${peerDepthIdx}__${ORDER_WHY_PROMPT_VERSION}`
-    : `${oid}__d${firstDepthIdx}__${ORDER_WHY_PROMPT_VERSION}`;
+    ? `${oid}__peer__d${peerDepthIdx}__${styleFp}__${ORDER_WHY_PROMPT_VERSION}`
+    : `${oid}__d${firstDepthIdx}__${styleFp}__${ORDER_WHY_PROMPT_VERSION}`;
   const label = String(orderLabel ?? '').trim();
   if (!cid || !oid || !label) {
     return res.status(400).json({ error: 'Missing caseId, orderId, or orderLabel' });

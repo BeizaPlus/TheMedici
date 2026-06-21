@@ -3,6 +3,7 @@ import { buildBareEssentialsRows, groupTeachCompareRowsByTier, ORDER_TIER_META }
 import { getCaseDifferentials } from '../lib/caseDifferentials.js';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 import { buildTeachCompareRows, teachCompareStatusLabel } from '../lib/teachMeCompare.js';
+import { ATTENDING_STYLE_CHANGED } from '../lib/attendingStylePrefs.js';
 import { fetchOrderWhy, clearFirstOpinionMemoryForCase } from '../lib/orderWhy.js';
 import { LOCKED_SECOND_OPINION_DEPTH } from '../lib/secondOpinionPrefs.js';
 import { FIRST_OPINION_DEPTH_EVENT, useFirstOpinionDepth } from './FirstOpinionDepthControl.jsx';
@@ -141,7 +142,11 @@ export default function TeachMeComparePanel({
       autoReadOrderIdsRef.current = new Set();
     };
     window.addEventListener(FIRST_OPINION_DEPTH_EVENT, onDepth);
-    return () => window.removeEventListener(FIRST_OPINION_DEPTH_EVENT, onDepth);
+    window.addEventListener(ATTENDING_STYLE_CHANGED, onDepth);
+    return () => {
+      window.removeEventListener(FIRST_OPINION_DEPTH_EVENT, onDepth);
+      window.removeEventListener(ATTENDING_STYLE_CHANGED, onDepth);
+    };
   }, [caseId]);
 
   useEffect(() => {

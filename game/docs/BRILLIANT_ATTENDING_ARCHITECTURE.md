@@ -103,6 +103,20 @@ Every DeepSeek/OpenAI attendant call builds **bottom → top**:
 
 ---
 
+## Learner prefs (persist across refresh)
+
+| Pref | localStorage key | Notes |
+|------|------------------|-------|
+| First opinion depth | `schoonmaker_first_opinion_depth` | 0–3 (Brief → Full arc) |
+| Attending style leans + A/B slots | `schoonmaker_attending_style_prefs` | Physics / biochem / abstraction / meaning sliders |
+| Simulation creativity | `schoonmaker_ui_prefs` + per-case map | Clears chat when changed |
+| Attending TTS auto-speak | `schoonmaker_audio_prefs` → `attendingAutoSpeak` | |
+| Cached order whys | `schoonmaker_order_why_cache` + server disk | Keyed by depth + style fingerprint |
+
+Study (`:5173`) and main preview (`:5174`) use **separate origins** — prefs do not sync between ports unless you copy localStorage.
+
+---
+
 ## Temperature & provider
 
 | Setting | Value |

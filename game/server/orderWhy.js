@@ -2,6 +2,7 @@ import {
   buildImmersaOrderWhySystemPrompt,
   buildImmersaSecondOpinionOrderWhyPrompt,
 } from './immersaAttendantPrompt.js';
+import { buildAttendingStylePromptBlock } from './attendingStylePrompt.js';
 import { getOrderMechanismHint } from './mechanismTeaching.js';
 import { formatVitalsLine } from '../src/lib/vitalsParse.js';
 
@@ -106,6 +107,11 @@ export function buildOrderWhyPrompt({
   const depthWords = secondOpinionDepthLevels[peerDepthIdx].maxWords;
   const firstWords = firstOpinionDepthLevels[firstDepthIdx].maxWords;
   const firstShape = firstOpinionDepthLevels[firstDepthIdx].sentences;
+  const styleBlock = buildAttendingStylePromptBlock(caseContext?.attendingStyleLeans, {
+    slotLabel: caseContext?.attendingStyleLabel || caseContext?.attendingStyleSlot || null,
+  });
+
+  const styleSuffix = `\n\n${styleBlock}`;
 
   return [
     {
@@ -123,18 +129,18 @@ MANDATORY: 2–4 sentences max (~${depthWords} words). Lead with forcing mechani
 
 Anchor to THIS patient (pronouns OK; repeat full name + vitals only if patientAnchorDone is false and they change the punch).
 
-${JSON.stringify(user, null, 2)}`
+${JSON.stringify(user, null, 2)}${styleSuffix}`
         : patientAnchorDone
           ? `First attending opinion — why this order belongs. First-principles interconnected teaching arc.
 
 MANDATORY: patientAnchorDone is TRUE — learner already knows who is on the monitor. Do NOT repeat full name + vitals. Jump to mechanism for THIS order. ${firstShape}. Max ~${firstWords} words. Interconnected chains ("because" / "so"), not a feature list.
 
-${JSON.stringify(user, null, 2)}`
+${JSON.stringify(user, null, 2)}${styleSuffix}`
           : `First attending opinion — why this order belongs. First-principles interconnected teaching arc.
 
 MANDATORY: First rationale this session — anchor once with demographics + vitals on the monitor (cite actual numbers), then mechanism. ${firstShape}. Max ~${firstWords} words. Interconnected chains ("because" / "so"), not a feature list.
 
-${JSON.stringify(user, null, 2)}`,
+${JSON.stringify(user, null, 2)}${styleSuffix}`,
     },
   ];
 }
