@@ -295,3 +295,13 @@ export function getBaseplateRelPath(sex = 'male') {
 export function getBaseplateAbsPath(sex = 'male') {
   return path.join(gameRoot, getBaseplateRelPath(sex));
 }
+
+/** Normalize baseplate path for play vs generation (female uses square source plate). */
+export function sanitizeScenePlateRelPath(relPath, { sceneKey } = {}) {
+  const rel = String(relPath || '').trim();
+  if (!rel) return getBaseplateRelPath(sceneKey === 'female' ? 'female' : 'male');
+  return rel;
+}
+
+/** Case story + inspection stills — crown through toes framing block. */
+export const CASE_STORY_INSPECTION_FRAMING_BLOCK = getCaseInspectionPhilosophyPromptBlock();

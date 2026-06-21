@@ -242,7 +242,7 @@ app.use('/case-briefs', express.static(CASE_BRIEF_DIR));
 
 const ORDER_WHY_CACHE_DIR = path.join(GAME_ROOT, '.order-why-cache');
 /** Bump when mechanism / storycraft / opinion length rules change — bust stale order-why cache. */
-const ORDER_WHY_PROMPT_VERSION = 'teach-me-v10';
+const ORDER_WHY_PROMPT_VERSION = 'teach-me-v11';
 /** First opinion = interconnected arc (depth slider); second opinion = locked brief punch. */
 const FIRST_OPINION_MAX_TOKENS = [280, 380, 480, 520];
 const SECOND_OPINION_MAX_TOKENS = [120, 160, 200, 240];
@@ -1332,7 +1332,7 @@ app.post('/api/order-why', async (req, res) => {
   const key = chatApiKeyOrError(res);
   if (!key) return;
 
-  const { caseId, orderId, orderLabel, playbookWhy = '', caseContext = null, peerReview = false, secondOpinionDepth = 0, firstOpinionDepth = 3, forceRefresh = false } =
+  const { caseId, orderId, orderLabel, playbookWhy = '', caseContext = null, peerReview = false, secondOpinionDepth = 0, firstOpinionDepth = 3, forceRefresh = false, patientAnchorDone = false } =
     req.body || {};
   const cid = String(caseId ?? '').trim();
   const oid = String(orderId ?? '').trim();
@@ -1369,6 +1369,7 @@ app.post('/api/order-why', async (req, res) => {
       peerReview: Boolean(peerReview),
       secondOpinionDepth: peerDepthIdx,
       firstOpinionDepth: firstDepthIdx,
+      patientAnchorDone: Boolean(patientAnchorDone),
     });
     const why = await callChatCompletion(key, messages, {
       maxTokens: peerReview

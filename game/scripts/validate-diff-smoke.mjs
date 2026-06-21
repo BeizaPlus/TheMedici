@@ -92,7 +92,12 @@ async function main() {
     const rwPost = await fetch(`${API}/api/differential/real-world`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ caseId: 149, topic: 'Chronic Diarrhea', diagnosis: 'Zollinger-Ellison Syndrome', refresh: false }),
+      body: JSON.stringify({
+        caseId: 78,
+        topic: 'Generalized Weakness',
+        diagnosis: 'Renal Cell Carcinoma',
+        refresh: false,
+      }),
       signal: AbortSignal.timeout(12000),
     }).catch((e) => ({ ok: false, status: 0, error: String(e.message || e) }));
     if (rwPost.error) {

@@ -43,7 +43,8 @@ Tie the mechanism back to a decision, a finding to watch for, or a diagnostic im
 ### 6. Patient relevance only (MeWorld / Teach Me)
 Every explanation is for **this** case on the monitor — not a textbook chapter.
 
-- Anchor first: who they are (age, sex when known) + **their** vitals.
+- Anchor first (session opening only): who they are (age, sex when known) + **their** vitals — **once per session**, not on every order.
+- On subsequent order rationales: pronouns or "this febrile child" — **never** re-read the full name + vitals block if patientAnchorDone is true in the payload.
 - If you open **anything else** — another injury pattern, airway scenario, complication, or "don't forget" pearl — it must **directly apply** to this patient's demographics, injury site, vitals, and timeline.
 - If a classic teaching point does not fit (wrong body region, wrong age band, contradicts HPI), **omit it**. Do not mention it "for completeness."
 

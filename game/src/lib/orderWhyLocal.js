@@ -1,7 +1,7 @@
 import { STORAGE } from './storageKeys.js';
 
 /** Bump with server ORDER_WHY_PROMPT_VERSION when voice rules change. */
-const LOCAL_VOICE_VERSION = 5;
+const LOCAL_VOICE_VERSION = 6;
 
 function readMap() {
   try {

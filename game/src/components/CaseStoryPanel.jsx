@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  buildCaseStoryOffline,
   fetchCaseStory,
   fetchCaseStoryMasterImage,
   fetchCaseStoryStoryboard,
@@ -61,7 +62,7 @@ function StoryboardPanel({
       <div className="case-story-storyboard-head">
         <p className="case-story-storyboard-lock">
           Camera: smart angle per beat — one 2×3 storyboard plate (six panels, varied composition; same MeWorld sculptural style).
-          Story text compiles from this session (attendant chat, patient replies, exam/lab proof).
+          Captions come from the compiled story; tap Refresh in the header only when you want to recompile from session chat.
         </p>
         <div className="case-story-storyboard-actions">
           <button
@@ -195,6 +196,8 @@ export default function CaseStoryPanel({
   medicalSequence = null,
 }) {
   const [compiling, setCompiling] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [needsSessionRefresh, setNeedsSessionRefresh] = useState(false);
   const [masterLoading, setMasterLoading] = useState(false);
   const [error, setError] = useState('');
   const [story, setStory] = useState(null);
@@ -205,6 +208,9 @@ export default function CaseStoryPanel({
   const [gridImageUrl, setGridImageUrl] = useState(null);
   const [imagesLoading, setImagesLoading] = useState(false);
   const [imageGen, setImageGen] = useState(true);
+  const compileStoryRef = useRef(null);
+  const compileInFlightRef = useRef(false);
+  const storyboardSyncKeyRef = useRef('');
   const hasOverride = Boolean(readCaseStoryOverride(caseData?.id));
 
   const applyStory = useCallback(
@@ -217,10 +223,21 @@ export default function CaseStoryPanel({
     [story?.chapters],
   );
 
+  const storyboardChapterKey = useMemo(
+    () =>
+      JSON.stringify(
+        (story?.chapters || []).map((c) => [c.id, c.heading, c.body, c.visualHint || '']),
+      ),
+    [story?.chapters],
+  );
+
   const compileStory = useCallback(
     async (refresh = false) => {
       if (!caseData?.id) return;
-      setCompiling(true);
+      if (compileInFlightRef.current) return;
+      compileInFlightRef.current = true;
+      if (refresh) setRefreshing(true);
+      else if (!story?.chapters?.length) setCompiling(true);
       setError('');
       try {
         const data = await fetchCaseStory({
@@ -232,19 +249,59 @@ export default function CaseStoryPanel({
           generateImage: false,
         });
         setStory(applyStory(data));
-        setStoryboardBeats(null);
-      setGridImageUrl(null);
+        setNeedsSessionRefresh(Boolean(data.needsSessionRefresh));
+        if (refresh) {
+          setStoryboardBeats(null);
+          setGridImageUrl(null);
+          storyboardSyncKeyRef.current = '';
+        }
         if (editing) {
           setDraft(emptyDraft(applyStory(data)));
         }
       } catch (e) {
         setError(String(e.message || e));
+        if (!story?.chapters?.length) {
+          setStory(applyStory(buildCaseStoryOffline(caseData, { sessionContext })));
+        }
       } finally {
+        compileInFlightRef.current = false;
         setCompiling(false);
+        setRefreshing(false);
       }
     },
-    [caseData, sessionContext, portraitNote, medicalSequence, applyStory, editing],
+    [caseData, sessionContext, portraitNote, medicalSequence, applyStory, editing, story?.chapters?.length],
   );
+
+  compileStoryRef.current = compileStory;
+
+  const syncStoryboardUrls = useCallback(async () => {
+    if (!caseData?.id || !story?.chapters?.length) return;
+    const syncKey = `${caseData.id}::${storyboardChapterKey}`;
+    if (storyboardSyncKeyRef.current === syncKey) return;
+    try {
+      const data = await fetchCaseStoryStoryboard({
+        caseData,
+        chapters: story.chapters,
+        patientLock: story.patientLock,
+        portraitNote,
+        generateImages: false,
+      });
+      setImageGen(data.imageGen !== false);
+      setStoryboardBeats(data.beats || previewBeats);
+      setGridImageUrl(data.gridImageUrl || null);
+      storyboardSyncKeyRef.current = syncKey;
+    } catch {
+      setStoryboardBeats(previewBeats);
+      storyboardSyncKeyRef.current = syncKey;
+    }
+  }, [
+    caseData,
+    story?.chapters,
+    story?.patientLock,
+    portraitNote,
+    previewBeats,
+    storyboardChapterKey,
+  ]);
 
   const generateMasterImage = useCallback(async () => {
     if (!caseData?.id) return;
@@ -268,24 +325,6 @@ export default function CaseStoryPanel({
     }
   }, [caseData, sessionContext, portraitNote]);
 
-  const syncStoryboardUrls = useCallback(async () => {
-    if (!caseData?.id || !story?.chapters?.length) return;
-    try {
-      const data = await fetchCaseStoryStoryboard({
-        caseData,
-        chapters: story.chapters,
-        patientLock: story.patientLock,
-        portraitNote,
-        generateImages: false,
-      });
-      setImageGen(data.imageGen !== false);
-      setStoryboardBeats(data.beats || previewBeats);
-      setGridImageUrl(data.gridImageUrl || null);
-    } catch {
-      setStoryboardBeats(previewBeats);
-    }
-  }, [caseData, story, portraitNote, previewBeats]);
-
   const generatePanelImages = useCallback(
     async (refresh = false) => {
       if (!caseData?.id || !story?.chapters?.length) return;
@@ -304,6 +343,7 @@ export default function CaseStoryPanel({
         setImageGen(data.imageGen !== false);
         setStoryboardBeats(data.beats || previewBeats);
         setGridImageUrl(data.gridImageUrl || null);
+        storyboardSyncKeyRef.current = `${caseData.id}::${storyboardChapterKey}::grid`;
         if (data.readiness) {
           setStory((prev) => (prev ? { ...prev, readiness: data.readiness } : prev));
         }
@@ -313,7 +353,7 @@ export default function CaseStoryPanel({
         setImagesLoading(false);
       }
     },
-    [caseData, story, portraitNote, previewBeats],
+    [caseData, story?.chapters, story?.patientLock, portraitNote, previewBeats, storyboardChapterKey],
   );
 
   useEffect(() => {
@@ -325,9 +365,15 @@ export default function CaseStoryPanel({
       setGridImageUrl(null);
       setStory(null);
       setError('');
+      setNeedsSessionRefresh(false);
+      storyboardSyncKeyRef.current = '';
       return;
     }
-    void compileStory(false);
+    const offline = applyStory(buildCaseStoryOffline(caseData, { sessionContext }));
+    setStory(offline);
+    setCompiling(false);
+    setRefreshing(false);
+    void compileStoryRef.current?.(false);
     fetch(apiUrl('/api/health'))
       .then((r) => r.json())
       .then((h) => {
@@ -335,13 +381,12 @@ export default function CaseStoryPanel({
         else if (h && h.magnific === false) setImageGen(false);
       })
       .catch(() => {});
-  }, [open, caseData?.id, compileStory]);
+  }, [open, caseData?.id]);
 
   useEffect(() => {
-    if (view === 'storyboard' && story?.chapters?.length) {
-      void syncStoryboardUrls();
-    }
-  }, [view, story?.chapters, syncStoryboardUrls]);
+    if (view !== 'storyboard' || !story?.chapters?.length) return;
+    void syncStoryboardUrls();
+  }, [view, storyboardChapterKey, caseData?.id, syncStoryboardUrls]);
 
   const startEdit = () => {
     const override = readCaseStoryOverride(caseData?.id);
@@ -387,6 +432,7 @@ export default function CaseStoryPanel({
   };
 
   const beats = storyboardBeats || previewBeats;
+  const storyTextReady = previewBeats.length > 0;
   const sessionOrders = sessionContext?.stacksPlaced?.length || 0;
   const sessionChat = sessionContext?.chatMessages?.length || 0;
 
@@ -417,6 +463,7 @@ export default function CaseStoryPanel({
             {!editing && sessionContext?.hasSessionData && (
               <p className="case-story-session-badge">
                 Session compiled · {sessionOrders} orders · {sessionChat} chat turns
+                {needsSessionRefresh ? ' · tap Refresh to merge new chat' : ''}
               </p>
             )}
           </div>
@@ -439,10 +486,10 @@ export default function CaseStoryPanel({
               type="button"
               className="case-story-btn"
               onClick={() => void compileStory(true)}
-              disabled={compiling}
+              disabled={refreshing}
               title="Recompile story from attendant chat, patient replies, orders, exam proof"
             >
-              {compiling ? 'Compiling…' : 'Refresh'}
+              {refreshing ? 'Refreshing…' : 'Refresh'}
             </button>
             <button type="button" className="case-story-btn case-story-btn-close" onClick={onClose}>
               ✕
@@ -536,7 +583,7 @@ export default function CaseStoryPanel({
         ) : view === 'storyboard' ? (
           <>
             {error && <p className="case-story-error">{error}</p>}
-            {compiling && !story?.chapters?.length && (
+            {compiling && !storyTextReady && (
               <p className="case-story-loading-img">Compiling story from session…</p>
             )}
             <StoryboardPanel

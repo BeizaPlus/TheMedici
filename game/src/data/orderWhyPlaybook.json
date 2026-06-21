@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-06-19T19:15:01.739Z",
+  "builtAt": "2026-06-21T02:42:55.123Z",
   "cases": {
     "100": {
       "physical-exam-pelvic": {
@@ -414,32 +414,32 @@
     },
     "113": {
       "abcs-oxygen-airway": {
-        "why": "Submersion stops gas exchange — hypoxia drives brain injury. Restore oxygenation and protect the airway before surfactant washout and cerebral hypoxia compound.",
+        "why": "Intubate if hypoxic, unable to protect airway.",
         "orderLabel": "ABCs / Oxygen / Airway",
         "source": "playbook"
       },
       "c-spine-precautions": {
-        "why": "Feet-first jump into shallow water transmits axial load through the cervical spine at impact — collar and inline stabilization prevent secondary cord injury if vertebrae were fractured at entry.",
+        "why": "If diving mechanism.",
         "orderLabel": "C-spine precautions",
         "source": "playbook"
       },
       "cxr": {
-        "why": "Aspiration and surfactant loss after submersion produce infiltrates and non-cardiogenic pulmonary edema — the CXR shows the pulmonary consequence of the drowning phase.",
+        "why": "Pulmonary edema, aspiration.",
         "orderLabel": "CXR",
         "source": "playbook"
       },
       "abg": {
-        "why": "Quantifies hypoxemia and ventilation-perfusion mismatch after aspiration.",
+        "why": "Assess oxygenation.",
         "orderLabel": "ABG",
         "source": "playbook"
       },
       "rewarming-if-hypothermic": {
-        "why": "Cold lake water drops core temperature — rewarming treats thermodynamic stress that worsens perfusion and coagulation.",
+        "why": "Passive or active rewarming.",
         "orderLabel": "Rewarming (if hypothermic)",
         "source": "playbook"
       },
       "observation-all-victims": {
-        "why": "Delayed pulmonary edema can appear after a lucid interval — lung injury from surfactant loss continues even when the child looks better.",
+        "why": "Can deteriorate hours later. Admit.",
         "orderLabel": "Observation (all victims)",
         "source": "playbook"
       }
@@ -1634,27 +1634,27 @@
     },
     "153": {
       "urine-porphyrins": {
-        "why": "Porphyrins keep building in the skin until you measure them — elevated uroporphyrins confirm the photosensitive pathway.",
+        "why": "Elevated uroporphyrins.",
         "orderLabel": "Urine porphyrins",
         "source": "playbook"
       },
       "plasma-porphyrins": {
-        "why": "Circulating porphyrin peak at 620 nm locks the diagnosis when urine is equivocal.",
+        "why": "Peak at 620nm — diagnostic.",
         "orderLabel": "Plasma porphyrins",
         "source": "playbook"
       },
       "hcv-hiv-iron-studies": {
-        "why": "Acquired PCT is often triggered by alcohol, iron overload, or silent hepatitis — the rash is not the whole story.",
+        "why": "Screen for PCT triggers.",
         "orderLabel": "HCV / HIV / Iron studies",
         "source": "playbook"
       },
       "phlebotomy": {
-        "why": "First-line when iron overload is driving the process — target ferritin low-normal.",
+        "why": "First-line. Target ferritin low-normal.",
         "orderLabel": "Phlebotomy",
         "source": "playbook"
       },
       "sun-protection-avoid-alcohol": {
-        "why": "Sunlight activates porphyrins in skin; alcohol keeps the trigger running — both must stop.",
+        "why": "Photosensitivity management.",
         "orderLabel": "Sun protection / Avoid alcohol",
         "source": "playbook"
       }
@@ -1920,48 +1920,28 @@
     },
     "166": {
       "pt-ptt-platelets": {
-        "why": "PTT prolonged, PT normal, Plt normal — isolated intrinsic pathway defect before you commit to factor replacement.",
+        "why": "PTT prolonged, PT normal, Plt normal.",
         "orderLabel": "PT/PTT / Platelets",
         "source": "playbook"
       },
       "mixing-study": {
-        "why": "PTT corrects — excludes inhibitor; if it fails to correct, think acquired inhibitor not classic hemophilia A.",
+        "why": "PTT corrects — excludes inhibitor.",
         "orderLabel": "Mixing study",
         "source": "playbook"
       },
       "factor-viii-assay": {
-        "why": "Low FVIII activity confirms hemophilia A and guides severity.",
+        "why": "Low FVIII — confirms diagnosis.",
         "orderLabel": "Factor VIII assay",
         "source": "playbook"
       },
-      "factor-viii-concentrate": {
-        "why": "Definitive hemostasis for active hemarthrosis — replace what the joint cannot clot without.",
-        "orderLabel": "Factor VIII concentrate",
+      "factor-viii-concentrate-ddavp": {
+        "why": "Replacement or desmopressin for mild.",
+        "orderLabel": "Factor VIII concentrate / DDAVP",
         "source": "playbook"
       },
-      "ddavp-mild-hemophilia-a": {
-        "why": "Mild disease may respond to desmopressin releasing stored VIII and vWF — not enough alone for severe bleed.",
-        "orderLabel": "DDAVP (mild hemophilia A)",
-        "source": "playbook"
-      },
-      "avoid-nsaids": {
-        "why": "Antiplatelet effect worsens bleeding — acetaminophen only for pain.",
-        "orderLabel": "Avoid NSAIDs",
-        "source": "playbook"
-      },
-      "avoid-im-injections": {
-        "why": "Intramuscular hematoma risk — IV and PO routes only.",
-        "orderLabel": "Avoid IM injections",
-        "source": "playbook"
-      },
-      "physical-exam-extremities-joints": {
-        "why": "Document swollen painful knee, range of motion, and prior hemarthrosis sites — exam drives urgency of factor.",
-        "orderLabel": "Physical exam: extremities / joints",
-        "source": "playbook"
-      },
-      "supportive-care-rice-joint-immobilizatio": {
-        "why": "Rest, ice, compression, elevation, and splint while factor works — protects cartilage from repeat bleed.",
-        "orderLabel": "Supportive care (RICE, joint immobilization)",
+      "avoid-asa-nsaids-im-injections": {
+        "why": "Bleeding precautions.",
+        "orderLabel": "Avoid ASA/NSAIDs/IM injections",
         "source": "playbook"
       }
     },
@@ -2350,12 +2330,12 @@
     },
     "176": {
       "stabilize-the-patient-ensure-airway-brea": {
-        "why": "Primary survey — airway, breathing, circulation before wound-specific care.",
+        "why": "To address any immediate life-threatening issues and administer tetanus prophylaxis",
         "orderLabel": "Stabilize the patient: ensure airway, breathing, and circulatory status",
         "source": "playbook"
       },
       "administer-tetanus-prophylaxis-if-needed": {
-        "why": "Wound prophylaxis channel — separate from ABC stabilization; both required for animal bites.",
+        "why": "Tetanus is wound prophylaxis — separate channel from ABC stabilization; both matter, not one bundled order.",
         "orderLabel": "Administer tetanus prophylaxis if needed",
         "source": "playbook"
       },
@@ -2537,186 +2517,6 @@
       "adenotonsillectomy-cpap": {
         "why": "Treat underlying OSA → enuresis resolves.",
         "orderLabel": "Adenotonsillectomy / CPAP",
-        "source": "playbook"
-      }
-    },
-    "192": {
-      "gad-7-anxiety-screening-child-appropriat": {
-        "why": "Quantify worry severity and track response — use developmentally appropriate anxiety screen alongside clinical interview.",
-        "orderLabel": "GAD-7 / anxiety screening (child-appropriate)",
-        "source": "playbook"
-      },
-      "tsh-basic-metabolic-panel": {
-        "why": "Morning stomachaches and restlessness can reflect hyperthyroidism or anemia — rule out medical drivers before anchoring on anxiety.",
-        "orderLabel": "TSH / basic metabolic panel",
-        "source": "playbook"
-      },
-      "cbt-psychotherapy-referral": {
-        "why": "First-line for pediatric GAD — exposure for school refusal, cognitive restructuring for catastrophizing about peer judgment.",
-        "orderLabel": "CBT / psychotherapy referral",
-        "source": "playbook"
-      },
-      "school-psychologist-504-coordination": {
-        "why": "School refusal needs coordinated return-to-school plan, accommodations, and teacher communication — not home isolation.",
-        "orderLabel": "School psychologist / 504 coordination",
-        "source": "playbook"
-      },
-      "ssri-consideration-sertraline-fluoxetine": {
-        "why": "Stepped care when psychotherapy alone is insufficient — sertraline or fluoxetine are first-line SSRIs for child GAD; monitor activation and suicidality early.",
-        "orderLabel": "SSRI consideration (sertraline / fluoxetine)",
-        "source": "playbook"
-      },
-      "sleep-hygiene-nightmare-screen": {
-        "why": "Sleep-onset worry and bad dreams perpetuate daytime irritability and concentration problems — screen for nightmare disorder and coach sleep routine.",
-        "orderLabel": "Sleep hygiene / nightmare screen",
-        "source": "playbook"
-      },
-      "safety-assessment": {
-        "why": "No acute suicidal ideation reported, but document safety, protective factors, and family psychiatric history — mother with depression raises genetic and modeling risk.",
-        "orderLabel": "Safety assessment",
-        "source": "playbook"
-      }
-    },
-    "193": {
-      "phq-9-safety-assessment-suicide-screen": {
-        "why": "Quantify depression severity and document passive death wishes — mandatory before disposition in young adult with mood crash.",
-        "orderLabel": "PHQ-9 / safety assessment (suicide screen)",
-        "source": "playbook"
-      },
-      "tsh-bmp-tox-screen-urine-drug-screen": {
-        "why": "Rule out hyperthyroidism, stimulant use, and metabolic mimics before anchoring on primary mood disorder.",
-        "orderLabel": "TSH / BMP / tox screen / urine drug screen",
-        "source": "playbook"
-      },
-      "mood-stabilizer-lithium-valproate": {
-        "why": "Family history of bipolar and prior manic behavior ( sleepless spending spree ) — mood stabilizer is backbone therapy, not antidepressant alone.",
-        "orderLabel": "Mood stabilizer (lithium / valproate)",
-        "source": "playbook"
-      },
-      "avoid-antidepressant-monotherapy-in-bipo": {
-        "why": "Classic bipolar trap: antidepressant without stabilizer can precipitate mania or rapid cycling — teach mechanism before prescribing.",
-        "orderLabel": "Avoid antidepressant monotherapy in bipolar",
-        "source": "playbook"
-      },
-      "ecg-chest-pain-rule-out-panic-vs-cardiac": {
-        "why": "Last week's ED visit for chest tightness may reflect panic physiology — still obtain ECG and risk-stratify; panic disorder often overlaps mood disorders.",
-        "orderLabel": "ECG + chest pain rule-out (panic vs cardiac)",
-        "source": "playbook"
-      },
-      "lithium-level-renal-thyroid-monitoring-p": {
-        "why": "If lithium chosen, plan levels 0.6–1.0 mEq/L, baseline renal function, and TSH — teaching beat for long-term bipolar care.",
-        "orderLabel": "Lithium level / renal / thyroid monitoring plan",
-        "source": "playbook"
-      },
-      "psychiatry-referral-disposition-by-risk": {
-        "why": "College-age patient with passive SI needs outpatient psychiatry or higher level of care based on risk — document plan and supports.",
-        "orderLabel": "Psychiatry referral / disposition by risk",
-        "source": "playbook"
-      }
-    },
-    "194": {
-      "collateral-history-friend-interview": {
-        "why": "Friend reports eight months of withdrawal and poor intake — essential when patient is guarded or internally preoccupied.",
-        "orderLabel": "Collateral history / friend interview",
-        "source": "playbook"
-      },
-      "cbc-bmp-tsh-lfts-tox-screen": {
-        "why": "Rule out metabolic, infectious, thyroid, and substance-induced psychosis before anchoring on schizophrenia spectrum.",
-        "orderLabel": "CBC / BMP / TSH / LFTs / tox screen",
-        "source": "playbook"
-      },
-      "ct-mri-brain-lp-encephalitis-rule-out": {
-        "why": "New psychosis with altered behavior warrants neuroimaging; autoimmune encephalitis and delirium belong on differential.",
-        "orderLabel": "CT/MRI brain ± LP (encephalitis rule-out)",
-        "source": "playbook"
-      },
-      "antipsychotic-risperidone-olanzapine": {
-        "why": "Second-generation antipsychotic for acute positive symptoms — monitor metabolic effects.",
-        "orderLabel": "Antipsychotic (risperidone / olanzapine)",
-        "source": "playbook"
-      },
-      "catatonia-screen-benzodiazepine-if-catat": {
-        "why": "Optional teaching beat — immobility, mutism, or waxy flexibility respond to lorazepam trial while arranging admission.",
-        "orderLabel": "Catatonia screen / benzodiazepine if catatonic",
-        "source": "playbook"
-      },
-      "psychiatry-admission-1-1-observation": {
-        "why": "Command hallucinations and poor self-care warrant inpatient safety and structured workup.",
-        "orderLabel": "Psychiatry admission / 1:1 observation",
-        "source": "playbook"
-      }
-    },
-    "195": {
-      "ciwa-ar-protocol-symptom-triggered-benzo": {
-        "why": "Last drink 36 hours ago with tremor and diaphoresis — scale-guided lorazepam or diazepam reduces seizure and DT risk.",
-        "orderLabel": "CIWA-Ar protocol / symptom-triggered benzodiazepines",
-        "source": "playbook"
-      },
-      "thiamine-folate-multivitamin-wernicke-pr": {
-        "why": "Give thiamine before glucose in at-risk drinkers — prevents Wernicke encephalopathy.",
-        "orderLabel": "Thiamine / folate / multivitamin (Wernicke prevention)",
-        "source": "playbook"
-      },
-      "bmp-magnesium-lfts-ethanol-level": {
-        "why": "Correct hypomagnesemia and assess hepatic injury; low ethanol level confirms withdrawal timing.",
-        "orderLabel": "BMP / magnesium / LFTs / ethanol level",
-        "source": "playbook"
-      },
-      "seizure-precautions-icu-if-severe-dt-ris": {
-        "why": "History of prior DT — lower threshold for ICU and continuous monitoring.",
-        "orderLabel": "Seizure precautions / ICU if severe DT risk",
-        "source": "playbook"
-      },
-      "monitor-for-delirium-tremens": {
-        "why": "Visual hallucinations today — track autonomic instability, agitation, and fever for DT progression.",
-        "orderLabel": "Monitor for delirium tremens",
-        "source": "playbook"
-      },
-      "addiction-medicine-psychiatry-consult": {
-        "why": "Link to detox, counseling, and relapse prevention after medical stabilization.",
-        "orderLabel": "Addiction medicine / psychiatry consult",
-        "source": "playbook"
-      },
-      "safety-assessment-after-intentional-rela": {
-        "why": "Document intent, supports, and safety if withdrawal followed deliberate drinking.",
-        "orderLabel": "Safety assessment after intentional relapse",
-        "source": "playbook"
-      }
-    },
-    "196": {
-      "trauma-informed-safety-assessment": {
-        "why": "Intrusive memories and hypervigilance after assault — assess current safety, stalking risk, and acute distress in a patient-centered manner.",
-        "orderLabel": "Trauma-informed safety assessment",
-        "source": "playbook"
-      },
-      "forensic-pathway-sane-consult-if-acute-a": {
-        "why": "If within forensic window, offer evidence collection and STI prophylaxis with explicit consent — parallel to psych care.",
-        "orderLabel": "Forensic pathway / SANE consult (if acute assault)",
-        "source": "playbook"
-      },
-      "ptsd-screen-trauma-focused-psychotherapy": {
-        "why": "First-line long-term treatment is trauma-focused CBT, CPT, or EMDR — not benzo dependence.",
-        "orderLabel": "PTSD screen / trauma-focused psychotherapy referral",
-        "source": "playbook"
-      },
-      "tsh-bmp-endocrine-depression-rule-out": {
-        "why": "Fatigue and mood symptoms warrant basic medical screen — overlap teaching with endocrine depression mimic segment.",
-        "orderLabel": "TSH / BMP — endocrine depression rule-out",
-        "source": "playbook"
-      },
-      "capacity-assessment-for-discharge": {
-        "why": "Dissociative episodes raise questions about decision-making — document capacity for discharge planning.",
-        "orderLabel": "Capacity assessment for discharge",
-        "source": "playbook"
-      },
-      "crisis-counseling-social-work": {
-        "why": "Link shelter, legal advocacy, and follow-up within days — trauma-informed voice throughout.",
-        "orderLabel": "Crisis counseling / social work",
-        "source": "playbook"
-      },
-      "bdd-differential-psychiatry-consult-for-": {
-        "why": "Mirror fixation and appearance preoccupation may reflect trauma-related shame or body dysmorphic overlap — psychiatry clarifies diagnosis.",
-        "orderLabel": "BDD differential — psychiatry consult for mirror preoccupation",
         "source": "playbook"
       }
     },
@@ -9409,393 +9209,245 @@
         "source": "playbook"
       }
     },
-    "case_004": {
-      "cbc-with-differential": {
-        "why": "In DKA, a CBC with differential is essential to evaluate for an underlying infection, which is a common precipitant of the crisis. Your patient's tachycardia and elevated glucose could be explained by DKA alone, but a high white count may signal a concurrent infection requiring antibiotics. This helps distinguish a stress leukocytosis from a true infectious process.",
-        "orderLabel": "CBC with differential",
+    "case_042": {
+      "arthrocentesis-synovial-fluid-analysis": {
+        "why": "Arthrocentesis is essential here because acute monoarticular arthritis with redness and swelling requires you to rule out septic arthritis, which can be rapidly destructive. Synovial fluid analysis will also confirm gout by identifying negatively birefringent needle-shaped crystals under polarized light, matching the classic podagra-like presentation. Expect a WBC count between 2,000 and 50,000 with a negative Gram stain and culture to support crystal-induced arthritis over infection.",
+        "orderLabel": "Arthrocentesis + synovial fluid analysis",
         "source": "llm-cache"
       },
-      "basic-metabolic-profile-comprehensive-me": {
-        "why": "A basic metabolic profile is essential here to confirm the severity of hyperglycemia and identify life-threatening electrolyte disturbances like hypokalemia or pseudohypercalcemia, which are common in DKA. Given her vomiting and polyuria, this panel will also reveal the degree of dehydration and renal function impairment, guiding your fluid and insulin therapy. You are ruling out a primary surgical abdomen by confirming the metabolic cause of her pain.",
-        "orderLabel": "Basic metabolic profile / Comprehensive metabolic profile",
+      "nsaids-indomethacin-naproxen-or-colchici": {
+        "why": "This order is appropriate for acute gout flare management, as your patient's presentation of sudden-onset monoarticular knee pain with erythema and warmth is classic for crystal-induced arthritis. You are ruling in gout by initiating first-line anti-inflammatory therapy (NSAIDs or colchicine) while awaiting definitive diagnosis via synovial fluid analysis. Given the 36-hour therapeutic window for colchicine, prompt administration can significantly reduce pain and swelling if renal and hepatic function are normal.",
+        "orderLabel": "NSAIDs (Indomethacin / Naproxen) or Colchicine",
         "source": "llm-cache"
       },
-      "urinalysis": {
-        "why": "A urinalysis is essential here to evaluate for evidence of chronic diabetic nephropathy, as the playbook hint indicates concern for proteinuria despite a normal creatinine. In a patient presenting with new-onset DKA, this test helps stage any underlying renal damage from likely undiagnosed diabetes. You are specifically looking for protein or microalbumin on the dipstick to assess for early diabetic kidney disease.",
-        "orderLabel": "Urinalysis",
+      "allopurinol-after-acute-flare": {
+        "why": "Allopurinol is indicated here for long-term urate-lowering therapy in a patient with acute gout, but it must be started only after the acute flare has fully resolved to avoid worsening the attack. In this case, the patient has classic podagra or knee involvement with dietary triggers, and you expect to confirm monosodium urate crystals on synovial fluid analysis. Starting allopurinol now would be incorrect; instead, treat the acute flare first with NSAIDs, colchicine, or corticosteroids, then initiate allopurinol with colchicine prophylaxis to prevent future flares and target a serum uric acid below 6.0 mg/dL.",
+        "orderLabel": "Allopurinol (after acute flare)",
         "source": "llm-cache"
-      },
-      "insulin-regular-lispro-glargine-nph": {
-        "why": "Insulin is the cornerstone of DKA management; you must start an IV insulin drip (regular insulin) to shut down ketogenesis and correct the metabolic acidosis. This patient's abdominal pain, vomiting, and lethargy are driven by her severe hyperglycemia and ketone production, not a surgical issue. Expect her abdominal pain and mental status to gradually improve over 12–24 hours as the insulin infusion lowers her glucose and clears ketones.",
-        "orderLabel": "Insulin (regular / lispro / glargine / NPH)",
-        "source": "llm-cache"
-      },
-      "normal-saline-lactated-ringer-0-45-salin": {
-        "why": "In DKA, profound volume depletion from osmotic diuresis is the primary driver of shock and acidosis, so IV fluids are the first and most critical intervention. This patient's dry mucous membranes, decreased skin turgor, and tachycardia confirm she needs aggressive volume expansion to restore perfusion and clear ketones. Normal saline or LR is appropriate here because her sodium is likely normal or low from the hyperglycemia-induced dilutional effect.",
-        "orderLabel": "Normal saline / Lactated Ringer / 0.45% saline",
-        "source": "llm-cache"
-      },
-      "potassium-replacement-kcl-k-citrate-k-ph": {
-        "why": "Potassium replacement is critical here because insulin therapy for DKA will drive potassium into cells, potentially unmasking or worsening hypokalemia and causing life-threatening arrhythmias. This patient already has vomiting and volume depletion, which can deplete total body potassium despite a normal or even elevated serum level on presentation. You must check her potassium before starting insulin and replete if it is below 5.3 mEq/L, using KCl to also correct the chloride loss from vomiting.",
-        "orderLabel": "Potassium replacement (KCl / K citrate / K phosphate)",
-        "source": "llm-cache"
-      },
-      "hpv-vaccine": {
-        "why": "The HPV vaccine is indicated for this 22-year-old female as part of routine preventive care, as she falls within the recommended catch-up vaccination window (ages 11-26). While her acute presentation is DKA, you must not miss this opportunity to provide age-appropriate immunization before discharge. Administering the vaccine now ensures she receives protection against HPV-related cancers, addressing a key preventive health gap in a young adult with no known primary care.",
-        "orderLabel": "HPV vaccine",
-        "source": "llm-cache"
-      },
-      "advise-patient-no-illegal-drug-use": {
-        "why": "Advising against illegal drug use is relevant here because cocaine or methamphetamine use can precipitate DKA in undiagnosed diabetes by causing hyperglycemia, tachycardia, and volume depletion, and it may also explain her abdominal pain and lethargy. Ruling out stimulant-induced metabolic crisis helps confirm that her presentation is solely due to new-onset DKA rather than a toxicologic cause. Expect a negative urine drug screen to support the diagnosis of uncomplicated DKA.",
-        "orderLabel": "Advise patient, no illegal drug use",
-        "source": "llm-cache"
-      },
-      "arterial-blood-gases": {
-        "why": "In this patient with suspected new-onset DKA, an arterial blood gas is not required because bicarbonate and anion gap from venous blood are sufficient to diagnose and monitor metabolic acidosis. The clinical picture—abdominal pain, vomiting, polyuria, and marked hyperglycemia—already points to DKA, and ABGs add no additional management value. Focus on checking serum bicarbonate, anion gap, and beta-hydroxybutyrate to confirm and follow the acidosis.",
-        "orderLabel": "Arterial blood gases",
-        "source": "llm-cache"
-      },
+      }
+    },
+    "case_043": {
       "physical-exam-general-appearance": {
-        "why": "In this patient with suspected DKA, the general appearance exam helps you quickly assess her level of consciousness and work of breathing, which are critical for determining severity (e.g., drowsiness suggests cerebral edema or severe acidosis, while Kussmaul respirations indicate compensatory hyperventilation). You are ruling out altered mental status or respiratory distress that would require immediate ICU-level care. A toxic or ill-appearing appearance here would prompt faster fluid resuscitation and insulin initiation.",
+        "why": "General appearance is critical here because this patient appears acutely ill with fever and chills, and you need to assess for signs of systemic toxicity or septic shock. A toxic-appearing patient with acute monoarticular knee pain strongly supports the diagnosis of septic arthritis, which requires urgent arthrocentesis and antibiotics. Documenting \"ill-appearing\" or \"in distress\" in the physical exam is essential for justifying the urgency of your next steps.",
         "orderLabel": "Physical Exam: General Appearance",
-        "source": "llm-cache"
-      },
-      "tdap-vaccine": {
-        "why": "In a 22-year-old female with new-onset DKA, you must address preventive care since no past medical history is available. Administering the Tdap vaccine ensures she is up-to-date on routine immunizations, as her current presentation provides an opportunity to prevent future infection. This is not directly related to DKA management but is a standard safety net for a patient with unknown vaccination status.",
-        "orderLabel": "Tdap vaccine",
-        "source": "llm-cache"
-      },
-      "hcg-beta-urine-serum-qualitative": {
-        "why": "In a 22-year-old woman of childbearing age with abdominal pain, vomiting, and polyuria, a qualitative beta-hCG is essential to rule out pregnancy before attributing symptoms solely to diabetic ketoacidosis. Pregnancy can alter management of hyperglycemia and contraindicate certain medications like ACE inhibitors or statins. A positive result would also raise concern for ectopic pregnancy as a cause of her abdominal pain. This test ensures you do not miss a critical coexisting condition.",
-        "orderLabel": "HCG, beta, urine/serum qualitative",
         "source": "llm-cache"
       },
       "physical-exam-chest-lungs": {
-        "why": "A chest and lung exam is essential here because the patient's tachypnea and tachycardia, combined with her vomiting and altered mental status, could point to a serious metabolic acidosis—like diabetic ketoacidosis—where the lungs try to \"blow off\" acid by breathing deeper and faster. You need to determine if her respiratory distress is driven by a primary lung problem (like aspiration pneumonia from vomiting) or a compensatory respiratory alkalosis from a metabolic derangement. Listen for Kussmaul respirations: deep, rapid, sighing breaths that would confirm the body is trying to correct a low pH. If her lungs are clear, it shifts your focus firmly away from a primary pulmonary cause and onto the metabolic picture.",
+        "why": "In a patient with fever and chills, a chest/lung exam is essential to identify a potential primary pulmonary source of infection, such as pneumonia, which could present with referred knee pain or bacteremia. This exam helps rule out a septic embolic source or concomitant respiratory infection that may complicate management. Given the concern for disseminated gonococcal infection, auscultation can also detect rare pulmonary involvement or a secondary process driving the systemic symptoms.",
         "orderLabel": "Physical Exam: Chest / Lungs",
         "source": "llm-cache"
-      }
-    },
-    "case_027": {
-      "obtain-complete-blood-count-cbc-and-meta": {
-        "why": "A CBC is essential to rule out anemia as a reversible cause of fatigue, while the metabolic panel screens for electrolyte disturbances or renal failure that may present with weakness. Given the emergency setting, these results will guide immediate management, such as transfusion for severe anemia or correction of life-threatening metabolic abnormalities.",
-        "orderLabel": "Obtain complete blood count (CBC) and metabolic panel",
+      },
+      "physical-exam-heart-cardiovascular": {
+        "why": "In a patient with disseminated gonococcal infection (DGI), a cardiac exam is essential to rule out endocarditis, a rare but serious complication. Listen for a new or changing murmur, which would suggest valvular involvement and alter your management. This is not a generic \"fever workup\" — DGI can seed the aortic or mitral valve, especially in young adults.",
+        "orderLabel": "Physical Exam: Heart / Cardiovascular",
         "source": "llm-cache"
       },
-      "oxygen": {
-        "why": "Oxygen is indicated here because fatigue in an emergency setting can signal hypoxemia from a pulmonary embolus, heart failure, or sepsis. Administering oxygen allows you to stabilize the patient while you investigate these life-threatening causes. Expect to see improvement in oxygen saturation and work of breathing if hypoxemia is present.",
-        "orderLabel": "Oxygen",
+      "physical-exam-extremities-knee": {
+        "why": "This focused knee exam is essential to document the classic signs of septic arthritis—warmth, swelling, erythema, and exquisite tenderness—which you must confirm to justify emergent arthrocentesis. In a sexually active young adult with fever and chills, you are ruling out a non-infectious effusion and looking for the effusion and limited range of motion that mandate synovial fluid analysis.",
+        "orderLabel": "Physical Exam: Extremities / Knee",
         "source": "llm-cache"
       },
-      "iv-access-2": {
-        "why": "IV access is critical here because this patient's fatigue may stem from a life-threatening condition such as hemorrhage, dehydration, or sepsis, requiring immediate fluid resuscitation or medication administration. Establishing two large-bore IVs ensures you can rapidly deliver IV fluids, blood products, or pressors if the patient deteriorates. This is a standard safety step in any emergency presentation where the underlying cause is unclear but potentially unstable.",
-        "orderLabel": "IV access ×2",
+      "arthrocentesis-synovial-fluid-analysis": {
+        "why": "Arthrocentesis with synovial fluid analysis is essential to confirm septic arthritis in this patient with acute monoarticular knee pain, fever, and chills. You are ruling in a septic joint by looking for a WBC count >50,000 cells/µL and Gram-negative diplococci on Gram stain, which would support disseminated gonococcal infection (DGI) as the cause. This procedure also allows you to obtain fluid for culture and NAAT, which are critical for definitive diagnosis and guiding antibiotic therapy.",
+        "orderLabel": "Arthrocentesis + synovial fluid analysis",
         "source": "llm-cache"
       },
-      "glucose-check": {
-        "why": "A glucose check is essential here because fatigue can be the presenting symptom of hypoglycemia, especially in an emergency setting. This patient’s acute fatigue warrants rapid exclusion of dangerously low blood sugar, which can mimic other conditions and requires immediate correction. Ordering this now rules out a common, reversible cause of altered mental status or weakness.",
-        "orderLabel": "Glucose check",
-        "source": "llm-cache"
-      }
-    },
-    "case_038": {
-      "ct-abdomen-pelvis-with-iv-contrast-pancr": {
-        "why": "CT abdomen/pelvis with IV contrast using a pancreatic protocol is essential here because this patient's painless jaundice, weight loss, and clay-colored stools are classic for malignant biliary obstruction, most commonly from pancreatic head adenocarcinoma. The dual-phase imaging allows you to evaluate for a pancreatic mass, assess vascular involvement (superior mesenteric artery/vein, portal vein), and detect liver metastases — all critical for determining resectability. This is the single most important staging study before considering a Whipple procedure or palliative intervention.",
-        "orderLabel": "CT abdomen/pelvis with IV contrast (pancreatic protocol)",
+      "cbc-with-differential": {
+        "why": "CBC with differential is essential here to assess for leukocytosis, which would support an infectious process like septic arthritis in this patient with acute monoarticular knee pain, fever, and chills. An elevated white count and left shift would increase your suspicion for disseminated gonococcal infection (DGI) as the underlying cause. This lab finding helps you gauge the severity of systemic inflammation and guides the urgency of arthrocentesis and empiric antibiotics.",
+        "orderLabel": "CBC with differential",
         "source": "llm-cache"
       },
-      "bmp-cmp-lfts": {
-        "why": "This patient's painless jaundice with dark urine and clay-colored stools is classic for obstructive jaundice, and a BMP/CMP/LFTs is essential to confirm the pattern. You expect to see an obstructive picture with elevated alkaline phosphatase, GGT, and direct bilirubin, while AST/ALT may be only mildly elevated. This helps differentiate extrahepatic biliary obstruction from hepatocellular injury and guides the need for urgent biliary imaging.",
-        "orderLabel": "BMP / CMP / LFTs",
+      "blood-cultures": {
+        "why": "Blood cultures are essential here because disseminated gonococcal infection (DGI) frequently presents with bacteremia, and isolating N. gonorrhoeae from blood confirms systemic infection. This patient's fever and chills suggest bloodstream involvement, and a positive culture guides definitive antibiotic therapy. Expect growth of Gram-negative diplococci, though sensitivity is limited; negative cultures do not rule out DGI.",
+        "orderLabel": "Blood cultures",
         "source": "llm-cache"
       },
-      "ca-19-9": {
-        "why": "CA 19-9 is relevant here because this patient's painless jaundice, weight loss, and Courvoisier's sign point to malignant biliary obstruction, most commonly from pancreatic head adenocarcinoma. While not diagnostic, this tumor marker helps assess prognosis and monitor treatment response after intervention. Expect an elevated level, but remember that false positives can occur with concurrent cholangitis or pancreatitis.",
-        "orderLabel": "CA 19-9",
+      "ct-gc-naat-cervix-urethra-rectum-pharynx": {
+        "why": "This patient’s acute monoarticular septic arthritis with fever and chills raises high suspicion for disseminated gonococcal infection (DGI), the most common cause of septic arthritis in sexually active young adults. Ordering NAAT from the cervix, urethra, rectum, and pharynx is essential because the primary mucosal infection is often asymptomatic, and identifying N. gonorrhoeae at any site confirms the diagnosis and guides targeted antibiotic therapy.",
+        "orderLabel": "CT/GC NAAT (cervix, urethra, rectum, pharynx)",
         "source": "llm-cache"
       },
-      "eus-with-fna": {
-        "why": "EUS with FNA is essential here to obtain a tissue diagnosis of the pancreatic head mass causing your patient’s obstructive jaundice and Courvoisier’s sign. You are ruling in pancreatic adenocarcinoma, which is the most likely cause given the painless jaundice and weight loss. The cytology result will determine whether the patient is a candidate for neoadjuvant therapy or proceeds directly to staging for possible Whipple resection.",
-        "orderLabel": "EUS with FNA",
-        "source": "llm-cache"
-      },
-      "ercp-mrcp": {
-        "why": "In this case of painless jaundice with clay-colored stools and weight loss, you are ruling in malignant biliary obstruction, most commonly from pancreatic head adenocarcinoma. ERCP allows for both diagnostic cholangiography and therapeutic biliary stent placement to relieve the obstruction. MRCP provides a non-invasive alternative to map the biliary and pancreatic ducts before intervention. Expect to see a dilated common bile duct with an abrupt cutoff at the pancreatic head on imaging.",
-        "orderLabel": "ERCP / MRCP",
+      "ceftriaxone-1g-iv-daily": {
+        "why": "This patient has acute monoarticular septic arthritis with fever and chills, and as a sexually active young adult, disseminated gonococcal infection (DGI) is the most likely cause. Ceftriaxone 1g IV daily is the first-line empiric antibiotic to cover Neisseria gonorrhoeae while you await synovial fluid culture and NAAT results. You are ruling out other bacterial causes of septic arthritis and treating the most common pathogen in this demographic. Expect clinical improvement (decreased pain, fever resolution) before transitioning to oral therapy.",
+        "orderLabel": "Ceftriaxone 1g IV daily",
         "source": "llm-cache"
       }
     },
-    "case_041": {
-      "physical-exam-heent-neck": {
-        "why": "This patient has periorbital edema, a hallmark of nephritic syndrome, and the HEENT/Neck exam is critical to assess for hypertensive retinopathy from acute hypertension and to evaluate for jugular venous distension indicating fluid overload. You are ruling out papilledema from malignant hypertension and checking for signs of volume overload that would guide diuretic therapy.",
-        "orderLabel": "Physical Exam: HEENT / Neck",
-        "source": "llm-cache"
-      }
-    },
-    "case_045": {
-      "physical-exam-neuro-psych__teach-me-v5": {
-        "why": "Mr. Babatunde Zubairu is awake now — pulse 102, BP 110/70, SpO₂ 96% — but he was found unresponsive with pinpoint pupils and a respiratory rate below 12. That triad is the opioid toxidrome, and it means his brainstem was flooded with mu-receptor agonists, suppressing the locus coeruleus and the pre-Bötzinger complex. The neuro exam is the only way to confirm he has fully emerged from that suppression — not just breathing on his own, but tracking, following commands, and protecting his airway without drift.\n\nYou need to see that his pupils are equal and reactive again — the miosis should reverse as naloxone clears the receptors. You need to check his mental status every 15 minutes for the next hour, because naloxone has a shorter half-life than most opioids, and he could slip back into respiratory depression before the next dose is due. The exam isn't a checkbox — it is the bedside monitor for re-toxication. If his pupils start to pinch again or his alertness fades, you have your answer before the pulse ox drops.\n\nWhat specific finding on the neuro exam would tell you he's at risk of re-sedating before his respiratory rate changes?",
-        "orderLabel": "Physical Exam: Neuro / Psych",
-        "source": "llm-cache"
-      },
-      "physical-exam-general-appearance__teach-me-v5": {
-        "why": "Mr. Babatunde Zubairu is here with a pulse of 102, blood pressure 110/70, and a respiratory rate of 20 — but he was found unresponsive. Those vitals tell us his body is compensating, but his brain is not awake. The first step isn't a scan or a lab — it's a **general appearance** exam, because your eyes are the most sensitive diagnostic instrument you have in the first 30 seconds.\n\nThis order belongs because the mechanism of unresponsiveness is a **failure of arousal or content** in the brainstem or cortex. You need to know *which* before you can treat *what*. Is he posturing? Are his eyes open but not tracking? Is he breathing in a Cheyne-Stokes pattern that points to a metabolic cause? Each of those physical findings slams the door on entire categories of differential — and the general appearance exam is how you open those doors.\n\nAt the bedside, you'll watch his breathing pattern, his posture, and his response to voice or sternal rub within seconds. That single observation — is he localizing, withdrawing, posturing, or flaccid? — will tell you if this is opioid toxidrome (pinpoint pupils, respiratory depression) or a structural lesion (asymmetric posturing, gaze deviation). The order buys you a diagnosis before the first needle goes in. What do you see when you look at him?",
+    "case_044": {
+      "physical-exam-general-appearance": {
+        "why": "In a patient with chronic steatorrhea and weight loss, the general appearance exam can quickly reveal signs of malnutrition such as temporal wasting, muscle atrophy, or pallor. This finding would support the severity of malabsorption from suspected Giardia infection and guide the urgency of your workup. You are specifically looking for objective evidence of the nutritional impact of the diarrhea.",
         "orderLabel": "Physical Exam: General Appearance",
         "source": "llm-cache"
       },
-      "physical-exam-neuro-psych__peer": {
-        "why": "Mr. Babatunde Zubairu is sitting in front of you with a pulse of 102, a blood pressure of 110/70, and an SpO₂ of 96% on room air — but his respiratory rate is down at 20, and he was found unresponsive. You cannot clear a toxidrome with a quick glance at the monitor; you need to see the pupils yourself.\n\nThe opioid toxidrome works by depressing the brainstem — specifically the pontine respiratory center and the Edinger-Westphal nucleus that controls pupillary constriction. Pinpoint pupils and a low respiratory rate are the same mechanism, two outputs. But you cannot trust the triage note or the paramedic's handoff; you must confirm the pupils are *actually* 1–2 mm and reactive, because a fixed and dilated pupil would flip your differential to a structural brainstem lesion or anticholinergic poisoning.\n\nSo you order a focused neuro exam: check pupil size and reactivity, assess the level of consciousness with the AVPU scale, and look for needle tracks on the arms. That exam is the fastest way to lock in the opioid toxidrome before you reach for naloxone. The bedside change? You go from *suspecting* opioid overdose to *knowing* it, and you titrate naloxone based on how the respiratory drive and pupil size respond — not on a guess.",
-        "orderLabel": "Physical Exam: Neuro / Psych",
+      "physical-exam-chest-lungs": {
+        "why": "A focused chest/lung exam is indicated here because steatorrhea and weight loss can result from cystic fibrosis, which often presents with chronic pulmonary findings like crackles or clubbing. You are ruling out CF-related bronchiectasis as an alternative cause of malabsorption. Expect normal lung exam in classic giardiasis, but abnormal findings would redirect your workup.",
+        "orderLabel": "Physical Exam: Chest / Lungs",
         "source": "llm-cache"
       },
-      "physical-exam-general-appearance__peer": {
-        "why": "Mr. Babatunde Zubairu is awake now — pulse 102, BP 110/70, RR 20, SpO₂ 96% — but he was found unresponsive with pinpoint pupils and respiratory depression. The general appearance exam is your first look at whether he is *back* or still drifting.\n\nStart from the doorway. Is he sitting up? Slumped? Making eye contact? The opioid toxidrome suppresses the reticular activating system — when you reverse it with naloxone, the brainstem wakes up, but higher cortical function may lag. A patient who tracks you with their eyes is different from one who stares through you.\n\nLook for the physical residue of the overdose: needle tracks in the antecubital fossa or between the toes, track marks on the neck. Those are not just historical — they tell you the injection route, which affects how fast the opioid hit the brain (IV = seconds, IM = minutes). If he has fresh puncture sites, the risk of re-overdose is higher because the drug depot in fat or muscle can re-equilibrate after naloxone wears off.\n\nAlso check his pupils now. If they are still 1–2 mm despite naloxone, the opioid is still bound or a longer-acting agent (methadone, fentanyl) is on board. If they are 4–5 mm and reactive, you have effectively reversed him — but that window is short.\n\nThe general appearance is not cosmetic. It is your first neurologic exam before you do the formal one. What do you see when you walk in the room?",
-        "orderLabel": "Physical Exam: General Appearance",
+      "physical-exam-heart-cardiovascular": {
+        "why": "In this case of suspected Giardia infection, a cardiovascular exam is relevant because chronic diarrhea and malabsorption can lead to electrolyte disturbances and volume depletion, which may cause tachycardia or orthostatic hypotension. You are ruling out hypovolemia or arrhythmias that could complicate rehydration or treatment. A normal exam supports that the patient is stable for outpatient management.",
+        "orderLabel": "Physical Exam: Heart / Cardiovascular",
         "source": "llm-cache"
-      }
-    },
-    "case_054": {
+      },
       "physical-exam-abdomen": {
-        "why": "A newborn with jaundice needs an abdominal exam to check for **hepatosplenomegaly** — which would point toward hemolysis (extramedullary hematopoiesis) or biliary obstruction rather than simple breastfeeding jaundice.\n\nIf the liver or spleen is palpable below the costal margin, that changes your differential from a benign feeding issue to something structural or hematologic.\n\nA soft, non-distended abdomen with no palpable masses supports the picture of physiologic or breastfeeding jaundice — where the liver and spleen should feel normal.",
+        "why": "The abdominal exam is essential to assess for diffuse tenderness and distension, which are common in giardiasis and help rule out acute surgical causes like appendicitis or cholecystitis. You are looking for signs of malabsorption, such as a protuberant, tympanitic abdomen with hyperactive bowel sounds, which would support the diagnosis of Giardia enteritis.",
         "orderLabel": "Physical Exam: Abdomen",
-        "source": "llm-cache"
-      },
-      "total-direct-bilirubin": {
-        "why": "This baby has jaundice appearing after day 3–5, which is classic for **breastfeeding jaundice** — but we must confirm it's **unconjugated** (physiologic/feeding-related) and not **conjugated** (pathologic, like biliary atresia). A **fractionated bilirubin** is the single lab that separates these two universes: unconjugated > conjugated means we manage with feeding support and possibly phototherapy; conjugated > unconjugated means we need an urgent ultrasound and surgical referral. This one lab determines whether we optimize breastfeeding or start a workup for neonatal cholestasis.",
-        "orderLabel": "Total + direct bilirubin",
-        "source": "llm-cache"
-      },
-      "direct-coombs-test": {
-        "why": "The Direct Coombs test detects antibodies coating the baby's red blood cells — the hallmark of immune-mediated hemolysis from ABO or Rh incompatibility. In this well-appearing term newborn with jaundice appearing after day 3, we need to distinguish benign breastfeeding jaundice from pathologic hemolysis. A positive Direct Coombs would confirm that maternal antibodies are attacking the baby's cells, driving bilirubin production and requiring phototherapy or IVIG. A negative result helps rule out that mechanism and supports the breastfeeding jaundice pathway.",
-        "orderLabel": "Direct Coombs test",
-        "source": "llm-cache"
-      },
-      "g6pd-screen": {
-        "why": "A G6PD deficiency can cause a severe hemolytic crisis triggered by seemingly benign exposures — even routine medications in the nursery or maternal substances in breast milk.\n\nIn a well-appearing term newborn, a sudden or prolonged rise in unconjugated bilirubin raises the question of non-immune hemolysis, and G6PD deficiency is the most common cause worldwide.\n\nThe screen is not about the jaundice itself — it's about identifying a latent risk so you can prevent future life-threatening hemolytic events.",
-        "orderLabel": "G6PD screen",
-        "source": "llm-cache"
-      },
-      "optimize-breastfeeding-lactation-consult": {
-        "why": "The jaundice appeared after day 3–5, which points to breastfeeding jaundice, not physiologic jaundice. The root cause is inadequate intake → fewer stools → bilirubin gets reabsorbed from the gut back into circulation instead of being excreted. Optimizing breastfeeding breaks that loop — more milk in means more stooling out, which physically flushes bilirubin from the enterohepatic circulation.",
-        "orderLabel": "Optimize breastfeeding / Lactation consultation",
-        "source": "llm-cache"
-      },
-      "phototherapy-if-exceeds-bhutani-threshol": {
-        "why": "Phototherapy is the only intervention that physically converts bilirubin into water-soluble isomers that can be excreted without conjugation — it directly breaks the buildup. In this well-appearing term newborn with breastfeeding jaundice, the risk isn't the jaundice itself but crossing the neurotoxicity threshold. So we're not treating the number — we're preventing bilirubin from accumulating enough to deposit in the basal ganglia. The Bhutani nomogram tells us exactly where that danger zone begins for this baby's gestational age and risk level.",
-        "orderLabel": "Phototherapy (if exceeds Bhutani threshold)",
-        "source": "llm-cache"
-      },
-      "cbc-with-differential-reticulocyte-count": {
-        "why": "A normal hemoglobin rules out hemolytic anemia as the driver of jaundice in this well-appearing newborn. The reticulocyte count tells you if the bone marrow is cranking out new red cells to compensate for destruction — a high count suggests ongoing hemolysis. Together, these labs confirm that this is simple breastfeeding jaundice from enterohepatic circulation, not a pathologic process.",
-        "orderLabel": "CBC with differential + reticulocyte count",
         "source": "llm-cache"
       },
       "tsh": {
-        "why": "TSH is relevant here because untreated congenital hypothyroidism slows hepatic bilirubin conjugation and clearance, directly prolonging physiologic jaundice.\n\nA well-appearing, feeding newborn with jaundice past day 5 needs this ruled out — hypothyroidism is a treatable cause that can be missed if you only think of hemolysis or obstruction.\n\nThe hint is literal: in this baby, a normal CBC and Coombs with prolonged unconjugated hyperbilirubinemia makes TSH the next logical stop.",
+        "why": "TSH is relevant here because hyperthyroidism is an important cause of chronic diarrhea that can mimic steatorrhea. Given this patient's weight loss and GI symptoms, ruling out thyroid dysfunction is a high-yield step before committing to parasitic workup. A normal TSH would help focus the differential on infectious causes like Giardia.",
         "orderLabel": "TSH",
         "source": "llm-cache"
-      }
-    },
-    "case_073": {
-      "physical-exam-neuro-psych": {
-        "why": "A focused neuro exam lets you **quantify the pattern of deficits** — is it truly recent memory first, with relative sparing of remote? That hippocampal gradient is the hallmark of Alzheimer's, not vascular dementia or depression.\n\nYou're also **ruling out focal findings** — asymmetric weakness, reflex changes, or a frontal release sign like grasp reflex — which would point to a different pathology like a tumor or stroke.\n\nFinally, the **cognitive screening score** (MMSE or MOCA) gives you a baseline to track progression and decide when to start donepezil or memantine. Memory isn't just a complaint — it's a measurable sign.",
-        "orderLabel": "Physical Exam: Neuro / Psych",
+      },
+      "hepatitis-a-panel": {
+        "why": "This patient’s chronic steatorrhea and camping history could also be explained by hepatitis A, which is transmitted via contaminated water and can present with prolonged diarrhea and abdominal pain. Ordering a hepatitis A panel rules out acute HAV infection as a cause of his symptoms, especially given the shared exposure risk. A positive IgM anti-HAV would confirm recent infection and alter management.",
+        "orderLabel": "Hepatitis A panel",
         "source": "llm-cache"
       },
-      "tsh-b12-rpr": {
-        "why": "These three tests are your **reversible dementia screen**. Before labeling this as Alzheimer's, you must exclude conditions that can mimic it and are treatable: **hypothyroidism** (TSH), **B12 deficiency** (which causes subacute combined degeneration of the cord and cognitive decline), and **neurosyphilis** (RPR — a forgotten cause of progressive dementia). If any of these are positive, your entire management changes.",
-        "orderLabel": "TSH / B12 / RPR",
+      "stool-culture": {
+        "why": "Stool culture is indicated here to rule out bacterial causes of chronic diarrhea, such as Campylobacter, Salmonella, or Shigella, which can also present with foul-smelling stools and weight loss. Although the history of drinking untreated stream water strongly suggests Giardia, bacterial co-infection is possible and must be excluded before attributing the entire picture to protozoa. A negative stool culture helps narrow the differential to parasitic etiologies, supporting the decision to order stool O&P and antigen testing.",
+        "orderLabel": "Stool culture",
         "source": "llm-cache"
       },
-      "cbc-bmp-lfts": {
-        "why": "CBC, BMP, and LFTs are screening labs to rule out metabolic and systemic causes of cognitive decline before you settle on a neurodegenerative diagnosis. A subtle electrolyte disturbance, uremia, or hepatic encephalopathy can mimic dementia. These are quick, cheap tests that could save the patient from being labeled with Alzheimer's if the real problem is a reversible metabolic derangement.",
-        "orderLabel": "CBC / BMP / LFTs",
+      "stool-o-p-ova-and-parasites": {
+        "why": "That patient drank untreated stream water. Giardia trophozoites colonize the proximal small bowel and disrupt the brush border, blocking fat absorption — that's why you see greasy, foul-smelling stool. The organism sheds cysts intermittently, so a single negative sample can miss it. You are looking for the characteristic pear-shaped trophozoite with two nuclei or the oval cyst on microscopy. A positive result confirms the cause of malabsorption and steatorrhea, and directs you to tinidazole or metronidazole.",
+        "orderLabel": "Stool O&P (ova and parasites)",
         "source": "llm-cache"
       },
-      "ct-mri-brain": {
-        "why": "We need to look for the structural footprint of Alzheimer's — specifically, hippocampal and medial temporal lobe atrophy, which is the signature of the tau pathology that starts there.\n\nSeeing this pattern on MRI helps distinguish Alzheimer's from other dementias, like frontotemporal (frontal/temporal pole atrophy) or vascular dementia (infarcts or white matter disease).\n\nIt also rules in or out reversible structural causes: a subdural hematoma, a slow-growing frontal tumor, or normal pressure hydrocephalus with ventriculomegaly.\n\nThe atrophy you see on imaging is the physical correlate of the memory circuits that have already been lost — it confirms the mechanism is neurodegeneration, not something we can fix with surgery.",
-        "orderLabel": "CT/MRI brain",
+      "stool-giardia-antigen-elisa": {
+        "why": "Your patient has steatorrhea — undigested fat in stool — because Giardia trophozoites coat the duodenal brush border, blocking micelle formation and fat absorption. The organism sheds intermittently, so a single O&P can miss it. The stool ELISA detects Giardia-specific antigen directly, giving you a definitive answer even when cysts are absent in that sample. A positive result means you start tinidazole immediately; a negative one with this history pushes you toward a string test or duodenal aspirate. This test bypasses the organism's patchy shedding and confirms the pathogen blocking your patient's gut.",
+        "orderLabel": "Stool Giardia antigen (ELISA)",
         "source": "llm-cache"
       },
-      "caregiver-support-advance-care-planning": {
-        "why": "In this case of progressive Alzheimer's dementia, memory and executive function will inevitably deteriorate to the point where your patient can no longer manage finances, medications, or daily safety. Advance care planning ensures their wishes for future care are documented *while they still have capacity to participate* — this is the only window to capture their authentic preferences. The goal isn't to treat the beta-amyloid, but to protect the person from a crisis decision made by a stranger in the ER.",
-        "orderLabel": "Caregiver support / Advance care planning",
+      "cbc": {
+        "why": "Your patient's small intestine is coated with Giardia trophozoites, disrupting villous architecture and creating a malabsorptive state. This chronic inflammation and nutrient loss can trigger a reactive leukocytosis or even an anemia from folate/B12 deficiency — the CBC captures the systemic toll of the mucosal war. You expect a normal eosinophil count here, because Giardia does not invade tissue or elicit the eosinophilic response that parasites like Strongyloides or hookworm cause. If the CBC shows a microcytic anemia, you now know the diarrhea has been severe enough to deplete iron stores, pushing you to start replacement alongside antiparasitic therapy. The WBC count helps you distinguish this protozoal cause from a bacterial enterocolitis that would typically drive a left-shifted neutrophilia.",
+        "orderLabel": "CBC",
         "source": "llm-cache"
       },
-      "memantine": {
-        "why": "Memantine is an NMDA receptor antagonist that reduces excessive glutamate-mediated excitotoxicity — a key driver of neuronal death in moderate-to-severe Alzheimer’s disease. In this patient, the progressive cognitive decline, apraxia, and visuospatial deficits suggest the disease has advanced beyond the mild stage, where memantine is indicated as an add-on to cholinesterase inhibitors. By blocking pathological overstimulation of NMDA receptors, it helps preserve synaptic function and slows functional decline. This order targets the neurodegenerative cascade itself, not just symptoms.",
-        "orderLabel": "Memantine",
+      "bmp-cmp": {
+        "why": "This patient has chronic watery and *fatty* diarrhea, so his small intestine is dumping fluid and preventing fat-soluble vitamin absorption. This directly pulls potassium, bicarbonate, and magnesium out of his blood, and his kidneys will try to hold onto sodium while excreting potassium as volume drops — the BMP will show you if he is hypokalemic, hypochloremic, or in a non-anion gap metabolic acidosis from stool bicarbonate loss. If his BUN is high relative to creatinine, he is volume-depleted from ongoing fluid loss, which guides your rehydration rate. You will also check creatinine to ensure his kidneys can tolerate the fluid load before you start aggressive IV replacement.",
+        "orderLabel": "BMP / CMP",
         "source": "llm-cache"
       },
-      "cholinesterase-inhibitor-donepezil": {
-        "why": "The cholinergic system in the hippocampus is essential for memory formation, and in Alzheimer's, those neurons are dying off. Donepezil boosts the remaining acetylcholine by blocking its breakdown, giving the surviving circuits a better signal-to-noise ratio. It doesn't stop the plaques and tangles, but it can slow symptom progression for months to a year. This is the first-line symptomatic treatment for this patient's mild-to-moderate Alzheimer's dementia.",
-        "orderLabel": "Cholinesterase inhibitor (Donepezil)",
-        "source": "llm-cache"
-      }
-    },
-    "case_089": {
-      "physical-exam-abdomen": {
-        "why": "The abdomen holds the most common site of fatal internal injury in abuse — solid organ laceration or bowel wall hematoma from blunt force. Palpation for distension, guarding, and tenderness is how you find what the history didn't mention.",
-        "orderLabel": "Physical Exam: Abdomen",
-        "source": "llm-cache"
-      },
-      "physical-exam-full-skin-exam-photographs": {
-        "why": "A full skin exam with photographs does two things here. First, it reveals the *distribution* of the burns — the sharp stocking-glove line on the buttocks tells you this is an immersion injury, not an accidental splash, because the skin submerged in hot water has a clear horizontal border. Second, the photographs create objective, timestamped evidence of the cigarette burns (circular, punched-out lesions) and any injuries in different stages of healing — this documentation is critical for the legal and child protection case, not just the medical one. You're not just looking at burns; you're mapping the mechanism of injury onto the child's body.",
-        "orderLabel": "Physical Exam: Full skin exam + photographs",
-        "source": "llm-cache"
-      },
-      "head-ct": {
-        "why": "A head CT is mandatory here because abusive head trauma is the leading cause of death in child physical abuse, and it often coexists with burn injuries. The same mechanism that caused these burns — a caregiver losing control — can also produce rotational acceleration-deceleration forces to the brain. You cannot clear the cervical spine or the intracranial space based on a normal neurological exam in an infant or young child with this injury pattern. We are looking for subdural hematomas, cerebral edema, or shear injuries that may be clinically silent initially but are immediately life-threatening.",
-        "orderLabel": "Head CT",
-        "source": "llm-cache"
-      },
-      "cbc-coags-bmp": {
-        "why": "For this child, the CBC, coagulogram, and BMP serve three distinct purposes. First, a low platelet count or elevated INR could mimic abuse by causing easy bruising and bleeding — we must rule out a coagulopathy before concluding the injuries are inflicted. Second, the BMP checks renal function and electrolytes, which can be deranged by large burns or dehydration from delayed care. Third, the CBC gives a baseline for anemia if there has been significant blood loss from deep burns or occult trauma.",
-        "orderLabel": "CBC / Coags / BMP",
-        "source": "llm-cache"
-      },
-      "report-to-cps-mandatory": {
-        "why": "The burn pattern—stocking-glove with sharp demarcation, cigarette marks, and facial burns inconsistent with the child's development—is a signature of non-accidental trauma. The inconsistent history and delayed care are additional red flags that, taken together, legally obligate you to report. This isn't a clinical decision you weigh; it's a statutory duty triggered by reasonable suspicion. Reporting now activates the legal and social safety net before the child goes home to further harm.",
-        "orderLabel": "Report to CPS (mandatory)",
-        "source": "llm-cache"
-      },
-      "admit-for-safety": {
-        "why": "When the story doesn't match the injury — a toddler with immersion burns and cigarette marks whose parents say they \"don't know how it happened\" — you cannot send them home. The home is the suspected source of the injury.\n\nAdmitting for safety removes the child from that environment while you work up the rest of the picture: skeletal survey, head CT, retinal exam. You're not treating the burns alone — you're stopping the ongoing harm.",
-        "orderLabel": "Admit for safety",
-        "source": "llm-cache"
-      },
-      "ophthalmology-exam": {
-        "why": "The playbook hint tells you: retinal hemorrhages are the sentinel sign of abusive head trauma (shaken baby syndrome). An ophthalmology exam is the only way to see them directly — they are invisible on any scan. In this child with multiple red flags for non-accidental trauma, you are ruling in or out the most lethal concurrent injury. You can't clear the head without looking in the eyes.",
-        "orderLabel": "Ophthalmology exam",
-        "source": "llm-cache"
-      },
-      "skeletal-survey": {
-        "why": "Skeletal survey is the standard for occult injury detection in suspected non-accidental trauma. You're looking for fractures in different stages of healing — old ones suggest ongoing abuse, not a single event. A healing rib fracture or corner metaphyseal lesion would confirm that the burns are just one episode in a pattern, not the whole story.",
-        "orderLabel": "Skeletal survey",
+      "tinidazole-2g-po-once-metronidazole-250m": {
+        "why": "The flagellated protozoan *Giardia lamblia* attaches to your patient's duodenal brush border, physically coating the absorptive surface and blocking fat and nutrient uptake — that is why you see greasy, foul-smelling steatorrhea, bloating, and weight loss. Tinidazole is your first choice because it concentrates in the intestinal lumen and biliary tract in a single 2g dose, achieving a higher cure rate than metronidazole with fewer side effects. Metronidazole, given for 5–7 days, works by disrupting the protozoan's DNA through its reduced nitro radical, but it requires multiple daily doses and has a lower compliance rate. You treat because the organism's cysts are chlorine-resistant and can persist in the gallbladder, causing a chronic smoldering infection that mimics malabsorption. Expect stool antigen or microscopy to clear within days of therapy, and if diarrhea persists, consider co-infection or post-infectious lactose intolerance from the damaged brush border.",
+        "orderLabel": "Tinidazole 2g PO once / Metronidazole 250mg TID x 5-7d",
         "source": "llm-cache"
       }
     },
-    "case_094": {
-      "ana": {
-        "why": "Order ANA to evaluate for systemic lupus erythematosus, given the classic malar rash sparing nasolabial folds, photosensitivity, polyarthritis, and constitutional symptoms. A positive ANA is required for the diagnosis and will guide further serologic workup.",
-        "orderLabel": "ANA",
+    "case_052": {
+      "physical-exam-general-appearance": {
+        "why": "A focused general appearance exam is critical here to rapidly assess the severity of his distress and hemodynamic instability. Given his tachycardia, hypotension, and sharp pleuritic chest pain, you are ruling out an immediately life-threatening tension pneumothorax or pericardial tamponade, where you would expect jugular venous distention or tracheal deviation. This quick visual assessment guides your next steps in resuscitation before more detailed exams.",
+        "orderLabel": "Physical Exam: General Appearance",
         "source": "llm-cache"
       },
-      "cbc-bmp-ua": {
-        "why": "CBC, BMP, and UA are essential to screen for hematologic and renal involvement in suspected systemic lupus erythematosus. Given this patient's malar rash, polyarthritis, and fever, you are ruling out cytopenias (anemia, leukopenia, thrombocytopenia) and active nephritis (hematuria, proteinuria, elevated creatinine). Abnormal findings in these labs would support the diagnosis and guide urgent management.",
-        "orderLabel": "CBC / BMP / UA",
+      "aspirin-325mg-chew": {
+        "why": "This patient presents with acute chest pain, tachycardia, and hypotension, concerning for an acute coronary syndrome (UA/NSTEMI). Chewable aspirin 325 mg provides rapid, irreversible inhibition of platelet aggregation, which is the cornerstone of initial antiplatelet therapy to reduce mortality and prevent progression to infarction. You are ruling out STEMI with the ECG, but regardless of the final subtype, aspirin must be given immediately upon suspicion of ACS.",
+        "orderLabel": "Aspirin 325mg chew",
         "source": "llm-cache"
       },
-      "complement-c3-c4": {
-        "why": "Order Complement C3/C4 to assess for active lupus nephritis or systemic flare, as low levels indicate classical pathway consumption in SLE. This patient’s malar rash, photosensitivity, polyarthritis, and fever meet clinical criteria for SLE, and complement levels help gauge disease activity and guide treatment urgency. Expect low C3 and C4 if she has active immune complex deposition.",
-        "orderLabel": "Complement C3/C4",
+      "bmp-mg": {
+        "why": "This patient with unstable angina and tachycardia needs a BMP to check creatinine before any contrast is used during cardiac catheterization, as his presentation warrants an early invasive strategy. Magnesium is also essential here because hypomagnesemia can predispose to arrhythmias in the setting of acute coronary syndrome and should be corrected.",
+        "orderLabel": "BMP / Mg",
         "source": "llm-cache"
       }
     },
-    "case_109": {
-      "airway-respiratory-support": {
-        "why": "This patient is unresponsive with respiratory depression, and the primary threat is airway compromise and hypoventilation. Ordering airway/respiratory support allows you to secure the airway via intubation if the GCS remains depressed, preventing hypoxia and aspiration. This is the cornerstone of management for isolated benzodiazepine overdose, as supportive care alone is expected to lead to full recovery.",
-        "orderLabel": "Airway / respiratory support",
+    "case_1": {
+      "test-1": {
+        "why": "Pulse oximetry is immediately indicated to assess for hypoxia, which is a critical finding in any patient presenting with respiratory distress or altered mental status. In this case, a low oxygen saturation would support the need for supplemental oxygen and guide further workup for conditions like pneumonia, pulmonary embolism, or COPD exacerbation. A normal reading helps rule out significant hypoxemia and may shift your differential toward non-hypoxic causes of the patient's symptoms.",
+        "orderLabel": "Pulse oximetry",
         "source": "llm-cache"
       },
-      "toxicology-screen": {
-        "why": "A toxicology screen is essential here to confirm the presence of benzodiazepines and, more critically, to rule out co-ingestants like opioids or alcohol, which would explain the severe respiratory depression and hypotonia. Isolated benzo overdose rarely causes this degree of CNS depression, so a positive screen for other sedatives would change your management and prognosis. Expect the screen to show benzodiazepines, but you are actively looking for additional toxins to guide airway support and avoid flumazenil.",
-        "orderLabel": "Toxicology screen",
-        "source": "llm-cache"
-      },
-      "cbc-bmp-lfts": {
-        "why": "A CBC, BMP, and LFTs are essential to screen for co-ingestants and metabolic derangements that could cause or worsen CNS and respiratory depression. In this unresponsive patient with known benzodiazepine overdose, you must rule out hypoglycemia, electrolyte abnormalities, hepatic encephalopathy, or concurrent infection as alternative or contributing causes. These labs also establish a baseline before any potential flumazenil use, which carries seizure risk in patients with underlying metabolic or hepatic issues. Expect normal results in isolated benzo overdose, but abnormal findings would prompt a broader differential and alter management.",
-        "orderLabel": "CBC / BMP / LFTs",
-        "source": "llm-cache"
-      },
-      "supportive-care-observation": {
-        "why": "Supportive care and observation are the mainstay of management for this patient with benzodiazepine overdose, as isolated ingestions rarely cause death and typically resolve with airway protection and respiratory support alone. You are ruling out co-ingestants (e.g., opioids, alcohol, TCAs) that would require specific interventions, and you expect gradual improvement in mental status and respiratory drive over hours with close monitoring. Avoid flumazenil here, as it can precipitate acute withdrawal seizures in a chronic user or unmask TCA toxicity.",
-        "orderLabel": "Supportive care / Observation",
-        "source": "llm-cache"
-      },
-      "psychiatry-consult": {
-        "why": "A psychiatry consult is essential here because the presentation of unresponsiveness and respiratory depression from a confirmed diazepam overdose suggests a suicide attempt or intentional self-harm. This order allows for a formal risk assessment of the patient's mental state, evaluation for underlying psychiatric conditions like depression or anxiety, and initiation of safety planning or involuntary hold if needed. Ruling out a co-ingestant overdose is critical, but the consult addresses the root cause of the overdose event itself.",
-        "orderLabel": "Psychiatry consult",
+      "test-2": {
+        "why": "In this patient with respiratory symptoms, a chest X-ray is essential to evaluate the lung fields for consolidation, effusion, or pneumothorax. This helps rule in or out pneumonia, heart failure, or other acute pulmonary pathology that would guide immediate management.",
+        "orderLabel": "Chest X-ray",
         "source": "llm-cache"
       }
     },
-    "case_140": {
-      "fundoscopy": {
-        "why": "Fundoscopy is essential here to confirm the presence of bilateral papilledema, which is the hallmark physical finding in Idiopathic Intracranial Hypertension. Given her occipital headache, vertigo, and tendency to fall, you are ruling in elevated intracranial pressure as the cause of her symptoms. A normal fundoscopic exam would argue against IIH and prompt a broader differential for her headache and imbalance.",
-        "orderLabel": "Fundoscopy",
+    "case_121": {
+      "obtain-a-thorough-history-including-feed": {
+        "why": "In this emergency presentation of poor feeding, a thorough history is essential to differentiate between life-threatening causes like sepsis or metabolic crisis and more common issues like GERD or FTT. You are specifically looking for red flags such as bilious vomiting (suggests obstruction) or poor weight gain (suggests organic disease). This history guides your immediate workup and prevents missing a surgical abdomen or inborn error of metabolism.",
+        "orderLabel": "Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements",
         "source": "llm-cache"
       },
-      "mri-mrv-brain": {
-        "why": "In this patient with occipital headache, vertigo, and gait instability, an MRI/MRV brain is essential to rule out a structural cause such as a posterior fossa mass or cerebral venous sinus thrombosis, which can present similarly. The MRV specifically evaluates for venous sinus thrombosis, a critical diagnosis to exclude given her hypertension and headache pattern. A normal study supports the working diagnosis of idiopathic intracranial hypertension by confirming no mass lesion or hydrocephalus, allowing you to proceed with lumbar puncture for opening pressure measurement.",
-        "orderLabel": "MRI/MRV brain",
-        "source": "llm-cache"
-      },
-      "lp-opening-pressure": {
-        "why": "This patient’s presentation of chronic headache with transient visual obscurations and bilateral papilledema strongly suggests elevated intracranial pressure. An LP with opening pressure is essential to confirm the diagnosis of Idiopathic Intracranial Hypertension by documenting a pressure >25 cm H2O, and to rule out other causes by ensuring normal CSF composition.",
-        "orderLabel": "LP (opening pressure)",
-        "source": "llm-cache"
-      },
-      "weight-loss": {
-        "why": "Weight loss is the most important long-term intervention for Idiopathic Intracranial Hypertension (IIH). This patient's presentation with chronic headache, transient visual obscurations, and papilledema is classic for IIH, and weight reduction directly lowers intracranial pressure. You are ruling in the diagnosis by confirming elevated opening pressure on LP, but weight loss is the cornerstone of treatment to prevent vision loss. Expect that sustained weight loss will improve her symptoms and reduce the need for surgical intervention.",
-        "orderLabel": "Weight loss",
-        "source": "llm-cache"
-      },
-      "acetazolamide": {
-        "why": "Acetazolamide is indicated here because this patient's presentation—occipital headache, vertigo, and gait instability—raises concern for elevated intracranial pressure, and the drug reduces CSF production as first-line medical therapy for idiopathic intracranial hypertension. You are ruling in IIH by confirming elevated opening pressure on LP and normal neuroimaging, and expect acetazolamide to improve her headache and vestibular symptoms by lowering ICP.",
-        "orderLabel": "Acetazolamide",
-        "source": "llm-cache"
-      },
-      "ophthalmology-follow-up": {
-        "why": "This patient has papilledema from suspected Idiopathic Intracranial Hypertension, and the ophthalmology follow-up is critical to objectively monitor for progressive optic nerve damage. You need serial visual field testing and optic nerve imaging to detect early vision loss that would warrant urgent surgical intervention. Without this, you cannot determine if medical therapy with acetazolamide is preserving her sight or if she needs a shunt.",
-        "orderLabel": "Ophthalmology follow-up",
-        "source": "llm-cache"
-      }
-    },
-    "case_176": {
-      "stabilize-the-patient-ensure-airway-brea__teach-me-v3": {
-        "why": "Before a single stitch or dose of antibiotics, you have to answer one question: is this patient about to die from something other than the bite?\n\nThe airway, breathing, and circulation you're checking is the same ABC sequence that applies to every trauma — but here, the threat is hidden. The bite itself can lacerate an artery (especially on the face, neck, or hand), cause a tension pneumothorax if the chest wall is punctured, or trigger anaphylaxis from venomous saliva. You can't treat the wound until you know the patient won't arrest from the injury's mechanical consequences.\n\nSo the order is mechanical, not pharmacological. You're literally ruling out the three ways the bite could kill before you address the wound. Once ABCs are secure, the patient is physiologically stable enough to tolerate wound exploration, irrigation, and tetanus prophylaxis — all of which cause pain and vagal stress. If you start cleaning a face laceration and the patient's airway is compromised from a hematoma, you've made things worse.\n\nWhat would you look for to know the airway is truly safe in a patient with a neck bite?",
-        "orderLabel": "Stabilize the patient: ensure airway, breathing, and circulatory status",
-        "source": "llm-cache"
-      },
-      "stabilize-the-patient-ensure-airway-brea__peer": {
-        "why": "\"Stabilize\" isn't a checkbox — it's a physics-first reset.\n\nThe bite has already broken skin and delivered bacteria deep into tissue. But before we worry about *which* bacteria, we need to know if the patient is perfusing well enough to mount an immune response at all. That's the ABC logic: airway, breathing, circulation. If the patient is hypotensive from blood loss or in respiratory distress from anaphylaxis, the wound is irrelevant — the body can't fight infection without oxygen delivery.\n\nSo the order says: pause the wound inspection. Assess the machine first. Is the airway patent? Are breath sounds equal? Is there a pulse? This isn't just protocol — it's the hierarchy of what kills fastest. A compromised airway kills in minutes. Infection kills in hours.\n\nOnce ABCs are confirmed stable, *then* you can shift focus to the bite — irrigation, debridement, antibiotics. But without this initial stabilization, you're treating a local problem in a patient whose systemic engine is failing. That's why this order belongs first: it buys you the time to think.",
-        "orderLabel": "Stabilize the patient: ensure airway, breathing, and circulatory status",
-        "source": "llm-cache"
-      },
-      "administer-tetanus-prophylaxis-if-needed__teach-me-v3": {
-        "why": "The tetanus bacterium, *Clostridium tetani*, lives in soil and animal saliva. An animal bite drives those spores deep into devitalized tissue — the puncture wound creates a low-oxygen environment. Spores germinate, produce tetanospasmin toxin, and that toxin travels up motor nerves to block inhibitory signaling. The result: uncontrollable muscle rigidity and spasm.\n\nThis order belongs because the wound is a direct inoculation event. The bite itself is the mechanism — we're not treating the wound's surface, we're preventing germination inside it. Tetanus prophylaxis isn't about the bite's size or appearance; it's about the anaerobic pocket created by the puncture. If the patient's vaccination status is uncertain or >5 years since last dose, we give Tdap or Td and tetanus immune globulin for dirty wounds like this.\n\nThe bedside change: you don't wait for trismus or opisthotonos. You stop the toxin before it reaches the spinal cord. One dose of prophylaxis now prevents a week in the ICU.",
-        "orderLabel": "Administer tetanus prophylaxis if needed",
-        "source": "llm-cache"
-      },
-      "obtain-a-complete-blood-count-cbc-and-se__teach-me-v3": {
-        "why": "This isn't a routine lab draw — it's a **triage signal** for two distinct emergencies hiding behind a bite wound.\n\nFirst, the **CBC**: a bite is a **direct inoculation** of oral flora into vascular tissue. If the neutrophil count is climbing, that tells you the immune system has already lost the local fight — bacteria are replicating faster than tissue macrophages can clear them. A rising white count doesn't diagnose infection; it diagnoses **systemic inflammatory response**, which changes your management from \"clean and observe\" to **IV antibiotics and possible operative washout**.\n\nSecond, the **serum glucose**: here's the mechanism most people miss. Rabies virus has a **predilection for the limbic system and autonomic centers**. One of its earliest systemic effects is **dysautonomia** — erratic catecholamine surges that drive glucose up before any neurologic symptom appears. A random hyperglycemia in a bite patient with no diabetes history is a **red flag for CNS involvement** long before they develop hydrophobia or agitation.\n\nAt the bedside, these two numbers tell you: *are we still managing a local wound, or has this become a systemic emergency?* The CBC answers \"infection,\" the glucose answers \"neuroinvasion.\" Together, they force a decision point — discharge with wound care, or admit for escalation.",
-        "orderLabel": "Obtain a complete blood count (CBC) and serum glucose level",
-        "source": "llm-cache"
-      },
-      "culture-and-debridement-of-the-wound-if-__teach-me-v3": {
-        "why": "Let’s talk about why culture and debridement is the first move here, not an afterthought.\n\nA dog or cat bite isn’t a clean puncture. It’s a crush-and-tear mechanism. The tooth drives oral flora — *Pasteurella*, *Staphylococcus*, anaerobes — deep into tissue that’s already devitalized by pressure. Debridement removes that dead tissue, which is essentially bacterial fertilizer. Without it, antibiotics alone can’t penetrate the biofilm that forms in the wound’s anaerobic pockets.\n\nCulturing isn’t reflex. It’s targeted. You culture because empiric coverage fails in about 30% of deep bite wounds — especially if the patient presents late, has diabetes, or the bite is over a joint or tendon sheath. The culture tells you which organism survived your initial amoxicillin-clavulanate, so you can pivot precisely.\n\nAt the bedside: debridement and culture turn a blind, infected cavity into a clean, visible wound that can heal. Without them, you’re treating a black box. With them, you own the microbiology and the tissue health.",
-        "orderLabel": "Culture and debridement of the wound if appropriate",
-        "source": "llm-cache"
-      },
-      "consult-infectious-disease-specialist-fo__teach-me-v3": {
-        "why": "The rabies virus is a bullet — once it enters a peripheral nerve, it travels up the axon at roughly 12–24 mm per day, hidden from the immune system the entire way. By the time symptoms appear, it has already reached the central nervous system, where it is nearly 100% fatal. There is no treatment for established rabies. There is only prophylaxis before the virus crosses into the brain.\n\nThat's why this consult isn't about treating an infection — it's about outrunning a timer. The Infectious Disease specialist determines three things: whether the animal's risk profile warrants post-exposure prophylaxis, whether the bite's location (face, hand, or neck) shortens the window because of denser nerve supply, and whether the patient's immunization history is reliable. Each variable shifts the risk-to-benefit calculus.\n\nAt the bedside, the decision changes everything. An unvaccinated patient with a bat bite in the neck gets rabies immunoglobulin infiltrated *into the wound itself* and a four-dose vaccine series over 14 days. A fully vaccinated patient with a dog bite on the leg may need only a booster. The specialist maps the virus's potential path against the clock — and that map determines whether the patient leaves the ED with a shot schedule or with a watch-and-wait plan that carries a different kind of weight.",
-        "orderLabel": "Consult Infectious Disease specialist for potential rabies prophylaxis",
-        "source": "llm-cache"
-      },
-      "oxygen__teach-me-v3": {
-        "why": "Let’s start with what the bite actually does to the body—not the wound itself, but the *whole-body response*.\n\nA large animal bite—especially a crush or puncture from a dog or large cat—triggers a massive sympathetic surge. Pain, fear, and tissue destruction dump catecholamines. That drives tachypnea and a shallow, inefficient breathing pattern. The patient is working hard to move air, but they’re not moving it well.\n\nNow add the mechanism of injury: a bite to the face, neck, or chest can cause direct airway compromise—swelling, hematoma, or even tracheal deviation. But even a limb bite can drop oxygen saturation if the patient is hyperventilating from pain and mismatch.\n\nOxygen here isn’t about fixing a lung problem. It’s about buying time. You raise the FiO₂ to widen the margin before desaturation hits. While you’re irrigating, assessing nerve and vessel integrity, and deciding on antibiotics, the patient’s oxygen reserve is your safety buffer.\n\nAt the bedside: you place the nasal cannula or non-rebreather, and you watch the respiratory rate drop. That’s the catecholamine storm settling because the brain senses it doesn’t have to panic-breathe anymore. The pulse oximeter stays above 97%, and you can focus on the wound without the patient crashing from exhaustion.\n\nSo the order belongs because the bite isn’t just a local injury—it’s a systemic stressor that steals oxygen reserve. Oxygen restores that reserve before you need it.",
+      "oxygen": {
+        "why": "Oxygen is indicated here because poor feeding in an infant can be a subtle sign of respiratory distress or underlying hypoxia, and you must rule out or manage hypoxemia before it leads to decompensation. In this emergency presentation, you expect to see low oxygen saturation on pulse oximetry, and supplemental oxygen helps stabilize the patient while you investigate the cause.",
         "orderLabel": "Oxygen",
         "source": "llm-cache"
       }
     },
-    "case_4": {
-      "genitalia_exam": {
-        "why": "In a young woman with lower abdominal pain, a genital exam is essential to evaluate for pelvic causes such as ovarian torsion, ectopic pregnancy, or pelvic inflammatory disease. This exam can reveal cervical motion tenderness, adnexal masses, or discharge that would not be detected on an abdominal exam alone. Ruling out these gynecologic emergencies is critical before attributing the pain to a gastrointestinal source.",
-        "orderLabel": "Physical Exam: Genitalia",
+    "case_156": {
+      "ua-24h-urine-protein": {
+        "why": "In this child with generalized edema, frothy urine, and weight gain, the UA will likely show 3-4+ protein and oval fat bodies, confirming nephrotic syndrome. The 24-hour urine protein quantifies whether protein excretion is in the nephrotic range (>40 mg/m²/hr in children), which is essential to establish the diagnosis and guide steroid therapy. This test is critical to rule out non-nephrotic proteinuria and to document the severity before starting prednisone.",
+        "orderLabel": "UA / 24h urine protein",
+        "source": "llm-cache"
+      },
+      "cbc-bmp-albumin-lipids": {
+        "why": "This CBC/BMP/Albumin/Lipids panel is essential to confirm the diagnostic triad of nephrotic syndrome in this child with periorbital edema and frothy urine. You expect to find hypoalbuminemia (<2.5 g/dL) and hyperlipidemia (elevated cholesterol/triglycerides), while the BMP and CBC help rule out alternative causes of edema like renal failure or infection.",
+        "orderLabel": "CBC / BMP / Albumin / Lipids",
+        "source": "llm-cache"
+      },
+      "prednisone-2mg-kg-day": {
+        "why": "Prednisone 2mg/kg/day is the first-line treatment for childhood nephrotic syndrome, most commonly due to minimal change disease (MCD). In this child with periorbital edema, frothy urine, and hypoalbuminemia, a rapid response to steroids (remission in 2-4 weeks) confirms MCD and avoids the need for renal biopsy. You are ruling in steroid-sensitive nephrotic syndrome and ruling out steroid-resistant causes like focal segmental glomerulosclerosis.",
+        "orderLabel": "Prednisone 2mg/kg/day",
+        "source": "llm-cache"
+      },
+      "salt-fluid-restriction-diuretics": {
+        "why": "In a child with nephrotic syndrome and severe edema, salt/fluid restriction plus diuretics directly addresses the symptomatic third-spacing of fluid caused by hypoalbuminemia. This order helps rule out anasarca from heart failure or liver disease by confirming a renal origin of the edema. You expect to see decreased peripheral swelling and improved urine output, though diuretics must be used cautiously to avoid intravascular volume depletion.",
+        "orderLabel": "Salt/fluid restriction + Diuretics",
+        "source": "llm-cache"
+      }
+    },
+    "case_160": {
+      "tsh-tox-screen": {
+        "why": "Your patient’s chronic anxiety, restlessness, and sleep disruption could stem from a hypermetabolic state — the thyroid is essentially revving every cell’s engine, mimicking generalized anxiety from the inside out. A TSH will tell us if her pituitary is suppressing in response to autonomous thyroid overdrive. Meanwhile, the tox screen isn’t just a checkbox — it’s hunting for a substance (stimulants, withdrawal from depressants) that could be driving her sympathetic nervous system into that same jittery, sleepless pattern. Both results pivot your next step: if TSH is suppressed, you’re treating the thyroid, not the psyche; if the tox screen is positive, you’re managing intoxication or withdrawal, not primary anxiety. Without these, you risk prescribing an SSRI for a biochemical storm you could have quieted with methimazole or detox.",
+        "orderLabel": "TSH / Tox screen",
+        "source": "llm-cache"
+      },
+      "cbt-psychotherapy": {
+        "why": "Your patient’s brain is locked in a chronic hyperarousal loop — the amygdala overreacts to neutral stimuli, and the prefrontal cortex fails to inhibit it. CBT directly retrains this circuitry by teaching the prefrontal cortex to reappraise threats and break the fear-avoidance cycle. You do not just medicate the symptoms; you give the patient a tool to rewire the neural pathways driving the worry. Expect the GAD-7 score to drop as the patient practices cognitive restructuring and behavioral exposure. This is first-line because it targets the mechanism of the disorder — not just the chemistry — and produces durable changes that persist after therapy ends.",
+        "orderLabel": "CBT (psychotherapy)",
+        "source": "llm-cache"
+      },
+      "ssri-sertraline-escitalopram": {
+        "why": "Your patient’s amygdala and prefrontal cortex are locked in a cycle of hyperarousal — the brain is generating excessive fear signals without an external threat. SSRIs increase synaptic serotonin, which over weeks downregulates postsynaptic receptors and strengthens the prefrontal cortex’s ability to inhibit that amygdala overdrive. You will not see a change in the first week; instead, you expect a gradual reduction in baseline worry and restlessness by week 4–6. This is not a rescue medication — it is a reset for the neural circuitry driving the chronic, generalized hypervigilance.",
+        "orderLabel": "SSRI (Sertraline / Escitalopram)",
+        "source": "llm-cache"
+      }
+    },
+    "case_171": {
+      "obtain-vital-signs-perform-a-detailed-ph": {
+        "why": "Your patient is agitated because something is disrupting their brain — but you do not yet know if that something is metabolic, infectious, structural, or toxic. Vital signs tell you if fever, hypoxia, hypotension, or tachycardia is driving the agitation from the body up into the brain. The physical exam localizes the problem: a rigid neck points to meningitis, focal weakness to a stroke, or a tremor to withdrawal or serotonin syndrome. Mental status assessment — specifically the timing, fluctuation, and content — distinguishes delirium (acute, fluctuating, inattention) from psychosis (fixed delusions, hallucinations with clear sensorium). You must know the physiology before you can choose the right sedative, workup, or restraint strategy.",
+        "orderLabel": "Obtain vital signs, perform a detailed physical examination, and assess mental status",
+        "source": "llm-cache"
+      },
+      "order-laboratory-workup-cbc-electrolytes": {
+        "why": "This patient’s agitation could be the brain’s only outward sign of a body in crisis—delirium from infection, electrolyte derangement, or hyperthyroidism. The CBC tells you if neutrophils are flooding the bloodstream, signaling sepsis. The electrolytes and glucose reveal if the neuron’s electrical environment is failing. The urine toxicology screen rules out an acute intoxication or withdrawal that is directly poisoning the synaptic cleft. You must know if this is a psychiatric storm or a metabolic fire before you sedate.",
+        "orderLabel": "Order laboratory workup: CBC, electrolytes, glucose, renal/hepatic function tests, thyroid function tests, urine toxicology screen",
+        "source": "llm-cache"
+      },
+      "order-imaging-studies-if-necessary-ct-sc": {
+        "why": "The patient's agitation may not be \"psychiatric\" at all — it could be the brain itself screaming through a structural or metabolic insult. A frontal lobe tumor, subdural hematoma, or acute stroke can present solely with altered behavior before any focal weakness or headache appears. You order imaging to look for a mass, bleed, or infarct that would make sedation or antipsychotics dangerous or futile. If the scan shows nothing, you pivot to delirium workup with confidence. This is the only way to know if you're treating a chemical imbalance or a ticking time bomb.",
+        "orderLabel": "Order imaging studies if necessary (CT scan or MRI of the brain)",
+        "source": "llm-cache"
+      },
+      "consult-psychiatry-for-further-evaluatio": {
+        "why": "Your patient’s agitation isn't just a behavioral issue — it's a symptom of an underlying brain dysfunction that may be structural, metabolic, or psychiatric. A psychiatry consult brings targeted expertise to dissect that dysfunction: they will perform a structured mental status exam to pinpoint whether this is delirium (a fluctuating, acute organic process) versus a primary psychiatric emergency (like mania or psychosis). This distinction changes your next step — delirium demands a search for infection, toxins, or metabolic derangement, while a psychotic break may need antipsychotics and safety planning. Without this lens, you risk treating the noise of agitation without addressing the root cause rattling the brain’s circuitry.",
+        "orderLabel": "Consult psychiatry for further evaluation and management",
+        "source": "llm-cache"
+      },
+      "if-the-patient-is-a-danger-to-themselves": {
+        "why": "This patient's agitation is not just a symptom — it is a behavior driven by a brain that has lost its ability to inhibit dangerous impulses. When the frontal lobe's executive control fails (from delirium, dementia, or acute psychosis), the amygdala can hijack motor output, making the patient unpredictable. If they cannot contract to safety or verbally contract to not harm themselves or others, their physiology has already bypassed voluntary restraint. A psychiatric hold is not a punishment — it is a mechanical lock on the environment until the underlying brain chemistry can be stabilized. You are protecting the patient from their own compromised neurocircuitry.",
+        "orderLabel": "If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold",
+        "source": "llm-cache"
+      },
+      "cmp-bmp": {
+        "why": "This patient’s agitation may not be “psychiatric” — it could be metabolic encephalopathy from deranged sodium, calcium, or glucose. The brain is an electrical organ whose firing depends on precise electrolyte gradients across neuronal membranes; a disrupted CMP explains why the cortex is misfiring. A high anion gap points to uremia or ketoacidosis, while transaminitis suggests hepatic encephalopathy from ammonia. If sodium is low or calcium is high, the agitation is driven by cerebral edema or altered membrane excitability — and the treatment is not a sedative, but correction of the chemistry.",
+        "orderLabel": "CMP/BMP",
         "source": "llm-cache"
       }
     }
   },
-  "caseCount": 212,
-  "entryCount": 1874
+  "caseCount": 203,
+  "entryCount": 1808
 }

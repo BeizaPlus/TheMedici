@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "builtAt": "2026-06-19T19:12:10.682Z",
-  "totalCases": 199,
-  "caseBankMerged": 186,
+  "builtAt": "2026-06-21T02:42:52.755Z",
+  "totalCases": 194,
+  "caseBankMerged": 181,
   "caseBankSource": "ollama-case-bank",
   "caseBankDir": "C:\\Users\\steve\\MeWorld\\game\\data\\cases",
   "cases": {
@@ -64,7 +64,7 @@
           "Diaphoretic or pale skin with perfusion checked."
         ]
       ],
-      "patientSex": "female",
+      "patientSex": "unknown",
       "hpi_narrative": "{{patient_name}} presents with vaginal itching, dryness, burning, dyspareunia, and increased urinary frequency. Postmenopausal. Exam reveals pale, thin vaginal mucosa with loss of rugae. Atrophic vaginitis results from estrogen deficiency → thinning of vaginal epithelium → decreased glycogen → loss of lactobacilli → increased vaginal pH → susceptibility to infection and irritation. Diagnosis is clinical. Wet mount may show increased WBCs and parabasal cells. Rule out other causes: candidiasis, bacterial vaginosis, trichomoniasis, STIs. Treatment: vaginal estrogen therapy (cream, ring, or tablet — first-line, minimal systemic absorption). Non-hormonal moisturizers and lubricants. If systemic vasomotor symptoms also present → consider systemic HRT.",
       "difficulty": "standard",
       "clinical_tip": "Atrophic Vaginitis (Genitourinary Syndrome of Menopause) — follow CCS review orders.",
@@ -2229,13 +2229,13 @@
       "category": "Pediatrics / Emergency Medicine",
       "presentationKey": "Drowning",
       "playbookKey": "case-bank-113",
-      "diagnosis": "Drowning with submersion injury after dock jump",
+      "diagnosis": "Drowning (Near-Drowning)",
       "patient_voice": {
-        "chief_complaint": "I jumped in the lake and couldn't breathe right after.",
-        "history": "I jumped off the dock like I always do. The water felt hard. I went under and swallowed water. My chest burns and my neck hurts.",
-        "pain": "Chest tight and burning — hard to catch my breath."
+        "chief_complaint": "Submersion injury with respiratory distress",
+        "history": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in l…",
+        "pain": "Submersion injury with respiratory distress"
       },
-      "caseBankSource": "immersa_mechanism_rewrite",
+      "caseBankSource": "deepseek_direct",
       "hasSourceIntro": true,
       "vitals": {
         "sbp": 82,
@@ -2258,35 +2258,34 @@
       "exam": [
         [
           "General",
-          "Ill-appearing school-age boy, wet clothing removed, mild confusion"
-        ],
-        [
-          "HEENT",
-          "No scalp laceration; cervical tenderness not reliably assessed pre-collar"
+          "Decreased engagement and cognitive change compared with reported baseline."
         ],
         [
           "Cardiovascular",
-          "Tachycardia, hypotension — hypoxia and cold stress"
+          "HR 116, tachycardic; BP 82/50; hypotensive."
         ],
         [
           "Respiratory",
-          "Tachypnea, crackles at bases, increased work of breathing, SpO₂ low"
+          "RR 24, tachypneic; SpO₂ 87%; hypoxemic; increased work of breathing noted."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
         ],
         [
           "Neuro",
-          "GCS reduced — hypoxic encephalopathy; moves all extremities pre-immobilization"
+          "Altered mental status with attention and command-following documented."
         ],
         [
           "Skin",
-          "Cool to touch — cold water exposure"
+          "No acute rash; capillary refill and perfusion assessed."
         ]
       ],
-      "patientSex": "male",
-      "hpi_narrative": "Ethan Brooks is a 10-year-old boy rescued from a lake after jumping feet-first from a dock into shallow water, then submerging. Bystanders say he surfaced once, coughed violently, and became confused. On arrival he is tachypneic with SpO₂ in the high 80s, hypotensive, and intermittently lethargic.\n\nMechanism — two phases: (1) **Impact:** kinetic energy from the jump converts to sudden deceleration at the water surface; axial loading through the cervical spine can fracture or dislocate vertebrae in shallow or awkward entries — C-spine precautions address injury from physics, not only visible trauma. (2) **Submersion:** loss of airway protection → aspiration → surfactant washout → V/Q mismatch and hypoxemic brain injury.\n\nWorkup: ABCs and oxygen, C-spine immobilization for jump mechanism, CXR and ABG for pulmonary injury, rewarming if hypothermic, mandatory observation for delayed pulmonary edema.",
-      "patient_name_default": "Ethan Brooks",
+      "patientSex": "unknown",
+      "hpi_narrative": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in liquid. Outcome: death, survival with morbidity, or survival without morbidity. NOT 'near-drowning' in current terminology. Fresh water vs salt water distinction clinically irrelevant — both cause pulmonary surfactant washout → ARDS. Key: hypoxic brain injury determines prognosis. Management: ABCs, oxygen, BVM or intubation if needed. C-spine precautions if diving mechanism. CXR (pulmonary edema vs aspiration pneumonia). Rewarming if hypothermic. All drowning victims need observation — even asymptomatic can deteriorate (secondary drowning from pulmonary edema). Admit for observation. Prevention counseling.",
       "difficulty": "standard",
-      "clinical_tip": "Drowning with submersion injury after dock jump — follow CCS review orders.",
-      "objective": "Complete diagnosis and treatment orders for Drowning with submersion injury after dock jump.",
+      "clinical_tip": "Drowning (Near-Drowning) — follow CCS review orders.",
+      "objective": "Complete diagnosis and treatment orders for Drowning (Near-Drowning).",
       "interventionIds": [
         "abcs-oxygen-airway",
         "c-spine-precautions",
@@ -2300,7 +2299,7 @@
           "id": "abcs-oxygen-airway",
           "label": "ABCs / Oxygen / Airway",
           "correct_zone": "zone-monitor",
-          "why": "Submersion stops gas exchange — hypoxia drives brain injury. Restore oxygenation and protect the airway before surfactant washout and cerebral hypoxia compound.",
+          "why": "Intubate if hypoxic, unable to protect airway.",
           "guideline": "ACEP",
           "teachingChannel": "acute"
         },
@@ -2308,7 +2307,7 @@
           "id": "c-spine-precautions",
           "label": "C-spine precautions",
           "correct_zone": "zone-arm",
-          "why": "Feet-first jump into shallow water transmits axial load through the cervical spine at impact — collar and inline stabilization prevent secondary cord injury if vertebrae were fractured at entry.",
+          "why": "If diving mechanism.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -2316,7 +2315,7 @@
           "id": "cxr",
           "label": "CXR",
           "correct_zone": "zone-monitor",
-          "why": "Aspiration and surfactant loss after submersion produce infiltrates and non-cardiogenic pulmonary edema — the CXR shows the pulmonary consequence of the drowning phase.",
+          "why": "Pulmonary edema, aspiration.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -2324,7 +2323,7 @@
           "id": "abg",
           "label": "ABG",
           "correct_zone": "zone-monitor",
-          "why": "Quantifies hypoxemia and ventilation-perfusion mismatch after aspiration.",
+          "why": "Assess oxygenation.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -2332,7 +2331,7 @@
           "id": "rewarming-if-hypothermic",
           "label": "Rewarming (if hypothermic)",
           "correct_zone": "zone-arm",
-          "why": "Cold lake water drops core temperature — rewarming treats thermodynamic stress that worsens perfusion and coagulation.",
+          "why": "Passive or active rewarming.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -2340,70 +2339,57 @@
           "id": "observation-all-victims",
           "label": "Observation (all victims)",
           "correct_zone": "zone-arm",
-          "why": "Delayed pulmonary edema can appear after a lucid interval — lung injury from surfactant loss continues even when the child looks better.",
+          "why": "Can deteriorate hours later. Admit.",
           "guideline": "ACEP",
           "teachingChannel": "disposition"
         }
       ],
-      "decoys": [
-        {
-          "id": "decoy-avoid-113-0",
-          "label": "Clear C-spine without inline stabilization when jump mechanism present",
-          "why": "CCS review: avoid this order for Drowning with submersion injury after dock jump — it does not change acute management.",
-          "correct_zone": "zone-icu"
-        },
-        {
-          "id": "decoy-avoid-113-1",
-          "label": "Discharge after brief lucid interval without observation",
-          "why": "CCS review: avoid this order for Drowning with submersion injury after dock jump — it does not change acute management.",
-          "correct_zone": "zone-arm"
-        }
-      ],
+      "decoys": [],
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Submersion after dock jump — respiratory distress and confusion",
-            "hpi": "Ethan Brooks is a 10-year-old boy rescued from a lake after jumping feet-first from a dock into shallow water, then submerging. Bystanders say he surfaced once, coughed violently, and became confused. On arrival he is tachypneic with SpO₂ in the high 80s, hypotensive, and intermittently lethargic. Mechanism — two phases: (1) **Impact:** kinetic energy from the jump converts to sudden deceleration at the water surface; axial loading through the cervical spine can fracture or dislocate vertebrae in shallow or awkward entries — C-spine precautions address injury from physics, not only visible trauma. (2) **Submersion:** loss of airway protection → aspiration → surfactant washout → V/Q mismatch and hypoxemic brain injury. Workup: ABCs and oxygen, C-spine immobilization for jump mechanism, CXR and ABG for pulmonary injury, rewarming if hypothermic, mandatory observation for delayed pulmonary edema.",
+            "intro": "Submersion injury with respiratory distress",
+            "hpi": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in liquid. Outcome: death, survival with morbidity, or survival without morbidity. NOT 'near-drowning' in current terminology. Fresh water vs salt water distinction clinically irrelevant — both cause pulmonary surfactant washout → ARDS. Key: hypoxic brain injury determines prognosis. Management: ABCs, oxygen, BVM or intubation if needed. C-spine precautions if diving mechanism. CXR (pulmonary edema vs aspiration pneumonia). Rewarming if hypothermic. All drowning victims need observation — even asymptomatic can deteriorate (secondary drowning from pulmonary edema). Admit for observation. Prevention counseling.",
             "vitalsText": "Pulse: 116 beats/min Blood pressure 82/50 mmHg Respiratory rate: 24 /minute Temperature: 35.8 C SpO2: 87% Lactate: 2.1 mmol/L",
-            "clinicalTip": "Teaching hint: Drowning with submersion injury after dock jump — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Drowning with submersion injury after dock jump. Start with stabilization, then targeted testing."
+            "clinicalTip": "Teaching hint: Drowning (Near-Drowning) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Drowning (Near-Drowning). Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Submersion after dock jump — respiratory distress and confusion",
-            "hpi": "Ethan Brooks is a 10-year-old boy rescued from a lake after jumping feet-first from a dock into shallow water, then submerging. Bystanders say he surfaced once, coughed violently, and became confused. On arrival he is tachypneic with SpO₂ in the high 80s, hypotensive, and intermittently lethargic. Mechanism — two phases: (1) **Impact:** kinetic energy from the jump converts to sudden deceleration at the water surface; axial loading through the cervical spine can fracture or dislocate vertebrae in shallow or awkward entries — C-spine precautions address injury from physics, not only visible trauma. (2) **Submersion:** loss of airway protection → aspiration → surfactant washout → V/Q mismatch and hypoxemic brain injury. Workup: ABCs and oxygen, C-spine immobilization for jump mechanism, CXR and ABG for pulmonary injury, rewarming if hypothermic, mandatory observation for delayed pulmonary edema.",
+            "intro": "Submersion injury with respiratory distress",
+            "hpi": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in liquid. Outcome: death, survival with morbidity, or survival without morbidity. NOT 'near-drowning' in current terminology. Fresh water vs salt water distinction clinically irrelevant — both cause pulmonary surfactant washout → ARDS. Key: hypoxic brain injury determines prognosis. Management: ABCs, oxygen, BVM or intubation if needed. C-spine precautions if diving mechanism. CXR (pulmonary edema vs aspiration pneumonia). Rewarming if hypothermic. All drowning victims need observation — even asymptomatic can deteriorate (secondary drowning from pulmonary edema). Admit for observation. Prevention counseling.",
             "vitalsText": "Pulse: 116 beats/min Blood pressure 82/50 mmHg Respiratory rate: 24 /minute Temperature: 35.8 C SpO2: 87% Lactate: 2.1 mmol/L",
-            "clinicalTip": "Drowning with submersion injury after dock jump — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Drowning with submersion injury after dock jump."
+            "clinicalTip": "Drowning (Near-Drowning) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Drowning (Near-Drowning)."
           },
           "hard": {
-            "intro": "Submersion after dock jump — respiratory distress and confusion",
-            "hpi": "Ethan Brooks is a 10-year-old boy rescued from a lake after jumping feet-first from a dock into shallow water, then submerging. Bystanders say he surfaced once, coughed violently, and became confused. On arrival he is tachypneic with SpO₂ in the high 80s, hypotensive, and intermittently lethargic. Mechanism — two phases: (1) **Impact:** kinetic energy from the jump converts to sudden deceleration at the water surface; axial loading through the cervical spine can fracture or dislocate vertebrae in shallow or awkward entries — C-spine precautions address injury from physics, not only visible trauma. (2) **Submersion:** loss of airway protection → aspiration → surfactant washout → V/Q mismatch and hypoxemic brain injury. Workup: ABCs and oxygen, C-spine immobilization for jump mechanism, CXR and ABG for pulmonary injury, rewarming if hypothermic, mandatory observation for delayed pulmonary edema.",
+            "intro": "Submersion injury with respiratory distress",
+            "hpi": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in liquid. Outcome: death, survival with morbidity, or survival without morbidity. NOT 'near-drowning' in current terminology. Fresh water vs salt water distinction clinically irrelevant — both cause pulmonary surfactant washout → ARDS. Key: hypoxic brain injury determines prognosis. Management: ABCs, oxygen, BVM or intubation if needed. C-spine precautions if diving mechanism. CXR (pulmonary edema vs aspiration pneumonia). Rewarming if hypothermic. All drowning victims need observation — even asymptomatic can deteriorate (secondary drowning from pulmonary edema). Admit for observation. Prevention counseling.",
             "vitalsText": "Pulse: 116 beats/min Blood pressure 82/50 mmHg Respiratory rate: 24 /minute Temperature: 35.8 C SpO2: 87% Lactate: 2.1 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Drowning with submersion injury after dock jump."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Drowning (Near-Drowning)."
           }
         },
         "patient": {
           "easy": {
-            "intro": "Submersion after dock jump — respiratory distress and confusion",
-            "hpi": "Ethan Brooks is a 10-year-old boy rescued from a lake after jumping feet-first from a dock into shallow water, then submerging. Bystanders say he surfaced once, coughed violently, and became confused. On arrival he is tachypneic with SpO₂ in the high 80s, hypotensive, and intermittently lethargic. Mechanism — two phases: (1) **Impact:** kinetic energy from the jump converts to sudden deceleration at the water surface; axial loading through the cervical spine can fracture or dislocate vertebrae in shallow or awkward entries — C-spine precautions address injury from physics, not only visible trauma. (2) **Submersion:** loss of airway protection → aspiration → surfactant washout → V/Q mismatch and hypoxemic brain injury. Workup: ABCs and oxygen, C-spine immobilization for jump mechanism, CXR and ABG for pulmonary injury, rewarming if hypothermic, mandatory observation for delayed pulmonary edema.",
+            "intro": "Submersion injury with respiratory distress",
+            "hpi": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in liquid. Outcome: death, survival with morbidity, or survival without morbidity. NOT 'near-drowning' in current terminology. Fresh water vs salt water distinction clinically irrelevant — both cause pulmonary surfactant washout → ARDS. Key: hypoxic brain injury determines prognosis. Management: ABCs, oxygen, BVM or intubation if needed. C-spine precautions if diving mechanism. CXR (pulmonary edema vs aspiration pneumonia). Rewarming if hypothermic. All drowning victims need observation — even asymptomatic can deteriorate (secondary drowning from pulmonary edema). Admit for observation. Prevention counseling.",
             "vitalsText": "Pulse: 116 beats/min Blood pressure 82/50 mmHg Respiratory rate: 24 /minute Temperature: 35.8 C SpO2: 87% Lactate: 2.1 mmol/L",
-            "clinicalTip": "Teaching hint: Drowning with submersion injury after dock jump — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Drowning with submersion injury after dock jump. Share your symptoms clearly with the team."
+            "clinicalTip": "Teaching hint: Drowning (Near-Drowning) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Drowning (Near-Drowning). Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Submersion after dock jump — respiratory distress and confusion",
-            "hpi": "Ethan Brooks is a 10-year-old boy rescued from a lake after jumping feet-first from a dock into shallow water, then submerging. Bystanders say he surfaced once, coughed violently, and became confused. On arrival he is tachypneic with SpO₂ in the high 80s, hypotensive, and intermittently lethargic. Mechanism — two phases: (1) **Impact:** kinetic energy from the jump converts to sudden deceleration at the water surface; axial loading through the cervical spine can fracture or dislocate vertebrae in shallow or awkward entries — C-spine precautions address injury from physics, not only visible trauma. (2) **Submersion:** loss of airway protection → aspiration → surfactant washout → V/Q mismatch and hypoxemic brain injury. Workup: ABCs and oxygen, C-spine immobilization for jump mechanism, CXR and ABG for pulmonary injury, rewarming if hypothermic, mandatory observation for delayed pulmonary edema.",
+            "intro": "Submersion injury with respiratory distress",
+            "hpi": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in liquid. Outcome: death, survival with morbidity, or survival without morbidity. NOT 'near-drowning' in current terminology. Fresh water vs salt water distinction clinically irrelevant — both cause pulmonary surfactant washout → ARDS. Key: hypoxic brain injury determines prognosis. Management: ABCs, oxygen, BVM or intubation if needed. C-spine precautions if diving mechanism. CXR (pulmonary edema vs aspiration pneumonia). Rewarming if hypothermic. All drowning victims need observation — even asymptomatic can deteriorate (secondary drowning from pulmonary edema). Admit for observation. Prevention counseling.",
             "vitalsText": "Pulse: 116 beats/min Blood pressure 82/50 mmHg Respiratory rate: 24 /minute Temperature: 35.8 C SpO2: 87% Lactate: 2.1 mmol/L",
-            "clinicalTip": "Drowning with submersion injury after dock jump — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Drowning with submersion injury after dock jump."
+            "clinicalTip": "Drowning (Near-Drowning) — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Drowning (Near-Drowning)."
           },
           "hard": {
-            "intro": "Submersion after dock jump — respiratory distress and confusion",
-            "hpi": "Ethan Brooks is a 10-year-old boy rescued from a lake after jumping feet-first from a dock into shallow water, then submerging. Bystanders say he surfaced once, coughed violently, and became confused. On arrival he is tachypneic with SpO₂ in the high 80s, hypotensive, and intermittently lethargic. Mechanism — two phases: (1) **Impact:** kinetic energy from the jump converts to sudden deceleration at the water surface; axial loading through the cervical spine can fracture or dislocate vertebrae in shallow or awkward entries — C-spine precautions address injury from physics, not only visible trauma. (2) **Submersion:** loss of airway protection → aspiration → surfactant washout → V/Q mismatch and hypoxemic brain injury. Workup: ABCs and oxygen, C-spine immobilization for jump mechanism, CXR and ABG for pulmonary injury, rewarming if hypothermic, mandatory observation for delayed pulmonary edema.",
+            "intro": "Submersion injury with respiratory distress",
+            "hpi": "{{patient_name}} is a child who was submerged in water, presenting with respiratory distress, hypoxia, altered mental status after water rescue. Drowning = respiratory impairment from submersion in liquid. Outcome: death, survival with morbidity, or survival without morbidity. NOT 'near-drowning' in current terminology. Fresh water vs salt water distinction clinically irrelevant — both cause pulmonary surfactant washout → ARDS. Key: hypoxic brain injury determines prognosis. Management: ABCs, oxygen, BVM or intubation if needed. C-spine precautions if diving mechanism. CXR (pulmonary edema vs aspiration pneumonia). Rewarming if hypothermic. All drowning victims need observation — even asymptomatic can deteriorate (secondary drowning from pulmonary edema). Admit for observation. Prevention counseling.",
             "vitalsText": "Pulse: 116 beats/min Blood pressure 82/50 mmHg Respiratory rate: 24 /minute Temperature: 35.8 C SpO2: 87% Lactate: 2.1 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Drowning with submersion injury after dock jump."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Drowning (Near-Drowning)."
           }
         }
       }
@@ -9060,9 +9046,9 @@
       "playbookKey": "case-bank-153",
       "diagnosis": "Porphyria Cutanea Tarda",
       "patient_voice": {
-        "chief_complaint": "My skin blisters in the sun — it started after we were drinking",
-        "history": "{{patient_name}} says he was out with friends from the village drinking beer all weekend. He felt fine until yesterday afternoon in the sun — then his hands and face started peeling and blistering. The light hurts now. He brought his yellow shirt and his bottles — they're still with him at the bedside.",
-        "pain": "Burning on the hands and forearms near any light"
+        "chief_complaint": "Fragile, blistering skin on sun-exposed areas",
+        "history": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused b…",
+        "pain": "Fragile, blistering skin on sun-exposed areas"
       },
       "caseBankSource": "deepseek_direct",
       "hasSourceIntro": true,
@@ -9075,7 +9061,7 @@
         "spo2": 99,
         "lactate": 1.7
       },
-      "vitalsSource": "parsed",
+      "vitalsSource": "template",
       "vitalsText": "Pulse: 114 beats/min Blood pressure 119/76 mmHg Respiratory rate: 23 /minute Temperature: 37.7 C SpO2: 99% Lactate: 1.7 mmol/L",
       "flowTrack": "Standard ED pathway",
       "dispositionUnits": [
@@ -9087,11 +9073,7 @@
       "exam": [
         [
           "General",
-          "Tired-appearing adult man, winces when daylight hits his forearms."
-        ],
-        [
-          "Skin",
-          "Fragile vesicles and erosions on dorsal hands, forearms, and face; milia on hands; hyperpigmented macules; hypertrichosis on dorsal hands; skin peels with light pressure."
+          "Acutely ill appearance consistent with skin lesions."
         ],
         [
           "Cardiovascular",
@@ -9099,22 +9081,23 @@
         ],
         [
           "Respiratory",
-          "RR 23, mildly tachypneic; SpO₂ 99%."
+          "RR 23, tachypneic; SpO₂ 99%."
         ],
         [
           "Abdomen",
-          "Soft, non-distended."
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
         ],
         [
           "Neuro",
-          "Alert; oriented; no focal deficit."
+          "Alert and oriented unless perfusion or metabolic derangement present."
+        ],
+        [
+          "Skin",
+          "No acute rash; capillary refill and perfusion assessed."
         ]
       ],
-      "patientSex": "male",
-      "uberFaceSlug": "ngavu-yellow-party",
-      "portraitNote": "N'Gavu — young Black man, mustard-yellow party jacket likeness, thin mustache, tired bloodshot eyes; hospital gown on ED stretcher; blistered dorsal hands and forearms, fragile skin; mustard-yellow shirt draped on bedside chair; two brown beer bottles on overbed side table (patient property); MeWorld sculptural CGI clinical still",
-      "hpi_narrative": "{{patient_name}} is a man from our village who came to the ED after a weekend of drinking with friends. He was partying — beer all night — and thought nothing of it until the next afternoon, walking home in the sun, when his skin began to peel and blister on his hands, face, and forearms. Light through the window still hurts. He took off his yellow party shirt when they put him in a gown; it hangs by the bedside. His beer bottles sit on the side table — his property, he says. On exam: fragile bullae and erosions on sun-exposed skin, milia, hyperpigmentation, and hypertrichosis on the dorsal hands. PCT is the most common porphyria — uroporphyrinogen decarboxylase deficiency leads to uroporphyrin accumulation in skin and photosensitivity. Acquired triggers: alcohol, hepatitis C, HIV, hemochromatosis, estrogen. Diagnosis: elevated urine porphyrins, plasma porphyrin peak at 620 nm. Treatment: phlebotomy for iron overload, sun avoidance, stop alcohol, screen HCV/HIV/iron.",
-      "patient_name_default": "N'Gavu",
+      "patientSex": "unknown",
+      "hpi_narrative": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
       "difficulty": "standard",
       "clinical_tip": "Porphyria Cutanea Tarda — follow CCS review orders.",
       "objective": "Complete diagnosis and treatment orders for Porphyria Cutanea Tarda.",
@@ -9130,7 +9113,7 @@
           "id": "urine-porphyrins",
           "label": "Urine porphyrins",
           "correct_zone": "zone-arm",
-          "why": "Porphyrins keep building in the skin until you measure them — elevated uroporphyrins confirm the photosensitive pathway.",
+          "why": "Elevated uroporphyrins.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -9138,7 +9121,7 @@
           "id": "plasma-porphyrins",
           "label": "Plasma porphyrins",
           "correct_zone": "zone-arm",
-          "why": "Circulating porphyrin peak at 620 nm locks the diagnosis when urine is equivocal.",
+          "why": "Peak at 620nm — diagnostic.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -9146,7 +9129,7 @@
           "id": "hcv-hiv-iron-studies",
           "label": "HCV / HIV / Iron studies",
           "correct_zone": "zone-arm",
-          "why": "Acquired PCT is often triggered by alcohol, iron overload, or silent hepatitis — the rash is not the whole story.",
+          "why": "Screen for PCT triggers.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -9154,7 +9137,7 @@
           "id": "phlebotomy",
           "label": "Phlebotomy",
           "correct_zone": "zone-arm",
-          "why": "First-line when iron overload is driving the process — target ferritin low-normal.",
+          "why": "First-line. Target ferritin low-normal.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -9162,7 +9145,7 @@
           "id": "sun-protection-avoid-alcohol",
           "label": "Sun protection / Avoid alcohol",
           "correct_zone": "zone-arm",
-          "why": "Sunlight activates porphyrins in skin; alcohol keeps the trigger running — both must stop.",
+          "why": "Photosensitivity management.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         }
@@ -9171,22 +9154,22 @@
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Skin blistering and peeling on sun-exposed areas after heavy alcohol use",
-            "hpi": "{{patient_name}} is a man from our village who came to the ED after a weekend of drinking with friends. He was partying — beer all night — and thought nothing of it until the next afternoon, walking home in the sun, when his skin began to peel and blister on his hands, face, and forearms. Light through the window still hurts. He took off his yellow party shirt when they put him in a gown; it hangs by the bedside. His beer bottles sit on the side table — his property, he says. On exam: fragile bullae and erosions on sun-exposed skin, milia, hyperpigmentation, and hypertrichosis on the dorsal hands. PCT is the most common porphyria — uroporphyrinogen decarboxylase deficiency leads to uroporphyrin accumulation in skin and photosensitivity. Acquired triggers: alcohol, hepatitis C, HIV, hemochromatosis, estrogen. Diagnosis: elevated urine porphyrins, plasma porphyrin peak at 620 nm. Treatment: phlebotomy for iron overload, sun avoidance, stop alcohol, screen HCV/HIV/iron.",
+            "intro": "Fragile, blistering skin on sun-exposed areas",
+            "hpi": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
             "vitalsText": "Pulse: 114 beats/min Blood pressure 119/76 mmHg Respiratory rate: 23 /minute Temperature: 37.7 C SpO2: 99% Lactate: 1.7 mmol/L",
             "clinicalTip": "Teaching hint: Porphyria Cutanea Tarda — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Porphyria Cutanea Tarda. Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Skin blistering and peeling on sun-exposed areas after heavy alcohol use",
-            "hpi": "{{patient_name}} is a man from our village who came to the ED after a weekend of drinking with friends. He was partying — beer all night — and thought nothing of it until the next afternoon, walking home in the sun, when his skin began to peel and blister on his hands, face, and forearms. Light through the window still hurts. He took off his yellow party shirt when they put him in a gown; it hangs by the bedside. His beer bottles sit on the side table — his property, he says. On exam: fragile bullae and erosions on sun-exposed skin, milia, hyperpigmentation, and hypertrichosis on the dorsal hands. PCT is the most common porphyria — uroporphyrinogen decarboxylase deficiency leads to uroporphyrin accumulation in skin and photosensitivity. Acquired triggers: alcohol, hepatitis C, HIV, hemochromatosis, estrogen. Diagnosis: elevated urine porphyrins, plasma porphyrin peak at 620 nm. Treatment: phlebotomy for iron overload, sun avoidance, stop alcohol, screen HCV/HIV/iron.",
+            "intro": "Fragile, blistering skin on sun-exposed areas",
+            "hpi": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
             "vitalsText": "Pulse: 114 beats/min Blood pressure 119/76 mmHg Respiratory rate: 23 /minute Temperature: 37.7 C SpO2: 99% Lactate: 1.7 mmol/L",
             "clinicalTip": "Porphyria Cutanea Tarda — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Porphyria Cutanea Tarda."
           },
           "hard": {
-            "intro": "Skin blistering and peeling on sun-exposed areas after heavy alcohol use",
-            "hpi": "{{patient_name}} is a man from our village who came to the ED after a weekend of drinking with friends. He was partying — beer all night — and thought nothing of it until the next afternoon, walking home in the sun, when his skin began to peel and blister on his hands, face, and forearms. Light through the window still hurts. He took off his yellow party shirt when they put him in a gown; it hangs by the bedside. His beer bottles sit on the side table — his property, he says. On exam: fragile bullae and erosions on sun-exposed skin, milia, hyperpigmentation, and hypertrichosis on the dorsal hands. PCT is the most common porphyria — uroporphyrinogen decarboxylase deficiency leads to uroporphyrin accumulation in skin and photosensitivity. Acquired triggers: alcohol, hepatitis C, HIV, hemochromatosis, estrogen. Diagnosis: elevated urine porphyrins, plasma porphyrin peak at 620 nm. Treatment: phlebotomy for iron overload, sun avoidance, stop alcohol, screen HCV/HIV/iron.",
+            "intro": "Fragile, blistering skin on sun-exposed areas",
+            "hpi": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
             "vitalsText": "Pulse: 114 beats/min Blood pressure 119/76 mmHg Respiratory rate: 23 /minute Temperature: 37.7 C SpO2: 99% Lactate: 1.7 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
             "objective": "High-acuity workup: Complete diagnosis and treatment orders for Porphyria Cutanea Tarda."
@@ -9194,22 +9177,22 @@
         },
         "patient": {
           "easy": {
-            "intro": "Skin blistering and peeling on sun-exposed areas after heavy alcohol use",
-            "hpi": "{{patient_name}} is a man from our village who came to the ED after a weekend of drinking with friends. He was partying — beer all night — and thought nothing of it until the next afternoon, walking home in the sun, when his skin began to peel and blister on his hands, face, and forearms. Light through the window still hurts. He took off his yellow party shirt when they put him in a gown; it hangs by the bedside. His beer bottles sit on the side table — his property, he says. On exam: fragile bullae and erosions on sun-exposed skin, milia, hyperpigmentation, and hypertrichosis on the dorsal hands. PCT is the most common porphyria — uroporphyrinogen decarboxylase deficiency leads to uroporphyrin accumulation in skin and photosensitivity. Acquired triggers: alcohol, hepatitis C, HIV, hemochromatosis, estrogen. Diagnosis: elevated urine porphyrins, plasma porphyrin peak at 620 nm. Treatment: phlebotomy for iron overload, sun avoidance, stop alcohol, screen HCV/HIV/iron.",
+            "intro": "Fragile, blistering skin on sun-exposed areas",
+            "hpi": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
             "vitalsText": "Pulse: 114 beats/min Blood pressure 119/76 mmHg Respiratory rate: 23 /minute Temperature: 37.7 C SpO2: 99% Lactate: 1.7 mmol/L",
             "clinicalTip": "Teaching hint: Porphyria Cutanea Tarda — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Porphyria Cutanea Tarda. Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Skin blistering and peeling on sun-exposed areas after heavy alcohol use",
-            "hpi": "{{patient_name}} is a man from our village who came to the ED after a weekend of drinking with friends. He was partying — beer all night — and thought nothing of it until the next afternoon, walking home in the sun, when his skin began to peel and blister on his hands, face, and forearms. Light through the window still hurts. He took off his yellow party shirt when they put him in a gown; it hangs by the bedside. His beer bottles sit on the side table — his property, he says. On exam: fragile bullae and erosions on sun-exposed skin, milia, hyperpigmentation, and hypertrichosis on the dorsal hands. PCT is the most common porphyria — uroporphyrinogen decarboxylase deficiency leads to uroporphyrin accumulation in skin and photosensitivity. Acquired triggers: alcohol, hepatitis C, HIV, hemochromatosis, estrogen. Diagnosis: elevated urine porphyrins, plasma porphyrin peak at 620 nm. Treatment: phlebotomy for iron overload, sun avoidance, stop alcohol, screen HCV/HIV/iron.",
+            "intro": "Fragile, blistering skin on sun-exposed areas",
+            "hpi": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
             "vitalsText": "Pulse: 114 beats/min Blood pressure 119/76 mmHg Respiratory rate: 23 /minute Temperature: 37.7 C SpO2: 99% Lactate: 1.7 mmol/L",
             "clinicalTip": "Porphyria Cutanea Tarda — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Porphyria Cutanea Tarda."
           },
           "hard": {
-            "intro": "Skin blistering and peeling on sun-exposed areas after heavy alcohol use",
-            "hpi": "{{patient_name}} is a man from our village who came to the ED after a weekend of drinking with friends. He was partying — beer all night — and thought nothing of it until the next afternoon, walking home in the sun, when his skin began to peel and blister on his hands, face, and forearms. Light through the window still hurts. He took off his yellow party shirt when they put him in a gown; it hangs by the bedside. His beer bottles sit on the side table — his property, he says. On exam: fragile bullae and erosions on sun-exposed skin, milia, hyperpigmentation, and hypertrichosis on the dorsal hands. PCT is the most common porphyria — uroporphyrinogen decarboxylase deficiency leads to uroporphyrin accumulation in skin and photosensitivity. Acquired triggers: alcohol, hepatitis C, HIV, hemochromatosis, estrogen. Diagnosis: elevated urine porphyrins, plasma porphyrin peak at 620 nm. Treatment: phlebotomy for iron overload, sun avoidance, stop alcohol, screen HCV/HIV/iron.",
+            "intro": "Fragile, blistering skin on sun-exposed areas",
+            "hpi": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
             "vitalsText": "Pulse: 114 beats/min Blood pressure 119/76 mmHg Respiratory rate: 23 /minute Temperature: 37.7 C SpO2: 99% Lactate: 1.7 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
             "objective": "High-acuity workup: Complete diagnosis and treatment orders for Porphyria Cutanea Tarda."
@@ -11054,9 +11037,9 @@
       "playbookKey": "case-bank-166",
       "diagnosis": "Hemophilia A (Factor VIII Deficiency)",
       "patient_voice": {
-        "chief_complaint": "My knee blew up after I twisted it playing soccer",
-        "history": "This keeps happening in my knees since I was a kid. I barely touched the ball and it swelled up like a balloon. My mom's brother had the same thing.",
-        "pain": "Sharp deep knee pain — worse when I try to bend it"
+        "chief_complaint": "Joint bleeding, easy bruising, prolonged PTT",
+        "history": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet …",
+        "pain": "Joint bleeding, easy bruising, prolonged PTT"
       },
       "caseBankSource": "deepseek_direct",
       "hasSourceIntro": true,
@@ -11069,8 +11052,8 @@
         "spo2": 98,
         "lactate": 2
       },
-      "vitalsSource": "parsed",
-      "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98%",
+      "vitalsSource": "template",
+      "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98% Lactate: 2 mmol/L",
       "flowTrack": "Standard ED pathway",
       "dispositionUnits": [
         "ER",
@@ -11081,30 +11064,31 @@
       "exam": [
         [
           "General",
-          "Athletic young man in pain, guarding right knee"
-        ],
-        [
-          "Extremities / joints",
-          "Right knee warm, swollen, limited flexion — hemarthrosis; old surgical scar on anterior knee; ecchymoses on forearms"
+          "presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count."
         ],
         [
           "Cardiovascular",
-          "Tachycardic — pain and anxiety"
+          "HR 110; BP 116/74."
         ],
         [
-          "Skin",
-          "Easy bruising on shins and forearms — no petechiae"
+          "Respiratory",
+          "RR 22; SpO₂ 98%."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
         ],
         [
           "Neuro",
-          "Alert; distal pulses and sensation intact below knee"
+          "Alert and oriented unless perfusion or metabolic derangement present."
+        ],
+        [
+          "Skin",
+          "No acute rash; capillary refill and perfusion assessed."
         ]
       ],
-      "patientSex": "male",
-      "uberFaceSlug": "hemarthrosis-athlete-knee",
-      "portraitNote": "Young athletic Black man likeness (hemarthrosis athlete ref), swollen knee hemarthrosis, clutching joint on ED stretcher, light blue hospital gown, MeWorld sculptural CGI clinical still — same face throughout",
-      "hpi_narrative": "{{patient_name}} is a young man with known easy bruising who presents after a trivial twist during pickup soccer — his right knee blew up within hours. He has had prior hemarthrosis in both knees and elbows since childhood. Family history: maternal uncle with \"bleeding problems.\"\n\nMechanism: Factor VIII anchors the intrinsic tenase complex — without it, fibrin cannot stabilize in the joint space, so trivial trauma becomes hemarthrosis. PTT prolongation with normal PT and platelets localizes the defect to Factor VIII, not liver, vitamin K, or platelets.\n\nWorkup: coags and mixing study, Factor VIII assay. Treatment: Factor VIII concentrate for active bleed; DDAVP if mild. Avoid NSAIDs and IM injections. Exam the joint, then RICE while factor infuses.",
-      "patient_name_default": "Marcus",
+      "patientSex": "unknown",
+      "hpi_narrative": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
       "difficulty": "standard",
       "clinical_tip": "Hemophilia A (Factor VIII Deficiency) — follow CCS review orders.",
       "objective": "Complete diagnosis and treatment orders for Hemophilia A (Factor VIII Deficiency).",
@@ -11112,19 +11096,15 @@
         "pt-ptt-platelets",
         "mixing-study",
         "factor-viii-assay",
-        "factor-viii-concentrate",
-        "ddavp-mild-hemophilia-a",
-        "avoid-nsaids",
-        "avoid-im-injections",
-        "physical-exam-extremities-joints",
-        "supportive-care-rice-joint-immobilizatio"
+        "factor-viii-concentrate-ddavp",
+        "avoid-asa-nsaids-im-injections"
       ],
       "interventions": [
         {
           "id": "pt-ptt-platelets",
           "label": "PT/PTT / Platelets",
           "correct_zone": "zone-arm",
-          "why": "PTT prolonged, PT normal, Plt normal — isolated intrinsic pathway defect before you commit to factor replacement.",
+          "why": "PTT prolonged, PT normal, Plt normal.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -11132,7 +11112,7 @@
           "id": "mixing-study",
           "label": "Mixing study",
           "correct_zone": "zone-arm",
-          "why": "PTT corrects — excludes inhibitor; if it fails to correct, think acquired inhibitor not classic hemophilia A.",
+          "why": "PTT corrects — excludes inhibitor.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -11140,55 +11120,23 @@
           "id": "factor-viii-assay",
           "label": "Factor VIII assay",
           "correct_zone": "zone-icu",
-          "why": "Low FVIII activity confirms hemophilia A and guides severity.",
+          "why": "Low FVIII — confirms diagnosis.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
         {
-          "id": "factor-viii-concentrate",
-          "label": "Factor VIII concentrate",
+          "id": "factor-viii-concentrate-ddavp",
+          "label": "Factor VIII concentrate / DDAVP",
           "correct_zone": "zone-icu",
-          "why": "Definitive hemostasis for active hemarthrosis — replace what the joint cannot clot without.",
+          "why": "Replacement or desmopressin for mild.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
         {
-          "id": "ddavp-mild-hemophilia-a",
-          "label": "DDAVP (mild hemophilia A)",
+          "id": "avoid-asa-nsaids-im-injections",
+          "label": "Avoid ASA/NSAIDs/IM injections",
           "correct_zone": "zone-arm",
-          "why": "Mild disease may respond to desmopressin releasing stored VIII and vWF — not enough alone for severe bleed.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "avoid-nsaids",
-          "label": "Avoid NSAIDs",
-          "correct_zone": "zone-arm",
-          "why": "Antiplatelet effect worsens bleeding — acetaminophen only for pain.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "avoid-im-injections",
-          "label": "Avoid IM injections",
-          "correct_zone": "zone-arm",
-          "why": "Intramuscular hematoma risk — IV and PO routes only.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "physical-exam-extremities-joints",
-          "label": "Physical exam: extremities / joints",
-          "correct_zone": "zone-custom-1",
-          "why": "Document swollen painful knee, range of motion, and prior hemarthrosis sites — exam drives urgency of factor.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "supportive-care-rice-joint-immobilizatio",
-          "label": "Supportive care (RICE, joint immobilization)",
-          "correct_zone": "zone-arm",
-          "why": "Rest, ice, compression, elevation, and splint while factor works — protects cartilage from repeat bleed.",
+          "why": "Bleeding precautions.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         }
@@ -11197,46 +11145,46 @@
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Acute knee hemarthrosis after minor trauma",
-            "hpi": "{{patient_name}} is a young man with known easy bruising who presents after a trivial twist during pickup soccer — his right knee blew up within hours. He has had prior hemarthrosis in both knees and elbows since childhood. Family history: maternal uncle with \"bleeding problems.\" Mechanism: Factor VIII anchors the intrinsic tenase complex — without it, fibrin cannot stabilize in the joint space, so trivial trauma becomes hemarthrosis. PTT prolongation with normal PT and platelets localizes the defect to Factor VIII, not liver, vitamin K, or platelets. Workup: coags and mixing study, Factor VIII assay. Treatment: Factor VIII concentrate for active bleed; DDAVP if mild. Avoid NSAIDs and IM injections. Exam the joint, then RICE while factor infuses.",
-            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98%",
+            "intro": "Joint bleeding, easy bruising, prolonged PTT",
+            "hpi": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98% Lactate: 2 mmol/L",
             "clinicalTip": "Teaching hint: Hemophilia A (Factor VIII Deficiency) — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Hemophilia A (Factor VIII Deficiency). Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Acute knee hemarthrosis after minor trauma",
-            "hpi": "{{patient_name}} is a young man with known easy bruising who presents after a trivial twist during pickup soccer — his right knee blew up within hours. He has had prior hemarthrosis in both knees and elbows since childhood. Family history: maternal uncle with \"bleeding problems.\" Mechanism: Factor VIII anchors the intrinsic tenase complex — without it, fibrin cannot stabilize in the joint space, so trivial trauma becomes hemarthrosis. PTT prolongation with normal PT and platelets localizes the defect to Factor VIII, not liver, vitamin K, or platelets. Workup: coags and mixing study, Factor VIII assay. Treatment: Factor VIII concentrate for active bleed; DDAVP if mild. Avoid NSAIDs and IM injections. Exam the joint, then RICE while factor infuses.",
-            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98%",
+            "intro": "Joint bleeding, easy bruising, prolonged PTT",
+            "hpi": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98% Lactate: 2 mmol/L",
             "clinicalTip": "Hemophilia A (Factor VIII Deficiency) — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Hemophilia A (Factor VIII Deficiency)."
           },
           "hard": {
-            "intro": "Acute knee hemarthrosis after minor trauma",
-            "hpi": "{{patient_name}} is a young man with known easy bruising who presents after a trivial twist during pickup soccer — his right knee blew up within hours. He has had prior hemarthrosis in both knees and elbows since childhood. Family history: maternal uncle with \"bleeding problems.\" Mechanism: Factor VIII anchors the intrinsic tenase complex — without it, fibrin cannot stabilize in the joint space, so trivial trauma becomes hemarthrosis. PTT prolongation with normal PT and platelets localizes the defect to Factor VIII, not liver, vitamin K, or platelets. Workup: coags and mixing study, Factor VIII assay. Treatment: Factor VIII concentrate for active bleed; DDAVP if mild. Avoid NSAIDs and IM injections. Exam the joint, then RICE while factor infuses.",
-            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98%",
+            "intro": "Joint bleeding, easy bruising, prolonged PTT",
+            "hpi": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98% Lactate: 2 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
             "objective": "High-acuity workup: Complete diagnosis and treatment orders for Hemophilia A (Factor VIII Deficiency)."
           }
         },
         "patient": {
           "easy": {
-            "intro": "Acute knee hemarthrosis after minor trauma",
-            "hpi": "{{patient_name}} is a young man with known easy bruising who presents after a trivial twist during pickup soccer — his right knee blew up within hours. He has had prior hemarthrosis in both knees and elbows since childhood. Family history: maternal uncle with \"bleeding problems.\" Mechanism: Factor VIII anchors the intrinsic tenase complex — without it, fibrin cannot stabilize in the joint space, so trivial trauma becomes hemarthrosis. PTT prolongation with normal PT and platelets localizes the defect to Factor VIII, not liver, vitamin K, or platelets. Workup: coags and mixing study, Factor VIII assay. Treatment: Factor VIII concentrate for active bleed; DDAVP if mild. Avoid NSAIDs and IM injections. Exam the joint, then RICE while factor infuses.",
-            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98%",
+            "intro": "Joint bleeding, easy bruising, prolonged PTT",
+            "hpi": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98% Lactate: 2 mmol/L",
             "clinicalTip": "Teaching hint: Hemophilia A (Factor VIII Deficiency) — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Hemophilia A (Factor VIII Deficiency). Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Acute knee hemarthrosis after minor trauma",
-            "hpi": "{{patient_name}} is a young man with known easy bruising who presents after a trivial twist during pickup soccer — his right knee blew up within hours. He has had prior hemarthrosis in both knees and elbows since childhood. Family history: maternal uncle with \"bleeding problems.\" Mechanism: Factor VIII anchors the intrinsic tenase complex — without it, fibrin cannot stabilize in the joint space, so trivial trauma becomes hemarthrosis. PTT prolongation with normal PT and platelets localizes the defect to Factor VIII, not liver, vitamin K, or platelets. Workup: coags and mixing study, Factor VIII assay. Treatment: Factor VIII concentrate for active bleed; DDAVP if mild. Avoid NSAIDs and IM injections. Exam the joint, then RICE while factor infuses.",
-            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98%",
+            "intro": "Joint bleeding, easy bruising, prolonged PTT",
+            "hpi": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98% Lactate: 2 mmol/L",
             "clinicalTip": "Hemophilia A (Factor VIII Deficiency) — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Hemophilia A (Factor VIII Deficiency)."
           },
           "hard": {
-            "intro": "Acute knee hemarthrosis after minor trauma",
-            "hpi": "{{patient_name}} is a young man with known easy bruising who presents after a trivial twist during pickup soccer — his right knee blew up within hours. He has had prior hemarthrosis in both knees and elbows since childhood. Family history: maternal uncle with \"bleeding problems.\" Mechanism: Factor VIII anchors the intrinsic tenase complex — without it, fibrin cannot stabilize in the joint space, so trivial trauma becomes hemarthrosis. PTT prolongation with normal PT and platelets localizes the defect to Factor VIII, not liver, vitamin K, or platelets. Workup: coags and mixing study, Factor VIII assay. Treatment: Factor VIII concentrate for active bleed; DDAVP if mild. Avoid NSAIDs and IM injections. Exam the joint, then RICE while factor infuses.",
-            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98%",
+            "intro": "Joint bleeding, easy bruising, prolonged PTT",
+            "hpi": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 116/74 mmHg Respiratory rate: 22 /minute Temperature: 37.3 C SpO2: 98% Lactate: 2 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
             "objective": "High-acuity workup: Complete diagnosis and treatment orders for Hemophilia A (Factor VIII Deficiency)."
           }
@@ -13063,9 +13011,7 @@
           "No acute rash; capillary refill and perfusion assessed."
         ]
       ],
-      "patientSex": "male",
-      "uberFaceSlug": "subway-afro-dandy",
-      "portraitNote": "Match subway-afro-dandy likeness: young Black man, large heart-shaped afro, calm direct gaze, light blue hospital gown on ED stretcher. Forearm animal bite wound with surrounding cellulitis visible where appropriate. Same face and afro silhouette throughout — clinical stress, trauma bay.",
+      "patientSex": "unknown",
       "difficulty": "standard",
       "clinical_tip": "Rabies, Cellulitis, Tetanus — follow CCS review orders.",
       "objective": "Complete diagnosis and treatment orders for Rabies, Cellulitis, Tetanus.",
@@ -13083,7 +13029,7 @@
           "id": "stabilize-the-patient-ensure-airway-brea",
           "label": "Stabilize the patient: ensure airway, breathing, and circulatory status",
           "correct_zone": "zone-icu",
-          "why": "Primary survey — airway, breathing, circulation before wound-specific care.",
+          "why": "To address any immediate life-threatening issues and administer tetanus prophylaxis",
           "guideline": "ACEP",
           "teachingChannel": "acute"
         },
@@ -13091,7 +13037,7 @@
           "id": "administer-tetanus-prophylaxis-if-needed",
           "label": "Administer tetanus prophylaxis if needed",
           "correct_zone": "zone-icu",
-          "why": "Wound prophylaxis channel — separate from ABC stabilization; both required for animal bites.",
+          "why": "Tetanus is wound prophylaxis — separate channel from ABC stabilization; both matter, not one bundled order.",
           "guideline": "ACEP",
           "teachingChannel": "prophylaxis"
         },
@@ -14040,935 +13986,6 @@
             "vitalsText": "Pulse: 114 beats/min Blood pressure 119/76 mmHg Respiratory rate: 23 /minute Temperature: 37.3 C SpO2: 99% Lactate: 2 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
             "objective": "High-acuity workup: Complete diagnosis and treatment orders for Severe Obstructive Sleep Apnea with Secondary Nocturnal Enuresis."
-          }
-        }
-      }
-    },
-    "192": {
-      "id": "192",
-      "title": "School Refusal and Childhood Anxiety",
-      "category": "Psychiatry / Pediatrics",
-      "presentationKey": "School Refusal and Childhood Anxiety",
-      "playbookKey": "case-bank-192",
-      "diagnosis": "Generalized Anxiety Disorder (child) with school refusal",
-      "patient_voice": {
-        "chief_complaint": "My stomach hurts every morning and I don't want to go to school. I keep thinking the kids will laugh at me.",
-        "history": "It started when my pencil fell and someone laughed. Now I think they'll all laugh if I go back. At night I check the lock on the door a lot. Mom says I've always been a worrier.",
-        "pain": "My tummy hurts before school — it's like butterflies but worse."
-      },
-      "caseBankSource": "immersa_uword_transform",
-      "hasSourceIntro": true,
-      "vitals": {
-        "sbp": 105,
-        "dbp": 65,
-        "hr": 98,
-        "rr": 20,
-        "temp": 37,
-        "spo2": 99,
-        "lactate": 1.7
-      },
-      "vitalsSource": "parsed",
-      "vitalsText": "Pulse: 98 beats/min Blood pressure, systolic: 105 mm Hg Blood pressure, diastolic: 65 mm Hg Respiratory rate: 20 /minute Temperature: 37.0 C (98.6 F) SpO2: 99%",
-      "flowTrack": "Standard ED pathway",
-      "dispositionUnits": [
-        "ER",
-        "OBS",
-        "ICU",
-        "WARD"
-      ],
-      "exam": [
-        [
-          "General",
-          "Well-nourished school-age girl, anxious affect, avoids eye contact when discussing school"
-        ],
-        [
-          "HEENT",
-          "Normocephalic, moist mucous membranes, no thyromegaly on inspection"
-        ],
-        [
-          "Cardiovascular",
-          "Tachycardia mild when discussing school — regular rhythm"
-        ],
-        [
-          "Abdomen",
-          "Soft, mild periumbilical tenderness without guarding — consistent with functional pain"
-        ],
-        [
-          "Neuro / Psych",
-          "Alert, cooperative with parent present; worried mood, normal thought content, no hallucinations; denies SI/HI today"
-        ]
-      ],
-      "patientSex": "female",
-      "hpi_narrative": "Maya Chen is a 9-year-old girl brought by her mother for worsening school refusal. Three weeks ago a classmate laughed when her pencil rolled off the desk; since then she believes everyone will laugh at her if she returns. She develops nausea and epigastric \"stomachaches\" on school mornings and cries at the door. At night she lies awake checking that the front-door lock is secure and worries someone could break in. She fidgets during homework and loses track of instructions — her teacher wonders about attention problems, but symptoms track with worry rather than classic hyperactivity. Mother reports lifelong \"nervous temperament\" and takes medication for depression. No fever, weight loss, tremor, or suicidal statements; she denies wanting to die but says she \"can't face school anymore.\"\n\nMechanism: pervasive anticipatory anxiety drives autonomic arousal (morning GI symptoms), avoidance (refusal), and hypervigilance at sleep onset. Inattention here is likely worry-related — distinguish from ADHD by onset after stressor, situational focus, and improvement when anxiety treated.\n\nWorkup: child-appropriate anxiety screen, TSH and basic labs, safety assessment with parent collateral. Treatment: CBT with graded school exposure, school psych coordination, sleep hygiene; consider SSRI if moderate-severe or partial CBT response.",
-      "patient_name_default": "Maya Chen",
-      "difficulty": "standard",
-      "clinical_tip": "Generalized Anxiety Disorder (child) with school refusal — follow CCS review orders.",
-      "objective": "Complete diagnosis and treatment orders for Generalized Anxiety Disorder (child) with school refusal.",
-      "interventionIds": [
-        "gad-7-anxiety-screening-child-appropriat",
-        "tsh-basic-metabolic-panel",
-        "cbt-psychotherapy-referral",
-        "school-psychologist-504-coordination",
-        "ssri-consideration-sertraline-fluoxetine",
-        "sleep-hygiene-nightmare-screen",
-        "safety-assessment"
-      ],
-      "interventions": [
-        {
-          "id": "gad-7-anxiety-screening-child-appropriat",
-          "label": "GAD-7 / anxiety screening (child-appropriate)",
-          "correct_zone": "zone-arm",
-          "why": "Quantify worry severity and track response — use developmentally appropriate anxiety screen alongside clinical interview.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "tsh-basic-metabolic-panel",
-          "label": "TSH / basic metabolic panel",
-          "correct_zone": "zone-arm",
-          "why": "Morning stomachaches and restlessness can reflect hyperthyroidism or anemia — rule out medical drivers before anchoring on anxiety.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "cbt-psychotherapy-referral",
-          "label": "CBT / psychotherapy referral",
-          "correct_zone": "zone-icu",
-          "why": "First-line for pediatric GAD — exposure for school refusal, cognitive restructuring for catastrophizing about peer judgment.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "school-psychologist-504-coordination",
-          "label": "School psychologist / 504 coordination",
-          "correct_zone": "zone-icu",
-          "why": "School refusal needs coordinated return-to-school plan, accommodations, and teacher communication — not home isolation.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "ssri-consideration-sertraline-fluoxetine",
-          "label": "SSRI consideration (sertraline / fluoxetine)",
-          "correct_zone": "zone-arm",
-          "why": "Stepped care when psychotherapy alone is insufficient — sertraline or fluoxetine are first-line SSRIs for child GAD; monitor activation and suicidality early.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "sleep-hygiene-nightmare-screen",
-          "label": "Sleep hygiene / nightmare screen",
-          "correct_zone": "zone-arm",
-          "why": "Sleep-onset worry and bad dreams perpetuate daytime irritability and concentration problems — screen for nightmare disorder and coach sleep routine.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "safety-assessment",
-          "label": "Safety assessment",
-          "correct_zone": "zone-icu",
-          "why": "No acute suicidal ideation reported, but document safety, protective factors, and family psychiatric history — mother with depression raises genetic and modeling risk.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        }
-      ],
-      "decoys": [
-        {
-          "id": "decoy-avoid-192-0",
-          "label": "Benzodiazepine long-term without psychotherapy plan",
-          "why": "Avoid chronic benzos in children — dependence, cognitive effects, and no exposure work for school refusal.",
-          "correct_zone": "zone-icu"
-        },
-        {
-          "id": "decoy-avoid-192-1",
-          "label": "Dismiss somatic complaints without medical rule-out",
-          "why": "Functional abdominal pain is common in child anxiety, but TSH and basic labs still belong in the workup.",
-          "correct_zone": "zone-arm"
-        }
-      ],
-      "narrative": {
-        "doctor": {
-          "easy": {
-            "intro": "Morning stomachaches, school refusal, constant worry about peers laughing",
-            "hpi": "Maya Chen is a 9-year-old girl brought by her mother for worsening school refusal. Three weeks ago a classmate laughed when her pencil rolled off the desk; since then she believes everyone will laugh at her if she returns. She develops nausea and epigastric \"stomachaches\" on school mornings and cries at the door. At night she lies awake checking that the front-door lock is secure and worries someone could break in. She fidgets during homework and loses track of instructions — her teacher wonders about attention problems, but symptoms track with worry rather than classic hyperactivity. Mother reports lifelong \"nervous temperament\" and takes medication for depression. No fever, weight loss, tremor, or suicidal statements; she denies wanting to die but says she \"can't face school anymore.\" Mechanism: pervasive anticipatory anxiety drives autonomic arousal (morning GI symptoms), avoidance (refusal), and hypervigilance at sleep onset. Inattention here is likely worry-related — distinguish from ADHD by onset after stressor, situational focus, and improvement when anxiety treated. Workup: child-appropriate anxiety screen, TSH and basic labs, safety assessment with parent collateral. Treatment: CBT with graded school exposure, school psych coordination, sleep hygiene; consider SSRI if moderate-severe or partial CBT response.",
-            "vitalsText": "Pulse: 98 beats/min Blood pressure, systolic: 105 mm Hg Blood pressure, diastolic: 65 mm Hg Respiratory rate: 20 /minute Temperature: 37.0 C (98.6 F) SpO2: 99%",
-            "clinicalTip": "Teaching hint: Generalized Anxiety Disorder (child) with school refusal — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Generalized Anxiety Disorder (child) with school refusal. Start with stabilization, then targeted testing."
-          },
-          "standard": {
-            "intro": "Morning stomachaches, school refusal, constant worry about peers laughing",
-            "hpi": "Maya Chen is a 9-year-old girl brought by her mother for worsening school refusal. Three weeks ago a classmate laughed when her pencil rolled off the desk; since then she believes everyone will laugh at her if she returns. She develops nausea and epigastric \"stomachaches\" on school mornings and cries at the door. At night she lies awake checking that the front-door lock is secure and worries someone could break in. She fidgets during homework and loses track of instructions — her teacher wonders about attention problems, but symptoms track with worry rather than classic hyperactivity. Mother reports lifelong \"nervous temperament\" and takes medication for depression. No fever, weight loss, tremor, or suicidal statements; she denies wanting to die but says she \"can't face school anymore.\" Mechanism: pervasive anticipatory anxiety drives autonomic arousal (morning GI symptoms), avoidance (refusal), and hypervigilance at sleep onset. Inattention here is likely worry-related — distinguish from ADHD by onset after stressor, situational focus, and improvement when anxiety treated. Workup: child-appropriate anxiety screen, TSH and basic labs, safety assessment with parent collateral. Treatment: CBT with graded school exposure, school psych coordination, sleep hygiene; consider SSRI if moderate-severe or partial CBT response.",
-            "vitalsText": "Pulse: 98 beats/min Blood pressure, systolic: 105 mm Hg Blood pressure, diastolic: 65 mm Hg Respiratory rate: 20 /minute Temperature: 37.0 C (98.6 F) SpO2: 99%",
-            "clinicalTip": "Generalized Anxiety Disorder (child) with school refusal — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Generalized Anxiety Disorder (child) with school refusal."
-          },
-          "hard": {
-            "intro": "Morning stomachaches, school refusal, constant worry about peers laughing",
-            "hpi": "Maya Chen is a 9-year-old girl brought by her mother for worsening school refusal. Three weeks ago a classmate laughed when her pencil rolled off the desk; since then she believes everyone will laugh at her if she returns. She develops nausea and epigastric \"stomachaches\" on school mornings and cries at the door. At night she lies awake checking that the front-door lock is secure and worries someone could break in. She fidgets during homework and loses track of instructions — her teacher wonders about attention problems, but symptoms track with worry rather than classic hyperactivity. Mother reports lifelong \"nervous temperament\" and takes medication for depression. No fever, weight loss, tremor, or suicidal statements; she denies wanting to die but says she \"can't face school anymore.\" Mechanism: pervasive anticipatory anxiety drives autonomic arousal (morning GI symptoms), avoidance (refusal), and hypervigilance at sleep onset. Inattention here is likely worry-related — distinguish from ADHD by onset after stressor, situational focus, and improvement when anxiety treated. Workup: child-appropriate anxiety screen, TSH and basic labs, safety assessment with parent collateral. Treatment: CBT with graded school exposure, school psych coordination, sleep hygiene; consider SSRI if moderate-severe or partial CBT response.",
-            "vitalsText": "Pulse: 98 beats/min Blood pressure, systolic: 105 mm Hg Blood pressure, diastolic: 65 mm Hg Respiratory rate: 20 /minute Temperature: 37.0 C (98.6 F) SpO2: 99%",
-            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Generalized Anxiety Disorder (child) with school refusal."
-          }
-        },
-        "patient": {
-          "easy": {
-            "intro": "Morning stomachaches, school refusal, constant worry about peers laughing",
-            "hpi": "Maya Chen is a 9-year-old girl brought by her mother for worsening school refusal. Three weeks ago a classmate laughed when her pencil rolled off the desk; since then she believes everyone will laugh at her if she returns. She develops nausea and epigastric \"stomachaches\" on school mornings and cries at the door. At night she lies awake checking that the front-door lock is secure and worries someone could break in. She fidgets during homework and loses track of instructions — her teacher wonders about attention problems, but symptoms track with worry rather than classic hyperactivity. Mother reports lifelong \"nervous temperament\" and takes medication for depression. No fever, weight loss, tremor, or suicidal statements; she denies wanting to die but says she \"can't face school anymore.\" Mechanism: pervasive anticipatory anxiety drives autonomic arousal (morning GI symptoms), avoidance (refusal), and hypervigilance at sleep onset. Inattention here is likely worry-related — distinguish from ADHD by onset after stressor, situational focus, and improvement when anxiety treated. Workup: child-appropriate anxiety screen, TSH and basic labs, safety assessment with parent collateral. Treatment: CBT with graded school exposure, school psych coordination, sleep hygiene; consider SSRI if moderate-severe or partial CBT response.",
-            "vitalsText": "Pulse: 98 beats/min Blood pressure, systolic: 105 mm Hg Blood pressure, diastolic: 65 mm Hg Respiratory rate: 20 /minute Temperature: 37.0 C (98.6 F) SpO2: 99%",
-            "clinicalTip": "Teaching hint: Generalized Anxiety Disorder (child) with school refusal — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Generalized Anxiety Disorder (child) with school refusal. Share your symptoms clearly with the team."
-          },
-          "standard": {
-            "intro": "Morning stomachaches, school refusal, constant worry about peers laughing",
-            "hpi": "Maya Chen is a 9-year-old girl brought by her mother for worsening school refusal. Three weeks ago a classmate laughed when her pencil rolled off the desk; since then she believes everyone will laugh at her if she returns. She develops nausea and epigastric \"stomachaches\" on school mornings and cries at the door. At night she lies awake checking that the front-door lock is secure and worries someone could break in. She fidgets during homework and loses track of instructions — her teacher wonders about attention problems, but symptoms track with worry rather than classic hyperactivity. Mother reports lifelong \"nervous temperament\" and takes medication for depression. No fever, weight loss, tremor, or suicidal statements; she denies wanting to die but says she \"can't face school anymore.\" Mechanism: pervasive anticipatory anxiety drives autonomic arousal (morning GI symptoms), avoidance (refusal), and hypervigilance at sleep onset. Inattention here is likely worry-related — distinguish from ADHD by onset after stressor, situational focus, and improvement when anxiety treated. Workup: child-appropriate anxiety screen, TSH and basic labs, safety assessment with parent collateral. Treatment: CBT with graded school exposure, school psych coordination, sleep hygiene; consider SSRI if moderate-severe or partial CBT response.",
-            "vitalsText": "Pulse: 98 beats/min Blood pressure, systolic: 105 mm Hg Blood pressure, diastolic: 65 mm Hg Respiratory rate: 20 /minute Temperature: 37.0 C (98.6 F) SpO2: 99%",
-            "clinicalTip": "Generalized Anxiety Disorder (child) with school refusal — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Generalized Anxiety Disorder (child) with school refusal."
-          },
-          "hard": {
-            "intro": "Morning stomachaches, school refusal, constant worry about peers laughing",
-            "hpi": "Maya Chen is a 9-year-old girl brought by her mother for worsening school refusal. Three weeks ago a classmate laughed when her pencil rolled off the desk; since then she believes everyone will laugh at her if she returns. She develops nausea and epigastric \"stomachaches\" on school mornings and cries at the door. At night she lies awake checking that the front-door lock is secure and worries someone could break in. She fidgets during homework and loses track of instructions — her teacher wonders about attention problems, but symptoms track with worry rather than classic hyperactivity. Mother reports lifelong \"nervous temperament\" and takes medication for depression. No fever, weight loss, tremor, or suicidal statements; she denies wanting to die but says she \"can't face school anymore.\" Mechanism: pervasive anticipatory anxiety drives autonomic arousal (morning GI symptoms), avoidance (refusal), and hypervigilance at sleep onset. Inattention here is likely worry-related — distinguish from ADHD by onset after stressor, situational focus, and improvement when anxiety treated. Workup: child-appropriate anxiety screen, TSH and basic labs, safety assessment with parent collateral. Treatment: CBT with graded school exposure, school psych coordination, sleep hygiene; consider SSRI if moderate-severe or partial CBT response.",
-            "vitalsText": "Pulse: 98 beats/min Blood pressure, systolic: 105 mm Hg Blood pressure, diastolic: 65 mm Hg Respiratory rate: 20 /minute Temperature: 37.0 C (98.6 F) SpO2: 99%",
-            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Generalized Anxiety Disorder (child) with school refusal."
-          }
-        }
-      }
-    },
-    "193": {
-      "id": "193",
-      "title": "Mood Instability and Chest Pain",
-      "category": "Psychiatry & Social",
-      "presentationKey": "Mood Instability and Chest Pain",
-      "playbookKey": "case-bank-193",
-      "diagnosis": "Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk)",
-      "patient_voice": {
-        "chief_complaint": "I can't get out of this hole. My chest freaked me out last week and now I just feel empty.",
-        "history": "I had this crazy week where I didn't sleep and bought stuff I can't pay for. Now I can barely move. Campus health put me on an antidepressant. My mom has bipolar — I'm scared I'm like her.",
-        "pain": "My chest was tight last week — like I couldn't breathe — but today it's mostly this heavy sadness."
-      },
-      "caseBankSource": "immersa_uword_transform",
-      "hasSourceIntro": true,
-      "vitals": {
-        "sbp": 118,
-        "dbp": 72,
-        "hr": 92,
-        "rr": 16,
-        "temp": 36.8,
-        "spo2": 99,
-        "lactate": 1.4
-      },
-      "vitalsSource": "parsed",
-      "vitalsText": "Pulse: 92 beats/min Blood pressure, systolic: 118 mm Hg Blood pressure, diastolic: 72 mm Hg Respiratory rate: 16 /minute Temperature: 36.8 C (98.2 F) SpO2: 99%",
-      "flowTrack": "Standard ED pathway",
-      "dispositionUnits": [
-        "ER",
-        "OBS",
-        "ICU",
-        "WARD"
-      ],
-      "exam": [
-        [
-          "General",
-          "Thin young man, psychomotor slowing, flat affect, poor eye contact when discussing debt"
-        ],
-        [
-          "Cardiovascular",
-          "Regular rhythm, no murmur — mild tachycardia when describing chest episode"
-        ],
-        [
-          "Chest",
-          "Non-tender, clear to auscultation — prior chest pain likely non-cardiac at rest today"
-        ],
-        [
-          "Neuro / Psych",
-          "Alert, oriented, linear thought process, no hallucinations; passive death wishes without plan; denies homicidal ideation"
-        ]
-      ],
-      "patientSex": "male",
-      "hpi_narrative": "Jordan Reyes is a 22-year-old college student brought by his roommate for worsening low mood after a dramatic week-long \"high.\" Three weeks ago Jordan stopped sleeping, felt \"wired and brilliant,\" opened two credit cards, and bought a motorcycle he cannot afford — then crashed into exhaustion, guilt, and tearfulness. He now sleeps fourteen hours daily, skips classes, and tells his roommate he \"wouldn't mind not waking up\" but denies a specific plan. Last week he went to the ED for chest tightness and palpitations; workup was unrevealing and he was told it might be stress. Mother has bipolar disorder treated with lithium. Jordan was started on sertraline by campus health two weeks ago during the low phase — he wonders if it made the earlier \"high\" worse. No alcohol binge, no illicit drugs, no psychotic symptoms.\n\nMechanism: episodic mood elevation with decreased sleep and risky spending fits manic/hypomanic physiology; subsequent crash with neurovegetative symptoms and passive SI fits depressive pole. Antidepressant monotherapy in undiagnosed bipolar can worsen cycling — mood stabilizer first when bipolar is suspected.\n\nWorkup: safety screen, TSH/BMP/tox, ECG if chest symptoms recur. Treatment: mood stabilizer (lithium or valproate), psychotherapy, structured follow-up; avoid SSRI alone; address panic-type chest symptoms with CBT/breathing retraining after mood stabilization.",
-      "patient_name_default": "Jordan Reyes",
-      "difficulty": "standard",
-      "clinical_tip": "Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk) — follow CCS review orders.",
-      "objective": "Complete diagnosis and treatment orders for Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk).",
-      "interventionIds": [
-        "phq-9-safety-assessment-suicide-screen",
-        "tsh-bmp-tox-screen-urine-drug-screen",
-        "mood-stabilizer-lithium-valproate",
-        "avoid-antidepressant-monotherapy-in-bipo",
-        "ecg-chest-pain-rule-out-panic-vs-cardiac",
-        "lithium-level-renal-thyroid-monitoring-p",
-        "psychiatry-referral-disposition-by-risk"
-      ],
-      "interventions": [
-        {
-          "id": "phq-9-safety-assessment-suicide-screen",
-          "label": "PHQ-9 / safety assessment (suicide screen)",
-          "correct_zone": "zone-icu",
-          "why": "Quantify depression severity and document passive death wishes — mandatory before disposition in young adult with mood crash.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "tsh-bmp-tox-screen-urine-drug-screen",
-          "label": "TSH / BMP / tox screen / urine drug screen",
-          "correct_zone": "zone-blood",
-          "why": "Rule out hyperthyroidism, stimulant use, and metabolic mimics before anchoring on primary mood disorder.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "mood-stabilizer-lithium-valproate",
-          "label": "Mood stabilizer (lithium / valproate)",
-          "correct_zone": "zone-arm",
-          "why": "Family history of bipolar and prior manic behavior ( sleepless spending spree ) — mood stabilizer is backbone therapy, not antidepressant alone.",
-          "guideline": "ACEP",
-          "teachingChannel": "acute"
-        },
-        {
-          "id": "avoid-antidepressant-monotherapy-in-bipo",
-          "label": "Avoid antidepressant monotherapy in bipolar",
-          "correct_zone": "zone-arm",
-          "why": "Classic bipolar trap: antidepressant without stabilizer can precipitate mania or rapid cycling — teach mechanism before prescribing.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "ecg-chest-pain-rule-out-panic-vs-cardiac",
-          "label": "ECG + chest pain rule-out (panic vs cardiac)",
-          "correct_zone": "zone-monitor",
-          "why": "Last week's ED visit for chest tightness may reflect panic physiology — still obtain ECG and risk-stratify; panic disorder often overlaps mood disorders.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "lithium-level-renal-thyroid-monitoring-p",
-          "label": "Lithium level / renal / thyroid monitoring plan",
-          "correct_zone": "zone-monitor",
-          "why": "If lithium chosen, plan levels 0.6–1.0 mEq/L, baseline renal function, and TSH — teaching beat for long-term bipolar care.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "psychiatry-referral-disposition-by-risk",
-          "label": "Psychiatry referral / disposition by risk",
-          "correct_zone": "zone-icu",
-          "why": "College-age patient with passive SI needs outpatient psychiatry or higher level of care based on risk — document plan and supports.",
-          "guideline": "ACEP",
-          "teachingChannel": "disposition"
-        }
-      ],
-      "decoys": [
-        {
-          "id": "decoy-avoid-193-0",
-          "label": "SSRI or SNRI alone without mood stabilizer",
-          "why": "Dangerous in suspected bipolar — can unmask mania.",
-          "correct_zone": "zone-icu"
-        },
-        {
-          "id": "decoy-avoid-193-1",
-          "label": "Discharge with passive SI without safety plan",
-          "why": "Passive death wishes require documented safety plan, means restriction, and follow-up within days.",
-          "correct_zone": "zone-arm"
-        }
-      ],
-      "narrative": {
-        "doctor": {
-          "easy": {
-            "intro": "Depressive crash after sleepless spending spree, passive death wishes, recent chest tightness",
-            "hpi": "Jordan Reyes is a 22-year-old college student brought by his roommate for worsening low mood after a dramatic week-long \"high.\" Three weeks ago Jordan stopped sleeping, felt \"wired and brilliant,\" opened two credit cards, and bought a motorcycle he cannot afford — then crashed into exhaustion, guilt, and tearfulness. He now sleeps fourteen hours daily, skips classes, and tells his roommate he \"wouldn't mind not waking up\" but denies a specific plan. Last week he went to the ED for chest tightness and palpitations; workup was unrevealing and he was told it might be stress. Mother has bipolar disorder treated with lithium. Jordan was started on sertraline by campus health two weeks ago during the low phase — he wonders if it made the earlier \"high\" worse. No alcohol binge, no illicit drugs, no psychotic symptoms. Mechanism: episodic mood elevation with decreased sleep and risky spending fits manic/hypomanic physiology; subsequent crash with neurovegetative symptoms and passive SI fits depressive pole. Antidepressant monotherapy in undiagnosed bipolar can worsen cycling — mood stabilizer first when bipolar is suspected. Workup: safety screen, TSH/BMP/tox, ECG if chest symptoms recur. Treatment: mood stabilizer (lithium or valproate), psychotherapy, structured follow-up; avoid SSRI alone; address panic-type chest symptoms with CBT/breathing retraining after mood stabilization.",
-            "vitalsText": "Pulse: 92 beats/min Blood pressure, systolic: 118 mm Hg Blood pressure, diastolic: 72 mm Hg Respiratory rate: 16 /minute Temperature: 36.8 C (98.2 F) SpO2: 99%",
-            "clinicalTip": "Teaching hint: Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk) — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk). Start with stabilization, then targeted testing."
-          },
-          "standard": {
-            "intro": "Depressive crash after sleepless spending spree, passive death wishes, recent chest tightness",
-            "hpi": "Jordan Reyes is a 22-year-old college student brought by his roommate for worsening low mood after a dramatic week-long \"high.\" Three weeks ago Jordan stopped sleeping, felt \"wired and brilliant,\" opened two credit cards, and bought a motorcycle he cannot afford — then crashed into exhaustion, guilt, and tearfulness. He now sleeps fourteen hours daily, skips classes, and tells his roommate he \"wouldn't mind not waking up\" but denies a specific plan. Last week he went to the ED for chest tightness and palpitations; workup was unrevealing and he was told it might be stress. Mother has bipolar disorder treated with lithium. Jordan was started on sertraline by campus health two weeks ago during the low phase — he wonders if it made the earlier \"high\" worse. No alcohol binge, no illicit drugs, no psychotic symptoms. Mechanism: episodic mood elevation with decreased sleep and risky spending fits manic/hypomanic physiology; subsequent crash with neurovegetative symptoms and passive SI fits depressive pole. Antidepressant monotherapy in undiagnosed bipolar can worsen cycling — mood stabilizer first when bipolar is suspected. Workup: safety screen, TSH/BMP/tox, ECG if chest symptoms recur. Treatment: mood stabilizer (lithium or valproate), psychotherapy, structured follow-up; avoid SSRI alone; address panic-type chest symptoms with CBT/breathing retraining after mood stabilization.",
-            "vitalsText": "Pulse: 92 beats/min Blood pressure, systolic: 118 mm Hg Blood pressure, diastolic: 72 mm Hg Respiratory rate: 16 /minute Temperature: 36.8 C (98.2 F) SpO2: 99%",
-            "clinicalTip": "Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk) — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk)."
-          },
-          "hard": {
-            "intro": "Depressive crash after sleepless spending spree, passive death wishes, recent chest tightness",
-            "hpi": "Jordan Reyes is a 22-year-old college student brought by his roommate for worsening low mood after a dramatic week-long \"high.\" Three weeks ago Jordan stopped sleeping, felt \"wired and brilliant,\" opened two credit cards, and bought a motorcycle he cannot afford — then crashed into exhaustion, guilt, and tearfulness. He now sleeps fourteen hours daily, skips classes, and tells his roommate he \"wouldn't mind not waking up\" but denies a specific plan. Last week he went to the ED for chest tightness and palpitations; workup was unrevealing and he was told it might be stress. Mother has bipolar disorder treated with lithium. Jordan was started on sertraline by campus health two weeks ago during the low phase — he wonders if it made the earlier \"high\" worse. No alcohol binge, no illicit drugs, no psychotic symptoms. Mechanism: episodic mood elevation with decreased sleep and risky spending fits manic/hypomanic physiology; subsequent crash with neurovegetative symptoms and passive SI fits depressive pole. Antidepressant monotherapy in undiagnosed bipolar can worsen cycling — mood stabilizer first when bipolar is suspected. Workup: safety screen, TSH/BMP/tox, ECG if chest symptoms recur. Treatment: mood stabilizer (lithium or valproate), psychotherapy, structured follow-up; avoid SSRI alone; address panic-type chest symptoms with CBT/breathing retraining after mood stabilization.",
-            "vitalsText": "Pulse: 92 beats/min Blood pressure, systolic: 118 mm Hg Blood pressure, diastolic: 72 mm Hg Respiratory rate: 16 /minute Temperature: 36.8 C (98.2 F) SpO2: 99%",
-            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk)."
-          }
-        },
-        "patient": {
-          "easy": {
-            "intro": "Depressive crash after sleepless spending spree, passive death wishes, recent chest tightness",
-            "hpi": "Jordan Reyes is a 22-year-old college student brought by his roommate for worsening low mood after a dramatic week-long \"high.\" Three weeks ago Jordan stopped sleeping, felt \"wired and brilliant,\" opened two credit cards, and bought a motorcycle he cannot afford — then crashed into exhaustion, guilt, and tearfulness. He now sleeps fourteen hours daily, skips classes, and tells his roommate he \"wouldn't mind not waking up\" but denies a specific plan. Last week he went to the ED for chest tightness and palpitations; workup was unrevealing and he was told it might be stress. Mother has bipolar disorder treated with lithium. Jordan was started on sertraline by campus health two weeks ago during the low phase — he wonders if it made the earlier \"high\" worse. No alcohol binge, no illicit drugs, no psychotic symptoms. Mechanism: episodic mood elevation with decreased sleep and risky spending fits manic/hypomanic physiology; subsequent crash with neurovegetative symptoms and passive SI fits depressive pole. Antidepressant monotherapy in undiagnosed bipolar can worsen cycling — mood stabilizer first when bipolar is suspected. Workup: safety screen, TSH/BMP/tox, ECG if chest symptoms recur. Treatment: mood stabilizer (lithium or valproate), psychotherapy, structured follow-up; avoid SSRI alone; address panic-type chest symptoms with CBT/breathing retraining after mood stabilization.",
-            "vitalsText": "Pulse: 92 beats/min Blood pressure, systolic: 118 mm Hg Blood pressure, diastolic: 72 mm Hg Respiratory rate: 16 /minute Temperature: 36.8 C (98.2 F) SpO2: 99%",
-            "clinicalTip": "Teaching hint: Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk) — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk). Share your symptoms clearly with the team."
-          },
-          "standard": {
-            "intro": "Depressive crash after sleepless spending spree, passive death wishes, recent chest tightness",
-            "hpi": "Jordan Reyes is a 22-year-old college student brought by his roommate for worsening low mood after a dramatic week-long \"high.\" Three weeks ago Jordan stopped sleeping, felt \"wired and brilliant,\" opened two credit cards, and bought a motorcycle he cannot afford — then crashed into exhaustion, guilt, and tearfulness. He now sleeps fourteen hours daily, skips classes, and tells his roommate he \"wouldn't mind not waking up\" but denies a specific plan. Last week he went to the ED for chest tightness and palpitations; workup was unrevealing and he was told it might be stress. Mother has bipolar disorder treated with lithium. Jordan was started on sertraline by campus health two weeks ago during the low phase — he wonders if it made the earlier \"high\" worse. No alcohol binge, no illicit drugs, no psychotic symptoms. Mechanism: episodic mood elevation with decreased sleep and risky spending fits manic/hypomanic physiology; subsequent crash with neurovegetative symptoms and passive SI fits depressive pole. Antidepressant monotherapy in undiagnosed bipolar can worsen cycling — mood stabilizer first when bipolar is suspected. Workup: safety screen, TSH/BMP/tox, ECG if chest symptoms recur. Treatment: mood stabilizer (lithium or valproate), psychotherapy, structured follow-up; avoid SSRI alone; address panic-type chest symptoms with CBT/breathing retraining after mood stabilization.",
-            "vitalsText": "Pulse: 92 beats/min Blood pressure, systolic: 118 mm Hg Blood pressure, diastolic: 72 mm Hg Respiratory rate: 16 /minute Temperature: 36.8 C (98.2 F) SpO2: 99%",
-            "clinicalTip": "Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk) — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk)."
-          },
-          "hard": {
-            "intro": "Depressive crash after sleepless spending spree, passive death wishes, recent chest tightness",
-            "hpi": "Jordan Reyes is a 22-year-old college student brought by his roommate for worsening low mood after a dramatic week-long \"high.\" Three weeks ago Jordan stopped sleeping, felt \"wired and brilliant,\" opened two credit cards, and bought a motorcycle he cannot afford — then crashed into exhaustion, guilt, and tearfulness. He now sleeps fourteen hours daily, skips classes, and tells his roommate he \"wouldn't mind not waking up\" but denies a specific plan. Last week he went to the ED for chest tightness and palpitations; workup was unrevealing and he was told it might be stress. Mother has bipolar disorder treated with lithium. Jordan was started on sertraline by campus health two weeks ago during the low phase — he wonders if it made the earlier \"high\" worse. No alcohol binge, no illicit drugs, no psychotic symptoms. Mechanism: episodic mood elevation with decreased sleep and risky spending fits manic/hypomanic physiology; subsequent crash with neurovegetative symptoms and passive SI fits depressive pole. Antidepressant monotherapy in undiagnosed bipolar can worsen cycling — mood stabilizer first when bipolar is suspected. Workup: safety screen, TSH/BMP/tox, ECG if chest symptoms recur. Treatment: mood stabilizer (lithium or valproate), psychotherapy, structured follow-up; avoid SSRI alone; address panic-type chest symptoms with CBT/breathing retraining after mood stabilization.",
-            "vitalsText": "Pulse: 92 beats/min Blood pressure, systolic: 118 mm Hg Blood pressure, diastolic: 72 mm Hg Respiratory rate: 16 /minute Temperature: 36.8 C (98.2 F) SpO2: 99%",
-            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk)."
-          }
-        }
-      }
-    },
-    "194": {
-      "id": "194",
-      "title": "Paranoia and Auditory Hallucinations",
-      "category": "Psychiatry & Social",
-      "presentationKey": "Paranoia and Auditory Hallucinations",
-      "playbookKey": "case-bank-194",
-      "diagnosis": "Primary psychotic disorder — rule out organic and toxic causes",
-      "patient_voice": {
-        "chief_complaint": "They're listening. The voice won't leave me alone.",
-        "history": "I stopped going out. People watch me. There's a voice — I don't want to talk about what it says. My friend made me come because I haven't eaten.",
-        "pain": "It's not pain — it's pressure in my head and the voice."
-      },
-      "caseBankSource": "immersa_uword_transform",
-      "hasSourceIntro": true,
-      "vitals": {
-        "sbp": 128,
-        "dbp": 82,
-        "hr": 88,
-        "rr": 14,
-        "temp": 36.9,
-        "spo2": 98,
-        "lactate": 1.7
-      },
-      "vitalsSource": "parsed",
-      "vitalsText": "Pulse: 88 beats/min Blood pressure, systolic: 128 mm Hg Blood pressure, diastolic: 82 mm Hg Respiratory rate: 14 /minute Temperature: 36.9 C (98.4 F) SpO2: 98%",
-      "flowTrack": "Standard ED pathway",
-      "dispositionUnits": [
-        "ER",
-        "OBS",
-        "ICU",
-        "WARD"
-      ],
-      "exam": [
-        [
-          "General",
-          "Thin man, poor grooming, guarded affect, minimal spontaneous speech"
-        ],
-        [
-          "HEENT",
-          "Normocephalic, no meningismus, mucous membranes dry — poor oral intake"
-        ],
-        [
-          "Neuro",
-          "No focal deficits; occasional catalepsy-like posturing when prompted to move"
-        ],
-        [
-          "Psych",
-          "Paranoid thought content, auditory hallucinations reported, no clear mood elevation; oriented to person and place"
-        ]
-      ],
-      "patientSex": "male",
-      "hpi_narrative": "Darius Webb is a 28-year-old man brought by a college friend who says Darius has \"barely eaten in days.\" For eight months Darius has withdrawn from friends, stopped going to work, and believes neighbors are monitoring him through his phone. He reports a deep male voice that \"tells me what they want me to do\" — he will not elaborate on commands but clenches his fists when asked. He denies substance use; friend confirms no known alcohol or drug binge but notes cannabis use years ago. No fever, headache, or seizure. Today he sits rigidly on the stretcher, answers in short phrases, and occasionally stares at the wall for minutes — friend wonders if he is \"frozen.\" No prior psychiatric hospitalizations documented; uncle had schizophrenia.\n\nMechanism: chronic positive symptoms (paranoia, auditory hallucinations) plus negative symptoms (withdrawal, avolition) suggest primary psychotic disorder — but organic causes (encephalitis, tox, metabolic) must be excluded in acute presentation with possible catatonic features.\n\nWorkup: labs, tox, neuroimaging, LP if encephalitis suspected. Treatment: antipsychotic, catatonia protocol if present, inpatient psychiatry with 1:1 observation until command hallucinations and nutrition risk are addressed.",
-      "patient_name_default": "Darius Webb",
-      "difficulty": "standard",
-      "clinical_tip": "Primary psychotic disorder — rule out organic and toxic causes — follow CCS review orders.",
-      "objective": "Complete diagnosis and treatment orders for Primary psychotic disorder — rule out organic and toxic causes.",
-      "interventionIds": [
-        "collateral-history-friend-interview",
-        "cbc-bmp-tsh-lfts-tox-screen",
-        "ct-mri-brain-lp-encephalitis-rule-out",
-        "antipsychotic-risperidone-olanzapine",
-        "catatonia-screen-benzodiazepine-if-catat",
-        "psychiatry-admission-1-1-observation"
-      ],
-      "interventions": [
-        {
-          "id": "collateral-history-friend-interview",
-          "label": "Collateral history / friend interview",
-          "correct_zone": "zone-arm",
-          "why": "Friend reports eight months of withdrawal and poor intake — essential when patient is guarded or internally preoccupied.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "cbc-bmp-tsh-lfts-tox-screen",
-          "label": "CBC / BMP / TSH / LFTs / tox screen",
-          "correct_zone": "zone-blood",
-          "why": "Rule out metabolic, infectious, thyroid, and substance-induced psychosis before anchoring on schizophrenia spectrum.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "ct-mri-brain-lp-encephalitis-rule-out",
-          "label": "CT/MRI brain ± LP (encephalitis rule-out)",
-          "correct_zone": "zone-monitor",
-          "why": "New psychosis with altered behavior warrants neuroimaging; autoimmune encephalitis and delirium belong on differential.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "antipsychotic-risperidone-olanzapine",
-          "label": "Antipsychotic (risperidone / olanzapine)",
-          "correct_zone": "zone-icu",
-          "why": "Second-generation antipsychotic for acute positive symptoms — monitor metabolic effects.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "catatonia-screen-benzodiazepine-if-catat",
-          "label": "Catatonia screen / benzodiazepine if catatonic",
-          "correct_zone": "zone-arm",
-          "why": "Optional teaching beat — immobility, mutism, or waxy flexibility respond to lorazepam trial while arranging admission.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "psychiatry-admission-1-1-observation",
-          "label": "Psychiatry admission / 1:1 observation",
-          "correct_zone": "zone-icu",
-          "why": "Command hallucinations and poor self-care warrant inpatient safety and structured workup.",
-          "guideline": "ACEP",
-          "teachingChannel": "disposition"
-        }
-      ],
-      "decoys": [
-        {
-          "id": "decoy-avoid-194-0",
-          "label": "Antidepressant monotherapy for primary psychosis",
-          "why": "Does not treat primary psychosis and may worsen agitation.",
-          "correct_zone": "zone-icu"
-        },
-        {
-          "id": "decoy-avoid-194-1",
-          "label": "Discharge without safety assessment",
-          "why": "Command auditory hallucinations require documented safety and supervision plan.",
-          "correct_zone": "zone-icu"
-        }
-      ],
-      "narrative": {
-        "doctor": {
-          "easy": {
-            "intro": "Paranoia, command auditory hallucinations, social withdrawal, poor intake",
-            "hpi": "Darius Webb is a 28-year-old man brought by a college friend who says Darius has \"barely eaten in days.\" For eight months Darius has withdrawn from friends, stopped going to work, and believes neighbors are monitoring him through his phone. He reports a deep male voice that \"tells me what they want me to do\" — he will not elaborate on commands but clenches his fists when asked. He denies substance use; friend confirms no known alcohol or drug binge but notes cannabis use years ago. No fever, headache, or seizure. Today he sits rigidly on the stretcher, answers in short phrases, and occasionally stares at the wall for minutes — friend wonders if he is \"frozen.\" No prior psychiatric hospitalizations documented; uncle had schizophrenia. Mechanism: chronic positive symptoms (paranoia, auditory hallucinations) plus negative symptoms (withdrawal, avolition) suggest primary psychotic disorder — but organic causes (encephalitis, tox, metabolic) must be excluded in acute presentation with possible catatonic features. Workup: labs, tox, neuroimaging, LP if encephalitis suspected. Treatment: antipsychotic, catatonia protocol if present, inpatient psychiatry with 1:1 observation until command hallucinations and nutrition risk are addressed.",
-            "vitalsText": "Pulse: 88 beats/min Blood pressure, systolic: 128 mm Hg Blood pressure, diastolic: 82 mm Hg Respiratory rate: 14 /minute Temperature: 36.9 C (98.4 F) SpO2: 98%",
-            "clinicalTip": "Teaching hint: Primary psychotic disorder — rule out organic and toxic causes — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Primary psychotic disorder — rule out organic and toxic causes. Start with stabilization, then targeted testing."
-          },
-          "standard": {
-            "intro": "Paranoia, command auditory hallucinations, social withdrawal, poor intake",
-            "hpi": "Darius Webb is a 28-year-old man brought by a college friend who says Darius has \"barely eaten in days.\" For eight months Darius has withdrawn from friends, stopped going to work, and believes neighbors are monitoring him through his phone. He reports a deep male voice that \"tells me what they want me to do\" — he will not elaborate on commands but clenches his fists when asked. He denies substance use; friend confirms no known alcohol or drug binge but notes cannabis use years ago. No fever, headache, or seizure. Today he sits rigidly on the stretcher, answers in short phrases, and occasionally stares at the wall for minutes — friend wonders if he is \"frozen.\" No prior psychiatric hospitalizations documented; uncle had schizophrenia. Mechanism: chronic positive symptoms (paranoia, auditory hallucinations) plus negative symptoms (withdrawal, avolition) suggest primary psychotic disorder — but organic causes (encephalitis, tox, metabolic) must be excluded in acute presentation with possible catatonic features. Workup: labs, tox, neuroimaging, LP if encephalitis suspected. Treatment: antipsychotic, catatonia protocol if present, inpatient psychiatry with 1:1 observation until command hallucinations and nutrition risk are addressed.",
-            "vitalsText": "Pulse: 88 beats/min Blood pressure, systolic: 128 mm Hg Blood pressure, diastolic: 82 mm Hg Respiratory rate: 14 /minute Temperature: 36.9 C (98.4 F) SpO2: 98%",
-            "clinicalTip": "Primary psychotic disorder — rule out organic and toxic causes — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Primary psychotic disorder — rule out organic and toxic causes."
-          },
-          "hard": {
-            "intro": "Paranoia, command auditory hallucinations, social withdrawal, poor intake",
-            "hpi": "Darius Webb is a 28-year-old man brought by a college friend who says Darius has \"barely eaten in days.\" For eight months Darius has withdrawn from friends, stopped going to work, and believes neighbors are monitoring him through his phone. He reports a deep male voice that \"tells me what they want me to do\" — he will not elaborate on commands but clenches his fists when asked. He denies substance use; friend confirms no known alcohol or drug binge but notes cannabis use years ago. No fever, headache, or seizure. Today he sits rigidly on the stretcher, answers in short phrases, and occasionally stares at the wall for minutes — friend wonders if he is \"frozen.\" No prior psychiatric hospitalizations documented; uncle had schizophrenia. Mechanism: chronic positive symptoms (paranoia, auditory hallucinations) plus negative symptoms (withdrawal, avolition) suggest primary psychotic disorder — but organic causes (encephalitis, tox, metabolic) must be excluded in acute presentation with possible catatonic features. Workup: labs, tox, neuroimaging, LP if encephalitis suspected. Treatment: antipsychotic, catatonia protocol if present, inpatient psychiatry with 1:1 observation until command hallucinations and nutrition risk are addressed.",
-            "vitalsText": "Pulse: 88 beats/min Blood pressure, systolic: 128 mm Hg Blood pressure, diastolic: 82 mm Hg Respiratory rate: 14 /minute Temperature: 36.9 C (98.4 F) SpO2: 98%",
-            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Primary psychotic disorder — rule out organic and toxic causes."
-          }
-        },
-        "patient": {
-          "easy": {
-            "intro": "Paranoia, command auditory hallucinations, social withdrawal, poor intake",
-            "hpi": "Darius Webb is a 28-year-old man brought by a college friend who says Darius has \"barely eaten in days.\" For eight months Darius has withdrawn from friends, stopped going to work, and believes neighbors are monitoring him through his phone. He reports a deep male voice that \"tells me what they want me to do\" — he will not elaborate on commands but clenches his fists when asked. He denies substance use; friend confirms no known alcohol or drug binge but notes cannabis use years ago. No fever, headache, or seizure. Today he sits rigidly on the stretcher, answers in short phrases, and occasionally stares at the wall for minutes — friend wonders if he is \"frozen.\" No prior psychiatric hospitalizations documented; uncle had schizophrenia. Mechanism: chronic positive symptoms (paranoia, auditory hallucinations) plus negative symptoms (withdrawal, avolition) suggest primary psychotic disorder — but organic causes (encephalitis, tox, metabolic) must be excluded in acute presentation with possible catatonic features. Workup: labs, tox, neuroimaging, LP if encephalitis suspected. Treatment: antipsychotic, catatonia protocol if present, inpatient psychiatry with 1:1 observation until command hallucinations and nutrition risk are addressed.",
-            "vitalsText": "Pulse: 88 beats/min Blood pressure, systolic: 128 mm Hg Blood pressure, diastolic: 82 mm Hg Respiratory rate: 14 /minute Temperature: 36.9 C (98.4 F) SpO2: 98%",
-            "clinicalTip": "Teaching hint: Primary psychotic disorder — rule out organic and toxic causes — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Primary psychotic disorder — rule out organic and toxic causes. Share your symptoms clearly with the team."
-          },
-          "standard": {
-            "intro": "Paranoia, command auditory hallucinations, social withdrawal, poor intake",
-            "hpi": "Darius Webb is a 28-year-old man brought by a college friend who says Darius has \"barely eaten in days.\" For eight months Darius has withdrawn from friends, stopped going to work, and believes neighbors are monitoring him through his phone. He reports a deep male voice that \"tells me what they want me to do\" — he will not elaborate on commands but clenches his fists when asked. He denies substance use; friend confirms no known alcohol or drug binge but notes cannabis use years ago. No fever, headache, or seizure. Today he sits rigidly on the stretcher, answers in short phrases, and occasionally stares at the wall for minutes — friend wonders if he is \"frozen.\" No prior psychiatric hospitalizations documented; uncle had schizophrenia. Mechanism: chronic positive symptoms (paranoia, auditory hallucinations) plus negative symptoms (withdrawal, avolition) suggest primary psychotic disorder — but organic causes (encephalitis, tox, metabolic) must be excluded in acute presentation with possible catatonic features. Workup: labs, tox, neuroimaging, LP if encephalitis suspected. Treatment: antipsychotic, catatonia protocol if present, inpatient psychiatry with 1:1 observation until command hallucinations and nutrition risk are addressed.",
-            "vitalsText": "Pulse: 88 beats/min Blood pressure, systolic: 128 mm Hg Blood pressure, diastolic: 82 mm Hg Respiratory rate: 14 /minute Temperature: 36.9 C (98.4 F) SpO2: 98%",
-            "clinicalTip": "Primary psychotic disorder — rule out organic and toxic causes — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Primary psychotic disorder — rule out organic and toxic causes."
-          },
-          "hard": {
-            "intro": "Paranoia, command auditory hallucinations, social withdrawal, poor intake",
-            "hpi": "Darius Webb is a 28-year-old man brought by a college friend who says Darius has \"barely eaten in days.\" For eight months Darius has withdrawn from friends, stopped going to work, and believes neighbors are monitoring him through his phone. He reports a deep male voice that \"tells me what they want me to do\" — he will not elaborate on commands but clenches his fists when asked. He denies substance use; friend confirms no known alcohol or drug binge but notes cannabis use years ago. No fever, headache, or seizure. Today he sits rigidly on the stretcher, answers in short phrases, and occasionally stares at the wall for minutes — friend wonders if he is \"frozen.\" No prior psychiatric hospitalizations documented; uncle had schizophrenia. Mechanism: chronic positive symptoms (paranoia, auditory hallucinations) plus negative symptoms (withdrawal, avolition) suggest primary psychotic disorder — but organic causes (encephalitis, tox, metabolic) must be excluded in acute presentation with possible catatonic features. Workup: labs, tox, neuroimaging, LP if encephalitis suspected. Treatment: antipsychotic, catatonia protocol if present, inpatient psychiatry with 1:1 observation until command hallucinations and nutrition risk are addressed.",
-            "vitalsText": "Pulse: 88 beats/min Blood pressure, systolic: 128 mm Hg Blood pressure, diastolic: 82 mm Hg Respiratory rate: 14 /minute Temperature: 36.9 C (98.4 F) SpO2: 98%",
-            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Primary psychotic disorder — rule out organic and toxic causes."
-          }
-        }
-      }
-    },
-    "195": {
-      "id": "195",
-      "title": "Alcohol Withdrawal",
-      "category": "Psychiatry & Social",
-      "presentationKey": "Alcohol Withdrawal",
-      "playbookKey": "case-bank-195",
-      "diagnosis": "Moderate alcohol withdrawal — prior delirium tremens history",
-      "patient_voice": {
-        "chief_complaint": "I'm shaking bad and I see things crawling — I need to get through this without seizing again.",
-        "history": "I stopped drinking yesterday. I've had DT before. I was drinking a lot after I lost my job. My partner brought me in because the hallucinations started.",
-        "pain": "My hands won't stop shaking — inside I feel like I'm coming apart."
-      },
-      "caseBankSource": "immersa_uword_transform",
-      "hasSourceIntro": true,
-      "vitals": {
-        "sbp": 156,
-        "dbp": 94,
-        "hr": 118,
-        "rr": 22,
-        "temp": 37.4,
-        "spo2": 97,
-        "lactate": 1.9
-      },
-      "vitalsSource": "authored",
-      "vitalsText": "Pulse: 118 beats/min Blood pressure 156/94 mmHg Respiratory rate: 22 /minute Temperature: 37.4 C SpO2: 97% Lactate: 1.9 mmol/L",
-      "flowTrack": "Standard ED pathway",
-      "dispositionUnits": [
-        "ER",
-        "OBS",
-        "ICU",
-        "WARD"
-      ],
-      "exam": [
-        [
-          "General",
-          "Middle-aged man, diaphoretic, visible fine tremor of outstretched hands, anxious affect"
-        ],
-        [
-          "HEENT",
-          "Scleral icterus absent today; mild conjunctival injection"
-        ],
-        [
-          "Cardiovascular",
-          "Tachycardia, regular rhythm, no murmur"
-        ],
-        [
-          "Abdomen",
-          "Mild hepatomegaly, non-tender — chronic alcohol use stigmata"
-        ],
-        [
-          "Neuro / Psych",
-          "Alert, oriented ×3, no focal deficits; visual hallucinations reported; CIWA score elevated"
-        ]
-      ],
-      "patientSex": "male",
-      "hpi_narrative": "Tom Hayes is a 45-year-old man brought by his partner for shaking, sweating, and \"seeing bugs on the wall\" since yesterday. His last drink was a pint of whiskey about 36 hours ago — he has tried to quit before and had a seizure and hospital admission for delirium tremens two years ago. He drinks roughly a liter of whiskey daily when actively using. Today he is anxious, tremulous, tachycardic, and oriented but reports visual hallucinations of insects crawling on the curtain. Partner says he drank heavily after losing his job last month and became despondent. No head trauma, no fever, no focal weakness. He wants help quitting but fears \"the shakes getting worse like last time.\"\n\nMechanism: GABA receptor downregulation after chronic ethanol exposure produces autonomic hyperactivity 24–72 hours after last drink — tremor, tachycardia, hallucinations; prior DT raises risk of seizures and progression to delirium tremens.\n\nTreatment: CIWA-driven benzodiazepines, thiamine/folate, correct electrolytes, seizure precautions, monitor for DT; addiction consult and safety planning after stabilization.",
-      "patient_name_default": "Tom Hayes",
-      "difficulty": "standard",
-      "clinical_tip": "Moderate alcohol withdrawal — prior delirium tremens history — follow CCS review orders.",
-      "objective": "Complete diagnosis and treatment orders for Moderate alcohol withdrawal — prior delirium tremens history.",
-      "interventionIds": [
-        "ciwa-ar-protocol-symptom-triggered-benzo",
-        "thiamine-folate-multivitamin-wernicke-pr",
-        "bmp-magnesium-lfts-ethanol-level",
-        "seizure-precautions-icu-if-severe-dt-ris",
-        "monitor-for-delirium-tremens",
-        "addiction-medicine-psychiatry-consult",
-        "safety-assessment-after-intentional-rela"
-      ],
-      "interventions": [
-        {
-          "id": "ciwa-ar-protocol-symptom-triggered-benzo",
-          "label": "CIWA-Ar protocol / symptom-triggered benzodiazepines",
-          "correct_zone": "zone-icu",
-          "why": "Last drink 36 hours ago with tremor and diaphoresis — scale-guided lorazepam or diazepam reduces seizure and DT risk.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "thiamine-folate-multivitamin-wernicke-pr",
-          "label": "Thiamine / folate / multivitamin (Wernicke prevention)",
-          "correct_zone": "zone-icu",
-          "why": "Give thiamine before glucose in at-risk drinkers — prevents Wernicke encephalopathy.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "bmp-magnesium-lfts-ethanol-level",
-          "label": "BMP / magnesium / LFTs / ethanol level",
-          "correct_zone": "zone-iv-bag",
-          "why": "Correct hypomagnesemia and assess hepatic injury; low ethanol level confirms withdrawal timing.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "seizure-precautions-icu-if-severe-dt-ris",
-          "label": "Seizure precautions / ICU if severe DT risk",
-          "correct_zone": "zone-icu",
-          "why": "History of prior DT — lower threshold for ICU and continuous monitoring.",
-          "guideline": "ACEP",
-          "teachingChannel": "disposition"
-        },
-        {
-          "id": "monitor-for-delirium-tremens",
-          "label": "Monitor for delirium tremens",
-          "correct_zone": "zone-monitor",
-          "why": "Visual hallucinations today — track autonomic instability, agitation, and fever for DT progression.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "addiction-medicine-psychiatry-consult",
-          "label": "Addiction medicine / psychiatry consult",
-          "correct_zone": "zone-icu",
-          "why": "Link to detox, counseling, and relapse prevention after medical stabilization.",
-          "guideline": "ACEP",
-          "teachingChannel": "consult"
-        },
-        {
-          "id": "safety-assessment-after-intentional-rela",
-          "label": "Safety assessment after intentional relapse",
-          "correct_zone": "zone-icu",
-          "why": "Document intent, supports, and safety if withdrawal followed deliberate drinking.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        }
-      ],
-      "decoys": [
-        {
-          "id": "decoy-avoid-195-0",
-          "label": "Fixed-dose benzo without CIWA monitoring",
-          "why": "Under- or over-sedation risk — CIWA-triggered dosing is standard.",
-          "correct_zone": "zone-monitor"
-        },
-        {
-          "id": "decoy-avoid-195-1",
-          "label": "Discharge before withdrawal plateau without follow-up",
-          "why": "High recurrence of seizures/DT if sent home too early without linkage.",
-          "correct_zone": "zone-arm"
-        }
-      ],
-      "narrative": {
-        "doctor": {
-          "easy": {
-            "intro": "Tremor, diaphoresis, visual hallucinations 36 hours after last drink — prior DT",
-            "hpi": "Tom Hayes is a 45-year-old man brought by his partner for shaking, sweating, and \"seeing bugs on the wall\" since yesterday. His last drink was a pint of whiskey about 36 hours ago — he has tried to quit before and had a seizure and hospital admission for delirium tremens two years ago. He drinks roughly a liter of whiskey daily when actively using. Today he is anxious, tremulous, tachycardic, and oriented but reports visual hallucinations of insects crawling on the curtain. Partner says he drank heavily after losing his job last month and became despondent. No head trauma, no fever, no focal weakness. He wants help quitting but fears \"the shakes getting worse like last time.\" Mechanism: GABA receptor downregulation after chronic ethanol exposure produces autonomic hyperactivity 24–72 hours after last drink — tremor, tachycardia, hallucinations; prior DT raises risk of seizures and progression to delirium tremens. Treatment: CIWA-driven benzodiazepines, thiamine/folate, correct electrolytes, seizure precautions, monitor for DT; addiction consult and safety planning after stabilization.",
-            "vitalsText": "Pulse: 118 beats/min Blood pressure 156/94 mmHg Respiratory rate: 22 /minute Temperature: 37.4 C SpO2: 97% Lactate: 1.9 mmol/L",
-            "clinicalTip": "Teaching hint: Moderate alcohol withdrawal — prior delirium tremens history — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Moderate alcohol withdrawal — prior delirium tremens history. Start with stabilization, then targeted testing."
-          },
-          "standard": {
-            "intro": "Tremor, diaphoresis, visual hallucinations 36 hours after last drink — prior DT",
-            "hpi": "Tom Hayes is a 45-year-old man brought by his partner for shaking, sweating, and \"seeing bugs on the wall\" since yesterday. His last drink was a pint of whiskey about 36 hours ago — he has tried to quit before and had a seizure and hospital admission for delirium tremens two years ago. He drinks roughly a liter of whiskey daily when actively using. Today he is anxious, tremulous, tachycardic, and oriented but reports visual hallucinations of insects crawling on the curtain. Partner says he drank heavily after losing his job last month and became despondent. No head trauma, no fever, no focal weakness. He wants help quitting but fears \"the shakes getting worse like last time.\" Mechanism: GABA receptor downregulation after chronic ethanol exposure produces autonomic hyperactivity 24–72 hours after last drink — tremor, tachycardia, hallucinations; prior DT raises risk of seizures and progression to delirium tremens. Treatment: CIWA-driven benzodiazepines, thiamine/folate, correct electrolytes, seizure precautions, monitor for DT; addiction consult and safety planning after stabilization.",
-            "vitalsText": "Pulse: 118 beats/min Blood pressure 156/94 mmHg Respiratory rate: 22 /minute Temperature: 37.4 C SpO2: 97% Lactate: 1.9 mmol/L",
-            "clinicalTip": "Moderate alcohol withdrawal — prior delirium tremens history — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Moderate alcohol withdrawal — prior delirium tremens history."
-          },
-          "hard": {
-            "intro": "Tremor, diaphoresis, visual hallucinations 36 hours after last drink — prior DT",
-            "hpi": "Tom Hayes is a 45-year-old man brought by his partner for shaking, sweating, and \"seeing bugs on the wall\" since yesterday. His last drink was a pint of whiskey about 36 hours ago — he has tried to quit before and had a seizure and hospital admission for delirium tremens two years ago. He drinks roughly a liter of whiskey daily when actively using. Today he is anxious, tremulous, tachycardic, and oriented but reports visual hallucinations of insects crawling on the curtain. Partner says he drank heavily after losing his job last month and became despondent. No head trauma, no fever, no focal weakness. He wants help quitting but fears \"the shakes getting worse like last time.\" Mechanism: GABA receptor downregulation after chronic ethanol exposure produces autonomic hyperactivity 24–72 hours after last drink — tremor, tachycardia, hallucinations; prior DT raises risk of seizures and progression to delirium tremens. Treatment: CIWA-driven benzodiazepines, thiamine/folate, correct electrolytes, seizure precautions, monitor for DT; addiction consult and safety planning after stabilization.",
-            "vitalsText": "Pulse: 118 beats/min Blood pressure 156/94 mmHg Respiratory rate: 22 /minute Temperature: 37.4 C SpO2: 97% Lactate: 1.9 mmol/L",
-            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Moderate alcohol withdrawal — prior delirium tremens history."
-          }
-        },
-        "patient": {
-          "easy": {
-            "intro": "Tremor, diaphoresis, visual hallucinations 36 hours after last drink — prior DT",
-            "hpi": "Tom Hayes is a 45-year-old man brought by his partner for shaking, sweating, and \"seeing bugs on the wall\" since yesterday. His last drink was a pint of whiskey about 36 hours ago — he has tried to quit before and had a seizure and hospital admission for delirium tremens two years ago. He drinks roughly a liter of whiskey daily when actively using. Today he is anxious, tremulous, tachycardic, and oriented but reports visual hallucinations of insects crawling on the curtain. Partner says he drank heavily after losing his job last month and became despondent. No head trauma, no fever, no focal weakness. He wants help quitting but fears \"the shakes getting worse like last time.\" Mechanism: GABA receptor downregulation after chronic ethanol exposure produces autonomic hyperactivity 24–72 hours after last drink — tremor, tachycardia, hallucinations; prior DT raises risk of seizures and progression to delirium tremens. Treatment: CIWA-driven benzodiazepines, thiamine/folate, correct electrolytes, seizure precautions, monitor for DT; addiction consult and safety planning after stabilization.",
-            "vitalsText": "Pulse: 118 beats/min Blood pressure 156/94 mmHg Respiratory rate: 22 /minute Temperature: 37.4 C SpO2: 97% Lactate: 1.9 mmol/L",
-            "clinicalTip": "Teaching hint: Moderate alcohol withdrawal — prior delirium tremens history — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Moderate alcohol withdrawal — prior delirium tremens history. Share your symptoms clearly with the team."
-          },
-          "standard": {
-            "intro": "Tremor, diaphoresis, visual hallucinations 36 hours after last drink — prior DT",
-            "hpi": "Tom Hayes is a 45-year-old man brought by his partner for shaking, sweating, and \"seeing bugs on the wall\" since yesterday. His last drink was a pint of whiskey about 36 hours ago — he has tried to quit before and had a seizure and hospital admission for delirium tremens two years ago. He drinks roughly a liter of whiskey daily when actively using. Today he is anxious, tremulous, tachycardic, and oriented but reports visual hallucinations of insects crawling on the curtain. Partner says he drank heavily after losing his job last month and became despondent. No head trauma, no fever, no focal weakness. He wants help quitting but fears \"the shakes getting worse like last time.\" Mechanism: GABA receptor downregulation after chronic ethanol exposure produces autonomic hyperactivity 24–72 hours after last drink — tremor, tachycardia, hallucinations; prior DT raises risk of seizures and progression to delirium tremens. Treatment: CIWA-driven benzodiazepines, thiamine/folate, correct electrolytes, seizure precautions, monitor for DT; addiction consult and safety planning after stabilization.",
-            "vitalsText": "Pulse: 118 beats/min Blood pressure 156/94 mmHg Respiratory rate: 22 /minute Temperature: 37.4 C SpO2: 97% Lactate: 1.9 mmol/L",
-            "clinicalTip": "Moderate alcohol withdrawal — prior delirium tremens history — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Moderate alcohol withdrawal — prior delirium tremens history."
-          },
-          "hard": {
-            "intro": "Tremor, diaphoresis, visual hallucinations 36 hours after last drink — prior DT",
-            "hpi": "Tom Hayes is a 45-year-old man brought by his partner for shaking, sweating, and \"seeing bugs on the wall\" since yesterday. His last drink was a pint of whiskey about 36 hours ago — he has tried to quit before and had a seizure and hospital admission for delirium tremens two years ago. He drinks roughly a liter of whiskey daily when actively using. Today he is anxious, tremulous, tachycardic, and oriented but reports visual hallucinations of insects crawling on the curtain. Partner says he drank heavily after losing his job last month and became despondent. No head trauma, no fever, no focal weakness. He wants help quitting but fears \"the shakes getting worse like last time.\" Mechanism: GABA receptor downregulation after chronic ethanol exposure produces autonomic hyperactivity 24–72 hours after last drink — tremor, tachycardia, hallucinations; prior DT raises risk of seizures and progression to delirium tremens. Treatment: CIWA-driven benzodiazepines, thiamine/folate, correct electrolytes, seizure precautions, monitor for DT; addiction consult and safety planning after stabilization.",
-            "vitalsText": "Pulse: 118 beats/min Blood pressure 156/94 mmHg Respiratory rate: 22 /minute Temperature: 37.4 C SpO2: 97% Lactate: 1.9 mmol/L",
-            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Moderate alcohol withdrawal — prior delirium tremens history."
-          }
-        }
-      }
-    },
-    "196": {
-      "id": "196",
-      "title": "Trauma Symptoms and Dissociation",
-      "category": "Psychiatry & Social",
-      "presentationKey": "Trauma Symptoms and Dissociation",
-      "playbookKey": "case-bank-196",
-      "diagnosis": "Post-traumatic stress symptoms — dissociation and hypervigilance after assault",
-      "patient_voice": {
-        "chief_complaint": "I keep reliving it and sometimes I float outside my body. I can't stop checking the mirror.",
-        "history": "Something happened three weeks ago — I don't want to go through every detail right now. I jump when people walk behind me. At night the images come back. I live alone and I'm scared I'll dissociate and forget my meds.",
-        "pain": "It's not really pain — it's this tight chest and the memories hitting me."
-      },
-      "caseBankSource": "immersa_uword_transform",
-      "hasSourceIntro": true,
-      "vitals": {
-        "sbp": 132,
-        "dbp": 84,
-        "hr": 104,
-        "rr": 18,
-        "temp": 36.7,
-        "spo2": 99,
-        "lactate": 1.4
-      },
-      "vitalsSource": "parsed",
-      "vitalsText": "Pulse: 104 beats/min Blood pressure, systolic: 132 mm Hg Blood pressure, diastolic: 84 mm Hg Respiratory rate: 18 /minute Temperature: 36.7 C (98.1 F) SpO2: 99%",
-      "flowTrack": "Standard ED pathway",
-      "dispositionUnits": [
-        "ER",
-        "OBS",
-        "ICU",
-        "WARD"
-      ],
-      "exam": [
-        [
-          "General",
-          "Well-groomed woman, guarded but cooperative, hypervigilant to door and hallway noise"
-        ],
-        [
-          "HEENT",
-          "Small excoriation on chin from picking — no acute facial trauma today"
-        ],
-        [
-          "Skin",
-          "No new bruises documented on limited exam with consent"
-        ],
-        [
-          "Neuro / Psych",
-          "Alert, oriented; describes depersonalization episodes; intrusive memories reported; denies active SI/HI; affect anxious and tearful at times"
-        ]
-      ],
-      "patientSex": "female",
-      "hpi_narrative": "Amina Laurent is a 32-year-old woman referred from the ED after reporting \"flashbacks and blank spells\" following a sexual assault three weeks ago. She describes sudden intrusive images of the attack, exaggerated startle when men walk behind her, and episodes where she \"watch(es) myself from the ceiling\" for minutes at a time. She has been checking mirrors repeatedly, picking at a small facial blemish until it bled, and asking whether she looks \"damaged.\" Sleep is fragmented; she denies current suicidal plan but says she \"doesn't trust my mind.\" She lives alone and is unsure she can manage medications safely tonight. No substance use. Past history of mild anxiety only. She wants help but asks that staff not \"make me tell every detail again unless I choose to.\"\n\nMechanism: trauma exposure can produce intrusive re-experiencing, hyperarousal, and dissociation (depersonalization) — mirror preoccupation may reflect shame, BDD overlap, or trauma-related body monitoring; capacity may fluctuate during dissociative episodes.\n\nCare: trauma-informed safety assessment, optional forensic pathway if acute, PTSD psychotherapy referral, medical rule-out, capacity documentation, psychiatry for complex comorbidity, safe discharge with advocacy linkage.",
-      "patient_name_default": "Amina Laurent",
-      "difficulty": "standard",
-      "clinical_tip": "Post-traumatic stress symptoms — dissociation and hypervigilance after assault — follow CCS review orders.",
-      "objective": "Complete diagnosis and treatment orders for Post-traumatic stress symptoms — dissociation and hypervigilance after assault.",
-      "interventionIds": [
-        "trauma-informed-safety-assessment",
-        "forensic-pathway-sane-consult-if-acute-a",
-        "ptsd-screen-trauma-focused-psychotherapy",
-        "tsh-bmp-endocrine-depression-rule-out",
-        "capacity-assessment-for-discharge",
-        "crisis-counseling-social-work",
-        "bdd-differential-psychiatry-consult-for-"
-      ],
-      "interventions": [
-        {
-          "id": "trauma-informed-safety-assessment",
-          "label": "Trauma-informed safety assessment",
-          "correct_zone": "zone-icu",
-          "why": "Intrusive memories and hypervigilance after assault — assess current safety, stalking risk, and acute distress in a patient-centered manner.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "forensic-pathway-sane-consult-if-acute-a",
-          "label": "Forensic pathway / SANE consult (if acute assault)",
-          "correct_zone": "zone-icu",
-          "why": "If within forensic window, offer evidence collection and STI prophylaxis with explicit consent — parallel to psych care.",
-          "guideline": "ACEP",
-          "teachingChannel": "consult"
-        },
-        {
-          "id": "ptsd-screen-trauma-focused-psychotherapy",
-          "label": "PTSD screen / trauma-focused psychotherapy referral",
-          "correct_zone": "zone-icu",
-          "why": "First-line long-term treatment is trauma-focused CBT, CPT, or EMDR — not benzo dependence.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "tsh-bmp-endocrine-depression-rule-out",
-          "label": "TSH / BMP — endocrine depression rule-out",
-          "correct_zone": "zone-blood",
-          "why": "Fatigue and mood symptoms warrant basic medical screen — overlap teaching with endocrine depression mimic segment.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "capacity-assessment-for-discharge",
-          "label": "Capacity assessment for discharge",
-          "correct_zone": "zone-icu",
-          "why": "Dissociative episodes raise questions about decision-making — document capacity for discharge planning.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "crisis-counseling-social-work",
-          "label": "Crisis counseling / social work",
-          "correct_zone": "zone-arm",
-          "why": "Link shelter, legal advocacy, and follow-up within days — trauma-informed voice throughout.",
-          "guideline": "ACEP",
-          "teachingChannel": "workup"
-        },
-        {
-          "id": "bdd-differential-psychiatry-consult-for-",
-          "label": "BDD differential — psychiatry consult for mirror preoccupation",
-          "correct_zone": "zone-icu",
-          "why": "Mirror fixation and appearance preoccupation may reflect trauma-related shame or body dysmorphic overlap — psychiatry clarifies diagnosis.",
-          "guideline": "ACEP",
-          "teachingChannel": "consult"
-        }
-      ],
-      "decoys": [
-        {
-          "id": "decoy-avoid-196-0",
-          "label": "Forced detailed trauma narrative without consent",
-          "why": "Re-traumatization risk — patient controls pacing of disclosure.",
-          "correct_zone": "zone-icu"
-        },
-        {
-          "id": "decoy-avoid-196-1",
-          "label": "Discharge without safety plan when dissociation impairs judgment",
-          "why": "Document supports, means safety, and follow-up before leaving.",
-          "correct_zone": "zone-icu"
-        }
-      ],
-      "narrative": {
-        "doctor": {
-          "easy": {
-            "intro": "Intrusive trauma memories, dissociative episodes, hypervigilance, mirror preoccupation",
-            "hpi": "Amina Laurent is a 32-year-old woman referred from the ED after reporting \"flashbacks and blank spells\" following a sexual assault three weeks ago. She describes sudden intrusive images of the attack, exaggerated startle when men walk behind her, and episodes where she \"watch(es) myself from the ceiling\" for minutes at a time. She has been checking mirrors repeatedly, picking at a small facial blemish until it bled, and asking whether she looks \"damaged.\" Sleep is fragmented; she denies current suicidal plan but says she \"doesn't trust my mind.\" She lives alone and is unsure she can manage medications safely tonight. No substance use. Past history of mild anxiety only. She wants help but asks that staff not \"make me tell every detail again unless I choose to.\" Mechanism: trauma exposure can produce intrusive re-experiencing, hyperarousal, and dissociation (depersonalization) — mirror preoccupation may reflect shame, BDD overlap, or trauma-related body monitoring; capacity may fluctuate during dissociative episodes. Care: trauma-informed safety assessment, optional forensic pathway if acute, PTSD psychotherapy referral, medical rule-out, capacity documentation, psychiatry for complex comorbidity, safe discharge with advocacy linkage.",
-            "vitalsText": "Pulse: 104 beats/min Blood pressure, systolic: 132 mm Hg Blood pressure, diastolic: 84 mm Hg Respiratory rate: 18 /minute Temperature: 36.7 C (98.1 F) SpO2: 99%",
-            "clinicalTip": "Teaching hint: Post-traumatic stress symptoms — dissociation and hypervigilance after assault — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Post-traumatic stress symptoms — dissociation and hypervigilance after assault. Start with stabilization, then targeted testing."
-          },
-          "standard": {
-            "intro": "Intrusive trauma memories, dissociative episodes, hypervigilance, mirror preoccupation",
-            "hpi": "Amina Laurent is a 32-year-old woman referred from the ED after reporting \"flashbacks and blank spells\" following a sexual assault three weeks ago. She describes sudden intrusive images of the attack, exaggerated startle when men walk behind her, and episodes where she \"watch(es) myself from the ceiling\" for minutes at a time. She has been checking mirrors repeatedly, picking at a small facial blemish until it bled, and asking whether she looks \"damaged.\" Sleep is fragmented; she denies current suicidal plan but says she \"doesn't trust my mind.\" She lives alone and is unsure she can manage medications safely tonight. No substance use. Past history of mild anxiety only. She wants help but asks that staff not \"make me tell every detail again unless I choose to.\" Mechanism: trauma exposure can produce intrusive re-experiencing, hyperarousal, and dissociation (depersonalization) — mirror preoccupation may reflect shame, BDD overlap, or trauma-related body monitoring; capacity may fluctuate during dissociative episodes. Care: trauma-informed safety assessment, optional forensic pathway if acute, PTSD psychotherapy referral, medical rule-out, capacity documentation, psychiatry for complex comorbidity, safe discharge with advocacy linkage.",
-            "vitalsText": "Pulse: 104 beats/min Blood pressure, systolic: 132 mm Hg Blood pressure, diastolic: 84 mm Hg Respiratory rate: 18 /minute Temperature: 36.7 C (98.1 F) SpO2: 99%",
-            "clinicalTip": "Post-traumatic stress symptoms — dissociation and hypervigilance after assault — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Post-traumatic stress symptoms — dissociation and hypervigilance after assault."
-          },
-          "hard": {
-            "intro": "Intrusive trauma memories, dissociative episodes, hypervigilance, mirror preoccupation",
-            "hpi": "Amina Laurent is a 32-year-old woman referred from the ED after reporting \"flashbacks and blank spells\" following a sexual assault three weeks ago. She describes sudden intrusive images of the attack, exaggerated startle when men walk behind her, and episodes where she \"watch(es) myself from the ceiling\" for minutes at a time. She has been checking mirrors repeatedly, picking at a small facial blemish until it bled, and asking whether she looks \"damaged.\" Sleep is fragmented; she denies current suicidal plan but says she \"doesn't trust my mind.\" She lives alone and is unsure she can manage medications safely tonight. No substance use. Past history of mild anxiety only. She wants help but asks that staff not \"make me tell every detail again unless I choose to.\" Mechanism: trauma exposure can produce intrusive re-experiencing, hyperarousal, and dissociation (depersonalization) — mirror preoccupation may reflect shame, BDD overlap, or trauma-related body monitoring; capacity may fluctuate during dissociative episodes. Care: trauma-informed safety assessment, optional forensic pathway if acute, PTSD psychotherapy referral, medical rule-out, capacity documentation, psychiatry for complex comorbidity, safe discharge with advocacy linkage.",
-            "vitalsText": "Pulse: 104 beats/min Blood pressure, systolic: 132 mm Hg Blood pressure, diastolic: 84 mm Hg Respiratory rate: 18 /minute Temperature: 36.7 C (98.1 F) SpO2: 99%",
-            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Post-traumatic stress symptoms — dissociation and hypervigilance after assault."
-          }
-        },
-        "patient": {
-          "easy": {
-            "intro": "Intrusive trauma memories, dissociative episodes, hypervigilance, mirror preoccupation",
-            "hpi": "Amina Laurent is a 32-year-old woman referred from the ED after reporting \"flashbacks and blank spells\" following a sexual assault three weeks ago. She describes sudden intrusive images of the attack, exaggerated startle when men walk behind her, and episodes where she \"watch(es) myself from the ceiling\" for minutes at a time. She has been checking mirrors repeatedly, picking at a small facial blemish until it bled, and asking whether she looks \"damaged.\" Sleep is fragmented; she denies current suicidal plan but says she \"doesn't trust my mind.\" She lives alone and is unsure she can manage medications safely tonight. No substance use. Past history of mild anxiety only. She wants help but asks that staff not \"make me tell every detail again unless I choose to.\" Mechanism: trauma exposure can produce intrusive re-experiencing, hyperarousal, and dissociation (depersonalization) — mirror preoccupation may reflect shame, BDD overlap, or trauma-related body monitoring; capacity may fluctuate during dissociative episodes. Care: trauma-informed safety assessment, optional forensic pathway if acute, PTSD psychotherapy referral, medical rule-out, capacity documentation, psychiatry for complex comorbidity, safe discharge with advocacy linkage.",
-            "vitalsText": "Pulse: 104 beats/min Blood pressure, systolic: 132 mm Hg Blood pressure, diastolic: 84 mm Hg Respiratory rate: 18 /minute Temperature: 36.7 C (98.1 F) SpO2: 99%",
-            "clinicalTip": "Teaching hint: Post-traumatic stress symptoms — dissociation and hypervigilance after assault — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Post-traumatic stress symptoms — dissociation and hypervigilance after assault. Share your symptoms clearly with the team."
-          },
-          "standard": {
-            "intro": "Intrusive trauma memories, dissociative episodes, hypervigilance, mirror preoccupation",
-            "hpi": "Amina Laurent is a 32-year-old woman referred from the ED after reporting \"flashbacks and blank spells\" following a sexual assault three weeks ago. She describes sudden intrusive images of the attack, exaggerated startle when men walk behind her, and episodes where she \"watch(es) myself from the ceiling\" for minutes at a time. She has been checking mirrors repeatedly, picking at a small facial blemish until it bled, and asking whether she looks \"damaged.\" Sleep is fragmented; she denies current suicidal plan but says she \"doesn't trust my mind.\" She lives alone and is unsure she can manage medications safely tonight. No substance use. Past history of mild anxiety only. She wants help but asks that staff not \"make me tell every detail again unless I choose to.\" Mechanism: trauma exposure can produce intrusive re-experiencing, hyperarousal, and dissociation (depersonalization) — mirror preoccupation may reflect shame, BDD overlap, or trauma-related body monitoring; capacity may fluctuate during dissociative episodes. Care: trauma-informed safety assessment, optional forensic pathway if acute, PTSD psychotherapy referral, medical rule-out, capacity documentation, psychiatry for complex comorbidity, safe discharge with advocacy linkage.",
-            "vitalsText": "Pulse: 104 beats/min Blood pressure, systolic: 132 mm Hg Blood pressure, diastolic: 84 mm Hg Respiratory rate: 18 /minute Temperature: 36.7 C (98.1 F) SpO2: 99%",
-            "clinicalTip": "Post-traumatic stress symptoms — dissociation and hypervigilance after assault — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Post-traumatic stress symptoms — dissociation and hypervigilance after assault."
-          },
-          "hard": {
-            "intro": "Intrusive trauma memories, dissociative episodes, hypervigilance, mirror preoccupation",
-            "hpi": "Amina Laurent is a 32-year-old woman referred from the ED after reporting \"flashbacks and blank spells\" following a sexual assault three weeks ago. She describes sudden intrusive images of the attack, exaggerated startle when men walk behind her, and episodes where she \"watch(es) myself from the ceiling\" for minutes at a time. She has been checking mirrors repeatedly, picking at a small facial blemish until it bled, and asking whether she looks \"damaged.\" Sleep is fragmented; she denies current suicidal plan but says she \"doesn't trust my mind.\" She lives alone and is unsure she can manage medications safely tonight. No substance use. Past history of mild anxiety only. She wants help but asks that staff not \"make me tell every detail again unless I choose to.\" Mechanism: trauma exposure can produce intrusive re-experiencing, hyperarousal, and dissociation (depersonalization) — mirror preoccupation may reflect shame, BDD overlap, or trauma-related body monitoring; capacity may fluctuate during dissociative episodes. Care: trauma-informed safety assessment, optional forensic pathway if acute, PTSD psychotherapy referral, medical rule-out, capacity documentation, psychiatry for complex comorbidity, safe discharge with advocacy linkage.",
-            "vitalsText": "Pulse: 104 beats/min Blood pressure, systolic: 132 mm Hg Blood pressure, diastolic: 84 mm Hg Respiratory rate: 18 /minute Temperature: 36.7 C (98.1 F) SpO2: 99%",
-            "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Post-traumatic stress symptoms — dissociation and hypervigilance after assault."
           }
         }
       }
@@ -35436,7 +34453,7 @@
       "diagnosis": "Autosomal Dominant Polycystic Kidney Disease",
       "patient_voice": {
         "chief_complaint": "Hematuria, flank pain, bilateral flank masses",
-        "history": "{{patient_name}} is a 28-year-old man with blood in his urine, pain in both sides of his back, and high blood pressure. His dad has polycystic kidney disease.",
+        "history": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most comm…",
         "pain": "Hematuria, flank pain, bilateral flank masses"
       },
       "caseBankSource": "deepseek_direct",
@@ -35462,32 +34479,31 @@
       "exam": [
         [
           "General",
-          "Young man, uncomfortable with flank pain; no acute distress beyond pain"
+          "presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses."
         ],
         [
           "Cardiovascular",
-          "Hypertensive on monitor; tachycardic but regular rhythm"
+          "HR 98; BP 162/98."
         ],
         [
           "Respiratory",
-          "Non-labored breathing"
+          "RR 19; SpO₂ 95%."
         ],
         [
           "Abdomen",
-          "Palpable bilateral flank masses; CVA tenderness; no peritoneal signs"
+          "Suprapubic or CVA tenderness assessed for UTI/pyelonephritis source."
         ],
         [
           "Neuro",
-          "Alert and oriented"
+          "Alert and oriented unless perfusion or metabolic derangement present."
         ],
         [
           "Skin",
-          "No rash; warm and well perfused"
+          "No acute rash; capillary refill and perfusion assessed."
         ]
       ],
-      "patientSex": "male",
-      "hpi_narrative": "{{patient_name}} is a 28-year-old man with gross hematuria, bilateral flank pain, and hypertension on repeat clinic readings. Exam shows palpable bilateral flank fullness. His father has autosomal dominant polycystic kidney disease (ADPKD). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
-      "patient_name_default": "Daniel Okonkwo",
+      "patientSex": "unknown",
+      "hpi_narrative": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
       "difficulty": "standard",
       "clinical_tip": "Autosomal Dominant Polycystic Kidney Disease — follow CCS review orders.",
       "objective": "Complete diagnosis and treatment orders for Autosomal Dominant Polycystic Kidney Disease.",
@@ -35563,21 +34579,21 @@
         "doctor": {
           "easy": {
             "intro": "Hematuria, flank pain, bilateral flank masses",
-            "hpi": "{{patient_name}} is a 28-year-old man with gross hematuria, bilateral flank pain, and hypertension on repeat clinic readings. Exam shows palpable bilateral flank fullness. His father has autosomal dominant polycystic kidney disease (ADPKD). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
+            "hpi": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
             "vitalsText": "Pulse: 98 beats/min Blood pressure 162/98 mmHg Respiratory rate: 19 /minute Temperature: 37.3 C SpO2: 95% Lactate: 2.3 mmol/L",
             "clinicalTip": "Teaching hint: Autosomal Dominant Polycystic Kidney Disease — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Autosomal Dominant Polycystic Kidney Disease. Start with stabilization, then targeted testing."
           },
           "standard": {
             "intro": "Hematuria, flank pain, bilateral flank masses",
-            "hpi": "{{patient_name}} is a 28-year-old man with gross hematuria, bilateral flank pain, and hypertension on repeat clinic readings. Exam shows palpable bilateral flank fullness. His father has autosomal dominant polycystic kidney disease (ADPKD). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
+            "hpi": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
             "vitalsText": "Pulse: 98 beats/min Blood pressure 162/98 mmHg Respiratory rate: 19 /minute Temperature: 37.3 C SpO2: 95% Lactate: 2.3 mmol/L",
             "clinicalTip": "Autosomal Dominant Polycystic Kidney Disease — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Autosomal Dominant Polycystic Kidney Disease."
           },
           "hard": {
             "intro": "Hematuria, flank pain, bilateral flank masses",
-            "hpi": "{{patient_name}} is a 28-year-old man with gross hematuria, bilateral flank pain, and hypertension on repeat clinic readings. Exam shows palpable bilateral flank fullness. His father has autosomal dominant polycystic kidney disease (ADPKD). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
+            "hpi": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
             "vitalsText": "Pulse: 98 beats/min Blood pressure 162/98 mmHg Respiratory rate: 19 /minute Temperature: 37.3 C SpO2: 95% Lactate: 2.3 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
             "objective": "High-acuity workup: Complete diagnosis and treatment orders for Autosomal Dominant Polycystic Kidney Disease."
@@ -35586,21 +34602,21 @@
         "patient": {
           "easy": {
             "intro": "Hematuria, flank pain, bilateral flank masses",
-            "hpi": "{{patient_name}} is a 28-year-old man with gross hematuria, bilateral flank pain, and hypertension on repeat clinic readings. Exam shows palpable bilateral flank fullness. His father has autosomal dominant polycystic kidney disease (ADPKD). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
+            "hpi": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
             "vitalsText": "Pulse: 98 beats/min Blood pressure 162/98 mmHg Respiratory rate: 19 /minute Temperature: 37.3 C SpO2: 95% Lactate: 2.3 mmol/L",
             "clinicalTip": "Teaching hint: Autosomal Dominant Polycystic Kidney Disease — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Autosomal Dominant Polycystic Kidney Disease. Share your symptoms clearly with the team."
           },
           "standard": {
             "intro": "Hematuria, flank pain, bilateral flank masses",
-            "hpi": "{{patient_name}} is a 28-year-old man with gross hematuria, bilateral flank pain, and hypertension on repeat clinic readings. Exam shows palpable bilateral flank fullness. His father has autosomal dominant polycystic kidney disease (ADPKD). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
+            "hpi": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
             "vitalsText": "Pulse: 98 beats/min Blood pressure 162/98 mmHg Respiratory rate: 19 /minute Temperature: 37.3 C SpO2: 95% Lactate: 2.3 mmol/L",
             "clinicalTip": "Autosomal Dominant Polycystic Kidney Disease — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Autosomal Dominant Polycystic Kidney Disease."
           },
           "hard": {
             "intro": "Hematuria, flank pain, bilateral flank masses",
-            "hpi": "{{patient_name}} is a 28-year-old man with gross hematuria, bilateral flank pain, and hypertension on repeat clinic readings. Exam shows palpable bilateral flank fullness. His father has autosomal dominant polycystic kidney disease (ADPKD). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
+            "hpi": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
             "vitalsText": "Pulse: 98 beats/min Blood pressure 162/98 mmHg Respiratory rate: 19 /minute Temperature: 37.3 C SpO2: 95% Lactate: 2.3 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
             "objective": "High-acuity workup: Complete diagnosis and treatment orders for Autosomal Dominant Polycystic Kidney Disease."

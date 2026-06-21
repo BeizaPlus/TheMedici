@@ -1,62 +1,43 @@
 {
   "id": 166,
   "topic": "Easy Bruising / Bleeding",
-  "title": "Oral Bleeding",
+  "title": "Easy Bruising / Bleeding",
   "diagnosis": "Hemophilia A (Factor VIII Deficiency)",
   "confidence": "screenshot",
-  "source": "data/cases/case_166.json + hemarthrosis athlete character lock",
-  "patient_sex": "male",
-  "patient_name_default": "Marcus",
-  "uber_face_slug": "hemarthrosis-athlete-knee",
-  "portrait_note": "Young athletic Black man likeness (hemarthrosis athlete ref), swollen knee hemarthrosis, clutching joint on ED stretcher, light blue hospital gown, MeWorld sculptural CGI clinical still — same face throughout",
+  "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "PT/PTT / Platelets",
     "Mixing study",
     "Factor VIII assay",
-    "Factor VIII concentrate",
-    "DDAVP (mild hemophilia A)",
-    "Avoid NSAIDs",
-    "Avoid IM injections",
-    "Physical exam: extremities / joints",
-    "Supportive care (RICE, joint immobilization)"
+    "Factor VIII concentrate / DDAVP",
+    "Avoid ASA/NSAIDs/IM injections"
   ],
   "should_avoid": [],
   "rationale": {
-    "PT/PTT / Platelets": "PTT prolonged, PT normal, Plt normal — isolated intrinsic pathway defect before you commit to factor replacement.",
-    "Mixing study": "PTT corrects — excludes inhibitor; if it fails to correct, think acquired inhibitor not classic hemophilia A.",
-    "Factor VIII assay": "Low FVIII activity confirms hemophilia A and guides severity.",
-    "Factor VIII concentrate": "Definitive hemostasis for active hemarthrosis — replace what the joint cannot clot without.",
-    "DDAVP (mild hemophilia A)": "Mild disease may respond to desmopressin releasing stored VIII and vWF — not enough alone for severe bleed.",
-    "Avoid NSAIDs": "Antiplatelet effect worsens bleeding — acetaminophen only for pain.",
-    "Avoid IM injections": "Intramuscular hematoma risk — IV and PO routes only.",
-    "Physical exam: extremities / joints": "Document swollen painful knee, range of motion, and prior hemarthrosis sites — exam drives urgency of factor.",
-    "Supportive care (RICE, joint immobilization)": "Rest, ice, compression, elevation, and splint while factor works — protects cartilage from repeat bleed."
+    "PT/PTT / Platelets": "PTT prolonged, PT normal, Plt normal.",
+    "Mixing study": "PTT corrects — excludes inhibitor.",
+    "Factor VIII assay": "Low FVIII — confirms diagnosis.",
+    "Factor VIII concentrate / DDAVP": "Replacement or desmopressin for mild.",
+    "Avoid ASA/NSAIDs/IM injections": "Bleeding precautions."
   },
-  "hpi": "{{patient_name}} is a young man with known easy bruising who presents after a trivial twist during pickup soccer — his right knee blew up within hours. He has had prior hemarthrosis in both knees and elbows since childhood. Family history: maternal uncle with \"bleeding problems.\" Labs already show prolonged PTT with normal PT and platelets. Hemophilia A is X-linked recessive Factor VIII deficiency. Mixing study corrects. Active joint bleed needs factor VIII concentrate now; mild disease may also get DDAVP. Never NSAIDs or IM injections.",
-  "hpi_narrative": "{{patient_name}} is a young man with known easy bruising who presents after a trivial twist during pickup soccer — his right knee blew up within hours. He has had prior hemarthrosis in both knees and elbows since childhood. Family history: maternal uncle with \"bleeding problems.\"\n\nMechanism: Factor VIII anchors the intrinsic tenase complex — without it, fibrin cannot stabilize in the joint space, so trivial trauma becomes hemarthrosis. PTT prolongation with normal PT and platelets localizes the defect to Factor VIII, not liver, vitamin K, or platelets.\n\nWorkup: coags and mixing study, Factor VIII assay. Treatment: Factor VIII concentrate for active bleed; DDAVP if mild. Avoid NSAIDs and IM injections. Exam the joint, then RICE while factor infuses.",
-  "physical_exam": [
-    ["General", "Athletic young man in pain, guarding right knee"],
-    ["Extremities / joints", "Right knee warm, swollen, limited flexion — hemarthrosis; old surgical scar on anterior knee; ecchymoses on forearms"],
-    ["Cardiovascular", "Tachycardic — pain and anxiety"],
-    ["Skin", "Easy bruising on shins and forearms — no petechiae"],
-    ["Neuro", "Alert; distal pulses and sensation intact below knee"]
-  ],
+  "hpi": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
+  "hpi_narrative": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
+  "physical_exam": [],
   "vitals": {
-    "hr": 110,
-    "spo2": 98,
-    "bp": "116/74",
-    "rr": 22,
-    "temp": 37.3
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
   },
-  "vitals_text": "Pulse: 110 beats/min\nBlood pressure 116/74 mmHg\nRespiratory rate: 22 /minute\nTemperature: 37.3 C\nSpO2: 98%",
   "patient_voice": {
-    "chief_complaint": "My knee blew up after I twisted it playing soccer",
-    "history": "This keeps happening in my knees since I was a kid. I barely touched the ball and it swelled up like a balloon. My mom's brother had the same thing.",
-    "pain": "Sharp deep knee pain — worse when I try to bend it"
+    "chief_complaint": "Joint bleeding, easy bruising, prolonged PTT",
+    "history": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet …",
+    "pain": "Joint bleeding, easy bruising, prolonged PTT"
   },
   "ccs_category": "Hematology",
-  "chief_complaint": "Acute knee hemarthrosis after minor trauma",
-  "case_summary": "Hemophilia A with acute hemarthrosis — prolonged PTT, factor replacement, bleeding precautions.",
+  "chief_complaint": "Joint bleeding, easy bruising, prolonged PTT",
+  "case_summary": null,
   "decoys": [],
   "distractors": [],
   "stacks": [
@@ -64,70 +45,55 @@
       "label": "PT/PTT / Platelets",
       "type": "correctlyOrdered",
       "finding": "PTT prolonged, PT normal, Plt normal.",
-      "aliases": ["Coags"]
+      "aliases": [
+        "Coags"
+      ]
     },
     {
       "label": "Mixing study",
       "type": "correctlyOrdered",
       "finding": "PTT corrects — excludes inhibitor.",
-      "aliases": ["Mixing study"]
+      "aliases": [
+        "Mixing study"
+      ]
     },
     {
       "label": "Factor VIII assay",
       "type": "correctlyOrdered",
       "finding": "Low FVIII — confirms diagnosis.",
-      "aliases": ["FVIII"]
+      "aliases": [
+        "FVIII"
+      ]
     },
     {
-      "label": "Factor VIII concentrate",
+      "label": "Factor VIII concentrate / DDAVP",
       "type": "correctlyOrdered",
-      "finding": "Definitive hemostasis for hemarthrosis.",
-      "aliases": ["FVIII concentrate", "Factor 8"]
+      "finding": "Replacement or desmopressin for mild.",
+      "aliases": [
+        "FVIII",
+        "DDAVP"
+      ]
     },
     {
-      "label": "DDAVP (mild hemophilia A)",
+      "label": "Avoid ASA/NSAIDs/IM injections",
       "type": "correctlyOrdered",
-      "finding": "Desmopressin for mild disease — releases stored VIII.",
-      "aliases": ["DDAVP"]
-    },
-    {
-      "label": "Avoid NSAIDs",
-      "type": "correctlyOrdered",
-      "finding": "Antiplatelet effect — worsens bleeding.",
-      "aliases": ["No NSAIDs"]
-    },
-    {
-      "label": "Avoid IM injections",
-      "type": "correctlyOrdered",
-      "finding": "IM hematoma risk — IV/PO only.",
-      "aliases": ["No IM"]
-    },
-    {
-      "label": "Physical exam: extremities / joints",
-      "type": "correctlyOrdered",
-      "finding": "Swollen knee, limited ROM — documents hemarthrosis.",
-      "aliases": ["Joint exam"]
-    },
-    {
-      "label": "Supportive care (RICE, joint immobilization)",
-      "type": "correctlyOrdered",
-      "finding": "Protect joint while factor works.",
-      "aliases": ["RICE"]
+      "finding": "Bleeding precautions.",
+      "aliases": [
+        "Precautions"
+      ]
     }
   ],
   "order_sets": [
     "PT/PTT / Platelets",
     "Mixing study",
     "Factor VIII assay",
-    "Factor VIII concentrate",
-    "DDAVP (mild hemophilia A)",
-    "Avoid NSAIDs",
-    "Avoid IM injections",
-    "Physical exam: extremities / joints",
-    "Supportive care (RICE, joint immobilization)"
+    "Factor VIII concentrate / DDAVP",
+    "Avoid ASA/NSAIDs/IM injections"
   ],
   "complete": true,
   "extraction_method": "deepseek_direct",
-  "enrichment_sources": ["deepseek", "hemarthrosis-athlete-lock"],
-  "extraction_notes": "Case 166 hemophilia A — critical: FVIII concentrate, avoid NSAIDs, avoid IM; misc: coags; general: joint exam + RICE."
+  "enrichment_sources": [
+    "deepseek"
+  ],
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Hemophilia A (Factor VIII Deficiency)."
 }

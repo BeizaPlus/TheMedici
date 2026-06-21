@@ -13,7 +13,7 @@ function normalizeCaseFile(caseId) {
 }
 
 /** Bump when attendant voice / length rules change — stale cache entries are ignored. */
-export const ORDER_WHY_PROMPT_VERSION = 3;
+export const ORDER_WHY_PROMPT_VERSION = 4;
 
 /** @returns {Record<string, { why: string, orderLabel?: string, cachedAt: string, promptVersion?: number }> | null} */
 export async function readOrderWhyCache(cacheDir, caseId) {

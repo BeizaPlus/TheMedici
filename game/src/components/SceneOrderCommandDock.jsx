@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { FiMessageSquare, FiSend, FiX, FiStar } from 'react-icons/fi';
-import { IconCamera, IconFileMedical, IconArrowsMove, IconPill } from './sceneToolbar/SceneToolbarIcons.jsx';
+import { IconCamera, IconFileMedical, IconArrowsMove, IconPill, IconLabFlask } from './sceneToolbar/SceneToolbarIcons.jsx';
 import PatientPortraitAvatar from './PatientPortraitAvatar.jsx';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import PatientReplyPlayButton from './PatientReplyPlayButton.jsx';
@@ -100,6 +100,7 @@ function SceneOrderCommandDock({
   stackMoveMode = false,
   onToggleStackMove,
   onSavePhysicalExamLayout,
+  onOpenLabPicker,
   onPinTeachingMoment,
   scenePinsHidden = false,
   onToggleScenePins,
@@ -118,8 +119,16 @@ function SceneOrderCommandDock({
   }, [resetKey]);
 
   useEffect(() => {
+    if (patientMode) return;
     onQueryChange?.(debouncedDraft);
-  }, [debouncedDraft, onQueryChange]);
+  }, [debouncedDraft, onQueryChange, patientMode]);
+
+  useEffect(() => {
+    if (!patientMode) return;
+    onQueryChange?.('');
+  }, [patientMode, onQueryChange]);
+
+  const dockChatMode = patientMode || isChatMode;
 
   const hasOrderContext = Boolean(resultsPanel);
   const showOrderContext = hasOrderContext && resultsExpanded;
@@ -130,17 +139,19 @@ function SceneOrderCommandDock({
     (showQuickReply && replyExpanded) ||
     (hasOrderContext && resultsExpanded);
   const hintText =
-    chatBusy && isChatMode
+    chatBusy && dockChatMode
       ? 'Thinking…'
       : chatOpen && hasChatHistory
         ? 'Answer in chat →'
-        : hint;
+        : patientMode
+          ? ''
+          : hint;
   const { displayHint: hintDisplay, isLingering } = useLingeringMatchHint(
     hintText,
     hasMatch,
     knownOrder,
   );
-  const showHintRow = Boolean(hintDisplay?.trim());
+  const showHintRow = !patientMode && Boolean(hintDisplay?.trim());
   const replyAnswer =
     quickReply?.answer && patientMode
       ? sanitizePatientReplyForDisplay(quickReply.answer) || quickReply.answer
@@ -173,6 +184,17 @@ function SceneOrderCommandDock({
               onClick={() => onSavePhysicalExamLayout?.()}
             >
               <IconFileMedical />
+            </button>
+          )}
+          {onOpenLabPicker && !patientMode && (
+            <button
+              type="button"
+              className="scene-order-command-icon-btn"
+              title="Order labs (picker — faster than typing)"
+              aria-label="Order labs"
+              onClick={() => onOpenLabPicker?.()}
+            >
+              <IconLabFlask />
             </button>
           )}
           {onPatientModeChange && (
@@ -250,6 +272,7 @@ function SceneOrderCommandDock({
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => {
+              if (patientMode) return;
               if (e.key === 'Tab' && autocompleteText && !e.shiftKey) {
                 e.preventDefault();
                 setDraft(autocompleteText);
@@ -260,26 +283,22 @@ function SceneOrderCommandDock({
                 });
               }
             }}
-            placeholder={
-              patientMode
-                ? 'Ask the patient or type an order…'
-                : 'Type an order or ask about this case…'
-            }
-            aria-label="Type an order or ask about this case"
-            aria-autocomplete="inline"
+            placeholder={patientMode ? 'Ask the patient…' : 'Type an order or ask about this case…'}
+            aria-label={patientMode ? 'Ask the patient' : 'Type an order or ask about this case'}
+            aria-autocomplete={patientMode ? 'none' : 'inline'}
           />
         </div>
         <button
           type="submit"
-          className={`btn-ghost stack-command-btn${isChatMode ? ' stack-command-btn--chat' : ''}`}
-          disabled={chatBusy && isChatMode}
-          aria-label={isChatMode ? 'Send chat message' : 'Place order'}
+          className={`btn-ghost stack-command-btn${dockChatMode ? ' stack-command-btn--chat' : ''}`}
+          disabled={chatBusy && dockChatMode}
+          aria-label={dockChatMode ? 'Send message' : 'Place order'}
         >
-          {isChatMode ? <FiSend aria-hidden /> : 'Order'}
+          {dockChatMode ? <FiSend aria-hidden /> : 'Order'}
         </button>
         {showHintRow && (
           <div
-            className={`stack-command-match ${hasMatch ? 'has-match' : knownOrder ? 'known-order' : ''}${isLingering ? ' is-lingering' : ''}${chatBusy && isChatMode ? ' is-thinking' : ''}`}
+            className={`stack-command-match ${hasMatch ? 'has-match' : knownOrder ? 'known-order' : ''}${isLingering ? ' is-lingering' : ''}${chatBusy && dockChatMode ? ' is-thinking' : ''}`}
             aria-live="polite"
           >
             {hintDisplay}

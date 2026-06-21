@@ -135,12 +135,17 @@ import { applyLayoutToPhysicalExamPin,
   writePhysicalExamPinLayout,
 } from '../lib/physicalExamPinLayout.js';
 import PhysicalExamPickerDialog from './PhysicalExamPickerDialog.jsx';
+import LabOrderPickerDialog from './LabOrderPickerDialog.jsx';
 import { addTeachingMoment } from '../lib/teachingMoments.js';
 import {
   CCS_PHYSICAL_EXAM_SECTIONS,
   isPhysicalExamPickerTrigger,
   suggestedPhysicalExamSectionIds,
 } from '../data/physicalExamSections.js';
+import {
+  isLabPickerTrigger,
+  suggestedLabNamesFromInterventions,
+} from '../data/labOrders.js';
 import '../styles/physical-exam-picker.css';
 import { pickTeachingVideo, preloadTeachingVideo } from '../lib/caseTeachingVideo.js';
 import { decoyReason, handleDecoyOrder } from '../lib/decoyOrder.js';
@@ -366,6 +371,7 @@ export default function Play({
   const [teachCompareLayout, setTeachCompareLayout] = useState(readTeachCompareLayout);
   const [medicalSequenceOpen, setMedicalSequenceOpen] = useState(false);
   const [caseStoryOpen, setCaseStoryOpen] = useState(false);
+  const [caseStorySessionContext, setCaseStorySessionContext] = useState(null);
   const [caseStoryStarted, setCaseStoryStarted] = useState(() =>
     readCaseStoryStarted(caseData?.id),
   );
@@ -413,6 +419,7 @@ export default function Play({
   const [dockCollapsed, setDockCollapsed] = useState(false);
   const [dockHidden, setDockHidden] = useState(false);
   const [physicalExamPickerOpen, setPhysicalExamPickerOpen] = useState(false);
+  const [labPickerOpen, setLabPickerOpen] = useState(false);
   const collapseClickTimerRef = useRef(null);
   const dockRestoreCollapsedRef = useRef(false);
   const dockHandleDraggedRef = useRef(false);
@@ -554,6 +561,10 @@ export default function Play({
     () => suggestedPhysicalExamSectionIds([...interventions, ...decoyInterventions]),
     [interventions, decoyInterventions],
   );
+  const suggestedLabNames = useMemo(
+    () => suggestedLabNamesFromInterventions([...interventions, ...decoyInterventions]),
+    [interventions, decoyInterventions],
+  );
   const expectedOrderIds = useMemo(() => interventions.map((iv) => iv.id), [interventions]);
 
   const shuffledStackEntries = useMemo(
@@ -643,52 +654,44 @@ export default function Play({
     },
     [teachMeMode, nextExpectedId, decoyInterventions],
   );
-  const commandMatch = useMemo(
-    () => resolveCaseStackOrder(orderCommandQuery, interventions, placed),
-    [interventions, orderCommandQuery, placed],
-  );
+  const commandMatch = useMemo(() => {
+    if (chatPatientMode || !orderCommandQuery.trim()) return null;
+    return resolveCaseStackOrder(orderCommandQuery, interventions, placed);
+  }, [chatPatientMode, interventions, orderCommandQuery, placed]);
 
-  const decoyCommandMatch = useMemo(
-    () => findStackMatchForQuery(orderCommandQuery, decoyInterventions, placed),
-    [decoyInterventions, orderCommandQuery, placed],
-  );
-
-  const knownOrderMatch = useMemo(() => {
-    if (commandMatch || chatPatientMode) return null;
-    return findKnownOrderMatch(orderCommandQuery, ALL_ORDERS, interventions, placed);
-  }, [commandMatch, chatPatientMode, orderCommandQuery, interventions, placed]);
+  const decoyCommandMatch = useMemo(() => {
+    if (chatPatientMode || !orderCommandQuery.trim()) return null;
+    return findStackMatchForQuery(orderCommandQuery, decoyInterventions, placed);
+  }, [chatPatientMode, decoyInterventions, orderCommandQuery, placed]);
 
   const orderCommandHint = useMemo(() => {
+    if (chatPatientMode) return '';
     if (!orderCommandQuery.trim()) return '';
     if (isPhysicalExamPickerTrigger(orderCommandQuery)) {
       return 'Physical exam — Enter to open section picker';
     }
+    if (isLabPickerTrigger(orderCommandQuery)) {
+      return 'Labs — Enter to open lab picker';
+    }
     if (commandMatch) return `Match: ${commandMatch.label}`;
     if (!teachMeMode && decoyCommandMatch) return `Match: ${decoyCommandMatch.label}`;
-    if (knownOrderMatch) {
-      return teachMeMode ? `${knownOrderMatch.name} is not in this case's order set` : '';
-    }
     return chatPatientMode ? 'Patient mode — send question' : 'Master tutor — tap portrait for patient mode';
-  }, [orderCommandQuery, commandMatch, decoyCommandMatch, knownOrderMatch, teachMeMode, chatPatientMode]);
+  }, [orderCommandQuery, commandMatch, decoyCommandMatch, teachMeMode, chatPatientMode]);
 
   const commandUiMatch = commandMatch || (!teachMeMode ? decoyCommandMatch : null);
 
   const orderCommandAutocomplete = useMemo(() => {
     if (commandUiMatch) return resolveOrderAutocomplete(orderCommandQuery, commandUiMatch);
-    if (knownOrderMatch) return resolveOrderAutocomplete(orderCommandQuery, knownOrderMatch);
     return null;
-  }, [orderCommandQuery, commandUiMatch, knownOrderMatch]);
+  }, [orderCommandQuery, commandUiMatch]);
 
   const orderCommandHintDisplay = useMemo(() => {
     const base = orderCommandHint;
     if (orderCommandAutocomplete && base && base !== 'Order not recognized') {
       return `${base} · Tab to complete`;
     }
-    if (orderCommandAutocomplete && knownOrderMatch && !base) {
-      return `Match: ${knownOrderMatch.name} · Tab to complete`;
-    }
     return base;
-  }, [orderCommandHint, orderCommandAutocomplete, knownOrderMatch]);
+  }, [orderCommandHint, orderCommandAutocomplete]);
 
   useEffect(() => {
     chatPatientModeRef.current = chatPatientMode;
@@ -722,13 +725,15 @@ export default function Play({
   );
 
   const isDockChatMode = useMemo(() => {
+    if (chatPatientMode) return Boolean(orderCommandQuery.trim());
     if (!orderCommandQuery.trim()) return false;
     if (detectLocation(orderCommandQuery)) return false;
     if (decoyCommandMatch) return false;
     if (commandMatch) return false;
-    if (knownOrderMatch && !teachMeMode) return false;
+    if (isLabPickerTrigger(orderCommandQuery)) return false;
+    if (isPhysicalExamPickerTrigger(orderCommandQuery)) return false;
     return true;
-  }, [orderCommandQuery, decoyCommandMatch, commandMatch, knownOrderMatch, teachMeMode]);
+  }, [chatPatientMode, orderCommandQuery, decoyCommandMatch, commandMatch]);
 
   const renderStackPill = (iv, isDecoy = false, displayNumOverride = null) => {
     const seqNum = interventions.findIndex((x) => x.id === iv.id);
@@ -1227,6 +1232,21 @@ export default function Play({
       caseChat.messages,
     ],
   );
+
+  const caseStorySessionContextLive = useMemo(
+    () => getPortraitSessionContext(),
+    [getPortraitSessionContext],
+  );
+
+  useEffect(() => {
+    if (!caseStoryOpen) return;
+    setCaseStorySessionContext(caseStorySessionContextLive);
+  }, [caseStoryOpen, caseData?.id]); // freeze session snapshot when panel opens — not every chat tick
+
+  useEffect(() => {
+    if (caseStoryOpen) return;
+    setCaseStorySessionContext(null);
+  }, [caseStoryOpen]);
 
   useEffect(() => {
     if (infoTab === 'chat') {
@@ -2162,14 +2182,182 @@ export default function Play({
     ],
   );
 
+  const applyLabOrders = useCallback(
+    (labNames) => {
+      const names = (labNames || []).map((n) => String(n || '').trim()).filter(Boolean);
+      if (!names.length) return;
+
+      let nextPlaced = { ...placed };
+      const orderIds = [];
+      const pinAdds = [];
+      const extras = [];
+      const events = [];
+      let placedCount = 0;
+
+      for (const name of names) {
+        let stackMatch = resolveCaseStackOrder(name, interventions, nextPlaced);
+        if (stackMatch && teachMeMode && stackMatch.id !== nextExpectedId) {
+          stackMatch = null;
+        }
+        if (stackMatch) {
+          if (nextPlaced[stackMatch.id]) continue;
+          const zoneId = stackDropZoneForIv(stackMatch, orderIds.length);
+          nextPlaced[stackMatch.id] = zoneId;
+          orderIds.push(stackMatch.id);
+          pinAdds.push(
+            applyLayoutToPhysicalExamPin({
+              zoneId,
+              label: stackMatch.label,
+              ivId: stackMatch.id,
+              ok: null,
+            }),
+          );
+          events.push({
+            type: 'stack',
+            stackId: stackMatch.id,
+            label: stackMatch.label,
+            correct: true,
+            method: 'command',
+          });
+          placedCount += 1;
+          continue;
+        }
+
+        const decoy = findStackMatchForQuery(name, decoyInterventions, nextPlaced);
+        if (decoy) {
+          if (nextPlaced[decoy.id]) continue;
+          nextPlaced[decoy.id] = decoy.correct_zone || 'zone-monitor';
+          pinAdds.push(
+            applyLayoutToPhysicalExamPin({
+              zoneId: decoy.correct_zone || 'zone-monitor',
+              label: decoy.label,
+              ivId: decoy.id,
+              ok: null,
+            }),
+          );
+          events.push({ type: 'extra_order', label: decoy.label });
+          placedCount += 1;
+          continue;
+        }
+
+        if (teachMeMode) continue;
+
+        const key = name.toLowerCase();
+        if (extraOrders.some((o) => o.name.toLowerCase() === key)) continue;
+
+        extras.push({ name, category: 'labs' });
+        const ivId = extraOrderPinId(name);
+        const zoneId = stackDropZoneForIv(null, orderIds.length + extras.length);
+        nextPlaced[ivId] = zoneId;
+        pinAdds.push(
+          applyLayoutToPhysicalExamPin({
+            zoneId,
+            label: name,
+            ivId,
+            ok: null,
+          }),
+        );
+        events.push({ type: 'extra_order', label: name, category: 'labs' });
+        placedCount += 1;
+      }
+
+      setLabPickerOpen(false);
+      setOrderCommandQuery('');
+
+      if (placedCount === 0) {
+        showToast(
+          teachMeMode ? 'No matching labs in this case order set' : 'No new labs to place',
+          teachMeMode ? 'bad' : '',
+        );
+        return;
+      }
+
+      setPlaced(nextPlaced);
+      if (orderIds.length) {
+        setPlacementOrder((prev) => {
+          const next = [...prev];
+          for (const id of orderIds) {
+            if (!next.includes(id)) next.push(id);
+          }
+          return next;
+        });
+      }
+      if (extras.length) {
+        setExtraOrders((prev) => [...prev, ...extras]);
+      }
+      if (pinAdds.length) {
+        setPins((prev) => {
+          let next = [...prev];
+          for (const pin of pinAdds) {
+            next = next.filter((p) => p.ivId !== pin.ivId && p.label !== pin.label);
+            next.push(pin);
+          }
+          return next;
+        });
+        setStackMoveMode(true);
+      }
+      setReviewed(false);
+      setReviewResults({});
+      setOrderReview({});
+      setReviewedAt(null);
+      for (const event of events) {
+        logTimeline(event);
+      }
+      const focusIvId =
+        orderIds[orderIds.length - 1] ||
+        pinAdds.find((p) => p.ivId && !String(p.ivId).startsWith('phys-exam-'))?.ivId ||
+        pinAdds[pinAdds.length - 1]?.ivId;
+      if (focusIvId) {
+        setOrderResultIvId(focusIvId);
+        setDockResultsExpanded(true);
+      }
+      showToast(`Ordered ${placedCount} lab${placedCount === 1 ? '' : 's'}`, 'ok');
+    },
+    [
+      placed,
+      extraOrders,
+      interventions,
+      decoyInterventions,
+      teachMeMode,
+      nextExpectedId,
+      logTimeline,
+    ],
+  );
+
   const submitOrderCommand = useCallback(
     (commandText) => {
       const raw = String(commandText ?? orderCommandQuery ?? '');
       const t = normCommandText(raw);
       if (!t) {
-        showToast('Type an order first', 'bad');
+        showToast(chatPatientModeRef.current ? 'Ask the patient something first' : 'Type an order first', 'bad');
         return;
       }
+
+      if (chatPatientModeRef.current) {
+        if (caseChat.available === false) {
+          showToast('Chat unavailable — add DEEPSEEK_API_KEY or OPENAI_API_KEY to .env', 'bad');
+          return;
+        }
+        const question = raw.trim();
+        setOrderCommandQuery('');
+        void (async () => {
+          const reply = await caseChat.sendMessage(question, { chatMode: 'patient_sim', dockBrief: true });
+          if (reply) {
+            logTimeline({ type: 'chat', role: 'user', text: question });
+            setDockChatReply({
+              answer: sanitizePatientReplyForDisplay(reply) || reply,
+              question,
+              orderLabel: question,
+            });
+            setDockReplyExpanded(true);
+            setDockChatHistoryExpanded(true);
+          } else if (caseChat.error) {
+            showToast(caseChat.error, 'bad');
+          }
+        })();
+        return;
+      }
+
       const loc = detectLocation(raw);
       if (loc) {
         switchCareUnit(loc);
@@ -2178,6 +2366,11 @@ export default function Play({
       }
       if (isPhysicalExamPickerTrigger(raw)) {
         setPhysicalExamPickerOpen(true);
+        setOrderCommandQuery('');
+        return;
+      }
+      if (isLabPickerTrigger(raw)) {
+        setLabPickerOpen(true);
         setOrderCommandQuery('');
         return;
       }
@@ -3716,6 +3909,7 @@ export default function Play({
         </div>
       }
       onToggleExam={() => setPhysicalExamPickerOpen(true)}
+      onToggleLabs={() => setLabPickerOpen(true)}
       onToggleHistory={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
       onOpenStacks={() => {
         if (commandUiLocked) return;
@@ -3870,8 +4064,7 @@ export default function Play({
             onSubmit={submitOrderCommand}
             hint={orderCommandHintDisplay}
             hasMatch={Boolean(commandUiMatch)}
-            knownOrder={Boolean(teachMeMode && knownOrderMatch)}
-            isChatMode={isDockChatMode}
+            isChatMode={chatPatientMode || isDockChatMode}
             chatBusy={caseChat.busy}
             chatOpen={infoTab === 'chat'}
             resultsExpanded={dockResultsExpanded}
@@ -3893,7 +4086,7 @@ export default function Play({
               expandDockPanel();
               setInfoTab('chat');
             }}
-            autocompleteText={orderCommandAutocomplete}
+            autocompleteText={chatPatientMode ? null : orderCommandAutocomplete}
             onScreenshot={capturePlayScreenshot}
             captureBusy={captureBusy}
             patientMode={chatPatientMode}
@@ -3902,6 +4095,7 @@ export default function Play({
             stackMoveMode={stackMoveMode}
             onToggleStackMove={toggleStackMoveMode}
             onSavePhysicalExamLayout={savePhysicalExamLayout}
+            onOpenLabPicker={() => setLabPickerOpen(true)}
             onPinTeachingMoment={pinTeachingMoment}
             scenePinsHidden={scenePinsHidden}
             onToggleScenePins={() => setScenePinsHidden((v) => !v)}
@@ -4667,6 +4861,13 @@ export default function Play({
         suggestedIds={suggestedPhysicalExamIds}
       />
 
+      <LabOrderPickerDialog
+        open={labPickerOpen}
+        onClose={() => setLabPickerOpen(false)}
+        onApply={applyLabOrders}
+        suggestedNames={suggestedLabNames}
+      />
+
       <div className={`toast ${toast.type} ${toast.msg ? 'show' : ''}`}>{toast.msg}</div>
 
       {studioCapture && (
@@ -4743,7 +4944,7 @@ export default function Play({
         open={caseStoryOpen}
         onClose={() => setCaseStoryOpen(false)}
         caseData={caseData}
-        sessionContext={getPortraitSessionContext()}
+        sessionContext={caseStorySessionContext || caseStorySessionContextLive}
         portraitNote={
           caseData?.patientScene?.portraitLock
           || (String(caseData?.id) === '121'

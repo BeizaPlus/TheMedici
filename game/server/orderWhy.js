@@ -5,7 +5,7 @@ import {
 import { getOrderMechanismHint } from './mechanismTeaching.js';
 import { formatVitalsLine } from '../src/lib/vitalsParse.js';
 
-function buildPatientTeachingAnchor(caseContext = {}) {
+function buildPatientTeachingAnchor(caseContext = {}, { patientAnchorDone = false } = {}) {
   const demo = caseContext.patientDemographics || {};
   const ageLabel = demo.ageLabel || demo.ageBand || null;
   const sex = caseContext.patientSex || demo.sex || null;
@@ -29,13 +29,17 @@ function buildPatientTeachingAnchor(caseContext = {}) {
     .filter(Boolean)
     .join(' ');
 
+  const mandate = patientAnchorDone
+    ? 'The learner already heard who this patient is and their baseline vitals earlier in this session. Do NOT reopen with full name + vitals ("Let\'s look at Mr. X — pulse…"). Start with mechanism, pronouns, or "this febrile child" — cite a vital only if this order turns on that number.'
+    : 'First attending beat this session: open once with demographics + current vitals from patientAnchor, then mechanism. Do not use "Let\'s look at" filler — weave name/vitals in one tight clause, then teach.';
+
   return {
     who: who || 'this patient',
     vitalsLine: vitalsLine || null,
     injurySite: injuryHint,
     chiefComplaint: caseContext.chief_complaint || caseContext.title || null,
-    mandate:
-      'Open by anchoring to THIS patient: cite demographics + current vitals from patientAnchor before mechanism. Every additional idea must be patient-relevant — if a classic teaching point does not apply to this injury site, age, or vitals, omit it; do not mention it for completeness.',
+    patientAnchorDone: Boolean(patientAnchorDone),
+    mandate,
   };
 }
 
@@ -47,6 +51,7 @@ export function buildOrderWhyPrompt({
   peerReview = false,
   secondOpinionDepth = 0,
   firstOpinionDepth = 3,
+  patientAnchorDone = false,
 } = {}) {
   const caseId = caseContext?.id ?? caseContext?.ccsNumber ?? '';
   const cc =
@@ -65,7 +70,7 @@ export function buildOrderWhyPrompt({
     caseContext.historyText ||
     '';
   const vitals = caseContext.vitalsText || '';
-  const patientAnchor = buildPatientTeachingAnchor(caseContext);
+  const patientAnchor = buildPatientTeachingAnchor(caseContext, { patientAnchorDone });
   const mechanismHint =
     getOrderMechanismHint(caseId, orderId || orderLabel) ||
     (playbookWhy ? String(playbookWhy).slice(0, 400) : null);
@@ -116,12 +121,18 @@ export function buildOrderWhyPrompt({
 
 MANDATORY: 2–4 sentences max (~${depthWords} words). Lead with forcing mechanism (value/pathway → tissue failure → bedside sign). Rule-out logic in one clause is fine. Gold shape: "Low FVIII means the intrinsic pathway can't form a stable clot in the joint space — that's why you see hemarthrosis with trivial trauma. A normal PT and platelets already ruled out the liver, vitamin K, and platelet causes."
 
-Anchor to THIS patient (demographics + vitals when they change the punch).
+Anchor to THIS patient (pronouns OK; repeat full name + vitals only if patientAnchorDone is false and they change the punch).
 
 ${JSON.stringify(user, null, 2)}`
-        : `First attending opinion — why this order belongs. First-principles interconnected teaching arc.
+        : patientAnchorDone
+          ? `First attending opinion — why this order belongs. First-principles interconnected teaching arc.
 
-MANDATORY: Anchor to THIS patient (demographics + vitals on the monitor — cite actual numbers). Walk the explanation stack: mechanism → spatial/pressure → connect findings in THIS case → clinical anchor. ${firstShape}. Max ~${firstWords} words. Interconnected chains ("because" / "so"), not a feature list.
+MANDATORY: patientAnchorDone is TRUE — learner already knows who is on the monitor. Do NOT repeat full name + vitals. Jump to mechanism for THIS order. ${firstShape}. Max ~${firstWords} words. Interconnected chains ("because" / "so"), not a feature list.
+
+${JSON.stringify(user, null, 2)}`
+          : `First attending opinion — why this order belongs. First-principles interconnected teaching arc.
+
+MANDATORY: First rationale this session — anchor once with demographics + vitals on the monitor (cite actual numbers), then mechanism. ${firstShape}. Max ~${firstWords} words. Interconnected chains ("because" / "so"), not a feature list.
 
 ${JSON.stringify(user, null, 2)}`,
     },

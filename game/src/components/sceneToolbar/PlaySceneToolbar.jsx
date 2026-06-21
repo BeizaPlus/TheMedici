@@ -9,6 +9,7 @@ import {
   IconRotate,
   IconSettings,
   IconStethoscope,
+  IconLabFlask,
 } from './SceneToolbarIcons.jsx';
 import CaseRecordButton from '../CaseRecordButton.jsx';
 
@@ -49,6 +50,7 @@ export default function PlaySceneToolbar({
   settingsPopover,
   recordButtonProps,
   onToggleExam,
+  onToggleLabs,
   onToggleHistory,
   onOpenStacks,
   onToggleChat,
@@ -71,6 +73,15 @@ export default function PlaySceneToolbar({
         >
           <IconStethoscope />
         </ToolbarBtn>
+        {onToggleLabs && (
+          <ToolbarBtn
+            onClick={onToggleLabs}
+            title="Order labs"
+            aria-label="Order labs"
+          >
+            <IconLabFlask />
+          </ToolbarBtn>
+        )}
         <ToolbarBtn
           active={historyOpen}
           onClick={onToggleHistory}

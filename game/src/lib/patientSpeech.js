@@ -16,7 +16,13 @@ export function patientVoiceProfile(caseData) {
 export function shouldAutoSpeakPatient() {
   const prefs = readAudioPrefs();
   if (prefs.voiceMuted) return false;
-  return prefs.patientAutoSpeak !== false;
+  return prefs.patientAutoSpeak === true;
+}
+
+export function shouldAutoSpeakAttending() {
+  const prefs = readAudioPrefs();
+  if (prefs.voiceMuted) return false;
+  return prefs.attendingAutoSpeak === true;
 }
 
 function patientSpokenLine(text) {

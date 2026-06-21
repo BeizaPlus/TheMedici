@@ -3,7 +3,6 @@ import { FiSend, FiX } from 'react-icons/fi';
 import { IconCopy, IconFileMedical, IconNotes, IconPlayerStop, IconVolume2 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import ChatMessageContent from './ChatMessageContent.jsx';
 import {
-  findKnownOrderMatch,
   findStackMatchForQuery,
   normCommandText,
   resolveCaseStackOrder,
@@ -131,41 +130,28 @@ export default function CaseChatPanel({
     [decoyInterventions, input, placed],
   );
 
-  const knownOrderMatch = useMemo(
-    () =>
-      commandMatch
-        ? null
-        : findKnownOrderMatch(input, allMedicalOrders, interventions, placed),
-    [commandMatch, input, allMedicalOrders, interventions, placed],
-  );
-
   const orderCommandHint = useMemo(() => {
     if (!input.trim()) return 'Matches unplaced stacks only';
     if (commandMatch) return `Match: ${commandMatch.label}`;
     if (decoyCommandMatch) return `Match: ${decoyCommandMatch.label}`;
-    if (knownOrderMatch) return '';
     return 'Order not recognized';
-  }, [input, commandMatch, decoyCommandMatch, knownOrderMatch]);
+  }, [input, commandMatch, decoyCommandMatch]);
 
   const commandUiMatch = commandMatch || decoyCommandMatch;
   const isOrder = Boolean(commandUiMatch);
 
   const inputAutocomplete = useMemo(() => {
     if (commandUiMatch) return resolveOrderAutocomplete(input, commandUiMatch);
-    if (knownOrderMatch) return resolveOrderAutocomplete(input, knownOrderMatch);
     return null;
-  }, [input, commandUiMatch, knownOrderMatch]);
+  }, [input, commandUiMatch]);
 
   const orderCommandHintDisplay = useMemo(() => {
     const base = orderCommandHint;
     if (inputAutocomplete && base && base !== 'Order not recognized') {
       return `${base} · Tab to complete`;
     }
-    if (inputAutocomplete && knownOrderMatch && !base) {
-      return `Match: ${knownOrderMatch.name} · Tab to complete`;
-    }
     return base;
-  }, [orderCommandHint, inputAutocomplete, knownOrderMatch]);
+  }, [orderCommandHint, inputAutocomplete]);
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -398,7 +384,7 @@ export default function CaseChatPanel({
               {isOrder ? 'Order' : <FiSend aria-hidden />}
             </button>
             <div
-              className={`case-chat-cmd-hint ${commandUiMatch ? 'has-match' : knownOrderMatch ? 'known-order' : ''}`}
+              className={`case-chat-cmd-hint ${commandUiMatch ? 'has-match' : ''}`}
               aria-live="polite"
             >
               {orderCommandHintDisplay || ' '}

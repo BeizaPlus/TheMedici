@@ -2,6 +2,15 @@
 
 import { clampVitals } from './vitalsLimits.js';
 
+/** One-line vitals summary for attending prompts and briefing. */
+export function formatVitalsLine(vitals = {}) {
+  const temp =
+    typeof vitals.temp === 'number' ? `${vitals.temp.toFixed(1)}°C` : '—';
+  const lactate =
+    typeof vitals.lactate === 'number' ? vitals.lactate.toFixed(1) : '—';
+  return `BP ${vitals.sbp ?? '—'}/${vitals.dbp ?? '—'} · HR ${vitals.hr ?? '—'} · RR ${vitals.rr ?? '—'} · Temp ${temp} · SpO₂ ${vitals.spo2 ?? '—'}% · Lactate ${lactate}`;
+}
+
 function pickNum(text, re, fallback) {
   const m = text?.match(re);
   if (!m?.[1]) return fallback;

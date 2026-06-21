@@ -57,6 +57,37 @@
   color: rgba(232, 184, 75, 0.9);
 }
 
+.lab-order-picker {
+  width: min(520px, 100%);
+}
+
+.lab-order-picker-search-wrap {
+  padding: 0 18px 8px;
+}
+
+.lab-order-picker-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(244, 244, 246, 0.95);
+  font-size: 0.9rem;
+}
+
+.lab-order-picker-search:focus {
+  outline: none;
+  border-color: rgba(232, 184, 75, 0.55);
+}
+
+.lab-order-picker-empty {
+  margin: 0;
+  padding: 8px 18px 12px;
+  font-size: 0.82rem;
+  color: rgba(240, 238, 232, 0.55);
+}
+
 .physical-exam-picker-close {
   border: none;
   background: transparent;

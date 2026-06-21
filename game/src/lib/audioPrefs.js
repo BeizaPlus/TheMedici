@@ -7,6 +7,8 @@ const DEFAULTS = {
   monitorMuted: false,
   voiceMuted: false,
   patientAutoSpeak: false,
+  attendingAutoSpeak: false,
+  allowBrowserSpeechFallback: true,
   monitorEnabled: true,
 };
 
@@ -29,6 +31,8 @@ export function readAudioPrefs() {
       monitorMuted: Boolean(parsed.monitorMuted),
       voiceMuted: Boolean(parsed.voiceMuted),
       patientAutoSpeak: parsed.patientAutoSpeak === true,
+      attendingAutoSpeak: parsed.attendingAutoSpeak === true,
+      allowBrowserSpeechFallback: parsed.allowBrowserSpeechFallback !== false,
     };
   } catch {
     return { ...DEFAULTS };

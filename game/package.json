@@ -46,6 +46,7 @@
     "smoke:gemini-realworld": "node scripts/smoke-gemini-realworld.mjs",
     "dev": "node scripts/start-dev.mjs",
     "dev:study": "node scripts/start-dev.mjs --no-hmr",
+    "dev:study:alt": "node scripts/start-dev-study-alt.mjs",
     "dev:alt": "node scripts/start-dev-alt.mjs",
     "dev:studio": "node scripts/start-dev.mjs --studio",
     "build": "vite build",

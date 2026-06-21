@@ -72,6 +72,15 @@ export function IconPill(props) {
   );
 }
 
+export function IconLabFlask(props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden {...props}>
+      <path d="M9 3h6" />
+      <path d="M10 3v7.34a4 4 0 0 1-.8 2.4L4.5 20.5a1 1 0 0 0 .8 1.5h13.4a1 1 0 0 0 .8-1.5L14.8 12.74a4 4 0 0 1-.8-2.4V3" />
+    </svg>
+  );
+}
+
 export function IconFileMedical(props) {
   return (
     <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
@@ -338,4 +347,9 @@ export function IconUsersGroup(props) {
       <path d="M12 7a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
     </svg>
   );
+}
+
+/** Second opinion — peer attending (Teach Me). */
+export function IconStethoscopeSecond(props) {
+  return <IconUsersGroup {...props} />;
 }

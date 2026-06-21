@@ -2,6 +2,8 @@
 
 Medical training game: **181 CCS cases**, drag-and-place clinical orders onto a patient scene. React 19 + Vite 6 + Express.
 
+**Latest session (2026-06-21):** [`docs/CHANGELOG-2026-06-21-agent-handoff.md`](docs/CHANGELOG-2026-06-21-agent-handoff.md) — lab picker, patient mode, TTS fallback, attending anchor fix, case story compile loop.
+
 **Repo:** `git@github.com:BeizaPlus/TheSchoonMaker.git` (SSH as **BeizaPlus** — configured on this machine)
 
 **Baseline architecture:** commit `92a2586` · tag `base-architecture-2026-06-16` · see **`ARCHITECTURE.md`** in this folder.

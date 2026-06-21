@@ -7,6 +7,7 @@ import { fetchOrderWhy, clearFirstOpinionMemoryForCase } from '../lib/orderWhy.j
 import { LOCKED_SECOND_OPINION_DEPTH } from '../lib/secondOpinionPrefs.js';
 import { FIRST_OPINION_DEPTH_EVENT, useFirstOpinionDepth } from './FirstOpinionDepthControl.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
+import { shouldAutoSpeakAttending } from '../lib/patientSpeech.js';
 import { IconRefresh, IconStethoscopeSecond, IconVolume2 } from './sceneToolbar/SceneToolbarIcons.jsx';
 
 function flowDotClass(row, focused) {
@@ -108,6 +109,11 @@ export default function TeachMeComparePanel({
     [],
   );
 
+  const patientAnchorDoneFor = useCallback(
+    (orderId) => Object.keys(whyByOrder).some((k) => k !== primaryKey(orderId)),
+    [whyByOrder, primaryKey],
+  );
+
   const focusedRow = useMemo(
     () => rows.find((r) => r.id === teachFocusId) || null,
     [rows, teachFocusId],
@@ -158,6 +164,7 @@ export default function TeachMeComparePanel({
       caseData,
       playbookWhy: focusedRow.why,
       firstOpinionDepth,
+      patientAnchorDone: patientAnchorDoneFor(teachFocusId),
     })
       .then(({ why }) => {
         if (!cancelled && String(why || '').trim()) {
@@ -180,7 +187,7 @@ export default function TeachMeComparePanel({
     return () => {
       cancelled = true;
     };
-  }, [teachFocusId, caseId, caseData, focusedRow, whyByOrder, firstOpinionDepth, primaryKey]);
+  }, [teachFocusId, caseId, caseData, focusedRow, whyByOrder, firstOpinionDepth, primaryKey, patientAnchorDoneFor]);
 
   useEffect(() => () => stopCaseReader(), []);
 
@@ -206,6 +213,7 @@ export default function TeachMeComparePanel({
   );
 
   useEffect(() => {
+    if (!shouldAutoSpeakAttending()) return undefined;
     if (!teachFocusId || !caseId || whyLoading === teachFocusId) return undefined;
     const text = String(whyByOrder[primaryKey(teachFocusId)] || '').trim();
     if (!text || text === 'No rationale available yet.') return undefined;
@@ -241,6 +249,7 @@ export default function TeachMeComparePanel({
             caseData,
             playbookWhy: row.why,
             firstOpinionDepth,
+            patientAnchorDone: patientAnchorDoneFor(row.id),
           });
           setWhyByOrder((prev) => ({ ...prev, [pk]: why }));
           await playAttendingVoice(row.id, why, { force: true });
@@ -253,7 +262,7 @@ export default function TeachMeComparePanel({
       }
       await playAttendingVoice(row.id, text, { force: true });
     },
-    [caseId, caseData, peerByOrder, whyByOrder, whyLoading, firstOpinionDepth, playAttendingVoice, primaryKey, peerKeyFor],
+    [caseId, caseData, peerByOrder, whyByOrder, whyLoading, firstOpinionDepth, playAttendingVoice, primaryKey, peerKeyFor, patientAnchorDoneFor],
   );
 
   const handlePeer = useCallback(
@@ -309,6 +318,7 @@ export default function TeachMeComparePanel({
           playbookWhy: row.why,
           firstOpinionDepth,
           forceRefresh: true,
+          patientAnchorDone: patientAnchorDoneFor(row.id),
         });
         setWhyByOrder((prev) => ({ ...prev, [pk]: why }));
         await playAttendingVoice(row.id, why, { force: true });
@@ -318,7 +328,7 @@ export default function TeachMeComparePanel({
         setWhyLoading(null);
       }
     },
-    [caseId, caseData, whyLoading, playAttendingVoice, firstOpinionDepth, primaryKey],
+    [caseId, caseData, whyLoading, playAttendingVoice, firstOpinionDepth, primaryKey, patientAnchorDoneFor],
   );
 
   const refreshSecondOpinion = useCallback(

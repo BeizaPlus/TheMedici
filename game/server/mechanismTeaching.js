@@ -27,7 +27,7 @@ export function buildStorycraftMechanismPreflight() {
 
 Before answering, apply the **Explanation Stack** (mechanism → spatial physics → connect findings → clinical anchor).
 
-**Patient anchor (mandatory first beat):** Before mechanism, ground the learner in **this** patient — demographics plus **current vitals numbers** from CASE JSON / patientAnchor. Every order explanation must read as if you are standing at **this** bedside watching **these** monitor values change.
+**Patient anchor (first attending beat only):** On the **first** order rationale in a Teach Me session, ground the learner with demographics plus **current vitals numbers** from CASE JSON / patientAnchor. On **every later order** in the same case, the learner already knows who is on the monitor — **do not** repeat the full name + vitals line ("Let's look at Mr. X — BP…"). Use he/she/this child, or jump straight to mechanism. Cite a vital number only when **this specific order** turns on that number (e.g. lactate for sepsis workup, SpO₂ for hypoxia).
 
 **Relevance gate (non-negotiable):** If you open any other idea — alternate injury pattern, anatomy, complication, or "also remember" beat — it must be **relevant to this patient** (age, sex, injury site, vitals, HPI, time course). Do not import textbook tangents that do not apply (e.g. face/neck airway compromise when the bite is forearm; pediatric drowning cues on an adult; rabies prodrome lecture before ABCs when he is hypoxic and septic now). When a classic teaching point does not fit, **omit it** — do not mention it "for completeness."
 

@@ -291,14 +291,8 @@ export async function fetchCaseStory({
     }
 
     if (data.staleSession && !refresh) {
-      return fetchCaseStory({
-        caseData,
-        sessionContext,
-        portraitNote,
-        medicalSequence,
-        refresh: true,
-        generateImage,
-      });
+      // Session changed but cached narrative is still valid — do not auto-recompile in a loop.
+      data.cached = true;
     }
 
     const merged = {
@@ -313,6 +307,7 @@ export async function fetchCaseStory({
       oversightSource: data.oversightSource || null,
       sessionFingerprint: data.sessionFingerprint || sessionFingerprint,
       source: data.cached ? 'cache' : 'api',
+      needsSessionRefresh: Boolean(data.staleSession && !refresh),
       readiness: data.readiness || null,
       lateralityOk: data.lateralityOk,
       lateralityIssues: data.lateralityIssues || [],

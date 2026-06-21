@@ -50,6 +50,7 @@ export async function fetchOrderWhy({
   secondOpinionDepth = LOCKED_SECOND_OPINION_DEPTH,
   firstOpinionDepth = readFirstOpinionDepth(),
   forceRefresh = false,
+  patientAnchorDone = false,
 } = {}) {
   const cid = normalizeCaseId(caseId);
   const oid = String(orderId ?? '').trim();
@@ -127,6 +128,7 @@ export async function fetchOrderWhy({
         secondOpinionDepth: peerDepthIdx,
         firstOpinionDepth: firstDepthIdx,
         forceRefresh: Boolean(forceRefresh),
+        patientAnchorDone: Boolean(patientAnchorDone),
       }),
     });
     const data = await res.json().catch(() => ({}));

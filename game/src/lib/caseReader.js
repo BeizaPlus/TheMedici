@@ -195,6 +195,14 @@ function shouldFallbackToBrowser(err) {
   );
 }
 
+function shouldUseBrowserSpeechFallback() {
+  return readAudioPrefs().allowBrowserSpeechFallback !== false;
+}
+
+function warmChatterboxCache({ caseId, section, text, voiceProfile }) {
+  void prefetchCaseAudio({ caseId, section, text, voiceProfile });
+}
+
 export async function readCaseAloud({ caseId, section, text, voiceProfile = 'narrator', onState }) {
   const trimmed = String(text || '').trim();
   if (!trimmed) {
@@ -244,6 +252,15 @@ export async function readCaseAloud({ caseId, section, text, voiceProfile = 'nar
 
     if (controller.signal.aborted || gen !== readerGen) return;
 
+    // Chatterbox is not realtime — speak now with Windows/browser voice while cache warms.
+    if (shouldUseBrowserSpeechFallback()) {
+      warmChatterboxCache({ caseId, section, text: trimmed, voiceProfile });
+      onState?.('generating', 'browser');
+      await readWithBrowserSpeech(trimmed, controller.signal, onState, voiceProfile);
+      if (gen === readerGen) onState?.('idle');
+      return;
+    }
+
     const r = await fetch(apiUrl('/api/read-case'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -274,7 +291,8 @@ export async function readCaseAloud({ caseId, section, text, voiceProfile = 'nar
       return;
     }
 
-    if (shouldFallbackToBrowser(e)) {
+    if (shouldFallbackToBrowser(e) && shouldUseBrowserSpeechFallback()) {
+      warmChatterboxCache({ caseId, section, text: trimmed, voiceProfile });
       try {
         onState?.('generating', 'browser');
         await readWithBrowserSpeech(trimmed, controller.signal, onState, voiceProfile);

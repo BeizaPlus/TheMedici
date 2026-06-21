@@ -39,8 +39,13 @@ if (process.platform === 'win32') {
 function devChildEnv(overrides = {}) {
   const env = { ...process.env, ...overrides };
   delete env.SERVE_STATIC;
-  env.PORT = '3001';
-  env.SPORTMAKER_API_PORT = '3001';
+  if (overrides.PORT === '') {
+    delete env.PORT;
+    env.SPORTMAKER_API_PORT = '3001';
+  } else {
+    env.PORT = '3001';
+    env.SPORTMAKER_API_PORT = '3001';
+  }
   return env;
 }
 
