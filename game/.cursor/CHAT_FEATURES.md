@@ -40,7 +40,19 @@ One **per-case markdown journal** (`cases/notes/{caseId}.md` on server + local f
 4. **Voice notes:** `<audio controls>` on every recording; replay links in markdown also render as audio players.
 5. **No pop-up step** for Teach Me rationales — inline markdown only (attending tone preserved).
 
+### Case context dock (Play)
+
+| Gesture | Result |
+|---------|--------|
+| Single-click tab | Expand (if collapsed) + show that tab |
+| Click another tab | Switch tab, stay expanded |
+| Double-click tab | Collapse to title + icon row only |
+
+See `.cursor/CHAT_MARKDOWN.md` § Case context dock.
+
 **Markdown presentation rules:** `.cursor/CHAT_MARKDOWN.md` (tables, headings, lists — no raw pipe syntax in UI).
+
+**Brilliant attending architecture:** `docs/BRILLIANT_ATTENDING_ARCHITECTURE.md` — mechanism stack, dock vs Teach Me voice locks, `mechanismTeaching.json`, cache versions.
 
 ---
 
@@ -74,7 +86,8 @@ Do **not** fall back to browser `SpeechRecognition` for batch mode when Whisper 
 | Feature | Where |
 |---------|--------|
 | **Inline rationale** | `TeachMeComparePanel` — tap stack → attending explanation (markdown) |
-| **Read aloud** | Speaker on expanded rationale → `readCaseAloud` (TTS cache + browser fallback) |
+| **Read aloud** | Speaker on expanded rationale → `readCaseAloud` (cached Chatterbox when ready; on cache miss, browser speaks immediately while TTS prefetches in background for the next click) |
+| **Teach Me opinions** | First + second opinion (each depth) append to `cases/notes/{id}.md` via `orderWhyNotes.js` (dedup markers) |
 | **Second opinion** | **Second opinion** button → peer attending via `/api/order-why` `peerReview: true` |
 
 ---

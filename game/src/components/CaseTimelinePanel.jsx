@@ -8,6 +8,7 @@ import { toTitleCase } from '../lib/clinicalTextFormat.js';
 
 export default function CaseTimelinePanel({
   visits = [],
+  totalCovered = 0,
   onResumeCheckpoint,
   onOpenCase,
   onDiscardCheckpoint,
@@ -22,6 +23,10 @@ export default function CaseTimelinePanel({
         ✕
       </button>
       <h2>Timeline</h2>
+      <p className="welcome-timeline-total" aria-label={`${totalCovered} cases covered`}>
+        {totalCovered}
+      </p>
+      <p className="welcome-timeline-total-label">cases covered</p>
       <p className="welcome-panel-stat muted">
         Your cases in time — when you practiced, chatted, or left a session saved.
       </p>

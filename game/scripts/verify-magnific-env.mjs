@@ -23,10 +23,18 @@ loadMasterEnv();
 loadGameEnv();
 
 const key = process.env.MAGNIFIC_API_KEY || process.env.MAGNIFIC_API_KEY_B2B || '';
+const masterPath = path.join(process.env.USERPROFILE || '', '.cursor', 'master.env');
+const gameEnvPath = path.join(root, '.env');
+
+console.log('API key sources (paths only):');
+console.log('  master.env:', masterPath, fs.existsSync(masterPath) ? '(exists)' : '(missing)');
+console.log('  game/.env:  ', gameEnvPath, fs.existsSync(gameEnvPath) ? '(exists)' : '(missing)');
+console.log('  docs:       ', path.join(root, 'docs', 'WHERE_IS_THE_API.md'));
 console.log('MAGNIFIC_API_KEY set:', Boolean(key));
 
 if (!key) {
-  console.error('FAIL: Add MAGNIFIC_API_KEY=... to game/.env (one line, no spaces in name)');
+  console.error('FAIL: No MAGNIFIC_API_KEY in master.env or game/.env');
+  console.error('Read: docs/WHERE_IS_THE_API.md');
   console.error('Get key: https://www.magnific.com/developers');
   process.exit(1);
 }

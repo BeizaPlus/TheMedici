@@ -15,6 +15,9 @@ import {
   CASE_BANK_DIR,
 } from './caseBankLoader.mjs';
 import { clampVitals } from '../src/lib/vitalsLimits.js';
+import { formatVitalsText } from '../src/lib/vitalsParse.js';
+import { composeClinicalText, resolveClinicalVitals } from '../src/lib/vitalsClinicalRules.js';
+import { resolvePatientSex } from '../src/lib/patientSex.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -101,17 +104,6 @@ function extractVitalsFromExam(exam) {
   return Object.keys(partial).length ? partial : null;
 }
 
-function formatVitalsText(vitals = {}) {
-  const parts = [];
-  if (vitals.hr != null) parts.push(`Pulse: ${vitals.hr} beats/min`);
-  if (vitals.sbp != null && vitals.dbp != null) parts.push(`Blood pressure ${vitals.sbp}/${vitals.dbp} mmHg`);
-  if (vitals.rr != null) parts.push(`Respiratory rate: ${vitals.rr} /minute`);
-  if (vitals.temp != null) parts.push(`Temperature: ${vitals.temp} C`);
-  if (vitals.spo2 != null) parts.push(`SpO2: ${vitals.spo2}%`);
-  if (vitals.lactate != null) parts.push(`Lactate: ${vitals.lactate} mmol/L`);
-  return parts.join('\n');
-}
-
 const CATEGORY_VITALS = {
   Cardiopulmonary: { sbp: 98, dbp: 62, hr: 112, rr: 24, temp: 37.2, spo2: 91, lactate: 2.4 },
   'GI & Abdomen': { sbp: 108, dbp: 68, hr: 104, rr: 20, temp: 38.1, spo2: 97, lactate: 2.0 },
@@ -162,6 +154,7 @@ const AUTHORED_VITALS = {
   '174': { sbp: 98, dbp: 62, hr: 118, rr: 20, temp: 37.2, spo2: 97, lactate: 2.4 },
   '176': { sbp: 82, dbp: 50, hr: 116, rr: 24, temp: 37.4, spo2: 87, lactate: 2.5 },
   '195': { sbp: 156, dbp: 94, hr: 118, rr: 22, temp: 37.4, spo2: 97, lactate: 1.9 },
+  '161': { sbp: 186, dbp: 112, hr: 118, rr: 20, temp: 37.0, spo2: 98, lactate: 1.6 },
 };
 
 const AUTHORED_FLOWS = {
@@ -248,13 +241,6 @@ function defaultExam(category, title) {
     ['Neuro', 'Mental status appropriate to case'],
     ['Skin', 'Perfusion and temperature align with vitals'],
   ];
-}
-
-function inferSex(intro, history, title) {
-  const blob = `${intro} ${history} ${title}`.toLowerCase();
-  if (/\b(female|woman|girl|she|her)\b/.test(blob)) return 'female';
-  if (/\b(male|man|boy|he|him)\b/.test(blob)) return 'male';
-  return 'unknown';
 }
 
 function asText(value) {
@@ -380,13 +366,38 @@ for (const ccsCase of catalog.cases) {
     vitals = clampVitals({ ...vitals, ...AUTHORED_VITALS[id] });
     vitalsSource = 'authored';
   }
-  const authored = AUTHORED_FLOWS[id];
-  let resolvedVitalsText = vitalsText.replace(/\s+/g, ' ').trim();
-  if (!resolvedVitalsText || vitalsSource === 'authored' || vitalsSource === 'exam-embedded' || vitalsSource === 'bank-object') {
-    resolvedVitalsText = formatVitalsText(vitals).replace(/\n/g, ' ').trim();
-  }
   const patientVoice = bankCase?.patient_voice || null;
   const diagnosis = bankCase?.diagnosis || pb.diagnosis || null;
+  const clinicalText = composeClinicalText({
+    hpi: hpiNarrative,
+    title: ccsCase.title,
+    diagnosis: diagnosis || '',
+    chiefComplaint: intro,
+    patientVoice,
+    exam: examFromBank,
+  });
+  const clinicalResolved = resolveClinicalVitals({
+    vitals,
+    diagnosis: diagnosis || '',
+    clinicalText,
+    seed,
+    vitalsSource,
+  });
+  vitals = clinicalResolved.vitals;
+  if (clinicalResolved.adjusted) {
+    vitalsSource = clinicalResolved.vitalsSource;
+  }
+  const authored = AUTHORED_FLOWS[id];
+  let resolvedVitalsText = vitalsText.replace(/\s+/g, ' ').trim();
+  if (
+    !resolvedVitalsText ||
+    vitalsSource === 'authored' ||
+    vitalsSource === 'clinical-rule' ||
+    vitalsSource === 'exam-embedded' ||
+    vitalsSource === 'bank-object'
+  ) {
+    resolvedVitalsText = formatVitalsText(vitals).replace(/\n/g, ' ').trim();
+  }
   const composedHistory = composeCaseHistory({
     history,
     patientVoice,
@@ -447,7 +458,14 @@ for (const ccsCase of catalog.cases) {
     flowTrack: authored?.flowTrack || 'Standard ED pathway',
     dispositionUnits: authored?.dispositionUnits || ['ER', 'OBS', 'ICU', 'WARD'],
     exam,
-    patientSex: bankCase?.patient_sex || inferSex(intro, history, ccsCase.title),
+    patientSex: resolvePatientSex({
+      chief_complaint: intro,
+      historyText: history,
+      title: ccsCase.title,
+      hpi_narrative: hpiNarrative,
+      patientSex: bankCase?.patient_sex,
+      preparedIntro: intro,
+    }),
     uberFaceSlug: bankCase?.uberFaceSlug || bankCase?.uber_face_slug || undefined,
     portraitNote: bankCase?.portraitNote || bankCase?.portrait_note || undefined,
     hpi_narrative: hpiNarrative || undefined,

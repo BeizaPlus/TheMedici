@@ -16,12 +16,12 @@ function stripUberTitleTail(tail) {
   return String(tail || '')
     .replace(/\s*&\s*(ID|AMS|GU|MSK|NEURO|GI|OB\/GYN|CARDIOPULMONARY)\b/gi, '')
     .replace(/\b(MSK|NEURO|GI|GU|OB\/GYN|CARDIOPULMONARY)\s+/gi, '')
-    .replace(/\s*(Marathon|Acute|Overlap)\b/gi, '')
+    .replace(/\s*(Marathon|Acute|Overlap|Alcohol Withdrawal|Withdrawal)\b/gi, '')
     .replace(/\s{2,}/g, ' ')
     .trim();
 }
 
-/** Learner-facing title — no domain acronyms or composite spoilers. */
+/** Learner-facing title — short catalog title (e.g. Ear Pain, Oral Bleeding). */
 export function learnerFacingCaseTitle(caseData, { teachMeMode = false } = {}) {
   const raw = String(caseData?.title || '').trim();
   if (!raw) return '';
@@ -29,15 +29,26 @@ export function learnerFacingCaseTitle(caseData, { teachMeMode = false } = {}) {
 
   const uber = caseData?.uberMeta;
   if (uber?.patientName) {
-    const first = String(uber.patientName).split(/\s+/)[0];
-    const tail = raw.includes('—')
-      ? raw.split('—').slice(1).join('—').trim()
-      : raw.replace(/^[^—]+—\s*/i, '').trim();
-    const cleaned = stripUberTitleTail(tail);
-    return cleaned ? `${first} — ${toTitleCase(cleaned)}` : first;
+    return String(uber.patientName).trim();
   }
 
   return toTitleCase(raw);
+}
+
+/** Presentation intro fallback — same short title in learning mode. */
+export function learnerPresentationTitle(caseData) {
+  return learnerFacingCaseTitle(caseData);
+}
+
+export function learnerPresentationFooter(caseData) {
+  const uber = caseData?.uberMeta;
+  if (uber?.patientName) {
+    const first = String(uber.patientName).split(/\s+/)[0];
+    return `${first} — emergency presentation`;
+  }
+  const synopsis = learnerFacingCaseTitle(caseData);
+  if (synopsis) return `${synopsis} — emergency presentation`;
+  return 'Emergency presentation';
 }
 
 export function formatCaseIdLabel(caseData, { teachMeMode = false } = {}) {
@@ -49,6 +60,7 @@ export function formatCaseIdLabel(caseData, { teachMeMode = false } = {}) {
 export function sanitizeCaseForLearning(caseData = {}) {
   if (!caseData || typeof caseData !== 'object') return caseData;
   const cleanHpi =
+    caseData.practice_hpi?.trim() ||
     caseData.clinical_hpi_narrative?.trim() ||
     caseData.hpi_narrative?.trim() ||
     caseData.historyText?.trim() ||
@@ -59,7 +71,7 @@ export function sanitizeCaseForLearning(caseData = {}) {
   delete out.clinical_tip;
   delete out.objective;
   if (out.uberMeta) {
-    const { segments, memberCaseIds, domains, ...uberRest } = out.uberMeta;
+    const { segments, memberCaseIds, domains, briefingNote, ...uberRest } = out.uberMeta;
     out.uberMeta = { ...uberRest };
   }
   if (out.patient_voice && cleanHpi) {

@@ -10,8 +10,17 @@ const MODEL_PATH = {
   'imagen-nano-banana-2-flash': '/v1/ai/text-to-image/nano-banana-pro-flash',
 };
 
+export function listMagnificApiKeys() {
+  const keys = [
+    process.env.MAGNIFIC_API_KEY,
+    process.env.MAGNIFIC_API_KEY_B2B,
+    process.env.MAGNIFIC_API_KEY_LEGACY,
+  ];
+  return [...new Set(keys.map((k) => String(k || '').trim()).filter(Boolean))];
+}
+
 export function magnificApiKey() {
-  return process.env.MAGNIFIC_API_KEY || process.env.MAGNIFIC_API_KEY_B2B || '';
+  return listMagnificApiKeys()[0] || '';
 }
 
 export function magnificImageModel() {
@@ -75,8 +84,8 @@ function trimMagnificPrompt(prompt, max = 2990) {
   return text.slice(0, max);
 }
 
-async function pollMagnificTask(taskPath, taskId, { timeoutMs = 180000 } = {}) {
-  const key = magnificApiKey();
+async function pollMagnificTask(taskPath, taskId, { timeoutMs = 180000, apiKey } = {}) {
+  const key = apiKey || magnificApiKey();
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
     const r = await fetch(`https://api.magnific.com${taskPath}/${taskId}`, {
@@ -122,13 +131,6 @@ export async function generateImageEditWithMagnific({
   referenceText = 'CAMERA LOCK — match bed composition, camera angle, and room layout exactly.',
   extraReferenceImages = [],
 }) {
-  const key = magnificApiKey();
-  if (!key) {
-    throw new Error(
-      'MAGNIFIC_API_KEY not configured — use Magnific MCP in Cursor (Kojo upload flow) or add REST key from magnific.com/developers',
-    );
-  }
-
   const mime =
     mimeType === 'image/jpeg' ? 'image/jpeg' : mimeType === 'image/webp' ? 'image/webp' : 'image/png';
   const dataUrl = `data:${mime};base64,${imageBase64}`;
@@ -150,36 +152,58 @@ export async function generateImageEditWithMagnific({
     reference_images,
   };
 
-  let created;
-  for (let attempt = 0; attempt < 6; attempt += 1) {
-    const r = await fetch(`https://api.magnific.com${taskPath}`, {
-      method: 'POST',
-      headers: {
-        'x-magnific-api-key': key,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (r.status === 429) {
-      await sleep(8000 + attempt * 4000);
-      continue;
-    }
-
-    if (!r.ok) {
-      const err = await r.text();
-      throw new Error(`Magnific image create failed: ${err || r.status}`);
-    }
-
-    created = await r.json();
-    break;
+  const keys = listMagnificApiKeys();
+  if (!keys.length) {
+    throw new Error(
+      'MAGNIFIC_API_KEY not configured — use Magnific MCP in Cursor (Kojo upload flow) or add REST key from magnific.com/developers',
+    );
   }
 
-  if (!created) throw new Error('Magnific image create failed: rate limited after retries');
+  let created;
+  let activeKey = keys[0];
+  let lastErr = null;
+
+  for (const key of keys) {
+    activeKey = key;
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      const r = await fetch(`https://api.magnific.com${taskPath}`, {
+        method: 'POST',
+        headers: {
+          'x-magnific-api-key': key,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (r.status === 429) {
+        await sleep(8000 + attempt * 4000);
+        continue;
+      }
+
+      if (r.status === 402) {
+        lastErr = new Error(`Magnific image create failed: ${await r.text() || r.status}`);
+        break;
+      }
+
+      if (!r.ok) {
+        const err = await r.text();
+        throw new Error(`Magnific image create failed: ${err || r.status}`);
+      }
+
+      created = await r.json();
+      break;
+    }
+    if (created) break;
+  }
+
+  if (!created) {
+    throw lastErr || new Error('Magnific image create failed: no API keys with credits');
+  }
+
   const taskId = created?.data?.task_id || created?.task_id;
   if (!taskId) throw new Error('Magnific did not return task_id');
 
-  const imageUrl = await pollMagnificTask(taskPath, taskId);
+  const imageUrl = await pollMagnificTask(taskPath, taskId, { apiKey: activeKey });
   const imgResp = await fetch(imageUrl);
   if (!imgResp.ok) throw new Error(`Could not download Magnific image (${imgResp.status})`);
   return Buffer.from(await imgResp.arrayBuffer());

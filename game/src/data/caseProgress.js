@@ -264,6 +264,27 @@ export function pickRandomId(ids) {
   return ids[Math.floor(Math.random() * ids.length)];
 }
 
+/**
+ * Shuffle pick — prefer cases the learner has not attempted yet.
+ * Repeats only when every candidate in the pool was already touched (use timeline for those).
+ */
+export function pickShuffleCaseId(ids, { excludeId = null, preferUnattempted = true } = {}) {
+  const normalized = [...new Set(ids.map((id) => normalizeCaseProgressId(id)).filter(Boolean))];
+  if (!normalized.length) return null;
+
+  let pool = excludeId
+    ? normalized.filter((id) => id !== normalizeCaseProgressId(excludeId))
+    : normalized;
+  if (!pool.length) pool = normalized;
+
+  if (preferUnattempted) {
+    const fresh = pool.filter((id) => !isCaseAttempted(id));
+    if (fresh.length) pool = fresh;
+  }
+
+  return pickRandomId(pool);
+}
+
 /** Start or restart full-library shuffle queue. Returns first case id. */
 export function startShuffleQueue(allIds) {
   const p = readProgress();

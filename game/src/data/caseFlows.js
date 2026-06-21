@@ -6,6 +6,7 @@ import { getPreparedCase } from '../lib/caseNarrative.js';
 import { composeCaseHistory, resolveCaseExam } from '../lib/caseExam.js';
 import { parseVitalsFromText } from '../lib/vitalsParse.js';
 import { clampVitals } from '../lib/vitalsLimits.js';
+import { composeClinicalText, resolveClinicalVitals } from '../lib/vitalsClinicalRules.js';
 
 const CASE_FLOW_DICTIONARY = {
   '001': {
@@ -35,14 +36,17 @@ export function getCaseFlow(caseData) {
   const key = String(caseData?.id || '').padStart(3, '0');
   const prepared = getPreparedCase(key);
   const authored = CASE_FLOW_DICTIONARY[key];
-  const vitals = clampVitals(
+  const seed = Number(caseData?.ccsNumber) || Number(key) || 0;
+  const vitalsSource =
+    prepared?.vitalsSource || caseData?.preparedMeta?.vitalsSource || '';
+  const baseVitals = clampVitals(
     prepared?.vitals ||
       caseData?.preparedVitals ||
       authored?.vitals ||
       parseVitalsFromText(
         caseData?.vitalsText || prepared?.vitalsText || '',
         caseData?.category || prepared?.category || 'Emergency Medicine',
-        Number(caseData?.ccsNumber) || Number(key) || 0,
+        seed,
       ),
   );
 
@@ -54,6 +58,23 @@ export function getCaseFlow(caseData) {
     '';
   const patientVoice =
     caseData?.patient_voice || caseData?.patientVoice || prepared?.patient_voice || null;
+  const diagnosis = caseData?.diagnosis || prepared?.diagnosis || '';
+  const clinicalText = composeClinicalText({
+    hpi: clinicalHpi,
+    title: caseData?.title || prepared?.title || authored?.title,
+    diagnosis,
+    chiefComplaint: caseData?.chief_complaint || prepared?.narrative?.doctor?.standard?.intro || '',
+    patientVoice,
+    exam: caseData?.preparedExam || prepared?.exam,
+  });
+  const { vitals } = resolveClinicalVitals({
+    vitals: baseVitals,
+    diagnosis,
+    clinicalText,
+    seed,
+    vitalsSource,
+  });
+
   const history = composeCaseHistory({
     history: caseData?.historyText || prepared?.narrative?.doctor?.easy?.hpi || '',
     patientVoice,

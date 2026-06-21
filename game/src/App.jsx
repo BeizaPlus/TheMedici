@@ -99,7 +99,6 @@ export default function App() {
       clearPlayCheckpoint();
       setResumeCheckpoint(null);
     }
-    touchCaseVisited(gameCase.id, teachMe ? 'whys' : 'briefing');
     rememberCaseBrowse(gameCase.id, { entry: screen === SCREENS.home ? 'browser' : 'briefing' });
     setPlayMode(mode);
     setLastMode(mode);
@@ -108,6 +107,7 @@ export default function App() {
     unlockAmbience();
     startIcuMonitor({ fadeMs: 1800 });
     if (skipBriefing && teachMe) {
+      touchCaseVisited(gameCase.id, 'whys');
       setScreen(SCREENS.play);
       return;
     }
@@ -162,7 +162,6 @@ export default function App() {
   }, []);
 
   const switchBriefingCase = useCallback((gameCase) => {
-    touchCaseVisited(gameCase.id, 'briefing');
     setPlayMode('browse');
     setLastMode('browse');
     setCurrentCase(gameCase);

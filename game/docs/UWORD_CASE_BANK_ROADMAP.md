@@ -33,6 +33,14 @@ These zips are the next raw case banks to format, ingest, and promote into produ
 
 **Next step (when ready):** unzip → inventory schema → map to `preparedCases` / catalog fields → dedupe against existing 181 CCS + 8 Uber composites.
 
+### Unzip started (2026-06-18)
+
+| Zip | Extracted to | Inventory |
+|-----|--------------|-----------|
+| `PSYCHIATRY (1).zip` | `data/uword-incoming/psychiatry-1/` | `psychiatry-1/INVENTORY.md` — 80 UWorld HTML blocks (v02_01 + v02_02) |
+
+Remaining 18 zips still in `Downloads\` — extract on demand per domain.
+
 ---
 
 ## 2. Two catalog sections (learner-facing structure)
@@ -43,6 +51,12 @@ These zips are the next raw case banks to format, ingest, and promote into produ
 | **U-Word** | `uword` | Transformed cases from new zips above — same clinical rigor, **new presentation** | *Not built* — separate category rail or top-level tab |
 
 **Uber cases** remain a third lane (multi-domain composites), not mixed into CCS category lists.
+
+**2026-06-19:** **U09 (Maya)** — first Psychiatry pediatric Uber proof on **main** (`dev/uword-psych-uber/PSYCH_UBER_U09_MAYA.md`). Study snapshot not updated until Steve confirms.
+
+**2026-06-19:** Trauma & Toxicology picker — **Core | Scenarios** tabs (`caseCatalogLanes.js`). Public UI never says CCS/UWorld. Extended lane reads `src/data/uwordTraumaToxCases.json` (empty until zip import). Inventory: `npm run inventory:uword-trauma-tox`.
+
+**2026-06-19:** **U10–U13 (Jordan, Darius, Tom, Amina)** — adult Psychiatry Uber lane on **main** only (`dev/uword-psych-uber/PSYCH_UBER_U10_JORDAN.md` … `U13`). Anchors **193–196**. Pending Steve review before study sync.
 
 Public release: both sections collapse to a single **Immersa Cases** experience — no “CCS” or “U-Word” labels in UI (see §4).
 

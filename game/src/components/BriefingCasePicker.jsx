@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FiChevronDown, FiChevronUp, FiSearch } from 'react-icons/fi';
 import { getAllGameCases, getCategories, getCasesInCategory, getCaseById } from '../data/useCcsCatalog.js';
-import { getCaseRecord, getCompletionStats, pickRandomId } from '../data/caseProgress.js';
+import { getCaseRecord, getCompletionStats, pickShuffleCaseId } from '../data/caseProgress.js';
 import { IconShuffle } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseProgressTag from './CaseProgressTag.jsx';
 import CaseAttemptRadio from './CaseAttemptRadio.jsx';
@@ -9,8 +9,6 @@ import { isCaseAttempted } from '../data/caseProgress.js';
 import CaseReadyTag from './CaseReadyTag.jsx';
 import { hasCaseSpecificPlaybook } from '../data/resolvePlaybook.js';
 import {
-  getReadyPracticeCases,
-  getReadyPracticeCount,
   getStackTestingCount,
   getStackTestingOrderRange,
 } from '../lib/caseReadyPractice.js';
@@ -102,10 +100,7 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
     return ctx?.catalogLane === 'extended' ? 'extended' : 'core';
   });
   const [query, setQuery] = useState('');
-  const [readyOnly, setReadyOnly] = useState(false);
   const [checkVersion, setCheckVersion] = useState(0);
-  const readyCount = getReadyPracticeCount();
-  const readyCases = useMemo(() => getReadyPracticeCases(allCases), [allCases]);
 
   useEffect(() => {
     const cat = visibleCategories.find((c) => c.caseIds?.includes(currentCaseId));
@@ -138,14 +133,9 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
 
   const filteredCases = useMemo(() => {
     const q = query.trim().toLowerCase();
-    let pool;
-    if (readyOnly) {
-      pool = readyCases.filter((c) => allowedSet.has(c.id));
-    } else if (q) {
-      pool = visibleAllCases.filter((c) => !isUberCatalogId(c.id));
-    } else {
-      pool = activeBatch?.cases || casesInCategory;
-    }
+    let pool = q
+      ? visibleAllCases.filter((c) => !isUberCatalogId(c.id))
+      : activeBatch?.cases || casesInCategory;
     if (!q) return pool;
     return pool.filter((c) => {
       const num = String(c.ccsNumber || '');
@@ -157,7 +147,7 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
         (c.diagnosis || '').toLowerCase().includes(q)
       );
     });
-  }, [visibleAllCases, casesInCategory, activeBatch, query, readyOnly, readyCases, allowedSet]);
+  }, [visibleAllCases, casesInCategory, activeBatch, query]);
 
   const activeCategory = visibleCategories.find((c) => c.id === categoryId);
   const overallStats = useMemo(() => getCompletionStats(allCases.length), [allCases.length]);
@@ -222,18 +212,23 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
     setDragging(true);
   };
 
-  const shuffleCase = useCallback(() => {
-    const pool = filteredCases.length ? filteredCases : visibleAllCases;
-    if (!pool.length) return;
-    let candidates = pool;
-    if (pool.length > 1 && currentCaseId) {
-      const others = pool.filter((c) => c.id !== currentCaseId);
-      if (others.length) candidates = others;
-    }
-    const id = pickRandomId(candidates.map((c) => c.id));
-    const picked = candidates.find((c) => c.id === id) || candidates[0];
-    if (picked) onSelectCase(picked);
-  }, [filteredCases, visibleAllCases, currentCaseId, onSelectCase]);
+  const shuffleCase = useCallback(
+    (scope) => {
+      const categoryPool = filteredCases.length ? filteredCases : casesInCategory;
+      const pool =
+        scope === 'all'
+          ? visibleAllCases.filter((c) => !isUberCatalogId(c.id))
+          : categoryPool;
+      if (!pool.length) return;
+      const id = pickShuffleCaseId(
+        pool.map((c) => c.id),
+        { excludeId: currentCaseId, preferUnattempted: true },
+      );
+      const picked = pool.find((c) => c.id === id) || pool[0];
+      if (picked) onSelectCase(picked);
+    },
+    [filteredCases, casesInCategory, visibleAllCases, currentCaseId, onSelectCase],
+  );
 
   return (
     <aside
@@ -309,29 +304,29 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
           <div className="briefing-picker-actions">
             <button
               type="button"
-              className={readyOnly ? 'briefing-ready-filter active' : 'briefing-ready-filter'}
-              onClick={() => {
-                setReadyOnly((v) => !v);
-                setQuery('');
-              }}
-              aria-pressed={readyOnly}
-            >
-              Ready to practice ({readyCount})
-            </button>
-            <button
-              type="button"
-              className="briefing-shuffle-btn"
-              onClick={shuffleCase}
-              disabled={!(filteredCases.length || visibleAllCases.length)}
-              title="Pick a random case from the current list"
-              aria-label="Shuffle — random case"
+              className="briefing-shuffle-btn briefing-shuffle-btn--category"
+              onClick={() => shuffleCase('category')}
+              disabled={!(filteredCases.length || casesInCategory.length)}
+              title="Random unattempted case in this category (or search results)"
+              aria-label="Shuffle category — prefer cases you have not attempted"
             >
               <IconShuffle />
               <span>Shuffle</span>
             </button>
+            <button
+              type="button"
+              className="briefing-shuffle-btn briefing-shuffle-btn--global"
+              onClick={() => shuffleCase('all')}
+              disabled={!visibleAllCases.length}
+              title="Random unattempted case across the full library"
+              aria-label="Shuffle all — prefer cases you have not attempted"
+            >
+              <IconShuffle />
+              <span>Shuffle all</span>
+            </button>
           </div>
 
-          {laneTabsActive && !readyOnly && !query.trim() && (
+          {laneTabsActive && !query.trim() && (
             <div className="briefing-picker-lanes" role="tablist" aria-label="Case source lane">
               {Object.values(CATALOG_LANES).map((lane) => (
                 <button
@@ -353,7 +348,7 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
             </div>
           )}
 
-          {!readyOnly && !query.trim() && categoryId !== 'Uber Cases' && studyBatches.length > 1 && (
+          {!query.trim() && categoryId !== 'Uber Cases' && studyBatches.length > 1 && (
             <div className="briefing-picker-batches" role="tablist" aria-label="Study batches">
               {studyBatches.map((batch) => (
                 <button
@@ -375,17 +370,18 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
           )}
 
           <p className="briefing-picker-meta">
-            {readyOnly
-              ? `${filteredCases.length} ready case${filteredCases.length === 1 ? '' : 's'}`
-              : query.trim()
-                ? `${filteredCases.length} match${filteredCases.length === 1 ? '' : 'es'}`
-                : activeCategory && activeBatch
-                  ? studyBatches.length > 1
-                    ? `${activeBatch.cases.length} in batch ${activeBatch.batchNumber} of ${activeBatch.totalBatches} · ${activeBatch.theme} · ${activeCategory.label}`
-                    : laneTabsActive
-                      ? `${filteredCases.length} in ${activeCategory.label} · ${CATALOG_LANES[catalogLaneTab]?.label || 'Core'}`
-                      : `${filteredCases.length} in ${activeCategory.label}`
-                  : ''}
+            {query.trim()
+              ? `${filteredCases.length} match${filteredCases.length === 1 ? '' : 'es'}`
+              : activeCategory && activeBatch
+                ? studyBatches.length > 1
+                  ? `${activeBatch.cases.length} in batch ${activeBatch.batchNumber} of ${activeBatch.totalBatches} · ${activeBatch.theme} · ${activeCategory.label}`
+                  : laneTabsActive
+                    ? `${filteredCases.length} in ${activeCategory.label} · ${CATALOG_LANES[catalogLaneTab]?.label || 'Core'}`
+                    : `${filteredCases.length} in ${activeCategory.label}`
+                : ''}
+          </p>
+          <p className="briefing-picker-shuffle-hint">
+            Shuffle prefers cases you have not attempted. Revisit finished cases from the timeline.
           </p>
 
           <div className="briefing-picker-list" role="listbox" aria-label="Cases in category">

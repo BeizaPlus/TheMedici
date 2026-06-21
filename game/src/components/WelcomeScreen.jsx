@@ -39,10 +39,10 @@ import {
   normalizeNameRegion,
 } from '../lib/patientNameRegions.js';
 import { DEFAULT_TIMER_SECONDS, normalizeTimerSeconds } from '../lib/caseTimer.js';
-import { getReadyPracticeCount, getStackTestingCount } from '../lib/caseReadyPractice.js';
+import { getStackTestingCount } from '../lib/caseReadyPractice.js';
 import { getFavoriteCount, getFlaggedReviewCount } from '../data/caseProgress.js';
-import { fetchOverallUserStats } from '../lib/caseUserLog.js';
-import { getCaseVisitHistory, formatCaseVisitWhen } from '../lib/caseVisitHistory.js';
+import { fetchOverallUserStats, fetchCaseVisitSummaries } from '../lib/caseUserLog.js';
+import { getCaseVisitHistory, formatCaseVisitWhen, countCasesCovered } from '../lib/caseVisitHistory.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import {
   applyPhysicianProfile,
@@ -225,7 +225,6 @@ export default function WelcomeScreen({
   }, [idleVideoTriggered, hasPlateVideo, silenceWelcomeVideo]);
   const catalog = getCatalog();
   const stats = useMemo(() => getCompletionStats(catalog.totalCases), [catalog.totalCases]);
-  const readyCount = getReadyPracticeCount();
   const stackTestingCount = useMemo(() => getStackTestingCount(catalog.cases), [catalog.cases]);
   const [activeNav, setActiveNav] = useState('play');
   const [panel, setPanel] = useState(null);
@@ -262,12 +261,27 @@ export default function WelcomeScreen({
   const [magicMsg, setMagicMsg] = useState('');
   const [journalStats, setJournalStats] = useState(null);
   const [historyVersion, setHistoryVersion] = useState(0);
+  const [serverVisits, setServerVisits] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetchCaseVisitSummaries({ limit: 40 }).then((rows) => {
+      if (!cancelled) setServerVisits(rows);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [historyVersion, panel]);
 
   const visitHistory = useMemo(() => {
     void historyVersion;
     void panel;
-    return getCaseVisitHistory({ limit: 40 });
-  }, [historyVersion, panel]);
+    return getCaseVisitHistory({ limit: 40, serverRows: serverVisits });
+  }, [historyVersion, panel, serverVisits]);
+  const casesCoveredCount = useMemo(() => {
+    void historyVersion;
+    return countCasesCovered({ serverRows: serverVisits });
+  }, [historyVersion, serverVisits]);
   const audienceLevel = useMemo(() => levelFromSlider(understanding), [understanding]);
   const conditionChoices = useMemo(() => getConditionChoices(audienceLevel), [audienceLevel]);
   useEffect(() => {
@@ -847,16 +861,6 @@ export default function WelcomeScreen({
                 🧠 Differential practice →
               </button>
             )}
-            <button
-              type="button"
-              className="welcome-panel-btn"
-              onClick={() => {
-                ensureReadyForCases();
-                onOpenReadyCases();
-              }}
-            >
-              Ready to practice ({readyCount}) →
-            </button>
             {stackTestingCount > 0 && onOpenStackTestingCases && (
               <button
                 type="button"
@@ -921,6 +925,7 @@ export default function WelcomeScreen({
       {panel === 'timeline' && (
         <CaseTimelinePanel
           visits={visitHistory}
+          totalCovered={casesCoveredCount}
           onResumeCheckpoint={() => {
             setPanel(null);
             onResumeSession?.();

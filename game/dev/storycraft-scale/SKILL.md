@@ -20,6 +20,7 @@ description: Score and rebuild clinical narratives using the 8-Dimension Storycr
 ## MeWorld clinical story rules
 
 - Third-person oversight prose — not tutor bullets, not HPI paste
+- **Spoken English (prompt v10+):** chapter bodies are read aloud — complete sentences with is/are; vitals introduced with verbs ("HR is 110", "blood pressure is borderline low"); ban "quiet tachycardia" and dropped copulas ("leg stiff"). Read-aloud test before ship. Gold tone: embodied arrival (clenched face, grabs doorframe) → nurse takes vitals → mechanism in spoken clauses.
 - **Tellability:** one memorable image or phrase (e.g. embolic "pepper" on DWI for TIA)
 - **Sequence logic:** each beat causes the next ("because" not "and then")
 - **Character consciousness:** family goal + patient wound visible in beat 1

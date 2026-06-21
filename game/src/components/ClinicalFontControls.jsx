@@ -47,7 +47,7 @@ export default function ClinicalFontControls({
       <button
         type="button"
         className="clinical-font-btn"
-        onClick={() => bump({ fontScale: Math.min(1.5, Number((prefs.fontScale + 0.08).toFixed(2))) })}
+        onClick={() => bump({ fontScale: Math.min(2, Number((prefs.fontScale + 0.08).toFixed(2))) })}
         aria-label="Increase text size"
         title="Larger text"
       >

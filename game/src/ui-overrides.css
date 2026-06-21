@@ -251,6 +251,23 @@
   padding: 10px 14px 4px;
 }
 
+.case-context-compact-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.care-switch--briefing .care-chip {
+  pointer-events: none;
+  cursor: default;
+}
+
+.care-switch--briefing .care-chip:not(.active) {
+  opacity: 0.45;
+}
+
 .case-context-compact-head .sidebar-case-id {
   margin: 0 0 2px;
 }
@@ -3428,4 +3445,380 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+
+/* Case context — differential stack tab */
+.case-diff-tab-wrap {
+  padding: 0 2px 6px;
+  overflow: auto;
+  max-height: min(52vh, 420px);
+}
+
+.case-diff-stack-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.case-diff-stack-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 4px 4px;
+}
+
+.case-diff-stack-title {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #e8ecf4;
+}
+
+.case-diff-stack-sub {
+  margin: 2px 0 0;
+  font-size: 0.62rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.case-diff-stack-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.case-diff-stack-action {
+  border: none;
+  background: transparent;
+  color: rgba(232, 184, 75, 0.85);
+  font-size: 0.58rem;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.case-diff-stack-action:hover {
+  color: #f0c96a;
+  text-decoration: underline;
+}
+
+.case-diff-stack-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.case-diff-stack-item {
+  border: 1px solid rgba(147, 180, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(20, 28, 48, 0.35);
+  overflow: hidden;
+}
+
+.case-diff-stack-item.is-open {
+  border-color: rgba(232, 184, 75, 0.35);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.case-diff-stack-item-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: #e8ecf4;
+  font-size: 0.68rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.case-diff-stack-item-head:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.case-diff-stack-chevron {
+  flex-shrink: 0;
+  width: 12px;
+  color: rgba(232, 184, 75, 0.8);
+  font-size: 0.62rem;
+}
+
+.case-diff-stack-label {
+  flex: 1;
+  line-height: 1.3;
+}
+
+.case-diff-stack-body {
+  padding: 0 10px 10px 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.case-diff-stack-why {
+  font-size: 0.64rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.case-diff-stack-discriminator {
+  margin: 8px 0 0;
+  font-size: 0.6rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.48);
+  font-style: italic;
+}
+
+.case-diff-empty {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 8px 4px;
+}
+
+.case-diff-stack-panel--compact .case-diff-stack-item-head {
+  padding: 6px 8px;
+}
+
+/* Play/briefing — mobile-style differential list (pilot U12) */
+.case-diff-mobile-panel {
+  padding: 2px 0 8px;
+}
+
+.case-diff-mobile-panel .diff-teach-me-topic {
+  font-size: 0.78rem;
+  margin: 2px 0 0;
+}
+
+.case-diff-mobile-sub {
+  margin: 4px 0 0;
+  font-size: 0.6rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.case-diff-mobile-list {
+  gap: 6px;
+}
+
+.case-diff-mobile-row {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.case-diff-mobile-item {
+  width: 100%;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.case-diff-mobile-chevron {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: rgba(232, 184, 75, 0.75);
+  flex-shrink: 0;
+}
+
+.case-diff-mobile-stack {
+  margin: 0 8px 6px 36px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(147, 180, 255, 0.2);
+  background: rgba(12, 18, 32, 0.55);
+}
+
+.case-diff-stack-placeholder {
+  margin: 0;
+  font-size: 0.62rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+.case-diff-mobile-row.is-open .case-diff-mobile-item {
+  border-color: rgba(232, 184, 75, 0.35);
+}
+
+/* Bibliography — settings / info panel */
+.case-bibliography-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: min(42vh, 320px);
+  overflow: auto;
+}
+
+.case-bibliography-section-title {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #e8ecf4;
+}
+
+.case-bibliography-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.case-bibliography-pdf-link {
+  font-size: 0.58rem;
+  color: rgba(232, 184, 75, 0.9);
+  text-decoration: none;
+}
+
+.case-bibliography-pdf-link:hover {
+  text-decoration: underline;
+}
+
+.case-bibliography-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.case-bibliography-item {
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.case-bibliography-item-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
+}
+
+.case-bibliography-item-label {
+  font-size: 0.64rem;
+  color: #e8ecf4;
+  text-decoration: none;
+}
+
+a.case-bibliography-item-label:hover {
+  color: #f0c96a;
+}
+
+.case-bibliography-item-ref {
+  font-size: 0.58rem;
+  color: rgba(232, 184, 75, 0.85);
+}
+
+.case-bibliography-item-note {
+  margin: 4px 0 0;
+  font-size: 0.58rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.case-bibliography-empty {
+  font-size: 0.64rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.settings-popover-block--bibliography {
+  max-width: 340px;
+}
+
+.settings-popover-note {
+  margin: 0 0 6px;
+  font-size: 0.58rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.sim-creativity-saved {
+  font-size: 0.58rem;
+  color: #7ce89a;
+}
+
+/* HyperK membrane physiology — live animation */
+.hyperk-physiology-panel {
+  margin: 8px 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(30, 12, 12, 0.35);
+}
+
+.hyperk-physiology-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.hyperk-physiology-title {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #fecaca;
+}
+
+.hyperk-physiology-k {
+  font-size: 0.64rem;
+  color: #f59e0b;
+}
+
+.hyperk-physiology-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hyperk-physiology-axis {
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 1;
+}
+
+.hyperk-physiology-axis-label {
+  fill: rgba(255, 255, 255, 0.4);
+  font-size: 8px;
+}
+
+.hyperk-physiology-gap {
+  fill: rgba(34, 197, 94, 0.2);
+}
+
+.hyperk-physiology-gap.is-danger {
+  fill: rgba(239, 68, 68, 0.35);
+}
+
+.hyperk-physiology-line {
+  stroke-width: 2;
+}
+
+.hyperk-physiology-line--resting {
+  stroke: #f59e0b;
+}
+
+.hyperk-physiology-line--threshold {
+  stroke: #60a5fa;
+}
+
+.hyperk-physiology-line--threshold.is-calcium {
+  stroke: #34d399;
+  stroke-dasharray: 6 3;
+}
+
+.hyperk-physiology-line-label {
+  fill: rgba(255, 255, 255, 0.55);
+  font-size: 7px;
+}
+
+.hyperk-physiology-caption {
+  margin: 6px 0 0;
+  font-size: 0.58rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.55);
 }

@@ -8,6 +8,7 @@ export function caseStorySessionFingerprint(sessionContext) {
     exams: (sessionContext.physicalExamFindings || []).map((r) => r.label),
     labs: (sessionContext.labResults || []).map((r) => r.label),
     notes: String(sessionContext.learnerNotes || '').slice(-400),
+    teachingMoments: (sessionContext.teachingMoments || []).length,
   };
   const raw = JSON.stringify(payload);
   let h = 0;

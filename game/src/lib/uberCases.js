@@ -1,6 +1,7 @@
 import uberManifest from '../data/uberCases.json' with { type: 'json' };
 import uberExtensions from '../data/uberCaseExtensions.json' with { type: 'json' };
 import { getPreparedCase } from './caseNarrative.js';
+import { getAnchorCaseInterventions } from './anchorCaseBank.js';
 import { resolvePlaybook } from '../data/resolvePlaybook.js';
 import { buildAlgorithm, getZones } from '../data/gameData.js';
 
@@ -50,9 +51,14 @@ export function mergeMemberInterventions(memberCaseIds, catalog, uberCaseId = nu
     if (!ccsCase) continue;
 
     const prepared = getPreparedCase(id);
+    const anchorIvs = getAnchorCaseInterventions(id);
     const pb = resolvePlaybook(ccsCase);
     const ivs =
-      prepared?.interventions?.length > 0 ? prepared.interventions : pb.interventions || [];
+      prepared?.interventions?.length > 0
+        ? prepared.interventions
+        : anchorIvs?.length > 0
+          ? anchorIvs
+          : pb.interventions || [];
 
     for (const iv of ivs) {
       const key = iv.id || iv.label;
@@ -73,6 +79,25 @@ export function mergeMemberInterventions(memberCaseIds, catalog, uberCaseId = nu
   return merged;
 }
 
+/** Merge decoys from member prepared cases (deduped by id or label). */
+export function mergeMemberDecoys(memberCaseIds) {
+  const seen = new Set();
+  const merged = [];
+
+  for (const rawId of memberCaseIds || []) {
+    const id = normalizeMemberId(rawId);
+    const prepared = getPreparedCase(id);
+    for (const d of prepared?.decoys || []) {
+      const key = d.id || d.label;
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      merged.push(d);
+    }
+  }
+
+  return merged;
+}
+
 /** Attach uber metadata and merged stacks to a base game case. */
 export function enrichUberGameCase(gameCase, ccsCase, catalog) {
   const uber = getUberDefinition(ccsCase.id);
@@ -81,6 +106,7 @@ export function enrichUberGameCase(gameCase, ccsCase, catalog) {
   const anchorId = normalizeMemberId(uber.anchorId);
   const anchorCcs = catalog?.cases?.find((c) => c.id === anchorId);
   const mergedInterventions = mergeMemberInterventions(uber.memberCaseIds, catalog, uber.id);
+  const mergedDecoys = mergeMemberDecoys(uber.memberCaseIds);
   const ext = getUberCaseExtension(uber.id);
   const zones = getZones();
 
@@ -110,18 +136,23 @@ export function enrichUberGameCase(gameCase, ccsCase, catalog) {
     objective: uber.objective || gameCase.objective,
     chief_complaint: ext?.chiefComplaint || uber.chiefComplaint || gameCase.chief_complaint,
     presentationTitle: uber.presentationTitle || ext?.presentationTitle || null,
-    practice_hpi: ext?.hpiNarrative || gameCase.practice_hpi || '',
+    practice_hpi: ext?.practiceHpi || gameCase.practice_hpi || '',
     hpi_narrative: ext?.hpiNarrative || gameCase.hpi_narrative,
     clinical_hpi_narrative: ext?.hpiNarrative || gameCase.clinical_hpi_narrative || gameCase.hpi_narrative,
-    historyText: ext?.hpiNarrative || gameCase.historyText,
+    historyText: ext?.practiceHpi || gameCase.historyText || '',
     clinical_tip: ext?.clinicalTip || gameCase.clinical_tip,
     vitals: ext?.vitals ? { ...gameCase.vitals, ...ext.vitals } : gameCase.vitals,
     interventions:
       mergedInterventions.length > 0 ? mergedInterventions : gameCase.interventions,
+    decoys: mergedDecoys.length > 0 ? mergedDecoys : gameCase.decoys,
     algorithm: buildAlgorithm(playbookForAlgo, zones),
     uberFaceSlug: uber.faceSlug || null,
     uberPediatricFaceSlug: uber.pediatricFaceSlug || null,
     patientSex: uber.patientSex || (uber.pediatricFaceSlug ? 'female' : gameCase.patientSex),
+    precallVideo: ext?.precallVideo || null,
+    precallPoster: ext?.precallPoster || null,
+    precallTitle: ext?.precallTitle || null,
+    precallDurationSec: ext?.precallDurationSec || null,
     uberMeta: {
       id: uber.id,
       domains: uber.domains,

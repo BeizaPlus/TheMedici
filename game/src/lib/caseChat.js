@@ -10,11 +10,13 @@ import { briefCacheKey, resolveCaseBriefMarkdown } from './caseBrief.js';
 import { buildCaseDiscussionContext, discussionCacheKey } from './caseDiscussionContext.js';
 import { enrichmentCacheKey } from './differentialChatEnrichment.js';
 import { resolveSimulationCreativity } from './simulationCreativity.js';
+import { formatVitalsLine } from './vitalsParse.js';
 import { getActiveNameRegion } from './patientNameRegions.js';
 import { resolvePracticeHpi } from './practiceHpi.js';
 import { isLearningMode, sanitizeCaseForLearning } from './learningMode.js';
 import { isUberCase } from './uberCases.js';
 import { readLocalCaseBrief } from './caseBrief.js';
+import { resolvePatientSex } from './patientSex.js';
 import { STORAGE } from './storageKeys.js';
 import { apiUrl } from './apiBase.js';
 const sessions = new Map();
@@ -52,7 +54,11 @@ export function buildCaseChatContext(caseData, {
     historyText: interviewHpi || enriched.historyText,
     clinical_hpi_narrative: interviewHpi || enriched.clinical_hpi_narrative,
   };
-  const patientFacts = extractPatientFacts(enrichedForPatient, patientPersona);
+  const resolvedSex = resolvePatientSex(enrichedForPatient);
+  const patientFacts = extractPatientFacts(
+    { ...enrichedForPatient, patientSex: resolvedSex },
+    patientPersona,
+  );
   const patientDemographics = resolvePatientDemographics(enrichedForPatient, patientPersona);
   const simulationCreativity = resolveSimulationCreativity(caseData?.id);
   const cleanHpi = interviewHpi.trim();
@@ -77,7 +83,7 @@ export function buildCaseChatContext(caseData, {
     patientDemographics,
     patientVoice,
     hpiExcerpt: hpiExcerpt(enrichedForPatient),
-    patientSex: caseData?.patientSex,
+    patientSex: resolvedSex,
     nameRegion: caseData?.nameRegion || getActiveNameRegion(),
     chief_complaint: caseData?.chief_complaint,
     historyText: learningMode && cleanHpi ? cleanHpi : caseData?.historyText,
@@ -85,7 +91,10 @@ export function buildCaseChatContext(caseData, {
     vitalsText: caseData?.vitalsText,
     learningMode,
     uberFaceSlug: caseData?.uberFaceSlug || caseData?.uberMeta?.faceSlug || null,
+    uberPediatricFaceSlug:
+      caseData?.uberPediatricFaceSlug || caseData?.uberMeta?.pediatricFaceSlug || null,
     vitals: flow?.vitals || prepared?.vitals || caseData?.vitals,
+    portraitNote: prepared?.portraitNote || caseData?.portraitNote || null,
     exam: flow?.exam,
     flowTrack: flow?.flowTrack,
     dispositionUnits: flow?.dispositionUnits,
@@ -123,6 +132,10 @@ export function buildCaseChatContext(caseData, {
   }
   if (caseData?.differentialStudyContext && typeof caseData.differentialStudyContext === 'object') {
     ctx.differentialStudyContext = caseData.differentialStudyContext;
+  }
+
+  if (!ctx.vitalsText?.trim() && ctx.vitals) {
+    ctx.vitalsText = formatVitalsLine(ctx.vitals);
   }
 
   return learningMode ? sanitizeCaseForLearning(ctx) : ctx;

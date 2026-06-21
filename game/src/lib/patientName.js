@@ -38,6 +38,8 @@ export function resolvePatientName(caseData) {
   if (!caseData) return '';
   if (caseData.patientDisplayName) return caseData.patientDisplayName;
   if (caseData.patient_name) return caseData.patient_name;
+  const locked = String(caseData.patient_name_default || '').trim();
+  if (locked) return locked;
 
   const caseNum = caseData.ccsNumber ?? Number(caseData.id) ?? 0;
   const sex = caseData.patientSex || inferSexFromPatient(caseData?.patient);

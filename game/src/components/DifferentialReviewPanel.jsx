@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import CcsCaseSummaryBody from './CcsCaseSummaryBody.jsx';
 import { resolveCaseSummaryText } from '../lib/ccsCaseSummary.js';
 
@@ -46,7 +46,7 @@ function OrdersFlowList({ orders = [] }) {
   );
 }
 
-export default function DifferentialReviewPanel({ review, className = '', onInteract }) {
+export default function DifferentialReviewPanel({ review, className = '', onInteract, caseId = null }) {
   const shouldOrderItems = useMemo(
     () => (review?.orders || []).filter((item) => item.status === 'missed'),
     [review?.orders],
@@ -62,6 +62,11 @@ export default function DifferentialReviewPanel({ review, className = '', onInte
   }, [review, shouldOrderItems.length]);
 
   const [tab, setTab] = useState('summary');
+
+  const reviewKey = caseId ?? review?.caseId ?? review?.diagnosis ?? '';
+  useEffect(() => {
+    setTab('summary');
+  }, [reviewKey]);
 
   const activeTab = tabs.some((t) => t.id === tab) ? tab : tabs[0]?.id || 'summary';
 

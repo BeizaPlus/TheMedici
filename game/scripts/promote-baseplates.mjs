@@ -17,10 +17,16 @@ const H = 864;
 
 const MAP = {
   'patient-scene.png': 'male-ed-anatomic-plate-a.png',
-  'patient-scene-female.png': 'female-ed-anatomic-plate-a.png',
+  'patient-scene-female.png': 'female-ed-anatomic-plate-b.png',
   'patient-scene-ped-male.png': 'ped-male-ed-anatomic-plate-a.png',
   'patient-scene-ped-female.png': 'ped-female-ed-anatomic-plate-a.png',
 };
+
+/** Steve-banned — never promote (see dev/anatomic-plates/BANNED.md) */
+const BANNED_RAW = new Set([
+  'female-ed-anatomic-plate-a.png',
+  'female-ed-anatomic-plate-a.backup-magnific-20260616.png',
+]);
 
 async function fit(inPath, outPath) {
   await sharp(inPath)
@@ -34,6 +40,10 @@ async function fit(inPath, outPath) {
 async function main() {
   await fs.mkdir(outDir, { recursive: true });
   for (const [outName, rawName] of Object.entries(MAP)) {
+    if (BANNED_RAW.has(rawName)) {
+      console.warn(`⚠ skip ${outName} — ${rawName} is banned (dev/anatomic-plates/BANNED.md)`);
+      continue;
+    }
     let src = path.join(rawDir, rawName);
     try {
       await fs.access(src);
@@ -41,10 +51,10 @@ async function main() {
       const fallback =
         outName.includes('ped-male') || outName.includes('ped-female')
           ? outName.includes('female')
-            ? 'female-ed-anatomic-plate-a.png'
+            ? 'female-ed-anatomic-plate-b.png'
             : 'male-ed-anatomic-plate-a.png'
           : null;
-      if (!fallback) {
+      if (!fallback || BANNED_RAW.has(fallback)) {
         console.warn(`⚠ skip ${outName} — missing ${rawName}`);
         continue;
       }

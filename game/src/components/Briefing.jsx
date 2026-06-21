@@ -25,12 +25,15 @@ import {
   getBriefingNoteSections,
 } from '../lib/caseBriefing.js';
 import { isLearningMode, learnerFacingCaseTitle, formatCaseIdLabel } from '../lib/learningMode.js';
+import { CARE_LOCATIONS, careLocationContext } from '../lib/careLocations.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
 import { useCasePortraitSrc } from '../hooks/useCasePortraitSrc.js';
 import PsychiatricLunaticIntro, {
   shouldSkipPsychiatricLunaticIntro,
 } from './PsychiatricLunaticIntro.jsx';
+import CasePrecallIntro from './CasePrecallIntro.jsx';
 import { resolvePsychiatricLunaticIntro } from '../lib/resolvePatientPsychiatricRef.js';
+import { resolveCasePrecall, shouldSkipCasePrecall } from '../lib/resolveCasePrecall.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
   BRIEFING_UI_ELEMENTS,
@@ -85,8 +88,12 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
   const [pickerPreviewCase, setPickerPreviewCase] = useState(null);
   const displayCase = pickerPreviewCase || caseData;
   const psychIntro = useMemo(() => resolvePsychiatricLunaticIntro(displayCase), [displayCase]);
+  const precall = useMemo(() => resolveCasePrecall(displayCase), [displayCase]);
   const [lunaticIntroDone, setLunaticIntroDone] = useState(() =>
     shouldSkipPsychiatricLunaticIntro(displayCase?.id),
+  );
+  const [precallDone, setPrecallDone] = useState(() =>
+    shouldSkipCasePrecall(displayCase?.id) || !resolveCasePrecall(displayCase),
   );
   const { portraitForceSrc, clearPortraitSrc } = useCasePortraitSrc(displayCase, {
     preferUberPreviewPlate: true,
@@ -130,6 +137,9 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
 
   useEffect(() => {
     setLunaticIntroDone(shouldSkipPsychiatricLunaticIntro(displayCase?.id));
+    setPrecallDone(
+      shouldSkipCasePrecall(displayCase?.id) || !resolveCasePrecall(displayCase),
+    );
   }, [displayCase?.id]);
 
   useEffect(() => {
@@ -217,6 +227,8 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
   }, [uiDrag]);
 
   const caseFlow = getCaseFlow(caseData);
+  const dispositionUnits = caseFlow.dispositionUnits || ['ER', 'OBS', 'ICU', 'WARD'];
+  const startUnit = dispositionUnits[0] || 'ER';
   const presentationHistory = getPresentationHistory(caseData);
   const textStyle = clinicalTextStyle(textPrefs);
 
@@ -428,7 +440,17 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             if (portraitForceSrc) clearPortraitSrc();
           }}
         />
-        {psychIntro?.enabled && !lunaticIntroDone && (
+        {precall?.videoUrl && !precallDone && (
+          <CasePrecallIntro
+            videoUrl={precall.videoUrl}
+            posterUrl={precall.posterUrl}
+            title={precall.title}
+            durationSec={precall.durationSec}
+            caseId={precall.caseId}
+            onComplete={() => setPrecallDone(true)}
+          />
+        )}
+        {psychIntro?.enabled && precallDone && !lunaticIntroDone && (
           <PsychiatricLunaticIntro
             anchorUrl={psychIntro.anchorUrl}
             videoUrl={psychIntro.videoUrl}
@@ -454,18 +476,6 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             {caseData.timeLimit ? ` · ${caseData.timeLimit}` : ''}
           </p>
           <h1>{learnerFacingCaseTitle(caseData)}</h1>
-          {caseData.uberMeta && !isLearningMode() && (
-            <div className="briefing-uber-meta">
-              <p className="briefing-uber-note">{caseData.uberMeta.briefingNote}</p>
-              <ul className="briefing-uber-segments">
-                {caseData.uberMeta.segments?.map((seg) => (
-                  <li key={seg.id}>
-                    <span className="briefing-uber-seg-num">#{seg.ccsNumber}</span> {seg.label}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
       </div>
 
@@ -533,6 +543,24 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             defaultBodyCollapsed
             textStyle={textStyle}
             defaultTab="hpi"
+            locationContext={careLocationContext(startUnit)}
+            headerControls={
+              <div
+                className="case-panel-care-switch care-switch care-switch--briefing"
+                role="list"
+                aria-label="Care pathway (starts here)"
+              >
+                {dispositionUnits.map((u) => (
+                  <span
+                    key={u}
+                    className={`care-chip ${u === startUnit ? 'active' : ''}`}
+                    title={CARE_LOCATIONS[u]?.context || u}
+                  >
+                    {CARE_LOCATIONS[u]?.label || u}
+                  </span>
+                ))}
+              </div>
+            }
             readLabel="Read case"
             onReadCase={handleReadCase}
             readState={readState}

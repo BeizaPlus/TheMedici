@@ -1,12 +1,16 @@
 import { getPatientScene, getPatientSceneForCase } from '../data/gameData.js';
+import { resolvePatientSceneKey } from './patientSceneKey.js';
+import { sanitizeScenePlateSrc } from './scenePlatePath.js';
 
 import { STORAGE } from './storageKeys.js';
 
 export const VISION_ZONES_KEY = STORAGE.visionZones;
 
 export function getBuiltInPatientSrc(caseData = null) {
+  const sceneKey = caseData ? resolvePatientSceneKey(caseData) : 'male';
   const scene = caseData ? getPatientSceneForCase(caseData) : getPatientScene();
-  return scene?.src || '/assets/patient/patient-scene.png';
+  const src = scene?.src || '/assets/patient/patient-scene.png';
+  return sanitizeScenePlateSrc(src, { sceneKey });
 }
 
 /** Reject empty/truncated data URLs and other bad scene sources from localStorage. */
@@ -85,14 +89,20 @@ export function resolveSceneSrc({ forceSrc, overrideSrc, sceneSrc, caseData } = 
 
   // Per-case briefing/play: case portrait → sex-aware template — not global Settings upload.
   if (caseData?.id != null && caseData.id !== '') {
+    const sceneKey = resolvePatientSceneKey(caseData);
     for (const candidate of [forceSrc, caseTemplate, fallback]) {
-      if (isValidSceneSrc(candidate)) return candidate;
+      if (isValidSceneSrc(candidate)) {
+        return sanitizeScenePlateSrc(candidate, { sceneKey });
+      }
     }
     return fallback;
   }
 
   for (const candidate of [forceSrc, overrideSrc, sceneSrc, fallback]) {
-    if (isValidSceneSrc(candidate)) return candidate;
+    if (isValidSceneSrc(candidate)) {
+      const sceneKey = caseData ? resolvePatientSceneKey(caseData) : 'male';
+      return sanitizeScenePlateSrc(candidate, { sceneKey });
+    }
   }
   return fallback;
 }

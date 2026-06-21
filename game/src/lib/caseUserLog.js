@@ -58,6 +58,16 @@ export async function fetchOverallUserStats() {
   }
 }
 
+/** Server-side session + chat timestamps from this tree's user-data (study :3001 vs main :3002). */
+export async function fetchCaseVisitSummaries({ limit = 40, timeoutMs = 4000 } = {}) {
+  try {
+    const data = await apiJson(`/api/user/visits?limit=${encodeURIComponent(limit)}`, { timeoutMs });
+    return Array.isArray(data.visits) ? data.visits : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function fetchCaseUserData(caseId, { timeoutMs = 2500 } = {}) {
   try {
     return await apiJson(`/api/user/case/${encodeURIComponent(caseId)}`, { timeoutMs });

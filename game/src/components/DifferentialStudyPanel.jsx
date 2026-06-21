@@ -227,6 +227,8 @@ function MobileStudyFeed({
           )}
           {hasReviewText && ccsReview ? (
             <DifferentialReviewPanel
+              key={`review-${caseId}`}
+              caseId={caseId}
               review={ccsReview}
               className="diff-case-review"
             />
@@ -591,6 +593,8 @@ export default function DifferentialStudyPanel({
               )}
               {hasReviewText && ccsReview ? (
                 <DifferentialReviewPanel
+                  key={`review-${caseId}`}
+                  caseId={caseId}
                   review={ccsReview}
                   className="diff-case-review"
                 />

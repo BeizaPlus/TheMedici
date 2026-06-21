@@ -1,5 +1,6 @@
 import { getPreparedCase } from './caseNarrative.js';
 import { resolvePatientName } from './patientName.js';
+import { resolvePatientSex } from './patientSex.js';
 
 const CHILD_VOICE_RE =
   /\b(?:my parents?|my mom|my dad|my mummy|my mommy|my daddy|mommy|daddy|at school|in my class|my teacher)\b/i;
@@ -161,7 +162,7 @@ export function extractPatientFacts(caseData = {}, persona = null) {
 
   const facts = {
     name: resolvePatientName(caseData) || null,
-    sex: caseData.patientSex && caseData.patientSex !== 'unknown' ? caseData.patientSex : null,
+    sex: resolvePatientSex(caseData),
     age: demographics.age,
     ageUnit: demographics.ageUnit,
     ageLabel: demographics.ageLabel,

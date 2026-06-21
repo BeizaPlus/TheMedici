@@ -1,23 +1,24 @@
+import uberRefs from '../data/patientUberRefs.json' with { type: 'json' };
+import { resolvePatientSex } from './patientSex.js';
+
 /** Resolve patient sex for portrait / scene template selection. */
 export function resolvePortraitSex(caseContext = {}) {
   const facts = caseContext.patientFacts || {};
-  const raw = String(facts.sex || caseContext.patientSex || '').toLowerCase();
-  if (raw === 'female' || raw === 'male') return raw;
-  const blob = [
-    caseContext.hpiExcerpt,
-    caseContext.chief_complaint,
-    caseContext.title,
-    caseContext.clinical_hpi_narrative,
-    caseContext.hpi_narrative,
-    facts.chiefComplaint,
-  ]
-    .filter(Boolean)
-    .join(' ');
-  const femaleHits =
-    (blob.match(/\bfemale\b|\bwoman\b|\bwomen\b|\bgirl\b/gi) || []).length +
-    (/\bpregnant\b|\bchildbearing\s+age\b|\bpelvic\s+pain\b/gi.test(blob) ? 2 : 0);
-  const maleHits = (blob.match(/\bmale\b|\bman\b|\bmen\b|\bboy\b/gi) || []).length;
-  if (femaleHits > maleHits) return 'female';
-  if (maleHits > femaleHits) return 'male';
-  return 'male';
+  const uberSlug = String(caseContext.uberFaceSlug || '').trim();
+  if (uberSlug) {
+    const entry = uberRefs.refs?.[uberSlug];
+    if (entry?.sex === 'female' || entry?.sex === 'male') return entry.sex;
+  }
+
+  return resolvePatientSex({
+    chief_complaint: caseContext.chief_complaint || facts.chiefComplaint,
+    historyText: caseContext.historyText,
+    hpi_narrative: caseContext.hpi_narrative,
+    clinical_hpi_narrative: caseContext.clinical_hpi_narrative || caseContext.hpiExcerpt,
+    patient_voice: caseContext.patient_voice || caseContext.patientVoice,
+    title: caseContext.title,
+    patientSex: facts.sex || caseContext.patientSex,
+    preparedIntro: caseContext.preparedIntro,
+    narrativeIntro: caseContext.narrativeIntro,
+  });
 }

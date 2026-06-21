@@ -14,7 +14,7 @@ import {
   FORBIDDEN_COMPOSITION,
   GAME_SCENE_APPROVED_PENDING_SHIP,
   GAME_SCENE_PROTECTED_FILES,
-} from '../src/lib/sceneCameraLock.js';
+} from '../src/lib/sceneCameraLock.server.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');

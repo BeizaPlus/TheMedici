@@ -32,12 +32,18 @@
       "cropLockRef": "dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png"
     },
     "female": {
-      "path": "public/assets/patient/patient-scene-female.png",
-      "sourcePixels": { "width": 2048, "height": 1152 },
-      "role": "Canonical female ED baseplate — same camera lock as male (crown through toes, bare feet at bottom); crop to exportPixels on promote",
+      "path": "public/assets/patient/patient-scene-source-square.png",
+      "sourcePixels": { "width": 1536, "height": 864 },
+      "role": "Approved in-case proper camera — replaces FORBIDDEN patient-scene-female.png (POV standing-on-patient)",
       "ladyIdentity": "src/data/patientLadyRefs.json",
       "cropLockRef": "dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png",
-      "promptRef": "dev/anatomic-plates/prompts/female-ed-anatomic-plate.txt"
+      "promptRef": "dev/anatomic-plates/prompts/female-ed-anatomic-plate.txt",
+      "forbiddenReplaced": "public/assets/patient/patient-scene-female.png"
+    },
+    "pedFemale": {
+      "path": "public/assets/patient/patient-scene-source-square.png",
+      "role": "Approved in-case proper camera — replaces FORBIDDEN patient-scene-ped-female.png",
+      "forbiddenReplaced": "public/assets/patient/patient-scene-ped-female.png"
     }
   },
   "legacyReferences": [
@@ -62,7 +68,8 @@
       "3/4 hero poster framing",
       "POV clinician examiner feet at frame bottom",
       "standing-over-patient first-person camera",
-      "patient-scene-female.png as Magnific gen layout lock"
+      "patient-scene-female.png (runtime or Magnific — POV standing-on-patient)",
+      "patient-scene-ped-female.png (runtime or Magnific — POV standing-on-patient)"
     ]
   },
   "patientScope": {

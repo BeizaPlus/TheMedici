@@ -59,6 +59,22 @@ Attending replies are **markdown documents**, not plain text. Tables, headings, 
 
 ---
 
+## Case context dock (Play sidebar tabs)
+
+**Chrome:** case title + ER/OBS/ICU/WARD + icon tab row (HPI · exam · orders · chat …).
+
+| Gesture | Behavior |
+|---------|----------|
+| **Single click** tab icon | Select that tab; if dock is collapsed, **auto-expand** and show panel body |
+| **Single click** another tab | **Switch** content; dock stays expanded |
+| **Double click** any tab icon | **Collapse** to chrome-only strip (title + unit chips + icons — no HPI/chat/stacks body) |
+
+Implementation: `CaseContextPanel` `onTabCollapse` → `Play.jsx` `collapseDockPanel()`. CSS: `.game-sidebar.floating.collapsed` hides `.case-context-body-wrap`.
+
+Thread / chat markdown still renders inside the expanded **chat** tab body — collapse only hides the scroll region, not the per-case `cases/notes/{id}.md` file.
+
+---
+
 ## Agent checklist
 
 - [ ] Tutor prompt may use markdown tables for frameworks — renderer must show them

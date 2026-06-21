@@ -37,7 +37,7 @@ assert.ok(case051, 'case 051 missing');
 const story051 = buildCaseStoryOffline(case051, { sessionContext });
 assert.equal(story051.caseId, '051');
 assert.match(story051.title, /Peppered/i);
-assert.ok(story051.chapters.length >= 5);
+assert.ok(story051.chapters.length >= 6, '051 needs six chapters for 2×3 grid');
 assert.ok(story051.chapters.every((c) => c.visualHint), '051 chapters need visualHint for storyboard');
 assert.match(story051.chapters[2].body, /peppered|embol|bruit|narrowing/i);
 

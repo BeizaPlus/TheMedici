@@ -1,6 +1,8 @@
 import { STORAGE } from './storageKeys.js';
 import { readUiPrefs, writeUiPrefs } from './uiPrefs.js';
 
+export const SIMULATION_CREATIVITY_CHANGED = 'schoonmaker-simulation-creativity-changed';
+
 export const DEFAULT_SIMULATION_CREATIVITY = 55;
 
 export function creativityBand(score) {
@@ -8,6 +10,11 @@ export function creativityBand(score) {
   if (c < 30) return { band: 'strict', label: 'Strict' };
   if (c < 65) return { band: 'balanced', label: 'Balanced' };
   return { band: 'immersive', label: 'Immersive' };
+}
+
+function notifyCreativityChange(detail = {}) {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new CustomEvent(SIMULATION_CREATIVITY_CHANGED, { detail }));
 }
 
 export function readCaseSimulationCreativity(caseId) {
@@ -37,6 +44,7 @@ export function writeCaseSimulationCreativity(caseId, value) {
       map[id] = Math.max(0, Math.min(100, Math.round(Number(value))));
     }
     localStorage.setItem(STORAGE.caseSimulationCreativity, JSON.stringify(map));
+    notifyCreativityChange({ scope: 'case', caseId: id, value: map[id] ?? null });
   } catch {
     /* ignore */
   }
@@ -50,7 +58,9 @@ export function readGlobalSimulationCreativity() {
 }
 
 export function writeGlobalSimulationCreativity(value) {
-  writeUiPrefs({ simulationCreativity: Math.max(0, Math.min(100, Math.round(Number(value)))) });
+  const n = Math.max(0, Math.min(100, Math.round(Number(value))));
+  writeUiPrefs({ simulationCreativity: n });
+  notifyCreativityChange({ scope: 'global', value: n });
 }
 
 /** Per-case override when set; otherwise global default. */

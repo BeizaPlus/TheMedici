@@ -96,30 +96,32 @@ export default function LabOrderPickerDialog({
           </button>
         </div>
 
-        <ul className="physical-exam-picker-list">
-          {filteredNames.map((name) => {
-            const checked = selected.has(name);
-            const isSuggested = showSuggestions && suggested.has(name.toLowerCase());
-            return (
-              <li key={name}>
-                <label className={`physical-exam-picker-row${checked ? ' is-checked' : ''}`}>
-                  <input
-                    type="checkbox"
-                    checked={checked}
-                    onChange={() => toggle(name)}
-                    disabled={busy}
-                  />
-                  <span className="physical-exam-picker-label">{name}</span>
-                  {isSuggested && <span className="physical-exam-picker-tag">In case stacks</span>}
-                </label>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="physical-exam-picker-list-wrap">
+          <ul className="physical-exam-picker-list">
+            {filteredNames.map((name) => {
+              const checked = selected.has(name);
+              const isSuggested = showSuggestions && suggested.has(name.toLowerCase());
+              return (
+                <li key={name}>
+                  <label className={`physical-exam-picker-row${checked ? ' is-checked' : ''}`}>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggle(name)}
+                      disabled={busy}
+                    />
+                    <span className="physical-exam-picker-label">{name}</span>
+                    {isSuggested && <span className="physical-exam-picker-tag">In case stacks</span>}
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
 
-        {!filteredNames.length && (
-          <p className="lab-order-picker-empty">No labs match your search.</p>
-        )}
+          {!filteredNames.length && (
+            <p className="lab-order-picker-empty">No labs match your search.</p>
+          )}
+        </div>
 
         <footer className="physical-exam-picker-foot">
           <button type="button" className="btn-ghost" onClick={() => onClose?.()} disabled={busy}>

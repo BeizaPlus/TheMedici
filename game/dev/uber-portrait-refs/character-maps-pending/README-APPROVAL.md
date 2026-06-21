@@ -16,7 +16,8 @@
    ```
 
 4. Update `patientUberRefs.json` → set `mapFile` and `status: "approved"` for that slug.
-5. Smoke: `?case=U01` … `?case=U08` in play-case smoke.
+5. **Case story / study session:** after ship, story gens use `public/` map; **before ship**, `caseStoryCharacterMap.js` falls back to pending alt1/alt2 automatically.
+6. Smoke: `?case=U01` … `?case=U08` in play-case smoke.
 
 ## Slug → Uber case → ship target
 
@@ -29,6 +30,9 @@
 | `craniofacial-asymmetry-goatee` | U06 | alt1, alt2 | `…/craniofacial-asymmetry-goatee-CHARACTER-MAP.png` |
 | `copper-afro-headwrap-africa` | U01 | alt1, alt2 | `…/copper-afro-headwrap-africa-CHARACTER-MAP.png` |
 | `subway-afro-dandy` | U08 | alt1, alt2 | `…/subway-afro-dandy-CHARACTER-MAP.png` |
+| `adpkd-long-nose-elder` | 086 | alt1, alt2 | `…/adpkd-long-nose-elder-CHARACTER-MAP.png` |
+
+**Reject:** `adpkd-long-nose-elder-CHARACTER-MAP-alt2-caricature.png` — do not use for story or play.
 
 ## Batch status
 

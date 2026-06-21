@@ -12,7 +12,7 @@ export function readClinicalTextPrefs() {
     const fontScale = Number(parsed?.fontScale);
     const weight = Number(parsed?.weight);
     return {
-      fontScale: Number.isFinite(fontScale) ? Math.min(1.5, Math.max(0.9, fontScale)) : DEFAULT.fontScale,
+      fontScale: Number.isFinite(fontScale) ? Math.min(2, Math.max(0.9, fontScale)) : DEFAULT.fontScale,
       weight: [500, 600, 700].includes(weight) ? weight : DEFAULT.weight,
     };
   } catch {

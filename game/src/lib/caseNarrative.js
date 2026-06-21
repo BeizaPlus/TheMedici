@@ -4,6 +4,7 @@ import { getActiveRefinedNarrative } from './narrativeRefine.js';
 import { composeCaseHistory, resolveCaseExam } from './caseExam.js';
 import { applyPatientName, applyPatientNameToCase, getDefaultPatientName, resolvePatientName } from './patientName.js';
 import { hpiContainsSpoilers, resolveAnswerKeyHpi, resolvePracticeHpi } from './practiceHpi.js';
+import { resolvePatientSex } from './patientSex.js';
 
 const PREPARED = preparedCases?.cases || {};
 
@@ -40,7 +41,10 @@ export function applySessionToCase(caseData, session = {}) {
   merged.clinical_hpi_narrative = clinicalHpi;
 
   if (narr) {
-    if (narr.intro) merged.chief_complaint = narr.intro.slice(0, 800);
+    const introStub = narr.intro && /— emergency presentation/i.test(narr.intro);
+    if (narr.intro && !(caseData?.uberMeta && introStub)) {
+      merged.chief_complaint = narr.intro.slice(0, 800);
+    }
     if (narr.vitalsText != null) merged.vitalsText = narr.vitalsText;
     if (narr.clinicalTip) merged.clinical_tip = narr.clinicalTip;
     if (narr.objective) merged.objective = narr.objective;
@@ -55,15 +59,33 @@ export function applySessionToCase(caseData, session = {}) {
     merged.narrativeSource = refined.label || 'refined';
   }
 
-  if (prepared?.patientSex && prepared.patientSex !== 'unknown') {
-    merged.patientSex = prepared.patientSex;
+  const introForSex = narr?.intro || merged.chief_complaint || '';
+  merged.patientSex = resolvePatientSex({
+    ...merged,
+    chief_complaint: introForSex,
+    preparedIntro: narr?.intro || prepared?.narrative?.doctor?.standard?.intro || '',
+    patientSex: prepared?.patientSex || caseData?.patientSex,
+  });
+  if (prepared?.uberFaceSlug) {
+    merged.uberFaceSlug = prepared.uberFaceSlug;
+  }
+  if (prepared?.portraitNote) {
+    merged.portraitNote = prepared.portraitNote;
   }
 
   if (prepared?.interventions?.length) {
-    merged.interventions = prepared.interventions;
+    const uberMergedStacks =
+      caseData?.uberMeta &&
+      Array.isArray(caseData.interventions) &&
+      caseData.interventions.length > prepared.interventions.length;
+    if (!uberMergedStacks) {
+      merged.interventions = prepared.interventions;
+    }
   }
-  if (prepared?.decoys?.length) {
+  if (prepared?.decoys?.length && !caseData?.uberMeta) {
     merged.decoys = prepared.decoys;
+  } else if (caseData?.decoys?.length) {
+    merged.decoys = caseData.decoys;
   }
   if (prepared?.diagnosis) {
     merged.diagnosis = prepared.diagnosis;
@@ -104,10 +126,10 @@ export function applySessionToCase(caseData, session = {}) {
   );
 
   const caseNum = caseData?.ccsNumber ?? Number(caseData?.id) ?? 0;
-  merged.patient_name_default = getDefaultPatientName(
-    caseNum,
-    merged.patientSex || prepared?.patientSex,
-  );
+  merged.patient_name_default =
+    prepared?.patient_name_default ||
+    caseData?.patient_name_default ||
+    getDefaultPatientName(caseNum, merged.patientSex || prepared?.patientSex);
   const displayName = resolvePatientName(merged);
   const namedClinical = applyPatientName(clinicalHpi, displayName);
   merged.hpi_narrative = namedClinical;

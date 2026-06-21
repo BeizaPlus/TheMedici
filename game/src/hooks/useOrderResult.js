@@ -5,17 +5,22 @@ import { resolveOrderResult } from '../lib/orderResult.js';
 /**
  * Instant local fallback, then upgrades from DeepSeek-cached /api/order-result when ready.
  */
-export function useOrderResult(intervention, { caseData, caseFlow, teachMeMode = false } = {}) {
+export function useOrderResult(
+  intervention,
+  { caseData, caseFlow, teachMeMode = false, orderLog = null } = {},
+) {
   const fallback = useMemo(() => {
     if (!intervention?.label) return null;
     return (
-      resolveOrderResult(intervention, { caseData, caseFlow, teachMeMode }) || {
+      resolveOrderResult(intervention, { caseData, caseFlow, teachMeMode, orderLog }) || {
         kind: 'order',
         kindLabel: 'Result',
         text: `${intervention.label} — completed.`,
       }
     );
-  }, [intervention, caseData, caseFlow, teachMeMode]);
+  }, [intervention, caseData, caseFlow, teachMeMode, orderLog]);
+
+  const trajectoryLocked = Boolean(fallback?.trajectoryState);
 
   const [result, setResult] = useState(fallback);
   const [loading, setLoading] = useState(false);
@@ -28,7 +33,11 @@ export function useOrderResult(intervention, { caseData, caseFlow, teachMeMode =
     }
 
     setResult(fallback);
-    setSource('fallback');
+    setSource(trajectoryLocked ? 'trajectory' : 'fallback');
+    if (trajectoryLocked) {
+      setLoading(false);
+      return undefined;
+    }
     let cancelled = false;
     setLoading(true);
 
@@ -56,7 +65,18 @@ export function useOrderResult(intervention, { caseData, caseFlow, teachMeMode =
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- fallback derived from same inputs
-  }, [intervention?.id, intervention?.label, intervention?.why, caseData?.id, teachMeMode, caseFlow]);
+  }, [
+    intervention?.id,
+    intervention?.label,
+    intervention?.why,
+    intervention?.trajectoryOccurrence,
+    caseData?.id,
+    teachMeMode,
+    caseFlow,
+    orderLog,
+    trajectoryLocked,
+    fallback,
+  ]);
 
   return { result, loading, source, fallback };
 }

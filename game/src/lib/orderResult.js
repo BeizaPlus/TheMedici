@@ -6,6 +6,7 @@
 import { getPreparedCase } from './caseNarrative.js';
 import { resolveLabPanelResult, resolveSingleLabResult } from './labPanelValues.js';
 import { mergeCleanCaseIntoCtx } from './cleanCaseClinical.js';
+import { resolveTrajectoryOrderResult } from './clinicalTrajectory/index.js';
 
 function norm(s) {
   return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
@@ -245,11 +246,18 @@ export function classifyOrderKind(label) {
  */
 export function resolveOrderResult(
   intervention,
-  { caseData, caseFlow, teachMeMode = false, cleanCase = null } = {},
+  { caseData, caseFlow, teachMeMode = false, cleanCase = null, orderLog = null } = {},
 ) {
   if (!intervention?.label) return null;
 
   const label = intervention.label;
+
+  const trajectoryHit = resolveTrajectoryOrderResult(intervention, {
+    caseId: caseData?.id,
+    orderLog: orderLog || undefined,
+    teachMeMode,
+  });
+  if (trajectoryHit) return trajectoryHit;
   const prepared = getPreparedCase(caseData?.id);
   const exam =
     (Array.isArray(prepared?.exam) && prepared.exam.length ? prepared.exam : null) ||

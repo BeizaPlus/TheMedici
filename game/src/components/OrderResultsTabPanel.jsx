@@ -1,5 +1,10 @@
 import OrderResultSceneCard from './OrderResultSceneCard.jsx';
+import LabTrendGraphPanel from './LabTrendGraphPanel.jsx';
+import HyperkMembranePhysiologyPanel from './HyperkMembranePhysiologyPanel.jsx';
 import { neutralStackOrderName } from '../lib/stackDecoys.js';
+import { hasClinicalTrajectory } from '../lib/clinicalTrajectory/index.js';
+import { useState } from 'react';
+import { buildTrendSeries } from '../lib/clinicalTrajectory/index.js';
 
 export default function OrderResultsTabPanel({
   resultRows = [],
@@ -14,7 +19,14 @@ export default function OrderResultsTabPanel({
   compact = false,
   hideKicker = false,
   onPinTeachingMoment = null,
+  trajectorySnapshots = null,
+  orderLog = null,
 }) {
+  const [trendMetric, setTrendMetric] = useState('k');
+  const trendSeries = trajectorySnapshots?.length
+    ? buildTrendSeries(trajectorySnapshots).points
+    : [];
+  const showTrend = trendSeries.length >= 2;
   const hasRows = resultRows.length > 0;
   const activeRow =
     resultRows.find((row) => row.iv.id === activeIvId) || (hasRows ? resultRows[0] : null);
@@ -59,6 +71,20 @@ export default function OrderResultsTabPanel({
               );
             })}
           </div>
+          {showTrend && (
+            <LabTrendGraphPanel
+              points={trendSeries}
+              metric={trendMetric}
+              onMetricChange={setTrendMetric}
+            />
+          )}
+          {hasClinicalTrajectory(caseData?.id) && (
+            <HyperkMembranePhysiologyPanel
+              caseId={caseData?.id}
+              orderLog={orderLog}
+              trajectorySnapshots={trajectorySnapshots}
+            />
+          )}
           {activeRow && !activeRow.teachPending && (
             <OrderResultSceneCard
               intervention={activeRow.iv}
@@ -70,6 +96,7 @@ export default function OrderResultsTabPanel({
               hideClose
               teachMeMode={teachMeMode}
               onPinTeachingMoment={onPinTeachingMoment}
+              orderLog={orderLog}
             />
           )}
         </>

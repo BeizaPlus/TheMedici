@@ -95,6 +95,12 @@ import {
 } from '../lib/orderCommandAutocomplete.js';
 import { extraOrderPinId } from '../lib/extraOrderPlacement.js';
 import { buildPlacedResultRows } from '../lib/placedResultRows.js';
+import {
+  buildMeasureSnapshots,
+  buildOrderLog,
+  getTrajectorySpec,
+} from '../lib/clinicalTrajectory/index.js';
+import { enrichResultRowsWithTrajectory } from '../lib/clinicalTrajectory/enrichRows.js';
 import { readExportUseLiveScene, writeExportUseLiveScene } from '../lib/exportLiveScenePrefs.js';
 import {
   IconLayoutSidebarRightCollapse,
@@ -111,6 +117,7 @@ import ClinicalFontControls from './ClinicalFontControls.jsx';
 import AudioSettingsPanel from './AudioSettingsPanel.jsx';
 import SimulationCreativityControl from './SimulationCreativityControl.jsx';
 import FirstOpinionDepthControl from './FirstOpinionDepthControl.jsx';
+import CaseBibliographyPanel from './CaseBibliographyPanel.jsx';
 import CasePortraitBriefControl from './CasePortraitBriefControl.jsx';
 import OrderResultsTabPanel from './OrderResultsTabPanel.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
@@ -898,6 +905,22 @@ export default function Play({
   const placedResultRows = useMemo(
     () => buildPlacedResultRows({ interventions, placed, pins, interventionById }),
     [interventions, placed, pins, interventionById],
+  );
+
+  const clinicalOrderLog = useMemo(
+    () => buildOrderLog({ placementOrder, extraOrders, interventionById }),
+    [placementOrder, extraOrders, interventionById],
+  );
+
+  const trajectorySnapshots = useMemo(() => {
+    const spec = getTrajectorySpec(caseData?.id);
+    if (!spec) return null;
+    return buildMeasureSnapshots(spec, clinicalOrderLog);
+  }, [caseData?.id, clinicalOrderLog]);
+
+  const trajectoryResultRows = useMemo(
+    () => enrichResultRowsWithTrajectory(placedResultRows, clinicalOrderLog),
+    [placedResultRows, clinicalOrderLog],
   );
 
   useEffect(() => {
@@ -2577,8 +2600,8 @@ export default function Play({
         teachPending: !placed[iv.id],
       }));
     }
-    return placedResultRows;
-  }, [teachMeMode, interventions, placed, placedResultRows]);
+    return trajectoryResultRows;
+  }, [teachMeMode, interventions, placed, trajectoryResultRows]);
 
   const dockResultsPanel = useMemo(
     () => (
@@ -2597,9 +2620,11 @@ export default function Play({
         compact
         hideKicker
         onPinTeachingMoment={pinTeachingMoment}
+        trajectorySnapshots={trajectorySnapshots}
+        orderLog={clinicalOrderLog}
       />
     ),
-    [dockResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode, pinTeachingMoment, showOrderWhyInDock],
+    [dockResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode, pinTeachingMoment, showOrderWhyInDock, trajectorySnapshots, clinicalOrderLog],
   );
 
   const dockOrderContextLabel = useMemo(() => {
@@ -3853,7 +3878,12 @@ export default function Play({
             />
           </div>
           <div className="settings-popover-row settings-popover-row-2">
-            <button type="button" onClick={toggleTimedMode}>
+            <button
+              type="button"
+              className={timedModeEnabled ? 'active settings-popover-btn--on' : ''}
+              aria-pressed={timedModeEnabled}
+              onClick={toggleTimedMode}
+            >
               {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
             </button>
             <button type="button" onClick={resetPlacements}>
@@ -3864,31 +3894,33 @@ export default function Play({
             </button>
             <button
               type="button"
-              className={simDeteriorationActive ? 'active' : ''}
+              className={simDeteriorationActive ? 'active settings-popover-btn--on' : ''}
               aria-pressed={simDeteriorationActive}
               onClick={() => {
                 const death = document.getElementById('death');
                 const idleSlots = document.querySelectorAll('.idle-slot');
-                if (!death) return;
                 if (simDeteriorationActive) {
-                  death.style.opacity = '0';
-                  death.style.zIndex = '0';
-                  death.pause();
+                  if (death) {
+                    death.style.opacity = '0';
+                    death.style.zIndex = '0';
+                    death.pause();
+                  }
                   idleSlots.forEach((slot) => {
                     slot.style.opacity = '1';
                   });
                   setSimDeteriorationActive(false);
                   return;
                 }
+                setSimDeteriorationActive(true);
                 idleSlots.forEach((slot) => {
                   slot.pause();
                   slot.style.opacity = '0';
                 });
+                if (!death) return;
                 death.style.opacity = '1';
                 death.style.zIndex = '2';
                 death.currentTime = 0;
                 death.play().catch(() => {});
-                setSimDeteriorationActive(true);
               }}
             >
               {simDeteriorationActive ? 'Deterioration: ON' : 'Simulate deterioration'}
@@ -3904,6 +3936,13 @@ export default function Play({
               showCaseOverride
               onCreativityChange={() => void caseChat.resetSession?.()}
             />
+          </div>
+          <div className="settings-popover-block settings-popover-block--bibliography">
+            <p className="settings-popover-label">Bibliography &amp; sources</p>
+            <p className="settings-popover-note">
+              Case composition threads, attending playbook citations, and First Aid pages.
+            </p>
+            <CaseBibliographyPanel caseData={caseData} compact />
           </div>
           <AudioSettingsPanel embedded showGameSounds={false} />
         </div>
@@ -4744,6 +4783,7 @@ export default function Play({
               setInfoTab(tab);
               if (dockCollapsed) expandDockPanel();
             }}
+            onTabCollapse={collapseDockPanel}
             onReadCase={(section, text) => {
               readCaseAloud({
                 caseId: caseData.id,

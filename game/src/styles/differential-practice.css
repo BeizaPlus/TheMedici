@@ -519,18 +519,47 @@
 /* A+/A−/B — readable study content only (case summary, orders, transcripts, notes) */
 .diff-study-panel .differential-review-body,
 .diff-study-panel .differential-review-text,
+.diff-mobile-feed .differential-review-body,
+.diff-mobile-feed .differential-review-text,
+.diff-study-sheet-body .differential-review-body,
+.diff-study-sheet-body .differential-review-text,
 .diff-study-panel .diff-ccs-case-summary,
 .diff-study-panel .diff-ccs-case-summary-body,
+.diff-mobile-feed .diff-ccs-case-summary-body,
+.diff-study-sheet-body .diff-ccs-case-summary-body,
 .diff-study-panel .diff-ccs-case-summary-diff,
+.diff-mobile-feed .diff-ccs-case-summary-diff,
+.diff-study-sheet-body .diff-ccs-case-summary-diff,
 .diff-study-panel .diff-order-name,
+.diff-mobile-feed .diff-order-name,
+.diff-study-sheet-body .diff-order-name,
 .diff-study-panel .diff-order-reason,
+.diff-mobile-feed .diff-order-reason,
+.diff-study-sheet-body .diff-order-reason,
 .diff-study-panel .diff-case-presentation .soap-body,
+.diff-mobile-feed .diff-case-presentation .soap-body,
+.diff-study-sheet-body .diff-case-presentation .soap-body,
 .diff-study-panel .diff-mnemonic-input,
+.diff-mobile-feed .diff-mnemonic-input,
+.diff-study-sheet-body .diff-mnemonic-input,
 .diff-study-panel .diff-rw-summary--full,
+.diff-mobile-feed .diff-rw-summary--full,
+.diff-study-sheet-body .diff-rw-summary--full,
 .diff-study-panel .diff-rw-transcript-text,
+.diff-mobile-feed .diff-rw-transcript-text,
+.diff-study-sheet-body .diff-rw-transcript-text,
 .diff-study-panel .diff-attempt-hearing,
+.diff-mobile-feed .diff-attempt-hearing,
+.diff-study-sheet-body .diff-attempt-hearing,
 .diff-study-panel .diff-attempt-guesses,
-.diff-study-panel .clinical-text-block {
+.diff-mobile-feed .diff-attempt-guesses,
+.diff-study-sheet-body .diff-attempt-guesses,
+.diff-study-panel .clinical-text-block,
+.diff-mobile-feed .clinical-text-block,
+.diff-study-sheet-body .clinical-text-block,
+.diff-practice--mobile .diff-chip,
+.diff-practice--mobile .diff-guess-input,
+.diff-practice--mobile .diff-mobile-feed .diff-teach-me-body {
   font-size: var(--clinical-font-size, 1rem);
   font-weight: var(--clinical-font-weight, 600);
 }
@@ -5366,6 +5395,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
     padding: 10px 16px 8px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   }

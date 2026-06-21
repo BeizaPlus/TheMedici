@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FiVolume2 } from 'react-icons/fi';
 import {
   IconClipboardPulse,
@@ -7,11 +7,15 @@ import {
   IconStethoscope,
   IconFileMedical,
   IconNotes,
+  IconDifferentialStack,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import { formatExamForDisplay } from '../lib/caseBriefing.js';
+import { caseHasDifferentials } from '../lib/caseDifferentials.js';
+import CaseDifferentialStackPanel from './CaseDifferentialStackPanel.jsx';
 import {
   formatCaseIdLabel,
+  isLearningMode,
   learnerFacingCaseTitle,
   shouldShowCaseIds,
 } from '../lib/learningMode.js';
@@ -61,6 +65,8 @@ export default function CaseContextPanel({
   footer = null,
   activeTab: controlledTab,
   onTabChange,
+  /** Play dock — double-click tab icon collapses chrome-only strip */
+  onTabCollapse = null,
   teachMeMode = false,
   /** Briefing — icon-only bookmark in tab row (no Review later text). */
   bookmarkCaseId = null,
@@ -77,7 +83,10 @@ export default function CaseContextPanel({
   const resultsEnabled = !isBriefing && showResultsTab;
   const chatEnabled = !isBriefing && showChatTab;
   const notesEnabled = isBriefing && Array.isArray(notesSections) && notesSections.length > 0;
+  const differentialEnabled = caseHasDifferentials(caseData);
+  const differentialLearningSafe = isBriefing || (teachMeMode === false && isLearningMode());
   const isNotes = tab === 'notes';
+  const isDifferential = tab === 'differential';
   const isTreatment = tab === 'treatment';
   const isResults = tab === 'results';
   const isChat = tab === 'chat';
@@ -112,12 +121,27 @@ export default function CaseContextPanel({
   const readPlaying = readState === 'playing';
   const caseIdLabel = formatCaseIdLabel(caseData, { teachMeMode });
   const displayTitle = learnerFacingCaseTitle(caseData, { teachMeMode });
-  const showUberTeachMeta =
-    teachMeMode && shouldShowCaseIds({ teachMeMode }) && caseData?.uberMeta?.segments?.length > 0;
+  const showUberTeachMeta = false;
 
   const selectTab = (id) => {
     setTab(id);
     if (defaultBodyCollapsed) setBodyCollapsed(false);
+  };
+
+  const tabActivateRef = useRef(false);
+
+  const handleTabClick = (id) => {
+    if (tabActivateRef.current) {
+      tabActivateRef.current = false;
+      return;
+    }
+    selectTab(id);
+  };
+
+  const handleTabDoubleClick = (e) => {
+    e.preventDefault();
+    tabActivateRef.current = true;
+    onTabCollapse?.();
   };
 
   return (
@@ -157,7 +181,7 @@ export default function CaseContextPanel({
             {displayTitle}
           </h2>
           {locationContext && <p className="case-location-context">{locationContext}</p>}
-          {showUberTeachMeta && (
+          {showUberTeachMeta && teachMeMode && (
             <ul className="briefing-uber-segments case-context-uber-segments" aria-label="Composite case threads (teach mode)">
               {caseData.uberMeta.segments.map((seg) => (
                 <li key={seg.id}>
@@ -170,14 +194,18 @@ export default function CaseContextPanel({
       )}
       {hideHeader && isBriefing && (
         <div className="case-context-compact-head">
-          {caseIdLabel ? (
-            <p className="sidebar-case-id">Case {caseIdLabel}</p>
-          ) : (
-            <p className="sidebar-case-id sidebar-case-id--learner">Case</p>
-          )}
+          <div className="case-context-compact-head-row">
+            {caseIdLabel ? (
+              <p className="sidebar-case-id">Case {caseIdLabel}</p>
+            ) : (
+              <p className="sidebar-case-id sidebar-case-id--learner">Case</p>
+            )}
+            {headerControls}
+          </div>
           <h2 className="sidebar-title case-context-compact-title" title={displayTitle}>
             {displayTitle}
           </h2>
+          {locationContext && <p className="case-location-context">{locationContext}</p>}
         </div>
       )}
       <div className="case-info-tabs-row">
@@ -187,12 +215,15 @@ export default function CaseContextPanel({
           if (def.id === 'results') return resultsEnabled;
           if (def.id === 'chat') return chatEnabled;
           return true;
-        }).concat(notesEnabled ? [{ id: 'notes', label: 'Notes', Icon: IconNotes }] : []).map(({ id, label, Icon }) => (
+        }).concat(notesEnabled ? [{ id: 'notes', label: 'Notes', Icon: IconNotes }] : [])
+          .concat(differentialEnabled ? [{ id: 'differential', label: 'Differentials', Icon: IconDifferentialStack }] : [])
+          .map(({ id, label, Icon }) => (
           <button
             key={id}
             type="button"
             className={tab === id ? 'case-info-tab active case-info-tab--icon' : 'case-info-tab case-info-tab--icon'}
-            onClick={() => selectTab(id)}
+            onClick={() => handleTabClick(id)}
+            onDoubleClick={handleTabDoubleClick}
             aria-selected={tab === id}
             aria-label={label}
             title={label}
@@ -229,12 +260,12 @@ export default function CaseContextPanel({
       </div>
       {!bodyCollapsed && (
       <div className="case-context-body-wrap">
-      {tab === 'hpi' && !isTreatment && !isChat && !isNotes && (
+      {tab === 'hpi' && !isTreatment && !isChat && !isNotes && !isDifferential && (
         <div className="hpi-text case-context-body clinical-text-block" style={textStyle}>
           {hpiNarrative || 'HPI not yet available for this case.'}
         </div>
       )}
-      {tab === 'exam' && !isTreatment && !isChat && !isNotes && (
+      {tab === 'exam' && !isTreatment && !isChat && !isNotes && !isDifferential && (
         <div className="hpi-text case-context-body clinical-text-block exam-by-system" style={textStyle}>
           {hasStructuredExam
             ? formatExamForDisplay(
@@ -255,7 +286,16 @@ export default function CaseContextPanel({
           ))}
         </div>
       )}
-      {tab !== 'hpi' && tab !== 'exam' && !isTreatment && !isChat && !isNotes && (
+      {isDifferential && (
+        <div className="case-context-body case-diff-tab-wrap clinical-text-block">
+          <CaseDifferentialStackPanel
+            caseData={caseData}
+            textStyle={textStyle}
+            learningSafe={differentialLearningSafe}
+          />
+        </div>
+      )}
+      {tab !== 'hpi' && tab !== 'exam' && !isTreatment && !isChat && !isNotes && !isDifferential && (
         <p className="sub case-context-body clinical-text-block" style={textStyle} title={bodyText}>
           {bodyText}
         </p>

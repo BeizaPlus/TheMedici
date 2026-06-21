@@ -30,6 +30,90 @@
           "discriminator": "Check glucose, but the fix is still **eliminate galactose** and confirm **GALT** deficiency."
         }
       ]
+    },
+    "035": {
+      "title": "Differentials — alcohol withdrawal",
+      "subtitle": "Autonomic storm + AMS after last drink — what else can kill before DTs?",
+      "items": [
+        {
+          "id": "dt",
+          "label": "Alcohol withdrawal / delirium tremens",
+          "why": "Chronic GABA ↑ + NMDA ↓ with abrupt cessation → **rebound glutamate hyperexcitability**. Timeline 24–72 h, tremor, diaphoresis, hallucinations, seizures. **CIWA** guides benzo dosing.",
+          "discriminator": "Last-drink history + autonomic hyperactivity + tremor — treat with benzos even while you rule out mimics."
+        },
+        {
+          "id": "ich",
+          "label": "Intracranial hemorrhage / traumatic brain injury",
+          "why": "New seizure + AMS in a patient who falls when intoxicated. Check for focal deficits, battle sign, coagulopathy from liver disease.",
+          "discriminator": "CT head if trauma, coagulopathy, focal neuro, or incomplete recovery between events."
+        },
+        {
+          "id": "meningitis",
+          "label": "Meningitis / encephalitis",
+          "why": "Fever, AMS, headache overlap. Immunocompromise and nuchal rigidity push this up.",
+          "discriminator": "LP after imaging if suspicion — do not let benzos mask the need for cultures."
+        },
+        {
+          "id": "metabolic",
+          "label": "Hypoglycemia, hyponatremia, hepatic encephalopathy",
+          "why": "Fingerstick glucose first. Cirrhosis → **hypoglycemia**, low Na⁺, ammonia ↑ with asterixis.",
+          "discriminator": "**Thiamine before glucose** (Wernicke). Correct Na⁺ slowly; check ammonia if cirrhosis."
+        },
+        {
+          "id": "tox",
+          "label": "Sympathomimetic / other substance toxidrome",
+          "why": "Cocaine, amphetamines, PCP — tachycardia, hypertension, agitation mimic withdrawal.",
+          "discriminator": "Urine tox screen + history; benzos still help agitation but stimulant MI/ischemia needs its own workup."
+        },
+        {
+          "id": "gi-bleed",
+          "label": "Upper GI bleed (varices)",
+          "why": "Chronic alcohol → portal HTN. Tachycardia, hypotension, melena — shock can present with AMS.",
+          "discriminator": "Hemoglobin trend, rectal exam, type & screen — resuscitate while treating withdrawal."
+        }
+      ]
+    },
+    "U12": {
+      "title": "Differentials — Tom",
+      "subtitle": "",
+      "items": [
+        {
+          "id": "dt",
+          "label": "Alcohol withdrawal / delirium tremens",
+          "why": "Tom's timeline fits **rebound glutamate hyperexcitability** after abrupt cessation. Prior DT raises risk for seizures and autonomic collapse. **CIWA-Ar** drives symptom-triggered benzos until sedated but arousable.",
+          "discriminator": "Autonomic surge and altered sensorium after reduced drinking — correlate timing with last use."
+        },
+        {
+          "id": "sedative",
+          "label": "Sedative / benzo overdose overlap",
+          "why": "Uber thread: chronic users may take **benzos or sedatives** with alcohol. Overlap can blunt withdrawal signs then unmask with clearance — or present as mixed toxidrome.",
+          "discriminator": "Overlap with sedatives can blur the picture — review meds and tox screen."
+        },
+        {
+          "id": "ich",
+          "label": "Intracranial hemorrhage / fall trauma",
+          "why": "Tom may fall when intoxicated or seizing. New AMS + seizure → scan if focal deficits, anticoagulation, or incomplete recovery.",
+          "discriminator": "Trauma history or focal neuro signs — imaging when the exam supports it."
+        },
+        {
+          "id": "wernicke",
+          "label": "Wernicke encephalopathy",
+          "why": "Chronic alcohol → **thiamine depletion**. Confusion, ataxia, ophthalmoplegia — often incomplete triad.",
+          "discriminator": "Ataxia or eye-movement findings — nutritional history matters."
+        },
+        {
+          "id": "metabolic",
+          "label": "Hypoglycemia · hyponatremia · hepatic encephalopathy",
+          "why": "Fingerstick first. Cirrhosis → hypoglycemia, low Na⁺, ammonia ↑ with asterixis.",
+          "discriminator": "Check glucose and basic chemistries early."
+        },
+        {
+          "id": "gi-bleed",
+          "label": "Upper GI bleed (varices)",
+          "why": "Portal HTN from chronic alcohol — tachycardia and hypotension can look like withdrawal autonomics.",
+          "discriminator": "Hemodynamic instability with GI history — look for bleeding stigmata."
+        }
+      ]
     }
   }
 }

@@ -12,7 +12,7 @@ function clamp(n, min, max) {
   return Math.min(max, Math.max(min, n));
 }
 
-export const DOCK_CHROME_COLLAPSED_HEIGHT = 168;
+export const DOCK_CHROME_COLLAPSED_HEIGHT = 148;
 
 export function defaultPlayDockLayout() {
   if (typeof window === 'undefined') {

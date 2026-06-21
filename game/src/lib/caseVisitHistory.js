@@ -8,8 +8,8 @@ function mergeAt(existing, candidate) {
   return new Date(candidate).getTime() > new Date(existing).getTime() ? candidate : existing;
 }
 
-/** Progress visits + chat-only cases, enriched with catalog titles. */
-export function getCaseVisitHistory({ limit = 30 } = {}) {
+/** Progress visits + chat-only cases + optional server sessions, enriched with catalog titles. */
+export function getCaseVisitHistory({ limit = 30, serverRows = null } = {}) {
   const byId = new Map();
 
   for (const row of getProgressHistory({ limit: limit * 2 })) {
@@ -37,6 +37,32 @@ export function getCaseVisitHistory({ limit = 30 } = {}) {
     });
   }
 
+  if (Array.isArray(serverRows)) {
+    for (const row of serverRows) {
+      const id = normalizeCaseProgressId(row.caseId);
+      const prev = byId.get(id);
+      if (!prev) {
+        byId.set(id, {
+          caseId: id,
+          at: row.at,
+          completed: Boolean(row.completed),
+          plays: row.plays || 0,
+          chatMessages: row.chatMessages || 0,
+          source: row.source || 'server',
+          title: row.title || '',
+        });
+        continue;
+      }
+      byId.set(id, {
+        ...prev,
+        at: mergeAt(prev.at, row.at),
+        plays: Math.max(prev.plays || 0, row.plays || 0),
+        chatMessages: Math.max(prev.chatMessages || 0, row.chatMessages || 0),
+        completed: prev.completed || row.completed,
+      });
+    }
+  }
+
   return [...byId.values()]
     .filter((row) => row.at)
     .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime())
@@ -50,6 +76,28 @@ export function getCaseVisitHistory({ limit = 30 } = {}) {
         category: gameCase?.category || '',
       };
     });
+}
+
+/** Unique cases touched (play, chat, or server) — not limited to timeline list length. */
+export function countCasesCovered({ serverRows = null } = {}) {
+  const byId = new Map();
+
+  for (const row of getProgressHistory({ limit: 10_000 })) {
+    byId.set(row.caseId, true);
+  }
+
+  for (const row of listCasesWithChatActivity({ limit: 10_000 })) {
+    byId.set(normalizeCaseProgressId(row.caseId), true);
+  }
+
+  if (Array.isArray(serverRows)) {
+    for (const row of serverRows) {
+      const id = normalizeCaseProgressId(row.caseId);
+      if (id) byId.set(id, true);
+    }
+  }
+
+  return byId.size;
 }
 
 export function formatCaseVisitWhen(iso) {

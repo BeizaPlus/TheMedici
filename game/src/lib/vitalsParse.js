@@ -2,6 +2,20 @@
 
 import { clampVitals } from './vitalsLimits.js';
 
+/** CCS-style multiline vitals block (matches build-prepared-cases formatVitalsText). */
+export function formatVitalsText(vitals = {}) {
+  const parts = [];
+  if (vitals.hr != null) parts.push(`Pulse: ${vitals.hr} beats/min`);
+  if (vitals.sbp != null && vitals.dbp != null) {
+    parts.push(`Blood pressure ${vitals.sbp}/${vitals.dbp} mmHg`);
+  }
+  if (vitals.rr != null) parts.push(`Respiratory rate: ${vitals.rr} /minute`);
+  if (vitals.temp != null) parts.push(`Temperature: ${vitals.temp} C`);
+  if (vitals.spo2 != null) parts.push(`SpO2: ${vitals.spo2}%`);
+  if (vitals.lactate != null) parts.push(`Lactate: ${vitals.lactate} mmol/L`);
+  return parts.join('\n');
+}
+
 /** One-line vitals summary for attending prompts and briefing. */
 export function formatVitalsLine(vitals = {}) {
   const temp =

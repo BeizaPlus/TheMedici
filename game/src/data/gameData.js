@@ -2,7 +2,8 @@ import gameConfig from './gameConfig.json' with { type: 'json' };
 import { getPreparedCase } from '../lib/caseNarrative.js';
 import { hpiContainsSpoilers } from '../lib/practiceHpi.js';
 import { resolvePatientSceneKey } from '../lib/patientSceneKey.js';
-import { inferPatientSex } from '../lib/patientSex.js';
+import { sanitizeScenePlateSrc } from '../lib/scenePlatePath.js';
+import { resolvePatientSex } from '../lib/patientSex.js';
 import { resolvePlaybook } from './resolvePlaybook.js';
 import { getUberDefinition, enrichUberGameCase } from '../lib/uberCases.js';
 
@@ -36,16 +37,21 @@ export function getLayout() {
 
 export function getPatientScene(sexOrKey = 'male') {
   const key = sexOrKey;
+  let scene;
   if (key === 'pedFemale' && gameConfig.patientScenePedFemale) {
-    return gameConfig.patientScenePedFemale;
+    scene = gameConfig.patientScenePedFemale;
+  } else if (key === 'pedMale' && gameConfig.patientScenePedMale) {
+    scene = gameConfig.patientScenePedMale;
+  } else if ((key === 'female' || key === 'pedFemale') && gameConfig.patientSceneFemale) {
+    scene = gameConfig.patientSceneFemale;
+  } else {
+    scene = gameConfig.patientScene;
   }
-  if (key === 'pedMale' && gameConfig.patientScenePedMale) {
-    return gameConfig.patientScenePedMale;
-  }
-  if ((key === 'female' || key === 'pedFemale') && gameConfig.patientSceneFemale) {
-    return gameConfig.patientSceneFemale;
-  }
-  return gameConfig.patientScene;
+  if (!scene?.src) return scene;
+  return {
+    ...scene,
+    src: sanitizeScenePlateSrc(scene.src, { sceneKey: key }),
+  };
 }
 
 export function getPatientSceneForCase(caseData) {
@@ -122,14 +128,14 @@ export function toGameCase(ccsCase, catalog) {
   const interventions =
     prepared?.interventions?.length > 0 ? prepared.interventions : pb.interventions;
   const chiefComplaint = introText || `${ccsCase.title} — CCS Case ${ccsCase.caseNumber}`;
-  const sexHint = prepared?.patientSex && prepared.patientSex !== 'unknown'
-    ? prepared.patientSex
-    : inferPatientSex({
-        chief_complaint: introText,
-        historyText,
-        hpi_narrative: hpiNarrative,
-        title: ccsCase.title,
-      });
+  const sexHint = resolvePatientSex({
+    chief_complaint: introText,
+    historyText,
+    hpi_narrative: hpiNarrative,
+    title: ccsCase.title,
+    patientSex: prepared?.patientSex,
+    preparedIntro: introText,
+  });
 
   const sceneCasePayload = {
     id: ccsCase.id,
@@ -140,12 +146,15 @@ export function toGameCase(ccsCase, catalog) {
     hpi_narrative: hpiNarrative || undefined,
     title: ccsCase.title,
     patientSex: sexHint,
+    uberFaceSlug: prepared?.uberFaceSlug || undefined,
+    portraitNote: prepared?.portraitNote || undefined,
   };
 
   const base = {
     id: ccsCase.id,
     ccsNumber: ccsCase.caseNumber,
-    title: ccsCase.title.toUpperCase(),
+    title: (prepared?.title || ccsCase.title).toUpperCase(),
+    presentationKey: prepared?.presentationKey || ccsCase.title,
     category: ccsCase.category,
     diagnosis: prepared?.diagnosis || pb.diagnosis || null,
     case_summary: prepared?.case_summary?.trim() || undefined,
@@ -164,11 +173,14 @@ export function toGameCase(ccsCase, catalog) {
     zoneColors: gameConfig.zoneColors,
     patientScene: getPatientSceneForCase(sceneCasePayload),
     patientSex: sexHint,
+    uberFaceSlug: prepared?.uberFaceSlug || undefined,
+    portraitNote: prepared?.portraitNote || undefined,
     preparedMeta: prepared
       ? {
           vitalsSource: prepared.vitalsSource,
           hasSourceIntro: prepared.hasSourceIntro,
           flowTrack: prepared.flowTrack,
+          presentationKey: prepared.presentationKey,
         }
       : null,
     completionThreshold: gameConfig.branding?.completionThreshold ?? 99,

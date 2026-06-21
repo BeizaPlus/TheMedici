@@ -409,6 +409,11 @@
   z-index: 200;
   min-width: 300px;
   max-width: min(360px, calc(100vw - 24px));
+  max-height: min(70vh, 520px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color);
   white-space: normal;
   background: rgba(12, 14, 20, 0.98);
   border: 1px solid rgba(255, 255, 255, 0.12);

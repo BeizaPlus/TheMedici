@@ -20,8 +20,9 @@ export default function OrderResultSceneCard({
   hideClose = false,
   teachMeMode = false,
   onPinTeachingMoment = null,
+  orderLog = null,
 }) {
-  const { result, loading } = useOrderResult(intervention, { caseData, caseFlow, teachMeMode });
+  const { result, loading } = useOrderResult(intervention, { caseData, caseFlow, teachMeMode, orderLog });
   const [whyOpen, setWhyOpen] = useState(false);
   const [storyPinned, setStoryPinned] = useState(() =>
     readOrderStoryPinned(caseData?.id, neutralStackOrderName(intervention?.label || '')),

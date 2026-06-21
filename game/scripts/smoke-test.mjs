@@ -225,6 +225,50 @@ async function main() {
   );
   ok(!/— completed\.$/.test(sleComplement.text.trim()), "orderResult: complement not bare completed stub");
 
+  const {
+    buildOrderLog,
+    computeTrajectoryState,
+    getTrajectorySpec,
+    resolveTrajectoryOrderResult,
+  } = await import(url.pathToFileURL(path.join(root, "src/lib/clinicalTrajectory/index.js")).href);
+  const hyperSpec = getTrajectorySpec("135");
+  const ivById = {
+    ecg: { id: "ecg", label: "ECG" },
+    "bmp-k": { id: "bmp-k", label: "BMP (K+)" },
+    "iv-calcium-gluconate": { id: "iv-calcium-gluconate", label: "IV Calcium gluconate" },
+    "iv-insulin-glucose-albuterol-bicarb": {
+      id: "iv-insulin-glucose-albuterol-bicarb",
+      label: "IV Insulin + Glucose / Albuterol / Bicarb",
+    },
+  };
+  const delayedLog = buildOrderLog({
+    placementOrder: ["ecg", "bmp-k"],
+    extraOrders: [],
+    interventionById: ivById,
+  });
+  const delayedState = computeTrajectoryState(hyperSpec, delayedLog);
+  ok(delayedState.k >= 6.9, "trajectory hyperK: delay worsens K+");
+  ok(delayedState.ecgStage >= 3, "trajectory hyperK: delay worsens ECG");
+
+  const treatedLog = buildOrderLog({
+    placementOrder: [
+      "ecg",
+      "iv-calcium-gluconate",
+      "iv-insulin-glucose-albuterol-bicarb",
+      "bmp-k",
+    ],
+    extraOrders: [{ name: "ECG" }],
+    interventionById: ivById,
+  });
+  const treatedState = computeTrajectoryState(hyperSpec, treatedLog);
+  ok(treatedState.k < 6.5, `trajectory hyperK: K+ ${treatedState.k} after treatment`);
+  ok(treatedState.ecgStage < 4, "trajectory hyperK: ECG improves after treatment");
+  const repeatEcg = resolveTrajectoryOrderResult(
+    { id: "extra-ecg", label: "ECG", trajectoryOccurrence: 1 },
+    { caseId: "135", orderLog: treatedLog, teachMeMode: false },
+  );
+  ok(repeatEcg && !/asystole/i.test(repeatEcg.text), "trajectory hyperK: treated repeat ECG not asystole");
+
   const { resolveSingleLabResult } = await import(
     url.pathToFileURL(path.join(root, "src/lib/labPanelValues.js")).href
   );

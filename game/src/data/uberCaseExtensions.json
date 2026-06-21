@@ -116,6 +116,72 @@
           "segment": "marathon-collapse"
         }
       ]
+    },
+    "U12": {
+      "precallVideo": "/assets/video/u12-tom-precall/u12-tom-truck-brake-5s-kling26.mp4",
+      "precallPoster": "/assets/video/u12-tom-precall/u12-tom-truck-cab-still.png",
+      "precallTitle": "I-80 shoulder — Tom slumps on the brake (~25 h before ED)",
+      "precallDurationSec": 6,
+      "chiefComplaint": "Tremulous, diaphoretic, tachycardic — reports ants crawling on his skin",
+      "presentationTitle": "Alcohol Withdrawal — Tom Hayes",
+      "practiceHpi": "Pre-hospital (~25 hours before the ED)\n\nTom Hayes is a 45-year-old long-haul truck driver. On a midnight freight run on I-80 he had been drinking in the cab — drowsy but running hot, sympathetic surge, rig at top highway speed. Something tiny on the road ahead made him stomp the brake; the semi swung hard and stopped on the shoulder. He woke at the scene and refused transport.\n\nEmergency department\n\nHis partner brought him in. He is tremulous, diaphoretic, and tachycardic. He keeps brushing at his arms and neck — says ants are crawling on his skin and on the curtains. He has not had a drink since yesterday morning. He downplays how much he usually drinks. No witnessed head trauma today.",
+      "hpiNarrative": "PRE-HOSPITAL (~25 hours before ED): Tom Hayes, 45-year-old long-haul truck driver, was running a midnight freight leg on I-80. Whiskey bottles rolled in the sleeper cab; he had been drinking through a layover after losing his driving contract. Around hour 18 of the haul he slumped forward on the wheel, foot slamming the brake pedal — the rig lurched to a complete stop on the highway shoulder. A state trooper found him unresponsive at the cab, key still in ignition, cab reeking of alcohol. EMS cleared him at scene after he woke briefly and refused transport.\n\nNEXT MORNING: Partner found him at home shaking, sweating, and \"seeing bugs on the wall.\" Last confirmed drink was a pint of whiskey about 36 hours before ED arrival. He had a seizure and hospital admission for delirium tremens two years ago when he tried to quit. Drinks roughly a liter of whiskey daily when using. Today: anxious, tremulous, tachycardic, oriented but reporting visual hallucinations of insects on the curtain. Job loss last month preceded this relapse. No head trauma, no fever, no focal weakness. He wants help quitting but fears \"the shakes getting worse like last time.\"\n\nMechanism: GABA downregulation after chronic ethanol → autonomic hyperactivity 24–72 h after last drink; prior DT lowers seizure threshold.\n\nTreatment threads (Uber U12): CIWA benzos (195), DT/seizure risk (035), sedative overlap (109), safety after relapse (172). Thiamine before glucose; folate/B6/multivitamin; ethanol level; addiction and psych consult; DT monitoring.",
+      "clinicalTip": "Truck-driver pre-call → day-2 withdrawal. Prior DT history — CIWA-driven benzos, thiamine before glucose, ICU threshold, addiction/psych consult, safety assessment.",
+      "vitals": {
+        "sbp": 156,
+        "dbp": 94,
+        "hr": 118,
+        "rr": 22,
+        "temp": 37.4,
+        "spo2": 97
+      },
+      "additionalInterventions": [
+        {
+          "id": "ciwa-ar-scoring",
+          "label": "CIWA-Ar scoring",
+          "correct_zone": "zone-arm",
+          "why": "Composite U12 — symptom-triggered benzodiazepines per CIWA for moderate withdrawal with prior DT.",
+          "guideline": "First Aid",
+          "teachingChannel": "workup",
+          "segment": "alcohol-withdrawal-anchor"
+        },
+        {
+          "id": "monitor-delirium-tremens",
+          "label": "Monitor for delirium tremens",
+          "correct_zone": "zone-monitor",
+          "why": "Visual hallucinations and prior DT — track fever, agitation, autonomic surge for progression.",
+          "guideline": "First Aid",
+          "teachingChannel": "workup",
+          "segment": "dt-seizure-risk"
+        },
+        {
+          "id": "consult-addiction-medicine",
+          "label": "Consult, addiction medicine / substance abuse",
+          "correct_zone": "zone-icu",
+          "why": "Detox linkage, relapse prevention, and inpatient rehab after medical stabilization.",
+          "guideline": "First Aid",
+          "teachingChannel": "consult",
+          "segment": "alcohol-withdrawal-anchor"
+        },
+        {
+          "id": "consult-psychiatry",
+          "label": "Consult, psychiatry",
+          "correct_zone": "zone-icu",
+          "why": "Job-loss relapse with despondency — psychiatry for mood, safety, and disposition.",
+          "guideline": "First Aid",
+          "teachingChannel": "consult",
+          "segment": "safety-relapse"
+        },
+        {
+          "id": "safety-assessment-relapse",
+          "label": "Safety assessment after intentional relapse",
+          "correct_zone": "zone-icu",
+          "why": "Document suicide risk, supports, and safety plan after deliberate drinking post job loss.",
+          "guideline": "First Aid",
+          "teachingChannel": "consult",
+          "segment": "safety-relapse"
+        }
+      ]
     }
   }
 }

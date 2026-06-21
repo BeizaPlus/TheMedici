@@ -75,7 +75,10 @@ const SYNONYM_GROUPS = [
     'ultrasound renal',
     'us renal',
     'renal ultrasound',
+    'renal us',
+    'usg renal',
     'kidney ultrasound',
+    'kidney us',
   ],
   ['ultrasound', 'us scan', 'usg'],
   ['insulin', 'insulin regular', 'regular insulin', 'insulin drip', 'lispro', 'glargine', 'nph'],
@@ -163,6 +166,7 @@ const LABEL_ABBREV_RULES = [
   { abbrev: 'ct', re: /\bct\b/i },
   { abbrev: 'mri', re: /\bmri\b/i },
   { abbrev: 'us', re: /\bultrasound\b|\bus\b/i },
+  { abbrev: 'usg', re: /\bultrasound\b|\busg\b/i },
   { abbrev: 'ffp', re: /fresh frozen plasma/i },
   { abbrev: 'prbc', re: /packed red|prbc/i },
   { abbrev: 'ns', re: /normal saline|0\.9% saline/i },
@@ -203,6 +207,10 @@ const QUERY_TOKEN_EXPANSIONS = {
   ringer: ['ringer', 'ringers'],
   lactated: ['lactated'],
   ringers: ['ringer', 'ringers'],
+  usg: ['usg', 'ultrasound', 'us'],
+  us: ['us', 'ultrasound', 'usg'],
+  renal: ['renal', 'kidney'],
+  kidney: ['kidney', 'renal'],
 };
 
 function queryTokensMatchAlias(query, alias) {
@@ -285,18 +293,44 @@ export function stackAliasList(stack) {
   return [...aliases].filter(Boolean);
 }
 
+/** USG = ultrasound shorthand — matches any ultrasound order label. */
+const USG_QUERY_TERMS = new Set(['usg', 'us scan']);
+
+function isUltrasoundAlias(alias) {
+  const n = normCommandText(alias);
+  return n.includes('ultrasound') || /\becho\b/.test(n);
+}
+
 /** Higher score = better match. Returns -1 when no match. */
 export function scoreOrderAliasMatch(query, alias, allAliases = []) {
   const t = normCommandText(query);
   const a = normCommandText(alias);
   if (!t || !a) return -1;
 
-  if (t === a) return 100000 + a.length;
+  if (t === a) {
+    let score = 100000 + a.length;
+    if (
+      USG_QUERY_TERMS.has(t) &&
+      allAliases.some((x) => {
+        const xn = normCommandText(x);
+        return isUltrasoundAlias(x) && (xn.includes('renal') || xn.includes('kidney'));
+      })
+    ) {
+      score += 4000;
+    }
+    return score;
+  }
   if (a.startsWith(t)) return 50000 + a.length;
   if (t.startsWith(a) && a.length >= 4) return 45000 + a.length;
 
   if (queryTokensMatchAlias(query, alias)) return 40000 + a.length;
   if (ringsOverlap(query, alias)) return 35000 + a.length;
+
+  if (USG_QUERY_TERMS.has(t) && isUltrasoundAlias(alias)) {
+    let score = 36000 + a.length;
+    if (a.includes('renal') || a.includes('kidney')) score += 4000;
+    return score;
+  }
 
   const tCompact = compactText(query);
   const aCompact = compactText(alias);

@@ -273,6 +273,16 @@ if (!fs.existsSync(USER_DATA_DIR)) {
 }
 app.use('/user-data', express.static(USER_DATA_DIR));
 
+const FIRST_AID_PDF_PATH = path.join(GAME_ROOT, 'reference', 'first-aid', 'First_Aid_USMLE_Step_1_2025_35th_Edition.pdf');
+app.get('/reference/first-aid/pdf', (_req, res) => {
+  if (!fs.existsSync(FIRST_AID_PDF_PATH)) {
+    return res.status(404).json({ error: 'First Aid PDF not installed locally' });
+  }
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', 'inline; filename="First_Aid_Step1_2025.pdf"');
+  return res.sendFile(FIRST_AID_PDF_PATH);
+});
+
 const CCS_SCREENSHOTS_DIR = process.env.CCS_SCREENSHOTS_DIR || path.join(GAME_ROOT, 'ccs_screenshots');
 
 const CHATTERBOX_ROOT = process.env.CHATTERBOX_ROOT || path.join(process.env.USERPROFILE || process.env.HOME || '', 'chatterbox');

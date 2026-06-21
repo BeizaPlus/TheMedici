@@ -51,7 +51,7 @@ import {
   getGameScenePoseLockPromptBlock,
   getGameScenePromptBlock,
   getHospitalWardrobePrompt,
-} from '../src/lib/sceneCameraLock.js';
+} from '../src/lib/sceneCameraLock.server.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');

@@ -10,7 +10,7 @@ import { resolvePortraitBriefForApi } from './casePortraitBrief.js';
 import { getBuiltInPatientSrc, isValidSceneSrc, portraitCacheBust } from './patientImage.js';
 import { portraitCacheNeedsLayers, PORTRAIT_LAYERS_VERSION } from './portraitLayers.js';
 import { resolvePatientSceneKey } from './patientSceneKey.js';
-import { inferPatientSex } from './patientSex.js';
+import { resolvePatientSex } from './patientSex.js';
 import { STORAGE } from './storageKeys.js';
 import { apiUrl } from './apiBase.js';
 
@@ -100,7 +100,8 @@ export function clearSceneVariantUnit(sceneSourceSig, unit) {
 }
 
 export function buildSceneSourceSig(caseData, erSrc) {
-  return `${caseData.id}:${caseData.patientSex || 'unknown'}:${erSrc.slice(0, 96)}:${erSrc.length}`;
+  const sex = resolvePatientSex(caseData);
+  return `${caseData.id}:${sex}:${erSrc.slice(0, 96)}:${erSrc.length}`;
 }
 
 export async function fetchCasePortraitStatus(caseId) {
@@ -144,7 +145,7 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
   const caseId = caseData?.id;
   if (!caseId) return null;
 
-  const expectedSex = inferPatientSex(caseData);
+  const expectedSex = resolvePatientSex(caseData);
   const expectedUber = caseData?.uberFaceSlug || resolvePatientUberRef(caseData)?.slug || null;
   const expectedSceneKey = resolvePatientSceneKey(caseData);
   const MIN_PORTRAIT_FRAME_VERSION = 3;
@@ -163,6 +164,8 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
     const status = await fetchCasePortraitStatus(caseId);
     if (status.exists && status.url) {
       if (status.patientSex && status.patientSex !== expectedSex) {
+        clearCaseRegenImage(caseId);
+      } else if (!status.patientSex) {
         clearCaseRegenImage(caseId);
       } else if (expectedUber && status.uberRefSlug !== expectedUber) {
         clearCaseRegenImage(caseId);
@@ -189,7 +192,21 @@ export async function ensureCasePortrait(caseData, { refresh = false } = {}) {
     if (localLooksAdultPlate) {
       clearCaseRegenImage(caseId);
     } else if (isValidSceneSrc(local) && local.includes('/case-portraits/')) {
-      return local;
+      const statusForLocal = await fetchCasePortraitStatus(caseId);
+      if (
+        statusForLocal.exists
+        && statusForLocal.patientSex
+        && statusForLocal.patientSex === expectedSex
+        && !(expectedUber && statusForLocal.uberRefSlug !== expectedUber)
+        && !(
+          statusForLocal.portraitFrameVersion != null
+          && statusForLocal.portraitFrameVersion < MIN_PORTRAIT_FRAME_VERSION
+        )
+        && !portraitCacheNeedsLayers(statusForLocal)
+      ) {
+        return storePortraitUrl(statusForLocal);
+      }
+      clearCaseRegenImage(caseId);
     }
     if (isValidSceneSrc(local)) {
       clearCaseRegenImage(caseId);

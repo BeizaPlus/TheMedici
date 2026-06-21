@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   creativityBand,
   readCaseSimulationCreativity,
   readGlobalSimulationCreativity,
+  SIMULATION_CREATIVITY_CHANGED,
   writeCaseSimulationCreativity,
   writeGlobalSimulationCreativity,
 } from '../lib/simulationCreativity.js';
 import { clearAllCaseChatSessions, clearCaseChatSession } from '../lib/caseChat.js';
+
+function readEffective(caseId, showCaseOverride) {
+  const globalDefault = readGlobalSimulationCreativity();
+  const caseOverride = caseId != null ? readCaseSimulationCreativity(caseId) : null;
+  if (showCaseOverride && caseOverride != null) {
+    return { globalDefault, caseOverride, effective: caseOverride, useGlobal: false };
+  }
+  return { globalDefault, caseOverride, effective: globalDefault, useGlobal: showCaseOverride };
+}
 
 export default function SimulationCreativityControl({
   caseId = null,
@@ -14,15 +24,24 @@ export default function SimulationCreativityControl({
   compact = false,
   onCreativityChange,
 }) {
-  const [tick, setTick] = useState(0);
-  const globalDefault = readGlobalSimulationCreativity();
-  const caseOverride =
-    caseId != null ? readCaseSimulationCreativity(caseId) : null;
-  const effective = caseOverride ?? globalDefault;
+  const [snapshot, setSnapshot] = useState(() => readEffective(caseId, showCaseOverride));
+
+  const refresh = () => setSnapshot(readEffective(caseId, showCaseOverride));
+
+  useEffect(() => {
+    refresh();
+  }, [caseId, showCaseOverride]);
+
+  useEffect(() => {
+    const onChange = () => refresh();
+    window.addEventListener(SIMULATION_CREATIVITY_CHANGED, onChange);
+    return () => window.removeEventListener(SIMULATION_CREATIVITY_CHANGED, onChange);
+  }, [caseId, showCaseOverride]);
+
+  const { globalDefault, caseOverride, effective, useGlobal } = snapshot;
   const { label: bandLabel } = creativityBand(effective);
-  const useGlobal = showCaseOverride && caseOverride == null;
-  const sliderKey = `${caseId ?? 'global'}-${tick}`;
-  const persist = (next, { perCase = showCaseOverride } = {}) => {
+
+  const persist = (next, { perCase = false } = {}) => {
     if (perCase && caseId != null) {
       writeCaseSimulationCreativity(caseId, next);
       clearCaseChatSession(caseId);
@@ -30,7 +49,7 @@ export default function SimulationCreativityControl({
       writeGlobalSimulationCreativity(next);
       clearAllCaseChatSessions();
     }
-    setTick((t) => t + 1);
+    refresh();
     onCreativityChange?.(next);
   };
 
@@ -38,8 +57,15 @@ export default function SimulationCreativityControl({
     if (caseId == null) return;
     writeCaseSimulationCreativity(caseId, null);
     clearCaseChatSession(caseId);
-    setTick((t) => t + 1);
+    refresh();
     onCreativityChange?.(readGlobalSimulationCreativity());
+  };
+
+  const setAsGlobalDefault = () => {
+    writeGlobalSimulationCreativity(effective);
+    clearAllCaseChatSessions();
+    refresh();
+    onCreativityChange?.(effective);
   };
 
   return (
@@ -55,13 +81,12 @@ export default function SimulationCreativityControl({
         <span className="sim-creativity-value">{effective}</span>
       </div>
       <input
-        key={sliderKey}
         type="range"
         className="sim-creativity-slider"
         min={0}
         max={100}
         step={5}
-        value={showCaseOverride && !useGlobal ? (caseOverride ?? effective) : effective}
+        value={effective}
         onChange={(e) => persist(Number(e.target.value), { perCase: showCaseOverride })}
         aria-valuetext={`${bandLabel} — ${effective}`}
       />
@@ -74,12 +99,20 @@ export default function SimulationCreativityControl({
       </p>
       {showCaseOverride && caseId != null && (
         <div className="sim-creativity-case-actions">
-          {caseOverride != null ? (
-            <button type="button" className="sim-creativity-reset" onClick={resetToGlobal}>
-              Use global ({globalDefault})
-            </button>
+          {useGlobal ? (
+            <span className="sim-creativity-using-global">
+              Using global default ({globalDefault}) — drag to set a value for this case only
+            </span>
           ) : (
-            <span className="sim-creativity-using-global">Using global setting ({globalDefault})</span>
+            <>
+              <span className="sim-creativity-saved">Saved for this case ({caseOverride})</span>
+              <button type="button" className="sim-creativity-reset" onClick={resetToGlobal}>
+                Use global ({globalDefault})
+              </button>
+              <button type="button" className="sim-creativity-reset" onClick={setAsGlobalDefault}>
+                Set as global default
+              </button>
+            </>
           )}
         </div>
       )}

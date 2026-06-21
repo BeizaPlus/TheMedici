@@ -58,6 +58,7 @@ import { getBriefingHpi } from '../lib/caseBriefing.js';
 import AudioVolumeControl from './AudioVolumeControl.jsx';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
 import { clinicalTextStyle, readClinicalTextPrefs, writeClinicalTextPrefs } from '../lib/clinicalTextPrefs.js';
+import { TEXT_PREFS_CHANGED } from '../lib/textPrefsSync.js';
 import { applyMonitorVolume, prefetchMonitorAudio, startIcuMonitor, subscribeAudioPrefs, unlockAmbience } from '../lib/audio.js';
 import { patchAudioPrefs, readAudioPrefs } from '../lib/audioPrefs.js';
 import { practiceCaseHeadline } from '../lib/differentialHeadline.js';
@@ -205,6 +206,16 @@ export default function DifferentialPractice({ onBack }) {
   }, []);
 
   useEffect(() => subscribeAudioPrefs(setAudioPrefs), []);
+
+  useEffect(() => {
+    const onPrefs = (e) => {
+      if (e.detail?.kind === 'clinical' && e.detail.prefs) {
+        setTextPrefs(e.detail.prefs);
+      }
+    };
+    window.addEventListener(TEXT_PREFS_CHANGED, onPrefs);
+    return () => window.removeEventListener(TEXT_PREFS_CHANGED, onPrefs);
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
@@ -1126,6 +1137,7 @@ export default function DifferentialPractice({ onBack }) {
 
   const renderStudyPanel = () => (
     <DifferentialStudyPanel
+      key={`study-${entry.caseId}`}
       caseId={entry.caseId}
       clinicalStyle={clinicalStyle}
       caseStats={caseStats}
@@ -1163,7 +1175,8 @@ export default function DifferentialPractice({ onBack }) {
   return (
     <>
     <div
-      className={`diff-practice${revealed ? ' diff-practice--revealed' : ''}${stacker.enabled ? ' diff-practice--stacker' : ''}`}
+      className={`diff-practice${revealed ? ' diff-practice--revealed' : ''}${stacker.enabled ? ' diff-practice--stacker' : ''}${isMobilePractice ? ' diff-practice--mobile' : ''}`}
+      style={clinicalStyle}
       ref={voiceFocusRef}
       tabIndex={-1}
       aria-label="Differential practice — Space starts microphone"
@@ -1617,6 +1630,12 @@ export default function DifferentialPractice({ onBack }) {
               <div className="diff-study-sheet-handle" />
               <div className="diff-study-sheet-header">
                 <span className="diff-study-sheet-title">CCS Case {entry.caseId}</span>
+                <ClinicalFontControls
+                  compact
+                  showLabel={false}
+                  prefs={textPrefs}
+                  onChange={setTextPrefs}
+                />
                 <button
                   type="button"
                   className="diff-study-sheet-close"
@@ -1766,7 +1785,7 @@ export default function DifferentialPractice({ onBack }) {
                   type="button"
                   className="diff-icon-btn"
                   onClick={() => {
-                    const next = { ...textPrefs, fontScale: Math.min(1.5, Number((textPrefs.fontScale + 0.08).toFixed(2))) };
+                    const next = { ...textPrefs, fontScale: Math.min(2, Number((textPrefs.fontScale + 0.08).toFixed(2))) };
                     writeClinicalTextPrefs(next);
                     setTextPrefs(next);
                   }}

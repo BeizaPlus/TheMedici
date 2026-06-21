@@ -5,6 +5,7 @@
 | | |
 |---|---|
 | **Workspace** | `C:\Users\steve\MeWorld\game` |
+| **API key location** | **`docs/WHERE_IS_THE_API.md`** — `master.env` + `game/.env` (Steve already provisioned) |
 | **This file** | `.cursor/RULES_IMAGE_GENERATION.md` (canonical — start here) |
 | **Platform** | **Magnific MCP** (`user-Magnific`) — primary for all stills |
 | **Magnific app** | https://www.magnific.com/app — login, credits, **Connect** agent/MCP |
@@ -21,14 +22,52 @@
 ```
 MeWorld Schoonmaker image generation:
 Read game/.cursor/RULES_IMAGE_GENERATION.md
+API: Steve's MAGNIFIC_API_KEY is already in ~/.cursor/master.env (and/or game/.env) — do NOT ask Steve to re-enter. Sanity: npm run verify:magnific
+REST replay (same as prior agents): server/magnificImage.js via npm run gen:* scripts below — not MCP OAuth
 RESEARCH FIRST: dev/scene-elements/SCENE_ELEMENT_REGISTRY.json — manufacturer URL or approved asset before any prop/device gen
-Platform: Magnific MCP (images_generate) — Fal expired, no OpenAI image edits
-Upload locals: creations_request_upload → node scripts/magnific-upload-put.mjs → creations_finalize_upload
+Platform: Magnific REST for batch scripts · Magnific MCP (images_generate) for one-off portrait A/B in Cursor
+Upload locals (MCP only): creations_request_upload → node scripts/magnific-upload-put.mjs → creations_finalize_upload
 Refs: scene/crop lock PNG + identity map (never text-only); pediatric = NO anatomy overlay ref
-Generate: imagen-nano-banana-2 · 16:9 · resolution 2k · count 2 for A/B
+Generate: imagen-nano-banana-2 · 16:9 · resolution 2k · count 2 for A/B (MCP)
 Post: creations_wait → download → fitToBaseplate (1536×864) → .case-portraits/case_NNN.png
 Camera lock: crown→toes, monitor upper-right, IV upper-left — never face-only crop
 ```
+
+---
+
+## REST API replay — other agents (key already on machine)
+
+Steve has already provisioned Magnific REST. **Do not ask for a new key** unless `npm run verify:magnific` fails.
+
+| Step | Command |
+|------|---------|
+| **Confirm key loads** | `cd C:\Users\steve\MeWorld\game` then `npm run verify:magnific` |
+| **Env load order** | `server/loadMasterEnv.js` → `C:\Users\steve\.cursor\master.env`, then `game/.env` |
+| **Shared client** | `server/magnificImage.js` — `generateImageEditWithMagnific()` (inline base64 refs; Magnific cannot fetch localhost) |
+
+**Same API runs any agent can repeat** (outputs land in `*-pending/` until Steve approves):
+
+| Pipeline | npm / node | Pending output | Handoff doc |
+|----------|------------|----------------|-------------|
+| Uber identity maps | `npm run gen:uber-maps` | `dev/uber-portrait-refs/character-maps-pending/` | `dev/uber-portrait-refs/README.md` |
+| Uber game scenes | `npm run gen:uber-scenes` | `dev/uber-portrait-refs/game-scenes-pending/` | `dev/uber-portrait-refs/GAME_SCENE_CAMERA_LOCK.md` |
+| Ship approved uber scenes | `npm run ship:uber-scenes` | `public/assets/patient/uber/*-GAME-SCENE.png` | `dev/uber-portrait-refs/WIRED_UBER_CASES.md` |
+| Pediatric character maps | `npm run gen:ped-maps` | `dev/pediatric-portrait-refs/character-maps-pending/` | `dev/pediatric-portrait-refs/README.md` |
+| Case story plates | `npm run gen:case-story -- 051` | `.case-story-cache/` | `dev/case-story/README.md` |
+| TV presenter stills | `npm run process:tv-presentations` | `dev/tv-presentations/processed/beiza-tv/pending-approval/` | `dev/tv-presentations/AGENT_HANDOFF_TV_PRESENTATION.md` |
+| TV broadcast degrade | `npm run tv:degrade` | same folder `*-tvfeed.png` | same |
+
+**Flags (pass through to node scripts):**
+
+```powershell
+node scripts/generate-uber-game-scenes.mjs --only=vitiligo-wink-diastema
+node scripts/generate-uber-game-scenes.mjs --regen-lock
+node scripts/generate-ped-character-maps.mjs --only=skeptical
+node scripts/generate-case-story-images.mjs 051 --force
+node scripts/process-tv-presentations.mjs --force --degrade
+```
+
+**MCP vs REST:** Cursor MCP OAuth (`user-Magnific`) is for interactive portrait A/B in chat. **Batch scripts above always use REST** — the same path Steve already ran successfully. If REST 403, plan may lack Business API — fall back to MCP for that beat only.
 
 ---
 
@@ -91,6 +130,19 @@ MeWorld Play patient scenes are **training plates**, not stock hospital photogra
 - Adult manikin body with a child face (pediatric cases)
 - Colored anatomy zone overlays on shipped play assets (green/red paint is Photoshop offline only)
 - Fal.ai, OpenAI `gpt-image-1` edits, Adobe cloud generative, localhost URLs as Magnific refs
+
+### Banned cached portraits (Steve 2026-06-19)
+
+**Do not serve or reuse** IDs in `server/bannedCasePortraits.js` — see `dev/case-portraits/BANNED.md`.
+
+```powershell
+node scripts/purge-banned-case-portraits.mjs
+node scripts/audit-portrait-assets.mjs
+```
+
+`readPortraitCache()` treats banned IDs as **missing** → forces regen only after Steve removes the ban and wires uber GAME-SCENE / CHARACTER-MAP.
+
+**`*_mask.png`:** compositing alpha (base vs IV pixel diff) — not clinical O₂ mask. Purge with base/iv when banning.
 
 ---
 
@@ -169,8 +221,9 @@ Do not re-invent monitor/IV/bed hardware if registry has `status: "approved"`.
 
 | Context | Path |
 |---------|------|
-| **Cursor agents (preferred)** | Magnific MCP OAuth — no API key in chat |
-| **Play Regenerate button** | `MAGNIFIC_API_KEY` in `MeWorld/.env` → `server/magnificImage.js` REST (inline base64 refs) |
+| **Batch scripts (uber, ped, TV, case story)** | **REST replay** — `npm run gen:*` · key from `master.env` / `game/.env` · see **§ REST API replay** above |
+| **Cursor agents (one-off portrait A/B)** | Magnific MCP OAuth — no API key in chat |
+| **Play Regenerate button** | `server/magnificImage.js` REST (same key as batch scripts) |
 | **No REST key** | Agent MCP batch → write `.case-portraits/case_NNN.png` + `.json` |
 
 ---

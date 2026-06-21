@@ -59,6 +59,19 @@
 
 .lab-order-picker {
   width: min(520px, 100%);
+  min-height: min(560px, 88vh);
+}
+
+.lab-order-picker .physical-exam-picker-list-wrap {
+  flex: 1 1 auto;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.lab-order-picker .physical-exam-picker-list {
+  min-height: 340px;
 }
 
 .lab-order-picker-search-wrap {
@@ -86,6 +99,11 @@
   padding: 8px 18px 12px;
   font-size: 0.82rem;
   color: rgba(240, 238, 232, 0.55);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 12px;
+  pointer-events: none;
 }
 
 .physical-exam-picker-close {
