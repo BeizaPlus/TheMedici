@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Unique-face reference bank for Uber Cases (U01–U13). Source photos in dev/uber-portrait-refs/sources/. After MCP restart: Magnific character-map pass per slug → public/assets/patient/uber/.",
+  "description": "Unique-face reference bank for Uber Cases (U01–U15). Source photos in dev/uber-portrait-refs/sources/. After MCP restart: Magnific character-map pass per slug → public/assets/patient/uber/.",
   "assetBase": "/assets/patient/uber",
   "devSourceDir": "dev/uber-portrait-refs/sources",
   "sceneAspect": "16:9",
@@ -24,6 +24,8 @@
     "U11": "copper-afro-headwrap-africa",
     "U12": "craniofacial-asymmetry-goatee",
     "U13": "nevus-speckled-laugh",
+    "U14": "craniofacial-asymmetry-goatee",
+    "U15": "copper-afro-headwrap-africa",
     "176": "subway-afro-dandy",
     "086": "adpkd-long-nose-elder",
     "153": "ngavu-yellow-party",
@@ -127,7 +129,8 @@
       "sex": "male",
       "uberCases": [
         "U06",
-        "U12"
+        "U12",
+        "U14"
       ],
       "identityPrompt": "Match likeness: older man with pronounced facial asymmetry, bulbous nose, white goatee, fair skin. Respectful clinical portrait on ED stretcher — same asymmetry and grooming.",
       "gameSceneShippedFrom": "craniofacial-asymmetry-goatee-GAME-SCENE-alt2-approved-pending-ship.png",
@@ -143,7 +146,8 @@
       "sex": "female",
       "uberCases": [
         "U01",
-        "U11"
+        "U11",
+        "U15"
       ],
       "identityPrompt": "Match likeness: Black woman, voluminous copper-red afro, patterned green headwrap, gold Africa-map pendant, freckles, nose ring. Hospital gown; preserve afro silhouette and jewelry unless brief omits.",
       "gameSceneFile": "copper-afro-headwrap-africa-GAME-SCENE.png",

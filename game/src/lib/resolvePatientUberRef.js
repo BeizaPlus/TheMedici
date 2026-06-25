@@ -55,6 +55,7 @@ export function resolvePatientUberRef(caseContext = {}) {
   if (uberCase && pedSlug) {
     const pedMap = resolvePediatricCharacterMap(pedSlug);
     if (pedMap) {
+      const mapFile = pedMap.file;
       return {
         slug: pedSlug,
         caseId,
@@ -62,12 +63,15 @@ export function resolvePatientUberRef(caseContext = {}) {
         sex: 'female',
         sourceFile: pedMap.refImage || null,
         devSourcePath: pedMap.refImage || null,
-        file: pedMap.file,
+        file: mapFile,
         publicUrl: pedMap.publicUrl,
-        gameSceneFile: null,
-        gameSceneStatus: null,
+        gameSceneFile: mapFile,
+        gameSceneStatus: 'approved',
         gameSceneAlt: null,
-        gameSceneUrl: null,
+        gameSceneUrl: pedMap.publicUrl,
+        gamePlaySceneFile: mapFile,
+        gamePlaySceneStatus: 'approved',
+        gamePlaySceneUrl: pedMap.publicUrl,
         identityPrompt: pedMap.use || 'School-age pediatric patient — worried affect',
         status: pedMap.status,
         isPediatricTemperament: true,

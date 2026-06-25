@@ -86,11 +86,12 @@ async function dismissOnboarding(page) {
 async function getPreviewImageSrc(page) {
   return page.evaluate(() => {
     const img =
+      document.querySelector('img.briefing-scene-img') ||
+      document.querySelector('img.patient-scene-img') ||
       document.querySelector('.case-detail-scene-img img') ||
-      document.querySelector('.briefing-with-scene img') ||
       document.querySelector('.game-scene img') ||
-      document.querySelector('.patient-scene img') ||
-      document.querySelector('img[src*="patient"]');
+      document.querySelector('img[src*="patient/uber"]') ||
+      document.querySelector('img[src*="patient/pediatric"]');
     return img?.getAttribute('src') || null;
   });
 }

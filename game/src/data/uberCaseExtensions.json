@@ -182,6 +182,112 @@
           "segment": "safety-relapse"
         }
       ]
+    },
+    "U14": {
+      "chiefComplaint": "Shortness of breath for 3 days — worse lying flat, dry cough, low-grade fever",
+      "practiceHpi": "Harold Mensah is a 68-year-old man with hypertension and a prior heart attack years ago who presents with 3 days of worsening shortness of breath. He needs three pillows to sleep and wakes gasping for air. He has a dry cough and felt warm yesterday. He denies chest pain. His legs have been more swollen than usual.\n\nOn arrival he speaks in short phrases, is diaphoretic, and looks tired. You hear crackles at both lung bases. The triage nurse asks: \"Heart failure, pneumonia, or pulmonary edema?\" — they all sound the same at the bedside.",
+      "hpiNarrative": "TEACHING FRAME — three look-alikes, one bedside presentation:\n\nAll three can present with dyspnea, tachypnea, hypoxia, and bibasilar crackles. The fork is mechanism + tempo + labs/imaging — not the first impression.\n\n| Feature | Cardiomyopathy / HFrEF (#023) | Pneumonia (#048) | Cardiogenic pulmonary edema (#053) |\n| --- | --- | --- | --- |\n| Tempo | Days–weeks (orthopnea, PND, weight gain) | Hours–days (fever, pleurisy) | Hours (acute decompensation) |\n| Fever | Usually absent | Common | May be low-grade only |\n| Exam | S3, JVD, peripheral edema | Egophony, bronchial breath sounds, focal consolidation | Crackles ± S3; may be flash pulmonary edema |\n| CXR | Cardiomegaly, cephalization, Kerley B, pleural effusions | Lobar or patchy infiltrate, air bronchograms | Bat-wing perihilar edema, cephalization |\n| Labs | BNP/NT-proBNP elevated | Procalcitonin ↑, leukocytosis, cultures | BNP very high in acute edema |\n| Echo | ↓ EF (systolic dysfunction / ischemic cardiomyopathy) | Normal EF unless septic cardiomyopathy | ↓ EF or diastolic failure; confirms cardiogenic fluid |\n| Treatment fork | Diuresis + afterload reduction + treat ischemia | Antibiotics + O2; fluids only if septic shock | O2, diuresis, nitrates if BP allows; treat trigger |\n\nPulmonary edema is often the acute manifestation of cardiomyopathy/CHF — pneumonia is infection in the alveolar airspace. Pneumonia can also trigger flash pulmonary edema in a failing heart.\n\nFirst Aid: HF p.316 (S3, JVD, rales); lobar pneumonia p.702; DKA unrelated — use BNP + CXR + echo before anchoring.\n\nWorkup in this Uber: CXR, BNP, CBC, BMP, blood cultures if febrile, ABG if hypoxic, ECG (ischemia?), echo, pulse ox, O2, IV access. Segment #048 adds fever/infiltrate antibiotics; #023/#053 add diuresis and cardiology consult.",
+      "clinicalTip": "Crackles are not a diagnosis — fork cardiomyopathy (chronic pump failure), pneumonia (infection + infiltrate), and pulmonary edema (hydrostatic fluid) with CXR, BNP, fever curve, and echo.",
+      "vitals": {
+        "sbp": 98,
+        "dbp": 62,
+        "hr": 112,
+        "rr": 24,
+        "temp": 37.6,
+        "spo2": 91,
+        "lactate": 2.7
+      },
+      "additionalInterventions": [
+        {
+          "id": "b-type-natriuretic-peptide-bnp-or-brain-",
+          "label": "B-type natriuretic peptide (BNP)",
+          "correct_zone": "zone-blood",
+          "why": "U14 dyspnea fork — BNP supports cardiogenic pulmonary edema / HFrEF over isolated pneumonia when elevated with compatible CXR.",
+          "guideline": "First Aid p.316",
+          "teachingChannel": "workup",
+          "segment": "pulmonary-edema"
+        },
+        {
+          "id": "procalcitonin-serum",
+          "label": "Procalcitonin, serum",
+          "correct_zone": "zone-blood",
+          "why": "Fever + infiltrate thread — supports bacterial pneumonia when elevated; low value nudges toward pure cardiogenic dyspnea.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup",
+          "segment": "pneumonia"
+        },
+        {
+          "id": "echocardiogram",
+          "label": "Echocardiogram",
+          "correct_zone": "zone-monitor",
+          "why": "Confirms systolic dysfunction (cardiomyopathy/HFrEF) vs preserved EF; distinguishes hydrostatic edema from primary parenchymal infection.",
+          "guideline": "First Aid p.316",
+          "teachingChannel": "workup",
+          "segment": "cardiomyopathy"
+        },
+        {
+          "id": "blood-cultures",
+          "label": "Blood cultures",
+          "correct_zone": "zone-blood",
+          "why": "Febrile dyspnea — capture bacteremia if pneumonia is driving the presentation before antibiotics.",
+          "guideline": "First Aid p.702",
+          "teachingChannel": "workup",
+          "segment": "pneumonia"
+        }
+      ]
+    },
+    "U15": {
+      "chiefComplaint": "Segment A: abdominal pain, vomiting, fruity breath (DKA). Segment B: confusion, extreme thirst, no abdominal pain (HHS).",
+      "practiceHpi": "SESSION A — Ruth Okonkwo, 22, no known diabetes: two days of abdominal pain, vomiting, and deep rapid breathing. Fruity odor on her breath. Glucose checked in triage is very high.\n\nSESSION B — Harold Okonkwo, 72, type 2 on metformin: two weeks of drinking and urinating constantly, found confused at home. No vomiting. No abdominal pain. Very dry skin.\n\nYour job: name the syndrome from labs, not from \"diabetes emergency\" alone. HONK is the old UK term for HHS — same disease, not a third option.",
+      "hpiNarrative": "HONK = HHS. There are two hyperglycemic crises, plus overlap (~1/3 mixed DKA-HHS):\n\n| | DKA (#004) | HHS / HONK (#197) |\n| --- | --- | --- |\n| Typical DM | Type 1 (can be T2) | Type 2 |\n| Onset | Hours–2 days | Days–weeks |\n| Glucose | ≥200 mg/dL (often 250–600) | Often >600 mg/dL |\n| Ketones | β-OHB ≥3 mmol/L or urine ≥2+ | Minimal (<3 mmol/L) |\n| pH / HCO3 | <7.3 / <18 | ≥7.3 / ≥15 |\n| Osmolality | Moderate ↑ | >320 mOsm/kg |\n| Exam | Kussmaul, abdominal pain, fruity breath | Profound dehydration, AMS, seizures — little GI pain |\n| Killers | Acidosis, K shifts with insulin | Hypovolemia, slow osmole correction |\n| Fluids | Aggressive NS | Aggressive NS first — main treatment |\n| Insulin | 0.1 U/kg/h after fluids/K | Lower rate 0.05–0.1 U/kg/h; avoid rapid glucose/osmole drop |\n\nSources: ADA/Diabetologia 2024 hyperglycemic crises consensus; Endotext NBK279052; First Aid pp.350–351, 712.\n\nDKA triad: hyperglycemia + ketosis + anion-gap acidosis. HHS tetrad: severe hyperglycemia + hyperosmolality + no significant ketosis + no significant acidosis.",
+      "clinicalTip": "HONK is HHS — not separate. Fork on ketones, pH, osmolality, and tempo; fluids-first in HHS; never chase glucose down too fast.",
+      "vitals": {
+        "sbp": 104,
+        "dbp": 68,
+        "hr": 108,
+        "rr": 22,
+        "temp": 37.1,
+        "spo2": 97,
+        "lactate": 1.9
+      },
+      "additionalInterventions": [
+        {
+          "id": "24h-urine-volume-serum-urine-osmolality",
+          "label": "Serum osmolality",
+          "correct_zone": "zone-blood",
+          "why": "HHS diagnosis requires hyperosmolality (>320 mOsm/kg) — distinguishes from DKA when ketones are minimal.",
+          "guideline": "First Aid p.351",
+          "teachingChannel": "workup",
+          "segment": "hhs-thread"
+        },
+        {
+          "id": "arterial-blood-gases",
+          "label": "Arterial blood gases",
+          "correct_zone": "zone-blood",
+          "why": "DKA shows metabolic acidosis (pH <7.3); HHS preserves pH ≥7.3 — same hyperglycemia, different acid-base fork.",
+          "guideline": "First Aid p.350",
+          "teachingChannel": "workup",
+          "segment": "dka-thread"
+        },
+        {
+          "id": "urinalysis",
+          "label": "Urinalysis",
+          "correct_zone": "zone-blood",
+          "why": "Ketonuria ≥2+ supports DKA; mild or absent ketones with extreme glucosuria fits HHS.",
+          "guideline": "First Aid p.350",
+          "teachingChannel": "workup",
+          "segment": "dka-thread"
+        },
+        {
+          "id": "normal-saline-lactated-ringer-0-45-salin",
+          "label": "Normal saline / Lactated Ringer",
+          "correct_zone": "zone-iv-bag",
+          "why": "Both crises need volume — HHS often needs larger initial fluid deficit correction before insulin.",
+          "guideline": "Endotext",
+          "teachingChannel": "workup",
+          "segment": "hhs-thread"
+        }
+      ]
     }
   }
 }

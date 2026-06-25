@@ -927,27 +927,124 @@ button {
   opacity: 0.85;
 }
 
-/* Uber pre-call cinematic (e.g. U12 truck brake) */
+/* Uber pre-call cinematic (e.g. U12 truck brake) — full viewport */
 .case-precall-intro {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 5;
+  width: 100vw;
+  height: 100vh;
+  z-index: 35;
   overflow: hidden;
   background: #000;
   pointer-events: auto;
 }
 
+.case-precall-intro-stack {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.briefing--precall-active .briefing-case-hero,
+.briefing--precall-active .briefing-case-cycler,
+.briefing--precall-active .briefing-ui-case-picker,
+.briefing-scene-wrap--precall-hover .briefing-case-hero,
+.briefing-scene-wrap--precall-hover .briefing-case-cycler {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.briefing-scene-wrap--precall-replay-zone {
+  cursor: pointer;
+}
+
+.case-precall-intro--hover-replay {
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.28s ease, visibility 0s linear 0.28s;
+}
+
+.case-precall-intro--hover-replay.is-active.is-media-ready {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.28s ease, visibility 0s linear 0s;
+}
+
+.case-precall-hover-hint {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 184, 75, 0.45);
+  background: rgba(8, 8, 12, 0.78);
+  pointer-events: none;
+}
+
+.case-precall-hover-hint-kicker {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold, #e8b84b);
+}
+
+.case-precall-hover-hint-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.case-precall-intro-caption,
+.case-precall-intro-skip,
+.case-precall-intro-play {
+  pointer-events: auto;
+}
+
+.case-precall-intro-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  pointer-events: auto;
+}
+
+
 .case-precall-intro-video,
 .case-precall-intro-poster {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center center;
 }
 
+.case-precall-intro-video {
+  opacity: 0;
+  z-index: 0;
+  transition: opacity 0.22s ease;
+}
+
+.case-precall-intro-video.is-ready {
+  opacity: 1;
+}
+
 .case-precall-intro-poster {
-  position: absolute;
-  inset: 0;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 0.22s ease, visibility 0s linear 0.22s;
+}
+
+.case-precall-intro-poster.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .case-precall-intro-caption {
@@ -1381,6 +1478,31 @@ button {
   opacity: 0.62;
   text-decoration: line-through;
   text-decoration-color: rgba(255, 255, 255, 0.28);
+}
+
+.briefing-picker-row.is-precall-arming {
+  position: relative;
+  overflow: hidden;
+}
+
+.briefing-picker-row.is-precall-arming::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: var(--gold, #e8b84b);
+  animation: briefing-precall-arm 2s linear forwards;
+}
+
+@keyframes briefing-precall-arm {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 .briefing-picker-num {
@@ -2353,6 +2475,11 @@ button {
   width: 100%;
   max-height: none;
   animation: none;
+  min-height: 0;
+}
+
+.order-result-scene-card.order-result-tab-card .order-result-body {
+  cursor: pointer;
 }
 
 .order-results-lower-third {
@@ -7695,15 +7822,20 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 10px;
+  width: 34px;
+  min-height: 100%;
+  padding: 0;
   border: none;
   border-left: 1px solid var(--border);
   background: color-mix(in srgb, var(--panel) 88%, var(--accent, #c9a227));
   color: inherit;
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   cursor: pointer;
+}
+
+.case-thread-case-chat-btn .toolbar-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.88;
 }
 
 .case-landscape-chip-chat-btn:hover,
@@ -9096,7 +9228,7 @@ button {
 .case-chat-head-actions {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 6px;
   flex-shrink: 0;
   margin-left: 8px;
 }
