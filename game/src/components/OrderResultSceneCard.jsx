@@ -21,15 +21,24 @@ export default function OrderResultSceneCard({
   teachMeMode = false,
   onPinTeachingMoment = null,
   orderLog = null,
+  onResultStored = null,
 }) {
-  const { result, loading } = useOrderResult(intervention, { caseData, caseFlow, teachMeMode, orderLog });
+  const { result, loading } = useOrderResult(intervention, {
+    caseData,
+    caseFlow,
+    teachMeMode,
+    orderLog,
+    onResultStored,
+  });
   const [whyOpen, setWhyOpen] = useState(false);
+  const [bodyExpanded, setBodyExpanded] = useState(false);
   const [storyPinned, setStoryPinned] = useState(() =>
     readOrderStoryPinned(caseData?.id, neutralStackOrderName(intervention?.label || '')),
   );
 
   useEffect(() => {
     setWhyOpen(false);
+    setBodyExpanded(false);
     setStoryPinned(
       readOrderStoryPinned(caseData?.id, neutralStackOrderName(intervention?.label || '')),
     );
@@ -57,7 +66,7 @@ export default function OrderResultSceneCard({
 
   return (
     <div
-      className={`order-result-scene-card ${className}`.trim()}
+      className={`order-result-scene-card${bodyExpanded ? ' order-result-scene-card--body-expanded' : ''} ${className}`.trim()}
       role="region"
       aria-label={`Result for ${label}`}
       aria-busy={loading}
@@ -105,7 +114,13 @@ export default function OrderResultSceneCard({
           )}
         </div>
       </header>
-      <div className="order-result-body">
+      <div
+        className="order-result-body"
+        onDoubleClick={() => setBodyExpanded((v) => !v)}
+        title={bodyExpanded ? 'Double-click to collapse' : 'Double-click to expand full result'}
+        role="group"
+        aria-expanded={bodyExpanded}
+      >
         {renderAttendingMarkdown(result?.text || 'No result documented for this order.')}
         {teachMeMode && whyOpen && intervention.why ? (
           <div className="order-result-why-body">

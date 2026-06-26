@@ -1284,6 +1284,9 @@ Learner question: `;
       if (ctxBlock.length > 14000) {
         ctxBlock = `${ctxBlock.slice(0, 14000)}\n…[session context truncated for token limit]`;
       }
+      if (sessionContext.tutorSessionHint) {
+        ctxBlock += `\n\n[TUTOR SESSION NOTE]\n${sessionContext.tutorSessionHint}`;
+      }
       if (sessionContext.caseDiscussion) {
         ctxBlock += `\n\n[CASE DISCUSSION SUMMARY]\n${formatCaseDiscussionForChat(sessionContext.caseDiscussion)}`;
       }
@@ -1916,6 +1919,9 @@ app.post('/api/order-result', async (req, res) => {
     refresh = false,
     fallbackText = '',
     orderKindHint = 'order',
+    trajectoryOccurrence = 0,
+    orderLog = [],
+    priorLabResults = [],
   } = req.body || {};
   const cid = String(caseId ?? '').trim();
   const oid = String(orderId ?? '').trim();
@@ -1926,7 +1932,13 @@ app.post('/api/order-result', async (req, res) => {
 
   try {
     if (!refresh) {
-      const cached = await readOrderResultEntry(ORDER_RESULT_CACHE_DIR, cid, oid, teachMeMode);
+      const cached = await readOrderResultEntry(
+        ORDER_RESULT_CACHE_DIR,
+        cid,
+        oid,
+        teachMeMode,
+        trajectoryOccurrence,
+      );
       if (cached?.text && (cached.promptVersion || 1) >= ORDER_RESULT_PROMPT_VERSION) {
         return res.json({
           ok: true,
@@ -1954,6 +1966,9 @@ app.post('/api/order-result', async (req, res) => {
       caseContext: enrichedContext,
       teachMeMode: Boolean(teachMeMode),
       fallbackText,
+      orderLog: Array.isArray(orderLog) ? orderLog : [],
+      priorLabResults: Array.isArray(priorLabResults) ? priorLabResults : [],
+      trajectoryOccurrence: Number(trajectoryOccurrence) || 0,
     });
     const raw = await callChatCompletion(key, messages, { maxTokens: 520, temperature: 0.28 });
     let parsed;
@@ -1973,13 +1988,20 @@ app.post('/api/order-result', async (req, res) => {
       }
       throw parseErr;
     }
-    const saved = await writeOrderResultEntry(ORDER_RESULT_CACHE_DIR, cid, oid, teachMeMode, {
-      text: parsed.text,
-      kind: parsed.kind,
-      kindLabel: parsed.kindLabel,
-      promptVersion: ORDER_RESULT_PROMPT_VERSION,
-      orderLabel: label,
-    });
+    const saved = await writeOrderResultEntry(
+      ORDER_RESULT_CACHE_DIR,
+      cid,
+      oid,
+      teachMeMode,
+      {
+        text: parsed.text,
+        kind: parsed.kind,
+        kindLabel: parsed.kindLabel,
+        promptVersion: ORDER_RESULT_PROMPT_VERSION,
+        orderLabel: label,
+      },
+      trajectoryOccurrence,
+    );
     return res.json({
       ok: true,
       text: parsed.text,

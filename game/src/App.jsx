@@ -11,6 +11,8 @@ import {
   setLastMode,
   markCaseIncomplete,
   touchCaseVisited,
+  pickShuffleCaseId,
+  startShuffleQueue,
 } from './data/caseProgress.js';
 import { runEvalSuite } from './data/evalSuite.js';
 import { isStudioApp, playerAppHref } from './lib/appMode.js';
@@ -22,7 +24,8 @@ import {
   writeCasePlayCheckpoint,
   listCasePlayCheckpointIds,
 } from './lib/playSessionResume.js';
-import { endPlaySession } from './lib/caseUserLog.js';
+import { endPlaySession, fetchCaseVisitSummaries } from './lib/caseUserLog.js';
+import { syncServerCoveredCaseIds } from './lib/caseCoverage.js';
 import { rememberCaseBrowse } from './lib/caseBrowseContext.js';
 import { startIcuMonitor, endSessionMonitor, unlockAmbience, prefetchMonitorAudio } from './lib/audio.js';
 
@@ -51,6 +54,10 @@ export default function App() {
 
   useEffect(() => {
     prefetchMonitorAudio();
+  }, []);
+
+  useEffect(() => {
+    void fetchCaseVisitSummaries({ limit: 500 }).then(syncServerCoveredCaseIds);
   }, []);
 
   // ── ?case=126 deep-link: auto-launch; resume play if checkpoint matches ──
@@ -276,11 +283,18 @@ export default function App() {
         startCase(nextCase, 'shuffle');
         return;
       }
+      const freshId = startShuffleQueue(allIds);
+      const freshCase = freshId ? getCaseById(freshId) : null;
+      if (freshCase) {
+        startCase(freshCase, 'shuffle');
+        return;
+      }
     }
 
     if (playMode === 'random' || playMode === 'shuffle') {
-      const pool = getAllGameCases();
-      const pick = pool[Math.floor(Math.random() * pool.length)];
+      const pool = getAllGameCases().map((c) => c.id);
+      const pickId = pickShuffleCaseId(pool, { preferUnattempted: true });
+      const pick = pickId ? getCaseById(pickId) : null;
       if (pick) {
         startCase(pick, playMode);
         return;

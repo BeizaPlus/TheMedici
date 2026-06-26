@@ -246,7 +246,7 @@ export function classifyOrderKind(label) {
  */
 export function resolveOrderResult(
   intervention,
-  { caseData, caseFlow, teachMeMode = false, cleanCase = null, orderLog = null } = {},
+  { caseData, caseFlow, teachMeMode = false, cleanCase = null, orderLog = null, liveAttendantLabs = true } = {},
 ) {
   if (!intervention?.label) return null;
 
@@ -298,8 +298,10 @@ export function resolveOrderResult(
   const phys = resolvePhysicalExamResult(label, exam);
   if (phys) return { ...meta, kind: 'exam', kindLabel: 'Exam finding', text: phys };
 
-  const lab = labResultForLabel(label, ctx, teachMeMode);
-  if (lab) return { ...meta, kind: 'lab', kindLabel: 'Lab result', text: lab };
+  if (!liveAttendantLabs) {
+    const lab = labResultForLabel(label, ctx, teachMeMode);
+    if (lab) return { ...meta, kind: 'lab', kindLabel: 'Lab result', text: lab };
+  }
 
   const imaging = imagingResultForLabel(label, ctx, teachMeMode);
   if (imaging) return { ...meta, kind: 'imaging', kindLabel: 'Imaging result', text: imaging };

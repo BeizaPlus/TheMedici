@@ -1,0 +1,117 @@
+{
+  "id": 193,
+  "topic": "Mood Instability and Chest Pain",
+  "title": "Mood Instability and Chest Pain",
+  "diagnosis": "Bipolar disorder — depressive phase with prior manic episode (antidepressant trap risk)",
+  "confidence": "uword-psych-transform",
+  "source": "U-Word Psychiatry v02 concepts (Immersa rewrite) — anchor for Uber U10",
+  "patient_sex": "male",
+  "patient_name_default": "Jordan Reyes",
+  "correct_orders": [
+    "PHQ-9 / safety assessment (suicide screen)",
+    "TSH / BMP / tox screen / urine drug screen",
+    "Mood stabilizer (lithium / valproate)",
+    "Avoid antidepressant monotherapy in bipolar",
+    "ECG + chest pain rule-out (panic vs cardiac)",
+    "Lithium level / renal / thyroid monitoring plan",
+    "Psychiatry referral / disposition by risk"
+  ],
+  "should_avoid": [
+    "SSRI or SNRI alone without mood stabilizer",
+    "Discharge with passive SI without safety plan"
+  ],
+  "rationale": {
+    "PHQ-9 / safety assessment (suicide screen)": "Quantify depression severity and document passive death wishes — mandatory before disposition in young adult with mood crash.",
+    "TSH / BMP / tox screen / urine drug screen": "Rule out hyperthyroidism, stimulant use, and metabolic mimics before anchoring on primary mood disorder.",
+    "Mood stabilizer (lithium / valproate)": "Family history of bipolar and prior manic behavior ( sleepless spending spree ) — mood stabilizer is backbone therapy, not antidepressant alone.",
+    "Avoid antidepressant monotherapy in bipolar": "Classic bipolar trap: antidepressant without stabilizer can precipitate mania or rapid cycling — teach mechanism before prescribing.",
+    "ECG + chest pain rule-out (panic vs cardiac)": "Last week's ED visit for chest tightness may reflect panic physiology — still obtain ECG and risk-stratify; panic disorder often overlaps mood disorders.",
+    "Lithium level / renal / thyroid monitoring plan": "If lithium chosen, plan levels 0.6–1.0 mEq/L, baseline renal function, and TSH — teaching beat for long-term bipolar care.",
+    "Psychiatry referral / disposition by risk": "College-age patient with passive SI needs outpatient psychiatry or higher level of care based on risk — document plan and supports.",
+    "SSRI or SNRI alone without mood stabilizer": "Dangerous in suspected bipolar — can unmask mania.",
+    "Discharge with passive SI without safety plan": "Passive death wishes require documented safety plan, means restriction, and follow-up within days."
+  },
+  "hpi": "Jordan Reyes is a 22-year-old college student brought by his roommate for worsening low mood after a dramatic week-long \"high.\" Three weeks ago Jordan stopped sleeping, felt \"wired and brilliant,\" opened two credit cards, and bought a motorcycle he cannot afford — then crashed into exhaustion, guilt, and tearfulness. He now sleeps fourteen hours daily, skips classes, and tells his roommate he \"wouldn't mind not waking up\" but denies a specific plan. Last week he went to the ED for chest tightness and palpitations; workup was unrevealing and he was told it might be stress. Mother has bipolar disorder treated with lithium. Jordan was started on sertraline by campus health two weeks ago during the low phase — he wonders if it made the earlier \"high\" worse. No alcohol binge, no illicit drugs, no psychotic symptoms.",
+  "hpi_narrative": "Jordan Reyes is a 22-year-old college student brought by his roommate for worsening low mood after a dramatic week-long \"high.\" Three weeks ago Jordan stopped sleeping, felt \"wired and brilliant,\" opened two credit cards, and bought a motorcycle he cannot afford — then crashed into exhaustion, guilt, and tearfulness. He now sleeps fourteen hours daily, skips classes, and tells his roommate he \"wouldn't mind not waking up\" but denies a specific plan. Last week he went to the ED for chest tightness and palpitations; workup was unrevealing and he was told it might be stress. Mother has bipolar disorder treated with lithium. Jordan was started on sertraline by campus health two weeks ago during the low phase — he wonders if it made the earlier \"high\" worse. No alcohol binge, no illicit drugs, no psychotic symptoms.\n\nMechanism: episodic mood elevation with decreased sleep and risky spending fits manic/hypomanic physiology; subsequent crash with neurovegetative symptoms and passive SI fits depressive pole. Antidepressant monotherapy in undiagnosed bipolar can worsen cycling — mood stabilizer first when bipolar is suspected.\n\nWorkup: safety screen, TSH/BMP/tox, ECG if chest symptoms recur. Treatment: mood stabilizer (lithium or valproate), psychotherapy, structured follow-up; avoid SSRI alone; address panic-type chest symptoms with CBT/breathing retraining after mood stabilization.",
+  "physical_exam": [
+    ["General", "Thin young man, psychomotor slowing, flat affect, poor eye contact when discussing debt"],
+    ["Cardiovascular", "Regular rhythm, no murmur — mild tachycardia when describing chest episode"],
+    ["Chest", "Non-tender, clear to auscultation — prior chest pain likely non-cardiac at rest today"],
+    ["Neuro / Psych", "Alert, oriented, linear thought process, no hallucinations; passive death wishes without plan; denies homicidal ideation"]
+  ],
+  "vitals": {
+    "hr": 92,
+    "spo2": 99,
+    "bp": "118/72",
+    "rr": 16,
+    "temp": 36.8
+  },
+  "vitals_text": "Pulse: 92 beats/min\nBlood pressure, systolic: 118 mm Hg\nBlood pressure, diastolic: 72 mm Hg\nRespiratory rate: 16 /minute\nTemperature: 36.8 C (98.2 F)\nSpO2: 99%",
+  "patient_voice": {
+    "chief_complaint": "I can't get out of this hole. My chest freaked me out last week and now I just feel empty.",
+    "history": "I had this crazy week where I didn't sleep and bought stuff I can't pay for. Now I can barely move. Campus health put me on an antidepressant. My mom has bipolar — I'm scared I'm like her.",
+    "pain": "My chest was tight last week — like I couldn't breathe — but today it's mostly this heavy sadness."
+  },
+  "ccs_category": "Psychiatry & Social",
+  "chief_complaint": "Depressive crash after sleepless spending spree, passive death wishes, recent chest tightness",
+  "case_summary": "College-age man with manic-depressive pattern, family history bipolar, recent SSRI start, passive SI, and prior ED visit for chest pain — mood stabilizer-first workup, safety assessment, panic overlap teaching.",
+  "decoys": [],
+  "distractors": [],
+  "stacks": [
+    {
+      "label": "PHQ-9 / safety assessment (suicide screen)",
+      "type": "correctlyOrdered",
+      "finding": "Quantify depression and document passive SI before disposition.",
+      "aliases": ["PHQ-9", "Safety assessment", "Columbia SSRS"]
+    },
+    {
+      "label": "TSH / BMP / tox screen / urine drug screen",
+      "type": "correctlyOrdered",
+      "finding": "Rule out medical and substance causes of mood instability.",
+      "aliases": ["TSH", "BMP", "Tox screen", "UDS"]
+    },
+    {
+      "label": "Mood stabilizer (lithium / valproate)",
+      "type": "correctlyOrdered",
+      "finding": "First-line pharmacotherapy when bipolar spectrum suspected.",
+      "aliases": ["Lithium", "Valproate", "Depakote", "Mood stabilizer"]
+    },
+    {
+      "label": "Avoid antidepressant monotherapy in bipolar",
+      "type": "correctlyOrdered",
+      "finding": "Teach bipolar trap — SSRI/SNRI alone can precipitate mania.",
+      "aliases": ["No SSRI monotherapy", "Bipolar-first prescribing"]
+    },
+    {
+      "label": "ECG + chest pain rule-out (panic vs cardiac)",
+      "type": "correctlyOrdered",
+      "finding": "Evaluate recurrent chest symptoms — panic often masquerades as cardiac pain.",
+      "aliases": ["ECG", "Chest pain workup", "Troponin if indicated"]
+    },
+    {
+      "label": "Lithium level / renal / thyroid monitoring plan",
+      "type": "correctlyOrdered",
+      "finding": "If lithium started — levels, creatinine, TSH schedule.",
+      "aliases": ["Lithium level", "Renal function", "TSH monitoring"]
+    },
+    {
+      "label": "Psychiatry referral / disposition by risk",
+      "type": "correctlyOrdered",
+      "finding": "Outpatient psychiatry, PHP, or admission based on suicide risk.",
+      "aliases": ["Psychiatry consult", "Disposition", "Safety plan"]
+    }
+  ],
+  "order_sets": [
+    "PHQ-9 / safety assessment (suicide screen)",
+    "TSH / BMP / tox screen / urine drug screen",
+    "Mood stabilizer (lithium / valproate)",
+    "Avoid antidepressant monotherapy in bipolar",
+    "ECG + chest pain rule-out (panic vs cardiac)",
+    "Lithium level / renal / thyroid monitoring plan",
+    "Psychiatry referral / disposition by risk"
+  ],
+  "complete": true,
+  "extraction_method": "immersa_uword_transform",
+  "enrichment_sources": ["immersa"],
+  "extraction_notes": "Anchor case for Psych Uber U10 (Jordan Reyes). U-Word Psychiatry v02 mood/bipolar/panic/suicide themes transformed — no verbatim UWorld UI text."
+}

@@ -1,4 +1,4 @@
-export const ORDER_RESULT_PROMPT_VERSION = 2;
+export const ORDER_RESULT_PROMPT_VERSION = 5;
 
 function clip(text, max) {
   const s = String(text || '').trim();
@@ -37,6 +37,9 @@ export function buildOrderResultPrompt({
   caseContext = {},
   teachMeMode = false,
   fallbackText = '',
+  orderLog = [],
+  priorLabResults = [],
+  trajectoryOccurrence = 0,
 }) {
   const learningMode = caseContext.learningMode !== false;
   const cc =
@@ -85,6 +88,9 @@ ${teachMeMode
     : '- PRACTICE MODE: objective values and findings ONLY — no interpretation, no "consistent with", no diagnosis names.'}
 ${learningMode ? '- LEARNING MODE: never name the final diagnosis; describe findings only.' : ''}
 - Match patient demographics, vitals, HPI, and canonical exam rows when provided.
+- If HPI mentions CKD, ADPKD, ESRD, end-stage renal disease, elevated creatinine, oliguria with azotemia, or declining renal function, BMP must show severe azotemia (Cr typically ≥6 mg/dL, BUN ≥60 mg/dL), hyperkalemia (K+ ≥5.5 mEq/L), and low bicarbonate (≤18 mEq/L) when metabolic acidosis is in the presentation — NOT normal creatinine 0.8. Include hypoCa and hyperphosphatemia when Ca/Phos/Albumin are ordered.
+- If HPI mentions CKD, ADPKD, elevated creatinine, hematuria, or declining renal function, UA must reflect hematuria/proteinuria when ordered.
+- SESSION: You receive ordersPlacedSoFar and priorLabResults. If this is a REPEAT lab (occurrenceIndex > 0) or treatment was given since the last panel, values MUST change realistically (e.g. K+ down after kayexalate/insulin/fluids, Cr down after hydration/ACEi in AKI on CKD, lactate down after resuscitation). Never return an identical panel after active treatment.
 - No markdown, no bullet lists, no "as an AI".`;
 
   const user = {
@@ -105,6 +111,17 @@ ${learningMode ? '- LEARNING MODE: never name the final diagnosis; describe find
     teachMeMode: Boolean(teachMeMode),
     learningMode,
     fallbackHint: fallbackText ? clip(fallbackText, 500) : null,
+    occurrenceIndex: Number(trajectoryOccurrence) || 0,
+    ordersPlacedSoFar: Array.isArray(orderLog)
+      ? orderLog.slice(0, 24).map((o) => o?.label || o?.orderId || '')
+      : [],
+    priorLabResults: Array.isArray(priorLabResults)
+      ? priorLabResults.slice(-6).map((r) => ({
+          order: r.order || r.label || '',
+          occurrence: r.occurrence ?? 0,
+          resultExcerpt: clip(r.result || r.text || '', 400),
+        }))
+      : [],
   };
 
   return [

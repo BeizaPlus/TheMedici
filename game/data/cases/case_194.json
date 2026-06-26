@@ -1,0 +1,108 @@
+{
+  "id": 194,
+  "topic": "Paranoia and Auditory Hallucinations",
+  "title": "Paranoia and Auditory Hallucinations",
+  "diagnosis": "Primary psychotic disorder — rule out organic and toxic causes",
+  "confidence": "uword-psych-transform",
+  "source": "U-Word Psychiatry v02 concepts (Immersa rewrite) — anchor for Uber U11",
+  "patient_sex": "male",
+  "patient_name_default": "Darius Webb",
+  "correct_orders": [
+    "Collateral history / friend interview",
+    "CBC / BMP / TSH / LFTs / tox screen",
+    "CT/MRI brain ± LP (encephalitis rule-out)",
+    "Antipsychotic (risperidone / olanzapine)",
+    "Catatonia screen / benzodiazepine if catatonic",
+    "Psychiatry admission / 1:1 observation"
+  ],
+  "should_avoid": [
+    "Antidepressant monotherapy for primary psychosis",
+    "Discharge without safety assessment"
+  ],
+  "rationale": {
+    "Collateral history / friend interview": "Friend reports eight months of withdrawal and poor intake — essential when patient is guarded or internally preoccupied.",
+    "CBC / BMP / TSH / LFTs / tox screen": "Rule out metabolic, infectious, thyroid, and substance-induced psychosis before anchoring on schizophrenia spectrum.",
+    "CT/MRI brain ± LP (encephalitis rule-out)": "New psychosis with altered behavior warrants neuroimaging; autoimmune encephalitis and delirium belong on differential.",
+    "Antipsychotic (risperidone / olanzapine)": "Second-generation antipsychotic for acute positive symptoms — monitor metabolic effects.",
+    "Catatonia screen / benzodiazepine if catatonic": "Optional teaching beat — immobility, mutism, or waxy flexibility respond to lorazepam trial while arranging admission.",
+    "Psychiatry admission / 1:1 observation": "Command hallucinations and poor self-care warrant inpatient safety and structured workup.",
+    "Antidepressant monotherapy for primary psychosis": "Does not treat primary psychosis and may worsen agitation.",
+    "Discharge without safety assessment": "Command auditory hallucinations require documented safety and supervision plan."
+  },
+  "hpi": "Darius Webb is a 28-year-old man brought by a college friend who says Darius has \"barely eaten in days.\" For eight months Darius has withdrawn from friends, stopped going to work, and believes neighbors are monitoring him through his phone. He reports a deep male voice that \"tells me what they want me to do\" — he will not elaborate on commands but clenches his fists when asked. He denies substance use; friend confirms no known alcohol or drug binge but notes cannabis use years ago. No fever, headache, or seizure. Today he sits rigidly on the stretcher, answers in short phrases, and occasionally stares at the wall for minutes — friend wonders if he is \"frozen.\" No prior psychiatric hospitalizations documented; uncle had schizophrenia.",
+  "hpi_narrative": "Darius Webb is a 28-year-old man brought by a college friend who says Darius has \"barely eaten in days.\" For eight months Darius has withdrawn from friends, stopped going to work, and believes neighbors are monitoring him through his phone. He reports a deep male voice that \"tells me what they want me to do\" — he will not elaborate on commands but clenches his fists when asked. He denies substance use; friend confirms no known alcohol or drug binge but notes cannabis use years ago. No fever, headache, or seizure. Today he sits rigidly on the stretcher, answers in short phrases, and occasionally stares at the wall for minutes — friend wonders if he is \"frozen.\" No prior psychiatric hospitalizations documented; uncle had schizophrenia.\n\nMechanism: chronic positive symptoms (paranoia, auditory hallucinations) plus negative symptoms (withdrawal, avolition) suggest primary psychotic disorder — but organic causes (encephalitis, tox, metabolic) must be excluded in acute presentation with possible catatonic features.\n\nWorkup: labs, tox, neuroimaging, LP if encephalitis suspected. Treatment: antipsychotic, catatonia protocol if present, inpatient psychiatry with 1:1 observation until command hallucinations and nutrition risk are addressed.",
+  "physical_exam": [
+    ["General", "Thin man, poor grooming, guarded affect, minimal spontaneous speech"],
+    ["HEENT", "Normocephalic, no meningismus, mucous membranes dry — poor oral intake"],
+    ["Neuro", "No focal deficits; occasional catalepsy-like posturing when prompted to move"],
+    ["Psych", "Paranoid thought content, auditory hallucinations reported, no clear mood elevation; oriented to person and place"]
+  ],
+  "vitals": {
+    "hr": 88,
+    "spo2": 98,
+    "bp": "128/82",
+    "rr": 14,
+    "temp": 36.9
+  },
+  "vitals_text": "Pulse: 88 beats/min\nBlood pressure, systolic: 128 mm Hg\nBlood pressure, diastolic: 82 mm Hg\nRespiratory rate: 14 /minute\nTemperature: 36.9 C (98.4 F)\nSpO2: 98%",
+  "patient_voice": {
+    "chief_complaint": "They're listening. The voice won't leave me alone.",
+    "history": "I stopped going out. People watch me. There's a voice — I don't want to talk about what it says. My friend made me come because I haven't eaten.",
+    "pain": "It's not pain — it's pressure in my head and the voice."
+  },
+  "ccs_category": "Psychiatry & Social",
+  "chief_complaint": "Paranoia, command auditory hallucinations, social withdrawal, poor intake",
+  "case_summary": "Young man with eight-month psychotic decline, command hallucinations, possible catatonic features — organic rule-out, antipsychotic, psychiatric admission.",
+  "decoys": [],
+  "distractors": [],
+  "stacks": [
+    {
+      "label": "Collateral history / friend interview",
+      "type": "correctlyOrdered",
+      "finding": "Obtain timeline of withdrawal, intake, and functional decline.",
+      "aliases": ["Collateral", "Friend interview", "Third-party history"]
+    },
+    {
+      "label": "CBC / BMP / TSH / LFTs / tox screen",
+      "type": "correctlyOrdered",
+      "finding": "Rule out medical and substance-induced psychosis.",
+      "aliases": ["Labs", "Tox screen", "TSH", "BMP"]
+    },
+    {
+      "label": "CT/MRI brain ± LP (encephalitis rule-out)",
+      "type": "correctlyOrdered",
+      "finding": "Neuroimaging and LP when organic psychosis suspected.",
+      "aliases": ["MRI brain", "CT head", "Lumbar puncture"]
+    },
+    {
+      "label": "Antipsychotic (risperidone / olanzapine)",
+      "type": "correctlyOrdered",
+      "finding": "Second-generation antipsychotic for acute positive symptoms.",
+      "aliases": ["Risperidone", "Olanzapine", "Antipsychotic"]
+    },
+    {
+      "label": "Catatonia screen / benzodiazepine if catatonic",
+      "type": "correctlyOrdered",
+      "finding": "Busch-Francis or clinical screen; lorazepam challenge if catatonic.",
+      "aliases": ["Catatonia screen", "Lorazepam trial", "Benzo for catatonia"]
+    },
+    {
+      "label": "Psychiatry admission / 1:1 observation",
+      "type": "correctlyOrdered",
+      "finding": "Inpatient safety for command hallucinations and self-neglect.",
+      "aliases": ["Psych admission", "1:1 observation", "Inpatient psychiatry"]
+    }
+  ],
+  "order_sets": [
+    "Collateral history / friend interview",
+    "CBC / BMP / TSH / LFTs / tox screen",
+    "CT/MRI brain ± LP (encephalitis rule-out)",
+    "Antipsychotic (risperidone / olanzapine)",
+    "Catatonia screen / benzodiazepine if catatonic",
+    "Psychiatry admission / 1:1 observation"
+  ],
+  "complete": true,
+  "extraction_method": "immersa_uword_transform",
+  "enrichment_sources": ["immersa"],
+  "extraction_notes": "Anchor case for Psych Uber U11 (Darius Webb). U-Word Psychiatry v02 psychosis/organic/emergency themes transformed — no verbatim UWorld UI text."
+}

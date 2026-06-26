@@ -1,0 +1,118 @@
+{
+  "id": 195,
+  "topic": "Alcohol Withdrawal",
+  "title": "Alcohol Withdrawal",
+  "diagnosis": "Moderate alcohol withdrawal — prior delirium tremens history",
+  "confidence": "uword-psych-transform",
+  "source": "U-Word Psychiatry v02 concepts (Immersa rewrite) — anchor for Uber U12",
+  "patient_sex": "male",
+  "patient_name_default": "Tom Hayes",
+  "correct_orders": [
+    "CIWA-Ar protocol / symptom-triggered benzodiazepines",
+    "Thiamine / folate / multivitamin (Wernicke prevention)",
+    "BMP / magnesium / LFTs / ethanol level",
+    "Seizure precautions / ICU if severe DT risk",
+    "Monitor for delirium tremens",
+    "Addiction medicine / psychiatry consult",
+    "Safety assessment after intentional relapse"
+  ],
+  "should_avoid": [
+    "Fixed-dose benzo without CIWA monitoring",
+    "Discharge before withdrawal plateau without follow-up"
+  ],
+  "rationale": {
+    "CIWA-Ar protocol / symptom-triggered benzodiazepines": "Last drink 36 hours ago with tremor and diaphoresis — scale-guided lorazepam or diazepam reduces seizure and DT risk.",
+    "Thiamine / folate / multivitamin (Wernicke prevention)": "Give thiamine before glucose in at-risk drinkers — prevents Wernicke encephalopathy.",
+    "BMP / magnesium / LFTs / ethanol level": "Correct hypomagnesemia and assess hepatic injury; low ethanol level confirms withdrawal timing.",
+    "Seizure precautions / ICU if severe DT risk": "History of prior DT — lower threshold for ICU and continuous monitoring.",
+    "Monitor for delirium tremens": "Visual hallucinations today — track autonomic instability, agitation, and fever for DT progression.",
+    "Addiction medicine / psychiatry consult": "Link to detox, counseling, and relapse prevention after medical stabilization.",
+    "Safety assessment after intentional relapse": "Document intent, supports, and safety if withdrawal followed deliberate drinking.",
+    "Fixed-dose benzo without CIWA monitoring": "Under- or over-sedation risk — CIWA-triggered dosing is standard.",
+    "Discharge before withdrawal plateau without follow-up": "High recurrence of seizures/DT if sent home too early without linkage."
+  },
+  "hpi": "Tom Hayes is a 45-year-old man brought by his partner for shaking, sweating, and \"seeing bugs on the wall\" since yesterday. His last drink was a pint of whiskey about 36 hours ago — he has tried to quit before and had a seizure and hospital admission for delirium tremens two years ago. He drinks roughly a liter of whiskey daily when actively using. Today he is anxious, tremulous, tachycardic, and oriented but reports visual hallucinations of insects crawling on the curtain. Partner says he drank heavily after losing his job last month and became despondent. No head trauma, no fever, no focal weakness. He wants help quitting but fears \"the shakes getting worse like last time.\"",
+  "hpi_narrative": "Tom Hayes is a 45-year-old man brought by his partner for shaking, sweating, and \"seeing bugs on the wall\" since yesterday. His last drink was a pint of whiskey about 36 hours ago — he has tried to quit before and had a seizure and hospital admission for delirium tremens two years ago. He drinks roughly a liter of whiskey daily when actively using. Today he is anxious, tremulous, tachycardic, and oriented but reports visual hallucinations of insects crawling on the curtain. Partner says he drank heavily after losing his job last month and became despondent. No head trauma, no fever, no focal weakness. He wants help quitting but fears \"the shakes getting worse like last time.\"\n\nMechanism: GABA receptor downregulation after chronic ethanol exposure produces autonomic hyperactivity 24–72 hours after last drink — tremor, tachycardia, hallucinations; prior DT raises risk of seizures and progression to delirium tremens.\n\nTreatment: CIWA-driven benzodiazepines, thiamine/folate, correct electrolytes, seizure precautions, monitor for DT; addiction consult and safety planning after stabilization.",
+  "physical_exam": [
+    ["General", "Middle-aged man, diaphoretic, visible fine tremor of outstretched hands, anxious affect"],
+    ["HEENT", "Scleral icterus absent today; mild conjunctival injection"],
+    ["Cardiovascular", "Tachycardia, regular rhythm, no murmur"],
+    ["Abdomen", "Mild hepatomegaly, non-tender — chronic alcohol use stigmata"],
+    ["Neuro / Psych", "Alert, oriented ×3, no focal deficits; visual hallucinations reported; CIWA score elevated"]
+  ],
+  "vitals": {
+    "hr": 118,
+    "spo2": 97,
+    "bp": "156/94",
+    "rr": 22,
+    "temp": 37.4
+  },
+  "vitals_text": "Pulse: 118 beats/min\nBlood pressure, systolic: 156 mm Hg\nBlood pressure, diastolic: 94 mm Hg\nRespiratory rate: 22 /minute\nTemperature: 37.4 C (99.3 F)\nSpO2: 97%",
+  "patient_voice": {
+    "chief_complaint": "I'm shaking bad and I see things crawling — I need to get through this without seizing again.",
+    "history": "I stopped drinking yesterday. I've had DT before. I was drinking a lot after I lost my job. My partner brought me in because the hallucinations started.",
+    "pain": "My hands won't stop shaking — inside I feel like I'm coming apart."
+  },
+  "ccs_category": "Psychiatry & Social",
+  "chief_complaint": "Tremor, diaphoresis, visual hallucinations 36 hours after last drink — prior DT",
+  "case_summary": "Chronic heavy alcohol use with moderate withdrawal, prior DT — CIWA benzos, thiamine, seizure precautions, addiction consult.",
+  "decoys": [],
+  "distractors": [],
+  "stacks": [
+    {
+      "label": "CIWA-Ar protocol / symptom-triggered benzodiazepines",
+      "type": "correctlyOrdered",
+      "finding": "Scale-guided lorazepam or diazepam for withdrawal.",
+      "aliases": ["CIWA", "Lorazepam", "Diazepam", "Benzo taper"]
+    },
+    {
+      "label": "Thiamine / folate / multivitamin (Wernicke prevention)",
+      "type": "correctlyOrdered",
+      "finding": "Thiamine before glucose — prevent Wernicke.",
+      "aliases": ["Thiamine", "Banana bag", "Folate"]
+    },
+    {
+      "label": "BMP / magnesium / LFTs / ethanol level",
+      "type": "correctlyOrdered",
+      "finding": "Electrolytes, magnesium, hepatic panel, ethanol level.",
+      "aliases": ["BMP", "Magnesium", "LFTs", "Ethanol level"]
+    },
+    {
+      "label": "Seizure precautions / ICU if severe DT risk",
+      "type": "correctlyOrdered",
+      "finding": "Prior DT — ICU monitoring if high CIWA or instability.",
+      "aliases": ["Seizure precautions", "ICU", "Continuous monitoring"]
+    },
+    {
+      "label": "Monitor for delirium tremens",
+      "type": "correctlyOrdered",
+      "finding": "Track fever, agitation, autonomic surge, hallucinations.",
+      "aliases": ["DT monitoring", "Delirium tremens watch"]
+    },
+    {
+      "label": "Addiction medicine / psychiatry consult",
+      "type": "correctlyOrdered",
+      "finding": "Detox linkage and relapse prevention.",
+      "aliases": ["Addiction consult", "Psychiatry consult", "Counseling referral"]
+    },
+    {
+      "label": "Safety assessment after intentional relapse",
+      "type": "correctlyOrdered",
+      "finding": "Assess mood, suicide risk, and supports after job loss relapse.",
+      "aliases": ["Safety assessment", "Suicide screen", "Social work"]
+    }
+  ],
+  "order_sets": [
+    "CIWA-Ar protocol / symptom-triggered benzodiazepines",
+    "Thiamine / folate / multivitamin (Wernicke prevention)",
+    "BMP / magnesium / LFTs / ethanol level",
+    "Seizure precautions / ICU if severe DT risk",
+    "Monitor for delirium tremens",
+    "Addiction medicine / psychiatry consult",
+    "Safety assessment after intentional relapse"
+  ],
+  "complete": true,
+  "extraction_method": "immersa_uword_transform",
+  "enrichment_sources": ["immersa"],
+  "extraction_notes": "Anchor case for Psych Uber U12 (Tom Hayes). U-Word Psychiatry v02 alcohol withdrawal/DT/overdose overlap themes transformed — no verbatim UWorld UI text."
+}

@@ -20,6 +20,8 @@ export default function RealtimeMechanismPanel({
       orderLog={orderLog}
       trajectorySnapshots={trajectorySnapshots}
       embedded
+      studentView
+      compact
     />
   );
 }

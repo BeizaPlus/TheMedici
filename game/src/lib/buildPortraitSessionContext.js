@@ -19,6 +19,8 @@ export function buildPortraitSessionContext({
   pins = [],
   caseData = null,
   chatMessages = [],
+  liveOrderResults = null,
+  caseFlow = null,
 }) {
   const base = buildChatSessionContext({
     careUnit,
@@ -38,9 +40,20 @@ export function buildPortraitSessionContext({
   const orderResults = [];
   const rows = buildPlacedResultRows({ interventions, placed, pins, interventionById });
   for (const { iv } of rows) {
-    const result = resolveOrderResult(iv, { caseData, teachMeMode });
-    if (!result?.text) continue;
+    const occ = Number.isFinite(iv.trajectoryOccurrence) ? iv.trajectoryOccurrence : 0;
+    const storageKey = occ > 0 ? `${iv.id}::${occ}` : String(iv.id);
+    const live = liveOrderResults?.[storageKey];
+    const result =
+      live?.text?.trim()
+        ? {
+            kind: live.kind || 'order',
+            kindLabel: live.kindLabel || 'Result',
+            text: live.text,
+          }
+        : resolveOrderResult(iv, { caseData, caseFlow, teachMeMode });
+    if (!result?.text || result.pending) continue;
     orderResults.push({
+      orderId: iv.id,
       label: iv.label,
       kind: result.kind,
       kindLabel: result.kindLabel,
@@ -50,6 +63,10 @@ export function buildPortraitSessionContext({
 
   const physicalExamFindings = orderResults.filter((r) => r.kind === 'exam');
   const labResults = orderResults.filter((r) => r.kind === 'lab');
+  const imagingResults = orderResults.filter((r) => r.kind === 'imaging');
+  const procedureResults = orderResults.filter(
+    (r) => r.kind === 'procedure' || r.kind === 'counseling',
+  );
   const chatSnippet = (Array.isArray(chatMessages) ? chatMessages : [])
     .filter((m) => m?.content && (m.role === 'user' || m.role === 'assistant' || m.role === 'patient'))
     .slice(-20)
@@ -66,12 +83,20 @@ export function buildPortraitSessionContext({
     || (base.stacksPlaced && base.stacksPlaced.length > 0),
   );
 
+  const tutorSessionHint =
+    orderResults.length > 0
+      ? 'orderResults lists every stack and extra order placed this run with attendant result text (labs, imaging, exams). Coach from these values — do not invent results for orders not in orderResults.'
+      : null;
+
   return {
     ...base,
     orderResults,
     physicalExamFindings,
     labResults,
+    imagingResults,
+    procedureResults,
     chatMessages: chatSnippet,
     hasSessionData,
+    tutorSessionHint,
   };
 }

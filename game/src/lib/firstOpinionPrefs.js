@@ -1,4 +1,7 @@
-import { STORAGE } from './storageKeys.js';
+import {
+  patchActiveAttendingStyleDepth,
+  readActiveAttendingDepth,
+} from './attendingStylePrefs.js';
 
 /** First attending opinion length — interconnected teaching arc. */
 export const FIRST_OPINION_DEPTH_LEVELS = [
@@ -10,25 +13,14 @@ export const FIRST_OPINION_DEPTH_LEVELS = [
 
 const DEFAULT_DEPTH = 3;
 
+/** Active attending slot depth (A/B each store their own). */
 export function readFirstOpinionDepth() {
-  if (typeof localStorage === 'undefined') return DEFAULT_DEPTH;
-  try {
-    const raw = localStorage.getItem(STORAGE.firstOpinionDepth);
-    const n = Number(raw);
-    if (Number.isFinite(n) && n >= 0 && n <= 3) return n;
-  } catch {
-    /* ignore */
-  }
-  return DEFAULT_DEPTH;
+  return readActiveAttendingDepth();
 }
 
 export function writeFirstOpinionDepth(depth) {
   const n = Math.max(0, Math.min(3, Number(depth) || 0));
-  try {
-    localStorage.setItem(STORAGE.firstOpinionDepth, String(n));
-  } catch {
-    /* ignore */
-  }
+  patchActiveAttendingStyleDepth(n);
   return n;
 }
 

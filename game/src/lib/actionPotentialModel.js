@@ -1,20 +1,37 @@
-/** Neuron action potential — sampled curves for interactive teaching (case 135 hyperK context). */
+/** Neuron action potential — SVG-sampled curves (neuron_action_potential_v2.svg). */
 
-export const AP_MV_MIN = -100;
-export const AP_MV_MAX = 45;
+import {
+  AP_SVG_MV_MAX,
+  AP_SVG_MV_MIN,
+  AP_SVG_PHASE_T,
+  AP_SVG_PERM_BASELINE_MV,
+  naPermPercentFromMv,
+  kPermPercentFromMv,
+  svgInterp,
+  SVG_K,
+  SVG_MV,
+  SVG_NA,
+  svgKMv,
+  svgMembraneMv,
+  svgNaMv,
+} from './actionPotentialSvgCurves.js';
+import { loadNaAlign, svgNaMvAligned } from './naCurveAlign.js';
+
+export const AP_MV_MIN = AP_SVG_MV_MIN;
+export const AP_MV_MAX = AP_SVG_MV_MAX;
 export const AP_RESTING_MV = -75;
 export const AP_THRESHOLD_MV = -55;
 
-/** Interactive teaching phases — match First Aid neuron AP diagram. */
+/** Interactive teaching phases — t aligned to v2 SVG numbered markers. */
 export const AP_PHASES = [
   {
     id: 1,
     key: 'resting',
     short: 'Resting',
     label: 'Resting membrane potential',
-    t: 0.02,
+    t: AP_SVG_PHASE_T[1],
     description:
-      'Both voltage-gated Na⁺ and K⁺ channels closed. Membrane more permeable to K⁺ at rest — resting near −75 mV.',
+      'Both voltage-gated Na⁺ and K⁺ channels closed. Membrane more permeable to K⁺ at rest — resting near −75 mV. In hyperK the resting potential depolarises and the safety gap narrows.',
     na: { activation: 'closed', inactivation: 'open' },
     k: { activation: 'closed' },
   },
@@ -23,9 +40,9 @@ export const AP_PHASES = [
     key: 'depolarization',
     short: 'Depolarization',
     label: 'Membrane depolarization',
-    t: 0.13,
+    t: AP_SVG_PHASE_T[2],
     description:
-      'Na⁺ activation gate opens — Na⁺ rushes in. Membrane potential races toward threshold and peak.',
+      'Na⁺ activation gate opens — Na⁺ rushes in. Membrane potential races toward threshold and peak (+40 mV).',
     na: { activation: 'open', inactivation: 'open' },
     k: { activation: 'closed' },
   },
@@ -34,7 +51,7 @@ export const AP_PHASES = [
     key: 'repolarization',
     short: 'Repolarization',
     label: 'Membrane repolarization',
-    t: 0.28,
+    t: AP_SVG_PHASE_T[3],
     description:
       'At peak: Na⁺ inactivation gate closes. K⁺ activation gate opens — K⁺ efflux drives potential back down.',
     na: { activation: 'closed', inactivation: 'closed' },
@@ -45,7 +62,7 @@ export const AP_PHASES = [
     key: 'hyperpolarization',
     short: 'Hyperpolarization',
     label: 'Membrane hyperpolarization',
-    t: 0.58,
+    t: AP_SVG_PHASE_T[4],
     description:
       'K⁺ gates slow to close — brief undershoot below rest. Na⁺ channels reset; Na⁺/K⁺ pump restores ion gradients.',
     na: { activation: 'closed', inactivation: 'open' },
@@ -53,67 +70,38 @@ export const AP_PHASES = [
   },
 ];
 
-const KEY_MV = [
-  [0, -75],
-  [0.08, -58],
-  [0.12, -40],
-  [0.16, 20],
-  [0.2, 40],
-  [0.28, 15],
-  [0.36, -20],
-  [0.44, -60],
-  [0.52, -78],
-  [0.6, -92],
-  [0.72, -82],
-  [0.88, -76],
-  [1, -75],
-];
-
-function lerpKey(keys, t) {
-  const u = Math.max(0, Math.min(1, t));
-  for (let i = 0; i < keys.length - 1; i += 1) {
-    const [t0, v0] = keys[i];
-    const [t1, v1] = keys[i + 1];
-    if (u >= t0 && u <= t1) {
-      const f = (u - t0) / (t1 - t0 || 1);
-      return v0 + (v1 - v0) * f;
-    }
-  }
-  return keys[keys.length - 1][1];
-}
-
-function gaussian(t, center, width) {
-  const x = (t - center) / width;
-  return Math.exp(-x * x);
-}
-
 export function membranePotentialMv(t, { restingOffsetMv = 0 } = {}) {
-  return lerpKey(KEY_MV, t) + restingOffsetMv;
+  return svgMembraneMv(t, restingOffsetMv);
 }
 
+/** Relative permeability 0–1 for channel diagram (derived from SVG y-scale). */
 export function naPermeability(t) {
-  return gaussian(t, 0.14, 0.06) * 0.95;
+  return naPermPercentFromMv(svgNaMv(t)) / 100;
 }
 
 export function kPermeability(t) {
-  return gaussian(t, 0.48, 0.14) * 0.92;
+  return kPermPercentFromMv(svgKMv(t)) / 100;
 }
 
 export function sampleActionPotentialCurves({
-  steps = 64,
+  steps = 96,
   restingOffsetMv = 0,
+  naAlign = null,
 } = {}) {
+  const align = naAlign || loadNaAlign();
   const membrane = [];
   const na = [];
   const k = [];
   for (let i = 0; i <= steps; i += 1) {
     const t = i / steps;
-    membrane.push({ t, mv: membranePotentialMv(t, { restingOffsetMv }) });
-    na.push({ t, p: naPermeability(t) });
-    k.push({ t, p: kPermeability(t) });
+    membrane.push({ t, mv: svgMembraneMv(t, restingOffsetMv) });
+    na.push({ t, mv: svgNaMvAligned(t, align) });
+    k.push({ t, mv: svgKMv(t) });
   }
   return { membrane, na, k };
 }
+
+export { DEFAULT_NA_ALIGN, loadNaAlign, saveNaAlign, svgNaMvAligned, naPeakDisplay, formatNaAlignReadout, AP_DURATION_MS, NA_ALIGN_STORAGE_KEY } from './naCurveAlign.js';
 
 export function phaseById(id) {
   return AP_PHASES.find((p) => p.id === id) || AP_PHASES[0];
@@ -131,3 +119,14 @@ export function phaseAtT(t) {
   }
   return best;
 }
+
+export {
+  AP_SVG_PHASE_T,
+  AP_SVG_PERM_BASELINE_MV,
+  naPermPercentFromMv,
+  kPermPercentFromMv,
+  svgInterp,
+  SVG_K,
+  SVG_MV,
+  SVG_NA,
+};

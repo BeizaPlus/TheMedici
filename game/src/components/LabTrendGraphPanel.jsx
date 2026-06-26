@@ -2,6 +2,7 @@ import { ECG_STAGE_LABELS } from '../lib/clinicalTrajectory/ecgStages.js';
 
 const METRIC_META = {
   k: { label: 'K⁺ (mEq/L)', color: '#f59e0b', refLow: 3.5, refHigh: 5.0, criticalHigh: 6.5 },
+  cr: { label: 'Cr (mg/dL)', color: '#38bdf8', refLow: 0.6, refHigh: 1.2, criticalHigh: 4.0 },
   ecgStage: { label: 'ECG severity', color: '#ef4444', refLow: 0, refHigh: 1, max: 5 },
 };
 
@@ -78,7 +79,9 @@ export default function LabTrendGraphPanel({ points = [], metric = 'k', onMetric
       <p className="lab-trend-graph-caption">
         {metric === 'ecgStage'
           ? `Latest: ${ECG_STAGE_LABELS[points[points.length - 1]?.ecgStage] || '—'}`
-          : `Latest K⁺: ${points[points.length - 1]?.k ?? '—'} mEq/L`}
+          : metric === 'cr'
+            ? `Latest Cr: ${points[points.length - 1]?.cr ?? '—'} mg/dL`
+            : `Latest K⁺: ${points[points.length - 1]?.k ?? '—'} mEq/L`}
       </p>
     </div>
   );

@@ -336,8 +336,21 @@ async function main() {
   ok(Boolean(first) && p1.queue[0] === first, "shuffle: start returns first id");
   ok(p1.lastMode === "shuffle", "shuffle: lastMode set");
 
+  // startShuffleQueue should prefer unattempted cases when available
+  progress.clearProgress();
+  progress.markCaseAttempted(ids[0], "visit");
+  progress.markCaseAttempted(ids[1], "visit");
+  const unattemptedPool = ids.slice(2);
+  const shuffleFresh = progress.startShuffleQueue(ids, { preferUnattempted: true });
+  ok(
+    unattemptedPool.includes(shuffleFresh),
+    "shuffle: startShuffleQueue prefers unattempted cases",
+    `picked ${shuffleFresh}`,
+  );
+
   // nextInQueue should advance and wrap
-  const seen = new Set([first]);
+  progress.startShuffleQueue(ids);
+  const seen = new Set([progress.currentQueueId()]);
   for (let i = 0; i < ids.length + 2; i++) {
     const n = progress.nextInQueue();
     seen.add(n);

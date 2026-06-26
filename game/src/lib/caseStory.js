@@ -367,3 +367,32 @@ export async function fetchCaseStoryStoryboard({
   if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
   return data;
 }
+
+/** Markdown export for offline review (prose + storyboard captions). */
+export function formatCaseStoryExportMarkdown(story, caseData = {}) {
+  const cid = caseData?.ccsNumber ?? caseData?.id ?? '';
+  const title = story?.title || caseData?.title || 'Case story';
+  const lines = [
+    `# Case ${cid} — ${title}`,
+    '',
+    story?.synopsis ? `${story.synopsis}\n` : '',
+    ...(story?.chapters || []).map((ch, i) => {
+      const head = ch.heading || `Scene ${i + 1}`;
+      return `## ${head}\n\n${ch.body || ''}${ch.visualHint ? `\n\n_Visual: ${ch.visualHint}_` : ''}\n`;
+    }),
+    story?.source ? `\n---\n_Source: ${story.source}_` : '',
+  ];
+  return lines.filter((l) => l !== undefined).join('\n').trim();
+}
+
+export function downloadCaseStoryMarkdown(story, caseData) {
+  const md = formatCaseStoryExportMarkdown(story, caseData);
+  const cid = String(caseData?.ccsNumber ?? caseData?.id ?? 'case').padStart(3, '0');
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `case-${cid}-story.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+}

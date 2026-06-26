@@ -11,6 +11,7 @@ import {
   setActiveAttendingStyleSlot,
   writeAttendingStylePrefs,
 } from '../lib/attendingStylePrefs.js';
+import FirstOpinionDepthControl from './FirstOpinionDepthControl.jsx';
 
 export function useAttendingStylePrefs() {
   const [prefs, setPrefs] = useState(() => readAttendingStylePrefs());
@@ -91,6 +92,12 @@ export default function AttendingStyleControl({
           onChange={(e) => renameSlot(e.target.value)}
         />
       )}
+      <FirstOpinionDepthControl
+        id={`first-opinion-depth-${activeSlot}`}
+        compact={compact}
+        slotLabel={active.label}
+        onDepthChange={notify}
+      />
       <div className="attending-style-presets">
         {ATTENDING_STYLE_PRESETS.map((preset) => (
           <button
@@ -125,7 +132,7 @@ export default function AttendingStyleControl({
         </div>
       ))}
       <p className="attending-style-persist-note">
-        Saved to this browser ({activeSlot === 'a' ? 'slot A' : 'slot B'} active). Refresh keeps your leans.
+        Saved to this browser ({activeSlot === 'a' ? 'slot A' : 'slot B'} active). Each slot keeps its own depth and leans.
       </p>
     </div>
   );

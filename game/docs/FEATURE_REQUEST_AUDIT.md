@@ -168,7 +168,7 @@ Steve is studying in **learning mode**: no answer cues on first open. Agents mus
 **Related backlog (same theme):** hide case-rail chat peek, no Teach Me spoilers in HPI, orders that change vitals — all learning-mode family; implement as one design pass later.
 
 - [ ] Sync clean `MeWorld/data/cases/` → `game/data/cases/` for Play/Briefing
-- [ ] Batch **`practice_hpi`** for cases that spoil diagnosis in `hpi_narrative`
+- [x] Batch **`practice_hpi`** for cases that spoil diagnosis in `hpi_narrative` (2026-06-24 — `npm run fix:learner-presentation`; audit: `docs/learner-spoiler-audit.md`)
 - [ ] Capture more CCS presentations (`step3/ccs_credentials.json` → `npm run refresh:case-bank`)
 - [ ] Expand playbooks for high-volume presentation titles still on `default`
 - [ ] Optional: batch pre-cache all 181 case portraits

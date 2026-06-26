@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import {
-  readFirstOpinionDepth,
+  ATTENDING_STYLE_CHANGED,
+  readActiveAttendingDepth,
+} from '../lib/attendingStylePrefs.js';
+import {
   resolveFirstOpinionDepthConfig,
   FIRST_OPINION_DEPTH_LEVELS,
   writeFirstOpinionDepth,
@@ -9,16 +12,21 @@ import {
 export const FIRST_OPINION_DEPTH_EVENT = 'schoonmaker-first-opinion-depth';
 
 export function useFirstOpinionDepth() {
-  const [depth, setDepth] = useState(() => readFirstOpinionDepth());
+  const [depth, setDepth] = useState(() => readActiveAttendingDepth());
 
   useEffect(() => {
-    const onChange = (e) => {
+    const onDepthChange = (e) => {
       const next = Number(e?.detail);
       if (Number.isFinite(next)) setDepth(next);
-      else setDepth(readFirstOpinionDepth());
+      else setDepth(readActiveAttendingDepth());
     };
-    window.addEventListener(FIRST_OPINION_DEPTH_EVENT, onChange);
-    return () => window.removeEventListener(FIRST_OPINION_DEPTH_EVENT, onChange);
+    const onStyleChange = () => setDepth(readActiveAttendingDepth());
+    window.addEventListener(FIRST_OPINION_DEPTH_EVENT, onDepthChange);
+    window.addEventListener(ATTENDING_STYLE_CHANGED, onStyleChange);
+    return () => {
+      window.removeEventListener(FIRST_OPINION_DEPTH_EVENT, onDepthChange);
+      window.removeEventListener(ATTENDING_STYLE_CHANGED, onStyleChange);
+    };
   }, []);
 
   const setAndPersist = (next) => {
@@ -31,11 +39,12 @@ export function useFirstOpinionDepth() {
   return [depth, setAndPersist];
 }
 
-/** Global control — first attending opinion length (Teach Me + stack voice). */
+/** Per-attending length — follows active A/B slot from Attending style. */
 export default function FirstOpinionDepthControl({
   id = 'first-opinion-depth',
   compact = false,
   className = '',
+  slotLabel = '',
   onDepthChange,
 }) {
   const [depth, setDepth] = useFirstOpinionDepth();
@@ -49,10 +58,10 @@ export default function FirstOpinionDepthControl({
   return (
     <div className={`first-opinion-depth-control${compact ? ' is-compact' : ''}${className ? ` ${className}` : ''}`}>
       <label className="first-opinion-depth-label" htmlFor={id}>
-        Attending depth
+        {slotLabel ? `${slotLabel} depth` : 'Attending depth'}
         {!compact && (
           <span className="first-opinion-depth-hint">
-            First opinion teaching arc — up to ~{depthConfig.maxWords} words
+            Teaching arc length — up to ~{depthConfig.maxWords} words
           </span>
         )}
       </label>

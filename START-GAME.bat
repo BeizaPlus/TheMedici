@@ -50,17 +50,17 @@ if not exist "%ROOT%.env" if not exist "%GAME%\.env" (
   echo.
 )
 
-echo Freeing ports 3001 / 5173 and starting dev servers...
-echo   API:  http://127.0.0.1:3001
-echo   Game: http://localhost:5173
+echo Freeing ports 3002 / 5174 and starting dev servers (study can stay on 5173)...
+echo   API:  http://127.0.0.1:3002
+echo   Game: http://localhost:5174
 echo.
-echo Smoke takes about 3 minutes ^(differential + play-case screenshots^).
-echo Keep this window open the whole time — do NOT open a second launcher.
+echo Smoke skipped on alt ports — use study launcher for :5173.
+echo Keep this window open — do NOT open a second main launcher.
 echo.
 echo Press Ctrl+C to stop.
 echo.
 
-call npm run dev
+call npm run dev:alt
 set "EXITCODE=%ERRORLEVEL%"
 
 if %EXITCODE% neq 0 (
@@ -69,12 +69,12 @@ if %EXITCODE% neq 0 (
   echo.
   echo Smoke may have passed then a server died. Common causes:
   echo   - Second START-GAME / study window opened ^(kills ports^)
-  echo   - Port 3001 or 5173 taken by another app
+  echo   - Port 3002 or 5174 taken by another app
   echo.
   echo Try:
   echo   1. Close ALL other MeWorld dev terminals
-  echo   2. cd game ^&^& node scripts/free-dev-ports.mjs
-  echo   3. cd game ^&^& npm run dev
+echo   2. cd game ^&^& node scripts/free-dev-alt-ports.mjs
+echo   3. cd game ^&^& npm run dev:alt
   echo   4. Chat/voice only: add DEEPSEEK_API_KEY to %ROOT%.env
   echo.
   pause

@@ -86,8 +86,36 @@ async function smokeWelcomeNavPanels(page, prefix) {
   await page.waitForSelector('.welcome-panel--timeline', { state: 'hidden', timeout: 5000 });
 }
 
+async function smokeOrderDockRole(page, prefix) {
+  const dock = page.locator('.scene-order-command-dock').first();
+  ok(await dock.isVisible({ timeout: 8000 }), 'order command dock visible');
+  const roleSeg = dock.locator('.scene-order-command-role .ap-role-segment');
+  ok((await roleSeg.count()) > 0, 'patient/attending icon toggle on order dock');
+  await shot(page, `${prefix}-order-dock`);
+  const attendingBtn = roleSeg.getByRole('tab', { name: /attending/i });
+  if (await attendingBtn.count()) {
+    await attendingBtn.first().click();
+    await page.waitForTimeout(350);
+    await shot(page, `${prefix}-order-dock-attending`);
+  }
+}
+
 async function smokePlaySettingsToggles(page, prefix) {
-  const settingsBtn = page.getByRole('button', { name: /^Settings$/i });
+  await page.locator('.scene-timeline-dock, .play-notes-session-foot').first().scrollIntoViewIfNeeded().catch(() => {});
+  await page.waitForTimeout(200);
+  const sceneToolsBtn = page.getByRole('button', { name: /scene tools/i });
+  if (await sceneToolsBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
+    await sceneToolsBtn.click();
+    await page.waitForTimeout(350);
+  } else {
+    const toolbarToggle = page.locator('.dock-toolbar-toggle');
+    if (await toolbarToggle.isVisible({ timeout: 2000 }).catch(() => false)) {
+      const expanded = await toolbarToggle.getAttribute('aria-expanded');
+      if (expanded === 'false') await toolbarToggle.click();
+      await page.waitForTimeout(250);
+    }
+  }
+  const settingsBtn = page.locator('.toolbar-settings-wrap button').first();
   ok(await settingsBtn.isVisible({ timeout: 8000 }), 'play settings button visible');
   await settingsBtn.click();
   await page.waitForSelector('.toolbar-settings-popover', { timeout: 5000 });
@@ -252,6 +280,8 @@ async function main() {
 
   const stacks = page.locator('.scene-order-command-dock, .game-sidebar, .icu-monitor-docked').first();
   ok(await stacks.isVisible({ timeout: 10000 }), 'play chrome visible (dock / sidebar / monitor)');
+
+  await smokeOrderDockRole(page, showedOnboarding ? '06' : '05b');
 
   await smokePlaySettingsToggles(page, showedOnboarding ? '07' : '06');
 

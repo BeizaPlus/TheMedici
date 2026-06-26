@@ -1,9 +1,9 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { FiMessageSquare, FiSend, FiX, FiStar, FiActivity } from 'react-icons/fi';
-import { IconCamera, IconFileMedical, IconArrowsMove, IconPill, IconLabFlask } from './sceneToolbar/SceneToolbarIcons.jsx';
-import PatientPortraitAvatar from './PatientPortraitAvatar.jsx';
+import { FiMessageSquare, FiSend, FiX, FiStar } from 'react-icons/fi';
+import { IconCamera, IconFileMedical } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import PatientReplyPlayButton from './PatientReplyPlayButton.jsx';
+import ChatRoleSegment from './ChatRoleSegment.jsx';
 import { renderAttendingMarkdown } from '../lib/chatMessageFormat.jsx';
 import { sanitizePatientReplyForDisplay } from '../lib/patientReplyText.js';
 
@@ -92,23 +92,12 @@ function SceneOrderCommandDock({
   onOpenFullChat,
   resultsExpanded = false,
   resultsPanel = null,
-  orderContextLabel = '',
   onToggleOrderContext,
   patientMode = false,
   onPatientModeChange,
-  patientRecording = null,
-  stackMoveMode = false,
-  onToggleStackMove,
-  onSavePhysicalExamLayout,
-  onOpenLabPicker,
   onPinTeachingMoment,
-  scenePinsHidden = false,
-  onToggleScenePins,
-  mechanismPreviewAvailable = false,
-  mechanismPreviewActive = false,
-  onToggleMechanismPreview,
+  patientRecording = null,
   resetKey,
-  caseId = null,
   caseData = null,
 }) {
   const inputRef = useRef(null);
@@ -138,12 +127,14 @@ function SceneOrderCommandDock({
   const showChatThread = Boolean(hasChatHistory && chatThreadPanel);
   const showQuickReply = Boolean(quickReply?.answer && !showChatThread);
   const dockContextOpen =
-  showChatThread ||
+    showChatThread ||
     (showQuickReply && replyExpanded) ||
     (hasOrderContext && resultsExpanded);
   const hintText =
     chatBusy && dockChatMode
-      ? 'Thinking…'
+      ? patientMode
+        ? 'Patient is thinking…'
+        : 'Thinking…'
       : chatOpen && hasChatHistory
         ? 'Answer in chat →'
         : patientMode
@@ -154,113 +145,43 @@ function SceneOrderCommandDock({
     hasMatch,
     knownOrder,
   );
-  const showHintRow = !patientMode && Boolean(hintDisplay?.trim());
+  const showHintRow = Boolean(hintDisplay?.trim());
   const replyAnswer =
     quickReply?.answer && patientMode
       ? sanitizePatientReplyForDisplay(quickReply.answer) || quickReply.answer
       : quickReply?.answer;
+
+  const liveVoiceText = String(patientRecording?.liveTranscript || '').trim();
+  const showLiveVoice =
+    Boolean(patientRecording?.recording || patientRecording?.transcribing) &&
+    liveVoiceText &&
+    liveVoiceText !== 'Recording…' &&
+    liveVoiceText !== 'Transcribing…';
 
   return (
     <div
       className={`scene-order-command-dock${dockContextOpen ? ' scene-order-command-dock--reply-open' : ''}`}
     >
       <header className="scene-order-command-head" aria-label="Order and chat">
-        <div className="scene-order-command-actions">
-          {onToggleStackMove && (
-            <button
-              type="button"
-              className={`scene-order-command-icon-btn${stackMoveMode ? ' is-active' : ''}`}
-              title={stackMoveMode ? 'Pin move on — drag labels on patient' : 'Move order labels on patient'}
-              aria-label={stackMoveMode ? 'Pin move on' : 'Enable pin move on patient'}
-              aria-pressed={stackMoveMode}
-              onClick={() => onToggleStackMove?.()}
-            >
-              <IconArrowsMove />
-            </button>
-          )}
-          {onSavePhysicalExamLayout && (
-            <button
-              type="button"
-              className="scene-order-command-icon-btn"
-              title="Save physical exam label positions globally (clipboard + browser)"
-              aria-label="Save physical exam layout"
-              onClick={() => onSavePhysicalExamLayout?.()}
-            >
-              <IconFileMedical />
-            </button>
-          )}
-          {onOpenLabPicker && !patientMode && (
-            <button
-              type="button"
-              className="scene-order-command-icon-btn"
-              title="Order labs (picker — faster than typing)"
-              aria-label="Order labs"
-              onClick={() => onOpenLabPicker?.()}
-            >
-              <IconLabFlask />
-            </button>
-          )}
-          {mechanismPreviewAvailable && onToggleMechanismPreview && !patientMode && (
-            <button
-              type="button"
-              className={`scene-order-command-icon-btn scene-order-command-mechanism-btn${mechanismPreviewActive ? ' is-active' : ''}`}
-              title={
-                mechanismPreviewActive
-                  ? 'Action potential preview on — tap to show order results'
-                  : 'Action potential — live mechanism preview for placed orders'
-              }
-              aria-label={mechanismPreviewActive ? 'Hide action potential preview' : 'Show action potential preview'}
-              aria-pressed={mechanismPreviewActive}
-              onClick={() => onToggleMechanismPreview?.()}
-            >
-              <FiActivity aria-hidden />
-            </button>
-          )}
-          {onPatientModeChange && (
-            <button
-              type="button"
-              className={`scene-order-command-icon-btn case-chat-patient-btn${patientMode ? ' is-active' : ''}`}
-              title={
-                patientMode
-                  ? 'Patient mode ON — talk or type to interview'
-                  : 'Tutor chat — click for patient interview mode'
-              }
-              aria-label={patientMode ? 'Patient mode on' : 'Turn on patient mode'}
-              aria-pressed={patientMode}
-              onClick={() => onPatientModeChange(!patientMode)}
-            >
-              <PatientPortraitAvatar
-                caseId={caseId}
-                caseData={caseData}
-                title={
-                  patientMode
-                    ? 'Patient mode ON — talk or type to interview'
-                    : 'Tutor chat — click for patient interview mode'
-                }
-              />
-            </button>
-          )}
-          {patientRecording && (
+        {onPatientModeChange ? (
+          <div className="scene-order-command-role">
+            <ChatRoleSegment
+              iconOnly
+              patientMode={patientMode}
+              onPatientModeChange={onPatientModeChange}
+            />
+          </div>
+        ) : null}
+        <div className="scene-order-command-head-tools">
+          {patientRecording ? (
             <CaseRecordButton
               {...patientRecording}
               variant="toolbar"
               iconOnly
               chatMode={patientMode}
-              className={`scene-order-command-icon-btn scene-order-command-mic-btn${patientMode ? ' is-active' : ''}`}
+              className="scene-order-command-icon-btn scene-order-command-mic-btn"
             />
-          )}
-          {onToggleScenePins && (
-            <button
-              type="button"
-              className={`scene-order-command-icon-btn${scenePinsHidden ? ' is-active' : ''}`}
-              title={scenePinsHidden ? 'Show order labels on patient' : 'Hide order labels on patient'}
-              aria-label={scenePinsHidden ? 'Show order labels on patient' : 'Hide order labels on patient'}
-              aria-pressed={scenePinsHidden}
-              onClick={() => onToggleScenePins?.()}
-            >
-              <IconPill />
-            </button>
-          )}
+          ) : null}
           <button
             type="button"
             className="scene-order-command-icon-btn"
@@ -273,6 +194,20 @@ function SceneOrderCommandDock({
           </button>
         </div>
       </header>
+
+      {(showLiveVoice || (patientRecording?.recording && !showLiveVoice)) && (
+        <div
+          className="scene-order-command-live-voice selectable-text"
+          aria-live="polite"
+          aria-label="Live voice transcript"
+        >
+          {showLiveVoice
+            ? liveVoiceText
+            : patientRecording?.transcribing
+              ? 'Transcribing…'
+              : 'Listening…'}
+        </div>
+      )}
 
       <form
         className="stack-command-ui scene-order-command-form"

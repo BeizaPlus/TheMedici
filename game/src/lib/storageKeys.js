@@ -39,6 +39,7 @@ export const STORAGE = {
   timelineCollapsed: 'schoonmaker_timeline_collapsed',
   scenePinsHidden: 'schoonmaker_scene_pins_hidden',
   caseChatHistory: 'schoonmaker_case_chat_history',
+  coveredCaseIds: 'schoonmaker_covered_case_ids',
   orderWhyCache: 'schoonmaker_order_why_cache',
   secondOpinionDepth: 'schoonmaker_second_opinion_depth',
   firstOpinionDepth: 'schoonmaker_first_opinion_depth',

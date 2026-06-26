@@ -5,6 +5,8 @@ export function defaultUiPrefs() {
   return {
     timedMode: 'timed',
     simulationCreativity: 55,
+    /** Order dock — Case chat thread open (study-style tutor history visible after refresh). */
+    dockChatExpanded: true,
   };
 }
 
@@ -21,6 +23,7 @@ export function readUiPrefs() {
         Number.isFinite(Number(parsed?.simulationCreativity))
           ? Math.max(0, Math.min(100, Math.round(Number(parsed.simulationCreativity))))
           : 55,
+      dockChatExpanded: parsed?.dockChatExpanded !== false,
     };
   } catch {
     return defaultUiPrefs();

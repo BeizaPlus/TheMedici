@@ -25,7 +25,36 @@ alwaysApply: false
 
 Add `practice_hpi` to `preparedCases.json` (and `game/data/cases/case_N.json` when syncing bank) for any case whose `hpi_narrative` contains spoilers.
 
-## Code paths (do not regress)
+**Batch audit (dev):** `node scripts/audit-learner-spoilers.mjs` → `docs/learner-spoiler-audit.md`  
+**Batch fix:** `node scripts/fix-learner-presentation.mjs --write --force` (rebuilds all `practice_hpi` from answer-key)
+
+## HPI bans (learner-facing)
+
+Never in **`practice_hpi`**, `narrative.*.hpi`, or briefing/play HPI:
+
+- Diagnosis names or classification (SJS, TEN, DKA, IIH, …)
+- Exam findings that belong after a dedicated order (Nikolsky, BSA %, biopsy read)
+- Treatment plan (stop drug, admit ICU, consults)
+- Teaching pivots ("classic 1–8 week window", "offending agent", "new diagnosis — stop now")
+- Pathophysiology or "consistent with …"
+
+**OK in HPI:** symptoms, timeline, patient-reported mouth/eye pain, med names and start dates as facts (no causality lecture).
+
+## Physical exam bans (initial `exam` array — Exam tab before orders)
+
+Exam text must be **objective bedside documentation** — what you see/hear/feel, not what you conclude.
+
+| Ban | Use instead |
+|-----|-------------|
+| "no acute surgical abdomen" | "Soft, non-distended, non-tender" |
+| "SJS not TEN" / "(SJS)" / "<10% BSA" labels | Omit classification; state findings only |
+| Nikolsky, BSA detachment, full mucosal survey | Defer to **full skin exam** stack result |
+| Negative differentials ("not TEN", "not SSSS") | Omit — learner rules those out |
+
+**Order results** (labs, biopsy, dedicated skin exam): report **raw values and histology** without diagnosis labels unless the order is literally "pathology read with diagnosis" (prefer neutral histology text).
+
+**Attendant canon** in `docs/cases/*.md` may keep teaching inferences in a separate **Attendant / answer-key** section — never copy that block into `practice_hpi` or initial `exam`.
+
 
 | Function | Must use |
 |----------|----------|

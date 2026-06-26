@@ -21,10 +21,10 @@ export function usePlayDockLayout(options = {}) {
   const [activeDrag, setActiveDrag] = useState(null);
 
   const persist = useCallback(
-    (next) => {
+    (next, { write = true } = {}) => {
       const clamped = clampDockLayout(next);
       setLayout(clamped);
-      writePlayDockLayout(clamped, storageKey);
+      if (write) writePlayDockLayout(clamped, storageKey);
       return clamped;
     },
     [storageKey],
@@ -51,46 +51,65 @@ export function usePlayDockLayout(options = {}) {
       const dy = event.clientY - startY;
 
       if (mode === 'move') {
-        persist({
-          ...startLayout,
-          x: startLayout.x + dx,
-          y: startLayout.y + dy,
-        });
+        persist(
+          {
+            ...startLayout,
+            x: startLayout.x + dx,
+            y: startLayout.y + dy,
+          },
+          { write: false },
+        );
         return;
       }
       if (mode === 'resize-e') {
-        persist({ ...startLayout, width: startLayout.width + dx });
+        persist({ ...startLayout, width: startLayout.width + dx }, { write: false });
         return;
       }
       if (mode === 'resize-s') {
-        persist({ ...startLayout, height: startLayout.height + dy });
+        persist({ ...startLayout, height: startLayout.height + dy }, { write: false });
         return;
       }
       if (mode === 'resize-se') {
-        persist({
-          ...startLayout,
-          width: startLayout.width + dx,
-          height: startLayout.height + dy,
-        });
+        persist(
+          {
+            ...startLayout,
+            width: startLayout.width + dx,
+            height: startLayout.height + dy,
+          },
+          { write: false },
+        );
         return;
       }
       if (mode === 'split') {
-        persist({
-          ...startLayout,
-          clinicalPx: startLayout.clinicalPx + dy,
-        });
+        persist(
+          {
+            ...startLayout,
+            clinicalPx: startLayout.clinicalPx + dy,
+          },
+          { write: false },
+        );
         return;
       }
       if (mode === 'resize-stacks') {
         const base = startLayout.stacksListPx > 0 ? startLayout.stacksListPx : 220;
-        persist({
-          ...startLayout,
-          stacksListPx: base + dy,
-        });
+        persist(
+          {
+            ...startLayout,
+            stacksListPx: base + dy,
+          },
+          { write: false },
+        );
       }
     };
 
-    const onUp = () => setActiveDrag(null);
+    const onUp = () => {
+      setActiveDrag(null);
+      setLayout((prev) => {
+        const clamped = clampDockLayout(prev);
+        writePlayDockLayout(clamped, storageKey);
+        return clamped;
+      });
+    };
 
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
@@ -100,7 +119,7 @@ export function usePlayDockLayout(options = {}) {
       window.removeEventListener('pointerup', onUp);
       window.removeEventListener('pointercancel', onUp);
     };
-  }, [activeDrag, persist]);
+  }, [activeDrag, persist, storageKey]);
 
   const startDrag = useCallback(
     (mode, event) => {

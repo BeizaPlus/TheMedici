@@ -1,0 +1,118 @@
+{
+  "id": 192,
+  "topic": "School Refusal and Childhood Anxiety",
+  "title": "School Refusal and Childhood Anxiety",
+  "diagnosis": "Generalized Anxiety Disorder (child) with school refusal",
+  "confidence": "uword-psych-transform",
+  "source": "U-Word Psychiatry v02 concepts (Immersa rewrite) — anchor for Uber U09",
+  "patient_sex": "female",
+  "patient_name_default": "Maya Chen",
+  "correct_orders": [
+    "GAD-7 / anxiety screening (child-appropriate)",
+    "TSH / basic metabolic panel",
+    "CBT / psychotherapy referral",
+    "School psychologist / 504 coordination",
+    "SSRI consideration (sertraline / fluoxetine)",
+    "Sleep hygiene / nightmare screen",
+    "Safety assessment"
+  ],
+  "should_avoid": [
+    "Benzodiazepine long-term without psychotherapy plan",
+    "Dismiss somatic complaints without medical rule-out"
+  ],
+  "rationale": {
+    "GAD-7 / anxiety screening (child-appropriate)": "Quantify worry severity and track response — use developmentally appropriate anxiety screen alongside clinical interview.",
+    "TSH / basic metabolic panel": "Morning stomachaches and restlessness can reflect hyperthyroidism or anemia — rule out medical drivers before anchoring on anxiety.",
+    "CBT / psychotherapy referral": "First-line for pediatric GAD — exposure for school refusal, cognitive restructuring for catastrophizing about peer judgment.",
+    "School psychologist / 504 coordination": "School refusal needs coordinated return-to-school plan, accommodations, and teacher communication — not home isolation.",
+    "SSRI consideration (sertraline / fluoxetine)": "Stepped care when psychotherapy alone is insufficient — sertraline or fluoxetine are first-line SSRIs for child GAD; monitor activation and suicidality early.",
+    "Sleep hygiene / nightmare screen": "Sleep-onset worry and bad dreams perpetuate daytime irritability and concentration problems — screen for nightmare disorder and coach sleep routine.",
+    "Safety assessment": "No acute suicidal ideation reported, but document safety, protective factors, and family psychiatric history — mother with depression raises genetic and modeling risk.",
+    "Benzodiazepine long-term without psychotherapy plan": "Avoid chronic benzos in children — dependence, cognitive effects, and no exposure work for school refusal.",
+    "Dismiss somatic complaints without medical rule-out": "Functional abdominal pain is common in child anxiety, but TSH and basic labs still belong in the workup."
+  },
+  "hpi": "Maya Chen is a 9-year-old girl brought by her mother for worsening school refusal. Three weeks ago a classmate laughed when her pencil rolled off the desk; since then she believes everyone will laugh at her if she returns. She develops nausea and epigastric \"stomachaches\" on school mornings and cries at the door. At night she lies awake checking that the front-door lock is secure and worries someone could break in. She fidgets during homework and loses track of instructions — her teacher wonders about attention problems, but symptoms track with worry rather than classic hyperactivity. Mother reports lifelong \"nervous temperament\" and takes medication for depression. No fever, weight loss, tremor, or suicidal statements; she denies wanting to die but says she \"can't face school anymore.\"",
+  "hpi_narrative": "Maya Chen is a 9-year-old girl brought by her mother for worsening school refusal. Three weeks ago a classmate laughed when her pencil rolled off the desk; since then she believes everyone will laugh at her if she returns. She develops nausea and epigastric \"stomachaches\" on school mornings and cries at the door. At night she lies awake checking that the front-door lock is secure and worries someone could break in. She fidgets during homework and loses track of instructions — her teacher wonders about attention problems, but symptoms track with worry rather than classic hyperactivity. Mother reports lifelong \"nervous temperament\" and takes medication for depression. No fever, weight loss, tremor, or suicidal statements; she denies wanting to die but says she \"can't face school anymore.\"\n\nMechanism: pervasive anticipatory anxiety drives autonomic arousal (morning GI symptoms), avoidance (refusal), and hypervigilance at sleep onset. Inattention here is likely worry-related — distinguish from ADHD by onset after stressor, situational focus, and improvement when anxiety treated.\n\nWorkup: child-appropriate anxiety screen, TSH and basic labs, safety assessment with parent collateral. Treatment: CBT with graded school exposure, school psych coordination, sleep hygiene; consider SSRI if moderate-severe or partial CBT response.",
+  "physical_exam": [
+    ["General", "Well-nourished school-age girl, anxious affect, avoids eye contact when discussing school"],
+    ["HEENT", "Normocephalic, moist mucous membranes, no thyromegaly on inspection"],
+    ["Cardiovascular", "Tachycardia mild when discussing school — regular rhythm"],
+    ["Abdomen", "Soft, mild periumbilical tenderness without guarding — consistent with functional pain"],
+    ["Neuro / Psych", "Alert, cooperative with parent present; worried mood, normal thought content, no hallucinations; denies SI/HI today"]
+  ],
+  "vitals": {
+    "hr": 98,
+    "spo2": 99,
+    "bp": "105/65",
+    "rr": 20,
+    "temp": 37.0
+  },
+  "vitals_text": "Pulse: 98 beats/min\nBlood pressure, systolic: 105 mm Hg\nBlood pressure, diastolic: 65 mm Hg\nRespiratory rate: 20 /minute\nTemperature: 37.0 C (98.6 F)\nSpO2: 99%",
+  "patient_voice": {
+    "chief_complaint": "My stomach hurts every morning and I don't want to go to school. I keep thinking the kids will laugh at me.",
+    "history": "It started when my pencil fell and someone laughed. Now I think they'll all laugh if I go back. At night I check the lock on the door a lot. Mom says I've always been a worrier.",
+    "pain": "My tummy hurts before school — it's like butterflies but worse."
+  },
+  "ccs_category": "Psychiatry / Pediatrics",
+  "chief_complaint": "Morning stomachaches, school refusal, constant worry about peers laughing",
+  "case_summary": "Nine-year-old with school refusal after peer embarrassment, pervasive worry, sleep-onset security checking, and worry-related inattention. Pediatric GAD with somatic cues — rule out medical causes, coordinate school return, CBT first-line, SSRI if needed.",
+  "decoys": [],
+  "distractors": [],
+  "stacks": [
+    {
+      "label": "GAD-7 / anxiety screening (child-appropriate)",
+      "type": "correctlyOrdered",
+      "finding": "Quantify worry severity and track response.",
+      "aliases": ["GAD-7", "Anxiety screen", "SCARED"]
+    },
+    {
+      "label": "TSH / basic metabolic panel",
+      "type": "correctlyOrdered",
+      "finding": "Rule out hyperthyroidism and metabolic mimics of anxiety.",
+      "aliases": ["TSH", "BMP", "CBC"]
+    },
+    {
+      "label": "CBT / psychotherapy referral",
+      "type": "correctlyOrdered",
+      "finding": "First-line — exposure for school refusal and cognitive work on catastrophizing.",
+      "aliases": ["CBT", "Psychotherapy", "Counseling referral"]
+    },
+    {
+      "label": "School psychologist / 504 coordination",
+      "type": "correctlyOrdered",
+      "finding": "Graded return-to-school plan and classroom accommodations.",
+      "aliases": ["School psych", "504 plan", "IEP coordination"]
+    },
+    {
+      "label": "SSRI consideration (sertraline / fluoxetine)",
+      "type": "correctlyOrdered",
+      "finding": "Stepped pharmacotherapy for child GAD when psychotherapy insufficient.",
+      "aliases": ["Sertraline", "Fluoxetine", "SSRI"]
+    },
+    {
+      "label": "Sleep hygiene / nightmare screen",
+      "type": "correctlyOrdered",
+      "finding": "Address sleep-onset worry and nightmares perpetuating daytime symptoms.",
+      "aliases": ["Sleep hygiene", "Nightmare screen", "Sleep diary"]
+    },
+    {
+      "label": "Safety assessment",
+      "type": "correctlyOrdered",
+      "finding": "Document SI/HI, protective factors, and family psychiatric history.",
+      "aliases": ["Safety assessment", "Suicide risk screen", "Columbia SSRS"]
+    }
+  ],
+  "order_sets": [
+    "GAD-7 / anxiety screening (child-appropriate)",
+    "TSH / basic metabolic panel",
+    "CBT / psychotherapy referral",
+    "School psychologist / 504 coordination",
+    "SSRI consideration (sertraline / fluoxetine)",
+    "Sleep hygiene / nightmare screen",
+    "Safety assessment"
+  ],
+  "complete": true,
+  "extraction_method": "immersa_uword_transform",
+  "enrichment_sources": ["immersa"],
+  "extraction_notes": "Anchor case for Psych Uber U09 (Maya Chen). U-Word Psychiatry v02 items ~5,10,21,28,31 transformed — no verbatim UWorld UI text."
+}

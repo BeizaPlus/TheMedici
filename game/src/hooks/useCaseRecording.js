@@ -48,6 +48,7 @@ export function useCaseRecording({
   const [recording, setRecording] = useState(false);
   const [busy, setBusy] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
+  const [liveTranscript, setLiveTranscript] = useState('');
 
   const recorderRef = useRef(null);
   const streamRef = useRef(null);
@@ -91,6 +92,7 @@ export function useCaseRecording({
         : transcript;
       updateLiveVoiceNote(caseId, display);
       onNotesChanged?.();
+      setLiveTranscript(display);
       onTranscriptUpdate?.(display, { live: true, interim: Boolean(interim) });
     },
     [caseId, onNotesChanged, onTranscriptUpdate],
@@ -105,6 +107,13 @@ export function useCaseRecording({
 
       mergeQueueRef.current = mergeQueueRef.current
         .then(async () => {
+          if (batchModeRef.current) {
+            const fastAppend = `${transcriptRef.current}${transcriptRef.current ? ' ' : ''}${chunk}`.trim();
+            transcriptRef.current = fastAppend;
+            interimRef.current = '';
+            pushNotes(fastAppend);
+            return;
+          }
           setTranscribing(true);
           try {
             const merged = await mergeVoiceNoteChunk(transcriptRef.current, chunk);
@@ -170,7 +179,7 @@ export function useCaseRecording({
   }, []);
 
   const startSpeechRecognition = useCallback(() => {
-    if (batchModeRef.current || !speechRecognitionSupported()) return false;
+    if (!speechRecognitionSupported()) return false;
     const rec = createLiveSpeechRecognition({
       onFinalChunk: (text) => { void enqueueMerge(text); },
       onInterim: (text) => {
@@ -268,6 +277,7 @@ export function useCaseRecording({
     try {
       transcriptRef.current = '';
       interimRef.current = '';
+      setLiveTranscript('');
       mergeQueueRef.current = Promise.resolve();
       whisperQueueRef.current = Promise.resolve();
       liveStampRef.current = caseId ? beginLiveVoiceNote(caseId) : '';
@@ -283,8 +293,12 @@ export function useCaseRecording({
 
       if (batchModeRef.current) {
         pushNotes(RECORDING_LABEL);
-      } else {
-        startSpeechRecognition();
+      }
+      const speechStarted = startSpeechRecognition();
+      if (!batchModeRef.current && !speechStarted) {
+        stopTracks();
+        onError?.(new Error('Speech recognition unavailable in this browser — use Chrome or enable Whisper on the API server'));
+        return;
       }
 
       rec.ondataavailable = (event) => {
@@ -382,6 +396,7 @@ export function useCaseRecording({
     recording,
     busy,
     transcribing,
+    liveTranscript,
     toggleRecording,
     startRecording,
     stopRecording,

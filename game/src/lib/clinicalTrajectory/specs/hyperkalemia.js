@@ -1,7 +1,7 @@
-/** Case 135 — hyperkalemic emergency (ACEI + NSAID). */
+/** Cases 135 (ACEI + NSAID) and 118 (rhabdomyolysis) — hyperkalemic emergency. */
 export const HYPERKALEMIA_SPEC = {
   id: 'hyperkalemia',
-  caseIds: ['135'],
+  caseIds: ['135', '118'],
   baseline: { k: 6.8, ecgStage: 3 },
   /** Orders that count as "delay" without treating hyperK */
   delayIfNoTreatment: true,

@@ -69,7 +69,6 @@ import PlaySceneToolbar from './sceneToolbar/PlaySceneToolbar.jsx';
 import { useCaseRecording } from '../hooks/useCaseRecording.js';
 import { useCaseChat } from '../hooks/useCaseChat.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
-import { buildChatSessionContext } from '../lib/buildChatSessionContext.js';
 import { buildPortraitSessionContext } from '../lib/buildPortraitSessionContext.js';
 import { consumePlayOpenTab, stashPlayOpenTab } from '../lib/recentChatCases.js';
 import { getCaseVisitHistory } from '../lib/caseVisitHistory.js';
@@ -117,7 +116,6 @@ import ClinicalTextControls from './ClinicalTextControls.jsx';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
 import AudioSettingsPanel from './AudioSettingsPanel.jsx';
 import SimulationCreativityControl from './SimulationCreativityControl.jsx';
-import FirstOpinionDepthControl from './FirstOpinionDepthControl.jsx';
 import AttendingStyleControl from './AttendingStyleControl.jsx';
 import CaseBibliographyPanel from './CaseBibliographyPanel.jsx';
 import CollapsibleSettingsSection from './CollapsibleSettingsSection.jsx';
@@ -170,7 +168,6 @@ import TeachMeCompareLandscape from './TeachMeCompareLandscape.jsx';
 import MedicalSequencePanel from './MedicalSequencePanel.jsx';
 import CaseStoryPanel from './CaseStoryPanel.jsx';
 import { markCaseStoryStarted, readCaseStoryStarted } from '../lib/caseStoryStarted.js';
-import { sanitizePatientReplyForDisplay } from '../lib/patientReplyText.js';
 import {
   buildTeachCompareReport,
   copyTeachCompareReport,
@@ -414,7 +411,18 @@ export default function Play({
   const caseHasClinicalTrajectory = hasClinicalTrajectory(caseData?.id);
   const [dockChatReply, setDockChatReply] = useState(null);
   const [dockReplyExpanded, setDockReplyExpanded] = useState(false);
-  const [dockChatHistoryExpanded, setDockChatHistoryExpanded] = useState(true);
+  const [dockChatHistoryExpanded, setDockChatHistoryExpanded] = useState(
+    () => readUiPrefs().dockChatExpanded !== false,
+  );
+  const dockChatMessageCountRef = useRef(0);
+
+  const setDockChatExpandedPersist = useCallback((value) => {
+    setDockChatHistoryExpanded((prev) => {
+      const next = typeof value === 'function' ? value(prev) : value;
+      writeUiPrefs({ dockChatExpanded: next });
+      return next;
+    });
+  }, []);
   const [chatPatientMode, setChatPatientModeState] = useState(false);
   const chatPatientModeRef = useRef(false);
   const setChatPatientMode = useCallback((next) => {
@@ -691,7 +699,7 @@ export default function Play({
     }
     if (commandMatch) return `Match: ${commandMatch.label}`;
     if (!teachMeMode && decoyCommandMatch) return `Match: ${decoyCommandMatch.label}`;
-    return chatPatientMode ? 'Patient mode — send question' : 'Master tutor — tap portrait for patient mode';
+    return chatPatientMode ? 'Patient mode — send question' : 'Attending tutor — ask in the box below';
   }, [orderCommandQuery, commandMatch, decoyCommandMatch, teachMeMode, chatPatientMode]);
 
   const commandUiMatch = commandMatch || (!teachMeMode ? decoyCommandMatch : null);
@@ -720,16 +728,16 @@ export default function Play({
     setDockResultsExpanded(false);
     setDockChatReply(null);
     setDockReplyExpanded(false);
-    setDockChatHistoryExpanded(true);
+    setDockChatHistoryExpanded(readUiPrefs().dockChatExpanded !== false);
+    dockChatMessageCountRef.current = 0;
     setDockHidden(false);
     setTeachFocusId(null);
   }, [caseData?.id]);
 
   useEffect(() => {
     if (!caseData?.id) return;
-    if (teachMeMode) collapseDockPanel();
-    else setDockCollapsed(false);
-  }, [caseData?.id, teachMeMode, collapseDockPanel]);
+    collapseDockPanel();
+  }, [caseData?.id, collapseDockPanel]);
 
   const showOrderWhyInDock = useCallback(
     (iv) => {
@@ -921,6 +929,16 @@ export default function Play({
     [placementOrder, extraOrders, interventionById],
   );
 
+  const [liveOrderResults, setLiveOrderResults] = useState({});
+  const storeLiveOrderResult = useCallback((row) => {
+    if (!row?.storageKey || !row?.text) return;
+    setLiveOrderResults((prev) => ({ ...prev, [row.storageKey]: row }));
+  }, []);
+
+  useEffect(() => {
+    setLiveOrderResults({});
+  }, [caseData?.id]);
+
   const trajectorySnapshots = useMemo(() => {
     const spec = getTrajectorySpec(caseData?.id);
     if (!spec) return null;
@@ -944,9 +962,11 @@ export default function Play({
         caseFlow,
         teachMeMode,
         playbookWhy: row.iv.why || '',
+        orderLog: clinicalOrderLog,
+        trajectoryOccurrence: row.iv.trajectoryOccurrence ?? 0,
       });
     }
-  }, [placedResultRows, caseData, caseFlow, teachMeMode]);
+  }, [placedResultRows, caseData, caseFlow, teachMeMode, clinicalOrderLog]);
   const vitals = liveVitals;
   const exam = caseFlow.exam;
   const examSummary = useMemo(() => getBriefingExam(caseFlow), [caseFlow]);
@@ -1183,9 +1203,12 @@ export default function Play({
     [caseData?.id],
   );
 
+  // Ref avoids TDZ: getChatSessionContext is passed into useCaseChat before caseChat exists.
+  const chatMessagesForContextRef = useRef([]);
+
   const getChatSessionContext = useCallback(
     () =>
-      buildChatSessionContext({
+      buildPortraitSessionContext({
         careUnit,
         orderTimelineEvents,
         conversationLog,
@@ -1198,6 +1221,11 @@ export default function Play({
         nextExpectedId,
         reviewResults: reviewed ? reviewResults : null,
         sessionStartedAt,
+        pins,
+        caseData,
+        caseFlow,
+        chatMessages: chatMessagesForContextRef.current,
+        liveOrderResults,
       }),
     [
       careUnit,
@@ -1205,7 +1233,8 @@ export default function Play({
       conversationLog,
       placed,
       interventions,
-      caseData?.id,
+      caseData,
+      caseFlow,
       teachMeMode,
       placementOrder,
       interventionById,
@@ -1213,6 +1242,8 @@ export default function Play({
       reviewed,
       reviewResults,
       sessionStartedAt,
+      pins,
+      liveOrderResults,
     ],
   );
 
@@ -1226,6 +1257,7 @@ export default function Play({
       logTimeline({ type: 'chat', role: 'system', text: `Case chat running on ${label}` });
     }, [logTimeline]),
   });
+  chatMessagesForContextRef.current = caseChat.messages;
 
   const getPortraitSessionContext = useCallback(
     () =>
@@ -1244,7 +1276,9 @@ export default function Play({
         sessionStartedAt,
         pins,
         caseData,
+        caseFlow,
         chatMessages: caseChat.messages,
+        liveOrderResults,
       }),
     [
       careUnit,
@@ -1253,6 +1287,7 @@ export default function Play({
       placed,
       interventions,
       caseData,
+      caseFlow,
       teachMeMode,
       placementOrder,
       interventionById,
@@ -1262,6 +1297,7 @@ export default function Play({
       sessionStartedAt,
       pins,
       caseChat.messages,
+      liveOrderResults,
     ],
   );
 
@@ -1283,12 +1319,26 @@ export default function Play({
   useEffect(() => {
     if (infoTab === 'chat') {
       void caseChat.reloadHistory();
-      return;
     }
-    if (caseChat.messages.some((m) => m.role === 'user' || m.role === 'assistant')) {
-      setDockChatHistoryExpanded(true);
+  }, [infoTab, caseChat.reloadHistory]);
+
+  // Auto-expand dock chat only when a NEW tutor/patient message arrives — not when user collapses.
+  useEffect(() => {
+    if (!caseChat.historyLoaded) return;
+    const count = caseChat.messages.filter(
+      (m) => m.role === 'user' || m.role === 'assistant',
+    ).length;
+    const grew = count > dockChatMessageCountRef.current;
+    dockChatMessageCountRef.current = count;
+    if (grew && count > 0 && !dockChatHistoryExpanded) {
+      setDockChatExpandedPersist(true);
     }
-  }, [infoTab, caseChat.reloadHistory, caseChat.messages]);
+  }, [
+    caseChat.historyLoaded,
+    caseChat.messages,
+    setDockChatExpandedPersist,
+    dockChatHistoryExpanded,
+  ]);
 
   const threadChatCases = useMemo(() => {
     const visits = getCaseVisitHistory({ limit: 24 });
@@ -1819,7 +1869,7 @@ export default function Play({
     onRecordingStart: () => {
       expandDockPanel();
       if (chatPatientModeRef.current) {
-        setDockChatHistoryExpanded(true);
+        setDockChatExpandedPersist(true);
       } else {
         setInfoTab('chat');
       }
@@ -2376,13 +2426,9 @@ export default function Play({
           const reply = await caseChat.sendMessage(question, { chatMode: 'patient_sim', dockBrief: true });
           if (reply) {
             logTimeline({ type: 'chat', role: 'user', text: question });
-            setDockChatReply({
-              answer: sanitizePatientReplyForDisplay(reply) || reply,
-              question,
-              orderLabel: question,
-            });
-            setDockReplyExpanded(true);
-            setDockChatHistoryExpanded(true);
+            setDockChatReply(null);
+            setDockReplyExpanded(false);
+            setDockChatExpandedPersist(true);
           } else if (caseChat.error) {
             showToast(caseChat.error, 'bad');
           }
@@ -2554,15 +2600,9 @@ export default function Play({
         const reply = await caseChat.sendMessage(question, { chatMode, dockBrief: true });
         if (reply) {
           logTimeline({ type: 'chat', role: 'user', text: question });
-          const displayAnswer =
-            chatMode === 'patient_sim' ? sanitizePatientReplyForDisplay(reply) : reply;
-          setDockChatReply({
-            answer: displayAnswer,
-            question,
-            orderLabel: question,
-          });
-          setDockReplyExpanded(true);
-          setDockChatHistoryExpanded(true);
+          setDockChatReply(null);
+          setDockReplyExpanded(false);
+          setDockChatExpandedPersist(true);
         } else if (caseChat.error) {
           showToast(caseChat.error, 'bad');
         }
@@ -2631,9 +2671,11 @@ export default function Play({
         onPinTeachingMoment={pinTeachingMoment}
         trajectorySnapshots={trajectorySnapshots}
         orderLog={clinicalOrderLog}
+        liveOrderResults={liveOrderResults}
+        onResultStored={storeLiveOrderResult}
       />
     ),
-    [dockResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode, pinTeachingMoment, showOrderWhyInDock, trajectorySnapshots, clinicalOrderLog],
+    [dockResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode, pinTeachingMoment, showOrderWhyInDock, trajectorySnapshots, clinicalOrderLog, liveOrderResults, storeLiveOrderResult],
   );
 
   const dockOrderContextLabel = useMemo(() => {
@@ -3942,9 +3984,6 @@ export default function Play({
               </button>
             </div>
           </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Attending depth" defaultOpen>
-            <FirstOpinionDepthControl id="first-opinion-depth-scene" compact />
-          </CollapsibleSettingsSection>
           <CollapsibleSettingsSection title="Attending style" defaultOpen>
             <AttendingStyleControl
               compact
@@ -4153,7 +4192,7 @@ export default function Play({
             }}
             hasChatHistory={hasDockChatHistory}
             chatHistoryExpanded={dockChatHistoryExpanded}
-            onToggleChatHistory={() => setDockChatHistoryExpanded((v) => !v)}
+            onToggleChatHistory={() => setDockChatExpandedPersist((v) => !v)}
             chatThreadPanel={dockChatThreadPanel}
             onOpenFullChat={() => {
               expandDockPanel();

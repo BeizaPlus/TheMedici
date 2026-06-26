@@ -2,6 +2,12 @@ import fs from 'fs';
 import fsp from 'fs/promises';
 import path from 'path';
 
+export function orderCacheKey(orderId, occurrence = 0) {
+  const key = String(orderId || '').trim();
+  const occ = Number.isFinite(Number(occurrence)) ? Number(occurrence) : 0;
+  return occ > 0 ? `${key}::occ::${occ}` : key;
+}
+
 export function orderResultCachePath(cacheDir, caseId) {
   const num = String(caseId || '').replace(/^case_/i, '').trim();
   return path.join(cacheDir, `case_${num}.json`);
@@ -24,9 +30,15 @@ export async function readOrderResultCache(cacheDir, caseId) {
   }
 }
 
-export async function readOrderResultEntry(cacheDir, caseId, orderId, teachMeMode = false) {
+export async function readOrderResultEntry(
+  cacheDir,
+  caseId,
+  orderId,
+  teachMeMode = false,
+  occurrence = 0,
+) {
   const entries = await readOrderResultCache(cacheDir, caseId);
-  const key = String(orderId || '').trim();
+  const key = orderCacheKey(orderId, occurrence);
   if (!entries || !key) return null;
   const slot = teachMeMode ? 'teach' : 'practice';
   const row = entries[key]?.[slot];
@@ -40,9 +52,10 @@ export async function writeOrderResultEntry(
   orderId,
   teachMeMode,
   { text, kind = 'order', kindLabel = 'Result', promptVersion = 1, orderLabel = '' },
+  occurrence = 0,
 ) {
   const slug = normalizeCaseFile(caseId);
-  const key = String(orderId || '').trim();
+  const key = orderCacheKey(orderId, occurrence);
   const slot = teachMeMode ? 'teach' : 'practice';
   if (!slug || !key || !text) return null;
 

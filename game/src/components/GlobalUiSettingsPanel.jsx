@@ -10,7 +10,6 @@ import { readUiPrefs, writeUiPrefs } from '../lib/uiPrefs.js';
 import ClinicalFontControls from './ClinicalFontControls.jsx';
 import SimulationCreativityControl from './SimulationCreativityControl.jsx';
 import CollapsibleSettingsSection from './CollapsibleSettingsSection.jsx';
-import FirstOpinionDepthControl from './FirstOpinionDepthControl.jsx';
 import AttendingStyleControl from './AttendingStyleControl.jsx';
 
 function isFavoriteLayoutSaved() {
@@ -110,16 +109,9 @@ export default function GlobalUiSettingsPanel({ embedded = false }) {
         />
       </CollapsibleSettingsSection>
 
-      <CollapsibleSettingsSection title="Attending depth" defaultOpen>
-        <p className="global-ui-settings-note">
-          First opinion when you open a treatment stack — interconnected teaching arc. One global length for all orders. Second opinion stays brief (locked punch).
-        </p>
-        <FirstOpinionDepthControl id="first-opinion-depth-global" compact />
-      </CollapsibleSettingsSection>
-
       <CollapsibleSettingsSection title="Attending style" defaultOpen>
         <p className="global-ui-settings-note">
-          Physics, biochemistry, abstraction, and meaning leans — two slots (A/B). Saved in this browser; refresh keeps your settings.
+          Two attendings (A/B) — each slot has its own teaching length and leans (physics, biochemistry, abstraction, meaning). Switch slots to tune length separately.
         </p>
         <AttendingStyleControl compact />
       </CollapsibleSettingsSection>

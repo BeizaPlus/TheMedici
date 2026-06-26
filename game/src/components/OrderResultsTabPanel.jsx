@@ -3,6 +3,7 @@ import LabTrendGraphPanel from './LabTrendGraphPanel.jsx';
 import { neutralStackOrderName } from '../lib/stackDecoys.js';
 import { useState } from 'react';
 import { buildTrendSeries } from '../lib/clinicalTrajectory/index.js';
+import { buildLiveLabTrendPoints } from '../lib/liveLabTrend.js';
 
 export default function OrderResultsTabPanel({
   resultRows = [],
@@ -19,12 +20,16 @@ export default function OrderResultsTabPanel({
   onPinTeachingMoment = null,
   trajectorySnapshots = null,
   orderLog = null,
+  liveOrderResults = null,
+  onResultStored = null,
 }) {
   const [trendMetric, setTrendMetric] = useState('k');
   const trendSeries = trajectorySnapshots?.length
     ? buildTrendSeries(trajectorySnapshots).points
     : [];
-  const showTrend = trendSeries.length >= 2;
+  const livePoints = buildLiveLabTrendPoints(orderLog, liveOrderResults || {}, trendSeries);
+  const showTrend = livePoints.length >= 2;
+  const trendPoints = livePoints;
   const hasRows = resultRows.length > 0;
   const activeRow =
     resultRows.find((row) => row.iv.id === activeIvId) || (hasRows ? resultRows[0] : null);
@@ -71,7 +76,7 @@ export default function OrderResultsTabPanel({
           </div>
           {showTrend && (
             <LabTrendGraphPanel
-              points={trendSeries}
+              points={trendPoints}
               metric={trendMetric}
               onMetricChange={setTrendMetric}
             />
@@ -88,6 +93,7 @@ export default function OrderResultsTabPanel({
               teachMeMode={teachMeMode}
               onPinTeachingMoment={onPinTeachingMoment}
               orderLog={orderLog}
+              onResultStored={onResultStored}
             />
           )}
         </>

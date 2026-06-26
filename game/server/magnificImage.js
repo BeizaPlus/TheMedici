@@ -115,44 +115,8 @@ async function pollMagnificTask(taskPath, taskId, { timeoutMs = 180000, apiKey }
   throw new Error('Magnific image task timed out');
 }
 
-/**
- * Reference-guided edit via Magnific REST (Nano Banana Pro API).
- * Kojo/MCP agents use OAuth + creations_request_upload instead — see
- * `.cursor/rules/meworld-magnific-mcp.mdc`.
- *
- * REST refs use inline data URLs (Magnific cloud cannot fetch localhost).
- */
-export async function generateImageEditWithMagnific({
-  imageBase64,
-  mimeType = 'image/png',
-  prompt,
-  aspectRatio = '16:9',
-  resolution = '2K',
-  referenceText = 'CAMERA LOCK — match bed composition, camera angle, and room layout exactly.',
-  extraReferenceImages = [],
-}) {
-  const mime =
-    mimeType === 'image/jpeg' ? 'image/jpeg' : mimeType === 'image/webp' ? 'image/webp' : 'image/png';
-  const dataUrl = `data:${mime};base64,${imageBase64}`;
+async function createMagnificImageTask(body, { keys = listMagnificApiKeys() } = {}) {
   const taskPath = magnificImagePath();
-
-  const reference_images = [
-    {
-      image: dataUrl,
-      mime_type: mime,
-      text: referenceText,
-    },
-    ...extraReferenceImages,
-  ];
-
-  const body = {
-    prompt: trimMagnificPrompt(prompt),
-    aspect_ratio: aspectRatio,
-    resolution,
-    reference_images,
-  };
-
-  const keys = listMagnificApiKeys();
   if (!keys.length) {
     throw new Error(
       'MAGNIFIC_API_KEY not configured — use Magnific MCP in Cursor (Kojo upload flow) or add REST key from magnific.com/developers',
@@ -207,4 +171,54 @@ export async function generateImageEditWithMagnific({
   const imgResp = await fetch(imageUrl);
   if (!imgResp.ok) throw new Error(`Could not download Magnific image (${imgResp.status})`);
   return Buffer.from(await imgResp.arrayBuffer());
+}
+
+/** Text-to-image via Beiza REST key (no reference images). */
+export async function generateTextToImageWithMagnific({
+  prompt,
+  aspectRatio = '1:1',
+  resolution = '2K',
+}) {
+  return createMagnificImageTask({
+    prompt: trimMagnificPrompt(prompt),
+    aspect_ratio: aspectRatio,
+    resolution,
+  });
+}
+
+/**
+ * Reference-guided edit via Magnific REST (Nano Banana Pro API).
+ * Kojo/MCP agents use OAuth + creations_request_upload instead — see
+ * `.cursor/rules/meworld-magnific-mcp.mdc`.
+ *
+ * REST refs use inline data URLs (Magnific cloud cannot fetch localhost).
+ */
+export async function generateImageEditWithMagnific({
+  imageBase64,
+  mimeType = 'image/png',
+  prompt,
+  aspectRatio = '16:9',
+  resolution = '2K',
+  referenceText = 'CAMERA LOCK — match bed composition, camera angle, and room layout exactly.',
+  extraReferenceImages = [],
+}) {
+  const mime =
+    mimeType === 'image/jpeg' ? 'image/jpeg' : mimeType === 'image/webp' ? 'image/webp' : 'image/png';
+  const dataUrl = `data:${mime};base64,${imageBase64}`;
+
+  const reference_images = [
+    {
+      image: dataUrl,
+      mime_type: mime,
+      text: referenceText,
+    },
+    ...extraReferenceImages,
+  ];
+
+  return createMagnificImageTask({
+    prompt: trimMagnificPrompt(prompt),
+    aspect_ratio: aspectRatio,
+    resolution,
+    reference_images,
+  });
 }

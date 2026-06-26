@@ -1,7 +1,7 @@
 import preparedBundle from '../data/preparedCases.json' with { type: 'json' };
 import { isUberCase } from './uberCases.js';
 
-export const STUDY_BATCH_SIZE = 4;
+export const STUDY_BATCH_SIZE = 5;
 
 const THEME_BUCKETS = [
   [/chest|dyspnea|sob|breath|respiratory|pneumo|pulmonary|cardiac/i, 'Cardiopulmonary'],
@@ -51,7 +51,7 @@ function summarizeBatchTheme(cases) {
 }
 
 /**
- * Group similar cases into study batches of four (Pediatrics-style bite-sized goals).
+ * Group similar cases into study batches of five (Pediatrics-style bite-sized goals).
  * Similar = shared presentationKey or theme bucket; sorted before chunking.
  */
 export function buildStudyBatches(cases, { batchSize = STUDY_BATCH_SIZE } = {}) {

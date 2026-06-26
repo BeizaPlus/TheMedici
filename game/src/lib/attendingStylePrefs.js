@@ -43,12 +43,59 @@ export const ATTENDING_STYLE_PRESETS = [
 
 const DEFAULT_LEANS = { physics: 50, biochemistry: 50, abstraction: 50, spirituality: 50 };
 
+/** Slot A default — Steve: first attending talks too much at global Full arc. */
+const DEFAULT_SLOT_A_DEPTH = 0;
+/** Slot B default when no legacy global depth exists. */
+const DEFAULT_SLOT_B_DEPTH = 3;
+
 export const ATTENDING_STYLE_CHANGED = 'schoonmaker-attending-style-changed';
+
+function normalizeDepth(n, fallback = DEFAULT_SLOT_B_DEPTH) {
+  const v = Number(n);
+  if (!Number.isFinite(v)) return fallback;
+  return Math.max(0, Math.min(3, Math.round(v)));
+}
+
+/** One-time migration from global first-opinion depth slider → slot B. */
+function readLegacyGlobalFirstOpinionDepth() {
+  if (typeof localStorage === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(STORAGE.firstOpinionDepth);
+    if (raw == null) return null;
+    const n = Number(raw);
+    if (Number.isFinite(n) && n >= 0 && n <= 3) return n;
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
+function defaultSlotDepth(slotId, legacyGlobal = readLegacyGlobalFirstOpinionDepth()) {
+  if (slotId === 'a') return DEFAULT_SLOT_A_DEPTH;
+  return legacyGlobal != null ? legacyGlobal : DEFAULT_SLOT_B_DEPTH;
+}
 
 function defaultSlot(slotId) {
   return {
     label: slotId === 'a' ? 'Attending A' : 'Attending B',
     leans: { ...DEFAULT_LEANS },
+    depth: defaultSlotDepth(slotId),
+  };
+}
+
+function normalizeSlot(slotId, row, legacyGlobal = readLegacyGlobalFirstOpinionDepth()) {
+  const base = defaultSlot(slotId);
+  if (!row) return base;
+  const depthFallback =
+    row.depth != null
+      ? defaultSlotDepth(slotId, legacyGlobal)
+      : slotId === 'b' && legacyGlobal != null
+        ? legacyGlobal
+        : defaultSlotDepth(slotId, null);
+  return {
+    label: String(row.label || base.label).slice(0, 40),
+    leans: normalizeLeans(row.leans),
+    depth: row.depth != null ? normalizeDepth(row.depth, depthFallback) : depthFallback,
   };
 }
 
@@ -83,15 +130,11 @@ export function readAttendingStylePrefs() {
       };
     }
     const parsed = JSON.parse(raw);
-    const slots = { a: defaultSlot('a'), b: defaultSlot('b') };
-    for (const slotId of ATTENDING_STYLE_SLOTS) {
-      const row = parsed?.slots?.[slotId];
-      if (!row) continue;
-      slots[slotId] = {
-        label: String(row.label || slots[slotId].label).slice(0, 40),
-        leans: normalizeLeans(row.leans),
-      };
-    }
+    const legacyGlobal = readLegacyGlobalFirstOpinionDepth();
+    const slots = {
+      a: normalizeSlot('a', parsed?.slots?.a, legacyGlobal),
+      b: normalizeSlot('b', parsed?.slots?.b, legacyGlobal),
+    };
     const activeSlot = ATTENDING_STYLE_SLOTS.includes(parsed?.activeSlot) ? parsed.activeSlot : 'a';
     return { activeSlot, slots };
   } catch {
@@ -106,14 +149,8 @@ export function writeAttendingStylePrefs(prefs) {
   const next = {
     activeSlot: ATTENDING_STYLE_SLOTS.includes(prefs?.activeSlot) ? prefs.activeSlot : 'a',
     slots: {
-      a: {
-        label: String(prefs?.slots?.a?.label || 'Attending A').slice(0, 40),
-        leans: normalizeLeans(prefs?.slots?.a?.leans),
-      },
-      b: {
-        label: String(prefs?.slots?.b?.label || 'Attending B').slice(0, 40),
-        leans: normalizeLeans(prefs?.slots?.b?.leans),
-      },
+      a: normalizeSlot('a', prefs?.slots?.a),
+      b: normalizeSlot('b', prefs?.slots?.b),
     },
   };
   try {
@@ -134,6 +171,36 @@ export function readActiveAttendingStyleSlot() {
 export function readActiveAttendingStyleLeans() {
   const prefs = readAttendingStylePrefs();
   return { ...prefs.slots[prefs.activeSlot].leans };
+}
+
+export function readActiveAttendingDepth() {
+  const prefs = readAttendingStylePrefs();
+  return normalizeDepth(
+    prefs.slots[prefs.activeSlot].depth,
+    defaultSlotDepth(prefs.activeSlot),
+  );
+}
+
+export function readAttendingDepthForSlot(slotId) {
+  const prefs = readAttendingStylePrefs();
+  if (!ATTENDING_STYLE_SLOTS.includes(slotId)) return DEFAULT_SLOT_A_DEPTH;
+  return normalizeDepth(prefs.slots[slotId].depth, defaultSlotDepth(slotId));
+}
+
+export function patchActiveAttendingStyleDepth(depth) {
+  const prefs = readAttendingStylePrefs();
+  const slotId = prefs.activeSlot;
+  const slot = prefs.slots[slotId];
+  return writeAttendingStylePrefs({
+    ...prefs,
+    slots: {
+      ...prefs.slots,
+      [slotId]: {
+        ...slot,
+        depth: normalizeDepth(depth, slot.depth),
+      },
+    },
+  });
 }
 
 export function setActiveAttendingStyleSlot(slotId) {

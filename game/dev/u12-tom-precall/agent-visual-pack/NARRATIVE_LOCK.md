@@ -23,13 +23,15 @@
 
 ---
 
-## Road object — name
+## Road object — name & shape
 
 | Term | Use |
 |------|-----|
-| **Pavement utility vault hatch** | Real-world maintenance cover in asphalt |
-| **Road bunker hatch** | Prompt shorthand |
+| **Circular pavement manhole cover** | **Steve-approved geometry** — round cast-iron maintenance cover flush in asphalt (~24–36 in) |
+| **Road bunker hatch** | Prompt shorthand only — must still render **circular**, never square |
 | **Ant** | Comic trigger + ED psychosis continuity (skin + curtains) |
+
+**Geometry lock:** **NOT** square vault door, rectangular utility hatch, or box metal plate. See `GENERATION_RULES.md` §3.
 
 ---
 

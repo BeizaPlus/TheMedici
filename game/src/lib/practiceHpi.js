@@ -1,6 +1,6 @@
 /** Spoiler phrases that must not appear in briefing / play HPI. */
 export const HPI_SPOILER_RE =
-  /\b(consistent with|hallmark of|pathophysiology|first-line|gold standard|myasthenia gravis|\bMG\b|thymoma|lambert-eaton|myasthenic crisis|autoimmune antibody|postsynaptic acetylcholine|resection can lead|CT chest is essential)\b/i;
+  /\b(consistent with|hallmark of|pathophysiology|first-line|gold standard|offending agent|stop now|classic \d[\s–-]\d|On exam:|Stevens-Johnson|\bSJS\b|\bTEN\b|Nikolsky sign|BSA epidermal|myasthenia gravis|\bMG\b|thymoma|lambert-eaton|myasthenic crisis|autoimmune antibody|postsynaptic acetylcholine|resection can lead|CT chest is essential|Treatment:|Diagnosis:|Management:|is the most common)\b/i;
 
 export function hpiContainsSpoilers(text) {
   return HPI_SPOILER_RE.test(String(text || ''));

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { FiSend } from 'react-icons/fi';
 import {
   IconCopy,
@@ -15,7 +15,7 @@ import {
   looksLikePatientStageReply,
   sanitizePatientReplyForDisplay,
 } from '../lib/patientReplyText.js';
-import { formatCaseIdLabel, shouldShowCaseIds } from '../lib/learningMode.js';
+import { formatCaseIdLabel } from '../lib/learningMode.js';
 import { mergeSessionThread, parseNoteBubbleContent } from '../lib/caseSessionThread.js';
 import { hydrateCaseNotes } from '../lib/caseNotes.js';
 import {
@@ -25,8 +25,8 @@ import {
 } from '../lib/caseUserLog.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { looksLikeTutorQuestion } from '../lib/chatIntentRouting.js';
-import { getCaseById } from '../data/useCcsCatalog.js';
 import CaseRecordButton from './CaseRecordButton.jsx';
+import ChatRoleSegment from './ChatRoleSegment.jsx';
 import CaseThreadCaseRail from './CaseThreadCaseRail.jsx';
 import { STORAGE } from '../lib/storageKeys.js';
 import { addCasePictureNote, casePictureLink } from '../lib/casePictureNotes.js';
@@ -48,6 +48,18 @@ function writeCollapsed(key, value) {
   } catch {
     /* ignore */
   }
+}
+
+const CHAT_SCROLL_BOTTOM_THRESHOLD_PX = 80;
+
+function isChatListNearBottom(el) {
+  if (!el) return true;
+  return el.scrollHeight - el.scrollTop - el.clientHeight <= CHAT_SCROLL_BOTTOM_THRESHOLD_PX;
+}
+
+function scrollChatListToBottom(el) {
+  if (!el) return;
+  el.scrollTop = el.scrollHeight;
 }
 
 function ThreadNoteBubble({ content }) {
@@ -149,6 +161,8 @@ export default function CaseSessionThread({
   } = chatApi;
   const listRef = useRef(null);
   const inputRef = useRef(null);
+  const stickToBottomRef = useRef(true);
+  const prevThreadLenRef = useRef(0);
   const [readingIdx, setReadingIdx] = useState(null);
   const [archivedMessages, setArchivedMessages] = useState([]);
   const [recordings, setRecordings] = useState([]);
@@ -160,17 +174,6 @@ export default function CaseSessionThread({
   );
 
   const caseLabel = formatCaseIdLabel(caseData, { teachMeMode });
-  const playCaseLabel = useMemo(() => {
-    if (playCaseId == null) return null;
-    if (!shouldShowCaseIds({ teachMeMode })) return null;
-    const gc = getCaseById(playCaseId);
-    return gc?.ccsNumber ?? playCaseId;
-  }, [playCaseId]);
-
-  const viewingOtherCase =
-    playCaseId != null &&
-    threadViewCaseId != null &&
-    String(threadViewCaseId) !== String(playCaseId);
 
   const thread = useMemo(() => {
     const chatRows = browseOnly ? archivedMessages : messages || [];
@@ -216,10 +219,46 @@ export default function CaseSessionThread({
     };
   }, [caseId, notesVersion, recordingsVersion, browseOnly]);
 
+  const expanded = suppressHeader || fillTab || !collapsed;
+
   useEffect(() => {
-    if (!listRef.current || collapsed) return;
-    listRef.current.scrollTop = listRef.current.scrollHeight;
-  }, [thread, busy, collapsed]);
+    const el = listRef.current;
+    if (!el || collapsed) return undefined;
+    const onScroll = () => {
+      stickToBottomRef.current = isChatListNearBottom(el);
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => el.removeEventListener('scroll', onScroll);
+  }, [collapsed, expanded, threadReady]);
+
+  useEffect(() => {
+    if (!collapsed) {
+      stickToBottomRef.current = true;
+    }
+  }, [collapsed]);
+
+  useLayoutEffect(() => {
+    const el = listRef.current;
+    if (!el || collapsed) return undefined;
+
+    const prevLen = prevThreadLenRef.current;
+    const grew = thread.length > prevLen;
+    prevThreadLenRef.current = thread.length;
+
+    const last = thread[thread.length - 1];
+    if (grew && last?.role === 'user') {
+      stickToBottomRef.current = true;
+    }
+
+    if (!stickToBottomRef.current || !grew) return undefined;
+
+    scrollChatListToBottom(el);
+    const frame = requestAnimationFrame(() => {
+      scrollChatListToBottom(listRef.current);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [thread, collapsed]);
 
   useEffect(() => () => stopCaseReader(), []);
 
@@ -271,6 +310,7 @@ export default function CaseSessionThread({
   const submitDraft = useCallback(async () => {
     const text = draft.trim();
     if (!text || busy || browseOnly) return;
+    stickToBottomRef.current = true;
     setDraft('');
 
     const cmd = parseChatModeCommand(text);
@@ -322,7 +362,6 @@ export default function CaseSessionThread({
     browseOnly,
   ]);
 
-  const expanded = suppressHeader || fillTab || !collapsed;
   const quietChatChrome = defaultChatTarget === 'tutor';
   const flatDockMessages = compact && messagesOnly;
 
@@ -354,18 +393,22 @@ export default function CaseSessionThread({
             </span>
           </button>
         )}
-        {expanded && caseRecording && (
+        {expanded && (onPatientModeChange || caseRecording) && (
           <div className="case-chat-head-actions">
-            {onPatientModeChange && (
+            {onPatientModeChange && fillTab ? (
+              <ChatRoleSegment
+                iconOnly
+                patientMode={patientMode}
+                onPatientModeChange={onPatientModeChange}
+              />
+            ) : onPatientModeChange ? (
               <button
                 type="button"
                 className={`case-chat-patient-btn${patientMode ? ' is-active' : ''}`}
                 title={
                   patientMode
                     ? 'Patient mode ON — simulated patient replies'
-                    : defaultChatTarget === 'tutor'
-                      ? 'Tutor chat — click for patient interview mode'
-                      : 'Notes mode — click for patient mode or type /pt'
+                    : 'Patient interview — talk to the simulated patient'
                 }
                 aria-label={patientMode ? 'Patient mode on' : 'Turn on patient mode'}
                 aria-pressed={patientMode}
@@ -377,32 +420,20 @@ export default function CaseSessionThread({
                   title={
                     patientMode
                       ? 'Patient mode ON — simulated patient replies'
-                      : defaultChatTarget === 'tutor'
-                        ? 'Tutor chat — click for patient interview mode'
-                        : 'Notes mode — click for patient mode or type /pt'
+                      : 'Patient interview — talk to the simulated patient'
                   }
                 />
               </button>
-            )}
-            <CaseRecordButton {...caseRecording} compact variant="toolbar" iconOnly chatMode={available === true} />
-          </div>
-        )}
-        {expanded && !caseRecording && onPatientModeChange && fillTab && (
-          <div className="case-chat-head-actions">
-            <button
-              type="button"
-              className={`case-chat-patient-btn${patientMode ? ' is-active' : ''}`}
-              title={patientMode ? 'Patient mode ON' : 'Turn on patient mode'}
-              aria-label={patientMode ? 'Patient mode on' : 'Turn on patient mode'}
-              aria-pressed={patientMode}
-              onClick={() => onPatientModeChange(!patientMode)}
-            >
-              <PatientPortraitAvatar
-                caseId={caseId}
-                caseData={caseData}
-                title={patientMode ? 'Patient mode ON' : 'Turn on patient mode'}
+            ) : null}
+            {caseRecording && (
+              <CaseRecordButton
+                {...caseRecording}
+                compact
+                variant="toolbar"
+                iconOnly
+                chatMode={available === true}
               />
-            </button>
+            )}
           </div>
         )}
       </header>
@@ -420,32 +451,12 @@ export default function CaseSessionThread({
               teachMeMode={teachMeMode}
             />
           )}
-          {viewingOtherCase && (
-            <p className="case-chat-banner case-thread-view-banner">
-              {caseLabel && playCaseLabel ? (
-                <>
-                  Viewing chat for case #{caseLabel} — you are still playing case #{playCaseLabel}. Tap #
-                  {playCaseLabel} to return to this case&apos;s live chat.
-                </>
-              ) : (
-                <>
-                  Viewing another case&apos;s chat history — tap your active case chip to return to live
-                  chat.
-                </>
-              )}
-            </p>
-          )}
-          {browseOnly && !viewingOtherCase && (
-            <p className="case-chat-banner case-thread-view-banner">
-              Read-only history — switch to the active case chip to continue chatting.
-            </p>
-          )}
           {available === false && (
             <p className="case-chat-banner bad">
               Add API keys to <code>.env</code> for case chat answers.
             </p>
           )}
-          {error && <p className="case-chat-banner bad">{error}</p>}
+          {error && !busy && <p className="case-chat-banner bad">{error}</p>}
           {tutorRouteHint && (
             <p className="case-chat-banner case-chat-banner--patient">{tutorRouteHint}</p>
           )}
@@ -462,11 +473,6 @@ export default function CaseSessionThread({
             {threadReady && thread.length === 0 && !busy && !quietChatChrome && (
               <p className="case-chat-tab-empty">
                 Talk to the patient — ask age, travel, smoking, symptoms — or jot a clinical note.
-              </p>
-            )}
-            {busy && (
-              <p className="case-chat-tab-empty case-chat-tab-busy" role="status">
-                {defaultChatTarget === 'tutor' || patientMode ? 'Tutor thinking…' : 'Working…'}
               </p>
             )}
             {thread.map((m, i) => {
@@ -553,7 +559,22 @@ export default function CaseSessionThread({
                 </div>
               );
             })}
-            {busy && <div className="case-chat-bubble assistant typing">Thinking…</div>}
+            {busy && (
+              <div
+                className={
+                  flatDockMessages
+                    ? 'case-chat-flat case-chat-flat--assistant case-chat-flat--typing'
+                    : 'case-chat-bubble assistant typing'
+                }
+                role="status"
+              >
+                {patientMode
+                  ? 'Patient is thinking…'
+                  : defaultChatTarget === 'tutor'
+                    ? 'Tutor thinking…'
+                    : 'Working…'}
+              </div>
+            )}
           </div>
 
           {!messagesOnly && !browseOnly && (

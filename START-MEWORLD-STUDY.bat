@@ -52,6 +52,8 @@ if not exist "%STUDY%\.env" if not exist "%GAME%\.env" (
   echo.
 )
 
+set SKIP_PLAY_SMOKE=1
+
 call npm run dev:study
 set "EXITCODE=%ERRORLEVEL%"
 if %EXITCODE% neq 0 pause

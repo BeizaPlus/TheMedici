@@ -52,6 +52,41 @@
         "consult-infectious-disease-specialist-fo": "ID for rabies immunoglobulin + vaccine series after ABCs and source control."
       },
       "teachingHook": "Look at the monitor first: 87% on room air with lactate 4.5 — the bite is on the forearm, but the body is already fighting systemically."
+    },
+    "014": {
+      "title": "Facial and Upper Extremity Edema",
+      "injuryMechanism": "33-week pregnant woman — placental sFlt-1 binds VEGF/PlGF → ↓ NO, vasospasm, and porous endothelium → fluid leaks to face and hands while BP surges; headache and vision changes are cerebral/retinal end-organ signals.",
+      "physicsBeats": [
+        "Title suggests SVC syndrome or lymphatic obstruction — pregnancy reframes the leak: spiral artery remodeling failed → anti-angiogenic surge.",
+        "Leaky capillaries (edema) and vasospasm (HTN) coexist — not hypotension from blood loss.",
+        "BP 189/99 with headache and blurry vision = brain and retina under pressure before seizure.",
+        "Magnesium blocks NMDA pore (not Ca²⁺ competition at the receptor) — lowers eclampsia risk while you control BP and plan delivery."
+      ],
+      "managementLinks": {
+        "magnesium-sulfate": "IV magnesium sulfate before eclampsia — raises the seizure threshold by blocking the NMDA receptor channel pore (use-dependent). Load 4–6 g, then maintenance. Give with severe features even when BP is controlled.",
+        "labetalol-hydralazine-iv": "IV labetalol 10–20 mg (repeat q10–20 min) — combined α+β blockade lowers BP without reflex tachycardia. Target SBP 140–150 mmHg, not normal pressure, to protect placental perfusion. First-line over hydralazine or nifedipine in pregnancy HTN emergency.",
+        "betamethasone-dexamethasone": "Betamethasone 12 mg IM × 2 doses 24 h apart — crosses placenta, induces surfactant in fetal type II pneumocytes. At 33 weeks she will likely deliver soon; steroids still help even if delivery is within hours.",
+        "consult-ob-gyn-cesarean-section": "Delivery is definitive for preeclampsia with severe features. At 33 weeks, after Mg, antihypertensive, and steroids, OB plans delivery — vaginal if stable, cesarean if non-reassuring fetal status or failed induction.",
+        "bmp-cmp-lfts": "Screen for HELLP — platelets <100K, elevated AST/ALT, hemolysis. Elevated creatinine signals renal end-organ injury.",
+        "cbc-with-differential": "Thrombocytopenia <100K is a severe feature and suggests HELLP — changes urgency of delivery planning.",
+        "urinalysis": "Screen for proteinuria — supports preeclampsia diagnosis when paired with HTN after 20 weeks. Spot protein/creatinine or 24-hour collection if positive.",
+        "protein-24-hour-urine-quantitative": "Quantify proteinuria (≥300 mg/24 h supports preeclampsia). Start collection even if you intervene before results return."
+      },
+      "teachingHook": "The swelling is in the face and hands, but the crisis is endothelial — pregnancy is the pivot that turns a venous differential into an obstetric emergency.",
+      "firstAidRefs": [
+        {
+          "page": 660,
+          "topic": "Preeclampsia / eclampsia — IV magnesium"
+        },
+        {
+          "page": 244,
+          "topic": "Labetalol — pregnancy HTN"
+        },
+        {
+          "page": 561,
+          "topic": "Glutamate / NMDA receptor (Mg mechanism)"
+        }
+      ]
     }
   }
 }

@@ -25,6 +25,7 @@ import {
   writeCaseBrowseContext,
 } from '../lib/caseBrowseContext.js';
 import { STORAGE } from '../lib/storageKeys.js';
+import { resolveCasePrecall } from '../lib/resolveCasePrecall.js';
 import { getAllowedCaseIds, readAudienceProfile } from '../lib/audienceProfile.js';
 import {
   batchLabel,
@@ -64,7 +65,11 @@ function writePickerPos(pos) {
   }
 }
 
-export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPreviewCase }) {
+export default function BriefingCasePicker({
+  currentCaseId,
+  onSelectCase,
+  onReplayPrecall,
+}) {
   const categories = getCategories();
   const audienceProfile = useMemo(() => readAudienceProfile(), []);
   const allCases = useMemo(() => getAllGameCases(), []);
@@ -381,7 +386,9 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
                 : ''}
           </p>
           <p className="briefing-picker-shuffle-hint">
-            Shuffle prefers cases you have not attempted. Revisit finished cases from the timeline.
+            Shuffle skips cases already on your Timeline (Home → Timeline).
+            Revisit finished cases there.
+            {onReplayPrecall ? ' Click a case to open it — pre-call video plays on select (click again to replay).' : ''}
           </p>
 
           <div className="briefing-picker-list" role="listbox" aria-label="Cases in category">
@@ -398,6 +405,7 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
               void checkVersion;
               const selected = c.id === currentCaseId;
               const rowState = rec?.completed ? 'done' : rec?.plays ? 'attempted' : '';
+              const hasPrecall = Boolean(onReplayPrecall && resolveCasePrecall(c));
               return (
                 <button
                   key={c.id}
@@ -407,13 +415,13 @@ export default function BriefingCasePicker({ currentCaseId, onSelectCase, onPrev
                   className={`briefing-picker-row ${selected ? 'selected' : ''} ${rowState} ${attempted ? 'study-done' : ''}`}
                   onClick={() => {
                     rememberCaseBrowse(c.id, { categoryId, entry: 'briefing' });
+                    if (selected && hasPrecall) {
+                      onReplayPrecall?.();
+                      return;
+                    }
                     onSelectCase(c);
                   }}
-                  onMouseEnter={() => onPreviewCase?.(c)}
-                  onMouseLeave={() => onPreviewCase?.(null)}
-                  onFocus={() => onPreviewCase?.(c)}
-                  onBlur={() => onPreviewCase?.(null)}
-                  title={`Switch to ${learnerFacingCaseTitle(c)}`}
+                  title={`Switch to ${learnerFacingCaseTitle(c)}${hasPrecall ? ' — click again to replay pre-call' : ''}`}
                 >
                   <CaseAttemptRadio caseId={c.id} onChange={() => setCheckVersion((v) => v + 1)} />
                   {shouldShowCaseIds() && (

@@ -35,3 +35,12 @@ export function markCasePrecallSkipped(caseId) {
     /* ignore */
   }
 }
+
+export function clearCasePrecallSkip(caseId) {
+  if (!caseId) return;
+  try {
+    sessionStorage.removeItem(`${PRECALL_SKIP_KEY}:${String(caseId).toUpperCase()}`);
+  } catch {
+    /* ignore */
+  }
+}

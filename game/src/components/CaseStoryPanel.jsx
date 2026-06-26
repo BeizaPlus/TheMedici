@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   buildCaseStoryOffline,
+  downloadCaseStoryMarkdown,
   fetchCaseStory,
   fetchCaseStoryMasterImage,
   fetchCaseStoryStoryboard,
+  formatCaseStoryExportMarkdown,
 } from '../lib/caseStory.js';
 import { apiUrl } from '../lib/apiBase.js';
 import { chaptersToStoryboardBeats } from '../lib/caseStorySessionFingerprint.js';
@@ -187,6 +189,28 @@ function StoryReadinessChecklist({ readiness, lateralityIssues = [] }) {
   );
 }
 
+function ProseChapter({ chapter, open, onToggle }) {
+  const isTwist = chapter.id === 'twist';
+  return (
+    <article
+      className={`case-story-chapter${isTwist ? ' case-story-chapter-twist' : ''}${open ? ' is-open' : ' is-collapsed'}`}
+    >
+      <button
+        type="button"
+        className="case-story-chapter-head"
+        onClick={onToggle}
+        aria-expanded={open}
+      >
+        <span className="case-story-chapter-chevron" aria-hidden>
+          {open ? '▴' : '▾'}
+        </span>
+        <h3>{chapter.heading}</h3>
+      </button>
+      {open && <p>{chapter.body}</p>}
+    </article>
+  );
+}
+
 export default function CaseStoryPanel({
   open,
   onClose,
@@ -208,6 +232,7 @@ export default function CaseStoryPanel({
   const [gridImageUrl, setGridImageUrl] = useState(null);
   const [imagesLoading, setImagesLoading] = useState(false);
   const [imageGen, setImageGen] = useState(true);
+  const [chapterOpen, setChapterOpen] = useState({});
   const compileStoryRef = useRef(null);
   const compileInFlightRef = useRef(false);
   const storyboardSyncKeyRef = useRef('');
@@ -436,6 +461,33 @@ export default function CaseStoryPanel({
   const sessionOrders = sessionContext?.stacksPlaced?.length || 0;
   const sessionChat = sessionContext?.chatMessages?.length || 0;
 
+  const isChapterOpen = useCallback(
+    (id) => chapterOpen[id] !== false,
+    [chapterOpen],
+  );
+
+  const toggleChapter = useCallback((id) => {
+    setChapterOpen((prev) => ({
+      ...prev,
+      [id]: prev[id] !== false ? false : true,
+    }));
+  }, []);
+
+  const handleCopyExport = useCallback(async () => {
+    if (!story) return;
+    const md = formatCaseStoryExportMarkdown(story, caseData);
+    try {
+      await navigator.clipboard.writeText(md);
+    } catch {
+      /* ignore */
+    }
+  }, [story, caseData]);
+
+  const handleDownloadExport = useCallback(() => {
+    if (!story) return;
+    downloadCaseStoryMarkdown(story, caseData);
+  }, [story, caseData]);
+
   if (!open) return null;
 
   return (
@@ -479,6 +531,28 @@ export default function CaseStoryPanel({
                 </button>
                 <button type="button" className="case-story-btn" onClick={() => setEditing(false)}>
                   Cancel
+                </button>
+              </>
+            )}
+            {!editing && (
+              <>
+                <button
+                  type="button"
+                  className="case-story-btn"
+                  onClick={() => void handleCopyExport()}
+                  disabled={!story?.chapters?.length}
+                  title="Copy story as markdown"
+                >
+                  Copy
+                </button>
+                <button
+                  type="button"
+                  className="case-story-btn"
+                  onClick={handleDownloadExport}
+                  disabled={!story?.chapters?.length}
+                  title="Download story markdown for offline review"
+                >
+                  Export
                 </button>
               </>
             )}
@@ -625,13 +699,12 @@ export default function CaseStoryPanel({
 
             <div className="case-story-chapters">
               {(story?.chapters || []).map((ch) => (
-                <article
+                <ProseChapter
                   key={ch.id}
-                  className={`case-story-chapter${ch.id === 'twist' ? ' case-story-chapter-twist' : ''}`}
-                >
-                  <h3>{ch.heading}</h3>
-                  <p>{ch.body}</p>
-                </article>
+                  chapter={ch}
+                  open={isChapterOpen(ch.id)}
+                  onToggle={() => toggleChapter(ch.id)}
+                />
               ))}
             </div>
           </>

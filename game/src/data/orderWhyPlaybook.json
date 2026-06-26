@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-06-21T14:46:42.258Z",
+  "builtAt": "2026-06-24T12:50:45.376Z",
   "cases": {
     "100": {
       "physical-exam-pelvic": {
@@ -672,22 +672,42 @@
     },
     "122": {
       "physical-exam-full-skin-exam": {
-        "why": "Target lesions, bullae, mucosal involvement, Nikolsky sign.",
+        "why": "Document targetoid lesions, bullae, Nikolsky sign, mucosal involvement, and BSA detachment — classifies SJS vs TEN.",
         "orderLabel": "Physical Exam: Full skin exam",
         "source": "playbook"
       },
+      "cbc-bmp-lfts": {
+        "why": "BMP for hypotonic fluid losses (Na 131); CBC for lymphopenia (severity); LFTs for drug-induced transaminitis.",
+        "orderLabel": "CBC / BMP / LFTs",
+        "source": "playbook"
+      },
+      "skin-biopsy-punch": {
+        "why": "Full-thickness epidermal necrosis at DEJ — distinguishes SJS from superficial SSSS split.",
+        "orderLabel": "Skin biopsy (frozen section)",
+        "source": "playbook"
+      },
       "discontinue-offending-drug": {
-        "why": "Most important intervention.",
-        "orderLabel": "DISCONTINUE offending drug",
+        "why": "Stop lamotrigine now — every hour on board drives more keratinocyte death.",
+        "orderLabel": "DISCONTINUE offending drug (lamotrigine)",
+        "source": "playbook"
+      },
+      "iv-fluids-resuscitation": {
+        "why": "Lactate 2.3 + insensible losses through denuded skin; hyponatremia risk.",
+        "orderLabel": "IV fluids / resuscitation",
+        "source": "playbook"
+      },
+      "ophthalmology-consult": {
+        "why": "Ocular mucosal involvement — prevent synechiae and corneal scarring.",
+        "orderLabel": "Ophthalmology consult",
         "source": "playbook"
       },
       "admit-to-burn-icu": {
-        "why": "SJS/TEN = burn unit management.",
+        "why": "SJS/TEN requires burn-unit wound care, fluids, and monitoring — not floor.",
         "orderLabel": "Admit to Burn ICU",
         "source": "playbook"
       },
       "supportive-care-fluids-wound-care-nutrit": {
-        "why": "Mainstay. Ophthalmology for eye involvement.",
+        "why": "Silver dressings, nutrition, analgesia — mainstay after drug withdrawal.",
         "orderLabel": "Supportive care (fluids, wound care, nutrition)",
         "source": "playbook"
       }
@@ -3838,7 +3858,7 @@
         "source": "playbook"
       },
       "cbc-with-differential": {
-        "why": "Screening. Assess for thrombocytopenia (<100K = severe feature).",
+        "why": "Thrombocytopenia <100K is a severe feature and suggests HELLP — changes urgency of delivery planning.",
         "orderLabel": "CBC with differential",
         "source": "playbook"
       },
@@ -3853,7 +3873,7 @@
         "source": "playbook"
       },
       "urinalysis": {
-        "why": "Screen for proteinuria — positive in pre-eclampsia. Leads to 24-hour quantitative protein.",
+        "why": "Screen for proteinuria — supports preeclampsia diagnosis when paired with HTN after 20 weeks. Spot protein/creatinine or 24-hour collection if positive.",
         "orderLabel": "Urinalysis",
         "source": "playbook"
       },
@@ -3868,32 +3888,32 @@
         "source": "playbook"
       },
       "protein-24-hour-urine-quantitative": {
-        "why": "≥300mg in 24h = proteinuria supporting pre-eclampsia diagnosis. May not return before intervention but must be started.",
+        "why": "Quantify proteinuria (≥300 mg/24 h supports preeclampsia). Start collection even if you intervene before results return.",
         "orderLabel": "Protein, 24-hour urine, quantitative",
         "source": "playbook"
       },
       "bmp-cmp-lfts": {
-        "why": "Elevated creatinine, LFTs, and uric acid. Screen for HELLP syndrome.",
+        "why": "Screen for HELLP — platelets <100K, elevated AST/ALT, hemolysis. Elevated creatinine signals renal end-organ injury.",
         "orderLabel": "BMP / CMP / LFTs",
         "source": "playbook"
       },
       "betamethasone-dexamethasone": {
-        "why": "Antenatal corticosteroids for fetal lung maturity if < 34 weeks. Patient likely to deliver at 33 weeks.",
+        "why": "Betamethasone 12 mg IM × 2 doses 24 h apart — crosses placenta, induces surfactant in fetal type II pneumocytes. At 33 weeks she will likely deliver soon; steroids still help even if delivery is within hours.",
         "orderLabel": "Betamethasone / Dexamethasone",
         "source": "playbook"
       },
       "magnesium-sulfate": {
-        "why": "Seizure prophylaxis to prevent progression to eclampsia. Standard of care for pre-eclampsia with severe features.",
+        "why": "IV magnesium sulfate before eclampsia — raises the seizure threshold by blocking the NMDA receptor channel pore (use-dependent). Load 4–6 g, then maintenance. Give with severe features even when BP is controlled.",
         "orderLabel": "Magnesium sulfate",
         "source": "playbook"
       },
       "labetalol-hydralazine-iv": {
-        "why": "IV labetalol is first-line for pre-eclampsia hypertension — superior efficacy with fewer side effects than hydralazine. Nifedipine has fetal effects.",
+        "why": "IV labetalol 10–20 mg (repeat q10–20 min) — combined α+β blockade lowers BP without reflex tachycardia. Target SBP 140–150 mmHg, not normal pressure, to protect placental perfusion. First-line over hydralazine or nifedipine in pregnancy HTN emergency.",
         "orderLabel": "Labetalol / Hydralazine (IV)",
         "source": "playbook"
       },
       "consult-ob-gyn-cesarean-section": {
-        "why": "Delivery is definitive treatment. With severe features, deliver ≥ 34 weeks. OB/GYN for cesarean.",
+        "why": "Delivery is definitive for preeclampsia with severe features. At 33 weeks, after Mg, antihypertensive, and steroids, OB plans delivery — vaginal if stable, cesarean if non-reassuring fetal status or failed induction.",
         "orderLabel": "Consult OB/GYN / Cesarean section",
         "source": "playbook"
       },
@@ -9276,6 +9296,43 @@
         "source": "llm-cache"
       }
     },
+    "case_010": {
+      "hemoglobin-a1c-blood__d2__p88b35a42s22__teach-me-v11": {
+        "why": "Mr. Uche Emecheta is a middle-aged man with bilateral leg pain on exertion, pulse 102, BP 133/88. This is classic claudication — his legs demand more blood flow during walking than his narrowed arteries can deliver. The pain is a supply-and-demand crisis: working muscle needs oxygen, stenotic vessels can't increase flow, so ischemia forces him to stop. When he rests, demand drops below supply, the pain resolves. Now look at his risk factors — hypertension, smoking, hyperlipidemia, and newly diagnosed diabetes. Diabetes accelerates atherosclerosis through a specific mechanism: chronic hyperglycemia glycates vessel wall proteins, stiffening the endothelium and driving plaque formation in the same medium-sized arteries that supply the legs. So the HbA1c here isn't a screening test — it tells us how aggressively his glucose has been damaging his vessels over the past three months. If his A1c is high, his claudication is driven by a modifiable process we can slow. If it's controlled, we focus harder on smoking cessation and statins. Either way, this number reframes his leg pain from a mechanical problem to a metabolic one.",
+        "orderLabel": "Hemoglobin A1C, blood",
+        "source": "llm-cache"
+      },
+      "lipid-profile__d2__p88b35a42s22__teach-me-v11": {
+        "why": "The leg pain on exertion is a demand-ischemia signal — the calf muscles are outrunning their blood supply every time he walks. That supply is choked by atherosclerotic plaques, and lipids are the raw material those plaques are built from. So checking his lipid profile tells us how much new fuel is available to grow more blockages. His LDL drives endothelial deposition, oxidation, and foam cell formation — the whole cascade that tightens the lumen. Treating that LDL below 100, ideally below 70, slows or halts plaque progression. Without it, his walking distance keeps shrinking and the risk of critical limb ischemia climbs. This order is about whether we can stop the pipe from narrowing further.",
+        "orderLabel": "Lipid profile",
+        "source": "llm-cache"
+      },
+      "microalbumin-urine-24-hour-or-spot__d2__p88b35a42s22__teach-me-v11": {
+        "why": "He has newly diagnosed type 2 diabetes, so his endothelium has been bathed in high glucose for months. That glucose directly damages the glomerular basement membrane, widening the pores and letting albumin slip through. This happens long before his creatinine budges — microalbuminuria is the earliest detectable sign of diabetic nephropathy. We're screening for early disease because catching it now lets us start an ACE inhibitor and slow the progression before protein spills become irreversible. The same microvascular damage that's causing his claudication — smoking plus hyperglycemia — is also attacking his kidneys. If his urine albumin-to-creatinine ratio is elevated, we know the vascular injury isn't limited to his legs. What would you expect to see on his foot exam if the microvascular disease is already advanced?",
+        "orderLabel": "Microalbumin, urine (24-hour or spot)",
+        "source": "llm-cache"
+      },
+      "ankle-brachial-index-arterial-doppler-lo__d2__p88b35a42s22__teach-me-v11": {
+        "why": "The leg pain on exertion is a supply-demand mismatch. Atherosclerotic plaques in the iliac or femoral arteries create a fixed resistance; during walking, the calf muscles demand more oxygen than the narrowed vessel can deliver. The pain is ischemic — the muscle is screaming for blood it cannot get. Rest lowers metabolic demand back below the supply threshold, so the pain resolves. That pattern — reproducible, distance-dependent, rest-relieved — is classic claudication. The ABI measures the pressure drop across the stenosis: a normal ankle pressure equals or exceeds brachial pressure (≥1.0), but a blocked artery drops the distal pressure. A ratio below 0.7 confirms hemodynamically significant disease. We need this number to stage severity and decide whether to pursue revascularization or start medical therapy.",
+        "orderLabel": "Ankle-brachial index / Arterial Doppler, lower extremities",
+        "source": "llm-cache"
+      },
+      "ankle-brachial-index-arterial-doppler-lo__peer__d0__p32b30a42s85__teach-me-v11": {
+        "why": "ABI below 0.9 means plaque has narrowed the lumen enough that flow drops when muscle demand rises — that's the cramping. This man's smoking and diabetes are actively driving that plaque progression. The test tells you how much vessel he has left to work with.",
+        "orderLabel": "Ankle-brachial index / Arterial Doppler, lower extremities",
+        "source": "llm-cache"
+      },
+      "metformin__d2__p32b30a42s85__teach-me-v11": {
+        "why": "This man's legs are screaming with every block he walks — but the pain is a messenger, not the enemy. The real problem is that his arteries are clogged, his muscles are starving for oxygen, and his newly diagnosed diabetes is accelerating that destruction silently. Metformin is not a diabetes drug here — it is a vascular protection drug. It improves endothelial function, reduces oxidative stress, and lowers the insulin resistance that drives plaque progression in his legs. Starting it now, at diagnosis, is the single best chance to keep him walking without pain a year from now. Without it, his claudication will worsen, his ABI will drop, and he may face amputation or bypass. This is not just about glucose numbers — it is about whether this man keeps his mobility, his independence, and his ability to provide for his family. What is his hemoglobin A1c?",
+        "orderLabel": "Metformin",
+        "source": "llm-cache"
+      },
+      "metformin__peer__d0__p32b30a42s85__teach-me-v11": {
+        "why": "Mr. Emecheta — pulse 102, lactate 2 — his claudication is atherosclerotic plaque narrowing the femoral runoff, so his calf muscles starve for oxygen the moment he walks. Metformin won't open that pipe. What will?",
+        "orderLabel": "Metformin",
+        "source": "llm-cache"
+      }
+    },
     "case_027": {
       "obtain-complete-blood-count-cbc-and-meta": {
         "why": "A CBC is essential to rule out anemia as a reversible cause of fatigue, while the metabolic panel screens for electrolyte disturbances or renal failure that may present with weakness. Given the emergency setting, these results will guide immediate management, such as transfusion for severe anemia or correction of life-threatening metabolic abnormalities.",
@@ -9668,8 +9725,35 @@
         "orderLabel": "Physical Exam: Genitalia",
         "source": "llm-cache"
       }
+    },
+    "case_U12": {
+      "physical-exam-general-appearance__d2__teach-me-v11": {
+        "why": "Tom Hayes, 45, pulse 90, BP 101/64, SpO₂ 93% — a man whose GABA receptors have been chronically suppressed by a liter of whiskey daily. When alcohol disappears, those receptors become underactive. The brain loses its main braking system. So the sympathetic nervous system runs unchecked — that's the tremor, the diaphoresis, the hallucinations. General appearance tells you how far this has progressed: is he just tremulous, or is he agitated, confused, unable to track? The difference between mild withdrawal and impending delirium tremens is a clinical gestalt that no lab can capture. You're looking for the point where autonomic overdrive turns into global CNS dysregulation — that's the moment you need ICU-level sedation, not just a benzodiazepine taper. His prior DTs mean his brain has already kindled this pathway; it will escalate faster this time. So your first look across the bed tells you how aggressive your initial CIWA and benzodiazepine strategy needs to be.",
+        "orderLabel": "Physical Exam: General Appearance",
+        "source": "llm-cache"
+      },
+      "physical-exam-general-appearance__d3__teach-me-v11": {
+        "why": "Tom Hayes — 45, pulse 90, BP 101/64, SpO₂ 93%, seeing bugs on the wall 36 hours out from his last drink — his autonomic nervous system is running without brakes.\n\nThat's because ethanol is a GABA-A potentiator and an NMDA antagonist. When he drinks a liter of whiskey daily, his brain compensates by downregulating GABA receptors and upregulating NMDA receptors to maintain baseline function. The moment alcohol leaves his system, the brakes disappear — GABA inhibition collapses while glutamate excitation surges unchecked. So his heart races, he sweats, his hands shake, and his visual cortex starts generating bugs that aren't there. The low-normal BP and borderline SpO₂ tell you he's still compensating, but the tremor and hallucinations say the hyperadrenergic storm is building.\n\nThe general appearance exam is your first severity gauge — is he calm enough to interview, or is he crawling out of bed? That single observation tells you whether this is mild withdrawal or the opening act of delirium tremens, which killed him once before. Everything else — CIWA, benzodiazepine dosing, ICU level — follows from that first look.",
+        "orderLabel": "Physical Exam: General Appearance",
+        "source": "llm-cache"
+      },
+      "physical-exam-neuro-psych__d3__teach-me-v11": {
+        "why": "This is autonomic and cortical hyperexcitability, not a primary psychiatric break. You stopped the GABAergic brake that was compensating for chronic alcohol-driven NMDA receptor upregulation. Now the excitatory system is unopposed — and it's expressing everywhere. The tremor is spinal motor neuron disinhibition. The hallucinations are temporal lobe irritability. The diaphoresis is sympathetic overflow because the locus coeruleus is also disinhibited.\n\nYou don't need imaging to know this is withdrawal. You need to confirm that the exam is symmetrical and the mental status is consistent with a toxic-metabolic delirium — no focal deficits, no papilledema. A normal neuro exam in this context *is* the diagnosis: the mechanism is diffuse, not structural.\n\nWhat will you start first — the benzodiazepine or the CIWA scoring?",
+        "orderLabel": "Physical Exam: Neuro / Psych",
+        "source": "llm-cache"
+      },
+      "physical-exam-heart-cardiovascular__d3__teach-me-v11": {
+        "why": "The heart exam here isn't about ischemia or valve disease — it's the only window into autonomic tone you can lay hands on. Alcohol withdrawal strips GABA-mediated inhibition, so the locus coeruleus fires unchecked, dumping norepinephrine into the circulation. The pulse you feel isn't just fast; it's the sympathetic nervous system screaming without its brake. A hyperdynamic precordium, a flow murmur, a bounding pulse — those are all the same catecholamine surge you see in the tremor and the sweat. If you find a normal, quiet heart in this setting, you need to ask why the autonomic response is blunted — that's how you catch a concurrent infection, a silent MI, or impending cardiovascular collapse before it happens. The stethoscope is your catecholamine meter.",
+        "orderLabel": "Physical Exam: Heart / Cardiovascular",
+        "source": "llm-cache"
+      },
+      "supportive-care-observation__d3__teach-me-v11": {
+        "why": "This patient's brain has been adapting to constant GABA potentiation from alcohol. When the alcohol leaves, the GABA brake releases and NMDA glutamate receptors ramp up unchecked — that's the tremor, the autonomic storm, the hallucinations. Supportive care is the foundation because the brain needs time to rebalance its own inhibitory tone without pharmacologic interference. Benzodiazepines are the rescue tool for severe symptoms, but observation with quiet environment, reorientation, and safety monitoring prevents the spiral into full delirium tremens. The prior DTs tell us his kindling threshold is low — each withdrawal episode makes the next one more explosive. So you watch, you protect the airway, you give thiamine before glucose to prevent Wernicke's, and you don't reach for flumazenil because that strips away the only GABA tone he has left and guarantees seizures. What CIWA-Ar threshold would prompt you to start benzodiazepines in this patient given his DTs history?",
+        "orderLabel": "Supportive care / Observation",
+        "source": "llm-cache"
+      }
     }
   },
-  "caseCount": 209,
-  "entryCount": 1850
+  "caseCount": 211,
+  "entryCount": 1866
 }

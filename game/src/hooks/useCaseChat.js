@@ -9,7 +9,11 @@ import {
 import { loadPersistedChatHistory, logChatMessage } from '../lib/caseUserLog.js';
 import { appendCaseNotesBlock } from '../lib/caseNotes.js';
 import { prefetchPatientReplyAudio, speakPatientReply } from '../lib/patientSpeech.js';
-import { sanitizePatientReplyForDisplay, looksLikePatientStageReply } from '../lib/patientReplyText.js';
+import {
+  sanitizePatientReplyForDisplay,
+  looksLikePatientStageReply,
+  splitPatientReply,
+} from '../lib/patientReplyText.js';
 
 function normalizeAssistantContent(content, { patientMode = false } = {}) {
   const text = String(content || '');
@@ -162,6 +166,7 @@ export function useCaseChat({
       const sid = await ensureCaseChatSession(caseData, { chatMode });
       setSessionId((prev) => (prev !== sid ? sid : prev));
 
+      setError('');
       setMessages((prev) => [...prev, { role: 'user', content: trimmed, at: new Date().toISOString() }]);
       await persistMessage('user', trimmed);
 
@@ -176,20 +181,32 @@ export function useCaseChat({
         setSessionId(result.sessionId);
       }
       const reply = result.reply;
-      const displayReply =
-        chatMode === 'patient_sim' ? sanitizePatientReplyForDisplay(reply) : reply;
-      const shown = displayReply || (chatMode === 'patient_sim' ? '' : reply);
-      if (chatMode === 'patient_sim' && !shown) {
+      let shown = reply;
+      if (chatMode === 'patient_sim') {
+        const { dialogue } = splitPatientReply(reply);
+        shown = dialogue || sanitizePatientReplyForDisplay(reply);
+      }
+      if (chatMode === 'patient_sim' && !String(shown || '').trim()) {
         throw new Error('Patient reply had no speakable dialogue — try asking again.');
       }
       if (chatMode === 'tutor' && !String(shown || reply || '').trim()) {
         throw new Error('Tutor returned empty — retry or check API keys');
       }
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: shown || reply, at: new Date().toISOString() },
-      ]);
-      await persistMessage('assistant', shown || reply);
+      const assistantContent = shown || reply;
+      setMessages((prev) => {
+        const last = prev[prev.length - 1];
+        if (
+          last?.role === 'assistant' &&
+          String(last.content || '').trim() === String(assistantContent || '').trim()
+        ) {
+          return prev;
+        }
+        return [
+          ...prev,
+          { role: 'assistant', content: assistantContent, at: new Date().toISOString() },
+        ];
+      });
+      await persistMessage('assistant', assistantContent);
       if (chatMode === 'patient_sim' && shown) {
         void prefetchPatientReplyAudio({ caseData, text: shown });
         void speakPatientReply({ caseData, text: shown });

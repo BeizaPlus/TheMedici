@@ -1,6 +1,9 @@
 import { getRecentCaseHistory as getProgressHistory, normalizeCaseProgressId } from '../data/caseProgress.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
 import { listCasesWithChatActivity } from './recentChatCases.js';
+import { countCasesCovered } from './caseCoverage.js';
+
+export { countCasesCovered };
 
 function mergeAt(existing, candidate) {
   if (!candidate) return existing;
@@ -76,28 +79,6 @@ export function getCaseVisitHistory({ limit = 30, serverRows = null } = {}) {
         category: gameCase?.category || '',
       };
     });
-}
-
-/** Unique cases touched (play, chat, or server) — not limited to timeline list length. */
-export function countCasesCovered({ serverRows = null } = {}) {
-  const byId = new Map();
-
-  for (const row of getProgressHistory({ limit: 10_000 })) {
-    byId.set(row.caseId, true);
-  }
-
-  for (const row of listCasesWithChatActivity({ limit: 10_000 })) {
-    byId.set(normalizeCaseProgressId(row.caseId), true);
-  }
-
-  if (Array.isArray(serverRows)) {
-    for (const row of serverRows) {
-      const id = normalizeCaseProgressId(row.caseId);
-      if (id) byId.set(id, true);
-    }
-  }
-
-  return byId.size;
 }
 
 export function formatCaseVisitWhen(iso) {

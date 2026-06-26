@@ -18,6 +18,8 @@ alwaysApply: true
 ## Never
 
 - Edit **both** `MeWorld` and `MeWorld-study` in one task without Steve asking
+- Edit **`MeWorld\game` (main)** when Steve is studying on **`localhost:5173`** — use study tree only
+- Port main dock/UI experiments to study unless Steve says "sync study" or "port to study"
 - Run `create-study-snapshot.ps1` mid-study (overwrites study code)
 - Assume study and main are the same level — they **diverge**
 

@@ -1,13 +1,15 @@
 import { readAudienceProfile } from './audienceProfile.js';
 import { toTitleCase } from './clinicalTextFormat.js';
+import { resolvePracticeHpi } from './practiceHpi.js';
 
 /** Default ON — spoiler-free study until case completes. Toggle in Welcome → Settings. */
 export function isLearningMode(profile = readAudienceProfile()) {
   return profile?.learningMode !== false;
 }
 
-/** CCS / Uber catalog numbers — teach mode or exam mode only. */
+/** CCS / Uber catalog numbers — teach mode, exam mode, or dev build (for case editing). */
 export function shouldShowCaseIds({ teachMeMode = false } = {}) {
+  if (import.meta.env?.DEV) return true;
   return !isLearningMode() || Boolean(teachMeMode);
 }
 
@@ -60,16 +62,18 @@ export function formatCaseIdLabel(caseData, { teachMeMode = false } = {}) {
 export function sanitizeCaseForLearning(caseData = {}) {
   if (!caseData || typeof caseData !== 'object') return caseData;
   const cleanHpi =
-    caseData.practice_hpi?.trim() ||
-    caseData.clinical_hpi_narrative?.trim() ||
-    caseData.hpi_narrative?.trim() ||
-    caseData.historyText?.trim() ||
-    '';
+    resolvePracticeHpi(
+      { practice_hpi: caseData.practice_hpi },
+      caseData,
+      caseData.historyText || '',
+    ) || '';
   const out = { ...caseData };
   delete out.diagnosis;
   delete out.case_summary;
   delete out.clinical_tip;
   delete out.objective;
+  delete out.hpi_narrative;
+  delete out.clinical_hpi_narrative;
   if (out.uberMeta) {
     const { segments, memberCaseIds, domains, briefingNote, ...uberRest } = out.uberMeta;
     out.uberMeta = { ...uberRest };

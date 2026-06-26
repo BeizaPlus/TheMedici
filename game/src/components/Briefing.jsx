@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { apiUrl } from '../lib/apiBase.js';
 import PatientScene from './PatientScene.jsx';
 import BriefingCasePicker from './BriefingCasePicker.jsx';
@@ -33,7 +33,7 @@ import PsychiatricLunaticIntro, {
 } from './PsychiatricLunaticIntro.jsx';
 import CasePrecallIntro from './CasePrecallIntro.jsx';
 import { resolvePsychiatricLunaticIntro } from '../lib/resolvePatientPsychiatricRef.js';
-import { resolveCasePrecall, shouldSkipCasePrecall } from '../lib/resolveCasePrecall.js';
+import { resolveCasePrecall } from '../lib/resolveCasePrecall.js';
 import { STORAGE } from '../lib/storageKeys.js';
 import {
   BRIEFING_UI_ELEMENTS,
@@ -85,16 +85,13 @@ function studioOnlyPosition(entry, layoutStudio) {
 
 export default function Briefing({ caseData, onBegin, onBack, onSelectCase, studioCapture = false }) {
   const brand = getBranding();
-  const [pickerPreviewCase, setPickerPreviewCase] = useState(null);
-  const displayCase = pickerPreviewCase || caseData;
+  const displayCase = caseData;
   const psychIntro = useMemo(() => resolvePsychiatricLunaticIntro(displayCase), [displayCase]);
-  const precall = useMemo(() => resolveCasePrecall(displayCase), [displayCase]);
+  const precall = useMemo(() => resolveCasePrecall(caseData), [caseData]);
   const [lunaticIntroDone, setLunaticIntroDone] = useState(() =>
     shouldSkipPsychiatricLunaticIntro(displayCase?.id),
   );
-  const [precallDone, setPrecallDone] = useState(() =>
-    shouldSkipCasePrecall(displayCase?.id) || !resolveCasePrecall(displayCase),
-  );
+  const [precallDone, setPrecallDone] = useState(() => !resolveCasePrecall(caseData));
   const { portraitForceSrc, clearPortraitSrc } = useCasePortraitSrc(displayCase, {
     preferUberPreviewPlate: true,
   });
@@ -117,6 +114,10 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
     writeBriefingUiLayout(next);
   }, []);
 
+  const handleReplayPrecall = useCallback(() => {
+    if (resolveCasePrecall(caseData)) setPrecallDone(false);
+  }, [caseData]);
+
   useEffect(() => {
     stopCaseReader();
     setReadState('idle');
@@ -132,14 +133,12 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
   }, []);
 
   useEffect(() => {
-    setPickerPreviewCase(null);
+    setPrecallDone(!resolveCasePrecall(caseData));
+    setLunaticIntroDone(shouldSkipPsychiatricLunaticIntro(caseData?.id));
   }, [caseData?.id]);
 
   useEffect(() => {
     setLunaticIntroDone(shouldSkipPsychiatricLunaticIntro(displayCase?.id));
-    setPrecallDone(
-      shouldSkipCasePrecall(displayCase?.id) || !resolveCasePrecall(displayCase),
-    );
   }, [displayCase?.id]);
 
   useEffect(() => {
@@ -331,7 +330,7 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
   }, [cycleCase, layoutStudio]);
 
   return (
-    <main className={`briefing briefing-with-scene briefing-dock-style ${layoutStudio ? 'briefing-layout-studio' : ''}`}>
+    <main className={`briefing briefing-with-scene briefing-dock-style ${layoutStudio ? 'briefing-layout-studio' : ''}${precall?.videoUrl && !precallDone ? ' briefing--precall-active' : ''}`}>
       {studioCapture && (
         <div className="briefing-studio-bar">
           <button
@@ -404,7 +403,20 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
         />
       </div>
 
-      <div className="briefing-scene-wrap">
+      {precall?.videoUrl && !precallDone ? (
+        <CasePrecallIntro
+          videoUrl={precall.videoUrl}
+          posterUrl={precall.posterUrl}
+          title={precall.title}
+          durationSec={precall.durationSec}
+          caseId={precall.caseId}
+          onComplete={() => setPrecallDone(true)}
+        />
+      ) : null}
+
+      <div
+        className="briefing-scene-wrap"
+      >
         {onSelectCase && allCases.length > 1 && (
           <div className="briefing-case-cycler" aria-label="Cycle cases">
             <button
@@ -440,16 +452,6 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
             if (portraitForceSrc) clearPortraitSrc();
           }}
         />
-        {precall?.videoUrl && !precallDone && (
-          <CasePrecallIntro
-            videoUrl={precall.videoUrl}
-            posterUrl={precall.posterUrl}
-            title={precall.title}
-            durationSec={precall.durationSec}
-            caseId={precall.caseId}
-            onComplete={() => setPrecallDone(true)}
-          />
-        )}
         {psychIntro?.enabled && precallDone && !lunaticIntroDone && (
           <PsychiatricLunaticIntro
             anchorUrl={psychIntro.anchorUrl}
@@ -489,7 +491,7 @@ export default function Briefing({ caseData, onBegin, onBack, onSelectCase, stud
           <BriefingCasePicker
             currentCaseId={caseData.id}
             onSelectCase={onSelectCase}
-            onPreviewCase={setPickerPreviewCase}
+            onReplayPrecall={handleReplayPrecall}
           />
         </div>
       )}

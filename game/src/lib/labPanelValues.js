@@ -1,13 +1,12 @@
 /**
- * Case-seeded lab panels for order-result drill — always numeric in practice mode;
- * teach mode adds brief interpretation from case context.
+ * Case-seeded lab panels — used only as attendant fallbackHint when API is offline.
+ * Runtime lab display is always /api/order-result (live attendant), keyed per occurrence.
  */
 
 function norm(s) {
   return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
 }
 
-/** Deterministic 0..1 float from case id + salt (stable across sessions). */
 export function labSeed(caseId, salt = '') {
   const raw = `${caseId ?? '0'}:${salt}`;
   let h = 2166136261;
@@ -16,6 +15,48 @@ export function labSeed(caseId, salt = '') {
     h = Math.imul(h, 16777619);
   }
   return (h >>> 0) / 4294967295;
+}
+
+/** OCR / screenshot-locked labs — override seeded defaults until attending cache fills. */
+export const AUTHORED_CASE_LABS = {
+  '086': {
+    bmp: { glucose: 94, na: 138, k: 4.2, cl: 102, hco3: 24, bun: 38, cr: 3.6 },
+    ua: {
+      glucose: 'negative',
+      ketones: 'negative',
+      protein: '2+',
+      blood: '3+',
+      rbc: '15–25/HPF',
+      wbc: '0–2/HPF',
+      nitrites: 'negative',
+      leukEsterase: 'negative',
+    },
+  },
+  '116': {
+    cbc: { wbc: 9.7, hgb: 14.6, hct: 43.3, plt: 319, neut: 62, lymph: 28 },
+    bmp: { glucose: 98, na: 140, k: 4.1, cl: 104, hco3: 25, bun: 14, cr: 0.9 },
+  },
+  /** Case 138 — Mr. Gustavo Dias, ESRD (shrunken kidneys, oliguria, dialysis threshold labs). */
+  '138': {
+    bmp: { glucose: 92, na: 137, k: 6.2, cl: 101, hco3: 16, bun: 82, cr: 7.4 },
+    caPhos: { ca: 7.6, phos: 6.9, albumin: 3.1 },
+    cbc: { wbc: 8.4, hgb: 8.1, hct: 24.2, plt: 218, neut: 68, lymph: 24 },
+  },
+  /** Case 122 — SJS, lamotrigine, ~8% BSA (Mr. Liang Zhu). */
+  '122': {
+    bmp: { glucose: 118, na: 131, k: 3.6, cl: 98, hco3: 20, bun: 28, cr: 1.0 },
+    cbc: { wbc: 8.2, hgb: 13.4, hct: 40.1, plt: 198, neut: 84, lymph: 8 },
+    lfts: { ast: 86, alt: 94, alkPhos: 142, tbili: 1.4, albumin: 3.2 },
+  },
+};
+
+function caseLabKey(caseId) {
+  return String(caseId ?? '').padStart(3, '0');
+}
+
+function authoredPanel(caseId, panel) {
+  const row = AUTHORED_CASE_LABS[caseLabKey(caseId)]?.[panel];
+  return row ? { ...row } : null;
 }
 
 function pick(caseId, salt, min, max, decimals = 1) {
@@ -34,6 +75,20 @@ export function detectLabProfile(ctx = {}) {
   if (/sepsis|bacteremia|septic shock/.test(blob)) return 'sepsis';
   if (/appendicitis|peritonitis|acute abdomen/.test(blob)) return 'inflammatory';
   if (/uti|pyelonephritis|dysuria|urinary tract/.test(blob)) return 'uti';
+  if (
+    /esrd|end.stage renal|end-stage renal|gfr\s*<\s*15|markedly elevated bun\/cr|hyperphosphatemia|oliguria.*(bun|cr|renal)|shrunken kidney/i.test(
+      blob,
+    )
+  ) {
+    return 'esrd';
+  }
+  if (
+    /adpkd|polycystic kidney|chronic kidney|\bckd\b|declining renal function|elevated cr|azotemia/i.test(
+      blob,
+    )
+  ) {
+    return 'ckd';
+  }
   if (/gi bleed|melena|hematemesis|anemia/.test(blob)) return 'anemia';
   if (/jaundice|yellow baby|hyperbilirubin|neonatal|newborn|breastfeeding jaundice/.test(blob)) {
     return 'neonatal_jaundice';
@@ -44,6 +99,7 @@ export function detectLabProfile(ctx = {}) {
   if (/heart failure|volume overload|edema/.test(blob)) return 'renal_stress';
   if (/pneumonia|copd exacerbation/.test(blob)) return 'infection';
   if (/rash|fever|viral|exanthem/.test(blob)) return 'inflammatory';
+  if (/stevens-johnson|\bsjs\b|toxic epidermal|ten\b|nikolsky/.test(blob)) return 'sjs';
   return 'default';
 }
 
@@ -59,6 +115,8 @@ export function panelsInLabel(label) {
 
 export function synthesizeBmp(ctx) {
   const { vitals = {}, caseId } = ctx;
+  const authored = authoredPanel(caseId, 'bmp');
+  if (authored) return authored;
   const profile = detectLabProfile(ctx);
   const k = vitals.k != null ? vitals.k : null;
 
@@ -106,6 +164,28 @@ export function synthesizeBmp(ctx) {
       cr: pick(caseId, 'cr', 1.6, 2.8, 1),
     };
   }
+  if (profile === 'esrd') {
+    return {
+      glucose: pick(caseId, 'glu', 88, 102, 0),
+      na: pick(caseId, 'na', 136, 140, 0),
+      k: k ?? pick(caseId, 'k', 5.5, 6.5, 1),
+      cl: pick(caseId, 'cl', 98, 104, 0),
+      hco3: pick(caseId, 'hco3', 15, 18, 0),
+      bun: pick(caseId, 'bun', 60, 100, 0),
+      cr: pick(caseId, 'cr', 6.0, 8.5, 1),
+    };
+  }
+  if (profile === 'ckd') {
+    return {
+      glucose: pick(caseId, 'glu', 88, 108, 0),
+      na: pick(caseId, 'na', 136, 140, 0),
+      k: k ?? pick(caseId, 'k', 4.0, 5.4, 1),
+      cl: pick(caseId, 'cl', 98, 104, 0),
+      hco3: pick(caseId, 'hco3', 20, 24, 0),
+      bun: pick(caseId, 'bun', 28, 58, 0),
+      cr: pick(caseId, 'cr', 2.0, 4.8, 1),
+    };
+  }
   return {
     glucose: pick(caseId, 'glu', 82, 108, 0),
     na: pick(caseId, 'na', 136, 142, 0),
@@ -119,6 +199,8 @@ export function synthesizeBmp(ctx) {
 
 export function synthesizeCbc(ctx) {
   const { caseId } = ctx;
+  const authored = authoredPanel(caseId, 'cbc');
+  if (authored) return authored;
   const profile = detectLabProfile(ctx);
 
   if (profile === 'dka') {
@@ -176,6 +258,16 @@ export function synthesizeCbc(ctx) {
       lymph: pick(caseId, 'lymph', 22, 34, 0),
     };
   }
+  if (profile === 'esrd' || profile === 'ckd') {
+    return {
+      wbc: pick(caseId, 'wbc', 7.0, 10.5, 1),
+      hgb: pick(caseId, 'hgb', 7.2, 9.2, 1),
+      hct: pick(caseId, 'hct', 22, 28, 1),
+      plt: pick(caseId, 'plt', 150, 260, 0),
+      neut: pick(caseId, 'neut', 62, 74, 0),
+      lymph: pick(caseId, 'lymph', 20, 30, 0),
+    };
+  }
   return {
     wbc: pick(caseId, 'wbc', 5.5, 9.8, 1),
     hgb: pick(caseId, 'hgb', 12.5, 15.2, 1),
@@ -188,6 +280,8 @@ export function synthesizeCbc(ctx) {
 
 export function synthesizeUa(ctx) {
   const { caseId } = ctx;
+  const authored = authoredPanel(caseId, 'ua');
+  if (authored) return authored;
   const profile = detectLabProfile(ctx);
 
   if (profile === 'dka') {
@@ -248,6 +342,41 @@ export function synthesizeUa(ctx) {
   };
 }
 
+function hasCaPhosAlbumin(label) {
+  const l = norm(label);
+  return /ca\s*\/\s*phos|calcium|phosphate|\bphos\b|albumin/i.test(l);
+}
+
+export function synthesizeCaPhosAlbumin(ctx) {
+  const { caseId } = ctx;
+  const authored = authoredPanel(caseId, 'caPhos');
+  if (authored) return authored;
+  const profile = detectLabProfile(ctx);
+  if (profile === 'esrd') {
+    return {
+      ca: pick(caseId, 'ca', 7.2, 8.2, 1),
+      phos: pick(caseId, 'phos', 5.8, 7.5, 1),
+      albumin: pick(caseId, 'alb', 2.8, 3.4, 1),
+    };
+  }
+  if (profile === 'ckd') {
+    return {
+      ca: pick(caseId, 'ca', 8.0, 8.8, 1),
+      phos: pick(caseId, 'phos', 4.5, 6.2, 1),
+      albumin: pick(caseId, 'alb', 3.0, 3.6, 1),
+    };
+  }
+  return {
+    ca: pick(caseId, 'ca', 8.8, 9.8, 1),
+    phos: pick(caseId, 'phos', 2.8, 4.2, 1),
+    albumin: pick(caseId, 'alb', 3.5, 4.2, 1),
+  };
+}
+
+function formatCaPhosAlbuminSuffix(minerals) {
+  return `Ca ${minerals.ca} mg/dL. Phos ${minerals.phos} mg/dL. Albumin ${minerals.albumin} g/dL.`;
+}
+
 function anionGap(bmp) {
   if (!bmp?.na || bmp.cl == null || bmp.hco3 == null) return null;
   return Math.round(bmp.na - bmp.cl - bmp.hco3);
@@ -261,6 +390,8 @@ export function formatBmpLine(bmp, { teachMeMode = false, hint = '' } = {}) {
   if (ag != null && ag >= 16) cues.push(`Anion gap ${ag}.`);
   if (bmp.glucose >= 250) cues.push('Hyperglycemia.');
   if (bmp.cr >= 1.5) cues.push('Azotemia — assess renal function.');
+  if (bmp.k >= 5.5) cues.push('Hyperkalemia — assess dialysis urgency.');
+  if (bmp.hco3 != null && bmp.hco3 <= 18) cues.push('Metabolic acidosis.');
   if (hint) cues.push(hint);
   return cues.length ? `${base} ${cues.join(' ')}` : base;
 }
@@ -313,6 +444,18 @@ const PROFILE_HINTS = {
     bmp: 'Hyperglycemia with anion-gap acidosis pattern.',
     ua: 'Glucosuria and ketonuria expected.',
   },
+  ckd: {
+    bmp: 'Azotemia — Cr and BUN reflect chronic kidney disease in this presentation.',
+    ua: 'Hematuria and proteinuria expected with cystic kidney disease.',
+  },
+  esrd: {
+    bmp: 'Severe azotemia with hyperkalemia and metabolic acidosis — assess AEIOU dialysis indications.',
+    cbc: 'Normocytic anemia from low EPO production.',
+  },
+  sjs: {
+    cbc: 'Lymphopenia correlates with SJS/TEN severity.',
+    bmp: 'Hyponatremia and volume depletion from insensible losses through denuded skin.',
+  },
 };
 
 function hintForPanel(profile, panel, why) {
@@ -361,9 +504,12 @@ export function resolveLabPanelResult(label, ctx, teachMeMode = false) {
     }
     if (panels.bmp) {
       const bmp = synthesizeBmp(ctx);
-      sections.push(
-        `BMP: ${formatBmpLine(bmp, { ...opts, hint: hintForPanel(profile, 'bmp', why) })}`,
-      );
+      let bmpText = formatBmpLine(bmp, { ...opts, hint: hintForPanel(profile, 'bmp', why) });
+      if (hasCaPhosAlbumin(label)) {
+        const minerals = synthesizeCaPhosAlbumin(ctx);
+        bmpText = `${bmpText} ${formatCaPhosAlbuminSuffix(minerals)}`;
+      }
+      sections.push(`BMP: ${bmpText}`);
     }
     if (panels.ua) {
       const ua = synthesizeUa(ctx);
@@ -383,7 +529,11 @@ export function resolveLabPanelResult(label, ctx, teachMeMode = false) {
     });
   }
   if (panels.bmp) {
-    return formatBmpLine(synthesizeBmp(ctx), { ...opts, hint: hintForPanel(profile, 'bmp', why) });
+    let bmpText = formatBmpLine(synthesizeBmp(ctx), { ...opts, hint: hintForPanel(profile, 'bmp', why) });
+    if (hasCaPhosAlbumin(label)) {
+      bmpText = `${bmpText} ${formatCaPhosAlbuminSuffix(synthesizeCaPhosAlbumin(ctx))}`;
+    }
+    return bmpText;
   }
   if (panels.ua) {
     return formatUaLine(synthesizeUa(ctx), { ...opts, hint: hintForPanel(profile, 'ua', why) });
@@ -485,6 +635,13 @@ export function resolveSingleLabResult(label, ctx, teachMeMode = false) {
   }
 
   if (/\bast\b|\balt\b|lft|liver function|hepatic panel/.test(l)) {
+    const authoredLfts = authoredPanel(caseId, 'lfts');
+    if (authoredLfts) {
+      const base = `AST ${authoredLfts.ast} U/L. ALT ${authoredLfts.alt} U/L. Alk phos ${authoredLfts.alkPhos} U/L. Total bili ${authoredLfts.tbili} mg/dL. Albumin ${authoredLfts.albumin} g/dL.`;
+      return teachMeMode && hint
+        ? `${base} ${hint}`
+        : base;
+    }
     return `AST ${pick(caseId, 'ast', 18, 42, 0)} U/L. ALT ${pick(caseId, 'alt', 16, 38, 0)} U/L. Alk phos ${pick(caseId, 'alk', 55, 115, 0)} U/L. Total bili ${pick(caseId, 'bili', 0.3, 1.0, 1)} mg/dL.`;
   }
 

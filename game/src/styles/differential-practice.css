@@ -398,6 +398,37 @@
   box-shadow: 0 0 0 1px rgba(232, 184, 75, 0.35);
 }
 
+.case-chat-message-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  transition: color 0.15s, background 0.15s;
+}
+
+.case-chat-message-btn .toolbar-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.case-chat-message-btn:hover {
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.case-chat-message-btn.is-active {
+  color: var(--gold, #e8b84b);
+  background: rgba(232, 184, 75, 0.18);
+}
+
 .case-chat-banner--patient {
   color: var(--gold, #e8b84b);
   background: rgba(232, 184, 75, 0.1);

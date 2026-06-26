@@ -7,19 +7,27 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: Full skin exam",
-    "DISCONTINUE offending drug",
+    "CBC / BMP / LFTs",
+    "Skin biopsy (frozen section)",
+    "DISCONTINUE offending drug (lamotrigine)",
+    "IV fluids / resuscitation",
+    "Ophthalmology consult",
     "Admit to Burn ICU",
     "Supportive care (fluids, wound care, nutrition)"
   ],
   "should_avoid": [],
   "rationale": {
-    "Physical Exam: Full skin exam": "Target lesions, bullae, mucosal involvement, Nikolsky sign.",
-    "DISCONTINUE offending drug": "Most important intervention.",
-    "Admit to Burn ICU": "SJS/TEN = burn unit management.",
-    "Supportive care (fluids, wound care, nutrition)": "Mainstay. Ophthalmology for eye involvement."
+    "Physical Exam: Full skin exam": "Document targetoid lesions, bullae, Nikolsky sign, mucosal involvement, and BSA detachment — classifies SJS vs TEN.",
+    "CBC / BMP / LFTs": "BMP for hypotonic fluid losses (Na 131); CBC for lymphopenia (severity); LFTs for drug-induced transaminitis.",
+    "Skin biopsy (frozen section)": "Full-thickness epidermal necrosis at DEJ — distinguishes SJS from superficial SSSS split.",
+    "DISCONTINUE offending drug (lamotrigine)": "Stop lamotrigine now — every hour on board drives more keratinocyte death.",
+    "IV fluids / resuscitation": "Lactate 2.3 + insensible losses through denuded skin; hyponatremia risk.",
+    "Ophthalmology consult": "Ocular mucosal involvement — prevent synechiae and corneal scarring.",
+    "Admit to Burn ICU": "SJS/TEN requires burn-unit wound care, fluids, and monitoring — not floor.",
+    "Supportive care (fluids, wound care, nutrition)": "Silver dressings, nutrition, analgesia — mainstay after drug withdrawal."
   },
-  "hpi": "{{patient_name}} presents with acute onset fever, widespread painful target-like lesions, bullae, epidermal detachment (<10% BSA = SJS, 10-30% = SJS/TEN overlap, >30% = TEN), and mucosal involvement (oral, ocular, genital). Nikolsky sign positive (epidermis sloughs with gentle pressure). Most commonly triggered by medications: sulfa antibiotics, anti-epileptics (lamotrigine, phenytoin, carbamazepine), allopurinol, NSAIDs, within 1-8 weeks of exposure. This is a medical emergency. Immediately discontinue offending drug. Admit to burn ICU. Supportive care: fluid/electrolyte management, wound care, infection prevention, nutritional support, ophthalmology consult. Systemic steroids controversial — not universally recommended. IVIG or cyclosporine may be considered. SCORTEN score for prognosis.",
-  "hpi_narrative": "{{patient_name}} presents with acute onset fever, widespread painful target-like lesions, bullae, epidermal detachment (<10% BSA = SJS, 10-30% = SJS/TEN overlap, >30% = TEN), and mucosal involvement (oral, ocular, genital). Nikolsky sign positive (epidermis sloughs with gentle pressure). Most commonly triggered by medications: sulfa antibiotics, anti-epileptics (lamotrigine, phenytoin, carbamazepine), allopurinol, NSAIDs, within 1-8 weeks of exposure. This is a medical emergency. Immediately discontinue offending drug. Admit to burn ICU. Supportive care: fluid/electrolyte management, wound care, infection prevention, nutritional support, ophthalmology consult. Systemic steroids controversial — not universally recommended. IVIG or cyclosporine may be considered. SCORTEN score for prognosis.",
+  "hpi": "{{patient_name}} is a 34-year-old man with 5 days of fever and painful rash with oral and ocular mucosal involvement. Lamotrigine started 4 weeks ago for seizures. Full skin exam: targetoid lesions, bullae, Nikolsky positive, ~8% BSA epidermal detachment — Stevens-Johnson syndrome. Stop lamotrigine; admit burn ICU; fluids, wound care, ophthalmology.",
+  "hpi_narrative": "{{patient_name}} is a 34-year-old man with 5 days of fever and painful rash with oral and ocular mucosal involvement. Lamotrigine started 4 weeks ago for seizures. Full skin exam: targetoid lesions, bullae, Nikolsky positive, ~8% BSA epidermal detachment — Stevens-Johnson syndrome. Stop lamotrigine; admit burn ICU; fluids, wound care, ophthalmology.",
   "physical_exam": [],
   "vitals": {
     "hr": null,
@@ -29,12 +37,12 @@
     "temp": null
   },
   "patient_voice": {
-    "chief_complaint": "Fever, widespread painful rash, mucosal involvement",
-    "history": "{{patient_name}} presents with acute onset fever, widespread painful target-like lesions, bullae, epidermal detachment (<10% BSA = SJS, 10-30% = SJS/TEN overlap, >30% = TEN), and mucosal involvement …",
-    "pain": "Fever, widespread painful rash, mucosal involvement"
+    "chief_complaint": "Fever, painful rash, and mouth sores",
+    "history": "The rash burns — it started on my chest and now my mouth hurts so bad I can barely drink. They started me on a new seizure medicine a few weeks ago.",
+    "pain": "Burning rash and mouth pain"
   },
   "ccs_category": "Dermatology / Burn ICU",
-  "chief_complaint": "Fever, widespread painful rash, mucosal involvement",
+  "chief_complaint": "Fever, painful rash, and mouth sores",
   "case_summary": null,
   "decoys": [],
   "distractors": [],
@@ -42,39 +50,59 @@
     {
       "label": "Physical Exam: Full skin exam",
       "type": "correctlyOrdered",
-      "finding": "Target lesions, bullae, mucosal involvement, Nikolsky sign.",
-      "aliases": [
-        "Skin Exam"
-      ]
+      "finding": "Document targetoid lesions, bullae, Nikolsky sign, mucosal involvement, and BSA detachment — classifies SJS vs TEN.",
+      "aliases": []
     },
     {
-      "label": "DISCONTINUE offending drug",
+      "label": "CBC / BMP / LFTs",
       "type": "correctlyOrdered",
-      "finding": "Most important intervention.",
-      "aliases": [
-        "Stop drug"
-      ]
+      "finding": "BMP for hypotonic fluid losses (Na 131); CBC for lymphopenia (severity); LFTs for drug-induced transaminitis.",
+      "aliases": []
+    },
+    {
+      "label": "Skin biopsy (frozen section)",
+      "type": "correctlyOrdered",
+      "finding": "Full-thickness epidermal necrosis at DEJ — distinguishes SJS from superficial SSSS split.",
+      "aliases": []
+    },
+    {
+      "label": "DISCONTINUE offending drug (lamotrigine)",
+      "type": "correctlyOrdered",
+      "finding": "Stop lamotrigine now — every hour on board drives more keratinocyte death.",
+      "aliases": []
+    },
+    {
+      "label": "IV fluids / resuscitation",
+      "type": "correctlyOrdered",
+      "finding": "Lactate 2.3 + insensible losses through denuded skin; hyponatremia risk.",
+      "aliases": []
+    },
+    {
+      "label": "Ophthalmology consult",
+      "type": "correctlyOrdered",
+      "finding": "Ocular mucosal involvement — prevent synechiae and corneal scarring.",
+      "aliases": []
     },
     {
       "label": "Admit to Burn ICU",
       "type": "correctlyOrdered",
-      "finding": "SJS/TEN = burn unit management.",
-      "aliases": [
-        "ICU"
-      ]
+      "finding": "SJS/TEN requires burn-unit wound care, fluids, and monitoring — not floor.",
+      "aliases": []
     },
     {
       "label": "Supportive care (fluids, wound care, nutrition)",
       "type": "correctlyOrdered",
-      "finding": "Mainstay. Ophthalmology for eye involvement.",
-      "aliases": [
-        "Supportive care"
-      ]
+      "finding": "Silver dressings, nutrition, analgesia — mainstay after drug withdrawal.",
+      "aliases": []
     }
   ],
   "order_sets": [
     "Physical Exam: Full skin exam",
-    "DISCONTINUE offending drug",
+    "CBC / BMP / LFTs",
+    "Skin biopsy (frozen section)",
+    "DISCONTINUE offending drug (lamotrigine)",
+    "IV fluids / resuscitation",
+    "Ophthalmology consult",
     "Admit to Burn ICU",
     "Supportive care (fluids, wound care, nutrition)"
   ],
@@ -83,5 +111,6 @@
   "enrichment_sources": [
     "deepseek"
   ],
-  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Stevens-Johnson Syndrome."
+  "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Stevens-Johnson Syndrome.",
+  "practice_hpi": "{{patient_name}} is a 34-year-old man who presents with 5 days of fever and a painful rash that began on the trunk and spread to his face and proximal arms. He reports painful sores in his mouth that make drinking difficult. His eyes feel red and gritty. He has a history of seizures and was started on lamotrigine about four weeks ago. He denies recent upper respiratory infection, tick bites, or new sexual partners."
 }

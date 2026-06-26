@@ -1,9 +1,11 @@
 /**
  * One-plate 2×3 storyboard grid — U12 Tom truck brake pre-call.
  * node dev/u12-tom-precall/generate-storyboard-grid.mjs
+ *
+ * Style: MeWorld in-game cinematic — Frank Tzeng sculptural skin, Bianchini cab,
+ * Rules: agent-visual-pack/GENERATION_RULES.md (character map + circular manhole — mandatory)
  */
 import fs from 'fs/promises';
-import fsSync from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadMasterEnv } from '../../server/loadMasterEnv.js';
@@ -27,12 +29,14 @@ try {
 }
 
 if (!process.env.MAGNIFIC_API_KEY) {
-  console.error('MAGNIFIC_API_KEY missing — npm run verify:magnific');
+  console.error('MAGNIFIC_API_KEY missing — npm run verify:magnific or Magnific MCP reauth');
   process.exit(1);
 }
 
 const globalRefs = path.join(__dirname, '..', 'global-visual-refs');
 const outDir = path.join(__dirname, 'storyboard-pending');
+const packOutDir = path.join(__dirname, 'agent-visual-pack', 'outputs');
+
 const charMap = path.join(
   root,
   'dev/uber-portrait-refs/character-maps-pending/craniofacial-asymmetry-goatee-CHARACTER-MAP-alt2.png',
@@ -41,6 +45,11 @@ const compGold = path.join(
   root,
   'dev/uber-portrait-refs/refs/COMPOSITION_GOLD-craniofacial-asymmetry-goatee-alt2.png',
 );
+const gameScene = path.join(
+  root,
+  'public/assets/patient/uber/craniofacial-asymmetry-goatee-GAME-SCENE.png',
+);
+const v1CabStill = path.join(packOutDir, 'u12-tom-truck-cab-still.png');
 
 async function readB64(file) {
   const buf = await fs.readFile(file);
@@ -55,53 +64,49 @@ async function refPath(filePath, text) {
   return { image: `data:${mime};base64,${b64}`, mime_type: mime, text };
 }
 
-const prompt = `Professional film STORYBOARD CONTACT SHEET — exactly SIX photoreal panels in a 2 ROWS × 3 COLUMNS grid on ONE image. Thin dark gutters between panels. Small panel numbers 1–6 in corners only.
+const prompt = `Professional film STORYBOARD CONTACT SHEET — exactly SIX photoreal panels in 2 ROWS × 3 COLUMNS on ONE image. Thin dark gutters between panels. Small white panel numbers 1–6 in corners only.
 
-STYLE BAR (mandatory on every panel): Match attached Frank Tzeng skin refs, Ars Thanea environmental grade, Massimiliano Bianchini interior intimacy where applicable, Oscar Ramos truck angles for panels 1 and 5. Muted filmic dusk grade on I-80 — sodium amber + blue twilight — NOT plastic AI, NOT video-game HUD, NOT generic cinematic bloom.
+MEWORLD IN-GAME CINEMATIC BAR (EVERY panel — mandatory):
+This is NOT generic stock photography or flat AI trucking footage. Match MeWorld / Immersa briefing cinematics: Frank Tzeng sculptural skin and slightly hero-proportioned faces, Massimiliano Bianchini cab interior intimacy, Ars Thanea dusk environmental grade. Oscar Ramos truck plates define camera hero read — immersive depth, tactile materials, sculptural caricature feel (premium game cinematic). Muted I-80 dusk — sodium amber + blue twilight. NOT bright Pixar, NOT plastic gloss, NOT blockbuster bloom, NO dashboard HUD, NO speedometer UI, NOT comic-strip ink outlines.
 
-Tom Hayes ~45, long-haul trucker: craniofacial asymmetry, short goatee, worn cap — match CHARACTER LOCK in every panel where he appears.
+Tom Hayes ~45, long-haul trucker: craniofacial facial asymmetry, short goatee, worn cap — EXACT likeness from CHARACTER LOCK wherever he appears.
 
-PANEL 1 (top-left): Articulated semi-truck at HIGH SPEED on interstate I-80 at dusk — drowsy driver sympathetic surge, lane streaks show velocity — OSCAR RAMOS driving angle (low heroic 3/4, trailer visible, sodium highway light). NO dashboard HUD, NO speedometer UI.
+PANEL 1 [s01-speed-drowse | 0:00–0:02]: Articulated semi at HIGH SPEED on I-80 dusk — drowsy Tom visible in cab, sympathetic surge, heavy eyelids, lane motion streaks. OSCAR RAMOS DRIVE REF — low heroic 3/4 exterior, trailer visible, immersive sculptural truck read. Full MeWorld game style applied to cab and environment.
 
-PANEL 2 (top-center): Driver POV through windshield — a tiny ANT on the asphalt ahead near a pavement utility vault hatch (road bunker cover). Exhaustion / alcoholic mis-perception. NO digital driving HUD.
+PANEL 2 [s02-windshield-ant | 0:02–0:04]: Driver POV through windshield — tiny ANT on asphalt ahead beside a CIRCULAR cast-iron pavement manhole cover (round maintenance cover flush in road — NOT square, NOT rectangular vault door). Ars Thanea dusk grade. NO digital HUD.
 
-PANEL 3 (top-right): Road surface close — road bunker hatch edge lifted; an ANT scurries across the lane. Dusk asphalt. Photoreal, not cartoon.
+PANEL 3 [s03-hatch-ant | 0:04–0:05]: Road surface close — ROUND manhole cover edge lifted at circular seam; ANT scurries on dusk asphalt. Surreal but photoreal MeWorld game cinematic. Hatch geometry MUST be circular.
 
-PANEL 4 (bottom-left): INTERIOR CUT — worn boot STOMPS brake pedal fully down from highway speed, low angle cab floor, amber dash underglow only.
+PANEL 4 [s03-foot-brake | 0:05–0:06]: INTERIOR CUT — low angle cab floor from driver seat. CRITICAL ANATOMY: BOTH feet and lower legs fully visible — LEFT foot on cab floor near accelerator rest, RIGHT heavy worn work boot stomping brake pedal FULLY DOWN. TWO complete feet — do NOT omit, crop, or hide either foot. Bianchini interior intimacy, amber dash underglow. Match approved v1 cab interior craft reference.
 
-PANEL 5 (bottom-center): HARD BRAKE from top speed — articulated semi with MASSIVE trailer swing and weight shift, OSCAR RAMOS angle — brief tire smoke. Single brake event.
+PANEL 5 [s04-trailer-swing | 0:06–0:09]: HARD BRAKE — articulated semi with MASSIVE trailer swing. OSCAR RAMOS BRAKE REF — same immersive hero truck angle Steve approved, tire smoke, weight shift, sculptural caricature truck kinematics.
 
-PANEL 6 (bottom-right): AERIAL — same truck at COMPLETE STOP on highway shoulder, no motion blur on cab.
+PANEL 6 [s05-aerial-stop | 0:09–0:11]: AERIAL — same truck COMPLETE STOP on highway shoulder, dusk I-80, Ars Thanea grade.
 
-Consistent dusk color grade all panels. No dialogue text. No explosion.
-
-CHARACTER LOCK — Tom face, goatee, asymmetry from identity map in panels 2 and interior shots.`;
+Consistent dusk color grade all panels. No dialogue text. Beats 7–8 not on sheet.`;
 
 await fs.mkdir(outDir, { recursive: true });
-const char = await readB64(charMap);
-const gold = await readB64(compGold);
+await fs.mkdir(packOutDir, { recursive: true });
 
-const frankSkin = path.join(globalRefs, 'skin-frank-tzeng', 'frank-tzeng-joel-t1-hex-color-closeup-all.jpg');
-const framestore = path.join(globalRefs, 'surreal-framestore', 'control_room_01_1400px.jpg');
-const bianchini = path.join(globalRefs, 'interior-bianchini', 'massimiliano-bianchini-interior.jpg');
+const char = await readB64(charMap);
+
+const oscarDrive = path.join(globalRefs, 'truck-oscar-ramos', '3a393127203969.5636149739be5.jpg');
+const oscarBrake = path.join(globalRefs, 'truck-oscar-ramos', 'cb622327203969.5636149748923.jpg');
+const bianchiniInterior = path.join(globalRefs, 'interior-bianchini', 'massimiliano-bianchini-interior.jpg');
 const arsThanea = path.join(globalRefs, 'environment-ars-thanea', 'IMG_4031.JPG');
+
+// Keep payload small — REST 500s on 10+ large inline refs
 const extraRefs = [
-  await refPath(compGold, 'Likeness and sculptural photoreal craft lock.'),
-  await refPath(arsThanea, 'Global Ars Thanea environmental grade — game-wide ref.'),
-  await refPath(framestore, 'Control room vision for panel 2.'),
-  await refPath(frankSkin, 'Frank Tzeng skin light craft — mandatory.'),
-  await refPath(bianchini, 'Cab interior intimacy.'),
+  await refPath(compGold, 'Likeness + sculptural photoreal craft — MeWorld identity bar.'),
+  await refPath(gameScene, 'MEWORLD GAME SCENE — in-game briefing look; match this render language on driving panels.'),
+  await refPath(v1CabStill, 'v1 APPROVED cab interior — panel 4 foot-brake floor, amber dash, both feet.'),
+  await refPath(oscarBrake, 'OSCAR RAMOS BRAKE — primary hero angle for panels 1 and 5; immersive sculptural truck read.'),
+  await refPath(oscarDrive, 'OSCAR RAMOS DRIVE — secondary articulated semi angle for panel 1 speed drowse.'),
+  await refPath(bianchiniInterior, 'Bianchini cab interior intimacy — panels 1 and 4 driving/brake floor.'),
 ];
 
-const oscarDir = path.join(globalRefs, 'truck-oscar-ramos');
-const oscarFiles = await fs.readdir(oscarDir).catch(() => []);
-for (const f of oscarFiles.filter((n) => /\.(jpg|jpeg|png)$/i.test(n))) {
-  extraRefs.push(
-    await refPath(path.join(oscarDir, f), 'OSCAR RAMOS ANGLE — articulated truck drive and brake panels 1 and 5.'),
-  );
-}
-
-console.log('Generating 2x3 storyboard grid plate...');
+console.log('Generating 2x3 storyboard grid plate (v3 — GENERATION_RULES, circular manhole)...');
+console.log('Refs attached:', extraRefs.length + 1, '(character lock +', extraRefs.length, 'extra)');
 
 const imageBuffer = await generateImageEditWithMagnific({
   imageBase64: char.b64,
@@ -109,14 +114,14 @@ const imageBuffer = await generateImageEditWithMagnific({
   prompt,
   aspectRatio: '16:9',
   resolution: '2K',
-  referenceText: 'CHARACTER LOCK — Tom Hayes. Storyboard grid layout mandatory.',
+  referenceText:
+    'CHARACTER LOCK — Tom Hayes craniofacial asymmetry, goatee. Storyboard 2×3 grid mandatory. MeWorld game cinematic style on all panels.',
   extraReferenceImages: extraRefs,
 });
 
 const outPath = path.join(outDir, 'u12-truck-brake-storyboard-grid-2x3.png');
-const packOut = path.join(__dirname, 'agent-visual-pack', 'outputs', 'u12-truck-brake-storyboard-grid-2x3.png');
+const packOut = path.join(packOutDir, 'u12-truck-brake-storyboard-grid-2x3.png');
 await fs.writeFile(outPath, imageBuffer);
-await fs.mkdir(path.dirname(packOut), { recursive: true });
 await fs.writeFile(packOut, imageBuffer);
 console.log('Wrote', outPath, imageBuffer.length, 'bytes');
 console.log('Copied', packOut);

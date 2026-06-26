@@ -99,7 +99,7 @@ src/data/preparedCases.json                ← vitals, exam, narratives (what th
         ↓  node scripts/rewrite-hpi-neutral.mjs --case NNN  (after import — spoiler-free HPI)
 ```
 
-**HPI spoiler split (required after new cases):** Teaching content (diagnosis, pathophysiology, management) belongs in `case_summary`, not `hpi_narrative` or `narrative.*.hpi`. Run `rewrite-hpi-neutral.mjs` — task file: `C:\Users\steve\MeWorld\.cursor\tasks\rewrite-hpi-neutral.md` · rules: repo root `CURSOR_RULES.md` § CASE DATA FIELD SCHEMA.
+**HPI spoiler split (required after new cases):** Teaching content belongs in `answer_key_hpi` / `case_summary`, not learner `practice_hpi` or `narrative.*.hpi`. **Batch fix:** `npm run fix:learner-presentation` · **Audit:** `npm run audit:learner-spoilers` → `docs/learner-spoiler-audit.md`. Per-case template: `docs/cases/case-122-painful-rash.md`. Rules: `practice-presentation.mdc`.
 
 **npm scripts:**
 
@@ -224,7 +224,7 @@ npm run build:differential-review
 Quick backlog (see audit file for full list):
 
 - [ ] Sync clean `MeWorld/data/cases/` → `game/data/cases/` for Play/Briefing
-- [ ] Add **`practice_hpi`** for cases whose `hpi_narrative` spoils diagnosis/treatment (batch high-yield first)
+- [x] Add **`practice_hpi`** for all prepared cases (2026-06-24 batch — see `docs/learner-spoiler-audit.md`)
 - [ ] Curate more `realWorldCases.json` entries (target: 2 stories per high-yield case)
 - [ ] More lady **character maps** from approved Pinterest refs (`patient-character-maps.mdc`)
 - [ ] Optional: API/AI auto-discovery for real-world YouTube matches
@@ -417,7 +417,7 @@ Implementation: `Play.jsx` — `handleDrop`, `commitStackPlacement`, `submitOrde
 
 ## Suggested next work (priority order)
 
-1. **Batch `practice_hpi`** for cases whose `hpi_narrative` spoils diagnosis/treatment (rule: `practice-presentation.mdc`)
+1. ~~**Batch `practice_hpi`**~~ — done 2026-06-24 (`npm run fix:learner-presentation`)
 2. **Sync case bank** — `MeWorld/data/cases/` → `game/data/cases/` + `preparedCases.json`
 3. **More lady character maps** — Pinterest ref → Magnific → `patientLadyRefs.json` (`patient-character-maps.mdc`)
 4. **Capture more CCS presentations** — `step3/ccs_credentials.json` → `npm run refresh:case-bank`

@@ -18,7 +18,7 @@ import {
 } from '../src/lib/caseStoryLaterality.js';
 
 /** Bump when narrative prompt / storycraft rules change — stale cache ignored. */
-export const CASE_STORY_PROMPT_VERSION = 12;
+export const CASE_STORY_PROMPT_VERSION = 13;
 
 const SPOKEN_ENGLISH_VOICE = `SPOKEN ENGLISH VOICE (mandatory — chapter bodies are read aloud):
 - Write every chapter **body** as **spoken prose**: complete sentences a narrator can read naturally — NOT chart shorthand, HPI paste, or telegraphic vitals lists.
@@ -42,7 +42,14 @@ After the learner finishes (or pauses) a case, write a **case story** — third-
 ${SPOKEN_ENGLISH_VOICE}
 
 Storycraft rules (mandatory):
-- **Exactly 6 chapters** (ids c1–c6) — one per 2×3 storyboard panel: Disruption → Embodiment → Escalation → Crisis point → Mechanism turn → Recontextualization. Never return fewer than six chapters.
+- **Exactly 6 chapters** (ids c1–c6) — one per 2×3 storyboard panel. Use these **learner-facing headings** (exact wording):
+  - c1: "Scene 1 — With the patient"
+  - c2: "Scene 2 — With the attending"
+  - c3: "Scene 3 — Orders and data"
+  - c4: "Scene 4 — Results land"
+  - c5: "Scene 5 — Treatment and mechanism"
+  - c6: "Scene 6 — Plan together"
+  Never use Disruption, Embodiment, Escalation, Crisis point, Mechanism turn, or Recontextualization as headings.
 - **Qualia:** at least one embodied sensory detail (cold floor, hollow stare, bruit under the stethoscope)
 - **Sequence logic:** each beat causes the next ("because" not "and then")
 - **Tellability:** one memorable true image or phrase tied to mechanism (e.g. scattered DWI specks = brain "peppered" with emboli for TIA)
@@ -56,7 +63,7 @@ Return ONLY valid JSON:
   "title": "short episode title",
   "synopsis": "2-3 sentences — emotional + clinical hook",
   "chapters": [
-    { "id": "c1", "heading": "Disruption", "body": "2-4 sentences third-person spoken prose — complete sentences, read-aloud natural", "visualHint": "smart camera for THIS beat only — MCU, wide 3/4, or close on finding; vary angle across the six chapters" }
+    { "id": "c1", "heading": "Scene 1 — With the patient", "body": "2-4 sentences third-person spoken prose — complete sentences, read-aloud natural", "visualHint": "smart camera for THIS beat only — MCU, wide 3/4, or close on finding; vary angle across the six chapters" }
   ],
   "masterImagePrompt": "One paragraph visual brief for third-person oversight still — patient likeness, distress, props — NO bird's-eye overhead",
   "patientLock": "age, sex, ethnicity, gown — likeness lock for image gen"
@@ -321,7 +328,7 @@ export function buildCaseStoryGridPlatePrompt({
     const i = beats.length;
     beats.push({
       id: `pad${i + 1}`,
-      heading: i === 5 ? 'Recontextualization' : 'Beat',
+      heading: i === 5 ? 'Scene 6 — Plan together' : `Scene ${i + 1}`,
       body: narrative.synopsis || 'Same patient — maintain likeness and ED bay continuity.',
       visualHint: 'Same patient likeness — atmospheric bridge panel, no new characters',
     });

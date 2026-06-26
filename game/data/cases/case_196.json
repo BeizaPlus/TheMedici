@@ -1,0 +1,117 @@
+{
+  "id": 196,
+  "topic": "Trauma Symptoms and Dissociation",
+  "title": "Trauma Symptoms and Dissociation",
+  "diagnosis": "Post-traumatic stress symptoms — dissociation and hypervigilance after assault",
+  "confidence": "uword-psych-transform",
+  "source": "U-Word Psychiatry v02 concepts (Immersa rewrite) — anchor for Uber U13",
+  "patient_sex": "female",
+  "patient_name_default": "Amina Laurent",
+  "correct_orders": [
+    "Trauma-informed safety assessment",
+    "Forensic pathway / SANE consult (if acute assault)",
+    "PTSD screen / trauma-focused psychotherapy referral",
+    "TSH / BMP — endocrine depression rule-out",
+    "Capacity assessment for discharge",
+    "Crisis counseling / social work",
+    "BDD differential — psychiatry consult for mirror preoccupation"
+  ],
+  "should_avoid": [
+    "Forced detailed trauma narrative without consent",
+    "Discharge without safety plan when dissociation impairs judgment"
+  ],
+  "rationale": {
+    "Trauma-informed safety assessment": "Intrusive memories and hypervigilance after assault — assess current safety, stalking risk, and acute distress in a patient-centered manner.",
+    "Forensic pathway / SANE consult (if acute assault)": "If within forensic window, offer evidence collection and STI prophylaxis with explicit consent — parallel to psych care.",
+    "PTSD screen / trauma-focused psychotherapy referral": "First-line long-term treatment is trauma-focused CBT, CPT, or EMDR — not benzo dependence.",
+    "TSH / BMP — endocrine depression rule-out": "Fatigue and mood symptoms warrant basic medical screen — overlap teaching with endocrine depression mimic segment.",
+    "Capacity assessment for discharge": "Dissociative episodes raise questions about decision-making — document capacity for discharge planning.",
+    "Crisis counseling / social work": "Link shelter, legal advocacy, and follow-up within days — trauma-informed voice throughout.",
+    "BDD differential — psychiatry consult for mirror preoccupation": "Mirror fixation and appearance preoccupation may reflect trauma-related shame or body dysmorphic overlap — psychiatry clarifies diagnosis.",
+    "Forced detailed trauma narrative without consent": "Re-traumatization risk — patient controls pacing of disclosure.",
+    "Discharge without safety plan when dissociation impairs judgment": "Document supports, means safety, and follow-up before leaving."
+  },
+  "hpi": "Amina Laurent is a 32-year-old woman referred from the ED after reporting \"flashbacks and blank spells\" following a sexual assault three weeks ago. She describes sudden intrusive images of the attack, exaggerated startle when men walk behind her, and episodes where she \"watch(es) myself from the ceiling\" for minutes at a time. She has been checking mirrors repeatedly, picking at a small facial blemish until it bled, and asking whether she looks \"damaged.\" Sleep is fragmented; she denies current suicidal plan but says she \"doesn't trust my mind.\" She lives alone and is unsure she can manage medications safely tonight. No substance use. Past history of mild anxiety only. She wants help but asks that staff not \"make me tell every detail again unless I choose to.\"",
+  "hpi_narrative": "Amina Laurent is a 32-year-old woman referred from the ED after reporting \"flashbacks and blank spells\" following a sexual assault three weeks ago. She describes sudden intrusive images of the attack, exaggerated startle when men walk behind her, and episodes where she \"watch(es) myself from the ceiling\" for minutes at a time. She has been checking mirrors repeatedly, picking at a small facial blemish until it bled, and asking whether she looks \"damaged.\" Sleep is fragmented; she denies current suicidal plan but says she \"doesn't trust my mind.\" She lives alone and is unsure she can manage medications safely tonight. No substance use. Past history of mild anxiety only. She wants help but asks that staff not \"make me tell every detail again unless I choose to.\"\n\nMechanism: trauma exposure can produce intrusive re-experiencing, hyperarousal, and dissociation (depersonalization) — mirror preoccupation may reflect shame, BDD overlap, or trauma-related body monitoring; capacity may fluctuate during dissociative episodes.\n\nCare: trauma-informed safety assessment, optional forensic pathway if acute, PTSD psychotherapy referral, medical rule-out, capacity documentation, psychiatry for complex comorbidity, safe discharge with advocacy linkage.",
+  "physical_exam": [
+    ["General", "Well-groomed woman, guarded but cooperative, hypervigilant to door and hallway noise"],
+    ["HEENT", "Small excoriation on chin from picking — no acute facial trauma today"],
+    ["Skin", "No new bruises documented on limited exam with consent"],
+    ["Neuro / Psych", "Alert, oriented; describes depersonalization episodes; intrusive memories reported; denies active SI/HI; affect anxious and tearful at times"]
+  ],
+  "vitals": {
+    "hr": 104,
+    "spo2": 99,
+    "bp": "132/84",
+    "rr": 18,
+    "temp": 36.7
+  },
+  "vitals_text": "Pulse: 104 beats/min\nBlood pressure, systolic: 132 mm Hg\nBlood pressure, diastolic: 84 mm Hg\nRespiratory rate: 18 /minute\nTemperature: 36.7 C (98.1 F)\nSpO2: 99%",
+  "patient_voice": {
+    "chief_complaint": "I keep reliving it and sometimes I float outside my body. I can't stop checking the mirror.",
+    "history": "Something happened three weeks ago — I don't want to go through every detail right now. I jump when people walk behind me. At night the images come back. I live alone and I'm scared I'll dissociate and forget my meds.",
+    "pain": "It's not really pain — it's this tight chest and the memories hitting me."
+  },
+  "ccs_category": "Psychiatry & Social",
+  "chief_complaint": "Intrusive trauma memories, dissociative episodes, hypervigilance, mirror preoccupation",
+  "case_summary": "Adult woman with post-assault PTSD symptoms, dissociation, and appearance preoccupation — trauma-informed care, forensic option, capacity assessment, psychotherapy referral.",
+  "decoys": [],
+  "distractors": [],
+  "stacks": [
+    {
+      "label": "Trauma-informed safety assessment",
+      "type": "correctlyOrdered",
+      "finding": "Assess acute safety and distress without forced disclosure.",
+      "aliases": ["Safety assessment", "Trauma-informed interview"]
+    },
+    {
+      "label": "Forensic pathway / SANE consult (if acute assault)",
+      "type": "correctlyOrdered",
+      "finding": "Offer evidence collection and prophylaxis with consent.",
+      "aliases": ["SANE consult", "Forensic exam", "Rape kit"]
+    },
+    {
+      "label": "PTSD screen / trauma-focused psychotherapy referral",
+      "type": "correctlyOrdered",
+      "finding": "CPT, PE, or EMDR referral — first-line trauma therapy.",
+      "aliases": ["PTSD screen", "Trauma therapy", "EMDR referral"]
+    },
+    {
+      "label": "TSH / BMP — endocrine depression rule-out",
+      "type": "correctlyOrdered",
+      "finding": "Rule out medical mimics of fatigue and mood symptoms.",
+      "aliases": ["TSH", "BMP", "Medical rule-out"]
+    },
+    {
+      "label": "Capacity assessment for discharge",
+      "type": "correctlyOrdered",
+      "finding": "Document decision-making when dissociation present.",
+      "aliases": ["Capacity assessment", "Decision-making capacity"]
+    },
+    {
+      "label": "Crisis counseling / social work",
+      "type": "correctlyOrdered",
+      "finding": "Advocacy, shelter resources, and follow-up linkage.",
+      "aliases": ["Social work", "Crisis counseling", "Victim advocacy"]
+    },
+    {
+      "label": "BDD differential — psychiatry consult for mirror preoccupation",
+      "type": "correctlyOrdered",
+      "finding": "Clarify trauma-related shame vs body dysmorphic disorder.",
+      "aliases": ["Psychiatry consult", "BDD screen", "Mirror preoccupation"]
+    }
+  ],
+  "order_sets": [
+    "Trauma-informed safety assessment",
+    "Forensic pathway / SANE consult (if acute assault)",
+    "PTSD screen / trauma-focused psychotherapy referral",
+    "TSH / BMP — endocrine depression rule-out",
+    "Capacity assessment for discharge",
+    "Crisis counseling / social work",
+    "BDD differential — psychiatry consult for mirror preoccupation"
+  ],
+  "complete": true,
+  "extraction_method": "immersa_uword_transform",
+  "enrichment_sources": ["immersa"],
+  "extraction_notes": "Anchor case for Psych Uber U13 (Amina Laurent). U-Word Psychiatry v02 trauma/dissociation/forensic/endocrine overlap themes transformed — no verbatim UWorld UI text."
+}

@@ -26,6 +26,8 @@ const GENERIC_FINDINGS = new Set([
   'Alert and oriented unless perfusion or metabolic derangement present.',
   'No acute rash; capillary refill and perfusion assessed.',
   'Exam findings reflect presentation acuity on arrival.',
+  'Skin rash morphology and distribution documented.',
+  'Abdominal tenderness pattern matches history; no rigid abdomen documented yet.',
 ]);
 
 const GENERIC_FINDING_PATTERNS = [
@@ -60,6 +62,28 @@ export const AUTHORED_CASE_EXAMS = {
     ['Abdomen', 'Suprapubic and unilateral lower quadrant tenderness'],
     ['Neuro', 'Alert but distressed'],
     ['Skin', 'Pale, slightly diaphoretic'],
+  ],
+  '116': [
+    ['General', 'Febrile, fatigued, and concerned; appears mildly ill but hemodynamically stable.'],
+    ['Cardiovascular', 'HR 88; BP 135/84.'],
+    ['Respiratory', 'RR 18; SpO₂ 96%.'],
+    ['Abdomen', 'Soft, non-tender; no peritoneal signs.'],
+    [
+      'Neuro',
+      'Occipital headache; mild vertigo; unsteady gait with veering and near-falls; cranial nerves intact; no meningismus on initial survey.',
+    ],
+    [
+      'Skin',
+      'No active rash today; resolved pink macular rash on arms and torso per history (~8 days ago); faint residual patches on upper arms only.',
+    ],
+  ],
+  '086': [
+    ['General', 'Hypertensive; uncomfortable with flank pain; ill-appearing but stable.'],
+    ['Cardiovascular', 'HR 98; BP 162/98.'],
+    ['Respiratory', 'RR 19; SpO₂ 95%.'],
+    ['Abdomen', 'Palpable bilateral flank masses; no peritoneal signs.'],
+    ['Neuro', 'Alert and oriented.'],
+    ['Skin', 'No acute rash; perfusion adequate.'],
   ],
 };
 
@@ -312,7 +336,7 @@ function deriveGeneral(history = '', title = '', diagnosis = '', patientVoice = 
     const m = h.match(/(?:presents|complaining|reports)[^.!?]{20,180}[.!?]/i);
     if (m) return clip(m[0]);
   }
-  if (title) return `Acutely ill appearance consistent with ${title.toLowerCase()}.`;
+  if (title) return 'Ill-appearing; moderate distress.';
   return 'Exam findings reflect presentation acuity on arrival.';
 }
 
@@ -339,7 +363,13 @@ function deriveNeuro(historyLower = '', title = '') {
       return 'Impaired recall and orientation; gait and focal motor/sensory exam documented.';
     }
     if (/headache/i.test(tl)) {
-      return 'Mental status intact; cranial nerves and neck stiffness assessed.';
+      if (/vertigo|off-balance|unsteady|ataxia|fall when walking|tendency to fall/i.test(historyLower)) {
+        return 'Occipital headache; mild vertigo; unsteady gait with veering; cranial nerves intact; neck stiffness assessed.';
+      }
+      return 'Occipital tenderness; mental status intact; cranial nerves and neck stiffness assessed.';
+    }
+    if (/vertigo|off-balance|unsteady|ataxia|fall when walking|tendency to fall/i.test(historyLower)) {
+      return 'Gait unsteady with veering; mild vertigo; cranial nerves intact; focal deficits assessed.';
     }
     if (/altered mental|confus|somnolent/i.test(historyLower + tl)) {
       return 'Altered mental status with attention and command-following documented.';
@@ -358,6 +388,9 @@ function deriveSkin(historyLower = '', vitals = {}) {
     return 'No acute rash; night sweats and weight loss noted in history when obtained.';
   }
   if (/rash|petech|lesion|jaundice|diaphoretic|clammy|pale/i.test(historyLower)) {
+    if (/rash.*(improv|resolv|went away|cleared)|(?:improv|resolv|went away|cleared).*rash/i.test(historyLower)) {
+      return 'No active rash today; resolved rash per history; faint residual macular patches may remain on arms or torso.';
+    }
     if (/rash|petech/i.test(historyLower)) return 'Skin rash morphology and distribution documented.';
     if (/diaphoretic|clammy|pale/i.test(historyLower)) return 'Diaphoretic or pale skin with perfusion checked.';
   }

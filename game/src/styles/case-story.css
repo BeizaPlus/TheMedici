@@ -152,11 +152,38 @@
 }
 
 .case-story-chapter h3 {
-  margin: 0 0 6px;
+  margin: 0;
   font-size: 0.78rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgba(232, 184, 75, 0.8);
+}
+
+.case-story-chapter-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  margin: 0 0 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.case-story-chapter-head:hover h3 {
+  color: rgba(232, 184, 75, 0.95);
+}
+
+.case-story-chapter-chevron {
+  font-size: 0.65rem;
+  color: rgba(232, 184, 75, 0.75);
+  flex-shrink: 0;
+}
+
+.case-story-chapter.is-collapsed .case-story-chapter-head {
+  margin-bottom: 0;
 }
 
 .case-story-chapter p {

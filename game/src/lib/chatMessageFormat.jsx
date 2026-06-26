@@ -41,7 +41,32 @@ function normalizeChatMarkdown(src) {
   s = s.replace(/(\*\*[^*]+\*\*)\n(\|)/g, '$1\n\n$2');
   // Normalize double-pipe table rows from some LLM outputs: `|| A | B |` → `| A | B |`
   s = s.replace(/^\|\|/gm, '|').replace(/\|\|$/gm, '|');
+  s = unfoldInlineGfmTables(s);
   return s;
+}
+
+/** Split single-line GFM tables (`prose: | A | B | |---| | C | D |`) into newline rows. */
+function unfoldInlineGfmTables(text) {
+  return text
+    .split('\n')
+    .map((line) => {
+      const trimmed = line.trim();
+      if (!trimmed.includes('|')) return line;
+      const pipeCount = (trimmed.match(/\|/g) || []).length;
+      if (pipeCount < 4) return line;
+
+      const firstPipe = trimmed.indexOf('|');
+      const prefix = firstPipe > 0 ? trimmed.slice(0, firstPipe).trimEnd() : '';
+      const tablePart = firstPipe >= 0 ? trimmed.slice(firstPipe) : trimmed;
+
+      const rowMatches = tablePart.match(/\|[^|\n]*(?:\|[^|\n]*)+\|/g);
+      if (!rowMatches || rowMatches.length < 2) return line;
+
+      const rows = rowMatches.map((r) => r.trim()).join('\n');
+      if (!prefix) return rows;
+      return `${prefix}\n\n${rows}`;
+    })
+    .join('\n');
 }
 
 function isTableSeparatorLine(trimmed) {

@@ -147,7 +147,11 @@ export default function CaseContextPanel({
   const handleTabDoubleClick = (e) => {
     e.preventDefault();
     tabActivateRef.current = true;
-    onTabCollapse?.();
+    if (onTabCollapse) {
+      onTabCollapse();
+    } else {
+      setBodyCollapsed((collapsed) => !collapsed);
+    }
   };
 
   return (

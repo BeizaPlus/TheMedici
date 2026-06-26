@@ -51,10 +51,9 @@ export function getCaseFlow(caseData) {
   );
 
   const clinicalHpi =
+    caseData?.historyText ||
+    prepared?.practice_hpi ||
     caseData?.clinical_hpi_narrative ||
-    caseData?.hpi_narrative ||
-    prepared?.hpi_narrative ||
-    prepared?.narrative?.doctor?.standard?.hpi ||
     '';
   const patientVoice =
     caseData?.patient_voice || caseData?.patientVoice || prepared?.patient_voice || null;
@@ -76,7 +75,11 @@ export function getCaseFlow(caseData) {
   });
 
   const history = composeCaseHistory({
-    history: caseData?.historyText || prepared?.narrative?.doctor?.easy?.hpi || '',
+    history:
+      caseData?.historyText ||
+      prepared?.practice_hpi ||
+      prepared?.narrative?.doctor?.easy?.hpi ||
+      '',
     patientVoice,
     clinicalHpi,
     chiefComplaint: caseData?.chief_complaint || prepared?.narrative?.doctor?.standard?.intro || '',

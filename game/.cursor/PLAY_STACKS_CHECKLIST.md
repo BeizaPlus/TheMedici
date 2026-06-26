@@ -27,6 +27,8 @@ Run this after **any** change to stack drag, scene dock, command sidebar, Teach 
 - [ ] Ask the patient from the **scene order dock** — reply appears in the dock chat panel.
 - [ ] Open **full chat** (command doc), send messages, then **collapse** the command doc — dock still shows **Case chat** thread with full history.
 - [ ] **Patient mode** portrait toggle works in both dock and full chat.
+- [x] **Patient mode thinking** — dock + thread show **Patient is thinking…** while busy; errors hidden until reply fails.
+- [x] **Play dock starts collapsed** — all cases/modes on load; single-click tab expands; double-click collapses
 - [ ] Tutor tables render as **tables**, not raw `||` pipes.
 
 ## Teach Me vs exam mode

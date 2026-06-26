@@ -42,6 +42,7 @@ import { DEFAULT_TIMER_SECONDS, normalizeTimerSeconds } from '../lib/caseTimer.j
 import { getStackTestingCount } from '../lib/caseReadyPractice.js';
 import { getFavoriteCount, getFlaggedReviewCount } from '../data/caseProgress.js';
 import { fetchOverallUserStats, fetchCaseVisitSummaries } from '../lib/caseUserLog.js';
+import { syncServerCoveredCaseIds } from '../lib/caseCoverage.js';
 import { getCaseVisitHistory, formatCaseVisitWhen, countCasesCovered } from '../lib/caseVisitHistory.js';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import {
@@ -265,7 +266,8 @@ export default function WelcomeScreen({
 
   useEffect(() => {
     let cancelled = false;
-    void fetchCaseVisitSummaries({ limit: 40 }).then((rows) => {
+    void fetchCaseVisitSummaries({ limit: 500, timeoutMs: 6000 }).then((rows) => {
+      syncServerCoveredCaseIds(rows);
       if (!cancelled) setServerVisits(rows);
     });
     return () => {

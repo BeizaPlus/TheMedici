@@ -18,17 +18,17 @@
 
 **Strengths:** Foot brake, lurch, full stop, and end hold match beats **4 → 5 → 6 → 8** in `NARRATIVE_LOCK.md`. Interior craft is consistent.
 
-**Gaps vs approved story:** No exterior Oscar truck angles, no rat/hatch reveal, no windshield “something ahead” beat, no comic end tag.
+**Gaps vs approved story:** No exterior Oscar truck angles, no ant/hatch reveal, no windshield “something ahead” beat, no comic end tag.
 
 ---
 
 ## Recommended assembly (after storyboard re-gen)
 
 ```
-[COLD OPEN]  Beat 1–3  — new stills/i2v: drowse drive, road POV, hatch + rat (no HUD)
+[COLD OPEN]  Beat 1–3  — new stills/i2v: drowse drive, road POV, hatch + ant (no HUD)
 [HARD CUT]   Beat 4    — foot slam (new still or tight insert)
 [KINETIC]    Beat 5–6  — trim/reuse v1 interior lurch + optional Oscar exterior + aerial stop
-[COMIC TAG]  Beat 7    — new 1–2 s: rat on pavement, hatch gap (wide or low road angle)
+[COMIC TAG]  Beat 7    — new 1–2 s: ant on pavement, hatch gap (wide or low road angle)
 [HOLD]       Beat 8    — v1 last ~1 s slump OR match frame from v1
 ```
 

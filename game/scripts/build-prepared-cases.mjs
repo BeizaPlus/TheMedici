@@ -199,6 +199,24 @@ const AUTHORED_FLOWS = {
     dispositionUnits: ['OFFICE', 'ER', 'WARD'],
     exam: null,
   },
+  '116': {
+    flowTrack: 'Office neuro workup',
+    dispositionUnits: ['OFFICE', 'ER', 'OBS', 'WARD'],
+    exam: [
+      ['General', 'Febrile, fatigued, and concerned; appears mildly ill but hemodynamically stable.'],
+      ['Cardiovascular', 'HR 88; BP 135/84.'],
+      ['Respiratory', 'RR 18; SpO₂ 96%.'],
+      ['Abdomen', 'Soft, non-tender; no peritoneal signs.'],
+      [
+        'Neuro',
+        'Occipital headache; mild vertigo; unsteady gait with veering and near-falls; cranial nerves intact; no meningismus on initial survey.',
+      ],
+      [
+        'Skin',
+        'No active rash today; resolved pink macular rash on arms and torso per history (~8 days ago); faint residual patches on upper arms only.',
+      ],
+    ],
+  },
 };
 
 function defaultExam(category, title) {
@@ -254,6 +272,22 @@ function asText(value) {
       .join(' ');
   }
   return String(value);
+}
+
+/** Prefer bank-specific intro; shared presentation intros apply only when bank has no distinct HPI. */
+function resolveCaseIntro({ bankCase, pres, hpiNarrative, title }) {
+  const bankIntro =
+    asText(bankCase?.case_introduction) || asText(bankCase?.chief_complaint) || '';
+  if (bankIntro) return bankIntro;
+
+  const hpi = asText(hpiNarrative).replace(/\s+/g, ' ').trim();
+  const presIntro = asText(pres?.intro).replace(/\s+/g, ' ').trim();
+  if (hpi.length >= 48 && presIntro && hpi !== presIntro && !hpi.startsWith(presIntro.slice(0, 40))) {
+    const clipped = hpi.length <= 220 ? hpi : `${hpi.slice(0, 217).trim()}…`;
+    return clipped;
+  }
+
+  return presIntro || hpi || `${title} — emergency presentation.`;
 }
 
 function buildNarrative({ intro, history, vitalsText, clinicalTip, objective, title }) {
@@ -327,8 +361,7 @@ for (const ccsCase of catalog.cases) {
   const pb = resolvePlaybookForBuild(ccsCase, playbooks);
   const hpiNarrative =
     asText(bankCase?.hpi_narrative) || asText(bankCase?.hpi) || pres?.history || '';
-  const intro =
-    asText(bankCase?.case_introduction) || pres?.intro || asText(bankCase?.chief_complaint) || '';
+  const intro = resolveCaseIntro({ bankCase, pres, hpiNarrative, title: ccsCase.title });
   const vitalsText =
     (typeof bankCase?.vitals === 'string' ? bankCase.vitals : '') ||
     asText(bankCase?.vitals_text) ||

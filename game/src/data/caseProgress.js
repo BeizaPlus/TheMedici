@@ -1,4 +1,5 @@
 import { STORAGE } from '../lib/storageKeys.js';
+import { isCaseCovered } from '../lib/caseCoverage.js';
 import { getBranding } from './gameData.js';
 import { getUberDefinition } from '../lib/uberCases.js';
 
@@ -265,8 +266,8 @@ export function pickRandomId(ids) {
 }
 
 /**
- * Shuffle pick — prefer cases the learner has not attempted yet.
- * Repeats only when every candidate in the pool was already touched (use timeline for those).
+ * Shuffle pick — prefer cases not on the learner's covered timeline yet.
+ * Repeats only when every candidate in the pool was already touched.
  */
 export function pickShuffleCaseId(ids, { excludeId = null, preferUnattempted = true } = {}) {
   const normalized = [...new Set(ids.map((id) => normalizeCaseProgressId(id)).filter(Boolean))];
@@ -278,7 +279,7 @@ export function pickShuffleCaseId(ids, { excludeId = null, preferUnattempted = t
   if (!pool.length) pool = normalized;
 
   if (preferUnattempted) {
-    const fresh = pool.filter((id) => !isCaseAttempted(id));
+    const fresh = pool.filter((id) => !isCaseCovered(id));
     if (fresh.length) pool = fresh;
   }
 
@@ -286,22 +287,38 @@ export function pickShuffleCaseId(ids, { excludeId = null, preferUnattempted = t
 }
 
 /** Start or restart full-library shuffle queue. Returns first case id. */
-export function startShuffleQueue(allIds) {
+export function startShuffleQueue(allIds, { preferUnattempted = true } = {}) {
+  const normalized = [...new Set(allIds.map((id) => normalizeCaseProgressId(id)).filter(Boolean))];
+  let pool = normalized;
+  if (preferUnattempted) {
+    const fresh = pool.filter((id) => !isCaseCovered(id));
+    if (fresh.length) pool = fresh;
+  }
   const p = readProgress();
-  p.queue = shuffleIds(allIds);
+  p.queue = shuffleIds(pool);
   p.queueIndex = 0;
   p.lastMode = 'shuffle';
   writeProgress(p);
   return p.queue[0] || null;
 }
 
-/** Next id in shuffle queue (wraps). */
+/** Next id in shuffle queue — skips cases already on the covered timeline. */
 export function nextInQueue() {
   const p = readProgress();
   if (!p.queue.length) return null;
-  p.queueIndex = (p.queueIndex + 1) % p.queue.length;
+
+  const len = p.queue.length;
+  for (let step = 0; step < len; step += 1) {
+    p.queueIndex = (p.queueIndex + 1) % p.queue.length;
+    const id = p.queue[p.queueIndex];
+    if (!isCaseCovered(id)) {
+      writeProgress(p);
+      return id;
+    }
+  }
+
   writeProgress(p);
-  return p.queue[p.queueIndex];
+  return null;
 }
 
 export function currentQueueId() {
