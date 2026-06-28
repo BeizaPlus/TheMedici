@@ -65,7 +65,19 @@ Placed order pins: class `pin-draggable` — drag anywhere on patient to reposit
 
 **Case rail** (Chat tab): chips = recent cases; tap chip or message icon → view that case’s thread without leaving current play case. Requires normalized case ids (`2` = `002`) — see `normalizeCaseProgressId` in `caseUserLog.js`.
 
-**Dock chat expander:** flat markdown (no bubbles) — `.scene-order-command-chat` in `ui-overrides.css`.
+## Order·Chat dock compose (scene, bottom-left)
+
+Same **3-way `dockRole` slider** as dock header (`ChatRoleSegment`):
+
+| Icon | Dock line | Chat bar (sidebar Thread tab, `.case-chat-cmd-ui`) |
+|------|-----------|-----------------------------------------------------|
+| Clipboard | Place / match orders | **Notes** → case journal |
+| Person | Patient interview | `patient_sim` |
+| Stethoscope | Attending tutor (no orders) | `tutor` |
+
+State is **shared** from `Play.jsx` — changing slider in dock updates sidebar chat bar and vice versa.
+
+**Expand / collapse:** dock ▾/▴ strips (Case chat, results, reply); sidebar Thread header ▾/▴; panel handle single/double-click per `ARCHITECTURE.md`.
 
 Font prefs **re-read from localStorage on case change** — never reset to default.
 

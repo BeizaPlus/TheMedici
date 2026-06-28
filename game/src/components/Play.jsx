@@ -133,6 +133,13 @@ import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
 import { computePinDisplayPercent } from '../lib/pinLayout.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { looksLikeTutorQuestion } from '../lib/chatIntentRouting.js';
+import {
+  DOCK_ROLE,
+  dockSkipsOrderMatch,
+  isDockPatientMode,
+  isDockTutorMode,
+  normalizeDockRole,
+} from '../lib/dockRoleMode.js';
 import { buildShuffledStackEntries } from '../lib/shuffleStacks.js';
 import {
   neutralStackOrderName,
@@ -415,23 +422,33 @@ export default function Play({
     () => readUiPrefs().dockChatExpanded !== false,
   );
   const dockChatMessageCountRef = useRef(0);
+  const dockChatUserCollapsedRef = useRef(false);
 
   const setDockChatExpandedPersist = useCallback((value) => {
     setDockChatHistoryExpanded((prev) => {
       const next = typeof value === 'function' ? value(prev) : value;
+      dockChatUserCollapsedRef.current = !next;
       writeUiPrefs({ dockChatExpanded: next });
       return next;
     });
   }, []);
-  const [chatPatientMode, setChatPatientModeState] = useState(false);
+  const [dockRole, setDockRoleState] = useState(DOCK_ROLE.ORDERS);
+  const dockRoleRef = useRef(DOCK_ROLE.ORDERS);
+  const chatPatientMode = isDockPatientMode(dockRole);
   const chatPatientModeRef = useRef(false);
-  const setChatPatientMode = useCallback((next) => {
-    setChatPatientModeState((prev) => {
-      const val = typeof next === 'function' ? next(prev) : next;
-      if (prev && !val) clearCaseChatSession(caseData?.id, 'patient_sim');
+  const setDockRole = useCallback((next) => {
+    setDockRoleState((prev) => {
+      const val = normalizeDockRole(typeof next === 'function' ? next(prev) : next);
+      if (isDockPatientMode(prev) && !isDockPatientMode(val)) {
+        clearCaseChatSession(caseData?.id, 'patient_sim');
+      }
       return val;
     });
   }, [caseData?.id]);
+  const setChatPatientMode = useCallback((next) => {
+    const val = typeof next === 'function' ? next(isDockPatientMode(dockRoleRef.current)) : next;
+    setDockRole(val ? DOCK_ROLE.PATIENT : DOCK_ROLE.ORDERS);
+  }, [setDockRole]);
   const [recordingsVersion, setRecordingsVersion] = useState(0);
   const [notesVersion, setNotesVersion] = useState(0);
   const [conversationLog, setConversationLog] = useState([]);
@@ -679,17 +696,18 @@ export default function Play({
     [teachMeMode, nextExpectedId, decoyInterventions],
   );
   const commandMatch = useMemo(() => {
-    if (chatPatientMode || !orderCommandQuery.trim()) return null;
+    if (dockSkipsOrderMatch(dockRole) || !orderCommandQuery.trim()) return null;
     return resolveCaseStackOrder(orderCommandQuery, interventions, placed);
-  }, [chatPatientMode, interventions, orderCommandQuery, placed]);
+  }, [dockRole, interventions, orderCommandQuery, placed]);
 
   const decoyCommandMatch = useMemo(() => {
-    if (chatPatientMode || !orderCommandQuery.trim()) return null;
+    if (dockSkipsOrderMatch(dockRole) || !orderCommandQuery.trim()) return null;
     return findStackMatchForQuery(orderCommandQuery, decoyInterventions, placed);
-  }, [chatPatientMode, decoyInterventions, orderCommandQuery, placed]);
+  }, [dockRole, decoyInterventions, orderCommandQuery, placed]);
 
   const orderCommandHint = useMemo(() => {
-    if (chatPatientMode) return '';
+    if (isDockPatientMode(dockRole)) return '';
+    if (isDockTutorMode(dockRole)) return 'Attending only — no orders from this box';
     if (!orderCommandQuery.trim()) return '';
     if (isPhysicalExamPickerTrigger(orderCommandQuery)) {
       return 'Physical exam — Enter to open section picker';
@@ -699,8 +717,8 @@ export default function Play({
     }
     if (commandMatch) return `Match: ${commandMatch.label}`;
     if (!teachMeMode && decoyCommandMatch) return `Match: ${decoyCommandMatch.label}`;
-    return chatPatientMode ? 'Patient mode — send question' : 'Attending tutor — ask in the box below';
-  }, [orderCommandQuery, commandMatch, decoyCommandMatch, teachMeMode, chatPatientMode]);
+    return 'Type an order or switch to Attending to coach without placing';
+  }, [orderCommandQuery, commandMatch, decoyCommandMatch, teachMeMode, dockRole]);
 
   const commandUiMatch = commandMatch || (!teachMeMode ? decoyCommandMatch : null);
 
@@ -718,18 +736,20 @@ export default function Play({
   }, [orderCommandHint, orderCommandAutocomplete]);
 
   useEffect(() => {
-    chatPatientModeRef.current = chatPatientMode;
-  }, [chatPatientMode]);
+    chatPatientModeRef.current = isDockPatientMode(dockRole);
+    dockRoleRef.current = dockRole;
+  }, [dockRole]);
 
   useEffect(() => {
     setTextPrefs(readClinicalTextPrefs());
     setTeachMeTextPrefs(readTeachMeTextPrefs());
-    setChatPatientMode(false);
+    setDockRole(DOCK_ROLE.ORDERS);
     setDockResultsExpanded(false);
     setDockChatReply(null);
     setDockReplyExpanded(false);
     setDockChatHistoryExpanded(readUiPrefs().dockChatExpanded !== false);
     dockChatMessageCountRef.current = 0;
+    dockChatUserCollapsedRef.current = readUiPrefs().dockChatExpanded === false;
     setDockHidden(false);
     setTeachFocusId(null);
   }, [caseData?.id]);
@@ -749,7 +769,9 @@ export default function Play({
   );
 
   const isDockChatMode = useMemo(() => {
-    if (chatPatientMode) return Boolean(orderCommandQuery.trim());
+    if (isDockPatientMode(dockRole) || isDockTutorMode(dockRole)) {
+      return Boolean(orderCommandQuery.trim());
+    }
     if (!orderCommandQuery.trim()) return false;
     if (detectLocation(orderCommandQuery)) return false;
     if (decoyCommandMatch) return false;
@@ -757,7 +779,7 @@ export default function Play({
     if (isLabPickerTrigger(orderCommandQuery)) return false;
     if (isPhysicalExamPickerTrigger(orderCommandQuery)) return false;
     return true;
-  }, [chatPatientMode, orderCommandQuery, decoyCommandMatch, commandMatch]);
+  }, [dockRole, orderCommandQuery, decoyCommandMatch, commandMatch]);
 
   const renderStackPill = (iv, isDecoy = false, displayNumOverride = null) => {
     const seqNum = interventions.findIndex((x) => x.id === iv.id);
@@ -1330,7 +1352,7 @@ export default function Play({
     ).length;
     const grew = count > dockChatMessageCountRef.current;
     dockChatMessageCountRef.current = count;
-    if (grew && count > 0 && !dockChatHistoryExpanded) {
+    if (grew && count > 0 && !dockChatUserCollapsedRef.current) {
       setDockChatExpandedPersist(true);
     }
   }, [
@@ -1885,7 +1907,11 @@ export default function Play({
       }
       const forceTutor = looksLikeTutorQuestion(text);
       const chatMode =
-        forceTutor || !chatPatientModeRef.current ? 'tutor' : 'patient_sim';
+        isDockTutorMode(dockRoleRef.current) ||
+        forceTutor ||
+        !isDockPatientMode(dockRoleRef.current)
+          ? 'tutor'
+          : 'patient_sim';
       if (chatMode === 'tutor' && !isLearningMode()) {
         void caseChat.appendNote?.(text, { header: 'Voice note' });
         setNotesVersion((v) => v + 1);
@@ -2411,11 +2437,17 @@ export default function Play({
       const raw = String(commandText ?? orderCommandQuery ?? '');
       const t = normCommandText(raw);
       if (!t) {
-        showToast(chatPatientModeRef.current ? 'Ask the patient something first' : 'Type an order first', 'bad');
+        if (isDockPatientMode(dockRoleRef.current)) {
+          showToast('Ask the patient something first', 'bad');
+        } else if (isDockTutorMode(dockRoleRef.current)) {
+          showToast('Ask the attending something first', 'bad');
+        } else {
+          showToast('Type an order first', 'bad');
+        }
         return;
       }
 
-      if (chatPatientModeRef.current) {
+      if (isDockPatientMode(dockRoleRef.current)) {
         if (caseChat.available === false) {
           showToast('Chat unavailable — add DEEPSEEK_API_KEY or OPENAI_API_KEY to .env', 'bad');
           return;
@@ -2424,6 +2456,33 @@ export default function Play({
         setOrderCommandQuery('');
         void (async () => {
           const reply = await caseChat.sendMessage(question, { chatMode: 'patient_sim', dockBrief: true });
+          if (reply) {
+            logTimeline({ type: 'chat', role: 'user', text: question });
+            setDockChatReply(null);
+            setDockReplyExpanded(false);
+            setDockChatExpandedPersist(true);
+          } else if (caseChat.error) {
+            showToast(caseChat.error, 'bad');
+          }
+        })();
+        return;
+      }
+
+      if (isDockTutorMode(dockRoleRef.current)) {
+        if (caseChat.available === false) {
+          showToast('Chat unavailable — add DEEPSEEK_API_KEY or OPENAI_API_KEY to .env', 'bad');
+          return;
+        }
+        if (!isLearningMode()) {
+          showToast('Exam mode — enable Learning in Settings for tutor coaching.', 'bad');
+          setOrderCommandQuery('');
+          return;
+        }
+        const question = raw.trim();
+        setOrderCommandQuery('');
+        void (async () => {
+          clearCaseChatSession(caseData?.id, 'patient_sim');
+          const reply = await caseChat.sendMessage(question, { chatMode: 'tutor', dockBrief: true });
           if (reply) {
             logTimeline({ type: 'chat', role: 'user', text: question });
             setDockChatReply(null);
@@ -2565,13 +2624,13 @@ export default function Play({
       const cmd = parseChatModeCommand(raw);
       if (cmd) {
         if (cmd.patientMode) {
-          setChatPatientMode(true);
+          setDockRole(DOCK_ROLE.PATIENT);
         } else if (!cmd.remainder) {
-          setChatPatientMode(false);
+          setDockRole(DOCK_ROLE.ORDERS);
           setOrderCommandQuery('');
           return;
         } else {
-          setChatPatientMode(false);
+          setDockRole(DOCK_ROLE.ORDERS);
           setOrderCommandQuery('');
           void caseChat.appendNote?.(cmd.remainder, { header: 'Note' });
           logTimeline({ type: 'note', text: cmd.remainder });
@@ -2703,7 +2762,8 @@ export default function Play({
           onTimelineNote={(text) => logTimeline({ type: 'note', text })}
           onTimelineChat={(text) => logTimeline({ type: 'chat', role: 'user', text })}
           patientMode={chatPatientMode}
-          onPatientModeChange={setChatPatientMode}
+          dockRole={dockRole}
+          onDockRoleChange={setDockRole}
           defaultChatTarget="tutor"
           suppressHeader
           messagesOnly
@@ -2718,6 +2778,7 @@ export default function Play({
       notesVersion,
       recordingsVersion,
       chatPatientMode,
+      dockRole,
       logTimeline,
       teachMeMode,
     ],
@@ -4176,7 +4237,9 @@ export default function Play({
             onSubmit={submitOrderCommand}
             hint={orderCommandHintDisplay}
             hasMatch={Boolean(commandUiMatch)}
-            isChatMode={chatPatientMode || isDockChatMode}
+            isChatMode={
+              isDockPatientMode(dockRole) || isDockTutorMode(dockRole) || isDockChatMode
+            }
             chatBusy={caseChat.busy}
             chatOpen={infoTab === 'chat'}
             resultsExpanded={dockResultsExpanded}
@@ -4198,9 +4261,11 @@ export default function Play({
               expandDockPanel();
               setInfoTab('chat');
             }}
-            autocompleteText={chatPatientMode ? null : orderCommandAutocomplete}
+            autocompleteText={dockSkipsOrderMatch(dockRole) ? null : orderCommandAutocomplete}
             onScreenshot={capturePlayScreenshot}
             captureBusy={captureBusy}
+            dockRole={dockRole}
+            onDockRoleChange={setDockRole}
             patientMode={chatPatientMode}
             onPatientModeChange={setChatPatientMode}
             patientRecording={caseRecording}
@@ -4942,7 +5007,8 @@ export default function Play({
                 onTimelineNote={(text) => logTimeline({ type: 'note', text })}
                 onTimelineChat={(text) => logTimeline({ type: 'chat', role: 'user', text })}
                 patientMode={chatPatientMode}
-                onPatientModeChange={setChatPatientMode}
+                dockRole={dockRole}
+                onDockRoleChange={setDockRole}
                 defaultChatTarget="tutor"
                 browseOnly={!threadIsPlayCase}
                 teachMeMode={teachMeMode}

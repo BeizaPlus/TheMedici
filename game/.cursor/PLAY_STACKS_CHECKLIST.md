@@ -24,7 +24,8 @@ Run this after **any** change to stack drag, scene dock, command sidebar, Teach 
 
 ## Command doc + scene dock chat
 
-- [ ] Ask the patient from the **scene order dock** — reply appears in the dock chat panel.
+- [ ] **3-way dock slider** — Orders · Patient · Attending icons all visible horizontally; white thumb slides to active slot.
+- [ ] **Case chat / result strips** — ▾ row click expands; ▴ click collapses; user collapse stays until next message (not re-opened on every render).
 - [ ] Open **full chat** (command doc), send messages, then **collapse** the command doc — dock still shows **Case chat** thread with full history.
 - [ ] **Patient mode** portrait toggle works in both dock and full chat.
 - [x] **Patient mode thinking** — dock + thread show **Patient is thinking…** while busy; errors hidden until reply fails.
