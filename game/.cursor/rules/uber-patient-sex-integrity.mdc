@@ -1,0 +1,63 @@
+---
+description: Uber-case patient sex/gender and portrait must agree across all three data sources (uberCases, preparedCases, face-slug). Run the audit before serving any Uber case change. Use when editing uberCases.json, preparedCases.json, patientUberRefs.json, faceSlug, patientSex, portraits, or patient-sim voice.
+globs:
+  - src/data/uberCases.json
+  - src/data/preparedCases.json
+  - src/data/patientUberRefs.json
+  - src/lib/portraitSex.js
+  - src/lib/patientSex.js
+---
+
+# Uber patient sex + portrait integrity (learn-from-mistakes)
+
+A patient's sex is derived from **three independent sources**. They drive different
+things and they can silently disagree — that is exactly how Ruth Okonkwo (U15) shipped
+as a *woman in the portrait but a man in the attending/patient voice*.
+
+## The three sources (and what each one drives)
+
+| Source | Field | Drives |
+|---|---|---|
+| `src/data/patientUberRefs.json` → `refs[slug].sex` | face-slug sex | **Portrait + game-scene** template (`resolvePortraitSex` checks this FIRST) |
+| `src/data/uberCases.json` → `patientSex` | case-level | Case context / documentation source of truth |
+| `src/data/preparedCases.json` → `cases[id].patientSex` | prepared | **Patient-sim voice + pronouns** via `resolvePatientSex` |
+
+**Precedence trap:** `preparedCases` defaults `patientSex` to `"male"` for almost every
+case (template leak). So a female-named patient with a female face slug will still be
+*voiced male* unless `preparedCases.cases[id].patientSex` is explicitly `"female"`.
+The portrait looks right; the sim is wrong. Always set **all three** to the same value.
+
+## Non-negotiable rule
+
+Whenever you touch an Uber case's sex, name, `faceSlug`, portrait, or the patient sim:
+
+1. The patient's name/identity, the face-slug sex, `uberCases.patientSex`, and
+   `preparedCases.cases[id].patientSex` must **all agree**.
+2. A male patient must not carry a female face slug (or vice-versa) — that is the
+   same bug seen from the portrait side (U11 Darius Webb was on `copper-afro-headwrap-africa`).
+3. **Run the audit and reach `0 problem case(s)` before serving / committing:**
+
+   ```bash
+   node scripts/audit-uber-sex.mjs
+   ```
+
+   It cross-checks all three sources for every Uber case and flags `MISMATCH` / `NO-SEX`.
+   `scripts/fix-uber-sex.mjs` is the corrective pass it was written alongside.
+
+## How to fix a mismatch
+
+- Wrong sim voice (female patient sounds male): set
+  `preparedCases.cases[id].patientSex = "female"` **and** `uberCases.patientSex = "female"`.
+- Wrong portrait (male patient, female face): repoint `uberCases.faceSlug` and
+  `patientUberRefs.caseSlugs[id]` to a slug whose `refs[slug].sex` matches, and keep
+  the `refs[].uberCases` lists honest.
+- Pediatric patients use `pediatricFaceSlug` (not in `refs`), so `portraitSex` can't read
+  their sex from a slug — `patientSex` in both case files is the only guard. Set it.
+
+## Meta (why this rule exists)
+
+This rule was written *after* the agent shipped a sex mismatch the user had to catch.
+The lesson generalizes: when a single fact (sex, name, vitals, diagnosis) lives in more
+than one data file, do not patch one file and assume the rest follow. Find every source,
+write/keep an audit script, and run it to green before declaring done. Add a similar
+audit + rule the next time a multi-source field bites — don't wait to be told.

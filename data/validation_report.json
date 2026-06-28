@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-05-31T20:08:29.493741+00:00",
+  "cases_file": "C:\\Users\\steve\\Downloads\\clinical-scene\\data\\cases.json",
+  "models": {
+    "text": "mistral",
+    "vision": "llava"
+  },
+  "summary": {
+    "total_cases": 1,
+    "structure_pass": 0,
+    "structure_fail": 1,
+    "structure_issue_ids": [
+      1
+    ],
+    "clinical_high": 1,
+    "clinical_medium": 0,
+    "clinical_low": 0,
+    "clinical_failed": 0,
+    "clinical_failed_ids": [],
+    "screenshot_matched": 0,
+    "screenshot_mismatched": 0,
+    "screenshot_mismatch_ids": [],
+    "screenshot_missing": 0,
+    "screenshot_skipped": 1,
+    "distractor_clean": 0,
+    "distractor_contaminated": 0,
+    "distractor_contaminated_ids": [],
+    "ready": 0,
+    "needs_review": 1,
+    "broken": 0
+  },
+  "cases": [
+    {
+      "id": 1,
+      "title": "Chest Pain",
+      "structure": {
+        "id": true,
+        "title": true,
+        "diagnosis": true,
+        "correct_orders": true,
+        "correct_order_rationales": true,
+        "hpi": true,
+        "patient_voice.chief_complaint": true,
+        "distractors": false,
+        "distractors_not_generic": false
+      },
+      "structure_ok": false,
+      "structure_issues": [
+        "distractors != 4",
+        "generic distractor contamination"
+      ],
+      "clinical": {
+        "passes": true,
+        "issues": [],
+        "confidence": "high"
+      },
+      "screenshot": {
+        "status": "skipped"
+      },
+      "overall_grade": "needs_review",
+      "problems": [
+        "distractors != 4",
+        "generic distractor contamination"
+      ]
+    }
+  ]
+}

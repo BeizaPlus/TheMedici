@@ -1,0 +1,952 @@
+{
+  "testedAt": "2026-05-31T19:17:00.595554",
+  "caseIds": [
+    1,
+    2,
+    35,
+    121,
+    143
+  ],
+  "cases": {
+    "001": {
+      "id": "001",
+      "title": "Chest Pain",
+      "category": "Cardiopulmonary",
+      "presentationKey": "Chest Pain",
+      "playbookKey": "case-bank-1",
+      "diagnosis": "Tension Pneumothorax",
+      "caseBankSource": "preparedCases+presentation",
+      "hasSourceIntro": true,
+      "vitals": {
+        "sbp": 110,
+        "dbp": 70,
+        "hr": 120,
+        "rr": 34,
+        "temp": 37.0,
+        "spo2": 96,
+        "lactate": 1.8
+      },
+      "vitalsSource": "ccs_master",
+      "vitalsText": "Initial Vital Signs Day 1 @ 16:00 Temperature: 37.0 C (98.6 degrees F) Pulse: 120 beats/min, Weak Respiratory rate: 34 /minute Blood pressure, systolic: 100 mm Hg Blood pressure, diastolic: 60 mm Hg Height: 183cm (72.0 in) Weight: 97.5 kg (215 lb) Body Mass Index: 29.1 kg/m2",
+      "flowTrack": "ACS rapid stratification",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "CATH"
+      ],
+      "exam": [
+        [
+          "General",
+          "Diaphoretic and anxious, clutching chest"
+        ],
+        [
+          "Cardiovascular",
+          "Tachycardic, regular rhythm, no new murmur"
+        ],
+        [
+          "Respiratory",
+          "Mild tachypnea, bibasilar crackles absent"
+        ],
+        [
+          "Abdomen",
+          "Soft, non-tender"
+        ],
+        [
+          "Neuro",
+          "Alert and oriented"
+        ],
+        [
+          "Skin",
+          "Cool clammy extremities"
+        ]
+      ],
+      "patientSex": "male",
+      "difficulty": "standard",
+      "clinical_tip": "Needle decompression before CXR in the unstable patient \u2014 do not delay treatment for imaging.",
+      "objective": "Immediate decompression and chest tube; 100% oxygen.",
+      "interventionIds": [
+        "move-to-emergency-department",
+        "100-oxygen",
+        "pulse-ox-cardiac-monitor",
+        "iv-access",
+        "needle-decompression",
+        "tube-thoracostomy",
+        "chest-x-ray"
+      ],
+      "interventions": [
+        {
+          "id": "move-to-emergency-department",
+          "label": "Move to Emergency Department",
+          "correct_zone": "zone-icu",
+          "why": "Acute respiratory failure requires ED care.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "100-oxygen",
+          "label": "100% Oxygen",
+          "correct_zone": "zone-monitor",
+          "why": "Maximize oxygenation while preparing decompression.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "pulse-ox-cardiac-monitor",
+          "label": "Pulse ox + cardiac monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Track oxygenation and hemodynamics continuously.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv-access",
+          "label": "IV access",
+          "correct_zone": "zone-arm",
+          "why": "Large-bore access if hypotensive or peri-arrest.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "needle-decompression",
+          "label": "Needle decompression",
+          "correct_zone": "zone-arm",
+          "why": "Clinical diagnosis \u2014 treat before imaging if unstable.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "tube-thoracostomy",
+          "label": "Tube thoracostomy",
+          "correct_zone": "zone-arm",
+          "why": "Definitive management after needle decompression.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "chest-x-ray",
+          "label": "Chest X-ray",
+          "correct_zone": "zone-monitor",
+          "why": "Confirm tube placement after stabilization.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [
+        {
+          "id": "decoy-bank-1-0",
+          "label": "Administer a sedative",
+          "why": "Sedatives are not typically administered initially in tension pneumothorax as they can worsen respiratory depression",
+          "correct_zone": "zone-custom-2"
+        },
+        {
+          "id": "decoy-bank-1-1",
+          "label": "Start antibiotics",
+          "why": "Antibiotics are not necessary for a primary diagnosis of tension pneumothorax unless there is a secondary infection present",
+          "correct_zone": "zone-custom-2"
+        },
+        {
+          "id": "decoy-bank-1-2",
+          "label": "Apply a hot pack to the affected area",
+          "why": "Heat application is not beneficial in cases of tension pneumothorax as it can increase intrathoracic pressure and worsen symptoms",
+          "correct_zone": "zone-custom-2"
+        },
+        {
+          "id": "decoy-bank-1-3",
+          "label": "Prescribe a blood transfusion",
+          "why": "A blood transfusion would not be appropriate for a primary diagnosis of tension pneumothorax unless there is severe anemia or hemorrhage present",
+          "correct_zone": "zone-custom-2"
+        }
+      ],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: The patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "hpi": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "vitalsText": "Initial Vital Signs Day 1 @ 16:00 Temperature: 37.0 C (98.6 degrees F) Pulse: 120 beats/min, Weak Respiratory rate: 34 /minute Blood pressure, systolic: 100 mm Hg Blood pressure, diastolic: 60 mm Hg Height: 183cm (72.0 in) Weight: 97.5 kg (215 lb) Body Mass Index: 29.1 kg/m2",
+            "clinicalTip": "Teaching hint: Needle decompression before CXR in the unstable patient \u2014 do not delay treatment for imaging.",
+            "objective": "Immediate decompression and chest tube; 100% oxygen. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: The patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "hpi": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "vitalsText": "Initial Vital Signs Day 1 @ 16:00 Temperature: 37.0 C (98.6 degrees F) Pulse: 120 beats/min, Weak Respiratory rate: 34 /minute Blood pressure, systolic: 100 mm Hg Blood pressure, diastolic: 60 mm Hg Height: 183cm (72.0 in) Weight: 97.5 kg (215 lb) Body Mass Index: 29.1 kg/m2",
+            "clinicalTip": "Needle decompression before CXR in the unstable patient \u2014 do not delay treatment for imaging.",
+            "objective": "Immediate decompression and chest tube; 100% oxygen."
+          },
+          "hard": {
+            "intro": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: The patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "hpi": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "vitalsText": "Initial Vital Signs Day 1 @ 16:00 Temperature: 37.0 C (98.6 degrees F) Pulse: 120 beats/min, Weak Respiratory rate: 34 /minute Blood pressure, systolic: 100 mm Hg Blood pressure, diastolic: 60 mm Hg Height: 183cm (72.0 in) Weight: 97.5 kg (215 lb) Body Mass Index: 29.1 kg/m2",
+            "clinicalTip": "Minimal coaching \u2014 prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Immediate decompression and chest tube; 100% oxygen."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: I, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, I developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. I rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied I to the hospital says that this has never happened to I in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "hpi": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "vitalsText": "The team is checking my vital signs now.",
+            "clinicalTip": "You feel unwell and want help \u2014 the clinical team will guide next steps.",
+            "objective": "Share your symptoms clearly; ask what happens next."
+          },
+          "standard": {
+            "intro": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: I, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, I developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. I rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied I to the hospital says that this has never happened to I in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "hpi": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "vitalsText": "What I was told about my vitals is on the monitor.",
+            "clinicalTip": "Focus on what you feel, when it started, and what makes it worse or better.",
+            "objective": "Participate in shared decision-making as the team stabilizes you."
+          },
+          "hard": {
+            "intro": "Initial History Reason(s) for visit: Chest pain; respiratory distress History of present Illness: I, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, I developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. I rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied I to the hospital says that this has never happened to I in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "hpi": "Initial History\n\nReason(s) for visit: Chest pain; respiratory distress\nHistory of present Illness:\nThe patient, a 65-year-old accountant, is brought to the emergency department by ambulance from the trucking company, where he works. Ten minutes prior to the ambulance\u2019s arrival, the patient developed excruciating, sharp pain on the right side of his chest accompanied by marked respiratory distress. He rates the pain as an 8 on a 10-point scale. The pain increases on respiration, and he is unable to answer questions. A coworker who accompanied the patient to the hospital says that this has never happened to the patient in the past. Coworker mentions patient has a past medical history of emphysema and asthma. Oxygen was administered during transport.",
+            "vitalsText": "",
+            "clinicalTip": "Limited guidance \u2014 advocate for yourself if symptoms worsen.",
+            "objective": "Navigate uncertainty while the team works through the differential."
+          }
+        }
+      }
+    },
+    "002": {
+      "id": "002",
+      "title": "Altered Mental Status",
+      "category": "Neurology",
+      "presentationKey": "Altered Mental Status",
+      "playbookKey": "case-bank-2",
+      "diagnosis": "Subdural Hematoma",
+      "caseBankSource": "preparedCases+presentation",
+      "hasSourceIntro": true,
+      "vitals": {
+        "sbp": 110,
+        "dbp": 70,
+        "hr": 88,
+        "rr": 18,
+        "temp": 36.8,
+        "spo2": 96,
+        "lactate": 1.8
+      },
+      "vitalsSource": "ccs_master",
+      "vitalsText": "Initial Vital Signs Day 1 @ 11:00 Temperature: 36.8 C (98.2 degrees F) Pulse: 88 beats/min. Regular rhythm Respiratory rate: 18 /minute Blood pressure, systolic: 115 mm Hg Blood pressure, diastolic: 85 mm Hg Height: 180cm (70.9 in) Weight: 91.0 kg (200.6 lb) Body Mass Index: 27.9 kg/m2",
+      "flowTrack": "AMS stabilization",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Somnolent, intermittently arousable"
+        ],
+        [
+          "Cardiovascular",
+          "Tachycardic with delayed capillary refill"
+        ],
+        [
+          "Respiratory",
+          "Compensatory tachypnea"
+        ],
+        [
+          "Abdomen",
+          "Soft, no rebound or guarding"
+        ],
+        [
+          "Neuro",
+          "Confused, follows simple commands; gait unsteady after recent fall"
+        ],
+        [
+          "Skin",
+          "Warm with mild diaphoresis"
+        ]
+      ],
+      "patientSex": "male",
+      "difficulty": "standard",
+      "clinical_tip": "Elderly or alcoholic with AMS after minor trauma \u2014 non-contrast CT head first.",
+      "objective": "Identify bleed, reverse coagulopathy, neurosurgical evacuation if indicated.",
+      "interventionIds": [
+        "emergency-department",
+        "seizure-precautions",
+        "non-contrast-ct-head",
+        "pt-inr-and-platelets",
+        "cbc",
+        "neurosurgery-consult",
+        "neurologic-checks-monitor"
+      ],
+      "interventions": [
+        {
+          "id": "emergency-department",
+          "label": "Emergency Department",
+          "correct_zone": "zone-icu",
+          "why": "Acute neurologic change needs ED evaluation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "seizure-precautions",
+          "label": "Seizure precautions",
+          "correct_zone": "zone-arm",
+          "why": "Prevent secondary brain injury from seizures.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "non-contrast-ct-head",
+          "label": "Non-contrast CT head",
+          "correct_zone": "zone-monitor",
+          "why": "Crescent-shaped subdural collection.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "pt-inr-and-platelets",
+          "label": "PT/INR and platelets",
+          "correct_zone": "zone-arm",
+          "why": "Identify coagulopathy before neurosurgery.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "cbc",
+          "label": "CBC",
+          "correct_zone": "zone-blood",
+          "why": "Baseline and transfusion planning.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "neurosurgery-consult",
+          "label": "Neurosurgery consult",
+          "correct_zone": "zone-icu",
+          "why": "Evacuation if midline shift or decline.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "neurologic-checks-monitor",
+          "label": "Neurologic checks + monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Detect herniation early.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [
+        {
+          "id": "decoy-bank-2-0",
+          "label": "Admit the patient to a general ward",
+          "why": "Subdural hematoma is an emergency and requires immediate attention. Admission to a general ward might not provide the necessary level of care, monitoring, or resources for such a critical condition.",
+          "correct_zone": "zone-custom-2"
+        },
+        {
+          "id": "decoy-bank-2-1",
+          "label": "Prescribe pain medication but without any CT scan",
+          "why": "Pain management is important, but it should be done after confirming the cause of the head injury. Without a CT scan, the cause cannot be accurately identified, and the wrong treatment might be prescribed.",
+          "correct_zone": "zone-custom-2"
+        },
+        {
+          "id": "decoy-bank-2-2",
+          "label": "Administer a blood thinner to prevent further clotting",
+          "why": "Subdural hematoma is caused by bleeding between the brain and skull. Administering a blood thinner could potentially worsen the condition by accelerating the bleeding.",
+          "correct_zone": "zone-custom-2"
+        },
+        {
+          "id": "decoy-bank-2-3",
+          "label": "Start the patient on antiepileptic drugs for seizure prophylaxis without a history of seizures",
+          "why": "Antiepileptic drugs are used to prevent seizures, but they should only be administered if the patient has a history of seizures or if seizures have occurred during the initial evaluation. In the absence of these factors, their use is unnecessary and potentially harmful.",
+          "correct_zone": "zone-custom-2"
+        }
+      ],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Initial History Reason(s) for visit: Altered mental status History of present Illness: A 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. The patient has been having behavioral changes over a period of three or four weeks. He used to be very active and managed all of his financial affairs. He now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, the patient got up to urinate and fell before reaching the bathroom. He was found on the floor the next morning by family members. He was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. The patient is currently in no pain. Past Medical History: Chronic alcohol abuse; cataracts. Hospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities. Current medications: Aspirin 81mg PO daily Allergies: None Vaccinations: Up to date Family History: Father: Deceased due to a 'heart attack'. Mother: Diagnosed with type 2 diabetes mellitus and died of natural causes. The patient has no siblings. Social History: Marital/Family: Widowed; he has three children. Personal habits: the patient smokes 1 Pack/day. He currently does not drink alcohol but was a chronic alcoholic for 30 years. Denies use of illegal drugs or misuse of medications. Occupation/educational: He is a retired Army human resources manager. He is a high school graduate. Recreational: The patient likes to spend time with his children and enjoys collecting stamps. Review of systems: General: See HPI Skin: Negative HEENT: Negative Cardiorespiratory: Negative Gastrointestinal: Negative Genitourinary: Negative Neuropsychiatric: See HPI --- Chart tabs --- * Chart: Progress Notes \u2192 presentation_2_Altered_Mental_Status_chart_Progress_Notes.png * Chart: Vital Signs \u2192 presentation_2_Altered_Mental_Status_chart_Vital_Signs.png",
+            "hpi": "Initial History\n\nReason(s) for visit: Altered mental status\nHistory of present Illness:\nA 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. The patient has been having behavioral changes over a period of three or four weeks. He used to be very active and managed all of his financial affairs. He now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, the patient got up to urinate and fell before reaching the bathroom. He was found on the floor the next morning by family members. He was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. The patient is currently in no pain. \n\nPast Medical History: Chronic alcohol abuse; cataracts.\n\nHospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities.\n\nCurrent medications: Aspirin 81mg PO daily\n\nAllergies: None\n\nVaccinations: Up to date\n\nFamily History:\nFather: Deceased due to a 'heart attack'.\nMother: Diagnosed with type 2 diabetes mellitus and died of natural causes. \nThe patient has no siblings.\n\nSocial History: Marital/Family: Widowed; he has three children. Personal habits: the patient smokes 1 Pack/day. He currently does not drink alcohol but was a chronic alcoholic for 30 years. Denies use of illegal drugs or misuse of medications.\n\nOccupation/educational: He is a retired Army human resources manager. He is a high school graduate.\n\nRecreational: The patient likes to spend time with his children and enjoys collecting stamps.\n\nReview of systems:\nGeneral: See HPI\nSkin: Negative\nHEENT: Negative\nCardiorespiratory: Negative\nGastrointestinal: Negative\nGenitourinary: Negative\nNeuropsychiatric: See HPI\n\n--- Chart tabs ---\n\n* Chart: Progress Notes \u2192 presentation_2_Altered_Mental_Status_chart_Progress_Notes.png\n* Chart: Vital Signs \u2192 presentation_2_Altered_Mental_Status_chart_Vital_Signs.png",
+            "vitalsText": "Initial Vital Signs Day 1 @ 11:00 Temperature: 36.8 C (98.2 degrees F) Pulse: 88 beats/min. Regular rhythm Respiratory rate: 18 /minute Blood pressure, systolic: 115 mm Hg Blood pressure, diastolic: 85 mm Hg Height: 180cm (70.9 in) Weight: 91.0 kg (200.6 lb) Body Mass Index: 27.9 kg/m2",
+            "clinicalTip": "Teaching hint: Elderly or alcoholic with AMS after minor trauma \u2014 non-contrast CT head first.",
+            "objective": "Identify bleed, reverse coagulopathy, neurosurgical evacuation if indicated. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Initial History Reason(s) for visit: Altered mental status History of present Illness: A 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. The patient has been having behavioral changes over a period of three or four weeks. He used to be very active and managed all of his financial affairs. He now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, the patient got up to urinate and fell before reaching the bathroom. He was found on the floor the next morning by family members. He was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. The patient is currently in no pain. Past Medical History: Chronic alcohol abuse; cataracts. Hospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities. Current medications: Aspirin 81mg PO daily Allergies: None Vaccinations: Up to date Family History: Father: Deceased due to a 'heart attack'. Mother: Diagnosed with type 2 diabetes mellitus and died of natural causes. The patient has no siblings. Social History: Marital/Family: Widowed; he has three children. Personal habits: the patient smokes 1 Pack/day. He currently does not drink alcohol but was a chronic alcoholic for 30 years. Denies use of illegal drugs or misuse of medications. Occupation/educational: He is a retired Army human resources manager. He is a high school graduate. Recreational: The patient likes to spend time with his children and enjoys collecting stamps. Review of systems: General: See HPI Skin: Negative HEENT: Negative Cardiorespiratory: Negative Gastrointestinal: Negative Genitourinary: Negative Neuropsychiatric: See HPI --- Chart tabs --- * Chart: Progress Notes \u2192 presentation_2_Altered_Mental_Status_chart_Progress_Notes.png * Chart: Vital Signs \u2192 presentation_2_Altered_Mental_Status_chart_Vital_Signs.png",
+            "hpi": "Initial History\n\nReason(s) for visit: Altered mental status\nHistory of present Illness:\nA 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. The patient has been having behavioral changes over a period of three or four weeks. He used to be very active and managed all of his financial affairs. He now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, the patient got up to urinate and fell before reaching the bathroom. He was found on the floor the next morning by family members. He was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. The patient is currently in no pain. \n\nPast Medical History: Chronic alcohol abuse; cataracts.\n\nHospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities.\n\nCurrent medications: Aspirin 81mg PO daily\n\nAllergies: None\n\nVaccinations: Up to date\n\nFamily History:\nFather: Deceased due to a 'heart attack'.\nMother: Diagnosed with type 2 diabetes mellitus and died of natural causes. \nThe patient has no siblings.\n\nSocial History: Marital/Family: Widowed; he has three children. Personal habits: the patient smokes 1 Pack/day. He currently does not drink alcohol but was a chronic alcoholic for 30 years. Denies use of illegal drugs or misuse of medications.\n\nOccupation/educational: He is a retired Army human resources manager. He is a high school graduate.\n\nRecreational: The patient likes to spend time with his children and enjoys collecting stamps.\n\nReview of systems:\nGeneral: See HPI\nSkin: Negative\nHEENT: Negative\nCardiorespiratory: Negative\nGastrointestinal: Negative\nGenitourinary: Negative\nNeuropsychiatric: See HPI\n\n--- Chart tabs ---\n\n* Chart: Progress Notes \u2192 presentation_2_Altered_Mental_Status_chart_Progress_Notes.png\n* Chart: Vital Signs \u2192 presentation_2_Altered_Mental_Status_chart_Vital_Signs.png",
+            "vitalsText": "Initial Vital Signs Day 1 @ 11:00 Temperature: 36.8 C (98.2 degrees F) Pulse: 88 beats/min. Regular rhythm Respiratory rate: 18 /minute Blood pressure, systolic: 115 mm Hg Blood pressure, diastolic: 85 mm Hg Height: 180cm (70.9 in) Weight: 91.0 kg (200.6 lb) Body Mass Index: 27.9 kg/m2",
+            "clinicalTip": "Elderly or alcoholic with AMS after minor trauma \u2014 non-contrast CT head first.",
+            "objective": "Identify bleed, reverse coagulopathy, neurosurgical evacuation if indicated."
+          },
+          "hard": {
+            "intro": "Initial History Reason(s) for visit: Altered mental status History of present Illness: A 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. The patient has been having behavioral changes over a period of three or four weeks. He used to be very active and managed all of his financial affairs. He now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, the patient got up to urinate and fell before reaching the bathroom. He was found on the floor the next morning by family members. He was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. The patient is currently in no pain. Past Medical History: Chronic alcohol abuse; cataracts. Hospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities. Current medications: Aspirin 81mg PO daily Allergies: None Vaccinations: Up to date Family History: Father: Deceased due to a 'heart attack'. Mother: Diagnosed with type 2 diabetes mellitus and died of natural causes. The patient has no siblings. Social History: Marital/Family: Widowed; he has three children. Personal habits: the patient smokes 1 Pack/day. He currently does not drink alcohol but was a chronic alcoholic for 30 years. Denies use of illegal drugs or misuse of medications. Occupation/educational: He is a retired Army human resources manager. He is a high school graduate. Recreational: The patient likes to spend time with his children and enjoys collecting stamps. Review of systems: General: See HPI Skin: Negative HEENT: Negative Cardiorespiratory: Negative Gastrointestinal: Negative Genitourinary: Negative Neuropsychiatric: See HPI --- Chart tabs --- * Chart: Progress Notes \u2192 presentation_2_Altered_Mental_Status_chart_Progress_Notes.png * Chart: Vital Signs \u2192 presentation_2_Altered_Mental_Status_chart_Vital_Signs.png",
+            "hpi": "Initial History\n\nReason(s) for visit: Altered mental status\nHistory of present Illness:\nA 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. The patient has been having behavioral changes over a period of three or four weeks. He used to be very active and managed all of his financial affairs. He now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, the patient got up to urinate and fell before reaching the bathroom. He was found on the floor the next morning by family members. He was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. The patient is currently in no pain. \n\nPast Medical History: Chronic alcohol abuse; cataracts.\n\nHospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities.\n\nCurrent medications: Aspirin 81mg PO daily\n\nAllergies: None\n\nVaccinations: Up to date\n\nFamily History:\nFather: Deceased due to a 'heart attack'.\nMother: Diagnosed with type 2 diabetes mellitus and died of natural causes. \nThe patient has no siblings.\n\nSocial History: Marital/Family: Widowed; he has three children. Personal habits: the patient smokes 1 Pack/day. He currently does not drink alcohol but was a chronic alcoholic for 30 years. Denies use of illegal drugs or misuse of medications.\n\nOccupation/educational: He is a retired Army human resources manager. He is a high school graduate.\n\nRecreational: The patient likes to spend time with his children and enjoys collecting stamps.\n\nReview of systems:\nGeneral: See HPI\nSkin: Negative\nHEENT: Negative\nCardiorespiratory: Negative\nGastrointestinal: Negative\nGenitourinary: Negative\nNeuropsychiatric: See HPI\n\n--- Chart tabs ---\n\n* Chart: Progress Notes \u2192 presentation_2_Altered_Mental_Status_chart_Progress_Notes.png\n* Chart: Vital Signs \u2192 presentation_2_Altered_Mental_Status_chart_Vital_Signs.png",
+            "vitalsText": "Initial Vital Signs Day 1 @ 11:00 Temperature: 36.8 C (98.2 degrees F) Pulse: 88 beats/min. Regular rhythm Respiratory rate: 18 /minute Blood pressure, systolic: 115 mm Hg Blood pressure, diastolic: 85 mm Hg Height: 180cm (70.9 in) Weight: 91.0 kg (200.6 lb) Body Mass Index: 27.9 kg/m2",
+            "clinicalTip": "Minimal coaching \u2014 prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Identify bleed, reverse coagulopathy, neurosurgical evacuation if indicated."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Initial History Reason(s) for visit: Altered mental status History of present Illness: A 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. I has been having behavioral changes over a period of three or four weeks. I used to be very active and managed all of his financial affairs. I now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, I got up to urinate and fell before reaching the bathroom. I was found on the floor the next morning by family members. I was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. I is currently in no pain. Past Medical History: Chronic alcohol abuse; cataracts. Hospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities. Current medications: Aspirin 81mg PO daily Allergies: None Vaccinations: Up to date Family History: Father: Deceased due to a 'heart attack'. Mother: Diagnosed with type 2 diabetes mellitus and died of natural causes. I has no sibl",
+            "hpi": "Initial History\n\nReason(s) for visit: Altered mental status\nHistory of present Illness:\nA 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. The patient has been having behavioral changes over a period of three or four weeks. He used to be very active and managed all of his financial affairs. He now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, the patient got up to urinate and fell before reaching the bathroom. He was found on the floor the next morning by family members. He was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. The patient is currently in no pain. \n\nPast Medical History: Chronic alcohol abuse; cataracts.\n\nHospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities.\n\nCurrent medications: Aspirin 81mg PO daily\n\nAllergies: None\n\nVaccinations: Up to date\n\nFamily History:\nFather: Deceased due to a 'heart attack'.\nMother: Diagnosed with type 2 diabetes mellitus and died of natural causes. \nThe patient has no siblings.\n\nSocial History: Marital/Family: Widowed; he has three children. Personal habits: the patient smokes 1 Pack/day. He currently does not drink alcohol but was a chronic alcoholic for 30 years. Denies use of illegal drugs or misuse of medications.\n\nOccupation/educational: He is a retired Army human resources manager. He is a high school graduate.\n\nRecreational: The patient likes to spend time with his children and enjoys collecting stamps.\n\nReview of systems:\nGeneral: See HPI\nSkin: Negative\nHEENT: Negative\nCardiorespiratory: Negative\nGastrointestinal: Negative\nGenitourinary: Negative\nNeuropsychiatric: See HPI\n\n--- Chart tabs ---\n\n* Chart: Progress Notes \u2192 presentation_2_Altered_Mental_Status_chart_Progress_Notes.png\n* Chart: Vital Signs \u2192 presentation_2_Altered_Mental_Status_chart_Vital_Signs.png",
+            "vitalsText": "The team is checking my vital signs now.",
+            "clinicalTip": "You feel unwell and want help \u2014 the clinical team will guide next steps.",
+            "objective": "Share your symptoms clearly; ask what happens next."
+          },
+          "standard": {
+            "intro": "Initial History Reason(s) for visit: Altered mental status History of present Illness: A 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. I has been having behavioral changes over a period of three or four weeks. I used to be very active and managed all of his financial affairs. I now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, I got up to urinate and fell before reaching the bathroom. I was found on the floor the next morning by family members. I was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. I is currently in no pain. Past Medical History: Chronic alcohol abuse; cataracts. Hospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities. Current medications: Aspirin 81mg PO daily Allergies: None Vaccinations: Up to date Family History: Father: Deceased due to a 'heart attack'. Mother: Diagnosed with type 2 diabetes mellitus and died of natural causes. I has no sibl",
+            "hpi": "Initial History\n\nReason(s) for visit: Altered mental status\nHistory of present Illness:\nA 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. The patient has been having behavioral changes over a period of three or four weeks. He used to be very active and managed all of his financial affairs. He now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, the patient got up to urinate and fell before reaching the bathroom. He was found on the floor the next morning by family members. He was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. The patient is currently in no pain. \n\nPast Medical History: Chronic alcohol abuse; cataracts.\n\nHospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities.\n\nCurrent medications: Aspirin 81mg PO daily\n\nAllergies: None\n\nVaccinations: Up to date\n\nFamily History:\nFather: Deceased due to a 'heart attack'.\nMother: Diagnosed with type 2 diabetes mellitus and died of natural causes. \nThe patient has no siblings.\n\nSocial History: Marital/Family: Widowed; he has three children. Personal habits: the patient smokes 1 Pack/day. He currently does not drink alcohol but was a chronic alcoholic for 30 years. Denies use of illegal drugs or misuse of medications.\n\nOccupation/educational: He is a retired Army human resources manager. He is a high school graduate.\n\nRecreational: The patient likes to spend time with his children and enjoys collecting stamps.\n\nReview of systems:\nGeneral: See HPI\nSkin: Negative\nHEENT: Negative\nCardiorespiratory: Negative\nGastrointestinal: Negative\nGenitourinary: Negative\nNeuropsychiatric: See HPI\n\n--- Chart tabs ---\n\n* Chart: Progress Notes \u2192 presentation_2_Altered_Mental_Status_chart_Progress_Notes.png\n* Chart: Vital Signs \u2192 presentation_2_Altered_Mental_Status_chart_Vital_Signs.png",
+            "vitalsText": "What I was told about my vitals is on the monitor.",
+            "clinicalTip": "Focus on what you feel, when it started, and what makes it worse or better.",
+            "objective": "Participate in shared decision-making as the team stabilizes you."
+          },
+          "hard": {
+            "intro": "Initial History Reason(s) for visit: Altered mental status History of present Illness: A 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. I has been having behavioral changes over a period of three or four weeks. I used to be very active and managed all of his financial affairs. I now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, I got up to urinate and fell before reaching the bathroom. I was found on the floor the next morning by family members. I was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. I is currently in no pain. Past Medical History: Chronic alcohol abuse; cataracts. Hospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities. Current medications: Aspirin 81mg PO daily Allergies: None Vaccinations: Up to date Family History: Father: Deceased due to a 'heart attack'. Mother: Diagnosed with type 2 diabetes mellitus and died of natural causes. I has no sibl",
+            "hpi": "Initial History\n\nReason(s) for visit: Altered mental status\nHistory of present Illness:\nA 70-year-old Caucasian man comes to the Emergency room because his family members are concerned that something is wrong. The patient has been having behavioral changes over a period of three or four weeks. He used to be very active and managed all of his financial affairs. He now barely talks, stares at the wall for hours at a time, and sleeps most of the day. Four weeks ago, the patient got up to urinate and fell before reaching the bathroom. He was found on the floor the next morning by family members. He was taken to his family doctor and was discharged with a prescription to buy a cane. Since that time, he has been having problems walking. There have been no fevers or night sweats. The patient is currently in no pain. \n\nPast Medical History: Chronic alcohol abuse; cataracts.\n\nHospitalization Procedures: Hemorrhoidectomy 1 year ago. Last colonoscopy was 4 years ago which demonstrated no abnormalities.\n\nCurrent medications: Aspirin 81mg PO daily\n\nAllergies: None\n\nVaccinations: Up to date\n\nFamily History:\nFather: Deceased due to a 'heart attack'.\nMother: Diagnosed with type 2 diabetes mellitus and died of natural causes. \nThe patient has no siblings.\n\nSocial History: Marital/Family: Widowed; he has three children. Personal habits: the patient smokes 1 Pack/day. He currently does not drink alcohol but was a chronic alcoholic for 30 years. Denies use of illegal drugs or misuse of medications.\n\nOccupation/educational: He is a retired Army human resources manager. He is a high school graduate.\n\nRecreational: The patient likes to spend time with his children and enjoys collecting stamps.\n\nReview of systems:\nGeneral: See HPI\nSkin: Negative\nHEENT: Negative\nCardiorespiratory: Negative\nGastrointestinal: Negative\nGenitourinary: Negative\nNeuropsychiatric: See HPI\n\n--- Chart tabs ---\n\n* Chart: Progress Notes \u2192 presentation_2_Altered_Mental_Status_chart_Progress_Notes.png\n* Chart: Vital Signs \u2192 presentation_2_Altered_Mental_Status_chart_Vital_Signs.png",
+            "vitalsText": "",
+            "clinicalTip": "Limited guidance \u2014 advocate for yourself if symptoms worsen.",
+            "objective": "Navigate uncertainty while the team works through the differential."
+          }
+        }
+      }
+    },
+    "035": {
+      "id": "035",
+      "title": "Seizure",
+      "category": "Neurology",
+      "presentationKey": "Seizure",
+      "playbookKey": "case-bank-35",
+      "diagnosis": "Status Epilepticus or Structural Brain Abnormality (pending further workup)",
+      "caseBankSource": "preparedCases+fmgmatch+screenshot+mistral",
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 139,
+        "dbp": 82,
+        "hr": 76,
+        "rr": 13,
+        "temp": 38,
+        "spo2": 95,
+        "lactate": 1.9
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Seizure \u2014 exam tailored to chief complaint on arrival."
+        ],
+        [
+          "Cardiovascular",
+          "HR 76; BP 139/82."
+        ],
+        [
+          "Respiratory",
+          "RR 13; SpO\u2082 95%."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Neurologic exam focused on mental status and focal deficits."
+        ],
+        [
+          "Skin",
+          "No acute rash; capillary refill and perfusion assessed."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Fingerstick glucose before CT \u2014 hypoglycemia mimics stroke.",
+      "objective": "Stabilize ABCs. Identify reversible causes.",
+      "interventionIds": [
+        "obtain-stat-head-ct-to-rule-out-structur",
+        "administration-of-benzodiazepines-e-g-lo",
+        "initiate-electrolyte-and-glucose-monitor",
+        "consult-neurology-for-further-management",
+        "monitor-vital-signs-oxygenation-and-neur",
+        "order1",
+        "oxygen",
+        "iv-access",
+        "monitor",
+        "pulse-ox",
+        "cbc",
+        "cmp",
+        "glucose",
+        "tox-screen"
+      ],
+      "interventions": [
+        {
+          "id": "obtain-stat-head-ct-to-rule-out-structur",
+          "label": "Obtain stat head CT to rule out structural brain abnormalities or acute process",
+          "correct_zone": "zone-monitor",
+          "why": "Required for this case presentation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "administration-of-benzodiazepines-e-g-lo",
+          "label": "Administration of benzodiazepines (e.g., lorazepam) for seizure control",
+          "correct_zone": "zone-iv-bag",
+          "why": "Required for this case presentation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "initiate-electrolyte-and-glucose-monitor",
+          "label": "Initiate electrolyte and glucose monitoring",
+          "correct_zone": "zone-monitor",
+          "why": "Required for this case presentation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "consult-neurology-for-further-management",
+          "label": "Consult Neurology for further management, workup, and long-term treatment options",
+          "correct_zone": "zone-icu",
+          "why": "Required for this case presentation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "monitor-vital-signs-oxygenation-and-neur",
+          "label": "Monitor vital signs, oxygenation, and neurological status",
+          "correct_zone": "zone-monitor",
+          "why": "Required for this case presentation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "order1",
+          "label": "order1",
+          "correct_zone": "zone-arm",
+          "why": "correct reason1",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "oxygen",
+          "label": "Oxygen",
+          "correct_zone": "zone-monitor",
+          "why": "To provide supplemental oxygen if the patient is having difficulty breathing",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv-access",
+          "label": "IV access",
+          "correct_zone": "zone-arm",
+          "why": "For administration of fluids, medications, and blood products as needed",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "monitor",
+          "label": "monitor",
+          "correct_zone": "zone-monitor",
+          "why": "To continuously monitor the patient's vital signs",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "pulse-ox",
+          "label": "pulse ox",
+          "correct_zone": "zone-monitor",
+          "why": "To assess the patient's oxygen saturation level",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "cbc",
+          "label": "CBC",
+          "correct_zone": "zone-blood",
+          "why": "To evaluate for anemia, infection, or other hematologic abnormalities",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "cmp",
+          "label": "CMP",
+          "correct_zone": "zone-blood",
+          "why": "To evaluate renal and liver function, as well as electrolyte levels",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "glucose",
+          "label": "glucose",
+          "correct_zone": "zone-blood",
+          "why": "To check for hypoglycemia or hyperglycemia which can trigger seizures",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "tox-screen",
+          "label": "tox screen",
+          "correct_zone": "zone-arm",
+          "why": "To rule out toxicology as a cause of the seizure",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Seizure \u2014 emergency presentation.",
+            "hpi": "Seizure \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Fingerstick glucose before CT \u2014 hypoglycemia mimics stroke.",
+            "objective": "Stabilize ABCs. Identify reversible causes. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Seizure \u2014 emergency presentation.",
+            "hpi": "Seizure \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Fingerstick glucose before CT \u2014 hypoglycemia mimics stroke.",
+            "objective": "Stabilize ABCs. Identify reversible causes."
+          },
+          "hard": {
+            "intro": "Seizure \u2014 emergency presentation.",
+            "hpi": "Seizure \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching \u2014 prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Stabilize ABCs. Identify reversible causes."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Seizure \u2014 emergency presentation.",
+            "hpi": "Seizure \u2014 emergency presentation.",
+            "vitalsText": "The team is checking my vital signs now.",
+            "clinicalTip": "You feel unwell and want help \u2014 the clinical team will guide next steps.",
+            "objective": "Share your symptoms clearly; ask what happens next."
+          },
+          "standard": {
+            "intro": "Seizure \u2014 emergency presentation.",
+            "hpi": "Seizure \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Focus on what you feel, when it started, and what makes it worse or better.",
+            "objective": "Participate in shared decision-making as the team stabilizes you."
+          },
+          "hard": {
+            "intro": "Seizure \u2014 emergency presentation.",
+            "hpi": "Seizure \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Limited guidance \u2014 advocate for yourself if symptoms worsen.",
+            "objective": "Navigate uncertainty while the team works through the differential."
+          }
+        }
+      }
+    },
+    "121": {
+      "id": "121",
+      "title": "Poor Feeding",
+      "category": "Pediatrics",
+      "presentationKey": "Poor Feeding",
+      "playbookKey": "case-bank-121",
+      "diagnosis": "Failure to Thrive (FTT) or Gastroesophageal Reflux Disease (GERD) are common considerations for Poor Feeding of unknown cause in pediatric patients.",
+      "caseBankSource": "preparedCases+fmgmatch+fmgmatch+mistral",
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 93,
+        "dbp": 56,
+        "hr": 124,
+        "rr": 27,
+        "temp": 38.6,
+        "spo2": 94,
+        "lactate": 2.2
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Poor Feeding \u2014 exam tailored to chief complaint on arrival."
+        ],
+        [
+          "Cardiovascular",
+          "HR 124, tachycardic; BP 93/56; hypotensive."
+        ],
+        [
+          "Respiratory",
+          "RR 27, tachypneic; SpO\u2082 94%."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Alert and oriented unless perfusion or metabolic derangement present."
+        ],
+        [
+          "Skin",
+          "Warm skin with fever; no purpura on initial survey."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Febrile infant \u2014 sepsis workup, fluids, and close monitoring before disposition.",
+      "objective": "Stabilize the pediatric patient and complete emergent workup before disposition.",
+      "interventionIds": [
+        "obtain-a-thorough-history-including-feed",
+        "physical-examination-to-assess-growth-pa",
+        "investigations-such-as-complete-blood-co",
+        "consider-a-swallowing-study-videofluoros",
+        "refer-the-patient-to-a-pediatric-gastroe",
+        "oxygen",
+        "iv-access-x2",
+        "glucose-check"
+      ],
+      "interventions": [
+        {
+          "id": "obtain-a-thorough-history-including-feed",
+          "label": "Obtain a thorough history, including feeding habits, weight gain, vomiting, and bowel movements",
+          "correct_zone": "zone-icu",
+          "why": "Required for this case presentation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "physical-examination-to-assess-growth-pa",
+          "label": "Physical examination to assess growth parameters, signs of dehydration, abdominal distension, or other relevant findings",
+          "correct_zone": "zone-icu",
+          "why": "Required for this case presentation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "investigations-such-as-complete-blood-co",
+          "label": "Investigations such as complete blood count (CBC), chemistry panel, urinalysis, stool studies, and electrolytes to rule out potential underlying causes like infections, metabolic disorders, or anemia",
+          "correct_zone": "zone-blood",
+          "why": "Required for this case presentation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "consider-a-swallowing-study-videofluoros",
+          "label": "Consider a swallowing study (videofluoroscopy) or pH monitoring if GERD is suspected",
+          "correct_zone": "zone-monitor",
+          "why": "Required for this case presentation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "refer-the-patient-to-a-pediatric-gastroe",
+          "label": "Refer the patient to a pediatric gastroenterologist for further evaluation and management",
+          "correct_zone": "zone-icu",
+          "why": "Required for this case presentation.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "oxygen",
+          "label": "Oxygen",
+          "correct_zone": "zone-monitor",
+          "why": "To provide supplemental oxygen and help maintain adequate oxygenation in the patient with poor feeding",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv-access-x2",
+          "label": "IV access x2",
+          "correct_zone": "zone-arm",
+          "why": "To establish two large-bore IV access for fluid administration, medication delivery, and blood draws",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "glucose-check",
+          "label": "glucose check",
+          "correct_zone": "zone-blood",
+          "why": "To quickly assess the blood glucose level of the patient to rule out hypoglycemia as a possible cause of poor feeding",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Febrile infant \u2014 sepsis workup, fluids, and close monitoring before disposition.",
+            "objective": "Stabilize the pediatric patient and complete emergent workup before disposition. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Febrile infant \u2014 sepsis workup, fluids, and close monitoring before disposition.",
+            "objective": "Stabilize the pediatric patient and complete emergent workup before disposition."
+          },
+          "hard": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching \u2014 prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Stabilize the pediatric patient and complete emergent workup before disposition."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "The team is checking my vital signs now.",
+            "clinicalTip": "You feel unwell and want help \u2014 the clinical team will guide next steps.",
+            "objective": "Share your symptoms clearly; ask what happens next."
+          },
+          "standard": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Focus on what you feel, when it started, and what makes it worse or better.",
+            "objective": "Participate in shared decision-making as the team stabilizes you."
+          },
+          "hard": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Limited guidance \u2014 advocate for yourself if symptoms worsen.",
+            "objective": "Navigate uncertainty while the team works through the differential."
+          }
+        }
+      }
+    },
+    "143": {
+      "id": "143",
+      "title": "Poor Feeding",
+      "category": "Pediatrics",
+      "presentationKey": "Poor Feeding",
+      "playbookKey": "case-bank-143",
+      "diagnosis": "Failure to Thrive (FTT) or Malnutrition",
+      "caseBankSource": "preparedCases+fmgmatch+screenshot+fmgmatch+mistral",
+      "hasSourceIntro": false,
+      "vitals": {
+        "sbp": 96,
+        "dbp": 58,
+        "hr": 128,
+        "rr": 28,
+        "temp": 39,
+        "spo2": 95,
+        "lactate": 2.5
+      },
+      "vitalsSource": "template",
+      "vitalsText": "",
+      "flowTrack": "Standard ED pathway",
+      "dispositionUnits": [
+        "ER",
+        "OBS",
+        "ICU",
+        "WARD"
+      ],
+      "exam": [
+        [
+          "General",
+          "Poor Feeding \u2014 exam tailored to chief complaint on arrival."
+        ],
+        [
+          "Cardiovascular",
+          "HR 128, tachycardic; BP 96/58."
+        ],
+        [
+          "Respiratory",
+          "RR 28, tachypneic; SpO\u2082 95%."
+        ],
+        [
+          "Abdomen",
+          "Soft, non-distended, no focal peritoneal signs on initial exam."
+        ],
+        [
+          "Neuro",
+          "Alert and oriented unless perfusion or metabolic derangement present."
+        ],
+        [
+          "Skin",
+          "Warm skin with fever; no purpura on initial survey."
+        ]
+      ],
+      "patientSex": "unknown",
+      "difficulty": "standard",
+      "clinical_tip": "Febrile infant \u2014 sepsis workup, fluids, and close monitoring before disposition.",
+      "objective": "Stabilize the pediatric patient and complete emergent workup before disposition.",
+      "interventionIds": [
+        "obtain-a-thorough-history-including-mate",
+        "perform-physical-examination-focusing-on",
+        "oxygen",
+        "iv-access-2",
+        "glucose-check"
+      ],
+      "interventions": [
+        {
+          "id": "obtain-a-thorough-history-including-mate",
+          "label": "Obtain a thorough history, including maternal and child health, growth and development, feeding habits, and family dynamics.",
+          "correct_zone": "zone-icu",
+          "why": "To gather information that may help narrow down the diagnosis of the underlying cause of poor feeding.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "perform-physical-examination-focusing-on",
+          "label": "Perform physical examination focusing on growth parameters, developmental milestones, signs of malnutrition (e.g., edema, skin changes), and any underlying conditions.",
+          "correct_zone": "zone-icu",
+          "why": "To assess the patient's overall health status, identify any abnormalities that may contribute to poor feeding, and monitor progress during treatment.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "oxygen",
+          "label": "Oxygen",
+          "correct_zone": "zone-monitor",
+          "why": "Immediate oxygen delivery for poor feeding is important to address any potential respiratory distress.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv-access-2",
+          "label": "IV access \u00d72",
+          "correct_zone": "zone-arm",
+          "why": "Two large-bore IV access will allow for quick administration of fluids and medications if needed.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "glucose-check",
+          "label": "glucose check",
+          "correct_zone": "zone-blood",
+          "why": "A glucose check can help rule out hypoglycemia, which can cause poor feeding in infants.",
+          "guideline": "ACEP"
+        }
+      ],
+      "decoys": [],
+      "narrative": {
+        "doctor": {
+          "easy": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Teaching hint: Febrile infant \u2014 sepsis workup, fluids, and close monitoring before disposition.",
+            "objective": "Stabilize the pediatric patient and complete emergent workup before disposition. Start with stabilization, then targeted testing."
+          },
+          "standard": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Febrile infant \u2014 sepsis workup, fluids, and close monitoring before disposition.",
+            "objective": "Stabilize the pediatric patient and complete emergent workup before disposition."
+          },
+          "hard": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Minimal coaching \u2014 prioritize life threats without hand-holding.",
+            "objective": "High-acuity workup: Stabilize the pediatric patient and complete emergent workup before disposition."
+          }
+        },
+        "patient": {
+          "easy": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "The team is checking my vital signs now.",
+            "clinicalTip": "You feel unwell and want help \u2014 the clinical team will guide next steps.",
+            "objective": "Share your symptoms clearly; ask what happens next."
+          },
+          "standard": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Focus on what you feel, when it started, and what makes it worse or better.",
+            "objective": "Participate in shared decision-making as the team stabilizes you."
+          },
+          "hard": {
+            "intro": "Poor Feeding \u2014 emergency presentation.",
+            "hpi": "Poor Feeding \u2014 emergency presentation.",
+            "vitalsText": "",
+            "clinicalTip": "Limited guidance \u2014 advocate for yourself if symptoms worsen.",
+            "objective": "Navigate uncertainty while the team works through the differential."
+          }
+        }
+      }
+    }
+  },
+  "stats": {
+    "updated": 21,
+    "kept": 3,
+    "processed": 5,
+    "skipped": [],
+    "failed": []
+  }
+}

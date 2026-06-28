@@ -1,0 +1,243 @@
+.timeline-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 0%, rgba(18, 26, 40, 0.92), rgba(6, 9, 16, 0.97));
+  backdrop-filter: blur(6px);
+  padding: 24px;
+}
+
+.timeline-frame {
+  width: min(1120px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #0e1422;
+  border: 1px solid rgba(120, 160, 220, 0.22);
+  border-radius: 18px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6);
+  overflow: auto;
+  padding: 18px 22px 22px;
+}
+
+.timeline-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.timeline-kicker {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6fa8ff;
+}
+.timeline-title {
+  margin: 2px 0 0;
+  font-size: 20px;
+  color: #eaf1ff;
+}
+.timeline-stats {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.timeline-progress { font-weight: 600; color: #9fe0a0; }
+.timeline-misses { color: #d98a8a; font-size: 13px; }
+.timeline-refresh,
+.timeline-close {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid rgba(160, 180, 220, 0.25);
+  background: transparent; color: #cdd8ee; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.timeline-refresh svg,
+.timeline-close svg { width: 18px; height: 18px; }
+.timeline-refresh:hover { background: rgba(111, 168, 255, 0.16); color: #eaf1ff; }
+.timeline-close:hover { background: rgba(200, 80, 80, 0.18); }
+
+/* The ordered track — connecting rail + colored nodes + #notes */
+.timeline-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 10px;
+  position: relative;
+  padding-top: 4px;
+}
+/* the continuous rail the nodes sit on (matches the order-timeline look) */
+.timeline-rail {
+  position: absolute;
+  top: 14px;
+  left: 22px; right: 22px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(111, 168, 255, 0.15), rgba(111, 168, 255, 0.45), rgba(111, 168, 255, 0.15));
+  border-radius: 2px;
+  z-index: 0;
+}
+.timeline-track.is-complete .timeline-rail {
+  background: linear-gradient(90deg, rgba(159, 224, 160, 0.2), rgba(159, 224, 160, 0.55), rgba(159, 224, 160, 0.2));
+}
+@media (max-width: 760px) {
+  .timeline-track { grid-auto-flow: row; grid-auto-columns: auto; }
+  .timeline-rail { display: none; }
+}
+.timeline-lane {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+/* node dot on the rail */
+.timeline-node {
+  align-self: center;
+  width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: #0e1422;
+  border: 2px solid rgba(120, 150, 200, 0.45);
+  position: relative; z-index: 1;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.timeline-node svg { width: 14px; height: 14px; color: #9fe0a0; }
+.timeline-node.is-empty { border-color: rgba(120, 150, 200, 0.4); }
+.timeline-node.is-next {
+  border-color: #6fa8ff;
+  box-shadow: 0 0 0 4px rgba(111, 168, 255, 0.16);
+  animation: timelineNodePulse 1.6s ease-in-out infinite;
+}
+.timeline-node.is-filled {
+  border-color: rgba(159, 224, 160, 0.85);
+  background: rgba(159, 224, 160, 0.14);
+}
+.timeline-node.is-wrong {
+  border-color: #e06a6a;
+  box-shadow: 0 0 0 4px rgba(224, 106, 106, 0.18);
+}
+@keyframes timelineNodePulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(111, 168, 255, 0.1); }
+  50% { box-shadow: 0 0 0 6px rgba(111, 168, 255, 0.22); }
+}
+/* the amber "#n" note, like the reference timeline */
+.timeline-note {
+  align-self: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #e3b663;
+}
+.timeline-slot {
+  min-height: 96px;
+  border: 1.5px dashed rgba(120, 150, 200, 0.35);
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: #eaf1ff;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.12s;
+}
+.timeline-slot.droppable {
+  border-color: #6fa8ff;
+  background: rgba(111, 168, 255, 0.08);
+}
+.timeline-slot.is-next {
+  border-color: rgba(111, 168, 255, 0.7);
+  box-shadow: 0 0 0 1px rgba(111, 168, 255, 0.25);
+}
+.timeline-slot.filled {
+  border-style: solid;
+  border-color: rgba(159, 224, 160, 0.5);
+  background: rgba(159, 224, 160, 0.08);
+  cursor: default;
+}
+.timeline-slot.wrong {
+  border-color: #e06a6a;
+  background: rgba(224, 106, 106, 0.12);
+  animation: timelineShake 0.4s ease;
+}
+@keyframes timelineShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+.timeline-slot-empty {
+  color: rgba(180, 195, 225, 0.4);
+  font-style: italic;
+}
+.timeline-track.is-complete .timeline-slot {
+  border-color: rgba(159, 224, 160, 0.7);
+  box-shadow: 0 0 0 1px rgba(159, 224, 160, 0.3);
+}
+
+.timeline-nudge {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(217, 138, 138, 0.12);
+  border: 1px solid rgba(217, 138, 138, 0.3);
+  color: #f0cccc;
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.timeline-nudge svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+.timeline-done {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(159, 224, 160, 0.12);
+  border: 1px solid rgba(159, 224, 160, 0.4);
+  color: #b6f0c4;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.timeline-done svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+/* Piece tray */
+.timeline-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(120, 160, 220, 0.14);
+}
+.timeline-piece {
+  text-align: left;
+  max-width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(150, 175, 220, 0.3);
+  background: rgba(23, 32, 50, 0.55);
+  color: #dce6f8;
+  font-size: 13px;
+  line-height: 1.35;
+  cursor: grab;
+  transition: transform 0.12s, border-color 0.2s, background 0.2s;
+}
+.timeline-piece:hover { border-color: #6fa8ff; transform: translateY(-1px); }
+.timeline-piece.selected {
+  border-color: #6fa8ff;
+  background: rgba(111, 168, 255, 0.16);
+  box-shadow: 0 0 0 2px rgba(111, 168, 255, 0.3);
+}
+.timeline-piece.is-distractor { /* visually identical — it's a lure */ }
+.timeline-tray-empty { color: rgba(180, 195, 225, 0.5); font-size: 13px; }
+.timeline-tip { margin: 0; font-size: 12px; color: rgba(180, 195, 225, 0.45); }

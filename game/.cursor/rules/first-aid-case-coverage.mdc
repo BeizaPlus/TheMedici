@@ -1,0 +1,130 @@
+---
+description: Before promoting any MeWorld case — search First Aid for all topic/concern hits and map each into the case vignette
+globs:
+  - docs/cases/**
+  - src/data/preparedCases.json
+  - data/cases/**
+  - src/data/orderWhyPlaybook.json
+  - reference/first-aid/**
+alwaysApply: true
+---
+
+# First Aid case coverage (mandatory)
+
+Every case must **touch the high-yield First Aid material** for its presentation — not just the single diagnosis paragraph. Steve studies from First Aid; the sim case should be a **guided tour** through every relevant index hit for that concern.
+
+## Golden rule
+
+**Search First Aid first → map every hit → wire into the case → then promote.**
+
+| Step | What |
+|------|------|
+| 1 | **Search** local index for presentation + concern + differential branches |
+| 2 | **List** all distinct book pages / topics (coverage map table) |
+| 3 | **Assign** each row to HPI, exam, stack, result, tutor beat, or bibliography link |
+| 4 | **Promote** only when primary rows are touched (deferred rows need explicit reason) |
+
+Attendant voice still wins on clinical dilemmas; First Aid coverage wins on **completeness** — don't skip a classic mimic if FA teaches it for this complaint.
+
+## When to run
+
+| Phase | Action |
+|-------|--------|
+| **Capture** (`docs/cases/case-NNN-*.md`) | Run coverage script; paste table into markdown |
+| **Before promote** | Fill **Touch in this case** column; add missing stacks if gaps |
+| **Bibliography UI** | Link rows with `pdfPage1` from `page-map.json` (not book page in browser URL) |
+
+Pairs with `attendant-case-canon.mdc` Phase 2b — First Aid is **step 1** of enrichment, PubMed/guidelines step 2.
+
+## Search workflow (agents)
+
+**Cwd:** `C:\Users\steve\MeWorld\game`
+
+### 1. Build term list from the case
+
+Start from:
+
+- CCS **title** / presentation key (e.g. `Dysphagia`, `Dyspareunia`)
+- **Chief complaint** + diagnosis + attendant differential rows
+- **Mechanism branches** (e.g. dysphagia → achalasia, GERD, cancer, Zenker, epiglottitis, LA enlargement)
+
+Aim for **8–20 search terms** — broad enough to catch all FA instances, not one keyword only.
+
+### 2. Run coverage script (preferred)
+
+```powershell
+cd C:\Users\steve\MeWorld\game
+python scripts/first-aid-case-coverage.py --case-id 097 `
+  --terms "dyspareunia,menopause,atrophic vaginitis,GSM,prolactin,FSH,estradiol,TSH,osteoporosis,DEXA"
+```
+
+Paste stdout into `docs/cases/case-NNN-*.md` under **First Aid coverage map**.
+
+### 3. Single-term probes (optional)
+
+```powershell
+python scripts/build-first-aid-index.py --search "dysphagia"
+python scripts/build-first-aid-index.py --topic "Menopause"
+```
+
+Requires `reference/first-aid/index/pages.json` (run `npm run build:first-aid-index` once if missing).
+
+### 4. Fill the coverage table
+
+For each row, set **Touch in this case** to one of:
+
+| Touch type | Example |
+|------------|---------|
+| HPI pivot | "12 mo amenorrhea" |
+| Exam | "Pale atrophic mucosa" |
+| Stack | `fsh-estradiol`, pelvic exam |
+| Result text | FSH 68, E2 8 |
+| Tutor beat | Prolactinoma mimic in differential table |
+| Bibliography | `caseBibliography.js` → FA p.653 / pdfPage1 674 |
+| **deferred** | "Not this vignette — cite in tutor only if asked" |
+
+**Bar:** Every **primary** FA page for the chief concern must have a touch. Secondary pages (e.g. Sjögren dyspareunia on 474 when case is GSM) → tutor differential or deferred with reason.
+
+## Example — Dysphagia case
+
+Search terms: `dysphagia, achalasia, GERD, esophageal cancer, Zenker, epiglottitis, aspiration, botulism, mitral stenosis, Plummer-Vinson`
+
+FA hits include book p.383–385 (achalasia, GERD, cancer), p.391 (Zenker), p.288 (LA compression), p.182 (epiglottitis), p.136 (botulism) — case should **reach** each through story, order, or explicit tutor branch.
+
+## Example — Dyspareunia / GSM (097)
+
+Primary touches (minimum):
+
+| FA p. | Topic | Touch |
+|-------|-------|-------|
+| 653 / PDF 674 | Menopause definition | HPI amenorrhea ≥12 mo |
+| 334 / 355 | Prolactin | Differential mimic |
+| 331–332 | FSH/LH/GnRH | Lab results |
+| 467+ | Osteoporosis / bone | DEXA stack |
+| 661 | Lichen / atrophic | Exam overlap in tutor |
+
+## Markdown template section (required in every case profile)
+
+```markdown
+## First Aid coverage map
+
+(paste script output; fill Touch column)
+
+**Primary concern:** …
+**Terms searched:** …
+**Coverage status:** N/M primary pages touched
+```
+
+## Promotion gate
+
+Do **not** promote `preparedCases` / playbook until:
+
+- [ ] Coverage map exists in `docs/cases/case-NNN-*.md`
+- [ ] Primary FA pages for chief concern have non-*(fill)* touches
+- [ ] Bibliography links use `pdfPage1` where case bibliography popover is wired
+
+## Agents
+
+- Run **`first-aid-case-coverage.py`** on every new case capture — not optional
+- Paraphrase FA in attending voice in JSON; no long verbatim paste into shipped `orderWhy`
+- If index stale after PDF update: `npm run build:first-aid-index`

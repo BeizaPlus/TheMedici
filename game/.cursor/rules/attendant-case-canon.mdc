@@ -1,0 +1,153 @@
+---
+description: Attendant-led case building — tutor voice is canon; docs/cases markdown is promotion source before preparedCases/playbook/labs
+globs:
+  - docs/cases/**
+  - src/data/preparedCases.json
+  - data/cases/**
+  - src/data/orderWhyPlaybook.json
+  - src/lib/labPanelValues.js
+  - .order-result-cache/**
+  - user-data/cases/**
+alwaysApply: true
+---
+
+# Attendant case canon (Steve workflow)
+
+Cases are built **one at a time** by playing them, not by bulk-promoting bank JSON.
+
+## Golden rule
+
+**In any conflict, the attendant (tutor) voice wins.**
+
+| Source | Role |
+|--------|------|
+| **Attendant / tutor chat** (`user-data/cases/NNN.json` → `chatHistory`) | **Canon** — diagnosis, labs, imaging read, mechanism, treatment fork, disposition |
+| `docs/cases/case-NNN-*.md` | **Promotion spec** — distilled from attendant + session; what gets wired into game data |
+| CCS screenshot / bank / `preparedCases` / order-result cache | **Input only** — fix when they disagree with attendant |
+
+Do not ship case bank, playbook, lab panels, or imaging text that contradict the attendant-led playthrough.
+
+## Workflow (per case)
+
+### Phase 1 — Play + attendant demo (study or dev)
+
+Steve plays the case in **Tutor** mode (`chatMode: tutor`). The attendant should walk the case **top to bottom** like a teaching attending:
+
+1. **Chief concern & HPI** — what matters in the story (timeline, pivot events, meds like aspirin)
+2. **Physical exam approach** — what to look for first (general appearance → neuro → HEENT → cardio → etc.) and why
+3. **Differential** — ranked, mechanistic; what each branch needs to rule in/out
+4. **Workup sequence** — orders in teaching order (bedside glucose → CT → labs → ECG…)
+5. **Results read-back** — exact values the learner should see
+6. **Diagnosis** — named mechanism, not vague “AMS workup”
+7. **Treatment & disposition** — hold/continue meds, consults, admit vs OR, escalation triggers
+
+If the attendant has not demo’d the full arc yet, **prompt Steve to continue the case** or ask the tutor “walk me through this case top to bottom” before promoting data.
+
+### Phase 2 — Capture → markdown
+
+After (or during) the playthrough:
+
+1. Pull session from `user-data/cases/NNN.json` (+ `live/snapshot.json`, `.order-result-cache/case_NNN.json`)
+2. Create or update **`docs/cases/case-NNN-<slug>.md`**
+3. Attach: patient voice quotes, voice notes, orders placed, **attendant canon labs/imaging**, treatment-stack draft, JSON seed block for labs
+
+**Gold reference:** `docs/cases/case-051-altered-mental-status.md`
+
+### Phase 2a — First Aid coverage map (mandatory before promote)
+
+**Search the local First Aid index for every instance of the case topic, chief concern, and differential branches — then touch each hit inside the vignette.**
+
+See **`.cursor/rules/first-aid-case-coverage.mdc`** (always apply).
+
+1. Build search terms from title, complaint, diagnosis, attendant differential.
+2. Run `python scripts/first-aid-case-coverage.py --case-id NNN --terms "…"`.
+3. Paste **First Aid coverage map** table into `docs/cases/case-NNN-*.md`.
+4. Fill **Touch in this case** for each row (HPI / exam / stack / tutor / bibliography).
+5. Add stacks or tutor beats for gaps before Phase 3 promote.
+
+### Phase 2b — Literature & standard-of-care synthesis (unique case quality)
+
+After attendant canon is captured, **enrich** the markdown — do not ship generic sepsis/CBC templates.
+
+**Goal:** Each case is **unique**. Labs, imaging, vitals, and treatment forks must fit **this** presentation. Synthesize the **best composite physician** — not one random paper, not copy-paste from another case id.
+
+**Sources (in order):**
+
+1. **Attendant session** — what Steve actually learned (still wins on dilemmas)
+2. **PubMed / PMC** — case reports and cohorts with **same presentation** (age, pivot event, antiplatelet, imaging pattern)
+3. **Guidelines & consensus** — multidisciplinary statements (e.g. cSDH pathway papers)
+4. **First Aid local index** — `reference/first-aid/index/` — **Phase 2a coverage map first** (all hits for topic/concern); cite `pdfPage1` in bibliography
+5. **Real-world case bank** — `src/data/realWorldCases.json` if a matching vignette exists
+
+**Agent workflow:**
+
+1. Search PubMed/PMC with presentation-specific terms (e.g. `chronic subdural hematoma elderly fall aspirin altered mental status`)
+2. Pull **5–10** papers: ≥2 case reports/series, ≥1 guideline/consensus, ≥1 outcomes paper (treatment)
+3. Build a **SOC table** in markdown:
+
+| Theme | What good physicians agree on | Where they differ | **Our case choice** (why) |
+|-------|------------------------------|-------------------|---------------------------|
+| Workup | … | … | Match attendant + literature |
+| Meds | … | … | … |
+| Surgery threshold | … | … | … |
+| Disposition | … | … | … |
+
+4. **Infuse** into markdown: refine treatment stacks, attending `why` text, authored lab values (realistic for this story), escalation triggers
+5. **Never** reuse another case’s `AUTHORED_CASE_LABS` profile wholesale — fork per case id
+
+**Teaching bar:** Steve learns from the **attendant demo** + **literature-backed SOC** — the composite of how excellent physicians approach this exact vignette.
+
+**Do not:** paste long verbatim PMID abstracts into shipped JSON; summaries in markdown only, paraphrase in attendant voice when promoting.
+
+### Phase 3 — Promote markdown → game (dev only unless Steve says port)
+
+Only after markdown is agreed:
+
+| Markdown section | Promote to |
+|------------------|------------|
+| **Learner HPI** (symptoms only) | `practice_hpi` in `preparedCases.json`, `data/cases/case_N.json`; `narrative.*.hpi` must match |
+| **Answer-key HPI** (diagnosis, treatment) | `hpi_narrative` — teach / notes only (`practice-presentation.mdc`) |
+| **Initial objective exam** | `exam` array — no classification or negative differentials |
+| **Dedicated exam/lab/imaging results** | `.order-result-cache` — values/histology without diagnosis labels |
+| Stacks + why | `interventions`, `orderWhyPlaybook.json` |
+| Lab/imaging values | `labPanelValues.js` (`AUTHORED_CASE_LABS`), `.order-result-cache` |
+
+Rebuild: `npm run build:order-why-playbook` / `build:data` as needed. **Study lane:** promote only when Steve says sync — see `meworld-study-mode.mdc`.
+
+### Dev batch while Steve studies
+
+When Steve is on **study** (`MeWorld-study`, `:5173`) and says **done with case** / **fix dev**:
+
+1. Patch **`MeWorld\game` (dev) only** — never copy into study mid-session.
+2. Run items from **`docs/DEV_FIX_QUEUE.md`** + case markdown promotion checklist.
+3. Global fixes that affect all cases: **chart markdown rendering** (`chatMessageFormat.jsx`), **patient sex lock** (`patientSex.js` + required-sex map).
+4. Steve verifies on `:5174`; study session on `:5173` stays untouched until explicit port.
+
+## Case profile markdown template (required sections)
+
+Every `docs/cases/case-NNN-*.md` should include:
+
+1. **Header** — id, title, patient name, confirmed diagnosis
+2. **Live session source** — session id, date, paths to `user-data`
+3. **Conflict table** — bank/cache vs attendant canon (what to fix)
+4. **CCS / presentation history** — **`practice_hpi`** (learner); separate **answer-key** block for attendant/teach
+5. **Initial physical exam** — objective bedside only (see `practice-presentation.mdc`)
+5. **Attendant demo arc** — numbered teaching walkthrough (history → exam → diff → workup → results → treatment)
+6. **Canonical results** — labs, imaging, ECG (copy attendant wording + structured JSON)
+7. **Workup stacks** — diagnostic orders from session
+8. **Treatment stacks** — from attendant management fork
+9. **Avoid list** — wrong bank orders (e.g. DAPT when SDH confirmed)
+10. **Literature & SOC synthesis** — PubMed/PMC table + infused treatment choices
+11. **First Aid coverage map** — all index hits for topic/concern + how case touches each (Phase 2a)
+12. **Uniqueness note** — what makes this case’s labs/vitals/imaging distinct from other ids
+13. **Promotion checklist** — files still out of sync
+
+## Agents
+
+- **Never** prefer `preparedCases` or DeepSeek bank over attendant session when Steve is building a case
+- **Never** promote to main `MeWorld\game` mid-study without explicit ask
+- When Steve says “build the case from the markdown,” read **`docs/cases/case-NNN-*.md` first**, then patch game data to match
+- Attendant demo style: follow `immersa-attendant-teaching.mdc` — mechanism, spatial, one thread at a time
+- Before promoting labs: confirm **case-unique** authored profile — search `labPanelValues.js` for duplicate profiles; split if needed
+- Literature pass: PubMed/PMC + guidelines → update markdown **before** `preparedCases` / playbook promotion
+- **First Aid pass:** `first-aid-case-coverage.py` + filled touch column **before** promote (rule: `first-aid-case-coverage.mdc`)

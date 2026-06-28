@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Immersa · Content Arc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 17px; }
+
+  /* ── LIGHT ── */
+  :root {
+    --bg:         #ffffff;
+    --bg-subtle:  #f5f5f7;
+    --bg-surface: #fafafa;
+    --border:     #e5e5e5;
+    --border-hi:  #d1d1d6;
+    --text:       #1d1d1f;
+    --text-soft:  #6e6e73;
+    --text-muted: #aeaeb2;
+    --accent:     #0071e3;
+    --accent-bg:  #e8f0fe;
+    --dot-draft:  #aeaeb2;
+    --dot-ready:  #f5a623;
+    --dot-posted: #34c759;
+    --ready-bg:   #fef9e7;
+    --ready-text: #7d5e00;
+    --posted-bg:  #e8f8ee;
+    --posted-text:#1a5e2a;
+    --shadow:     0 0 0 1px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  /* ── DARK ── */
+  [data-theme="dark"] {
+    --bg:         #000000;
+    --bg-subtle:  #1c1c1e;
+    --bg-surface: #111111;
+    --border:     #2c2c2e;
+    --border-hi:  #3a3a3c;
+    --text:       #f5f5f7;
+    --text-soft:  #98989d;
+    --text-muted: #636366;
+    --accent:     #2997ff;
+    --accent-bg:  #1a2d4a;
+    --dot-draft:  #636366;
+    --dot-ready:  #f5a623;
+    --dot-posted: #30d158;
+    --ready-bg:   #2d2410;
+    --ready-text: #f5a623;
+    --posted-bg:  #11291a;
+    --posted-text:#30d158;
+    --shadow:     0 0 0 1px rgba(255,255,255,0.04), 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s, color 0.3s;
+    user-select: none;
+  }
+
+  .app {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 28px 80px;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .topbar h1 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    background: var(--bg-surface);
+    font-size: 0.72rem;
+    font-weight: 450;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: -0.01em;
+  }
+  .chip:hover { border-color: var(--border-hi); color: var(--text); }
+  .chip.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+  .chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .chip svg path { stroke: currentColor; }
+
+  /* ── UMBRELLA ── */
+  .umbrella-wrap {
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.35s ease, margin 0.35s ease;
+  }
+  .umbrella-wrap.collapsed {
+    max-height: 0 !important;
+    opacity: 0;
+    margin-bottom: 0;
+  }
+  .umbrella-label {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .umbrella-text {
+    font-size: 0.82rem;
+    line-height: 1.9;
+    color: var(--text-soft);
+    font-weight: 350;
+  }
+  .umbrella-text span {
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 1px 2px;
+    transition: all 0.12s;
+    letter-spacing: -0.01em;
+  }
+  .umbrella-text span:hover {
+    color: var(--text);
+  }
+  .umbrella-text span.active,
+  .umbrella-text span:target {
+    color: var(--text);
+    font-weight: 500;
+    background: var(--accent-bg);
+  }
+  .dot-sep {
+    color: var(--border-hi);
+    margin: 0 4px;
+    font-weight: 300;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline-scroll {
+    overflow-x: auto;
+    margin: 0 -28px;
+    padding: 0 28px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .timeline-scroll::-webkit-scrollbar { height: 2px; }
+  .timeline-scroll::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 1px; }
+  .timeline-scroll::-webkit-scrollbar-track { background: transparent; }
+
+  .timeline-wrap {
+    padding: 20px 0 14px;
+    border-radius: 16px;
+    background: var(--bg-subtle);
+    box-shadow: var(--shadow);
+  }
+  .timeline {
+    display: flex;
+    align-items: flex-start;
+    min-width: max-content;
+    position: relative;
+    padding: 0 20px;
+  }
+  .spine-line {
+    position: absolute;
+    top: 28px;
+    left: 20px;
+    right: 20px;
+    height: 0.5px;
+    background: var(--border-hi);
+    z-index: 0;
+  }
+  .post-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    padding: 0 3px;
+    min-width: 32px;
+    flex-shrink: 0;
+  }
+  .node-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 0.5px solid var(--border-hi);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.58rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    letter-spacing: 0;
+  }
+  .post-node.active .node-dot {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+  .post-node.ready .node-dot {
+    background: var(--ready-bg);
+    border-color: var(--dot-ready);
+    color: var(--ready-text);
+  }
+  .post-node.ready.active .node-dot {
+    background: var(--dot-ready);
+    color: #fff;
+    border-color: var(--dot-ready);
+  }
+  .post-node.posted .node-dot {
+    background: var(--posted-bg);
+    border-color: var(--dot-posted);
+    color: var(--posted-text);
+  }
+  .post-node.posted.active .node-dot {
+    background: var(--dot-posted);
+    color: #fff;
+    border-color: var(--dot-posted);
+  }
+  .node-date {
+    font-size: 0.5rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-weight: 450;
+    letter-spacing: 0.03em;
+  }
+  .post-node.active .node-date {
+    color: var(--text-soft);
+  }
+  .act-divider {
+    width: 0.5px;
+    height: 16px;
+    background: var(--border);
+    margin: 0 10px;
+    align-self: flex-start;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ── ACT BAND ── */
+  .act-band {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 20px;
+    margin-top: 8px;
+  }
+  .act-label {
+    font-size: 0.5rem;
+    font-weight: 450;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* ── READER ── */
+  .reader-wrap {
+    margin-top: 20px;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.35s ease, margin 0.35s ease;
+  }
+  .reader-wrap.collapsed {
+    max-height: 0 !important;
+    opacity: 0;
+    margin-top: 0;
+  }
+  .reader {
+    background: var(--bg-subtle);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 28px;
+  }
+  .reader-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .reader-date {
+    font-size: 0.75rem;
+    color: var(--text-soft);
+    font-weight: 450;
+    letter-spacing: -0.01em;
+  }
+  .act-badge {
+    font-size: 0.55rem;
+    padding: 3px 10px;
+    border-radius: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .reader-spine {
+    font-size: 0.85rem;
+    font-weight: 450;
+    color: var(--text-soft);
+    padding-left: 12px;
+    border-left: 1.5px solid var(--border-hi);
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+    line-height: 1.45;
+  }
+  .reader-body {
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.75;
+    white-space: pre-wrap;
+    font-weight: 350;
+    letter-spacing: -0.01em;
+  }
+  .reader-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 0.5px solid var(--border);
+  }
+  .nav-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .nav-btn {
+    font-size: 0.72rem;
+    padding: 6px 18px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 450;
+    letter-spacing: -0.01em;
+    transition: all 0.15s;
+  }
+  .nav-btn:hover:not(:disabled) { border-color: var(--border-hi); }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+  .post-num {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* ── STATUS PILLS ── */
+  .status-group {
+    display: flex;
+    gap: 4px;
+  }
+  .status-pill {
+    font-size: 0.62rem;
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    background: var(--bg);
+    color: var(--text-soft);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 450;
+    letter-spacing: -0.01em;
+    transition: all 0.15s;
+  }
+  .status-pill:hover { border-color: var(--border-hi); color: var(--text); }
+  .status-pill.sel-draft { background: var(--bg); border-color: var(--text-muted); color: var(--text); }
+  .status-pill.sel-ready { background: var(--ready-bg); border-color: var(--dot-ready); color: var(--ready-text); }
+  .status-pill.sel-posted { background: var(--posted-bg); border-color: var(--dot-posted); color: var(--posted-text); }
+
+  /* ── KEYBOARD HINT ── */
+  .kbd-hint {
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 24px;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 640px) {
+    .app { padding: 20px 16px 60px; }
+    .reader { padding: 20px; }
+    .reader-controls { flex-direction: column; gap: 14px; align-items: flex-start; }
+    .reader-body { font-size: 0.82rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ── TOP BAR ── -->
+  <div class="topbar">
+    <h1>Content Arc</h1>
+    <div class="topbar-actions">
+      <button class="chip" id="btn-story" onclick="toggleStory()" title="Toggle umbrella story">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M4 6h16M4 12h10M4 18h8"/></svg>
+        Story
+      </button>
+      <button class="chip" id="btn-reader" onclick="toggleReader()" title="Toggle post reader">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+        Post
+      </button>
+      <button class="chip" id="btn-theme" onclick="toggleTheme()" title="Toggle light/dark mode">
+        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── UMBRELLA ── -->
+  <div class="umbrella-wrap" id="umbrella-wrap">
+    <div class="umbrella-label">The full story —&nbsp;one sentence at a time</div>
+    <div class="umbrella-text" id="umbrella"></div>
+  </div>
+
+  <!-- ── TIMELINE ── -->
+  <div class="timeline-scroll">
+    <div class="timeline-wrap">
+      <div class="timeline" id="timeline">
+        <div class="spine-line"></div>
+      </div>
+      <div class="act-band" id="act-band"></div>
+    </div>
+  </div>
+
+  <!-- ── READER ── -->
+  <div class="reader-wrap" id="reader-wrap">
+    <div class="reader" id="reader">
+      <div class="reader-meta">
+        <span class="reader-date" id="r-date"></span>
+        <span class="act-badge" id="r-act"></span>
+      </div>
+      <div class="reader-spine" id="r-spine"></div>
+      <div class="reader-body" id="r-body"></div>
+      <div class="reader-controls">
+        <div class="nav-group">
+          <button class="nav-btn" id="prev-btn">← Prev</button>
+          <span class="post-num" id="post-num"></span>
+          <button class="nav-btn" id="next-btn">Next →</button>
+        </div>
+        <div class="status-group" id="status-group"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kbd-hint">← → arrow keys &nbsp;·&nbsp; click any dot &nbsp;·&nbsp; click Sentence</div>
+</div>
+
+<script>
+/* ── DATA ── */
+const posts = [
+  { date:"Mon Jun 29", act:"Prologue", spine:"Imagine you are in a simulated hospital where everything feels real.", body:"Imagine you are in a simulated hospital where everything feels real, and as a physician, you move through cases that react to your decisions in real time. You treat what you find, and an experienced attending guides you while using real numbers and real scenarios. The patients respond to how you act, just like in the real world, but now you are in a safe space where you can learn and make mistakes.\n\nThis is the sandbox for medicine that never existed when I was in training, and here you can practice, fail, and recover without ever putting a real life at risk. It is an environment where you can finally train fearless doctors, because you learn to freeze and then recover, and eventually you stop freezing altogether." },
+  { date:"Tue Jun 30", act:"Prologue", spine:"There is no practice round in medicine.", body:"There is something strange about medical school. You spend years studying physiology, understanding how every system works, and dedicating almost half a decade to learning the details. Even with all this knowledge, the first time you walk into a real shift, you freeze.\n\nThat happened to me. I knew the material, but that was not the issue. The real problem was that I had never actually been in that room before. In school, every patient is just a case study. In the hospital, each patient is a real individual, a person with emotions who is looking at you for answers.\n\nThere is no practice round in medicine. Any mistake you make directly impacts another person's life and story.\n\nYou learn to be careful, but sometimes in the wrong way. You become slower, more hesitant, and overthink every move. You practice defensive medicine, becoming too afraid to trust what you truly know.\n\nThese are not the same things. Mastery comes from failing repeatedly and learning quickly. But in healthcare, when you fail, someone's life is on the line.\n\nSo, how do you solve this?" },
+  { date:"Thu Jul 2",  act:"Prologue", spine:"The complaint is almost never the real diagnosis.", body:"Picture this: it's a busy Friday afternoon in the ER, and a patient comes in with a sore throat. In that moment, this is your emergency. But as any doctor knows, the complaint is almost never the real diagnosis. A sore throat could be something simple, like a virus, or it could be the first sign that a patient's airway is about to close.\n\nIn Immersa, you step into situations like this with all the tools you would have in real life. You get the patient, the clock, and the room. You ask questions, examine the patient, place your orders, and begin treatment. At the same time, an experienced attending is there with you, guiding you and explaining the underlying mechanisms as the case unfolds.\n\nYou have twenty minutes to work through the case, and the timer does not care how confident you feel because it just keeps ticking. Just like in real medicine, the answer is not written at the top of the chart. You have to find your way, make decisions, and learn as you go. This is what makes this training so valuable. It gives you a safe space to practice dealing with uncertainty and complexity, so you are ready when it matters most." },
+  { date:"Fri Jul 3",  act:"Prologue", spine:"Immersa changes that.", body:"This was exactly what my training had been missing. I spent years studying physiology, memorizing drug names, and crunching numbers, but it wasn't until I stood in that room with a real person waiting for answers that I truly understood what it meant to be a doctor. There were no practice runs or do-overs; every decision had real consequences for someone's life. That kind of pressure teaches caution, but it can also make you hesitate and second-guess yourself at the worst possible moment.\n\nImmersa changes that. It gives you a safe space to make mistakes, learn from them, and build confidence so that when you walk into the real ER.\n\nNow, as a physician, you stop reciting facts as a false display of intelligence and genuinely care for people. That's how you go from freezing up to stepping forward, ready for whatever comes through the door." },
+  { date:"Mon Jul 6",  act:"Problem", spine:"An exam rewards recall. A patient needs judgment.", body:"You can pass every exam and still freeze on your first real shift.\n\nI know the feeling. Years of physiology, pharmacology, and pathways. Strong on paper. Then a real patient is in front of you, waiting for an answer, and your mind goes quiet.\n\nThe problem was never the knowledge. It was that I had never been in the room. An exam rewards recall. A patient needs judgment. Those are not the same skill, and we only train one of them.\n\nWe graduate people who can name the mechanism but cannot move when it matters.\n\nThat gap is where I started building." },
+  { date:"Tue Jul 7",  act:"Problem", spine:"Memorization gives you facts. It does not give you a way to think.", body:"I trained in a system that rewards memorizing over understanding.\n\nYou can recite the clotting cascade and still not see why this patient is bleeding. You can ace the renal block and still freeze when the potassium climbs.\n\nMemorization gives you facts. It does not give you a way to think when the facts do not line up.\n\nI spent years optimizing for the exam. The exam was never the patient.\n\nSo I stopped trying to fix the studying, and started rebuilding the training itself." },
+  { date:"Thu Jul 9",  act:"Problem", spine:"Same low number. Two different problems.", body:"Why do fluids sometimes do nothing for low blood pressure?\n\nPicture the arteries as a hose. Pressure is the squeeze of the hose plus the volume running through it.\n\nMost low pressure is a volume problem. You bled, you are dry, the tank is low. Fill the tank and the pressure returns.\n\nBut sometimes the tank is full and the pressure still falls. The hose itself has gone slack. Sepsis or a toxin opened the vessels wide, and the pressure bled off into the periphery. That is hypotension without hypovolemia.\n\nPour in more fluid and you are filling a hose that cannot hold pressure. What it needs is tone. That is when you reach for pressors.\n\nSame low number. Two different problems. The number alone will not tell you which." },
+  { date:"Fri Jul 10", act:"Bridge", spine:"Not a knowledge gap. A reps gap.", body:"There is no practice round in medicine. So I am building one.\n\nEvery other field lets you rehearse. Pilots have simulators. Athletes scrimmage. Doctors get handed a real patient and a real consequence on day one.\n\nThat is why the first shift feels like falling. Not a knowledge gap. A reps gap.\n\nSo I built the room. A real case, a patient who responds to what you do, a clock that does not wait, and an attending who teaches while it happens. You can be wrong here, learn why, and try again.\n\nThe first time you face it should not be the first time you have seen it." },
+  { date:"Mon Jul 13", act:"Mechanism", spine:"The attending teaches from her actual labs. Not a textbook.", body:"Ask my AI attending why the patient is crashing. It answers from her actual labs.\n\nNot a textbook paragraph. It reads this patient's vitals, this patient's results, and what you have already ordered, and teaches from there.\n\n\"Why is she hypotensive?\" It looks at the pressure that will not budge after fluids and walks you to the answer. The vessels are open. She needs tone, not more volume.\n\nIt remembers what you asked five minutes ago. It teaches the case in front of you, not a generic one.\n\nMost tools quiz you on a patient who does not exist. This one teaches at the bedside of the one who does." },
+  { date:"Tue Jul 14", act:"Mechanism", spine:"Same case. Same numbers. Different teacher.", body:"Same question. Two teachers. Watch the answer change.\n\nI asked my attending the same thing twice: why is she hypotensive.\n\nFirst answer, four sentences. She is vasodilated, the toxin dropped her vascular tone, give fluids before pressors. Tight, the way you answer mid-resuscitation.\n\nThen I turned the teaching dial up. Same patient. Now it walks the mechanism. The vessel wall as a hose with the nozzle wide open, pressure bleeding into the capillary beds. Then it turns it back on me. What is your next move.\n\nSame case. Same numbers. Different teacher, because I chose how deep to go.\n\nA good attending reads the room. Sometimes you need one line. Sometimes the whole arc. You should not have to fight the tool to get either." },
+  { date:"Thu Jul 16", act:"Mechanism", spine:"Get it wrong and the patient gets worse. On purpose.", body:"Get it wrong and the patient gets worse. On purpose.\n\nIn most med ed, a wrong answer turns red and you move on. Nothing happens to anyone.\n\nHere, something happens. Miss the bleed and the pressure keeps falling. Push the wrong drug and the rhythm changes. The patient deteriorates the way a real one would.\n\nAnd it is not the AI deciding to punish you. The physiology decides. Vitals, potassium, the ECG stage all follow explicit rules. The attending explains what is happening. It does not invent it.\n\nConsequences are the teacher. You remember the miss because you watched it cost something." },
+  { date:"Fri Jul 17", act:"Mechanism", spine:"The teaching happens where the confusion is.", body:"A lab result means nothing until you know what it means for this patient.\n\nSo every result card has one button. Interpret.\n\nTap it on a potassium of 6.2 and the attending does not give you the textbook range. It relates that exact value to this patient, this case, right now. Why it is rising, what it is doing to the heart, what to do next.\n\nThen it logs the explanation into your chat, so the reasoning stays with the case.\n\nNo tab switching. No looking it up. The teaching happens where the confusion is." },
+  { date:"Mon Jul 20", act:"Proof", spine:"A 13 year old and a physician walk the same case. Both learn.", body:"A 13 year old and a physician can walk through the same case. Both should learn something.\n\nThat is my test for whether the model is right.\n\nIf the only way to learn is to already have the vocabulary, it is not teaching. It is gatekeeping.\n\nA real case does not require you to know the answer first. It lets you ask, try, be wrong, and understand. The attending meets you where you are, one line or the whole mechanism.\n\nMedicine is not a secret language. It is a system you can understand. Anyone willing to walk the case should be able to." },
+  { date:"Tue Jul 21", act:"Proof", spine:"The number is a warning. The ECG tells you how much time you have.", body:"What does the heart look like at a potassium of 6.2?\n\nPotassium sets the resting voltage of every heart cell. Push it up and the cells get twitchy, then sluggish, in a sequence you can read on the ECG.\n\nFirst the T waves go tall and peaked, like tents. The cell repolarizes too fast.\n\nClimb higher and the P wave flattens and the PR stretches. The atria struggle to fire.\n\nHigher still and the QRS widens, smearing into the T, until the tracing turns into a slow sine wave. That is the heart about to stop.\n\nThe number on the chart is a warning. The ECG tells you how much time you have." },
+  { date:"Thu Jul 23", act:"Proof", spine:"Some cases are carried by whether you listened first.", body:"Medicine is not only hearts and labs.\n\nSome of the hardest cases are not solved by the right order set. They are carried by whether you listened first.\n\nSo we built psychiatry and social cases too. The human ones. The conversations training tends to skip, because they do not fit on a flashcard.\n\nThe simulated patient stays fully in character. It will let you rush. It will let you talk past the person in front of you and miss what they actually came in for.\n\nIf we only train for the clean cases, we leave people unprepared for the human ones. So we built for both." },
+  { date:"Fri Jul 24", act:"Proof", spine:"One source of truth. Every surface reads from it.", body:"One order log. Every screen reads from it.\n\nUnder the bedside scene there is a single source of truth. Every order you place, every result, every exam finding, in one ledger.\n\nThe chart reads from it. The monitor reads from it. The attending reads from it, which is how it can teach about this patient instead of a generic one.\n\nBuild it once, correctly, and every surface stays in sync for free. No screen can disagree with another, because there is only one set of facts.\n\nGood products are not a pile of features. They are one true thing, shown well from many angles." },
+  { date:"Mon Jul 27", act:"Vision", spine:"The AI explains. The physiology decides.", body:"Deterministic core. Narrative shell.\n\nThe most important rule in the engine. The AI never decides whether the potassium rose.\n\nThe physiology decides. Vitals, electrolytes, the ECG stage, all follow explicit rules written into the case. Give the wrong drug and the numbers move the way biology says they must.\n\nThe AI's job is to explain, not to invent. It reads what the engine produced and teaches the mechanism behind it.\n\nThat line matters. It is the difference between a tutor you can trust and a chatbot that will confidently make something up. The story can be flexible. The medicine cannot." },
+  { date:"Tue Jul 28", act:"Vision", spine:"I am documenting how I think, not just what I build.", body:"I am documenting how I think, not just what I build.\n\nAnyone can inherit a product. Few inherit the reasoning behind it.\n\nSo I am writing down the why under every decision. Why cases instead of flashcards. Why the physiology is fixed and the teaching is flexible. Why the patient is allowed to get worse.\n\nMoney is a number you hand over. A blueprint is a way of thinking you pass on.\n\nI want my sons to inherit the second one. The thing that makes the first one repeatable.\n\nYou do not leave a legacy by hoarding the answer. You leave it by documenting the method." },
+  { date:"Thu Jul 30", act:"Vision", spine:"The work that compounds is writing it down.", body:"Build it. Document it. Hand it off.\n\nThat is the only way anything scales without me standing in every room.\n\nEarly on you are the system. Every decision routes through you, and it feels productive. It is also a ceiling.\n\nThe work that compounds is not the next feature. It is writing the thing down clearly enough that someone else can run it, and then letting them.\n\nI am playing a nine year game, not a nine week one. Things that compound look slow until they do not.\n\nThe founder who cannot leave the room has not built a company. He has built a job." },
+  { date:"Fri Jul 31", act:"Vision", spine:"You understand the body. You do not memorize it.", body:"I trained to memorize. I am building so the next doctor does not have to.\n\nThis month I wrote about the gap. The exam you can pass and the shift where you still freeze. The patient who is real, and the consequence that is real with them.\n\nImmersa is my answer. A real case. A patient who responds. An attending who teaches the mechanism while it happens. A room where being wrong costs nothing but teaches everything.\n\nYou understand the body. You do not memorize it.\n\nIf that is the kind of training you wish you had, come see it. Link in the comments." }
+];
+
+const actColors = { Prologue:"#e5e5e5", Problem:"#fef3c7", Bridge:"#e0e7ff", Mechanism:"#dbeafe", Proof:"#d1fae5", Vision:"#ede9fe" };
+const actTexts  = { Prologue:"#6e6e73", Problem:"#7d5e00", Bridge:"#312e81", Mechanism:"#1e3a5f", Proof:"#1a5e2a", Vision:"#3b0764" };
+const actColorsD = { Prologue:"#3a3a3c", Problem:"#2d2410", Bridge:"#1a1d3a", Mechanism:"#152238", Proof:"#11291a", Vision:"#1e1033" };
+
+const statuses = {};
+let current = 0;
+let storyOpen = true;
+let readerOpen = true;
+let dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+function g(id) { return document.getElementById(id); }
+
+function getStatus(i) { return statuses[i] || "draft"; }
+function cAct(p) { return dark ? actColorsD[p.act] : actColors[p.act]; }
+
+/* ── UMBRELLA ── */
+function renderUmbrella() {
+  const el = g("umbrella");
+  el.innerHTML = posts.map((p,i) => {
+    const cls = i === current ? "active" : "";
+    return `<span class="${cls}" data-i="${i}" onclick="goTo(${i})">${esc(p.spine)}</span><span class="dot-sep">·</span>`;
+  }).join(" ");
+}
+
+function esc(s) { return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+/* ── TIMELINE ── */
+function renderTimeline() {
+  const tl = g("timeline");
+  tl.querySelectorAll(".post-node, .act-divider").forEach(n => n.remove());
+  let lastAct = null;
+  posts.forEach((p,i) => {
+    if (lastAct && p.act !== lastAct) {
+      const div = document.createElement("div");
+      div.className = "act-divider";
+      tl.appendChild(div);
+    }
+    lastAct = p.act;
+    const st = getStatus(i);
+    const node = document.createElement("div");
+    node.className = `post-node ${st} ${i===current?"active":""}`;
+    node.innerHTML = `<div class="node-dot">${i+1}</div><div class="node-date">${p.date.replace(/Mon |Tue |Thu |Fri /,"")}</div>`;
+    node.onclick = () => goTo(i);
+    tl.appendChild(node);
+  });
+}
+
+/* ── ACT BAND ── */
+function renderActBand() {
+  const acts = [...new Set(posts.map(p => p.act))];
+  const el = g("act-band");
+  el.innerHTML = acts.map(a => `<span class="act-label">${a}</span>`).join("");
+}
+
+/* ── READER ── */
+function renderReader() {
+  const p = posts[current];
+  const st = getStatus(current);
+  g("r-date").textContent = p.date;
+  const badge = g("r-act");
+  badge.textContent = p.act;
+  badge.style.background = cAct(p);
+  badge.style.color = dark ? actColors[p.act] : actTexts[p.act];
+  g("r-spine").textContent = p.spine;
+  g("r-body").textContent = p.body;
+  g("post-num").textContent = `${current+1} of ${posts.length}`;
+  g("prev-btn").disabled = current===0;
+  g("next-btn").disabled = current===posts.length-1;
+  g("reader").style.borderTop = `3px solid ${cAct(p)}`;
+  g("reader").style.borderRadius = "16px";
+
+  g("status-group").innerHTML = ["draft","ready","posted"].map(s =>
+    `<button class="status-pill ${st===s?"sel-"+s:""}" onclick="setStatus('${s}')">${s.charAt(0).toUpperCase()+s.slice(1)}</button>`
+  ).join("");
+
+  g("prev-btn").onclick = () => navigate(-1);
+  g("next-btn").onclick = () => navigate(1);
+}
+
+/* ── COLLAPSE ── */
+function toggleStory() {
+  storyOpen = !storyOpen;
+  const el = g("umbrella-wrap");
+  const btn = g("btn-story");
+  if (storyOpen) {
+    el.classList.remove("collapsed");
+    btn.classList.add("active");
+    el.style.maxHeight = el.scrollHeight + "px";
+  } else {
+    el.classList.add("collapsed");
+    btn.classList.remove("active");
+  }
+}
+
+function toggleReader() {
+  readerOpen = !readerOpen;
+  const el = g("reader-wrap");
+  const btn = g("btn-reader");
+  if (readerOpen) {
+    el.classList.remove("collapsed");
+    btn.classList.add("active");
+    el.style.maxHeight = el.scrollHeight + "px";
+  } else {
+    el.classList.add("collapsed");
+    btn.classList.remove("active");
+  }
+}
+
+/* ── THEME ── */
+function toggleTheme() {
+  dark = !dark;
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  g("icon-sun").style.display = dark ? "none" : "";
+  g("icon-moon").style.display = dark ? "" : "none";
+  render();
+}
+
+/* ── NAVIGATION ── */
+function goTo(i) {
+  current = i;
+  render();
+  const scroll = document.querySelector(".timeline-scroll");
+  scroll.scrollLeft = i * 32 - 120;
+}
+
+function setStatus(s) { statuses[current]=s; render(); }
+function navigate(d) { goTo(Math.max(0,Math.min(posts.length-1,current+d))); }
+
+/* ── RENDER ALL ── */
+function render() { renderUmbrella(); renderTimeline(); renderActBand(); renderReader(); }
+function init() {
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  g("icon-sun").style.display = dark ? "none" : "";
+  g("icon-moon").style.display = dark ? "" : "none";
+  g("btn-story").classList.add("active");
+  g("btn-reader").classList.add("active");
+  render();
+  // keyboard
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") navigate(1);
+    else if (e.key === "ArrowLeft") navigate(-1);
+  });
+}
+
+init();
+</script>
+</body>
+</html>

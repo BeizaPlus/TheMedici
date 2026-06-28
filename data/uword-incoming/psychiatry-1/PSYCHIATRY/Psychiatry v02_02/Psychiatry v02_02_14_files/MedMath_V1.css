@@ -1,0 +1,921 @@
+﻿/*---------------------------------------------------IV Bag------------------------------------------------------------------------------*/
+.ivBag-main {
+    width: 300px;
+    height: 300px;
+    font-size: 9px;
+    border: 1px solid #cec8c8;
+    border-radius: 6px;
+    box-shadow: 0px 3px 3px 1px rgba(6, 26, 42, 0.5);
+    font-family: Arial;
+    margin: 0 auto;
+    background-color: white !important;
+    color: black;
+    box-sizing: content-box;
+    line-height: 1.0 !important;
+}
+
+.ivBag-headerNext {
+    line-height: 1.2 !important;
+}
+
+.ivBag-first {
+    margin-top: 1%;
+    width: 20%;
+    float: left;
+    text-align: right;
+}
+
+.ivBag-second {
+    margin-top: 1%;
+    width: 30%;
+    float: left;
+    text-align: right;
+}
+
+.ivBag-subject {
+    text-align: justify;
+    width: 98%;
+    /*font-variant: small-caps;*/
+}
+
+.ivBag-brandName {
+    font-size: 14px;
+    margin-top: 5%;
+}
+
+.ivBag-recycle {
+    transform: translate(1%,-200%);
+    float: right;
+}
+
+.ivBag-first-dash {
+    vertical-align: top;
+}
+
+.ivBag-second-dash {
+    margin-top: 20px;
+}
+
+.ivBag-third-dash {
+    margin-top: 25px;
+}
+
+.ivBag-fourth-dash {
+    margin-top: 30px;
+}
+
+.ivBag-right-dash {
+    margin-top: 20px;
+}
+
+
+/*---------------------------------------------------End IV Bag------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------Med Label 3-------------------------------------------------------------------------*/
+
+.medLabel3-main {
+    width: 270px;
+    height: 230px;
+    font-size: 9px;
+    font-family: Arial;
+    border: 1px solid #cec8c8;
+    border-radius: 6px;
+    box-shadow: 0px 3px 3px 1px rgba(6, 26, 42, 0.5);
+    margin: 0 auto;
+    background-color: white !important;
+    color: black;
+    box-sizing: content-box;
+    line-height: 1.2 !important;
+}
+
+
+.medLabel3-code {
+    margin: 2% 0 1% 25%;
+}
+
+.medLabel3-barcode {
+    margin: 0 0 1% 10%;
+}
+
+
+.medLabel3-medicine {
+    font-size: 18px;
+}
+
+.medLabel3-dosage {
+    margin-left: -4%;
+    text-align: center;
+}
+
+.medLabel3-condition {
+}
+
+.medLabel3-details {
+    margin-left: 17% !important;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.medLabel3-center {
+    background-color: #b39ee3;
+    width: 79%;
+    float: left;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.medLabel3-right {
+    float: right;
+    margin-right: 5px;
+}
+
+.medLabel3-midCenter {
+    margin-left: 4%;
+    line-height: 1.0 !important;
+}
+
+.medLabel3-only {
+    padding-top: 10px;
+    text-align: bottom;
+}
+/*---------------------------------------------------End Med Label 3-------------------------------------------------------------------------*/
+/*---------------------------------------------------Drip Tubing-------------------------------------------------------------------------*/
+.dripTubing {
+    width: 325px;
+    height: 580px;
+    color: darkblue;
+    padding: 0.5%;
+    border: 1px solid #cec8c8;
+    border-radius: 6px;
+    box-shadow: 0px 3px 3px 1px rgba(6, 26, 42, 0.5);
+    font-size: 9px;
+    font-family: Arial;
+    margin: 0 auto;
+    background-color: white !important;
+    color: black;
+    box-sizing: content-box;
+    line-height: 1 !important;
+}
+
+header h1 {
+    color: #4fc0e9;
+    margin-bottom: 0px;
+    font-size: 18px;
+    margin-top: 0px;
+}
+
+header hr {
+    background-color: #4fc0e9;
+    color: #4fc0e9;
+    border-color: #4fc0e9;
+    margin: 5px 0;
+}
+
+
+.dripTubing-left-pane {
+    width: 75%;
+    float: left;
+}
+
+    .dripTubing-left-pane h1 {
+        color: darkblue;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        font-size: 18px;
+    }
+
+    .dripTubing-left-pane img {
+        height: 20px;
+        width: 100px;
+    }
+
+.dripTubing-right-pane {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
+
+div.dripTubing-drops-count {
+    color: white;
+    background-color: darkblue;
+    margin-left: 25%;
+    font-size: 24px;
+    width: 50%;
+    border-radius: 3px;
+}
+
+.dripTubing-stand-image {
+    margin-top: 15%;
+    width: 29%;
+}
+
+.dripTubing-ldpe-image {
+    height: 25px;
+    width: 25px;
+    margin-left: 63%;
+}
+
+.dripTubing-barcode {
+    line-height: 2.0 !important
+}
+
+    .dripTubing-barcode img {
+        height: 25px;
+        width: 230px;
+    }
+
+    .dripTubing-barcode p {
+        margin-left: 35%;
+        margin-top: 3% !important;
+    }
+
+.dripTubing-address {
+    line-height: 1.0;
+}
+
+.dripTubing-copyright {
+    line-height: 1.0;
+}
+
+/*---------------------------------------------------End Drip Tubing-------------------------------------------------------------------------*/
+/**/
+/*---------------------------------------------------Med Label 1-------------------------------------------------------------------------*/
+.medLabel1-main {
+    height: 210px;
+    padding-top: 0.6%;
+    color: #333399;
+    width: 320px;
+    font-size: 9px;
+    font-family: Arial;
+    border: 1px solid #cec8c8;
+    border-radius: 6px;
+    box-shadow: 0px 3px 3px 1px rgba(6, 26, 42, 0.5);
+    margin: 0 auto;
+    background-color: white !important;
+    color: black;
+    box-sizing: content-box;
+}
+
+.medLabel1-left-pane {
+    width: 13%;
+    padding-left: 2%;
+    float: left;
+}
+
+    .medLabel1-left-pane img {
+        height: 54%;
+        width: 90%;
+    }
+
+.medLabel1-middle-pane {
+    margin-left: 1%;
+    line-height: 1;
+    float: left;
+    width: 42%;
+}
+
+.medLabel1-product-title {
+    font-family: "Times New Roman", Times, serif;
+}
+
+.medLabel1-product-combination {
+    font-family: "Franklin Gothic Medium";
+}
+
+.medLabel1-product-dosage {
+    background-color: #80dfff;
+    padding: 2%;
+    font-family: "Franklin Gothic Medium";
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.medLabel1-tabs {
+    font-size: 13px;
+    padding: 12% 0;
+}
+
+.medLabel1-pharma {
+    float: left;
+    padding-right: 22px;
+    color: black;
+    font-size: 10px;
+}
+
+.medLabel1-right-pane {
+    margin-left: 3%;
+    font-family: "Helvetica";
+    line-height: 1;
+    font-size: 11px;
+    padding-right: 1%;
+    float: left;
+    width: 38%;
+}
+
+.medLabel1-right-pane-footer {
+    font-size: 10px;
+    text-align: right;
+    padding-top: 3px;
+}
+
+/*---------------------------------------------------End Med Label 1-------------------------------------------------------------------------*/
+
+/*---------------------------------------------------Med Label 2-------------------------------------------------------------------------*/
+.medLabel2-main {
+    max-width: 280px;
+    max-height: 260px;
+    font-size: 9px;
+    font-weight: bold;
+    font-family: Arial;
+    border: 1px solid #cec8c8;
+    border-radius: 6px;
+    box-shadow: 0px 3px 3px 1px rgba(6, 26, 42, 0.5);
+    margin: 0 auto;
+    background-color: white !important;
+    color: black;
+    box-sizing: content-box;
+    line-height: 1.2
+}
+
+.medLabel2-product-code-item {
+    float: left;
+    width: 60%;
+}
+
+.medLabel2-product-code-item-new {
+    float: right;
+    width: 40%;
+    text-align: right;
+}
+
+.medLabel2-name {
+    float: left;
+    width: 74%;
+}
+
+.medLabel2-dosage {
+    color: orange;
+    float: left;
+    width: 26%;
+    font-size: 17px;
+    text-align: right;
+}
+
+.medLabel2-footerHeading {
+    margin-top: 5%;
+    padding-bottom: 2%;
+}
+
+.medLabel2-footer {
+    background-color: #ffe778;
+    margin-top: 10%;
+    padding-top: 5px;
+    padding-bottom: 4%;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.medLabel2-caution {
+    margin-top: 5%;
+    line-height: 1;
+}
+
+.medLabel2-main .med20 {
+    font-size: 17px !important;
+}
+
+.medLabel2-main .med14 {
+    text-align: left;
+}
+/*---------------------------------------------------End Med Label 2-------------------------------------------------------------------------*/
+.med14 {
+    font-size: 14px;
+}
+
+.med12 {
+    font-size: 12px;
+}
+
+.med20 {
+    font-size: 20px;
+}
+
+.med18 {
+    font-size: 18px;
+}
+
+.medTopBottomPadding10 {
+    padding: 10px 0;
+}
+
+.medFontBold {
+    font-weight: bold;
+}
+
+.medFloatLeft {
+    float: left;
+}
+
+.medRed {
+    color: red;
+}
+
+
+.prescriptionlabel__inline-block {
+    display: inline-block
+}
+
+.prescriptionlabel__flex {
+    display: flex;
+}
+
+.prescriptionlabel__fw {
+    font-weight: bold
+}
+
+.prescriptionlabel__text--lowercase {
+    text-transform: lowercase
+}
+
+.prescriptionlabel__text--capitalize {
+    text-transform: capitalize
+}
+
+.prescriptionlabel__text--vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+}
+
+
+.prescriptionlabel__barcode {
+    width: 30px
+}
+
+/*--------------------------------------------------------prescriptionlabel1: Start------------------------------------------*/
+
+.prescriptionlabel1-main {
+    width: 365px;
+    height: 400px;
+    padding: 0.5%;
+    border: 1px solid #cec8c8;
+    border-radius: 5px;
+    box-shadow: 0px 3px 3px 1px rgba(6, 26, 42, 0.5);
+    font-size: 9px;
+    font-family: Arial;
+    margin: 0 auto;
+    background-color: white !important;
+    color: black;
+    box-sizing: content-box;
+    line-height: 1 !important;
+    text-indent: initial;
+    word-wrap: break-word;
+}
+
+.prescriptionlabel1-header {
+    /*width: 100%;*/
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    background: #1167bf;
+    align-items: center;
+    padding: 0 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px 5px 0 0;
+}
+
+.prescriptionlabel1-header--title {
+    margin-left: 30% !important;
+    text-align: center;
+}
+
+.prescriptionlabel1-header--title_main {
+    padding-bottom: 3px
+}
+
+.prescriptionlabel1-header--address {
+    font-size: 8px
+}
+
+.prescriptionlabel1-header--logo {
+    float: left;
+    margin-right: 0
+}
+
+.prescriptionlabel1-body {
+    padding: 15px 20px;
+    background-color: #069cf70f;
+}
+
+.prescriptionlabel1-body--doctor-Info {
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+
+.prescriptionlabel1-body--patient-Info {
+    width: 100%;
+    padding: 24px 0px;
+    font-size: 12px;
+}
+
+.prescriptionlabel__flex-sec1 {
+    width: 66%;
+}
+
+.prescriptionlabel1-body--patient-Info--address {
+    display: flex;
+    margin: 10px 0
+}
+
+.prescriptionlabel1-body--patient-Info--address-sec1 {
+    width: 66%;
+    position: relative
+}
+
+.prescriptionlabel1-body--patient-Info--address-sec1-info {
+    display: inline-block;
+    position: absolute;
+    line-height: 1.2
+}
+
+.prescriptionlabel1-body--medicine-Info {
+    display: flex;
+    font-size: large;
+}
+
+.prescriptionlabel1-body--medicine-logo_sec {
+    width: 75px
+}
+
+.prescriptionlabel1-body--medicine-logo {
+    float: left;
+}
+
+.prescriptionlabel1-body--medicine {
+    line-height: 1.1
+}
+
+.medLabel1-product-tabdescription {
+    margin-top: 6px;
+}
+
+.prescriptionlabel1-medLabel1-tabs {
+    font-size: 14px;
+    padding: 10px 0 5px 0;
+}
+
+.prescriptionlabel1-body--other-Info {
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.prescriptionlabel__flex_sect1-W {
+    width: 60%;
+}
+
+.prescriptionlabel1__flex--mt {
+    margin-top: 5px;
+}
+
+.prescriptionlabel1_prescriber_Signature_body {
+    display: flex;
+    justify-content: space-between;
+    align-items: end
+}
+
+.prescriptionlabel1_refill {
+    margin-bottom: 5px;
+}
+
+.prescriptionlabel1_prescriber_Signature_body--info {
+    padding-right: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.prescriptionlabel1_prescriber_Signature {
+    font-family: 'Brush Script MT';
+    font-family: Mistral;
+    font-size: 1.8em;
+    font-weight: 100;
+    padding: 8px 0;
+}
+
+
+.prescriptionlabel1_checkbox_placeholder {
+    position: relative;
+    top: 3px;
+}
+
+/*--------------------------------------------------------prescriptionlabel1: END ------------------------------------------*/
+
+/*--------------------------------------------------------prescriptionlabel2: Start ------------------------------------------*/
+.prescriptionlabel2-main {
+    width: 640px;
+    height: 300px;
+    padding: 0.5%;
+    border: 1px solid #cec8c8;
+    border-radius: 5px;
+    box-shadow: 0px 3px 3px 1px rgba(6, 26, 42, 0.5);
+    font-size: 9px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0 auto;
+    background-color: white !important;
+    color: black;
+    box-sizing: content-box;
+    line-height: 1 !important;
+    display: flex;
+    text-indent: initial;
+    word-wrap: break-word;
+}
+
+.prescriptionlabel2-col--1 {
+    width: 33%;
+    padding: 0 5px; /*
+    background-color: #009fff2b;*/
+    background-color: #069cf740;
+}
+
+.prescriptionlabel2-col--2 {
+    width: 40%;
+    padding: 0 5px;
+    line-height: 1.1;
+}
+
+.prescriptionlabel2-patient-name {
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 5px;
+    padding-bottom: 2px;
+}
+
+.prescriptionlabel2-col--3 {
+    padding: 0 1%;
+    display: flex;
+    flex-direction: column;
+    width: 25%
+}
+
+.prescriptionlabel2-col--4 {
+    padding: 15px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.label-hr {
+    background-color: black;
+    border: none;
+    height: 1px;
+    margin: 0 0 4px 0;
+}
+
+.prescriptionlabel2-patient-address {
+    font-size: 10px;
+    font-weight: normal;
+    padding-left: 5px;
+    padding-top: 4px
+}
+
+.prescriptionlabel2-header--title {
+    font-size: 13px;
+    align-self: center;
+    font-weight: bold;
+    margin-left: 4px;
+}
+
+.prescriptionlabel2__flex--pt {
+    padding-top: 5px;
+}
+
+.prescriptionlabel2__logo {
+    position: relative;
+    top: 2px;
+    margin: 0 !important
+}
+
+.prescriptionlabel2-header--address {
+    padding-left: 26px;
+    margin-top: -3px;
+}
+
+.prescriptionlabel2-medicine-qty {
+    background: #fdfdfd;
+    border-radius: 5px;
+    padding: 5px 3px;
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 5px 0;
+}
+
+.prescriptionlabel2-prescriber-sec {
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 600;
+    padding: 0 3px;
+}
+
+.prescriptionlabel2-prescriber-sec-value {
+    font-weight: 500
+}
+
+.prescriptionlabel2-medinfo {
+    font-size: 18px;
+    height: 30%;
+    background-color: #069cf740;
+    margin: 0;
+    margin-right: 6px;
+    padding: 5px;
+    font-weight: 600;
+    margin-top: 4%;
+}
+
+.prescriptionlabel2__product-description {
+    font-size: 9px;
+    line-height: normal;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+.prescriptionlabel2-medinfo--genericname {
+    font-size: 10px;
+    padding: 5px 0;
+    padding-left: 5px
+}
+
+.prescriptionlabel2-medinfo--instructions {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 10px 0 20px 0;
+    padding-left: 5px
+}
+
+.prescriptionlabel2__importantinfo--sec {
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: 1px
+}
+
+.prescriptionlabel2__importantinfo--sec-1 {
+    height: 70%;
+    padding: 0% 0 0% 8%;
+}
+
+.prescriptionlabel2__importantinfo-ul {
+    margin: 0;
+    padding: 0;
+    font-size: 12px
+}
+
+    .prescriptionlabel2__importantinfo-ul li {
+        margin-bottom: 5px;
+    }
+
+/*-------------------------------------------------------- prescriptionlabel2: End ------------------------------------------*/
+/*-------------------------------------------------------- prescriptionlabel3: Start ----------------------------------------*/
+.prescriptionlabel3-main {
+    width: 500px;
+    height: 280px;
+    padding: 0.5%;
+    border: 1px solid #cec8c8;
+    border-radius: 5px;
+    box-shadow: 0px 3px 3px 1px rgba(6, 26, 42, 0.5);
+    font-size: 9px;
+    font-family: Arial;
+    margin: 0 auto;
+    background-color: white !important;
+    color: black;
+    box-sizing: content-box;
+    line-height: 1 !important;
+    display: flex;
+    text-indent: initial;
+    word-wrap: break-word;
+}
+
+.prescriptionlabel3-col--1 {
+    width: 28%;
+    background-color: #069cf740;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 10px;
+    line-height: normal;
+}
+
+    .prescriptionlabel3-col--1 ul {
+        margin: 0;
+        padding: 5px 0 0 10px;
+    }
+
+.prescriptionlabel3-col--2 {
+    padding: 0 5px;
+    width: 65%;
+}
+
+.prescriptionlabel3-col--3 {
+    padding: 15px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.prescriptionlabel3-patient--Info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end
+}
+
+.prescriptionlabel3-patient---Info-sec {
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 5px;
+}
+
+.prescriptionlabel3-patient-address {
+    font-size: 10px;
+    font-weight: normal;
+    padding-top: 4px
+}
+
+.prescriptionlabel3-medinfo {
+    font-size: 18px;
+    height: 35%;
+    background-color: #069cf740;
+    margin-right: 6px;
+    padding: 5px;
+    margin: 5px 0 0 0;
+    font-weight: 600;
+}
+
+.prescriptionlabel3-medinfo--genericname{
+    font-size: 10px;
+    font-weight: normal;
+    margin-top:5px;
+}
+
+.prescriptionlabel3-medinfo--instructions{
+    margin-top: 15px;
+    font-size: 16px
+}
+
+.prescriptionlabel3-prescriber--info {
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    line-height: 1.3;
+}
+
+.prescriptionlabel3-datefilled{ 
+    font-weight: 600;
+    font-size: 10px;
+}
+.prescriptionlabel3-datefilled-value {
+    font-weight: normal;
+}
+.prescriptionlabel3-prescriber-sec{
+font-weight: 600;
+font-size: 10px;
+}
+
+.prescriptionlabel3-header--title {
+    font-size: 13px;
+    align-self: center;
+    font-weight: bold;
+    margin-left: 4px;
+}
+
+.prescriptionlabel3-address-sec {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.prescriptionlabel3-address-sec-1 {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.prescriptionlabel3-header--address {
+    padding-left: 26px;
+    margin-top: -5px;
+}
+
+.prescriptionlabel3-address-tel-info {
+    font-size: 13px;
+}
+
+.prescriptionlabel3-caution {
+    padding: 0 5px;
+    font-size: 8px;
+}
+/*-------------------------------------------------------- prescriptionlabel3: End ------------------------------------------*/
+

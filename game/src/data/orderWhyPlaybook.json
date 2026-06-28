@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-06-24T12:50:45.376Z",
+  "builtAt": "2026-06-28T19:33:49.249Z",
   "cases": {
     "100": {
       "physical-exam-pelvic": {
@@ -672,42 +672,22 @@
     },
     "122": {
       "physical-exam-full-skin-exam": {
-        "why": "Document targetoid lesions, bullae, Nikolsky sign, mucosal involvement, and BSA detachment — classifies SJS vs TEN.",
+        "why": "Target lesions, bullae, mucosal involvement, Nikolsky sign.",
         "orderLabel": "Physical Exam: Full skin exam",
         "source": "playbook"
       },
-      "cbc-bmp-lfts": {
-        "why": "BMP for hypotonic fluid losses (Na 131); CBC for lymphopenia (severity); LFTs for drug-induced transaminitis.",
-        "orderLabel": "CBC / BMP / LFTs",
-        "source": "playbook"
-      },
-      "skin-biopsy-punch": {
-        "why": "Full-thickness epidermal necrosis at DEJ — distinguishes SJS from superficial SSSS split.",
-        "orderLabel": "Skin biopsy (frozen section)",
-        "source": "playbook"
-      },
       "discontinue-offending-drug": {
-        "why": "Stop lamotrigine now — every hour on board drives more keratinocyte death.",
-        "orderLabel": "DISCONTINUE offending drug (lamotrigine)",
-        "source": "playbook"
-      },
-      "iv-fluids-resuscitation": {
-        "why": "Lactate 2.3 + insensible losses through denuded skin; hyponatremia risk.",
-        "orderLabel": "IV fluids / resuscitation",
-        "source": "playbook"
-      },
-      "ophthalmology-consult": {
-        "why": "Ocular mucosal involvement — prevent synechiae and corneal scarring.",
-        "orderLabel": "Ophthalmology consult",
+        "why": "Most important intervention.",
+        "orderLabel": "DISCONTINUE offending drug",
         "source": "playbook"
       },
       "admit-to-burn-icu": {
-        "why": "SJS/TEN requires burn-unit wound care, fluids, and monitoring — not floor.",
+        "why": "SJS/TEN = burn unit management.",
         "orderLabel": "Admit to Burn ICU",
         "source": "playbook"
       },
       "supportive-care-fluids-wound-care-nutrit": {
-        "why": "Silver dressings, nutrition, analgesia — mainstay after drug withdrawal.",
+        "why": "Mainstay. Ophthalmology for eye involvement.",
         "orderLabel": "Supportive care (fluids, wound care, nutrition)",
         "source": "playbook"
       }
@@ -2540,6 +2520,48 @@
         "source": "playbook"
       }
     },
+    "197": {
+      "glucose": {
+        "why": "Hypoglycemia is immediately reversible.",
+        "orderLabel": "Point-of-care Glucose",
+        "source": "playbook"
+      },
+      "thiamine": {
+        "why": "Before dextrose in malnourished / alcoholic patients.",
+        "orderLabel": "Thiamine IV",
+        "source": "playbook"
+      },
+      "ct": {
+        "why": "Rule out bleed before tPA or if trauma concern.",
+        "orderLabel": "CT Head non-contrast",
+        "source": "playbook"
+      },
+      "physical-exam": {
+        "why": "Rapid neuro exam helps localize deficits and guides immediate imaging urgency.",
+        "orderLabel": "Focused Neurologic Exam",
+        "source": "playbook"
+      },
+      "cxr-ams": {
+        "why": "Helps identify aspiration or pulmonary source when infection is suspected.",
+        "orderLabel": "Chest X-ray",
+        "source": "playbook"
+      },
+      "toxicology": {
+        "why": "Supports overdose/metabolic differential when presentation is unclear.",
+        "orderLabel": "Toxicology Screen",
+        "source": "playbook"
+      },
+      "labs": {
+        "why": "Infection, uremia, electrolytes, overdose.",
+        "orderLabel": "BMP · CBC · UA · Tox",
+        "source": "playbook"
+      },
+      "admit": {
+        "why": "Protect airway if GCS falling; continuous neuro checks.",
+        "orderLabel": "Monitor / ICU admit",
+        "source": "playbook"
+      }
+    },
     "001": {
       "physical-exam-general-appearance": {
         "why": "It is always important to see how the patient looks in general to assess how sick the patient is.",
@@ -3858,7 +3880,7 @@
         "source": "playbook"
       },
       "cbc-with-differential": {
-        "why": "Thrombocytopenia <100K is a severe feature and suggests HELLP — changes urgency of delivery planning.",
+        "why": "Screening. Assess for thrombocytopenia (<100K = severe feature).",
         "orderLabel": "CBC with differential",
         "source": "playbook"
       },
@@ -3873,7 +3895,7 @@
         "source": "playbook"
       },
       "urinalysis": {
-        "why": "Screen for proteinuria — supports preeclampsia diagnosis when paired with HTN after 20 weeks. Spot protein/creatinine or 24-hour collection if positive.",
+        "why": "Screen for proteinuria — positive in pre-eclampsia. Leads to 24-hour quantitative protein.",
         "orderLabel": "Urinalysis",
         "source": "playbook"
       },
@@ -3888,32 +3910,32 @@
         "source": "playbook"
       },
       "protein-24-hour-urine-quantitative": {
-        "why": "Quantify proteinuria (≥300 mg/24 h supports preeclampsia). Start collection even if you intervene before results return.",
+        "why": "≥300mg in 24h = proteinuria supporting pre-eclampsia diagnosis. May not return before intervention but must be started.",
         "orderLabel": "Protein, 24-hour urine, quantitative",
         "source": "playbook"
       },
       "bmp-cmp-lfts": {
-        "why": "Screen for HELLP — platelets <100K, elevated AST/ALT, hemolysis. Elevated creatinine signals renal end-organ injury.",
+        "why": "Elevated creatinine, LFTs, and uric acid. Screen for HELLP syndrome.",
         "orderLabel": "BMP / CMP / LFTs",
         "source": "playbook"
       },
       "betamethasone-dexamethasone": {
-        "why": "Betamethasone 12 mg IM × 2 doses 24 h apart — crosses placenta, induces surfactant in fetal type II pneumocytes. At 33 weeks she will likely deliver soon; steroids still help even if delivery is within hours.",
+        "why": "Antenatal corticosteroids for fetal lung maturity if < 34 weeks. Patient likely to deliver at 33 weeks.",
         "orderLabel": "Betamethasone / Dexamethasone",
         "source": "playbook"
       },
       "magnesium-sulfate": {
-        "why": "IV magnesium sulfate before eclampsia — raises the seizure threshold by blocking the NMDA receptor channel pore (use-dependent). Load 4–6 g, then maintenance. Give with severe features even when BP is controlled.",
+        "why": "Seizure prophylaxis to prevent progression to eclampsia. Standard of care for pre-eclampsia with severe features.",
         "orderLabel": "Magnesium sulfate",
         "source": "playbook"
       },
       "labetalol-hydralazine-iv": {
-        "why": "IV labetalol 10–20 mg (repeat q10–20 min) — combined α+β blockade lowers BP without reflex tachycardia. Target SBP 140–150 mmHg, not normal pressure, to protect placental perfusion. First-line over hydralazine or nifedipine in pregnancy HTN emergency.",
+        "why": "IV labetalol is first-line for pre-eclampsia hypertension — superior efficacy with fewer side effects than hydralazine. Nifedipine has fetal effects.",
         "orderLabel": "Labetalol / Hydralazine (IV)",
         "source": "playbook"
       },
       "consult-ob-gyn-cesarean-section": {
-        "why": "Delivery is definitive for preeclampsia with severe features. At 33 weeks, after Mg, antihypertensive, and steroids, OB plans delivery — vaginal if stable, cesarean if non-reassuring fetal status or failed induction.",
+        "why": "Delivery is definitive treatment. With severe features, deliver ≥ 34 weeks. OB/GYN for cesarean.",
         "orderLabel": "Consult OB/GYN / Cesarean section",
         "source": "playbook"
       },
@@ -9229,6 +9251,60 @@
         "source": "playbook"
       }
     },
+    "U14": {
+      "monitor": {
+        "why": "Continuous vitals.",
+        "orderLabel": "Cardiac Monitor",
+        "source": "playbook"
+      },
+      "iv": {
+        "why": "Two large-bore if shock.",
+        "orderLabel": "IV Access + Fluids",
+        "source": "playbook"
+      },
+      "labs": {
+        "why": "CBC, BMP, lactate.",
+        "orderLabel": "Stat Labs",
+        "source": "playbook"
+      },
+      "imaging": {
+        "why": "Targeted imaging.",
+        "orderLabel": "Bedside / CT imaging",
+        "source": "playbook"
+      },
+      "admit": {
+        "why": "Match acuity.",
+        "orderLabel": "Admit / Disposition",
+        "source": "playbook"
+      }
+    },
+    "U15": {
+      "monitor": {
+        "why": "Continuous vitals.",
+        "orderLabel": "Cardiac Monitor",
+        "source": "playbook"
+      },
+      "iv": {
+        "why": "Two large-bore if shock.",
+        "orderLabel": "IV Access + Fluids",
+        "source": "playbook"
+      },
+      "labs": {
+        "why": "CBC, BMP, lactate.",
+        "orderLabel": "Stat Labs",
+        "source": "playbook"
+      },
+      "imaging": {
+        "why": "Targeted imaging.",
+        "orderLabel": "Bedside / CT imaging",
+        "source": "playbook"
+      },
+      "admit": {
+        "why": "Match acuity.",
+        "orderLabel": "Admit / Disposition",
+        "source": "playbook"
+      }
+    },
     "case_004": {
       "cbc-with-differential": {
         "why": "In DKA, a CBC with differential is essential to evaluate for an underlying infection, which is a common precipitant of the crisis. Your patient's tachycardia and elevated glucose could be explained by DKA alone, but a high white count may signal a concurrent infection requiring antibiotics. This helps distinguish a stress leukocytosis from a true infectious process.",
@@ -9754,6 +9830,6 @@
       }
     }
   },
-  "caseCount": 211,
-  "entryCount": 1866
+  "caseCount": 214,
+  "entryCount": 1880
 }

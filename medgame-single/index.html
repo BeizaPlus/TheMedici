@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedGame — Case Sim</title>
+<script src="https://cdn.jsdelivr.net/npm/@interactjs/interact@1.10.27/dist/interact.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#E8B84B;--teal:#1DB8A0;--red:#E24B4A;--blue:#4A9EE8;
+  --bg:#0a0a0c;--panel:rgba(10,10,14,0.96);--border:rgba(255,255,255,0.07);
+  --txt:rgba(255,255,255,0.85);--sub:rgba(255,255,255,0.4);--dim:rgba(255,255,255,0.15);
+  --sidebar-w:340px;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:'Barlow',sans-serif}
+.bcond{font-family:'Barlow Condensed',sans-serif}
+
+/* ═══════════════════════════════════════════════════════
+   UPLOAD SCREEN
+═══════════════════════════════════════════════════════ */
+#s-upload{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:200;background:var(--bg)}
+#s-upload::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:url('assets/hero.jpg');
+  background-size:cover;
+  background-position:center;
+  filter:brightness(.15) blur(8px);
+  transform:scale(1.03);
+  z-index:0;
+}
+.up-logo,.up-sub,#dropzone{position:relative;z-index:1}
+.up-logo{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;letter-spacing:4px;text-transform:uppercase}
+.up-logo b{color:var(--gold)}
+.up-sub{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--sub)}
+#dropzone{width:400px;height:220px;border:1px dashed rgba(232,184,75,.4);border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .2s;position:relative}
+#dropzone:hover,#dropzone.over{border-color:var(--gold);background:rgba(232,184,75,.04)}
+#dropzone p{font-size:13px;color:var(--sub)}
+#dropzone span{font-size:11px;color:var(--dim)}
+.brace{position:absolute;width:10px;height:10px;border-color:var(--gold);border-style:solid;opacity:.5}
+.brace.tl{top:6px;left:6px;border-width:1.5px 0 0 1.5px}
+.brace.tr{top:6px;right:6px;border-width:1.5px 1.5px 0 0}
+.brace.bl{bottom:6px;left:6px;border-width:0 0 1.5px 1.5px}
+.brace.br{bottom:6px;right:6px;border-width:0 1.5px 1.5px 0}
+#file-input{display:none}
+
+/* ═══════════════════════════════════════════════════════
+   LOADING SCREEN
+═══════════════════════════════════════════════════════ */
+#s-loading{position:fixed;inset:0;display:none;z-index:180}
+#loading-bg{
+  position:absolute;inset:0;
+  background-image:url('assets/hero.jpg');
+  background-size:cover;
+  background-position:center;
+  filter:brightness(.55) contrast(1.1);
+  z-index:0;
+}
+#loading-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.35) 42%,rgba(0,0,0,0) 70%);z-index:1}
+#loading-content{position:absolute;left:52px;right:52px;bottom:36px;max-width:760px;z-index:2}
+.ld-kicker{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.ld-title{font-family:'Barlow Condensed',sans-serif;font-size:54px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#fff;line-height:1}
+.ld-sub{margin-top:4px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.ld-obj{margin-top:10px;font-size:13px;line-height:1.65;color:rgba(255,255,255,.72);max-width:62ch}
+.ld-tip{margin-top:10px;display:flex;gap:8px;align-items:flex-start;font-size:12px;color:rgba(232,184,75,.92)}
+.ld-tip .ico{font-family:'Barlow Condensed';font-weight:900}
+.ld-label{margin-top:14px;font-family:'Barlow Condensed';font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub)}
+.ld-bar{margin-top:8px;height:6px;border:1px solid var(--border);background:rgba(0,0,0,.45)}
+#ld-fill{height:100%;width:0;background:var(--gold);transition:width 2s linear}
+.ld-click{margin-top:10px;font-family:'Barlow Condensed';font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;animation:blink 1s steps(2,end) infinite}
+@keyframes blink{50%{opacity:.35}}
+
+/* ═══════════════════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════════════════ */
+#app{position:fixed;inset:0;display:none;flex-direction:column}
+
+/* ── TOP BAR ── */
+#topbar{height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--border);flex-shrink:0;background:rgba(8,8,11,.95);backdrop-filter:blur(12px);z-index:50}
+.tb-left{display:flex;align-items:center;gap:10px}
+.case-badge{display:flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgba(232,184,75,.35);border-radius:2px;background:rgba(232,184,75,.07)}
+.case-badge .lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.case-badge .num{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.5)}
+.case-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#fff}
+.divider-v{width:1px;height:18px;background:var(--border)}
+.eval-tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--teal);text-transform:uppercase;padding:2px 8px;border:1px solid rgba(29,184,160,.3);border-radius:2px}
+.tb-center{display:flex;align-items:center;gap:8px}
+#timer-wrap{display:flex;align-items:center;gap:6px;position:relative}
+#timer-display{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:2px;color:#fff;cursor:pointer;min-width:60px;text-align:center;padding:2px 8px;border-radius:2px;transition:background .15s}
+#timer-display:hover{background:rgba(255,255,255,.06)}
+#timer-display.warn{color:var(--gold);animation:pulse .8s ease infinite}
+#timer-display.crit{color:var(--red);animation:pulse .4s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.timer-btn{width:22px;height:22px;border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;color:var(--sub);font-size:11px}
+.timer-btn:hover{border-color:rgba(255,255,255,.25);color:#fff;background:rgba(255,255,255,.05)}
+.timer-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,.1)}
+#timer-popup{position:absolute;top:38px;left:50%;transform:translateX(-50%);background:rgba(10,10,16,.98);border:1px solid var(--border);border-radius:3px;padding:14px 16px;display:none;z-index:100;min-width:220px;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+#timer-popup .pop-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-bottom:10px}
+.time-presets{display:flex;gap:6px;margin-bottom:10px}
+.preset{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:5px 10px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .15s;color:var(--sub)}
+.preset:hover,.preset.sel{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,.08)}
+.custom-row{display:flex;gap:6px;align-items:center}
+#custom-min{background:rgba(255,255,255,.05);border:1px solid var(--border);color:#fff;padding:5px 8px;border-radius:2px;width:60px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-align:center}
+#custom-min:focus{outline:none;border-color:var(--gold)}
+.pop-apply{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border:1px solid var(--gold);border-radius:2px;cursor:pointer;color:var(--gold);background:transparent;transition:all .15s}
+.pop-apply:hover{background:rgba(232,184,75,.12)}
+.override-row{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.override-lbl{font-size:11px;color:var(--sub)}
+.toggle{width:32px;height:18px;background:rgba(255,255,255,.1);border-radius:9px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--teal)}
+.toggle::after{content:'';position:absolute;width:12px;height:12px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left .2s}
+.toggle.on::after{left:17px}
+.tb-right{display:flex;align-items:center;gap:8px}
+.tb-btn{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;border:1px solid var(--border);border-radius:2px;cursor:pointer;color:var(--sub);background:transparent;transition:all .15s}
+.tb-btn:hover{border-color:rgba(255,255,255,.25);color:#fff}
+.tb-btn.primary{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,.07)}
+.tb-btn.primary:hover{background:rgba(232,184,75,.15)}
+
+/* ── MAIN BODY ── */
+#body{flex:1;display:flex;overflow:hidden;position:relative}
+#pill-col{position:absolute;left:12px;top:12px;display:flex;flex-direction:column;gap:5px;z-index:20}
+.stack-pill{display:flex;align-items:center;gap:7px;padding:7px 12px;background:rgba(60,40,160,.6);border-left:2px solid var(--gold);border-radius:3px;cursor:grab;user-select:none;touch-action:none;backdrop-filter:blur(8px);transition:border-color .15s,background .15s;min-width:170px}
+.stack-pill:hover{background:rgba(75,52,188,.7);border-left-color:#f3c45b}
+.stack-pill.dragging{cursor:grabbing;box-shadow:0 8px 30px rgba(0,0,0,.6);z-index:100}
+.stack-pill.used{opacity:.2;pointer-events:none;text-decoration:line-through}
+.pill-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.pill-txt{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.9)}
+#scene{flex:1;position:relative;overflow:hidden}
+#scene img{width:100%;height:100%;object-fit:cover;user-select:none;pointer-events:none}
+#scene::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,transparent 55%,var(--bg) 100%);pointer-events:none;transition:opacity .3s}
+#scene.sidebar-closed::after{opacity:0}
+.zone{position:absolute;border-radius:50%;transition:background .2s,box-shadow .2s;pointer-events:none}
+.zone.lit{pointer-events:auto;background:radial-gradient(ellipse,rgba(29,184,160,.18) 0%,transparent 70%);box-shadow:0 0 0 2px rgba(29,184,160,.5),0 0 45px rgba(29,184,160,.2)}
+.zone.hover{box-shadow:0 0 0 2px rgba(29,184,160,.8),0 0 55px rgba(29,184,160,.35);background:radial-gradient(ellipse,rgba(29,184,160,.24) 0%,transparent 70%)}
+.zone.filled{pointer-events:auto}
+.zone-label{position:absolute;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);pointer-events:none;transform:translate(-50%,0);white-space:nowrap;opacity:0;transition:opacity .2s;top:105%;left:50%}
+.zone.lit .zone-label,.zone.hover .zone-label,.zone.filled .zone-label{opacity:1}
+.pin{position:absolute;z-index:25;transform:translate(-50%,-50%);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;animation:pinIn .3s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes pinIn{from{opacity:0;transform:translate(-50%,-50%) scale(.2)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.pin-ring{width:12px;height:12px;border-radius:50%;border:2px solid var(--teal);background:rgba(29,184,160,.3);box-shadow:0 0 16px rgba(29,184,160,.7);transition:transform .15s}
+.pin-ring.bad{border-color:var(--red);background:rgba(226,74,74,.3);box-shadow:0 0 16px rgba(226,74,74,.7)}
+.pin:hover .pin-ring{transform:scale(1.5)}
+.pin-stick{width:1px;height:18px;background:linear-gradient(to bottom,rgba(29,184,160,.6),transparent)}
+.pin-stick.bad{background:linear-gradient(to bottom,rgba(226,74,74,.6),transparent)}
+.pin-tag{background:rgba(8,8,14,.92);border:1px solid rgba(29,184,160,.45);color:#9FE1CB;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.5px;padding:3px 9px;border-radius:2px;white-space:nowrap;backdrop-filter:blur(6px)}
+.pin-tag.bad{border-color:rgba(226,74,74,.45);color:#F09595}
+.pin-why{font-size:9px;color:rgba(232,184,75,.7);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.5px;text-align:center;margin-top:1px}
+
+/* SIDEBAR */
+#sidebar{width:var(--sidebar-w);height:100%;background:rgba(9,9,13,.97);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:relative;transition:width .25s cubic-bezier(.4,0,.2,1),opacity .2s}
+#sidebar.collapsed{width:0;opacity:0;pointer-events:none;overflow:hidden}
+#sb-toggle{position:absolute;left:-28px;top:50%;transform:translateY(-50%);width:22px;height:48px;background:rgba(9,9,13,.95);border:1px solid var(--border);border-right:none;border-radius:3px 0 0 3px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;color:var(--sub);font-size:11px;transition:color .15s,background .15s}
+#sb-toggle:hover{color:#fff;background:rgba(20,20,28,.98)}
+.sb-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.sb-tab{flex:1;padding:10px 6px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-align:center;cursor:pointer;color:var(--sub);border-bottom:2px solid transparent;transition:all .15s}
+.sb-tab:hover{color:var(--txt)}
+.sb-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.sb-pane{flex:1;overflow-y:auto;display:none;flex-direction:column;padding:14px}
+.sb-pane.active{display:flex}
+.case-header{margin-bottom:14px}
+.case-tag-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.cp-tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid}
+.cp-tag.pack{border-color:rgba(232,184,75,.4);color:var(--gold);background:rgba(232,184,75,.07)}
+.cp-num{font-family:'Barlow Condensed',sans-serif;font-size:9px;color:var(--sub);letter-spacing:1px}
+.case-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#fff;margin-bottom:4px}
+.case-desc{font-size:12px;color:var(--sub);line-height:1.6}
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.prog-lbl{font-size:10px;color:var(--sub);letter-spacing:.5px}
+.prog-val{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:var(--gold)}
+.sb-section-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.step-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.step-num{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--dim);min-width:18px}
+.step-info{flex:1}
+.step-name{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.step-zone{font-size:11px;color:var(--sub)}
+.step-check{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:9px}
+.step-check.done{border-color:var(--teal);background:rgba(29,184,160,.15);color:var(--teal)}
+.step-check.wrong{border-color:var(--red);background:rgba(226,74,74,.15);color:var(--red)}
+.stack-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:3px;margin-bottom:5px;transition:border-color .15s}
+.stack-item.placed{border-color:rgba(29,184,160,.3);border-left:2px solid var(--teal)}
+.si-name{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--txt)}
+.si-right{display:flex;align-items:center;gap:6px}
+.si-num{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;color:var(--dim);background:rgba(255,255,255,.05);border-radius:2px;padding:2px 6px}
+.hint-lbl{font-size:10px;color:var(--sub);margin-top:2px}
+.sb-bottom{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+.sb-act{flex:1;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px;border-radius:2px;cursor:pointer;text-align:center;border:1px solid;transition:all .15s}
+.sb-act.primary{border-color:var(--gold);color:var(--gold);background:rgba(232,184,75,.07)}
+.sb-act.primary:hover{background:rgba(232,184,75,.15)}
+.sb-act.ghost{border-color:var(--border);color:var(--sub)}
+
+/* DRAWERS */
+#vitals-drawer{position:absolute;bottom:0;left:0;right:var(--sidebar-w);height:220px;background:rgba(8,8,13,.97);border-top:1px solid var(--border);z-index:30;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1),right .25s;display:flex;flex-direction:column}
+#vitals-drawer.open{transform:translateY(0)}
+#exam-drawer{position:absolute;bottom:0;left:0;right:var(--sidebar-w);height:240px;background:rgba(8,8,13,.97);border-top:1px solid var(--border);z-index:30;transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1),right .25s;display:flex;flex-direction:column}
+#exam-drawer.open{transform:translateY(0)}
+.drawer-bar{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:36px;border-bottom:1px solid var(--border);flex-shrink:0;cursor:pointer}
+.drawer-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sub)}
+.vitals-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;flex:1;background:var(--border);overflow:hidden}
+.vital-box{background:rgba(10,10,16,1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px}
+.vital-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--sub)}
+.vital-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;line-height:1}
+.vital-unit{font-size:10px;color:var(--dim)}
+.vital-box.warn .vital-val{color:var(--gold)} .vital-box.crit .vital-val{color:var(--red)} .vital-box.ok .vital-val{color:var(--teal)}
+.exam-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;flex:1;overflow-y:auto}
+.exam-sys{border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 14px}
+.exam-sys:nth-child(3n){border-right:none}
+.exam-sys-name{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.exam-finding{font-size:12px;color:var(--sub);line-height:1.6}
+
+/* Bottom bar */
+#bottombar{height:36px;border-top:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0;background:rgba(8,8,11,.95)}
+.bb-btn{display:flex;align-items:center;gap:5px;padding:4px 10px;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--sub);transition:all .15s}
+.bb-btn.active{border-color:rgba(29,184,160,.5);color:var(--teal);background:rgba(29,184,160,.07)}
+.bb-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.bb-sep{flex:1}
+.feedback-inline{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;padding:3px 12px;border-radius:2px;display:none}
+.feedback-inline.ok{background:rgba(29,184,160,.12);border:1px solid rgba(29,184,160,.35);color:#9FE1CB}
+.feedback-inline.fail{background:rgba(226,74,74,.1);border:1px solid rgba(226,74,74,.3);color:#F09595}
+
+/* WHY PANEL */
+#why-panel{position:absolute;bottom:80px;left:160px;width:300px;background:rgba(8,8,14,.98);border:1px dashed rgba(232,184,75,.4);border-radius:3px;padding:16px;z-index:60;display:none;animation:fadeUp .2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+#why-panel .brace{opacity:.5}
+.wp-action{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#fff;margin-bottom:4px}
+.wp-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-bottom:10px;border:1px solid}
+.wp-tag.ok{border-color:rgba(29,184,160,.4);color:var(--teal);background:rgba(29,184,160,.1)}
+.wp-tag.bad{border-color:rgba(226,74,74,.4);color:var(--red);background:rgba(226,74,74,.1)}
+.wp-hr{height:1px;background:var(--border);margin-bottom:10px}
+.wp-body{font-size:12px;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:10px}
+.wp-rule{font-size:11px;color:var(--sub);line-height:1.6;padding:8px 10px;background:rgba(232,184,75,.05);border-left:2px solid rgba(232,184,75,.4);font-style:italic}
+.wp-close{position:absolute;top:10px;right:10px;font-size:14px;color:var(--sub);cursor:pointer}
+</style>
+</head>
+<body>
+
+<!-- UPLOAD -->
+<div id="s-upload">
+  <p class="up-logo">Med<b>Game</b></p>
+  <p class="up-sub">Emergency Medicine · Case Simulator</p>
+  <div id="dropzone" onclick="document.getElementById('file-input').click()">
+    <div class="brace tl"></div><div class="brace tr"></div><div class="brace bl"></div><div class="brace br"></div>
+    <p>Drop patient scene image</p>
+    <span>PNG / JPG — hospital patient photo</span>
+  </div>
+  <input type="file" id="file-input" accept="image/*">
+</div>
+
+<!-- LOADING -->
+<div id="s-loading">
+  <div id="loading-bg"></div>
+  <div id="loading-overlay"></div>
+  <div id="loading-content">
+    <p class="ld-kicker">EMERGENCY MEDICINE · CASE 001</p>
+    <p class="ld-title">SEPSIS</p>
+    <p class="ld-sub">Hour-1 Bundle · Critical Care</p>
+    <p class="ld-obj">65yo M from nursing home with confusion, fever, tachycardia, and probable septic shock. Complete the hour-1 bundle before irreversible organ failure.</p>
+    <p class="ld-tip"><span class="ico">!</span><span>Clinical tip: blood cultures before antibiotics. Fluids before pressors when no pulmonary edema.</span></p>
+    <p class="ld-label">LOADING LEVEL</p>
+    <div class="ld-bar"><div id="ld-fill"></div></div>
+    <p class="ld-click">CLICK TO BEGIN</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div id="topbar">
+    <div class="tb-left">
+      <div class="case-badge"><span class="num">CASE</span><span class="lbl">4</span></div>
+      <div class="divider-v"></div><span class="eval-tag">EVAL</span><div class="divider-v"></div>
+      <span class="case-name">SEPSIS</span>
+    </div>
+    <div class="tb-center">
+      <div id="timer-wrap">
+        <div class="timer-btn" id="btn-pause" title="Pause" onclick="togglePause()">⏸</div>
+        <div id="timer-display" onclick="openTimerPopup()">05:00</div>
+        <div class="timer-btn" title="Timer settings" onclick="openTimerPopup()">⚙</div>
+        <div id="timer-popup">
+          <p class="pop-title">Set Session Timer</p>
+          <div class="time-presets">
+            <div class="preset" onclick="selectPreset(this,3)">3 min</div>
+            <div class="preset sel" onclick="selectPreset(this,5)">5 min</div>
+            <div class="preset" onclick="selectPreset(this,10)">10 min</div>
+            <div class="preset" onclick="selectPreset(this,0)">∞</div>
+          </div>
+          <div class="custom-row">
+            <input type="number" id="custom-min" placeholder="—" min="1" max="60">
+            <button class="pop-apply" onclick="applyCustomTime()">Apply</button>
+          </div>
+          <div class="override-row">
+            <div class="toggle" id="override-toggle" onclick="toggleOverride(this)"></div>
+            <span class="override-lbl">Override — keep timer visible, no end</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-btn" onclick="resetGame()">Reset</div>
+      <div class="tb-btn primary" onclick="checkAnswer()">Check ↗</div>
+    </div>
+  </div>
+
+  <div id="body">
+    <div id="pill-col"></div>
+    <div id="scene"><img id="scene-img" alt="Patient" draggable="false"></div>
+
+    <div id="sidebar">
+      <div id="sb-toggle" onclick="toggleSidebar()">›</div>
+      <div class="sb-tabs">
+        <div class="sb-tab active" onclick="switchTab('case')">Case</div>
+        <div class="sb-tab" onclick="switchTab('stacks')">Stacks</div>
+      </div>
+      <div class="sb-pane active" id="pane-case"></div>
+      <div class="sb-pane" id="pane-stacks"></div>
+      <div class="sb-bottom">
+        <div class="sb-act primary" onclick="checkAnswer()">Check ↗</div>
+        <div class="sb-act ghost" onclick="resetGame()">Reset</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="bottombar">
+    <div class="bb-btn" id="bb-vitals" onclick="toggleVitals()"><div class="bb-dot"></div>Vitals</div>
+    <div class="bb-btn" id="bb-exam" onclick="toggleExam()"><div class="bb-dot"></div>Physical Exam</div>
+    <div class="bb-sep"></div><div class="feedback-inline" id="feedback"></div><div class="bb-sep"></div>
+    <div class="bb-btn" onclick="goUpload()">← New Image</div>
+  </div>
+
+  <div id="vitals-drawer">
+    <div class="drawer-bar" onclick="toggleVitals()"><span class="drawer-title">Vitals Monitor</span><span class="drawer-close">✕</span></div>
+    <div class="vitals-grid">
+      <div class="vital-box crit"><span class="vital-lbl">BP</span><span class="vital-val">88/54</span><span class="vital-unit">mmHg</span></div>
+      <div class="vital-box warn"><span class="vital-lbl">HR</span><span class="vital-val">118</span><span class="vital-unit">bpm</span></div>
+      <div class="vital-box warn"><span class="vital-lbl">RR</span><span class="vital-val">24</span><span class="vital-unit">/min</span></div>
+      <div class="vital-box warn"><span class="vital-lbl">Temp</span><span class="vital-val">39.2</span><span class="vital-unit">°C</span></div>
+      <div class="vital-box ok"><span class="vital-lbl">SpO₂</span><span class="vital-val">94</span><span class="vital-unit">%</span></div>
+      <div class="vital-box crit"><span class="vital-lbl">Lactate</span><span class="vital-val">3.8</span><span class="vital-unit">mmol/L</span></div>
+    </div>
+  </div>
+
+  <div id="exam-drawer">
+    <div class="drawer-bar" onclick="toggleExam()"><span class="drawer-title">Physical Examination</span><span class="drawer-close">✕</span></div>
+    <div class="exam-grid">
+      <div class="exam-sys"><div class="exam-sys-name">General</div><div class="exam-finding">Ill-appearing male, diaphoretic, confused, not oriented.</div></div>
+      <div class="exam-sys"><div class="exam-sys-name">Cardiovascular</div><div class="exam-finding">Tachycardic, weak pulse, delayed cap refill.</div></div>
+      <div class="exam-sys"><div class="exam-sys-name">Respiratory</div><div class="exam-finding">Tachypnea at rest, no focal crackles.</div></div>
+      <div class="exam-sys"><div class="exam-sys-name">Abdomen</div><div class="exam-finding">Soft, mild diffuse tenderness, no guarding.</div></div>
+      <div class="exam-sys"><div class="exam-sys-name">Neuro</div><div class="exam-finding">GCS 13, slow responses, no focal deficits.</div></div>
+      <div class="exam-sys"><div class="exam-sys-name">Skin</div><div class="exam-finding">Warm, flushed, no petechiae.</div></div>
+    </div>
+  </div>
+
+  <div id="why-panel">
+    <div class="brace tl"></div><div class="brace tr"></div><div class="brace bl"></div><div class="brace br"></div>
+    <span class="wp-close" onclick="closeWhy()">✕</span>
+    <div class="wp-action" id="wp-action">—</div>
+    <div class="wp-tag" id="wp-tag">—</div>
+    <div class="wp-hr"></div>
+    <div class="wp-body" id="wp-body">—</div>
+    <div class="wp-rule" id="wp-rule">—</div>
+  </div>
+</div>
+
+<script>
+const ZONES={
+  "zone-monitor":{cx:.925,cy:.10,w:.09,h:.18,accept:"Cardiac monitor",label:"MONITOR & VITALS",why:"Continuous monitoring is mandatory in septic shock — HR and BP trend faster than any lab.",rule:"SSC Hour-1: continuous vitals monitoring throughout resuscitation."},
+  "zone-iv-bag":{cx:.930,cy:.42,w:.09,h:.38,accept:"30 mL/kg bolus",label:"IV FLUIDS",why:"30 mL/kg crystalloid bolus restores intravascular volume. MAP <65 + lactate >2 = fluids before pressors.",rule:"SSC 2021: ≥30 mL/kg IV crystalloid within 3 hours of sepsis-induced hypoperfusion."},
+  "zone-blood":{cx:.225,cy:.415,w:.15,h:.155,accept:"Blood cultures x2",label:"BLOOD DRAW",why:"Two blood culture sets must be drawn BEFORE antibiotics — only chance to identify the organism.",rule:"Cultures first. Antibiotics destroy the organism and eliminate culture yield permanently."},
+  "zone-arm":{cx:.225,cy:.37,w:.12,h:.11,accept:"Vanc + Pip-Tazo",label:"IV LINE / MEDS",why:"Vancomycin + Pip-Tazo covers gram+, gram-, and anaerobes. Given after cultures, within 1 hour.",rule:"SSC Hour-1: broad-spectrum IV antibiotics within 1 hour of sepsis recognition."},
+  "zone-icu":{cx:.50,cy:.915,w:.52,h:.13,accept:"ICU admission",label:"ICU · WARD · OBS",why:"ICU-level care required for vasopressor infusion, hemodynamic monitoring, lactate clearance.",rule:"Septic shock = ICU. MAP <65 on adequate fluids mandates vasopressor + critical care."}
+};
+const PILLS=[
+  {label:"Blood Draw",action:"Blood cultures x2",dot:"#4A9EE8"},
+  {label:"IV Fluids",action:"30 mL/kg bolus",dot:"#1DB8A0"},
+  {label:"Antibiotics",action:"Vanc + Pip-Tazo",dot:"#E8B84B"},
+  {label:"Monitor & Vitals",action:"Cardiac monitor",dot:"#7B6EE8"},
+  {label:"Vasopressors",action:"Vasopressors",dot:"#E24B4A"},
+  {label:"ICU · Ward · Obs",action:"ICU admission",dot:"#E8845A"}
+];
+const CHECK_ORDER=[["zone-iv-bag","01"],["zone-blood","02"],["zone-arm","03"],["zone-monitor","04"],["zone-icu","05"]];
+let placements={},tries=0,timerSec=300,timerRunning=true,overrideMode=false,timerIv=null,sidebarOpen=true,currentImage="";
+
+const dropzone=document.getElementById("dropzone"),fileInput=document.getElementById("file-input");
+fileInput.addEventListener("change",e=>e.target.files[0]&&loadFile(e.target.files[0]));
+dropzone.addEventListener("dragover",e=>{e.preventDefault();dropzone.classList.add("over")});
+dropzone.addEventListener("dragleave",()=>dropzone.classList.remove("over"));
+dropzone.addEventListener("drop",e=>{e.preventDefault();dropzone.classList.remove("over");e.dataTransfer.files[0]&&loadFile(e.dataTransfer.files[0])});
+
+function loadFile(file){
+  const r=new FileReader();
+  r.onload=e=>{currentImage=e.target.result;showLoading()};
+  r.readAsDataURL(file);
+}
+
+function showLoading(){
+  document.getElementById("s-upload").style.display="none";
+  const ls=document.getElementById("s-loading");
+  ls.style.display="block";
+  const fill=document.getElementById("ld-fill");
+  fill.style.width="0";
+  setTimeout(()=>fill.style.width="100%",40);
+  ls.onclick=()=>startGame();
+}
+
+function startGame(){
+  document.getElementById("s-loading").style.display="none";
+  document.getElementById("app").style.display="flex";
+  document.getElementById("scene-img").src=currentImage;
+  initPills();
+  buildZones();
+  buildCasePane();
+  buildStacksPane();
+  initDragDrop();
+  resetGame();
+  startTimer();
+}
+
+function goUpload(){
+  if(timerIv) clearInterval(timerIv);
+  document.getElementById("app").style.display="none";
+  document.getElementById("s-loading").style.display="none";
+  document.getElementById("s-upload").style.display="flex";
+}
+
+function initPills(){
+  const col=document.getElementById("pill-col");
+  col.innerHTML="";
+  PILLS.forEach(p=>{
+    const el=document.createElement("div");
+    el.className="stack-pill";
+    el.dataset.action=p.action;
+    el.innerHTML=`<div class="pill-dot" style="background:${p.dot}"></div><span class="pill-txt">${p.label}</span>`;
+    col.appendChild(el);
+  });
+}
+
+function buildZones(){
+  const scene=document.getElementById("scene");
+  scene.querySelectorAll(".zone,.pin").forEach(n=>n.remove());
+  Object.entries(ZONES).forEach(([id,z])=>{
+    const el=document.createElement("div");
+    el.className="zone";
+    el.id=id;
+    el.style.left=(z.cx-z.w/2)*100+"%";
+    el.style.top=(z.cy-z.h/2)*100+"%";
+    el.style.width=z.w*100+"%";
+    el.style.height=z.h*100+"%";
+    el.dataset.cx=z.cx*100+"%";
+    el.dataset.cy=z.cy*100+"%";
+    el.innerHTML=`<div class="zone-label">${z.label}</div>`;
+    scene.appendChild(el);
+  });
+}
+
+function buildCasePane(){
+  const c=document.getElementById("pane-case");
+  c.innerHTML=`
+    <div class="case-header">
+      <div class="case-tag-row"><span class="cp-tag pack">Clinical Pack</span><span class="cp-num">Case 4 of 12</span></div>
+      <div class="case-title">Sepsis</div>
+      <div class="case-desc">65yo M from nursing home. Complete surviving sepsis hour-1 bundle before organ failure.</div>
+      <div class="progress-row"><span class="prog-lbl">Ready 4</span><span class="prog-val" id="placed-count">Placed 0/5</span></div>
+    </div>
+    <div class="sb-section-lbl">Resuscitate · Image · Involve surgery if indicated</div>
+    <div class="step-row"><span class="step-num">01</span><div class="step-info"><div class="step-name">IV Fluids + NPO</div><div class="step-zone">→ IV fluids zone</div></div><div class="step-check" id="sc-01"></div></div>
+    <div class="step-row"><span class="step-num">02</span><div class="step-info"><div class="step-name">CBC · Lipase · LFTs · UA</div><div class="step-zone">→ Blood draw zone</div></div><div class="step-check" id="sc-02"></div></div>
+    <div class="step-row"><span class="step-num">03</span><div class="step-info"><div class="step-name">Broad-spectrum Abx</div><div class="step-zone">→ IV line / meds</div></div><div class="step-check" id="sc-03"></div></div>
+    <div class="step-row"><span class="step-num">04</span><div class="step-info"><div class="step-name">Cardiac Monitor</div><div class="step-zone">→ Monitor & vitals zone</div></div><div class="step-check" id="sc-04"></div></div>
+    <div class="step-row"><span class="step-num">05</span><div class="step-info"><div class="step-name">ICU Admission</div><div class="step-zone">→ ICU · Ward · Obs</div></div><div class="step-check" id="sc-05"></div></div>
+  `;
+}
+
+function buildStacksPane(){
+  const s=document.getElementById("pane-stacks");
+  s.innerHTML=`
+    <div class="sb-section-lbl">Treatment stacks — drag to patient</div>
+    <div class="hint-lbl" style="margin-bottom:10px;font-size:11px;color:var(--sub)">Release over the correct zone · <span id="placed-count2" style="color:var(--gold)">0/5</span></div>
+    <div class="stack-item" id="si-01"><div class="si-name">IV Fluids + NPO</div><div class="si-right"><span class="si-num">x1</span><span class="si-num">01</span></div></div>
+    <div class="stack-item" id="si-02"><div class="si-name">Blood Cultures x2</div><div class="si-right"><span class="si-num">x1</span><span class="si-num">02</span></div></div>
+    <div class="stack-item" id="si-03"><div class="si-name">Vanc + Pip-Tazo</div><div class="si-right"><span class="si-num">x1</span><span class="si-num">03</span></div></div>
+    <div class="stack-item" id="si-04"><div class="si-name">Cardiac Monitor</div><div class="si-right"><span class="si-num">x1</span><span class="si-num">04</span></div></div>
+    <div class="stack-item" id="si-05"><div class="si-name">ICU Admission</div><div class="si-right"><span class="si-num">x1</span><span class="si-num">05</span></div></div>
+  `;
+}
+
+function initDragDrop(){
+  interact(".stack-pill").draggable({
+    inertia:{resistance:7,minSpeed:80,endSpeed:40},
+    autoScroll:true,
+    listeners:{
+      start(e){
+        e.target.classList.add("dragging");
+        document.querySelectorAll(".zone:not(.filled)").forEach(z=>z.classList.add("lit"));
+        closeWhy();
+      },
+      move(e){
+        const t=e.target;
+        const x=(parseFloat(t.getAttribute("data-x"))||0)+e.dx;
+        const y=(parseFloat(t.getAttribute("data-y"))||0)+e.dy;
+        t.style.transform=`translate(${x}px,${y}px)`;
+        t.setAttribute("data-x",x);t.setAttribute("data-y",y);
+      },
+      end(e){
+        e.target.classList.remove("dragging");
+        document.querySelectorAll(".zone").forEach(z=>z.classList.remove("lit","hover"));
+        if(!e.target._dropped) snapBack(e.target);
+        e.target._dropped=false;
+      }
+    }
+  });
+  interact(".zone").dropzone({
+    accept:".stack-pill",
+    overlap:.25,
+    ondragenter:e=>e.target.classList.add("hover"),
+    ondragleave:e=>e.target.classList.remove("hover"),
+    ondrop(e){
+      const zone=e.target,pill=e.relatedTarget,action=pill.dataset.action;
+      zone.classList.remove("hover","lit");
+      pill._dropped=true;
+      const zr=zone.getBoundingClientRect(),pr=pill.getBoundingClientRect();
+      const tx=zr.left+zr.width/2-pr.left-pr.width/2+(parseFloat(pill.getAttribute("data-x"))||0);
+      const ty=zr.top+zr.height/2-pr.top-pr.height/2+(parseFloat(pill.getAttribute("data-y"))||0);
+      pill.style.transition="transform .28s cubic-bezier(.34,1.56,.64,1)";
+      pill.style.transform=`translate(${tx}px,${ty}px)`;
+      pill.setAttribute("data-x",tx);pill.setAttribute("data-y",ty);
+      setTimeout(()=>pill.style.transition="",320);
+      placements[zone.id]=action;
+      pill.classList.add("used");
+      zone.classList.add("filled");
+      updatePlacedCount();
+    }
+  });
+}
+
+function snapBack(p){
+  p.style.transition="transform .35s cubic-bezier(.34,1.56,.64,1)";
+  p.style.transform="translate(0,0)";
+  p.setAttribute("data-x","0");p.setAttribute("data-y","0");
+  setTimeout(()=>p.style.transition="",380);
+}
+function updatePlacedCount(){
+  const n=Object.keys(placements).length;
+  const a=document.getElementById("placed-count"),b=document.getElementById("placed-count2");
+  if(a)a.textContent=`Placed ${n}/5`; if(b)b.textContent=`${n}/5`;
+}
+
+function checkAnswer(){
+  tries++;
+  document.querySelectorAll(".pin").forEach(p=>p.remove());
+  let right=0,total=CHECK_ORDER.length;
+  CHECK_ORDER.forEach(([zoneId,step])=>{
+    const placed=placements[zoneId];
+    const ok=placed&&placed===ZONES[zoneId].accept;
+    if(ok) right++;
+    const check=document.getElementById(`sc-${step}`);
+    const item=document.getElementById(`si-${step}`);
+    if(check){check.classList.remove("done","wrong");check.textContent="";}
+    if(item)item.classList.remove("placed");
+    if(placed){
+      placePin(document.getElementById(zoneId),placed,ok,true);
+      if(check){check.classList.add(ok?"done":"wrong");check.textContent=ok?"✓":"✗";}
+      if(item&&ok)item.classList.add("placed");
+    }
+  });
+  const pct=Math.round((right/total)*100);
+  const fb=document.getElementById("feedback");
+  fb.style.display="block";
+  fb.className="feedback-inline "+(right===total?"ok":"fail");
+  fb.textContent=right===total?`✓ Perfect · ${pct}% · Click any pin for rationale`:`${total-right} wrong · ${pct}% · Click red pins to learn`;
+}
+
+function placePin(zone,action,ok,clickable){
+  const scene=document.getElementById("scene");
+  const pin=document.createElement("div");
+  pin.className="pin";
+  pin.style.left=zone.dataset.cx; pin.style.top=zone.dataset.cy;
+  pin.innerHTML=`<div class="pin-ring${ok?'':' bad'}"></div><div class="pin-stick${ok?'':' bad'}"></div><div class="pin-tag${ok?'':' bad'}">${action}</div>${clickable?'<div class="pin-why">tap for why</div>':''}`;
+  if(clickable) pin.onclick=()=>showWhy(zone.id,action,ok);
+  scene.appendChild(pin);
+}
+
+function showWhy(zoneId,action,ok){
+  const z=ZONES[zoneId];
+  document.getElementById("wp-action").textContent=action;
+  const tag=document.getElementById("wp-tag");
+  tag.textContent=ok?"✓ Correct":"✗ Wrong zone";
+  tag.className="wp-tag "+(ok?"ok":"bad");
+  document.getElementById("wp-body").textContent=ok?z.why:`${action} was placed at wrong zone. This zone expects ${z.accept}.`;
+  document.getElementById("wp-rule").textContent=ok?z.rule:`Correct action for this zone: ${z.accept}.`;
+  document.getElementById("why-panel").style.display="block";
+}
+function closeWhy(){document.getElementById("why-panel").style.display="none";}
+
+function resetGame(){
+  placements={};tries=0;
+  document.querySelectorAll(".pin").forEach(p=>p.remove());
+  document.querySelectorAll(".zone").forEach(z=>z.classList.remove("filled","hover","lit"));
+  document.querySelectorAll(".stack-pill").forEach(p=>{p.classList.remove("used","dragging");snapBack(p);});
+  document.querySelectorAll(".step-check").forEach(c=>{c.classList.remove("done","wrong");c.textContent="";});
+  document.querySelectorAll(".stack-item").forEach(i=>i.classList.remove("placed"));
+  const fb=document.getElementById("feedback"); fb.style.display="none";
+  closeWhy(); updatePlacedCount();
+}
+
+function startTimer(){
+  if(timerIv) clearInterval(timerIv);
+  timerIv=setInterval(()=>{
+    if(!timerRunning||overrideMode) return;
+    timerSec--;
+    updateTimerDisplay();
+    if(timerSec<=0){clearInterval(timerIv);document.getElementById("timer-display").textContent="TIME";}
+  },1000);
+}
+function updateTimerDisplay(){
+  const m=Math.floor(timerSec/60),s=timerSec%60,el=document.getElementById("timer-display");
+  el.textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  el.className="";
+  if(timerSec<60) el.classList.add("crit");
+  else if(timerSec<120) el.classList.add("warn");
+}
+function togglePause(){
+  timerRunning=!timerRunning;
+  const b=document.getElementById("btn-pause");
+  b.textContent=timerRunning?"⏸":"▶";
+  b.classList.toggle("active",!timerRunning);
+}
+function openTimerPopup(){
+  const p=document.getElementById("timer-popup");
+  p.style.display=p.style.display==="block"?"none":"block";
+}
+function selectPreset(el,min){
+  document.querySelectorAll(".preset").forEach(p=>p.classList.remove("sel"));
+  el.classList.add("sel");
+  if(min===0){overrideMode=true;document.getElementById("override-toggle").classList.add("on");}
+  else{overrideMode=false;timerSec=min*60;updateTimerDisplay();document.getElementById("override-toggle").classList.remove("on");}
+}
+function applyCustomTime(){
+  const v=parseInt(document.getElementById("custom-min").value,10);
+  if(v>0){timerSec=v*60;updateTimerDisplay();}
+  document.getElementById("timer-popup").style.display="none";
+}
+function toggleOverride(el){el.classList.toggle("on");overrideMode=el.classList.contains("on");}
+document.addEventListener("click",e=>{
+  const p=document.getElementById("timer-popup"),tw=document.getElementById("timer-wrap");
+  if(p.style.display==="block"&&!tw.contains(e.target)) p.style.display="none";
+});
+
+function toggleSidebar(){
+  sidebarOpen=!sidebarOpen;
+  document.getElementById("sidebar").classList.toggle("collapsed",!sidebarOpen);
+  document.getElementById("sb-toggle").textContent=sidebarOpen?"›":"‹";
+  document.getElementById("vitals-drawer").style.right=sidebarOpen?"var(--sidebar-w)":"0";
+  document.getElementById("exam-drawer").style.right=sidebarOpen?"var(--sidebar-w)":"0";
+  document.getElementById("scene").classList.toggle("sidebar-closed",!sidebarOpen);
+}
+function switchTab(tab){
+  document.querySelectorAll(".sb-tab").forEach((t,i)=>t.classList.toggle("active",["case","stacks"][i]===tab));
+  document.querySelectorAll(".sb-pane").forEach(p=>p.classList.remove("active"));
+  document.getElementById("pane-"+tab).classList.add("active");
+}
+function toggleVitals(){
+  const vd=document.getElementById("vitals-drawer"),ed=document.getElementById("exam-drawer");
+  ed.classList.remove("open");document.getElementById("bb-exam").classList.remove("active");
+  vd.classList.toggle("open");
+  document.getElementById("bb-vitals").classList.toggle("active",vd.classList.contains("open"));
+}
+function toggleExam(){
+  const vd=document.getElementById("vitals-drawer"),ed=document.getElementById("exam-drawer");
+  vd.classList.remove("open");document.getElementById("bb-vitals").classList.remove("active");
+  ed.classList.toggle("open");
+  document.getElementById("bb-exam").classList.toggle("active",ed.classList.contains("open"));
+}
+</script>
+</body>
+</html>

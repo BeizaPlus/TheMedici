@@ -203,6 +203,7 @@ async function main() {
         hpi_narrative: "Malar rash, polyarthritis, fever.",
       },
       teachMeMode: false,
+      liveAttendantLabs: false,
     },
   );
   ok(/CBC:/.test(sleLab.text) && /Glucose \d+ mg\/dL/.test(sleLab.text), "orderResult: combined lab panel has numeric values");
@@ -217,6 +218,7 @@ async function main() {
         hpi_narrative: "Malar rash, polyarthritis, fever.",
       },
       teachMeMode: false,
+      liveAttendantLabs: false,
     },
   );
   ok(

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drag & Stack Orders onto Patient</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #0b0b0b;
+    color: #e4e4e4;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useRef } = React;
+
+const ORDERS = [
+  "CBC with diff",
+  "Basic metabolic panel",
+  "12-lead EKG",
+  "Chest X-ray",
+  "Urinalysis",
+  "Lactic acid",
+  "Troponin",
+  "Blood cultures x2",
+  "IV fluids 1L bolus",
+  "Vancomycin",
+];
+
+function PlacedLabel({ item, onMove }) {
+  const ref = useRef(null);
+  const dragOffset = useRef({ x: 0, y: 0 });
+
+  return (
+    <div
+      ref={ref}
+      draggable
+      onDragStart={e => {
+        const rect = ref.current.getBoundingClientRect();
+        dragOffset.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        e.dataTransfer.setData("repositioning", item.id.toString());
+        e.dataTransfer.effectAllowed = "move";
+      }}
+      onDragEnd={e => {
+        const parent = ref.current.closest("[data-dropzone]");
+        if (!parent) return;
+        const rect = parent.getBoundingClientRect();
+        const x = Math.max(0, e.clientX - rect.left - dragOffset.current.x);
+        const y = Math.max(0, e.clientY - rect.top - dragOffset.current.y);
+        onMove(item.id, x, y);
+      }}
+      style={{
+        position: "absolute",
+        left: item.x,
+        top: item.y,
+        background: "#000",
+        color: "#fff",
+        border: "1.5px solid #c9a227",
+        borderRadius: 4,
+        padding: "3px 10px",
+        fontSize: 11,
+        fontWeight: 700,
+        letterSpacing: "0.06em",
+        textTransform: "uppercase",
+        cursor: "grab",
+        userSelect: "none",
+        whiteSpace: "nowrap",
+        zIndex: 10,
+      }}
+    >
+      {item.name}
+    </div>
+  );
+}
+
+function App() {
+  const [placed, setPlaced] = useState([]);
+  const [patientImg, setPatientImg] = useState(null);
+  const fileRef = useRef(null);
+
+  const handleDrop = e => {
+    e.preventDefault();
+    const name = e.dataTransfer.getData("orderName");
+    if (!name) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const baseX = e.clientX - rect.left;
+    const baseY = e.clientY - rect.top;
+
+    const offset = placed.length * 5;
+
+    setPlaced(prev => [
+      ...prev,
+      { id: Date.now(), name, x: baseX + offset, y: baseY + offset }
+    ]);
+  };
+
+  const handleImageUpload = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setPatientImg(reader.result);
+    reader.readAsDataURL(file);
+  };
+
+  const handleMove = (id, x, y) => {
+    setPlaced(prev => prev.map(p => p.id === id ? { ...p, x, y } : p));
+  };
+
+  const clearLabels = () => setPlaced([]);
+
+  return (
+    <div style={{ display: "flex", gap: 0, width: "100vw", height: "100vh" }}>
+
+      {/* ── PATIENT IMAGE DROP ZONE ── */}
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+        <div
+          data-dropzone
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            borderRadius: 12,
+            overflow: "hidden",
+            background: patientImg ? "transparent" : "#1a1a1a",
+            border: patientImg ? "none" : "2px dashed #333",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onDragOver={e => e.preventDefault()}
+          onDrop={handleDrop}
+        >
+          {patientImg ? (
+            <img
+              src={patientImg}
+              alt="Patient"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          ) : (
+            <div style={{ textAlign: "center", color: "#525252" }}>
+              <div style={{ fontSize: 40, marginBottom: 8 }}>+</div>
+              <div style={{ fontSize: 13 }}>Drop a patient image or drag orders here</div>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ display: "none" }}
+              />
+              <button
+                onClick={() => fileRef.current?.click()}
+                style={{
+                  marginTop: 12,
+                  padding: "6px 18px",
+                  borderRadius: 6,
+                  border: "0.5px solid #333",
+                  background: "#1a1a1a",
+                  color: "#a3a3a3",
+                  cursor: "pointer",
+                  fontSize: 12,
+                }}
+              >
+                Browse image
+              </button>
+            </div>
+          )}
+
+          {placed.map(item => (
+            <PlacedLabel key={item.id} item={item} onMove={handleMove} />
+          ))}
+        </div>
+      </div>
+
+      {/* ── RIGHT PANEL: ORDER STACK ── */}
+      <div style={{
+        width: 260,
+        background: "#121212",
+        borderLeft: "0.5px solid #262626",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+      }}>
+        <div style={{
+          padding: "14px 16px",
+          borderBottom: "0.5px solid #262626",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}>
+          <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "#a3a3a3" }}>
+            Orders
+          </span>
+          <span style={{ fontSize: 10, color: "#525252" }}>
+            {placed.length} placed
+          </span>
+        </div>
+
+        <div style={{ flex: 1, overflowY: "auto", padding: "8px 0" }}>
+          {ORDERS.map(order => (
+            <div
+              key={order}
+              draggable
+              onDragStart={e => {
+                e.dataTransfer.setData("orderName", order);
+                e.dataTransfer.effectAllowed = "move";
+              }}
+              style={{
+                cursor: "grab",
+                padding: "9px 16px",
+                fontSize: 13,
+                color: "#d4d4d4",
+                borderBottom: "0.5px solid #1a1a1a",
+                transition: "background 0.1s",
+                userSelect: "none",
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = "#1a1a1a"}
+              onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+            >
+              {order}
+            </div>
+          ))}
+        </div>
+
+        {placed.length > 0 && (
+          <button
+            onClick={clearLabels}
+            style={{
+              margin: "8px 16px 14px",
+              padding: "8px",
+              borderRadius: 6,
+              border: "0.5px solid #333",
+              background: "#1a1a1a",
+              color: "#a3a3a3",
+              cursor: "pointer",
+              fontSize: 11,
+            }}
+          >
+            Clear all labels
+          </button>
+        )}
+      </div>
+
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

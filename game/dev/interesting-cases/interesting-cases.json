@@ -1,0 +1,127 @@
+{
+  "version": 2,
+  "updated": "2026-06-19",
+  "description": "Meme/reference queue for future MeWorld interesting cases. Character maps in character-maps-pending/ — promote after Steve approval.",
+  "architectureDoc": "docs/BRILLIANT_ATTENDING_ARCHITECTURE.md",
+  "sourcesDir": "dev/interesting-cases/sources",
+  "mapsPendingDir": "dev/interesting-cases/character-maps-pending",
+  "pinterestPins": [
+    {
+      "url": "https://www.pinterest.com/pin/1033998395698022862/",
+      "notes": "Weirdest of faces — save for later reference, do not gen until promoted"
+    }
+  ],
+  "entries": [
+    {
+      "id": "ic-001",
+      "slug": "adult-drowning-river-cup",
+      "categories": ["adult drowning", "near-drowning", "altered mental status"],
+      "dxCandidates": ["Drowning", "Near-drowning with AMS", "Hypoxic brain injury"],
+      "refPath": "dev/interesting-cases/sources/01-adult-drowning-river-cup-ref.png",
+      "identityPrompt": "Middle-aged Black man, stocky build, shaved head, dazed calm expression — preserve likeness from reference",
+      "status": "map-pending",
+      "notes": "Adult river drowning — distinct from case_113 pediatric."
+    },
+    {
+      "id": "ic-002",
+      "slug": "scalp-geographic-ridges",
+      "categories": ["distinctive exam finding"],
+      "dxCandidates": ["Neurocutaneous disorder", "Dermatology exam finding"],
+      "refPath": "dev/interesting-cases/sources/02-scalp-geographic-ridges-ref.png",
+      "identityPrompt": "Black man in profile, shaved scalp with raised geographic ridge pattern — preserve scalp markings",
+      "status": "map-pending",
+      "notes": "Geographic/map-like scalp ridges."
+    },
+    {
+      "id": "ic-003",
+      "slug": "ams-wide-eyes-encephalitis",
+      "categories": ["encephalitis", "meningitis", "AMS"],
+      "dxCandidates": ["Viral encephalitis", "Bacterial meningitis", "Delirium"],
+      "refPath": "dev/interesting-cases/sources/03-ams-wide-eyes-encephalitis-ref.png",
+      "identityPrompt": "Young Black man, wide eyes, dazed shocked expression — preserve likeness without caricature",
+      "status": "map-pending",
+      "notes": "AMS meme face for encephalitis/meningitis case."
+    },
+    {
+      "id": "ic-004",
+      "slug": "orange-jumpsuit-intense",
+      "categories": ["correctional health", "AMS"],
+      "dxCandidates": ["Psychosis", "Delirium in custody"],
+      "refPath": "dev/interesting-cases/sources/04-orange-jumpsuit-intense-ref.png",
+      "identityPrompt": "Black man, very dark skin, intense stern expression, orange V-neck top — preserve mugshot intensity",
+      "status": "map-pending",
+      "notes": "Orange jumpsuit custody energy."
+    },
+    {
+      "id": "ic-005",
+      "slug": "macrocephaly-frontal-bossing",
+      "categories": ["congenital", "neuro exam"],
+      "dxCandidates": ["Macrocephaly", "Hydrocephalus"],
+      "refPath": "dev/interesting-cases/sources/05-macrocephaly-frontal-bossing-ref.png",
+      "identityPrompt": "Black man side profile, extreme frontal bossing, buzz cut, small ear stud",
+      "status": "map-pending",
+      "notes": "Pronounced frontal bossing profile."
+    },
+    {
+      "id": "ic-006",
+      "slug": "ring-light-vertical-braids",
+      "categories": ["distinctive appearance", "TBD"],
+      "dxCandidates": ["TBD"],
+      "refPath": "dev/interesting-cases/sources/06-ring-light-vertical-braids-ref.png",
+      "identityPrompt": "Black man, very high forehead, box hairline, vertical braid sticks standing up from scalp — preserve distinctive hairstyle",
+      "status": "map-pending",
+      "notes": "Amazing face — funny hairstyle sticks, ring-light barber photo."
+    },
+    {
+      "id": "ic-007",
+      "slug": "block-head-mustache-suit",
+      "categories": ["distinctive appearance", "TBD"],
+      "dxCandidates": ["TBD"],
+      "refPath": "dev/interesting-cases/sources/07-block-head-mustache-suit-ref.png",
+      "identityPrompt": "Black man, blocky rectangular head shape, thick mustache, pinstripe suit, hoop earring — preserve likeness",
+      "status": "map-pending",
+      "notes": "Block/square head meme face."
+    },
+    {
+      "id": "ic-008",
+      "slug": "hair-halo-beard",
+      "categories": ["distinctive appearance", "TBD"],
+      "dxCandidates": ["TBD"],
+      "refPath": "dev/interesting-cases/sources/08-hair-halo-beard-ref.png",
+      "identityPrompt": "Black man, shaved head with single hair halo strip connecting to full beard — preserve unique hairline",
+      "status": "map-pending",
+      "notes": "Hair halo strip + beard."
+    },
+    {
+      "id": "ic-009",
+      "slug": "deep-black-youth",
+      "categories": ["distinctive appearance", "TBD"],
+      "dxCandidates": ["TBD — future case"],
+      "refPath": "dev/interesting-cases/sources/09-deep-black-youth-ref.png",
+      "identityPrompt": "Young Black man, deep obsidian skin tone, short buzz cut, neutral contemplative expression — preserve skin tone and likeness",
+      "status": "map-pending",
+      "notes": "Deep black character — use for another case later."
+    },
+    {
+      "id": "ic-010",
+      "slug": "hemarthrosis-athlete-knee",
+      "categories": ["hemophilia", "hemarthrosis", "case 166"],
+      "dxCandidates": ["Hemophilia A", "Acute hemarthrosis"],
+      "refPath": "dev/interesting-cases/sources/10-ronaldo-knee-agony-ref.png",
+      "identityPrompt": "Young athletic Black man, shaved head, anguished expression, clutching swollen knee — hemarthrosis athlete reference; hospital gown acceptable on contact sheet",
+      "status": "wired-case-166",
+      "wiredCaseId": "166",
+      "notes": "Primary face for case 166 hemophilia hemarthrosis. Wired in patientUberRefs + case_166.json."
+    },
+    {
+      "id": "ic-011",
+      "slug": "athlete-knee-surgical-scar",
+      "categories": ["hemophilia", "supplement ref"],
+      "dxCandidates": ["Hemophilia A"],
+      "refPath": "dev/interesting-cases/sources/11-ronaldo-knee-scar-ref.png",
+      "identityPrompt": "Athletic legs with long vertical knee surgical scar, soccer kit — supplement reference for hemarthrosis exam finding",
+      "status": "reference-only",
+      "notes": "Inter Milan knee scar — exam/prop ref for case 166, not primary face map."
+    }
+  ]
+}

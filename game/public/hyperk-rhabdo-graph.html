@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0c0c10"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>Case 118 · Rhabdo HyperK — MeWorld graph preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root,[data-theme='dark']{
+  --bg:#0c0c10;--panel:#14141c;--canvas:#12121a;--border:#2a2a38;
+  --text:#f4f4f6;--muted:#8b8b9a;--gold:#e8b84b;--green:#3ecf8e;--red:#ef5350;
+  --font:'Archivo',sans-serif;
+  --clinical-font-size:22px;--clinical-font-weight:600;
+  --graph-outer:#0a0a0e;--graph-inner:#0f0f14;--graph-grid:rgba(255,255,255,0.15);--graph-axis:rgba(255,255,255,0.45);
+}
+[data-graph='light']{
+  --graph-outer:#fafafa;--graph-inner:#ffffff;--graph-grid:rgba(115,114,108,0.5);--graph-axis:#3d3d3a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100dvh;padding:12px}
+.shell{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.case-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px}
+.case-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.case-title{font-size:var(--clinical-font-size);font-weight:var(--clinical-font-weight);color:#fecaca;line-height:1.2}
+.case-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.case-k{font-size:12px;font-weight:700;color:#f59e0b;padding:5px 12px;border-radius:20px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);white-space:nowrap}
+.hyperk-panel{border:1px solid rgba(239,68,68,.25);border-radius:10px;background:rgba(30,12,12,.35);padding:10px;display:flex;flex-direction:column;gap:8px}
+.vitals{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:11px}
+.vital{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:4px 8px}
+.vital .k{color:var(--muted);margin-right:4px}
+.vital .v{font-weight:700}
+.vital .v.warn{color:#f59e0b}.vital .v.crit{color:#ef5350}.vital .v.ok{color:var(--green)}
+.gap-track{flex:1 1 100px;min-width:80px;height:6px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.gap-fill{height:100%;border-radius:4px;transition:width .5s,background .5s}
+.gap-note{font-size:11px;color:var(--muted)}
+.stage{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:820px){.stage{grid-template-columns:1fr 260px}}
+.graph-wrap{background:var(--canvas);border:1px solid var(--border);border-radius:8px;overflow:hidden;touch-action:none}
+.graph-wrap svg{width:100%;height:auto;display:block;min-height:220px}
+.effect-banner{font-size:11px;color:var(--muted);line-height:1.45;padding:6px 8px;border-radius:6px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.effect-banner strong{color:#fecaca}
+.dock{border:1px solid rgba(239,68,68,.2);border-radius:10px;background:var(--panel);display:flex;flex-direction:column;overflow:hidden}
+.dock-head{padding:10px 12px;border-bottom:1px solid var(--border);border-left:3px solid #ef4444}
+.dock-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#fecaca}
+.dock-sub{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.35}
+.dock-scroll{padding:8px 10px 12px;overflow-y:auto;max-height:min(520px,50vh)}
+.pharm-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:10px 0 6px}
+.pharm-cat:first-child{margin-top:0}
+.pharm-card{border:1px solid var(--border);border-radius:8px;background:rgba(255,255,255,.03);padding:8px 9px;margin-bottom:6px;transition:border-color .15s}
+.pharm-card.is-preview{border-color:rgba(52,211,153,.45);box-shadow:0 0 0 1px rgba(52,211,153,.12)}
+.pharm-card.is-given{border-color:rgba(62,207,142,.5);background:rgba(6,78,59,.2)}
+.pharm-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:6px}
+.pharm-name{font-size:12px;font-weight:600;color:var(--text)}
+.pharm-give{padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--text);font-size:11px;font-weight:600;cursor:pointer}
+.pharm-give:hover{border-color:var(--gold);color:var(--gold)}
+.pharm-card.is-given .pharm-give{border-color:var(--green);color:var(--green)}
+.pharm-dose-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.pharm-dose-row input[type=range]{flex:1;accent-color:#f59e0b}
+.pharm-dose-val{font-size:10px;color:var(--muted);white-space:nowrap}
+.pharm-effect{font-size:10px;color:#a5f3fc;margin-bottom:4px}
+.pharm-mechanism{font-size:10px;color:var(--muted);line-height:1.4;display:none}
+.pharm-card.is-preview .pharm-mechanism,.pharm-card:focus-within .pharm-mechanism{display:block}
+.resetbtn{width:100%;margin-top:8px;padding:8px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;cursor:pointer}
+.resetbtn:hover{border-color:var(--muted);color:var(--text)}
+.caption{font-size:11px;color:var(--muted);line-height:1.45;border-top:1px solid var(--border);padding-top:8px}
+.graph-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:8px;padding:8px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border)}
+.graph-toolbar-sep{width:1px;height:18px;background:var(--border);margin:0 2px}
+.legend-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.tog{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;border:1.5px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-size:11px;font-weight:600;cursor:pointer}
+.tog .dot{width:8px;height:8px;border-radius:50%}
+.tog-mv .dot{background:#73726c}.tog-na .dot{background:#378ADD}.tog-k .dot{background:#EF9F27}.tog-rest .dot{background:#f59e0b}
+.tog.off{opacity:.45}
+.na-align-readout{margin-left:auto;font-size:10px;font-weight:600;color:var(--gold);white-space:nowrap}
+.ap-graph-role-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:6px}
+.ap-role-segment{position:relative;display:inline-grid;grid-template-columns:1fr 1fr;padding:3px;border-radius:999px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.1)}
+.ap-role-segment-thumb{position:absolute;top:3px;left:3px;width:calc(50% - 3px);height:calc(100% - 6px);border-radius:999px;background:#fff;transition:transform .2s ease;pointer-events:none}
+.ap-role-segment-btn{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:5px 12px;border:none;background:transparent;color:rgba(255,255,255,.55);font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;border-radius:999px}
+.ap-role-segment-btn.is-active{color:#0c0c10}
+.ap-role-segment-btn svg{width:16px;height:16px}
+.ap-align-attending-tools{display:inline-flex;align-items:center;gap:8px;flex:1 1 auto;min-width:0}
+.ap-align-attending-tools .na-align-readout{margin-left:0}
+.ap-align-copy-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;border:1px solid rgba(232,184,75,.45);background:rgba(232,184,75,.12);color:var(--gold);font-size:10px;font-weight:700;cursor:pointer}
+.ap-align-copy-btn.is-ok{border-color:rgba(62,207,142,.5);color:var(--green);background:rgba(6,78,59,.25)}
+.align-chip,.theme-chip{padding:5px 10px;border-radius:8px;border:1.5px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-size:11px;font-weight:600;cursor:pointer}
+.align-chip.is-on,.theme-chip.is-on{border-color:var(--gold);color:var(--gold)}
+.toolbar-hint{font-size:10px;color:var(--muted);flex:1 1 140px;line-height:1.35}
+.align-panel{margin-top:8px;border:1px solid var(--border);border-radius:8px;background:rgba(255,255,255,.02)}
+.align-panel summary{padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;color:var(--muted)}
+.align-body{padding:0 10px 10px}
+.align-row{display:grid;grid-template-columns:110px 1fr 52px;gap:8px;align-items:center;margin-bottom:8px}
+.align-row label{font-size:11px;color:var(--muted)}
+.align-row input[type=range]{width:100%;accent-color:var(--gold)}
+.align-row .val{font-size:11px;font-weight:700;text-align:right;color:var(--text)}
+.align-hint{font-size:10px;color:var(--muted);line-height:1.45;margin-bottom:8px}
+.align-actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.abtn{padding:5px 9px;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,.04);font-size:10px;cursor:pointer;color:var(--text)}
+.editor-link{font-size:10px;color:var(--gold);margin-left:auto}
+.wrap.align-mode .graph-wrap{cursor:crosshair}
+/* Student view — graph + curve toggles + Na drag; add ?dev=1 for full editor chrome */
+body.study-view:not(.dev-view) .case-head,
+body.study-view:not(.dev-view) .vitals,
+body.study-view:not(.dev-view) .gap-note,
+body.study-view:not(.dev-view) .dock,
+body.study-view:not(.dev-view) .theme-chip,
+body.study-view:not(.dev-view) .align-chip,
+body.study-view:not(.dev-view) .graph-toolbar-sep,
+body.study-view:not(.dev-view) .align-panel,
+body.study-view:not(.dev-view) .editor-link,
+body.study-view:not(.dev-view) .toolbar-hint,
+body.study-view:not(.dev-view) .effect-banner,
+body.study-view:not(.dev-view) .caption{display:none}
+body.study-view:not(.dev-view) .stage{grid-template-columns:1fr}
+body.study-view:not(.dev-view) .hyperk-panel{padding:8px;border:none;background:transparent}
+</style>
+</head>
+<body data-graph="dark" class="study-view">
+<div class="shell" id="root-panel">
+  <header class="case-head dev-only">
+    <div>
+      <div class="case-kicker">MeWorld physiology preview</div>
+      <h1 class="case-title">Case 118 · Rhabdomyolysis</h1>
+      <p class="case-sub">Hyperkalemia from muscle breakdown — treat on the graph</p>
+    </div>
+    <span class="case-k" id="head-k">K⁺ 6.8 mEq/L</span>
+  </header>
+
+  <section class="hyperk-panel" aria-label="Hyperkalemia action potential">
+    <div class="vitals dev-only" id="vitals-strip">
+      <span class="vital"><span class="k">Serum K⁺</span><span class="v" id="vserumk">6.8 mEq/L</span></span>
+      <span class="vital"><span class="k">Rest</span><span class="v" id="vrest">−59 mV</span></span>
+      <span class="vital"><span class="k">Threshold</span><span class="v" id="vthr">−55 mV</span></span>
+      <span class="vital"><span class="k">Safety gap</span><span class="v" id="vgap">4 mV</span></span>
+      <span class="vital"><span class="k">ECG</span><span class="v" id="vecg">Wide QRS</span></span>
+      <span class="gap-track"><span class="gap-fill" id="gfill" style="width:20%"></span></span>
+    </div>
+    <p class="gap-note dev-only" id="gnote"></p>
+
+    <div class="stage">
+      <div>
+        <div class="graph-wrap" id="wrap">
+          <svg id="svg" viewBox="0 0 680 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Neuron action potential"></svg>
+        </div>
+        <div class="graph-toolbar">
+          <div class="ap-graph-role-bar" id="graph-role-bar">
+            <div class="ap-role-segment" role="tablist" aria-label="Patient or attending graph view">
+              <span class="ap-role-segment-thumb" id="role-thumb" aria-hidden="true"></span>
+              <button type="button" class="ap-role-segment-btn is-active" id="role-patient" role="tab" aria-selected="true" title="Patient — drag Na⁺ on graph">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/></svg>
+                <span>Patient</span>
+              </button>
+              <button type="button" class="ap-role-segment-btn" id="role-attending" role="tab" aria-selected="false" title="Attending — copy Na⁺ align JSON">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 4h-1a2 2 0 0 0 -2 2v3.5a5.5 5.5 0 0 0 11 0v-3.5a2 2 0 0 0 -2 -2h-1"/><path d="M8 15a6 6 0 1 0 12 0v-3"/><path d="M11 3v2"/><path d="M6 3v2"/><path d="M18 10a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg>
+                <span>Attending</span>
+              </button>
+            </div>
+            <div class="ap-align-attending-tools" id="attending-tools" hidden>
+              <span class="na-align-readout" id="na-align-readout"></span>
+              <button type="button" class="ap-align-copy-btn" id="align-copy-btn" title="Copy Na⁺ align JSON">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"/><path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"/></svg>
+                Copy
+              </button>
+            </div>
+          </div>
+          <button type="button" class="theme-chip dev-only" id="theme-graph-btn" aria-pressed="false">Graph: dark</button>
+          <button type="button" class="align-chip dev-only" id="align-mode-btn" aria-pressed="false">Align Na⁺: OFF</button>
+          <span class="graph-toolbar-sep dev-only"></span>
+          <span class="legend-lbl">Curves</span>
+          <button type="button" class="tog tog-mv" data-c="mv" aria-pressed="true"><span class="dot"></span>Vm</button>
+          <button type="button" class="tog tog-na" data-c="na" aria-pressed="true"><span class="dot"></span>Na⁺</button>
+          <button type="button" class="tog tog-k" data-c="k" aria-pressed="true"><span class="dot"></span>K⁺ perm</button>
+          <button type="button" class="tog tog-rest" data-c="rest" aria-pressed="true"><span class="dot"></span>Rest Vm</button>
+          <button type="button" class="tog" id="showallbtn" style="display:none">Show all</button>
+          <a class="editor-link dev-only" href="physiology-editor.html" target="_blank" rel="noopener">Full graph editor ↗</a>
+          <span class="toolbar-hint dev-only" id="align-hint-text">Insulin/albuterol lower serum K⁺ → resting line moves down (by design). Toggle curves or white graph background.</span>
+        </div>
+        <details class="align-panel dev-only" id="panel-align">
+          <summary>Na⁺ peak alignment — slide right to nest inside Vm upstroke</summary>
+          <div class="align-body">
+            <p class="align-hint">Vm/K⁺ curves stay fixed from SVG. Drag the blue handle to <strong>slide Na⁺ along time</strong> — same shape, no stretching.</p>
+            <div class="align-actions">
+              <button type="button" class="abtn" id="align-reset-btn">Reset Na⁺ align</button>
+              <button type="button" class="abtn" id="align-copy-btn">Copy JSON</button>
+            </div>
+            <div class="align-row"><label>Na⁺ peak time</label><input type="range" id="sl-na-t" min="0" max="1000" step="1"><span class="val" id="vl-na-t"></span></div>
+          </div>
+        </details>
+        <p class="effect-banner dev-only" id="effect-banner"><strong>Live:</strong> <span id="effect-banner-body"></span></p>
+      </div>
+      <aside class="dock dev-only" aria-label="HyperK treatments">
+        <div class="dock-head">
+          <div class="dock-title">Treat hyperkalemia</div>
+          <div class="dock-sub">Ca gluconate · insulin + dextrose · albuterol · KCN (toxin demo)</div>
+        </div>
+        <div class="dock-scroll" id="pharm-cards"></div>
+        <div style="padding:0 10px 10px">
+          <button type="button" class="resetbtn" id="resetbtn">↺ Reset doses</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <p class="caption dev-only"><strong>Rhabdo hyperK:</strong> <span id="capbody"></span> · Curves from <code>neuron_action_potential_v2.svg</code></p>
+</div>
+
+<script src="physiology/action_potential_curves.js"></script>
+<script src="physiology/hyperk_pharmacology.js"></script>
+<script src="physiology/hyperk-rhabdo-app.js"></script>
+</body>
+</html>

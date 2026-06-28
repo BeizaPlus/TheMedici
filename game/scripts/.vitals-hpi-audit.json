@@ -1,0 +1,338 @@
+{
+  "auditedAt": "2026-06-21T13:15:42.078Z",
+  "total": 194,
+  "issues": [
+    {
+      "id": "174",
+      "title": "Hematemesis",
+      "category": "Emergency Medicine",
+      "vitalsSource": "authored",
+      "vitals": "98/62 HR118 T37.2 SpO297 Lac2.4",
+      "flags": [
+        "HPI hypertensive but BP 98/62",
+        "HPI hypoxic/distress but SpO2 97"
+      ],
+      "severity": 4
+    },
+    {
+      "id": "011",
+      "title": "Abdominal Pain",
+      "category": "Emergency Medicine / Hepatology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "114/79 HR106 T37.2 SpO290 Lac1.8",
+      "flags": [
+        "sex narrative male vs patientSex female"
+      ],
+      "severity": 3
+    },
+    {
+      "id": "020",
+      "title": "Palpitations",
+      "category": "Emergency Medicine / Cardiology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "83/57 HR50 T37.1 SpO299 Lac2.3",
+      "flags": [
+        "HPI hypertensive but BP 83/57"
+      ],
+      "severity": 3
+    },
+    {
+      "id": "034",
+      "title": "Headache",
+      "category": "Emergency Medicine / Cardiology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "87/53 HR114 T37.9 SpO299 Lac2",
+      "flags": [
+        "HPI hypertensive but BP 87/53"
+      ],
+      "severity": 3
+    },
+    {
+      "id": "045",
+      "title": "Unresponsive",
+      "category": "Emergency Medicine / Toxicology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "110/70 HR102 T37.1 SpO287 Lac1.7",
+      "flags": [
+        "patientSex unknown but narrative says male"
+      ],
+      "severity": 3
+    },
+    {
+      "id": "119",
+      "title": "Sore Throat",
+      "category": "Pediatrics / Internal Medicine",
+      "vitalsSource": "clinical-rule",
+      "vitals": "101/64 HR90 T37.1 SpO293 Lac2.3",
+      "flags": [
+        "HPI febrile but T 37.1"
+      ],
+      "severity": 3
+    },
+    {
+      "id": "125",
+      "title": "Chest Pain",
+      "category": "Cardiology",
+      "vitalsSource": "authored",
+      "vitals": "92/58 HR108 T37 SpO297 Lac2.3",
+      "flags": [
+        "HPI bradycardic but HR 108"
+      ],
+      "severity": 3
+    },
+    {
+      "id": "136",
+      "title": "Shortness of Breath",
+      "category": "Pulmonology",
+      "vitalsSource": "template",
+      "vitals": "110/70 HR102 T37.3 SpO296 Lac2",
+      "flags": [
+        "HPI hypoxic/distress but SpO2 96"
+      ],
+      "severity": 3
+    },
+    {
+      "id": "147",
+      "title": "Heart Palpitations",
+      "category": "Cardiopulmonary",
+      "vitalsSource": "authored",
+      "vitals": "89/56 HR100 T38.8 SpO294 Lac2.6",
+      "flags": [
+        "HPI hypoxic/distress but SpO2 94"
+      ],
+      "severity": 3
+    },
+    {
+      "id": "155",
+      "title": "Shortness of breath",
+      "category": "Cardiopulmonary",
+      "vitalsSource": "authored",
+      "vitals": "92/58 HR104 T39 SpO294 Lac2.8",
+      "flags": [
+        "HPI hypoxic/distress but SpO2 94"
+      ],
+      "severity": 3
+    },
+    {
+      "id": "168",
+      "title": "Fatigue",
+      "category": "Sleep Medicine / Pulmonology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "139/86 HR90 T37.7 SpO293 Lac1.7",
+      "flags": [
+        "HPI hypertensive but BP 139/86"
+      ],
+      "severity": 3
+    },
+    {
+      "id": "126",
+      "title": "Shortness of Breath",
+      "category": "Emergency Medicine / Cardiology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "137/86 HR90 T37.2 SpO293 Lac1.7",
+      "flags": [
+        "HPI hypertensive but BP 137/86",
+        "HPI febrile but T 37.2"
+      ],
+      "severity": 2
+    },
+    {
+      "id": "010",
+      "title": "Pain in Legs",
+      "category": "Internal Medicine / Vascular Medicine",
+      "vitalsSource": "clinical-rule",
+      "vitals": "133/88 HR102 T37.1 SpO296 Lac2",
+      "flags": [
+        "HPI hypertensive but BP 133/88"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "013",
+      "title": "Abdominal Pain",
+      "category": "Internal Medicine / Gastroenterology",
+      "vitalsSource": "parsed",
+      "vitals": "114/79 HR106 T37.2 SpO296 Lac1.8",
+      "flags": [
+        "sex narrative male vs patientSex female"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "019",
+      "title": "Abdominal Pain",
+      "category": "Emergency Medicine / General Surgery",
+      "vitalsSource": "clinical-rule",
+      "vitals": "114/79 HR106 T38.7 SpO296 Lac1.8",
+      "flags": [
+        "sex narrative male vs patientSex female"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "023",
+      "title": "Shortness of Breath",
+      "category": "Internal Medicine / Cardiology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "138/87 HR98 T37.7 SpO295 Lac2.3",
+      "flags": [
+        "HPI hypertensive but BP 138/87"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "024",
+      "title": "Burning During Urination",
+      "category": "Internal Medicine / Cardiology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "139/86 HR89 T37.1 SpO296 Lac1.8",
+      "flags": [
+        "HPI hypertensive but BP 139/86"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "035",
+      "title": "Seizure",
+      "category": "Emergency Medicine / Addiction Medicine",
+      "vitalsSource": "clinical-rule",
+      "vitals": "134/87 HR121 T38.7 SpO293 Lac2.3",
+      "flags": [
+        "HPI hypertensive but BP 134/87"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "041",
+      "title": "Weakness",
+      "category": "Pediatrics / Nephrology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "132/87 HR114 T37.3 SpO299 Lac2.3",
+      "flags": [
+        "HPI hypertensive but BP 132/87"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "046",
+      "title": "Weakness in Extremities",
+      "category": "Neurology / Critical Care",
+      "vitalsSource": "clinical-rule",
+      "vitals": "113/72 HR52 T37.3 SpO297 Lac2",
+      "flags": [
+        "HPI tachycardic but HR 52"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "075",
+      "title": "Chest Pain",
+      "category": "Emergency Medicine / Cardiothoracic Surgery",
+      "vitalsSource": "clinical-rule",
+      "vitals": "134/89 HR120 T37 SpO296 Lac1.8",
+      "flags": [
+        "HPI hypertensive but BP 134/89"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "078",
+      "title": "Generalized Weakness",
+      "category": "Urology / Oncology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "137/86 HR110 T38.6 SpO296 Lac1.8",
+      "flags": [
+        "HPI hypertensive but BP 137/86"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "082",
+      "title": "Abdominal Pain",
+      "category": "Internal Medicine",
+      "vitalsSource": "clinical-rule",
+      "vitals": "114/79 HR106 T37 SpO296 Lac1.8",
+      "flags": [
+        "HPI febrile but T 37"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "090",
+      "title": "Prenatal Followup",
+      "category": "OB/GYN",
+      "vitalsSource": "clinical-rule",
+      "vitals": "133/86 HR120 T37 SpO2100 Lac1.6",
+      "flags": [
+        "HPI hypertensive but BP 133/86"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "116",
+      "title": "Headache",
+      "category": "Neurology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "135/84 HR88 T38.3 SpO296 Lac1.8",
+      "flags": [
+        "HPI hypertensive but BP 135/84"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "127",
+      "title": "Rash",
+      "category": "Pediatrics / Hematology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "104/66 HR94 T37 SpO294 Lac2",
+      "flags": [
+        "HPI febrile but T 37"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "138",
+      "title": "Fatigue",
+      "category": "Nephrology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "133/86 HR110 T37.7 SpO298 Lac1.7",
+      "flags": [
+        "HPI hypertensive but BP 133/86"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "140",
+      "title": "Headache",
+      "category": "Neurology / Ophthalmology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "135/84 HR88 T36.9 SpO296 Lac1.8",
+      "flags": [
+        "HPI hypertensive but BP 135/84"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "173",
+      "title": "Sexual Assault",
+      "category": "Emergency Medicine / Forensic",
+      "vitalsSource": "template",
+      "vitals": "116/74 HR110 T37.7 SpO298 Lac2.3",
+      "flags": [
+        "patientSex unknown but narrative says male"
+      ],
+      "severity": 1
+    },
+    {
+      "id": "180",
+      "title": "Headache",
+      "category": "Neurology",
+      "vitalsSource": "clinical-rule",
+      "vitals": "135/86 HR88 T38.3 SpO296 Lac1.8",
+      "flags": [
+        "HPI hypertensive but BP 135/86"
+      ],
+      "severity": 1
+    }
+  ]
+}

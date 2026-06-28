@@ -1,0 +1,75 @@
+---
+description: Guardrails for the Play dock (CaseContextPanel) collapse/expand/hide so the "dock opens empty and won't expand" regression never recurs. Read before touching expandDockPanel/collapseDockPanel, the case-load collapse effect, usePlayDockLayout, or syncing study→main.
+globs:
+  - game/src/components/Play.jsx
+  - game/src/components/CaseContextPanel.jsx
+  - game/src/hooks/usePlayDockLayout.js
+  - game/src/lib/playDockLayout.js
+alwaysApply: false
+---
+
+# Dock layout integrity (Play / CaseContextPanel)
+
+The floating command dock has three independent view states: **hidden** (`dockHidden`),
+**collapsed** (`dockCollapsed`, chrome-only), and **expanded** (full body). Several
+times this has silently broken so the dock opens empty and cannot be expanded.
+These are the non-negotiable rules.
+
+## Symptom signature (if you see this, it's this bug)
+- Every case opens with an **empty / collapsed** dock (header + tabs, no body).
+- Clicking "Expand panel" / a tab does nothing — the dock **snaps back collapsed**.
+- `.case-context-body-wrap` measures **height 0** while `dockCollapsed` is false.
+
+## Rule 1 — Never put a dockLayout-dependent callback in an effect dep array
+`expandDockPanel` / `collapseDockPanel` are `useCallback`s that depend on `dockLayout`.
+`usePlayDockLayout.persist()` calls `setLayout()`, so **`dockLayout` gets a new reference
+on every collapse/expand**. If you list `collapseDockPanel` (or `expandDockPanel`) in a
+`useEffect` dependency array, that effect **re-fires on every layout change** → an expand
+immediately triggers a re-collapse (infinite fight) and corrupts the saved height.
+
+✅ Use a ref: `collapseDockPanelRef` / `expandDockPanelRef` (assigned every render), and
+depend only on the real trigger (`caseData?.id`, `teachMeMode`).
+
+```js
+const collapseDockPanelRef = useRef(collapseDockPanel);
+collapseDockPanelRef.current = collapseDockPanel;
+// effect:
+useEffect(() => {
+  if (!caseData?.id) return;
+  if (teachMeMode) collapseDockPanelRef.current();
+  else expandDockPanelRef.current();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [caseData?.id, teachMeMode]);
+```
+
+## Rule 2 — Normal play opens EXPANDED; only teach-me opens collapsed
+The case-load effect must be conditional. **Do not** make it unconditionally
+`collapseDockPanel()`. (This is exactly what the 2026-06 study→main sync did and it
+shipped the empty-dock bug to main.)
+
+## Rule 3 — Expand/collapse must round-trip the FULL layout
+`collapseDockPanel` zeroes `clinicalPx`/`stacksListPx` and shrinks `height`. If
+`expandDockPanel` only restores `height`, the body stays **0px**. Snapshot the whole
+layout on collapse and restore the whole layout on expand:
+- Collapse: `expandedDockLayoutRef.current = { ...dockLayout }` **only when genuinely
+  expanded** (`height > DOCK_CHROME_COLLAPSED_HEIGHT + 4`), then persist the collapsed
+  geometry with **`{ write: false }`** so localStorage keeps the user's expanded size.
+- Expand: restore the snapshot; if none and currently collapsed, fall back to
+  `defaultPlayDockLayout()` so a corrupted/collapsed saved layout can still open.
+
+## Rule 4 — readPlayDockLayout only self-heals clinicalPx, NOT height
+`clinicalPx: Number(parsed.clinicalPx) || base.clinicalPx` heals a stored `0`. But
+`height` is kept if truthy, so a persisted collapsed height (148) **sticks across reloads**.
+That's why Rule 3 uses `write:false` on collapse — never persist collapsed height.
+
+## Rule 5 — Smoke test after ANY dock change or study→main sync
+On a **normal** (non-teach) case at `:5174`:
+1. Resume/enter a case → dock opens **expanded**, `.case-context-body-wrap` height > 0.
+2. Single-click dock handle → collapses. Sidebar button single-click → expands.
+3. Double-click sidebar button → hides; single-click → shows, still expanded.
+4. Collapse → expand round-trip keeps body height (not 0).
+
+## History
+- **2026-06-26**: `788bfaa` (study→main sync) replaced the conditional case-load collapse
+  with unconditional `collapseDockPanel()` AND the effect listed `collapseDockPanel` in
+  deps → empty dock + re-collapse loop + lossy (height-only) expand. Fixed by Rules 1–3.

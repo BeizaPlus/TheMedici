@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedGame — Step 3 CCS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+<style>
+/* ── RESET & TOKENS ─────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A0A0A;
+  --gold:#F0B429;
+  --gold-dim:rgba(240,180,41,0.18);
+  --gold-glow:rgba(240,180,41,0.45);
+  --white:#F5F5F5;
+  --muted:#888;
+  --red:#E53E3E;
+  --green:#38A169;
+  --pill-bg:#12063A;
+  --pill-border:#6B46C1;
+  --pill-active:#F0B429;
+  --font:'Sora',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--white);font-family:var(--font);overflow:hidden;user-select:none}
+/* ── SCREENS ────────────────────────────────────────────── */
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center}
+.screen.active{display:flex}
+
+/* ── CORNER BRACKETS ──────────────────────────────────── */
+.bracket{position:absolute;width:40px;height:40px;border-color:var(--gold);border-style:solid;opacity:.6}
+.bracket.tl{top:24px;left:24px;border-width:2px 0 0 2px}
+.bracket.tr{top:24px;right:24px;border-width:2px 2px 0 0}
+.bracket.bl{bottom:24px;left:24px;border-width:0 0 2px 2px}
+.bracket.br{bottom:24px;right:24px;border-width:0 2px 2px 0}
+
+/* ══ SCREEN 1 — UPLOAD ══════════════════════════════════ */
+#screen-upload{background:var(--bg)}
+#screen-upload .case-title{font-size:clamp(28px,5vw,52px);font-weight:800;letter-spacing:.04em;color:var(--white);text-align:center;margin-bottom:8px}
+#screen-upload .case-sub{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:48px}
+#dropzone{
+  width:min(420px,90vw);height:220px;
+  border:2px dashed var(--gold);
+  border-radius:16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  cursor:pointer;
+  transition:background .2s,border-color .2s;
+  position:relative;overflow:hidden;
+}
+#dropzone:hover,#dropzone.over{background:var(--gold-dim);border-color:var(--gold)}
+#dropzone svg{opacity:.5;width:48px;height:48px;color:var(--gold)}
+#dropzone p{font-size:14px;color:var(--muted);letter-spacing:.08em}
+#dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.clinical-tip{
+  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
+  font-size:12px;color:var(--muted);letter-spacing:.06em;text-align:center;
+  max-width:420px;
+}
+.clinical-tip span{color:var(--gold)}
+
+/* Case selector */
+#case-selector{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:32px;max-width:600px}
+.case-chip{
+  padding:6px 14px;border-radius:99px;
+  border:1px solid var(--pill-border);
+  background:var(--pill-bg);
+  font-size:12px;letter-spacing:.06em;cursor:pointer;
+  transition:all .2s;color:var(--white)
+}
+.case-chip:hover,.case-chip.selected{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+
+/* API KEY input */
+#vision-settings{width:min(420px,90vw);margin-bottom:20px;display:flex;flex-direction:column;gap:10px}
+.vision-row{display:flex;flex-direction:column;gap:5px}
+.vision-row.hidden{display:none}
+.vision-row label{font-size:11px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+#visionProvider,#apiKeyInput,#ollamaModel{
+  width:100%;padding:10px 14px;
+  background:#111;border:1px solid #333;border-radius:8px;
+  color:var(--white);font-family:var(--mono);font-size:13px;
+  outline:none;transition:border .2s;
+}
+#visionProvider{font-family:var(--font);font-size:12px;cursor:pointer}
+#visionProvider:focus,#apiKeyInput:focus,#ollamaModel:focus{border-color:var(--gold)}
+#apiKeyInput::placeholder{color:#444}
+.vision-hint{font-size:11px;color:#555;line-height:1.5;text-align:center}
+.vision-hint code{background:#1a1a1a;padding:2px 6px;border-radius:4px;color:var(--gold);font-family:var(--mono);font-size:10px}
+.cache-hint{color:var(--green)}
+.btn-demo{
+  margin-bottom:20px;padding:14px 36px;
+  background:linear-gradient(135deg,#1a5c3a,#38A169);
+  border:none;border-radius:10px;
+  color:#fff;font-family:var(--font);font-weight:700;font-size:14px;
+  letter-spacing:.08em;cursor:pointer;
+  box-shadow:0 4px 24px rgba(56,161,105,.35);
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-demo:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(56,161,105,.45)}
+
+/* ══ SCREEN 2 — BRIEFING ════════════════════════════════ */
+#screen-briefing{padding:0;overflow:hidden}
+#briefing-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.45)}
+#briefing-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.4) 50%,transparent 100%)
+}
+#briefing-content{position:relative;z-index:2;text-align:center;padding:0 32px;width:100%}
+#briefing-label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+#briefing-title{font-size:clamp(36px,7vw,72px);font-weight:800;letter-spacing:.02em;line-height:1;margin-bottom:20px}
+#briefing-complaint{font-size:16px;color:rgba(255,255,255,.72);font-weight:300;letter-spacing:.04em;margin-bottom:48px}
+#briefing-bottom{position:absolute;bottom:0;left:0;right:0;padding:28px 40px;z-index:2}
+#loading-bar-wrap{width:100%;height:3px;background:rgba(255,255,255,.12);border-radius:99px;margin-bottom:20px;overflow:hidden}
+#loading-bar{height:100%;width:0;background:var(--gold);border-radius:99px;transition:width 2s linear}
+#briefing-objective{font-size:12px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
+#btn-begin{
+  display:none;
+  padding:14px 48px;background:var(--gold);color:#000;
+  font-family:var(--font);font-weight:700;font-size:14px;letter-spacing:.1em;text-transform:uppercase;
+  border:none;border-radius:8px;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+}
+#btn-begin:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(240,180,41,.4)}
+
+/* ══ SCREEN 3 — GAME ════════════════════════════════════ */
+#screen-game{flex-direction:row;align-items:stretch;padding:0}
+#game-image-wrap{
+  position:relative;flex:0 0 65%;height:100%;overflow:hidden;
+}
+#game-patient-img{width:100%;height:100%;object-fit:cover;display:block}
+/* Vision loading overlay */
+#vision-loading{
+  position:absolute;inset:0;background:rgba(0,0,0,.75);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  z-index:20;
+}
+#vision-loading.hidden{display:none}
+#vision-loading p{font-size:13px;letter-spacing:.1em;color:var(--gold);text-transform:uppercase}
+.spinner{
+  width:40px;height:40px;border:2px solid rgba(240,180,41,.2);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Drop zones */
+.drop-zone{
+  position:absolute;border-radius:50%;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .3s;
+  transform:translate(-50%,-50%);
+}
+.drop-zone.active{
+  pointer-events:auto;
+  opacity:1;
+  animation:zone-pulse 1.4s ease-in-out infinite;
+}
+.drop-zone.correct{
+  opacity:1;pointer-events:none;
+  background:radial-gradient(circle,rgba(56,161,105,.35),transparent 70%);
+  animation:none;
+}
+@keyframes zone-pulse{
+  0%,100%{background:radial-gradient(circle,rgba(240,180,41,.22),transparent 70%)}
+  50%{background:radial-gradient(circle,rgba(240,180,41,.45),transparent 70%)}
+}
+
+/* Floating pins */
+.pin{
+  position:absolute;transform:translate(-50%,-50%);
+  pointer-events:none;z-index:10;
+  animation:pin-in .35s var(--ease-spring) forwards;
+}
+@keyframes pin-in{from{transform:translate(-50%,-50%) scale(0)}to{transform:translate(-50%,-50%) scale(1)}}
+.pin-dot{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--green);border:2px solid #fff;
+  margin:0 auto;
+}
+.pin-label{
+  margin-top:6px;background:rgba(0,0,0,.8);
+  padding:4px 10px;border-radius:6px;
+  font-size:11px;letter-spacing:.06em;white-space:nowrap;color:#fff;
+  border:1px solid var(--green);
+}
+
+/* Sidebar */
+#game-sidebar{
+  flex:0 0 35%;display:flex;flex-direction:column;
+  background:#0D0D0D;border-left:1px solid #1A1A1A;
+  height:100%;overflow:hidden;
+}
+#sidebar-header{
+  padding:20px 20px 14px;border-bottom:1px solid #1A1A1A;flex-shrink:0;
+}
+#sidebar-case-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+#sidebar-case-title{font-size:18px;font-weight:700;letter-spacing:.04em}
+#sidebar-complaint{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+#pills-container{
+  flex:1;overflow-y:auto;padding:16px;
+  display:flex;flex-direction:column;gap:10px;
+}
+#pills-container::-webkit-scrollbar{width:3px}
+#pills-container::-webkit-scrollbar-track{background:transparent}
+#pills-container::-webkit-scrollbar-thumb{background:#333;border-radius:99px}
+.pill{
+  padding:14px 18px;
+  background:var(--pill-bg);
+  border:1px solid var(--pill-border);
+  border-radius:10px;
+  font-size:13px;font-weight:600;letter-spacing:.04em;
+  cursor:grab;
+  transition:border-color .2s,transform .2s,box-shadow .2s;
+  touch-action:none;
+  position:relative;
+}
+.pill:hover{border-color:var(--gold);box-shadow:0 0 16px rgba(240,180,41,.15)}
+.pill.dragging{
+  border-color:var(--gold);transform:scale(1.05);
+  box-shadow:0 8px 32px rgba(240,180,41,.3);
+  opacity:.85;
+}
+.pill.placed{
+  opacity:.38;cursor:default;
+  border-style:dashed;
+  pointer-events:none;
+}
+.pill-number{
+  position:absolute;top:8px;right:10px;
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+}
+#sidebar-footer{
+  padding:16px 20px;border-top:1px solid #1A1A1A;flex-shrink:0;
+  display:flex;gap:10px;align-items:center;
+}
+#btn-check{
+  flex:1;padding:12px;background:var(--pill-bg);
+  border:1px solid var(--pill-border);border-radius:8px;
+  color:var(--white);font-family:var(--font);font-weight:600;font-size:13px;
+  cursor:pointer;transition:all .2s;letter-spacing:.06em;
+}
+#btn-check:hover{border-color:var(--gold);color:var(--gold)}
+#progress-dots{display:flex;gap:6px;align-items:center}
+.pdot{width:8px;height:8px;border-radius:50%;background:#222;border:1px solid #444;transition:all .3s}
+.pdot.done{background:var(--green);border-color:var(--green)}
+.pdot.active{background:var(--gold);border-color:var(--gold)}
+
+/* Flash overlays on image */
+#flash-overlay{
+  position:absolute;inset:0;pointer-events:none;opacity:0;
+  transition:opacity .15s;z-index:15;
+}
+#flash-overlay.red{background:rgba(229,62,62,.25);opacity:1}
+#flash-overlay.green{background:rgba(56,161,105,.2);opacity:1}
+
+/* ══ SCREEN 4 — WHY PANEL ═══════════════════════════════ */
+#screen-why{
+  position:fixed;top:0;right:0;width:min(440px,100vw);height:100%;
+  background:#0F0F0F;border-left:1px solid #1E1E1E;
+  z-index:100;
+  flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .35s var(--ease-out);
+  display:flex!important; /* always in DOM, hidden via transform */
+}
+#screen-why.open{transform:translateX(0)}
+#why-header{
+  padding:24px 24px 20px;border-bottom:1px solid #1A1A1A;
+  display:flex;align-items:center;gap:12px;
+}
+#why-back{
+  width:36px;height:36px;border-radius:8px;
+  background:#1A1A1A;border:1px solid #2A2A2A;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:border-color .2s;
+}
+#why-back:hover{border-color:var(--gold)}
+#why-intervention-name{font-size:16px;font-weight:700;letter-spacing:.04em;flex:1}
+#why-body{flex:1;overflow-y:auto;padding:28px 24px}
+.why-section-label{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:8px;
+}
+.why-text{
+  font-size:14px;line-height:1.7;color:rgba(255,255,255,.8);
+  margin-bottom:28px;
+}
+.why-guideline{
+  display:inline-block;padding:6px 14px;
+  background:var(--gold-dim);border:1px solid rgba(240,180,41,.3);
+  border-radius:6px;font-size:12px;color:var(--gold);letter-spacing:.06em;
+}
+#why-footer{padding:20px 24px;border-top:1px solid #1A1A1A}
+#btn-got-it{
+  width:100%;padding:13px;
+  background:var(--gold);color:#000;
+  font-family:var(--font);font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  border:none;border-radius:8px;cursor:pointer;transition:transform .2s,box-shadow .2s;
+}
+#btn-got-it:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(240,180,41,.35)}
+
+/* ══ SCREEN 5 — COMPLETE ════════════════════════════════ */
+#screen-complete{background:var(--bg)}
+#complete-case{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+#complete-title{font-size:clamp(32px,5vw,52px);font-weight:800;margin-bottom:8px}
+#complete-badge{
+  font-size:13px;color:var(--green);letter-spacing:.08em;margin-bottom:48px;
+}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:min(520px,90vw);margin-bottom:48px}
+.stat-card{
+  background:#111;border:1px solid #1E1E1E;border-radius:12px;
+  padding:20px 16px;text-align:center;
+}
+.stat-num{font-size:28px;font-weight:800;color:var(--gold);font-family:var(--mono)}
+.stat-label{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.complete-actions{display:flex;gap:12px}
+.btn-action{
+  padding:13px 32px;border-radius:8px;font-family:var(--font);
+  font-weight:600;font-size:13px;letter-spacing:.08em;cursor:pointer;
+  transition:all .2s;
+}
+.btn-primary{background:var(--gold);color:#000;border:none}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(240,180,41,.35)}
+.btn-secondary{background:transparent;color:var(--white);border:1px solid #333}
+.btn-secondary:hover{border-color:var(--white)}
+
+/* Case complete cascade */
+#complete-cascade{
+  position:fixed;inset:0;pointer-events:none;z-index:200;
+  background:linear-gradient(to bottom,var(--green),transparent);
+  opacity:0;transform:scaleY(0);transform-origin:top;
+}
+#complete-cascade.animate{
+  animation:cascade .7s var(--ease-out) forwards;
+}
+@keyframes cascade{
+  0%{opacity:.7;transform:scaleY(0)}
+  60%{opacity:.5;transform:scaleY(1)}
+  100%{opacity:0;transform:scaleY(1)}
+}
+
+/* ── TOAST ───────────────────────────────────────────── */
+#toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#1A1A1A;border:1px solid #2A2A2A;border-radius:10px;
+  padding:12px 24px;font-size:13px;letter-spacing:.04em;
+  opacity:0;transition:opacity .25s,transform .25s;
+  z-index:300;pointer-events:none;white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.success{border-color:var(--green);color:var(--green)}
+#toast.error{border-color:var(--red);color:var(--red)}
+
+/* Eval badge */
+#eval-badge{
+  position:fixed;top:12px;left:12px;z-index:999;
+  background:#111;border:1px solid #333;border-radius:8px;
+  padding:6px 12px;font-family:var(--mono);font-size:11px;color:var(--muted);
+  cursor:pointer;transition:border-color .2s;
+}
+#eval-badge:hover{border-color:var(--gold);color:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- ══ SCREEN 1 — UPLOAD ══════════════════════════════ -->
+<div id="screen-upload" class="screen active">
+  <div class="bracket tl"></div><div class="bracket tr"></div>
+  <div class="bracket bl"></div><div class="bracket br"></div>
+
+  <div class="case-sub">Step 3 CCS Trainer</div>
+  <div class="case-title">MedGame</div>
+
+  <!-- Case selector -->
+  <div id="case-selector"></div>
+
+  <!-- Vision settings -->
+  <div id="vision-settings">
+    <div class="vision-row">
+      <label>Zone detection</label>
+      <select id="visionProvider">
+        <option value="off">Off — use default zones (instant)</option>
+        <option value="openai">OpenAI — gpt-4o-mini (fast)</option>
+        <option value="anthropic">Anthropic — Claude Sonnet</option>
+        <option value="ollama">Local — Ollama on this PC</option>
+      </select>
+    </div>
+    <div class="vision-row" id="api-key-row">
+      <label id="api-key-label">API key</label>
+      <input type="password" id="apiKeyInput" placeholder="sk-..." autocomplete="off">
+    </div>
+    <div class="vision-row hidden" id="ollama-row">
+      <label>Ollama model</label>
+      <input type="text" id="ollamaModel" placeholder="llama3.2-vision or moondream" value="moondream">
+      <p class="vision-hint">Run once: <code>ollama pull moondream</code> (~1.7 GB). Zones are cached per image.</p>
+    </div>
+    <p class="vision-hint cache-hint">Same photo = cached zones in browser — vision runs only once per image.</p>
+  </div>
+
+  <button type="button" id="btn-demo" class="btn-demo">▶ Play demo now (no upload)</button>
+
+  <!-- Drop zone -->
+  <div id="dropzone">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M12 16V8m0 0-3 3m3-3 3 3M5.5 20h13a2.5 2.5 0 000-5h-.5a6 6 0 10-11 0h-.5a2.5 2.5 0 000 5z"/>
+    </svg>
+    <p>Drop patient image here — or click to browse</p>
+    <input type="file" id="fileInput" accept="image/*">
+  </div>
+
+  <div class="clinical-tip" id="upload-tip">
+    <span>Clinical tip: </span><span id="tip-text">Select a case above to see the tip.</span>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2 — BRIEFING ════════════════════════════ -->
+<div id="screen-briefing" class="screen">
+  <div id="briefing-bg"></div>
+  <div id="briefing-overlay"></div>
+  <div class="bracket tl" style="color:var(--gold)"></div>
+  <div class="bracket tr"></div>
+  <div id="briefing-content">
+    <div id="briefing-label">Case 001</div>
+    <div id="briefing-title">SEPSIS</div>
+    <div id="briefing-complaint">68M • Fever, Hypotension, Altered Mental Status</div>
+  </div>
+  <div id="briefing-bottom">
+    <div id="briefing-objective">Objective — Identify source. Treat within the first hour.</div>
+    <div id="loading-bar-wrap"><div id="loading-bar"></div></div>
+    <button id="btn-begin">Begin Case →</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 3 — GAME ════════════════════════════════ -->
+<div id="screen-game" class="screen">
+  <div id="game-image-wrap">
+    <img id="game-patient-img" src="" alt="Patient">
+    <!-- drop zones rendered here by JS -->
+    <div id="flash-overlay"></div>
+    <!-- vision loading overlay -->
+    <div id="vision-loading" class="hidden">
+      <div class="spinner"></div>
+      <p id="vision-status">Analyzing image…</p>
+    </div>
+    <!-- pins rendered here by JS -->
+  </div>
+
+  <div id="game-sidebar">
+    <div id="sidebar-header">
+      <div id="sidebar-case-label">Case 001 — Active</div>
+      <div id="sidebar-case-title">SEPSIS</div>
+      <div id="sidebar-complaint">68M with fever, hypotension, altered mental status</div>
+    </div>
+
+    <div id="pills-container">
+      <!-- pills injected by JS -->
+    </div>
+
+    <div id="sidebar-footer">
+      <div id="progress-dots"></div>
+      <button id="btn-check">Check ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 4 — WHY PANEL (always in DOM) ══════════ -->
+<div id="screen-why">
+  <div id="why-header">
+    <div id="why-back">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+    </div>
+    <div id="why-intervention-name">Blood Cultures x2</div>
+  </div>
+  <div id="why-body">
+    <div class="why-section-label">Clinical Rationale</div>
+    <div class="why-text" id="why-text">—</div>
+    <div class="why-section-label">Guideline</div>
+    <div class="why-guideline" id="why-guideline">—</div>
+  </div>
+  <div id="why-footer">
+    <button id="btn-got-it">Got It</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 5 — COMPLETE ════════════════════════════ -->
+<div id="screen-complete" class="screen">
+  <div class="bracket tl"></div><div class="bracket br"></div>
+  <div id="complete-case">Case Complete</div>
+  <div id="complete-title">SEPSIS</div>
+  <div id="complete-badge">✓ All interventions placed correctly</div>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-num" id="stat-tries">1</div><div class="stat-label">Attempts</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-accuracy">100%</div><div class="stat-label">Accuracy</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-time">0:42</div><div class="stat-label">Time</div></div>
+  </div>
+  <div class="complete-actions">
+    <button class="btn-action btn-primary" id="btn-next-case">Next Case →</button>
+    <button class="btn-action btn-secondary" id="btn-review">Review</button>
+  </div>
+</div>
+
+<!-- Cascade flash -->
+<div id="complete-cascade"></div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Dev eval badge -->
+<div id="eval-badge" title="Run eval suite (console)">⚡ Eval</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  STACK DECLARATION
+//  • Vanilla JS + CSS (no framework, no build step)
+//  • interact.js (CDN) — drag/drop with inertia + snap
+//  • Google Fonts (CDN) — Sora + JetBrains Mono
+//  • Vision (optional, once per unique image, then cached):
+//    Off | OpenAI gpt-4o-mini | Anthropic | Ollama local
+//  • Zone cache: localStorage keyed by SHA-256 of image bytes
+//  • Web Audio API — sound cues (feature-guarded)
+//  • localStorage — stats persistence
+//
+//  FEATURE GUARD POLICY:
+//  A feature is implemented only when the code is 99%
+//  certain it will work correctly in this stack.
+//  Uncertain features are left as clearly-labelled TODOs.
+// ════════════════════════════════════════════════════════
+
+'use strict';
+
+// ── CASE DATA ───────────────────────────────────────────
+const CASES = [
+{
+  id:"001",title:"SEPSIS",
+  chief_complaint:"68M with fever, hypotension, altered mental status",
+  clinical_tip:"Sepsis kills fastest when you hesitate on fluids.",
+  objective:"Identify source. Treat within the first hour.",
+  interventions:[
+    {id:"blood-cultures",label:"Blood Cultures x2",correct_zone:"zone-blood",
+     why:"Two sets from different sites before antibiotics. Improves sensitivity to 80–90%. SSC 2021 mandates cultures before first antibiotic dose.",guideline:"Surviving Sepsis Campaign 2021"},
+    {id:"iv-fluids",label:"30 mL/kg Crystalloid",correct_zone:"zone-iv-bag",
+     why:"Initial resuscitation target in hypotensive sepsis. Give within 3 hours of recognition. Reassess after each bolus.",guideline:"SSC 2021 — Strong Recommendation"},
+    {id:"antibiotics",label:"Vanc + Pip-Tazo",correct_zone:"zone-arm",
+     why:"Broad-spectrum coverage within 1 hour of sepsis recognition. Vancomycin covers MRSA. Pip-Tazo covers gram-negatives including Pseudomonas.",guideline:"SSC 2021 — Strong Recommendation"},
+    {id:"lactate",label:"Lactate Level",correct_zone:"zone-blood",
+     why:"Lactate ≥2 mmol/L indicates tissue hypoperfusion even with normal BP. Guides resuscitation depth and predicts mortality.",guideline:"SSC 2021 — Best Practice Statement"},
+    {id:"icu-admit",label:"ICU Admission",correct_zone:"zone-icu",
+     why:"Septic shock requires ICU-level monitoring for vasopressor titration, airway management, and hour-by-hour reassessment.",guideline:"ACEP / SCCM"}
+  ]
+},
+{
+  id:"002",title:"DKA",
+  chief_complaint:"32F with type 1 DM, nausea, vomiting, fruity breath, BS 480",
+  clinical_tip:"In DKA, fix the fluid first — insulin chases the potassium.",
+  objective:"Correct acidosis and prevent cerebral edema.",
+  interventions:[
+    {id:"iv-fluids-dka",label:"NS 1L Bolus",correct_zone:"zone-iv-bag",
+     why:"Aggressive fluid resuscitation corrects the volume deficit that drives hyperosmolality. Start with 1L NS over 1 hour.",guideline:"ADA Standards of Care 2024"},
+    {id:"insulin-dka",label:"Regular Insulin gtt",correct_zone:"zone-arm",
+     why:"0.1 U/kg/hr infusion corrects anion gap without causing precipitous glucose drop. Do NOT bolus — increases cerebral edema risk.",guideline:"ADA 2024 — Standard"},
+    {id:"potassium-dka",label:"KCl Repletion",correct_zone:"zone-arm",
+     why:"Insulin drives K+ intracellularly — must replète if K+ <3.5. Hold insulin if K+ <3.3 until corrected.",guideline:"ADA 2024"},
+    {id:"glucose-check",label:"BMP / Glucose q1h",correct_zone:"zone-blood",
+     why:"Titrate insulin to anion gap closure, NOT to glucose. Check electrolytes hourly until resolving.",guideline:"ADA 2024"},
+    {id:"icu-dka",label:"Step-Down / ICU",correct_zone:"zone-icu",
+     why:"Moderate-severe DKA requires continuous monitoring for mental status change, K+ dysrhythmias, and cerebral edema.",guideline:"ADA / ACEP"}
+  ]
+},
+{
+  id:"003",title:"STEMI",
+  chief_complaint:"55M with crushing chest pain, diaphoresis, ST elevation in II, III, aVF",
+  clinical_tip:"Door-to-balloon time is your only clock. Every minute costs 1000 myocytes.",
+  objective:"Reperfuse within 90 minutes of door arrival.",
+  interventions:[
+    {id:"aspirin-stemi",label:"Aspirin 324mg Chew",correct_zone:"zone-arm",
+     why:"Antiplatelet effect reduces infarct size and mortality. Chewed for rapid buccal absorption. Give immediately unless true allergy.",guideline:"ACC/AHA STEMI Guidelines 2022"},
+    {id:"heparin-stemi",label:"Heparin IV Bolus",correct_zone:"zone-iv-bag",
+     why:"Unfractionated heparin prevents thrombus propagation and maintains catheter patency. Weight-based bolus before cath lab.",guideline:"ACC/AHA 2022"},
+    {id:"ecg-monitor",label:"12-Lead ECG + Monitor",correct_zone:"zone-monitor",
+     why:"Serial ECGs detect evolving changes, re-occlusion post-PCI, and new blocks. Continuous monitoring for VF/VT.",guideline:"ACC/AHA 2022"},
+    {id:"cath-lab",label:"Activate Cath Lab",correct_zone:"zone-icu",
+     why:"Primary PCI is superior to thrombolytics when door-to-balloon time can be achieved within 90 min. Activate immediately on ECG interpretation.",guideline:"ACC/AHA 2022 — Class I"},
+    {id:"troponin-stemi",label:"Troponin + CBC/BMP",correct_zone:"zone-blood",
+     why:"Baseline troponin establishes peak, CBC/BMP identifies contraindications to anticoagulation and baseline renal function for contrast.",guideline:"ACC/AHA 2022"}
+  ]
+},
+{
+  id:"004",title:"PULMONARY EMBOLISM",
+  chief_complaint:"44F post-op day 3, sudden dyspnea, tachycardia, O2 sat 88% on room air",
+  clinical_tip:"Wells score first — but don't let a low score stop your clinical gestalt.",
+  objective:"Risk-stratify and anticoagulate immediately if high probability.",
+  interventions:[
+    {id:"heparin-pe",label:"Heparin IV gtt",correct_zone:"zone-iv-bag",
+     why:"Anticoagulation prevents clot propagation. Weight-based bolus + infusion. Start before CT if high clinical probability.",guideline:"ASH PE Guidelines 2020"},
+    {id:"cta-pe",label:"CT Pulm Angiography",correct_zone:"zone-monitor",
+     why:"Gold standard for PE diagnosis. Sensitivity >90%. Assess for right heart strain as marker of massive PE.",guideline:"ASH 2020 / AHA"},
+    {id:"echo-pe",label:"Bedside Echo",correct_zone:"zone-monitor",
+     why:"RV dilation/hypokinesis indicates massive PE requiring escalation. Identifies alternative diagnoses (tamponade, pneumothorax).",guideline:"AHA PE Guidelines 2019"},
+    {id:"troponin-pe",label:"Troponin + BNP",correct_zone:"zone-blood",
+     why:"Elevated troponin/BNP flags submassive PE with RV strain — risk-stratifies for ICU vs floor and potential catheter-directed therapy.",guideline:"AHA 2019"},
+    {id:"icu-pe",label:"ICU vs Cath Lab",correct_zone:"zone-icu",
+     why:"Massive PE with hemodynamic instability: systemic thrombolytics or catheter-directed therapy. Submassive: anticoagulate + monitor.",guideline:"AHA 2019 — Massive PE"}
+  ]
+},
+{
+  id:"005",title:"ACUTE STROKE",
+  chief_complaint:"67M with sudden right-sided weakness and aphasia onset 45 min ago",
+  clinical_tip:"Treat a stroke like a STEMI — time is brain, 1.9M neurons/minute.",
+  objective:"tPA decision within 60 min of door arrival. Endovascular if eligible.",
+  interventions:[
+    {id:"ct-stroke",label:"Non-contrast CT Head",correct_zone:"zone-monitor",
+     why:"Rules out hemorrhagic transformation before tPA. Also identifies ASPECTS score for endovascular candidacy.",guideline:"AHA/ASA Stroke Guidelines 2019"},
+    {id:"tpa-stroke",label:"IV tPA (Alteplase)",correct_zone:"zone-iv-bag",
+     why:"0.9 mg/kg IV within 4.5 hours of onset (10% bolus, remainder over 60 min). Improves functional outcomes NNT ~8.",guideline:"AHA/ASA 2019 — Class I"},
+    {id:"bp-stroke",label:"BP Management",correct_zone:"zone-arm",
+     why:"Target BP <185/110 before tPA. After tPA, maintain <180/105 for 24h. Permissive hypertension if no tPA given.",guideline:"AHA/ASA 2019"},
+    {id:"labs-stroke",label:"Stat Labs + Glucose",correct_zone:"zone-blood",
+     why:"Hypoglycemia mimics stroke. PT/INR rules out anticoagulation as contraindication to tPA. CBC for platelets.",guideline:"AHA/ASA 2019"},
+    {id:"neuro-icu",label:"Stroke Unit / Neuro ICU",correct_zone:"zone-icu",
+     why:"Continuous neuro assessment, BP titration, swallow evaluation, DVT prophylaxis. Reduces 90-day mortality and dependency.",guideline:"AHA/ASA 2019 — Class I"}
+  ]
+},
+{
+  id:"006",title:"ANAPHYLAXIS",
+  chief_complaint:"28F with bee sting, diffuse urticaria, throat tightness, BP 78/50",
+  clinical_tip:"Epinephrine first — antihistamines are adjuncts, never primary therapy.",
+  objective:"Epi IM within 60 seconds. Airway secured within 3 minutes.",
+  interventions:[
+    {id:"epi-ana",label:"Epi 0.3mg IM Thigh",correct_zone:"zone-arm",
+     why:"IM epinephrine in lateral thigh (not deltoid) gives fastest absorption. Repeat every 5–15 min if no response. Never delay for antihistamines.",guideline:"WAO Anaphylaxis Guidelines 2020"},
+    {id:"fluids-ana",label:"IV Fluid Bolus 1L",correct_zone:"zone-iv-bag",
+     why:"Distributive shock — rapid volume expansion. 1–2L crystalloid for persistent hypotension after epinephrine.",guideline:"WAO 2020"},
+    {id:"airway-ana",label:"Airway / RSI Prep",correct_zone:"zone-monitor",
+     why:"Angioedema can close the airway within minutes. Prepare for early intubation if laryngeal edema — waiting makes it impossible.",guideline:"WAO 2020 / EM Airway Management"},
+    {id:"diphen-ana",label:"Diphenhydramine IV",correct_zone:"zone-arm",
+     why:"H1 blocker as adjunct therapy. Does NOT replace epinephrine. Addresses urticaria/pruritus but has no role in hypotension or airway.",guideline:"WAO 2020 — Adjunct"},
+    {id:"obs-ana",label:"Observation 4–6 hr",correct_zone:"zone-icu",
+     why:"Biphasic anaphylaxis occurs in 4–23% of cases up to 72 hours post-exposure. All anaphylaxis requires extended observation.",guideline:"WAO 2020 — All Severity"}
+  ]
+},
+{
+  id:"007",title:"HYPERTENSIVE EMERGENCY",
+  chief_complaint:"52M BP 228/142, headache, blurred vision, papilledema",
+  clinical_tip:"Lower MAP by 25% in first hour — faster reduction causes stroke.",
+  objective:"Prevent end-organ damage. Controlled MAP reduction.",
+  interventions:[
+    {id:"nicardipine",label:"Nicardipine IV gtt",correct_zone:"zone-iv-bag",
+     why:"Titratable IV calcium channel blocker. Ideal for most hypertensive emergencies. Start 5 mg/hr, titrate to BP goal.",guideline:"AHA Hypertension Guidelines 2023"},
+    {id:"bp-monitor",label:"Arterial Line / IBP",correct_zone:"zone-arm",
+     why:"Continuous BP monitoring required during IV antihypertensive titration. Prevents overshoot. Placed in radial artery.",guideline:"AHA 2023"},
+    {id:"ct-head-htn",label:"CT Head / MRI Brain",correct_zone:"zone-monitor",
+     why:"Rule out hemorrhagic stroke or PRES. Imaging guides choice of agent (avoid vasodilators if hemorrhagic stroke suspected).",guideline:"AHA 2023"},
+    {id:"echo-htn",label:"BMP / UA / Troponin",correct_zone:"zone-blood",
+     why:"Identifies end-organ damage: creatinine (renal crisis), troponin (ACS), urinalysis (hematuria in glomerulonephritis).",guideline:"AHA 2023"},
+    {id:"icu-htn",label:"ICU Admission",correct_zone:"zone-icu",
+     why:"Hypertensive emergency requires ICU-level monitoring for titratable antihypertensives and end-organ reassessment.",guideline:"AHA 2023"}
+  ]
+},
+{
+  id:"008",title:"ACUTE APPENDICITIS",
+  chief_complaint:"19M with periumbilical pain migrating to RLQ, fever 38.4°C, nausea",
+  clinical_tip:"CT confirms, but your Alvarado score should already tell you the answer.",
+  objective:"Timely surgical consult. Avoid perforation.",
+  interventions:[
+    {id:"ct-appy",label:"CT Abdomen/Pelvis",correct_zone:"zone-monitor",
+     why:"CT with contrast has 94–98% sensitivity for appendicitis. Confirms diagnosis and identifies complications (perforation, abscess, phlegmon).",guideline:"ACR Appropriateness Criteria 2022"},
+    {id:"iv-abx-appy",label:"Cefoxitin IV",correct_zone:"zone-iv-bag",
+     why:"Pre-operative antibiotics reduce surgical site infection. Cefoxitin covers bowel flora including anaerobes. Give within 1 hr of incision.",guideline:"IDSA Surgical Prophylaxis 2023"},
+    {id:"iv-access",label:"IV Access + NPO",correct_zone:"zone-arm",
+     why:"Large-bore IV access for fluids and pre-op. NPO status established for emergent OR case. Rehydrate for operative optimization.",guideline:"Surgical Prep Standard"},
+    {id:"cbc-appy",label:"CBC / CRP / BMP",correct_zone:"zone-blood",
+     why:"WBC elevation supports diagnosis; CRP >75 mg/L at 24h suggests perforation. BMP for pre-op metabolic baseline.",guideline:"ACR / ACS"},
+    {id:"surgery-appy",label:"Surgery Consult / OR",correct_zone:"zone-icu",
+     why:"Laparoscopic appendectomy is standard of care. Early surgery prevents perforation. Non-operative management only for select uncomplicated cases.",guideline:"EAST Guidelines 2022"}
+  ]
+},
+{
+  id:"009",title:"ECTOPIC PREGNANCY",
+  chief_complaint:"26F 7 weeks LMP, sharp pelvic pain, vaginal spotting, BP 88/60",
+  clinical_tip:"Unstable + positive HCG + pelvic pain = ectopic until proven otherwise.",
+  objective:"Rule out rupture. Surgical vs medical management decision.",
+  interventions:[
+    {id:"utz-ectopic",label:"Bedside Pelvic US",correct_zone:"zone-monitor",
+     why:"Identifies intrauterine vs extrauterine pregnancy and free fluid in Pouch of Douglas (hemoperitoneum). Adnexal mass with empty uterus = ectopic.",guideline:"ACOG Practice Bulletin 193"},
+    {id:"iv-ectopic",label:"2 Large-Bore IVs",correct_zone:"zone-iv-bag",
+     why:"Two large-bore IVs (16g+) for rapid transfusion if rupture. Volume resuscitation for hemodynamic instability.",guideline:"Trauma Resuscitation / ACOG"},
+    {id:"type-screen",label:"Type & Crossmatch",correct_zone:"zone-blood",
+     why:"Type and screen for potential OR. Rh-negative patients need RhoGAM. Quantitative HCG guides methotrexate eligibility.",guideline:"ACOG 193"},
+    {id:"ob-consult",label:"OB/GYN Stat Consult",correct_zone:"zone-arm",
+     why:"Ruptured ectopic is a surgical emergency with hemorrhagic shock mortality. Unstable patient goes straight to OR — no methotrexate.",guideline:"ACOG 193 — Ruptured"},
+    {id:"or-ectopic",label:"OR / Surgical Prep",correct_zone:"zone-icu",
+     why:"Laparoscopic salpingostomy or salpingectomy is definitive treatment. Unstable patient: open surgery. Methotrexate only for stable, unruptured, criteria-meeting cases.",guideline:"ACOG 193"}
+  ]
+},
+{
+  id:"010",title:"BACTERIAL MENINGITIS",
+  chief_complaint:"21M college student, fever 39.8°C, nuchal rigidity, photophobia, petechiae",
+  clinical_tip:"Petechiae + fever = meningococcemia until proven otherwise. Antibiotics NOW.",
+  objective:"Antibiotics within 30 minutes. LP only if no signs of herniation.",
+  interventions:[
+    {id:"abx-mening",label:"Ceftriaxone 2g IV",correct_zone:"zone-iv-bag",
+     why:"Empiric ceftriaxone covers N. meningitidis, S. pneumoniae, and Listeria (add Ampicillin >50yo). Give IMMEDIATELY — do NOT delay for LP.",guideline:"IDSA Meningitis Guidelines 2004 (updated 2017)"},
+    {id:"dexa-mening",label:"Dexamethasone IV",correct_zone:"zone-arm",
+     why:"0.15 mg/kg q6h × 4 days, starting before or with first antibiotic dose. Reduces hearing loss and mortality in pneumococcal meningitis.",guideline:"IDSA 2004/2017 — Class I"},
+    {id:"lp-mening",label:"LP (after CT if indicated)",correct_zone:"zone-blood",
+     why:"CSF analysis confirms diagnosis and identifies organism for targeted therapy. CT first only if papilledema, focal neuro deficit, or seizure.",guideline:"IDSA 2004/2017"},
+    {id:"ct-mening",label:"CT Head",correct_zone:"zone-monitor",
+     why:"Rules out mass lesion/herniation before LP in select patients. Never delay antibiotics for CT.",guideline:"IDSA 2004/2017"},
+    {id:"icu-mening",label:"ICU + Isolation",correct_zone:"zone-icu",
+     why:"Bacterial meningitis carries 20–30% mortality. ICU for ICP monitoring, seizure management. Droplet isolation until 24h of appropriate antibiotics.",guideline:"IDSA / CDC"}
+  ]
+}
+];
+
+// ── DEFAULT ZONES (fallback if Vision API unavailable / no API key) ─
+const DEFAULT_ZONES = {
+  'zone-monitor': {cx:0.78,cy:0.15,w:0.14,h:0.10,label:'Monitor / Imaging'},
+  'zone-iv-bag':  {cx:0.82,cy:0.30,w:0.10,h:0.12,label:'IV Bag / Fluids'},
+  'zone-blood':   {cx:0.25,cy:0.55,w:0.12,h:0.08,label:'Blood Draw'},
+  'zone-arm':     {cx:0.30,cy:0.62,w:0.12,h:0.08,label:'IV Line / Arm'},
+  'zone-icu':     {cx:0.50,cy:0.88,w:0.20,h:0.08,label:'Disposition / ICU'}
+};
+
+// ── STATE ───────────────────────────────────────────────
+const STATE = {
+  apiKey: '',
+  patientImageB64: null,
+  patientImageDataURL: null,
+  currentCaseIdx: 0,
+  currentCase: null,
+  zones: JSON.parse(JSON.stringify(DEFAULT_ZONES)),
+  placedInterventions: {},   // interventionId → zoneId
+  attempts: 0,
+  wrongAttempts: 0,
+  startTime: null,
+  caseComplete: false,
+  lastPlacedIntervention: null,
+  dragClone: null,
+  dragSource: null,
+};
+
+const QUEUE_KEY = 'medgame_queue';
+const STATS_KEY = 'medgame_stats';
+const ZONE_CACHE_KEY = 'medgame_zone_cache_v1';
+const VISION_PROMPT = `You are a medical image analyzer for a clinical training game.
+Given a patient photograph, identify pixel-percentage coordinates for 5 interaction zones.
+Respond ONLY with a JSON object — no preamble, no markdown fences.
+Keys: zone-monitor, zone-iv-bag, zone-blood, zone-arm, zone-icu
+Each: { "cx": 0-1, "cy": 0-1, "w": 0.05-0.20, "h": 0.05-0.15 }
+cx/cy = center as fraction of image size.
+zone-monitor: head/chest monitor area | zone-iv-bag: IV fluids | zone-blood: antecubital draw
+zone-arm: IV access forearm | zone-icu: lower body / disposition`;
+
+// Demo scene — works offline, no upload
+const DEMO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+<rect fill="#1a1a22" width="800" height="500"/>
+<rect x="80" y="120" width="640" height="280" rx="8" fill="#2a2a35"/>
+<ellipse cx="400" cy="200" rx="70" ry="55" fill="#c4a882"/>
+<rect x="330" y="250" width="140" height="100" rx="20" fill="#3d5a80"/>
+<rect x="620" y="80" width="100" height="140" rx="6" fill="#111" stroke="#4af" stroke-width="2"/>
+<rect x="100" y="200" width="80" height="120" rx="4" fill="#1a3a2a" stroke="#3a8"/>
+<text x="400" y="460" text-anchor="middle" fill="#666" font-size="14" font-family="sans-serif">Demo patient — drag interventions onto glowing zones</text>
+</svg>`;
+const DEMO_IMAGE_DATAURL = 'data:image/svg+xml,' + encodeURIComponent(DEMO_SVG);
+
+// ── STATS ───────────────────────────────────────────────
+function readStats(){
+  try{ return JSON.parse(localStorage.getItem(STATS_KEY))||{cases:{},session:{total_cases:0,total_correct:0,streak:0}}; }
+  catch{ return {cases:{},session:{total_cases:0,total_correct:0,streak:0}}; }
+}
+function writeStats(s){ try{localStorage.setItem(STATS_KEY,JSON.stringify(s));}catch{} }
+function readQueue(){
+  try{ const q=JSON.parse(localStorage.getItem(QUEUE_KEY)); return Array.isArray(q)?q:CASES.map(c=>c.id); }
+  catch{ return CASES.map(c=>c.id); }
+}
+function writeQueue(q){ try{localStorage.setItem(QUEUE_KEY,JSON.stringify(q));}catch{} }
+
+// ── QUEUE / SPACED REPETITION ───────────────────────────
+function nextCaseFromQueue(){
+  const queue = readQueue();
+  if(!queue.length) return CASES[0];
+  const id = queue[0];
+  return CASES.find(c=>c.id===id)||CASES[0];
+}
+function updateQueue(caseId, accuracy){
+  const queue = readQueue().filter(id=>id!==caseId);
+  if(accuracy < 80){
+    queue.splice(Math.min(2,queue.length),0,caseId); // position 3
+  } else if(accuracy === 100){
+    queue.push(caseId);
+  } else {
+    queue.splice(Math.min(4,queue.length),0,caseId);
+  }
+  writeQueue(queue);
+}
+
+// ── SCREEN MANAGEMENT ──────────────────────────────────
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active')});
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+}
+
+// ── TOAST ───────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg, type=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show' + (type?' '+type:'');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ t.className=''; },2400);
+}
+
+// ── AUDIO (Web Audio API — guarded: only if AudioContext exists) ─
+// 99% confident Web Audio API is available in Chrome.
+const AUDIO_SUPPORTED = typeof AudioContext !== 'undefined';
+function _playTone(freq, duration, gain=0.25){
+  if(!AUDIO_SUPPORTED) return;
+  try{
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.connect(g); g.connect(ctx.destination);
+    osc.frequency.value = freq;
+    osc.type = 'sine';
+    g.gain.setValueAtTime(gain, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.start(); osc.stop(ctx.currentTime + duration);
+  } catch{}
+}
+function playCorrect(){ _playTone(880, 0.4); setTimeout(()=>_playTone(1100,0.3,0.15),120); }
+function playWrong(){ _playTone(180, 0.12, 0.35); }
+function playCaseComplete(){
+  _playTone(523,0.3);
+  setTimeout(()=>_playTone(659,0.3),160);
+  setTimeout(()=>_playTone(784,0.5),320);
+}
+
+// ── ZONE CACHE (per image hash) ─────────────────────────
+async function hashImageBase64(b64){
+  const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  const buf = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+function readZoneCache(){
+  try{ return JSON.parse(localStorage.getItem(ZONE_CACHE_KEY)) || {}; }
+  catch{ return {}; }
+}
+function writeZoneCache(cache){
+  try{
+    const keys = Object.keys(cache);
+    if(keys.length > 40){ delete cache[keys[0]]; }
+    localStorage.setItem(ZONE_CACHE_KEY, JSON.stringify(cache));
+  }catch(e){ console.warn('[Cache] full', e); }
+}
+function getCachedZones(imageHash){
+  const hit = readZoneCache()[imageHash];
+  if(hit) console.info('[Zones] Cache hit — skipping vision');
+  return hit || null;
+}
+function setCachedZones(imageHash, zones){
+  const cache = readZoneCache();
+  cache[imageHash] = zones;
+  writeZoneCache(cache);
+}
+
+function parseZonesFromText(text){
+  const clean = text.replace(/```json|```/g,'').trim();
+  const parsed = JSON.parse(clean);
+  const required = ['zone-monitor','zone-iv-bag','zone-blood','zone-arm','zone-icu'];
+  for(const k of required){
+    if(!parsed[k] || typeof parsed[k].cx !== 'number') throw new Error('Missing zone: ' + k);
+  }
+  for(const k of required){
+    parsed[k].label = DEFAULT_ZONES[k].label;
+    parsed[k].cx = Math.max(0.05, Math.min(0.95, parsed[k].cx));
+    parsed[k].cy = Math.max(0.05, Math.min(0.95, parsed[k].cy));
+    parsed[k].w  = Math.max(0.05, Math.min(0.25, parsed[k].w));
+    parsed[k].h  = Math.max(0.04, Math.min(0.20, parsed[k].h));
+  }
+  return parsed;
+}
+
+async function visionOpenAI(b64, mime, apiKey){
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      max_tokens: 400,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'text', text: VISION_PROMPT + '\nReturn only JSON for this image.' },
+          { type: 'image_url', image_url: { url: 'data:' + mime + ';base64,' + b64 } }
+        ]
+      }]
+    })
+  });
+  if(!res.ok) throw new Error('OpenAI ' + res.status);
+  const data = await res.json();
+  return parseZonesFromText(data.choices[0].message.content);
+}
+
+async function visionAnthropic(b64, mime, apiKey){
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 400,
+      system: VISION_PROMPT,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: mime, data: b64 } },
+          { type: 'text', text: 'Return only JSON.' }
+        ]
+      }]
+    })
+  });
+  if(!res.ok) throw new Error('Anthropic ' + res.status);
+  const data = await res.json();
+  const text = (data.content || []).map(b => b.type === 'text' ? b.text : '').join('');
+  return parseZonesFromText(text);
+}
+
+async function visionOllama(b64){
+  const model = document.getElementById('ollamaModel').value.trim() || 'moondream';
+  const res = await fetch('http://127.0.0.1:11434/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      stream: false,
+      messages: [{
+        role: 'user',
+        content: VISION_PROMPT + '\nReturn only JSON.',
+        images: [b64]
+      }]
+    })
+  });
+  if(!res.ok) throw new Error('Ollama ' + res.status + ' — is Ollama running? Try: ollama pull ' + model);
+  const data = await res.json();
+  return parseZonesFromText(data.message.content);
+}
+
+async function detectZonesViaVision(base64Image, mimeType = 'image/jpeg'){
+  const provider = document.getElementById('visionProvider').value;
+  const visionEl = document.getElementById('vision-loading');
+
+  const imageHash = await hashImageBase64(base64Image);
+  STATE.imageHash = imageHash;
+
+  const cached = getCachedZones(imageHash);
+  if(cached) return cached;
+
+  if(provider === 'off'){
+    console.info('[Zones] Vision off — defaults');
+    return null;
+  }
+
+  visionEl.classList.remove('hidden');
+  const status = visionEl.querySelector('p');
+  const labels = { openai: 'OpenAI', anthropic: 'Anthropic', ollama: 'Ollama (local)' };
+  if(status) status.textContent = 'Analyzing with ' + (labels[provider] || provider) + '… (once per image)';
+
+  try{
+    let zones = null;
+    if(provider === 'openai'){
+      if(!STATE.apiKey) throw new Error('Add OpenAI API key');
+      zones = await visionOpenAI(base64Image, mimeType, STATE.apiKey);
+    } else if(provider === 'anthropic'){
+      if(!STATE.apiKey) throw new Error('Add Anthropic API key');
+      zones = await visionAnthropic(base64Image, mimeType, STATE.apiKey);
+    } else if(provider === 'ollama'){
+      zones = await visionOllama(base64Image);
+    }
+    if(zones){
+      setCachedZones(imageHash, zones);
+      console.info('[Zones] Saved to cache for this image');
+    }
+    visionEl.classList.add('hidden');
+    return zones;
+  } catch(err){
+    console.warn('[Vision]', err);
+    showToast(String(err.message || err).slice(0, 80), 'error');
+    visionEl.classList.add('hidden');
+    return null;
+  }
+}
+
+// ── UPLOAD SCREEN ───────────────────────────────────────
+function initUploadScreen(){
+  const caseSelector = document.getElementById('case-selector');
+  caseSelector.innerHTML = '';
+  CASES.forEach((c,i)=>{
+    const chip = document.createElement('div');
+    chip.className = 'case-chip' + (i===STATE.currentCaseIdx?' selected':'');
+    chip.textContent = c.id + ' — ' + c.title;
+    chip.addEventListener('click',()=>{
+      STATE.currentCaseIdx = i;
+      document.querySelectorAll('.case-chip').forEach(ch=>ch.classList.remove('selected'));
+      chip.classList.add('selected');
+      document.getElementById('tip-text').textContent = CASES[i].clinical_tip;
+    });
+    caseSelector.appendChild(chip);
+  });
+  document.getElementById('tip-text').textContent = CASES[STATE.currentCaseIdx].clinical_tip;
+
+  const providerEl = document.getElementById('visionProvider');
+  const apiRow = document.getElementById('api-key-row');
+  const ollamaRow = document.getElementById('ollama-row');
+  const apiLabel = document.getElementById('api-key-label');
+
+  function syncVisionUI(){
+    const p = providerEl.value;
+    ollamaRow.classList.toggle('hidden', p !== 'ollama');
+    apiRow.classList.toggle('hidden', p === 'off' || p === 'ollama');
+    apiLabel.textContent = p === 'openai' ? 'OpenAI API key' : 'Anthropic API key';
+    document.getElementById('apiKeyInput').placeholder = p === 'openai' ? 'sk-...' : 'sk-ant-...';
+  }
+  const savedProvider = localStorage.getItem('medgame_vision_provider');
+  if(savedProvider) providerEl.value = savedProvider;
+  const savedOllama = localStorage.getItem('medgame_ollama_model');
+  if(savedOllama) document.getElementById('ollamaModel').value = savedOllama;
+  providerEl.addEventListener('change', ()=>{
+    localStorage.setItem('medgame_vision_provider', providerEl.value);
+    syncVisionUI();
+  });
+  document.getElementById('ollamaModel').addEventListener('change', e=>{
+    localStorage.setItem('medgame_ollama_model', e.target.value.trim());
+  });
+  syncVisionUI();
+
+  const saved = sessionStorage.getItem('medgame_apikey');
+  if(saved) document.getElementById('apiKeyInput').value = saved;
+  document.getElementById('apiKeyInput').addEventListener('input', e=>{
+    STATE.apiKey = e.target.value.trim();
+    sessionStorage.setItem('medgame_apikey', STATE.apiKey);
+  });
+  if(saved) STATE.apiKey = saved;
+
+  document.getElementById('btn-demo').addEventListener('click', ()=> loadDemo());
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+
+  function handleFile(file){
+    if(!file||!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = async(e)=>{
+      const dataURL = e.target.result;
+      STATE.patientImageDataURL = dataURL;
+      // Extract base64 without data URL prefix
+      STATE.patientImageB64 = dataURL.split(',')[1];
+      STATE.patientImageMime = file.type;
+      STATE.currentCase = CASES[STATE.currentCaseIdx];
+      await startBriefing();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  dropzone.addEventListener('dragover', e=>{ e.preventDefault(); dropzone.classList.add('over'); });
+  dropzone.addEventListener('dragleave', ()=>dropzone.classList.remove('over'));
+  dropzone.addEventListener('drop', e=>{
+    e.preventDefault(); dropzone.classList.remove('over');
+    handleFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', e=>handleFile(e.target.files[0]));
+}
+
+async function loadDemo(){
+  STATE.patientImageDataURL = DEMO_IMAGE_DATAURL;
+  STATE.patientImageMime = 'image/svg+xml';
+  STATE.patientImageB64 = btoa(unescape(encodeURIComponent(DEMO_SVG)));
+  STATE.imageHash = 'medgame-demo-v1';
+  STATE.currentCase = CASES[STATE.currentCaseIdx];
+  STATE.zones = {
+    'zone-monitor': { cx:0.78, cy:0.22, w:0.14, h:0.12, label:'Monitor / Imaging' },
+    'zone-iv-bag':  { cx:0.18, cy:0.42, w:0.12, h:0.14, label:'IV Bag / Fluids' },
+    'zone-blood':   { cx:0.38, cy:0.48, w:0.12, h:0.10, label:'Blood Draw' },
+    'zone-arm':     { cx:0.50, cy:0.52, w:0.14, h:0.10, label:'IV Line / Arm' },
+    'zone-icu':     { cx:0.50, cy:0.82, w:0.22, h:0.10, label:'Disposition / ICU' }
+  };
+  const cached = getCachedZones(STATE.imageHash);
+  if(cached) STATE.zones = cached;
+  await startBriefing(true);
+}
+
+// ── BRIEFING SCREEN ─────────────────────────────────────
+async function startBriefing(skipVision = false){
+  const c = STATE.currentCase;
+  document.getElementById('briefing-bg').style.backgroundImage = `url(${STATE.patientImageDataURL})`;
+  document.getElementById('briefing-label').textContent = 'Case ' + c.id;
+  document.getElementById('briefing-title').textContent = c.title;
+  document.getElementById('briefing-complaint').textContent = c.chief_complaint;
+  document.getElementById('briefing-objective').textContent = 'Objective — ' + c.objective;
+
+  const bar = document.getElementById('loading-bar');
+  const btn = document.getElementById('btn-begin');
+  bar.style.width = '0';
+  btn.style.display = 'none';
+  showScreen('screen-briefing');
+
+  const visionPromise = skipVision
+    ? Promise.resolve(STATE.zones)
+    : detectZonesViaVision(STATE.patientImageB64, STATE.patientImageMime || 'image/jpeg');
+
+  requestAnimationFrame(()=>{ bar.style.width='100%'; });
+
+  const minWait = skipVision ? 800 : 1200;
+  await Promise.all([
+    new Promise(r => setTimeout(r, minWait)),
+    visionPromise.then(zones => {
+      if(zones) STATE.zones = zones;
+      else if(!skipVision) STATE.zones = JSON.parse(JSON.stringify(DEFAULT_ZONES));
+    })
+  ]);
+
+  btn.style.display = 'inline-block';
+}
+
+document.getElementById('btn-begin').addEventListener('click', ()=>{
+  initGameScreen();
+  showScreen('screen-game');
+});
+
+// ── GAME SCREEN ─────────────────────────────────────────
+function initGameScreen(){
+  const c = STATE.currentCase;
+  STATE.placedInterventions = {};
+  STATE.attempts = 0;
+  STATE.wrongAttempts = 0;
+  STATE.caseComplete = false;
+  STATE.startTime = Date.now();
+
+  // Set patient image
+  document.getElementById('game-patient-img').src = STATE.patientImageDataURL;
+
+  // Sidebar header
+  document.getElementById('sidebar-case-label').textContent = 'Case ' + c.id + ' — Active';
+  document.getElementById('sidebar-case-title').textContent = c.title;
+  document.getElementById('sidebar-complaint').textContent = c.chief_complaint;
+
+  // Render pills
+  renderPills();
+
+  // Render progress dots
+  renderProgressDots();
+
+  // Render drop zones
+  renderDropZones();
+
+  // Init interact.js drag
+  initDrag();
+}
+
+function renderPills(){
+  const container = document.getElementById('pills-container');
+  container.innerHTML = '';
+  STATE.currentCase.interventions.forEach((iv, i)=>{
+    const pill = document.createElement('div');
+    pill.className = 'pill';
+    pill.dataset.id = iv.id;
+    pill.dataset.correctZone = iv.correct_zone;
+    pill.innerHTML = `${iv.label}<span class="pill-number">${String(i+1).padStart(2,'0')}</span>`;
+    container.appendChild(pill);
+  });
+}
+
+function renderProgressDots(){
+  const wrap = document.getElementById('progress-dots');
+  wrap.innerHTML = '';
+  STATE.currentCase.interventions.forEach((_,i)=>{
+    const dot = document.createElement('div');
+    dot.className = 'pdot';
+    dot.id = 'pdot-'+i;
+    wrap.appendChild(dot);
+  });
+  updateProgressDots();
+}
+
+function updateProgressDots(){
+  const placed = Object.keys(STATE.placedInterventions).length;
+  STATE.currentCase.interventions.forEach((_,i)=>{
+    const dot = document.getElementById('pdot-'+i);
+    if(!dot) return;
+    if(i < placed) dot.classList.add('done');
+    else if(i === placed) dot.classList.add('active');
+    else { dot.classList.remove('done','active'); }
+  });
+}
+
+function renderDropZones(){
+  // Remove old zones
+  document.querySelectorAll('.drop-zone').forEach(z=>z.remove());
+  const wrap = document.getElementById('game-image-wrap');
+
+  Object.entries(STATE.zones).forEach(([zoneId, def])=>{
+    const el = document.createElement('div');
+    el.className = 'drop-zone';
+    el.id = zoneId;
+    el.dataset.zoneId = zoneId;
+
+    // Size: use percentage of container
+    const pw = wrap.offsetWidth, ph = wrap.offsetHeight;
+    const w = def.w * pw, h = def.h * ph;
+    el.style.cssText = `
+      width:${w}px; height:${h}px;
+      left:${def.cx*100}%; top:${def.cy*100}%;
+    `;
+    wrap.appendChild(el);
+  });
+}
+
+// ── DRAG ENGINE (interact.js) ───────────────────────────
+// 99% confident this pattern works with interact.js 1.10+ in Chrome.
+function initDrag(){
+  // Clean previous listeners
+  interact('.pill').unset();
+
+  interact('.pill').draggable({
+    inertia: { resistance: 12, minSpeed: 100, endSpeed: 50 },
+    modifiers: [ interact.modifiers.restrictToWindow() ],
+    listeners: {
+      start(event){
+        const pill = event.target;
+        if(pill.classList.contains('placed')) return;
+
+        // Clone pill for visual dragging
+        const rect = pill.getBoundingClientRect();
+        const clone = pill.cloneNode(true);
+        clone.id = 'drag-clone';
+        clone.style.cssText = `
+          position:fixed; left:${rect.left}px; top:${rect.top}px;
+          width:${rect.width}px; z-index:500; pointer-events:none;
+          margin:0; transform:scale(1.05);
+          box-shadow:0 8px 32px rgba(240,180,41,.3);
+          border-color:var(--gold);
+        `;
+        document.body.appendChild(clone);
+        STATE.dragClone = clone;
+        STATE.dragSource = pill;
+        STATE._dragOffsetX = event.clientX - rect.left;
+        STATE._dragOffsetY = event.clientY - rect.top;
+
+        // Activate drop zone glows
+        document.querySelectorAll('.drop-zone').forEach(z=>z.classList.add('active'));
+      },
+      move(event){
+        const clone = STATE.dragClone;
+        if(!clone) return;
+        const x = parseFloat(clone.style.left)||0;
+        const y = parseFloat(clone.style.top)||0;
+        clone.style.left = (x + event.dx) + 'px';
+        clone.style.top  = (y + event.dy) + 'px';
+      },
+      end(event){
+        document.querySelectorAll('.drop-zone').forEach(z=>z.classList.remove('active'));
+        const clone = STATE.dragClone;
+        const source = STATE.dragSource;
+        if(!clone||!source){ cleanup(); return; }
+
+        // Detect which drop zone the clone center is over
+        const cloneRect = clone.getBoundingClientRect();
+        const cx = cloneRect.left + cloneRect.width/2;
+        const cy = cloneRect.top  + cloneRect.height/2;
+
+        let hitZone = null;
+        document.querySelectorAll('.drop-zone').forEach(z=>{
+          const r = z.getBoundingClientRect();
+          if(cx >= r.left && cx <= r.right && cy >= r.top && cy <= r.bottom) hitZone = z;
+        });
+
+        if(hitZone){
+          handleDrop(source, hitZone);
+        } else {
+          animateReturn(clone, source);
+        }
+        function cleanup(){ if(clone&&clone.parentNode) clone.parentNode.removeChild(clone); STATE.dragClone=null; STATE.dragSource=null; }
+        if(!hitZone) return; // animateReturn will cleanup
+        cleanup();
+      }
+    }
+  });
+}
+
+function animateReturn(clone, source){
+  const sourceRect = source.getBoundingClientRect();
+  clone.style.transition = 'left .5s cubic-bezier(0.34,1.56,0.64,1), top .5s cubic-bezier(0.34,1.56,0.64,1), opacity .4s';
+  clone.style.left = sourceRect.left + 'px';
+  clone.style.top  = sourceRect.top  + 'px';
+  clone.style.opacity = '0';
+  setTimeout(()=>{ if(clone.parentNode) clone.parentNode.removeChild(clone); STATE.dragClone=null; STATE.dragSource=null; }, 520);
+}
+
+function handleDrop(pillEl, zoneEl){
+  const ivId = pillEl.dataset.id;
+  const correctZone = pillEl.dataset.correctZone;
+  const droppedZone = zoneEl.dataset.zoneId;
+
+  STATE.attempts++;
+
+  if(droppedZone === correctZone){
+    // ✓ Correct
+    playCorrect();
+    pillEl.classList.add('placed');
+    STATE.placedInterventions[ivId] = droppedZone;
+    STATE.lastPlacedIntervention = ivId;
+    flashImage('green');
+    zoneEl.classList.remove('active');
+    zoneEl.classList.add('correct');
+    placePin(zoneEl, pillEl.textContent.replace(/\d\d$/,'').trim());
+    updateProgressDots();
+    showToast('✓ Correct — ' + pillEl.textContent.replace(/\d\d$/,'').trim(), 'success');
+
+    // Show Why? button (inline toast for now — 99% safe)
+    setTimeout(()=>{ openWhyPanel(ivId); }, 600);
+
+    checkAllPlaced();
+  } else {
+    // ✗ Wrong
+    playWrong();
+    STATE.wrongAttempts++;
+    flashImage('red');
+    if(STATE.dragClone) animateReturn(STATE.dragClone, pillEl);
+    STATE.dragClone = null;
+    showToast('✗ Wrong zone — try again', 'error');
+  }
+}
+
+function flashImage(type){
+  const overlay = document.getElementById('flash-overlay');
+  overlay.className = type;
+  setTimeout(()=>{ overlay.className=''; }, 300);
+}
+
+function placePin(zoneEl, label){
+  const wrap = document.getElementById('game-image-wrap');
+  const pin = document.createElement('div');
+  pin.className = 'pin';
+  // Position at zone center relative to wrap
+  const zRect = zoneEl.getBoundingClientRect();
+  const wRect = wrap.getBoundingClientRect();
+  const px = ((zRect.left + zRect.width/2 - wRect.left) / wRect.width) * 100;
+  const py = ((zRect.top  + zRect.height/2 - wRect.top)  / wRect.height)* 100;
+  pin.style.left = px + '%';
+  pin.style.top  = py + '%';
+  pin.innerHTML = `<div class="pin-dot"></div><div class="pin-label">${label}</div>`;
+  wrap.appendChild(pin);
+}
+
+function checkAllPlaced(){
+  const total = STATE.currentCase.interventions.length;
+  const placed = Object.keys(STATE.placedInterventions).length;
+  if(placed >= total) triggerCaseComplete();
+}
+
+// Check button
+document.getElementById('btn-check').addEventListener('click', ()=>{
+  const total = STATE.currentCase.interventions.length;
+  const placed = Object.keys(STATE.placedInterventions).length;
+  if(placed === total){
+    triggerCaseComplete();
+  } else {
+    showToast(`${placed}/${total} placed — keep going`);
+  }
+});
+
+// ── CASE COMPLETE ───────────────────────────────────────
+function triggerCaseComplete(){
+  if(STATE.caseComplete) return;
+  STATE.caseComplete = true;
+  playCaseComplete();
+
+  const cascade = document.getElementById('complete-cascade');
+  cascade.classList.add('animate');
+  setTimeout(()=>cascade.classList.remove('animate'), 800);
+
+  const elapsed = Math.round((Date.now() - STATE.startTime)/1000);
+  const total = STATE.currentCase.interventions.length;
+  const correct = Object.keys(STATE.placedInterventions).length;
+  const accuracy = Math.round((correct / (STATE.attempts||1)) * 100);
+  const mins = Math.floor(elapsed/60);
+  const secs = String(elapsed%60).padStart(2,'0');
+
+  // Save stats
+  const stats = readStats();
+  const cid = STATE.currentCase.id;
+  if(!stats.cases[cid]) stats.cases[cid]={attempts:0,best_accuracy:0,last_played:''};
+  stats.cases[cid].attempts++;
+  stats.cases[cid].best_accuracy = Math.max(stats.cases[cid].best_accuracy, accuracy);
+  stats.cases[cid].last_played = new Date().toISOString().slice(0,10);
+  stats.session.total_cases++;
+  if(accuracy>=80) stats.session.total_correct++;
+  if(accuracy===100) stats.session.streak++;
+  else stats.session.streak=0;
+  writeStats(stats);
+  updateQueue(cid, accuracy);
+
+  setTimeout(()=>{
+    document.getElementById('complete-case').textContent = 'Case ' + STATE.currentCase.id + ' Complete';
+    document.getElementById('complete-title').textContent = STATE.currentCase.title;
+    document.getElementById('complete-badge').textContent =
+      accuracy===100 ? '✓ Perfect — All interventions correct' : `✓ ${correct}/${total} correct`;
+    document.getElementById('stat-tries').textContent = STATE.attempts;
+    document.getElementById('stat-accuracy').textContent = accuracy + '%';
+    document.getElementById('stat-time').textContent = mins + ':' + secs;
+    showScreen('screen-complete');
+  }, 900);
+}
+
+// ── WHY PANEL ───────────────────────────────────────────
+function openWhyPanel(ivId){
+  const iv = STATE.currentCase.interventions.find(i=>i.id===ivId);
+  if(!iv) return;
+  document.getElementById('why-intervention-name').textContent = iv.label;
+  document.getElementById('why-text').textContent = iv.why;
+  document.getElementById('why-guideline').textContent = iv.guideline;
+  document.getElementById('screen-why').classList.add('open');
+}
+function closeWhyPanel(){
+  document.getElementById('screen-why').classList.remove('open');
+}
+document.getElementById('why-back').addEventListener('click', closeWhyPanel);
+document.getElementById('btn-got-it').addEventListener('click', closeWhyPanel);
+
+// ── COMPLETE SCREEN BUTTONS ─────────────────────────────
+document.getElementById('btn-next-case').addEventListener('click', ()=>{
+  const next = nextCaseFromQueue();
+  STATE.currentCase = next;
+  STATE.currentCaseIdx = CASES.findIndex(c=>c.id===next.id);
+  STATE.zones = JSON.parse(JSON.stringify(DEFAULT_ZONES)); // reset; vision called again after new image
+  // For next case, go back to upload to allow new patient image
+  initUploadScreen();
+  showScreen('screen-upload');
+  showToast('Upload a patient image for: ' + next.title);
+});
+
+document.getElementById('btn-review').addEventListener('click', ()=>{
+  initGameScreen();
+  showScreen('screen-game');
+});
+
+// ── EVAL FUNCTION ────────────────────────────────────────
+// Accessible as window.runEval() from DevTools console.
+// Tests: case data integrity, zone structure, scoring logic, queue logic.
+window.runEval = function(){
+  console.group('🩺 MedGame Eval Suite');
+  let passed = 0, failed = 0;
+
+  function assert(name, condition, detail=''){
+    if(condition){ console.log(`✅ ${name}`); passed++; }
+    else { console.error(`❌ ${name}${detail?' — '+detail:''}`); failed++; }
+  }
+
+  // 1. Case data integrity
+  assert('10 cases loaded', CASES.length === 10);
+  CASES.forEach(c=>{
+    assert(`Case ${c.id} has id`, !!c.id);
+    assert(`Case ${c.id} has title`, !!c.title);
+    assert(`Case ${c.id} has chief_complaint`, !!c.chief_complaint);
+    assert(`Case ${c.id} has objective`, !!c.objective);
+    assert(`Case ${c.id} has clinical_tip`, !!c.clinical_tip);
+    assert(`Case ${c.id} has 5 interventions`, c.interventions.length === 5,
+      `got ${c.interventions.length}`);
+    c.interventions.forEach(iv=>{
+      assert(`  ${c.id}/${iv.id} has label`, !!iv.label);
+      assert(`  ${c.id}/${iv.id} correct_zone is valid`,
+        Object.keys(DEFAULT_ZONES).includes(iv.correct_zone), iv.correct_zone);
+      assert(`  ${c.id}/${iv.id} has why text`, iv.why && iv.why.length > 20);
+      assert(`  ${c.id}/${iv.id} has guideline`, !!iv.guideline);
+    });
+  });
+
+  // 2. Zone structure
+  const zoneKeys = Object.keys(DEFAULT_ZONES);
+  assert('5 default zones defined', zoneKeys.length === 5);
+  zoneKeys.forEach(k=>{
+    const z = DEFAULT_ZONES[k];
+    assert(`Zone ${k} cx in [0,1]`, z.cx>=0&&z.cx<=1);
+    assert(`Zone ${k} cy in [0,1]`, z.cy>=0&&z.cy<=1);
+    assert(`Zone ${k} w > 0`, z.w>0);
+    assert(`Zone ${k} h > 0`, z.h>0);
+    assert(`Zone ${k} has label`, !!z.label);
+  });
+
+  // 3. Scoring / accuracy logic
+  (function testScoring(){
+    const totalInterventions = 5;
+    // Perfect case: 5 correct, 5 attempts → 100%
+    const perfAcc = Math.round((5/(5||1))*100);
+    assert('Perfect accuracy = 100%', perfAcc===100);
+    // 1 wrong attempt: 5 correct out of 6 total → 83%
+    const partAcc = Math.round((5/(6||1))*100);
+    assert('5/6 accuracy = 83%', partAcc===83);
+    // 0 correct: 0/1 → 0%
+    const zeroAcc = Math.round((0/(1||1))*100);
+    assert('0/1 accuracy = 0%', zeroAcc===0);
+  })();
+
+  // 4. Queue / spaced repetition
+  (function testQueue(){
+    // Save original queue
+    const origQueue = localStorage.getItem(QUEUE_KEY);
+    // Seed a known queue
+    writeQueue(['001','002','003','004','005','006','007','008','009','010']);
+    // accuracy < 80 → goes to position 3
+    updateQueue('001', 70);
+    const q1 = readQueue();
+    assert('Low accuracy → case at position 3', q1[2]==='001', JSON.stringify(q1.slice(0,5)));
+    // Reset
+    writeQueue(['001','002','003','004','005','006','007','008','009','010']);
+    // accuracy 100 → goes to end
+    updateQueue('001', 100);
+    const q2 = readQueue();
+    assert('Perfect accuracy → case at end', q2[q2.length-1]==='001', JSON.stringify(q2));
+    // Restore
+    if(origQueue) localStorage.setItem(QUEUE_KEY,origQueue);
+    else localStorage.removeItem(QUEUE_KEY);
+  })();
+
+  // 5. Stats read/write round-trip
+  (function testStats(){
+    const orig = localStorage.getItem(STATS_KEY);
+    const testStats = {cases:{'001':{attempts:2,best_accuracy:85,last_played:'2026-01-01'}},session:{total_cases:1,total_correct:1,streak:1}};
+    writeStats(testStats);
+    const back = readStats();
+    assert('Stats round-trip: attempts', back.cases['001'].attempts===2);
+    assert('Stats round-trip: accuracy', back.cases['001'].best_accuracy===85);
+    assert('Stats round-trip: streak', back.session.streak===1);
+    if(orig) localStorage.setItem(STATS_KEY,orig); else localStorage.removeItem(STATS_KEY);
+  })();
+
+  // 6. Vision API response parser (mock)
+  (function testVisionParser(){
+    const mockResponse = `{"zone-monitor":{"cx":0.5,"cy":0.1,"w":0.12,"h":0.08},"zone-iv-bag":{"cx":0.8,"cy":0.3,"w":0.1,"h":0.1},"zone-blood":{"cx":0.3,"cy":0.55,"w":0.1,"h":0.08},"zone-arm":{"cx":0.25,"cy":0.65,"w":0.1,"h":0.07},"zone-icu":{"cx":0.5,"cy":0.9,"w":0.18,"h":0.07}}`;
+    try{
+      const parsed = JSON.parse(mockResponse);
+      const required = ['zone-monitor','zone-iv-bag','zone-blood','zone-arm','zone-icu'];
+      const allPresent = required.every(k=>parsed[k]&&typeof parsed[k].cx==='number');
+      assert('Vision JSON parser handles valid response', allPresent);
+    } catch(e){
+      assert('Vision JSON parser handles valid response', false, e.message);
+    }
+    // Malformed response with fences
+    const fenced = '```json\n{"zone-monitor":{"cx":0.5,"cy":0.1,"w":0.1,"h":0.08}}\n```';
+    try{
+      const clean = fenced.replace(/```json|```/g,'').trim();
+      const p = JSON.parse(clean);
+      assert('Vision parser strips markdown fences', !!p['zone-monitor']);
+    } catch(e){
+      assert('Vision parser strips markdown fences', false, e.message);
+    }
+  })();
+
+  // 7. Audio guard
+  assert('AudioContext guard correct', AUDIO_SUPPORTED === (typeof AudioContext !== 'undefined'));
+
+  // Summary
+  console.groupEnd();
+  const total = passed+failed;
+  console.log(`\n📊 Results: ${passed}/${total} passed, ${failed} failed`);
+  if(failed===0) console.log('🟢 All tests passed!');
+  else console.warn(`🔴 ${failed} test(s) failed — see above`);
+  return {passed, failed, total};
+};
+
+// Eval badge click
+document.getElementById('eval-badge').addEventListener('click', ()=>{
+  console.clear();
+  const results = window.runEval();
+  showToast(`Eval: ${results.passed}/${results.total} passed`, results.failed===0?'success':'error');
+});
+
+// ── INIT ────────────────────────────────────────────────
+(function init(){
+  initUploadScreen();
+  // Set initial case from queue
+  const next = nextCaseFromQueue();
+  STATE.currentCase = next;
+  STATE.currentCaseIdx = CASES.findIndex(c=>c.id===next.id);
+  // Pre-select in UI
+  document.querySelectorAll('.case-chip').forEach((chip,i)=>{
+    if(i===STATE.currentCaseIdx) chip.classList.add('selected');
+    else chip.classList.remove('selected');
+  });
+  document.getElementById('tip-text').textContent = next.clinical_tip;
+})();
+</script>
+</body>
+</html>

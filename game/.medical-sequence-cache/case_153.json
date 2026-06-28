@@ -1,0 +1,145 @@
+{
+  "caseId": "153",
+  "title": "SKIN LESIONS",
+  "source": "offline",
+  "patientLock": "N'Gavu — young Black man, mustard-yellow party jacket likeness, thin mustache, tired bloodshot eyes; hospital gown on ED stretcher; blistered dorsal hands and forearms, fragile skin; mustard-yellow shirt draped on bedside chair; two brown beer bottles on overbed side table (patient property); MeWorld sculptural CGI clinical still",
+  "orders": [
+    {
+      "id": "urine-porphyrins",
+      "label": "Urine porphyrins",
+      "why": "Porphyrins keep building in the skin until you measure them — elevated uroporphyrins confirm the photosensitive pathway.",
+      "guideline": "ACEP"
+    },
+    {
+      "id": "plasma-porphyrins",
+      "label": "Plasma porphyrins",
+      "why": "Circulating porphyrin peak at 620 nm locks the diagnosis when urine is equivocal.",
+      "guideline": "ACEP"
+    },
+    {
+      "id": "hcv-hiv-iron-studies",
+      "label": "HCV / HIV / Iron studies",
+      "why": "Acquired PCT is often triggered by alcohol, iron overload, or silent hepatitis — the rash is not the whole story.",
+      "guideline": "ACEP"
+    },
+    {
+      "id": "phlebotomy",
+      "label": "Phlebotomy",
+      "why": "First-line when iron overload is driving the process — target ferritin low-normal.",
+      "guideline": "ACEP"
+    },
+    {
+      "id": "sun-protection-avoid-alcohol",
+      "label": "Sun protection / Avoid alcohol",
+      "why": "Sunlight activates porphyrins in skin; alcohol keeps the trigger running — both must stop.",
+      "guideline": "ACEP"
+    }
+  ],
+  "prequel": [
+    {
+      "id": "p1",
+      "title": "Village party",
+      "caption": "N'Gavu drinks with friends from the village — beer all night, yellow jacket, laughter. He thinks nothing of it.",
+      "visualHint": "MCU: N'Gavu in mustard-yellow party jacket holding brown beer bottle, pool-hall or outdoor party — same face, night lights, NOT hospital"
+    },
+    {
+      "id": "p2",
+      "title": "Afternoon sun",
+      "caption": "Walking home the next day, his hands and face begin to peel and blister in the sun — the first time the light feels like fire.",
+      "visualHint": "Wide: same N'Gavu in yellow jacket squinting in harsh afternoon sun, forearms reddening, village path — NOT ED"
+    },
+    {
+      "id": "p3",
+      "title": "ED arrival",
+      "caption": "He takes off the yellow shirt for the gown — the shirt hangs on the chair; his beer bottles sit on the side table. Light through the window still hurts.",
+      "visualHint": "ED bay: N'Gavu in hospital gown on stretcher, mustard-yellow shirt draped on bedside chair, two brown beer bottles on overbed table, blistered forearms shielded from window — MeWorld sculptural CGI"
+    }
+  ],
+  "missedPath": [
+    {
+      "id": "m1",
+      "title": "Urine porphyrins delayed",
+      "caption": "Porphyrins keep accumulating in the skin — blisters near the window stay angry; light still hurts while the sample waits.",
+      "visualHint": "MCU on face and hands — patient reaction: patient shields blistered forearms from overhead light, winces near exam-room window — porphyrins still accumulating in skin, ED bay. MeWorld sculptural 3D CGI clinical still — muted palette, same patient likeness, smart camera angle for this moment only.",
+      "tiedOrderId": "urine-porphyrins",
+      "tiedOrderLabel": "Urine porphyrins"
+    },
+    {
+      "id": "m2",
+      "title": "Plasma porphyrins delayed",
+      "caption": "Circulating porphyrin load keeps building — the diagnostic peak you need is still not captured.",
+      "visualHint": "wide three-quarter from foot of bed — room depth: same patient tense on stretcher, hands curled, waiting — circulating porphyrin burden still rising, diagnostic sample not drawn, ED bay. MeWorld sculptural 3D CGI clinical still — muted palette, same patient likeness, smart camera angle for this moment only.",
+      "tiedOrderId": "plasma-porphyrins",
+      "tiedOrderLabel": "Plasma porphyrins"
+    },
+    {
+      "id": "m3",
+      "title": "HCV / HIV / Iron studies delayed",
+      "caption": "The rash looks like the whole story — but a silent infection or iron overload trigger can stay hidden until you screen.",
+      "visualHint": "over-shoulder from clinician POV toward patient — no standing feet in frame: patient on stretcher, skin lesions visible but team focused on rash only — silent infection or iron overload still unchecked, ED bay. MeWorld sculptural 3D CGI clinical still — muted palette, same patient likeness, smart camera angle for this moment only.",
+      "tiedOrderId": "hcv-hiv-iron-studies",
+      "tiedOrderLabel": "HCV / HIV / Iron studies"
+    },
+    {
+      "id": "m4",
+      "title": "Phlebotomy delayed",
+      "caption": "The rash looks like the whole story — but a silent infection or iron overload trigger can stay hidden until you screen.",
+      "visualHint": "close on affected body region — patient still identifiable: patient on stretcher, skin lesions visible but team focused on rash only — silent infection or iron overload still unchecked, ED bay. MeWorld sculptural 3D CGI clinical still — muted palette, same patient likeness, smart camera angle for this moment only.",
+      "tiedOrderId": "phlebotomy",
+      "tiedOrderLabel": "Phlebotomy"
+    },
+    {
+      "id": "m5",
+      "title": "Sun protection / Avoid alcohol delayed",
+      "caption": "The team treats shadows without the picture — reversible causes stay invisible while imaging waits.",
+      "visualHint": "profile at bedside — monitor glow in background: clinical stress visible — Sun protection / Avoid alcohol not yet done, ED bay. MeWorld sculptural 3D CGI clinical still — muted palette, same patient likeness, smart camera angle for this moment only.",
+      "tiedOrderId": "sun-protection-avoid-alcohol",
+      "tiedOrderLabel": "Sun protection / Avoid alcohol"
+    }
+  ],
+  "savedPath": [
+    {
+      "id": "s1",
+      "title": "Urine porphyrins",
+      "caption": "Urinary porphyrins trend down — blistering eases once the pathway is named and treated.",
+      "visualHint": "over-shoulder from clinician POV toward patient — no standing feet in frame: patient calmer in dimmed bay, blistering settling, porphyrin pathway addressed, ED bay. MeWorld sculptural 3D CGI clinical still — muted palette, same patient likeness, smart camera angle for this moment only.",
+      "tiedOrderId": "urine-porphyrins",
+      "tiedOrderLabel": "Urine porphyrins"
+    },
+    {
+      "id": "s2",
+      "title": "Plasma porphyrins",
+      "caption": "Plasma porphyrin peak is captured — diagnosis locks; sun avoidance and trigger treatment can start.",
+      "visualHint": "close on affected body region — patient still identifiable: relief at bedside — diagnostic porphyrin peak captured, treatment plan forming, ED bay. MeWorld sculptural 3D CGI clinical still — muted palette, same patient likeness, smart camera angle for this moment only.",
+      "tiedOrderId": "plasma-porphyrins",
+      "tiedOrderLabel": "Plasma porphyrins"
+    },
+    {
+      "id": "s3",
+      "title": "HCV / HIV / Iron studies",
+      "caption": "Screening finds the trigger — iron overload or infection can be treated, not just the skin.",
+      "visualHint": "profile at bedside — monitor glow in background: team reviews positive screen with patient — trigger identified, not just skin treated, ED bay. MeWorld sculptural 3D CGI clinical still — muted palette, same patient likeness, smart camera angle for this moment only.",
+      "tiedOrderId": "hcv-hiv-iron-studies",
+      "tiedOrderLabel": "HCV / HIV / Iron studies"
+    },
+    {
+      "id": "s4",
+      "title": "Phlebotomy",
+      "caption": "Screening finds the trigger — iron overload or infection can be treated, not just the skin.",
+      "visualHint": "low angle from stretcher rail — emotional weight: team reviews positive screen with patient — trigger identified, not just skin treated, ED bay. MeWorld sculptural 3D CGI clinical still — muted palette, same patient likeness, smart camera angle for this moment only.",
+      "tiedOrderId": "phlebotomy",
+      "tiedOrderLabel": "Phlebotomy"
+    },
+    {
+      "id": "s5",
+      "title": "Sun protection / Avoid alcohol",
+      "caption": "Access and fluids restore perfusion — vitals steady and the workup can proceed safely.",
+      "visualHint": "MCU on face and hands — patient reaction: IV running, vitals stabilizing on monitor, patient breathing easier, ED bay. MeWorld sculptural 3D CGI clinical still — muted palette, same patient likeness, smart camera angle for this moment only.",
+      "tiedOrderId": "sun-protection-avoid-alcohol",
+      "tiedOrderLabel": "Sun protection / Avoid alcohol"
+    }
+  ],
+  "realWorldEcho": null,
+  "promptVersion": 3,
+  "cachedAt": "2026-06-20T13:12:23.795Z"
+}

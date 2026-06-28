@@ -1,0 +1,228 @@
+[
+  {
+    "condition": "Tension Pneumothorax",
+    "chief_complaint": "Acute chest pain and respiratory distress",
+    "correct_orders": [
+      "Physical examination: chest/lung",
+      "Physical examination: cardiovascular",
+      "Cardiac monitoring",
+      "Pulse oximetry",
+      "Needle thoracostomy for decompression",
+      "Chest tube insertion",
+      "Chest x-ray (after tube placement)",
+      "Monitor blood pressure",
+      "Monitor respiratory rate"
+    ],
+    "should_avoid_orders": [
+      "Admission before treatment",
+      "12-lead ECG before stabilization",
+      "Arterial blood gases before stabilization",
+      "Portable chest x-ray before treatment",
+      "Lung scan",
+      "CT before lung re-expansion",
+      "Endotracheal intubation",
+      "Pulmonary function testing",
+      "Thrombolytic therapy",
+      "Sending patient home before treatment"
+    ],
+    "key_rationale": {
+      "Needle thoracostomy": "Immediate decompression is life-saving when tension pneumothorax is discovered on exam",
+      "Chest tube insertion": "Definitive treatment for lung reexpansion after needle decompression",
+      "Chest x-ray after intervention": "Confirms appropriate tube placement and lung reexpansion",
+      "Avoid delays": "Any testing that delays treatment (ECG, ABG) can be harmful or fatal"
+    },
+    "source": "usmle_official"
+  },
+  {
+    "condition": "Rheumatoid Arthritis",
+    "chief_complaint": "Knee pain and swelling",
+    "correct_orders": [
+      "Physical examination: extremities/spine",
+      "Physical examination: chest/lung",
+      "Physical examination: cardiovascular",
+      "Physical examination: abdominal",
+      "Physical examination: skin",
+      "Physical examination: HEENT/neck",
+      "Physical examination: lymph node",
+      "Rheumatoid factor OR Anti-CCP antibody test",
+      "NSAID or corticosteroids (for interim relief)",
+      "Disease-modifying antirheumatic drug (DMARD)",
+      "Complete blood count",
+      "Arthrocentesis with synovial fluid studies (cell count, crystals, culture)",
+      "Antinuclear antibody assay",
+      "ESR or CRP",
+      "Joint x-rays",
+      "Exercise counseling or physical/occupational therapy referral"
+    ],
+    "should_avoid_orders": [
+      "Treatment with NSAIDs or corticosteroids alone",
+      "Biologic agents alone (adalimumab) as first-line",
+      "Opioids",
+      "Arthroscopy",
+      "Synovial biopsy"
+    ],
+    "key_rationale": {
+      "Rheumatoid factor or Anti-CCP": "Supports diagnosis of rheumatoid arthritis",
+      "DMARD therapy": "Prevents or slows joint damage, essential for comprehensive treatment",
+      "NSAIDs/corticosteroids plus DMARD": "Combination addresses both symptom relief and disease modification",
+      "Avoid NSAIDs alone": "Does not prevent joint damage or modify disease course"
+    },
+    "source": "usmle_official"
+  },
+  {
+    "condition": "Ascending Aortic Dissection",
+    "chief_complaint": "Chest pain",
+    "correct_orders": [
+      "Physical examination: cardiovascular",
+      "Physical examination: chest/lung",
+      "Physical examination: neurologic/psychiatric",
+      "12-lead ECG",
+      "Portable chest x-ray",
+      "IV beta-blocker (to lower BP and HR)",
+      "IV narcotic analgesic",
+      "Cardiac monitoring or repeat vital signs",
+      "Oxygen saturation monitoring",
+      "CT chest with contrast OR Cardiac CTA with contrast OR Echocardiogram OR TEE OR MRI chest OR Cardiac MRI with gadolinium",
+      "Open heart surgery OR EVAR OR Thoracotomy/cardiothoracic surgery OR General surgery consult",
+      "Serum creatinine (basic or complete metabolic panel)",
+      "Electrolytes",
+      "Complete blood count",
+      "Cardiac enzymes (CK or troponin I)",
+      "Type and crossmatch"
+    ],
+    "should_avoid_orders": [
+      "Antihypertensives other than IV route",
+      "Antihypertensives without IV beta-blocker",
+      "Chest tube",
+      "Exercise ECG",
+      "Heparin",
+      "Laparotomy",
+      "Needle thoracostomy",
+      "Stress echocardiography",
+      "Thrombolytics",
+      "Warfarin",
+      "Discharge to office or home",
+      "Lung scan"
+    ],
+    "key_rationale": {
+      "IV beta-blocker": "Lowers blood pressure and heart rate to stabilize dissection",
+      "Chest imaging (CT/CTA/Echo/TEE/MRI)": "Confirms diagnosis of aortic dissection",
+      "Surgical intervention": "Ascending aortic dissection with aortic root involvement requires emergency surgery",
+      "Avoid thrombolytics": "Contraindicated in aortic dissection, can be fatal"
+    },
+    "source": "usmle_official"
+  },
+  {
+    "condition": "Asthma (pediatric)",
+    "chief_complaint": "Shortness of breath",
+    "correct_orders": [
+      "Physical examination: HEENT/neck",
+      "Physical examination: chest/lung",
+      "Physical examination: cardiovascular",
+      "Physical examination: abdominal",
+      "Pulse oximetry or oxygen therapy",
+      "Inhalation bronchodilator (albuterol or levalbuterol with ipratropium)",
+      "Oral steroid",
+      "Asthma counseling and medication side effects education",
+      "Repeat chest/lung examination after treatment"
+    ],
+    "should_avoid_orders": [
+      "Bronchodilator by non-inhalation route (IM or oral)",
+      "Ipratropium alone",
+      "Arterial blood gas analysis for monitoring",
+      "Antibiotics",
+      "Bronchoscopy",
+      "Chest CT",
+      "Endotracheal intubation",
+      "IV sympathomimetics"
+    ],
+    "key_rationale": {
+      "Inhalation bronchodilator": "Most effective route for acute asthma treatment in children",
+      "Oral steroid": "Reduces airway inflammation in acute asthma exacerbation",
+      "Repeat chest exam": "Monitors response to treatment without invasive testing",
+      "Avoid non-inhalation bronchodilators": "Less effective than inhalation route"
+    },
+    "source": "usmle_official"
+  },
+  {
+    "condition": "Diabetic Ketoacidosis with E. coli Sepsis",
+    "chief_complaint": "Lethargy, nausea, and vomiting",
+    "correct_orders": [
+      "Physical examination: chest/lung",
+      "Physical examination: cardiovascular",
+      "Physical examination: abdominal",
+      "Physical examination: neurologic/psychiatric",
+      "Blood glucose test (glucometer)",
+      "Complete blood count",
+      "Urinalysis",
+      "Isotonic IV fluids (Lactated Ringer or normal saline)",
+      "Broad-spectrum IV or IM antibiotic (empiric)",
+      "IV insulin (after glucose result)",
+      "Repeat vital signs OR admission to inpatient/ICU",
+      "Arterial blood gas",
+      "Blood culture (before antibiotics)",
+      "Urine culture (before antibiotics)",
+      "Serum electrolytes",
+      "Serum beta-hydroxybutyrate or urinalysis for ketones",
+      "Serum creatinine or BUN",
+      "Continued monitoring of glucose, electrolytes (especially potassium), and arterial pH"
+    ],
+    "should_avoid_orders": [
+      "IV fluids other than isotonic (hypotonic saline or dextrose in water)",
+      "Subcutaneous insulin initially",
+      "Inappropriate antibiotics",
+      "Gastric lavage",
+      "Upper GI endoscopy"
+    ],
+    "key_rationale": {
+      "Isotonic IV fluids": "Corrects severe dehydration in DKA; hypotonic solutions are inappropriate",
+      "IV insulin": "Required for acute hyperglycemia management in DKA, not subcutaneous",
+      "Blood/urine culture before antibiotics": "Identifies organism causing sepsis",
+      "Electrolyte monitoring": "Potassium shifts during DKA treatment require close monitoring"
+    },
+    "source": "usmle_official"
+  },
+  {
+    "condition": "Eclampsia",
+    "chief_complaint": "Seizure and loss of consciousness (38 weeks pregnant)",
+    "correct_orders": [
+      "Physical examination: skin",
+      "Physical examination: HEENT/neck",
+      "Physical examination: chest/lung",
+      "Physical examination: cardiovascular",
+      "Physical examination: abdominal",
+      "Physical examination: genital",
+      "Physical examination: extremities",
+      "Physical examination: neurologic/psychiatric",
+      "Complete blood count",
+      "IV magnesium sulfate",
+      "IV hydralazine OR IV labetalol OR PO nifedipine",
+      "Delivery (stimulate contractions with uterotonics OR cesarean delivery OR OB/GYN consult)",
+      "Fetal monitor",
+      "Urine output monitoring",
+      "Serum creatinine or BUN (basic or comprehensive metabolic panel)",
+      "Electrolytes",
+      "Liver enzymes",
+      "Platelet count",
+      "Urinalysis for proteinuria"
+    ],
+    "should_avoid_orders": [
+      "Peripheral blood smear instead of CBC",
+      "IM or IV phenobarbital or benzodiazepine instead of magnesium sulfate",
+      "IV antihypertensives other than hydralazine/labetalol/nifedipine",
+      "Less effective uterotonics",
+      "Discharge to office or home",
+      "PO mifepristone",
+      "CT abdomen/pelvis",
+      "IM carboprost",
+      "Dilatation and curettage"
+    ],
+    "key_rationale": {
+      "IV magnesium sulfate": "Prevents recurrent seizures in eclampsia, superior to benzodiazepines",
+      "IV hydralazine/labetalol or PO nifedipine": "Ideal antihypertensives for eclampsia",
+      "Delivery": "Definitive treatment for eclampsia at 38 weeks gestation",
+      "CBC and platelets": "Rules out HELLP syndrome and hemolysis"
+    },
+    "source": "usmle_official"
+  }
+]

@@ -1,0 +1,1055 @@
+[
+  {
+    "condition": "Acute Coronary Syndrome (ACS) / NSTEMI / STEMI",
+    "chief_complaint": "Chest pain",
+    "correct_orders": [
+      "Oxygen (if hypoxic)",
+      "IV access",
+      "Cardiac monitor/telemetry",
+      "Pulse oximetry",
+      "EKG",
+      "Troponin (serial)",
+      "Chest X-ray",
+      "Aspirin",
+      "Nitrates",
+      "Heparin",
+      "Statin",
+      "Beta-blocker",
+      "Cardiology consult",
+      "Admit to CCU/telemetry"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Provides oxygen support if hypoxic in cardiac distress",
+      "IV access: Secure route for medications and fluids",
+      "Cardiac monitor: Continuous rhythm monitoring for arrhythmia detection",
+      "Pulse oximetry: Monitor oxygen saturation continuously",
+      "EKG: Rapidly rules in/out ischemia and arrhythmia",
+      "Troponin: Guides NSTEMI/ACS management with serial measurements",
+      "Chest X-ray: Screens for complications and alternative diagnoses",
+      "Aspirin: Antiplatelet therapy for acute coronary syndrome",
+      "Nitrates: Reduces cardiac workload and chest pain",
+      "Heparin: Anticoagulation for ACS management",
+      "Statin: Early lipid management in ACS",
+      "Beta-blocker: Reduces cardiac workload unless contraindicated",
+      "Cardiology consult: Specialist evaluation for definitive management",
+      "Admit to CCU: Appropriate level of care for monitoring"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Sepsis",
+    "chief_complaint": "Fever, hypotension, signs of infection",
+    "correct_orders": [
+      "Oxygen",
+      "IV access x2 large-bore",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "IV fluids bolus (30 mL/kg NS or LR)",
+      "Blood cultures x2 (before antibiotics)",
+      "CBC",
+      "CMP",
+      "Lactate",
+      "UA with culture",
+      "Chest X-ray",
+      "Broad-spectrum IV antibiotics within 1 hour",
+      "Vasopressors if MAP <65 after fluids",
+      "Admit to ICU if unstable"
+    ],
+    "should_avoid": [
+      "Delaying antibiotics for cultures"
+    ],
+    "key_rationale": [
+      "Oxygen: Support respiratory distress in septic patient",
+      "IV access x2: Adequate access for aggressive fluid resuscitation",
+      "Cardiac monitor: Continuous monitoring for arrhythmias in shock",
+      "Pulse oximetry: Monitor oxygenation status",
+      "IV fluids bolus: Early aggressive fluid resuscitation (30 mL/kg)",
+      "Blood cultures x2: Identify organism before starting antibiotics",
+      "CBC: Check for leukocytosis and assess for anemia",
+      "CMP: Assess renal function and electrolyte status",
+      "Lactate: Marker of tissue hypoperfusion and sepsis severity",
+      "UA with culture: Identify urinary source of infection",
+      "Chest X-ray: Screen for pneumonia as infection source",
+      "Broad-spectrum IV antibiotics: Must be given within 1 hour for sepsis",
+      "Vasopressors: Support blood pressure if fluids insufficient",
+      "Admit to ICU: Appropriate for unstable septic patients"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "DKA (Diabetic Ketoacidosis)",
+    "chief_complaint": "Altered mental status, hyperglycemia, metabolic acidosis",
+    "correct_orders": [
+      "Oxygen",
+      "IV access",
+      "Cardiac monitor",
+      "IV fluids (NS, then D5\u00bdNS when glucose <200)",
+      "Insulin infusion",
+      "Potassium protocol (replace if <5.3)",
+      "BMP q2-4h",
+      "Check phosphorus",
+      "Fingerstick glucose",
+      "Admit to ICU if AMS or severe"
+    ],
+    "should_avoid": [
+      "Starting insulin before adequate fluid resuscitation",
+      "Failing to monitor and replace potassium"
+    ],
+    "key_rationale": [
+      "Oxygen: Support for any respiratory compromise",
+      "IV access: Route for fluids and insulin",
+      "Cardiac monitor: Monitor for arrhythmias from electrolyte shifts",
+      "IV fluids: Aggressive hydration, switch to dextrose when glucose normalizes",
+      "Insulin infusion: Correct hyperglycemia and ketoacidosis",
+      "Potassium protocol: Replace potassium before insulin to prevent dangerous hypokalemia",
+      "BMP q2-4h: Frequent monitoring of glucose and electrolytes",
+      "Check phosphorus: Monitor for hypophosphatemia during treatment",
+      "Fingerstick glucose: Frequent glucose monitoring",
+      "Admit to ICU: Appropriate level of care for severe DKA with AMS"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "HHS (Hyperosmolar Hyperglycemic State)",
+    "chief_complaint": "Severe hyperglycemia, altered mental status, profound dehydration",
+    "correct_orders": [
+      "Oxygen",
+      "IV access",
+      "Cardiac monitor",
+      "IV fluids (NS, then D5\u00bdNS when glucose <200)",
+      "Insulin infusion",
+      "Potassium protocol (replace if <5.3)",
+      "BMP q2-4h",
+      "Check phosphorus",
+      "Admit to ICU if AMS or severe"
+    ],
+    "should_avoid": [
+      "Rapid correction of hyperglycemia"
+    ],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "IV access: Route for aggressive fluid replacement",
+      "Cardiac monitor: Monitor for complications",
+      "IV fluids: More aggressive hydration than DKA due to profound dehydration",
+      "Insulin infusion: Correct hyperglycemia gradually",
+      "Potassium protocol: Prevent life-threatening hypokalemia",
+      "BMP q2-4h: Close electrolyte and glucose monitoring",
+      "Check phosphorus: Monitor electrolyte balance",
+      "Admit to ICU: Severe metabolic emergency requiring intensive monitoring"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "COPD Exacerbation",
+    "chief_complaint": "Shortness of breath, increased sputum production",
+    "correct_orders": [
+      "Oxygen (target 88-92%)",
+      "Nebulized albuterol/ipratropium",
+      "Systemic steroids",
+      "Chest X-ray",
+      "ABG",
+      "Antibiotics if fever/sputum change"
+    ],
+    "should_avoid": [
+      "High-flow oxygen (risk of CO2 retention)"
+    ],
+    "key_rationale": [
+      "Oxygen: Controlled oxygen to avoid CO2 retention (88-92% target)",
+      "Nebulized albuterol/ipratropium: Bronchodilation for acute exacerbation",
+      "Systemic steroids: Reduce airway inflammation",
+      "Chest X-ray: Rule out pneumonia or pneumothorax",
+      "ABG: Assess acid-base status and CO2 retention",
+      "Antibiotics: Indicated if infectious trigger (fever, purulent sputum)"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Asthma Exacerbation",
+    "chief_complaint": "Shortness of breath, wheezing, chest tightness",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "Nebulized albuterol/ipratropium",
+      "Systemic steroids",
+      "Chest X-ray",
+      "ABG if severe",
+      "Peak flow monitoring",
+      "Admit if severe"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Support oxygenation during respiratory distress",
+      "Cardiac monitor: Monitor for cardiac stress",
+      "Pulse oximetry: Continuous oxygen monitoring",
+      "Nebulized albuterol/ipratropium: First-line bronchodilator therapy",
+      "Systemic steroids: Reduce airway inflammation",
+      "Chest X-ray: Rule out complications like pneumothorax",
+      "ABG: Assess severity and ventilation status if severe",
+      "Peak flow monitoring: Objective measure of airway obstruction",
+      "Admit if severe: Hospitalization for severe exacerbation"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Ischemic Stroke",
+    "chief_complaint": "Sudden neurological deficit, weakness, speech changes",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "IV access",
+      "CT head non-contrast STAT",
+      "Neuro checks q1h",
+      "NPO until swallow evaluation",
+      "tPA if within window",
+      "Aspirin if not tPA candidate",
+      "Admit to ICU/stroke unit"
+    ],
+    "should_avoid": [
+      "Aspirin before CT (risk of hemorrhage)",
+      "Delaying CT imaging"
+    ],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "Cardiac monitor: Monitor for arrhythmias",
+      "Pulse oximetry: Continuous oxygen monitoring",
+      "IV access: Route for emergency medications",
+      "CT head STAT: Rapidly distinguish ischemic from hemorrhagic stroke",
+      "Neuro checks q1h: Frequent monitoring for deterioration",
+      "NPO: Prevent aspiration until swallow assessed",
+      "tPA: Thrombolysis if within treatment window for ischemic stroke",
+      "Aspirin: Antiplatelet therapy if not candidate for tPA",
+      "Admit to ICU/stroke unit: Specialized care and monitoring"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "GI Bleed (Upper)",
+    "chief_complaint": "Hematemesis, melena, hypotension",
+    "correct_orders": [
+      "IV access x2 large-bore",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "IV fluids",
+      "Type & cross",
+      "CBC",
+      "CMP",
+      "Coagulation studies",
+      "NPO",
+      "IV PPI",
+      "Octreotide + ceftriaxone if variceal suspected",
+      "GI consult for urgent EGD"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "IV access x2: Large-bore access for rapid transfusion if needed",
+      "Cardiac monitor: Monitor for hemodynamic instability",
+      "Pulse oximetry: Monitor oxygenation",
+      "IV fluids: Volume resuscitation",
+      "Type & cross: Prepare for blood transfusion",
+      "CBC: Assess degree of anemia from blood loss",
+      "CMP: Assess renal function and electrolytes",
+      "Coagulation studies: Check for coagulopathy",
+      "NPO: Prepare for urgent endoscopy",
+      "IV PPI: Reduce acid secretion in upper GI bleed",
+      "Octreotide + ceftriaxone: For suspected variceal bleeding",
+      "GI consult for EGD: Diagnostic and therapeutic endoscopy"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Ectopic Pregnancy",
+    "chief_complaint": "Abdominal pain, vaginal bleeding, positive pregnancy test",
+    "correct_orders": [
+      "IV access",
+      "Cardiac monitor",
+      "Type & cross",
+      "\u03b2-hCG",
+      "Transvaginal ultrasound",
+      "OB consult STAT",
+      "Laparotomy if ruptured/unstable",
+      "Methotrexate if stable and meets criteria"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "IV access: Prepare for potential surgical emergency",
+      "Cardiac monitor: Monitor hemodynamic status",
+      "Type & cross: Prepare for transfusion if ruptured",
+      "\u03b2-hCG: Confirm pregnancy and trend levels",
+      "Transvaginal ultrasound: Locate pregnancy and assess for rupture",
+      "OB consult STAT: Specialist management required",
+      "Laparotomy: Surgical intervention if ruptured and unstable",
+      "Methotrexate: Medical management if stable and criteria met"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Preeclampsia/Eclampsia",
+    "chief_complaint": "Hypertension, proteinuria, seizures (if eclampsia)",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "IV access",
+      "Pulse oximetry",
+      "CBC",
+      "CMP",
+      "Urine protein",
+      "LFTs",
+      "Magnesium sulfate",
+      "IV labetalol or hydralazine",
+      "OB consult",
+      "Delivery if \u226534 weeks or unstable"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "Cardiac monitor: Monitor for complications",
+      "IV access: Route for emergency medications",
+      "Pulse oximetry: Monitor oxygen status",
+      "CBC: Check for thrombocytopenia (HELLP)",
+      "CMP: Assess renal function",
+      "Urine protein: Quantify proteinuria",
+      "LFTs: Check for HELLP syndrome",
+      "Magnesium sulfate: Seizure prophylaxis/treatment",
+      "IV labetalol/hydralazine: Acute blood pressure control",
+      "OB consult: Specialist management required",
+      "Delivery: Definitive treatment if severe or term"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Preterm Labor",
+    "chief_complaint": "Contractions before 37 weeks gestation",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "IV access",
+      "CBC",
+      "UA",
+      "Vaginal cultures",
+      "Fetal monitoring",
+      "Tocolytics if no contraindication",
+      "Betamethasone",
+      "GBS prophylaxis",
+      "OB consult"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Support maternal and fetal oxygenation",
+      "Cardiac monitor: Monitor maternal status",
+      "IV access: Route for tocolytics and medications",
+      "CBC: Check for infection",
+      "UA: Rule out UTI as trigger",
+      "Vaginal cultures: Check for GBS status",
+      "Fetal monitoring: Assess fetal well-being",
+      "Tocolytics: Delay delivery if no contraindications",
+      "Betamethasone: Fetal lung maturity if <34 weeks",
+      "GBS prophylaxis: Prevent neonatal infection",
+      "OB consult: Specialist management required"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Febrile Infant (<28 days)",
+    "chief_complaint": "Fever in neonate",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "IV access",
+      "CBC",
+      "CMP",
+      "Blood culture",
+      "Urine culture",
+      "CSF studies (lumbar puncture)",
+      "Empiric IV antibiotics",
+      "Admit"
+    ],
+    "should_avoid": [
+      "Delaying antibiotics",
+      "Sending home without full septic workup"
+    ],
+    "key_rationale": [
+      "Oxygen: Support if needed",
+      "Cardiac monitor: Monitor vital signs",
+      "IV access: Route for antibiotics and fluids",
+      "CBC: Check for leukocytosis or leukopenia",
+      "CMP: Assess overall status",
+      "Blood culture: Identify bacteremia",
+      "Urine culture: Common source in infants",
+      "CSF studies: Rule out meningitis",
+      "Empiric IV antibiotics: Immediate treatment for suspected sepsis",
+      "Admit: All febrile neonates require admission"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Croup",
+    "chief_complaint": "Barky cough, stridor, respiratory distress",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "Nebulized racemic epinephrine if severe",
+      "Steroids (dexamethasone)",
+      "Cool mist",
+      "Admit if severe"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "Cardiac monitor: Monitor status",
+      "Pulse oximetry: Monitor oxygen saturation",
+      "Nebulized epinephrine: Reduce airway edema if severe",
+      "Steroids: Reduce airway inflammation",
+      "Cool mist: Humidified air helps breathing",
+      "Admit if severe: Hospitalization for severe respiratory distress"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Epiglottitis",
+    "chief_complaint": "Severe respiratory distress, drooling, tripod positioning",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "Intubation precautions",
+      "ENT/Anesthesia consult STAT",
+      "Blood cultures",
+      "IV antibiotics",
+      "Admit to ICU"
+    ],
+    "should_avoid": [
+      "Agitating the child",
+      "Laying child flat",
+      "Examining throat with tongue depressor"
+    ],
+    "key_rationale": [
+      "Oxygen: Careful oxygen support",
+      "Cardiac monitor: Monitor vital signs",
+      "Intubation precautions: Prepare for potential airway emergency",
+      "ENT/Anesthesia STAT: Specialists for airway management",
+      "Blood cultures: Identify organism",
+      "IV antibiotics: Treat infection",
+      "Admit to ICU: Life-threatening airway emergency"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "CHF Exacerbation",
+    "chief_complaint": "Shortness of breath, orthopnea, edema",
+    "correct_orders": [
+      "Oxygen",
+      "IV access",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "IV loop diuretic (furosemide)",
+      "Strict I&O",
+      "Daily weights",
+      "Chest X-ray",
+      "EKG",
+      "BMP",
+      "BNP",
+      "Low-salt diet",
+      "Fluid restriction",
+      "Admit"
+    ],
+    "should_avoid": [
+      "Aggressive IV fluids"
+    ],
+    "key_rationale": [
+      "Oxygen: Support oxygenation in pulmonary edema",
+      "IV access: Route for diuretics",
+      "Cardiac monitor: Monitor rhythm",
+      "Pulse oximetry: Monitor oxygen status",
+      "IV loop diuretic: Remove excess fluid",
+      "Strict I&O: Monitor fluid balance closely",
+      "Daily weights: Track fluid status",
+      "Chest X-ray: Assess pulmonary edema",
+      "EKG: Check for ischemia or arrhythmia",
+      "BMP: Monitor electrolytes during diuresis",
+      "BNP: Confirm CHF diagnosis",
+      "Low-salt diet: Reduce fluid retention",
+      "Fluid restriction: Prevent fluid overload",
+      "Admit: Requires hospitalization for management"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Hypertensive Emergency",
+    "chief_complaint": "Severe hypertension with end-organ damage",
+    "correct_orders": [
+      "Oxygen",
+      "IV access",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "IV antihypertensive (labetalol, nitroprusside, nicardipine)",
+      "CBC",
+      "CMP",
+      "UA",
+      "EKG",
+      "Chest X-ray",
+      "Troponin",
+      "Neuro checks",
+      "Admit to ICU"
+    ],
+    "should_avoid": [
+      "Rapid BP reduction (risk of stroke)"
+    ],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "IV access: Route for IV antihypertensives",
+      "Cardiac monitor: Monitor for arrhythmias",
+      "Pulse oximetry: Monitor oxygen status",
+      "IV antihypertensive: Controlled BP reduction (avoid precipitous drop)",
+      "CBC: Baseline labs",
+      "CMP: Assess renal function and electrolytes",
+      "UA: Check for proteinuria/hematuria",
+      "EKG: Assess for cardiac complications",
+      "Chest X-ray: Check for pulmonary edema",
+      "Troponin: Rule out myocardial injury",
+      "Neuro checks: Monitor for stroke",
+      "Admit to ICU: Requires intensive monitoring"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Atrial Fibrillation (new, unstable)",
+    "chief_complaint": "Palpitations, chest discomfort, dyspnea, hypotension",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "IV access",
+      "EKG",
+      "BMP",
+      "TSH",
+      "Magnesium",
+      "Synchronized cardioversion if unstable",
+      "Rate control (diltiazem, beta-blocker) if stable",
+      "Anticoagulation"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "Cardiac monitor: Continuous rhythm monitoring",
+      "IV access: Route for medications",
+      "EKG: Document arrhythmia",
+      "BMP: Check electrolytes",
+      "TSH: Rule out hyperthyroidism as cause",
+      "Magnesium: Check and replace if low",
+      "Synchronized cardioversion: Immediate if hemodynamically unstable",
+      "Rate control: If stable, control ventricular rate",
+      "Anticoagulation: Prevent thromboembolic complications"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Pulmonary Embolism",
+    "chief_complaint": "Sudden dyspnea, chest pain, tachycardia",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "EKG",
+      "Chest X-ray",
+      "ABG",
+      "D-dimer (if low probability)",
+      "CT angiography chest (or V/Q if contraindicated)",
+      "Anticoagulation (heparin) immediately if high suspicion",
+      "Admit"
+    ],
+    "should_avoid": [
+      "Delaying anticoagulation in high-probability cases"
+    ],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "Cardiac monitor: Monitor for arrhythmias",
+      "Pulse oximetry: Monitor oxygen saturation",
+      "EKG: May show right heart strain",
+      "Chest X-ray: Rule out other causes",
+      "ABG: Assess hypoxemia and A-a gradient",
+      "D-dimer: Useful if low probability (high sensitivity)",
+      "CT angio chest: Definitive diagnostic test",
+      "Anticoagulation immediately: Start if high suspicion before imaging",
+      "Admit: Requires hospitalization"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Community-Acquired Pneumonia",
+    "chief_complaint": "Fever, cough, dyspnea, chest pain",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "Chest X-ray",
+      "CBC",
+      "BMP",
+      "Blood cultures",
+      "Sputum culture",
+      "Empiric IV antibiotics (ceftriaxone + azithromycin or levofloxacin)",
+      "Admit if severe, otherwise outpatient with oral antibiotics"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "Cardiac monitor: Monitor vital signs",
+      "Pulse oximetry: Monitor oxygen saturation",
+      "Chest X-ray: Confirm pneumonia diagnosis",
+      "CBC: Check for leukocytosis",
+      "BMP: Assess renal function for antibiotic dosing",
+      "Blood cultures: If severe or septic",
+      "Sputum culture: Identify organism",
+      "Empiric IV antibiotics: Cover typical and atypical organisms",
+      "Admit if severe: Based on severity scores (CURB-65, PSI)"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "TIA (Transient Ischemic Attack)",
+    "chief_complaint": "Transient neurological symptoms that resolved",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "EKG",
+      "CT or MRI brain",
+      "Carotid Doppler ultrasound",
+      "Echocardiogram",
+      "Aspirin",
+      "Statin",
+      "Risk factor control",
+      "Admit for workup"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Support as needed",
+      "Cardiac monitor: Monitor for arrhythmias (AFib)",
+      "Pulse oximetry: Monitor oxygenation",
+      "EKG: Check for atrial fibrillation",
+      "CT or MRI brain: Rule out stroke, evaluate for early infarct",
+      "Carotid Doppler: Assess for carotid stenosis",
+      "Echocardiogram: Evaluate for cardioembolic source",
+      "Aspirin: Antiplatelet therapy to prevent stroke",
+      "Statin: Lipid management and plaque stabilization",
+      "Risk factor control: Address HTN, DM, smoking",
+      "Admit for workup: High-risk for stroke within 48 hours"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Meningitis (Bacterial)",
+    "chief_complaint": "Fever, headache, neck stiffness, altered mental status",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "IV access",
+      "Blood cultures",
+      "CBC",
+      "CMP",
+      "CT head if increased ICP signs",
+      "Lumbar puncture (after CT if needed)",
+      "Empiric IV antibiotics + dexamethasone immediately",
+      "Neuro checks",
+      "Admit"
+    ],
+    "should_avoid": [
+      "Delaying antibiotics for LP"
+    ],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "Cardiac monitor: Monitor vital signs",
+      "IV access: Route for antibiotics",
+      "Blood cultures: Identify organism",
+      "CBC: Check WBC count",
+      "CMP: Baseline labs",
+      "CT head: Only if signs of increased ICP before LP",
+      "Lumbar puncture: Definitive diagnosis via CSF studies",
+      "Empiric IV antibiotics + dexamethasone: Must not delay (give before LP if needed)",
+      "Neuro checks: Monitor neurological status",
+      "Admit: Life-threatening infection"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Seizure / Status Epilepticus",
+    "chief_complaint": "Seizure activity, prolonged or recurrent seizures",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "IV access",
+      "IV lorazepam",
+      "Phenytoin or fosphenytoin",
+      "CBC",
+      "CMP",
+      "Fingerstick glucose",
+      "Toxicology screen",
+      "Head CT",
+      "EEG",
+      "Neurology consult",
+      "Admit"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Support oxygenation during seizure",
+      "Cardiac monitor: Monitor vital signs",
+      "Pulse oximetry: Monitor oxygen saturation",
+      "IV access: Route for antiepileptic medications",
+      "IV lorazepam: First-line benzodiazepine to stop seizure",
+      "Phenytoin/fosphenytoin: Second-line for seizure control",
+      "CBC: Check for infection",
+      "CMP: Check electrolytes and glucose",
+      "Fingerstick glucose: Rule out hypoglycemia immediately",
+      "Toxicology screen: Identify drug-related causes",
+      "Head CT: Rule out structural lesions",
+      "EEG: Assess for ongoing seizure activity",
+      "Neurology consult: Specialist management",
+      "Admit: Requires hospitalization"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Lower GI Bleed",
+    "chief_complaint": "Hematochezia, maroon stools, hypotension",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "IV access x2 large-bore",
+      "Pulse oximetry",
+      "IV fluids",
+      "Type & cross",
+      "CBC",
+      "CMP",
+      "Coagulation studies",
+      "NPO",
+      "Admit",
+      "Colonoscopy once stable"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "Cardiac monitor: Monitor hemodynamic status",
+      "IV access x2: Large-bore for resuscitation",
+      "Pulse oximetry: Monitor oxygen status",
+      "IV fluids: Volume resuscitation",
+      "Type & cross: Prepare for transfusion",
+      "CBC: Assess degree of blood loss",
+      "CMP: Check renal function",
+      "Coagulation studies: Assess for coagulopathy",
+      "NPO: Prepare for colonoscopy",
+      "Admit: Requires hospitalization",
+      "Colonoscopy: Diagnostic and therapeutic once stabilized"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Acute Pancreatitis",
+    "chief_complaint": "Severe epigastric pain radiating to back, nausea, vomiting",
+    "correct_orders": [
+      "NPO",
+      "IV fluids (aggressive)",
+      "Pain control",
+      "CBC",
+      "CMP",
+      "Lipase or amylase",
+      "LFTs",
+      "Triglycerides",
+      "RUQ ultrasound if gallstones suspected",
+      "Admit",
+      "Monitor for complications"
+    ],
+    "should_avoid": [
+      "Oral intake early"
+    ],
+    "key_rationale": [
+      "NPO: Bowel rest to reduce pancreatic stimulation",
+      "IV fluids: Aggressive hydration (cornerstone of treatment)",
+      "Pain control: Adequate analgesia improves outcomes",
+      "CBC: Check for leukocytosis",
+      "CMP: Assess calcium and renal function",
+      "Lipase/amylase: Confirm diagnosis (lipase more specific)",
+      "LFTs: Evaluate for biliary etiology",
+      "Triglycerides: Check for hypertriglyceridemia as cause",
+      "RUQ ultrasound: Identify gallstones",
+      "Admit: Most cases require hospitalization",
+      "Monitor for complications: Necrosis, pseudocyst, organ failure"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Cholecystitis (Acute)",
+    "chief_complaint": "Right upper quadrant pain, fever, nausea",
+    "correct_orders": [
+      "NPO",
+      "IV fluids",
+      "Pain control",
+      "IV antibiotics",
+      "CBC",
+      "CMP",
+      "RUQ ultrasound",
+      "Surgery consult for cholecystectomy"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "NPO: Prepare for surgery",
+      "IV fluids: Maintain hydration",
+      "Pain control: Adequate analgesia",
+      "IV antibiotics: Treat infection",
+      "CBC: Check for leukocytosis",
+      "CMP: Assess liver function",
+      "RUQ ultrasound: Confirm diagnosis (gallstones, wall thickening, pericholecystic fluid)",
+      "Surgery consult: Cholecystectomy is definitive treatment"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Appendicitis",
+    "chief_complaint": "Right lower quadrant pain, anorexia, nausea",
+    "correct_orders": [
+      "NPO",
+      "IV fluids",
+      "Pain control",
+      "IV antibiotics",
+      "CBC",
+      "CMP",
+      "Abdominal CT (or ultrasound if pregnant)",
+      "Surgery consult for appendectomy"
+    ],
+    "should_avoid": [
+      "Delaying surgery"
+    ],
+    "key_rationale": [
+      "NPO: Prepare for surgery",
+      "IV fluids: Maintain hydration",
+      "Pain control: Adequate analgesia",
+      "IV antibiotics: Prevent perforation complications",
+      "CBC: Check for leukocytosis",
+      "CMP: Baseline labs",
+      "Abdominal CT: Confirm diagnosis (use ultrasound if pregnant)",
+      "Surgery consult: Appendectomy is definitive treatment"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Diverticulitis",
+    "chief_complaint": "Left lower quadrant pain, fever, change in bowel habits",
+    "correct_orders": [
+      "NPO",
+      "IV fluids",
+      "Pain control",
+      "CBC",
+      "CMP",
+      "Abdominal CT with contrast",
+      "IV antibiotics",
+      "Admit if complicated"
+    ],
+    "should_avoid": [
+      "Colonoscopy during acute episode"
+    ],
+    "key_rationale": [
+      "NPO: Bowel rest",
+      "IV fluids: Maintain hydration",
+      "Pain control: Adequate analgesia",
+      "CBC: Check for leukocytosis",
+      "CMP: Baseline labs",
+      "Abdominal CT: Confirm diagnosis and assess for complications",
+      "IV antibiotics: Treat infection (gram-negative and anaerobic coverage)",
+      "Admit if complicated: Perforation, abscess, or failure of outpatient management"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Cellulitis",
+    "chief_complaint": "Red, warm, tender skin with fever",
+    "correct_orders": [
+      "CBC",
+      "Blood cultures if severe",
+      "IV antibiotics (or oral if mild)",
+      "Incision & drainage if abscess",
+      "Elevate affected limb",
+      "Mark margins",
+      "Outpatient if mild, admit if severe"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "CBC: Check for leukocytosis",
+      "Blood cultures: If systemic symptoms or severe",
+      "IV antibiotics: Empiric coverage for strep/staph (IV if severe, oral if mild)",
+      "I&D if abscess: Drainage required for abscess",
+      "Elevate limb: Reduce swelling",
+      "Mark margins: Track progression or improvement",
+      "Admit if severe: Systemic symptoms, failed outpatient, immunocompromised"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Endocarditis (Infective)",
+    "chief_complaint": "Fever, heart murmur, systemic symptoms",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "IV access",
+      "Blood cultures x3 (before antibiotics)",
+      "Empiric IV antibiotics",
+      "EKG",
+      "Transthoracic echocardiogram (TTE) or transesophageal (TEE)",
+      "Admit",
+      "Infectious Disease consult"
+    ],
+    "should_avoid": [
+      "Starting antibiotics before blood cultures"
+    ],
+    "key_rationale": [
+      "Oxygen: Support as needed",
+      "Cardiac monitor: Monitor for arrhythmias",
+      "IV access: Route for antibiotics",
+      "Blood cultures x3: Must obtain before antibiotics (from different sites)",
+      "Empiric IV antibiotics: Start after cultures obtained",
+      "EKG: Check for conduction abnormalities",
+      "TTE/TEE: Visualize vegetations (TEE more sensitive)",
+      "Admit: Requires prolonged IV antibiotics",
+      "ID consult: Complex antibiotic management"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Blunt Abdominal Trauma",
+    "chief_complaint": "Abdominal trauma from motor vehicle collision or fall",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "IV access x2 large-bore",
+      "Pulse oximetry",
+      "FAST exam",
+      "CBC",
+      "CMP",
+      "Type & cross",
+      "IV fluids",
+      "Surgical consult",
+      "Trauma CT if stable",
+      "Admit"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: Support oxygenation",
+      "Cardiac monitor: Monitor hemodynamic status",
+      "IV access x2: Prepare for resuscitation",
+      "Pulse oximetry: Monitor oxygen status",
+      "FAST exam: Rapid assessment for free fluid (hemorrhage)",
+      "CBC: Assess for blood loss",
+      "CMP: Baseline labs",
+      "Type & cross: Prepare for transfusion",
+      "IV fluids: Volume resuscitation",
+      "Surgical consult: May need operative intervention",
+      "Trauma CT: If stable, detailed imaging of injuries",
+      "Admit: Observation or treatment"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Fracture (Open or Closed)",
+    "chief_complaint": "Pain, deformity, inability to use limb after trauma",
+    "correct_orders": [
+      "Oxygen if unstable",
+      "Cardiac monitor if unstable",
+      "IV access if unstable",
+      "X-ray of injured site",
+      "Pain control",
+      "Splint/immobilize",
+      "Orthopedic consult",
+      "Tetanus prophylaxis",
+      "IV antibiotics if open fracture"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oxygen: If patient unstable or polytrauma",
+      "Cardiac monitor: If hemodynamically unstable",
+      "IV access: If unstable or open fracture",
+      "X-ray: Confirm fracture and assess alignment",
+      "Pain control: Adequate analgesia",
+      "Splint: Immobilize to prevent further injury",
+      "Ortho consult: Specialist management for operative vs. non-operative treatment",
+      "Tetanus prophylaxis: Update if needed, especially open fracture",
+      "IV antibiotics: Essential for open fractures to prevent infection"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Spinal Cord Compression",
+    "chief_complaint": "Back pain, weakness, sensory changes, bowel/bladder dysfunction",
+    "correct_orders": [
+      "Oxygen",
+      "Cardiac monitor",
+      "IV access",
+      "High-dose IV steroids (dexamethasone)",
+      "MRI spine STAT",
+      "Neurology or Orthopedic consult",
+      "Admit"
+    ],
+    "should_avoid": [
+      "Delaying steroids or imaging"
+    ],
+    "key_rationale": [
+      "Oxygen: Support as needed",
+      "Cardiac monitor: Monitor vital signs",
+      "IV access: Route for steroids",
+      "High-dose IV steroids: Reduce spinal cord edema (time-sensitive)",
+      "MRI spine STAT: Definitive imaging to identify level and cause",
+      "Neurology/Ortho consult: Urgent surgical decompression may be needed",
+      "Admit: Neurological emergency"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Otitis Media",
+    "chief_complaint": "Ear pain, fever in child",
+    "correct_orders": [
+      "Outpatient oral antibiotics (amoxicillin)",
+      "Pain control (acetaminophen or ibuprofen)",
+      "Follow-up in 1-2 weeks"
+    ],
+    "should_avoid": [],
+    "key_rationale": [
+      "Oral antibiotics: Amoxicillin first-line for bacterial otitis media",
+      "Pain control: Symptomatic relief",
+      "Follow-up: Ensure resolution and check for effusion"
+    ],
+    "source": "fmgmatch"
+  },
+  {
+    "condition": "Anaphylaxis",
+    "chief_complaint": "Acute onset urticaria, angioedema, respiratory distress, hypotension",
+    "correct_orders": [
+      "Epinephrine IM immediately",
+      "Oxygen",
+      "IV access",
+      "Cardiac monitor",
+      "Pulse oximetry",
+      "IV fluids",
+      "H1 blocker (diphenhydramine)",
+      "H2 blocker (ranitidine)",
+      "Steroids",
+      "Observe for biphasic reaction",
+      "Admit or observe"
+    ],
+    "should_avoid": [
+      "Delaying epinephrine"
+    ],
+    "key_rationale": [
+      "Epinephrine IM: First and most important intervention",
+      "Oxygen: Support airway and oxygenation",
+      "IV access: Route for fluids and medications",
+      "Cardiac monitor: Monitor for arrhythmias",
+      "Pulse oximetry: Monitor oxygen saturation",
+      "IV fluids: Treat hypotension",
+      "H1 blocker: Reduce histamine effects",
+      "H2 blocker: Additional histamine blockade",
+      "Steroids: Prevent late-phase reactions",
+      "Observe: Watch for biphasic reaction (4-8 hours)",
+      "Admit or observe: Based on severity and response"
+    ],
+    "source": "fmgmatch"
+  }
+]

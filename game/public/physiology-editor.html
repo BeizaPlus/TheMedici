@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neuron Action Potential — Interactive</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f4f8;font-family:-apple-system,'Segoe UI',sans-serif;font-size:16px;color:#222;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 12px}
+/* MeWorld hyperk-physiology — standalone light shell (matches ui-overrides.css + clinicalTextPrefs) */
+.hyperk-physiology-panel--standalone{
+  width:100%;max-width:1140px;background:#fff;border-radius:14px;box-shadow:0 2px 16px rgba(20,50,80,.08);border:1px solid #e8eef2;padding:14px 16px 12px;
+  /* Defaults mirror MeWorld: clinicalTextPrefs 16×1.38, teachMeTextPrefs 12×1.24 */
+  --clinical-font-size:22px;
+  --clinical-font-weight:600;
+  --teach-me-font-size:15px;
+  --teach-me-font-weight:500;
+}
+.hyperk-physiology-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+.hyperk-physiology-title{display:block;font-size:17px;font-weight:800;color:#0f2d4a;line-height:1.2}
+.hyperk-physiology-k{font-size:12px;font-weight:700;color:#d97706;white-space:nowrap;padding:4px 10px;border-radius:20px;background:#fff8ee;border:1px solid #fcd34d}
+.card-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#5a7a90;margin-bottom:2px}
+.layout{display:flex;flex-direction:column;gap:10px}
+.ap-stage-main{display:grid;grid-template-columns:minmax(0,1fr) 292px;gap:10px;align-items:stretch}
+.ap-graph-col{min-width:0;display:flex;flex-direction:column}
+.ap-treatment-dock{border:1px solid rgba(26,110,160,.28);border-radius:12px;background:linear-gradient(180deg,#f0f9ff 0%,#fff 40%);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 2px 12px rgba(20,50,80,.06)}
+.ap-treatment-dock-head{padding:8px 10px 8px 9px;border-bottom:1px solid #d0e8f5;background:#e6f2fa;border-left:4px solid #1a6ea0}
+.ap-treatment-dock-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#0f2d4a}
+.ap-treatment-dock-sub{font-size:10px;color:#5a7090;margin-top:2px;line-height:1.35}
+.ap-treatment-scroll{flex:1 1 auto;overflow-y:auto;max-height:min(520px,58vh);padding:8px 10px 10px}
+.ap-effect-banner{margin-top:6px;padding:10px 12px;border-radius:8px;border:1px solid #c8e0f0;background:#fff;font-size:var(--teach-me-font-size);font-weight:var(--teach-me-font-weight);line-height:1.5;color:#334155}
+.ap-effect-banner strong{color:#0f2d4a;font-weight:var(--clinical-font-weight)}
+.ap-effect-banner-sub{display:block;margin-top:4px;font-size:calc(var(--teach-me-font-size)*0.88);font-weight:500;color:#5a7090;line-height:1.45}
+.ap-effect-banner.is-live{border-color:#1a6ea0;background:#e6f2fa}
+.ap-vitals-strip{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px;padding:6px 10px;border-radius:8px;background:#f8fafb;border:1px solid #e0e8ee;font-size:11px}
+.ap-vital-chip{display:flex;gap:5px;align-items:baseline}
+.ap-vital-chip .vk{color:#7a8a96}
+.ap-vital-chip .vv{font-weight:700}
+.pharm-cat{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8aa;margin:8px 0 4px}
+.pharm-cat:first-child{margin-top:0}
+.pharm-card{border:1px solid #d0e0ea;border-radius:8px;background:#fff;padding:8px 9px;margin-bottom:6px;transition:border-color .15s,box-shadow .15s}
+.pharm-card.serum-k-card{border-color:#d97706;background:#fffbeb}
+.pharm-card.serum-k-card .pharm-name{color:#92400e}
+.inspect-label{font-size:10px;font-weight:700;font-family:sans-serif;pointer-events:none}
+.inspect-label-bg{fill:#fff;stroke:rgba(0,0,0,.12);stroke-width:.5}
+.pharm-card.is-preview{border-color:#1a6ea0;box-shadow:0 0 0 2px rgba(26,110,160,.12)}
+.pharm-card.is-given{border-color:#86efac;background:#fafffa}
+.pharm-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:6px}
+.pharm-name{font-size:11px;font-weight:700;color:#0f2d4a;line-height:1.25}
+.pharm-give{flex-shrink:0;padding:4px 9px;border-radius:6px;border:1px solid #1a6ea0;background:#1a6ea0;color:#fff;font-size:10px;font-weight:600;cursor:pointer}
+.pharm-give:hover{background:#155a82}
+.pharm-give.is-given{background:#fff;color:#15803d;border-color:#86efac}
+.pharm-dose-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;margin-bottom:4px}
+.pharm-slider{width:100%;accent-color:#1a6ea0}
+.pharm-dose-val{font-size:10px;font-weight:700;color:#334;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pharm-effect{font-size:10px;color:#1a6ea0;font-weight:600;margin-bottom:3px;line-height:1.35}
+.pharm-mechanism{font-size:9px;color:#6a8090;line-height:1.4;display:none}
+.pharm-card.is-preview .pharm-mechanism,.pharm-card:focus-within .pharm-mechanism{display:block}
+.ap-stage-foot{display:flex;flex-direction:column;gap:8px}
+.ap-bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:900px){.ap-stage-main{grid-template-columns:1fr}.ap-treatment-scroll{max-height:none}.ap-bottom-row{grid-template-columns:1fr}}
+.graph-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px;padding:8px 10px;background:#f8fafb;border:1px solid #e0e8ee;border-radius:8px}
+.graph-toolbar-sep{width:1px;height:22px;background:#d0e0ea;flex-shrink:0}
+.align-mode-chip{padding:7px 14px;border-radius:8px;border:2px solid #1a6ea0;background:#fff;color:#1a4a6b;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.align-mode-chip:hover{background:#e6f2fa}
+.align-mode-chip.is-on{background:#1a6ea0;color:#fff;box-shadow:0 0 0 3px rgba(26,110,160,.2)}
+.align-mode-hint{font-size:11px;color:#5a7090;flex:1 1 180px;line-height:1.35}
+.svg-wrap{width:100%;position:relative;cursor:crosshair;user-select:none;border-radius:8px;overflow:hidden;border:1px solid #e0e8ee;background:#fff}
+.intro-overlay{position:absolute;inset:0;z-index:30;display:flex;align-items:flex-start;justify-content:center;padding:12px;background:rgba(248,249,251,.96);border-radius:8px}
+.intro-card{max-width:520px;padding:16px 18px;border-radius:10px;border:1px solid #d0e0ea;background:#fff;box-shadow:0 4px 20px rgba(20,50,80,.1)}
+.intro-kicker{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8aa;margin-bottom:4px}
+.intro-card h2{font-size:16px;font-weight:800;color:#0f2d4a;margin-bottom:10px}
+.intro-steps{margin:0 0 12px;padding-left:1.2rem;font-size:var(--clinical-font-size);font-weight:500;line-height:1.55;color:#3a5060}
+.intro-steps li{margin-bottom:5px}
+.intro-dismiss{display:block;width:100%;padding:9px 12px;border:none;border-radius:8px;background:#1a6ea0;color:#fff;font-size:13px;font-weight:600;cursor:pointer}
+.intro-dismiss:hover{background:#155a82}
+svg.ap{display:block;width:100%;height:auto}
+.legend{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap;align-items:center}
+.legend-lbl{font-size:11px;color:#8aa;margin-right:2px}
+.tog{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;border:1.5px solid #c0d0da;background:white;cursor:pointer;font-size:12px;font-weight:500;color:#3a5060;transition:all .15s}
+.tog:hover{border-color:#8aaabb}
+.tog.off{opacity:.55;background:#f0f0f0;text-decoration:line-through;color:#aaa}
+.tog.off .dot{opacity:.4}
+.tog .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.tog-mv .dot{background:#73726c}
+.tog-na .dot{background:#378ADD}
+.tog-k  .dot{background:#EF9F27}
+.tog-rest .dot{background:#b91c1c}
+.tog-hint{font-size:11px;color:#8aa;margin-top:6px;line-height:1.45}
+.axis-key{font-size:var(--clinical-font-size);font-weight:500;line-height:1.55;color:#3a5060}
+.axis-key strong{color:#0f2d4a}
+.axis-key dt{font-weight:700;margin-top:6px;color:#1a4a6b}
+.axis-key dt:first-child{margin-top:0}
+.axis-key dd{margin:2px 0 0;padding:0}
+.mw-collapsible{border:1px solid #d0e0ea;border-radius:10px;margin-bottom:10px;background:#fff;overflow:hidden}
+.mw-collapsible-summary{padding:10px 12px;font-size:calc(var(--teach-me-font-size)*0.92);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0f2d4a;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f8fafb;user-select:none}
+.mw-collapsible-summary::-webkit-details-marker{display:none}
+.mw-collapsible-summary::after{content:'▸';font-size:11px;color:#8aa;flex-shrink:0}
+.mw-collapsible[open]>.mw-collapsible-summary::after{content:'▾'}
+.mw-collapsible-body{padding:12px 14px 14px;border-top:1px solid #e8eef2;font-size:var(--teach-me-font-size)}
+.mw-collapsible--priority>.mw-collapsible-summary{background:#e6f2fa;border-left:3px solid #1a6ea0;padding-left:9px}
+.mw-collapsible--teach>.mw-collapsible-summary{color:#5a7a90}
+.mw-collapsible-badge{font-size:9px;font-weight:600;text-transform:none;letter-spacing:0;color:#8aa;padding:2px 6px;border-radius:10px;background:#eef2f6}
+.attendant-body{font-size:var(--clinical-font-size);font-weight:500;line-height:1.55;color:#334155}
+.attendant-body p{margin:0 0 10px}
+.attendant-body p:last-child{margin:0}
+.attendant-body em{color:#1a6ea0;font-style:normal;font-weight:var(--clinical-font-weight)}
+.attendant-body strong{font-weight:var(--clinical-font-weight)}
+.attendant-q{display:block;width:100%;margin:0 0 8px;padding:9px 12px;text-align:left;border:1px solid #d0e0ea;border-radius:7px;background:#fff;font-size:calc(var(--clinical-font-size)*0.88);font-weight:500;line-height:1.4;color:#3a5060;cursor:pointer}
+.attendant-q:last-child{margin-bottom:0}
+.attendant-q:hover{border-color:#1a6ea0;color:#1a4a6b}
+.treatment-live{margin-bottom:10px;padding:10px 12px;border-radius:8px;border:1px solid #c8e0f0;background:linear-gradient(135deg,#f0f9ff,#fff);font-size:var(--teach-me-font-size);font-weight:var(--teach-me-font-weight);line-height:1.5;color:#334155}
+.treatment-live.is-preview{border-color:#1a6ea0;background:#e6f2fa}
+.treatment-live.is-applied{border-color:#86efac;background:#f0fdf4}
+.treatment-live-label{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5a7a90;margin-bottom:4px}
+.treatment-live strong{color:#0f2d4a}
+.mbtn.can-undo{opacity:.85}
+.mbtn.held{border-color:#1a6ea0;background:#e6f2fa}
+.compare-note{font-size:10px;color:#8aa;margin-top:6px;line-height:1.4}
+.svg-wrap.is-dragging .ap{cursor:grabbing}
+.readout{margin-top:9px;background:white;border:1px solid #d0e0ea;border-radius:8px;padding:11px 14px;min-height:48px;font-size:var(--teach-me-font-size);font-weight:var(--teach-me-font-weight);display:flex;gap:14px;flex-wrap:wrap;align-items:center;color:#8aa;line-height:1.45}
+.rv{font-weight:var(--clinical-font-weight);color:#111}
+.rp{font-weight:var(--clinical-font-weight);color:#1a6ea0;font-size:calc(var(--clinical-font-size)*0.92)}
+.rd{font-size:var(--clinical-font-size);font-weight:500;line-height:1.55;color:#334155;flex-basis:100%;margin-top:6px}
+/* ap-phase-tabs — MeWorld ui-overrides (light standalone) */
+.ap-phase-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.ap-phase-tab{flex:1;min-width:72px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 5px;border-radius:8px;border:1.5px solid #c0d0da;background:#fff;color:#6a8090;cursor:pointer;font-size:11px;text-align:center;transition:all .15s}
+.ap-phase-tab:hover{border-color:#8aaabb;color:#334}
+.ap-phase-tab.is-active{border-color:#1a6ea0;color:#1a4a6b;background:#e6f2fa;font-weight:600}
+.ap-phase-tab-num{font-size:15px;font-weight:800;display:block;line-height:1}
+.ap-phase-tab-label{font-size:10px;display:block}
+.ap-phase-play{flex:0 0 auto;padding:7px 14px;border-radius:8px;border:1.5px solid #c0d0da;background:#fff;color:#6a8090;cursor:pointer;font-size:12px;transition:all .15s}
+.ap-phase-play:hover{border-color:#8aaabb;color:#334}
+.ap-phase-play.is-playing{border-color:#16a34a;color:#15803d;background:#f0fdf4;font-weight:600}
+.right-col{width:248px;flex-shrink:0;max-height:calc(100vh - 48px);overflow-y:auto}
+.panel-inner{padding:0}
+.vrow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.vname{font-size:12px;color:#7a8a96}
+.vval{font-size:13px;font-weight:700}
+.ok{color:#16a34a}.warn{color:#d97706}.crit{color:#dc2626}
+.gap-track{height:7px;background:#e0eaf0;border-radius:4px;overflow:hidden;margin-top:8px}
+.gap-fill{height:100%;border-radius:4px;transition:width .7s,background .7s}
+.gap-note{font-size:11px;color:#8aa;margin-top:4px}
+.ecg-area{margin-top:10px}
+.ecg-bar{display:flex;gap:3px;margin-top:5px}
+.ecg-seg{flex:1;height:5px;border-radius:3px;background:#ddeaf0;transition:background .5s}
+.ecg-nm{font-size:10px;color:#8aa;margin-top:4px}
+.med-grp{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#aabbcc;margin:8px 0 4px}
+.mbtn{display:block;width:100%;padding:7px 9px;margin-bottom:4px;background:#f4f9fb;border:1px solid #d0e0ea;border-radius:7px;color:#3a5060;font-size:12px;text-align:left;cursor:pointer;transition:all .15s}
+.mbtn:hover:not(:disabled){border-color:#a0c0d0;background:#eaf4fa}
+.mbtn.done{border-color:#86efac;color:#15803d;background:#f0fdf4;cursor:default}
+.msub{display:block;font-size:10px;color:#8aa;margin-top:2px}
+.mbtn.done .msub{color:#86efac}
+.resetbtn{display:block;width:100%;padding:7px;margin-top:8px;background:transparent;border:1px solid #d0e0ea;border-radius:7px;color:#8aa;font-size:11px;cursor:pointer;transition:all .15s}
+.resetbtn:hover{border-color:#aabbc8;color:#446}
+.caption,.hyperk-physiology-caption{margin-top:13px;font-size:var(--teach-me-font-size);font-weight:var(--teach-me-font-weight);color:#334155;line-height:1.55;border-top:1px solid #d0e0ea;padding-top:11px}
+.hyperk-physiology-caption strong{font-weight:var(--clinical-font-weight);color:#0f2d4a}
+.caption strong{color:#3a5060}
+.align-panel{margin-top:10px}
+.align-panel>.mw-collapsible-summary{font-size:11px}
+.align-body{padding:0}
+.align-row{display:grid;grid-template-columns:110px 1fr 52px;gap:8px;align-items:center;margin-bottom:8px}
+.align-row label{font-size:11px;color:#5a7090}
+.align-row input[type=range]{width:100%;accent-color:#1a6ea0}
+.align-row .val{font-size:11px;font-weight:700;color:#334;text-align:right;font-variant-numeric:tabular-nums}
+.align-grp{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8aa;margin:12px 0 6px}
+.align-grp:first-child{margin-top:0}
+.align-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.abtn{padding:6px 10px;border-radius:7px;border:1px solid #c0d0da;background:#fff;font-size:11px;cursor:pointer;color:#3a5060}
+.abtn:hover{border-color:#8aaabb}
+.abtn.primary{background:#1a6ea0;color:#fff;border-color:#1a6ea0}
+.abtn.primary.on{background:#15803d;border-color:#15803d}
+.align-hint{font-size:11px;color:#8aa;line-height:1.45;margin-bottom:10px}
+.align-json{width:100%;min-height:56px;margin-top:8px;font-size:10px;font-family:ui-monospace,monospace;padding:8px;border:1px solid #d0e0ea;border-radius:6px;resize:vertical}
+.svg-wrap.align-mode .ap{cursor:default}
+.align-handle{cursor:grab}
+.align-handle:active{cursor:grabbing}
+@media(max-width:900px){.ap-stage-main{grid-template-columns:1fr}.align-row{grid-template-columns:90px 1fr 44px}}
+</style>
+</head>
+<body>
+<div class="hyperk-physiology-panel hyperk-physiology-panel--standalone">
+  <div class="hyperk-physiology-head">
+    <div>
+      <div class="card-label">Physiology teaching tool</div>
+      <span class="hyperk-physiology-title">Neuron action potential</span>
+    </div>
+    <span class="hyperk-physiology-k" id="head-k">K⁺ 6.8 mEq/L</span>
+  </div>
+  <div class="ap-vitals-strip" id="vitals-strip">
+    <span class="ap-vital-chip"><span class="vk">Serum K⁺</span><span class="vv" id="vserumk">6.8 mEq/L</span></span>
+    <span class="ap-vital-chip"><span class="vk">Rest</span><span class="vv" id="vrest">−59 mV</span></span>
+    <span class="ap-vital-chip"><span class="vk">Threshold</span><span class="vv" id="vthr">−55 mV</span></span>
+    <span class="ap-vital-chip"><span class="vk">Safety gap</span><span class="vv" id="vgap">4 mV</span></span>
+    <span class="ap-vital-chip"><span class="vk">ECG</span><span class="vv" id="vecg">Wide QRS</span></span>
+    <span class="gap-track" style="flex:1 1 120px;min-width:80px;margin:0"><span class="gap-fill" id="gfill" style="width:20%"></span></span>
+  </div>
+  <div class="gap-note" id="gnote" style="font-size:11px;color:#8aa;margin-top:-4px"></div>
+
+  <div class="layout">
+    <div class="ap-stage-main">
+    <div class="ap-graph-col">
+      <div class="svg-wrap" id="wrap">
+        <div class="intro-overlay" id="intro">
+          <div class="intro-card">
+            <p class="intro-kicker">How to use — read this first</p>
+            <h2>Interactive action potential</h2>
+            <ol class="intro-steps">
+              <li><strong>Treatment dock</strong> (right of graph) — move dose sliders; graph updates live. Click <strong>Give</strong> to commit.</li>
+              <li><strong>Align mode</strong> — toolbar below graph; drag phase markers 1–4 (curves are fixed from SVG).</li>
+              <li><strong>Hover or drag</strong> on the graph — Vm (mV), Na⁺/K⁺ channel permeability (%), serum K⁺ (mEq/L) in the readout.</li>
+              <li><strong>Phase tabs 1–4</strong> — jump to resting, depolarization, repolarization, hyperpolarization.</li>
+            </ol>
+            <button type="button" class="intro-dismiss" id="intro-dismiss">Got it — explore graph</button>
+          </div>
+        </div>
+        <svg class="ap" id="svg" viewBox="0 0 680 520" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="ap-effect-banner is-live" id="effect-banner">
+        <strong>Live on graph:</strong> <span id="effect-banner-body">Baseline hyperK — K⁺ 6.8 mEq/L · gap 4 mV · adjust a dose slider →</span>
+      </div>
+      <div class="graph-toolbar">
+        <button type="button" class="align-mode-chip" id="align-mode-btn" aria-pressed="false">Align mode: OFF</button>
+        <span class="graph-toolbar-sep" aria-hidden="true"></span>
+        <span class="legend-lbl">Curves:</span>
+        <button class="tog tog-mv" data-c="mv"><span class="dot"></span>Vm</button>
+        <button class="tog tog-na" data-c="na"><span class="dot"></span>Na⁺</button>
+        <button class="tog tog-k"  data-c="k" ><span class="dot"></span>K⁺ perm</button>
+        <span class="graph-toolbar-sep" aria-hidden="true"></span>
+        <button class="tog tog-rest" data-c="rest"><span class="dot"></span>Rest Vm</button>
+        <button id="showallbtn" style="display:none;padding:5px 11px;border-radius:20px;border:1.5px solid #d97706;background:#fff8ee;cursor:pointer;font-size:12px;color:#b45309">Show all</button>
+        <span class="align-mode-hint" id="align-hint-text">Curves from SVG. Turn on align mode to drag phase markers 1–4.</span>
+      </div>
+      <p class="tog-hint">Graph is primary — treatment sliders update resting/threshold lines immediately.</p>
+    </div>
+
+    <aside class="ap-treatment-dock" id="treatment-dock" aria-label="HyperK treatments">
+      <div class="ap-treatment-dock-head">
+        <div class="ap-treatment-dock-title">Give treatment</div>
+        <div class="ap-treatment-dock-sub">Dose sliders from pharmacology bank — graph reflects your dose before you give.</div>
+      </div>
+      <div class="ap-treatment-scroll" id="pharm-cards"></div>
+      <div style="padding:0 10px 10px">
+        <button class="resetbtn" id="resetbtn" type="button">↺ Reset all doses &amp; K⁺ 6.8</button>
+      </div>
+    </aside>
+    </div>
+
+    <div class="ap-stage-foot">
+      <div class="readout" id="readout">
+        <span style="color:#bbb">Hover or drag on graph to inspect values in real time</span>
+      </div>
+      <div class="ap-phase-tabs" id="phase-row" role="tablist" aria-label="Action potential phases">
+        <button type="button" class="ap-phase-tab is-active" data-i="0" role="tab" aria-selected="true"><span class="ap-phase-tab-num">1</span><span class="ap-phase-tab-label">Resting</span></button>
+        <button type="button" class="ap-phase-tab" data-i="1" role="tab" aria-selected="false"><span class="ap-phase-tab-num">2</span><span class="ap-phase-tab-label">Depolarization</span></button>
+        <button type="button" class="ap-phase-tab" data-i="2" role="tab" aria-selected="false"><span class="ap-phase-tab-num">3</span><span class="ap-phase-tab-label">Repolarization</span></button>
+        <button type="button" class="ap-phase-tab" data-i="3" role="tab" aria-selected="false"><span class="ap-phase-tab-num">4</span><span class="ap-phase-tab-label">Hyperpolarization</span></button>
+        <button type="button" class="ap-phase-play" id="playbtn" aria-pressed="false">▶ Play phases</button>
+      </div>
+
+      <div class="ap-bottom-row">
+      <details class="mw-collapsible align-panel" id="panel-align">
+        <summary class="mw-collapsible-summary">Phase markers — drag on graph</summary>
+        <div class="mw-collapsible-body align-body">
+          <p class="align-hint">Curves are <strong>fixed from <code>neuron_action_potential_v2.svg</code></strong>. With Align mode on, drag phase markers <strong>1–4</strong> along the time axis only.</p>
+          <div class="align-actions">
+            <button type="button" class="abtn" id="align-reset-btn">Reset phase markers</button>
+            <button type="button" class="abtn" id="align-copy-btn">Copy JSON</button>
+          </div>
+          <div class="align-grp" style="display:none">Membrane potential (Vm)</div>
+          <div class="align-row" style="display:none"><label>Peak time</label><input type="range" id="sl-mv-t" min="0" max="1000" step="1" disabled><span class="val" id="vl-mv-t"></span></div>
+          <div class="align-row" style="display:none"><label>Peak mV</label><input type="range" id="sl-mv-mv" min="-100" max="400" step="1" disabled><span class="val" id="vl-mv-mv"></span></div>
+          <div class="align-row" style="display:none"><label>Trough time</label><input type="range" id="sl-mv-tt" min="0" max="1000" step="1" disabled><span class="val" id="vl-mv-tt"></span></div>
+          <div class="align-row" style="display:none"><label>Trough mV</label><input type="range" id="sl-mv-tmv" min="-1000" max="0" step="1" disabled><span class="val" id="vl-mv-tmv"></span></div>
+          <div class="align-grp" style="display:none">Na⁺ permeability peak</div>
+          <div class="align-row" style="display:none"><label>Peak time</label><input type="range" id="sl-na-t" min="0" max="1000" step="1" disabled><span class="val" id="vl-na-t"></span></div>
+          <div class="align-row" style="display:none"><label>Peak mV</label><input type="range" id="sl-na-mv" min="-700" max="100" step="1" disabled><span class="val" id="vl-na-mv"></span></div>
+          <div class="align-grp" style="display:none">K⁺ permeability peak</div>
+          <div class="align-row" style="display:none"><label>Peak time</label><input type="range" id="sl-k-t" min="0" max="1000" step="1" disabled><span class="val" id="vl-k-t"></span></div>
+          <div class="align-row" style="display:none"><label>Peak mV</label><input type="range" id="sl-k-mv" min="-700" max="0" step="1" disabled><span class="val" id="vl-k-mv"></span></div>
+          <div class="align-grp">Phase markers (time)</div>
+          <div class="align-row"><label>Phase 1</label><input type="range" id="sl-ph1" min="0" max="1000" step="1"><span class="val" id="vl-ph1"></span></div>
+          <div class="align-row"><label>Phase 2</label><input type="range" id="sl-ph2" min="0" max="1000" step="1"><span class="val" id="vl-ph2"></span></div>
+          <div class="align-row"><label>Phase 3</label><input type="range" id="sl-ph3" min="0" max="1000" step="1"><span class="val" id="vl-ph3"></span></div>
+          <div class="align-row"><label>Phase 4</label><input type="range" id="sl-ph4" min="0" max="1000" step="1"><span class="val" id="vl-ph4"></span></div>
+          <textarea class="align-json" id="align-json" readonly placeholder="Alignment JSON appears here…"></textarea>
+        </div>
+      </details>
+
+      <details class="mw-collapsible mw-collapsible--teach" id="panel-attendant">
+        <summary class="mw-collapsible-summary">Attendant <span class="mw-collapsible-badge">optional</span></summary>
+        <div class="mw-collapsible-body panel-inner">
+        <div class="attendant-body" id="attendant-body">
+          <p>At rest (~0.3 ms on this chart), leak K⁺ leaves the cell until electrical pull balances chemical pull — that steady voltage is <em>resting membrane potential</em>, about <strong>−75 mV</strong> inside negative.</p>
+          <p>An <em>action potential</em> is a millisecond-scale voltage excursion. The gray trace is <em>Vm</em>; blue/orange are <em>relative permeability</em> for timing.</p>
+        </div>
+        <button type="button" class="attendant-q" data-topic="time">How do I read the time axis?</button>
+        <button type="button" class="attendant-q" data-topic="nak">Why does Na⁺ open before K⁺?</button>
+        <button type="button" class="attendant-q" data-topic="resting">What is resting potential?</button>
+        <button type="button" class="attendant-q" data-topic="action">What is an action potential?</button>
+        <button type="button" class="attendant-q" data-topic="axis">Why does Na⁺ sit near −70 on the axis?</button>
+        <button type="button" class="attendant-q" data-topic="hyperk">How does hyperK change this?</button>
+        </div>
+      </details>
+      </div>
+    </div>
+  </div>
+
+  <p class="caption hyperk-physiology-caption"><strong>HyperK (this case):</strong> <span id="capbody"></span> · Pharmacology: <code>hyperk_pharmacology.js</code> · Graph: <code>neuron_action_potential_v2.svg</code></p>
+</div>
+
+<script src="physiology/action_potential_curves.js"></script>
+<script src="physiology/hyperk_pharmacology.js"></script>
+<script>
+'use strict';
+
+const { REF, Y_ANCHORS, LABELS, PHASE_T, SVG_K, SVG_NA, SVG_MV } = window.AP_FROM_SVG;
+
+const AP_DURATION_MS = 6.5;
+const tToMs = t => t * AP_DURATION_MS;
+const msToT = ms => ms / AP_DURATION_MS;
+
+/** Flat Vm at rest until threshold (no pre-upstroke dip). */
+const REST_FLAT_END_T = msToT(0.93);
+
+const LIT_MARKERS = {
+  rest:        { ms: 0.30, label: 'Phase 1 · rest' },
+  threshold:   { ms: 0.93, label: 'Threshold crossing' },
+  vmPeak:      { ms: 1.32, label: 'Vm peak (+40 mV)', mv: 40 },
+  naPeak:      { ms: 1.33, label: 'Na⁺ permeability peak' },
+  kPeak:       { ms: 2.12, label: 'K⁺ permeability peak' },
+  hyperpolMin: { ms: 2.12, label: 'Hyperpolarization minimum' },
+};
+for (const k of Object.keys(LIT_MARKERS)) LIT_MARKERS[k].t = msToT(LIT_MARKERS[k].ms);
+
+function createNaturalCubicSpline(points) {
+  const n = points.length;
+  const x = points.map(p => p[0]);
+  const y = points.map(p => p[1]);
+  const h = [], alpha = [], l = [0], mu = [0], z = [0];
+  for (let i = 0; i < n - 1; i++) h[i] = x[i + 1] - x[i];
+  for (let i = 1; i < n - 1; i++)
+    alpha[i] = (3 / h[i]) * (y[i + 1] - y[i]) - (3 / h[i - 1]) * (y[i] - y[i - 1]);
+  l[0] = 1; mu[0] = 0; z[0] = 0;
+  for (let i = 1; i < n - 1; i++) {
+    l[i] = 2 * (x[i + 1] - x[i - 1]) - h[i - 1] * mu[i - 1];
+    mu[i] = h[i] / l[i];
+    z[i] = (alpha[i] - h[i - 1] * z[i - 1]) / l[i];
+  }
+  l[n - 1] = 1; z[n - 1] = 0;
+  const c = new Array(n), b = new Array(n - 1), d = new Array(n - 1);
+  c[n - 1] = 0;
+  for (let j = n - 2; j >= 0; j--) {
+    c[j] = z[j] - mu[j] * c[j + 1];
+    b[j] = (y[j + 1] - y[j]) / h[j] - h[j] * (c[j + 1] + 2 * c[j]) / 3;
+    d[j] = (c[j + 1] - c[j]) / (3 * h[j]);
+  }
+  return function (xq) {
+    const u = Math.max(x[0], Math.min(x[n - 1], xq));
+    let i = 0;
+    while (i < n - 2 && u > x[i + 1]) i++;
+    i = Math.min(i, n - 2);
+    const dx = u - x[i];
+    return y[i] + b[i] * dx + c[i] * dx * dx + d[i] * dx * dx * dx;
+  };
+}
+
+/** Smooth curves from canonical SVG — natural cubic spline + cardinal display path. */
+const SPLINES = {
+  mv: createNaturalCubicSpline(SVG_MV),
+  na: createNaturalCubicSpline(SVG_NA),
+  k: createNaturalCubicSpline(SVG_K),
+};
+
+function splineInterp(curveKey, t) {
+  return SPLINES[curveKey](Math.max(0, Math.min(1, t)));
+}
+
+// Resting potential vs K+ (Goldman-linearised, clinically validated)
+const restMvFromK=k=>Math.max(-92,Math.min(-38,-75+(k-4.5)*7.0));
+const BASELINE_K=6.8;
+const K_NORMAL_LO=3.5,K_NORMAL_HI=5.0;
+function fmtSerumK(k){return `${k.toFixed(1)} mEq/L`;}
+function fmtSerumKClinical(k){
+  const tag=k<K_NORMAL_LO?' (low)':k<=K_NORMAL_HI?' (normal)':k<6.5?' (mild hyperK)':' (hyperK)';
+  return `K⁺ ${fmtSerumK(k)}${tag} · normal ${K_NORMAL_LO}–${K_NORMAL_HI}`;
+}
+
+const { BANK: PHARM, ORDER: PHARM_ORDER, CATEGORIES: PHARM_CAT, computeFromDoses } = window.HYPERK_PHARM_BANK;
+
+function effectiveDoses(){
+  const d={};
+  for(const id of PHARM_ORDER){
+    d[id]=S.given[id]>0?S.given[id]:(Number(S.slider[id])||0);
+  }
+  return d;
+}
+
+function membraneStateFromPharm(){
+  const comp=computeFromDoses(effectiveDoses(),S.serumK);
+  const rm=restMvFromK(comp.k);
+  const tm=comp.thresholdMv;
+  const gap=tm-rm;
+  const normGap=(-55)-restMvFromK(4.5);
+  const pct=Math.round(clamp((gap/normGap)*100,0,100));
+  return{
+    k:comp.k,rm,tm,gap,pct,
+    ca:comp.calciumActive,
+    danger:gap<5,
+    lines:comp.lines,
+    doses:effectiveDoses(),
+  };
+}
+
+const ECG_LABELS=['Normal','Peaked T','Wide QRS','Sine wave','VF/Asystole'];
+const ECG_COLORS=['#16a34a','#65a30d','#d97706','#ea580c','#dc2626'];
+const ecgStage=k=>k<5.5?0:k<6.5?1:k<7.0?2:k<8.0?3:4;
+
+const PHASES=[
+  {id:1,t:PHASE_T['1'],short:'Resting',
+   desc:'~0.3 ms — Leak K⁺ sets Vm near −75 mV. Voltage-gated Na⁺ and K⁺ are closed; the membrane waits at steady state until local depolarization reaches threshold (~0.9 ms). In hyperK, rest sits less negative and the safety gap narrows.'},
+  {id:2,t:PHASE_T['2'],short:'Depolarization',
+   desc:'~0.9–1.3 ms — Threshold crossed: Na⁺ activation gates open fast, Na⁺ influx makes the inside less negative, which opens more Na⁺ channels. Positive feedback drives the upstroke to ~+40 mV peak at ~1.32 ms.'},
+  {id:3,t:PHASE_T['3'],short:'Repolarization',
+   desc:'~1.3–2.1 ms — Na⁺ inactivation gates slam shut while K⁺ activation catches up (~2.1 ms). K⁺ efflux pulls Vm back toward rest. Na⁺ channels enter absolute refractory period.'},
+  {id:4,t:PHASE_T['4'],short:'Hyperpolarization',
+   desc:'~2.1 ms — K⁺ gates close slowly, so Vm briefly undershoots rest (minimum ~2.12 ms). Na⁺/K⁺-ATPase restores ion gradients; relative refractory period ends over the next few milliseconds.'},
+];
+
+// ── SVG GEOMETRY (neuron_action_potential_v2.svg viewBox) ─────────────────────
+const VW=REF.viewW,VH=REF.viewH;
+const PL=REF.padL,PR=REF.padR,PT=REF.padT,PB=REF.padB;
+const GW=REF.graphW,GH=REF.graphH,BY=REF.graphBottom;
+
+function mvToSvgY(mv){
+  for(let i=0;i<Y_ANCHORS.length-1;i++){
+    const a=Y_ANCHORS[i],b=Y_ANCHORS[i+1];
+    if(mv<=a.mv&&mv>=b.mv){
+      const f=(a.mv-mv)/(a.mv-b.mv||1);
+      return a.y+(b.y-a.y)*f;
+    }
+  }
+  return mv>Y_ANCHORS[0].mv?Y_ANCHORS[0].y:Y_ANCHORS[Y_ANCHORS.length-1].y;
+}
+function mvFromSvgY(y){
+  for(let i=0;i<Y_ANCHORS.length-1;i++){
+    const a=Y_ANCHORS[i],b=Y_ANCHORS[i+1];
+    if(y>=a.y&&y<=b.y){
+      const f=(y-a.y)/(b.y-a.y||1);
+      return a.mv+(b.mv-a.mv)*f;
+    }
+  }
+  return y<Y_ANCHORS[0].y?Y_ANCHORS[0].mv:Y_ANCHORS[Y_ANCHORS.length-1].mv;
+}
+const mvY=mv=>mvToSvgY(mv);
+const tX =t =>PL+t*GW;
+const xT =x =>(x-PL)/GW;
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v));}
+
+function curvePeak(arr,mode='max',tMin=0,tMax=1){
+  let best={t:arr[0][0],mv:arr[0][1]};
+  for(const[t,mv] of arr){
+    if(t<tMin||t>tMax)continue;
+    if(mode==='max'?mv>best.mv:mv<best.mv)best={t,mv};
+  }
+  return best;
+}
+
+/** Read-only peaks from the canonical SVG trace (not draggable). */
+const SVG_PEAKS={
+  mvPeak:curvePeak(SVG_MV,'max'),
+  mvTrough:(()=>{const p=curvePeak(SVG_MV,'max');return curvePeak(SVG_MV,'min',p.t,1);})(),
+  naPeak:curvePeak(SVG_NA,'max'),
+  kPeak:curvePeak(SVG_K,'max'),
+};
+
+const ALIGN_KEY='ap-align-v3';
+const DEFAULT_ALIGN={
+  phases:[PHASE_T['1'],PHASE_T['2'],PHASE_T['3'],PHASE_T['4']],
+  labels:JSON.parse(JSON.stringify(LABELS)),
+};
+
+function mergeAlign(base){
+  const a=JSON.parse(JSON.stringify(base));
+  if(!a.labels)a.labels=JSON.parse(JSON.stringify(LABELS));
+  if(!a.phases||a.phases.length<4)a.phases=[PHASE_T['1'],PHASE_T['2'],PHASE_T['3'],PHASE_T['4']];
+  return a;
+}
+
+let ALIGN;
+try{
+  const saved=localStorage.getItem(ALIGN_KEY);
+  ALIGN=mergeAlign(saved?JSON.parse(saved):DEFAULT_ALIGN);
+}catch(_e){ALIGN=mergeAlign(DEFAULT_ALIGN);}
+
+function saveAlign(){
+  try{localStorage.setItem(ALIGN_KEY,JSON.stringify(ALIGN));}catch(_e){}
+  const el=document.getElementById('align-json');
+  if(el)el.value=JSON.stringify(ALIGN,null,2);
+}
+
+/** Curves = natural cubic spline through SVG sample points only. */
+function valMv(key,t){
+  let v=(key==='mv'&&t<REST_FLAT_END_T)?-75:splineInterp(key,t);
+  if(key==='mv'&&S._mvOffset)v+=S._mvOffset;
+  return v;
+}
+
+function fmtMvLabel(mv){
+  const r=Math.round(mv);
+  return(r>0?'+':'')+r+' mV';
+}
+
+function naPermPctFromChartMv(chartMv){
+  return Math.round(Math.max(0,(chartMv+70.02)/75.02*100));
+}
+function kPermPctFromChartMv(chartMv){
+  return Math.round(Math.max(0,(chartMv+70.02)/32.01*100));
+}
+
+/** Pill label beside a graph point — shows numeric value at cursor/phase */
+function addValueLabel(svgRoot,cx,cy,text,color,side='right'){
+  const anchor=side==='left'?'end':'start';
+  const tx=cx+(side==='left'?-10:10);
+  const tw=Math.max(28,text.length*5.8+8);
+  const rx=side==='left'?tx-tw+2:tx-2;
+  svgRoot.appendChild(mk('rect',{
+    x:rx,y:cy-9,width:tw,height:16,rx:4,class:'inspect-label-bg',
+  }));
+  svgRoot.appendChild(mk('text',{
+    x:tx,y:cy+4,'text-anchor':anchor,fill:color,'font-size':'10','font-weight':'700',
+    'font-family':'sans-serif',class:'inspect-label',
+  },text));
+}
+
+function syncPhaseTimes(){
+  ALIGN.phases.forEach((t,i)=>{PHASES[i].t=t;});
+}
+
+function applyAlignToSliders(){
+  const set=(id,v,dec=3)=>{const el=document.getElementById(id);if(el)el.textContent=typeof v==='number'?v.toFixed(dec):v;};
+  const setMs=(id,t)=>set(id,tToMs(t),2);
+  const sl=(id,v)=>{const el=document.getElementById(id);if(el)el.value=Math.round(v*1000);};
+  setMs('vl-mv-t',SVG_PEAKS.mvPeak.t); set('vl-mv-mv',SVG_PEAKS.mvPeak.mv,1);
+  setMs('vl-mv-tt',SVG_PEAKS.mvTrough.t); set('vl-mv-tmv',SVG_PEAKS.mvTrough.mv,1);
+  setMs('vl-na-t',SVG_PEAKS.naPeak.t); set('vl-na-mv',SVG_PEAKS.naPeak.mv,1);
+  setMs('vl-k-t',SVG_PEAKS.kPeak.t); set('vl-k-mv',SVG_PEAKS.kPeak.mv,1);
+  ['ph1','ph2','ph3','ph4'].forEach((k,i)=>{sl('sl-'+k,ALIGN.phases[i]); setMs('vl-'+k,ALIGN.phases[i]);});
+  saveAlign();
+}
+
+function resetAlign(){
+  ALIGN=mergeAlign(DEFAULT_ALIGN);
+  syncPhaseTimes();
+  applyAlignToSliders();
+  redraw();
+}
+
+function cardinal(pts,ten=0.42){
+  if(pts.length<2)return'';
+  let d=`M${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+  for(let i=0;i<pts.length-1;i++){
+    const p0=pts[Math.max(0,i-1)],p1=pts[i],p2=pts[i+1],p3=pts[Math.min(pts.length-1,i+2)];
+    const c1x=p1.x+((p2.x-p0.x)/6)*ten, c1y=p1.y+((p2.y-p0.y)/6)*ten;
+    const c2x=p2.x-((p3.x-p1.x)/6)*ten, c2y=p2.y-((p3.y-p1.y)/6)*ten;
+    d+=` C${c1x.toFixed(1)} ${c1y.toFixed(1)},${c2x.toFixed(1)} ${c2y.toFixed(1)},${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+  }return d;
+}
+
+const CURVE_STEPS = 1000;
+const CARDINAL_TENSION = 0.35;
+
+function buildCurves(steps=CURVE_STEPS){
+  const mv=[],na=[],k=[];
+  for(let i=0;i<=steps;i++){
+    const t=i/steps,x=tX(t);
+    mv.push({x,y:mvY(valMv('mv',t))});
+    na.push({x,y:mvY(valMv('na',t))});
+    k.push( {x,y:mvY(valMv('k',t))});
+  }return{mv,na,k};
+}
+
+function filled(pts,baseY=BY){
+  const c=cardinal(pts,CARDINAL_TENSION);
+  return`${c} L${pts[pts.length-1].x.toFixed(1)} ${baseY.toFixed(1)} L${pts[0].x.toFixed(1)} ${baseY.toFixed(1)} Z`;
+}
+
+const MED_LABELS={ca:'Calcium gluconate',insulin:'Insulin + dextrose',albuterol:'Albuterol',bicarb:'Sodium bicarbonate',lasix:'Furosemide',dialysis:'Dialysis'};
+
+const S={
+  serumK:BASELINE_K,
+  baselineK:BASELINE_K,
+  given:Object.fromEntries(PHARM_ORDER.map(id=>[id,0])),
+  slider:Object.fromEntries(PHARM_ORDER.map(id=>[id,0])),
+  focusDrug:null,
+  phaseIdx:0, playing:false, curT:null,
+  vis:{mv:true,na:true,k:true,rest:true},
+  alignMode:false,
+  drag:null,
+  dragPointerId:null,
+  dragRaf:null,
+};
+let animFrom=BASELINE_K,animTarget=BASELINE_K,animT0=0,animRaf=null,playTmr=null;
+
+function dispState(){return membraneStateFromPharm();}
+
+// ── SVG RENDER ────────────────────────────────────────────────────────────────
+const svg=document.getElementById('svg');
+function mk(tag,a,txt){
+  const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const[k,v]of Object.entries(a))e.setAttribute(k,v);
+  if(txt!=null)e.textContent=txt;return e;
+}
+
+function drawSVG(){
+  svg.innerHTML='';
+  const ds=dispState();
+  S._mvOffset=ds.rm-(-75);
+  const C=buildCurves();
+
+  // defs – gradients
+  const defs=mk('defs',{});
+  for(const[id,c1,c2]of[
+    ['gMv','rgba(28,78,122,.22)','rgba(28,78,122,.02)'],
+    ['gNa','rgba(13,27,62,.22)','rgba(13,27,62,.02)'],
+    ['gK','rgba(200,136,0,.28)','rgba(200,136,0,.03)'],
+  ]){
+    const g=mk('linearGradient',{id,x1:'0',y1:'0',x2:'0',y2:'1'});
+    g.appendChild(mk('stop',{offset:'0%','stop-color':c1}));
+    g.appendChild(mk('stop',{offset:'100%','stop-color':c2}));
+    defs.appendChild(g);
+  }svg.appendChild(defs);
+
+  // bg — pale white for maximum legibility
+  svg.appendChild(mk('rect',{x:0,y:0,width:VW,height:VH,fill:'#fafafa'}));
+  svg.appendChild(mk('rect',{x:PL,y:PT,width:GW,height:GH,fill:'#ffffff'}));
+
+  // grid — gray dotted reference lines (matches neuron_action_potential_v2.svg)
+  const GRID_STROKE='rgba(115,114,108,0.5)';
+  const GRID_DASH='3 3';
+  const AXIS_ANNOTATIONS={
+    40:'Peak Vm (+40 mV)',
+    0:'0 mV',
+    [-40]:'−40 mV',
+    [-55]:'Threshold (−55 mV)',
+    [-75]:'Resting Vm (−75 mV)',
+    [-100]:'Deep hyperpolarization',
+  };
+  const gridMv=[40,0,-40,-55,-75,-100];
+  for(const mv of gridMv){
+    const y=mvToSvgY(mv);
+    svg.appendChild(mk('line',{x1:PL,y1:y,x2:PL+GW,y2:y,
+      stroke:GRID_STROKE,'stroke-width':'0.5','stroke-dasharray':GRID_DASH}));
+    const lbl=mv>0?`+${mv}`:String(mv);
+    svg.appendChild(mk('text',{x:PL-6,y:y+4,'text-anchor':'end',
+      fill:'#3d3d3a','font-size':'12','font-family':'sans-serif'},lbl));
+    if(AXIS_ANNOTATIONS[mv]!=null){
+      svg.appendChild(mk('text',{x:PL+6,y:y-4,'text-anchor':'start',
+        fill:'#8aa','font-size':'9','font-family':'sans-serif'},AXIS_ANNOTATIONS[mv]));
+    }
+  }
+  // permeability baseline (~0% open) — not −75 mV
+  const permY=mvY(-75);
+  svg.appendChild(mk('line',{x1:PL,y1:permY,x2:PL+GW,y2:permY,stroke:'rgba(55,138,221,.25)','stroke-width':'1','stroke-dasharray':'2 4'}));
+  svg.appendChild(mk('text',{x:PL+6,y:permY-4,fill:'#378ADD','font-size':'9','font-family':'sans-serif'},'Na⁺/K⁺ ~0% open (chart −75)'));
+
+  // Y-axis title (matches source SVG)
+  svg.appendChild(mk('text',{x:18,y:280,transform:'rotate(-90 18 280)','text-anchor':'middle',fill:'#141413','font-size':'14','font-family':'sans-serif'},'Membrane potential (mV)'));
+
+  // axes
+  svg.appendChild(mk('line',{x1:PL,y1:PT,x2:PL,y2:BY,stroke:'#6a8090','stroke-width':'1.2'}));
+  svg.appendChild(mk('line',{x1:PL,y1:BY,x2:PL+GW,y2:BY,stroke:'#6a8090','stroke-width':'1.2'}));
+  // X-axis ticks — 0–6 ms (full window = 6.5 ms)
+  for(let ms=0;ms<=6;ms++){
+    const x=tX(msToT(ms));
+    svg.appendChild(mk('line',{x1:x,y1:BY,x2:x,y2:BY+6,stroke:'#6a8090','stroke-width':'1'}));
+    svg.appendChild(mk('text',{x,y:BY+20,'text-anchor':'middle',fill:'#3d3d3a','font-size':'11','font-family':'sans-serif'},String(ms)));
+  }
+  svg.appendChild(mk('text',{x:PL+GW+4,y:BY+4,fill:'#8aa','font-size':'9','font-family':'sans-serif'},'ms'));
+  // Literature anchor ticks (action_potential.py)
+  for(const m of [LIT_MARKERS.rest,LIT_MARKERS.threshold,LIT_MARKERS.vmPeak,LIT_MARKERS.hyperpolMin]){
+    const x=tX(m.t);
+    svg.appendChild(mk('line',{x1:x,y1:BY-4,x2:x,y2:BY+2,stroke:'rgba(26,110,160,.45)','stroke-width':'1.5'}));
+    svg.appendChild(mk('text',{x,y:BY-7,'text-anchor':'middle',fill:'#5a7a90','font-size':'8','font-family':'sans-serif'},m.ms.toFixed(2)));
+  }
+  svg.appendChild(mk('text',{x:340,y:500,'text-anchor':'middle',fill:'#141413','font-size':'14','font-family':'sans-serif'},'Time (ms)'));
+
+  // fills (back→front) — Na+/K+ fills from their -70 mV baseline, Vm to graph bottom
+  const ry=mvY(ds.rm),ty=mvY(ds.tm),pkBase=mvY(-70);
+  if(S.vis.k) svg.appendChild(mk('path',{d:filled(C.k, pkBase), fill:'url(#gK)'}));
+  if(S.vis.na)svg.appendChild(mk('path',{d:filled(C.na,pkBase), fill:'url(#gNa)'}));
+  if(S.vis.mv)svg.appendChild(mk('path',{d:filled(C.mv),         fill:'url(#gMv)'}));
+
+  // curves
+  if(S.vis.k) svg.appendChild(mk('path',{d:cardinal(C.k,CARDINAL_TENSION), fill:'none',stroke:'#EF9F27','stroke-width':'2','stroke-linejoin':'round'}));
+  if(S.vis.na)svg.appendChild(mk('path',{d:cardinal(C.na,CARDINAL_TENSION),fill:'none',stroke:'#378ADD','stroke-width':'2','stroke-linejoin':'round'}));
+  if(S.vis.mv)svg.appendChild(mk('path',{d:cardinal(C.mv,CARDINAL_TENSION),fill:'none',stroke:'#73726c','stroke-width':'2.2','stroke-linejoin':'round'}));
+
+  // resting Vm baseline — thick solid: Na⁺ depolarization rises FROM this level
+  if(S.vis.rest){
+    svg.appendChild(mk('line',{x1:PL,y1:ry,x2:PL+GW,y2:ry,stroke:'rgba(185,28,28,.18)','stroke-width':'10','stroke-linecap':'round'}));
+    svg.appendChild(mk('line',{x1:PL,y1:ry,x2:PL+GW,y2:ry,stroke:'#b91c1c','stroke-width':'4','stroke-linecap':'round'}));
+    svg.appendChild(mk('text',{x:PL+8,y:ry-8,'text-anchor':'start',fill:'#b91c1c','font-size':'11','font-weight':'700','font-family':'sans-serif'},`Resting Vm ${Math.round(ds.rm)} mV`));
+    svg.appendChild(mk('text',{x:PL+8,y:ry+14,'text-anchor':'start',fill:'#9a3412','font-size':'8','font-family':'sans-serif'},'Na⁺ upstroke rises from here'));
+  }
+
+  // threshold line (thin dashed — contrast with thick resting)
+  const tc=ds.ca?'#16a34a':'#d97706';
+  svg.appendChild(mk('line',{x1:PL,y1:ty,x2:PL+GW,y2:ty,stroke:tc,'stroke-width':'1.5','stroke-dasharray':'6 4','opacity':'0.9'}));
+  svg.appendChild(mk('text',{x:PL+GW-3,y:ty-5,'text-anchor':'end',fill:tc,'font-size':'9','font-family':'sans-serif'},`Threshold ${Math.round(ds.tm)} mV`));
+
+  // curve labels — draggable in align mode
+  const L=ALIGN.labels;
+  if(S.vis.mv)svg.appendChild(mk('text',{x:L.membrane.x,y:L.membrane.y,fill:'#1c4e7a','font-size':'12','font-weight':'600','font-family':'sans-serif','data-handle':'lbl-mv'},'Membrane potential'));
+  if(S.vis.na)svg.appendChild(mk('text',{x:L.na.x,y:L.na.y,fill:'#185FA5','font-size':'12','font-family':'sans-serif','data-handle':'lbl-na'},'Na⁺ relative permeability'));
+  if(S.vis.k) svg.appendChild(mk('text',{x:L.k.x,y:L.k.y,fill:'#854F0B','font-size':'12','font-family':'sans-serif','data-handle':'lbl-k'},'K⁺ relative permeability'));
+
+  // phase marker (active phase tab)
+  const ph=PHASES[S.phaseIdx];
+  const mx=tX(ph.t),my=mvY(valMv('mv',ph.t));
+  const phMv=valMv('mv',ph.t);
+  svg.appendChild(mk('line',{x1:mx,y1:PT,x2:mx,y2:BY,stroke:'rgba(26,78,122,.28)','stroke-width':'1','stroke-dasharray':'3 3'}));
+  svg.appendChild(mk('circle',{cx:mx,cy:my,r:'7.5',fill:'#1a4a6b',stroke:'white','stroke-width':'1.5'}));
+  svg.appendChild(mk('text',{x:mx,y:my+3.5,'text-anchor':'middle',fill:'white','font-size':'9','font-weight':'bold','font-family':'sans-serif'},String(ph.id)));
+  addValueLabel(svg,mx,my,fmtMvLabel(phMv),'#1a4a6b','right');
+
+  // SVG peak reference dots (read-only — curves are not deformable)
+  if(S.alignMode){
+    const refs=[
+      {t:SVG_PEAKS.mvPeak.t,mv:SVG_PEAKS.mvPeak.mv,color:'#73726c',r:7,label:'Vm↑'},
+      {t:SVG_PEAKS.mvTrough.t,mv:SVG_PEAKS.mvTrough.mv,color:'#73726c',r:6,label:'Vm↓'},
+      {t:SVG_PEAKS.naPeak.t,mv:SVG_PEAKS.naPeak.mv,color:'#378ADD',r:7,label:'Na'},
+      {t:SVG_PEAKS.kPeak.t,mv:SVG_PEAKS.kPeak.mv,color:'#EF9F27',r:7,label:'K'},
+    ];
+    refs.forEach(h=>{
+      const hx=tX(h.t),hy=mvY(h.mv);
+      svg.appendChild(mk('circle',{cx:hx,cy:hy,r:h.r,fill:h.color,stroke:'#fff','stroke-width':'1.5',opacity:'0.85','pointer-events':'none'}));
+      svg.appendChild(mk('text',{x:hx,y:hy-10,'text-anchor':'middle',fill:h.color,'font-size':'9','font-weight':'700','font-family':'sans-serif','pointer-events':'none'},h.label));
+    });
+    ALIGN.phases.forEach((t,i)=>{
+      const px=tX(t);
+      svg.appendChild(mk('circle',{cx:px,cy:BY+14,r:10,fill:'#0C447C',stroke:'#fff','stroke-width':'2',class:'align-handle','data-handle':'ph-'+(i+1)}));
+      svg.appendChild(mk('text',{x:px,y:BY+18,'text-anchor':'middle',fill:'#fff','font-size':'10','font-weight':'700','font-family':'sans-serif'},String(i+1)));
+    });
+  }
+
+  // cursor (inspect) — skip while dragging align handles
+  if(S.curT!==null&&!S.drag){
+    const cx=tX(S.curT);
+    const mv=valMv('mv',S.curT),naMv=valMv('na',S.curT),kMv=valMv('k',S.curT);
+    svg.appendChild(mk('line',{x1:cx,y1:PT,x2:cx,y2:BY,stroke:'rgba(0,0,0,.3)','stroke-width':'1'}));
+    const dots=[];
+    if(S.vis.mv){
+      const cy=mvY(mv);
+      svg.appendChild(mk('circle',{cx,cy,r:'5',fill:'#73726c',stroke:'white','stroke-width':'1.5'}));
+      dots.push({cy,text:'Vm '+fmtMvLabel(mv),color:'#73726c'});
+    }
+    if(S.vis.na){
+      const cy=mvY(naMv);
+      svg.appendChild(mk('circle',{cx,cy,r:'5',fill:'#378ADD',stroke:'white','stroke-width':'1.5'}));
+      dots.push({cy,text:'Na⁺ '+naPermPctFromChartMv(naMv)+'% open',color:'#378ADD'});
+    }
+    if(S.vis.k){
+      const cy=mvY(kMv);
+      svg.appendChild(mk('circle',{cx,cy,r:'5',fill:'#EF9F27',stroke:'white','stroke-width':'1.5'}));
+      dots.push({cy,text:'K⁺ perm '+kPermPctFromChartMv(kMv)+'% open',color:'#EF9F27'});
+    }
+    dots.forEach((d,i)=>{
+      const side=i%2===0?'right':'left';
+      addValueLabel(svg,cx,d.cy,d.text,d.color,side);
+    });
+    addValueLabel(svg,cx,PT+12,tToMs(S.curT).toFixed(2)+' ms','#5a7090','right');
+  }
+}
+
+// ── VITALS UI ─────────────────────────────────────────────────────────────────
+function updateVitals(){
+  const ds=dispState(),st=ecgStage(ds.k);
+  const vserumk=document.getElementById('vserumk');
+  if(vserumk){
+    vserumk.textContent=fmtSerumK(ds.k);
+    vserumk.className=`vv ${ds.k>K_NORMAL_HI?'warn':ds.danger?'crit':'ok'}`;
+  }
+  const vrest=document.getElementById('vrest');
+  const vthr=document.getElementById('vthr');
+  const vgap=document.getElementById('vgap');
+  if(vrest)vrest.textContent=`${Math.round(ds.rm)} mV`;
+  if(vthr)vthr.textContent=`${Math.round(ds.tm)} mV`;
+  if(vgap){
+    vgap.textContent=`${ds.gap.toFixed(1)} mV`;
+    vgap.className=`vv ${ds.danger?'crit':ds.pct<50?'warn':'ok'}`;
+  }
+  const gf=document.getElementById('gfill');
+  if(gf){
+    gf.style.width=`${ds.pct}%`;
+    gf.style.background=ds.danger?'#dc2626':ds.pct<50?'#d97706':'#16a34a';
+  }
+  const gnote=document.getElementById('gnote');
+  if(gnote)gnote.textContent=
+    ds.danger?'⚠ Critical gap — give calcium gluconate first':
+    ds.ca?`✓ Ca²⁺ on board — threshold ${Math.round(ds.tm)} mV`:
+    ds.pct<60?'Reduced safety margin':'Safety gap adequate';
+  const vecg=document.getElementById('vecg');
+  if(vecg)vecg.textContent=ECG_LABELS[st];
+  const hk=document.getElementById('head-k');
+  if(hk)hk.textContent=fmtSerumKClinical(ds.k);
+  const banner=document.getElementById('effect-banner-body');
+  if(banner){
+    const parts=[`K⁺ <strong>${ds.k.toFixed(1)}</strong> mEq/L`,`rest <strong>${Math.round(ds.rm)}</strong> mV`,`thr <strong>${Math.round(ds.tm)}</strong> mV`,`gap <strong>${ds.gap.toFixed(1)}</strong> mV (${ds.pct}%)`];
+    if(ds.lines.length){
+      const fx=ds.lines.map(l=>`${l.name.split(' ')[0]}: ${l.label}`).join(' · ');
+      banner.innerHTML=parts.join(' · ')+'<br><span class="ap-effect-banner-sub">'+fx+'</span>';
+    }else banner.innerHTML=parts.join(' · ');
+  }
+  document.getElementById('capbody').innerHTML=
+    `Serum ${fmtSerumKClinical(ds.k)}. Safety gap <strong>${ds.gap.toFixed(1)} mV</strong> (${ds.pct}% of normal)` +
+    (ds.danger?' — <strong style="color:#dc2626">critical narrowing</strong>':'') +
+    (ds.ca?' · <strong style="color:#16a34a">Ca²⁺ stabilizing membrane</strong>':'') +
+    `. Resting <strong>${Math.round(ds.rm)} mV</strong>; threshold <strong>${Math.round(ds.tm)} mV</strong>.`;
+  updatePharmCardStates();
+}
+
+function pharmEffectLabel(drug,id,dose,eff,ds){
+  if(dose<=0)return eff.label;
+  if(id==='ca')return `Serum K⁺ ${fmtSerumK(ds.k)} unchanged · threshold ~${Math.round(ds.tm)} mV`;
+  if(drug.lowersK)return `Serum K⁺ → ${fmtSerumK(ds.k)} (target ${K_NORMAL_LO}–${K_NORMAL_HI})`;
+  return eff.label;
+}
+
+function updatePharmCardStates(){
+  const ds=dispState();
+  document.querySelectorAll('.pharm-card').forEach(card=>{
+    const id=card.dataset.drug;
+    if(!id)return;
+    const drug=PHARM[id];
+    if(!drug)return;
+    const dose=S.given[id]>0?S.given[id]:S.slider[id];
+    const eff=drug.effect(dose);
+    const valEl=card.querySelector('.pharm-dose-val');
+    const effEl=card.querySelector('.pharm-effect');
+    const btn=card.querySelector('.pharm-give');
+    if(valEl)valEl.textContent=drug.formatDose(dose);
+    if(effEl)effEl.textContent=pharmEffectLabel(drug,id,dose,eff,ds);
+    card.classList.toggle('is-given',S.given[id]>0);
+    card.classList.toggle('is-preview',S.focusDrug===id||(!S.given[id]&&dose>0));
+    if(btn){
+      if(S.given[id]>0){btn.textContent='Given';btn.classList.add('is-given');}
+      else{btn.textContent='Give';btn.classList.remove('is-given');}
+    }
+  });
+}
+
+// ── READOUT ───────────────────────────────────────────────────────────────────
+function updateReadout(){
+  const ro=document.getElementById('readout');
+  const ds=dispState();
+  if(S.curT===null){
+    ro.innerHTML=`<span>Serum K⁺: <span class="rv" style="color:#c88800">${fmtSerumK(ds.k)}</span> <span style="color:#8aa">(normal ${K_NORMAL_LO}–${K_NORMAL_HI})</span></span>`+
+      '<span style="color:#bbb"> · hover or drag on graph to inspect Vm and channel permeability</span>';
+    return;
+  }
+  const mv=valMv('mv',S.curT);
+  const naMv=valMv('na',S.curT),kMv=valMv('k',S.curT);
+  const naPct=naPermPctFromChartMv(naMv);
+  const kPerm=kPermPctFromChartMv(kMv);
+  let near=PHASES[0],nd=Infinity;
+  for(const p of PHASES){const d=Math.abs(p.t-S.curT);if(d<nd){nd=d;near=p;}}
+  const ms=tToMs(S.curT).toFixed(2);
+  ro.innerHTML=`
+    <span>Time: <span class="rv">${ms} ms</span></span>
+    <span>Serum K⁺: <span class="rv" style="color:#c88800">${fmtSerumK(ds.k)}</span></span>
+    ${S.vis.mv?`<span>Vm: <span class="rv" style="color:#1c4e7a">${Math.round(mv)} mV</span></span>`:''}
+    ${S.vis.na?`<span>Na⁺ perm: <span class="rv" style="color:#0d1b3e">${naPct}% open</span></span>`:''}
+    ${S.vis.k ?`<span>K⁺ perm: <span class="rv" style="color:#c88800">${kPerm}% open</span></span>`:''}
+    <span class="rp">Phase ${near.id} — ${near.short}</span>
+    <span class="rd">${near.desc}</span>`;
+  syncAttendantFromInspect();
+}
+
+function redraw(){drawSVG();updateVitals();updateReadout();}
+
+// ── PHARMACOLOGY UI ───────────────────────────────────────────────────────────
+function buildPharmCards(){
+  const root=document.getElementById('pharm-cards');
+  if(!root)return;
+  let html=`<div class="pharm-cat">Serum K⁺ — drives resting Vm</div>
+    <div class="pharm-card serum-k-card is-preview">
+      <div class="pharm-card-head"><span class="pharm-name">Potassium load (KCl / serum K⁺)</span></div>
+      <p class="pharm-mechanism" style="display:block;margin-bottom:6px">Higher serum K⁺ depolarizes <em>resting</em> membrane potential — the gray trace and red resting line shift up. This is what worsens hyperK before you treat.</p>
+      <div class="pharm-dose-row">
+        <input type="range" id="serum-k-slider" min="45" max="85" step="1" value="${Math.round(S.serumK*10)}">
+        <span class="pharm-dose-val" id="serum-k-val">${fmtSerumK(S.serumK)} · rest ${Math.round(restMvFromK(S.serumK))} mV · normal ${K_NORMAL_LO}–${K_NORMAL_HI}</span>
+      </div>
+      <div class="pharm-effect" id="serum-k-effect">Serum ${fmtSerumK(S.serumK)} → resting Vm ≈ ${Math.round(restMvFromK(S.serumK))} mV</div>
+    </div>`;
+  let lastCat=null;
+  for(const id of PHARM_ORDER){
+    const drug=PHARM[id];
+    if(drug.category!==lastCat){
+      html+=`<div class="pharm-cat">${PHARM_CAT[drug.category]}</div>`;
+      lastCat=drug.category;
+    }
+    const step=drug.doseStep;
+    const min=drug.doseMin,max=drug.doseMax;
+    const eff=drug.effect(0);
+    html+=`<div class="pharm-card" data-drug="${id}">
+      <div class="pharm-card-head">
+        <span class="pharm-name">${drug.name}</span>
+        <button type="button" class="pharm-give" data-give="${id}">Give</button>
+      </div>
+      <div class="pharm-dose-row">
+        <input type="range" class="pharm-slider" data-drug="${id}" min="${min}" max="${max}" step="${step}" value="0">
+        <span class="pharm-dose-val">${drug.formatDose(0)}</span>
+      </div>
+      <div class="pharm-effect">${eff.label}</div>
+      <p class="pharm-mechanism">${drug.mechanism}</p>
+      <p class="pharm-mechanism" style="color:#8aa">Ref: ${drug.reference} · Typical: ${drug.formatDose(drug.doseDefault)}</p>
+    </div>`;
+  }
+  root.innerHTML=html;
+  const sk=document.getElementById('serum-k-slider');
+  if(sk){
+    sk.addEventListener('input',()=>{
+      S.serumK=Number(sk.value)/10;
+      const v=document.getElementById('serum-k-val');
+      const e=document.getElementById('serum-k-effect');
+      if(v)v.textContent=`${fmtSerumK(S.serumK)} · rest ${Math.round(restMvFromK(S.serumK))} mV · normal ${K_NORMAL_LO}–${K_NORMAL_HI}`;
+      if(e)e.textContent=`Serum ${fmtSerumK(S.serumK)} → rest ≈ ${Math.round(restMvFromK(S.serumK))} mV · safety gap ${(dispState().gap).toFixed(1)} mV`;
+      redraw();
+    });
+  }
+  root.querySelectorAll('.pharm-slider').forEach(sl=>{
+    sl.addEventListener('input',()=>{
+      const id=sl.dataset.drug;
+      S.slider[id]=Number(sl.value);
+      S.focusDrug=id;
+      redraw();
+    });
+  });
+  root.querySelectorAll('.pharm-give').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=btn.dataset.give;
+      if(S.given[id]>0){
+        S.given[id]=0;
+        S.slider[id]=PHARM[id].doseDefault;
+        const sl=root.querySelector(`.pharm-slider[data-drug="${id}"]`);
+        if(sl)sl.value=PHARM[id].doseDefault;
+      }else{
+        S.given[id]=Number(S.slider[id])||PHARM[id].doseDefault;
+      }
+      redraw();
+    });
+  });
+}
+
+document.getElementById('resetbtn').addEventListener('click',()=>{
+  stopPlay();
+  S.serumK=BASELINE_K;
+  for(const id of PHARM_ORDER){
+    S.given[id]=0;
+    S.slider[id]=0;
+  }
+  S.focusDrug=null;
+  buildPharmCards();
+  redraw();
+});
+
+// ── INTRO ─────────────────────────────────────────────────────────────────────
+function dismissIntro(){
+  const el=document.getElementById('intro');
+  if(el)el.style.display='none';
+}
+document.getElementById('intro-dismiss').addEventListener('click',dismissIntro);
+
+// ── PHASE BUTTONS ─────────────────────────────────────────────────────────────
+function syncPhase(){
+  document.querySelectorAll('.ap-phase-tab').forEach((b,i)=>{
+    b.classList.toggle('is-active',i===S.phaseIdx);
+    b.setAttribute('aria-selected',i===S.phaseIdx?'true':'false');
+  });
+}
+document.querySelectorAll('.ap-phase-tab').forEach((b,i)=>b.addEventListener('click',()=>{
+  dismissIntro();stopPlay();S.phaseIdx=i;syncPhase();
+  attendantPinnedTopic=null;
+  setAttendantHtml(attendantSnippetForPhase(i));
+  redraw();
+}));
+
+const pb=document.getElementById('playbtn');
+function stopPlay(){
+  if(!S.playing)return;
+  S.playing=false;
+  pb.textContent='▶ Play phases';
+  pb.classList.remove('is-playing');
+  pb.setAttribute('aria-pressed','false');
+  clearInterval(playTmr);
+}
+function startPlay(){
+  S.playing=true;
+  pb.textContent='⏸ Pause';
+  pb.classList.add('is-playing');
+  pb.setAttribute('aria-pressed','true');
+  playTmr=setInterval(()=>{S.phaseIdx=(S.phaseIdx+1)%PHASES.length;syncPhase();redraw();},1400);
+}
+pb.addEventListener('click',()=>S.playing?stopPlay():startPlay());
+
+// ── TOGGLES ───────────────────────────────────────────────────────────────────
+const showAllBtn=document.getElementById('showallbtn');
+function updateShowAll(){
+  const anyOff=!S.vis.mv||!S.vis.na||!S.vis.k||!S.vis.rest;
+  showAllBtn.style.display=anyOff?'':'none';
+}
+document.querySelectorAll('.tog').forEach(b=>{
+  b.addEventListener('click',function(e){
+    e.stopPropagation();
+    const c=this.dataset.c;
+    const on=!S.vis[c];
+    S.vis[c]=on;
+    this.classList.toggle('off',!on);
+    this.setAttribute('aria-pressed',on?'true':'false');
+    updateShowAll();redraw();
+  });
+  b.setAttribute('aria-pressed','true');
+});
+showAllBtn.addEventListener('click',()=>{
+  S.vis.mv=S.vis.na=S.vis.k=S.vis.rest=true;
+  document.querySelectorAll('.tog').forEach(b=>b.classList.remove('off'));
+  showAllBtn.style.display='none';redraw();
+});
+
+// ── ALIGN CONTROLS ────────────────────────────────────────────────────────────
+function svgPointFromEvent(e){
+  const r=svg.getBoundingClientRect();
+  const cx=e.clientX!=null?e.clientX:(e.touches?e.touches[0].clientX:0);
+  const cy=e.clientY!=null?e.clientY:(e.touches?e.touches[0].clientY:0);
+  return{x:clamp((cx-r.left)/r.width*VW,0,VW),y:clamp((cy-r.top)/r.height*VH,0,VH)};
+}
+
+function hitAlignHandle(pt){
+  if(!S.alignMode)return null;
+  const hits=[];
+  for(let i=0;i<4;i++){
+    const px=tX(ALIGN.phases[i]),py=BY+14;
+    hits.push({id:'ph-'+(i+1),x:px,y:py,r:14});
+  }
+  let best=null,bd=Infinity;
+  for(const h of hits){
+    const d=Math.hypot(pt.x-h.x,pt.y-h.y);
+    if(d<=h.r&&d<bd){bd=d;best=h;}
+  }
+  return best;
+}
+
+function applyHandleDrag(id,pt){
+  const t=clamp(xT(pt.x),0,1);
+  if(id.startsWith('ph-')){
+    ALIGN.phases[+id.split('-')[1]-1]=t;
+    syncPhaseTimes();
+  }
+  applyAlignToSliders();
+  if(S.dragRaf)cancelAnimationFrame(S.dragRaf);
+  S.dragRaf=requestAnimationFrame(()=>redraw());
+}
+
+function endDrag(){
+  if(!S.drag)return;
+  S.drag=null;
+  S.dragPointerId=null;
+  wrap.classList.remove('is-dragging');
+  document.removeEventListener('pointermove',onDocPointerMove);
+  document.removeEventListener('pointerup',onDocPointerUp);
+  document.removeEventListener('pointercancel',onDocPointerUp);
+  redraw();
+}
+
+function bindAlignSlider(slId,fn){
+  document.getElementById(slId).addEventListener('input',e=>{
+    fn(+e.target.value);
+    syncPhaseTimes();
+    applyAlignToSliders();
+    redraw();
+  });
+}
+
+document.getElementById('align-mode-btn').addEventListener('click',()=>{
+  S.alignMode=!S.alignMode;
+  const btn=document.getElementById('align-mode-btn');
+  btn.textContent='Align mode: '+(S.alignMode?'ON':'OFF');
+  btn.classList.toggle('is-on',S.alignMode);
+  btn.setAttribute('aria-pressed',S.alignMode?'true':'false');
+  const hint=document.getElementById('align-hint-text');
+  if(hint)hint.textContent=S.alignMode
+    ?'Dragging enabled — move phase markers 1–4 along the time axis. Curves are fixed from SVG.'
+    :'Curves from neuron_action_potential_v2.svg. Turn on align mode to drag phase markers 1–4.';
+  wrap.classList.toggle('align-mode',S.alignMode);
+  if(S.alignMode){
+    const pan=document.getElementById('panel-align');
+    if(pan)pan.open=true;
+  }
+  S.curT=null;
+  redraw();
+});
+
+document.getElementById('align-reset-btn').addEventListener('click',resetAlign);
+document.getElementById('align-copy-btn').addEventListener('click',()=>{
+  saveAlign();
+  navigator.clipboard.writeText(JSON.stringify(ALIGN,null,2)).catch(()=>{});
+});
+
+bindAlignSlider('sl-ph1',v=>{ALIGN.phases[0]=v/1000;});
+bindAlignSlider('sl-ph2',v=>{ALIGN.phases[1]=v/1000;});
+bindAlignSlider('sl-ph3',v=>{ALIGN.phases[2]=v/1000;});
+bindAlignSlider('sl-ph4',v=>{ALIGN.phases[3]=v/1000;});
+
+// ── CURSOR & ALIGN DRAG (pointer capture — release always works) ─────────────
+const wrap=document.getElementById('wrap');
+function getT(e){
+  const r=svg.getBoundingClientRect(),cx=e.clientX!=null?e.clientX:(e.touches?e.touches[0].clientX:0);
+  return clamp(xT((cx-r.left)/r.width*VW),0,1);
+}
+
+function onDocPointerMove(e){
+  if(!S.drag||e.pointerId!==S.dragPointerId)return;
+  applyHandleDrag(S.drag,svgPointFromEvent(e));
+  e.preventDefault();
+}
+function onDocPointerUp(e){
+  if(S.dragPointerId!=null&&e.pointerId!==S.dragPointerId)return;
+  endDrag();
+}
+
+function onWrapPointerDown(e){
+  if(e.button!==0&&e.pointerType==='mouse')return;
+  dismissIntro();
+  const pt=svgPointFromEvent(e);
+  const hit=hitAlignHandle(pt);
+  if(hit){
+    S.drag=hit.id;
+    S.dragPointerId=e.pointerId;
+    wrap.classList.add('is-dragging');
+    try{wrap.setPointerCapture(e.pointerId);}catch(_e){}
+    document.addEventListener('pointermove',onDocPointerMove,{passive:false});
+    document.addEventListener('pointerup',onDocPointerUp);
+    document.addEventListener('pointercancel',onDocPointerUp);
+    e.preventDefault();
+    return;
+  }
+  if(S.alignMode)return;
+  S.curT=getT(e);redraw();
+}
+function onWrapPointerMove(e){
+  if(S.drag)return;
+  if(S.alignMode)return;
+  S.curT=getT(e);redraw();
+}
+
+wrap.addEventListener('pointerdown',onWrapPointerDown);
+wrap.addEventListener('pointermove',onWrapPointerMove);
+wrap.addEventListener('pointerup',e=>{if(!S.drag&&S.alignMode)return;});
+wrap.addEventListener('lostpointercapture',endDrag);
+wrap.addEventListener('pointerleave',e=>{if(!S.drag)S.curT=null;redraw();});
+wrap.addEventListener('pointerenter',e=>{if(!S.alignMode&&!S.drag){S.curT=getT(e);redraw();}});
+
+// ── ATTENDANT Q&A ─────────────────────────────────────────────────────────────
+const ATTENDANT_DEFAULT=document.getElementById('attendant-body').innerHTML;
+
+const ATTENDANT_COPY={
+  time:'<p>The horizontal axis is real <em>time in milliseconds</em>. This graph spans <strong>0–6.5 ms</strong> — one action potential and its return to rest. Normalized position 0→1 maps linearly: <em>t (ms) = position × 6.5</em>.</p><p>Textbook anchors (Hodgkin–Huxley): rest ~<strong>0.30 ms</strong>; threshold ~<strong>0.93 ms</strong>; Vm peak <strong>+40 mV</strong> at ~<strong>1.32 ms</strong>; g<sub>Na</sub> peak ~<strong>1.20 ms</strong>; g<sub>K</sub> peak ~<strong>2.12 ms</strong>. Na⁺/K⁺ traces stay flat at 0% open until those gates open.</p><p>Why milliseconds? Channel gating and capacitive charging are fast — the upstroke is positive feedback on a membrane already near threshold, not a slow metabolic process.</p>',
+  nak:'<p>Na⁺ opens first because its <em>activation gate</em> is fast. At rest g<sub>Na</sub> is <strong>zero</strong> — blue stays on the baseline until ~1.03 ms, then rises sharply to peak ~<strong>1.20 ms</strong>, then inactivates.</p><p>K⁺ activation is <em>delayed</em> (~1.15 ms onward), peaking ~<strong>2.12 ms</strong> during repolarization. On this chart, 100% K⁺ open ≈ <strong>−3 mV</strong> on the shared axis (permeability overlay, not serum K⁺).</p>',
+  resting:'<p><em>Resting membrane potential</em> is the voltage where leak currents balance. K⁺ leak dominates at idle, so Vm sits near E<sub>K</sub> — about <strong>−75 mV</strong> here. The Na⁺/K⁺ pump does not set Vm directly; it restores the concentration gradients that leak channels constantly bleed.</p><p>On the chart, rest is the flat gray segment before ~0.9 ms. Literature marker: ~0.30 ms, phase 1.</p>',
+  action:'<p>An <em>action potential</em> is an all-or-nothing depolarization–repolarization cycle forced by voltage-gated channel kinetics. Threshold (~0.9 ms): Na⁺ activation wins → peak ~1.32 ms (+40 mV) → Na⁺ inactivates, K⁺ opens → repolarization → brief hyperpolarization minimum ~2.12 ms → pump restores gradients.</p><p>It is not “extra energy stored in the cell” — it is a rapid redistribution of charge across the capacitor that is the membrane.</p>',
+  axis:'<p>The <strong>left numbers are mV for Vm only</strong>. Na⁺ (blue) and K⁺ (orange) plot <em>relative permeability</em> (0–100% open) on the same axis for timing.</p><p>At rest both sit on the <strong>−75 mV baseline</strong> (~0% open). Peak g<sub>Na</sub> maps to ~<strong>+33 mV</strong> on the chart; peak g<sub>K</sub> to ~<strong>−3 mV</strong> — textbook overlay from Hodgkin–Huxley reconstructions.</p>',
+  hyperk:'<p><strong>Serum K⁺</strong> (mEq/L) sets the K⁺ equilibrium potential — not channel permeability %. <em>Hyperkalemia</em> (e.g. 6.0–6.8 mEq/L; normal 3.5–5.0) makes E<sub>K</sub> less negative, so resting Vm depolarizes (e.g. −59 mV in this case). The <strong>safety gap</strong> between rest and threshold shrinks.</p><p>Use the treatment dock: preview insulin or albuterol to see <em>resulting serum K⁺</em> in mEq/L; calcium gluconate widens gap without lowering K⁺. Click <strong>Give</strong> to commit.</p>',
+};
+
+const ATTENDANT_PHASE=[
+  '<p><em>Phase 1 — Rest (~0.3 ms).</em> Leak K⁺ has set Vm near −75 mV. Voltage-gated Na⁺ and K⁺ are closed because the membrane has not reached the depolarization needed to open their activation gates. Steady state, not silence.</p>',
+  '<p><em>Phase 2 — Depolarization (~0.9–1.3 ms).</em> Local Vm crosses threshold. Na⁺ activation gates open quickly; Na⁺ influx makes the inside less negative, opening more Na⁺ channels — positive feedback. Peak Vm ~+40 mV at ~1.32 ms.</p>',
+  '<p><em>Phase 3 — Repolarization (~1.3–2.1 ms).</em> Na⁺ inactivation gates close; K⁺ activation has caught up (~2.1 ms peak). K⁺ efflux drives Vm back toward rest. Na⁺ channels are in absolute refractory period — no second spike yet.</p>',
+  '<p><em>Phase 4 — Hyperpolarization (~2.1 ms).</em> K⁺ gates close more slowly than they opened, so Vm briefly undershoots rest (minimum ~2.12 ms). The Na⁺/K⁺ pump restores ion gradients; relative refractory period ends over the next few milliseconds.</p>',
+];
+
+let attendantPinnedTopic=null;
+
+function setAttendantHtml(html){
+  document.getElementById('attendant-body').innerHTML=html;
+}
+
+function attendantSnippetForPhase(idx){
+  return ATTENDANT_PHASE[idx]||ATTENDANT_DEFAULT;
+}
+
+function attendantSnippetForTime(t){
+  if(t==null)return null;
+  let best=0,bd=Infinity;
+  for(let i=0;i<PHASES.length;i++){
+    const d=Math.abs(PHASES[i].t-t);
+    if(d<bd){bd=d;best=i;}
+  }
+  return attendantSnippetForPhase(best);
+}
+
+function showAttendantTopic(topic){
+  attendantPinnedTopic=topic;
+  if(ATTENDANT_COPY[topic]){
+    setAttendantHtml(ATTENDANT_COPY[topic]);
+    const pan=document.getElementById('panel-attendant');
+    if(pan)pan.open=true;
+  }
+}
+
+function syncAttendantFromInspect(){
+  if(attendantPinnedTopic)return;
+  if(S.curT!=null)setAttendantHtml(attendantSnippetForTime(S.curT));
+}
+
+document.querySelectorAll('.attendant-q').forEach(btn=>{
+  btn.addEventListener('click',()=>showAttendantTopic(btn.dataset.topic));
+});
+
+// ── COLLAPSIBLE PANELS (persist open/closed) ─────────────────────────────────
+const PANEL_KEY='ap-panels-v1';
+const PANEL_DEFAULTS={'panel-attendant':false,'panel-align':false};
+function initCollapsiblePanels(){
+  let saved={};
+  try{saved=JSON.parse(localStorage.getItem(PANEL_KEY)||'{}');}catch(_e){}
+  Object.keys(PANEL_DEFAULTS).forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.open=id in saved?saved[id]:PANEL_DEFAULTS[id];
+    el.addEventListener('toggle',()=>{
+      saved[id]=el.open;
+      try{localStorage.setItem(PANEL_KEY,JSON.stringify(saved));}catch(_e){}
+    });
+  });
+}
+
+// ── MEWORLD TEXT PREFS (clinical + teach-me — same keys as game) ─────────────
+const CLINICAL_PREFS_KEY='schoonmaker_clinical_text_prefs';
+const TEACH_ME_PREFS_KEY='schoonmaker_teach_me_text_prefs';
+function applyMeWorldTextPrefs(){
+  const root=document.querySelector('.hyperk-physiology-panel--standalone');
+  if(!root)return;
+  let cScale=1.38,cWeight=600;
+  let tScale=1.24,tWeight=500;
+  try{
+    const c=JSON.parse(localStorage.getItem(CLINICAL_PREFS_KEY)||'null');
+    if(c&&Number.isFinite(c.fontScale))cScale=Math.min(2,Math.max(0.9,c.fontScale));
+    if(c&&[500,600,700].includes(c.weight))cWeight=c.weight;
+  }catch(_e){}
+  try{
+    const t=JSON.parse(localStorage.getItem(TEACH_ME_PREFS_KEY)||'null');
+    if(t&&Number.isFinite(t.fontScale))tScale=Math.min(1.5,Math.max(0.9,t.fontScale));
+    if(t&&[500,600,700].includes(t.weight))tWeight=t.weight;
+  }catch(_e){}
+  root.style.setProperty('--clinical-font-size',`${Math.round(16*cScale)}px`);
+  root.style.setProperty('--clinical-font-weight',String(cWeight));
+  root.style.setProperty('--teach-me-font-size',`${Math.round(12*tScale)}px`);
+  root.style.setProperty('--teach-me-font-weight',String(tWeight));
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+applyMeWorldTextPrefs();
+initCollapsiblePanels();
+buildPharmCards();
+syncPhaseTimes();
+applyAlignToSliders();
+redraw();
+
+</script>
+</body>
+</html>
