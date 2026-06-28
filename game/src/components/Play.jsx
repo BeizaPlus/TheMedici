@@ -75,7 +75,6 @@ import { useCaseChat } from '../hooks/useCaseChat.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
 import { buildPortraitSessionContext } from '../lib/buildPortraitSessionContext.js';
 import { consumePlayOpenTab, stashPlayOpenTab } from '../lib/recentChatCases.js';
-import { getCaseVisitHistory } from '../lib/caseVisitHistory.js';
 import {
   isOrderTimelineEvent,
   orderTimelineEntryFromEvent,
@@ -1434,54 +1433,6 @@ export default function Play({
     setDockChatExpandedPersist,
     dockChatHistoryExpanded,
   ]);
-
-  const threadChatCases = useMemo(() => {
-    const visits = getCaseVisitHistory({ limit: 24 });
-    const currentId = String(caseData.id);
-    const byId = new Map(
-      visits.map((row) => [
-        row.caseId,
-        {
-          caseId: row.caseId,
-          ccsNumber: row.ccsNumber ?? row.caseId,
-          title: row.title,
-          messageCount: row.chatMessages || 0,
-          lastAt: row.at,
-          plays: row.plays || 0,
-          completed: Boolean(row.completed),
-        },
-      ]),
-    );
-    if (!byId.has(currentId)) {
-      byId.set(currentId, {
-        caseId: currentId,
-        ccsNumber: caseData.ccsNumber ?? caseData.id,
-        title: caseData.title,
-        messageCount: 0,
-        lastAt: null,
-        plays: 0,
-        completed: false,
-      });
-    }
-    return [...byId.values()].sort((a, b) => {
-      if (a.caseId === currentId) return -1;
-      if (b.caseId === currentId) return 1;
-      const ta = a.lastAt ? new Date(a.lastAt).getTime() : 0;
-      const tb = b.lastAt ? new Date(b.lastAt).getTime() : 0;
-      return tb - ta;
-    });
-  }, [caseData.id, caseData.ccsNumber, caseData.title, notesVersion, caseChat.messages.length]);
-
-  const handleOpenCaseFromRail = useCallback(
-    (item) => {
-      const id = String(item?.caseId ?? '').trim();
-      if (!id) return;
-      setThreadViewCaseId(id);
-      expandDockPanel();
-      setInfoTab('chat');
-    },
-    [expandDockPanel],
-  );
 
   const misses = Math.max(0, attempts - correctAttempts);
   const lifePct = useMemo(
@@ -5157,11 +5108,6 @@ export default function Play({
                 chat={caseChat}
                 caseData={threadViewCase}
                 caseId={threadViewCase.id}
-                playCaseId={caseData.id}
-                caseRailItems={threadChatCases}
-                threadViewCaseId={threadViewCaseId}
-                onSelectThreadCase={setThreadViewCaseId}
-                onOpenCaseFromRail={handleOpenCaseFromRail}
                 caseRecording={threadIsPlayCase ? caseRecording : null}
                 notesVersion={notesVersion}
                 recordingsVersion={recordingsVersion}

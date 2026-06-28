@@ -81,6 +81,7 @@ const SYNONYM_GROUPS = [
     'kidney us',
   ],
   ['ultrasound', 'us scan', 'usg'],
+  ['doppler', 'doppler study', 'doppler ultrasound', 'doppler us', 'doppler exam'],
   ['insulin', 'insulin regular', 'regular insulin', 'insulin drip', 'lispro', 'glargine', 'nph'],
   ['prothrombin time', 'pt'],
   ['partial thromboplastin', 'ptt'],
@@ -167,6 +168,7 @@ const LABEL_ABBREV_RULES = [
   { abbrev: 'mri', re: /\bmri\b/i },
   { abbrev: 'us', re: /\bultrasound\b|\bus\b/i },
   { abbrev: 'usg', re: /\bultrasound\b|\busg\b/i },
+  { abbrev: 'doppler', re: /\bdoppler\b/i },
   { abbrev: 'ffp', re: /fresh frozen plasma/i },
   { abbrev: 'prbc', re: /packed red|prbc/i },
   { abbrev: 'ns', re: /normal saline|0\.9% saline/i },
@@ -209,6 +211,7 @@ const QUERY_TOKEN_EXPANSIONS = {
   ringers: ['ringer', 'ringers'],
   usg: ['usg', 'ultrasound', 'us'],
   us: ['us', 'ultrasound', 'usg'],
+  doppler: ['doppler'],
   renal: ['renal', 'kidney'],
   kidney: ['kidney', 'renal'],
 };

@@ -5,10 +5,6 @@ export default function PlayChatNotesTabPanel({
   chat,
   caseData,
   caseId,
-  playCaseId = null,
-  caseRailItems = [],
-  threadViewCaseId,
-  onSelectThreadCase,
   caseRecording,
   notesVersion,
   recordingsVersion = 0,
@@ -22,7 +18,6 @@ export default function PlayChatNotesTabPanel({
   patientMode = false,
   defaultChatTarget = 'notes',
   onPatientModeChange,
-  onOpenCaseFromRail,
   browseOnly = false,
   teachMeMode = false,
 }) {
@@ -31,10 +26,6 @@ export default function PlayChatNotesTabPanel({
       chat={chat}
       caseData={caseData}
       caseId={caseId}
-      playCaseId={playCaseId}
-      caseRailItems={caseRailItems}
-      threadViewCaseId={threadViewCaseId}
-      onSelectThreadCase={onSelectThreadCase}
       caseRecording={suppressHeader ? null : caseRecording}
       notesVersion={notesVersion}
       recordingsVersion={recordingsVersion}
@@ -49,7 +40,6 @@ export default function PlayChatNotesTabPanel({
       patientMode={patientMode}
       defaultChatTarget={defaultChatTarget}
       onPatientModeChange={onPatientModeChange}
-      onOpenCaseFromRail={onOpenCaseFromRail}
       browseOnly={browseOnly}
       teachMeMode={teachMeMode}
     />

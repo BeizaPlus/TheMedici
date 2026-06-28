@@ -31,27 +31,16 @@ export default function ChatRoleSegment({
   };
 
   const index =
-    resolvedRole === DOCK_ROLE.PATIENT ? 1 : resolvedRole === DOCK_ROLE.TUTOR ? 2 : 0;
+    resolvedRole === DOCK_ROLE.TUTOR ? 1 : resolvedRole === DOCK_ROLE.ORDERS ? 2 : 0;
 
   return (
     <div
       className={`ap-role-segment ap-role-segment--triple chat-role-segment${iconOnly ? ' ap-role-segment--icons-only' : ''}`}
       role="tablist"
-      aria-label="Dock mode — orders, patient interview, or attending tutor"
+      aria-label="Dock mode — patient interview, attending tutor, or orders"
       style={{ '--seg-index': index }}
     >
       <span className="ap-role-segment-thumb" aria-hidden />
-      <button
-        type="button"
-        role="tab"
-        className={`ap-role-segment-btn${resolvedRole === DOCK_ROLE.ORDERS ? ' is-active' : ''}`}
-        aria-selected={resolvedRole === DOCK_ROLE.ORDERS}
-        title="Orders — type to place stacks on the canvas"
-        onClick={() => setRole(DOCK_ROLE.ORDERS)}
-      >
-        <IconClipboardList />
-        <span className="ap-role-segment-label">Orders</span>
-      </button>
       <button
         type="button"
         role="tab"
@@ -73,6 +62,17 @@ export default function ChatRoleSegment({
       >
         <IconStethoscope />
         <span className="ap-role-segment-label">Attending</span>
+      </button>
+      <button
+        type="button"
+        role="tab"
+        className={`ap-role-segment-btn${resolvedRole === DOCK_ROLE.ORDERS ? ' is-active' : ''}`}
+        aria-selected={resolvedRole === DOCK_ROLE.ORDERS}
+        title="Orders — type to place stacks on the canvas"
+        onClick={() => setRole(DOCK_ROLE.ORDERS)}
+      >
+        <IconClipboardList />
+        <span className="ap-role-segment-label">Orders</span>
       </button>
     </div>
   );

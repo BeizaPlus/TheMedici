@@ -33,7 +33,6 @@ import {
   isDockTutorMode,
   normalizeDockRole,
 } from '../lib/dockRoleMode.js';
-import CaseThreadCaseRail from './CaseThreadCaseRail.jsx';
 import { STORAGE } from '../lib/storageKeys.js';
 import { addCasePictureNote, casePictureLink } from '../lib/casePictureNotes.js';
 
@@ -134,10 +133,6 @@ export default function CaseSessionThread({
   chat,
   caseData,
   caseId,
-  playCaseId = null,
-  caseRailItems = [],
-  threadViewCaseId,
-  onSelectThreadCase,
   caseRecording,
   notesVersion = 0,
   recordingsVersion = 0,
@@ -151,7 +146,6 @@ export default function CaseSessionThread({
   patientMode = false,
   defaultChatTarget = 'notes',
   onPatientModeChange,
-  onOpenCaseFromRail,
   onTimelineChat,
   browseOnly = false,
   teachMeMode = false,
@@ -433,34 +427,11 @@ export default function CaseSessionThread({
             </span>
           </button>
         )}
-        {expanded && caseRecording && (
-          <div className="case-chat-head-actions">
-            {caseRecording && (
-              <CaseRecordButton
-                {...caseRecording}
-                compact
-                variant="toolbar"
-                iconOnly
-                chatMode={available === true}
-              />
-            )}
-          </div>
-        )}
       </header>
       )}
 
       {expanded && (
         <>
-          {caseRailItems.length > 0 && onSelectThreadCase && !compact && (
-            <CaseThreadCaseRail
-              items={caseRailItems}
-              activeCaseId={threadViewCaseId ?? caseId}
-              playCaseId={playCaseId}
-              onSelectCase={onSelectThreadCase}
-              onOpenCaseChat={onOpenCaseFromRail}
-              teachMeMode={teachMeMode}
-            />
-          )}
           {available === false && (
             <p className="case-chat-banner bad">
               Add API keys to <code>.env</code> for case chat answers.
@@ -597,17 +568,28 @@ export default function CaseSessionThread({
             }}
           >
             <div className="case-chat-cmd-ui" data-testid="case-chat-compose">
-              {(onDockRoleChange || onPatientModeChange) && (
-                <div className="case-chat-cmd-role">
-                  <ChatRoleSegment
+              <div className="case-chat-cmd-top-row">
+                {(onDockRoleChange || onPatientModeChange) && (
+                  <div className="case-chat-cmd-role">
+                    <ChatRoleSegment
+                      iconOnly
+                      role={resolvedDockRole}
+                      onRoleChange={setDockRole}
+                      patientMode={patientMode}
+                      onPatientModeChange={onPatientModeChange}
+                    />
+                  </div>
+                )}
+                {caseRecording && (
+                  <CaseRecordButton
+                    {...caseRecording}
+                    variant="toolbar"
                     iconOnly
-                    role={resolvedDockRole}
-                    onRoleChange={setDockRole}
-                    patientMode={patientMode}
-                    onPatientModeChange={onPatientModeChange}
+                    chatMode={dockPatient}
+                    className="case-chat-cmd-mic-btn"
                   />
-                </div>
-              )}
+                )}
+              </div>
               <div className="case-chat-cmd-input-wrap">
                 <IconFileMedical />
                 <input
