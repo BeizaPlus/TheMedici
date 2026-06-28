@@ -48,7 +48,12 @@ export async function fetchVoiceNoteStatus() {
   }
 }
 
-export async function transcribeVoiceNoteAudioChunk(blob, priorTranscript = '', promptHint = '') {
+export async function transcribeVoiceNoteAudioChunk(
+  blob,
+  priorTranscript = '',
+  promptHint = '',
+  { cleanup = true } = {},
+) {
   const audioBase64 = await blobToBase64(blob);
   const data = await apiJson('/api/voice-note/transcribe-chunk', {
     method: 'POST',
@@ -57,13 +62,17 @@ export async function transcribeVoiceNoteAudioChunk(blob, priorTranscript = '', 
       mimeType: blob.type || 'audio/webm',
       priorTranscript,
       promptHint,
+      cleanup,
     }),
   });
   return data.transcript || '';
 }
 
-/** Cursor-style batch STT — transcribe a full recorded clip after mic stop. */
-export async function transcribeVoiceNoteFull(blob, { promptHint = '' } = {}) {
+/**
+ * Cursor-style batch STT — transcribe a full recorded clip after mic stop.
+ * Pass `cleanup: false` to send the verbatim local/Whisper text with no LLM reword.
+ */
+export async function transcribeVoiceNoteFull(blob, { promptHint = '', cleanup = true } = {}) {
   const audioBase64 = await blobToBase64(blob);
   const data = await apiJson('/api/voice-note/transcribe-full', {
     method: 'POST',
@@ -71,6 +80,7 @@ export async function transcribeVoiceNoteFull(blob, { promptHint = '' } = {}) {
       audioBase64,
       mimeType: blob.type || 'audio/webm',
       promptHint,
+      cleanup,
     }),
   });
   return {

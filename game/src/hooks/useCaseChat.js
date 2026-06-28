@@ -7,6 +7,7 @@ import {
   sendCaseChatMessage,
 } from '../lib/caseChat.js';
 import { loadPersistedChatHistory, logChatMessage } from '../lib/caseUserLog.js';
+import { readActiveAttendingDepth } from '../lib/attendingStylePrefs.js';
 import { appendCaseNotesBlock } from '../lib/caseNotes.js';
 import { prefetchPatientReplyAudio, speakPatientReply } from '../lib/patientSpeech.js';
 import {
@@ -170,9 +171,24 @@ export function useCaseChat({
       setMessages((prev) => [...prev, { role: 'user', content: trimmed, at: new Date().toISOString() }]);
       await persistMessage('user', trimmed);
 
-      const sessionContext = dockBrief
-        ? { dockBrief: true }
-        : (getSessionContext?.() ?? null);
+      // Dock quick-ask: tutor still needs live orders/results so the attending reads
+      // labs from the dock (server keeps the reply brief via dockBrief + ledger delta).
+      // Patient sim stays minimal — the patient must not see lab values.
+      let sessionContext;
+      if (dockBrief) {
+        sessionContext =
+          chatMode !== 'patient_sim'
+            ? { ...(getSessionContext?.() ?? {}), dockBrief: true }
+            : { dockBrief: true };
+      } else {
+        sessionContext = getSessionContext?.() ?? null;
+      }
+      // Attending depth slider must shape the reply live (it is not in the system
+      // prompt). Attach it to every tutor turn — dock and full — so Brief↔Full works.
+      if (chatMode !== 'patient_sim') {
+        if (!sessionContext || typeof sessionContext !== 'object') sessionContext = {};
+        sessionContext.attendingDepth = readActiveAttendingDepth();
+      }
       const result = await sendCaseChatMessage(sid, trimmed, sessionContext, {
         caseData,
         chatMode,

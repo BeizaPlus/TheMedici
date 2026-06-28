@@ -10,7 +10,11 @@ import { briefCacheKey, resolveCaseBriefMarkdown } from './caseBrief.js';
 import { buildCaseDiscussionContext, discussionCacheKey } from './caseDiscussionContext.js';
 import { enrichmentCacheKey } from './differentialChatEnrichment.js';
 import { resolveSimulationCreativity } from './simulationCreativity.js';
-import { readActiveAttendingStyleLeans, readAttendingStylePrefs } from './attendingStylePrefs.js';
+import {
+  attendingStyleFingerprint,
+  readActiveAttendingStyleLeans,
+  readAttendingStylePrefs,
+} from './attendingStylePrefs.js';
 import { formatVitalsLine } from './vitalsParse.js';
 import { getActiveNameRegion } from './patientNameRegions.js';
 import { resolvePracticeHpi } from './practiceHpi.js';
@@ -282,6 +286,10 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
   const discussionKey = discussionCacheKey(caseDiscussion);
   const briefKey = briefCacheKey(caseBriefMarkdown);
   const enrichKey = enrichmentCacheKey(caseData?.differentialStudyContext);
+  // Attending style/slot is baked into the system prompt at /start — rebuild the
+  // session when the learner switches slot A/B or moves the lean sliders, else the
+  // change silently has no effect on the running chat.
+  const styleKey = `${caseContext.attendingStyleSlot || 'a'}:${attendingStyleFingerprint(caseContext.attendingStyleLeans)}`;
   const cached = sessions.get(mapKey);
 
   if (
@@ -292,7 +300,8 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
     cached.demographicsKey === demographicsKey &&
     cached.discussionKey === discussionKey &&
     cached.briefKey === briefKey &&
-    cached.enrichKey === enrichKey
+    cached.enrichKey === enrichKey &&
+    cached.styleKey === styleKey
   ) {
     return cached.sessionId;
   }
@@ -317,6 +326,7 @@ export async function ensureCaseChatSession(caseData, { chatMode = 'patient_sim'
     discussionKey,
     briefKey,
     enrichKey,
+    styleKey,
   });
   return data.sessionId;
 }

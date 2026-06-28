@@ -32,6 +32,7 @@ import {
   startCaseSession,
   writeCaseNotesText,
 } from './userCaseStore.js';
+import { diffCaseLedger, writeCaseLedger } from './caseLedger.js';
 import {
   mergeVoiceNoteTranscript,
   transcribeAudioChunk,
@@ -940,7 +941,7 @@ app.post('/api/voice-note/merge', async (req, res) => {
 });
 
 app.post('/api/voice-note/transcribe-chunk', async (req, res) => {
-  const { audioBase64, mimeType, priorTranscript = '', promptHint = '' } = req.body || {};
+  const { audioBase64, mimeType, priorTranscript = '', promptHint = '', cleanup = true } = req.body || {};
   if (!audioBase64) return res.status(400).json({ error: 'Missing audioBase64' });
   const status = await voiceNoteStatus();
   if (!status.batch) {
@@ -954,7 +955,8 @@ app.post('/api/voice-note/transcribe-chunk', async (req, res) => {
     if (!chunkText) {
       return res.json({ ok: true, transcript: String(priorTranscript || '').trim(), chunkText: '' });
     }
-    const transcript = voiceNoteMergeAvailable()
+    // Verbatim path (free-form notes): plain append, no LLM merge reword.
+    const transcript = cleanup && voiceNoteMergeAvailable()
       ? await mergeVoiceNoteTranscript(priorTranscript, chunkText)
       : `${String(priorTranscript || '').trim()}${priorTranscript ? ' ' : ''}${chunkText}`.trim();
     return res.json({ ok: true, transcript, chunkText, provider: status.mode });
@@ -964,7 +966,7 @@ app.post('/api/voice-note/transcribe-chunk', async (req, res) => {
 });
 
 app.post('/api/voice-note/transcribe-full', async (req, res) => {
-  const { audioBase64, mimeType, promptHint = '' } = req.body || {};
+  const { audioBase64, mimeType, promptHint = '', cleanup = true } = req.body || {};
   if (!audioBase64) return res.status(400).json({ error: 'Missing audioBase64' });
   const status = await voiceNoteStatus();
   if (!status.batch) {
@@ -974,7 +976,7 @@ app.post('/api/voice-note/transcribe-full', async (req, res) => {
   }
   try {
     const buffer = Buffer.from(audioBase64, 'base64');
-    const result = await transcribeFullAudio(buffer, mimeType || 'audio/webm', { promptHint });
+    const result = await transcribeFullAudio(buffer, mimeType || 'audio/webm', { promptHint, cleanup });
     return res.json({
       ok: true,
       transcript: result.transcript || '',
@@ -1251,6 +1253,15 @@ Rules:
   }
 });
 
+// Attending DEPTH slider (Brief→Full arc) for live chat replies — drives length +
+// shape directive + token ceiling. Mirrors firstOpinionPrefs FIRST_OPINION_DEPTH_LEVELS.
+const CHAT_DEPTH_LEVELS = [
+  { id: 0, label: 'Brief', words: 55, maxTokens: 200, shape: 'One tight point, no preamble.' },
+  { id: 1, label: 'Standard', words: 95, maxTokens: 360, shape: 'Concise but complete.' },
+  { id: 2, label: 'Deep', words: 150, maxTokens: 560, shape: 'Mechanism + connection, still focused.' },
+  { id: 3, label: 'Full arc', words: 230, maxTokens: 900, shape: 'Full connected teaching arc.' },
+];
+
 app.post('/api/case-chat/message', async (req, res) => {
   const key = chatApiKeyOrError(res);
   if (!key) return;
@@ -1266,6 +1277,30 @@ app.post('/api/case-chat/message', async (req, res) => {
   }
 
   try {
+    // Live case ledger (docs/CHART_ARCHITECTURE.md §3): persist the full current state
+    // to a per-case markdown (disk = complete source of truth), and feed the attending
+    // only the DELTA since its last reply — token-smart, no re-flooding.
+    const hasCtx = sessionContext && typeof sessionContext === 'object';
+    const isTutor = session.chatMode !== 'patient_sim';
+    let liveLedger = '';
+    if (hasCtx && isTutor) {
+      if (sessionContext.hasSessionData && session.caseId != null) {
+        void writeCaseLedger(session.caseId, sessionContext);
+      }
+      const delta = diffCaseLedger(sessionContext, session.ledgerSeen || null);
+      session.ledgerSeen = delta.nextSeen;
+      liveLedger = delta.block;
+    }
+
+    // Attending depth → live reply length + shape (Brief↔Full actually changes output).
+    const depthRaw = Number(sessionContext?.attendingDepth);
+    const depthIdx =
+      isTutor && Number.isFinite(depthRaw) ? Math.max(0, Math.min(3, Math.round(depthRaw))) : null;
+    const depthCfg = depthIdx != null ? CHAT_DEPTH_LEVELS[depthIdx] : null;
+    const depthDirective = depthCfg
+      ? `[ATTENDING DEPTH — ${depthCfg.label}: answer in ~${depthCfg.words} words max. ${depthCfg.shape}]`
+      : '';
+
     let userContent = text;
     if (sessionContext?.dockBrief) {
       const briefLead =
@@ -1273,14 +1308,14 @@ app.post('/api/case-chat/message', async (req, res) => {
           ? `[ORDER DOCK — patient voice, 1–3 short sentences in lay language. Answer only what was asked.]\n\n`
           : `[ORDER DOCK — ultra-brief tutor reply]
 ${IMMERSA_ATTENDANT_DOCK_BRIEF_VOICE}
-
+${depthDirective ? `${depthDirective}\n` : ''}${liveLedger ? `\n${liveLedger}\n` : ''}
 Learner question: `;
       userContent = `${briefLead}${text}`;
     } else if (sessionContext && typeof sessionContext === 'object') {
       const header = sessionContext.standardFlow
         ? '[SESSION SO FAR — standard flow compare, order timeline, case transcripts, notes, and scene activity for this run]'
         : '[SESSION SO FAR — orders, case transcripts, notes, and scene activity for this run]';
-      let ctxBlock = `${header}\n${JSON.stringify(sessionContext, null, 2)}`;
+      let ctxBlock = `${liveLedger ? `${liveLedger}\n\n` : ''}${header}\n${JSON.stringify(sessionContext, null, 2)}`;
       if (ctxBlock.length > 14000) {
         ctxBlock = `${ctxBlock.slice(0, 14000)}\n…[session context truncated for token limit]`;
       }
@@ -1290,13 +1325,14 @@ Learner question: `;
       if (sessionContext.caseDiscussion) {
         ctxBlock += `\n\n[CASE DISCUSSION SUMMARY]\n${formatCaseDiscussionForChat(sessionContext.caseDiscussion)}`;
       }
-      userContent = `${ctxBlock}\n\n---\n\nLearner question: ${text}`;
+      userContent = `${ctxBlock}\n\n---\n\n${depthDirective ? `${depthDirective}\n\n` : ''}Learner question: ${text}`;
     }
     session.messages.push({ role: 'user', content: userContent });
     const window = session.messages.slice(0, 1).concat(session.messages.slice(-24));
     const dockBrief = Boolean(sessionContext?.dockBrief);
-    const maxTokens =
-      session.chatMode === 'patient_sim'
+    const maxTokens = depthCfg
+      ? depthCfg.maxTokens
+      : session.chatMode === 'patient_sim'
         ? dockBrief
           ? 220
           : 450

@@ -48,7 +48,6 @@ import CaseReadyTag from './CaseReadyTag.jsx';
 
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
 
-import CaseReviewFlagTag from './CaseReviewFlagTag.jsx';
 import CaseSelectionScenePreview from './CaseSelectionScenePreview.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import CaseLandscapeRail from './CaseLandscapeRail.jsx';
@@ -1069,7 +1068,15 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
                       <span className="case-stack-count case-stack-count--stress">long stack</span>
                     )}
 
-                    {flagged && <CaseReviewFlagTag compact />}
+                    {flagged && (
+                      <CaseReviewFlagButton
+                        caseId={c.id}
+                        iconOnly
+                        compact
+                        className="case-row-bookmark-btn"
+                        onChange={() => setFlagVersion((v) => v + 1)}
+                      />
+                    )}
 
                     {isReady && <CaseReadyTag compact />}
 

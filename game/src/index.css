@@ -1796,6 +1796,32 @@ button {
   text-shadow: 0 0 6px rgba(232, 184, 75, 0.55);
 }
 
+/* Inline un-bookmark on a flagged case row — tap the gold bookmark to remove
+   it from Review next. Mirrors the favorite-star affordance on the same row. */
+.case-review-flag-btn.case-row-bookmark-btn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: rgba(232, 184, 75, 0.95);
+  border-radius: 6px;
+  transition: transform 0.12s, background 0.12s;
+}
+
+.case-review-flag-btn.case-row-bookmark-btn:hover {
+  transform: scale(1.15);
+  background: rgba(232, 184, 75, 0.12);
+}
+
+.case-review-flag-btn.case-row-bookmark-btn .case-review-bookmark-icon {
+  width: 18px;
+  height: 18px;
+}
+
 .case-check-btn {
   display: none;
 }
@@ -2686,6 +2712,31 @@ button {
 
 .order-result-print:hover {
   background: rgba(232, 184, 75, 0.22);
+}
+
+/* Interpret — primary action on a result card. Sends the values to the
+   attending; the interpretation is logged into the case chat. */
+.order-result-interpret {
+  border: 1px solid rgba(111, 207, 151, 0.55);
+  border-radius: 6px;
+  background: rgba(111, 207, 151, 0.16);
+  color: #8fe3b4;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: background 0.12s, opacity 0.12s;
+}
+
+.order-result-interpret:hover:not(:disabled) {
+  background: rgba(111, 207, 151, 0.28);
+}
+
+.order-result-interpret:disabled {
+  opacity: 0.55;
+  cursor: default;
 }
 
 .order-result-close {

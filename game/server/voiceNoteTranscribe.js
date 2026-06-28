@@ -287,12 +287,18 @@ export async function transcribeAudioChunk(buffer, mimeType = 'audio/webm', prom
   return result?.text || '';
 }
 
-export async function transcribeFullAudio(buffer, mimeType = 'audio/webm', { promptHint = '' } = {}) {
+export async function transcribeFullAudio(
+  buffer,
+  mimeType = 'audio/webm',
+  { promptHint = '', cleanup = true } = {},
+) {
   const result = await transcribeAudioBuffer(buffer, mimeType, promptHint);
   const text = String(result?.text || '').trim();
   if (!text) return { transcript: '', provider: result?.provider || null, model: result?.model || null };
-  if (!voiceNoteMergeAvailable()) {
-    return { transcript: text, provider: result.provider, model: result.model };
+  // Verbatim path (e.g. free-form notes): return the raw local/Whisper text
+  // exactly as captioned — no LLM "merge" pass to reword it.
+  if (!cleanup || !voiceNoteMergeAvailable()) {
+    return { transcript: text, provider: result.provider, model: result.model, raw: text };
   }
   const cleaned = await mergeVoiceNoteTranscript('', text);
   return {

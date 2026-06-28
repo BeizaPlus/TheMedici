@@ -44,6 +44,10 @@ export function useCaseRecording({
   onNotesChanged,
   onTranscriptReady,
   promptHint = '',
+  // Free-form dictation: send the local/Whisper caption verbatim. No LLM
+  // "merge" reword pass. Set true only for list-style recorders that want
+  // the diagnosis-cleanup pass.
+  cleanup = false,
 }) {
   const [recording, setRecording] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -64,9 +68,11 @@ export function useCaseRecording({
   const interimRef = useRef('');
   const batchModeRef = useRef(false);
   const promptHintRef = useRef(promptHint || '');
+  const cleanupRef = useRef(cleanup);
   const onTranscriptReadyRef = useRef(onTranscriptReady);
   onTranscriptReadyRef.current = onTranscriptReady;
   promptHintRef.current = promptHint || '';
+  cleanupRef.current = cleanup;
   sessionIdRef.current = sessionId;
 
   // ─── helpers ──────────────────────────────────────────────────────────────
@@ -107,7 +113,7 @@ export function useCaseRecording({
 
       mergeQueueRef.current = mergeQueueRef.current
         .then(async () => {
-          if (batchModeRef.current) {
+          if (batchModeRef.current || !cleanupRef.current) {
             const fastAppend = `${transcriptRef.current}${transcriptRef.current ? ' ' : ''}${chunk}`.trim();
             transcriptRef.current = fastAppend;
             interimRef.current = '';
@@ -150,6 +156,7 @@ export function useCaseRecording({
               blob,
               transcriptRef.current,
               promptHintRef.current,
+              { cleanup: cleanupRef.current },
             );
             if (merged) {
               transcriptRef.current = merged;
@@ -221,6 +228,7 @@ export function useCaseRecording({
       try {
         const result = await transcribeVoiceNoteFull(blob, {
           promptHint: promptHintRef.current,
+          cleanup: cleanupRef.current,
         });
         const text = result.transcript || result.raw || '';
         if (text) {

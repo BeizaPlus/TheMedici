@@ -22,6 +22,8 @@ export default function OrderResultSceneCard({
   onPinTeachingMoment = null,
   orderLog = null,
   onResultStored = null,
+  onInterpret = null,
+  interpreting = false,
 }) {
   const { result, loading } = useOrderResult(intervention, {
     caseData,
@@ -94,14 +96,32 @@ export default function OrderResultSceneCard({
               ⭐ Story
             </button>
           )}
-          <button
-            type="button"
-            className="order-result-print"
-            onClick={handlePrint}
-            title="Print — choose Microsoft Print to PDF"
-          >
-            Print
-          </button>
+          {onInterpret ? (
+            <button
+              type="button"
+              className="order-result-interpret"
+              onClick={() =>
+                onInterpret({
+                  label,
+                  resultText: result?.text || '',
+                  kindLabel: result?.kindLabel || 'Result',
+                })
+              }
+              disabled={loading || interpreting || !result?.text}
+              title="Ask the attending to interpret these results for this patient"
+            >
+              {interpreting ? 'Interpreting…' : 'Interpret'}
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="order-result-print"
+              onClick={handlePrint}
+              title="Print — choose Microsoft Print to PDF"
+            >
+              Print
+            </button>
+          )}
           {!hideClose && (
             <button
               type="button"

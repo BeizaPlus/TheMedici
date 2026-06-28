@@ -9,7 +9,11 @@ import { useGridDragGame } from '../hooks/useGridDragGame.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
 import { usePinReposition } from '../hooks/usePinReposition.js';
 import { useCasePortraitSrc } from '../hooks/useCasePortraitSrc.js';
-import { DOCK_CHROME_COLLAPSED_HEIGHT, playDockStorageKey } from '../lib/playDockLayout.js';
+import {
+  DOCK_CHROME_COLLAPSED_HEIGHT,
+  defaultPlayDockLayout,
+  playDockStorageKey,
+} from '../lib/playDockLayout.js';
 import { nudgeVitalsAfterOrder } from '../lib/vitalsProgression.js';
 import { useTeachCompareDockWidth } from '../hooks/useTeachCompareDockWidth.js';
 import { isCorrectGridPlacement, zoneIdForCell, zoneToGridCell } from '../lib/placementGrid.js';
@@ -109,6 +113,8 @@ import {
   IconFlagCheckered,
   IconMessage,
   IconSkipForward,
+  IconPuzzle,
+  IconTimeline,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
 import IcuMonitorStrip from './IcuMonitorStrip.jsx';
@@ -121,6 +127,9 @@ import CaseBibliographyPanel from './CaseBibliographyPanel.jsx';
 import CollapsibleSettingsSection from './CollapsibleSettingsSection.jsx';
 import RealtimeMechanismPanel from './RealtimeMechanismPanel.jsx';
 import CasePortraitBriefControl from './CasePortraitBriefControl.jsx';
+import PuzzleMode from './PuzzleMode.jsx';
+import TimelineMode from './TimelineMode.jsx';
+import { getPuzzleForCase, getTimelineForCase } from '../data/puzzles/index.js';
 import OrderResultsTabPanel from './OrderResultsTabPanel.jsx';
 import { caseHasBibliography } from '../lib/caseBibliography.js';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
@@ -335,6 +344,19 @@ function MessageEntry({ role = 'system', content }) {
   return <div className={`conversation-entry ${role}`}>{renderChatMarkdown(content)}</div>;
 }
 
+// Rotating clinical lenses for the attending "new angle" refresh — so the case
+// gets worked from many angles, not just history/presentation.
+const ATTENDING_ANGLES = [
+  { id: 'history', label: 'History', focus: 'the history and risk factors worth chasing next' },
+  { id: 'presentation', label: 'Presentation', focus: 'how the presenting signs map to the underlying process' },
+  { id: 'exam', label: 'Exam', focus: 'the physical exam maneuver or finding that would change your thinking' },
+  { id: 'mechanism', label: 'Mechanism', focus: 'the core pathophysiology driving this picture' },
+  { id: 'workup', label: 'Workup', focus: 'the diagnostic test that confirms or rules out, and the result you expect' },
+  { id: 'treatment', label: 'Treatment', focus: 'the first management move, why it works, and the endpoint you watch' },
+  { id: 'complications', label: 'Complications', focus: 'the complication to anticipate and its earliest warning sign' },
+  { id: 'disposition', label: 'Disposition', focus: 'disposition and what must be true before this patient moves' },
+];
+
 export default function Play({
   caseData,
   playMode = 'browse',
@@ -387,6 +409,12 @@ export default function Play({
   }, [caseData.id, initialTeachMe, onTeachMeConsumed]);
   const [teachCompareLayout, setTeachCompareLayout] = useState(readTeachCompareLayout);
   const [medicalSequenceOpen, setMedicalSequenceOpen] = useState(false);
+  const attendingAngleIndexRef = useRef(0);
+  const [nextAngleLabel, setNextAngleLabel] = useState(ATTENDING_ANGLES[0].label);
+  const [puzzleOpen, setPuzzleOpen] = useState(false);
+  const casePuzzle = useMemo(() => getPuzzleForCase(caseData.id), [caseData.id]);
+  const [timelineOpen, setTimelineOpen] = useState(false);
+  const caseTimeline = useMemo(() => getTimelineForCase(caseData.id), [caseData.id]);
   const [caseStoryOpen, setCaseStoryOpen] = useState(false);
   const [caseStorySessionContext, setCaseStorySessionContext] = useState(null);
   const [caseStoryStarted, setCaseStoryStarted] = useState(() =>
@@ -456,7 +484,7 @@ export default function Play({
   const playSessionIdRef = useRef(playBoot.sessionId);
   const stackCommandRef = useRef(null);
   const bibliographyRef = useRef(null);
-  const expandedDockHeightRef = useRef(null);
+  const expandedDockLayoutRef = useRef(null);
   const [dockCollapsed, setDockCollapsed] = useState(false);
   const [dockHidden, setDockHidden] = useState(false);
   const [physicalExamPickerOpen, setPhysicalExamPickerOpen] = useState(false);
@@ -474,26 +502,62 @@ export default function Play({
   const expandDockPanel = useCallback(() => {
     setDockHidden(false);
     setDockCollapsed(false);
-    if (expandedDockHeightRef.current) {
-      persistDockLayout({
-        ...dockLayout,
-        height: expandedDockHeightRef.current,
-      });
-      expandedDockHeightRef.current = null;
+    const snapshot = expandedDockLayoutRef.current;
+    expandedDockLayoutRef.current = null;
+    if (snapshot && snapshot.height > DOCK_CHROME_COLLAPSED_HEIGHT + 4) {
+      // Restore the FULL pre-collapse geometry (height + clinicalPx +
+      // stacksListPx) — restoring height alone left the body at 0px.
+      persistDockLayout(snapshot);
+    } else if (dockLayout.height <= DOCK_CHROME_COLLAPSED_HEIGHT + 4) {
+      // No usable snapshot but we're currently collapsed → open to a sane
+      // default so a corrupted/collapsed saved layout can still expand.
+      const def = defaultPlayDockLayout();
+      persistDockLayout({ ...dockLayout, height: def.height, clinicalPx: def.clinicalPx });
     }
   }, [dockLayout, persistDockLayout]);
 
   const collapseDockPanel = useCallback(() => {
     setDockHidden(false);
-    expandedDockHeightRef.current = dockLayout.height;
-    persistDockLayout({
-      ...dockLayout,
-      height: DOCK_CHROME_COLLAPSED_HEIGHT,
-      clinicalPx: 0,
-      stacksListPx: 0,
-    });
+    // Snapshot the layout only when it's genuinely expanded, so we never save a
+    // collapsed geometry as the "expanded" state to restore later.
+    if (dockLayout.height > DOCK_CHROME_COLLAPSED_HEIGHT + 4) {
+      expandedDockLayoutRef.current = { ...dockLayout };
+    }
+    // write:false keeps the user's expanded layout in localStorage intact —
+    // collapsing is a view state, not a saved size.
+    persistDockLayout(
+      {
+        ...dockLayout,
+        height: DOCK_CHROME_COLLAPSED_HEIGHT,
+        clinicalPx: 0,
+        stacksListPx: 0,
+      },
+      { write: false },
+    );
     setDockCollapsed(true);
   }, [dockLayout, persistDockLayout]);
+
+  // Keep a stable handle to the latest collapseDockPanel so the case-load
+  // effect can call it WITHOUT depending on its identity. collapseDockPanel is
+  // recreated whenever dockLayout changes (persist → setLayout), so listing it
+  // as an effect dep made every expand re-fire the case-load collapse and snap
+  // the dock shut again (and corrupt the saved expanded height).
+  const collapseDockPanelRef = useRef(collapseDockPanel);
+  collapseDockPanelRef.current = collapseDockPanel;
+  const expandDockPanelRef = useRef(expandDockPanel);
+  expandDockPanelRef.current = expandDockPanel;
+
+  // Responsive expand/collapse of the dock panel (used by the dock header and
+  // the collapse button).
+  const toggleDockCollapsed = useCallback(() => {
+    if (dockHidden) {
+      setDockHidden(false);
+      expandDockPanel();
+      return;
+    }
+    if (dockCollapsed) expandDockPanel();
+    else collapseDockPanel();
+  }, [dockHidden, dockCollapsed, expandDockPanel, collapseDockPanel]);
 
   const toggleStackMoveMode = useCallback(() => {
     setStackMoveMode((on) => {
@@ -544,10 +608,12 @@ export default function Play({
     [dockHidden, dockCollapsed, expandDockPanel],
   );
 
-  const onDockChromeClick = useCallback(() => {
+  // §3: double-click the dock header toggles collapse/open. Single-click is
+  // reserved for drag (onPointerDown), so it never collapses on a stray click.
+  const onDockChromeDoubleClick = useCallback(() => {
     if (dockDragging || dockHidden || dockHandleDraggedRef.current) return;
-    if (!dockCollapsed) collapseDockPanel();
-  }, [dockDragging, dockHidden, dockCollapsed, collapseDockPanel]);
+    toggleDockCollapsed();
+  }, [dockDragging, dockHidden, toggleDockCollapsed]);
 
   useEffect(
     () => () => {
@@ -756,8 +822,15 @@ export default function Play({
 
   useEffect(() => {
     if (!caseData?.id) return;
-    collapseDockPanel();
-  }, [caseData?.id, collapseDockPanel]);
+    // Normal play opens the dock EXPANDED; only teach-me mode starts collapsed.
+    // (Regression: the study→main sync made this always-collapse, so every case
+    // opened with an empty dock.) Use refs so this fires only on case/mode
+    // change — not whenever the callbacks' identities change (which caused a
+    // re-collapse loop that made the dock impossible to expand).
+    if (teachMeMode) collapseDockPanelRef.current();
+    else expandDockPanelRef.current();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseData?.id, teachMeMode]);
 
   const showOrderWhyInDock = useCallback(
     (iv) => {
@@ -2711,6 +2784,57 @@ export default function Play({
     return trajectoryResultRows;
   }, [teachMeMode, interventions, placed, trajectoryResultRows]);
 
+  // Interpret a result card with the attending: the reply lands in the case chat
+  // (logged + persisted), and the attending relates the values to this patient.
+  const handleInterpretResult = useCallback(
+    async ({ label, resultText }) => {
+      const text = String(resultText || '').trim();
+      if (!text) return;
+      if (caseChat.available === false) {
+        showToast('Chat API offline — cannot interpret', 'bad');
+        return;
+      }
+      const prompt =
+        `Interpret the ${label} results for this patient. Relate each abnormal value to the clinical picture and say what it changes in management — be specific.\n\n${label}: ${text}`;
+      expandDockPanel();
+      setInfoTab('chat');
+      showToast('Asking the attending to interpret…', '');
+      const reply = await caseChat.sendMessage(prompt, { chatMode: 'tutor' });
+      showToast(
+        reply ? 'Attending interpreted these labs' : caseChat.error || 'No interpretation — check chat panel',
+        reply ? 'ok' : 'bad',
+      );
+    },
+    [caseChat, expandDockPanel],
+  );
+
+  // Attending "new angle" — refresh button that makes the attending quiz the
+  // learner from a rotating clinical lens, so the case gets worked from many
+  // angles (history → exam → mechanism → treatment → …) instead of one.
+  const handleAskNewAngle = useCallback(async () => {
+    if (caseChat.available === false) {
+      showToast('Chat API offline — cannot ask', 'bad');
+      return;
+    }
+    const idx = attendingAngleIndexRef.current % ATTENDING_ANGLES.length;
+    const angle = ATTENDING_ANGLES[idx];
+    const nextIdx = (idx + 1) % ATTENDING_ANGLES.length;
+    attendingAngleIndexRef.current = nextIdx;
+    setNextAngleLabel(ATTENDING_ANGLES[nextIdx].label);
+    const prompt =
+      `Quiz me from a new angle — the ${angle.label.toUpperCase()} angle. ` +
+      `Ask me ONE sharp question about ${angle.focus} for THIS patient that you haven't already asked. ` +
+      `One question only — then stop and wait for my answer. Do not answer it yourself.`;
+    expandDockPanel();
+    setInfoTab('chat');
+    showToast(`Attending: ${angle.label} angle…`, '');
+    const reply = await caseChat.sendMessage(prompt, { chatMode: 'tutor' });
+    showToast(
+      reply ? `New ${angle.label} question` : caseChat.error || 'No question — check chat panel',
+      reply ? 'ok' : 'bad',
+    );
+  }, [caseChat, expandDockPanel]);
+
   const dockResultsPanel = useMemo(
     () => (
       <OrderResultsTabPanel
@@ -2732,9 +2856,11 @@ export default function Play({
         orderLog={clinicalOrderLog}
         liveOrderResults={liveOrderResults}
         onResultStored={storeLiveOrderResult}
+        onInterpret={handleInterpretResult}
+        interpreting={caseChat.busy}
       />
     ),
-    [dockResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode, pinTeachingMoment, showOrderWhyInDock, trajectorySnapshots, clinicalOrderLog, liveOrderResults, storeLiveOrderResult],
+    [dockResultRows, orderResultIvId, caseData, caseFlow, portraitDisplaySrc, teachMeMode, pinTeachingMoment, showOrderWhyInDock, trajectorySnapshots, clinicalOrderLog, liveOrderResults, storeLiveOrderResult, handleInterpretResult, caseChat.busy],
   );
 
   const dockOrderContextLabel = useMemo(() => {
@@ -3909,7 +4035,7 @@ export default function Play({
       !initialCheckpoint?.caseId ||
       String(initialCheckpoint.caseId) !== String(caseData.id)
     ) {
-      expandedDockHeightRef.current = null;
+      expandedDockLayoutRef.current = null;
       setDockCollapsed(false);
     }
   }, [caseData.id, initialCheckpoint?.caseId]);
@@ -4114,7 +4240,15 @@ export default function Play({
         ...teachMeStyle,
       }}
     >
-      <div className="panel-controls-stack">
+      <div
+        className="panel-controls-stack"
+        onDoubleClick={(e) => {
+          // §3: double-click the sidebar rail (empty area, not a button) hides
+          // the command UI. Single-click the toggle button shows it again.
+          if (e.target.closest('button')) return;
+          setDockHidden(true);
+        }}
+      >
         <button
           type="button"
           className="panel-toggle-btn"
@@ -4164,6 +4298,30 @@ export default function Play({
         >
           <IconMessage />
         </button>
+        {casePuzzle && (
+          <button
+            type="button"
+            className={`panel-puzzle-btn${puzzleOpen ? ' active' : ''}`}
+            onClick={() => setPuzzleOpen(true)}
+            title="Puzzle mode — Build the Picture"
+            aria-label="Puzzle mode"
+            aria-pressed={puzzleOpen}
+          >
+            <IconPuzzle />
+          </button>
+        )}
+        {caseTimeline && (
+          <button
+            type="button"
+            className={`panel-puzzle-btn${timelineOpen ? ' active' : ''}`}
+            onClick={() => setTimelineOpen(true)}
+            title="Timeline mode — arrange the management sequence"
+            aria-label="Timeline mode"
+            aria-pressed={timelineOpen}
+          >
+            <IconTimeline />
+          </button>
+        )}
         <button
           type="button"
           className="panel-next-case-btn"
@@ -4266,6 +4424,9 @@ export default function Play({
             captureBusy={captureBusy}
             dockRole={dockRole}
             onDockRoleChange={setDockRole}
+            onNewAngle={handleAskNewAngle}
+            newAngleLabel={nextAngleLabel}
+            newAngleBusy={caseChat.busy}
             patientMode={chatPatientMode}
             onPatientModeChange={setChatPatientMode}
             patientRecording={caseRecording}
@@ -4867,8 +5028,8 @@ export default function Play({
         <div
           className="dock-handle"
           onPointerDown={onDockDragStart}
-          onClick={onDockChromeClick}
-          title="Drag to move · click to collapse · double-click panel button to hide"
+          onDoubleClick={onDockChromeDoubleClick}
+          title="Drag to move · double-click to collapse/open"
         >
           <span className="dock-handle-grip" aria-hidden>
             ⋮⋮
@@ -4929,7 +5090,7 @@ export default function Play({
               setInfoTab(tab);
               if (dockCollapsed) expandDockPanel();
             }}
-            onTabCollapse={collapseDockPanel}
+            onTabCollapse={toggleDockCollapsed}
             onReadCase={(section, text) => {
               readCaseAloud({
                 caseId: caseData.id,
@@ -5139,6 +5300,23 @@ export default function Play({
             : '')
         }
       />
+
+      {puzzleOpen && casePuzzle && (
+        <PuzzleMode
+          puzzle={casePuzzle}
+          portraitSrc={portraitDisplaySrc}
+          onClose={() => setPuzzleOpen(false)}
+          onComplete={() => showToast('Picture complete — diagnosis revealed', 'ok')}
+        />
+      )}
+
+      {timelineOpen && caseTimeline && (
+        <TimelineMode
+          timeline={caseTimeline}
+          onClose={() => setTimelineOpen(false)}
+          onComplete={() => showToast('Resuscitation sequence complete', 'ok')}
+        />
+      )}
 
     </div>
   );

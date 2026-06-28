@@ -22,6 +22,8 @@ export default function OrderResultsTabPanel({
   orderLog = null,
   liveOrderResults = null,
   onResultStored = null,
+  onInterpret = null,
+  interpreting = false,
 }) {
   const [trendMetric, setTrendMetric] = useState('k');
   const trendSeries = trajectorySnapshots?.length
@@ -94,6 +96,8 @@ export default function OrderResultsTabPanel({
               onPinTeachingMoment={onPinTeachingMoment}
               orderLog={orderLog}
               onResultStored={onResultStored}
+              onInterpret={onInterpret}
+              interpreting={interpreting}
             />
           )}
         </>

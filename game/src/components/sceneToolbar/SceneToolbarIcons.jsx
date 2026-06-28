@@ -341,6 +341,25 @@ export function IconBookmark(props) {
   );
 }
 
+/** Tabler: x — close — https://tabler.io/icons/icon/x */
+export function IconX(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M18 6l-12 12" />
+      <path d="M6 6l12 12" />
+    </svg>
+  );
+}
+
+/** Tabler: puzzle — Build the Picture mode — https://tabler.io/icons/icon/puzzle */
+export function IconPuzzle(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1" />
+    </svg>
+  );
+}
+
 /** Tabler: timeline — practice log — https://tabler.io/icons/icon/timeline */
 export function IconTimeline(props) {
   return (

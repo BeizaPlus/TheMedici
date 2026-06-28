@@ -38,6 +38,7 @@ export function buildPortraitSessionContext({
   });
 
   const orderResults = [];
+  const seenKeys = new Set();
   const rows = buildPlacedResultRows({ interventions, placed, pins, interventionById });
   for (const { iv } of rows) {
     const occ = Number.isFinite(iv.trajectoryOccurrence) ? iv.trajectoryOccurrence : 0;
@@ -52,12 +53,29 @@ export function buildPortraitSessionContext({
           }
         : resolveOrderResult(iv, { caseData, caseFlow, teachMeMode });
     if (!result?.text || result.pending) continue;
+    seenKeys.add(storageKey);
     orderResults.push({
       orderId: iv.id,
       label: iv.label,
       kind: result.kind,
       kindLabel: result.kindLabel,
       text: result.text,
+    });
+  }
+
+  // Catch live results whose order isn't a placed pin (typed/dock orders, rechecks).
+  // Without this, a lab the learner ordered from the dock has a value on screen but
+  // never reaches the attending ledger — the tutor "can't see the labs".
+  for (const [storageKey, live] of Object.entries(liveOrderResults || {})) {
+    if (seenKeys.has(storageKey) || !live?.text?.trim()) continue;
+    const orderId = String(storageKey).split('::')[0];
+    const iv = interventionById?.[orderId] || null;
+    orderResults.push({
+      orderId,
+      label: live.label || iv?.label || live.kindLabel || 'Order',
+      kind: live.kind || 'order',
+      kindLabel: live.kindLabel || 'Result',
+      text: live.text,
     });
   }
 

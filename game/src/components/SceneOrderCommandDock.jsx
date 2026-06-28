@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { FiMessageSquare, FiSend, FiX, FiStar } from 'react-icons/fi';
-import { IconCamera, IconFileMedical } from './sceneToolbar/SceneToolbarIcons.jsx';
+import { IconCamera, IconFileMedical, IconRefresh } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import PatientReplyPlayButton from './PatientReplyPlayButton.jsx';
 import ChatRoleSegment from './ChatRoleSegment.jsx';
@@ -87,6 +87,9 @@ function SceneOrderCommandDock({
   chatOpen = false,
   onScreenshot,
   captureBusy = false,
+  onNewAngle,
+  newAngleLabel = '',
+  newAngleBusy = false,
   autocompleteText = null,
   quickReply = null,
   replyExpanded = false,
@@ -196,6 +199,24 @@ function SceneOrderCommandDock({
           </div>
         ) : null}
         <div className="scene-order-command-head-tools">
+          {!patientMode && onNewAngle ? (
+            <button
+              type="button"
+              className="scene-order-command-icon-btn scene-order-command-angle-btn"
+              onClick={() => onNewAngle()}
+              disabled={newAngleBusy}
+              title={
+                newAngleLabel
+                  ? `Ask the attending a fresh question — next angle: ${newAngleLabel}`
+                  : 'Ask the attending a fresh question from a new angle'
+              }
+              aria-label={
+                newAngleLabel ? `New attending question — ${newAngleLabel} angle` : 'New attending question'
+              }
+            >
+              <IconRefresh />
+            </button>
+          ) : null}
           {patientRecording ? (
             <CaseRecordButton
               {...patientRecording}

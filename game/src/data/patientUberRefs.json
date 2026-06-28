@@ -12,6 +12,9 @@
     "Read game/.cursor/RULES_IMAGE_GENERATION.md before any gen"
   ],
   "caseSlugs": {
+    "153": "ngavu-yellow-party",
+    "166": "hemarthrosis-athlete-knee",
+    "176": "subway-afro-dandy",
     "U01": "copper-afro-headwrap-africa",
     "U02": "vitiligo-wink-diastema",
     "U03": "hijab-albino-freckles",
@@ -21,15 +24,12 @@
     "U07": "nevus-speckled-laugh",
     "U08": "subway-afro-dandy",
     "U10": "vitiligo-wink-diastema",
-    "U11": "copper-afro-headwrap-africa",
+    "U11": "subway-afro-dandy",
     "U12": "craniofacial-asymmetry-goatee",
     "U13": "nevus-speckled-laugh",
-    "U14": "craniofacial-asymmetry-goatee",
+    "U14": "deep-black-youth",
     "U15": "copper-afro-headwrap-africa",
-    "176": "subway-afro-dandy",
-    "086": "adpkd-long-nose-elder",
-    "153": "ngavu-yellow-party",
-    "166": "hemarthrosis-athlete-knee"
+    "086": "adpkd-long-nose-elder"
   },
   "bankSlugs": [
     "strongman-caricature-bank",
@@ -44,6 +44,26 @@
     "distorted-excluded-do-not-gen"
   ],
   "refs": {
+    "deep-black-youth": {
+      "sourceFile": "20-deep-black-youth-harold.png",
+      "mapFile": "deep-black-youth-CHARACTER-MAP.png",
+      "label": "Harold Mensah · deep ebony · salt-and-pepper",
+      "sex": "male",
+      "uberCases": [
+        "U14"
+      ],
+      "identityPrompt": "Match likeness: Black man ~45, very deep dark ebony/blue-black skin (never lighten), distinguished salt-and-pepper short afro — grey at temples, hairline, crown — greying short beard, lean face, calm gaze. Hospital gown on ED stretcher; preserve deep skin tone and grey hair. MeWorld sculptural clinical still, dignified.",
+      "characterMapStatus": "approved",
+      "characterMapShippedFrom": "deep-black-youth-U14-harold-45yo-grey-CHARACTER-MAP-alt1.png",
+      "characterMapShippedAt": "2026-06-26",
+      "gameSceneFile": "deep-black-youth-GAME-SCENE.png",
+      "gameSceneStatus": "approved-pending-ship",
+      "gameSceneAlt": "alt2-idlock",
+      "gameSceneShippedFrom": "deep-black-youth-GAME-SCENE-alt2-idlock-20260625-approved-pending-ship.png",
+      "gameSceneShippedAt": "2026-06-26",
+      "gameSceneNote": "Identity-lock regen — character map as sole face ref (no gold-face bleed). Replaces drifted v2 pass.",
+      "status": "approved"
+    },
     "hijab-albino-freckles": {
       "sourceFile": "01-hijab-albino-freckles.png",
       "mapFile": "hijab-albino-freckles-CHARACTER-MAP.png",
@@ -129,8 +149,7 @@
       "sex": "male",
       "uberCases": [
         "U06",
-        "U12",
-        "U14"
+        "U12"
       ],
       "identityPrompt": "Match likeness: older man with pronounced facial asymmetry, bulbous nose, white goatee, fair skin. Respectful clinical portrait on ED stretcher — same asymmetry and grooming.",
       "gameSceneShippedFrom": "craniofacial-asymmetry-goatee-GAME-SCENE-alt2-approved-pending-ship.png",
@@ -146,7 +165,6 @@
       "sex": "female",
       "uberCases": [
         "U01",
-        "U11",
         "U15"
       ],
       "identityPrompt": "Match likeness: Black woman, voluminous copper-red afro, patterned green headwrap, gold Africa-map pendant, freckles, nose ring. Hospital gown; preserve afro silhouette and jewelry unless brief omits.",
@@ -165,7 +183,8 @@
       "label": "Subway afro · retro dandy",
       "sex": "male",
       "uberCases": [
-        "U08"
+        "U08",
+        "U11"
       ],
       "catalogCases": [
         "176"
