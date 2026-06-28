@@ -4,10 +4,7 @@ import ClinicalAlgorithm from './ClinicalAlgorithm.jsx';
 import WhyPanel from './WhyPanel.jsx';
 import { getDragConfig } from '../data/gameData.js';
 import medicalOrders from '../data/medical-orders.json';
-import { useDragGame } from '../hooks/useDragGame.js';
-import { useGridDragGame } from '../hooks/useGridDragGame.js';
 import { usePlayDockLayout } from '../hooks/usePlayDockLayout.js';
-import { usePinReposition } from '../hooks/usePinReposition.js';
 import { useCasePortraitSrc } from '../hooks/useCasePortraitSrc.js';
 import {
   DOCK_CHROME_COLLAPSED_HEIGHT,
@@ -752,14 +749,6 @@ export default function Play({
     setTeachFocusId((prev) => (prev === id ? null : id));
   }, []);
 
-  const canStartStackDrag = useCallback(
-    (ivId) => {
-      if (!teachMeMode) return true;
-      if (decoyInterventions.some((d) => d.id === ivId)) return true;
-      return ivId === nextExpectedId;
-    },
-    [teachMeMode, nextExpectedId, decoyInterventions],
-  );
   const commandMatch = useMemo(() => {
     if (dockSkipsOrderMatch(dockRole) || !orderCommandQuery.trim()) return null;
     return resolveCaseStackOrder(orderCommandQuery, interventions, placed);
@@ -865,8 +854,13 @@ export default function Play({
       <div
         key={iv.id}
         className={`drag-pill-wrap pack-item ${showDecoyVisual && !blendVisual ? 'pack-item-decoy' : ''} ${placed[iv.id] ? 'is-placed is-expandable' : ''} ${teachMeMode && placed[iv.id] ? 'teach-pill-placed' : ''} ${expandedStackId === iv.id ? 'expanded' : ''} ${isTeachFocused ? 'teach-pill-focused' : ''} ${isTeachNext ? 'teach-pill-next' : ''} ${isTeachLocked ? 'teach-pill-locked' : ''}`}
-        data-x="0"
-        data-y="0"
+        draggable
+        onDragStart={(e) => {
+          e.dataTransfer.setData('application/stack-iv-id', iv.id);
+          e.dataTransfer.effectAllowed = 'move';
+          setDragging(true);
+        }}
+        onDragEnd={() => setDragging(false)}
         onClick={(e) => {
           if (e.currentTarget?.dataset?.didDrag === 'true') {
             e.currentTarget.dataset.didDrag = '';
@@ -881,10 +875,6 @@ export default function Play({
           className="drag-pill pill"
           data-iv-id={iv.id}
           data-placed={placed[iv.id] ? 'true' : 'false'}
-          onMouseDown={() => setDragging(true)}
-          onMouseUp={() => setDragging(false)}
-          onTouchStart={() => setDragging(true)}
-          onTouchEnd={() => setDragging(false)}
         >
           <span
             className="pill-text"
@@ -1965,17 +1955,6 @@ export default function Play({
       }
     },
   });
-
-  const snapWrapHome = (wrap) => {
-    if (!wrap) return;
-    wrap.style.transition = `transform ${dragCfg.snapBackMs}ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
-    wrap.style.transform = 'translate(0, 0)';
-    wrap.setAttribute('data-x', '0');
-    wrap.setAttribute('data-y', '0');
-    setTimeout(() => {
-      wrap.style.transition = '';
-    }, dragCfg.snapBackMs + 20);
-  };
 
   const logDecoyAttempt = useCallback(
     (stack, input) => {
@@ -3063,13 +3042,11 @@ export default function Play({
             : 'Killed the patient — harmful or irrelevant action.',
           'bad',
         );
-        snapWrapHome(wrap);
         return;
       }
 
       if (teachMeMode) {
         if (iv.id !== nextExpectedId) {
-          snapWrapHome(wrap);
           const nextIv = nextExpectedId ? interventionById[nextExpectedId] : null;
           const nextSeq = nextExpectedId ? expectedOrderIds.indexOf(nextExpectedId) + 1 : null;
           showToast(
@@ -3139,13 +3116,41 @@ export default function Play({
     [interventions, decoyInterventions],
   );
 
-  usePinReposition({
-    sceneRef,
-    enabled:
-      !timedOut && !finalMode && pins.length > 0 && (stackMoveMode || !teachMeMode),
-    pinCount: pins.length,
-    onMovePin: handleMovePin,
-  });
+  // ── Native HTML5 drag drop zone handlers ──────────────────────────────────
+
+  const handleSceneDragOver = useCallback((e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const handleSceneDrop = useCallback((e) => {
+    e.preventDefault();
+    const ivId = e.dataTransfer.getData('application/stack-iv-id');
+    if (!ivId) return;
+
+    // Block drags that can't start (teachMeMode sequence enforcement)
+    if (teachMeMode && ivId !== nextExpectedId &&
+        !decoyInterventions.some((d) => d.id === ivId)) {
+      return;
+    }
+
+    const sceneEl = sceneRef.current;
+    if (!sceneEl) return;
+    const rect = sceneEl.getBoundingClientRect();
+    const cx = (e.clientX - rect.left) / rect.width;
+    const cy = (e.clientY - rect.top) / rect.height;
+
+    // Convert to grid cell for grid placement mode
+    const cols = 48;
+    const rows = 32;
+    const col = Math.max(0, Math.min(cols - 1, Math.round(cx * cols - 0.5)));
+    const row = Math.max(0, Math.min(rows - 1, Math.round(cy * rows - 0.5)));
+    const target = { col, row, cx: (col + 0.5) / cols, cy: (row + 0.5) / rows };
+
+    const pill = document.querySelector(`.drag-pill[data-iv-id="${ivId}"]`);
+    const wrap = pill?.closest('.drag-pill-wrap');
+    handleDrop(ivId, target, { wrap, pill, clientX: e.clientX, clientY: e.clientY });
+  }, [handleDrop, teachMeMode, nextExpectedId, decoyInterventions]);
 
   const savePhysicalExamLayout = useCallback(async () => {
     const sections = capturePhysicalExamLayoutFromPins(pins);
@@ -3163,39 +3168,6 @@ export default function Play({
       showToast(`Saved ${count} PE positions in this browser`, 'ok');
     }
   }, [pins]);
-
-  const returnStackToDock = useCallback(
-    (ivId, { wrap } = {}) => {
-      const iv = interventions.find((i) => i.id === ivId) || decoyInterventions.find((i) => i.id === ivId);
-      setPlaced((p) => {
-        if (!(ivId in p)) return p;
-        const next = { ...p };
-        delete next[ivId];
-        return next;
-      });
-      setPlacementOrder((prev) => prev.filter((id) => id !== ivId));
-      setPins((prev) => prev.filter((pin) => pin.ivId !== ivId));
-      setReviewed(false);
-      setReviewResults({});
-      setOrderReview({});
-      setReviewedAt(null);
-      if (wrap) {
-        if (wrap.classList?.contains('pin-grid')) {
-          wrap.style.transition = `transform ${dragCfg.snapBackMs}ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
-          wrap.style.transform = 'translate(-50%, -100%)';
-          wrap.setAttribute('data-x', '0');
-          wrap.setAttribute('data-y', '0');
-        } else {
-          wrap.style.transition = `transform ${dragCfg.snapBackMs}ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
-          wrap.style.transform = 'translate(0, 0)';
-          wrap.setAttribute('data-x', '0');
-          wrap.setAttribute('data-y', '0');
-        }
-      }
-      showToast(`Returned ${iv?.label || 'stack'} to dock`, '');
-    },
-    [interventions, decoyInterventions, dragCfg.snapBackMs],
-  );
 
   const wrapUpCase = useCallback(
     ({ requireAllPlaced = true } = {}) => {
@@ -3330,33 +3302,6 @@ export default function Play({
     if (!ok) return;
     wrapUpCase({ requireAllPlaced: false });
   }, [showThanksVideo, showPostVideoReview, wrapUpCase]);
-
-  useDragGame({
-    sceneRef,
-    enabled: !timedOut && !useGridPlacement,
-    placed,
-    overlap: dragCfg.overlap,
-    snapBackMs: dragCfg.snapBackMs,
-    freeDrop: dropMode === 'free',
-    onDrop: handleDrop,
-    onReturnToDock: returnStackToDock,
-    canStartDrag: canStartStackDrag,
-  });
-
-  const dragDockRevision = `${placementOrder.length}:${expandedStackId ?? ''}:${orderResultIvId ?? ''}`;
-
-  useGridDragGame({
-    sceneRef,
-    enabled: !timedOut && useGridPlacement,
-    overlap: dragCfg.overlap,
-    snapBackMs: dragCfg.snapBackMs,
-    placedCount: placementOrder.length,
-    dockRevision: dragDockRevision,
-    onDrop: handleDrop,
-    onMovePin: handleMovePin,
-    onReturnToDock: returnStackToDock,
-    canStartDrag: canStartStackDrag,
-  });
 
   const zoneLit = showCues && (dragging || showZonesAlways);
 
@@ -3682,9 +3627,40 @@ export default function Play({
     showToast('Placements reset', '');
   };
 
+  const autoLayoutPins = useCallback(() => {
+    // Layout pins vertically along the right side of the patient, stacked with offset
+    const pinCount = pins.length;
+    if (pinCount === 0) return;
+
+    const startX = 0.68; // right of patient torso
+    const startY = 0.22; // top of patient area
+    const offsetStep = 0.022; // vertical offset per pin (~2.2% of scene height)
+
+    const sceneEl = sceneRef.current;
+    const maxY = 0.78; // don't go below patient feet
+
+    const newPins = pins.map((p, i) => {
+      if (!p.ivId) return p;
+      const cy = Math.min(startY + i * offsetStep, maxY - (pinCount - i) * 0.01);
+      return { ...p, cx: startX, cy, zoneId: 'zone-custom-1' };
+    });
+
+    // Update placed positions too
+    const newPlaced = { ...placed };
+    newPins.forEach((p) => {
+      if (p.ivId && p.cx != null && p.cy != null) {
+        newPlaced[p.ivId] = { cx: p.cx, cy: p.cy, zoneId: 'zone-custom-1' };
+      }
+    });
+
+    setPlaced(newPlaced);
+    setPins(newPins);
+    showToast('Pins auto-laid out', '');
+  }, [pins, placed]);
+
   const restartCurrentCase = useCallback(() => {
     const ok = window.confirm(
-      'Restart this case from scratch? Timer, placements, and SOAP notes reset.',
+      'Restart this case from scratch? Timer, placements, and SOAP notes reset. Chat history is preserved.',
     );
     if (!ok) return;
 
@@ -3728,12 +3704,7 @@ export default function Play({
 
     soapLoggedRef.current = { assessment: null, plan: null };
 
-    void (async () => {
-      await endCurrentPlaySession({ restarted: true, placed: doneCount, total });
-      clearPlayCheckpoint();
-      await beginPlaySession({ resume: false, forceNew: true });
-    })();
-
+    clearPlayCheckpoint();
     startRef.current = Date.now();
 
     try {
@@ -3742,9 +3713,8 @@ export default function Play({
       /* ignore */
     }
 
-    sceneRef.current?.querySelectorAll('.drag-pill-wrap').forEach(snapWrapHome);
-    showToast('Case restarted from scratch', 'ok');
-  }, [timerTotal, caseFlow.dispositionUnits, soapDraftKey, showToast, caseData?.id, endCurrentPlaySession, beginPlaySession, doneCount, total]);
+    showToast('Placements reset — chat preserved', 'ok');
+  }, [timerTotal, caseFlow.dispositionUnits, soapDraftKey, showToast, caseData?.id, doneCount, total]);
 
   const persistGridItems = useCallback(
     (next) => {
@@ -4084,6 +4054,9 @@ export default function Play({
               <button type="button" onClick={resetPlacements}>
                 Reset placements
               </button>
+              <button type="button" onClick={autoLayoutPins}>
+                Auto-layout pins
+              </button>
               <button type="button" onClick={openCaseStory}>
                 Case story
               </button>
@@ -4306,6 +4279,9 @@ export default function Play({
       <div
         className={`game-scene ${vitals.spo2 < 92 || vitals.sbp < 95 || vitals.hr > 120 ? 'icu-alarm' : ''} ${teachMeMode ? 'teach-me-active' : ''}${stackMoveMode ? ' pin-move-mode' : ''}`}
         ref={sceneRef}
+        onDragOver={handleSceneDragOver}
+        onDrop={handleSceneDrop}
+        data-dropzone
       >
         <div className="game-scene-capture" ref={sceneCaptureRef}>
         <div className="scene-dock-left">
@@ -4573,13 +4549,34 @@ export default function Play({
               key={`${p.ivId || p.zoneId}-${i}-${p.label}`}
               className={`pin ${p.ivId ? 'pin-draggable' : ''} ${stackMoveMode && p.ivId ? 'pin-move-active' : ''} ${useGridPlacement ? 'pin-grid' : ''} ${p.ok === true ? 'ok' : ''} ${p.ok === false ? 'bad' : ''} ${p.ivId ? 'pin-has-result' : ''} ${orderResultIvId === p.ivId ? 'pin-active' : ''}`}
               data-iv-id={p.ivId || ''}
-              data-x="0"
-              data-y="0"
-              onPointerDown={(e) => {
+              draggable={Boolean(p.ivId)}
+              onDragStart={(e) => {
+                if (!p.ivId) { e.preventDefault(); return; }
+                const rect = e.currentTarget.getBoundingClientRect();
+                const offX = e.clientX - rect.left;
+                const offY = e.clientY - rect.top;
+                e.currentTarget.dataset.dragOffsetX = offX;
+                e.currentTarget.dataset.dragOffsetY = offY;
+                e.dataTransfer.setData('application/reposition-pin', p.ivId);
+                e.dataTransfer.effectAllowed = 'move';
+              }}
+              onDragEnd={(e) => {
                 if (!p.ivId) return;
-                if (stackMoveMode || !teachMeMode) {
-                  e.preventDefault();
-                }
+                const sceneEl = sceneRef.current;
+                if (!sceneEl) return;
+                const rect = sceneEl.getBoundingClientRect();
+                if (!rect.width || !rect.height) return;
+                const insideScene =
+                  e.clientX >= rect.left && e.clientX <= rect.right &&
+                  e.clientY >= rect.top && e.clientY <= rect.bottom;
+                if (!insideScene) return;
+                const offX = parseFloat(e.currentTarget.dataset.dragOffsetX || 0);
+                const offY = parseFloat(e.currentTarget.dataset.dragOffsetY || 0);
+                const rawCx = (e.clientX - rect.left - offX) / rect.width;
+                const rawCy = (e.clientY - rect.top - offY) / rect.height;
+                const { cx, cy } = clampPinAwayFromUi(rawCx, rawCy, sceneEl);
+                pinDragSuppressClickRef.current = { ivId: p.ivId, at: Date.now() };
+                handleMovePin(p.ivId, { cx, cy, zoneId: 'zone-custom-1' });
               }}
               onClick={() => {
                 if (!p.ivId) return;
