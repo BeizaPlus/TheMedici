@@ -53,24 +53,48 @@ MeWorld/data/cases/*.json ← clean DeepSeek bank (Differential review build)
 │  SceneOrderCommandDock (left) — orders + chat input          │
 ├─────────────────────────────────────────────────────────────┤
 │  Floating sidebar (CaseContextPanel) — HPI · exam · stacks   │
-│  · results · portrait brief (toolbar user icon)              │
+│  · Chat tab (CaseSessionThread) · portrait brief             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 | Piece | File | Role |
 |-------|------|------|
-| Scene + game loop | `Play.jsx` | Drops, stacks, teach-me, chat hook |
+| Scene + game loop | `Play.jsx` | Drops, stacks, teach-me, chat hook; **`dockRole` state** syncs dock + chat |
 | Order/chat dock | `SceneOrderCommandDock.jsx` | Primary order UI + chat input; accordions for latest result/reply |
+| Case chat thread | `CaseSessionThread.jsx` | Sidebar Chat tab + dock history embed; **`.case-chat-cmd-ui` compose bar** |
 | Clinical sidebar | `CaseContextPanel.jsx` | HPI, physical exam picker, order stacks, results |
 | ICU monitor | `IcuMonitorStrip.jsx` | Live vitals display (clamped jitter) |
 | Portrait brief | `CasePortraitBriefControl.jsx` | Top-right user icon; custom regen brief |
 | Toolbar icons | `sceneToolbar/SceneToolbarIcons.jsx` | Tabler-only icons |
 
-**Chat persistence:** `useCaseChat.js` → localStorage per case; server `patient_sim` mode.
+### Command UI — three-way role slider (`dockRole`)
 
-**Chat display policy (baseline):** conversation expands in the **scene dock**; full history available via thread components when mounted. **Do not add duplicate sidebar Thread tab without Steve approval.**
+**One shared state** in `Play.jsx`: `orders` · `patient` · `tutor` (Attending).  
+Component: `ChatRoleSegment.jsx` — horizontal pill, white thumb slides across **3 equal icon slots** (132px wide in dock + chat bar).
 
-**Pending UX (discuss first):** `CaseThreadCaseRail.jsx` — horizontal “recent cases with chat” strip; Steve may remove. **No agent changes until cleared.**
+| Icon | Dock command line | Chat bar (`.case-chat-cmd-ui`) |
+|------|-------------------|--------------------------------|
+| **Clipboard — Orders** | Match stacks → canvas pin; extras when not Teach Me | **Case notes** → `appendNote` / journal (`cases/notes/{id}.md`) |
+| **Person — Patient** | `patient_sim` — no order match | `patient_sim` — interview |
+| **Stethoscope — Attending** | `tutor` only — **never** places orders | `tutor` — coaching; order names do not pin stacks |
+
+**Expand / collapse (command dock panels):**
+
+| Strip | Toggle | Behavior |
+|-------|--------|----------|
+| Case chat history | ▾ / ▴ on dock | Click expands/collapses thread; user collapse persists until next message |
+| Order result context | ▾ / ▴ | Lab/exam result card |
+| Quick tutor/patient reply | ▾ / ▴ | Latest dock brief reply |
+| Sidebar Chat tab header | ▾ / ▴ | `CaseSessionThread` collapse (`STORAGE.threadCollapsed`) |
+| Sidebar panel chrome | Single-click handle | Expand/collapse `CaseContextPanel` body |
+| Sidebar panel | Double-click handle | `dock-hidden` — full hide |
+
+CSS: `ui-overrides.css` (dock), `index.css` `.case-chat-cmd-*` (chat bar).  
+Rules: `.cursor/rules/play-case-chat.mdc`, `.cursor/PLAY_STACKS_CHECKLIST.md`, `docs/components/CASE_CHAT.md`.
+
+**Chat persistence:** `useCaseChat.js` → localStorage per case; server sessions per `chatMode` (`tutor` | `patient_sim`).
+
+**Chat display policy:** Dock shows message history expander; full compose + 3-way slider in sidebar **Chat tab** (`.case-chat-cmd-ui`). Both surfaces share `dockRole` from `Play.jsx`.
 
 **Deferred — true learning mode (Steve 2026-06-16):** Physical exam picker (`PhysicalExamPickerDialog.jsx`) must open **clean** — no pre-selected sections, no **In case stacks** tags. **Case suggestions** is the only control that turns hints on. Full spec: `docs/FEATURE_REQUEST_AUDIT.md` § Deferred: True learning mode. **Do not implement until Steve clears.**
 

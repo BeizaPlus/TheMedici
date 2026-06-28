@@ -35,15 +35,22 @@ Case chat is **not** a single assistant. The server picks a **system prompt** at
 
 **Place orders on canvas** → **Order·Chat dock command line** (`submitOrderCommand` in `Play.jsx`), **not** the Chat tab. Chat tab text goes to LLM only (unless it matches order autocomplete in the dock).
 
-## Patient mode toggle
+## Patient / attending toggle
 
 | Control | State |
 |---------|--------|
-| Patient portrait button (dock + chat header) | `chatPatientMode` in `Play.jsx` |
-| Gold / active | `patient_sim` for voice + dock free text |
-| Off (default) | `tutor` |
+| Order dock **three-way segment** | `dockRole` in `Play.jsx`: `orders` · `patient` · `tutor` |
+| **Orders** (default) | Stack match + autocomplete → canvas pin; unmatched text → tutor if Learning on |
+| **Patient** | `patient_sim` — no order matching |
+| **Attending** | `tutor` only — **never** matches stacks (use for workup think-aloud: "IV access, ceftriaxone, lactate…") |
+| **Chat bar** (sidebar Chat tab, `.case-chat-cmd-ui`) | Same 3 icons + shared `dockRole`; Orders → journal note, Patient → `patient_sim`, Attending → tutor |
+| **UI** | Horizontal pill slider — **3 icons** slide like the old 2-way toggle (`ChatRoleSegment` + `--seg-index` thumb) |
+| Sidebar Chat tab portrait | Still toggles patient vs orders (not tutor-only) |
+| Slash | `/pt` patient · `/ch` orders · `/ch note text` saves note |
 
-Slash: `/pt` patient · `/ch` tutor · `/ch note text` saves note (notes-only path when `defaultChatTarget !== 'tutor'`).
+**Symptom:** typing `ceftriaxone` fires an order → dock is on **Orders**, not **Attending**. Switch to stethoscope (Attending) before coaching lists.
+
+Legacy: `chatPatientMode` = `dockRole === 'patient'` for portrait + CaseSessionThread.
 
 ## Session architecture (client)
 

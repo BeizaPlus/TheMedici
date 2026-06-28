@@ -6,7 +6,8 @@ import {
   IconPlayerStop,
   IconVolume2,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
-import PatientPortraitAvatar from './PatientPortraitAvatar.jsx';
+import CaseRecordButton from './CaseRecordButton.jsx';
+import ChatRoleSegment from './ChatRoleSegment.jsx';
 import ChatMessageContent from './ChatMessageContent.jsx';
 import CasePictureInline from './CasePictureInline.jsx';
 import { readCaseAloud, stopCaseReader } from '../lib/caseReader.js';
@@ -25,8 +26,13 @@ import {
 } from '../lib/caseUserLog.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { looksLikeTutorQuestion } from '../lib/chatIntentRouting.js';
-import CaseRecordButton from './CaseRecordButton.jsx';
-import ChatRoleSegment from './ChatRoleSegment.jsx';
+import {
+  DOCK_ROLE,
+  isDockOrdersMode,
+  isDockPatientMode,
+  isDockTutorMode,
+  normalizeDockRole,
+} from '../lib/dockRoleMode.js';
 import CaseThreadCaseRail from './CaseThreadCaseRail.jsx';
 import { STORAGE } from '../lib/storageKeys.js';
 import { addCasePictureNote, casePictureLink } from '../lib/casePictureNotes.js';
@@ -140,6 +146,8 @@ export default function CaseSessionThread({
   suppressHeader = false,
   messagesOnly = false,
   compact = false,
+  dockRole,
+  onDockRoleChange,
   patientMode = false,
   defaultChatTarget = 'notes',
   onPatientModeChange,
@@ -174,6 +182,29 @@ export default function CaseSessionThread({
   );
 
   const caseLabel = formatCaseIdLabel(caseData, { teachMeMode });
+
+  const resolvedDockRole =
+    dockRole != null
+      ? normalizeDockRole(dockRole)
+      : patientMode
+        ? DOCK_ROLE.PATIENT
+        : defaultChatTarget === 'tutor'
+          ? DOCK_ROLE.TUTOR
+          : DOCK_ROLE.ORDERS;
+  const dockPatient = isDockPatientMode(resolvedDockRole);
+  const dockTutor = isDockTutorMode(resolvedDockRole);
+  const dockOrders = isDockOrdersMode(resolvedDockRole);
+
+  const setDockRole = useCallback(
+    (next) => {
+      const val = normalizeDockRole(typeof next === 'function' ? next(resolvedDockRole) : next);
+      onDockRoleChange?.(val);
+      if (!onDockRoleChange && onPatientModeChange) {
+        onPatientModeChange(val === DOCK_ROLE.PATIENT);
+      }
+    },
+    [onDockRoleChange, onPatientModeChange, resolvedDockRole],
+  );
 
   const thread = useMemo(() => {
     const chatRows = browseOnly ? archivedMessages : messages || [];
@@ -315,33 +346,42 @@ export default function CaseSessionThread({
 
     const cmd = parseChatModeCommand(text);
     let body = text;
-    let asPatient = patientMode;
+    let role = resolvedDockRole;
 
     if (cmd) {
       if (cmd.patientMode) {
-        asPatient = true;
-        onPatientModeChange?.(true);
+        role = DOCK_ROLE.PATIENT;
+        setDockRole(DOCK_ROLE.PATIENT);
         body = cmd.remainder;
         if (!body) return;
       } else if (cmd.remainder) {
         await appendNoteEntry(cmd.remainder);
         return;
       } else {
-        onPatientModeChange?.(false);
+        setDockRole(DOCK_ROLE.ORDERS);
         return;
       }
     }
 
-    if (asPatient && looksLikeTutorQuestion(body)) {
-      setTutorRouteHint('Clinical question — routed to tutor (portrait still in patient mode).');
+    if (isDockPatientMode(role) && looksLikeTutorQuestion(body)) {
+      setTutorRouteHint('Clinical question — routed to tutor (patient mode on).');
       setTimeout(() => setTutorRouteHint(''), 6000);
       await sendMessage(body, { chatMode: 'tutor' });
       onTimelineChat?.(body);
       return;
     }
-    if (asPatient) {
+    if (isDockPatientMode(role)) {
       await sendMessage(body, { chatMode: 'patient_sim' });
       onTimelineChat?.(body);
+      return;
+    }
+    if (isDockTutorMode(role)) {
+      await sendMessage(body, { chatMode: 'tutor' });
+      onTimelineChat?.(body);
+      return;
+    }
+    if (isDockOrdersMode(role)) {
+      await appendNoteEntry(body);
       return;
     }
     if (defaultChatTarget === 'tutor') {
@@ -353,9 +393,9 @@ export default function CaseSessionThread({
   }, [
     draft,
     busy,
-    patientMode,
+    resolvedDockRole,
     defaultChatTarget,
-    onPatientModeChange,
+    setDockRole,
     sendMessage,
     appendNoteEntry,
     onTimelineChat,
@@ -393,38 +433,8 @@ export default function CaseSessionThread({
             </span>
           </button>
         )}
-        {expanded && (onPatientModeChange || caseRecording) && (
+        {expanded && caseRecording && (
           <div className="case-chat-head-actions">
-            {onPatientModeChange && fillTab ? (
-              <ChatRoleSegment
-                iconOnly
-                patientMode={patientMode}
-                onPatientModeChange={onPatientModeChange}
-              />
-            ) : onPatientModeChange ? (
-              <button
-                type="button"
-                className={`case-chat-patient-btn${patientMode ? ' is-active' : ''}`}
-                title={
-                  patientMode
-                    ? 'Patient mode ON — simulated patient replies'
-                    : 'Patient interview — talk to the simulated patient'
-                }
-                aria-label={patientMode ? 'Patient mode on' : 'Turn on patient mode'}
-                aria-pressed={patientMode}
-                onClick={() => onPatientModeChange(!patientMode)}
-              >
-                <PatientPortraitAvatar
-                  caseId={caseId}
-                  caseData={caseData}
-                  title={
-                    patientMode
-                      ? 'Patient mode ON — simulated patient replies'
-                      : 'Patient interview — talk to the simulated patient'
-                  }
-                />
-              </button>
-            ) : null}
             {caseRecording && (
               <CaseRecordButton
                 {...caseRecording}
@@ -461,7 +471,7 @@ export default function CaseSessionThread({
             <p className="case-chat-banner case-chat-banner--patient">{tutorRouteHint}</p>
           )}
 
-          {patientMode && !quietChatChrome && !compact && (
+          {dockPatient && !quietChatChrome && !compact && (
             <p className="case-chat-banner case-chat-banner--patient">
               Patient mode — direct answers only; tap <strong>▶</strong> to hear. Type <code>/ch</code> for
               notes.
@@ -486,7 +496,7 @@ export default function CaseSessionThread({
               }
               const bubbleText =
                 m.role === 'assistant' &&
-                (patientMode || looksLikePatientStageReply(m.content))
+                (dockPatient || looksLikePatientStageReply(m.content))
                   ? sanitizePatientReplyForDisplay(m.content) || m.content
                   : m.content;
               return (
@@ -509,7 +519,7 @@ export default function CaseSessionThread({
                         title={
                           readingIdx === i
                             ? 'Stop'
-                            : patientMode
+                            : dockPatient
                               ? 'Play patient dialogue'
                               : 'Read aloud'
                         }
@@ -525,7 +535,7 @@ export default function CaseSessionThread({
                           const onState = (state) => {
                             if (state === 'idle' || state === 'error') setReadingIdx(null);
                           };
-                          if (patientMode) {
+                          if (dockPatient) {
                             void speakPatientReply({
                               caseData,
                               text: bubbleText,
@@ -568,10 +578,10 @@ export default function CaseSessionThread({
                 }
                 role="status"
               >
-                {patientMode
+                {dockPatient
                   ? 'Patient is thinking…'
-                  : defaultChatTarget === 'tutor'
-                    ? 'Tutor thinking…'
+                  : dockTutor || defaultChatTarget === 'tutor'
+                    ? 'Attending is thinking…'
                     : 'Working…'}
               </div>
             )}
@@ -586,7 +596,18 @@ export default function CaseSessionThread({
               void submitDraft();
             }}
           >
-            <div className="case-chat-cmd-ui">
+            <div className="case-chat-cmd-ui" data-testid="case-chat-compose">
+              {(onDockRoleChange || onPatientModeChange) && (
+                <div className="case-chat-cmd-role">
+                  <ChatRoleSegment
+                    iconOnly
+                    role={resolvedDockRole}
+                    onRoleChange={setDockRole}
+                    patientMode={patientMode}
+                    onPatientModeChange={onPatientModeChange}
+                  />
+                </div>
+              )}
               <div className="case-chat-cmd-input-wrap">
                 <IconFileMedical />
                 <input
@@ -596,11 +617,13 @@ export default function CaseSessionThread({
                   value={draft}
                   onChange={(e) => setDraft(e.target.value)}
                   placeholder={
-                    patientMode
+                    dockPatient
                       ? 'Ask the patient…'
-                      : defaultChatTarget === 'tutor'
-                        ? 'Ask the tutor…'
-                        : 'Jot a case note…'
+                      : dockTutor
+                        ? 'Ask the attending…'
+                        : defaultChatTarget === 'tutor'
+                          ? 'Ask the attending…'
+                          : 'Jot a case note…'
                   }
                   aria-label="Add to case thread"
                   disabled={busy}
@@ -616,17 +639,20 @@ export default function CaseSessionThread({
               </button>
               {!quietChatChrome && (
                 <p className="case-chat-mode-hint" aria-live="polite">
-                  {patientMode ? (
+                  {dockPatient ? (
                     <>
-                      <strong className="case-chat-mode-hint--on">Patient mode</strong> — talk to the
-                      patient; voice goes to the patient.{' '}
-                      <code>/ch</code> notes only · click stethoscope to turn off
+                      <strong className="case-chat-mode-hint--on">Patient</strong> — interview the simulated
+                      patient. <code>/ch note</code> saves to journal.
+                    </>
+                  ) : dockTutor ? (
+                    <>
+                      <strong className="case-chat-mode-hint--on">Attending</strong> — tutor coaching; order
+                      names here won&apos;t place stacks. Use dock <strong>Orders</strong> to pin on canvas.
                     </>
                   ) : (
                     <>
-                      <strong>Notes mode</strong> — saved to case journal; patient will not reply.{' '}
-                      <code>/pt</code> talk to patient · stethoscope turns{' '}
-                      <span className="case-chat-mode-hint--gold">gold</span> when patient mode is on
+                      <strong>Notes</strong> — saved to case journal. <code>/pt</code> patient ·{' '}
+                      <code>/ch</code> attending · slide stethoscope for tutor.
                     </>
                   )}
                 </p>
@@ -638,7 +664,7 @@ export default function CaseSessionThread({
             <p className="case-notes-live-hint case-session-thread-live-hint" aria-live="polite">
               Transcribing voice…
               {!quietChatChrome &&
-                (patientMode && available !== false
+                (dockPatient && available !== false
                   ? ' sending to patient'
                   : ' saving to case notes')}
             </p>

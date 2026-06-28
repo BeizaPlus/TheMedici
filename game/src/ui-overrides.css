@@ -687,6 +687,26 @@
   padding-right: 10px;
   margin-right: 2px;
   border-right: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: visible;
+}
+
+/* Horizontal 3-icon pill slider (Orders · Patient · Attending) — same pattern as old 2-way toggle */
+.scene-order-command-role .ap-role-segment--triple {
+  width: 132px;
+  min-width: 132px;
+  max-width: none;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.scene-order-command-role .ap-role-segment--triple .ap-role-segment-thumb {
+  width: calc((100% - 6px) / 3);
+  transform: translateX(calc(var(--seg-index, 0) * 100%));
+}
+
+.scene-order-command-role .ap-role-segment--icons-only.ap-role-segment--triple .ap-role-segment-btn {
+  padding: 5px 0;
+  min-width: 0;
+  width: 100%;
 }
 
 .scene-order-command-head-tools {
@@ -694,10 +714,6 @@
   align-items: center;
   gap: 4px;
   margin-left: auto;
-}
-
-.scene-order-command-role .ap-role-segment--icons-only {
-  min-width: 72px;
 }
 
 .ap-role-segment--icons-only .ap-role-segment-label {
@@ -932,6 +948,12 @@
 
 .scene-order-command-chat {
   background: rgba(0, 0, 0, 0.22);
+}
+
+.scene-order-command-reply.is-collapsed .scene-order-command-reply-toggle {
+  min-height: 32px;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .scene-order-command-reply.is-collapsed {
@@ -4772,6 +4794,15 @@ a.case-bibliography-item-label:hover {
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ap-role-segment--triple {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ap-role-segment--triple .ap-role-segment-thumb {
+  width: calc((100% - 6px) / 3);
+  transform: translateX(calc(var(--seg-index, 0) * 100%));
 }
 
 .ap-role-segment-thumb {

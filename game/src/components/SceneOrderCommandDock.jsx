@@ -6,6 +6,13 @@ import PatientReplyPlayButton from './PatientReplyPlayButton.jsx';
 import ChatRoleSegment from './ChatRoleSegment.jsx';
 import { renderAttendingMarkdown } from '../lib/chatMessageFormat.jsx';
 import { sanitizePatientReplyForDisplay } from '../lib/patientReplyText.js';
+import {
+  DOCK_ROLE,
+  isDockOrdersMode,
+  isDockPatientMode,
+  isDockTutorMode,
+  normalizeDockRole,
+} from '../lib/dockRoleMode.js';
 
 function useDebouncedValue(value, delayMs = 120) {
   const [debounced, setDebounced] = useState(value);
@@ -93,7 +100,11 @@ function SceneOrderCommandDock({
   resultsExpanded = false,
   resultsPanel = null,
   onToggleOrderContext,
+  dockRole = DOCK_ROLE.ORDERS,
+  onDockRoleChange,
+  /** @deprecated use dockRole */
   patientMode = false,
+  /** @deprecated use onDockRoleChange */
   onPatientModeChange,
   onPinTeachingMoment,
   patientRecording = null,
@@ -110,17 +121,27 @@ function SceneOrderCommandDock({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetKey]);
 
+  const resolvedDockRole =
+    dockRole != null
+      ? normalizeDockRole(dockRole)
+      : patientMode
+        ? DOCK_ROLE.PATIENT
+        : DOCK_ROLE.ORDERS;
+  const dockPatient = isDockPatientMode(resolvedDockRole);
+  const dockTutor = isDockTutorMode(resolvedDockRole);
+  const dockOrders = isDockOrdersMode(resolvedDockRole);
+
   useEffect(() => {
-    if (patientMode) return;
+    if (!dockOrders) return;
     onQueryChange?.(debouncedDraft);
-  }, [debouncedDraft, onQueryChange, patientMode]);
+  }, [debouncedDraft, onQueryChange, dockOrders]);
 
   useEffect(() => {
-    if (!patientMode) return;
+    if (dockOrders) return;
     onQueryChange?.('');
-  }, [patientMode, onQueryChange]);
+  }, [dockOrders, onQueryChange]);
 
-  const dockChatMode = patientMode || isChatMode;
+  const dockChatMode = dockPatient || dockTutor || isChatMode;
 
   const hasOrderContext = Boolean(resultsPanel);
   const showOrderContext = hasOrderContext && resultsExpanded;
@@ -132,12 +153,12 @@ function SceneOrderCommandDock({
     (hasOrderContext && resultsExpanded);
   const hintText =
     chatBusy && dockChatMode
-      ? patientMode
+      ? dockPatient
         ? 'Patient is thinking…'
-        : 'Thinking…'
+        : 'Attending is thinking…'
       : chatOpen && hasChatHistory
         ? 'Answer in chat →'
-        : patientMode
+        : dockPatient || dockTutor
           ? ''
           : hint;
   const { displayHint: hintDisplay, isLingering } = useLingeringMatchHint(
@@ -147,7 +168,7 @@ function SceneOrderCommandDock({
   );
   const showHintRow = Boolean(hintDisplay?.trim());
   const replyAnswer =
-    quickReply?.answer && patientMode
+    quickReply?.answer && dockPatient
       ? sanitizePatientReplyForDisplay(quickReply.answer) || quickReply.answer
       : quickReply?.answer;
 
@@ -163,10 +184,12 @@ function SceneOrderCommandDock({
       className={`scene-order-command-dock${dockContextOpen ? ' scene-order-command-dock--reply-open' : ''}`}
     >
       <header className="scene-order-command-head" aria-label="Order and chat">
-        {onPatientModeChange ? (
+        {onDockRoleChange || onPatientModeChange ? (
           <div className="scene-order-command-role">
             <ChatRoleSegment
               iconOnly
+              role={resolvedDockRole}
+              onRoleChange={onDockRoleChange}
               patientMode={patientMode}
               onPatientModeChange={onPatientModeChange}
             />
@@ -178,7 +201,7 @@ function SceneOrderCommandDock({
               {...patientRecording}
               variant="toolbar"
               iconOnly
-              chatMode={patientMode}
+              chatMode={dockPatient}
               className="scene-order-command-icon-btn scene-order-command-mic-btn"
             />
           ) : null}
@@ -226,7 +249,7 @@ function SceneOrderCommandDock({
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => {
-              if (patientMode) return;
+              if (!dockOrders) return;
               if (e.key === 'Tab' && autocompleteText && !e.shiftKey) {
                 e.preventDefault();
                 setDraft(autocompleteText);
@@ -237,9 +260,21 @@ function SceneOrderCommandDock({
                 });
               }
             }}
-            placeholder={patientMode ? 'Ask the patient…' : 'Type an order or ask about this case…'}
-            aria-label={patientMode ? 'Ask the patient' : 'Type an order or ask about this case'}
-            aria-autocomplete={patientMode ? 'none' : 'inline'}
+            placeholder={
+              dockPatient
+                ? 'Ask the patient…'
+                : dockTutor
+                  ? 'Ask the attending — orders won’t fire from here…'
+                  : 'Type an order or ask about this case…'
+            }
+            aria-label={
+              dockPatient
+                ? 'Ask the patient'
+                : dockTutor
+                  ? 'Ask the attending tutor'
+                  : 'Type an order or ask about this case'
+            }
+            aria-autocomplete={dockOrders ? 'inline' : 'none'}
           />
         </div>
         <button

@@ -17,6 +17,8 @@ export default function PlayChatNotesTabPanel({
   suppressHeader = false,
   messagesOnly = false,
   compact = false,
+  dockRole,
+  onDockRoleChange,
   patientMode = false,
   defaultChatTarget = 'notes',
   onPatientModeChange,
@@ -42,6 +44,8 @@ export default function PlayChatNotesTabPanel({
       suppressHeader={suppressHeader}
       messagesOnly={messagesOnly}
       compact={compact}
+      dockRole={dockRole}
+      onDockRoleChange={onDockRoleChange}
       patientMode={patientMode}
       defaultChatTarget={defaultChatTarget}
       onPatientModeChange={onPatientModeChange}
