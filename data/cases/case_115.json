@@ -1,1 +1,85 @@
-{"id":115,"topic":"Agitation","title":"Agitation","diagnosis":"Acute Agitation","hpi_narrative":"{{patient_name}} presents with acute agitation, aggression, psychomotor activation, and possible threatening behavior. Priority: ensure safety of patient and staff. Determine etiology: psychiatric (schizophrenia, bipolar mania, psychosis) vs substance-induced (stimulants, PCP, alcohol withdrawal) vs medical (hypoglycemia, hypoxia, head injury, sepsis, encephalopathy). Rapid assessment: vital signs, fingerstick glucose, pulse oximetry, brief neuro exam. Verbal de-escalation first-line. If pharmacologic needed: PO preferred over IM if patient willing — lorazepam (benzo) or olanzapine (antipsychotic). If IM required: midazolam + haloperidol or olanzapine IM. Avoid physical restraints unless absolutely necessary — can worsen agitation and cause rhabdomyolysis. If restraints used: 1:1 observation, frequent monitoring. Once stabilized → workup for underlying cause (tox screen, CT head, labs). Psychiatry consult.","chief_complaint":"Acute agitation, aggression, threatening behavior","patient":null,"patient_name":"Mansa Yeboah","patient_sex":"female","location":"ER","specialty":"Psychiatry / Emergency Medicine","stacks":[{"label":"Vitals / Glucose / SpO2","type":"correctlyOrdered","finding":"Rule out medical cause.","aliases":["ABCs"]},{"label":"Verbal de-escalation","type":"correctlyOrdered","finding":"First-line. Safe, calm environment.","aliases":["De-escalation"]},{"label":"PO Lorazepam / Olanzapine","type":"correctlyOrdered","finding":"PO preferred. Lorazepam or olanzapine.","aliases":["Ativan","Zyprexa"]},{"label":"IM Midazolam + Haloperidol (if severe)","type":"correctlyOrdered","finding":"If patient refuses PO.","aliases":["IM meds"]},{"label":"CBC / BMP / Tox / CT head","type":"correctlyOrdered","finding":"Rule out medical causes.","aliases":["Workup"]},{"label":"Psychiatry consult","type":"correctlyOrdered","finding":"Determine disposition.","aliases":["Psych consult"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":92,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 115,
+  "topic": "Agitation",
+  "title": "Agitation",
+  "diagnosis": "Acute Agitation",
+  "hpi_narrative": "{{patient_name}} presents with acute agitation, aggression, psychomotor activation, and possible threatening behavior. Priority: ensure safety of patient and staff. Determine etiology: psychiatric (schizophrenia, bipolar mania, psychosis) vs substance-induced (stimulants, PCP, alcohol withdrawal) vs medical (hypoglycemia, hypoxia, head injury, sepsis, encephalopathy). Rapid assessment: vital signs, fingerstick glucose, pulse oximetry, brief neuro exam. Verbal de-escalation first-line. If pharmacologic needed: PO preferred over IM if patient willing — lorazepam (benzo) or olanzapine (antipsychotic). If IM required: midazolam + haloperidol or olanzapine IM. Avoid physical restraints unless absolutely necessary — can worsen agitation and cause rhabdomyolysis. If restraints used: 1:1 observation, frequent monitoring. Once stabilized → workup for underlying cause (tox screen, CT head, labs). Psychiatry consult.",
+  "chief_complaint": "Acute agitation, aggression, threatening behavior",
+  "patient": null,
+  "patient_name": "Mansa Yeboah",
+  "patient_sex": "female",
+  "location": "ER",
+  "specialty": "Psychiatry / Emergency Medicine",
+  "stacks": [
+    {
+      "label": "Vitals / Glucose / SpO2",
+      "type": "correctlyOrdered",
+      "finding": "Rule out medical cause.",
+      "aliases": [
+        "ABCs"
+      ]
+    },
+    {
+      "label": "Verbal de-escalation",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Safe, calm environment.",
+      "aliases": [
+        "De-escalation"
+      ]
+    },
+    {
+      "label": "PO Lorazepam / Olanzapine",
+      "type": "correctlyOrdered",
+      "finding": "PO preferred. Lorazepam or olanzapine.",
+      "aliases": [
+        "Ativan",
+        "Zyprexa"
+      ]
+    },
+    {
+      "label": "Midazolam IM",
+      "type": "correctlyOrdered",
+      "finding": "If patient refuses PO.",
+      "aliases": [
+        "IM meds"
+      ]
+    },
+    {
+      "label": "Haloperidol IM",
+      "type": "correctlyOrdered",
+      "finding": "If patient refuses PO.",
+      "aliases": [
+        "IM meds"
+      ],
+      "id": "-split-1"
+    },
+    {
+      "label": "CBC / BMP / Tox / CT head",
+      "type": "correctlyOrdered",
+      "finding": "Rule out medical causes.",
+      "aliases": [
+        "Workup"
+      ]
+    },
+    {
+      "label": "Psychiatry consult",
+      "type": "correctlyOrdered",
+      "finding": "Determine disposition.",
+      "aliases": [
+        "Psych consult"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 92,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}

@@ -6,18 +6,24 @@
   "confidence": "screenshot",
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Blood cultures x2 + source cultures",
+    "Blood cultures x2",
+    "Source cultures",
     "CBC / BMP / LFTs / Coags",
-    "IV fluids + Norepinephrine",
-    "Vancomycin + Clindamycin",
+    "IV Fluids",
+    "Norepinephrine drip",
+    "Vancomycin IV",
+    "Clindamycin IV",
     "Remove source (tampon / wound)"
   ],
   "should_avoid": [],
   "rationale": {
-    "Blood cultures x2 + source cultures": "Before antibiotics.",
+    "Blood cultures x2": "[Auto-split from bundled label \"Blood cultures x2 + source cultures\"] Before antibiotics.",
+    "Source cultures": "[Auto-split from bundled label \"Blood cultures x2 + source cultures\"] Before antibiotics.",
     "CBC / BMP / LFTs / Coags": "Multisystem involvement.",
-    "IV fluids + Norepinephrine": "Resuscitation. MAP ≥65.",
-    "Vancomycin + Clindamycin": "Vanc covers MRSA. Clindamycin suppresses toxin production.",
+    "IV Fluids": "Resuscitation. MAP ≥65.",
+    "Norepinephrine drip": "Resuscitation. MAP ≥65.",
+    "Vancomycin IV": "[Auto-split from bundled label \"Vancomycin + Clindamycin\"] Vanc covers MRSA. Clindamycin suppresses toxin production.",
+    "Clindamycin IV": "[Auto-split from bundled label \"Vancomycin + Clindamycin\"] Vanc covers MRSA. Clindamycin suppresses toxin production.",
     "Remove source (tampon / wound)": "Eliminate toxin source."
   },
   "hpi": "{{patient_name}} presents with acute onset fever, hypotension, diffuse erythematous rash (sunburn-like with desquamation 1-2 weeks later), and multisystem involvement (GI: nausea/vomiting/diarrhea, renal, hepatic, CNS, hematologic). Caused by TSST-1 superantigen from S. aureus (menstrual — tampon use) or Group A Strep. TSS diagnosis: fever + hypotension + rash + ≥3 organ systems. Remove source (tampon, wound packing). Blood cultures, wound cultures. Treatment: aggressive IV fluids, vasopressors if needed, empiric IV antibiotics (vancomycin + clindamycin — clindamycin suppresses toxin production). IVIG may be considered in severe cases. Admit to ICU.",
@@ -42,9 +48,17 @@
   "distractors": [],
   "stacks": [
     {
-      "label": "Blood cultures x2 + source cultures",
+      "label": "Blood cultures x2",
       "type": "correctlyOrdered",
-      "finding": "Before antibiotics.",
+      "finding": "[Auto-split from bundled label \"Blood cultures x2 + source cultures\"] Before antibiotics.",
+      "aliases": [
+        "Cultures"
+      ]
+    },
+    {
+      "label": "Source cultures",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Blood cultures x2 + source cultures\"] Before antibiotics.",
       "aliases": [
         "Cultures"
       ]
@@ -58,7 +72,7 @@
       ]
     },
     {
-      "label": "IV fluids + Norepinephrine",
+      "label": "IV Fluids",
       "type": "correctlyOrdered",
       "finding": "Resuscitation. MAP ≥65.",
       "aliases": [
@@ -67,9 +81,28 @@
       ]
     },
     {
-      "label": "Vancomycin + Clindamycin",
+      "label": "Norepinephrine drip",
       "type": "correctlyOrdered",
-      "finding": "Vanc covers MRSA. Clindamycin suppresses toxin production.",
+      "finding": "Resuscitation. MAP ≥65.",
+      "aliases": [
+        "IVF",
+        "Levophed"
+      ],
+      "id": "undefined-split"
+    },
+    {
+      "label": "Vancomycin IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Vancomycin + Clindamycin\"] Vanc covers MRSA. Clindamycin suppresses toxin production.",
+      "aliases": [
+        "Vanc",
+        "Clinda"
+      ]
+    },
+    {
+      "label": "Clindamycin IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Vancomycin + Clindamycin\"] Vanc covers MRSA. Clindamycin suppresses toxin production.",
       "aliases": [
         "Vanc",
         "Clinda"
@@ -85,10 +118,13 @@
     }
   ],
   "order_sets": [
-    "Blood cultures x2 + source cultures",
+    "Blood cultures x2",
+    "Source cultures",
     "CBC / BMP / LFTs / Coags",
-    "IV fluids + Norepinephrine",
-    "Vancomycin + Clindamycin",
+    "IV Fluids",
+    "Norepinephrine drip",
+    "Vancomycin IV",
+    "Clindamycin IV",
     "Remove source (tampon / wound)"
   ],
   "complete": true,

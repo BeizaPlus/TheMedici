@@ -1,29 +1,205 @@
 {
-  "id":36,"topic":"Headache","title":"Headache","diagnosis":"Bacterial Meningitis (Meningococcal)",
-  "hpi_narrative":"{{patient_name}} presents with severe headache, fever, photophobia, nuchal rigidity, and altered mental status. Exam reveals positive Kernig's sign (pain with knee extension when hip flexed 90°) and Brudzinski's sign (involuntary hip/knee flexion with passive neck flexion). Petechial/purpuric rash is present — meningococcemia causes DIC and purpura fulminans. This is a medical emergency. Do NOT delay antibiotics for CT or LP. Blood cultures + LP with CSF analysis (opening pressure, cell count with differential, glucose, protein, Gram stain, culture). CSF: neutrophilic pleocytosis, low glucose (<40 or <2/3 serum), elevated protein, Gram-negative diplococci. Empiric antibiotics: ceftriaxone 2g IV + vancomycin + dexamethasone (before or with first dose). Add ampicillin if Listeria risk (age >50, immunocompromised). Droplet precautions for meningococcal. Chemoprophylaxis for close contacts (rifampin, ciprofloxacin, or ceftriaxone).",
-  "chief_complaint":"Severe headache, fever, stiff neck, photophobia, rash","patient":null,"patient_name":"Kwame Marfo","patient_sex":"male","location":"ER","specialty":"Emergency Medicine / Infectious Disease",
-  "stacks":[
-    {"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Assess severity — ill-appearing, febrile, altered.","aliases":["General Appearance"]},
-    {"label":"Physical Exam: Chest / Lungs","type":"correctlyOrdered","finding":"Investigate for lung pathology.","aliases":["Chest Exam"]},
-    {"label":"Physical Exam: Heart / Cardiovascular","type":"correctlyOrdered","finding":"Tachycardia from fever/sepsis.","aliases":["Cardiovascular Exam"]},
-    {"label":"Physical Exam: Skin","type":"correctlyOrdered","finding":"Petechiae in >50% of meningococcemia — non-blanching purple spots. Purpura fulminans.","aliases":["Skin Exam"]},
-    {"label":"Physical Exam: Neuro / Psych","type":"correctlyOrdered","finding":"Kernig's and Brudzinski's signs. Nuchal rigidity. AMS. Focal deficits?","aliases":["Neuro Exam"]},
-    {"label":"Blood cultures x2","type":"correctlyOrdered","finding":"Before antibiotics. Positive in 50-90% of bacterial meningitis.","aliases":["Blood culture"]},
-    {"label":"CBC with differential","type":"correctlyOrdered","finding":"Leukocytosis. Thrombocytopenia in meningococcemia (DIC).","aliases":["CBC"]},
-    {"label":"Lumbar puncture + CSF analysis","type":"correctlyOrdered","finding":"Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.","aliases":["LP","CSF"]},
-    {"label":"CT head (if indicated before LP)","type":"correctlyOrdered","finding":"If papilledema, focal neuro deficit, AMS, seizure, immunocompromised — CT before LP to rule out mass effect.","aliases":["Head CT"]},
-    {"label":"BMP / CMP","type":"correctlyOrdered","finding":"Screening. Hyponatremia in SIADH from meningitis.","aliases":["BMP"]},
-    {"label":"PT/PTT / INR","type":"correctlyOrdered","finding":"Assess for DIC — meningococcemia can trigger DIC.","aliases":["Coags"]},
-    {"label":"Ceftriaxone 2g IV + Vancomycin IV","type":"correctlyOrdered","finding":"Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.","aliases":["Rocephin","Vanc"]},
-    {"label":"Dexamethasone IV","type":"correctlyOrdered","finding":"Before or with first antibiotics. Reduces hearing loss and neurologic sequelae in S. pneumoniae and H. influenzae meningitis.","aliases":["Decadron"]},
-    {"label":"Droplet precautions","type":"correctlyOrdered","finding":"Meningococcal meningitis requires droplet isolation until 24h of effective antibiotics.","aliases":["Isolation"]},
-    {"label":"Admit to ICU","type":"correctlyOrdered","finding":"Bacterial meningitis requires ICU for close monitoring and IV antibiotics.","aliases":["ICU"]}
+  "id": 36,
+  "topic": "Headache",
+  "title": "Headache",
+  "diagnosis": "Bacterial Meningitis (Meningococcal)",
+  "hpi_narrative": "{{patient_name}} presents with severe headache, fever, photophobia, nuchal rigidity, and altered mental status. Exam reveals positive Kernig's sign (pain with knee extension when hip flexed 90°) and Brudzinski's sign (involuntary hip/knee flexion with passive neck flexion). Petechial/purpuric rash is present — meningococcemia causes DIC and purpura fulminans. This is a medical emergency. Do NOT delay antibiotics for CT or LP. Blood cultures + LP with CSF analysis (opening pressure, cell count with differential, glucose, protein, Gram stain, culture). CSF: neutrophilic pleocytosis, low glucose (<40 or <2/3 serum), elevated protein, Gram-negative diplococci. Empiric antibiotics: ceftriaxone 2g IV + vancomycin + dexamethasone (before or with first dose). Add ampicillin if Listeria risk (age >50, immunocompromised). Droplet precautions for meningococcal. Chemoprophylaxis for close contacts (rifampin, ciprofloxacin, or ceftriaxone).",
+  "chief_complaint": "Severe headache, fever, stiff neck, photophobia, rash",
+  "patient": null,
+  "patient_name": "Kwame Marfo",
+  "patient_sex": "male",
+  "location": "ER",
+  "specialty": "Emergency Medicine / Infectious Disease",
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Assess severity — ill-appearing, febrile, altered.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Investigate for lung pathology.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Tachycardia from fever/sepsis.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Skin",
+      "type": "correctlyOrdered",
+      "finding": "Petechiae in >50% of meningococcemia — non-blanching purple spots. Purpura fulminans.",
+      "aliases": [
+        "Skin Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Kernig's and Brudzinski's signs. Nuchal rigidity. AMS. Focal deficits?",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "Blood cultures x2",
+      "type": "correctlyOrdered",
+      "finding": "Before antibiotics. Positive in 50-90% of bacterial meningitis.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Leukocytosis. Thrombocytopenia in meningococcemia (DIC).",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Lumbar puncture",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+      "aliases": [
+        "LP",
+        "CSF"
+      ]
+    },
+    {
+      "label": "CSF analysis",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+      "aliases": [
+        "LP",
+        "CSF"
+      ]
+    },
+    {
+      "label": "CT head (if indicated before LP)",
+      "type": "correctlyOrdered",
+      "finding": "If papilledema, focal neuro deficit, AMS, seizure, immunocompromised — CT before LP to rule out mass effect.",
+      "aliases": [
+        "Head CT"
+      ]
+    },
+    {
+      "label": "BMP / CMP",
+      "type": "correctlyOrdered",
+      "finding": "Screening. Hyponatremia in SIADH from meningitis.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "PT/PTT / INR",
+      "type": "correctlyOrdered",
+      "finding": "Assess for DIC — meningococcemia can trigger DIC.",
+      "aliases": [
+        "Coags"
+      ]
+    },
+    {
+      "label": "Ceftriaxone IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+      "aliases": [
+        "Rocephin",
+        "Vanc"
+      ]
+    },
+    {
+      "label": "Vancomycin IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+      "aliases": [
+        "Rocephin",
+        "Vanc"
+      ]
+    },
+    {
+      "label": "Dexamethasone IV",
+      "type": "correctlyOrdered",
+      "finding": "Before or with first antibiotics. Reduces hearing loss and neurologic sequelae in S. pneumoniae and H. influenzae meningitis.",
+      "aliases": [
+        "Decadron"
+      ]
+    },
+    {
+      "label": "Droplet precautions",
+      "type": "correctlyOrdered",
+      "finding": "Meningococcal meningitis requires droplet isolation until 24h of effective antibiotics.",
+      "aliases": [
+        "Isolation"
+      ]
+    },
+    {
+      "label": "Admit to ICU",
+      "type": "correctlyOrdered",
+      "finding": "Bacterial meningitis requires ICU for close monitoring and IV antibiotics.",
+      "aliases": [
+        "ICU"
+      ]
+    }
   ],
-  "physical_exam":{"general":"Febrile, ill-appearing, photophobic.","cardiovascular":"Tachycardic.","respiratory":null,"abdominal":null,"neurological":"Nuchal rigidity. Kernig's sign positive. Brudzinski's sign positive. Altered mental status. No focal deficits.","skin":"Petechial rash — non-blanching purple spots suggesting meningococcemia.","heent":"Photophobia.","musculoskeletal":null,"genitourinary":null,"psychiatric":"AMS."},
-  "vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},
-  "decoys":[{"label":"Delay antibiotics for CT/LP results","reason_wrong":"NEVER delay antibiotics in suspected bacterial meningitis. Blood cultures first, then immediate empiric antibiotics. LP after stabilization. Mortality increases with each hour of delay."}],
-  "teach_me_steps":[{"order":"CSF: neutrophilic pleocytosis + low glucose","category":"Diagnosis","reasoning":"Bacterial = low glucose (CSF:serum <0.4) + high protein + neutrophils >1000. Viral = normal glucose + lymphocytes. Fungal/TB = low glucose + lymphocytes."},{"order":"Ceftriaxone + Vancomycin + Dexamethasone NOW","category":"Treatment","reasoning":"Do NOT delay. Dexamethasone before/with first dose reduces neurologic sequelae. Droplet precautions. Chemoprophylaxis for contacts."}],
-  "differential":["Bacterial meningitis","Viral meningitis","Encephalitis","Subarachnoid hemorrhage","Fungal/TB meningitis"],
-  "case_summary":"Bacterial meningitis (meningococcal). Triad: headache + fever + nuchal rigidity + petechiae. CSF: neutrophilic pleocytosis, low glucose. Ceftriaxone + vanc + dexamethasone immediately. Droplet precautions. ICU.",
-  "confidence":94,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false
+  "physical_exam": {
+    "general": "Febrile, ill-appearing, photophobic.",
+    "cardiovascular": "Tachycardic.",
+    "respiratory": null,
+    "abdominal": null,
+    "neurological": "Nuchal rigidity. Kernig's sign positive. Brudzinski's sign positive. Altered mental status. No focal deficits.",
+    "skin": "Petechial rash — non-blanching purple spots suggesting meningococcemia.",
+    "heent": "Photophobia.",
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": "AMS."
+  },
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "decoys": [
+    {
+      "label": "Delay antibiotics for CT/LP results",
+      "reason_wrong": "NEVER delay antibiotics in suspected bacterial meningitis. Blood cultures first, then immediate empiric antibiotics. LP after stabilization. Mortality increases with each hour of delay."
+    }
+  ],
+  "teach_me_steps": [
+    {
+      "order": "CSF: neutrophilic pleocytosis + low glucose",
+      "category": "Diagnosis",
+      "reasoning": "Bacterial = low glucose (CSF:serum <0.4) + high protein + neutrophils >1000. Viral = normal glucose + lymphocytes. Fungal/TB = low glucose + lymphocytes."
+    },
+    {
+      "order": "Ceftriaxone + Vancomycin + Dexamethasone NOW",
+      "category": "Treatment",
+      "reasoning": "Do NOT delay. Dexamethasone before/with first dose reduces neurologic sequelae. Droplet precautions. Chemoprophylaxis for contacts."
+    }
+  ],
+  "differential": [
+    "Bacterial meningitis",
+    "Viral meningitis",
+    "Encephalitis",
+    "Subarachnoid hemorrhage",
+    "Fungal/TB meningitis"
+  ],
+  "case_summary": "Bacterial meningitis (meningococcal). Triad: headache + fever + nuchal rigidity + petechiae. CSF: neutrophilic pleocytosis, low glucose. Ceftriaxone + vanc + dexamethasone immediately. Droplet precautions. ICU.",
+  "confidence": 94,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
 }

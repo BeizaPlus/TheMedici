@@ -7,7 +7,8 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "CBC / BMP / LFTs / Lactate / Coags",
-    "Blood cultures x2 + urine culture",
+    "Blood cultures x2",
+    "urine culture",
     "CXR",
     "IV crystalloid bolus 30 mL/kg",
     "Empiric broad-spectrum Abx within 1h",
@@ -17,7 +18,8 @@
   "should_avoid": [],
   "rationale": {
     "CBC / BMP / LFTs / Lactate / Coags": "Lactate >2, AKI, LFTs, coagulopathy.",
-    "Blood cultures x2 + urine culture": "Before antibiotics.",
+    "Blood cultures x2": "[Auto-split from bundled label \"Blood cultures x2 + urine culture\"] Before antibiotics.",
+    "urine culture": "[Auto-split from bundled label \"Blood cultures x2 + urine culture\"] Before antibiotics.",
     "CXR": "Pneumonia source.",
     "IV crystalloid bolus 30 mL/kg": "Initial resuscitation.",
     "Empiric broad-spectrum Abx within 1h": "Vancomycin + Pip-Tazo or Cefepime + Metronidazole.",
@@ -54,9 +56,17 @@
       ]
     },
     {
-      "label": "Blood cultures x2 + urine culture",
+      "label": "Blood cultures x2",
       "type": "correctlyOrdered",
-      "finding": "Before antibiotics.",
+      "finding": "[Auto-split from bundled label \"Blood cultures x2 + urine culture\"] Before antibiotics.",
+      "aliases": [
+        "Cultures"
+      ]
+    },
+    {
+      "label": "urine culture",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Blood cultures x2 + urine culture\"] Before antibiotics.",
       "aliases": [
         "Cultures"
       ]
@@ -104,7 +114,8 @@
   ],
   "order_sets": [
     "CBC / BMP / LFTs / Lactate / Coags",
-    "Blood cultures x2 + urine culture",
+    "Blood cultures x2",
+    "urine culture",
     "CXR",
     "IV crystalloid bolus 30 mL/kg",
     "Empiric broad-spectrum Abx within 1h",

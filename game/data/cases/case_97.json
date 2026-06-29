@@ -11,7 +11,9 @@
     "Vaginal estrogen (cream/ring/tablet)",
     "Lubricants / Moisturizers",
     "HRT discussion (if vasomotor)",
-    "Calcium + Vitamin D + DEXA"
+    "Calcium",
+    "Vitamin D",
+    "DEXA"
   ],
   "should_avoid": [],
   "rationale": {
@@ -20,7 +22,9 @@
     "Vaginal estrogen (cream/ring/tablet)": "For GU symptoms. Minimal systemic absorption.",
     "Lubricants / Moisturizers": "Non-hormonal options.",
     "HRT discussion (if vasomotor)": "Shortest duration, lowest dose. Screen for contraindications.",
-    "Calcium + Vitamin D + DEXA": "Osteoporosis prevention."
+    "Calcium": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+    "Vitamin D": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+    "DEXA": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention."
   },
   "hpi": "{{patient_name}} presents with vaginal dryness, dyspareunia, hot flashes, night sweats, mood changes, and irregular menses/amenorrhea. FSH is elevated (>40), estradiol is low. Menopause = 12 months of amenorrhea. Genitourinary syndrome of menopause (atrophic vaginitis): thinning and drying of vaginal mucosa from estrogen loss → dyspareunia, pruritus, increased UTIs. Treatment: for vasomotor symptoms (hot flashes) — systemic HRT (estrogen ± progestin) for shortest duration at lowest dose. Contraindications: breast cancer, VTE, stroke. For GU symptoms only — vaginal estrogen (cream, ring, tablet). Non-hormonal: lubricants, moisturizers, SSRIs/SNRIs for hot flashes. Osteoporosis prevention: calcium, vitamin D, weight-bearing exercise, screening DEXA.",
   "hpi_narrative": "{{patient_name}} presents with vaginal dryness, dyspareunia, hot flashes, night sweats, mood changes, and irregular menses/amenorrhea. FSH is elevated (>40), estradiol is low. Menopause = 12 months of amenorrhea. Genitourinary syndrome of menopause (atrophic vaginitis): thinning and drying of vaginal mucosa from estrogen loss → dyspareunia, pruritus, increased UTIs. Treatment: for vasomotor symptoms (hot flashes) — systemic HRT (estrogen ± progestin) for shortest duration at lowest dose. Contraindications: breast cancer, VTE, stroke. For GU symptoms only — vaginal estrogen (cream, ring, tablet). Non-hormonal: lubricants, moisturizers, SSRIs/SNRIs for hot flashes. Osteoporosis prevention: calcium, vitamin D, weight-bearing exercise, screening DEXA.",
@@ -84,9 +88,25 @@
       ]
     },
     {
-      "label": "Calcium + Vitamin D + DEXA",
+      "label": "Calcium",
       "type": "shouldHaveOrdered",
-      "finding": "Osteoporosis prevention.",
+      "finding": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+      "aliases": [
+        "Bone health"
+      ]
+    },
+    {
+      "label": "Vitamin D",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+      "aliases": [
+        "Bone health"
+      ]
+    },
+    {
+      "label": "DEXA",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
       "aliases": [
         "Bone health"
       ]
@@ -98,7 +118,9 @@
     "Vaginal estrogen (cream/ring/tablet)",
     "Lubricants / Moisturizers",
     "HRT discussion (if vasomotor)",
-    "Calcium + Vitamin D + DEXA"
+    "Calcium",
+    "Vitamin D",
+    "DEXA"
   ],
   "complete": true,
   "extraction_method": "deepseek_direct",

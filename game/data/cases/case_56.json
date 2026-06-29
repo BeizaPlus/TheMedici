@@ -8,7 +8,8 @@
   "correct_orders": [
     "Physical Exam: General Appearance",
     "Physical Exam: Abdomen",
-    "CBC with differential + reticulocyte count",
+    "CBC with differential",
+    "Reticulocyte count",
     "Peripheral blood smear",
     "LDH, haptoglobin, bilirubin",
     "G6PD enzyme assay",
@@ -21,7 +22,8 @@
   "rationale": {
     "Physical Exam: General Appearance": "Assess severity — may be jaundiced, ill.",
     "Physical Exam: Abdomen": "Abdominal pain from hemolysis.",
-    "CBC with differential + reticulocyte count": "Acute anemia, elevated retics.",
+    "CBC with differential": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
+    "Reticulocyte count": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
     "Peripheral blood smear": "Bite cells, blister cells, Heinz bodies.",
     "LDH, haptoglobin, bilirubin": "Elevated LDH, low haptoglobin, indirect hyperbilirubinemia = hemolysis.",
     "G6PD enzyme assay": "Definitive diagnosis. Check 4-6 weeks after acute hemolysis (reticulocytes have higher G6PD).",
@@ -68,9 +70,17 @@
       ]
     },
     {
-      "label": "CBC with differential + reticulocyte count",
+      "label": "CBC with differential",
       "type": "correctlyOrdered",
-      "finding": "Acute anemia, elevated retics.",
+      "finding": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Reticulocyte count",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
       "aliases": [
         "CBC"
       ]
@@ -135,7 +145,8 @@
   "order_sets": [
     "Physical Exam: General Appearance",
     "Physical Exam: Abdomen",
-    "CBC with differential + reticulocyte count",
+    "CBC with differential",
+    "Reticulocyte count",
     "Peripheral blood smear",
     "LDH, haptoglobin, bilirubin",
     "G6PD enzyme assay",

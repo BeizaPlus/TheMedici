@@ -27,7 +27,11 @@
     "BMP / CMP / LFTs",
     "IV fluids (NS / LR / D5LR)",
     "Diet, NPO",
-    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+    "Ceftriaxone IV",
+    "Metronidazole IV",
+    "Pip-Tazo",
+    "Ampicillin-Sulbactam",
+    "Cefazolin IV",
     {
       "order": "Intravenous access",
       "optional": true,
@@ -58,7 +62,11 @@
     "BMP / CMP / LFTs": "Screening labs.",
     "IV fluids (NS / LR / D5LR)": "Nausea and vomiting — IV fluids for hydration.",
     "Diet, NPO": "Bowel rest — essential in acute diverticulitis.",
-    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+    "Ceftriaxone IV": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+    "Metronidazole IV": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+    "Pip-Tazo": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+    "Ampicillin-Sulbactam": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+    "Cefazolin IV": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
     "Intravenous access": "Good practice for IV fluids/medications.",
     "Colonoscopy / Sigmoidoscopy / Barium enema": "COLONOSCOPY AND BARIUM ENEMA ARE CONTRAINDICATED in acute diverticulitis — risk of perforation of inflamed bowel.",
     "Diet, high fiber": "High-fiber diet at discharge to prevent further occurrences. Gradually advance from low to high residue.",
@@ -231,7 +239,7 @@
       ]
     },
     {
-      "label": "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+      "label": "Ceftriaxone IV",
       "type": "shouldHaveOrdered",
       "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
       "aliases": [
@@ -239,6 +247,50 @@
         "Ceftriaxone",
         "Flagyl"
       ]
+    },
+    {
+      "label": "Metronidazole IV",
+      "type": "shouldHaveOrdered",
+      "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+      "aliases": [
+        "Antibiotics",
+        "Ceftriaxone",
+        "Flagyl"
+      ],
+      "id": "-split-1"
+    },
+    {
+      "label": "Pip-Tazo",
+      "type": "shouldHaveOrdered",
+      "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+      "aliases": [
+        "Antibiotics",
+        "Ceftriaxone",
+        "Flagyl"
+      ],
+      "id": "-split-2"
+    },
+    {
+      "label": "Ampicillin-Sulbactam",
+      "type": "shouldHaveOrdered",
+      "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+      "aliases": [
+        "Antibiotics",
+        "Ceftriaxone",
+        "Flagyl"
+      ],
+      "id": "-split-3"
+    },
+    {
+      "label": "Cefazolin IV",
+      "type": "shouldHaveOrdered",
+      "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+      "aliases": [
+        "Antibiotics",
+        "Ceftriaxone",
+        "Flagyl"
+      ],
+      "id": "-split-4"
     },
     {
       "label": "Intravenous access",
@@ -288,7 +340,11 @@
     "BMP / CMP / LFTs",
     "IV fluids (NS / LR / D5LR)",
     "Diet, NPO",
-    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+    "Ceftriaxone IV",
+    "Metronidazole IV",
+    "Pip-Tazo",
+    "Ampicillin-Sulbactam",
+    "Cefazolin IV",
     {
       "order": "Intravenous access",
       "optional": true,

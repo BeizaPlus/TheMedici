@@ -12,7 +12,8 @@
     "BMP / CMP",
     "UA",
     "TSH",
-    "DISCONTINUE simvastatin + gemfibrozil",
+    "DISCONTINUE simvastatin",
+    "gemfibrozil",
     "Aggressive IV fluids",
     "Switch to atorvastatin / rosuvastatin / ezetimibe"
   ],
@@ -24,7 +25,8 @@
     "BMP / CMP": "Elevated Cr (AKI risk), hyperkalemia from rhabdo.",
     "UA": "Myoglobinuria.",
     "TSH": "Rule out hypothyroid myopathy.",
-    "DISCONTINUE simvastatin + gemfibrozil": "Contraindicated combination. Discontinue immediately.",
+    "DISCONTINUE simvastatin": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
+    "gemfibrozil": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
     "Aggressive IV fluids": "Prevent pigment nephropathy from rhabdomyolysis.",
     "Switch to atorvastatin / rosuvastatin / ezetimibe": "Alternative lipid management after recovery. Fenofibrate (not gemfibrozil) if fibrate needed."
   },
@@ -99,9 +101,17 @@
       ]
     },
     {
-      "label": "DISCONTINUE simvastatin + gemfibrozil",
+      "label": "DISCONTINUE simvastatin",
       "type": "correctlyOrdered",
-      "finding": "Contraindicated combination. Discontinue immediately.",
+      "finding": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
+      "aliases": [
+        "Stop meds"
+      ]
+    },
+    {
+      "label": "gemfibrozil",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
       "aliases": [
         "Stop meds"
       ]
@@ -130,7 +140,8 @@
     "BMP / CMP",
     "UA",
     "TSH",
-    "DISCONTINUE simvastatin + gemfibrozil",
+    "DISCONTINUE simvastatin",
+    "gemfibrozil",
     "Aggressive IV fluids",
     "Switch to atorvastatin / rosuvastatin / ezetimibe"
   ],

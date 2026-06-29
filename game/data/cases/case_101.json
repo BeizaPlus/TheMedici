@@ -9,7 +9,8 @@
     "Physical Exam: Observation only",
     "Lateral neck X-ray",
     "Controlled airway (OR / ENT / Anesthesia)",
-    "Ceftriaxone + Vancomycin",
+    "Ceftriaxone IV",
+    "Vancomycin IV",
     "Dexamethasone"
   ],
   "should_avoid": [],
@@ -17,7 +18,8 @@
     "Physical Exam: Observation only": "Tripod position, drooling, stridor. Do NOT examine throat.",
     "Lateral neck X-ray": "Thumbprint sign. Do NOT send child unattended.",
     "Controlled airway (OR / ENT / Anesthesia)": "Awake fiberoptic intubation. Keep child calm.",
-    "Ceftriaxone + Vancomycin": "IV antibiotics.",
+    "Ceftriaxone IV": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
+    "Vancomycin IV": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
     "Dexamethasone": "Reduce airway edema."
   },
   "hpi": "{{patient_name}} presents with acute onset high fever, severe sore throat, drooling, muffled 'hot potato' voice, stridor, and tripod positioning (leaning forward, chin thrust out). Epiglottitis is a life-threatening airway emergency. Historically caused by H. influenzae type B (now rare due to Hib vaccine) — now more commonly Group A Strep, S. pneumoniae, Staph. Do NOT examine the throat or agitate the child — can trigger complete airway obstruction! Let the child remain in position of comfort. Immediate management: keep child calm, avoid invasive exam, arrange for controlled airway management in OR by anesthesia/ENT (awake fiberoptic intubation). Croup (laryngotracheitis) is viral, slower onset, barky cough — epiglottitis is rapid, toxic-appearing, no cough. Lateral neck X-ray shows 'thumbprint sign' (swollen epiglottis) but do NOT send child to radiology unattended. Treatment: IV antibiotics (ceftriaxone + vancomycin), steroids (dexamethasone).",
@@ -66,9 +68,18 @@
       ]
     },
     {
-      "label": "Ceftriaxone + Vancomycin",
+      "label": "Ceftriaxone IV",
       "type": "correctlyOrdered",
-      "finding": "IV antibiotics.",
+      "finding": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
+      "aliases": [
+        "Rocephin",
+        "Vanc"
+      ]
+    },
+    {
+      "label": "Vancomycin IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
       "aliases": [
         "Rocephin",
         "Vanc"
@@ -87,7 +98,8 @@
     "Physical Exam: Observation only",
     "Lateral neck X-ray",
     "Controlled airway (OR / ENT / Anesthesia)",
-    "Ceftriaxone + Vancomycin",
+    "Ceftriaxone IV",
+    "Vancomycin IV",
     "Dexamethasone"
   ],
   "complete": true,

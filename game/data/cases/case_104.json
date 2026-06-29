@@ -11,7 +11,8 @@
     "Blood cultures x2",
     "CBC / ESR / CRP",
     "Biopsy (if cultures negative)",
-    "IV Vancomycin + Ceftriaxone x 6 weeks"
+    "Vancomycin IV",
+    "Ceftriaxone IV"
   ],
   "should_avoid": [],
   "rationale": {
@@ -20,7 +21,8 @@
     "Blood cultures x2": "Identify organism. Positive in 50%.",
     "CBC / ESR / CRP": "Elevated inflammatory markers.",
     "Biopsy (if cultures negative)": "CT-guided or open for culture.",
-    "IV Vancomycin + Ceftriaxone x 6 weeks": "Empiric until cultures. Tailor to organism."
+    "Vancomycin IV": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism.",
+    "Ceftriaxone IV": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism."
   },
   "hpi": "{{patient_name}} presents with localized lower back pain, fever, chills, malaise, and point tenderness over the affected vertebrae. Vertebral osteomyelitis is a bacterial infection of the vertebral body — most commonly S. aureus. Risk factors: IV drug use, recent bacteremia, indwelling catheters, DM, immunocompromised. Diagnosis: MRI spine with contrast (gold standard — high sensitivity). Plain X-ray may be normal early (need 30-50% bone loss to see). Blood cultures x2 (positive in 50%). If blood cultures negative → CT-guided or open biopsy for culture. ESR and CRP elevated. Treatment: IV antibiotics (empiric: vancomycin + ceftriaxone or cefepime — cover MRSA and gram-negatives) x 6 weeks minimum, tailored to culture results. Surgical debridement if abscess, neurologic deficit, spinal instability, or failure of medical therapy.",
   "hpi_narrative": "{{patient_name}} presents with localized lower back pain, fever, chills, malaise, and point tenderness over the affected vertebrae. Vertebral osteomyelitis is a bacterial infection of the vertebral body — most commonly S. aureus. Risk factors: IV drug use, recent bacteremia, indwelling catheters, DM, immunocompromised. Diagnosis: MRI spine with contrast (gold standard — high sensitivity). Plain X-ray may be normal early (need 30-50% bone loss to see). Blood cultures x2 (positive in 50%). If blood cultures negative → CT-guided or open biopsy for culture. ESR and CRP elevated. Treatment: IV antibiotics (empiric: vancomycin + ceftriaxone or cefepime — cover MRSA and gram-negatives) x 6 weeks minimum, tailored to culture results. Surgical debridement if abscess, neurologic deficit, spinal instability, or failure of medical therapy.",
@@ -84,9 +86,17 @@
       ]
     },
     {
-      "label": "IV Vancomycin + Ceftriaxone x 6 weeks",
+      "label": "Vancomycin IV",
       "type": "correctlyOrdered",
-      "finding": "Empiric until cultures. Tailor to organism.",
+      "finding": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism.",
+      "aliases": [
+        "IV Abx"
+      ]
+    },
+    {
+      "label": "Ceftriaxone IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism.",
       "aliases": [
         "IV Abx"
       ]
@@ -98,7 +108,8 @@
     "Blood cultures x2",
     "CBC / ESR / CRP",
     "Biopsy (if cultures negative)",
-    "IV Vancomycin + Ceftriaxone x 6 weeks"
+    "Vancomycin IV",
+    "Ceftriaxone IV"
   ],
   "complete": true,
   "extraction_method": "deepseek_direct",

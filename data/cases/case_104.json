@@ -1,1 +1,83 @@
-{"id":104,"topic":"Back Pain","title":"Back Pain","diagnosis":"Vertebral Osteomyelitis (Lumbar Spine)","hpi_narrative":"{{patient_name}} presents with localized lower back pain, fever, chills, malaise, and point tenderness over the affected vertebrae. Vertebral osteomyelitis is a bacterial infection of the vertebral body — most commonly S. aureus. Risk factors: IV drug use, recent bacteremia, indwelling catheters, DM, immunocompromised. Diagnosis: MRI spine with contrast (gold standard — high sensitivity). Plain X-ray may be normal early (need 30-50% bone loss to see). Blood cultures x2 (positive in 50%). If blood cultures negative → CT-guided or open biopsy for culture. ESR and CRP elevated. Treatment: IV antibiotics (empiric: vancomycin + ceftriaxone or cefepime — cover MRSA and gram-negatives) x 6 weeks minimum, tailored to culture results. Surgical debridement if abscess, neurologic deficit, spinal instability, or failure of medical therapy.","chief_complaint":"Localized lower back pain, fever, chills, malaise","patient":null,"patient_name":"Akosua Berko","patient_sex":"female","location":"ER","specialty":"Infectious Disease / Spine","stacks":[{"label":"Physical Exam: Spine / Neuro","type":"correctlyOrdered","finding":"Point tenderness, localized pain.","aliases":["Spine Exam"]},{"label":"MRI spine with contrast","type":"correctlyOrdered","finding":"Gold standard. Discitis/osteomyelitis changes.","aliases":["MRI"]},{"label":"Blood cultures x2","type":"correctlyOrdered","finding":"Identify organism. Positive in 50%.","aliases":["Blood culture"]},{"label":"CBC / ESR / CRP","type":"correctlyOrdered","finding":"Elevated inflammatory markers.","aliases":["Labs"]},{"label":"Biopsy (if cultures negative)","type":"correctlyOrdered","finding":"CT-guided or open for culture.","aliases":["Biopsy"]},{"label":"IV Vancomycin + Ceftriaxone x 6 weeks","type":"correctlyOrdered","finding":"Empiric until cultures. Tailor to organism.","aliases":["IV Abx"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 104,
+  "topic": "Back Pain",
+  "title": "Back Pain",
+  "diagnosis": "Vertebral Osteomyelitis (Lumbar Spine)",
+  "hpi_narrative": "{{patient_name}} presents with localized lower back pain, fever, chills, malaise, and point tenderness over the affected vertebrae. Vertebral osteomyelitis is a bacterial infection of the vertebral body — most commonly S. aureus. Risk factors: IV drug use, recent bacteremia, indwelling catheters, DM, immunocompromised. Diagnosis: MRI spine with contrast (gold standard — high sensitivity). Plain X-ray may be normal early (need 30-50% bone loss to see). Blood cultures x2 (positive in 50%). If blood cultures negative → CT-guided or open biopsy for culture. ESR and CRP elevated. Treatment: IV antibiotics (empiric: vancomycin + ceftriaxone or cefepime — cover MRSA and gram-negatives) x 6 weeks minimum, tailored to culture results. Surgical debridement if abscess, neurologic deficit, spinal instability, or failure of medical therapy.",
+  "chief_complaint": "Localized lower back pain, fever, chills, malaise",
+  "patient": null,
+  "patient_name": "Akosua Berko",
+  "patient_sex": "female",
+  "location": "ER",
+  "specialty": "Infectious Disease / Spine",
+  "stacks": [
+    {
+      "label": "Physical Exam: Spine / Neuro",
+      "type": "correctlyOrdered",
+      "finding": "Point tenderness, localized pain.",
+      "aliases": [
+        "Spine Exam"
+      ]
+    },
+    {
+      "label": "MRI spine with contrast",
+      "type": "correctlyOrdered",
+      "finding": "Gold standard. Discitis/osteomyelitis changes.",
+      "aliases": [
+        "MRI"
+      ]
+    },
+    {
+      "label": "Blood cultures x2",
+      "type": "correctlyOrdered",
+      "finding": "Identify organism. Positive in 50%.",
+      "aliases": [
+        "Blood culture"
+      ]
+    },
+    {
+      "label": "CBC / ESR / CRP",
+      "type": "correctlyOrdered",
+      "finding": "Elevated inflammatory markers.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Biopsy (if cultures negative)",
+      "type": "correctlyOrdered",
+      "finding": "CT-guided or open for culture.",
+      "aliases": [
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "Vancomycin IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism.",
+      "aliases": [
+        "IV Abx"
+      ]
+    },
+    {
+      "label": "Ceftriaxone IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism.",
+      "aliases": [
+        "IV Abx"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 93,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}

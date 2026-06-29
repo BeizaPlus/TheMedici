@@ -8,8 +8,11 @@
   "correct_orders": [
     "Physical Exam: Full body (with consent)",
     "Pregnancy test",
-    "STI testing + toxicology screen",
-    "STI prophylaxis (CTX + Doxy + Metro)",
+    "STI testing",
+    "toxicology screen",
+    "Ceftriaxone",
+    "Doxycycline",
+    "Metronidazole",
     "Emergency contraception",
     "HIV PEP (if <72h)",
     "Crisis counseling / SANE / Safe discharge"
@@ -18,8 +21,11 @@
   "rationale": {
     "Physical Exam: Full body (with consent)": "Document injuries. Photographs. Forensic evidence.",
     "Pregnancy test": "Rule out pregnancy.",
-    "STI testing + toxicology screen": "CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
-    "STI prophylaxis (CTX + Doxy + Metro)": "Empiric.",
+    "STI testing": "[Auto-split from bundled label \"STI testing + toxicology screen\"] CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+    "toxicology screen": "[Auto-split from bundled label \"STI testing + toxicology screen\"] CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+    "Ceftriaxone": "Empiric.",
+    "Doxycycline": "Empiric.",
+    "Metronidazole": "Empiric.",
     "Emergency contraception": "Levonorgestrel 1.5mg PO once.",
     "HIV PEP (if <72h)": "28-day course.",
     "Crisis counseling / SANE / Safe discharge": "Trauma-informed. Psychiatry referral."
@@ -62,20 +68,46 @@
       ]
     },
     {
-      "label": "STI testing + toxicology screen",
+      "label": "STI testing",
       "type": "correctlyOrdered",
-      "finding": "CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+      "finding": "[Auto-split from bundled label \"STI testing + toxicology screen\"] CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
       "aliases": [
         "Labs"
       ]
     },
     {
-      "label": "STI prophylaxis (CTX + Doxy + Metro)",
+      "label": "toxicology screen",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"STI testing + toxicology screen\"] CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Ceftriaxone",
       "type": "correctlyOrdered",
       "finding": "Empiric.",
       "aliases": [
         "STI prophylaxis"
       ]
+    },
+    {
+      "label": "Doxycycline",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ],
+      "id": "-split-1"
+    },
+    {
+      "label": "Metronidazole",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ],
+      "id": "-split-2"
     },
     {
       "label": "Emergency contraception",
@@ -105,8 +137,11 @@
   "order_sets": [
     "Physical Exam: Full body (with consent)",
     "Pregnancy test",
-    "STI testing + toxicology screen",
-    "STI prophylaxis (CTX + Doxy + Metro)",
+    "STI testing",
+    "toxicology screen",
+    "Ceftriaxone",
+    "Doxycycline",
+    "Metronidazole",
     "Emergency contraception",
     "HIV PEP (if <72h)",
     "Crisis counseling / SANE / Safe discharge"

@@ -10,7 +10,8 @@
     "Physical Exam: Chest / Lungs",
     "Physical Exam: Heart / Cardiovascular",
     "Physical Exam: Extremities / Knee",
-    "Arthrocentesis + synovial fluid analysis",
+    "Arthrocentesis",
+    "Synovial fluid analysis",
     "CBC with differential",
     "Blood cultures",
     "CT/GC NAAT (cervix, urethra, rectum, pharynx)",
@@ -24,7 +25,8 @@
     "Physical Exam: Chest / Lungs": "Fever — screen lungs.",
     "Physical Exam: Heart / Cardiovascular": "Fever — screen heart.",
     "Physical Exam: Extremities / Knee": "Monoarticular: hot, swollen, erythematous, tender. Limited ROM. DGI: tenosynovitis + pustular skin lesions + migratory arthralgia.",
-    "Arthrocentesis + synovial fluid analysis": "WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+    "Arthrocentesis": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+    "Synovial fluid analysis": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
     "CBC with differential": "Leukocytosis.",
     "Blood cultures": "Bacteremia in DGI.",
     "CT/GC NAAT (cervix, urethra, rectum, pharynx)": "Screen all sites — often primary infection asymptomatic.",
@@ -103,9 +105,17 @@
       ]
     },
     {
-      "label": "Arthrocentesis + synovial fluid analysis",
+      "label": "Arthrocentesis",
       "type": "correctlyOrdered",
-      "finding": "WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+      "finding": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+      "aliases": [
+        "Joint aspiration"
+      ]
+    },
+    {
+      "label": "Synovial fluid analysis",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
       "aliases": [
         "Joint aspiration"
       ]
@@ -164,7 +174,8 @@
     "Physical Exam: Chest / Lungs",
     "Physical Exam: Heart / Cardiovascular",
     "Physical Exam: Extremities / Knee",
-    "Arthrocentesis + synovial fluid analysis",
+    "Arthrocentesis",
+    "Synovial fluid analysis",
     "CBC with differential",
     "Blood cultures",
     "CT/GC NAAT (cervix, urethra, rectum, pharynx)",

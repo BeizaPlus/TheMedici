@@ -36,7 +36,8 @@
     "BMP / CMP / LFTs",
     "Chest X-ray / CT chest",
     "IV fluids (NS / LR)",
-    "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine",
+    "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin",
+    "Primaquine",
     "Oxygen",
     "Consult, infectious disease",
     "Topical antifungal (Clotrimazole / Miconazole / Terconazole) / Fluconazole",
@@ -87,7 +88,8 @@
     "BMP / CMP / LFTs": "Screening labs.",
     "Chest X-ray / CT chest": "Classic PCP: diffuse central perihilar interstitial infiltrates. CXR sufficient — CT only if equivocal.",
     "IV fluids (NS / LR)": "IV fluids for sick patient.",
-    "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine": "First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+    "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin": "[Auto-split from bundled label \"TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine\"] First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+    "Primaquine": "[Auto-split from bundled label \"TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine\"] First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
     "Oxygen": "Low oxygen — supplemental O2.",
     "Consult, infectious disease": "ID consult for HIV management and OI treatment recommendations.",
     "Topical antifungal (Clotrimazole / Miconazole / Terconazole) / Fluconazole": "First-line: topical clotrimazole/miconazole/terconazole for candida vulvovaginitis. Oral fluconazole if recurrent.",
@@ -394,9 +396,18 @@
       ]
     },
     {
-      "label": "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine",
+      "label": "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin",
       "type": "correctlyOrdered",
-      "finding": "First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+      "finding": "[Auto-split from bundled label \"TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine\"] First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+      "aliases": [
+        "Bactrim",
+        "TMP-SMX"
+      ]
+    },
+    {
+      "label": "Primaquine",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine\"] First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
       "aliases": [
         "Bactrim",
         "TMP-SMX"
@@ -499,7 +510,8 @@
     "BMP / CMP / LFTs",
     "Chest X-ray / CT chest",
     "IV fluids (NS / LR)",
-    "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine",
+    "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin",
+    "Primaquine",
     "Oxygen",
     "Consult, infectious disease",
     "Topical antifungal (Clotrimazole / Miconazole / Terconazole) / Fluconazole",

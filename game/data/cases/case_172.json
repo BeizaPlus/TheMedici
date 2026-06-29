@@ -7,14 +7,16 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "ABCs / C-spine / Airway",
-    "CT neck + CT head",
+    "CT neck",
+    "CT head",
     "Admit ICU",
     "Psychiatry consult / 1:1 observation"
   ],
   "should_avoid": [],
   "rationale": {
     "ABCs / C-spine / Airway": "Laryngeal injury risk. C-spine immobilization.",
-    "CT neck + CT head": "Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+    "CT neck": "[Auto-split from bundled label \"CT neck + CT head\"] Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+    "CT head": "[Auto-split from bundled label \"CT neck + CT head\"] Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
     "Admit ICU": "Close monitoring.",
     "Psychiatry consult / 1:1 observation": "Suicide attempt. Safety assessment."
   },
@@ -48,9 +50,17 @@
       ]
     },
     {
-      "label": "CT neck + CT head",
+      "label": "CT neck",
       "type": "shouldHaveOrdered",
-      "finding": "Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+      "finding": "[Auto-split from bundled label \"CT neck + CT head\"] Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+      "aliases": [
+        "CT"
+      ]
+    },
+    {
+      "label": "CT head",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"CT neck + CT head\"] Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
       "aliases": [
         "CT"
       ]
@@ -74,7 +84,8 @@
   ],
   "order_sets": [
     "ABCs / C-spine / Airway",
-    "CT neck + CT head",
+    "CT neck",
+    "CT head",
     "Admit ICU",
     "Psychiatry consult / 1:1 observation"
   ],

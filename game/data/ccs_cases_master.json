@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-28T19:33:48.752Z",
+  "generated_at": "2026-06-29T17:35:00.797Z",
   "builder": "import-ollama-cases",
   "source": "game/data/ollama/cases.json",
   "total_cases": 181,
@@ -1692,11 +1692,18 @@
         "Pyridostigmine / Neostigmine",
         "Consult surgery / Thymectomy",
         {
-          "order": "IVIG / Plasmapheresis",
+          "order": "IVIG",
           "optional": true,
           "affects_grade": false,
           "section": "treatment_optional",
-          "rationale": "Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
+          "rationale": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
+        },
+        {
+          "order": "Plasmapheresis",
+          "optional": true,
+          "affects_grade": false,
+          "section": "treatment_optional",
+          "rationale": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
         },
         "Instruct patient, smoking cessation",
         "Advise patient, safe sex techniques",
@@ -1735,7 +1742,8 @@
         "Methylprednisolone / Prednisone / Azathioprine": "Corticosteroids and azathioprine are first-line immunosuppressive treatments for MG.",
         "Pyridostigmine / Neostigmine": "Pyridostigmine is for symptomatic treatment only — acetylcholinesterase inhibitor that increases ACh at neuromuscular junction. Does NOT treat underlying disease. Use in conjunction with immunosuppressants.",
         "Consult surgery / Thymectomy": "Thymoma should be surgically removed. Thymectomy can lead to complete remission in ~85% of patients without further medication.",
-        "IVIG / Plasmapheresis": "Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
+        "IVIG": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
+        "Plasmapheresis": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
         "Instruct patient, smoking cessation": "One of the most important things for health — address smoking.",
         "Advise patient, safe sex techniques": "Patient has history of STIs — review safe sex practices.",
         "Reassure patient": "New chronic diagnosis causes anxiety — reassure and inform.",
@@ -2006,9 +2014,17 @@
           ]
         },
         {
-          "label": "IVIG / Plasmapheresis",
+          "label": "IVIG",
           "type": "optional",
-          "finding": "Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
+          "finding": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
+          "aliases": [
+            "Immune globulin"
+          ]
+        },
+        {
+          "label": "Plasmapheresis",
+          "type": "optional",
+          "finding": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
           "aliases": [
             "Immune globulin"
           ]
@@ -2100,11 +2116,18 @@
         "Pyridostigmine / Neostigmine",
         "Consult surgery / Thymectomy",
         {
-          "order": "IVIG / Plasmapheresis",
+          "order": "IVIG",
           "optional": true,
           "affects_grade": false,
           "section": "treatment_optional",
-          "rationale": "Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
+          "rationale": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
+        },
+        {
+          "order": "Plasmapheresis",
+          "optional": true,
+          "affects_grade": false,
+          "section": "treatment_optional",
+          "rationale": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
         },
         "Instruct patient, smoking cessation",
         "Advise patient, safe sex techniques",
@@ -2450,7 +2473,11 @@
         "CT abdomen/pelvis with contrast",
         "Normal saline / Lactated Ringer",
         "Analgesia (Hydromorphone / Fentanyl / Morphine / Ketorolac)",
-        "Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)",
+        "Meropenem IV",
+        "Piperacillin-tazobactam IV",
+        "Ciprofloxacin IV",
+        "Metronidazole IV",
+        "Cefepime IV",
         "Antiemetic (Ondansetron / Metoclopramide / Promethazine)",
         "Acetaminophen",
         "Needle drainage, abscess, imaging guided",
@@ -2486,7 +2513,11 @@
         "CT abdomen/pelvis with contrast": "CT with IV contrast is preferred for abdominal pathology — will reveal intra-abdominal abscess.",
         "Normal saline / Lactated Ringer": "Low sodium, nausea/vomiting — IV fluids indicated for resuscitation.",
         "Analgesia (Hydromorphone / Fentanyl / Morphine / Ketorolac)": "Patient is in pain — treat. Nauseous, so IV route appropriate.",
-        "Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)": "Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+        "Meropenem IV": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+        "Piperacillin-tazobactam IV": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+        "Ciprofloxacin IV": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+        "Metronidazole IV": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+        "Cefepime IV": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
         "Antiemetic (Ondansetron / Metoclopramide / Promethazine)": "Patient is nauseous — treat symptomatically.",
         "Acetaminophen": "Patient is febrile. Ibuprofen/NSAIDs not ideal after recent surgery and upcoming procedure.",
         "Needle drainage, abscess, imaging guided": "First step: percutaneous image-guided drainage. Avoids difficult laparotomy, anesthesia, wound complications, and reduces hospitalization length. Open laparotomy is excessive — less invasive first.",
@@ -2675,9 +2706,53 @@
           ]
         },
         {
-          "label": "Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)",
+          "label": "Meropenem IV",
           "type": "shouldHaveOrdered",
-          "finding": "Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+          "finding": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+          "aliases": [
+            "Meropenem",
+            "Zosyn",
+            "Pip-Tazo",
+            "Cipro + Flagyl"
+          ]
+        },
+        {
+          "label": "Piperacillin-tazobactam IV",
+          "type": "shouldHaveOrdered",
+          "finding": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+          "aliases": [
+            "Meropenem",
+            "Zosyn",
+            "Pip-Tazo",
+            "Cipro + Flagyl"
+          ]
+        },
+        {
+          "label": "Ciprofloxacin IV",
+          "type": "shouldHaveOrdered",
+          "finding": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+          "aliases": [
+            "Meropenem",
+            "Zosyn",
+            "Pip-Tazo",
+            "Cipro + Flagyl"
+          ]
+        },
+        {
+          "label": "Metronidazole IV",
+          "type": "shouldHaveOrdered",
+          "finding": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+          "aliases": [
+            "Meropenem",
+            "Zosyn",
+            "Pip-Tazo",
+            "Cipro + Flagyl"
+          ]
+        },
+        {
+          "label": "Cefepime IV",
+          "type": "shouldHaveOrdered",
+          "finding": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
           "aliases": [
             "Meropenem",
             "Zosyn",
@@ -2761,7 +2836,11 @@
         "CT abdomen/pelvis with contrast",
         "Normal saline / Lactated Ringer",
         "Analgesia (Hydromorphone / Fentanyl / Morphine / Ketorolac)",
-        "Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)",
+        "Meropenem IV",
+        "Piperacillin-tazobactam IV",
+        "Ciprofloxacin IV",
+        "Metronidazole IV",
+        "Cefepime IV",
         "Antiemetic (Ondansetron / Metoclopramide / Promethazine)",
         "Acetaminophen",
         "Needle drainage, abscess, imaging guided",
@@ -3129,7 +3208,8 @@
         "Antiemetic (Ondansetron / Metoclopramide)",
         "Oxygen",
         "Analgesia (Hydromorphone / Fentanyl / Morphine)",
-        "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin",
+        "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone",
+        "Azithromycin",
         "Advise patient, no alcohol",
         "Follow-up LFTs in 1-4 weeks"
       ],
@@ -3159,7 +3239,8 @@
         "Antiemetic (Ondansetron / Metoclopramide)": "Patient is nauseous — treat symptomatically.",
         "Oxygen": "Low oxygen — supplemental O2.",
         "Analgesia (Hydromorphone / Fentanyl / Morphine)": "Treat patient's pain.",
-        "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin": "ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
+        "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone": "[Auto-split from bundled label \"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin\"] ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
+        "Azithromycin": "[Auto-split from bundled label \"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin\"] ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
         "Acetaminophen": "Acetaminophen with hepatitis and high LFTs is CONTRAINDICATED.",
         "Advise patient, no alcohol": "Avoid alcohol to prevent further liver damage during recovery.",
         "Follow-up LFTs in 1-4 weeks": "Schedule follow-up to monitor downward trajectory of liver enzymes.",
@@ -3379,9 +3460,19 @@
           ]
         },
         {
-          "label": "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin",
+          "label": "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone",
           "type": "correctlyOrdered",
-          "finding": "ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
+          "finding": "[Auto-split from bundled label \"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin\"] ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
+          "aliases": [
+            "Antibiotics",
+            "Levaquin",
+            "Ceftriaxone"
+          ]
+        },
+        {
+          "label": "Azithromycin",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin\"] ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
           "aliases": [
             "Antibiotics",
             "Levaquin",
@@ -3434,7 +3525,8 @@
         "Antiemetic (Ondansetron / Metoclopramide)",
         "Oxygen",
         "Analgesia (Hydromorphone / Fentanyl / Morphine)",
-        "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin",
+        "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone",
+        "Azithromycin",
         "Advise patient, no alcohol",
         "Follow-up LFTs in 1-4 weeks"
       ],
@@ -4793,7 +4885,8 @@
         "BMP / CMP / LFTs",
         "Chest X-ray / CT chest",
         "IV fluids (NS / LR)",
-        "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine",
+        "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin",
+        "Primaquine",
         "Oxygen",
         "Consult, infectious disease",
         "Topical antifungal (Clotrimazole / Miconazole / Terconazole) / Fluconazole",
@@ -4844,7 +4937,8 @@
         "BMP / CMP / LFTs": "Screening labs.",
         "Chest X-ray / CT chest": "Classic PCP: diffuse central perihilar interstitial infiltrates. CXR sufficient — CT only if equivocal.",
         "IV fluids (NS / LR)": "IV fluids for sick patient.",
-        "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine": "First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+        "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin": "[Auto-split from bundled label \"TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine\"] First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+        "Primaquine": "[Auto-split from bundled label \"TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine\"] First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
         "Oxygen": "Low oxygen — supplemental O2.",
         "Consult, infectious disease": "ID consult for HIV management and OI treatment recommendations.",
         "Topical antifungal (Clotrimazole / Miconazole / Terconazole) / Fluconazole": "First-line: topical clotrimazole/miconazole/terconazole for candida vulvovaginitis. Oral fluconazole if recurrent.",
@@ -5151,9 +5245,18 @@
           ]
         },
         {
-          "label": "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine",
+          "label": "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin",
           "type": "correctlyOrdered",
-          "finding": "First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+          "finding": "[Auto-split from bundled label \"TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine\"] First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+          "aliases": [
+            "Bactrim",
+            "TMP-SMX"
+          ]
+        },
+        {
+          "label": "Primaquine",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine\"] First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
           "aliases": [
             "Bactrim",
             "TMP-SMX"
@@ -5256,7 +5359,8 @@
         "BMP / CMP / LFTs",
         "Chest X-ray / CT chest",
         "IV fluids (NS / LR)",
-        "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine",
+        "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin",
+        "Primaquine",
         "Oxygen",
         "Consult, infectious disease",
         "Topical antifungal (Clotrimazole / Miconazole / Terconazole) / Fluconazole",
@@ -5991,7 +6095,11 @@
         "BMP / CMP / LFTs",
         "IV fluids (NS / LR / D5LR)",
         "Diet, NPO",
-        "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+        "Ceftriaxone IV",
+        "Metronidazole IV",
+        "Pip-Tazo",
+        "Ampicillin-Sulbactam",
+        "Cefazolin IV",
         {
           "order": "Intravenous access",
           "optional": true,
@@ -6022,7 +6130,11 @@
         "BMP / CMP / LFTs": "Screening labs.",
         "IV fluids (NS / LR / D5LR)": "Nausea and vomiting — IV fluids for hydration.",
         "Diet, NPO": "Bowel rest — essential in acute diverticulitis.",
-        "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+        "Ceftriaxone IV": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+        "Metronidazole IV": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+        "Pip-Tazo": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+        "Ampicillin-Sulbactam": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+        "Cefazolin IV": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
         "Intravenous access": "Good practice for IV fluids/medications.",
         "Colonoscopy / Sigmoidoscopy / Barium enema": "COLONOSCOPY AND BARIUM ENEMA ARE CONTRAINDICATED in acute diverticulitis — risk of perforation of inflamed bowel.",
         "Diet, high fiber": "High-fiber diet at discharge to prevent further occurrences. Gradually advance from low to high residue.",
@@ -6195,7 +6307,7 @@
           ]
         },
         {
-          "label": "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+          "label": "Ceftriaxone IV",
           "type": "shouldHaveOrdered",
           "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
           "aliases": [
@@ -6203,6 +6315,50 @@
             "Ceftriaxone",
             "Flagyl"
           ]
+        },
+        {
+          "label": "Metronidazole IV",
+          "type": "shouldHaveOrdered",
+          "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+          "aliases": [
+            "Antibiotics",
+            "Ceftriaxone",
+            "Flagyl"
+          ],
+          "id": "-split-1"
+        },
+        {
+          "label": "Pip-Tazo",
+          "type": "shouldHaveOrdered",
+          "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+          "aliases": [
+            "Antibiotics",
+            "Ceftriaxone",
+            "Flagyl"
+          ],
+          "id": "-split-2"
+        },
+        {
+          "label": "Ampicillin-Sulbactam",
+          "type": "shouldHaveOrdered",
+          "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+          "aliases": [
+            "Antibiotics",
+            "Ceftriaxone",
+            "Flagyl"
+          ],
+          "id": "-split-3"
+        },
+        {
+          "label": "Cefazolin IV",
+          "type": "shouldHaveOrdered",
+          "finding": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+          "aliases": [
+            "Antibiotics",
+            "Ceftriaxone",
+            "Flagyl"
+          ],
+          "id": "-split-4"
         },
         {
           "label": "Intravenous access",
@@ -6252,7 +6408,11 @@
         "BMP / CMP / LFTs",
         "IV fluids (NS / LR / D5LR)",
         "Diet, NPO",
-        "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+        "Ceftriaxone IV",
+        "Metronidazole IV",
+        "Pip-Tazo",
+        "Ampicillin-Sulbactam",
+        "Cefazolin IV",
         {
           "order": "Intravenous access",
           "optional": true,
@@ -9832,7 +9992,8 @@
         },
         "IV fluids (NS / LR)",
         "Diet, NPO",
-        "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)",
+        "Ceftriaxone IV",
+        "Metronidazole IV",
         "Analgesia (Ketorolac / Morphine / Hydromorphone)",
         "Surgery consult / Laparoscopic cholecystectomy"
       ],
@@ -9851,7 +10012,8 @@
         "HIDA scan": "If US equivocal. Non-filling of gallbladder = cystic duct obstruction.",
         "IV fluids (NS / LR)": "Nausea/vomiting — IV hydration. NPO.",
         "Diet, NPO": "Bowel rest — patient will need surgery.",
-        "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)": "Cover enteric gram-negatives + anaerobes.",
+        "Ceftriaxone IV": "Cover enteric gram-negatives + anaerobes.",
+        "Metronidazole IV": "Cover enteric gram-negatives + anaerobes.",
         "Analgesia (Ketorolac / Morphine / Hydromorphone)": "Pain management.",
         "Surgery consult / Laparoscopic cholecystectomy": "Definitive treatment within 24-72 hours.",
         "ER discharge without surgery consult": "Acute cholecystitis requires surgical admission and cholecystectomy within 24-72 hours. Discharge risks complications: gangrenous cholecystitis, perforation, sepsis."
@@ -9986,7 +10148,7 @@
           ]
         },
         {
-          "label": "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)",
+          "label": "Ceftriaxone IV",
           "type": "correctlyOrdered",
           "finding": "Cover enteric gram-negatives + anaerobes.",
           "aliases": [
@@ -9994,6 +10156,17 @@
             "Flagyl",
             "Zosyn"
           ]
+        },
+        {
+          "label": "Metronidazole IV",
+          "type": "correctlyOrdered",
+          "finding": "Cover enteric gram-negatives + anaerobes.",
+          "aliases": [
+            "Ceftriaxone",
+            "Flagyl",
+            "Zosyn"
+          ],
+          "id": "-split-1"
         },
         {
           "label": "Analgesia (Ketorolac / Morphine / Hydromorphone)",
@@ -10031,7 +10204,8 @@
         },
         "IV fluids (NS / LR)",
         "Diet, NPO",
-        "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)",
+        "Ceftriaxone IV",
+        "Metronidazole IV",
         "Analgesia (Ketorolac / Morphine / Hydromorphone)",
         "Surgery consult / Laparoscopic cholecystectomy"
       ],
@@ -10692,11 +10866,13 @@
         "Physical Exam: Neuro / Psych",
         "Blood cultures x2",
         "CBC with differential",
-        "Lumbar puncture + CSF analysis",
+        "Lumbar puncture",
+        "CSF analysis",
         "CT head (if indicated before LP)",
         "BMP / CMP",
         "PT/PTT / INR",
-        "Ceftriaxone 2g IV + Vancomycin IV",
+        "Ceftriaxone IV",
+        "Vancomycin IV",
         "Dexamethasone IV",
         "Droplet precautions",
         "Admit to ICU"
@@ -10712,11 +10888,13 @@
         "Physical Exam: Neuro / Psych": "Kernig's and Brudzinski's signs. Nuchal rigidity. AMS. Focal deficits?",
         "Blood cultures x2": "Before antibiotics. Positive in 50-90% of bacterial meningitis.",
         "CBC with differential": "Leukocytosis. Thrombocytopenia in meningococcemia (DIC).",
-        "Lumbar puncture + CSF analysis": "Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+        "Lumbar puncture": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+        "CSF analysis": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
         "CT head (if indicated before LP)": "If papilledema, focal neuro deficit, AMS, seizure, immunocompromised — CT before LP to rule out mass effect.",
         "BMP / CMP": "Screening. Hyponatremia in SIADH from meningitis.",
         "PT/PTT / INR": "Assess for DIC — meningococcemia can trigger DIC.",
-        "Ceftriaxone 2g IV + Vancomycin IV": "Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+        "Ceftriaxone IV": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+        "Vancomycin IV": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
         "Dexamethasone IV": "Before or with first antibiotics. Reduces hearing loss and neurologic sequelae in S. pneumoniae and H. influenzae meningitis.",
         "Droplet precautions": "Meningococcal meningitis requires droplet isolation until 24h of effective antibiotics.",
         "Admit to ICU": "Bacterial meningitis requires ICU for close monitoring and IV antibiotics.",
@@ -10830,9 +11008,18 @@
           ]
         },
         {
-          "label": "Lumbar puncture + CSF analysis",
+          "label": "Lumbar puncture",
           "type": "correctlyOrdered",
-          "finding": "Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+          "finding": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+          "aliases": [
+            "LP",
+            "CSF"
+          ]
+        },
+        {
+          "label": "CSF analysis",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
           "aliases": [
             "LP",
             "CSF"
@@ -10863,9 +11050,18 @@
           ]
         },
         {
-          "label": "Ceftriaxone 2g IV + Vancomycin IV",
+          "label": "Ceftriaxone IV",
           "type": "correctlyOrdered",
-          "finding": "Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+          "finding": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+          "aliases": [
+            "Rocephin",
+            "Vanc"
+          ]
+        },
+        {
+          "label": "Vancomycin IV",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
           "aliases": [
             "Rocephin",
             "Vanc"
@@ -10904,11 +11100,13 @@
         "Physical Exam: Neuro / Psych",
         "Blood cultures x2",
         "CBC with differential",
-        "Lumbar puncture + CSF analysis",
+        "Lumbar puncture",
+        "CSF analysis",
         "CT head (if indicated before LP)",
         "BMP / CMP",
         "PT/PTT / INR",
-        "Ceftriaxone 2g IV + Vancomycin IV",
+        "Ceftriaxone IV",
+        "Vancomycin IV",
         "Dexamethasone IV",
         "Droplet precautions",
         "Admit to ICU"
@@ -11961,7 +12159,8 @@
         "Physical Exam: Chest / Lungs",
         "Physical Exam: Heart / Cardiovascular",
         "Physical Exam: Extremities / Knee",
-        "Arthrocentesis + synovial fluid analysis",
+        "Arthrocentesis",
+        "Synovial fluid analysis",
         "CBC",
         "BMP / Uric acid",
         "NSAIDs (Indomethacin / Naproxen) or Colchicine",
@@ -11973,7 +12172,8 @@
         "Physical Exam: Chest / Lungs": "Screening exam.",
         "Physical Exam: Heart / Cardiovascular": "Screen for endocarditis if septic joint suspected.",
         "Physical Exam: Extremities / Knee": "Monoarticular: hot, swollen, erythematous knee. Exquisite tenderness. Limited ROM.",
-        "Arthrocentesis + synovial fluid analysis": "Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
+        "Arthrocentesis": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
+        "Synovial fluid analysis": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
         "CBC": "Leukocytosis in acute flare.",
         "BMP / Uric acid": "Uric acid may be normal during acute flare. Assess renal function (affects NSAID/colchicine use).",
         "NSAIDs (Indomethacin / Naproxen) or Colchicine": "First-line within 36h. Colchicine: avoid in renal/hepatic impairment. Alternatives: prednisone or intra-articular steroids.",
@@ -12042,9 +12242,17 @@
           ]
         },
         {
-          "label": "Arthrocentesis + synovial fluid analysis",
+          "label": "Arthrocentesis",
           "type": "correctlyOrdered",
-          "finding": "Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
+          "finding": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
+          "aliases": [
+            "Joint aspiration"
+          ]
+        },
+        {
+          "label": "Synovial fluid analysis",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
           "aliases": [
             "Joint aspiration"
           ]
@@ -12089,7 +12297,8 @@
         "Physical Exam: Chest / Lungs",
         "Physical Exam: Heart / Cardiovascular",
         "Physical Exam: Extremities / Knee",
-        "Arthrocentesis + synovial fluid analysis",
+        "Arthrocentesis",
+        "Synovial fluid analysis",
         "CBC",
         "BMP / Uric acid",
         "NSAIDs (Indomethacin / Naproxen) or Colchicine",
@@ -12114,7 +12323,8 @@
         "Physical Exam: Chest / Lungs",
         "Physical Exam: Heart / Cardiovascular",
         "Physical Exam: Extremities / Knee",
-        "Arthrocentesis + synovial fluid analysis",
+        "Arthrocentesis",
+        "Synovial fluid analysis",
         "CBC with differential",
         "Blood cultures",
         "CT/GC NAAT (cervix, urethra, rectum, pharynx)",
@@ -12128,7 +12338,8 @@
         "Physical Exam: Chest / Lungs": "Fever — screen lungs.",
         "Physical Exam: Heart / Cardiovascular": "Fever — screen heart.",
         "Physical Exam: Extremities / Knee": "Monoarticular: hot, swollen, erythematous, tender. Limited ROM. DGI: tenosynovitis + pustular skin lesions + migratory arthralgia.",
-        "Arthrocentesis + synovial fluid analysis": "WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+        "Arthrocentesis": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+        "Synovial fluid analysis": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
         "CBC with differential": "Leukocytosis.",
         "Blood cultures": "Bacteremia in DGI.",
         "CT/GC NAAT (cervix, urethra, rectum, pharynx)": "Screen all sites — often primary infection asymptomatic.",
@@ -12207,9 +12418,17 @@
           ]
         },
         {
-          "label": "Arthrocentesis + synovial fluid analysis",
+          "label": "Arthrocentesis",
           "type": "correctlyOrdered",
-          "finding": "WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+          "finding": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+          "aliases": [
+            "Joint aspiration"
+          ]
+        },
+        {
+          "label": "Synovial fluid analysis",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
           "aliases": [
             "Joint aspiration"
           ]
@@ -12268,7 +12487,8 @@
         "Physical Exam: Chest / Lungs",
         "Physical Exam: Heart / Cardiovascular",
         "Physical Exam: Extremities / Knee",
-        "Arthrocentesis + synovial fluid analysis",
+        "Arthrocentesis",
+        "Synovial fluid analysis",
         "CBC with differential",
         "Blood cultures",
         "CT/GC NAAT (cervix, urethra, rectum, pharynx)",
@@ -12693,7 +12913,8 @@
         "Physical Exam: Neuro / Psych",
         "CBC",
         "BMP / CMP",
-        "Lumbar puncture + CSF analysis",
+        "Lumbar puncture",
+        "CSF analysis",
         "EMG / NCS",
         "Pulmonary function tests (FVC, NIF)",
         "IVIG 0.4g/kg/day x 5d or Plasmapheresis",
@@ -12707,7 +12928,8 @@
         "Physical Exam: Neuro / Psych": "Symmetric ascending weakness, areflexia, paresthesias. Facial diplegia possible. Sensation often preserved.",
         "CBC": "Screening.",
         "BMP / CMP": "Screening.",
-        "Lumbar puncture + CSF analysis": "Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
+        "Lumbar puncture": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
+        "CSF analysis": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
         "EMG / NCS": "Demyelinating pattern. Slowed conduction velocities, prolonged distal latencies.",
         "Pulmonary function tests (FVC, NIF)": "Serial monitoring. FVC <20 mL/kg or NIF <-30 → intubate.",
         "IVIG 0.4g/kg/day x 5d or Plasmapheresis": "First-line treatment. Equally effective. Start early — best within 2 weeks of symptoms.",
@@ -12800,9 +13022,18 @@
           ]
         },
         {
-          "label": "Lumbar puncture + CSF analysis",
+          "label": "Lumbar puncture",
           "type": "correctlyOrdered",
-          "finding": "Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
+          "finding": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
+          "aliases": [
+            "LP",
+            "CSF"
+          ]
+        },
+        {
+          "label": "CSF analysis",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
           "aliases": [
             "LP",
             "CSF"
@@ -12851,7 +13082,8 @@
         "Physical Exam: Neuro / Psych",
         "CBC",
         "BMP / CMP",
-        "Lumbar puncture + CSF analysis",
+        "Lumbar puncture",
+        "CSF analysis",
         "EMG / NCS",
         "Pulmonary function tests (FVC, NIF)",
         "IVIG 0.4g/kg/day x 5d or Plasmapheresis",
@@ -12955,7 +13187,8 @@
         "Chest X-ray",
         "Pulse oximetry",
         "Blood cultures (if inpatient)",
-        "Sputum Gram stain + culture",
+        "Sputum Gram stain",
+        "Culture",
         "BMP / CMP",
         "Antibiotics per CAP guidelines"
       ],
@@ -12971,7 +13204,8 @@
         "Chest X-ray": "Lobar consolidation — confirms CAP.",
         "Pulse oximetry": "Assess oxygenation.",
         "Blood cultures (if inpatient)": "Before antibiotics.",
-        "Sputum Gram stain + culture": "Identify pathogen.",
+        "Sputum Gram stain": "[Auto-split from bundled label \"Sputum Gram stain + culture\"] Identify pathogen.",
+        "Culture": "[Auto-split from bundled label \"Sputum Gram stain + culture\"] Identify pathogen.",
         "BMP / CMP": "CURB-65: BUN >19 = 1 point.",
         "Antibiotics per CAP guidelines": "Outpatient: amoxicillin or doxycycline or azithromycin. With comorbidities: levofloxacin or amox-clav + macrolide."
       },
@@ -13077,9 +13311,17 @@
           ]
         },
         {
-          "label": "Sputum Gram stain + culture",
+          "label": "Sputum Gram stain",
           "type": "correctlyOrdered",
-          "finding": "Identify pathogen.",
+          "finding": "[Auto-split from bundled label \"Sputum Gram stain + culture\"] Identify pathogen.",
+          "aliases": [
+            "Sputum"
+          ]
+        },
+        {
+          "label": "Culture",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Sputum Gram stain + culture\"] Identify pathogen.",
           "aliases": [
             "Sputum"
           ]
@@ -13112,7 +13354,8 @@
         "Chest X-ray",
         "Pulse oximetry",
         "Blood cultures (if inpatient)",
-        "Sputum Gram stain + culture",
+        "Sputum Gram stain",
+        "Culture",
         "BMP / CMP",
         "Antibiotics per CAP guidelines"
       ],
@@ -13480,7 +13723,8 @@
         "Echocardiogram",
         "MRI brain with DWI",
         "CBC / BMP / Lipids / HbA1c",
-        "Aspirin + Clopidogrel (DAPT x21d)",
+        "Aspirin",
+        "Clopidogrel",
         "High-intensity statin (Atorvastatin 80mg)",
         "Admit for expedited TIA workup"
       ],
@@ -13496,7 +13740,8 @@
         "Echocardiogram": "Cardioembolic source.",
         "MRI brain with DWI": "May show small infarcts.",
         "CBC / BMP / Lipids / HbA1c": "Risk factor assessment.",
-        "Aspirin + Clopidogrel (DAPT x21d)": "Dual antiplatelet for 21 days then single agent.",
+        "Aspirin": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
+        "Clopidogrel": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
         "High-intensity statin (Atorvastatin 80mg)": "Aggressive LDL lowering.",
         "Admit for expedited TIA workup": "High stroke risk in first 48h."
       },
@@ -13602,9 +13847,18 @@
           ]
         },
         {
-          "label": "Aspirin + Clopidogrel (DAPT x21d)",
+          "label": "Aspirin",
           "type": "correctlyOrdered",
-          "finding": "Dual antiplatelet for 21 days then single agent.",
+          "finding": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
+          "aliases": [
+            "ASA",
+            "Plavix"
+          ]
+        },
+        {
+          "label": "Clopidogrel",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
           "aliases": [
             "ASA",
             "Plavix"
@@ -13638,7 +13892,8 @@
         "Echocardiogram",
         "MRI brain with DWI",
         "CBC / BMP / Lipids / HbA1c",
-        "Aspirin + Clopidogrel (DAPT x21d)",
+        "Aspirin",
+        "Clopidogrel",
         "High-intensity statin (Atorvastatin 80mg)",
         "Admit for expedited TIA workup"
       ],
@@ -13938,8 +14193,10 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "Physical Exam: Abdomen",
-        "CBC with differential + reticulocyte count",
-        "Total + direct bilirubin",
+        "CBC with differential",
+        "Reticulocyte count",
+        "Total bilirubin",
+        "Direct bilirubin",
         "Direct Coombs test",
         {
           "order": "G6PD screen",
@@ -13955,8 +14212,10 @@
       "should_avoid": [],
       "rationale": {
         "Physical Exam: Abdomen": "Full exam — assess for hepatosplenomegaly.",
-        "CBC with differential + reticulocyte count": "Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
-        "Total + direct bilirubin": "Unconjugated > conjugated. Plot on Bhutani nomogram.",
+        "CBC with differential": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
+        "Reticulocyte count": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
+        "Total bilirubin": "[Auto-split from bundled label \"Total + direct bilirubin\"] Unconjugated > conjugated. Plot on Bhutani nomogram.",
+        "Direct bilirubin": "[Auto-split from bundled label \"Total + direct bilirubin\"] Unconjugated > conjugated. Plot on Bhutani nomogram.",
         "Direct Coombs test": "Rule out immune-mediated hemolysis (ABO/Rh incompatibility).",
         "G6PD screen": "Unconjugated hyperbilirubinemia — G6PD screening suggested.",
         "TSH": "Congenital hypothyroidism causes prolonged jaundice.",
@@ -13993,17 +14252,33 @@
           ]
         },
         {
-          "label": "CBC with differential + reticulocyte count",
+          "label": "CBC with differential",
           "type": "shouldHaveOrdered",
-          "finding": "Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
+          "finding": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
           "aliases": [
             "CBC"
           ]
         },
         {
-          "label": "Total + direct bilirubin",
+          "label": "Reticulocyte count",
           "type": "shouldHaveOrdered",
-          "finding": "Unconjugated > conjugated. Plot on Bhutani nomogram.",
+          "finding": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
+          "aliases": [
+            "CBC"
+          ]
+        },
+        {
+          "label": "Total bilirubin",
+          "type": "shouldHaveOrdered",
+          "finding": "[Auto-split from bundled label \"Total + direct bilirubin\"] Unconjugated > conjugated. Plot on Bhutani nomogram.",
+          "aliases": [
+            "Bilirubin"
+          ]
+        },
+        {
+          "label": "Direct bilirubin",
+          "type": "shouldHaveOrdered",
+          "finding": "[Auto-split from bundled label \"Total + direct bilirubin\"] Unconjugated > conjugated. Plot on Bhutani nomogram.",
           "aliases": [
             "Bilirubin"
           ]
@@ -14052,8 +14327,10 @@
       ],
       "order_sets": [
         "Physical Exam: Abdomen",
-        "CBC with differential + reticulocyte count",
-        "Total + direct bilirubin",
+        "CBC with differential",
+        "Reticulocyte count",
+        "Total bilirubin",
+        "Direct bilirubin",
         "Direct Coombs test",
         {
           "order": "G6PD screen",
@@ -14154,7 +14431,8 @@
       "correct_orders": [
         "Physical Exam: General Appearance",
         "Physical Exam: Abdomen",
-        "CBC with differential + reticulocyte count",
+        "CBC with differential",
+        "Reticulocyte count",
         "Peripheral blood smear",
         "LDH, haptoglobin, bilirubin",
         "G6PD enzyme assay",
@@ -14167,7 +14445,8 @@
       "rationale": {
         "Physical Exam: General Appearance": "Assess severity — may be jaundiced, ill.",
         "Physical Exam: Abdomen": "Abdominal pain from hemolysis.",
-        "CBC with differential + reticulocyte count": "Acute anemia, elevated retics.",
+        "CBC with differential": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
+        "Reticulocyte count": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
         "Peripheral blood smear": "Bite cells, blister cells, Heinz bodies.",
         "LDH, haptoglobin, bilirubin": "Elevated LDH, low haptoglobin, indirect hyperbilirubinemia = hemolysis.",
         "G6PD enzyme assay": "Definitive diagnosis. Check 4-6 weeks after acute hemolysis (reticulocytes have higher G6PD).",
@@ -14214,9 +14493,17 @@
           ]
         },
         {
-          "label": "CBC with differential + reticulocyte count",
+          "label": "CBC with differential",
           "type": "correctlyOrdered",
-          "finding": "Acute anemia, elevated retics.",
+          "finding": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
+          "aliases": [
+            "CBC"
+          ]
+        },
+        {
+          "label": "Reticulocyte count",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
           "aliases": [
             "CBC"
           ]
@@ -14281,7 +14568,8 @@
       "order_sets": [
         "Physical Exam: General Appearance",
         "Physical Exam: Abdomen",
-        "CBC with differential + reticulocyte count",
+        "CBC with differential",
+        "Reticulocyte count",
         "Peripheral blood smear",
         "LDH, haptoglobin, bilirubin",
         "G6PD enzyme assay",
@@ -15198,7 +15486,8 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "Physical Exam: Neuro / Psych",
-        "CBC + peripheral smear",
+        "CBC",
+        "Peripheral smear",
         "Blood lead level",
         {
           "order": "Free erythrocyte protoporphyrin (FEP)",
@@ -15209,18 +15498,23 @@
         },
         "BMP / Mg",
         "Abdominal X-ray",
-        "Chelation therapy (Succimer / EDTA + BAL)",
+        "Succimer",
+        "EDTA",
+        "BAL",
         "Remove lead source"
       ],
       "should_avoid": [],
       "rationale": {
         "Physical Exam: Neuro / Psych": "Ataxia, cognitive changes, encephalopathy.",
-        "CBC + peripheral smear": "Microcytic anemia + basophilic stippling.",
+        "CBC": "[Auto-split from bundled label \"CBC + peripheral smear\"] Microcytic anemia + basophilic stippling.",
+        "Peripheral smear": "[Auto-split from bundled label \"CBC + peripheral smear\"] Microcytic anemia + basophilic stippling.",
         "Blood lead level": ">70 mcg/dL = medical emergency requiring chelation.",
         "Free erythrocyte protoporphyrin (FEP)": "Would be elevated.",
         "BMP / Mg": "Electrolyte assessment.",
         "Abdominal X-ray": "May show lead flecks in GI tract if recent ingestion.",
-        "Chelation therapy (Succimer / EDTA + BAL)": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+        "Succimer": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+        "EDTA": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+        "BAL": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
         "Remove lead source": "Home lead abatement. Public health reporting."
       },
       "hpi": "{{patient_name}} is a child presenting with abdominal pain, constipation, irritability, lethargy, ataxia, and cognitive changes. History reveals exposure to lead-based paint in older home (built <1978). Lead intoxication causes microcytic anemia with basophilic stippling on peripheral smear. Elevated free erythrocyte protoporphyrin (FEP). Definitive diagnosis: blood lead level (BLL) >5 mcg/dL is elevated. >45 mcg/dL requires chelation. >70 mcg/dL is a medical emergency. Chronic lead exposure affects: nervous system (encephalopathy, developmental delay), kidneys (Fanconi syndrome), bone marrow (anemia), GI (colic). Treatment: remove source (lead abatement). Chelation therapy: succimer (DMSA) PO for BLL >45, or IV edetate calcium disodium (EDTA) + dimercaprol (BAL) for lead encephalopathy (BLL >70). Iron supplementation for anemia. Report to public health.",
@@ -15253,9 +15547,17 @@
           ]
         },
         {
-          "label": "CBC + peripheral smear",
+          "label": "CBC",
           "type": "correctlyOrdered",
-          "finding": "Microcytic anemia + basophilic stippling.",
+          "finding": "[Auto-split from bundled label \"CBC + peripheral smear\"] Microcytic anemia + basophilic stippling.",
+          "aliases": [
+            "CBC"
+          ]
+        },
+        {
+          "label": "Peripheral smear",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"CBC + peripheral smear\"] Microcytic anemia + basophilic stippling.",
           "aliases": [
             "CBC"
           ]
@@ -15293,12 +15595,30 @@
           ]
         },
         {
-          "label": "Chelation therapy (Succimer / EDTA + BAL)",
+          "label": "Succimer",
           "type": "correctlyOrdered",
           "finding": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
           "aliases": [
             "Chelation"
           ]
+        },
+        {
+          "label": "EDTA",
+          "type": "correctlyOrdered",
+          "finding": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+          "aliases": [
+            "Chelation"
+          ],
+          "id": "-split-1"
+        },
+        {
+          "label": "BAL",
+          "type": "correctlyOrdered",
+          "finding": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+          "aliases": [
+            "Chelation"
+          ],
+          "id": "-split-2"
         },
         {
           "label": "Remove lead source",
@@ -15311,7 +15631,8 @@
       ],
       "order_sets": [
         "Physical Exam: Neuro / Psych",
-        "CBC + peripheral smear",
+        "CBC",
+        "Peripheral smear",
         "Blood lead level",
         {
           "order": "Free erythrocyte protoporphyrin (FEP)",
@@ -15322,7 +15643,9 @@
         },
         "BMP / Mg",
         "Abdominal X-ray",
-        "Chelation therapy (Succimer / EDTA + BAL)",
+        "Succimer",
+        "EDTA",
+        "BAL",
         "Remove lead source"
       ],
       "complete": true,
@@ -15653,7 +15976,8 @@
       "correct_orders": [
         "Physical Exam: Chest / Lungs",
         "Chest X-ray",
-        "Sputum AFB smear + culture",
+        "Sputum AFB smear",
+        "Culture",
         "NAAT (PCR) for TB",
         "IGRA / PPD",
         "CBC / BMP / LFTs",
@@ -15666,7 +15990,8 @@
       "rationale": {
         "Physical Exam: Chest / Lungs": "Apical crackles.",
         "Chest X-ray": "Apical infiltrates ± cavitary lesions.",
-        "Sputum AFB smear + culture": "AFB positive. Culture = gold standard.",
+        "Sputum AFB smear": "[Auto-split from bundled label \"Sputum AFB smear + culture\"] AFB positive. Culture = gold standard.",
+        "Culture": "[Auto-split from bundled label \"Sputum AFB smear + culture\"] AFB positive. Culture = gold standard.",
         "NAAT (PCR) for TB": "Rapid confirmation + rifampin resistance.",
         "IGRA / PPD": "Positive in active + latent TB.",
         "CBC / BMP / LFTs": "Baseline before RIPE.",
@@ -15713,9 +16038,18 @@
           ]
         },
         {
-          "label": "Sputum AFB smear + culture",
+          "label": "Sputum AFB smear",
           "type": "correctlyOrdered",
-          "finding": "AFB positive. Culture = gold standard.",
+          "finding": "[Auto-split from bundled label \"Sputum AFB smear + culture\"] AFB positive. Culture = gold standard.",
+          "aliases": [
+            "AFB",
+            "TB culture"
+          ]
+        },
+        {
+          "label": "Culture",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Sputum AFB smear + culture\"] AFB positive. Culture = gold standard.",
           "aliases": [
             "AFB",
             "TB culture"
@@ -15781,7 +16115,8 @@
       "order_sets": [
         "Physical Exam: Chest / Lungs",
         "Chest X-ray",
-        "Sputum AFB smear + culture",
+        "Sputum AFB smear",
+        "Culture",
         "NAAT (PCR) for TB",
         "IGRA / PPD",
         "CBC / BMP / LFTs",
@@ -15944,7 +16279,8 @@
         "BMP / CMP",
         "UA",
         "TSH",
-        "DISCONTINUE simvastatin + gemfibrozil",
+        "DISCONTINUE simvastatin",
+        "gemfibrozil",
         "Aggressive IV fluids",
         "Switch to atorvastatin / rosuvastatin / ezetimibe"
       ],
@@ -15956,7 +16292,8 @@
         "BMP / CMP": "Elevated Cr (AKI risk), hyperkalemia from rhabdo.",
         "UA": "Myoglobinuria.",
         "TSH": "Rule out hypothyroid myopathy.",
-        "DISCONTINUE simvastatin + gemfibrozil": "Contraindicated combination. Discontinue immediately.",
+        "DISCONTINUE simvastatin": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
+        "gemfibrozil": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
         "Aggressive IV fluids": "Prevent pigment nephropathy from rhabdomyolysis.",
         "Switch to atorvastatin / rosuvastatin / ezetimibe": "Alternative lipid management after recovery. Fenofibrate (not gemfibrozil) if fibrate needed."
       },
@@ -16031,9 +16368,17 @@
           ]
         },
         {
-          "label": "DISCONTINUE simvastatin + gemfibrozil",
+          "label": "DISCONTINUE simvastatin",
           "type": "correctlyOrdered",
-          "finding": "Contraindicated combination. Discontinue immediately.",
+          "finding": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
+          "aliases": [
+            "Stop meds"
+          ]
+        },
+        {
+          "label": "gemfibrozil",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
           "aliases": [
             "Stop meds"
           ]
@@ -16062,7 +16407,8 @@
         "BMP / CMP",
         "UA",
         "TSH",
-        "DISCONTINUE simvastatin + gemfibrozil",
+        "DISCONTINUE simvastatin",
+        "gemfibrozil",
         "Aggressive IV fluids",
         "Switch to atorvastatin / rosuvastatin / ezetimibe"
       ],
@@ -16291,7 +16637,8 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "Physical Exam: General Appearance",
-        "IgA anti-tTG + Total IgA",
+        "IgA anti-tTG",
+        "Total IgA",
         "IgG anti-tTG / anti-DGP (if IgA deficient)",
         "CBC / Iron studies / B12 / Folate",
         "BMP / CMP / Vitamin D",
@@ -16301,7 +16648,8 @@
       "should_avoid": [],
       "rationale": {
         "Physical Exam: General Appearance": "Weight loss, cachexia.",
-        "IgA anti-tTG + Total IgA": "First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+        "IgA anti-tTG": "[Auto-split from bundled label \"IgA anti-tTG + Total IgA\"] First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+        "Total IgA": "[Auto-split from bundled label \"IgA anti-tTG + Total IgA\"] First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
         "IgG anti-tTG / anti-DGP (if IgA deficient)": "If IgA deficiency (false-negative IgA tTG).",
         "CBC / Iron studies / B12 / Folate": "Iron deficiency anemia. Nutritional deficiencies.",
         "BMP / CMP / Vitamin D": "Nutritional assessment.",
@@ -16338,9 +16686,18 @@
           ]
         },
         {
-          "label": "IgA anti-tTG + Total IgA",
+          "label": "IgA anti-tTG",
           "type": "correctlyOrdered",
-          "finding": "First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+          "finding": "[Auto-split from bundled label \"IgA anti-tTG + Total IgA\"] First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+          "aliases": [
+            "tTG",
+            "Celiac panel"
+          ]
+        },
+        {
+          "label": "Total IgA",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"IgA anti-tTG + Total IgA\"] First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
           "aliases": [
             "tTG",
             "Celiac panel"
@@ -16390,7 +16747,8 @@
       ],
       "order_sets": [
         "Physical Exam: General Appearance",
-        "IgA anti-tTG + Total IgA",
+        "IgA anti-tTG",
+        "Total IgA",
         "IgG anti-tTG / anti-DGP (if IgA deficient)",
         "CBC / Iron studies / B12 / Folate",
         "BMP / CMP / Vitamin D",
@@ -16418,7 +16776,8 @@
         "Electrocardiogram (ECG)",
         "Imaging studies (X-ray, CT, MRI as necessary)",
         "Universal Labs (CBC, CMP, UA)",
-        "EKG + CXR if indicated"
+        "EKG",
+        "Chest X-ray"
       ],
       "should_avoid": [],
       "rationale": {
@@ -16473,7 +16832,8 @@
         "Electrocardiogram (ECG)",
         "Imaging studies (X-ray, CT, MRI as necessary)",
         "Universal Labs (CBC, CMP, UA)",
-        "EKG + CXR if indicated"
+        "EKG",
+        "Chest X-ray"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
@@ -17210,7 +17570,8 @@
         "BMP",
         "CT abdomen/pelvis",
         "IV Ceftriaxone / Ciprofloxacin",
-        "IV fluids + Antiemetics"
+        "IV Fluids",
+        "Antiemetics"
       ],
       "should_avoid": [],
       "rationale": {
@@ -17221,7 +17582,8 @@
         "BMP": "Renal function.",
         "CT abdomen/pelvis": "If complicated or not responding to Abx.",
         "IV Ceftriaxone / Ciprofloxacin": "IV if severe/vomiting/pregnant. PO if mild and stable.",
-        "IV fluids + Antiemetics": "Nausea/vomiting."
+        "IV Fluids": "Nausea/vomiting.",
+        "Antiemetics": "Nausea/vomiting."
       },
       "hpi": "{{patient_name}} presents with fever, chills, unilateral flank pain/CVA tenderness, nausea, vomiting, and lower urinary tract symptoms (dysuria, frequency, urgency). Acute pyelonephritis is an ascending bacterial infection of the renal parenchyma — most commonly E. coli (80%). Risk factors: female, sexual activity, pregnancy, urinary tract obstruction, catheterization, DM, immunosuppression. UA shows pyuria, leukocyte esterase, nitrites, WBC casts. Urine culture for confirmation + sensitivities. Blood cultures if severe/septic. CT abdomen/pelvis if complicated (abscess, obstruction, stone) or not responding to 48-72h of antibiotics. Treatment: outpatient (mild, stable): PO fluoroquinolone (ciprofloxacin) or TMP-SMX. Inpatient (severe, vomiting, pregnant, immunocompromised): IV ceftriaxone or fluoroquinolone. Switch to PO after clinical improvement. Total course 7-14 days. Repeat urine culture after treatment to confirm clearance.",
       "hpi_narrative": "{{patient_name}} presents with fever, chills, unilateral flank pain/CVA tenderness, nausea, vomiting, and lower urinary tract symptoms (dysuria, frequency, urgency). Acute pyelonephritis is an ascending bacterial infection of the renal parenchyma — most commonly E. coli (80%). Risk factors: female, sexual activity, pregnancy, urinary tract obstruction, catheterization, DM, immunosuppression. UA shows pyuria, leukocyte esterase, nitrites, WBC casts. Urine culture for confirmation + sensitivities. Blood cultures if severe/septic. CT abdomen/pelvis if complicated (abscess, obstruction, stone) or not responding to 48-72h of antibiotics. Treatment: outpatient (mild, stable): PO fluoroquinolone (ciprofloxacin) or TMP-SMX. Inpatient (severe, vomiting, pregnant, immunocompromised): IV ceftriaxone or fluoroquinolone. Switch to PO after clinical improvement. Total course 7-14 days. Repeat urine culture after treatment to confirm clearance.",
@@ -17302,12 +17664,21 @@
           ]
         },
         {
-          "label": "IV fluids + Antiemetics",
+          "label": "IV Fluids",
           "type": "correctlyOrdered",
           "finding": "Nausea/vomiting.",
           "aliases": [
             "IV fluids"
           ]
+        },
+        {
+          "label": "Antiemetics",
+          "type": "correctlyOrdered",
+          "finding": "Nausea/vomiting.",
+          "aliases": [
+            "IV fluids"
+          ],
+          "id": "undefined-split"
         }
       ],
       "order_sets": [
@@ -17318,7 +17689,8 @@
         "BMP",
         "CT abdomen/pelvis",
         "IV Ceftriaxone / Ciprofloxacin",
-        "IV fluids + Antiemetics"
+        "IV Fluids",
+        "Antiemetics"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
@@ -17339,7 +17711,8 @@
         "Physical Exam: Abdomen",
         "Abdominal X-ray",
         "Upper GI series",
-        "NPO + NG tube",
+        "NPO",
+        "NG tube",
         "EMERGENCY surgical consult / Ladd procedure"
       ],
       "should_avoid": [],
@@ -17348,7 +17721,8 @@
         "Physical Exam: Abdomen": "Distension, tenderness.",
         "Abdominal X-ray": "Double bubble, gasless abdomen.",
         "Upper GI series": "DJJ right of midline, corkscrew duodenum = malrotation with volvulus.",
-        "NPO + NG tube": "Decompression. IV fluids resuscitation.",
+        "NPO": "[Auto-split from bundled label \"NPO + NG tube\"] Decompression. IV fluids resuscitation.",
+        "NG tube": "[Auto-split from bundled label \"NPO + NG tube\"] Decompression. IV fluids resuscitation.",
         "EMERGENCY surgical consult / Ladd procedure": "Time-critical. Ladd procedure reduces volvulus."
       },
       "hpi": "{{patient_name}} is a neonate/infant presenting with bilious (green) vomiting — a surgical emergency until proven otherwise. Bilious vomiting in a newborn = malrotation with volvulus. Malrotation occurs when the midgut fails to complete its normal 270° counterclockwise rotation during fetal development, resulting in a narrow mesenteric base. This predisposes to volvulus — twisting of the midgut around the superior mesenteric artery → intestinal ischemia and necrosis. Diagnosis: upper GI series (gold standard) showing DJJ (duodenojejunal junction) to the RIGHT of midline and spiral/corkscrew duodenum. Abdominal X-ray may show double bubble sign or gasless abdomen. Treatment: EMERGENCY surgical exploration (Ladd procedure). NPO, NG tube decompression, IV fluids. Time-critical — delay leads to bowel necrosis and short gut syndrome.",
@@ -17405,9 +17779,17 @@
           ]
         },
         {
-          "label": "NPO + NG tube",
+          "label": "NPO",
           "type": "correctlyOrdered",
-          "finding": "Decompression. IV fluids resuscitation.",
+          "finding": "[Auto-split from bundled label \"NPO + NG tube\"] Decompression. IV fluids resuscitation.",
+          "aliases": [
+            "NG tube"
+          ]
+        },
+        {
+          "label": "NG tube",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"NPO + NG tube\"] Decompression. IV fluids resuscitation.",
           "aliases": [
             "NG tube"
           ]
@@ -17426,7 +17808,8 @@
         "Physical Exam: Abdomen",
         "Abdominal X-ray",
         "Upper GI series",
-        "NPO + NG tube",
+        "NPO",
+        "NG tube",
         "EMERGENCY surgical consult / Ladd procedure"
       ],
       "complete": true,
@@ -17444,7 +17827,8 @@
       "confidence": "screenshot",
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
-        "Colonoscopy + biopsy",
+        "Colonoscopy",
+        "biopsy",
         "CT/MR enterography",
         "CBC / CRP / ESR / Fecal calprotectin",
         "Budesonide / Prednisone",
@@ -17452,7 +17836,8 @@
       ],
       "should_avoid": [],
       "rationale": {
-        "Colonoscopy + biopsy": "Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+        "Colonoscopy": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+        "biopsy": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
         "CT/MR enterography": "Small bowel evaluation.",
         "CBC / CRP / ESR / Fecal calprotectin": "Anemia, elevated inflammatory markers.",
         "Budesonide / Prednisone": "Induction. Budesonide for TI/right colon.",
@@ -17480,9 +17865,17 @@
       "distractors": [],
       "stacks": [
         {
-          "label": "Colonoscopy + biopsy",
+          "label": "Colonoscopy",
           "type": "correctlyOrdered",
-          "finding": "Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+          "finding": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+          "aliases": [
+            "Colonoscopy"
+          ]
+        },
+        {
+          "label": "biopsy",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
           "aliases": [
             "Colonoscopy"
           ]
@@ -17522,7 +17915,8 @@
         }
       ],
       "order_sets": [
-        "Colonoscopy + biopsy",
+        "Colonoscopy",
+        "biopsy",
         "CT/MR enterography",
         "CBC / CRP / ESR / Fecal calprotectin",
         "Budesonide / Prednisone",
@@ -17655,8 +18049,12 @@
       "correct_orders": [
         "Obtain basic labs (CBC, BMP, Coagulation panel)",
         "Order imaging studies (Axial CT scan of the abdomen and pelvis with IV contrast)",
-        "IV Fluids + NPO",
-        "CBC · Lipase · LFTs · UA",
+        "IV Fluids",
+        "NPO",
+        "CBC",
+        "Lipase",
+        "LFTs",
+        "UA",
         "CT Abdomen/Pelvis",
         "Surgery Consult",
         "Antibiotics if indicated"
@@ -17713,8 +18111,12 @@
       "order_sets": [
         "Obtain basic labs (CBC, BMP, Coagulation panel)",
         "Order imaging studies (Axial CT scan of the abdomen and pelvis with IV contrast)",
-        "IV Fluids + NPO",
-        "CBC · Lipase · LFTs · UA",
+        "IV Fluids",
+        "NPO",
+        "CBC",
+        "Lipase",
+        "LFTs",
+        "UA",
         "CT Abdomen/Pelvis",
         "Surgery Consult",
         "Antibiotics if indicated"
@@ -17738,7 +18140,8 @@
         "CBC / BMP / Lactate",
         "CT abdomen/pelvis with IV contrast",
         "Colonoscopy",
-        "NPO + IV fluids",
+        "NPO",
+        "IV fluids",
         "Broad-spectrum Abx (if severe)"
       ],
       "should_avoid": [],
@@ -17747,7 +18150,8 @@
         "CBC / BMP / Lactate": "Leukocytosis. Elevated lactate if transmural infarction.",
         "CT abdomen/pelvis with IV contrast": "Segmental wall thickening, thumbprinting.",
         "Colonoscopy": "Segmental erythema, ulceration. Biopsy to rule out other causes.",
-        "NPO + IV fluids": "Bowel rest, resuscitation.",
+        "NPO": "[Auto-split from bundled label \"NPO + IV fluids\"] Bowel rest, resuscitation.",
+        "IV fluids": "[Auto-split from bundled label \"NPO + IV fluids\"] Bowel rest, resuscitation.",
         "Broad-spectrum Abx (if severe)": "Cover gram-neg + anaerobes."
       },
       "hpi": "{{patient_name}} is an elderly patient with cardiovascular risk factors who presents with acute LLQ abdominal pain and bloody diarrhea following a meal (postprandial pain). Ischemic colitis is the most common form of GI ischemia — caused by non-occlusive hypoperfusion of the watershed areas (splenic flexure = Griffith's point, rectosigmoid = Sudeck's point). Differentiate from acute mesenteric ischemia (small bowel — embolic, more severe, pain out of proportion). CT abdomen/pelvis with IV contrast shows segmental colonic wall thickening, thumbprinting (submucosal edema/hemorrhage). Colonoscopy confirms with segmental erythema, ulceration. Most cases are self-limited and resolve with supportive care: bowel rest (NPO), IV fluids, broad-spectrum antibiotics (cover gram-neg + anaerobes if severe). Surgery only if transmural infarction, perforation, peritonitis, or stricture.",
@@ -17804,9 +18208,18 @@
           ]
         },
         {
-          "label": "NPO + IV fluids",
+          "label": "NPO",
           "type": "correctlyOrdered",
-          "finding": "Bowel rest, resuscitation.",
+          "finding": "[Auto-split from bundled label \"NPO + IV fluids\"] Bowel rest, resuscitation.",
+          "aliases": [
+            "NPO",
+            "IVF"
+          ]
+        },
+        {
+          "label": "IV fluids",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"NPO + IV fluids\"] Bowel rest, resuscitation.",
           "aliases": [
             "NPO",
             "IVF"
@@ -17826,7 +18239,8 @@
         "CBC / BMP / Lactate",
         "CT abdomen/pelvis with IV contrast",
         "Colonoscopy",
-        "NPO + IV fluids",
+        "NPO",
+        "IV fluids",
         "Broad-spectrum Abx (if severe)"
       ],
       "complete": true,
@@ -17845,24 +18259,28 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "FSH/LH",
-        "Testosterone (free + total) / DHEA-S",
+        "Testosterone (free + total)",
+        "DHEA-S",
         "17-OH progesterone",
         "TSH / Prolactin",
         "Pelvic US",
         "Glucose / HbA1c / OGTT",
-        "Weight loss + lifestyle",
+        "Weight loss",
+        "lifestyle",
         "Combined OCPs",
         "Metformin"
       ],
       "should_avoid": [],
       "rationale": {
         "FSH/LH": "LH:FSH >2:1 supports PCOS.",
-        "Testosterone (free + total) / DHEA-S": "Elevated androgens.",
+        "Testosterone (free + total)": "Elevated androgens.",
+        "DHEA-S": "Elevated androgens.",
         "17-OH progesterone": "Rule out late-onset CAH.",
         "TSH / Prolactin": "Rule out thyroid, prolactin causes.",
         "Pelvic US": "Polycystic ovaries — ≥12 follicles.",
         "Glucose / HbA1c / OGTT": "Screen for insulin resistance/DM.",
-        "Weight loss + lifestyle": "First-line. Improves all parameters.",
+        "Weight loss": "[Auto-split from bundled label \"Weight loss + lifestyle\"] First-line. Improves all parameters.",
+        "lifestyle": "[Auto-split from bundled label \"Weight loss + lifestyle\"] First-line. Improves all parameters.",
         "Combined OCPs": "Regulate cycles, reduce hyperandrogenism.",
         "Metformin": "Insulin sensitizer."
       },
@@ -17897,12 +18315,21 @@
           ]
         },
         {
-          "label": "Testosterone (free + total) / DHEA-S",
+          "label": "Testosterone (free + total)",
           "type": "correctlyOrdered",
           "finding": "Elevated androgens.",
           "aliases": [
             "Androgens"
           ]
+        },
+        {
+          "label": "DHEA-S",
+          "type": "correctlyOrdered",
+          "finding": "Elevated androgens.",
+          "aliases": [
+            "Androgens"
+          ],
+          "id": "-split-1"
         },
         {
           "label": "17-OH progesterone",
@@ -17937,9 +18364,17 @@
           ]
         },
         {
-          "label": "Weight loss + lifestyle",
+          "label": "Weight loss",
           "type": "correctlyOrdered",
-          "finding": "First-line. Improves all parameters.",
+          "finding": "[Auto-split from bundled label \"Weight loss + lifestyle\"] First-line. Improves all parameters.",
+          "aliases": [
+            "Weight loss"
+          ]
+        },
+        {
+          "label": "lifestyle",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Weight loss + lifestyle\"] First-line. Improves all parameters.",
           "aliases": [
             "Weight loss"
           ]
@@ -17963,12 +18398,14 @@
       ],
       "order_sets": [
         "FSH/LH",
-        "Testosterone (free + total) / DHEA-S",
+        "Testosterone (free + total)",
+        "DHEA-S",
         "17-OH progesterone",
         "TSH / Prolactin",
         "Pelvic US",
         "Glucose / HbA1c / OGTT",
-        "Weight loss + lifestyle",
+        "Weight loss",
+        "lifestyle",
         "Combined OCPs",
         "Metformin"
       ],
@@ -18107,7 +18544,8 @@
       "confidence": "screenshot",
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
-        "Colonoscopy + biopsy",
+        "Colonoscopy",
+        "biopsy",
         "CBC / CRP / ESR / Fecal calprotectin",
         "p-ANCA",
         "5-ASA (Mesalamine)",
@@ -18116,7 +18554,8 @@
       ],
       "should_avoid": [],
       "rationale": {
-        "Colonoscopy + biopsy": "Continuous inflammation from rectum, crypt abscesses.",
+        "Colonoscopy": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Continuous inflammation from rectum, crypt abscesses.",
+        "biopsy": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Continuous inflammation from rectum, crypt abscesses.",
         "CBC / CRP / ESR / Fecal calprotectin": "Anemia, elevated inflammatory markers.",
         "p-ANCA": "Serologic marker — supports UC over Crohn's.",
         "5-ASA (Mesalamine)": "First-line for mild-mod UC. Topical + PO.",
@@ -18145,9 +18584,17 @@
       "distractors": [],
       "stacks": [
         {
-          "label": "Colonoscopy + biopsy",
+          "label": "Colonoscopy",
           "type": "correctlyOrdered",
-          "finding": "Continuous inflammation from rectum, crypt abscesses.",
+          "finding": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Continuous inflammation from rectum, crypt abscesses.",
+          "aliases": [
+            "Colonoscopy"
+          ]
+        },
+        {
+          "label": "biopsy",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Continuous inflammation from rectum, crypt abscesses.",
           "aliases": [
             "Colonoscopy"
           ]
@@ -18196,7 +18643,8 @@
         }
       ],
       "order_sets": [
-        "Colonoscopy + biopsy",
+        "Colonoscopy",
+        "biopsy",
         "CBC / CRP / ESR / Fecal calprotectin",
         "p-ANCA",
         "5-ASA (Mesalamine)",
@@ -18220,7 +18668,8 @@
       "correct_orders": [
         "DRE",
         "PSA",
-        "TRUS + prostate biopsy",
+        "TRUS",
+        "prostate biopsy",
         "MRI prostate",
         "CT / Bone scan",
         "Refer urology / oncology"
@@ -18229,7 +18678,8 @@
       "rationale": {
         "DRE": "Hard, irregular, nodular prostate.",
         "PSA": "Elevated.",
-        "TRUS + prostate biopsy": "Definitive diagnosis. Gleason score.",
+        "TRUS": "[Auto-split from bundled label \"TRUS + prostate biopsy\"] Definitive diagnosis. Gleason score.",
+        "prostate biopsy": "[Auto-split from bundled label \"TRUS + prostate biopsy\"] Definitive diagnosis. Gleason score.",
         "MRI prostate": "Identify suspicious lesions.",
         "CT / Bone scan": "Staging — lymph nodes, bone mets.",
         "Refer urology / oncology": "Active surveillance vs surgery vs radiation."
@@ -18272,9 +18722,17 @@
           ]
         },
         {
-          "label": "TRUS + prostate biopsy",
+          "label": "TRUS",
           "type": "correctlyOrdered",
-          "finding": "Definitive diagnosis. Gleason score.",
+          "finding": "[Auto-split from bundled label \"TRUS + prostate biopsy\"] Definitive diagnosis. Gleason score.",
+          "aliases": [
+            "Prostate biopsy"
+          ]
+        },
+        {
+          "label": "prostate biopsy",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"TRUS + prostate biopsy\"] Definitive diagnosis. Gleason score.",
           "aliases": [
             "Prostate biopsy"
           ]
@@ -18307,7 +18765,8 @@
       "order_sets": [
         "DRE",
         "PSA",
-        "TRUS + prostate biopsy",
+        "TRUS",
+        "prostate biopsy",
         "MRI prostate",
         "CT / Bone scan",
         "Refer urology / oncology"
@@ -18579,7 +19038,8 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "Physical Exam: Breasts / Axillae",
-        "Diagnostic mammogram + US",
+        "Diagnostic mammogram",
+        "Ultrasound",
         "Core needle biopsy",
         "BRCA testing (if indicated)",
         "Staging (CT / bone scan)",
@@ -18588,7 +19048,8 @@
       "should_avoid": [],
       "rationale": {
         "Physical Exam: Breasts / Axillae": "Firm, non-tender, immobile lump. Skin dimpling. Axillary LAN.",
-        "Diagnostic mammogram + US": "BIRADS classification.",
+        "Diagnostic mammogram": "[Auto-split from bundled label \"Diagnostic mammogram + US\"] BIRADS classification.",
+        "Ultrasound": "[Auto-split from bundled label \"Diagnostic mammogram + US\"] BIRADS classification.",
         "Core needle biopsy": "ER, PR, HER2/neu status.",
         "BRCA testing (if indicated)": "Family history, young age, TNBC.",
         "Staging (CT / bone scan)": "Metastases.",
@@ -18624,9 +19085,18 @@
           ]
         },
         {
-          "label": "Diagnostic mammogram + US",
+          "label": "Diagnostic mammogram",
           "type": "correctlyOrdered",
-          "finding": "BIRADS classification.",
+          "finding": "[Auto-split from bundled label \"Diagnostic mammogram + US\"] BIRADS classification.",
+          "aliases": [
+            "Mammogram",
+            "Breast US"
+          ]
+        },
+        {
+          "label": "Ultrasound",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Diagnostic mammogram + US\"] BIRADS classification.",
           "aliases": [
             "Mammogram",
             "Breast US"
@@ -18667,7 +19137,8 @@
       ],
       "order_sets": [
         "Physical Exam: Breasts / Axillae",
-        "Diagnostic mammogram + US",
+        "Diagnostic mammogram",
+        "Ultrasound",
         "Core needle biopsy",
         "BRCA testing (if indicated)",
         "Staging (CT / bone scan)",
@@ -18763,7 +19234,8 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "CBC / BMP / LFTs / Lactate / Coags",
-        "Blood cultures x2 + urine culture",
+        "Blood cultures x2",
+        "urine culture",
         "CXR",
         "IV crystalloid bolus 30 mL/kg",
         "Empiric broad-spectrum Abx within 1h",
@@ -18773,7 +19245,8 @@
       "should_avoid": [],
       "rationale": {
         "CBC / BMP / LFTs / Lactate / Coags": "Lactate >2, AKI, LFTs, coagulopathy.",
-        "Blood cultures x2 + urine culture": "Before antibiotics.",
+        "Blood cultures x2": "[Auto-split from bundled label \"Blood cultures x2 + urine culture\"] Before antibiotics.",
+        "urine culture": "[Auto-split from bundled label \"Blood cultures x2 + urine culture\"] Before antibiotics.",
         "CXR": "Pneumonia source.",
         "IV crystalloid bolus 30 mL/kg": "Initial resuscitation.",
         "Empiric broad-spectrum Abx within 1h": "Vancomycin + Pip-Tazo or Cefepime + Metronidazole.",
@@ -18810,9 +19283,17 @@
           ]
         },
         {
-          "label": "Blood cultures x2 + urine culture",
+          "label": "Blood cultures x2",
           "type": "correctlyOrdered",
-          "finding": "Before antibiotics.",
+          "finding": "[Auto-split from bundled label \"Blood cultures x2 + urine culture\"] Before antibiotics.",
+          "aliases": [
+            "Cultures"
+          ]
+        },
+        {
+          "label": "urine culture",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Blood cultures x2 + urine culture\"] Before antibiotics.",
           "aliases": [
             "Cultures"
           ]
@@ -18860,7 +19341,8 @@
       ],
       "order_sets": [
         "CBC / BMP / LFTs / Lactate / Coags",
-        "Blood cultures x2 + urine culture",
+        "Blood cultures x2",
+        "urine culture",
         "CXR",
         "IV crystalloid bolus 30 mL/kg",
         "Empiric broad-spectrum Abx within 1h",
@@ -19134,18 +19616,24 @@
       "confidence": "screenshot",
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
-        "Blood cultures x2 + source cultures",
+        "Blood cultures x2",
+        "Source cultures",
         "CBC / BMP / LFTs / Coags",
-        "IV fluids + Norepinephrine",
-        "Vancomycin + Clindamycin",
+        "IV Fluids",
+        "Norepinephrine drip",
+        "Vancomycin IV",
+        "Clindamycin IV",
         "Remove source (tampon / wound)"
       ],
       "should_avoid": [],
       "rationale": {
-        "Blood cultures x2 + source cultures": "Before antibiotics.",
+        "Blood cultures x2": "[Auto-split from bundled label \"Blood cultures x2 + source cultures\"] Before antibiotics.",
+        "Source cultures": "[Auto-split from bundled label \"Blood cultures x2 + source cultures\"] Before antibiotics.",
         "CBC / BMP / LFTs / Coags": "Multisystem involvement.",
-        "IV fluids + Norepinephrine": "Resuscitation. MAP ≥65.",
-        "Vancomycin + Clindamycin": "Vanc covers MRSA. Clindamycin suppresses toxin production.",
+        "IV Fluids": "Resuscitation. MAP ≥65.",
+        "Norepinephrine drip": "Resuscitation. MAP ≥65.",
+        "Vancomycin IV": "[Auto-split from bundled label \"Vancomycin + Clindamycin\"] Vanc covers MRSA. Clindamycin suppresses toxin production.",
+        "Clindamycin IV": "[Auto-split from bundled label \"Vancomycin + Clindamycin\"] Vanc covers MRSA. Clindamycin suppresses toxin production.",
         "Remove source (tampon / wound)": "Eliminate toxin source."
       },
       "hpi": "{{patient_name}} presents with acute onset fever, hypotension, diffuse erythematous rash (sunburn-like with desquamation 1-2 weeks later), and multisystem involvement (GI: nausea/vomiting/diarrhea, renal, hepatic, CNS, hematologic). Caused by TSST-1 superantigen from S. aureus (menstrual — tampon use) or Group A Strep. TSS diagnosis: fever + hypotension + rash + ≥3 organ systems. Remove source (tampon, wound packing). Blood cultures, wound cultures. Treatment: aggressive IV fluids, vasopressors if needed, empiric IV antibiotics (vancomycin + clindamycin — clindamycin suppresses toxin production). IVIG may be considered in severe cases. Admit to ICU.",
@@ -19170,9 +19658,17 @@
       "distractors": [],
       "stacks": [
         {
-          "label": "Blood cultures x2 + source cultures",
+          "label": "Blood cultures x2",
           "type": "correctlyOrdered",
-          "finding": "Before antibiotics.",
+          "finding": "[Auto-split from bundled label \"Blood cultures x2 + source cultures\"] Before antibiotics.",
+          "aliases": [
+            "Cultures"
+          ]
+        },
+        {
+          "label": "Source cultures",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Blood cultures x2 + source cultures\"] Before antibiotics.",
           "aliases": [
             "Cultures"
           ]
@@ -19186,7 +19682,7 @@
           ]
         },
         {
-          "label": "IV fluids + Norepinephrine",
+          "label": "IV Fluids",
           "type": "correctlyOrdered",
           "finding": "Resuscitation. MAP ≥65.",
           "aliases": [
@@ -19195,9 +19691,28 @@
           ]
         },
         {
-          "label": "Vancomycin + Clindamycin",
+          "label": "Norepinephrine drip",
           "type": "correctlyOrdered",
-          "finding": "Vanc covers MRSA. Clindamycin suppresses toxin production.",
+          "finding": "Resuscitation. MAP ≥65.",
+          "aliases": [
+            "IVF",
+            "Levophed"
+          ],
+          "id": "undefined-split"
+        },
+        {
+          "label": "Vancomycin IV",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Vancomycin + Clindamycin\"] Vanc covers MRSA. Clindamycin suppresses toxin production.",
+          "aliases": [
+            "Vanc",
+            "Clinda"
+          ]
+        },
+        {
+          "label": "Clindamycin IV",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Vancomycin + Clindamycin\"] Vanc covers MRSA. Clindamycin suppresses toxin production.",
           "aliases": [
             "Vanc",
             "Clinda"
@@ -19213,10 +19728,13 @@
         }
       ],
       "order_sets": [
-        "Blood cultures x2 + source cultures",
+        "Blood cultures x2",
+        "Source cultures",
         "CBC / BMP / LFTs / Coags",
-        "IV fluids + Norepinephrine",
-        "Vancomycin + Clindamycin",
+        "IV Fluids",
+        "Norepinephrine drip",
+        "Vancomycin IV",
+        "Clindamycin IV",
         "Remove source (tampon / wound)"
       ],
       "complete": true,
@@ -19239,7 +19757,9 @@
         "Vaginal estrogen (cream/ring/tablet)",
         "Lubricants / Moisturizers",
         "HRT discussion (if vasomotor)",
-        "Calcium + Vitamin D + DEXA"
+        "Calcium",
+        "Vitamin D",
+        "DEXA"
       ],
       "should_avoid": [],
       "rationale": {
@@ -19248,7 +19768,9 @@
         "Vaginal estrogen (cream/ring/tablet)": "For GU symptoms. Minimal systemic absorption.",
         "Lubricants / Moisturizers": "Non-hormonal options.",
         "HRT discussion (if vasomotor)": "Shortest duration, lowest dose. Screen for contraindications.",
-        "Calcium + Vitamin D + DEXA": "Osteoporosis prevention."
+        "Calcium": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+        "Vitamin D": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+        "DEXA": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention."
       },
       "hpi": "{{patient_name}} presents with vaginal dryness, dyspareunia, hot flashes, night sweats, mood changes, and irregular menses/amenorrhea. FSH is elevated (>40), estradiol is low. Menopause = 12 months of amenorrhea. Genitourinary syndrome of menopause (atrophic vaginitis): thinning and drying of vaginal mucosa from estrogen loss → dyspareunia, pruritus, increased UTIs. Treatment: for vasomotor symptoms (hot flashes) — systemic HRT (estrogen ± progestin) for shortest duration at lowest dose. Contraindications: breast cancer, VTE, stroke. For GU symptoms only — vaginal estrogen (cream, ring, tablet). Non-hormonal: lubricants, moisturizers, SSRIs/SNRIs for hot flashes. Osteoporosis prevention: calcium, vitamin D, weight-bearing exercise, screening DEXA.",
       "hpi_narrative": "{{patient_name}} presents with vaginal dryness, dyspareunia, hot flashes, night sweats, mood changes, and irregular menses/amenorrhea. FSH is elevated (>40), estradiol is low. Menopause = 12 months of amenorrhea. Genitourinary syndrome of menopause (atrophic vaginitis): thinning and drying of vaginal mucosa from estrogen loss → dyspareunia, pruritus, increased UTIs. Treatment: for vasomotor symptoms (hot flashes) — systemic HRT (estrogen ± progestin) for shortest duration at lowest dose. Contraindications: breast cancer, VTE, stroke. For GU symptoms only — vaginal estrogen (cream, ring, tablet). Non-hormonal: lubricants, moisturizers, SSRIs/SNRIs for hot flashes. Osteoporosis prevention: calcium, vitamin D, weight-bearing exercise, screening DEXA.",
@@ -19312,9 +19834,25 @@
           ]
         },
         {
-          "label": "Calcium + Vitamin D + DEXA",
+          "label": "Calcium",
           "type": "shouldHaveOrdered",
-          "finding": "Osteoporosis prevention.",
+          "finding": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+          "aliases": [
+            "Bone health"
+          ]
+        },
+        {
+          "label": "Vitamin D",
+          "type": "shouldHaveOrdered",
+          "finding": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+          "aliases": [
+            "Bone health"
+          ]
+        },
+        {
+          "label": "DEXA",
+          "type": "shouldHaveOrdered",
+          "finding": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
           "aliases": [
             "Bone health"
           ]
@@ -19326,7 +19864,9 @@
         "Vaginal estrogen (cream/ring/tablet)",
         "Lubricants / Moisturizers",
         "HRT discussion (if vasomotor)",
-        "Calcium + Vitamin D + DEXA"
+        "Calcium",
+        "Vitamin D",
+        "DEXA"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
@@ -19596,7 +20136,8 @@
         "Physical Exam: Observation only",
         "Lateral neck X-ray",
         "Controlled airway (OR / ENT / Anesthesia)",
-        "Ceftriaxone + Vancomycin",
+        "Ceftriaxone IV",
+        "Vancomycin IV",
         "Dexamethasone"
       ],
       "should_avoid": [],
@@ -19604,7 +20145,8 @@
         "Physical Exam: Observation only": "Tripod position, drooling, stridor. Do NOT examine throat.",
         "Lateral neck X-ray": "Thumbprint sign. Do NOT send child unattended.",
         "Controlled airway (OR / ENT / Anesthesia)": "Awake fiberoptic intubation. Keep child calm.",
-        "Ceftriaxone + Vancomycin": "IV antibiotics.",
+        "Ceftriaxone IV": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
+        "Vancomycin IV": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
         "Dexamethasone": "Reduce airway edema."
       },
       "hpi": "{{patient_name}} presents with acute onset high fever, severe sore throat, drooling, muffled 'hot potato' voice, stridor, and tripod positioning (leaning forward, chin thrust out). Epiglottitis is a life-threatening airway emergency. Historically caused by H. influenzae type B (now rare due to Hib vaccine) — now more commonly Group A Strep, S. pneumoniae, Staph. Do NOT examine the throat or agitate the child — can trigger complete airway obstruction! Let the child remain in position of comfort. Immediate management: keep child calm, avoid invasive exam, arrange for controlled airway management in OR by anesthesia/ENT (awake fiberoptic intubation). Croup (laryngotracheitis) is viral, slower onset, barky cough — epiglottitis is rapid, toxic-appearing, no cough. Lateral neck X-ray shows 'thumbprint sign' (swollen epiglottis) but do NOT send child to radiology unattended. Treatment: IV antibiotics (ceftriaxone + vancomycin), steroids (dexamethasone).",
@@ -19653,9 +20195,18 @@
           ]
         },
         {
-          "label": "Ceftriaxone + Vancomycin",
+          "label": "Ceftriaxone IV",
           "type": "correctlyOrdered",
-          "finding": "IV antibiotics.",
+          "finding": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
+          "aliases": [
+            "Rocephin",
+            "Vanc"
+          ]
+        },
+        {
+          "label": "Vancomycin IV",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
           "aliases": [
             "Rocephin",
             "Vanc"
@@ -19674,7 +20225,8 @@
         "Physical Exam: Observation only",
         "Lateral neck X-ray",
         "Controlled airway (OR / ENT / Anesthesia)",
-        "Ceftriaxone + Vancomycin",
+        "Ceftriaxone IV",
+        "Vancomycin IV",
         "Dexamethasone"
       ],
       "complete": true,
@@ -19797,7 +20349,8 @@
         "Chest X-ray",
         "Consultation with Internal Medicine or Hospitalist",
         "Cardiac Monitor",
-        "IV Access + Fluids",
+        "IV access peripheral",
+        "IV Fluids",
         "Stat Labs",
         "Bedside / CT imaging",
         "Admit / Disposition"
@@ -19863,7 +20416,8 @@
         "Chest X-ray",
         "Consultation with Internal Medicine or Hospitalist",
         "Cardiac Monitor",
-        "IV Access + Fluids",
+        "IV access peripheral",
+        "IV Fluids",
         "Stat Labs",
         "Bedside / CT imaging",
         "Admit / Disposition"
@@ -19888,7 +20442,8 @@
         "Blood cultures x2",
         "CBC / ESR / CRP",
         "Biopsy (if cultures negative)",
-        "IV Vancomycin + Ceftriaxone x 6 weeks"
+        "Vancomycin IV",
+        "Ceftriaxone IV"
       ],
       "should_avoid": [],
       "rationale": {
@@ -19897,7 +20452,8 @@
         "Blood cultures x2": "Identify organism. Positive in 50%.",
         "CBC / ESR / CRP": "Elevated inflammatory markers.",
         "Biopsy (if cultures negative)": "CT-guided or open for culture.",
-        "IV Vancomycin + Ceftriaxone x 6 weeks": "Empiric until cultures. Tailor to organism."
+        "Vancomycin IV": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism.",
+        "Ceftriaxone IV": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism."
       },
       "hpi": "{{patient_name}} presents with localized lower back pain, fever, chills, malaise, and point tenderness over the affected vertebrae. Vertebral osteomyelitis is a bacterial infection of the vertebral body — most commonly S. aureus. Risk factors: IV drug use, recent bacteremia, indwelling catheters, DM, immunocompromised. Diagnosis: MRI spine with contrast (gold standard — high sensitivity). Plain X-ray may be normal early (need 30-50% bone loss to see). Blood cultures x2 (positive in 50%). If blood cultures negative → CT-guided or open biopsy for culture. ESR and CRP elevated. Treatment: IV antibiotics (empiric: vancomycin + ceftriaxone or cefepime — cover MRSA and gram-negatives) x 6 weeks minimum, tailored to culture results. Surgical debridement if abscess, neurologic deficit, spinal instability, or failure of medical therapy.",
       "hpi_narrative": "{{patient_name}} presents with localized lower back pain, fever, chills, malaise, and point tenderness over the affected vertebrae. Vertebral osteomyelitis is a bacterial infection of the vertebral body — most commonly S. aureus. Risk factors: IV drug use, recent bacteremia, indwelling catheters, DM, immunocompromised. Diagnosis: MRI spine with contrast (gold standard — high sensitivity). Plain X-ray may be normal early (need 30-50% bone loss to see). Blood cultures x2 (positive in 50%). If blood cultures negative → CT-guided or open biopsy for culture. ESR and CRP elevated. Treatment: IV antibiotics (empiric: vancomycin + ceftriaxone or cefepime — cover MRSA and gram-negatives) x 6 weeks minimum, tailored to culture results. Surgical debridement if abscess, neurologic deficit, spinal instability, or failure of medical therapy.",
@@ -19961,9 +20517,17 @@
           ]
         },
         {
-          "label": "IV Vancomycin + Ceftriaxone x 6 weeks",
+          "label": "Vancomycin IV",
           "type": "correctlyOrdered",
-          "finding": "Empiric until cultures. Tailor to organism.",
+          "finding": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism.",
+          "aliases": [
+            "IV Abx"
+          ]
+        },
+        {
+          "label": "Ceftriaxone IV",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism.",
           "aliases": [
             "IV Abx"
           ]
@@ -19975,7 +20539,8 @@
         "Blood cultures x2",
         "CBC / ESR / CRP",
         "Biopsy (if cultures negative)",
-        "IV Vancomycin + Ceftriaxone x 6 weeks"
+        "Vancomycin IV",
+        "Ceftriaxone IV"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
@@ -19994,7 +20559,8 @@
       "correct_orders": [
         "HCG",
         "TVUS",
-        "CBC + Type and screen",
+        "CBC",
+        "Type and screen",
         "IV fluids",
         "Serial Hct / Observation",
         "Surgical consult (if unstable)"
@@ -20003,7 +20569,8 @@
       "rationale": {
         "HCG": "Negative — rules out ectopic.",
         "TVUS": "Free fluid, ruptured cyst, adnexal mass.",
-        "CBC + Type and screen": "Assess anemia, prepare for transfusion.",
+        "CBC": "[Auto-split from bundled label \"CBC + Type and screen\"] Assess anemia, prepare for transfusion.",
+        "Type and screen": "[Auto-split from bundled label \"CBC + Type and screen\"] Assess anemia, prepare for transfusion.",
         "IV fluids": "Resuscitation.",
         "Serial Hct / Observation": "If stable — conservative.",
         "Surgical consult (if unstable)": "Laparoscopy for hemostasis if ongoing bleeding."
@@ -20046,9 +20613,17 @@
           ]
         },
         {
-          "label": "CBC + Type and screen",
+          "label": "CBC",
           "type": "correctlyOrdered",
-          "finding": "Assess anemia, prepare for transfusion.",
+          "finding": "[Auto-split from bundled label \"CBC + Type and screen\"] Assess anemia, prepare for transfusion.",
+          "aliases": [
+            "CBC"
+          ]
+        },
+        {
+          "label": "Type and screen",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"CBC + Type and screen\"] Assess anemia, prepare for transfusion.",
           "aliases": [
             "CBC"
           ]
@@ -20081,7 +20656,8 @@
       "order_sets": [
         "HCG",
         "TVUS",
-        "CBC + Type and screen",
+        "CBC",
+        "Type and screen",
         "IV fluids",
         "Serial Hct / Observation",
         "Surgical consult (if unstable)"
@@ -20102,18 +20678,24 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "CBC with differential",
-        "Blood cultures x2 + UA + CXR",
+        "Blood cultures x2",
+        "Urinalysis",
+        "Chest X-ray",
         "MASCC score",
         "Cefepime / Meropenem / Pip-Tazo IV within 1h",
-        "Admit + neutropenic precautions"
+        "Admission",
+        "Neutropenic precautions"
       ],
       "should_avoid": [],
       "rationale": {
         "CBC with differential": "ANC <500 — neutropenic.",
-        "Blood cultures x2 + UA + CXR": "Source workup.",
+        "Blood cultures x2": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+        "Urinalysis": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+        "Chest X-ray": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
         "MASCC score": "Low vs high risk.",
         "Cefepime / Meropenem / Pip-Tazo IV within 1h": "Empiric anti-pseudomonal.",
-        "Admit + neutropenic precautions": "Reverse isolation."
+        "Admission": "[Auto-split from bundled label \"Admit + neutropenic precautions\"] Reverse isolation.",
+        "Neutropenic precautions": "[Auto-split from bundled label \"Admit + neutropenic precautions\"] Reverse isolation."
       },
       "hpi": "{{patient_name}} presents with fever (single temp >38.3°C or sustained >38.0°C for 1h) and absolute neutrophil count <500 cells/µL. This is a MEDICAL EMERGENCY — mortality high without immediate antibiotics. Most commonly seen post-chemotherapy. Often no localizing signs of infection because there are no neutrophils to create pus/inflammation. Blood cultures x2, UA + culture, CXR. Calculate MASCC score for risk stratification (low-risk may be outpatient). Treatment: empiric IV antibiotics within 1 HOUR — monotherapy with anti-pseudomonal beta-lactam (cefepime, meropenem, pip-tazo). Add vancomycin if: hemodynamic instability, suspected catheter infection, skin/soft tissue infection, known MRSA colonization, severe mucositis. If persists >4-7 days → add antifungal coverage. G-CSF may be considered. Admit. Reverse isolation (neutropenic precautions).",
       "hpi_narrative": "{{patient_name}} presents with fever (single temp >38.3°C or sustained >38.0°C for 1h) and absolute neutrophil count <500 cells/µL. This is a MEDICAL EMERGENCY — mortality high without immediate antibiotics. Most commonly seen post-chemotherapy. Often no localizing signs of infection because there are no neutrophils to create pus/inflammation. Blood cultures x2, UA + culture, CXR. Calculate MASCC score for risk stratification (low-risk may be outpatient). Treatment: empiric IV antibiotics within 1 HOUR — monotherapy with anti-pseudomonal beta-lactam (cefepime, meropenem, pip-tazo). Add vancomycin if: hemodynamic instability, suspected catheter infection, skin/soft tissue infection, known MRSA colonization, severe mucositis. If persists >4-7 days → add antifungal coverage. G-CSF may be considered. Admit. Reverse isolation (neutropenic precautions).",
@@ -20145,9 +20727,25 @@
           ]
         },
         {
-          "label": "Blood cultures x2 + UA + CXR",
+          "label": "Blood cultures x2",
           "type": "correctlyOrdered",
-          "finding": "Source workup.",
+          "finding": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+          "aliases": [
+            "Cultures"
+          ]
+        },
+        {
+          "label": "Urinalysis",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+          "aliases": [
+            "Cultures"
+          ]
+        },
+        {
+          "label": "Chest X-ray",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
           "aliases": [
             "Cultures"
           ]
@@ -20169,9 +20767,17 @@
           ]
         },
         {
-          "label": "Admit + neutropenic precautions",
+          "label": "Admission",
           "type": "correctlyOrdered",
-          "finding": "Reverse isolation.",
+          "finding": "[Auto-split from bundled label \"Admit + neutropenic precautions\"] Reverse isolation.",
+          "aliases": [
+            "Admission"
+          ]
+        },
+        {
+          "label": "Neutropenic precautions",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Admit + neutropenic precautions\"] Reverse isolation.",
           "aliases": [
             "Admission"
           ]
@@ -20179,10 +20785,13 @@
       ],
       "order_sets": [
         "CBC with differential",
-        "Blood cultures x2 + UA + CXR",
+        "Blood cultures x2",
+        "Urinalysis",
+        "Chest X-ray",
         "MASCC score",
         "Cefepime / Meropenem / Pip-Tazo IV within 1h",
-        "Admit + neutropenic precautions"
+        "Admission",
+        "Neutropenic precautions"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
@@ -20481,18 +21090,22 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "Physical Exam: Skin / Genital",
-        "RPR / VDRL + FTA-ABS / TP-PA",
+        "RPR / VDRL",
+        "FTA-ABS / TP-PA",
         "HIV test",
         "Benzathine penicillin G 2.4M units IM once",
-        "Public health reporting + Partner treatment"
+        "Public health reporting",
+        "Partner treatment"
       ],
       "should_avoid": [],
       "rationale": {
         "Physical Exam: Skin / Genital": "Maculopapular rash including palms/soles. Chancre? Condyloma lata?",
-        "RPR / VDRL + FTA-ABS / TP-PA": "Non-treponemal screening + treponemal confirmation.",
+        "RPR / VDRL": "[Auto-split from bundled label \"RPR / VDRL + FTA-ABS / TP-PA\"] Non-treponemal screening + treponemal confirmation.",
+        "FTA-ABS / TP-PA": "[Auto-split from bundled label \"RPR / VDRL + FTA-ABS / TP-PA\"] Non-treponemal screening + treponemal confirmation.",
         "HIV test": "High co-infection rate.",
         "Benzathine penicillin G 2.4M units IM once": "First-line. Doxycycline if allergic.",
-        "Public health reporting + Partner treatment": "Reportable. Partners must be treated."
+        "Public health reporting": "[Auto-split from bundled label \"Public health reporting + Partner treatment\"] Reportable. Partners must be treated.",
+        "Partner treatment": "[Auto-split from bundled label \"Public health reporting + Partner treatment\"] Reportable. Partners must be treated."
       },
       "hpi": "{{patient_name}} presents with rash, lymphadenopathy, and possible genital lesion history. Secondary syphilis: diffuse maculopapular rash (INCLUDING palms and soles — key differentiating feature), condyloma lata (wart-like lesions in moist areas), lymphadenopathy, flu-like symptoms. Primary syphilis: painless indurated chancre at inoculation site (resolves spontaneously). Caused by Treponema pallidum (spirochete). Diagnosis: screening with RPR or VDRL (non-treponemal — titer correlates with disease activity). Confirm with treponemal-specific test (FTA-ABS, TP-PA). Darkfield microscopy of chancre fluid can directly visualize spirochetes. HIV testing (high co-infection). Treatment: benzathine penicillin G 2.4M units IM once (primary/secondary/early latent). Doxycycline if penicillin-allergic. Jarisch-Herxheimer reaction may occur (fever, myalgias, headache within 24h). Report to public health. Partner notification. Follow RPR titers to confirm cure (4-fold decline).",
       "hpi_narrative": "{{patient_name}} presents with rash, lymphadenopathy, and possible genital lesion history. Secondary syphilis: diffuse maculopapular rash (INCLUDING palms and soles — key differentiating feature), condyloma lata (wart-like lesions in moist areas), lymphadenopathy, flu-like symptoms. Primary syphilis: painless indurated chancre at inoculation site (resolves spontaneously). Caused by Treponema pallidum (spirochete). Diagnosis: screening with RPR or VDRL (non-treponemal — titer correlates with disease activity). Confirm with treponemal-specific test (FTA-ABS, TP-PA). Darkfield microscopy of chancre fluid can directly visualize spirochetes. HIV testing (high co-infection). Treatment: benzathine penicillin G 2.4M units IM once (primary/secondary/early latent). Doxycycline if penicillin-allergic. Jarisch-Herxheimer reaction may occur (fever, myalgias, headache within 24h). Report to public health. Partner notification. Follow RPR titers to confirm cure (4-fold decline).",
@@ -20524,9 +21137,17 @@
           ]
         },
         {
-          "label": "RPR / VDRL + FTA-ABS / TP-PA",
+          "label": "RPR / VDRL",
           "type": "correctlyOrdered",
-          "finding": "Non-treponemal screening + treponemal confirmation.",
+          "finding": "[Auto-split from bundled label \"RPR / VDRL + FTA-ABS / TP-PA\"] Non-treponemal screening + treponemal confirmation.",
+          "aliases": [
+            "Syphilis serology"
+          ]
+        },
+        {
+          "label": "FTA-ABS / TP-PA",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"RPR / VDRL + FTA-ABS / TP-PA\"] Non-treponemal screening + treponemal confirmation.",
           "aliases": [
             "Syphilis serology"
           ]
@@ -20548,9 +21169,17 @@
           ]
         },
         {
-          "label": "Public health reporting + Partner treatment",
+          "label": "Public health reporting",
           "type": "correctlyOrdered",
-          "finding": "Reportable. Partners must be treated.",
+          "finding": "[Auto-split from bundled label \"Public health reporting + Partner treatment\"] Reportable. Partners must be treated.",
+          "aliases": [
+            "Public health"
+          ]
+        },
+        {
+          "label": "Partner treatment",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Public health reporting + Partner treatment\"] Reportable. Partners must be treated.",
           "aliases": [
             "Public health"
           ]
@@ -20558,10 +21187,12 @@
       ],
       "order_sets": [
         "Physical Exam: Skin / Genital",
-        "RPR / VDRL + FTA-ABS / TP-PA",
+        "RPR / VDRL",
+        "FTA-ABS / TP-PA",
         "HIV test",
         "Benzathine penicillin G 2.4M units IM once",
-        "Public health reporting + Partner treatment"
+        "Public health reporting",
+        "Partner treatment"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
@@ -20690,8 +21321,11 @@
       "correct_orders": [
         "Physical Exam: Full body (with consent)",
         "Pregnancy test",
-        "STI testing + toxicology screen",
-        "STI prophylaxis (CTX + Doxy + Metro)",
+        "STI testing",
+        "toxicology screen",
+        "Ceftriaxone",
+        "Doxycycline",
+        "Metronidazole",
         "Emergency contraception",
         "HIV PEP (if <72h)",
         "Crisis counseling / SANE / Safe discharge"
@@ -20700,8 +21334,11 @@
       "rationale": {
         "Physical Exam: Full body (with consent)": "Document injuries. Photographs. Forensic evidence.",
         "Pregnancy test": "Rule out pregnancy.",
-        "STI testing + toxicology screen": "CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
-        "STI prophylaxis (CTX + Doxy + Metro)": "Empiric.",
+        "STI testing": "[Auto-split from bundled label \"STI testing + toxicology screen\"] CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+        "toxicology screen": "[Auto-split from bundled label \"STI testing + toxicology screen\"] CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+        "Ceftriaxone": "Empiric.",
+        "Doxycycline": "Empiric.",
+        "Metronidazole": "Empiric.",
         "Emergency contraception": "Levonorgestrel 1.5mg PO once.",
         "HIV PEP (if <72h)": "28-day course.",
         "Crisis counseling / SANE / Safe discharge": "Trauma-informed. Psychiatry referral."
@@ -20744,20 +21381,46 @@
           ]
         },
         {
-          "label": "STI testing + toxicology screen",
+          "label": "STI testing",
           "type": "correctlyOrdered",
-          "finding": "CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+          "finding": "[Auto-split from bundled label \"STI testing + toxicology screen\"] CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
           "aliases": [
             "Labs"
           ]
         },
         {
-          "label": "STI prophylaxis (CTX + Doxy + Metro)",
+          "label": "toxicology screen",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"STI testing + toxicology screen\"] CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+          "aliases": [
+            "Labs"
+          ]
+        },
+        {
+          "label": "Ceftriaxone",
           "type": "correctlyOrdered",
           "finding": "Empiric.",
           "aliases": [
             "STI prophylaxis"
           ]
+        },
+        {
+          "label": "Doxycycline",
+          "type": "correctlyOrdered",
+          "finding": "Empiric.",
+          "aliases": [
+            "STI prophylaxis"
+          ],
+          "id": "-split-1"
+        },
+        {
+          "label": "Metronidazole",
+          "type": "correctlyOrdered",
+          "finding": "Empiric.",
+          "aliases": [
+            "STI prophylaxis"
+          ],
+          "id": "-split-2"
         },
         {
           "label": "Emergency contraception",
@@ -20787,8 +21450,11 @@
       "order_sets": [
         "Physical Exam: Full body (with consent)",
         "Pregnancy test",
-        "STI testing + toxicology screen",
-        "STI prophylaxis (CTX + Doxy + Metro)",
+        "STI testing",
+        "toxicology screen",
+        "Ceftriaxone",
+        "Doxycycline",
+        "Metronidazole",
         "Emergency contraception",
         "HIV PEP (if <72h)",
         "Crisis counseling / SANE / Safe discharge"
@@ -20992,7 +21658,8 @@
         "Vitals / Glucose / SpO2",
         "Verbal de-escalation",
         "PO Lorazepam / Olanzapine",
-        "IM Midazolam + Haloperidol (if severe)",
+        "Midazolam IM",
+        "Haloperidol IM",
         "CBC / BMP / Tox / CT head",
         "Psychiatry consult"
       ],
@@ -21001,7 +21668,8 @@
         "Vitals / Glucose / SpO2": "Rule out medical cause.",
         "Verbal de-escalation": "First-line. Safe, calm environment.",
         "PO Lorazepam / Olanzapine": "PO preferred. Lorazepam or olanzapine.",
-        "IM Midazolam + Haloperidol (if severe)": "If patient refuses PO.",
+        "Midazolam IM": "If patient refuses PO.",
+        "Haloperidol IM": "If patient refuses PO.",
         "CBC / BMP / Tox / CT head": "Rule out medical causes.",
         "Psychiatry consult": "Determine disposition."
       },
@@ -21052,12 +21720,21 @@
           ]
         },
         {
-          "label": "IM Midazolam + Haloperidol (if severe)",
+          "label": "Midazolam IM",
           "type": "correctlyOrdered",
           "finding": "If patient refuses PO.",
           "aliases": [
             "IM meds"
           ]
+        },
+        {
+          "label": "Haloperidol IM",
+          "type": "correctlyOrdered",
+          "finding": "If patient refuses PO.",
+          "aliases": [
+            "IM meds"
+          ],
+          "id": "-split-1"
         },
         {
           "label": "CBC / BMP / Tox / CT head",
@@ -21080,7 +21757,8 @@
         "Vitals / Glucose / SpO2",
         "Verbal de-escalation",
         "PO Lorazepam / Olanzapine",
-        "IM Midazolam + Haloperidol (if severe)",
+        "Midazolam IM",
+        "Haloperidol IM",
         "CBC / BMP / Tox / CT head",
         "Psychiatry consult"
       ],
@@ -21998,14 +22676,18 @@
       "correct_orders": [
         "ECG with right-sided leads (V4R)",
         "IV fluids (aggressive)",
-        "Aspirin + P2Y12 + Anticoagulation",
+        "Aspirin",
+        "P2Y12",
+        "Anticoagulation",
         "Emergent PCI"
       ],
       "should_avoid": [],
       "rationale": {
         "ECG with right-sided leads (V4R)": "Inferior STEMI + V4R elevation = RV infarction.",
         "IV fluids (aggressive)": "RV is preload-dependent. AVOID nitrates/diuretics.",
-        "Aspirin + P2Y12 + Anticoagulation": "Standard ACS antiplatelet.",
+        "Aspirin": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+        "P2Y12": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+        "Anticoagulation": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
         "Emergent PCI": "Reperfusion."
       },
       "hpi": "{{patient_name}} presents with chest pain, hypotension, clear lung fields, elevated JVP, and Kussmaul's sign. ECG shows ST elevation in inferior leads (II, III, aVF) with ST elevation in V1 > V3 and ST elevation in V4R (right-sided leads) — indicating RV involvement. RV infarction occurs in ~30% of inferior MIs (usually RCA occlusion). RV is preload-dependent — nitroglycerin and morphine can cause dangerous hypotension because they reduce preload. Treatment: AVOID nitrates and diuretics (reduce preload → worsen RV output). Give IV fluids aggressively to maintain RV preload. Aspirin, P2Y12 inhibitor, anticoagulation. REPERFUSION: emergent PCI (preferred) or fibrinolysis. If hypotensive despite fluids: dobutamine (inotrope). Atropine for bradycardia. Admit to CCU.",
@@ -22046,9 +22728,27 @@
           ]
         },
         {
-          "label": "Aspirin + P2Y12 + Anticoagulation",
+          "label": "Aspirin",
           "type": "correctlyOrdered",
-          "finding": "Standard ACS antiplatelet.",
+          "finding": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+          "aliases": [
+            "ASA",
+            "DAPT"
+          ]
+        },
+        {
+          "label": "P2Y12",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+          "aliases": [
+            "ASA",
+            "DAPT"
+          ]
+        },
+        {
+          "label": "Anticoagulation",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
           "aliases": [
             "ASA",
             "DAPT"
@@ -22067,7 +22767,9 @@
       "order_sets": [
         "ECG with right-sided leads (V4R)",
         "IV fluids (aggressive)",
-        "Aspirin + P2Y12 + Anticoagulation",
+        "Aspirin",
+        "P2Y12",
+        "Anticoagulation",
         "Emergent PCI"
       ],
       "complete": true,
@@ -22400,14 +23102,16 @@
       "confidence": "screenshot",
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
-        "CBC + Peripheral smear",
+        "CBC",
+        "Peripheral smear",
         "Observation (if platelets >20K, no bleeding)",
         "Prednisone / IVIG (if <10K or bleeding)",
         "Avoid contact sports, NSAIDs, IM injections"
       ],
       "should_avoid": [],
       "rationale": {
-        "CBC + Peripheral smear": "Isolated thrombocytopenia. Normal Hb, WBC.",
+        "CBC": "[Auto-split from bundled label \"CBC + Peripheral smear\"] Isolated thrombocytopenia. Normal Hb, WBC.",
+        "Peripheral smear": "[Auto-split from bundled label \"CBC + Peripheral smear\"] Isolated thrombocytopenia. Normal Hb, WBC.",
         "Observation (if platelets >20K, no bleeding)": "Most resolve spontaneously.",
         "Prednisone / IVIG (if <10K or bleeding)": "First-line treatment.",
         "Avoid contact sports, NSAIDs, IM injections": "Bleeding precautions."
@@ -22434,9 +23138,17 @@
       "distractors": [],
       "stacks": [
         {
-          "label": "CBC + Peripheral smear",
+          "label": "CBC",
           "type": "correctlyOrdered",
-          "finding": "Isolated thrombocytopenia. Normal Hb, WBC.",
+          "finding": "[Auto-split from bundled label \"CBC + Peripheral smear\"] Isolated thrombocytopenia. Normal Hb, WBC.",
+          "aliases": [
+            "CBC"
+          ]
+        },
+        {
+          "label": "Peripheral smear",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"CBC + Peripheral smear\"] Isolated thrombocytopenia. Normal Hb, WBC.",
           "aliases": [
             "CBC"
           ]
@@ -22468,7 +23180,8 @@
         }
       ],
       "order_sets": [
-        "CBC + Peripheral smear",
+        "CBC",
+        "Peripheral smear",
         "Observation (if platelets >20K, no bleeding)",
         "Prednisone / IVIG (if <10K or bleeding)",
         "Avoid contact sports, NSAIDs, IM injections"
@@ -22873,8 +23586,12 @@
         "Order abdominal ultrasound or CT scan",
         "Consider obtaining electrocardiogram (ECG) to rule out ischemic heart disease",
         "Administer analgesia for pain management",
-        "IV Fluids + NPO",
-        "CBC · Lipase · LFTs · UA",
+        "IV Fluids",
+        "NPO",
+        "CBC",
+        "Lipase",
+        "LFTs",
+        "UA",
         "CT Abdomen/Pelvis",
         "Surgery Consult",
         "Antibiotics if indicated"
@@ -22934,8 +23651,12 @@
         "Order abdominal ultrasound or CT scan",
         "Consider obtaining electrocardiogram (ECG) to rule out ischemic heart disease",
         "Administer analgesia for pain management",
-        "IV Fluids + NPO",
-        "CBC · Lipase · LFTs · UA",
+        "IV Fluids",
+        "NPO",
+        "CBC",
+        "Lipase",
+        "LFTs",
+        "UA",
         "CT Abdomen/Pelvis",
         "Surgery Consult",
         "Antibiotics if indicated"
@@ -23138,16 +23859,24 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "Physical Exam: Scrotal",
-        "UA + Urine culture + CT/GC NAAT",
-        "Ceftriaxone + Doxycycline x10d",
-        "Scrotal elevation + NSAIDs"
+        "Urinalysis",
+        "Urine culture",
+        "CT/GC NAAT",
+        "Ceftriaxone IV",
+        "Doxycycline",
+        "Scrotal elevation",
+        "NSAIDs"
       ],
       "should_avoid": [],
       "rationale": {
         "Physical Exam: Scrotal": "Tender epididymis. Prehn's sign positive.",
-        "UA + Urine culture + CT/GC NAAT": "Identify organism.",
-        "Ceftriaxone + Doxycycline x10d": "For CT/GC. Fluoroquinolone if enteric.",
-        "Scrotal elevation + NSAIDs": "Symptomatic."
+        "Urinalysis": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+        "Urine culture": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+        "CT/GC NAAT": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+        "Ceftriaxone IV": "[Auto-split from bundled label \"Ceftriaxone + Doxycycline x10d\"] For CT/GC. Fluoroquinolone if enteric.",
+        "Doxycycline": "[Auto-split from bundled label \"Ceftriaxone + Doxycycline x10d\"] For CT/GC. Fluoroquinolone if enteric.",
+        "Scrotal elevation": "[Auto-split from bundled label \"Scrotal elevation + NSAIDs\"] Symptomatic.",
+        "NSAIDs": "[Auto-split from bundled label \"Scrotal elevation + NSAIDs\"] Symptomatic."
       },
       "hpi": "{{patient_name}} presents with unilateral scrotal pain of gradual onset, swelling, tenderness, and erythema. Pain may radiate to lower abdomen. Prehn's sign: pain improves with scrotal elevation (distinguishes from testicular torsion — no relief with elevation, acute onset). Caused by ascending infection: sexually active young men → Chlamydia trachomatis, Neisseria gonorrhoeae. Older men or post-instrumentation → E. coli, enteric organisms. Diagnosis: UA (pyuria), urine culture, CT/GC NAAT. Scrotal ultrasound with Doppler if torsion suspected (increased flow in epididymitis, decreased/absent in torsion). Treatment: CT/GC → ceftriaxone 250mg IM once + doxycycline 100mg PO BID x 10d. Enteric → levofloxacin x 10d. Scrotal elevation, NSAIDs, ice. Treat sexual partners.",
       "hpi_narrative": "{{patient_name}} presents with unilateral scrotal pain of gradual onset, swelling, tenderness, and erythema. Pain may radiate to lower abdomen. Prehn's sign: pain improves with scrotal elevation (distinguishes from testicular torsion — no relief with elevation, acute onset). Caused by ascending infection: sexually active young men → Chlamydia trachomatis, Neisseria gonorrhoeae. Older men or post-instrumentation → E. coli, enteric organisms. Diagnosis: UA (pyuria), urine culture, CT/GC NAAT. Scrotal ultrasound with Doppler if torsion suspected (increased flow in epididymitis, decreased/absent in torsion). Treatment: CT/GC → ceftriaxone 250mg IM once + doxycycline 100mg PO BID x 10d. Enteric → levofloxacin x 10d. Scrotal elevation, NSAIDs, ice. Treat sexual partners.",
@@ -23179,25 +23908,57 @@
           ]
         },
         {
-          "label": "UA + Urine culture + CT/GC NAAT",
+          "label": "Urinalysis",
           "type": "correctlyOrdered",
-          "finding": "Identify organism.",
+          "finding": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
           "aliases": [
             "Labs"
           ]
         },
         {
-          "label": "Ceftriaxone + Doxycycline x10d",
+          "label": "Urine culture",
           "type": "correctlyOrdered",
-          "finding": "For CT/GC. Fluoroquinolone if enteric.",
+          "finding": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+          "aliases": [
+            "Labs"
+          ]
+        },
+        {
+          "label": "CT/GC NAAT",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+          "aliases": [
+            "Labs"
+          ]
+        },
+        {
+          "label": "Ceftriaxone IV",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Ceftriaxone + Doxycycline x10d\"] For CT/GC. Fluoroquinolone if enteric.",
           "aliases": [
             "Abx"
           ]
         },
         {
-          "label": "Scrotal elevation + NSAIDs",
+          "label": "Doxycycline",
           "type": "correctlyOrdered",
-          "finding": "Symptomatic.",
+          "finding": "[Auto-split from bundled label \"Ceftriaxone + Doxycycline x10d\"] For CT/GC. Fluoroquinolone if enteric.",
+          "aliases": [
+            "Abx"
+          ]
+        },
+        {
+          "label": "Scrotal elevation",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Scrotal elevation + NSAIDs\"] Symptomatic.",
+          "aliases": [
+            "Supportive"
+          ]
+        },
+        {
+          "label": "NSAIDs",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Scrotal elevation + NSAIDs\"] Symptomatic.",
           "aliases": [
             "Supportive"
           ]
@@ -23205,9 +23966,13 @@
       ],
       "order_sets": [
         "Physical Exam: Scrotal",
-        "UA + Urine culture + CT/GC NAAT",
-        "Ceftriaxone + Doxycycline x10d",
-        "Scrotal elevation + NSAIDs"
+        "Urinalysis",
+        "Urine culture",
+        "CT/GC NAAT",
+        "Ceftriaxone IV",
+        "Doxycycline",
+        "Scrotal elevation",
+        "NSAIDs"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
@@ -23227,18 +23992,22 @@
         "ECG",
         "BMP (K+)",
         "IV Calcium gluconate",
-        "IV Insulin + Glucose / Albuterol / Bicarb",
+        "IV Insulin",
+        "Glucose / Albuterol / Bicarb",
         "Furosemide / Dialysis",
-        "DISCONTINUE ACEI + NSAIDs"
+        "DISCONTINUE ACEI",
+        "NSAIDs"
       ],
       "should_avoid": [],
       "rationale": {
         "ECG": "Peaked T, loss of P, wide QRS = severe hyperK.",
         "BMP (K+)": "K >6.5 mEq/L.",
         "IV Calcium gluconate": "Membrane stabilization — FIRST.",
-        "IV Insulin + Glucose / Albuterol / Bicarb": "Shift K+ intracellularly.",
+        "IV Insulin": "[Auto-split from bundled label \"IV Insulin + Glucose / Albuterol / Bicarb\"] Shift K+ intracellularly.",
+        "Glucose / Albuterol / Bicarb": "[Auto-split from bundled label \"IV Insulin + Glucose / Albuterol / Bicarb\"] Shift K+ intracellularly.",
         "Furosemide / Dialysis": "Eliminate K+.",
-        "DISCONTINUE ACEI + NSAIDs": "Remove cause."
+        "DISCONTINUE ACEI": "[Auto-split from bundled label \"DISCONTINUE ACEI + NSAIDs\"] Remove cause.",
+        "NSAIDs": "[Auto-split from bundled label \"DISCONTINUE ACEI + NSAIDs\"] Remove cause."
       },
       "hpi": "{{patient_name}} presents with progressive muscle weakness, fatigue, and palpitations. ECG shows peaked T waves, loss of P waves, widened QRS. Labs reveal severe hyperkalemia (K+ >6.5). Medication history: on ACE inhibitor for HTN and recently started NSAIDs for joint pain. ACEI reduces aldosterone → decreased renal K+ excretion. NSAIDs reduce renal blood flow → further decrease K+ excretion. Combined → dangerous hyperkalemia. Management: IMMEDIATE cardiac membrane stabilization — IV calcium gluconate or calcium chloride (does NOT lower K+, PROTECTS the heart). Then shift K+ intracellularly: IV regular insulin + glucose, beta-agonist (albuterol nebulized), sodium bicarbonate if acidotic. Then eliminate K+: furosemide (if renal function adequate), sodium polystyrene sulfonate (Kayexalate), patiromer, or hemodialysis if refractory. Discontinue ACEI and NSAIDs.",
       "hpi_narrative": "{{patient_name}} presents with progressive muscle weakness, fatigue, and palpitations. ECG shows peaked T waves, loss of P waves, widened QRS. Labs reveal severe hyperkalemia (K+ >6.5). Medication history: on ACE inhibitor for HTN and recently started NSAIDs for joint pain. ACEI reduces aldosterone → decreased renal K+ excretion. NSAIDs reduce renal blood flow → further decrease K+ excretion. Combined → dangerous hyperkalemia. Management: IMMEDIATE cardiac membrane stabilization — IV calcium gluconate or calcium chloride (does NOT lower K+, PROTECTS the heart). Then shift K+ intracellularly: IV regular insulin + glucose, beta-agonist (albuterol nebulized), sodium bicarbonate if acidotic. Then eliminate K+: furosemide (if renal function adequate), sodium polystyrene sulfonate (Kayexalate), patiromer, or hemodialysis if refractory. Discontinue ACEI and NSAIDs.",
@@ -23286,9 +24055,17 @@
           ]
         },
         {
-          "label": "IV Insulin + Glucose / Albuterol / Bicarb",
+          "label": "IV Insulin",
           "type": "correctlyOrdered",
-          "finding": "Shift K+ intracellularly.",
+          "finding": "[Auto-split from bundled label \"IV Insulin + Glucose / Albuterol / Bicarb\"] Shift K+ intracellularly.",
+          "aliases": [
+            "Shift K"
+          ]
+        },
+        {
+          "label": "Glucose / Albuterol / Bicarb",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"IV Insulin + Glucose / Albuterol / Bicarb\"] Shift K+ intracellularly.",
           "aliases": [
             "Shift K"
           ]
@@ -23302,9 +24079,17 @@
           ]
         },
         {
-          "label": "DISCONTINUE ACEI + NSAIDs",
+          "label": "DISCONTINUE ACEI",
           "type": "correctlyOrdered",
-          "finding": "Remove cause.",
+          "finding": "[Auto-split from bundled label \"DISCONTINUE ACEI + NSAIDs\"] Remove cause.",
+          "aliases": [
+            "Stop meds"
+          ]
+        },
+        {
+          "label": "NSAIDs",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"DISCONTINUE ACEI + NSAIDs\"] Remove cause.",
           "aliases": [
             "Stop meds"
           ]
@@ -23314,9 +24099,11 @@
         "ECG",
         "BMP (K+)",
         "IV Calcium gluconate",
-        "IV Insulin + Glucose / Albuterol / Bicarb",
+        "IV Insulin",
+        "Glucose / Albuterol / Bicarb",
         "Furosemide / Dialysis",
-        "DISCONTINUE ACEI + NSAIDs"
+        "DISCONTINUE ACEI",
+        "NSAIDs"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
@@ -23913,7 +24700,9 @@
         "Plasma amino acids",
         "Urine organic acids",
         "Glucose / BMP / ABG / Ammonia",
-        "Acute: stop protein + glucose + insulin",
+        "Acute: stop protein",
+        "Point-of-care Glucose",
+        "insulin",
         "Long-term: BCAA-restricted diet"
       ],
       "should_avoid": [],
@@ -23921,7 +24710,9 @@
         "Plasma amino acids": "Elevated leucine, isoleucine, valine.",
         "Urine organic acids": "Branched-chain ketoacids.",
         "Glucose / BMP / ABG / Ammonia": "Metabolic assessment.",
-        "Acute: stop protein + glucose + insulin": "Anabolic state. Dialysis if severe hyperleucinemia.",
+        "Acute: stop protein": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+        "Point-of-care Glucose": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+        "insulin": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
         "Long-term: BCAA-restricted diet": "Special formula. Metabolic genetics follow-up."
       },
       "hpi": "{{patient_name}} is a neonate presenting with seizures, poor feeding, vomiting, lethargy, and urine/cerumen that smells like maple syrup (burnt sugar). MSUD is an autosomal recessive inborn error of metabolism — deficiency of branched-chain alpha-ketoacid dehydrogenase complex → accumulation of branched-chain amino acids (leucine, isoleucine, valine) and their ketoacids. Leucine is neurotoxic → encephalopathy, seizures. Newborn screening detects elevated leucine. Diagnosis: plasma amino acids — markedly elevated leucine, isoleucine, valine. Urine organic acids: branched-chain ketoacids. During acute decompensation: remove leucine (dialysis if severe), provide calories (glucose + insulin to promote anabolism), correct electrolyte abnormalities. Long-term: dietary restriction of BCAAs with special formula, liver transplant for severe cases.",
@@ -23970,9 +24761,25 @@
           ]
         },
         {
-          "label": "Acute: stop protein + glucose + insulin",
+          "label": "Acute: stop protein",
           "type": "correctlyOrdered",
-          "finding": "Anabolic state. Dialysis if severe hyperleucinemia.",
+          "finding": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+          "aliases": [
+            "Acute management"
+          ]
+        },
+        {
+          "label": "Point-of-care Glucose",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+          "aliases": [
+            "Acute management"
+          ]
+        },
+        {
+          "label": "insulin",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
           "aliases": [
             "Acute management"
           ]
@@ -23990,7 +24797,9 @@
         "Plasma amino acids",
         "Urine organic acids",
         "Glucose / BMP / ABG / Ammonia",
-        "Acute: stop protein + glucose + insulin",
+        "Acute: stop protein",
+        "Point-of-care Glucose",
+        "insulin",
         "Long-term: BCAA-restricted diet"
       ],
       "complete": true,
@@ -24364,14 +25173,16 @@
       "correct_orders": [
         "ABG / Lactate / BMP",
         "Hydroxocobalamin IV",
-        "100% O2 + supportive care",
+        "100% O2",
+        "Supportive care",
         "Admit to ICU"
       ],
       "should_avoid": [],
       "rationale": {
         "ABG / Lactate / BMP": "High AG metabolic acidosis, elevated lactate.",
         "Hydroxocobalamin IV": "First-line. Binds cyanide.",
-        "100% O2 + supportive care": "Maximize O2 delivery.",
+        "100% O2": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
+        "Supportive care": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
         "Admit to ICU": "Critical care monitoring."
       },
       "hpi": "{{patient_name}} presents found unconscious with cherry-red skin, bitter almond breath odor (only 40% can detect), high anion gap metabolic acidosis, and elevated lactate. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks oxidative phosphorylation → cells cannot use oxygen → tissue hypoxia despite normal PaO2 → anaerobic metabolism → lactic acidosis. Sources: smoke inhalation (burning plastics/wool), industrial exposure, sodium nitroprusside infusion. Treatment: hydroxocobalamin (Cyanokit — first-line, binds cyanide to form cyanocobalamin which is renally excreted). Alternative: sodium nitrite + sodium thiosulfate (older regimen, risk of methemoglobinemia). Supportive: 100% oxygen, airway management, IVF, vasopressors if needed. Admit to ICU.",
@@ -24412,9 +25223,17 @@
           ]
         },
         {
-          "label": "100% O2 + supportive care",
+          "label": "100% O2",
           "type": "correctlyOrdered",
-          "finding": "Maximize O2 delivery.",
+          "finding": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
+          "aliases": [
+            "O2"
+          ]
+        },
+        {
+          "label": "Supportive care",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
           "aliases": [
             "O2"
           ]
@@ -24431,7 +25250,8 @@
       "order_sets": [
         "ABG / Lactate / BMP",
         "Hydroxocobalamin IV",
-        "100% O2 + supportive care",
+        "100% O2",
+        "Supportive care",
         "Admit to ICU"
       ],
       "complete": true,
@@ -25243,14 +26063,16 @@
         "UA / 24h urine protein",
         "CBC / BMP / Albumin / Lipids",
         "Prednisone 2mg/kg/day",
-        "Salt/fluid restriction + Diuretics"
+        "Salt/fluid restriction",
+        "Diuretics"
       ],
       "should_avoid": [],
       "rationale": {
         "UA / 24h urine protein": "3-4+ protein, oval fat bodies. Nephrotic range >40mg/m2/hr.",
         "CBC / BMP / Albumin / Lipids": "Hypoalbuminemia, hyperlipidemia.",
         "Prednisone 2mg/kg/day": "Response confirms MCD.",
-        "Salt/fluid restriction + Diuretics": "Symptom management."
+        "Salt/fluid restriction": "[Auto-split from bundled label \"Salt/fluid restriction + Diuretics\"] Symptom management.",
+        "Diuretics": "[Auto-split from bundled label \"Salt/fluid restriction + Diuretics\"] Symptom management."
       },
       "hpi": "{{patient_name}} is a child presenting with generalized edema (periorbital — worse in morning, then leg/scrotal), weight gain, frothy urine (proteinuria), and fatigue. Nephrotic syndrome: massive proteinuria (>3.5g/day or >40mg/m2/hr in children), hypoalbuminemia (<2.5), edema, hyperlipidemia. Most common cause in children: minimal change disease (MCD) — 80-90%. Often preceded by viral URI. Diagnosis: UA — 3-4+ protein, oval fat bodies. 24h urine protein confirms nephrotic range. Renal biopsy NOT routinely needed in children (MCD most common and responds to steroids). Treatment: prednisone 2mg/kg/day (response = remission in 2-4 weeks confirms MCD). Salt/fluid restriction. Diuretics for severe edema. If steroid-resistant or frequently relapsing: consider biopsy, alternative immunosuppression (cyclophosphamide, cyclosporine). Vaccinate before immunosuppression (pneumococcal). Monitor for complications: infection (loss of immunoglobulins), thrombosis (loss of antithrombin III).",
       "hpi_narrative": "{{patient_name}} is a child presenting with generalized edema (periorbital — worse in morning, then leg/scrotal), weight gain, frothy urine (proteinuria), and fatigue. Nephrotic syndrome: massive proteinuria (>3.5g/day or >40mg/m2/hr in children), hypoalbuminemia (<2.5), edema, hyperlipidemia. Most common cause in children: minimal change disease (MCD) — 80-90%. Often preceded by viral URI. Diagnosis: UA — 3-4+ protein, oval fat bodies. 24h urine protein confirms nephrotic range. Renal biopsy NOT routinely needed in children (MCD most common and responds to steroids). Treatment: prednisone 2mg/kg/day (response = remission in 2-4 weeks confirms MCD). Salt/fluid restriction. Diuretics for severe edema. If steroid-resistant or frequently relapsing: consider biopsy, alternative immunosuppression (cyclophosphamide, cyclosporine). Vaccinate before immunosuppression (pneumococcal). Monitor for complications: infection (loss of immunoglobulins), thrombosis (loss of antithrombin III).",
@@ -25298,9 +26120,17 @@
           ]
         },
         {
-          "label": "Salt/fluid restriction + Diuretics",
+          "label": "Salt/fluid restriction",
           "type": "correctlyOrdered",
-          "finding": "Symptom management.",
+          "finding": "[Auto-split from bundled label \"Salt/fluid restriction + Diuretics\"] Symptom management.",
+          "aliases": [
+            "Supportive"
+          ]
+        },
+        {
+          "label": "Diuretics",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Salt/fluid restriction + Diuretics\"] Symptom management.",
           "aliases": [
             "Supportive"
           ]
@@ -25310,7 +26140,8 @@
         "UA / 24h urine protein",
         "CBC / BMP / Albumin / Lipids",
         "Prednisone 2mg/kg/day",
-        "Salt/fluid restriction + Diuretics"
+        "Salt/fluid restriction",
+        "Diuretics"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
@@ -25328,14 +26159,16 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "24h urine volume / Serum & urine osmolality",
-        "Water deprivation test + DDAVP",
+        "Water deprivation test",
+        "DDAVP",
         "MRI pituitary (if central)",
         "Desmopressin (DDAVP)"
       ],
       "should_avoid": [],
       "rationale": {
         "24h urine volume / Serum & urine osmolality": "Dilute urine <300, high serum osmo, hyperNa.",
-        "Water deprivation test + DDAVP": "Central DI: responds to DDAVP (>50% rise in Uosm).",
+        "Water deprivation test": "[Auto-split from bundled label \"Water deprivation test + DDAVP\"] Central DI: responds to DDAVP (>50% rise in Uosm).",
+        "DDAVP": "[Auto-split from bundled label \"Water deprivation test + DDAVP\"] Central DI: responds to DDAVP (>50% rise in Uosm).",
         "MRI pituitary (if central)": "Look for pituitary/hypothalamic lesion.",
         "Desmopressin (DDAVP)": "Central DI treatment."
       },
@@ -25369,9 +26202,17 @@
           ]
         },
         {
-          "label": "Water deprivation test + DDAVP",
+          "label": "Water deprivation test",
           "type": "correctlyOrdered",
-          "finding": "Central DI: responds to DDAVP (>50% rise in Uosm).",
+          "finding": "[Auto-split from bundled label \"Water deprivation test + DDAVP\"] Central DI: responds to DDAVP (>50% rise in Uosm).",
+          "aliases": [
+            "Water deprivation test"
+          ]
+        },
+        {
+          "label": "DDAVP",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Water deprivation test + DDAVP\"] Central DI: responds to DDAVP (>50% rise in Uosm).",
           "aliases": [
             "Water deprivation test"
           ]
@@ -25395,7 +26236,8 @@
       ],
       "order_sets": [
         "24h urine volume / Serum & urine osmolality",
-        "Water deprivation test + DDAVP",
+        "Water deprivation test",
+        "DDAVP",
         "MRI pituitary (if central)",
         "Desmopressin (DDAVP)"
       ],
@@ -25960,13 +26802,15 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "Speculum + bimanual exam",
-        "Colposcopy + cervical biopsy",
+        "Colposcopy",
+        "cervical biopsy",
         "Refer GYN oncology"
       ],
       "should_avoid": [],
       "rationale": {
         "Speculum + bimanual exam": "Friable cervical lesion.",
-        "Colposcopy + cervical biopsy": "SCC confirmed.",
+        "Colposcopy": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
+        "cervical biopsy": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
         "Refer GYN oncology": "Hysterectomy vs chemoradiation per stage."
       },
       "hpi": "{{patient_name}} presents with postcoital (after intercourse) vaginal bleeding, intermenstrual bleeding, and possibly malodorous discharge. Speculum exam reveals a friable, exophytic, or ulcerated cervical lesion. Cervical cancer is the most common GYN cancer worldwide — SCC most common. Caused by persistent high-risk HPV infection (16, 18 most common). Risk factors: multiple sexual partners, early sexual activity, immunosuppression, smoking, lack of Pap screening. Diagnosis: cervical biopsy (colposcopy-directed). Staging: clinical (FIGO). Treatment: early stage (IA-IB1) → radical hysterectomy or fertility-sparing cone biopsy. Locally advanced (IB2-IVA) → chemoradiation. Metastatic → systemic therapy. Prevention: HPV vaccination, routine Pap/HPV co-testing.",
@@ -25999,9 +26843,18 @@
           ]
         },
         {
-          "label": "Colposcopy + cervical biopsy",
+          "label": "Colposcopy",
           "type": "correctlyOrdered",
-          "finding": "SCC confirmed.",
+          "finding": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
+          "aliases": [
+            "Colposcopy",
+            "Biopsy"
+          ]
+        },
+        {
+          "label": "cervical biopsy",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
           "aliases": [
             "Colposcopy",
             "Biopsy"
@@ -26018,7 +26871,8 @@
       ],
       "order_sets": [
         "Speculum + bimanual exam",
-        "Colposcopy + cervical biopsy",
+        "Colposcopy",
+        "cervical biopsy",
         "Refer GYN oncology"
       ],
       "complete": true,
@@ -26565,14 +27419,16 @@
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
         "ABCs / C-spine / Airway",
-        "CT neck + CT head",
+        "CT neck",
+        "CT head",
         "Admit ICU",
         "Psychiatry consult / 1:1 observation"
       ],
       "should_avoid": [],
       "rationale": {
         "ABCs / C-spine / Airway": "Laryngeal injury risk. C-spine immobilization.",
-        "CT neck + CT head": "Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+        "CT neck": "[Auto-split from bundled label \"CT neck + CT head\"] Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+        "CT head": "[Auto-split from bundled label \"CT neck + CT head\"] Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
         "Admit ICU": "Close monitoring.",
         "Psychiatry consult / 1:1 observation": "Suicide attempt. Safety assessment."
       },
@@ -26606,9 +27462,17 @@
           ]
         },
         {
-          "label": "CT neck + CT head",
+          "label": "CT neck",
           "type": "shouldHaveOrdered",
-          "finding": "Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+          "finding": "[Auto-split from bundled label \"CT neck + CT head\"] Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+          "aliases": [
+            "CT"
+          ]
+        },
+        {
+          "label": "CT head",
+          "type": "shouldHaveOrdered",
+          "finding": "[Auto-split from bundled label \"CT neck + CT head\"] Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
           "aliases": [
             "CT"
           ]
@@ -26632,7 +27496,8 @@
       ],
       "order_sets": [
         "ABCs / C-spine / Airway",
-        "CT neck + CT head",
+        "CT neck",
+        "CT head",
         "Admit ICU",
         "Psychiatry consult / 1:1 observation"
       ],
@@ -26651,19 +27516,29 @@
       "confidence": "screenshot",
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
-        "Medical stabilization + SANE exam (with consent)",
-        "STI testing + prophylaxis (CTX+Doxy+Metro)",
+        "Medical stabilization",
+        "SANE exam (with consent)",
+        "STI testing",
+        "Ceftriaxone",
+        "Doxycycline",
+        "Metronidazole",
         "HIV PEP (if <72h)",
         "Hepatitis B vaccine",
-        "Crisis counseling + Safe discharge"
+        "Crisis counseling",
+        "Safe discharge"
       ],
       "should_avoid": [],
       "rationale": {
-        "Medical stabilization + SANE exam (with consent)": "Document injuries, forensic evidence.",
-        "STI testing + prophylaxis (CTX+Doxy+Metro)": "Empiric.",
+        "Medical stabilization": "Document injuries, forensic evidence.",
+        "SANE exam (with consent)": "Document injuries, forensic evidence.",
+        "STI testing": "Empiric.",
+        "Ceftriaxone": "Empiric.",
+        "Doxycycline": "Empiric.",
+        "Metronidazole": "Empiric.",
         "HIV PEP (if <72h)": "28-day course.",
         "Hepatitis B vaccine": "If not immune.",
-        "Crisis counseling + Safe discharge": "Trauma-informed. Psychiatry follow-up."
+        "Crisis counseling": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up.",
+        "Safe discharge": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up."
       },
       "hpi": "{{patient_name}} presents after sexual assault. Management: trauma-informed, multidisciplinary approach. Medical stabilization first, then forensic examination with consent. SANE examination if available. Forensic evidence collection (rape kit) within 72h. Document injuries. Labs: STI testing (CT, GC, HIV, syphilis, hepatitis B/C), toxicology if concern for drug-facilitated assault. Empiric STI prophylaxis: ceftriaxone + doxycycline + metronidazole. HIV PEP if exposure within 72h (28-day course). Hepatitis B vaccine if not immune. Mental health crisis counseling. Report to law enforcement (with patient consent). Safe discharge planning. Follow-up: STI re-testing, counseling.",
       "hpi_narrative": "{{patient_name}} presents after sexual assault. Management: trauma-informed, multidisciplinary approach. Medical stabilization first, then forensic examination with consent. SANE examination if available. Forensic evidence collection (rape kit) within 72h. Document injuries. Labs: STI testing (CT, GC, HIV, syphilis, hepatitis B/C), toxicology if concern for drug-facilitated assault. Empiric STI prophylaxis: ceftriaxone + doxycycline + metronidazole. HIV PEP if exposure within 72h (28-day course). Hepatitis B vaccine if not immune. Mental health crisis counseling. Report to law enforcement (with patient consent). Safe discharge planning. Follow-up: STI re-testing, counseling.",
@@ -26687,7 +27562,7 @@
       "distractors": [],
       "stacks": [
         {
-          "label": "Medical stabilization + SANE exam (with consent)",
+          "label": "Medical stabilization",
           "type": "correctlyOrdered",
           "finding": "Document injuries, forensic evidence.",
           "aliases": [
@@ -26695,12 +27570,48 @@
           ]
         },
         {
-          "label": "STI testing + prophylaxis (CTX+Doxy+Metro)",
+          "label": "SANE exam (with consent)",
+          "type": "correctlyOrdered",
+          "finding": "Document injuries, forensic evidence.",
+          "aliases": [
+            "Forensic exam"
+          ],
+          "id": "-split-1"
+        },
+        {
+          "label": "STI testing",
           "type": "correctlyOrdered",
           "finding": "Empiric.",
           "aliases": [
             "STI prophylaxis"
           ]
+        },
+        {
+          "label": "Ceftriaxone",
+          "type": "correctlyOrdered",
+          "finding": "Empiric.",
+          "aliases": [
+            "STI prophylaxis"
+          ],
+          "id": "-split-1"
+        },
+        {
+          "label": "Doxycycline",
+          "type": "correctlyOrdered",
+          "finding": "Empiric.",
+          "aliases": [
+            "STI prophylaxis"
+          ],
+          "id": "-split-2"
+        },
+        {
+          "label": "Metronidazole",
+          "type": "correctlyOrdered",
+          "finding": "Empiric.",
+          "aliases": [
+            "STI prophylaxis"
+          ],
+          "id": "-split-3"
         },
         {
           "label": "HIV PEP (if <72h)",
@@ -26719,20 +27630,33 @@
           ]
         },
         {
-          "label": "Crisis counseling + Safe discharge",
+          "label": "Crisis counseling",
           "type": "correctlyOrdered",
-          "finding": "Trauma-informed. Psychiatry follow-up.",
+          "finding": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up.",
+          "aliases": [
+            "Support"
+          ]
+        },
+        {
+          "label": "Safe discharge",
+          "type": "correctlyOrdered",
+          "finding": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up.",
           "aliases": [
             "Support"
           ]
         }
       ],
       "order_sets": [
-        "Medical stabilization + SANE exam (with consent)",
-        "STI testing + prophylaxis (CTX+Doxy+Metro)",
+        "Medical stabilization",
+        "SANE exam (with consent)",
+        "STI testing",
+        "Ceftriaxone",
+        "Doxycycline",
+        "Metronidazole",
         "HIV PEP (if <72h)",
         "Hepatitis B vaccine",
-        "Crisis counseling + Safe discharge"
+        "Crisis counseling",
+        "Safe discharge"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",

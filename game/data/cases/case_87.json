@@ -6,7 +6,8 @@
   "confidence": "screenshot",
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Colonoscopy + biopsy",
+    "Colonoscopy",
+    "biopsy",
     "CBC / CRP / ESR / Fecal calprotectin",
     "p-ANCA",
     "5-ASA (Mesalamine)",
@@ -15,7 +16,8 @@
   ],
   "should_avoid": [],
   "rationale": {
-    "Colonoscopy + biopsy": "Continuous inflammation from rectum, crypt abscesses.",
+    "Colonoscopy": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Continuous inflammation from rectum, crypt abscesses.",
+    "biopsy": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Continuous inflammation from rectum, crypt abscesses.",
     "CBC / CRP / ESR / Fecal calprotectin": "Anemia, elevated inflammatory markers.",
     "p-ANCA": "Serologic marker — supports UC over Crohn's.",
     "5-ASA (Mesalamine)": "First-line for mild-mod UC. Topical + PO.",
@@ -44,9 +46,17 @@
   "distractors": [],
   "stacks": [
     {
-      "label": "Colonoscopy + biopsy",
+      "label": "Colonoscopy",
       "type": "correctlyOrdered",
-      "finding": "Continuous inflammation from rectum, crypt abscesses.",
+      "finding": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Continuous inflammation from rectum, crypt abscesses.",
+      "aliases": [
+        "Colonoscopy"
+      ]
+    },
+    {
+      "label": "biopsy",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Continuous inflammation from rectum, crypt abscesses.",
       "aliases": [
         "Colonoscopy"
       ]
@@ -95,7 +105,8 @@
     }
   ],
   "order_sets": [
-    "Colonoscopy + biopsy",
+    "Colonoscopy",
+    "biopsy",
     "CBC / CRP / ESR / Fecal calprotectin",
     "p-ANCA",
     "5-ASA (Mesalamine)",

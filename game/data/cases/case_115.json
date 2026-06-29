@@ -9,7 +9,8 @@
     "Vitals / Glucose / SpO2",
     "Verbal de-escalation",
     "PO Lorazepam / Olanzapine",
-    "IM Midazolam + Haloperidol (if severe)",
+    "Midazolam IM",
+    "Haloperidol IM",
     "CBC / BMP / Tox / CT head",
     "Psychiatry consult"
   ],
@@ -18,7 +19,8 @@
     "Vitals / Glucose / SpO2": "Rule out medical cause.",
     "Verbal de-escalation": "First-line. Safe, calm environment.",
     "PO Lorazepam / Olanzapine": "PO preferred. Lorazepam or olanzapine.",
-    "IM Midazolam + Haloperidol (if severe)": "If patient refuses PO.",
+    "Midazolam IM": "If patient refuses PO.",
+    "Haloperidol IM": "If patient refuses PO.",
     "CBC / BMP / Tox / CT head": "Rule out medical causes.",
     "Psychiatry consult": "Determine disposition."
   },
@@ -69,12 +71,21 @@
       ]
     },
     {
-      "label": "IM Midazolam + Haloperidol (if severe)",
+      "label": "Midazolam IM",
       "type": "correctlyOrdered",
       "finding": "If patient refuses PO.",
       "aliases": [
         "IM meds"
       ]
+    },
+    {
+      "label": "Haloperidol IM",
+      "type": "correctlyOrdered",
+      "finding": "If patient refuses PO.",
+      "aliases": [
+        "IM meds"
+      ],
+      "id": "-split-1"
     },
     {
       "label": "CBC / BMP / Tox / CT head",
@@ -97,7 +108,8 @@
     "Vitals / Glucose / SpO2",
     "Verbal de-escalation",
     "PO Lorazepam / Olanzapine",
-    "IM Midazolam + Haloperidol (if severe)",
+    "Midazolam IM",
+    "Haloperidol IM",
     "CBC / BMP / Tox / CT head",
     "Psychiatry consult"
   ],

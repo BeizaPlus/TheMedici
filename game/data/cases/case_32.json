@@ -23,7 +23,8 @@
     },
     "IV fluids (NS / LR)",
     "Diet, NPO",
-    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)",
+    "Ceftriaxone IV",
+    "Metronidazole IV",
     "Analgesia (Ketorolac / Morphine / Hydromorphone)",
     "Surgery consult / Laparoscopic cholecystectomy"
   ],
@@ -42,7 +43,8 @@
     "HIDA scan": "If US equivocal. Non-filling of gallbladder = cystic duct obstruction.",
     "IV fluids (NS / LR)": "Nausea/vomiting — IV hydration. NPO.",
     "Diet, NPO": "Bowel rest — patient will need surgery.",
-    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)": "Cover enteric gram-negatives + anaerobes.",
+    "Ceftriaxone IV": "Cover enteric gram-negatives + anaerobes.",
+    "Metronidazole IV": "Cover enteric gram-negatives + anaerobes.",
     "Analgesia (Ketorolac / Morphine / Hydromorphone)": "Pain management.",
     "Surgery consult / Laparoscopic cholecystectomy": "Definitive treatment within 24-72 hours.",
     "ER discharge without surgery consult": "Acute cholecystitis requires surgical admission and cholecystectomy within 24-72 hours. Discharge risks complications: gangrenous cholecystitis, perforation, sepsis."
@@ -177,7 +179,7 @@
       ]
     },
     {
-      "label": "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)",
+      "label": "Ceftriaxone IV",
       "type": "correctlyOrdered",
       "finding": "Cover enteric gram-negatives + anaerobes.",
       "aliases": [
@@ -185,6 +187,17 @@
         "Flagyl",
         "Zosyn"
       ]
+    },
+    {
+      "label": "Metronidazole IV",
+      "type": "correctlyOrdered",
+      "finding": "Cover enteric gram-negatives + anaerobes.",
+      "aliases": [
+        "Ceftriaxone",
+        "Flagyl",
+        "Zosyn"
+      ],
+      "id": "-split-1"
     },
     {
       "label": "Analgesia (Ketorolac / Morphine / Hydromorphone)",
@@ -222,7 +235,8 @@
     },
     "IV fluids (NS / LR)",
     "Diet, NPO",
-    "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)",
+    "Ceftriaxone IV",
+    "Metronidazole IV",
     "Analgesia (Ketorolac / Morphine / Hydromorphone)",
     "Surgery consult / Laparoscopic cholecystectomy"
   ],

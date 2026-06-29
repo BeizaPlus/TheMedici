@@ -21,6 +21,8 @@ import {
   setLastMode,
 } from '../data/caseProgress.js';
 
+import { isCaseCovered } from '../lib/caseCoverage.js';
+
 import {
   getReadyPracticeCases,
   getReadyPracticeCount,
@@ -187,7 +189,14 @@ export default function CaseBrowser({ onPlay, onBack, initialFilter = 'all' }) {
 
   const categoryCases = useMemo(() => {
     const inCat = getCasesInCategory(activeCategory);
-    return activeCategory === 'Uber Cases' ? inCat : withoutUberCases(inCat);
+    const filtered = activeCategory === 'Uber Cases' ? inCat : withoutUberCases(inCat);
+    // Sort unattempted cases first — same preference as global shuffle
+    return [...filtered].sort((a, b) => {
+      const aCovered = isCaseCovered(a.id) ? 1 : 0;
+      const bCovered = isCaseCovered(b.id) ? 1 : 0;
+      if (aCovered !== bCovered) return aCovered - bCovered;
+      return String(a.id).localeCompare(String(b.id), undefined, { numeric: true });
+    });
   }, [activeCategory]);
 
   const studyBatches = useMemo(() => buildStudyBatches(categoryCases), [categoryCases]);

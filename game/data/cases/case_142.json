@@ -9,7 +9,9 @@
     "Plasma amino acids",
     "Urine organic acids",
     "Glucose / BMP / ABG / Ammonia",
-    "Acute: stop protein + glucose + insulin",
+    "Acute: stop protein",
+    "Point-of-care Glucose",
+    "insulin",
     "Long-term: BCAA-restricted diet"
   ],
   "should_avoid": [],
@@ -17,7 +19,9 @@
     "Plasma amino acids": "Elevated leucine, isoleucine, valine.",
     "Urine organic acids": "Branched-chain ketoacids.",
     "Glucose / BMP / ABG / Ammonia": "Metabolic assessment.",
-    "Acute: stop protein + glucose + insulin": "Anabolic state. Dialysis if severe hyperleucinemia.",
+    "Acute: stop protein": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+    "Point-of-care Glucose": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+    "insulin": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
     "Long-term: BCAA-restricted diet": "Special formula. Metabolic genetics follow-up."
   },
   "hpi": "{{patient_name}} is a neonate presenting with seizures, poor feeding, vomiting, lethargy, and urine/cerumen that smells like maple syrup (burnt sugar). MSUD is an autosomal recessive inborn error of metabolism — deficiency of branched-chain alpha-ketoacid dehydrogenase complex → accumulation of branched-chain amino acids (leucine, isoleucine, valine) and their ketoacids. Leucine is neurotoxic → encephalopathy, seizures. Newborn screening detects elevated leucine. Diagnosis: plasma amino acids — markedly elevated leucine, isoleucine, valine. Urine organic acids: branched-chain ketoacids. During acute decompensation: remove leucine (dialysis if severe), provide calories (glucose + insulin to promote anabolism), correct electrolyte abnormalities. Long-term: dietary restriction of BCAAs with special formula, liver transplant for severe cases.",
@@ -66,9 +70,25 @@
       ]
     },
     {
-      "label": "Acute: stop protein + glucose + insulin",
+      "label": "Acute: stop protein",
       "type": "correctlyOrdered",
-      "finding": "Anabolic state. Dialysis if severe hyperleucinemia.",
+      "finding": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+      "aliases": [
+        "Acute management"
+      ]
+    },
+    {
+      "label": "Point-of-care Glucose",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+      "aliases": [
+        "Acute management"
+      ]
+    },
+    {
+      "label": "insulin",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
       "aliases": [
         "Acute management"
       ]
@@ -86,7 +106,9 @@
     "Plasma amino acids",
     "Urine organic acids",
     "Glucose / BMP / ABG / Ammonia",
-    "Acute: stop protein + glucose + insulin",
+    "Acute: stop protein",
+    "Point-of-care Glucose",
+    "insulin",
     "Long-term: BCAA-restricted diet"
   ],
   "complete": true,

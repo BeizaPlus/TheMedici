@@ -8,7 +8,8 @@
   "correct_orders": [
     "DRE",
     "PSA",
-    "TRUS + prostate biopsy",
+    "TRUS",
+    "prostate biopsy",
     "MRI prostate",
     "CT / Bone scan",
     "Refer urology / oncology"
@@ -17,7 +18,8 @@
   "rationale": {
     "DRE": "Hard, irregular, nodular prostate.",
     "PSA": "Elevated.",
-    "TRUS + prostate biopsy": "Definitive diagnosis. Gleason score.",
+    "TRUS": "[Auto-split from bundled label \"TRUS + prostate biopsy\"] Definitive diagnosis. Gleason score.",
+    "prostate biopsy": "[Auto-split from bundled label \"TRUS + prostate biopsy\"] Definitive diagnosis. Gleason score.",
     "MRI prostate": "Identify suspicious lesions.",
     "CT / Bone scan": "Staging — lymph nodes, bone mets.",
     "Refer urology / oncology": "Active surveillance vs surgery vs radiation."
@@ -60,9 +62,17 @@
       ]
     },
     {
-      "label": "TRUS + prostate biopsy",
+      "label": "TRUS",
       "type": "correctlyOrdered",
-      "finding": "Definitive diagnosis. Gleason score.",
+      "finding": "[Auto-split from bundled label \"TRUS + prostate biopsy\"] Definitive diagnosis. Gleason score.",
+      "aliases": [
+        "Prostate biopsy"
+      ]
+    },
+    {
+      "label": "prostate biopsy",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"TRUS + prostate biopsy\"] Definitive diagnosis. Gleason score.",
       "aliases": [
         "Prostate biopsy"
       ]
@@ -95,7 +105,8 @@
   "order_sets": [
     "DRE",
     "PSA",
-    "TRUS + prostate biopsy",
+    "TRUS",
+    "prostate biopsy",
     "MRI prostate",
     "CT / Bone scan",
     "Refer urology / oncology"

@@ -12,9 +12,16 @@
       },
       {
         "id": "iv",
-        "label": "IV Access + Fluids",
-        "correct_zone": "zone-iv-bag",
+        "label": "IV access peripheral",
+        "correct_zone": "zone-arm",
         "why": "Two large-bore if shock.",
+        "guideline": "ATLS"
+      },
+      {
+        "id": "iv-fluids",
+        "label": "IV Fluids",
+        "correct_zone": "zone-iv-bag",
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
         "guideline": "ATLS"
       },
       {
@@ -61,7 +68,14 @@
         },
         {
           "id": "troponin",
-          "label": "Troponin + BMP",
+          "label": "Troponin",
+          "correct_zone": "zone-blood",
+          "why": "Baseline and trend. Risk-stratify with ECG.",
+          "guideline": "ACC/AHA"
+        },
+        {
+          "id": "troponin-split-1",
+          "label": "BMP",
           "correct_zone": "zone-blood",
           "why": "Baseline and trend. Risk-stratify with ECG.",
           "guideline": "ACC/AHA"
@@ -144,7 +158,28 @@
         },
         {
           "id": "labs",
-          "label": "BMP · CBC · UA · Tox",
+          "label": "BMP",
+          "correct_zone": "zone-blood",
+          "why": "Infection, uremia, electrolytes, overdose.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "labs-split-1",
+          "label": "CBC",
+          "correct_zone": "zone-blood",
+          "why": "Infection, uremia, electrolytes, overdose.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "labs-split-2",
+          "label": "Urinalysis",
+          "correct_zone": "zone-blood",
+          "why": "Infection, uremia, electrolytes, overdose.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "labs-split-3",
+          "label": "Toxicology Screen",
           "correct_zone": "zone-blood",
           "why": "Infection, uremia, electrolytes, overdose.",
           "guideline": "ACEP"
@@ -199,9 +234,16 @@
         },
         {
           "id": "iv",
-          "label": "IV Access + Type & Screen",
-          "correct_zone": "zone-iv-bag",
+          "label": "IV access peripheral",
+          "correct_zone": "zone-arm",
           "why": "Two large-bore if unstable or rupture concern.",
+          "guideline": "ATLS"
+        },
+        {
+          "id": "type-screen",
+          "label": "Type & Screen",
+          "correct_zone": "zone-blood",
+          "why": "Prepare for potential transfusion if ruptured ectopic.",
           "guideline": "ACOG"
         },
         {
@@ -226,14 +268,42 @@
       "interventions": [
         {
           "id": "iv",
-          "label": "IV Fluids + NPO",
+          "label": "IV Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Resuscitate before imaging if hypotensive.",
+          "guideline": "ACS"
+        },
+        {
+          "id": "iv-split-1",
+          "label": "NPO",
           "correct_zone": "zone-iv-bag",
           "why": "Resuscitate before imaging if hypotensive.",
           "guideline": "ACS"
         },
         {
           "id": "labs",
-          "label": "CBC · Lipase · LFTs · UA",
+          "label": "CBC",
+          "correct_zone": "zone-blood",
+          "why": "Narrow differential: biliary, pancreatic, UTI, medical.",
+          "guideline": "ACS"
+        },
+        {
+          "id": "labs-split-1",
+          "label": "Lipase",
+          "correct_zone": "zone-blood",
+          "why": "Narrow differential: biliary, pancreatic, UTI, medical.",
+          "guideline": "ACS"
+        },
+        {
+          "id": "labs-split-2",
+          "label": "LFTs",
+          "correct_zone": "zone-blood",
+          "why": "Narrow differential: biliary, pancreatic, UTI, medical.",
+          "guideline": "ACS"
+        },
+        {
+          "id": "labs-split-3",
+          "label": "Urinalysis",
           "correct_zone": "zone-blood",
           "why": "Narrow differential: biliary, pancreatic, UTI, medical.",
           "guideline": "ACS"
@@ -308,16 +378,30 @@
       "interventions": [
         {
           "id": "monitor",
-          "label": "Cardiac Monitor + Continuous vitals",
+          "label": "Cardiac Monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Track hemodynamics and oxygenation while evaluating AMS or acute cognitive change.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "monitor-split-1",
+          "label": "Continuous vitals monitoring",
           "correct_zone": "zone-monitor",
           "why": "Track hemodynamics and oxygenation while evaluating AMS or acute cognitive change.",
           "guideline": "ACEP"
         },
         {
           "id": "iv",
-          "label": "IV Access + fluids",
-          "correct_zone": "zone-iv-bag",
+          "label": "IV access peripheral",
+          "correct_zone": "zone-arm",
           "why": "Resuscitate and allow medication administration during the workup.",
+          "guideline": "ATLS"
+        },
+        {
+          "id": "iv-fluids-ams",
+          "label": "IV Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Crystalloid bolus if hypotensive or volume-depleted.",
           "guideline": "ATLS"
         },
         {
@@ -343,7 +427,42 @@
         },
         {
           "id": "labs",
-          "label": "BMP · CBC · TSH · B12 · RPR · Tox screen",
+          "label": "BMP",
+          "correct_zone": "zone-blood",
+          "why": "Metabolic, infectious, endocrine, nutritional, and toxic causes of memory change.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "labs-split-1",
+          "label": "CBC",
+          "correct_zone": "zone-blood",
+          "why": "Metabolic, infectious, endocrine, nutritional, and toxic causes of memory change.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "labs-split-2",
+          "label": "TSH",
+          "correct_zone": "zone-blood",
+          "why": "Metabolic, infectious, endocrine, nutritional, and toxic causes of memory change.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "labs-split-3",
+          "label": "B12",
+          "correct_zone": "zone-blood",
+          "why": "Metabolic, infectious, endocrine, nutritional, and toxic causes of memory change.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "labs-split-4",
+          "label": "RPR",
+          "correct_zone": "zone-blood",
+          "why": "Metabolic, infectious, endocrine, nutritional, and toxic causes of memory change.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "labs-split-5",
+          "label": "Toxicology Screen",
           "correct_zone": "zone-blood",
           "why": "Metabolic, infectious, endocrine, nutritional, and toxic causes of memory change.",
           "guideline": "ACEP"
@@ -357,7 +476,14 @@
         },
         {
           "id": "neuro-consult",
-          "label": "Neurology Consult + Admit",
+          "label": "Neurology Consult",
+          "correct_zone": "zone-icu",
+          "why": "Progressive or unexplained cognitive decline needs inpatient evaluation and safety planning.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "neuro-consult-split-1",
+          "label": "Admission",
           "correct_zone": "zone-icu",
           "why": "Progressive or unexplained cognitive decline needs inpatient evaluation and safety planning.",
           "guideline": "ACEP"
@@ -411,14 +537,28 @@
       "interventions": [
         {
           "id": "glucose",
-          "label": "Glucose · BMP",
+          "label": "Point-of-care Glucose",
+          "correct_zone": "zone-blood",
+          "why": "Hypo/hyperkalemia, hypercalcemia, hypoglycemia.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "glucose-split-1",
+          "label": "BMP",
           "correct_zone": "zone-blood",
           "why": "Hypo/hyperkalemia, hypercalcemia, hypoglycemia.",
           "guideline": "ACEP"
         },
         {
           "id": "ekg",
-          "label": "ECG + Monitor",
+          "label": "ECG",
+          "correct_zone": "zone-monitor",
+          "why": "HyperK causes weakness and arrhythmia.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "ekg-split-1",
+          "label": "Cardiac Monitor",
           "correct_zone": "zone-monitor",
           "why": "HyperK causes weakness and arrhythmia.",
           "guideline": "ACEP"
@@ -452,7 +592,14 @@
       "interventions": [
         {
           "id": "ua",
-          "label": "Urinalysis + Culture",
+          "label": "Urinalysis",
+          "correct_zone": "zone-blood",
+          "why": "Culture guides therapy; send before antibiotics if stable.",
+          "guideline": "IDSA"
+        },
+        {
+          "id": "ua-split-1",
+          "label": "Culture",
           "correct_zone": "zone-blood",
           "why": "Culture guides therapy; send before antibiotics if stable.",
           "guideline": "IDSA"
@@ -500,14 +647,35 @@
         },
         {
           "id": "cxr",
-          "label": "CXR + ECG",
+          "label": "Chest X-ray",
+          "correct_zone": "zone-monitor",
+          "why": "PE, pneumothorax, CHF, pneumonia patterns.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "cxr-split-1",
+          "label": "ECG",
           "correct_zone": "zone-monitor",
           "why": "PE, pneumothorax, CHF, pneumonia patterns.",
           "guideline": "ACEP"
         },
         {
           "id": "d-dimer",
-          "label": "BNP · D-dimer · ABG",
+          "label": "BNP",
+          "correct_zone": "zone-blood",
+          "why": "PE workup, CHF, CO₂ retention in COPD.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "d-dimer-split-1",
+          "label": "D-Dimer",
+          "correct_zone": "zone-blood",
+          "why": "PE workup, CHF, CO₂ retention in COPD.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "d-dimer-split-2",
+          "label": "ABG",
           "correct_zone": "zone-blood",
           "why": "PE workup, CHF, CO₂ retention in COPD.",
           "guideline": "ACEP"
@@ -593,7 +761,14 @@
         },
         {
           "id": "antibiotics",
-          "label": "Vanc + Pip-Tazo",
+          "label": "Vancomycin IV",
+          "correct_zone": "zone-arm",
+          "why": "Broad spectrum within 1 hour.",
+          "guideline": "SSC 2021"
+        },
+        {
+          "id": "antibiotics-split-1",
+          "label": "Piperacillin-tazobactam IV",
           "correct_zone": "zone-arm",
           "why": "Broad spectrum within 1 hour.",
           "guideline": "SSC 2021"
@@ -620,21 +795,49 @@
       "interventions": [
         {
           "id": "monitor",
-          "label": "Cardiac Monitor + Pulse ox",
+          "label": "Cardiac Monitor",
+          "correct_zone": "zone-monitor",
+          "why": "Continuous vitals in a potentially septic infant.",
+          "guideline": "AAP"
+        },
+        {
+          "id": "monitor-split-1",
+          "label": "Pulse oximetry",
           "correct_zone": "zone-monitor",
           "why": "Continuous vitals in a potentially septic infant.",
           "guideline": "AAP"
         },
         {
           "id": "iv",
-          "label": "IV Access + Fluids",
-          "correct_zone": "zone-iv-bag",
+          "label": "IV access peripheral",
+          "correct_zone": "zone-arm",
           "why": "Maintain perfusion while workup proceeds.",
           "guideline": "PALS"
         },
         {
+          "id": "iv-fluids-peds",
+          "label": "IV Fluids",
+          "correct_zone": "zone-iv-bag",
+          "why": "Pediatric resuscitation — 10-20 mL/kg isotonic crystalloid bolus.",
+          "guideline": "PALS"
+        },
+        {
           "id": "labs",
-          "label": "Stat Labs (CBC, BMP, glucose)",
+          "label": "CBC",
+          "correct_zone": "zone-blood",
+          "why": "Screen for dehydration, infection, and metabolic derangement.",
+          "guideline": "AAP"
+        },
+        {
+          "id": "labs-split-1",
+          "label": "BMP",
+          "correct_zone": "zone-blood",
+          "why": "Screen for dehydration, infection, and metabolic derangement.",
+          "guideline": "AAP"
+        },
+        {
+          "id": "labs-split-2",
+          "label": "Point-of-care Glucose",
           "correct_zone": "zone-blood",
           "why": "Screen for dehydration, infection, and metabolic derangement.",
           "guideline": "AAP"
@@ -648,7 +851,14 @@
         },
         {
           "id": "ua",
-          "label": "Urinalysis + Culture",
+          "label": "Urinalysis",
+          "correct_zone": "zone-blood",
+          "why": "UTI is a common occult source in poor feeding and fever.",
+          "guideline": "AAP"
+        },
+        {
+          "id": "ua-split-1",
+          "label": "Culture",
           "correct_zone": "zone-blood",
           "why": "UTI is a common occult source in poor feeding and fever.",
           "guideline": "AAP"
@@ -662,7 +872,14 @@
         },
         {
           "id": "antipyretic",
-          "label": "Antipyretic + Comfort care",
+          "label": "Antipyretic",
+          "correct_zone": "zone-arm",
+          "why": "Treat fever while avoiding premature closure on sepsis.",
+          "guideline": "AAP"
+        },
+        {
+          "id": "antipyretic-split-1",
+          "label": "Comfort care",
           "correct_zone": "zone-arm",
           "why": "Treat fever while avoiding premature closure on sepsis.",
           "guideline": "AAP"
@@ -678,8 +895,8 @@
     }
   },
   "casePlaybooks": {
+    "143": "Poor Feeding",
     "_comment": "Map CCS case id → presentation key. Example: \"023\": \"Sepsis\"",
-    "073": "Memory Loss",
-    "143": "Poor Feeding"
+    "073": "Memory Loss"
   }
 }

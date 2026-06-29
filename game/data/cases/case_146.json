@@ -8,14 +8,16 @@
   "correct_orders": [
     "ABG / Lactate / BMP",
     "Hydroxocobalamin IV",
-    "100% O2 + supportive care",
+    "100% O2",
+    "Supportive care",
     "Admit to ICU"
   ],
   "should_avoid": [],
   "rationale": {
     "ABG / Lactate / BMP": "High AG metabolic acidosis, elevated lactate.",
     "Hydroxocobalamin IV": "First-line. Binds cyanide.",
-    "100% O2 + supportive care": "Maximize O2 delivery.",
+    "100% O2": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
+    "Supportive care": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
     "Admit to ICU": "Critical care monitoring."
   },
   "hpi": "{{patient_name}} presents found unconscious with cherry-red skin, bitter almond breath odor (only 40% can detect), high anion gap metabolic acidosis, and elevated lactate. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks oxidative phosphorylation → cells cannot use oxygen → tissue hypoxia despite normal PaO2 → anaerobic metabolism → lactic acidosis. Sources: smoke inhalation (burning plastics/wool), industrial exposure, sodium nitroprusside infusion. Treatment: hydroxocobalamin (Cyanokit — first-line, binds cyanide to form cyanocobalamin which is renally excreted). Alternative: sodium nitrite + sodium thiosulfate (older regimen, risk of methemoglobinemia). Supportive: 100% oxygen, airway management, IVF, vasopressors if needed. Admit to ICU.",
@@ -56,9 +58,17 @@
       ]
     },
     {
-      "label": "100% O2 + supportive care",
+      "label": "100% O2",
       "type": "correctlyOrdered",
-      "finding": "Maximize O2 delivery.",
+      "finding": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
+      "aliases": [
+        "O2"
+      ]
+    },
+    {
+      "label": "Supportive care",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
       "aliases": [
         "O2"
       ]
@@ -75,7 +85,8 @@
   "order_sets": [
     "ABG / Lactate / BMP",
     "Hydroxocobalamin IV",
-    "100% O2 + supportive care",
+    "100% O2",
+    "Supportive care",
     "Admit to ICU"
   ],
   "complete": true,

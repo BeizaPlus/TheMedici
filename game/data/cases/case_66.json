@@ -8,7 +8,8 @@
   "correct_orders": [
     "Physical Exam: Chest / Lungs",
     "Chest X-ray",
-    "Sputum AFB smear + culture",
+    "Sputum AFB smear",
+    "Culture",
     "NAAT (PCR) for TB",
     "IGRA / PPD",
     "CBC / BMP / LFTs",
@@ -21,7 +22,8 @@
   "rationale": {
     "Physical Exam: Chest / Lungs": "Apical crackles.",
     "Chest X-ray": "Apical infiltrates ± cavitary lesions.",
-    "Sputum AFB smear + culture": "AFB positive. Culture = gold standard.",
+    "Sputum AFB smear": "[Auto-split from bundled label \"Sputum AFB smear + culture\"] AFB positive. Culture = gold standard.",
+    "Culture": "[Auto-split from bundled label \"Sputum AFB smear + culture\"] AFB positive. Culture = gold standard.",
     "NAAT (PCR) for TB": "Rapid confirmation + rifampin resistance.",
     "IGRA / PPD": "Positive in active + latent TB.",
     "CBC / BMP / LFTs": "Baseline before RIPE.",
@@ -68,9 +70,18 @@
       ]
     },
     {
-      "label": "Sputum AFB smear + culture",
+      "label": "Sputum AFB smear",
       "type": "correctlyOrdered",
-      "finding": "AFB positive. Culture = gold standard.",
+      "finding": "[Auto-split from bundled label \"Sputum AFB smear + culture\"] AFB positive. Culture = gold standard.",
+      "aliases": [
+        "AFB",
+        "TB culture"
+      ]
+    },
+    {
+      "label": "Culture",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Sputum AFB smear + culture\"] AFB positive. Culture = gold standard.",
       "aliases": [
         "AFB",
         "TB culture"
@@ -136,7 +147,8 @@
   "order_sets": [
     "Physical Exam: Chest / Lungs",
     "Chest X-ray",
-    "Sputum AFB smear + culture",
+    "Sputum AFB smear",
+    "Culture",
     "NAAT (PCR) for TB",
     "IGRA / PPD",
     "CBC / BMP / LFTs",

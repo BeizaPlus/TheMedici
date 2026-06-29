@@ -7,24 +7,28 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "FSH/LH",
-    "Testosterone (free + total) / DHEA-S",
+    "Testosterone (free + total)",
+    "DHEA-S",
     "17-OH progesterone",
     "TSH / Prolactin",
     "Pelvic US",
     "Glucose / HbA1c / OGTT",
-    "Weight loss + lifestyle",
+    "Weight loss",
+    "lifestyle",
     "Combined OCPs",
     "Metformin"
   ],
   "should_avoid": [],
   "rationale": {
     "FSH/LH": "LH:FSH >2:1 supports PCOS.",
-    "Testosterone (free + total) / DHEA-S": "Elevated androgens.",
+    "Testosterone (free + total)": "Elevated androgens.",
+    "DHEA-S": "Elevated androgens.",
     "17-OH progesterone": "Rule out late-onset CAH.",
     "TSH / Prolactin": "Rule out thyroid, prolactin causes.",
     "Pelvic US": "Polycystic ovaries — ≥12 follicles.",
     "Glucose / HbA1c / OGTT": "Screen for insulin resistance/DM.",
-    "Weight loss + lifestyle": "First-line. Improves all parameters.",
+    "Weight loss": "[Auto-split from bundled label \"Weight loss + lifestyle\"] First-line. Improves all parameters.",
+    "lifestyle": "[Auto-split from bundled label \"Weight loss + lifestyle\"] First-line. Improves all parameters.",
     "Combined OCPs": "Regulate cycles, reduce hyperandrogenism.",
     "Metformin": "Insulin sensitizer."
   },
@@ -59,12 +63,21 @@
       ]
     },
     {
-      "label": "Testosterone (free + total) / DHEA-S",
+      "label": "Testosterone (free + total)",
       "type": "correctlyOrdered",
       "finding": "Elevated androgens.",
       "aliases": [
         "Androgens"
       ]
+    },
+    {
+      "label": "DHEA-S",
+      "type": "correctlyOrdered",
+      "finding": "Elevated androgens.",
+      "aliases": [
+        "Androgens"
+      ],
+      "id": "-split-1"
     },
     {
       "label": "17-OH progesterone",
@@ -99,9 +112,17 @@
       ]
     },
     {
-      "label": "Weight loss + lifestyle",
+      "label": "Weight loss",
       "type": "correctlyOrdered",
-      "finding": "First-line. Improves all parameters.",
+      "finding": "[Auto-split from bundled label \"Weight loss + lifestyle\"] First-line. Improves all parameters.",
+      "aliases": [
+        "Weight loss"
+      ]
+    },
+    {
+      "label": "lifestyle",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Weight loss + lifestyle\"] First-line. Improves all parameters.",
       "aliases": [
         "Weight loss"
       ]
@@ -125,12 +146,14 @@
   ],
   "order_sets": [
     "FSH/LH",
-    "Testosterone (free + total) / DHEA-S",
+    "Testosterone (free + total)",
+    "DHEA-S",
     "17-OH progesterone",
     "TSH / Prolactin",
     "Pelvic US",
     "Glucose / HbA1c / OGTT",
-    "Weight loss + lifestyle",
+    "Weight loss",
+    "lifestyle",
     "Combined OCPs",
     "Metformin"
   ],

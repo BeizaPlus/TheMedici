@@ -16,7 +16,8 @@
     "Echocardiogram",
     "MRI brain with DWI",
     "CBC / BMP / Lipids / HbA1c",
-    "Aspirin + Clopidogrel (DAPT x21d)",
+    "Aspirin",
+    "Clopidogrel",
     "High-intensity statin (Atorvastatin 80mg)",
     "Admit for expedited TIA workup"
   ],
@@ -32,7 +33,8 @@
     "Echocardiogram": "Cardioembolic source.",
     "MRI brain with DWI": "May show small infarcts.",
     "CBC / BMP / Lipids / HbA1c": "Risk factor assessment.",
-    "Aspirin + Clopidogrel (DAPT x21d)": "Dual antiplatelet for 21 days then single agent.",
+    "Aspirin": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
+    "Clopidogrel": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
     "High-intensity statin (Atorvastatin 80mg)": "Aggressive LDL lowering.",
     "Admit for expedited TIA workup": "High stroke risk in first 48h."
   },
@@ -138,9 +140,18 @@
       ]
     },
     {
-      "label": "Aspirin + Clopidogrel (DAPT x21d)",
+      "label": "Aspirin",
       "type": "correctlyOrdered",
-      "finding": "Dual antiplatelet for 21 days then single agent.",
+      "finding": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
+      "aliases": [
+        "ASA",
+        "Plavix"
+      ]
+    },
+    {
+      "label": "Clopidogrel",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
       "aliases": [
         "ASA",
         "Plavix"
@@ -174,7 +185,8 @@
     "Echocardiogram",
     "MRI brain with DWI",
     "CBC / BMP / Lipids / HbA1c",
-    "Aspirin + Clopidogrel (DAPT x21d)",
+    "Aspirin",
+    "Clopidogrel",
     "High-intensity statin (Atorvastatin 80mg)",
     "Admit for expedited TIA workup"
   ],

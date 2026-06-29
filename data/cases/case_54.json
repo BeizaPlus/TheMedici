@@ -1,1 +1,108 @@
-{"id":54,"topic":"Yellow Baby","title":"Yellow Baby","diagnosis":"Breastfeeding Neonatal Jaundice (Unconjugated Hyperbilirubinemia)","hpi_narrative":"{{patient_name}} is a term newborn presenting with jaundice appearing after day 3-5 of life, clinically well-appearing, feeding well, gaining weight appropriately. Breastfeeding jaundice is the most common cause of prolonged neonatal unconjugated hyperbilirubinemia. Pathophysiology: inadequate breastfeeding intake → decreased stooling → increased enterohepatic circulation of bilirubin. Must distinguish from pathologic causes: hemolysis (ABO/Rh incompatibility, G6PD deficiency), sepsis, biliary atresia (conjugated), hypothyroidism. Key labs: total and direct bilirubin (unconjugated > conjugated by definition), CBC with reticulocyte count (anemia? hemolysis?), direct Coombs (immune hemolysis), G6PD screen. Plot on Bhutani nomogram for phototherapy threshold. Management: optimize breastfeeding (increase frequency, lactation consultation). Phototherapy if bilirubin exceeds threshold for gestational age and risk factors. Exchange transfusion if signs of bilirubin encephalopathy or failed phototherapy.","chief_complaint":"Jaundice in otherwise well-appearing term newborn","patient":null,"patient_name":"Dela Klu","patient_sex":"male","location":"Office","specialty":"Pediatrics / Neonatology","stacks":[{"label":"Physical Exam: Abdomen","type":"shouldHaveOrdered","finding":"Full exam — assess for hepatosplenomegaly.","aliases":["Abdominal Exam"]},{"label":"CBC with differential + reticulocyte count","type":"shouldHaveOrdered","finding":"Rule out hemolysis. Normal Hb = breastfeeding jaundice.","aliases":["CBC"]},{"label":"Total + direct bilirubin","type":"shouldHaveOrdered","finding":"Unconjugated > conjugated. Plot on Bhutani nomogram.","aliases":["Bilirubin"]},{"label":"Direct Coombs test","type":"shouldHaveOrdered","finding":"Rule out immune-mediated hemolysis (ABO/Rh incompatibility).","aliases":["DAT","Coombs"]},{"label":"G6PD screen","type":"optional","finding":"Unconjugated hyperbilirubinemia — G6PD screening suggested.","aliases":["G6PD"]},{"label":"TSH","type":"correctlyOrdered","finding":"Congenital hypothyroidism causes prolonged jaundice.","aliases":["TSH"]},{"label":"Optimize breastfeeding / Lactation consultation","type":"correctlyOrdered","finding":"Increase feeding frequency. Improve milk transfer.","aliases":["Lactation consult"]},{"label":"Phototherapy (if exceeds Bhutani threshold)","type":"correctlyOrdered","finding":"Per Bhutani nomogram for GA and risk factors.","aliases":["Bili lights"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 54,
+  "topic": "Yellow Baby",
+  "title": "Yellow Baby",
+  "diagnosis": "Breastfeeding Neonatal Jaundice (Unconjugated Hyperbilirubinemia)",
+  "hpi_narrative": "{{patient_name}} is a term newborn presenting with jaundice appearing after day 3-5 of life, clinically well-appearing, feeding well, gaining weight appropriately. Breastfeeding jaundice is the most common cause of prolonged neonatal unconjugated hyperbilirubinemia. Pathophysiology: inadequate breastfeeding intake → decreased stooling → increased enterohepatic circulation of bilirubin. Must distinguish from pathologic causes: hemolysis (ABO/Rh incompatibility, G6PD deficiency), sepsis, biliary atresia (conjugated), hypothyroidism. Key labs: total and direct bilirubin (unconjugated > conjugated by definition), CBC with reticulocyte count (anemia? hemolysis?), direct Coombs (immune hemolysis), G6PD screen. Plot on Bhutani nomogram for phototherapy threshold. Management: optimize breastfeeding (increase frequency, lactation consultation). Phototherapy if bilirubin exceeds threshold for gestational age and risk factors. Exchange transfusion if signs of bilirubin encephalopathy or failed phototherapy.",
+  "chief_complaint": "Jaundice in otherwise well-appearing term newborn",
+  "patient": null,
+  "patient_name": "Dela Klu",
+  "patient_sex": "male",
+  "location": "Office",
+  "specialty": "Pediatrics / Neonatology",
+  "stacks": [
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Full exam — assess for hepatosplenomegaly.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Reticulocyte count",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Total bilirubin",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"Total + direct bilirubin\"] Unconjugated > conjugated. Plot on Bhutani nomogram.",
+      "aliases": [
+        "Bilirubin"
+      ]
+    },
+    {
+      "label": "Direct bilirubin",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"Total + direct bilirubin\"] Unconjugated > conjugated. Plot on Bhutani nomogram.",
+      "aliases": [
+        "Bilirubin"
+      ]
+    },
+    {
+      "label": "Direct Coombs test",
+      "type": "shouldHaveOrdered",
+      "finding": "Rule out immune-mediated hemolysis (ABO/Rh incompatibility).",
+      "aliases": [
+        "DAT",
+        "Coombs"
+      ]
+    },
+    {
+      "label": "G6PD screen",
+      "type": "optional",
+      "finding": "Unconjugated hyperbilirubinemia — G6PD screening suggested.",
+      "aliases": [
+        "G6PD"
+      ]
+    },
+    {
+      "label": "TSH",
+      "type": "correctlyOrdered",
+      "finding": "Congenital hypothyroidism causes prolonged jaundice.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "Optimize breastfeeding / Lactation consultation",
+      "type": "correctlyOrdered",
+      "finding": "Increase feeding frequency. Improve milk transfer.",
+      "aliases": [
+        "Lactation consult"
+      ]
+    },
+    {
+      "label": "Phototherapy (if exceeds Bhutani threshold)",
+      "type": "correctlyOrdered",
+      "finding": "Per Bhutani nomogram for GA and risk factors.",
+      "aliases": [
+        "Bili lights"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 93,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}

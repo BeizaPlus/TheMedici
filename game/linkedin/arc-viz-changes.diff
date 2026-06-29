@@ -1,0 +1,141 @@
+--- arc-viz.html
++++ arc-viz.html
+@@
+-  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+-  .topbar-actions { display: flex; align-items: center; gap: 10px; }
++  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; gap: 16px; flex-wrap: wrap; }
++  .topbar-left, .topbar-right { display: flex; align-items: center; gap: 10px; }
++  .topbar-left { flex: 1 1 auto; min-width: 0; }
++  .topbar-left h1 { font-size: 19px; font-weight: 500; letter-spacing: -0.01em; margin-right: 12px; white-space: nowrap; }
++  .topbar-right { justify-content: flex-end; flex: 0 1 auto; flex-wrap: wrap; }
++  .topbar-actions { display: none; }
+@@
+-  <div class="topbar">
+-    <div class="topbar-left">
+-      <h1>MeWorld · Content Arc</h1>
+-      <button class="chip" id="btn-mic" onclick="toggleMic()" title="Speech-to-text — read aloud to transcribe">
+-        <svg id="mic-idle" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg>
+-        <svg id="mic-rec" viewBox="0 0 24 24" fill="none" stroke-width="1.5" style="display:none"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+-        Read
+-      </button>
+-    </div>
+-    <div class="topbar-right">
+-      <button class="chip active" id="btn-story" onclick="toggleSpine()" title="Toggle floating spine panel">
+-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M4 6h16M4 12h10M4 18h8"/></svg>
+-        Spine
+-      </button>
+-      <button class="chip active" id="btn-reader" onclick="toggleReader()" title="Toggle post reader">
+-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+-        Post
+-      </button>
+-      <button class="chip active" id="btn-timeline" onclick="toggleTimeline()" title="Toggle floating timeline panel">
+-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="1.5"/><circle cx="19" cy="7" r="1.5"/><circle cx="8" cy="19" r="1.5"/></svg>
+-        Map
+-      </button>
+-      <button class="chip" id="btn-takes" onclick="toggleTakes()" title="Toggle floating takes panel">
+-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+-        Takes
+-      </button>
+-      <div class="fs-chip" id="fs-chip">
+-        <button class="fs-btn" onclick="changeFontSize(-1)" title="Smaller text">A-</button>
+-        <span class="fs-val" id="fs-val">17</span>
+-        <button class="fs-btn" onclick="changeFontSize(1)" title="Larger text">A+</button>
+-      </div>
+-      <button class="chip" id="btn-theme" onclick="toggleTheme()" title="Toggle light/dark mode">
+-        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+-        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+-      </button>
+-      <button class="chip" onclick="exportTakes()" title="Save all transcripts as JSON">
+-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+-        Save JSON
+-      </button>
+-      <button class="chip" onclick="saveAllAudio()" title="Download all recorded audio as .webm files">
+-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>
+-        Save Audio
+-      </button>
+-      <button class="chip" onclick="importTakes()" title="Import takes from JSON file">
+-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+-        Import
+-      </button>
+-    </div>
+-  </div>
++  <div class="topbar">
++    <div class="topbar-left">
++      <h1>MeWorld · Content Arc</h1>
++      <button class="chip" id="btn-mic" onclick="toggleMic()" title="Speech-to-text — read aloud to transcribe">
++        <svg id="mic-idle" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg>
++        <svg id="mic-rec" viewBox="0 0 24 24" fill="none" stroke-width="1.5" style="display:none"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
++        Read
++      </button>
++    </div>
++    <div class="topbar-right">
++      <button class="chip active" id="btn-story" onclick="toggleSpine()" title="Toggle floating spine panel">
++        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M4 6h16M4 12h10M4 18h8"/></svg>
++        Spine
++      </button>
++      <button class="chip active" id="btn-reader" onclick="toggleReader()" title="Toggle post reader">
++        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>
++        Post
++      </button>
++      <button class="chip active" id="btn-timeline" onclick="toggleTimeline()" title="Toggle floating timeline panel">
++        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="1.5"/><circle cx="19" cy="7" r="1.5"/><circle cx="8" cy="19" r="1.5"/></svg>
++        Map
++      </button>
++      <button class="chip" id="btn-takes" onclick="toggleTakes()" title="Toggle floating takes panel">
++        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
++        Takes
++      </button>
++      <div class="fs-chip" id="fs-chip">
++        <button class="fs-btn" onclick="changeFontSize(-1)" title="Smaller text">A-</button>
++        <span class="fs-val" id="fs-val">17</span>
++        <button class="fs-btn" onclick="changeFontSize(1)" title="Larger text">A+</button>
++      </div>
++      <button class="chip" id="btn-theme" onclick="toggleTheme()" title="Toggle light/dark mode">
++        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
++        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
++      </button>
++      <button class="chip" onclick="exportTakes()" title="Save all transcripts as JSON">
++        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
++        Save JSON
++      </button>
++      <button class="chip" onclick="saveAllAudio()" title="Download all recorded audio as .webm files">
++        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>
++        Save Audio
++      </button>
++      <button class="chip" onclick="importTakes()" title="Import takes from JSON file">
++        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
++        Import
++      </button>
++    </div>
++  </div>
+
+--- arc-viz.html
++++ arc-viz.html
+@@
+-function renderTakes() {
+-  const panel = g("takes-panel"), list = g("takes-list"), countEl = g("takes-count");
+-  const takes = speechTakes[current] || [];
+-  const hasTakes = takes.length > 0;
+-  const minBtn = g("takes-min-btn");
+-
+-  // always sync visibility from takesOpen flag
+-  if (takesOpen) panel.classList.add("visible");
+-  else panel.classList.remove("visible");
+-
+-  // sync minimized state from variable
+-  if (takesMinimized) { panel.classList.add("minimized"); if (minBtn) minBtn.textContent = "+"; }
+-  else { panel.classList.remove("minimized"); if (minBtn) minBtn.textContent = "−"; }
+-
+-  syncTakesChip();
++function renderTakes() {
++  const panel = g("takes-panel"), list = g("takes-list"), countEl = g("takes-count");
++  const takes = speechTakes[current] || [];
++  const hasTakes = takes.length > 0;
++  const minBtn = g("takes-min-btn");
++
++  // always sync visibility and minimized state from the current flags
++  panel.classList.toggle("visible", takesOpen);
++  panel.classList.toggle("minimized", takesMinimized);
++  if (minBtn) minBtn.textContent = takesMinimized ? "+" : "−";
++
++  syncTakesChip();

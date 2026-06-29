@@ -7,14 +7,16 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "24h urine volume / Serum & urine osmolality",
-    "Water deprivation test + DDAVP",
+    "Water deprivation test",
+    "DDAVP",
     "MRI pituitary (if central)",
     "Desmopressin (DDAVP)"
   ],
   "should_avoid": [],
   "rationale": {
     "24h urine volume / Serum & urine osmolality": "Dilute urine <300, high serum osmo, hyperNa.",
-    "Water deprivation test + DDAVP": "Central DI: responds to DDAVP (>50% rise in Uosm).",
+    "Water deprivation test": "[Auto-split from bundled label \"Water deprivation test + DDAVP\"] Central DI: responds to DDAVP (>50% rise in Uosm).",
+    "DDAVP": "[Auto-split from bundled label \"Water deprivation test + DDAVP\"] Central DI: responds to DDAVP (>50% rise in Uosm).",
     "MRI pituitary (if central)": "Look for pituitary/hypothalamic lesion.",
     "Desmopressin (DDAVP)": "Central DI treatment."
   },
@@ -48,9 +50,17 @@
       ]
     },
     {
-      "label": "Water deprivation test + DDAVP",
+      "label": "Water deprivation test",
       "type": "correctlyOrdered",
-      "finding": "Central DI: responds to DDAVP (>50% rise in Uosm).",
+      "finding": "[Auto-split from bundled label \"Water deprivation test + DDAVP\"] Central DI: responds to DDAVP (>50% rise in Uosm).",
+      "aliases": [
+        "Water deprivation test"
+      ]
+    },
+    {
+      "label": "DDAVP",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Water deprivation test + DDAVP\"] Central DI: responds to DDAVP (>50% rise in Uosm).",
       "aliases": [
         "Water deprivation test"
       ]
@@ -74,7 +84,8 @@
   ],
   "order_sets": [
     "24h urine volume / Serum & urine osmolality",
-    "Water deprivation test + DDAVP",
+    "Water deprivation test",
+    "DDAVP",
     "MRI pituitary (if central)",
     "Desmopressin (DDAVP)"
   ],

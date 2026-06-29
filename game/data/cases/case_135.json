@@ -9,18 +9,22 @@
     "ECG",
     "BMP (K+)",
     "IV Calcium gluconate",
-    "IV Insulin + Glucose / Albuterol / Bicarb",
+    "IV Insulin",
+    "Glucose / Albuterol / Bicarb",
     "Furosemide / Dialysis",
-    "DISCONTINUE ACEI + NSAIDs"
+    "DISCONTINUE ACEI",
+    "NSAIDs"
   ],
   "should_avoid": [],
   "rationale": {
     "ECG": "Peaked T, loss of P, wide QRS = severe hyperK.",
     "BMP (K+)": "K >6.5 mEq/L.",
     "IV Calcium gluconate": "Membrane stabilization — FIRST.",
-    "IV Insulin + Glucose / Albuterol / Bicarb": "Shift K+ intracellularly.",
+    "IV Insulin": "[Auto-split from bundled label \"IV Insulin + Glucose / Albuterol / Bicarb\"] Shift K+ intracellularly.",
+    "Glucose / Albuterol / Bicarb": "[Auto-split from bundled label \"IV Insulin + Glucose / Albuterol / Bicarb\"] Shift K+ intracellularly.",
     "Furosemide / Dialysis": "Eliminate K+.",
-    "DISCONTINUE ACEI + NSAIDs": "Remove cause."
+    "DISCONTINUE ACEI": "[Auto-split from bundled label \"DISCONTINUE ACEI + NSAIDs\"] Remove cause.",
+    "NSAIDs": "[Auto-split from bundled label \"DISCONTINUE ACEI + NSAIDs\"] Remove cause."
   },
   "hpi": "{{patient_name}} presents with progressive muscle weakness, fatigue, and palpitations. ECG shows peaked T waves, loss of P waves, widened QRS. Labs reveal severe hyperkalemia (K+ >6.5). Medication history: on ACE inhibitor for HTN and recently started NSAIDs for joint pain. ACEI reduces aldosterone → decreased renal K+ excretion. NSAIDs reduce renal blood flow → further decrease K+ excretion. Combined → dangerous hyperkalemia. Management: IMMEDIATE cardiac membrane stabilization — IV calcium gluconate or calcium chloride (does NOT lower K+, PROTECTS the heart). Then shift K+ intracellularly: IV regular insulin + glucose, beta-agonist (albuterol nebulized), sodium bicarbonate if acidotic. Then eliminate K+: furosemide (if renal function adequate), sodium polystyrene sulfonate (Kayexalate), patiromer, or hemodialysis if refractory. Discontinue ACEI and NSAIDs.",
   "hpi_narrative": "{{patient_name}} presents with progressive muscle weakness, fatigue, and palpitations. ECG shows peaked T waves, loss of P waves, widened QRS. Labs reveal severe hyperkalemia (K+ >6.5). Medication history: on ACE inhibitor for HTN and recently started NSAIDs for joint pain. ACEI reduces aldosterone → decreased renal K+ excretion. NSAIDs reduce renal blood flow → further decrease K+ excretion. Combined → dangerous hyperkalemia. Management: IMMEDIATE cardiac membrane stabilization — IV calcium gluconate or calcium chloride (does NOT lower K+, PROTECTS the heart). Then shift K+ intracellularly: IV regular insulin + glucose, beta-agonist (albuterol nebulized), sodium bicarbonate if acidotic. Then eliminate K+: furosemide (if renal function adequate), sodium polystyrene sulfonate (Kayexalate), patiromer, or hemodialysis if refractory. Discontinue ACEI and NSAIDs.",
@@ -68,9 +72,17 @@
       ]
     },
     {
-      "label": "IV Insulin + Glucose / Albuterol / Bicarb",
+      "label": "IV Insulin",
       "type": "correctlyOrdered",
-      "finding": "Shift K+ intracellularly.",
+      "finding": "[Auto-split from bundled label \"IV Insulin + Glucose / Albuterol / Bicarb\"] Shift K+ intracellularly.",
+      "aliases": [
+        "Shift K"
+      ]
+    },
+    {
+      "label": "Glucose / Albuterol / Bicarb",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"IV Insulin + Glucose / Albuterol / Bicarb\"] Shift K+ intracellularly.",
       "aliases": [
         "Shift K"
       ]
@@ -84,9 +96,17 @@
       ]
     },
     {
-      "label": "DISCONTINUE ACEI + NSAIDs",
+      "label": "DISCONTINUE ACEI",
       "type": "correctlyOrdered",
-      "finding": "Remove cause.",
+      "finding": "[Auto-split from bundled label \"DISCONTINUE ACEI + NSAIDs\"] Remove cause.",
+      "aliases": [
+        "Stop meds"
+      ]
+    },
+    {
+      "label": "NSAIDs",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"DISCONTINUE ACEI + NSAIDs\"] Remove cause.",
       "aliases": [
         "Stop meds"
       ]
@@ -96,9 +116,11 @@
     "ECG",
     "BMP (K+)",
     "IV Calcium gluconate",
-    "IV Insulin + Glucose / Albuterol / Bicarb",
+    "IV Insulin",
+    "Glucose / Albuterol / Bicarb",
     "Furosemide / Dialysis",
-    "DISCONTINUE ACEI + NSAIDs"
+    "DISCONTINUE ACEI",
+    "NSAIDs"
   ],
   "complete": true,
   "extraction_method": "deepseek_direct",

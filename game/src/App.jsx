@@ -25,7 +25,7 @@ import {
   listCasePlayCheckpointIds,
 } from './lib/playSessionResume.js';
 import { endPlaySession, fetchCaseVisitSummaries } from './lib/caseUserLog.js';
-import { syncServerCoveredCaseIds } from './lib/caseCoverage.js';
+import { isCaseCovered, syncServerCoveredCaseIds } from './lib/caseCoverage.js';
 import { rememberCaseBrowse } from './lib/caseBrowseContext.js';
 import { startIcuMonitor, endSessionMonitor, unlockAmbience, prefetchMonitorAudio } from './lib/audio.js';
 
@@ -253,10 +253,22 @@ export default function App() {
 
       const allCases = getAllGameCases();
       const idx = allCases.findIndex((c) => String(c.id) === String(caseId));
-      const nextCase =
-        idx >= 0 && allCases.length > 1
-          ? allCases[(idx + 1) % allCases.length]
-          : null;
+      // Prefer the next unattempted case — same priority as global shuffle
+      let nextCase = null;
+      if (idx >= 0 && allCases.length > 1) {
+        // Search forward for unattempted
+        for (let i = 1; i <= allCases.length; i++) {
+          const candidate = allCases[(idx + i) % allCases.length];
+          if (!isCaseCovered(candidate.id)) {
+            nextCase = candidate;
+            break;
+          }
+        }
+        // All attempted — fall back to next-in-array
+        if (!nextCase) {
+          nextCase = allCases[(idx + 1) % allCases.length];
+        }
+      }
 
       if (!nextCase) {
         goHome();

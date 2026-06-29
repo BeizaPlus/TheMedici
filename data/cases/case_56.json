@@ -1,1 +1,115 @@
-{"id":56,"topic":"Abdominal Pain","title":"Abdominal Pain","diagnosis":"Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis","hpi_narrative":"{{patient_name}} presents with acute abdominal/back pain, fatigue, jaundice, and dark urine (hemoglobinuria) following exposure to an oxidative stressor (fava beans, infection, certain drugs: sulfa, primaquine, dapsone, nitrofurantoin, rasburicase). Labs show acute hemolytic anemia (low Hb, elevated LDH, low haptoglobin, elevated reticulocyte count, indirect hyperbilirubinemia). Peripheral smear shows bite cells, blister cells, and Heinz bodies. G6PD deficiency is the most common enzymopathy worldwide — X-linked recessive. G6PD protects RBCs from oxidative stress. Trigger → oxidative damage → intravascular + extravascular hemolysis. Diagnosis: G6PD enzyme assay (do NOT check during acute hemolysis — reticulocytes have higher G6PD). Treatment: supportive — remove trigger, IV fluids, transfuse if severe anemia. Avoid oxidative drugs lifelong. Screen family members (X-linked).","chief_complaint":"Acute abdominal pain, jaundice, dark urine","patient":null,"patient_name":"Nii Okine","patient_sex":"male","location":"ER","specialty":"Emergency Medicine / Hematology","stacks":[{"label":"Physical Exam: General Appearance","type":"shouldHaveOrdered","finding":"Assess severity — may be jaundiced, ill.","aliases":["General Appearance"]},{"label":"Physical Exam: Abdomen","type":"shouldHaveOrdered","finding":"Abdominal pain from hemolysis.","aliases":["Abdominal Exam"]},{"label":"CBC with differential + reticulocyte count","type":"correctlyOrdered","finding":"Acute anemia, elevated retics.","aliases":["CBC"]},{"label":"Peripheral blood smear","type":"correctlyOrdered","finding":"Bite cells, blister cells, Heinz bodies.","aliases":["Smear"]},{"label":"LDH, haptoglobin, bilirubin","type":"correctlyOrdered","finding":"Elevated LDH, low haptoglobin, indirect hyperbilirubinemia = hemolysis.","aliases":["Hemolysis labs"]},{"label":"G6PD enzyme assay","type":"correctlyOrdered","finding":"Definitive diagnosis. Check 4-6 weeks after acute hemolysis (reticulocytes have higher G6PD).","aliases":["G6PD"]},{"label":"BMP / CMP","type":"correctlyOrdered","finding":"Assess renal function — hemoglobinuria can cause AKI.","aliases":["BMP"]},{"label":"IV fluids","type":"correctlyOrdered","finding":"Maintain renal perfusion, prevent AKI from hemoglobinuria.","aliases":["IV fluids"]},{"label":"Blood transfusion (if severe anemia)","type":"correctlyOrdered","finding":"Packed RBCs for symptomatic anemia.","aliases":["Transfusion"]},{"label":"Remove trigger / Avoid oxidative drugs","type":"correctlyOrdered","finding":"Lifelong avoidance: sulfa, dapsone, primaquine, nitrofurantoin, fava beans.","aliases":["Trigger avoidance"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 56,
+  "topic": "Abdominal Pain",
+  "title": "Abdominal Pain",
+  "diagnosis": "Glucose-6-Phosphate Dehydrogenase (G6PD) Deficiency with Hemolysis",
+  "hpi_narrative": "{{patient_name}} presents with acute abdominal/back pain, fatigue, jaundice, and dark urine (hemoglobinuria) following exposure to an oxidative stressor (fava beans, infection, certain drugs: sulfa, primaquine, dapsone, nitrofurantoin, rasburicase). Labs show acute hemolytic anemia (low Hb, elevated LDH, low haptoglobin, elevated reticulocyte count, indirect hyperbilirubinemia). Peripheral smear shows bite cells, blister cells, and Heinz bodies. G6PD deficiency is the most common enzymopathy worldwide — X-linked recessive. G6PD protects RBCs from oxidative stress. Trigger → oxidative damage → intravascular + extravascular hemolysis. Diagnosis: G6PD enzyme assay (do NOT check during acute hemolysis — reticulocytes have higher G6PD). Treatment: supportive — remove trigger, IV fluids, transfuse if severe anemia. Avoid oxidative drugs lifelong. Screen family members (X-linked).",
+  "chief_complaint": "Acute abdominal pain, jaundice, dark urine",
+  "patient": null,
+  "patient_name": "Nii Okine",
+  "patient_sex": "male",
+  "location": "ER",
+  "specialty": "Emergency Medicine / Hematology",
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess severity — may be jaundiced, ill.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Abdominal pain from hemolysis.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Reticulocyte count",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Peripheral blood smear",
+      "type": "correctlyOrdered",
+      "finding": "Bite cells, blister cells, Heinz bodies.",
+      "aliases": [
+        "Smear"
+      ]
+    },
+    {
+      "label": "LDH, haptoglobin, bilirubin",
+      "type": "correctlyOrdered",
+      "finding": "Elevated LDH, low haptoglobin, indirect hyperbilirubinemia = hemolysis.",
+      "aliases": [
+        "Hemolysis labs"
+      ]
+    },
+    {
+      "label": "G6PD enzyme assay",
+      "type": "correctlyOrdered",
+      "finding": "Definitive diagnosis. Check 4-6 weeks after acute hemolysis (reticulocytes have higher G6PD).",
+      "aliases": [
+        "G6PD"
+      ]
+    },
+    {
+      "label": "BMP / CMP",
+      "type": "correctlyOrdered",
+      "finding": "Assess renal function — hemoglobinuria can cause AKI.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "IV fluids",
+      "type": "correctlyOrdered",
+      "finding": "Maintain renal perfusion, prevent AKI from hemoglobinuria.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "Blood transfusion (if severe anemia)",
+      "type": "correctlyOrdered",
+      "finding": "Packed RBCs for symptomatic anemia.",
+      "aliases": [
+        "Transfusion"
+      ]
+    },
+    {
+      "label": "Remove trigger / Avoid oxidative drugs",
+      "type": "correctlyOrdered",
+      "finding": "Lifelong avoidance: sulfa, dapsone, primaquine, nitrofurantoin, fava beans.",
+      "aliases": [
+        "Trigger avoidance"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 93,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}

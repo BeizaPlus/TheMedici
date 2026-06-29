@@ -152,6 +152,7 @@ node scripts/audit-portrait-assets.mjs
 
 | Role | Path | Pixels | When |
 |------|------|--------|------|
+| **The 154 Angle (canonical)** | `dev/scene-camera-lock/references/case-154-camera-lock-gold.png` | 16:9 2k | **PRIMARY** — when Steve says "154 angle" or "use the 154 camera lock" |
 | **Machine spec** | `dev/scene-camera-lock/SCENE_LOCK.json` | — | Read before every gen |
 | **Male play baseplate** | `public/assets/patient/patient-scene.png` | 1536×864 | Runtime + layout ref |
 | **Male crop lock (ALL adult gens)** | `dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png` | 2752×1536 | Adult male **and female** Magnific layout ref — **never** `patient-scene-female.png` for gen input (POV feet artifact) |

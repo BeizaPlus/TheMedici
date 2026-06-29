@@ -1,1 +1,77 @@
-{"id":101,"topic":"Fever","title":"Fever","diagnosis":"Epiglottitis","hpi_narrative":"{{patient_name}} presents with acute onset high fever, severe sore throat, drooling, muffled 'hot potato' voice, stridor, and tripod positioning (leaning forward, chin thrust out). Epiglottitis is a life-threatening airway emergency. Historically caused by H. influenzae type B (now rare due to Hib vaccine) — now more commonly Group A Strep, S. pneumoniae, Staph. Do NOT examine the throat or agitate the child — can trigger complete airway obstruction! Let the child remain in position of comfort. Immediate management: keep child calm, avoid invasive exam, arrange for controlled airway management in OR by anesthesia/ENT (awake fiberoptic intubation). Croup (laryngotracheitis) is viral, slower onset, barky cough — epiglottitis is rapid, toxic-appearing, no cough. Lateral neck X-ray shows 'thumbprint sign' (swollen epiglottis) but do NOT send child to radiology unattended. Treatment: IV antibiotics (ceftriaxone + vancomycin), steroids (dexamethasone).","chief_complaint":"High fever, sore throat, drooling, stridor, tripod position","patient":null,"patient_name":"Kwasi Antwi","patient_sex":"male","location":"ER","specialty":"Pediatrics / ENT / Emergency Medicine","stacks":[{"label":"Physical Exam: Observation only","type":"correctlyOrdered","finding":"Tripod position, drooling, stridor. Do NOT examine throat.","aliases":["Observe"]},{"label":"Lateral neck X-ray","type":"correctlyOrdered","finding":"Thumbprint sign. Do NOT send child unattended.","aliases":["Neck X-ray"]},{"label":"Controlled airway (OR / ENT / Anesthesia)","type":"correctlyOrdered","finding":"Awake fiberoptic intubation. Keep child calm.","aliases":["Airway"]},{"label":"Ceftriaxone + Vancomycin","type":"correctlyOrdered","finding":"IV antibiotics.","aliases":["Rocephin","Vanc"]},{"label":"Dexamethasone","type":"correctlyOrdered","finding":"Reduce airway edema.","aliases":["Decadron"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":95,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 101,
+  "topic": "Fever",
+  "title": "Fever",
+  "diagnosis": "Epiglottitis",
+  "hpi_narrative": "{{patient_name}} presents with acute onset high fever, severe sore throat, drooling, muffled 'hot potato' voice, stridor, and tripod positioning (leaning forward, chin thrust out). Epiglottitis is a life-threatening airway emergency. Historically caused by H. influenzae type B (now rare due to Hib vaccine) — now more commonly Group A Strep, S. pneumoniae, Staph. Do NOT examine the throat or agitate the child — can trigger complete airway obstruction! Let the child remain in position of comfort. Immediate management: keep child calm, avoid invasive exam, arrange for controlled airway management in OR by anesthesia/ENT (awake fiberoptic intubation). Croup (laryngotracheitis) is viral, slower onset, barky cough — epiglottitis is rapid, toxic-appearing, no cough. Lateral neck X-ray shows 'thumbprint sign' (swollen epiglottis) but do NOT send child to radiology unattended. Treatment: IV antibiotics (ceftriaxone + vancomycin), steroids (dexamethasone).",
+  "chief_complaint": "High fever, sore throat, drooling, stridor, tripod position",
+  "patient": null,
+  "patient_name": "Kwasi Antwi",
+  "patient_sex": "male",
+  "location": "ER",
+  "specialty": "Pediatrics / ENT / Emergency Medicine",
+  "stacks": [
+    {
+      "label": "Physical Exam: Observation only",
+      "type": "correctlyOrdered",
+      "finding": "Tripod position, drooling, stridor. Do NOT examine throat.",
+      "aliases": [
+        "Observe"
+      ]
+    },
+    {
+      "label": "Lateral neck X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Thumbprint sign. Do NOT send child unattended.",
+      "aliases": [
+        "Neck X-ray"
+      ]
+    },
+    {
+      "label": "Controlled airway (OR / ENT / Anesthesia)",
+      "type": "correctlyOrdered",
+      "finding": "Awake fiberoptic intubation. Keep child calm.",
+      "aliases": [
+        "Airway"
+      ]
+    },
+    {
+      "label": "Ceftriaxone IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
+      "aliases": [
+        "Rocephin",
+        "Vanc"
+      ]
+    },
+    {
+      "label": "Vancomycin IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
+      "aliases": [
+        "Rocephin",
+        "Vanc"
+      ]
+    },
+    {
+      "label": "Dexamethasone",
+      "type": "correctlyOrdered",
+      "finding": "Reduce airway edema.",
+      "aliases": [
+        "Decadron"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 95,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}

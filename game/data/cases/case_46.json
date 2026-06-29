@@ -12,7 +12,8 @@
     "Physical Exam: Neuro / Psych",
     "CBC",
     "BMP / CMP",
-    "Lumbar puncture + CSF analysis",
+    "Lumbar puncture",
+    "CSF analysis",
     "EMG / NCS",
     "Pulmonary function tests (FVC, NIF)",
     "IVIG 0.4g/kg/day x 5d or Plasmapheresis",
@@ -26,7 +27,8 @@
     "Physical Exam: Neuro / Psych": "Symmetric ascending weakness, areflexia, paresthesias. Facial diplegia possible. Sensation often preserved.",
     "CBC": "Screening.",
     "BMP / CMP": "Screening.",
-    "Lumbar puncture + CSF analysis": "Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
+    "Lumbar puncture": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
+    "CSF analysis": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
     "EMG / NCS": "Demyelinating pattern. Slowed conduction velocities, prolonged distal latencies.",
     "Pulmonary function tests (FVC, NIF)": "Serial monitoring. FVC <20 mL/kg or NIF <-30 → intubate.",
     "IVIG 0.4g/kg/day x 5d or Plasmapheresis": "First-line treatment. Equally effective. Start early — best within 2 weeks of symptoms.",
@@ -119,9 +121,18 @@
       ]
     },
     {
-      "label": "Lumbar puncture + CSF analysis",
+      "label": "Lumbar puncture",
       "type": "correctlyOrdered",
-      "finding": "Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
+      "finding": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
+      "aliases": [
+        "LP",
+        "CSF"
+      ]
+    },
+    {
+      "label": "CSF analysis",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
       "aliases": [
         "LP",
         "CSF"
@@ -170,7 +181,8 @@
     "Physical Exam: Neuro / Psych",
     "CBC",
     "BMP / CMP",
-    "Lumbar puncture + CSF analysis",
+    "Lumbar puncture",
+    "CSF analysis",
     "EMG / NCS",
     "Pulmonary function tests (FVC, NIF)",
     "IVIG 0.4g/kg/day x 5d or Plasmapheresis",

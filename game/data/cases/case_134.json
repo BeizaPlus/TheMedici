@@ -7,16 +7,24 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: Scrotal",
-    "UA + Urine culture + CT/GC NAAT",
-    "Ceftriaxone + Doxycycline x10d",
-    "Scrotal elevation + NSAIDs"
+    "Urinalysis",
+    "Urine culture",
+    "CT/GC NAAT",
+    "Ceftriaxone IV",
+    "Doxycycline",
+    "Scrotal elevation",
+    "NSAIDs"
   ],
   "should_avoid": [],
   "rationale": {
     "Physical Exam: Scrotal": "Tender epididymis. Prehn's sign positive.",
-    "UA + Urine culture + CT/GC NAAT": "Identify organism.",
-    "Ceftriaxone + Doxycycline x10d": "For CT/GC. Fluoroquinolone if enteric.",
-    "Scrotal elevation + NSAIDs": "Symptomatic."
+    "Urinalysis": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+    "Urine culture": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+    "CT/GC NAAT": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+    "Ceftriaxone IV": "[Auto-split from bundled label \"Ceftriaxone + Doxycycline x10d\"] For CT/GC. Fluoroquinolone if enteric.",
+    "Doxycycline": "[Auto-split from bundled label \"Ceftriaxone + Doxycycline x10d\"] For CT/GC. Fluoroquinolone if enteric.",
+    "Scrotal elevation": "[Auto-split from bundled label \"Scrotal elevation + NSAIDs\"] Symptomatic.",
+    "NSAIDs": "[Auto-split from bundled label \"Scrotal elevation + NSAIDs\"] Symptomatic."
   },
   "hpi": "{{patient_name}} presents with unilateral scrotal pain of gradual onset, swelling, tenderness, and erythema. Pain may radiate to lower abdomen. Prehn's sign: pain improves with scrotal elevation (distinguishes from testicular torsion — no relief with elevation, acute onset). Caused by ascending infection: sexually active young men → Chlamydia trachomatis, Neisseria gonorrhoeae. Older men or post-instrumentation → E. coli, enteric organisms. Diagnosis: UA (pyuria), urine culture, CT/GC NAAT. Scrotal ultrasound with Doppler if torsion suspected (increased flow in epididymitis, decreased/absent in torsion). Treatment: CT/GC → ceftriaxone 250mg IM once + doxycycline 100mg PO BID x 10d. Enteric → levofloxacin x 10d. Scrotal elevation, NSAIDs, ice. Treat sexual partners.",
   "hpi_narrative": "{{patient_name}} presents with unilateral scrotal pain of gradual onset, swelling, tenderness, and erythema. Pain may radiate to lower abdomen. Prehn's sign: pain improves with scrotal elevation (distinguishes from testicular torsion — no relief with elevation, acute onset). Caused by ascending infection: sexually active young men → Chlamydia trachomatis, Neisseria gonorrhoeae. Older men or post-instrumentation → E. coli, enteric organisms. Diagnosis: UA (pyuria), urine culture, CT/GC NAAT. Scrotal ultrasound with Doppler if torsion suspected (increased flow in epididymitis, decreased/absent in torsion). Treatment: CT/GC → ceftriaxone 250mg IM once + doxycycline 100mg PO BID x 10d. Enteric → levofloxacin x 10d. Scrotal elevation, NSAIDs, ice. Treat sexual partners.",
@@ -48,25 +56,57 @@
       ]
     },
     {
-      "label": "UA + Urine culture + CT/GC NAAT",
+      "label": "Urinalysis",
       "type": "correctlyOrdered",
-      "finding": "Identify organism.",
+      "finding": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
       "aliases": [
         "Labs"
       ]
     },
     {
-      "label": "Ceftriaxone + Doxycycline x10d",
+      "label": "Urine culture",
       "type": "correctlyOrdered",
-      "finding": "For CT/GC. Fluoroquinolone if enteric.",
+      "finding": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "CT/GC NAAT",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Ceftriaxone IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Ceftriaxone + Doxycycline x10d\"] For CT/GC. Fluoroquinolone if enteric.",
       "aliases": [
         "Abx"
       ]
     },
     {
-      "label": "Scrotal elevation + NSAIDs",
+      "label": "Doxycycline",
       "type": "correctlyOrdered",
-      "finding": "Symptomatic.",
+      "finding": "[Auto-split from bundled label \"Ceftriaxone + Doxycycline x10d\"] For CT/GC. Fluoroquinolone if enteric.",
+      "aliases": [
+        "Abx"
+      ]
+    },
+    {
+      "label": "Scrotal elevation",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Scrotal elevation + NSAIDs\"] Symptomatic.",
+      "aliases": [
+        "Supportive"
+      ]
+    },
+    {
+      "label": "NSAIDs",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Scrotal elevation + NSAIDs\"] Symptomatic.",
       "aliases": [
         "Supportive"
       ]
@@ -74,9 +114,13 @@
   ],
   "order_sets": [
     "Physical Exam: Scrotal",
-    "UA + Urine culture + CT/GC NAAT",
-    "Ceftriaxone + Doxycycline x10d",
-    "Scrotal elevation + NSAIDs"
+    "Urinalysis",
+    "Urine culture",
+    "CT/GC NAAT",
+    "Ceftriaxone IV",
+    "Doxycycline",
+    "Scrotal elevation",
+    "NSAIDs"
   ],
   "complete": true,
   "extraction_method": "deepseek_direct",

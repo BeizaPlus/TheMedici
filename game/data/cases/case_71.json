@@ -7,7 +7,8 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: General Appearance",
-    "IgA anti-tTG + Total IgA",
+    "IgA anti-tTG",
+    "Total IgA",
     "IgG anti-tTG / anti-DGP (if IgA deficient)",
     "CBC / Iron studies / B12 / Folate",
     "BMP / CMP / Vitamin D",
@@ -17,7 +18,8 @@
   "should_avoid": [],
   "rationale": {
     "Physical Exam: General Appearance": "Weight loss, cachexia.",
-    "IgA anti-tTG + Total IgA": "First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+    "IgA anti-tTG": "[Auto-split from bundled label \"IgA anti-tTG + Total IgA\"] First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+    "Total IgA": "[Auto-split from bundled label \"IgA anti-tTG + Total IgA\"] First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
     "IgG anti-tTG / anti-DGP (if IgA deficient)": "If IgA deficiency (false-negative IgA tTG).",
     "CBC / Iron studies / B12 / Folate": "Iron deficiency anemia. Nutritional deficiencies.",
     "BMP / CMP / Vitamin D": "Nutritional assessment.",
@@ -54,9 +56,18 @@
       ]
     },
     {
-      "label": "IgA anti-tTG + Total IgA",
+      "label": "IgA anti-tTG",
       "type": "correctlyOrdered",
-      "finding": "First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+      "finding": "[Auto-split from bundled label \"IgA anti-tTG + Total IgA\"] First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+      "aliases": [
+        "tTG",
+        "Celiac panel"
+      ]
+    },
+    {
+      "label": "Total IgA",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"IgA anti-tTG + Total IgA\"] First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
       "aliases": [
         "tTG",
         "Celiac panel"
@@ -106,7 +117,8 @@
   ],
   "order_sets": [
     "Physical Exam: General Appearance",
-    "IgA anti-tTG + Total IgA",
+    "IgA anti-tTG",
+    "Total IgA",
     "IgG anti-tTG / anti-DGP (if IgA deficient)",
     "CBC / Iron studies / B12 / Folate",
     "BMP / CMP / Vitamin D",

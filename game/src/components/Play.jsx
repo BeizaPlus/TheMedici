@@ -1906,8 +1906,6 @@ export default function Play({
       expandDockPanel();
       if (chatPatientModeRef.current) {
         setDockChatExpandedPersist(true);
-      } else {
-        setInfoTab('chat');
       }
     },
     onNotesChanged: () => setNotesVersion((v) => v + 1),

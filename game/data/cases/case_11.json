@@ -25,7 +25,8 @@
     "Antiemetic (Ondansetron / Metoclopramide)",
     "Oxygen",
     "Analgesia (Hydromorphone / Fentanyl / Morphine)",
-    "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin",
+    "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone",
+    "Azithromycin",
     "Advise patient, no alcohol",
     "Follow-up LFTs in 1-4 weeks"
   ],
@@ -55,7 +56,8 @@
     "Antiemetic (Ondansetron / Metoclopramide)": "Patient is nauseous — treat symptomatically.",
     "Oxygen": "Low oxygen — supplemental O2.",
     "Analgesia (Hydromorphone / Fentanyl / Morphine)": "Treat patient's pain.",
-    "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin": "ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
+    "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone": "[Auto-split from bundled label \"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin\"] ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
+    "Azithromycin": "[Auto-split from bundled label \"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin\"] ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
     "Acetaminophen": "Acetaminophen with hepatitis and high LFTs is CONTRAINDICATED.",
     "Advise patient, no alcohol": "Avoid alcohol to prevent further liver damage during recovery.",
     "Follow-up LFTs in 1-4 weeks": "Schedule follow-up to monitor downward trajectory of liver enzymes.",
@@ -275,9 +277,19 @@
       ]
     },
     {
-      "label": "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin",
+      "label": "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone",
       "type": "correctlyOrdered",
-      "finding": "ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
+      "finding": "[Auto-split from bundled label \"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin\"] ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
+      "aliases": [
+        "Antibiotics",
+        "Levaquin",
+        "Ceftriaxone"
+      ]
+    },
+    {
+      "label": "Azithromycin",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin\"] ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
       "aliases": [
         "Antibiotics",
         "Levaquin",
@@ -330,7 +342,8 @@
     "Antiemetic (Ondansetron / Metoclopramide)",
     "Oxygen",
     "Analgesia (Hydromorphone / Fentanyl / Morphine)",
-    "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin",
+    "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone",
+    "Azithromycin",
     "Advise patient, no alcohol",
     "Follow-up LFTs in 1-4 weeks"
   ],

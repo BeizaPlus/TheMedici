@@ -21,7 +21,11 @@
     "CT abdomen/pelvis with contrast",
     "Normal saline / Lactated Ringer",
     "Analgesia (Hydromorphone / Fentanyl / Morphine / Ketorolac)",
-    "Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)",
+    "Meropenem IV",
+    "Piperacillin-tazobactam IV",
+    "Ciprofloxacin IV",
+    "Metronidazole IV",
+    "Cefepime IV",
     "Antiemetic (Ondansetron / Metoclopramide / Promethazine)",
     "Acetaminophen",
     "Needle drainage, abscess, imaging guided",
@@ -57,7 +61,11 @@
     "CT abdomen/pelvis with contrast": "CT with IV contrast is preferred for abdominal pathology — will reveal intra-abdominal abscess.",
     "Normal saline / Lactated Ringer": "Low sodium, nausea/vomiting — IV fluids indicated for resuscitation.",
     "Analgesia (Hydromorphone / Fentanyl / Morphine / Ketorolac)": "Patient is in pain — treat. Nauseous, so IV route appropriate.",
-    "Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)": "Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+    "Meropenem IV": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+    "Piperacillin-tazobactam IV": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+    "Ciprofloxacin IV": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+    "Metronidazole IV": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+    "Cefepime IV": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
     "Antiemetic (Ondansetron / Metoclopramide / Promethazine)": "Patient is nauseous — treat symptomatically.",
     "Acetaminophen": "Patient is febrile. Ibuprofen/NSAIDs not ideal after recent surgery and upcoming procedure.",
     "Needle drainage, abscess, imaging guided": "First step: percutaneous image-guided drainage. Avoids difficult laparotomy, anesthesia, wound complications, and reduces hospitalization length. Open laparotomy is excessive — less invasive first.",
@@ -246,9 +254,53 @@
       ]
     },
     {
-      "label": "Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)",
+      "label": "Meropenem IV",
       "type": "shouldHaveOrdered",
-      "finding": "Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+      "finding": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+      "aliases": [
+        "Meropenem",
+        "Zosyn",
+        "Pip-Tazo",
+        "Cipro + Flagyl"
+      ]
+    },
+    {
+      "label": "Piperacillin-tazobactam IV",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+      "aliases": [
+        "Meropenem",
+        "Zosyn",
+        "Pip-Tazo",
+        "Cipro + Flagyl"
+      ]
+    },
+    {
+      "label": "Ciprofloxacin IV",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+      "aliases": [
+        "Meropenem",
+        "Zosyn",
+        "Pip-Tazo",
+        "Cipro + Flagyl"
+      ]
+    },
+    {
+      "label": "Metronidazole IV",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+      "aliases": [
+        "Meropenem",
+        "Zosyn",
+        "Pip-Tazo",
+        "Cipro + Flagyl"
+      ]
+    },
+    {
+      "label": "Cefepime IV",
+      "type": "shouldHaveOrdered",
+      "finding": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
       "aliases": [
         "Meropenem",
         "Zosyn",
@@ -332,7 +384,11 @@
     "CT abdomen/pelvis with contrast",
     "Normal saline / Lactated Ringer",
     "Analgesia (Hydromorphone / Fentanyl / Morphine / Ketorolac)",
-    "Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)",
+    "Meropenem IV",
+    "Piperacillin-tazobactam IV",
+    "Ciprofloxacin IV",
+    "Metronidazole IV",
+    "Cefepime IV",
     "Antiemetic (Ondansetron / Metoclopramide / Promethazine)",
     "Acetaminophen",
     "Needle drainage, abscess, imaging guided",

@@ -9,14 +9,16 @@
     "UA / 24h urine protein",
     "CBC / BMP / Albumin / Lipids",
     "Prednisone 2mg/kg/day",
-    "Salt/fluid restriction + Diuretics"
+    "Salt/fluid restriction",
+    "Diuretics"
   ],
   "should_avoid": [],
   "rationale": {
     "UA / 24h urine protein": "3-4+ protein, oval fat bodies. Nephrotic range >40mg/m2/hr.",
     "CBC / BMP / Albumin / Lipids": "Hypoalbuminemia, hyperlipidemia.",
     "Prednisone 2mg/kg/day": "Response confirms MCD.",
-    "Salt/fluid restriction + Diuretics": "Symptom management."
+    "Salt/fluid restriction": "[Auto-split from bundled label \"Salt/fluid restriction + Diuretics\"] Symptom management.",
+    "Diuretics": "[Auto-split from bundled label \"Salt/fluid restriction + Diuretics\"] Symptom management."
   },
   "hpi": "{{patient_name}} is a child presenting with generalized edema (periorbital — worse in morning, then leg/scrotal), weight gain, frothy urine (proteinuria), and fatigue. Nephrotic syndrome: massive proteinuria (>3.5g/day or >40mg/m2/hr in children), hypoalbuminemia (<2.5), edema, hyperlipidemia. Most common cause in children: minimal change disease (MCD) — 80-90%. Often preceded by viral URI. Diagnosis: UA — 3-4+ protein, oval fat bodies. 24h urine protein confirms nephrotic range. Renal biopsy NOT routinely needed in children (MCD most common and responds to steroids). Treatment: prednisone 2mg/kg/day (response = remission in 2-4 weeks confirms MCD). Salt/fluid restriction. Diuretics for severe edema. If steroid-resistant or frequently relapsing: consider biopsy, alternative immunosuppression (cyclophosphamide, cyclosporine). Vaccinate before immunosuppression (pneumococcal). Monitor for complications: infection (loss of immunoglobulins), thrombosis (loss of antithrombin III).",
   "hpi_narrative": "{{patient_name}} is a child presenting with generalized edema (periorbital — worse in morning, then leg/scrotal), weight gain, frothy urine (proteinuria), and fatigue. Nephrotic syndrome: massive proteinuria (>3.5g/day or >40mg/m2/hr in children), hypoalbuminemia (<2.5), edema, hyperlipidemia. Most common cause in children: minimal change disease (MCD) — 80-90%. Often preceded by viral URI. Diagnosis: UA — 3-4+ protein, oval fat bodies. 24h urine protein confirms nephrotic range. Renal biopsy NOT routinely needed in children (MCD most common and responds to steroids). Treatment: prednisone 2mg/kg/day (response = remission in 2-4 weeks confirms MCD). Salt/fluid restriction. Diuretics for severe edema. If steroid-resistant or frequently relapsing: consider biopsy, alternative immunosuppression (cyclophosphamide, cyclosporine). Vaccinate before immunosuppression (pneumococcal). Monitor for complications: infection (loss of immunoglobulins), thrombosis (loss of antithrombin III).",
@@ -64,9 +66,17 @@
       ]
     },
     {
-      "label": "Salt/fluid restriction + Diuretics",
+      "label": "Salt/fluid restriction",
       "type": "correctlyOrdered",
-      "finding": "Symptom management.",
+      "finding": "[Auto-split from bundled label \"Salt/fluid restriction + Diuretics\"] Symptom management.",
+      "aliases": [
+        "Supportive"
+      ]
+    },
+    {
+      "label": "Diuretics",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Salt/fluid restriction + Diuretics\"] Symptom management.",
       "aliases": [
         "Supportive"
       ]
@@ -76,7 +86,8 @@
     "UA / 24h urine protein",
     "CBC / BMP / Albumin / Lipids",
     "Prednisone 2mg/kg/day",
-    "Salt/fluid restriction + Diuretics"
+    "Salt/fluid restriction",
+    "Diuretics"
   ],
   "complete": true,
   "extraction_method": "deepseek_direct",

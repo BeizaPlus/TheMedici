@@ -6,7 +6,8 @@
   "confidence": "screenshot",
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Colonoscopy + biopsy",
+    "Colonoscopy",
+    "biopsy",
     "CT/MR enterography",
     "CBC / CRP / ESR / Fecal calprotectin",
     "Budesonide / Prednisone",
@@ -14,7 +15,8 @@
   ],
   "should_avoid": [],
   "rationale": {
-    "Colonoscopy + biopsy": "Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+    "Colonoscopy": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+    "biopsy": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
     "CT/MR enterography": "Small bowel evaluation.",
     "CBC / CRP / ESR / Fecal calprotectin": "Anemia, elevated inflammatory markers.",
     "Budesonide / Prednisone": "Induction. Budesonide for TI/right colon.",
@@ -42,9 +44,17 @@
   "distractors": [],
   "stacks": [
     {
-      "label": "Colonoscopy + biopsy",
+      "label": "Colonoscopy",
       "type": "correctlyOrdered",
-      "finding": "Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+      "finding": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+      "aliases": [
+        "Colonoscopy"
+      ]
+    },
+    {
+      "label": "biopsy",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
       "aliases": [
         "Colonoscopy"
       ]
@@ -84,7 +94,8 @@
     }
   ],
   "order_sets": [
-    "Colonoscopy + biopsy",
+    "Colonoscopy",
+    "biopsy",
     "CT/MR enterography",
     "CBC / CRP / ESR / Fecal calprotectin",
     "Budesonide / Prednisone",

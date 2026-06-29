@@ -329,6 +329,32 @@
   .take-edit-save { font-size: 10px; padding: 4px 14px; border-radius: 14px; border: none; background: var(--accent); color: #fff; cursor: pointer; font-family: inherit; font-weight: 500; line-height: 1; }
   .take-edit-cancel { font-size: 10px; padding: 4px 14px; border-radius: 14px; border: 0.5px solid var(--border); background: var(--bg-surface); color: var(--text-soft); cursor: pointer; font-family: inherit; font-weight: 450; line-height: 1; }
 
+  /* segment audio editor */
+  .seg-editor { display: none; flex: 1; min-height: 0; flex-direction: column; gap: 6px; padding: 8px 12px; overflow-y: auto; }
+  .takes-panel.seg-mode .takes-list { display: none; }
+  .takes-panel.seg-mode .seg-editor { display: flex; }
+  .takes-panel.seg-mode .takes-header .seg-editor-actions { display: flex; }
+  .seg-editor-actions { display: none; align-items: center; gap: 4px; margin-left: auto; }
+  .seg-snip-btn, .seg-rerecord-btn { display: none; }
+  .seg-editor-actions.has-sel .seg-snip-btn,
+  .seg-editor-actions.has-sel .seg-rerecord-btn { display: inline; }
+  .seg-block { display: flex; align-items: flex-start; gap: 6px; padding: 6px 8px; border-radius: 6px; border: 0.5px solid var(--border); background: var(--bg); cursor: pointer; transition: all 0.12s; }
+  .seg-block:hover { border-color: var(--border-hi); background: var(--bg-surface); }
+  .seg-block.selected { background: var(--accent-bg); border-color: var(--accent); }
+  .seg-time { font-size: 9px; color: var(--text-muted); font-weight: 500; min-width: 48px; text-align: right; line-height: 1.35; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .seg-text { font-size: 10px; color: var(--text); line-height: 1.4; flex: 1; }
+  .seg-toolbar { display: none; gap: 4px; padding: 4px 12px; align-items: center; }
+  .seg-toolbar.has-sel { display: flex; }
+  .seg-snip-btn { font-size: 10px; padding: 4px 10px; border-radius: 14px; border: 0.5px solid var(--border); background: var(--bg-surface); color: var(--text-soft); cursor: pointer; font-family: inherit; font-weight: 450; transition: all 0.15s; }
+  .seg-snip-btn:hover { border-color: #ff3b30; color: #ff3b30; background: #ff3b3010; }
+  .seg-rerecord-btn { font-size: 10px; padding: 4px 10px; border-radius: 14px; border: 0.5px solid var(--accent); background: var(--accent-bg); color: var(--accent); cursor: pointer; font-family: inherit; font-weight: 500; transition: all 0.15s; }
+  .seg-rerecord-btn:hover { background: var(--accent); color: #fff; }
+  .seg-done-btn { font-size: 10px; padding: 4px 10px; border-radius: 14px; border: none; background: var(--accent); color: #fff; cursor: pointer; font-family: inherit; font-weight: 500; }
+  .seg-empty { font-size: 11px; color: var(--text-muted); text-align: center; padding: 16px; }
+  .seg-hdr-btn { width: 24px; height: 24px; border-radius: 50%; border: 0.5px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .seg-hdr-btn:hover { border-color: var(--border-hi); color: var(--text); }
+  .seg-hdr-btn.recording { background: #ff3b30; border-color: #ff3b30; color: #fff; }
+
   /* minimal scrollbar */
   .reader-body::-webkit-scrollbar { width: 4px; }
   .fs-chip { display: flex; align-items: center; gap: 0; padding: 0; border-radius: 20px; border: 0.5px solid var(--border); background: var(--bg-surface); overflow: hidden; }
@@ -390,10 +416,18 @@
     <div class="takes-header" id="takes-header-drag">
       <span>Takes</span>
       <div class="takes-header-actions">
+        <div class="seg-editor-actions" id="seg-editor-actions">
+          <button class="seg-snip-btn" id="seg-snip-btn" onclick="snipSelectedSegments()" title="Remove selected audio">✂ Snip</button>
+          <button class="seg-rerecord-btn" id="seg-rerecord-btn" onclick="startReRecord()" title="Re-record selected segment">🔴 Rec</button>
+          <button class="seg-done-btn" onclick="exitAudioEdit()">Done</button>
+        </div>
         <span id="takes-count"></span>
         <button class="takes-hdr-btn" id="takes-min-btn" onclick="minimizeTakes()" title="Minimize / Expand">−</button>
         <button class="takes-hdr-btn" onclick="hideTakes()" title="Close">×</button>
       </div>
+    </div>
+    <div class="seg-editor" id="seg-editor">
+      <div id="seg-list"></div>
     </div>
     <div class="takes-list" id="takes-list"></div>
     <div class="takes-resize-handle" id="takes-resize-handle"></div>
@@ -958,7 +992,7 @@ let takesMinimized = false;
 let takesX = null, takesY = null;
 let takesW = null, takesH = null; // persisted width/height in px
 
-function hideTakes() { takesOpen = false; g("takes-panel").classList.remove("visible"); syncTakesChip(); }
+function hideTakes() { takesOpen = false; audioEditTakeIdx = null; audioEditSelected = new Set(); g("takes-panel").classList.remove("visible"); syncTakesChip(); }
 function showTakes() {
   takesOpen = true;
   takesMinimized = false;
@@ -1089,6 +1123,10 @@ let liveBase = "";
 let liveInterim = "";
 let currentAudio = null;
 let editingTakeIdx = null; // which take row is in edit mode (local index)
+let recSegments = [];     // timestamped segments captured during current recording
+let recSegStart = 0;      // performance offset when current segment started
+let audioEditTakeIdx = null; // which take is in audio-edit mode
+let audioEditSelected = new Set(); // indices of selected segments in audio edit mode
 
 // post index → array of takes: [{id, transcript, duration, timestamp}, ...]
 const speechTakes = {};
@@ -1276,13 +1314,20 @@ async function startMic() {
   rec = new Ctor();
   rec.continuous = true; rec.interimResults = true; rec.lang = "en-US";
   liveBase = ""; liveInterim = "";
+  recSegments = []; recSegStart = 0;
+  const recStartPerf = performance.now();
   rec.onresult = (e) => {
     let interim = "", final = "";
     for (let i = e.resultIndex; i < e.results.length; i++) {
       if (e.results[i].isFinal) final += e.results[i][0].transcript;
       else interim += e.results[i][0].transcript;
     }
-    if (final) liveBase += (liveBase ? " " : "") + final;
+    if (final) {
+      const endMs = performance.now() - recStartPerf;
+      recSegments.push({ text: final.trim(), startMs: recSegStart, endMs });
+      recSegStart = endMs;
+      liveBase += (liveBase ? " " : "") + final;
+    }
     liveInterim = interim;
     g("speech-text").textContent = liveBase + (interim ? " " + interim : "") || "Listening…";
   };
@@ -1329,12 +1374,70 @@ async function stopMic() {
   }
   mediaRecorder = null; audioChunks = [];
 
-  // save take
+  // save take (or merge into re-record)
   const text = (liveBase || "").trim();
-  if (text || audioBlob) {
+  const isReRecord = reRecordTakeIdx !== null;
+
+  if (isReRecord) {
+    // Merge new recording into the existing take at the re-record gap
+    const takes = speechTakes[current], take = takes[reRecordTakeIdx];
+    const newSegs = recSegments.length > 0 ? recSegments : [];
+    const hasNewContent = text.length > 0 || newSegs.length > 0;
+    let newRecBlob = null;
+    if (audioBlob && audioBlob.size > 0) {
+      try { newRecBlob = await webmToWav(audioBlob); } catch(_) {}
+      if (!newRecBlob) newRecBlob = audioBlob;
+    }
+
+    let combinedSegs, combinedBlob = null;
+
+    if (hasNewContent) {
+      // Full re-record: pre + new + shifted-post
+      const newRecDurMs = newSegs.length > 0 ? newSegs[newSegs.length - 1].endMs : duration * 1000;
+      const timedNewSegs = newSegs.map(s => ({
+        text: s.text,
+        startMs: s.startMs + reRecordInsertMs,
+        endMs: s.endMs + reRecordInsertMs
+      }));
+      const shiftedPost = reRecordPostSegs.map(s => ({
+        ...s,
+        startMs: s.startMs + newRecDurMs,
+        endMs: s.endMs + newRecDurMs
+      }));
+      combinedSegs = [...reRecordPreSegs.map(s => ({ ...s })), ...timedNewSegs, ...shiftedPost];
+      try {
+        combinedBlob = await rebuildCombinedAudio(
+          take.originalId || take.id, reRecordPreSegs, newRecBlob, reRecordPostSegs
+        );
+      } catch(e) { console.error("Audio rebuild failed:", e); }
+    } else {
+      // Empty re-record = pure snip: pre + post only
+      combinedSegs = [...reRecordPreSegs.map(s => ({ ...s })), ...reRecordPostSegs.map(s => ({ ...s }))];
+      try {
+        combinedBlob = await rebuildAudioFromSegments(take, combinedSegs);
+      } catch(e) { console.error("Snip rebuild failed:", e); }
+    }
+
+    if (combinedBlob) {
+      const newId = "t_" + current + "_edit_" + Date.now();
+      take.id = newId;
+      take.segments = combinedSegs;
+      take.transcript = combinedSegs.map(s => s.text).join(" ");
+      const lastSeg = combinedSegs[combinedSegs.length - 1];
+      take.duration = Math.round(lastSeg.endMs / 1000);
+      await idbSave(newId, combinedBlob);
+      selectedTake[current] = reRecordTakeIdx;
+      saveTakesMeta(); saveSelTake();
+      if (readMode === "original") readMode = "spoken";
+    }
+
+    reRecordPreSegs = []; reRecordPostSegs = [];
+    reRecordTakeIdx = null; reRecordInsertMs = 0;
+  } else if (text || audioBlob) {
     if (!speechTakes[current]) speechTakes[current] = [];
     const takeId = "t_" + current + "_" + Date.now();
-    const take = { id: takeId, type: "raw", transcript: text, duration, timestamp: Date.now() };
+    const segments = recSegments.length > 0 ? recSegments : [{ text, startMs: 0, endMs: duration * 1000 }];
+    const take = { id: takeId, type: "raw", transcript: text, duration, timestamp: Date.now(), segments, originalId: takeId };
     speechTakes[current].push(take);
     if (audioBlob && audioBlob.size > 0) {
       try {
@@ -1401,6 +1504,7 @@ function renderTakes() {
         <textarea id="edit-textarea-${i}" class="take-edit-textarea" rows="3" onclick="event.stopPropagation()">${esc(take.transcript || "")}</textarea>
       </div>
       <div class="take-actions" style="flex-direction:column;gap:4px;">
+        ${hasAudio ? `<button class="take-edit-btn" onclick="event.stopPropagation();enterAudioEdit(${i})">✂ Audio</button>` : ""}
         <button class="take-edit-save" onclick="event.stopPropagation();saveEdit(${i})">Save</button>
         <button class="take-edit-cancel" onclick="event.stopPropagation();cancelEdit()">Cancel</button>
       </div>
@@ -1417,12 +1521,306 @@ function renderTakes() {
         <span class="take-meta"><span>${time}</span>${dur ? "<span>" + dur + "</span>" : ""}</span>
       </div>
       <div class="take-actions">
+        ${hasAudio ? `<button class="take-edit-btn" onclick="event.stopPropagation();enterAudioEdit(${i})">✂ Audio</button>` : ""}
         ${!isFused ? `<button class="take-edit-btn" onclick="event.stopPropagation();editTake(${i})">Amend</button>` : `<button class="take-edit-btn" onclick="event.stopPropagation();editTake(${i})">Edit</button>`}
         <button class="take-use-btn${sel ? " used" : ""}" onclick="event.stopPropagation();selectTake(${i})">${sel ? "Active" : "Use"}</button>
         <button class="take-del-btn" onclick="event.stopPropagation();deleteTake(${i})" title="Delete">×</button>
       </div>
     </div>`;
   }).join("");
+
+  // If in audio edit mode, render segments
+  if (audioEditTakeIdx !== null && takes[audioEditTakeIdx]) {
+    renderSegments(takes[audioEditTakeIdx]);
+    panel.classList.add("seg-mode");
+  } else {
+    panel.classList.remove("seg-mode");
+  }
+}
+
+// ── Audio segment editor ──
+function enterAudioEdit(takeIdx) {
+  const takes = speechTakes[current] || [];
+  const take = takes[takeIdx];
+  if (!take || !take.segments || take.segments.length === 0) return;
+  audioEditTakeIdx = takeIdx;
+  audioEditSelected = new Set();
+  takesMinimized = false; // expand panel when editing audio
+  renderTakes();
+}
+
+function exitAudioEdit() {
+  audioEditTakeIdx = null;
+  audioEditSelected = new Set();
+  renderTakes();
+}
+
+function renderSegments(take) {
+  const list = g("seg-list"), snipBtn = g("seg-snip-btn"), rerecordBtn = g("seg-rerecord-btn");
+  const segs = take.segments || [];
+  if (segs.length === 0) {
+    list.innerHTML = '<div class="seg-empty">No timestamped segments for this take.</div>';
+    return;
+  }
+
+  const fmtMs = (ms) => {
+    const m = Math.floor(ms / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    const ds = Math.floor((ms % 1000) / 100);
+    return `${m}:${String(s).padStart(2, "0")}.${ds}`;
+  };
+
+  list.innerHTML = segs.map((seg, i) => {
+    const sel = audioEditSelected.has(i);
+    return `<div class="seg-block${sel ? " selected" : ""}" id="seg-${i}" onclick="toggleSegment(${i})">
+      <span class="seg-time">${fmtMs(seg.startMs)}<br>${fmtMs(seg.endMs)}</span>
+      <span class="seg-text">${esc(seg.text)}</span>
+    </div>`;
+  }).join("");
+
+  const hasSel = audioEditSelected.size > 0;
+  snipBtn.parentElement.classList.toggle("has-sel", hasSel);
+}
+
+function toggleSegment(idx) {
+  if (audioEditSelected.has(idx)) audioEditSelected.delete(idx);
+  else audioEditSelected.add(idx);
+  renderSegments(speechTakes[current][audioEditTakeIdx]);
+}
+
+async function snipSelectedSegments() {
+  if (audioEditSelected.size === 0 || audioEditTakeIdx === null) return;
+  const takes = speechTakes[current];
+  const take = takes[audioEditTakeIdx];
+  const newSegs = take.segments.filter((_, i) => !audioEditSelected.has(i));
+  if (newSegs.length === 0) { alert("Can't delete all segments — keep at least one."); return; }
+
+  // Preserve original audio on first edit
+  if (!take.originalSegments && !take.originalId) {
+    take.originalSegments = [...take.segments];
+    take.originalId = take.id;
+  }
+
+  try {
+    const audioBlob = await rebuildAudioFromSegments(take, newSegs);
+    if (audioBlob) {
+      const newId = "t_" + current + "_edit_" + Date.now();
+      take.id = newId;
+      take.segments = newSegs;
+      take.transcript = newSegs.map(s => s.text).join(" ");
+      const dur = newSegs[newSegs.length - 1].endMs;
+      take.duration = Math.round(dur / 1000);
+      await idbSave(newId, audioBlob);
+      saveTakesMeta(); saveSelTake();
+    }
+  } catch(e) { console.error("Snip failed:", e); alert("Snip failed: " + e.message); }
+
+  audioEditSelected = new Set();
+  renderTakes();
+}
+
+async function startReRecord() {
+  if (audioEditSelected.size === 0 || audioEditTakeIdx === null) return;
+  const takes = speechTakes[current];
+  const take = takes[audioEditTakeIdx];
+
+  // Snip first
+  const newSegs = take.segments.filter((_, i) => !audioEditSelected.has(i));
+  if (newSegs.length === 0) { alert("Can't replace all segments — keep at least one."); return; }
+
+  // Find insertion point (index of first selected segment)
+  const selIndices = [...audioEditSelected].sort((a, b) => a - b);
+  const insertIdx = selIndices[0];
+
+  // Preserve original on first edit
+  if (!take.originalSegments && !take.originalId) {
+    take.originalSegments = [...take.segments];
+    take.originalId = take.id;
+  }
+
+  // Rebuild audio without selected segments but keep a gap pointer
+  let beforeSegs = take.segments.slice(0, insertIdx);
+  let insertMs = beforeSegs.length > 0 ? beforeSegs[beforeSegs.length - 1].endMs : 0;
+
+  // Save the pre-snip state for rebuilding
+  reRecordPreSegs = newSegs.slice(0, insertIdx);
+  reRecordPostSegs = newSegs.slice(insertIdx);
+  reRecordTakeIdx = audioEditTakeIdx;
+  reRecordInsertMs = insertMs;
+
+  audioEditSelected = new Set();
+  audioEditTakeIdx = null;
+  renderTakes();
+
+  // Now start recording for replacement
+  await startMic();
+}
+
+let reRecordPreSegs = [];    // segments before the re-record gap
+let reRecordPostSegs = [];   // segments after the re-record gap
+let reRecordTakeIdx = null;  // which take we're replacing into
+let reRecordInsertMs = 0;    // time offset for the gap
+
+// Override stopMic for re-record flow — handled in modified stopMic
+// (We set a flag so stopMic knows it's a re-record)
+
+async function rebuildAudioFromSegments(take, segments) {
+  // Build audio from segments by slicing the existing audio blob
+  let blob;
+  try { blob = await idbLoad(take.originalId || take.id); }
+  catch(_) { try { blob = await idbLoad(take.id); } catch(__) { return null; } }
+  if (!blob) return null;
+
+  const ctx = new OfflineAudioContext({ numberOfChannels: 2, length: 1, sampleRate: 44100 });
+  const arrayBuf = await blob.arrayBuffer();
+  let audioBuf;
+  try { audioBuf = await ctx.decodeAudioData(arrayBuf.slice(0)); } catch(_) { return null; }
+
+  const sampleRate = audioBuf.sampleRate;
+  const ch = audioBuf.numberOfChannels;
+  // Calculate total new duration
+  const totalSamples = segments.reduce((sum, s) => {
+    return sum + Math.ceil((s.endMs - s.startMs) / 1000 * sampleRate);
+  }, 0);
+
+  const outCtx = new OfflineAudioContext({ numberOfChannels: ch, length: totalSamples, sampleRate });
+  const outBuf = outCtx.createBuffer(ch, totalSamples, sampleRate);
+
+  let outOffset = 0;
+  for (const seg of segments) {
+    const startSample = Math.floor(seg.startMs / 1000 * sampleRate);
+    const endSample = Math.ceil(seg.endMs / 1000 * sampleRate);
+    const segLen = endSample - startSample;
+    if (segLen <= 0) continue;
+    for (let c = 0; c < ch; c++) {
+      const srcData = audioBuf.getChannelData(c).slice(startSample, endSample);
+      outBuf.getChannelData(c).set(srcData, outOffset);
+    }
+    outOffset += segLen;
+  }
+
+  // Render to WAV
+  const source = outCtx.createBufferSource();
+  source.buffer = outBuf;
+  source.connect(outCtx.destination);
+  source.start(0);
+
+  const rendered = await outCtx.startRendering();
+  return bufferToWav(rendered);
+}
+
+function bufferToWav(buffer) {
+  const numChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const format = 1; // PCM
+  const bitsPerSample = 16;
+  const data = [];
+  for (let c = 0; c < numChannels; c++) data.push(buffer.getChannelData(c));
+  const length = data[0].length;
+  const byteRate = sampleRate * numChannels * bitsPerSample / 8;
+  const blockAlign = numChannels * bitsPerSample / 8;
+  const dataSize = length * numChannels * bitsPerSample / 8;
+  const headerSize = 44;
+  const buffer2 = new ArrayBuffer(headerSize + dataSize);
+  const view = new DataView(buffer2);
+
+  const writeString = (offset, str) => { for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i)); };
+  writeString(0, "RIFF");
+  view.setUint32(4, 36 + dataSize, true);
+  writeString(8, "WAVE");
+  writeString(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, format, true);
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, byteRate, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitsPerSample, true);
+  writeString(36, "data");
+  view.setUint32(40, dataSize, true);
+
+  let offset = 44;
+  for (let i = 0; i < length; i++) {
+    for (let c = 0; c < numChannels; c++) {
+      let sample = Math.max(-1, Math.min(1, data[c][i]));
+      sample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+      view.setInt16(offset, sample, true);
+      offset += 2;
+    }
+  }
+  return new Blob([buffer2], { type: "audio/wav" });
+}
+
+async function rebuildCombinedAudio(origAudioId, preSegs, newRecBlob, postSegs) {
+  // Load original audio
+  let origBlob;
+  try { origBlob = await idbLoad(origAudioId); } catch(_) { return null; }
+  if (!origBlob) return null;
+
+  const ctx = new OfflineAudioContext({ numberOfChannels: 2, length: 1, sampleRate: 44100 });
+
+  // Decode original audio
+  const origArr = await origBlob.arrayBuffer();
+  const origBuf = await ctx.decodeAudioData(origArr.slice(0));
+  const sampleRate = origBuf.sampleRate;
+  const ch = origBuf.numberOfChannels;
+
+  // Decode new recording
+  let newBuf;
+  if (newRecBlob) {
+    const newArr = await newRecBlob.arrayBuffer();
+    newBuf = await ctx.decodeAudioData(newArr.slice(0));
+  } else {
+    newBuf = ctx.createBuffer(ch, 0, sampleRate);
+  }
+
+  // Calculate total samples
+  const totalSamples = preSegs.reduce((sum, s) =>
+    sum + Math.ceil((s.endMs - s.startMs) / 1000 * sampleRate), 0)
+    + newBuf.length
+    + postSegs.reduce((sum, s) =>
+      sum + Math.ceil((s.endMs - s.startMs) / 1000 * sampleRate), 0);
+
+  const outCtx = new OfflineAudioContext({ numberOfChannels: ch, length: Math.max(1, totalSamples), sampleRate });
+  const outBuf = outCtx.createBuffer(ch, Math.max(1, totalSamples), sampleRate);
+
+  let outOff = 0;
+
+  // Copy pre segments from original audio
+  for (const seg of preSegs) {
+    const ss = Math.floor(seg.startMs / 1000 * sampleRate);
+    const es = Math.ceil(seg.endMs / 1000 * sampleRate);
+    const len = es - ss;
+    if (len <= 0) continue;
+    for (let c = 0; c < ch; c++) {
+      outBuf.getChannelData(c).set(origBuf.getChannelData(c).slice(ss, es), outOff);
+    }
+    outOff += len;
+  }
+
+  // Copy new recording
+  for (let c = 0; c < ch; c++) {
+    outBuf.getChannelData(c).set(newBuf.getChannelData(c), outOff);
+  }
+  outOff += newBuf.length;
+
+  // Copy post segments from original audio
+  for (const seg of postSegs) {
+    const ss = Math.floor(seg.startMs / 1000 * sampleRate);
+    const es = Math.ceil(seg.endMs / 1000 * sampleRate);
+    const len = es - ss;
+    if (len <= 0) continue;
+    for (let c = 0; c < ch; c++) {
+      outBuf.getChannelData(c).set(origBuf.getChannelData(c).slice(ss, es), outOff);
+    }
+    outOff += len;
+  }
+
+  const source = outCtx.createBufferSource();
+  source.buffer = outBuf;
+  source.connect(outCtx.destination);
+  source.start(0);
+  return bufferToWav(await outCtx.startRendering());
 }
 
 async function playTake(takeIdx) {
@@ -1567,7 +1965,8 @@ async function packageAll() {
       spine: p.spine, body: p.body, status: getStatus(i),
       takes: (speechTakes[i] || []).map(t => ({
         id: t.id, type: t.type, transcript: t.transcript,
-        duration: t.duration, timestamp: t.timestamp, fusedFrom: t.fusedFrom || null
+        duration: t.duration, timestamp: t.timestamp, fusedFrom: t.fusedFrom || null,
+        segments: t.segments || null, originalId: t.originalId || null, originalSegments: t.originalSegments || null
       })),
       selectedTake: selectedTake[i] ?? null
     };

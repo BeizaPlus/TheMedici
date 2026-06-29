@@ -1,1 +1,61 @@
-{"id":165,"topic":"Postcoital Bleeding","title":"Postcoital Bleeding","diagnosis":"Cervical Cancer (Squamous Cell Carcinoma)","hpi_narrative":"{{patient_name}} presents with postcoital (after intercourse) vaginal bleeding, intermenstrual bleeding, and possibly malodorous discharge. Speculum exam reveals a friable, exophytic, or ulcerated cervical lesion. Cervical cancer is the most common GYN cancer worldwide — SCC most common. Caused by persistent high-risk HPV infection (16, 18 most common). Risk factors: multiple sexual partners, early sexual activity, immunosuppression, smoking, lack of Pap screening. Diagnosis: cervical biopsy (colposcopy-directed). Staging: clinical (FIGO). Treatment: early stage (IA-IB1) → radical hysterectomy or fertility-sparing cone biopsy. Locally advanced (IB2-IVA) → chemoradiation. Metastatic → systemic therapy. Prevention: HPV vaccination, routine Pap/HPV co-testing.","chief_complaint":"Postcoital bleeding, intermenstrual bleeding","patient":null,"patient_name":"Efua Ayensu","patient_sex":"female","location":"Office","specialty":"OB/GYN / Gynecologic Oncology","stacks":[{"label":"Speculum + bimanual exam","type":"correctlyOrdered","finding":"Friable cervical lesion.","aliases":["Pelvic Exam"]},{"label":"Colposcopy + cervical biopsy","type":"correctlyOrdered","finding":"SCC confirmed.","aliases":["Colposcopy","Biopsy"]},{"label":"Refer GYN oncology","type":"correctlyOrdered","finding":"Hysterectomy vs chemoradiation per stage.","aliases":["Referral"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 165,
+  "topic": "Postcoital Bleeding",
+  "title": "Postcoital Bleeding",
+  "diagnosis": "Cervical Cancer (Squamous Cell Carcinoma)",
+  "hpi_narrative": "{{patient_name}} presents with postcoital (after intercourse) vaginal bleeding, intermenstrual bleeding, and possibly malodorous discharge. Speculum exam reveals a friable, exophytic, or ulcerated cervical lesion. Cervical cancer is the most common GYN cancer worldwide — SCC most common. Caused by persistent high-risk HPV infection (16, 18 most common). Risk factors: multiple sexual partners, early sexual activity, immunosuppression, smoking, lack of Pap screening. Diagnosis: cervical biopsy (colposcopy-directed). Staging: clinical (FIGO). Treatment: early stage (IA-IB1) → radical hysterectomy or fertility-sparing cone biopsy. Locally advanced (IB2-IVA) → chemoradiation. Metastatic → systemic therapy. Prevention: HPV vaccination, routine Pap/HPV co-testing.",
+  "chief_complaint": "Postcoital bleeding, intermenstrual bleeding",
+  "patient": null,
+  "patient_name": "Efua Ayensu",
+  "patient_sex": "female",
+  "location": "Office",
+  "specialty": "OB/GYN / Gynecologic Oncology",
+  "stacks": [
+    {
+      "label": "Speculum + bimanual exam",
+      "type": "correctlyOrdered",
+      "finding": "Friable cervical lesion.",
+      "aliases": [
+        "Pelvic Exam"
+      ]
+    },
+    {
+      "label": "Colposcopy",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
+      "aliases": [
+        "Colposcopy",
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "cervical biopsy",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
+      "aliases": [
+        "Colposcopy",
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "Refer GYN oncology",
+      "type": "correctlyOrdered",
+      "finding": "Hysterectomy vs chemoradiation per stage.",
+      "aliases": [
+        "Referral"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 93,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}

@@ -7,18 +7,24 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "CBC with differential",
-    "Blood cultures x2 + UA + CXR",
+    "Blood cultures x2",
+    "Urinalysis",
+    "Chest X-ray",
     "MASCC score",
     "Cefepime / Meropenem / Pip-Tazo IV within 1h",
-    "Admit + neutropenic precautions"
+    "Admission",
+    "Neutropenic precautions"
   ],
   "should_avoid": [],
   "rationale": {
     "CBC with differential": "ANC <500 — neutropenic.",
-    "Blood cultures x2 + UA + CXR": "Source workup.",
+    "Blood cultures x2": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+    "Urinalysis": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+    "Chest X-ray": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
     "MASCC score": "Low vs high risk.",
     "Cefepime / Meropenem / Pip-Tazo IV within 1h": "Empiric anti-pseudomonal.",
-    "Admit + neutropenic precautions": "Reverse isolation."
+    "Admission": "[Auto-split from bundled label \"Admit + neutropenic precautions\"] Reverse isolation.",
+    "Neutropenic precautions": "[Auto-split from bundled label \"Admit + neutropenic precautions\"] Reverse isolation."
   },
   "hpi": "{{patient_name}} presents with fever (single temp >38.3°C or sustained >38.0°C for 1h) and absolute neutrophil count <500 cells/µL. This is a MEDICAL EMERGENCY — mortality high without immediate antibiotics. Most commonly seen post-chemotherapy. Often no localizing signs of infection because there are no neutrophils to create pus/inflammation. Blood cultures x2, UA + culture, CXR. Calculate MASCC score for risk stratification (low-risk may be outpatient). Treatment: empiric IV antibiotics within 1 HOUR — monotherapy with anti-pseudomonal beta-lactam (cefepime, meropenem, pip-tazo). Add vancomycin if: hemodynamic instability, suspected catheter infection, skin/soft tissue infection, known MRSA colonization, severe mucositis. If persists >4-7 days → add antifungal coverage. G-CSF may be considered. Admit. Reverse isolation (neutropenic precautions).",
   "hpi_narrative": "{{patient_name}} presents with fever (single temp >38.3°C or sustained >38.0°C for 1h) and absolute neutrophil count <500 cells/µL. This is a MEDICAL EMERGENCY — mortality high without immediate antibiotics. Most commonly seen post-chemotherapy. Often no localizing signs of infection because there are no neutrophils to create pus/inflammation. Blood cultures x2, UA + culture, CXR. Calculate MASCC score for risk stratification (low-risk may be outpatient). Treatment: empiric IV antibiotics within 1 HOUR — monotherapy with anti-pseudomonal beta-lactam (cefepime, meropenem, pip-tazo). Add vancomycin if: hemodynamic instability, suspected catheter infection, skin/soft tissue infection, known MRSA colonization, severe mucositis. If persists >4-7 days → add antifungal coverage. G-CSF may be considered. Admit. Reverse isolation (neutropenic precautions).",
@@ -50,9 +56,25 @@
       ]
     },
     {
-      "label": "Blood cultures x2 + UA + CXR",
+      "label": "Blood cultures x2",
       "type": "correctlyOrdered",
-      "finding": "Source workup.",
+      "finding": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+      "aliases": [
+        "Cultures"
+      ]
+    },
+    {
+      "label": "Urinalysis",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+      "aliases": [
+        "Cultures"
+      ]
+    },
+    {
+      "label": "Chest X-ray",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
       "aliases": [
         "Cultures"
       ]
@@ -74,9 +96,17 @@
       ]
     },
     {
-      "label": "Admit + neutropenic precautions",
+      "label": "Admission",
       "type": "correctlyOrdered",
-      "finding": "Reverse isolation.",
+      "finding": "[Auto-split from bundled label \"Admit + neutropenic precautions\"] Reverse isolation.",
+      "aliases": [
+        "Admission"
+      ]
+    },
+    {
+      "label": "Neutropenic precautions",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Admit + neutropenic precautions\"] Reverse isolation.",
       "aliases": [
         "Admission"
       ]
@@ -84,10 +114,13 @@
   ],
   "order_sets": [
     "CBC with differential",
-    "Blood cultures x2 + UA + CXR",
+    "Blood cultures x2",
+    "Urinalysis",
+    "Chest X-ray",
     "MASCC score",
     "Cefepime / Meropenem / Pip-Tazo IV within 1h",
-    "Admit + neutropenic precautions"
+    "Admission",
+    "Neutropenic precautions"
   ],
   "complete": true,
   "extraction_method": "deepseek_direct",

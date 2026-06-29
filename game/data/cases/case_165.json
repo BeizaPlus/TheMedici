@@ -7,13 +7,15 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Speculum + bimanual exam",
-    "Colposcopy + cervical biopsy",
+    "Colposcopy",
+    "cervical biopsy",
     "Refer GYN oncology"
   ],
   "should_avoid": [],
   "rationale": {
     "Speculum + bimanual exam": "Friable cervical lesion.",
-    "Colposcopy + cervical biopsy": "SCC confirmed.",
+    "Colposcopy": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
+    "cervical biopsy": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
     "Refer GYN oncology": "Hysterectomy vs chemoradiation per stage."
   },
   "hpi": "{{patient_name}} presents with postcoital (after intercourse) vaginal bleeding, intermenstrual bleeding, and possibly malodorous discharge. Speculum exam reveals a friable, exophytic, or ulcerated cervical lesion. Cervical cancer is the most common GYN cancer worldwide — SCC most common. Caused by persistent high-risk HPV infection (16, 18 most common). Risk factors: multiple sexual partners, early sexual activity, immunosuppression, smoking, lack of Pap screening. Diagnosis: cervical biopsy (colposcopy-directed). Staging: clinical (FIGO). Treatment: early stage (IA-IB1) → radical hysterectomy or fertility-sparing cone biopsy. Locally advanced (IB2-IVA) → chemoradiation. Metastatic → systemic therapy. Prevention: HPV vaccination, routine Pap/HPV co-testing.",
@@ -46,9 +48,18 @@
       ]
     },
     {
-      "label": "Colposcopy + cervical biopsy",
+      "label": "Colposcopy",
       "type": "correctlyOrdered",
-      "finding": "SCC confirmed.",
+      "finding": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
+      "aliases": [
+        "Colposcopy",
+        "Biopsy"
+      ]
+    },
+    {
+      "label": "cervical biopsy",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
       "aliases": [
         "Colposcopy",
         "Biopsy"
@@ -65,7 +76,8 @@
   ],
   "order_sets": [
     "Speculum + bimanual exam",
-    "Colposcopy + cervical biopsy",
+    "Colposcopy",
+    "cervical biopsy",
     "Refer GYN oncology"
   ],
   "complete": true,

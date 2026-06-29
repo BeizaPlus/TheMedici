@@ -13,11 +13,13 @@
     "Physical Exam: Neuro / Psych",
     "Blood cultures x2",
     "CBC with differential",
-    "Lumbar puncture + CSF analysis",
+    "Lumbar puncture",
+    "CSF analysis",
     "CT head (if indicated before LP)",
     "BMP / CMP",
     "PT/PTT / INR",
-    "Ceftriaxone 2g IV + Vancomycin IV",
+    "Ceftriaxone IV",
+    "Vancomycin IV",
     "Dexamethasone IV",
     "Droplet precautions",
     "Admit to ICU"
@@ -33,11 +35,13 @@
     "Physical Exam: Neuro / Psych": "Kernig's and Brudzinski's signs. Nuchal rigidity. AMS. Focal deficits?",
     "Blood cultures x2": "Before antibiotics. Positive in 50-90% of bacterial meningitis.",
     "CBC with differential": "Leukocytosis. Thrombocytopenia in meningococcemia (DIC).",
-    "Lumbar puncture + CSF analysis": "Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+    "Lumbar puncture": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+    "CSF analysis": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
     "CT head (if indicated before LP)": "If papilledema, focal neuro deficit, AMS, seizure, immunocompromised — CT before LP to rule out mass effect.",
     "BMP / CMP": "Screening. Hyponatremia in SIADH from meningitis.",
     "PT/PTT / INR": "Assess for DIC — meningococcemia can trigger DIC.",
-    "Ceftriaxone 2g IV + Vancomycin IV": "Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+    "Ceftriaxone IV": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+    "Vancomycin IV": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
     "Dexamethasone IV": "Before or with first antibiotics. Reduces hearing loss and neurologic sequelae in S. pneumoniae and H. influenzae meningitis.",
     "Droplet precautions": "Meningococcal meningitis requires droplet isolation until 24h of effective antibiotics.",
     "Admit to ICU": "Bacterial meningitis requires ICU for close monitoring and IV antibiotics.",
@@ -151,9 +155,18 @@
       ]
     },
     {
-      "label": "Lumbar puncture + CSF analysis",
+      "label": "Lumbar puncture",
       "type": "correctlyOrdered",
-      "finding": "Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+      "finding": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+      "aliases": [
+        "LP",
+        "CSF"
+      ]
+    },
+    {
+      "label": "CSF analysis",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
       "aliases": [
         "LP",
         "CSF"
@@ -184,9 +197,18 @@
       ]
     },
     {
-      "label": "Ceftriaxone 2g IV + Vancomycin IV",
+      "label": "Ceftriaxone IV",
       "type": "correctlyOrdered",
-      "finding": "Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+      "finding": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+      "aliases": [
+        "Rocephin",
+        "Vanc"
+      ]
+    },
+    {
+      "label": "Vancomycin IV",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
       "aliases": [
         "Rocephin",
         "Vanc"
@@ -225,11 +247,13 @@
     "Physical Exam: Neuro / Psych",
     "Blood cultures x2",
     "CBC with differential",
-    "Lumbar puncture + CSF analysis",
+    "Lumbar puncture",
+    "CSF analysis",
     "CT head (if indicated before LP)",
     "BMP / CMP",
     "PT/PTT / INR",
-    "Ceftriaxone 2g IV + Vancomycin IV",
+    "Ceftriaxone IV",
+    "Vancomycin IV",
     "Dexamethasone IV",
     "Droplet precautions",
     "Admit to ICU"

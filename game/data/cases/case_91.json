@@ -7,7 +7,8 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: Breasts / Axillae",
-    "Diagnostic mammogram + US",
+    "Diagnostic mammogram",
+    "Ultrasound",
     "Core needle biopsy",
     "BRCA testing (if indicated)",
     "Staging (CT / bone scan)",
@@ -16,7 +17,8 @@
   "should_avoid": [],
   "rationale": {
     "Physical Exam: Breasts / Axillae": "Firm, non-tender, immobile lump. Skin dimpling. Axillary LAN.",
-    "Diagnostic mammogram + US": "BIRADS classification.",
+    "Diagnostic mammogram": "[Auto-split from bundled label \"Diagnostic mammogram + US\"] BIRADS classification.",
+    "Ultrasound": "[Auto-split from bundled label \"Diagnostic mammogram + US\"] BIRADS classification.",
     "Core needle biopsy": "ER, PR, HER2/neu status.",
     "BRCA testing (if indicated)": "Family history, young age, TNBC.",
     "Staging (CT / bone scan)": "Metastases.",
@@ -52,9 +54,18 @@
       ]
     },
     {
-      "label": "Diagnostic mammogram + US",
+      "label": "Diagnostic mammogram",
       "type": "correctlyOrdered",
-      "finding": "BIRADS classification.",
+      "finding": "[Auto-split from bundled label \"Diagnostic mammogram + US\"] BIRADS classification.",
+      "aliases": [
+        "Mammogram",
+        "Breast US"
+      ]
+    },
+    {
+      "label": "Ultrasound",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Diagnostic mammogram + US\"] BIRADS classification.",
       "aliases": [
         "Mammogram",
         "Breast US"
@@ -95,7 +106,8 @@
   ],
   "order_sets": [
     "Physical Exam: Breasts / Axillae",
-    "Diagnostic mammogram + US",
+    "Diagnostic mammogram",
+    "Ultrasound",
     "Core needle biopsy",
     "BRCA testing (if indicated)",
     "Staging (CT / bone scan)",

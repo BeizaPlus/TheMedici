@@ -13,7 +13,8 @@
     "BMP",
     "CT abdomen/pelvis",
     "IV Ceftriaxone / Ciprofloxacin",
-    "IV fluids + Antiemetics"
+    "IV Fluids",
+    "Antiemetics"
   ],
   "should_avoid": [],
   "rationale": {
@@ -24,7 +25,8 @@
     "BMP": "Renal function.",
     "CT abdomen/pelvis": "If complicated or not responding to Abx.",
     "IV Ceftriaxone / Ciprofloxacin": "IV if severe/vomiting/pregnant. PO if mild and stable.",
-    "IV fluids + Antiemetics": "Nausea/vomiting."
+    "IV Fluids": "Nausea/vomiting.",
+    "Antiemetics": "Nausea/vomiting."
   },
   "hpi": "{{patient_name}} presents with fever, chills, unilateral flank pain/CVA tenderness, nausea, vomiting, and lower urinary tract symptoms (dysuria, frequency, urgency). Acute pyelonephritis is an ascending bacterial infection of the renal parenchyma — most commonly E. coli (80%). Risk factors: female, sexual activity, pregnancy, urinary tract obstruction, catheterization, DM, immunosuppression. UA shows pyuria, leukocyte esterase, nitrites, WBC casts. Urine culture for confirmation + sensitivities. Blood cultures if severe/septic. CT abdomen/pelvis if complicated (abscess, obstruction, stone) or not responding to 48-72h of antibiotics. Treatment: outpatient (mild, stable): PO fluoroquinolone (ciprofloxacin) or TMP-SMX. Inpatient (severe, vomiting, pregnant, immunocompromised): IV ceftriaxone or fluoroquinolone. Switch to PO after clinical improvement. Total course 7-14 days. Repeat urine culture after treatment to confirm clearance.",
   "hpi_narrative": "{{patient_name}} presents with fever, chills, unilateral flank pain/CVA tenderness, nausea, vomiting, and lower urinary tract symptoms (dysuria, frequency, urgency). Acute pyelonephritis is an ascending bacterial infection of the renal parenchyma — most commonly E. coli (80%). Risk factors: female, sexual activity, pregnancy, urinary tract obstruction, catheterization, DM, immunosuppression. UA shows pyuria, leukocyte esterase, nitrites, WBC casts. Urine culture for confirmation + sensitivities. Blood cultures if severe/septic. CT abdomen/pelvis if complicated (abscess, obstruction, stone) or not responding to 48-72h of antibiotics. Treatment: outpatient (mild, stable): PO fluoroquinolone (ciprofloxacin) or TMP-SMX. Inpatient (severe, vomiting, pregnant, immunocompromised): IV ceftriaxone or fluoroquinolone. Switch to PO after clinical improvement. Total course 7-14 days. Repeat urine culture after treatment to confirm clearance.",
@@ -105,12 +107,21 @@
       ]
     },
     {
-      "label": "IV fluids + Antiemetics",
+      "label": "IV Fluids",
       "type": "correctlyOrdered",
       "finding": "Nausea/vomiting.",
       "aliases": [
         "IV fluids"
       ]
+    },
+    {
+      "label": "Antiemetics",
+      "type": "correctlyOrdered",
+      "finding": "Nausea/vomiting.",
+      "aliases": [
+        "IV fluids"
+      ],
+      "id": "undefined-split"
     }
   ],
   "order_sets": [
@@ -121,7 +132,8 @@
     "BMP",
     "CT abdomen/pelvis",
     "IV Ceftriaxone / Ciprofloxacin",
-    "IV fluids + Antiemetics"
+    "IV Fluids",
+    "Antiemetics"
   ],
   "complete": true,
   "extraction_method": "deepseek_direct",

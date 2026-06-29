@@ -1,1 +1,141 @@
-{"id":51,"topic":"Altered Mental Status","title":"Altered Mental Status","diagnosis":"Transient Ischemic Attack (TIA)","hpi_narrative":"{{patient_name}} presents with transient focal neurological deficit (unilateral weakness, aphasia, visual field defect) resolving completely within 24 hours (typically <1 hour). Exam reveals carotid bruit on the right. TIA is a neurological emergency — 10-15% risk of stroke within 90 days, highest in first 48 hours. ABCD2 score predicts stroke risk. Workup: non-contrast head CT (rule out hemorrhage), carotid duplex ultrasound (identify stenosis — this patient has right carotid bruit), ECG (atrial fibrillation is common cause), echocardiogram (cardioembolic source), MRI brain (DWI for ischemia). Labs: CBC, BMP, lipids, HbA1c, PT/PTT. Treatment: antiplatelet therapy — aspirin 81-325mg + clopidogrel (dual antiplatelet for 21 days then single agent), or aspirin + dipyridamole. If carotid stenosis >70%: CEA (carotid endarterectomy). If atrial fibrillation: anticoagulation (DOAC or warfarin). Aggressive risk factor management: statin, BP control, diabetes control, smoking cessation. Admit for expedited workup.","chief_complaint":"Transient focal neurological deficit, resolves within hours","patient":null,"patient_name":"Elorm Tetteh","patient_sex":"male","location":"ER","specialty":"Neurology / Vascular Neurology","stacks":[{"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Neurological emergency.","aliases":["General Appearance"]},{"label":"Physical Exam: Chest / Lungs","type":"correctlyOrdered","finding":"Screen.","aliases":["Chest Exam"]},{"label":"Physical Exam: Heart / Cardiovascular","type":"correctlyOrdered","finding":"Carotid bruit — right carotid. AFib auscultation.","aliases":["Cardiovascular Exam"]},{"label":"Physical Exam: Neuro / Psych","type":"correctlyOrdered","finding":"Focal deficits (may have resolved by exam). NIHSS.","aliases":["Neuro Exam"]},{"label":"CT head without contrast","type":"correctlyOrdered","finding":"Rule out hemorrhage. May be normal in TIA.","aliases":["Head CT"]},{"label":"Carotid duplex ultrasound","type":"correctlyOrdered","finding":"Identify carotid stenosis. Bruit on right.","aliases":["Carotid US"]},{"label":"ECG","type":"correctlyOrdered","finding":"AFib screen.","aliases":["EKG"]},{"label":"Echocardiogram","type":"correctlyOrdered","finding":"Cardioembolic source.","aliases":["Echo"]},{"label":"MRI brain with DWI","type":"correctlyOrdered","finding":"May show small infarcts.","aliases":["MRI"]},{"label":"CBC / BMP / Lipids / HbA1c","type":"correctlyOrdered","finding":"Risk factor assessment.","aliases":["Labs"]},{"label":"Aspirin + Clopidogrel (DAPT x21d)","type":"correctlyOrdered","finding":"Dual antiplatelet for 21 days then single agent.","aliases":["ASA","Plavix"]},{"label":"High-intensity statin (Atorvastatin 80mg)","type":"correctlyOrdered","finding":"Aggressive LDL lowering.","aliases":["Statin"]},{"label":"Admit for expedited TIA workup","type":"correctlyOrdered","finding":"High stroke risk in first 48h.","aliases":["Admit"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":94,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 51,
+  "topic": "Altered Mental Status",
+  "title": "Altered Mental Status",
+  "diagnosis": "Transient Ischemic Attack (TIA)",
+  "hpi_narrative": "{{patient_name}} presents with transient focal neurological deficit (unilateral weakness, aphasia, visual field defect) resolving completely within 24 hours (typically <1 hour). Exam reveals carotid bruit on the right. TIA is a neurological emergency — 10-15% risk of stroke within 90 days, highest in first 48 hours. ABCD2 score predicts stroke risk. Workup: non-contrast head CT (rule out hemorrhage), carotid duplex ultrasound (identify stenosis — this patient has right carotid bruit), ECG (atrial fibrillation is common cause), echocardiogram (cardioembolic source), MRI brain (DWI for ischemia). Labs: CBC, BMP, lipids, HbA1c, PT/PTT. Treatment: antiplatelet therapy — aspirin 81-325mg + clopidogrel (dual antiplatelet for 21 days then single agent), or aspirin + dipyridamole. If carotid stenosis >70%: CEA (carotid endarterectomy). If atrial fibrillation: anticoagulation (DOAC or warfarin). Aggressive risk factor management: statin, BP control, diabetes control, smoking cessation. Admit for expedited workup.",
+  "chief_complaint": "Transient focal neurological deficit, resolves within hours",
+  "patient": null,
+  "patient_name": "Elorm Tetteh",
+  "patient_sex": "male",
+  "location": "ER",
+  "specialty": "Neurology / Vascular Neurology",
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Neurological emergency.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "type": "correctlyOrdered",
+      "finding": "Screen.",
+      "aliases": [
+        "Chest Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Carotid bruit — right carotid. AFib auscultation.",
+      "aliases": [
+        "Cardiovascular Exam"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "type": "correctlyOrdered",
+      "finding": "Focal deficits (may have resolved by exam). NIHSS.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "CT head without contrast",
+      "type": "correctlyOrdered",
+      "finding": "Rule out hemorrhage. May be normal in TIA.",
+      "aliases": [
+        "Head CT"
+      ]
+    },
+    {
+      "label": "Carotid duplex ultrasound",
+      "type": "correctlyOrdered",
+      "finding": "Identify carotid stenosis. Bruit on right.",
+      "aliases": [
+        "Carotid US"
+      ]
+    },
+    {
+      "label": "ECG",
+      "type": "correctlyOrdered",
+      "finding": "AFib screen.",
+      "aliases": [
+        "EKG"
+      ]
+    },
+    {
+      "label": "Echocardiogram",
+      "type": "correctlyOrdered",
+      "finding": "Cardioembolic source.",
+      "aliases": [
+        "Echo"
+      ]
+    },
+    {
+      "label": "MRI brain with DWI",
+      "type": "correctlyOrdered",
+      "finding": "May show small infarcts.",
+      "aliases": [
+        "MRI"
+      ]
+    },
+    {
+      "label": "CBC / BMP / Lipids / HbA1c",
+      "type": "correctlyOrdered",
+      "finding": "Risk factor assessment.",
+      "aliases": [
+        "Labs"
+      ]
+    },
+    {
+      "label": "Aspirin",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
+      "aliases": [
+        "ASA",
+        "Plavix"
+      ]
+    },
+    {
+      "label": "Clopidogrel",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
+      "aliases": [
+        "ASA",
+        "Plavix"
+      ]
+    },
+    {
+      "label": "High-intensity statin (Atorvastatin 80mg)",
+      "type": "correctlyOrdered",
+      "finding": "Aggressive LDL lowering.",
+      "aliases": [
+        "Statin"
+      ]
+    },
+    {
+      "label": "Admit for expedited TIA workup",
+      "type": "correctlyOrdered",
+      "finding": "High stroke risk in first 48h.",
+      "aliases": [
+        "Admit"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 94,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}

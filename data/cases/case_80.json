@@ -1,1 +1,83 @@
-{"id":80,"topic":"Vomiting","title":"Vomiting","diagnosis":"Malrotation with Midgut Volvulus","hpi_narrative":"{{patient_name}} is a neonate/infant presenting with bilious (green) vomiting — a surgical emergency until proven otherwise. Bilious vomiting in a newborn = malrotation with volvulus. Malrotation occurs when the midgut fails to complete its normal 270° counterclockwise rotation during fetal development, resulting in a narrow mesenteric base. This predisposes to volvulus — twisting of the midgut around the superior mesenteric artery → intestinal ischemia and necrosis. Diagnosis: upper GI series (gold standard) showing DJJ (duodenojejunal junction) to the RIGHT of midline and spiral/corkscrew duodenum. Abdominal X-ray may show double bubble sign or gasless abdomen. Treatment: EMERGENCY surgical exploration (Ladd procedure). NPO, NG tube decompression, IV fluids. Time-critical — delay leads to bowel necrosis and short gut syndrome.","chief_complaint":"Bilious vomiting in newborn","patient":null,"patient_name":"Akua Nyantakyi","patient_sex":"female","location":"ER","specialty":"Pediatric Surgery","stacks":[{"label":"Physical Exam: General Appearance","type":"shouldHaveOrdered","finding":"Assess — may be in extremis.","aliases":["General Appearance"]},{"label":"Physical Exam: Abdomen","type":"shouldHaveOrdered","finding":"Distension, tenderness.","aliases":["Abdominal Exam"]},{"label":"Abdominal X-ray","type":"correctlyOrdered","finding":"Double bubble, gasless abdomen.","aliases":["KUB"]},{"label":"Upper GI series","type":"correctlyOrdered","finding":"DJJ right of midline, corkscrew duodenum = malrotation with volvulus.","aliases":["UGI"]},{"label":"NPO + NG tube","type":"correctlyOrdered","finding":"Decompression. IV fluids resuscitation.","aliases":["NG tube"]},{"label":"EMERGENCY surgical consult / Ladd procedure","type":"correctlyOrdered","finding":"Time-critical. Ladd procedure reduces volvulus.","aliases":["Pediatric surgery"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 80,
+  "topic": "Vomiting",
+  "title": "Vomiting",
+  "diagnosis": "Malrotation with Midgut Volvulus",
+  "hpi_narrative": "{{patient_name}} is a neonate/infant presenting with bilious (green) vomiting — a surgical emergency until proven otherwise. Bilious vomiting in a newborn = malrotation with volvulus. Malrotation occurs when the midgut fails to complete its normal 270° counterclockwise rotation during fetal development, resulting in a narrow mesenteric base. This predisposes to volvulus — twisting of the midgut around the superior mesenteric artery → intestinal ischemia and necrosis. Diagnosis: upper GI series (gold standard) showing DJJ (duodenojejunal junction) to the RIGHT of midline and spiral/corkscrew duodenum. Abdominal X-ray may show double bubble sign or gasless abdomen. Treatment: EMERGENCY surgical exploration (Ladd procedure). NPO, NG tube decompression, IV fluids. Time-critical — delay leads to bowel necrosis and short gut syndrome.",
+  "chief_complaint": "Bilious vomiting in newborn",
+  "patient": null,
+  "patient_name": "Akua Nyantakyi",
+  "patient_sex": "female",
+  "location": "ER",
+  "specialty": "Pediatric Surgery",
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "shouldHaveOrdered",
+      "finding": "Assess — may be in extremis.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Abdomen",
+      "type": "shouldHaveOrdered",
+      "finding": "Distension, tenderness.",
+      "aliases": [
+        "Abdominal Exam"
+      ]
+    },
+    {
+      "label": "Abdominal X-ray",
+      "type": "correctlyOrdered",
+      "finding": "Double bubble, gasless abdomen.",
+      "aliases": [
+        "KUB"
+      ]
+    },
+    {
+      "label": "Upper GI series",
+      "type": "correctlyOrdered",
+      "finding": "DJJ right of midline, corkscrew duodenum = malrotation with volvulus.",
+      "aliases": [
+        "UGI"
+      ]
+    },
+    {
+      "label": "NPO",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"NPO + NG tube\"] Decompression. IV fluids resuscitation.",
+      "aliases": [
+        "NG tube"
+      ]
+    },
+    {
+      "label": "NG tube",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"NPO + NG tube\"] Decompression. IV fluids resuscitation.",
+      "aliases": [
+        "NG tube"
+      ]
+    },
+    {
+      "label": "EMERGENCY surgical consult / Ladd procedure",
+      "type": "correctlyOrdered",
+      "finding": "Time-critical. Ladd procedure reduces volvulus.",
+      "aliases": [
+        "Pediatric surgery"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 93,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}

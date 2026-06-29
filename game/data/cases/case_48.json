@@ -16,7 +16,8 @@
     "Chest X-ray",
     "Pulse oximetry",
     "Blood cultures (if inpatient)",
-    "Sputum Gram stain + culture",
+    "Sputum Gram stain",
+    "Culture",
     "BMP / CMP",
     "Antibiotics per CAP guidelines"
   ],
@@ -32,7 +33,8 @@
     "Chest X-ray": "Lobar consolidation — confirms CAP.",
     "Pulse oximetry": "Assess oxygenation.",
     "Blood cultures (if inpatient)": "Before antibiotics.",
-    "Sputum Gram stain + culture": "Identify pathogen.",
+    "Sputum Gram stain": "[Auto-split from bundled label \"Sputum Gram stain + culture\"] Identify pathogen.",
+    "Culture": "[Auto-split from bundled label \"Sputum Gram stain + culture\"] Identify pathogen.",
     "BMP / CMP": "CURB-65: BUN >19 = 1 point.",
     "Antibiotics per CAP guidelines": "Outpatient: amoxicillin or doxycycline or azithromycin. With comorbidities: levofloxacin or amox-clav + macrolide."
   },
@@ -138,9 +140,17 @@
       ]
     },
     {
-      "label": "Sputum Gram stain + culture",
+      "label": "Sputum Gram stain",
       "type": "correctlyOrdered",
-      "finding": "Identify pathogen.",
+      "finding": "[Auto-split from bundled label \"Sputum Gram stain + culture\"] Identify pathogen.",
+      "aliases": [
+        "Sputum"
+      ]
+    },
+    {
+      "label": "Culture",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Sputum Gram stain + culture\"] Identify pathogen.",
       "aliases": [
         "Sputum"
       ]
@@ -173,7 +183,8 @@
     "Chest X-ray",
     "Pulse oximetry",
     "Blood cultures (if inpatient)",
-    "Sputum Gram stain + culture",
+    "Sputum Gram stain",
+    "Culture",
     "BMP / CMP",
     "Antibiotics per CAP guidelines"
   ],

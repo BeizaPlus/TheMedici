@@ -52,12 +52,12 @@ function buildSexCorpus(caseData = {}) {
 }
 
 function inferSexFromHeuristics(blob) {
-  if (!blob) return 'male';
+  if (!blob) return 'unknown';
 
   const femaleHits =
     (blob.match(/\bfemale\b|\bwoman\b|\bwomen\b|\bgirl\b|\bdaughter\b|\bmother\b|\bgravida\b|\bg\d+p\d+\b/gi) || [])
       .length +
-    (/\bpregnant\b|\bchildbearing\s+age\b|\bmenstrual\b|\btampon\b|\bpap\s+smear\b|\bhpv\b|\btdap\b|\bectopic\b|\bpelvic\s+pain\b|\bobstetric\b/gi.test(
+    (/\bpregnant\b|\bchildbearing\s+age\b|\bmenstrual\b|\btampon\b|\bpap\s+smear\b|\bhpv\b|\btdap\b|\bectopic\b|\bpelvic\s+pain\b|\bobstetric\b|\bvaginal\b|\bvulvar\b|\bcervix\b|\bcervical\b|\bdyspareunia\b|\bbartholin\b|\bendometrial\b|\bovarian\b|\buterine\b|\bclitoris\b|\blabia\b|\bbreast\b|\bmammary\b|\bmastectomy\b|\bhysterectomy\b|\boophorectomy\b|\bmenopause\b|\bmenorrhagia\b|\bendometriosis\b|\blactation\b/gi.test(
       blob,
     )
       ? 2
@@ -75,12 +75,12 @@ function inferSexFromHeuristics(blob) {
   if (femaleScore > maleScore + 2) return 'female';
   if (maleScore > femaleScore + 2) return 'male';
 
-  return 'male';
+  return 'unknown';
 }
 
 /**
  * Resolve patient sex for portraits, TTS, and simulation.
- * Priority: HPI intro age/sex pattern → explicit patientSex → narrative heuristics → male default.
+ * Priority: HPI intro age/sex pattern → explicit patientSex → narrative heuristics → unknown default.
  */
 export function resolvePatientSex(caseData = {}) {
   const corpus = buildSexCorpus(caseData);

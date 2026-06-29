@@ -6,19 +6,29 @@
   "confidence": "screenshot",
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "Medical stabilization + SANE exam (with consent)",
-    "STI testing + prophylaxis (CTX+Doxy+Metro)",
+    "Medical stabilization",
+    "SANE exam (with consent)",
+    "STI testing",
+    "Ceftriaxone",
+    "Doxycycline",
+    "Metronidazole",
     "HIV PEP (if <72h)",
     "Hepatitis B vaccine",
-    "Crisis counseling + Safe discharge"
+    "Crisis counseling",
+    "Safe discharge"
   ],
   "should_avoid": [],
   "rationale": {
-    "Medical stabilization + SANE exam (with consent)": "Document injuries, forensic evidence.",
-    "STI testing + prophylaxis (CTX+Doxy+Metro)": "Empiric.",
+    "Medical stabilization": "Document injuries, forensic evidence.",
+    "SANE exam (with consent)": "Document injuries, forensic evidence.",
+    "STI testing": "Empiric.",
+    "Ceftriaxone": "Empiric.",
+    "Doxycycline": "Empiric.",
+    "Metronidazole": "Empiric.",
     "HIV PEP (if <72h)": "28-day course.",
     "Hepatitis B vaccine": "If not immune.",
-    "Crisis counseling + Safe discharge": "Trauma-informed. Psychiatry follow-up."
+    "Crisis counseling": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up.",
+    "Safe discharge": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up."
   },
   "hpi": "{{patient_name}} presents after sexual assault. Management: trauma-informed, multidisciplinary approach. Medical stabilization first, then forensic examination with consent. SANE examination if available. Forensic evidence collection (rape kit) within 72h. Document injuries. Labs: STI testing (CT, GC, HIV, syphilis, hepatitis B/C), toxicology if concern for drug-facilitated assault. Empiric STI prophylaxis: ceftriaxone + doxycycline + metronidazole. HIV PEP if exposure within 72h (28-day course). Hepatitis B vaccine if not immune. Mental health crisis counseling. Report to law enforcement (with patient consent). Safe discharge planning. Follow-up: STI re-testing, counseling.",
   "hpi_narrative": "{{patient_name}} presents after sexual assault. Management: trauma-informed, multidisciplinary approach. Medical stabilization first, then forensic examination with consent. SANE examination if available. Forensic evidence collection (rape kit) within 72h. Document injuries. Labs: STI testing (CT, GC, HIV, syphilis, hepatitis B/C), toxicology if concern for drug-facilitated assault. Empiric STI prophylaxis: ceftriaxone + doxycycline + metronidazole. HIV PEP if exposure within 72h (28-day course). Hepatitis B vaccine if not immune. Mental health crisis counseling. Report to law enforcement (with patient consent). Safe discharge planning. Follow-up: STI re-testing, counseling.",
@@ -42,7 +52,7 @@
   "distractors": [],
   "stacks": [
     {
-      "label": "Medical stabilization + SANE exam (with consent)",
+      "label": "Medical stabilization",
       "type": "correctlyOrdered",
       "finding": "Document injuries, forensic evidence.",
       "aliases": [
@@ -50,12 +60,48 @@
       ]
     },
     {
-      "label": "STI testing + prophylaxis (CTX+Doxy+Metro)",
+      "label": "SANE exam (with consent)",
+      "type": "correctlyOrdered",
+      "finding": "Document injuries, forensic evidence.",
+      "aliases": [
+        "Forensic exam"
+      ],
+      "id": "-split-1"
+    },
+    {
+      "label": "STI testing",
       "type": "correctlyOrdered",
       "finding": "Empiric.",
       "aliases": [
         "STI prophylaxis"
       ]
+    },
+    {
+      "label": "Ceftriaxone",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ],
+      "id": "-split-1"
+    },
+    {
+      "label": "Doxycycline",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ],
+      "id": "-split-2"
+    },
+    {
+      "label": "Metronidazole",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ],
+      "id": "-split-3"
     },
     {
       "label": "HIV PEP (if <72h)",
@@ -74,20 +120,33 @@
       ]
     },
     {
-      "label": "Crisis counseling + Safe discharge",
+      "label": "Crisis counseling",
       "type": "correctlyOrdered",
-      "finding": "Trauma-informed. Psychiatry follow-up.",
+      "finding": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up.",
+      "aliases": [
+        "Support"
+      ]
+    },
+    {
+      "label": "Safe discharge",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up.",
       "aliases": [
         "Support"
       ]
     }
   ],
   "order_sets": [
-    "Medical stabilization + SANE exam (with consent)",
-    "STI testing + prophylaxis (CTX+Doxy+Metro)",
+    "Medical stabilization",
+    "SANE exam (with consent)",
+    "STI testing",
+    "Ceftriaxone",
+    "Doxycycline",
+    "Metronidazole",
     "HIV PEP (if <72h)",
     "Hepatitis B vaccine",
-    "Crisis counseling + Safe discharge"
+    "Crisis counseling",
+    "Safe discharge"
   ],
   "complete": true,
   "extraction_method": "deepseek_direct",

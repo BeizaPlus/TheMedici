@@ -7,7 +7,8 @@
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
     "Physical Exam: Neuro / Psych",
-    "CBC + peripheral smear",
+    "CBC",
+    "Peripheral smear",
     "Blood lead level",
     {
       "order": "Free erythrocyte protoporphyrin (FEP)",
@@ -18,18 +19,23 @@
     },
     "BMP / Mg",
     "Abdominal X-ray",
-    "Chelation therapy (Succimer / EDTA + BAL)",
+    "Succimer",
+    "EDTA",
+    "BAL",
     "Remove lead source"
   ],
   "should_avoid": [],
   "rationale": {
     "Physical Exam: Neuro / Psych": "Ataxia, cognitive changes, encephalopathy.",
-    "CBC + peripheral smear": "Microcytic anemia + basophilic stippling.",
+    "CBC": "[Auto-split from bundled label \"CBC + peripheral smear\"] Microcytic anemia + basophilic stippling.",
+    "Peripheral smear": "[Auto-split from bundled label \"CBC + peripheral smear\"] Microcytic anemia + basophilic stippling.",
     "Blood lead level": ">70 mcg/dL = medical emergency requiring chelation.",
     "Free erythrocyte protoporphyrin (FEP)": "Would be elevated.",
     "BMP / Mg": "Electrolyte assessment.",
     "Abdominal X-ray": "May show lead flecks in GI tract if recent ingestion.",
-    "Chelation therapy (Succimer / EDTA + BAL)": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+    "Succimer": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+    "EDTA": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+    "BAL": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
     "Remove lead source": "Home lead abatement. Public health reporting."
   },
   "hpi": "{{patient_name}} is a child presenting with abdominal pain, constipation, irritability, lethargy, ataxia, and cognitive changes. History reveals exposure to lead-based paint in older home (built <1978). Lead intoxication causes microcytic anemia with basophilic stippling on peripheral smear. Elevated free erythrocyte protoporphyrin (FEP). Definitive diagnosis: blood lead level (BLL) >5 mcg/dL is elevated. >45 mcg/dL requires chelation. >70 mcg/dL is a medical emergency. Chronic lead exposure affects: nervous system (encephalopathy, developmental delay), kidneys (Fanconi syndrome), bone marrow (anemia), GI (colic). Treatment: remove source (lead abatement). Chelation therapy: succimer (DMSA) PO for BLL >45, or IV edetate calcium disodium (EDTA) + dimercaprol (BAL) for lead encephalopathy (BLL >70). Iron supplementation for anemia. Report to public health.",
@@ -62,9 +68,17 @@
       ]
     },
     {
-      "label": "CBC + peripheral smear",
+      "label": "CBC",
       "type": "correctlyOrdered",
-      "finding": "Microcytic anemia + basophilic stippling.",
+      "finding": "[Auto-split from bundled label \"CBC + peripheral smear\"] Microcytic anemia + basophilic stippling.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Peripheral smear",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"CBC + peripheral smear\"] Microcytic anemia + basophilic stippling.",
       "aliases": [
         "CBC"
       ]
@@ -102,12 +116,30 @@
       ]
     },
     {
-      "label": "Chelation therapy (Succimer / EDTA + BAL)",
+      "label": "Succimer",
       "type": "correctlyOrdered",
       "finding": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
       "aliases": [
         "Chelation"
       ]
+    },
+    {
+      "label": "EDTA",
+      "type": "correctlyOrdered",
+      "finding": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+      "aliases": [
+        "Chelation"
+      ],
+      "id": "-split-1"
+    },
+    {
+      "label": "BAL",
+      "type": "correctlyOrdered",
+      "finding": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+      "aliases": [
+        "Chelation"
+      ],
+      "id": "-split-2"
     },
     {
       "label": "Remove lead source",
@@ -120,7 +152,8 @@
   ],
   "order_sets": [
     "Physical Exam: Neuro / Psych",
-    "CBC + peripheral smear",
+    "CBC",
+    "Peripheral smear",
     "Blood lead level",
     {
       "order": "Free erythrocyte protoporphyrin (FEP)",
@@ -131,7 +164,9 @@
     },
     "BMP / Mg",
     "Abdominal X-ray",
-    "Chelation therapy (Succimer / EDTA + BAL)",
+    "Succimer",
+    "EDTA",
+    "BAL",
     "Remove lead source"
   ],
   "complete": true,

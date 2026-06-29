@@ -51,11 +51,18 @@
     "Pyridostigmine / Neostigmine",
     "Consult surgery / Thymectomy",
     {
-      "order": "IVIG / Plasmapheresis",
+      "order": "IVIG",
       "optional": true,
       "affects_grade": false,
       "section": "treatment_optional",
-      "rationale": "Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
+      "rationale": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
+    },
+    {
+      "order": "Plasmapheresis",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
     },
     "Instruct patient, smoking cessation",
     "Advise patient, safe sex techniques",
@@ -94,7 +101,8 @@
     "Methylprednisolone / Prednisone / Azathioprine": "Corticosteroids and azathioprine are first-line immunosuppressive treatments for MG.",
     "Pyridostigmine / Neostigmine": "Pyridostigmine is for symptomatic treatment only — acetylcholinesterase inhibitor that increases ACh at neuromuscular junction. Does NOT treat underlying disease. Use in conjunction with immunosuppressants.",
     "Consult surgery / Thymectomy": "Thymoma should be surgically removed. Thymectomy can lead to complete remission in ~85% of patients without further medication.",
-    "IVIG / Plasmapheresis": "Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
+    "IVIG": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
+    "Plasmapheresis": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
     "Instruct patient, smoking cessation": "One of the most important things for health — address smoking.",
     "Advise patient, safe sex techniques": "Patient has history of STIs — review safe sex practices.",
     "Reassure patient": "New chronic diagnosis causes anxiety — reassure and inform.",
@@ -365,9 +373,17 @@
       ]
     },
     {
-      "label": "IVIG / Plasmapheresis",
+      "label": "IVIG",
       "type": "optional",
-      "finding": "Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
+      "finding": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
+      "aliases": [
+        "Immune globulin"
+      ]
+    },
+    {
+      "label": "Plasmapheresis",
+      "type": "optional",
+      "finding": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
       "aliases": [
         "Immune globulin"
       ]
@@ -459,11 +475,18 @@
     "Pyridostigmine / Neostigmine",
     "Consult surgery / Thymectomy",
     {
-      "order": "IVIG / Plasmapheresis",
+      "order": "IVIG",
       "optional": true,
       "affects_grade": false,
       "section": "treatment_optional",
-      "rationale": "Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
+      "rationale": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
+    },
+    {
+      "order": "Plasmapheresis",
+      "optional": true,
+      "affects_grade": false,
+      "section": "treatment_optional",
+      "rationale": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable."
     },
     "Instruct patient, smoking cessation",
     "Advise patient, safe sex techniques",

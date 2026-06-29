@@ -6,14 +6,16 @@
   "confidence": "screenshot",
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "CBC + Peripheral smear",
+    "CBC",
+    "Peripheral smear",
     "Observation (if platelets >20K, no bleeding)",
     "Prednisone / IVIG (if <10K or bleeding)",
     "Avoid contact sports, NSAIDs, IM injections"
   ],
   "should_avoid": [],
   "rationale": {
-    "CBC + Peripheral smear": "Isolated thrombocytopenia. Normal Hb, WBC.",
+    "CBC": "[Auto-split from bundled label \"CBC + Peripheral smear\"] Isolated thrombocytopenia. Normal Hb, WBC.",
+    "Peripheral smear": "[Auto-split from bundled label \"CBC + Peripheral smear\"] Isolated thrombocytopenia. Normal Hb, WBC.",
     "Observation (if platelets >20K, no bleeding)": "Most resolve spontaneously.",
     "Prednisone / IVIG (if <10K or bleeding)": "First-line treatment.",
     "Avoid contact sports, NSAIDs, IM injections": "Bleeding precautions."
@@ -40,9 +42,17 @@
   "distractors": [],
   "stacks": [
     {
-      "label": "CBC + Peripheral smear",
+      "label": "CBC",
       "type": "correctlyOrdered",
-      "finding": "Isolated thrombocytopenia. Normal Hb, WBC.",
+      "finding": "[Auto-split from bundled label \"CBC + Peripheral smear\"] Isolated thrombocytopenia. Normal Hb, WBC.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Peripheral smear",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"CBC + Peripheral smear\"] Isolated thrombocytopenia. Normal Hb, WBC.",
       "aliases": [
         "CBC"
       ]
@@ -74,7 +84,8 @@
     }
   ],
   "order_sets": [
-    "CBC + Peripheral smear",
+    "CBC",
+    "Peripheral smear",
     "Observation (if platelets >20K, no bleeding)",
     "Prednisone / IVIG (if <10K or bleeding)",
     "Avoid contact sports, NSAIDs, IM injections"

@@ -1,1 +1,108 @@
-{"id":68,"topic":"Muscle Weakness","title":"Muscle Weakness","diagnosis":"Statin-Induced Myopathy (Simvastatin + Gemfibrozil interaction)","hpi_narrative":"{{patient_name}} presents with progressive proximal muscle weakness, myalgias, and fatigue. History reveals concurrent use of simvastatin and gemfibrozil — a CONTRAINDICATED combination. Gemfibrozil inhibits CYP2C8 and OATP1B1, dramatically increasing simvastatin levels → myotoxicity. Labs show markedly elevated CK (often >10x ULN). UA shows myoglobinuria (risk of AKI). Differentiate from other causes: hypothyroidism, polymyositis, alcohol myopathy, steroid myopathy. Management: IMMEDIATELY discontinue simvastatin and gemfibrozil. Aggressive IV fluids to prevent pigment nephropathy from rhabdomyolysis. Monitor renal function and electrolytes (hyperkalemia risk from muscle breakdown). Alternative lipid management after recovery: atorvastatin or rosuvastatin (metabolized differently, less interaction risk), ezetimibe, PCSK9 inhibitor. Fenofibrate (not gemfibrozil) can be used with statins with caution.","chief_complaint":"Progressive proximal muscle weakness, myalgias","patient":null,"patient_name":"Mariama Issahaku","patient_sex":"female","location":"ER","specialty":"Internal Medicine / Cardiology","stacks":[{"label":"Physical Exam: General Appearance","type":"correctlyOrdered","finding":"Weak, may be in distress.","aliases":["General Appearance"]},{"label":"Physical Exam: Neuro / Extremities","type":"correctlyOrdered","finding":"Proximal muscle weakness, tenderness.","aliases":["Neuro Exam"]},{"label":"CK, serum","type":"correctlyOrdered","finding":"Markedly elevated (>10x ULN).","aliases":["CK","CPK"]},{"label":"BMP / CMP","type":"correctlyOrdered","finding":"Elevated Cr (AKI risk), hyperkalemia from rhabdo.","aliases":["BMP"]},{"label":"UA","type":"correctlyOrdered","finding":"Myoglobinuria.","aliases":["UA"]},{"label":"TSH","type":"correctlyOrdered","finding":"Rule out hypothyroid myopathy.","aliases":["TSH"]},{"label":"DISCONTINUE simvastatin + gemfibrozil","type":"correctlyOrdered","finding":"Contraindicated combination. Discontinue immediately.","aliases":["Stop meds"]},{"label":"Aggressive IV fluids","type":"correctlyOrdered","finding":"Prevent pigment nephropathy from rhabdomyolysis.","aliases":["IV fluids"]},{"label":"Switch to atorvastatin / rosuvastatin / ezetimibe","type":"correctlyOrdered","finding":"Alternative lipid management after recovery. Fenofibrate (not gemfibrozil) if fibrate needed.","aliases":["Alternative statin"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":94,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 68,
+  "topic": "Muscle Weakness",
+  "title": "Muscle Weakness",
+  "diagnosis": "Statin-Induced Myopathy (Simvastatin + Gemfibrozil interaction)",
+  "hpi_narrative": "{{patient_name}} presents with progressive proximal muscle weakness, myalgias, and fatigue. History reveals concurrent use of simvastatin and gemfibrozil — a CONTRAINDICATED combination. Gemfibrozil inhibits CYP2C8 and OATP1B1, dramatically increasing simvastatin levels → myotoxicity. Labs show markedly elevated CK (often >10x ULN). UA shows myoglobinuria (risk of AKI). Differentiate from other causes: hypothyroidism, polymyositis, alcohol myopathy, steroid myopathy. Management: IMMEDIATELY discontinue simvastatin and gemfibrozil. Aggressive IV fluids to prevent pigment nephropathy from rhabdomyolysis. Monitor renal function and electrolytes (hyperkalemia risk from muscle breakdown). Alternative lipid management after recovery: atorvastatin or rosuvastatin (metabolized differently, less interaction risk), ezetimibe, PCSK9 inhibitor. Fenofibrate (not gemfibrozil) can be used with statins with caution.",
+  "chief_complaint": "Progressive proximal muscle weakness, myalgias",
+  "patient": null,
+  "patient_name": "Mariama Issahaku",
+  "patient_sex": "female",
+  "location": "ER",
+  "specialty": "Internal Medicine / Cardiology",
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "Weak, may be in distress.",
+      "aliases": [
+        "General Appearance"
+      ]
+    },
+    {
+      "label": "Physical Exam: Neuro / Extremities",
+      "type": "correctlyOrdered",
+      "finding": "Proximal muscle weakness, tenderness.",
+      "aliases": [
+        "Neuro Exam"
+      ]
+    },
+    {
+      "label": "CK, serum",
+      "type": "correctlyOrdered",
+      "finding": "Markedly elevated (>10x ULN).",
+      "aliases": [
+        "CK",
+        "CPK"
+      ]
+    },
+    {
+      "label": "BMP / CMP",
+      "type": "correctlyOrdered",
+      "finding": "Elevated Cr (AKI risk), hyperkalemia from rhabdo.",
+      "aliases": [
+        "BMP"
+      ]
+    },
+    {
+      "label": "UA",
+      "type": "correctlyOrdered",
+      "finding": "Myoglobinuria.",
+      "aliases": [
+        "UA"
+      ]
+    },
+    {
+      "label": "TSH",
+      "type": "correctlyOrdered",
+      "finding": "Rule out hypothyroid myopathy.",
+      "aliases": [
+        "TSH"
+      ]
+    },
+    {
+      "label": "DISCONTINUE simvastatin",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
+      "aliases": [
+        "Stop meds"
+      ]
+    },
+    {
+      "label": "gemfibrozil",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
+      "aliases": [
+        "Stop meds"
+      ]
+    },
+    {
+      "label": "Aggressive IV fluids",
+      "type": "correctlyOrdered",
+      "finding": "Prevent pigment nephropathy from rhabdomyolysis.",
+      "aliases": [
+        "IV fluids"
+      ]
+    },
+    {
+      "label": "Switch to atorvastatin / rosuvastatin / ezetimibe",
+      "type": "correctlyOrdered",
+      "finding": "Alternative lipid management after recovery. Fenofibrate (not gemfibrozil) if fibrate needed.",
+      "aliases": [
+        "Alternative statin"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 94,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}

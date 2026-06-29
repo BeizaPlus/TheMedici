@@ -8,14 +8,18 @@
   "correct_orders": [
     "ECG with right-sided leads (V4R)",
     "IV fluids (aggressive)",
-    "Aspirin + P2Y12 + Anticoagulation",
+    "Aspirin",
+    "P2Y12",
+    "Anticoagulation",
     "Emergent PCI"
   ],
   "should_avoid": [],
   "rationale": {
     "ECG with right-sided leads (V4R)": "Inferior STEMI + V4R elevation = RV infarction.",
     "IV fluids (aggressive)": "RV is preload-dependent. AVOID nitrates/diuretics.",
-    "Aspirin + P2Y12 + Anticoagulation": "Standard ACS antiplatelet.",
+    "Aspirin": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+    "P2Y12": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+    "Anticoagulation": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
     "Emergent PCI": "Reperfusion."
   },
   "hpi": "{{patient_name}} presents with chest pain, hypotension, clear lung fields, elevated JVP, and Kussmaul's sign. ECG shows ST elevation in inferior leads (II, III, aVF) with ST elevation in V1 > V3 and ST elevation in V4R (right-sided leads) — indicating RV involvement. RV infarction occurs in ~30% of inferior MIs (usually RCA occlusion). RV is preload-dependent — nitroglycerin and morphine can cause dangerous hypotension because they reduce preload. Treatment: AVOID nitrates and diuretics (reduce preload → worsen RV output). Give IV fluids aggressively to maintain RV preload. Aspirin, P2Y12 inhibitor, anticoagulation. REPERFUSION: emergent PCI (preferred) or fibrinolysis. If hypotensive despite fluids: dobutamine (inotrope). Atropine for bradycardia. Admit to CCU.",
@@ -56,9 +60,27 @@
       ]
     },
     {
-      "label": "Aspirin + P2Y12 + Anticoagulation",
+      "label": "Aspirin",
       "type": "correctlyOrdered",
-      "finding": "Standard ACS antiplatelet.",
+      "finding": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+      "aliases": [
+        "ASA",
+        "DAPT"
+      ]
+    },
+    {
+      "label": "P2Y12",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+      "aliases": [
+        "ASA",
+        "DAPT"
+      ]
+    },
+    {
+      "label": "Anticoagulation",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
       "aliases": [
         "ASA",
         "DAPT"
@@ -77,7 +99,9 @@
   "order_sets": [
     "ECG with right-sided leads (V4R)",
     "IV fluids (aggressive)",
-    "Aspirin + P2Y12 + Anticoagulation",
+    "Aspirin",
+    "P2Y12",
+    "Anticoagulation",
     "Emergent PCI"
   ],
   "complete": true,

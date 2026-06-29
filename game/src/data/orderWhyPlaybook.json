@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-06-28T19:33:49.249Z",
+  "builtAt": "2026-06-29T17:35:01.245Z",
   "cases": {
     "100": {
       "physical-exam-pelvic": {
@@ -34,9 +34,14 @@
         "orderLabel": "Controlled airway (OR / ENT / Anesthesia)",
         "source": "playbook"
       },
-      "ceftriaxone-vancomycin": {
-        "why": "IV antibiotics.",
-        "orderLabel": "Ceftriaxone + Vancomycin",
+      "ceftriaxone-iv": {
+        "why": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
+        "orderLabel": "Ceftriaxone IV",
+        "source": "playbook"
+      },
+      "vancomycin-iv": {
+        "why": "[Auto-split from bundled label \"Ceftriaxone + Vancomycin\"] IV antibiotics.",
+        "orderLabel": "Vancomycin IV",
         "source": "playbook"
       },
       "dexamethasone": {
@@ -108,9 +113,14 @@
         "orderLabel": "Cardiac Monitor",
         "source": "playbook"
       },
-      "iv-access-fluids": {
-        "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+      "iv-access-peripheral": {
+        "why": "Appropriate CCS order for Initial Workup for Undetermined Condition: IV access peripheral.",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Appropriate CCS order for Initial Workup for Undetermined Condition: IV Fluids.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "stat-labs": {
@@ -155,9 +165,14 @@
         "orderLabel": "Biopsy (if cultures negative)",
         "source": "playbook"
       },
-      "iv-vancomycin-ceftriaxone-x-6-weeks": {
-        "why": "Empiric until cultures. Tailor to organism.",
-        "orderLabel": "IV Vancomycin + Ceftriaxone x 6 weeks",
+      "vancomycin-iv": {
+        "why": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism.",
+        "orderLabel": "Vancomycin IV",
+        "source": "playbook"
+      },
+      "ceftriaxone-iv": {
+        "why": "[Auto-split from bundled label \"IV Vancomycin + Ceftriaxone x 6 weeks\"] Empiric until cultures. Tailor to organism.",
+        "orderLabel": "Ceftriaxone IV",
         "source": "playbook"
       }
     },
@@ -172,9 +187,14 @@
         "orderLabel": "TVUS",
         "source": "playbook"
       },
-      "cbc-type-and-screen": {
-        "why": "Assess anemia, prepare for transfusion.",
-        "orderLabel": "CBC + Type and screen",
+      "cbc": {
+        "why": "[Auto-split from bundled label \"CBC + Type and screen\"] Assess anemia, prepare for transfusion.",
+        "orderLabel": "CBC",
+        "source": "playbook"
+      },
+      "type-and-screen": {
+        "why": "[Auto-split from bundled label \"CBC + Type and screen\"] Assess anemia, prepare for transfusion.",
+        "orderLabel": "Type and screen",
         "source": "playbook"
       },
       "iv-fluids": {
@@ -199,9 +219,19 @@
         "orderLabel": "CBC with differential",
         "source": "playbook"
       },
-      "blood-cultures-x2-ua-cxr": {
-        "why": "Source workup.",
-        "orderLabel": "Blood cultures x2 + UA + CXR",
+      "blood-cultures-x2": {
+        "why": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+        "orderLabel": "Blood cultures x2",
+        "source": "playbook"
+      },
+      "urinalysis": {
+        "why": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+        "orderLabel": "Urinalysis",
+        "source": "playbook"
+      },
+      "chest-x-ray": {
+        "why": "[Auto-split from bundled label \"Blood cultures x2 + UA + CXR\"] Source workup.",
+        "orderLabel": "Chest X-ray",
         "source": "playbook"
       },
       "mascc-score": {
@@ -214,9 +244,14 @@
         "orderLabel": "Cefepime / Meropenem / Pip-Tazo IV within 1h",
         "source": "playbook"
       },
-      "admit-neutropenic-precautions": {
-        "why": "Reverse isolation.",
-        "orderLabel": "Admit + neutropenic precautions",
+      "admission": {
+        "why": "[Auto-split from bundled label \"Admit + neutropenic precautions\"] Reverse isolation.",
+        "orderLabel": "Admission",
+        "source": "playbook"
+      },
+      "neutropenic-precautions": {
+        "why": "[Auto-split from bundled label \"Admit + neutropenic precautions\"] Reverse isolation.",
+        "orderLabel": "Neutropenic precautions",
         "source": "playbook"
       }
     },
@@ -322,9 +357,14 @@
         "orderLabel": "Physical Exam: Skin / Genital",
         "source": "playbook"
       },
-      "rpr-vdrl-fta-abs-tp-pa": {
-        "why": "Non-treponemal screening + treponemal confirmation.",
-        "orderLabel": "RPR / VDRL + FTA-ABS / TP-PA",
+      "rpr-vdrl": {
+        "why": "[Auto-split from bundled label \"RPR / VDRL + FTA-ABS / TP-PA\"] Non-treponemal screening + treponemal confirmation.",
+        "orderLabel": "RPR / VDRL",
+        "source": "playbook"
+      },
+      "fta-abs-tp-pa": {
+        "why": "[Auto-split from bundled label \"RPR / VDRL + FTA-ABS / TP-PA\"] Non-treponemal screening + treponemal confirmation.",
+        "orderLabel": "FTA-ABS / TP-PA",
         "source": "playbook"
       },
       "hiv-test": {
@@ -337,9 +377,14 @@
         "orderLabel": "Benzathine penicillin G 2.4M units IM once",
         "source": "playbook"
       },
-      "public-health-reporting-partner-treatmen": {
-        "why": "Reportable. Partners must be treated.",
-        "orderLabel": "Public health reporting + Partner treatment",
+      "public-health-reporting": {
+        "why": "[Auto-split from bundled label \"Public health reporting + Partner treatment\"] Reportable. Partners must be treated.",
+        "orderLabel": "Public health reporting",
+        "source": "playbook"
+      },
+      "partner-treatment": {
+        "why": "[Auto-split from bundled label \"Public health reporting + Partner treatment\"] Reportable. Partners must be treated.",
+        "orderLabel": "Partner treatment",
         "source": "playbook"
       }
     },
@@ -386,14 +431,29 @@
         "orderLabel": "Pregnancy test",
         "source": "playbook"
       },
-      "sti-testing-toxicology-screen": {
-        "why": "CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
-        "orderLabel": "STI testing + toxicology screen",
+      "sti-testing": {
+        "why": "[Auto-split from bundled label \"STI testing + toxicology screen\"] CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+        "orderLabel": "STI testing",
         "source": "playbook"
       },
-      "sti-prophylaxis-ctx-doxy-metro": {
+      "toxicology-screen": {
+        "why": "[Auto-split from bundled label \"STI testing + toxicology screen\"] CT/GC, HIV, syphilis, Hep B/C. Tox for DFSA.",
+        "orderLabel": "toxicology screen",
+        "source": "playbook"
+      },
+      "ceftriaxone": {
         "why": "Empiric.",
-        "orderLabel": "STI prophylaxis (CTX + Doxy + Metro)",
+        "orderLabel": "Ceftriaxone",
+        "source": "playbook"
+      },
+      "doxycycline": {
+        "why": "Empiric.",
+        "orderLabel": "Doxycycline",
+        "source": "playbook"
+      },
+      "metronidazole": {
+        "why": "Empiric.",
+        "orderLabel": "Metronidazole",
         "source": "playbook"
       },
       "emergency-contraception": {
@@ -482,9 +542,14 @@
         "orderLabel": "PO Lorazepam / Olanzapine",
         "source": "playbook"
       },
-      "im-midazolam-haloperidol-if-severe": {
+      "midazolam-im": {
         "why": "If patient refuses PO.",
-        "orderLabel": "IM Midazolam + Haloperidol (if severe)",
+        "orderLabel": "Midazolam IM",
+        "source": "playbook"
+      },
+      "haloperidol-im": {
+        "why": "If patient refuses PO.",
+        "orderLabel": "Haloperidol IM",
         "source": "playbook"
       },
       "cbc-bmp-tox-ct-head": {
@@ -792,9 +857,19 @@
         "orderLabel": "IV fluids (aggressive)",
         "source": "playbook"
       },
-      "aspirin-p2y12-anticoagulation": {
-        "why": "Standard ACS antiplatelet.",
-        "orderLabel": "Aspirin + P2Y12 + Anticoagulation",
+      "aspirin": {
+        "why": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+        "orderLabel": "Aspirin",
+        "source": "playbook"
+      },
+      "p2y12": {
+        "why": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+        "orderLabel": "P2Y12",
+        "source": "playbook"
+      },
+      "anticoagulation": {
+        "why": "[Auto-split from bundled label \"Aspirin + P2Y12 + Anticoagulation\"] Standard ACS antiplatelet.",
+        "orderLabel": "Anticoagulation",
         "source": "playbook"
       },
       "emergent-pci": {
@@ -881,9 +956,14 @@
       }
     },
     "127": {
-      "cbc-peripheral-smear": {
-        "why": "Isolated thrombocytopenia. Normal Hb, WBC.",
-        "orderLabel": "CBC + Peripheral smear",
+      "cbc": {
+        "why": "[Auto-split from bundled label \"CBC + Peripheral smear\"] Isolated thrombocytopenia. Normal Hb, WBC.",
+        "orderLabel": "CBC",
+        "source": "playbook"
+      },
+      "peripheral-smear": {
+        "why": "[Auto-split from bundled label \"CBC + Peripheral smear\"] Isolated thrombocytopenia. Normal Hb, WBC.",
+        "orderLabel": "Peripheral smear",
         "source": "playbook"
       },
       "observation-if-platelets-20k-no-bleeding": {
@@ -1039,14 +1119,34 @@
         "orderLabel": "Administer analgesia for pain management",
         "source": "playbook"
       },
-      "iv-fluids-npo": {
-        "why": "Resuscitate before imaging if hypotensive.",
-        "orderLabel": "IV Fluids + NPO",
+      "iv-fluids": {
+        "why": "Appropriate CCS order for Acute abdomen (non-specific): IV Fluids.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
-      "cbc-lipase-lfts-ua": {
-        "why": "Narrow differential: biliary, pancreatic, UTI, medical.",
-        "orderLabel": "CBC · Lipase · LFTs · UA",
+      "npo": {
+        "why": "Appropriate CCS order for Acute abdomen (non-specific): NPO.",
+        "orderLabel": "NPO",
+        "source": "playbook"
+      },
+      "cbc": {
+        "why": "Laboratory testing when systemic illness or severity warrants labs in Acute abdomen (non-specific).",
+        "orderLabel": "CBC",
+        "source": "playbook"
+      },
+      "lipase": {
+        "why": "Appropriate CCS order for Acute abdomen (non-specific): Lipase.",
+        "orderLabel": "Lipase",
+        "source": "playbook"
+      },
+      "lfts": {
+        "why": "Appropriate CCS order for Acute abdomen (non-specific): LFTs.",
+        "orderLabel": "LFTs",
+        "source": "playbook"
+      },
+      "ua": {
+        "why": "Appropriate CCS order for Acute abdomen (non-specific): UA.",
+        "orderLabel": "UA",
         "source": "playbook"
       },
       "ct-abdomen-pelvis": {
@@ -1125,19 +1225,39 @@
         "orderLabel": "Physical Exam: Scrotal",
         "source": "playbook"
       },
-      "ua-urine-culture-ct-gc-naat": {
-        "why": "Identify organism.",
-        "orderLabel": "UA + Urine culture + CT/GC NAAT",
+      "urinalysis": {
+        "why": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+        "orderLabel": "Urinalysis",
         "source": "playbook"
       },
-      "ceftriaxone-doxycycline-x10d": {
-        "why": "For CT/GC. Fluoroquinolone if enteric.",
-        "orderLabel": "Ceftriaxone + Doxycycline x10d",
+      "urine-culture": {
+        "why": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+        "orderLabel": "Urine culture",
         "source": "playbook"
       },
-      "scrotal-elevation-nsaids": {
-        "why": "Symptomatic.",
-        "orderLabel": "Scrotal elevation + NSAIDs",
+      "ct-gc-naat": {
+        "why": "[Auto-split from bundled label \"UA + Urine culture + CT/GC NAAT\"] Identify organism.",
+        "orderLabel": "CT/GC NAAT",
+        "source": "playbook"
+      },
+      "ceftriaxone-iv": {
+        "why": "[Auto-split from bundled label \"Ceftriaxone + Doxycycline x10d\"] For CT/GC. Fluoroquinolone if enteric.",
+        "orderLabel": "Ceftriaxone IV",
+        "source": "playbook"
+      },
+      "doxycycline": {
+        "why": "[Auto-split from bundled label \"Ceftriaxone + Doxycycline x10d\"] For CT/GC. Fluoroquinolone if enteric.",
+        "orderLabel": "Doxycycline",
+        "source": "playbook"
+      },
+      "scrotal-elevation": {
+        "why": "[Auto-split from bundled label \"Scrotal elevation + NSAIDs\"] Symptomatic.",
+        "orderLabel": "Scrotal elevation",
+        "source": "playbook"
+      },
+      "nsaids": {
+        "why": "[Auto-split from bundled label \"Scrotal elevation + NSAIDs\"] Symptomatic.",
+        "orderLabel": "NSAIDs",
         "source": "playbook"
       }
     },
@@ -1157,9 +1277,14 @@
         "orderLabel": "IV Calcium gluconate",
         "source": "playbook"
       },
-      "iv-insulin-glucose-albuterol-bicarb": {
-        "why": "Shift K+ intracellularly.",
-        "orderLabel": "IV Insulin + Glucose / Albuterol / Bicarb",
+      "iv-insulin": {
+        "why": "[Auto-split from bundled label \"IV Insulin + Glucose / Albuterol / Bicarb\"] Shift K+ intracellularly.",
+        "orderLabel": "IV Insulin",
+        "source": "playbook"
+      },
+      "glucose-albuterol-bicarb": {
+        "why": "[Auto-split from bundled label \"IV Insulin + Glucose / Albuterol / Bicarb\"] Shift K+ intracellularly.",
+        "orderLabel": "Glucose / Albuterol / Bicarb",
         "source": "playbook"
       },
       "furosemide-dialysis": {
@@ -1167,9 +1292,14 @@
         "orderLabel": "Furosemide / Dialysis",
         "source": "playbook"
       },
-      "discontinue-acei-nsaids": {
-        "why": "Remove cause.",
-        "orderLabel": "DISCONTINUE ACEI + NSAIDs",
+      "discontinue-acei": {
+        "why": "[Auto-split from bundled label \"DISCONTINUE ACEI + NSAIDs\"] Remove cause.",
+        "orderLabel": "DISCONTINUE ACEI",
+        "source": "playbook"
+      },
+      "nsaids": {
+        "why": "[Auto-split from bundled label \"DISCONTINUE ACEI + NSAIDs\"] Remove cause.",
+        "orderLabel": "NSAIDs",
         "source": "playbook"
       }
     },
@@ -1366,9 +1496,19 @@
         "orderLabel": "Glucose / BMP / ABG / Ammonia",
         "source": "playbook"
       },
-      "acute-stop-protein-glucose-insulin": {
-        "why": "Anabolic state. Dialysis if severe hyperleucinemia.",
-        "orderLabel": "Acute: stop protein + glucose + insulin",
+      "acute-stop-protein": {
+        "why": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+        "orderLabel": "Acute: stop protein",
+        "source": "playbook"
+      },
+      "point-of-care-glucose": {
+        "why": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+        "orderLabel": "Point-of-care Glucose",
+        "source": "playbook"
+      },
+      "insulin": {
+        "why": "[Auto-split from bundled label \"Acute: stop protein + glucose + insulin\"] Anabolic state. Dialysis if severe hyperleucinemia.",
+        "orderLabel": "insulin",
         "source": "playbook"
       },
       "long-term-bcaa-restricted-diet": {
@@ -1479,9 +1619,14 @@
         "orderLabel": "Hydroxocobalamin IV",
         "source": "playbook"
       },
-      "100-o2-supportive-care": {
-        "why": "Maximize O2 delivery.",
-        "orderLabel": "100% O2 + supportive care",
+      "100-o2": {
+        "why": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
+        "orderLabel": "100% O2",
+        "source": "playbook"
+      },
+      "supportive-care": {
+        "why": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
+        "orderLabel": "Supportive care",
         "source": "playbook"
       },
       "admit-to-icu": {
@@ -1739,9 +1884,14 @@
         "orderLabel": "Prednisone 2mg/kg/day",
         "source": "playbook"
       },
-      "salt-fluid-restriction-diuretics": {
-        "why": "Symptom management.",
-        "orderLabel": "Salt/fluid restriction + Diuretics",
+      "salt-fluid-restriction": {
+        "why": "[Auto-split from bundled label \"Salt/fluid restriction + Diuretics\"] Symptom management.",
+        "orderLabel": "Salt/fluid restriction",
+        "source": "playbook"
+      },
+      "diuretics": {
+        "why": "[Auto-split from bundled label \"Salt/fluid restriction + Diuretics\"] Symptom management.",
+        "orderLabel": "Diuretics",
         "source": "playbook"
       }
     },
@@ -1751,9 +1901,14 @@
         "orderLabel": "24h urine volume / Serum & urine osmolality",
         "source": "playbook"
       },
-      "water-deprivation-test-ddavp": {
-        "why": "Central DI: responds to DDAVP (>50% rise in Uosm).",
-        "orderLabel": "Water deprivation test + DDAVP",
+      "water-deprivation-test": {
+        "why": "[Auto-split from bundled label \"Water deprivation test + DDAVP\"] Central DI: responds to DDAVP (>50% rise in Uosm).",
+        "orderLabel": "Water deprivation test",
+        "source": "playbook"
+      },
+      "ddavp": {
+        "why": "[Auto-split from bundled label \"Water deprivation test + DDAVP\"] Central DI: responds to DDAVP (>50% rise in Uosm).",
+        "orderLabel": "DDAVP",
         "source": "playbook"
       },
       "mri-pituitary-if-central": {
@@ -1907,9 +2062,14 @@
         "orderLabel": "Speculum + bimanual exam",
         "source": "playbook"
       },
-      "colposcopy-cervical-biopsy": {
-        "why": "SCC confirmed.",
-        "orderLabel": "Colposcopy + cervical biopsy",
+      "colposcopy": {
+        "why": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
+        "orderLabel": "Colposcopy",
+        "source": "playbook"
+      },
+      "cervical-biopsy": {
+        "why": "[Auto-split from bundled label \"Colposcopy + cervical biopsy\"] SCC confirmed.",
+        "orderLabel": "cervical biopsy",
         "source": "playbook"
       },
       "refer-gyn-oncology": {
@@ -2076,9 +2236,14 @@
         "orderLabel": "ABCs / C-spine / Airway",
         "source": "playbook"
       },
-      "ct-neck-ct-head": {
-        "why": "Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
-        "orderLabel": "CT neck + CT head",
+      "ct-neck": {
+        "why": "[Auto-split from bundled label \"CT neck + CT head\"] Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+        "orderLabel": "CT neck",
+        "source": "playbook"
+      },
+      "ct-head": {
+        "why": "[Auto-split from bundled label \"CT neck + CT head\"] Laryngeal/C-spine fracture, anoxic brain injury, vascular injury.",
+        "orderLabel": "CT head",
         "source": "playbook"
       },
       "admit-icu": {
@@ -2093,14 +2258,34 @@
       }
     },
     "173": {
-      "medical-stabilization-sane-exam-with-con": {
+      "medical-stabilization": {
         "why": "Document injuries, forensic evidence.",
-        "orderLabel": "Medical stabilization + SANE exam (with consent)",
+        "orderLabel": "Medical stabilization",
         "source": "playbook"
       },
-      "sti-testing-prophylaxis-ctx-doxy-metro": {
+      "sane-exam-with-consent": {
+        "why": "Document injuries, forensic evidence.",
+        "orderLabel": "SANE exam (with consent)",
+        "source": "playbook"
+      },
+      "sti-testing": {
         "why": "Empiric.",
-        "orderLabel": "STI testing + prophylaxis (CTX+Doxy+Metro)",
+        "orderLabel": "STI testing",
+        "source": "playbook"
+      },
+      "ceftriaxone": {
+        "why": "Empiric.",
+        "orderLabel": "Ceftriaxone",
+        "source": "playbook"
+      },
+      "doxycycline": {
+        "why": "Empiric.",
+        "orderLabel": "Doxycycline",
+        "source": "playbook"
+      },
+      "metronidazole": {
+        "why": "Empiric.",
+        "orderLabel": "Metronidazole",
         "source": "playbook"
       },
       "hiv-pep-if-72h": {
@@ -2113,9 +2298,14 @@
         "orderLabel": "Hepatitis B vaccine",
         "source": "playbook"
       },
-      "crisis-counseling-safe-discharge": {
-        "why": "Trauma-informed. Psychiatry follow-up.",
-        "orderLabel": "Crisis counseling + Safe discharge",
+      "crisis-counseling": {
+        "why": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up.",
+        "orderLabel": "Crisis counseling",
+        "source": "playbook"
+      },
+      "safe-discharge": {
+        "why": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up.",
+        "orderLabel": "Safe discharge",
         "source": "playbook"
       }
     },
@@ -2553,7 +2743,22 @@
       },
       "labs": {
         "why": "Infection, uremia, electrolytes, overdose.",
-        "orderLabel": "BMP · CBC · UA · Tox",
+        "orderLabel": "BMP",
+        "source": "playbook"
+      },
+      "labs-split-1": {
+        "why": "Infection, uremia, electrolytes, overdose.",
+        "orderLabel": "CBC",
+        "source": "playbook"
+      },
+      "labs-split-2": {
+        "why": "Infection, uremia, electrolytes, overdose.",
+        "orderLabel": "Urinalysis",
+        "source": "playbook"
+      },
+      "labs-split-3": {
+        "why": "Infection, uremia, electrolytes, overdose.",
+        "orderLabel": "Toxicology Screen",
         "source": "playbook"
       },
       "admit": {
@@ -3150,9 +3355,14 @@
         "orderLabel": "Consult surgery / Thymectomy",
         "source": "playbook"
       },
-      "ivig-plasmapheresis": {
-        "why": "Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
-        "orderLabel": "IVIG / Plasmapheresis",
+      "ivig": {
+        "why": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
+        "orderLabel": "IVIG",
+        "source": "playbook"
+      },
+      "plasmapheresis": {
+        "why": "[Auto-split from bundled label \"IVIG / Plasmapheresis\"] Can be used pre-thymectomy for severe symptoms. However, expensive — conservative trial of steroids + pyridostigmine first is reasonable if patient is stable.",
+        "orderLabel": "Plasmapheresis",
         "source": "playbook"
       },
       "instruct-patient-smoking-cessation": {
@@ -3359,9 +3569,29 @@
         "orderLabel": "Analgesia (Hydromorphone / Fentanyl / Morphine / Ketorolac)",
         "source": "playbook"
       },
-      "broad-spectrum-antibiotics-meropenem-pip": {
-        "why": "Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
-        "orderLabel": "Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)",
+      "meropenem-iv": {
+        "why": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+        "orderLabel": "Meropenem IV",
+        "source": "playbook"
+      },
+      "piperacillin-tazobactam-iv": {
+        "why": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+        "orderLabel": "Piperacillin-tazobactam IV",
+        "source": "playbook"
+      },
+      "ciprofloxacin-iv": {
+        "why": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+        "orderLabel": "Ciprofloxacin IV",
+        "source": "playbook"
+      },
+      "metronidazole-iv": {
+        "why": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+        "orderLabel": "Metronidazole IV",
+        "source": "playbook"
+      },
+      "cefepime-iv": {
+        "why": "[Auto-split from bundled label \"Broad-spectrum antibiotics (Meropenem / Pip-Tazo / Cipro + Metronidazole / Cefepime + Metronidazole)\"] Empiric antimicrobials with broad-spectrum activity against gram-negatives, anaerobes, and enterococci for high-severity community-acquired intra-abdominal infection.",
+        "orderLabel": "Cefepime IV",
         "source": "playbook"
       },
       "antiemetic-ondansetron-metoclopramide-pr": {
@@ -3599,8 +3829,13 @@
         "source": "playbook"
       },
       "levofloxacin-moxifloxacin-penicillin-g-c": {
-        "why": "ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
-        "orderLabel": "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin",
+        "why": "[Auto-split from bundled label \"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin\"] ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
+        "orderLabel": "Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone",
+        "source": "playbook"
+      },
+      "azithromycin": {
+        "why": "[Auto-split from bundled label \"Levofloxacin / Moxifloxacin / Penicillin G / Ceftriaxone + Azithromycin\"] ATS/IDSA guidelines: treat aspiration pneumonia as CAP. Anaerobic coverage NOT needed without abscess/empyema.",
+        "orderLabel": "Azithromycin",
         "source": "playbook"
       },
       "advise-patient-no-alcohol": {
@@ -4199,8 +4434,13 @@
         "source": "playbook"
       },
       "tmp-smx-bactrim-atovaquone-dapsone-clind": {
-        "why": "First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
-        "orderLabel": "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine",
+        "why": "[Auto-split from bundled label \"TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine\"] First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+        "orderLabel": "TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin",
+        "source": "playbook"
+      },
+      "primaquine": {
+        "why": "[Auto-split from bundled label \"TMP-SMX (Bactrim) / Atovaquone / Dapsone / Clindamycin + Primaquine\"] First-line: TMP-SMX PO q8h (PO if PaO2 >70). Alternatives: TMP + Dapsone, Clindamycin + Primaquine, or Atovaquone. IV Pentamidine for severe disease with sulfa allergy.",
+        "orderLabel": "Primaquine",
         "source": "playbook"
       },
       "oxygen": {
@@ -4554,9 +4794,29 @@
         "orderLabel": "Diet, NPO",
         "source": "playbook"
       },
-      "iv-antibiotics-ceftriaxone-metronidazole": {
+      "ceftriaxone-iv": {
         "why": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
-        "orderLabel": "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+        "orderLabel": "Ceftriaxone IV",
+        "source": "playbook"
+      },
+      "metronidazole-iv": {
+        "why": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+        "orderLabel": "Metronidazole IV",
+        "source": "playbook"
+      },
+      "pip-tazo": {
+        "why": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+        "orderLabel": "Pip-Tazo",
+        "source": "playbook"
+      },
+      "ampicillin-sulbactam": {
+        "why": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+        "orderLabel": "Ampicillin-Sulbactam",
+        "source": "playbook"
+      },
+      "cefazolin-iv": {
+        "why": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.",
+        "orderLabel": "Cefazolin IV",
         "source": "playbook"
       },
       "intravenous-access": {
@@ -5825,9 +6085,14 @@
         "orderLabel": "Diet, NPO",
         "source": "playbook"
       },
-      "iv-antibiotics-ceftriaxone-metronidazole": {
+      "ceftriaxone-iv": {
         "why": "Cover enteric gram-negatives + anaerobes.",
-        "orderLabel": "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo)",
+        "orderLabel": "Ceftriaxone IV",
+        "source": "playbook"
+      },
+      "metronidazole-iv": {
+        "why": "Cover enteric gram-negatives + anaerobes.",
+        "orderLabel": "Metronidazole IV",
         "source": "playbook"
       },
       "analgesia-ketorolac-morphine-hydromorpho": {
@@ -6068,9 +6333,14 @@
         "orderLabel": "CBC with differential",
         "source": "playbook"
       },
-      "lumbar-puncture-csf-analysis": {
-        "why": "Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
-        "orderLabel": "Lumbar puncture + CSF analysis",
+      "lumbar-puncture": {
+        "why": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+        "orderLabel": "Lumbar puncture",
+        "source": "playbook"
+      },
+      "csf-analysis": {
+        "why": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Opening pressure, cell count, glucose, protein, Gram stain, culture. Neutrophilic pleocytosis, low glucose, high protein.",
+        "orderLabel": "CSF analysis",
         "source": "playbook"
       },
       "ct-head-if-indicated-before-lp": {
@@ -6088,9 +6358,14 @@
         "orderLabel": "PT/PTT / INR",
         "source": "playbook"
       },
-      "ceftriaxone-2g-iv-vancomycin-iv": {
-        "why": "Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
-        "orderLabel": "Ceftriaxone 2g IV + Vancomycin IV",
+      "ceftriaxone-iv": {
+        "why": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+        "orderLabel": "Ceftriaxone IV",
+        "source": "playbook"
+      },
+      "vancomycin-iv": {
+        "why": "[Auto-split from bundled label \"Ceftriaxone 2g IV + Vancomycin IV\"] Empiric: ceftriaxone (covers N. meningitidis) + vancomycin (covers resistant S. pneumoniae). Add ampicillin if Listeria risk.",
+        "orderLabel": "Vancomycin IV",
         "source": "playbook"
       },
       "dexamethasone-iv": {
@@ -6460,9 +6735,14 @@
         "orderLabel": "Physical Exam: Extremities / Knee",
         "source": "playbook"
       },
-      "arthrocentesis-synovial-fluid-analysis": {
-        "why": "Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
-        "orderLabel": "Arthrocentesis + synovial fluid analysis",
+      "arthrocentesis": {
+        "why": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
+        "orderLabel": "Arthrocentesis",
+        "source": "playbook"
+      },
+      "synovial-fluid-analysis": {
+        "why": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
+        "orderLabel": "Synovial fluid analysis",
         "source": "playbook"
       },
       "cbc": {
@@ -6507,9 +6787,14 @@
         "orderLabel": "Physical Exam: Extremities / Knee",
         "source": "playbook"
       },
-      "arthrocentesis-synovial-fluid-analysis": {
-        "why": "WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
-        "orderLabel": "Arthrocentesis + synovial fluid analysis",
+      "arthrocentesis": {
+        "why": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+        "orderLabel": "Arthrocentesis",
+        "source": "playbook"
+      },
+      "synovial-fluid-analysis": {
+        "why": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] WBC >50K, Gram stain (gram-negative diplococci), culture (50% positive). Send for NAAT.",
+        "orderLabel": "Synovial fluid analysis",
         "source": "playbook"
       },
       "cbc-with-differential": {
@@ -6703,9 +6988,14 @@
         "orderLabel": "BMP / CMP",
         "source": "playbook"
       },
-      "lumbar-puncture-csf-analysis": {
-        "why": "Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
-        "orderLabel": "Lumbar puncture + CSF analysis",
+      "lumbar-puncture": {
+        "why": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
+        "orderLabel": "Lumbar puncture",
+        "source": "playbook"
+      },
+      "csf-analysis": {
+        "why": "[Auto-split from bundled label \"Lumbar puncture + CSF analysis\"] Albuminocytologic dissociation: elevated protein with normal WBC. May be normal in first week.",
+        "orderLabel": "CSF analysis",
         "source": "playbook"
       },
       "emg-ncs": {
@@ -6807,9 +7097,14 @@
         "orderLabel": "Blood cultures (if inpatient)",
         "source": "playbook"
       },
-      "sputum-gram-stain-culture": {
-        "why": "Identify pathogen.",
-        "orderLabel": "Sputum Gram stain + culture",
+      "sputum-gram-stain": {
+        "why": "[Auto-split from bundled label \"Sputum Gram stain + culture\"] Identify pathogen.",
+        "orderLabel": "Sputum Gram stain",
+        "source": "playbook"
+      },
+      "culture": {
+        "why": "[Auto-split from bundled label \"Sputum Gram stain + culture\"] Identify pathogen.",
+        "orderLabel": "Culture",
         "source": "playbook"
       },
       "bmp-cmp": {
@@ -6993,9 +7288,14 @@
         "orderLabel": "CBC / BMP / Lipids / HbA1c",
         "source": "playbook"
       },
-      "aspirin-clopidogrel-dapt-x21d": {
-        "why": "Dual antiplatelet for 21 days then single agent.",
-        "orderLabel": "Aspirin + Clopidogrel (DAPT x21d)",
+      "aspirin": {
+        "why": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
+        "orderLabel": "Aspirin",
+        "source": "playbook"
+      },
+      "clopidogrel": {
+        "why": "[Auto-split from bundled label \"Aspirin + Clopidogrel (DAPT x21d)\"] Dual antiplatelet for 21 days then single agent.",
+        "orderLabel": "Clopidogrel",
         "source": "playbook"
       },
       "high-intensity-statin-atorvastatin-80mg": {
@@ -7114,14 +7414,24 @@
         "orderLabel": "Physical Exam: Abdomen",
         "source": "playbook"
       },
-      "cbc-with-differential-reticulocyte-count": {
-        "why": "Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
-        "orderLabel": "CBC with differential + reticulocyte count",
+      "cbc-with-differential": {
+        "why": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
+        "orderLabel": "CBC with differential",
         "source": "playbook"
       },
-      "total-direct-bilirubin": {
-        "why": "Unconjugated > conjugated. Plot on Bhutani nomogram.",
-        "orderLabel": "Total + direct bilirubin",
+      "reticulocyte-count": {
+        "why": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Rule out hemolysis. Normal Hb = breastfeeding jaundice.",
+        "orderLabel": "Reticulocyte count",
+        "source": "playbook"
+      },
+      "total-bilirubin": {
+        "why": "[Auto-split from bundled label \"Total + direct bilirubin\"] Unconjugated > conjugated. Plot on Bhutani nomogram.",
+        "orderLabel": "Total bilirubin",
+        "source": "playbook"
+      },
+      "direct-bilirubin": {
+        "why": "[Auto-split from bundled label \"Total + direct bilirubin\"] Unconjugated > conjugated. Plot on Bhutani nomogram.",
+        "orderLabel": "Direct bilirubin",
         "source": "playbook"
       },
       "direct-coombs-test": {
@@ -7188,9 +7498,14 @@
         "orderLabel": "Physical Exam: Abdomen",
         "source": "playbook"
       },
-      "cbc-with-differential-reticulocyte-count": {
-        "why": "Acute anemia, elevated retics.",
-        "orderLabel": "CBC with differential + reticulocyte count",
+      "cbc-with-differential": {
+        "why": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
+        "orderLabel": "CBC with differential",
+        "source": "playbook"
+      },
+      "reticulocyte-count": {
+        "why": "[Auto-split from bundled label \"CBC with differential + reticulocyte count\"] Acute anemia, elevated retics.",
+        "orderLabel": "Reticulocyte count",
         "source": "playbook"
       },
       "peripheral-blood-smear": {
@@ -7549,9 +7864,14 @@
         "orderLabel": "Physical Exam: Neuro / Psych",
         "source": "playbook"
       },
-      "cbc-peripheral-smear": {
-        "why": "Microcytic anemia + basophilic stippling.",
-        "orderLabel": "CBC + peripheral smear",
+      "cbc": {
+        "why": "[Auto-split from bundled label \"CBC + peripheral smear\"] Microcytic anemia + basophilic stippling.",
+        "orderLabel": "CBC",
+        "source": "playbook"
+      },
+      "peripheral-smear": {
+        "why": "[Auto-split from bundled label \"CBC + peripheral smear\"] Microcytic anemia + basophilic stippling.",
+        "orderLabel": "Peripheral smear",
         "source": "playbook"
       },
       "blood-lead-level": {
@@ -7574,9 +7894,19 @@
         "orderLabel": "Abdominal X-ray",
         "source": "playbook"
       },
-      "chelation-therapy-succimer-edta-bal": {
+      "succimer": {
         "why": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
-        "orderLabel": "Chelation therapy (Succimer / EDTA + BAL)",
+        "orderLabel": "Succimer",
+        "source": "playbook"
+      },
+      "edta": {
+        "why": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+        "orderLabel": "EDTA",
+        "source": "playbook"
+      },
+      "bal": {
+        "why": "BLL >45 = succimer PO. BLL >70 = IV EDTA + BAL.",
+        "orderLabel": "BAL",
         "source": "playbook"
       },
       "remove-lead-source": {
@@ -7693,9 +8023,14 @@
         "orderLabel": "Chest X-ray",
         "source": "playbook"
       },
-      "sputum-afb-smear-culture": {
-        "why": "AFB positive. Culture = gold standard.",
-        "orderLabel": "Sputum AFB smear + culture",
+      "sputum-afb-smear": {
+        "why": "[Auto-split from bundled label \"Sputum AFB smear + culture\"] AFB positive. Culture = gold standard.",
+        "orderLabel": "Sputum AFB smear",
+        "source": "playbook"
+      },
+      "culture": {
+        "why": "[Auto-split from bundled label \"Sputum AFB smear + culture\"] AFB positive. Culture = gold standard.",
+        "orderLabel": "Culture",
         "source": "playbook"
       },
       "naat-pcr-for-tb": {
@@ -7807,9 +8142,14 @@
         "orderLabel": "TSH",
         "source": "playbook"
       },
-      "discontinue-simvastatin-gemfibrozil": {
-        "why": "Contraindicated combination. Discontinue immediately.",
-        "orderLabel": "DISCONTINUE simvastatin + gemfibrozil",
+      "discontinue-simvastatin": {
+        "why": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
+        "orderLabel": "DISCONTINUE simvastatin",
+        "source": "playbook"
+      },
+      "gemfibrozil": {
+        "why": "[Auto-split from bundled label \"DISCONTINUE simvastatin + gemfibrozil\"] Contraindicated combination. Discontinue immediately.",
+        "orderLabel": "gemfibrozil",
         "source": "playbook"
       },
       "aggressive-iv-fluids": {
@@ -7908,9 +8248,14 @@
         "orderLabel": "Physical Exam: General Appearance",
         "source": "playbook"
       },
-      "iga-anti-ttg-total-iga": {
-        "why": "First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
-        "orderLabel": "IgA anti-tTG + Total IgA",
+      "iga-anti-ttg": {
+        "why": "[Auto-split from bundled label \"IgA anti-tTG + Total IgA\"] First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+        "orderLabel": "IgA anti-tTG",
+        "source": "playbook"
+      },
+      "total-iga": {
+        "why": "[Auto-split from bundled label \"IgA anti-tTG + Total IgA\"] First-line serology. IgA tTG sensitive/specific. Must check total IgA.",
+        "orderLabel": "Total IgA",
         "source": "playbook"
       },
       "igg-anti-ttg-anti-dgp-if-iga-deficient": {
@@ -7970,9 +8315,14 @@
         "orderLabel": "Universal Labs (CBC, CMP, UA)",
         "source": "playbook"
       },
-      "ekg-cxr-if-indicated": {
-        "why": "An EKG can help in detecting cardiac abnormalities while a chest X-ray can aid in identifying lung pathologies.",
-        "orderLabel": "EKG + CXR if indicated",
+      "ekg": {
+        "why": "ECG screens for cardiac ischemia or arrhythmia when clinically appropriate.",
+        "orderLabel": "EKG",
+        "source": "playbook"
+      },
+      "chest-x-ray": {
+        "why": "Evaluate chest and lungs as part of the initial exam for routine check-up. Finding: RR 19; SpO₂ 95%.",
+        "orderLabel": "Chest X-ray",
         "source": "playbook"
       }
     },
@@ -8229,9 +8579,14 @@
         "orderLabel": "IV Ceftriaxone / Ciprofloxacin",
         "source": "playbook"
       },
-      "iv-fluids-antiemetics": {
+      "iv-fluids": {
         "why": "Nausea/vomiting.",
-        "orderLabel": "IV fluids + Antiemetics",
+        "orderLabel": "IV Fluids",
+        "source": "playbook"
+      },
+      "antiemetics": {
+        "why": "Nausea/vomiting.",
+        "orderLabel": "Antiemetics",
         "source": "playbook"
       }
     },
@@ -8256,9 +8611,14 @@
         "orderLabel": "Upper GI series",
         "source": "playbook"
       },
-      "npo-ng-tube": {
-        "why": "Decompression. IV fluids resuscitation.",
-        "orderLabel": "NPO + NG tube",
+      "npo": {
+        "why": "[Auto-split from bundled label \"NPO + NG tube\"] Decompression. IV fluids resuscitation.",
+        "orderLabel": "NPO",
+        "source": "playbook"
+      },
+      "ng-tube": {
+        "why": "[Auto-split from bundled label \"NPO + NG tube\"] Decompression. IV fluids resuscitation.",
+        "orderLabel": "NG tube",
         "source": "playbook"
       },
       "emergency-surgical-consult-ladd-procedur": {
@@ -8268,9 +8628,14 @@
       }
     },
     "081": {
-      "colonoscopy-biopsy": {
-        "why": "Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
-        "orderLabel": "Colonoscopy + biopsy",
+      "colonoscopy": {
+        "why": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+        "orderLabel": "Colonoscopy",
+        "source": "playbook"
+      },
+      "biopsy": {
+        "why": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Skip lesions, cobblestoning, transmural inflammation, non-caseating granulomas.",
+        "orderLabel": "biopsy",
         "source": "playbook"
       },
       "ct-mr-enterography": {
@@ -8337,14 +8702,34 @@
         "orderLabel": "Order imaging studies (Axial CT scan of the abdomen and pelvis with IV contrast)",
         "source": "playbook"
       },
-      "iv-fluids-npo": {
-        "why": "Resuscitate before imaging if hypotensive.",
-        "orderLabel": "IV Fluids + NPO",
+      "iv-fluids": {
+        "why": "Appropriate CCS order for Acute Abdomen - Undetermined etiology: IV Fluids.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
-      "cbc-lipase-lfts-ua": {
-        "why": "Narrow differential: biliary, pancreatic, UTI, medical.",
-        "orderLabel": "CBC · Lipase · LFTs · UA",
+      "npo": {
+        "why": "Appropriate CCS order for Acute Abdomen - Undetermined etiology: NPO.",
+        "orderLabel": "NPO",
+        "source": "playbook"
+      },
+      "cbc": {
+        "why": "Laboratory testing when systemic illness or severity warrants labs in Acute Abdomen - Undetermined etiology.",
+        "orderLabel": "CBC",
+        "source": "playbook"
+      },
+      "lipase": {
+        "why": "Appropriate CCS order for Acute Abdomen - Undetermined etiology: Lipase.",
+        "orderLabel": "Lipase",
+        "source": "playbook"
+      },
+      "lfts": {
+        "why": "Appropriate CCS order for Acute Abdomen - Undetermined etiology: LFTs.",
+        "orderLabel": "LFTs",
+        "source": "playbook"
+      },
+      "ua": {
+        "why": "Appropriate CCS order for Acute Abdomen - Undetermined etiology: UA.",
+        "orderLabel": "UA",
         "source": "playbook"
       },
       "ct-abdomen-pelvis": {
@@ -8384,9 +8769,14 @@
         "orderLabel": "Colonoscopy",
         "source": "playbook"
       },
-      "npo-iv-fluids": {
-        "why": "Bowel rest, resuscitation.",
-        "orderLabel": "NPO + IV fluids",
+      "npo": {
+        "why": "[Auto-split from bundled label \"NPO + IV fluids\"] Bowel rest, resuscitation.",
+        "orderLabel": "NPO",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "[Auto-split from bundled label \"NPO + IV fluids\"] Bowel rest, resuscitation.",
+        "orderLabel": "IV fluids",
         "source": "playbook"
       },
       "broad-spectrum-abx-if-severe": {
@@ -8401,9 +8791,14 @@
         "orderLabel": "FSH/LH",
         "source": "playbook"
       },
-      "testosterone-free-total-dhea-s": {
+      "testosterone-free-total": {
         "why": "Elevated androgens.",
-        "orderLabel": "Testosterone (free + total) / DHEA-S",
+        "orderLabel": "Testosterone (free + total)",
+        "source": "playbook"
+      },
+      "dhea-s": {
+        "why": "Elevated androgens.",
+        "orderLabel": "DHEA-S",
         "source": "playbook"
       },
       "17-oh-progesterone": {
@@ -8426,9 +8821,14 @@
         "orderLabel": "Glucose / HbA1c / OGTT",
         "source": "playbook"
       },
-      "weight-loss-lifestyle": {
-        "why": "First-line. Improves all parameters.",
-        "orderLabel": "Weight loss + lifestyle",
+      "weight-loss": {
+        "why": "[Auto-split from bundled label \"Weight loss + lifestyle\"] First-line. Improves all parameters.",
+        "orderLabel": "Weight loss",
+        "source": "playbook"
+      },
+      "lifestyle": {
+        "why": "[Auto-split from bundled label \"Weight loss + lifestyle\"] First-line. Improves all parameters.",
+        "orderLabel": "lifestyle",
         "source": "playbook"
       },
       "combined-ocps": {
@@ -8480,9 +8880,14 @@
       }
     },
     "087": {
-      "colonoscopy-biopsy": {
-        "why": "Continuous inflammation from rectum, crypt abscesses.",
-        "orderLabel": "Colonoscopy + biopsy",
+      "colonoscopy": {
+        "why": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Continuous inflammation from rectum, crypt abscesses.",
+        "orderLabel": "Colonoscopy",
+        "source": "playbook"
+      },
+      "biopsy": {
+        "why": "[Auto-split from bundled label \"Colonoscopy + biopsy\"] Continuous inflammation from rectum, crypt abscesses.",
+        "orderLabel": "biopsy",
         "source": "playbook"
       },
       "cbc-crp-esr-fecal-calprotectin": {
@@ -8522,9 +8927,14 @@
         "orderLabel": "PSA",
         "source": "playbook"
       },
-      "trus-prostate-biopsy": {
-        "why": "Definitive diagnosis. Gleason score.",
-        "orderLabel": "TRUS + prostate biopsy",
+      "trus": {
+        "why": "[Auto-split from bundled label \"TRUS + prostate biopsy\"] Definitive diagnosis. Gleason score.",
+        "orderLabel": "TRUS",
+        "source": "playbook"
+      },
+      "prostate-biopsy": {
+        "why": "[Auto-split from bundled label \"TRUS + prostate biopsy\"] Definitive diagnosis. Gleason score.",
+        "orderLabel": "prostate biopsy",
         "source": "playbook"
       },
       "mri-prostate": {
@@ -8628,9 +9038,14 @@
         "orderLabel": "Physical Exam: Breasts / Axillae",
         "source": "playbook"
       },
-      "diagnostic-mammogram-us": {
-        "why": "BIRADS classification.",
-        "orderLabel": "Diagnostic mammogram + US",
+      "diagnostic-mammogram": {
+        "why": "[Auto-split from bundled label \"Diagnostic mammogram + US\"] BIRADS classification.",
+        "orderLabel": "Diagnostic mammogram",
+        "source": "playbook"
+      },
+      "ultrasound": {
+        "why": "[Auto-split from bundled label \"Diagnostic mammogram + US\"] BIRADS classification.",
+        "orderLabel": "Ultrasound",
         "source": "playbook"
       },
       "core-needle-biopsy": {
@@ -8687,9 +9102,14 @@
         "orderLabel": "CBC / BMP / LFTs / Lactate / Coags",
         "source": "playbook"
       },
-      "blood-cultures-x2-urine-culture": {
-        "why": "Before antibiotics.",
-        "orderLabel": "Blood cultures x2 + urine culture",
+      "blood-cultures-x2": {
+        "why": "[Auto-split from bundled label \"Blood cultures x2 + urine culture\"] Before antibiotics.",
+        "orderLabel": "Blood cultures x2",
+        "source": "playbook"
+      },
+      "urine-culture": {
+        "why": "[Auto-split from bundled label \"Blood cultures x2 + urine culture\"] Before antibiotics.",
+        "orderLabel": "urine culture",
         "source": "playbook"
       },
       "cxr": {
@@ -8798,9 +9218,14 @@
       }
     },
     "096": {
-      "blood-cultures-x2-source-cultures": {
-        "why": "Before antibiotics.",
-        "orderLabel": "Blood cultures x2 + source cultures",
+      "blood-cultures-x2": {
+        "why": "[Auto-split from bundled label \"Blood cultures x2 + source cultures\"] Before antibiotics.",
+        "orderLabel": "Blood cultures x2",
+        "source": "playbook"
+      },
+      "source-cultures": {
+        "why": "[Auto-split from bundled label \"Blood cultures x2 + source cultures\"] Before antibiotics.",
+        "orderLabel": "Source cultures",
         "source": "playbook"
       },
       "cbc-bmp-lfts-coags": {
@@ -8808,14 +9233,24 @@
         "orderLabel": "CBC / BMP / LFTs / Coags",
         "source": "playbook"
       },
-      "iv-fluids-norepinephrine": {
+      "iv-fluids": {
         "why": "Resuscitation. MAP ≥65.",
-        "orderLabel": "IV fluids + Norepinephrine",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
-      "vancomycin-clindamycin": {
-        "why": "Vanc covers MRSA. Clindamycin suppresses toxin production.",
-        "orderLabel": "Vancomycin + Clindamycin",
+      "norepinephrine-drip": {
+        "why": "Resuscitation. MAP ≥65.",
+        "orderLabel": "Norepinephrine drip",
+        "source": "playbook"
+      },
+      "vancomycin-iv": {
+        "why": "[Auto-split from bundled label \"Vancomycin + Clindamycin\"] Vanc covers MRSA. Clindamycin suppresses toxin production.",
+        "orderLabel": "Vancomycin IV",
+        "source": "playbook"
+      },
+      "clindamycin-iv": {
+        "why": "[Auto-split from bundled label \"Vancomycin + Clindamycin\"] Vanc covers MRSA. Clindamycin suppresses toxin production.",
+        "orderLabel": "Clindamycin IV",
         "source": "playbook"
       },
       "remove-source-tampon-wound": {
@@ -8850,9 +9285,19 @@
         "orderLabel": "HRT discussion (if vasomotor)",
         "source": "playbook"
       },
-      "calcium-vitamin-d-dexa": {
-        "why": "Osteoporosis prevention.",
-        "orderLabel": "Calcium + Vitamin D + DEXA",
+      "calcium": {
+        "why": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+        "orderLabel": "Calcium",
+        "source": "playbook"
+      },
+      "vitamin-d": {
+        "why": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+        "orderLabel": "Vitamin D",
+        "source": "playbook"
+      },
+      "dexa": {
+        "why": "[Auto-split from bundled label \"Calcium + Vitamin D + DEXA\"] Osteoporosis prevention.",
+        "orderLabel": "DEXA",
         "source": "playbook"
       }
     },
@@ -8908,7 +9353,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -8935,7 +9385,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -8962,7 +9417,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -8989,7 +9449,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9016,7 +9481,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9043,7 +9513,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9070,7 +9545,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9097,7 +9577,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9124,7 +9609,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9151,7 +9641,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9178,7 +9673,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9205,7 +9705,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9232,7 +9737,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9259,7 +9769,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9286,7 +9801,12 @@
       },
       "iv": {
         "why": "Two large-bore if shock.",
-        "orderLabel": "IV Access + Fluids",
+        "orderLabel": "IV access peripheral",
+        "source": "playbook"
+      },
+      "iv-fluids": {
+        "why": "Fluid resuscitation — crystalloid (NS/LR) bolus if hypotensive.",
+        "orderLabel": "IV Fluids",
         "source": "playbook"
       },
       "labs": {
@@ -9831,5 +10351,5 @@
     }
   },
   "caseCount": 214,
-  "entryCount": 1880
+  "entryCount": 1984
 }

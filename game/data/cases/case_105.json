@@ -8,7 +8,8 @@
   "correct_orders": [
     "HCG",
     "TVUS",
-    "CBC + Type and screen",
+    "CBC",
+    "Type and screen",
     "IV fluids",
     "Serial Hct / Observation",
     "Surgical consult (if unstable)"
@@ -17,7 +18,8 @@
   "rationale": {
     "HCG": "Negative — rules out ectopic.",
     "TVUS": "Free fluid, ruptured cyst, adnexal mass.",
-    "CBC + Type and screen": "Assess anemia, prepare for transfusion.",
+    "CBC": "[Auto-split from bundled label \"CBC + Type and screen\"] Assess anemia, prepare for transfusion.",
+    "Type and screen": "[Auto-split from bundled label \"CBC + Type and screen\"] Assess anemia, prepare for transfusion.",
     "IV fluids": "Resuscitation.",
     "Serial Hct / Observation": "If stable — conservative.",
     "Surgical consult (if unstable)": "Laparoscopy for hemostasis if ongoing bleeding."
@@ -60,9 +62,17 @@
       ]
     },
     {
-      "label": "CBC + Type and screen",
+      "label": "CBC",
       "type": "correctlyOrdered",
-      "finding": "Assess anemia, prepare for transfusion.",
+      "finding": "[Auto-split from bundled label \"CBC + Type and screen\"] Assess anemia, prepare for transfusion.",
+      "aliases": [
+        "CBC"
+      ]
+    },
+    {
+      "label": "Type and screen",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"CBC + Type and screen\"] Assess anemia, prepare for transfusion.",
       "aliases": [
         "CBC"
       ]
@@ -95,7 +105,8 @@
   "order_sets": [
     "HCG",
     "TVUS",
-    "CBC + Type and screen",
+    "CBC",
+    "Type and screen",
     "IV fluids",
     "Serial Hct / Observation",
     "Surgical consult (if unstable)"

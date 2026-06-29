@@ -10,7 +10,8 @@
     "Physical Exam: Chest / Lungs",
     "Physical Exam: Heart / Cardiovascular",
     "Physical Exam: Extremities / Knee",
-    "Arthrocentesis + synovial fluid analysis",
+    "Arthrocentesis",
+    "Synovial fluid analysis",
     "CBC",
     "BMP / Uric acid",
     "NSAIDs (Indomethacin / Naproxen) or Colchicine",
@@ -22,7 +23,8 @@
     "Physical Exam: Chest / Lungs": "Screening exam.",
     "Physical Exam: Heart / Cardiovascular": "Screen for endocarditis if septic joint suspected.",
     "Physical Exam: Extremities / Knee": "Monoarticular: hot, swollen, erythematous knee. Exquisite tenderness. Limited ROM.",
-    "Arthrocentesis + synovial fluid analysis": "Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
+    "Arthrocentesis": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
+    "Synovial fluid analysis": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
     "CBC": "Leukocytosis in acute flare.",
     "BMP / Uric acid": "Uric acid may be normal during acute flare. Assess renal function (affects NSAID/colchicine use).",
     "NSAIDs (Indomethacin / Naproxen) or Colchicine": "First-line within 36h. Colchicine: avoid in renal/hepatic impairment. Alternatives: prednisone or intra-articular steroids.",
@@ -91,9 +93,17 @@
       ]
     },
     {
-      "label": "Arthrocentesis + synovial fluid analysis",
+      "label": "Arthrocentesis",
       "type": "correctlyOrdered",
-      "finding": "Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
+      "finding": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
+      "aliases": [
+        "Joint aspiration"
+      ]
+    },
+    {
+      "label": "Synovial fluid analysis",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Arthrocentesis + synovial fluid analysis\"] Negatively birefringent needle-shaped crystals under polarized light. WBC 2000-50,000. Rule out septic arthritis. Gram stain and culture.",
       "aliases": [
         "Joint aspiration"
       ]
@@ -138,7 +148,8 @@
     "Physical Exam: Chest / Lungs",
     "Physical Exam: Heart / Cardiovascular",
     "Physical Exam: Extremities / Knee",
-    "Arthrocentesis + synovial fluid analysis",
+    "Arthrocentesis",
+    "Synovial fluid analysis",
     "CBC",
     "BMP / Uric acid",
     "NSAIDs (Indomethacin / Naproxen) or Colchicine",

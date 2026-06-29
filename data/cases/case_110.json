@@ -1,1 +1,83 @@
-{"id":110,"topic":"Rash","title":"Rash","diagnosis":"Syphilis","hpi_narrative":"{{patient_name}} presents with rash, lymphadenopathy, and possible genital lesion history. Secondary syphilis: diffuse maculopapular rash (INCLUDING palms and soles — key differentiating feature), condyloma lata (wart-like lesions in moist areas), lymphadenopathy, flu-like symptoms. Primary syphilis: painless indurated chancre at inoculation site (resolves spontaneously). Caused by Treponema pallidum (spirochete). Diagnosis: screening with RPR or VDRL (non-treponemal — titer correlates with disease activity). Confirm with treponemal-specific test (FTA-ABS, TP-PA). Darkfield microscopy of chancre fluid can directly visualize spirochetes. HIV testing (high co-infection). Treatment: benzathine penicillin G 2.4M units IM once (primary/secondary/early latent). Doxycycline if penicillin-allergic. Jarisch-Herxheimer reaction may occur (fever, myalgias, headache within 24h). Report to public health. Partner notification. Follow RPR titers to confirm cure (4-fold decline).","chief_complaint":"Diffuse rash involving palms and soles","patient":null,"patient_name":"Kobby Appau","patient_sex":"male","location":"Office","specialty":"Infectious Disease","stacks":[{"label":"Physical Exam: Skin / Genital","type":"correctlyOrdered","finding":"Maculopapular rash including palms/soles. Chancre? Condyloma lata?","aliases":["Skin Exam"]},{"label":"RPR / VDRL + FTA-ABS / TP-PA","type":"correctlyOrdered","finding":"Non-treponemal screening + treponemal confirmation.","aliases":["Syphilis serology"]},{"label":"HIV test","type":"correctlyOrdered","finding":"High co-infection rate.","aliases":["HIV"]},{"label":"Benzathine penicillin G 2.4M units IM once","type":"correctlyOrdered","finding":"First-line. Doxycycline if allergic.","aliases":["Bicillin"]},{"label":"Public health reporting + Partner treatment","type":"correctlyOrdered","finding":"Reportable. Partners must be treated.","aliases":["Public health"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 110,
+  "topic": "Rash",
+  "title": "Rash",
+  "diagnosis": "Syphilis",
+  "hpi_narrative": "{{patient_name}} presents with rash, lymphadenopathy, and possible genital lesion history. Secondary syphilis: diffuse maculopapular rash (INCLUDING palms and soles — key differentiating feature), condyloma lata (wart-like lesions in moist areas), lymphadenopathy, flu-like symptoms. Primary syphilis: painless indurated chancre at inoculation site (resolves spontaneously). Caused by Treponema pallidum (spirochete). Diagnosis: screening with RPR or VDRL (non-treponemal — titer correlates with disease activity). Confirm with treponemal-specific test (FTA-ABS, TP-PA). Darkfield microscopy of chancre fluid can directly visualize spirochetes. HIV testing (high co-infection). Treatment: benzathine penicillin G 2.4M units IM once (primary/secondary/early latent). Doxycycline if penicillin-allergic. Jarisch-Herxheimer reaction may occur (fever, myalgias, headache within 24h). Report to public health. Partner notification. Follow RPR titers to confirm cure (4-fold decline).",
+  "chief_complaint": "Diffuse rash involving palms and soles",
+  "patient": null,
+  "patient_name": "Kobby Appau",
+  "patient_sex": "male",
+  "location": "Office",
+  "specialty": "Infectious Disease",
+  "stacks": [
+    {
+      "label": "Physical Exam: Skin / Genital",
+      "type": "correctlyOrdered",
+      "finding": "Maculopapular rash including palms/soles. Chancre? Condyloma lata?",
+      "aliases": [
+        "Skin Exam"
+      ]
+    },
+    {
+      "label": "RPR / VDRL",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"RPR / VDRL + FTA-ABS / TP-PA\"] Non-treponemal screening + treponemal confirmation.",
+      "aliases": [
+        "Syphilis serology"
+      ]
+    },
+    {
+      "label": "FTA-ABS / TP-PA",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"RPR / VDRL + FTA-ABS / TP-PA\"] Non-treponemal screening + treponemal confirmation.",
+      "aliases": [
+        "Syphilis serology"
+      ]
+    },
+    {
+      "label": "HIV test",
+      "type": "correctlyOrdered",
+      "finding": "High co-infection rate.",
+      "aliases": [
+        "HIV"
+      ]
+    },
+    {
+      "label": "Benzathine penicillin G 2.4M units IM once",
+      "type": "correctlyOrdered",
+      "finding": "First-line. Doxycycline if allergic.",
+      "aliases": [
+        "Bicillin"
+      ]
+    },
+    {
+      "label": "Public health reporting",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Public health reporting + Partner treatment\"] Reportable. Partners must be treated.",
+      "aliases": [
+        "Public health"
+      ]
+    },
+    {
+      "label": "Partner treatment",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Public health reporting + Partner treatment\"] Reportable. Partners must be treated.",
+      "aliases": [
+        "Public health"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 93,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}

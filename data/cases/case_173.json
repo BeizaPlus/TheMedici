@@ -1,1 +1,111 @@
-{"id":173,"topic":"Sexual Assault","title":"Sexual Assault","diagnosis":"Male Sexual Assault","hpi_narrative":"{{patient_name}} presents after sexual assault. Management: trauma-informed, multidisciplinary approach. Medical stabilization first, then forensic examination with consent. SANE examination if available. Forensic evidence collection (rape kit) within 72h. Document injuries. Labs: STI testing (CT, GC, HIV, syphilis, hepatitis B/C), toxicology if concern for drug-facilitated assault. Empiric STI prophylaxis: ceftriaxone + doxycycline + metronidazole. HIV PEP if exposure within 72h (28-day course). Hepatitis B vaccine if not immune. Mental health crisis counseling. Report to law enforcement (with patient consent). Safe discharge planning. Follow-up: STI re-testing, counseling.","chief_complaint":"Sexual assault victim","patient":null,"patient_name":"Habiba Musah","patient_sex":"female","location":"ER","specialty":"Emergency Medicine / Forensic","stacks":[{"label":"Medical stabilization + SANE exam (with consent)","type":"correctlyOrdered","finding":"Document injuries, forensic evidence.","aliases":["Forensic exam"]},{"label":"STI testing + prophylaxis (CTX+Doxy+Metro)","type":"correctlyOrdered","finding":"Empiric.","aliases":["STI prophylaxis"]},{"label":"HIV PEP (if <72h)","type":"correctlyOrdered","finding":"28-day course.","aliases":["HIV PEP"]},{"label":"Hepatitis B vaccine","type":"correctlyOrdered","finding":"If not immune.","aliases":["HBV vaccine"]},{"label":"Crisis counseling + Safe discharge","type":"correctlyOrdered","finding":"Trauma-informed. Psychiatry follow-up.","aliases":["Support"]}],"vitals":{"hr":null,"spo2":null,"bp":null,"rr":null,"temp":null},"confidence":93,"source":"DeepSeek v4 Pro","extraction_method":"deepseek_direct","complete":true,"parse_error":false}
+{
+  "id": 173,
+  "topic": "Sexual Assault",
+  "title": "Sexual Assault",
+  "diagnosis": "Male Sexual Assault",
+  "hpi_narrative": "{{patient_name}} presents after sexual assault. Management: trauma-informed, multidisciplinary approach. Medical stabilization first, then forensic examination with consent. SANE examination if available. Forensic evidence collection (rape kit) within 72h. Document injuries. Labs: STI testing (CT, GC, HIV, syphilis, hepatitis B/C), toxicology if concern for drug-facilitated assault. Empiric STI prophylaxis: ceftriaxone + doxycycline + metronidazole. HIV PEP if exposure within 72h (28-day course). Hepatitis B vaccine if not immune. Mental health crisis counseling. Report to law enforcement (with patient consent). Safe discharge planning. Follow-up: STI re-testing, counseling.",
+  "chief_complaint": "Sexual assault victim",
+  "patient": null,
+  "patient_name": "Habiba Musah",
+  "patient_sex": "female",
+  "location": "ER",
+  "specialty": "Emergency Medicine / Forensic",
+  "stacks": [
+    {
+      "label": "Medical stabilization",
+      "type": "correctlyOrdered",
+      "finding": "Document injuries, forensic evidence.",
+      "aliases": [
+        "Forensic exam"
+      ]
+    },
+    {
+      "label": "SANE exam (with consent)",
+      "type": "correctlyOrdered",
+      "finding": "Document injuries, forensic evidence.",
+      "aliases": [
+        "Forensic exam"
+      ],
+      "id": "-split-1"
+    },
+    {
+      "label": "STI testing",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ]
+    },
+    {
+      "label": "Ceftriaxone",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ],
+      "id": "-split-1"
+    },
+    {
+      "label": "Doxycycline",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ],
+      "id": "-split-2"
+    },
+    {
+      "label": "Metronidazole",
+      "type": "correctlyOrdered",
+      "finding": "Empiric.",
+      "aliases": [
+        "STI prophylaxis"
+      ],
+      "id": "-split-3"
+    },
+    {
+      "label": "HIV PEP (if <72h)",
+      "type": "correctlyOrdered",
+      "finding": "28-day course.",
+      "aliases": [
+        "HIV PEP"
+      ]
+    },
+    {
+      "label": "Hepatitis B vaccine",
+      "type": "correctlyOrdered",
+      "finding": "If not immune.",
+      "aliases": [
+        "HBV vaccine"
+      ]
+    },
+    {
+      "label": "Crisis counseling",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up.",
+      "aliases": [
+        "Support"
+      ]
+    },
+    {
+      "label": "Safe discharge",
+      "type": "correctlyOrdered",
+      "finding": "[Auto-split from bundled label \"Crisis counseling + Safe discharge\"] Trauma-informed. Psychiatry follow-up.",
+      "aliases": [
+        "Support"
+      ]
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "confidence": 93,
+  "source": "DeepSeek v4 Pro",
+  "extraction_method": "deepseek_direct",
+  "complete": true,
+  "parse_error": false
+}
