@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: var(--fs-body); }
@@ -41,9 +42,12 @@
   }
   .app { max-width: 720px; margin: 0 auto; padding: 24px 28px 16px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
-  .topbar h1 { font-size: 19px; font-weight: 500; letter-spacing: -0.01em; }
-  .topbar-actions { display: flex; align-items: center; gap: 10px; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; gap: 16px; flex-wrap: wrap; }
+  .topbar-left, .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .topbar-left { flex: 1 1 auto; min-width: 0; }
+  .topbar-left h1 { font-size: 19px; font-weight: 500; letter-spacing: -0.01em; margin-right: 12px; white-space: nowrap; }
+  .topbar-right { justify-content: flex-end; flex: 0 1 auto; flex-wrap: wrap; }
+  .topbar-actions { display: none; }
   .chip { display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--border); background: var(--bg-surface); font-size: 12px; font-weight: 450; color: var(--text-soft); cursor: pointer; font-family: inherit; letter-spacing: -0.01em; transition: all 0.15s; }
   .chip:hover { border-color: var(--border-hi); color: var(--text); }
   .chip.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
@@ -97,6 +101,10 @@
   .spine-post-ref { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--dot-draft); margin: 0 1px; cursor: pointer; vertical-align: middle; transition: all 0.15s; }
   .spine-post-ref.active { background: var(--text); width: 9px; height: 9px; }
   .spine-post-ref:hover { background: var(--accent); }
+  .spine-post-ref.ready { background: var(--dot-ready); }
+  .spine-post-ref.posted { background: var(--dot-posted); }
+  .spine-post-ref.active.ready { background: var(--ready-text); }
+  .spine-post-ref.active.posted { background: var(--posted-text); }
 
   /* FLOATING TIMELINE PANEL (right side) */
   .tl-panel {
@@ -139,9 +147,16 @@
     display: flex; align-items: center; gap: 8px;
     padding: 6px 14px; cursor: pointer;
     transition: background 0.1s;
+    border-left: 2px solid transparent;
   }
   .tl-row:hover { background: var(--bg-subtle); }
   .tl-row.active { background: var(--accent-bg); }
+  .tl-row.ready { border-left-color: var(--dot-ready); }
+  .tl-row.posted { border-left-color: var(--dot-posted); }
+  .tl-row.ready .tl-date { color: var(--ready-text); font-weight: 500; }
+  .tl-row.posted .tl-date { color: var(--posted-text); font-weight: 500; }
+  .tl-row.ready .tl-act { color: var(--ready-text); opacity: 0.8; }
+  .tl-row.posted .tl-act { color: var(--posted-text); opacity: 0.8; }
   .tl-dot {
     width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
     border: 0.5px solid var(--border-hi); background: var(--bg);
@@ -190,6 +205,10 @@
   .reader-edit-btn { margin-left: auto; width: 28px; height: 28px; border-radius: 50%; border: 0.5px solid var(--border); background: var(--bg); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.15s; flex-shrink: 0; }
   .reader-edit-btn:hover { border-color: var(--border-hi); color: var(--text); }
   .reader-edit-btn.editing { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+  .reader-mic-btn { width: 30px; height: 30px; border-radius: 50%; border: 0.5px solid var(--border); background: var(--bg); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; padding: 0; }
+  .reader-mic-btn svg { width: 16px; height: 16px; }
+  .reader-mic-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .reader-mic-btn.recording { background: #ff3b30; border-color: #ff3b30; color: #fff; }
   .reader-edit-area { display: none; flex: 1; min-height: 0; flex-direction: column; gap: 8px; }
   .reader-edit-area.active { display: flex; }
   .reader-body.hidden { display: none; }
@@ -244,24 +263,24 @@
   .speech-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff3b30; animation: pulse 1.2s ease infinite; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
   .speech-text { font-size: 13px; color: var(--text-soft); font-family: 'Inter', sans-serif; font-weight: 400; font-style: italic; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .chip.recording { background: #ff3b30; border-color: #ff3b30; color: #fff; }
-  .chip.recording:hover { background: #ff3b30; color: #fff; }
+  .reader-mic-btn.recording { background: #ff3b30; border-color: #ff3b30; color: #fff; }
+  .reader-mic-btn.recording:hover { background: #ff3b30; color: #fff; }
 
   /* takes panel — floating, centered over lower edge of post */
   .takes-panel {
     position: fixed; z-index: 998;
-    bottom: 20px; left: 50%; transform: translateX(-50%) translateY(0);
-    width: 360px; max-height: 42vh;
+    bottom: 20px; left: 50%; transform: translateX(-50%);
+    width: 380px; max-height: 36vh;
     background: var(--bg); border: 0.5px solid var(--border-hi);
     border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
     display: none; flex-direction: column;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    opacity: 1; transform: translateY(0);
+    transition: opacity 0.2s ease;
   }
   [data-theme="dark"] .takes-panel { box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3); }
   .takes-panel.visible { display: flex; }
-  .takes-panel.hidden { opacity: 0; transform: translateX(-50%) translateY(-8px); pointer-events: none; }
-  .takes-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 12px; border-bottom: 0.5px solid var(--border); font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; flex-shrink: 0; cursor: grab; user-select: none; }
+  .takes-panel.hidden { display: none; }
+  .takes-panel.minimized .takes-list { display: none; }
+  .takes-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-bottom: 0.5px solid var(--border); font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; flex-shrink: 0; cursor: grab; user-select: none; }
   .takes-header:active { cursor: grabbing; }
   .takes-header-actions { display: flex; gap: 4px; }
   .takes-hdr-btn {
@@ -271,17 +290,25 @@
     font-size: 12px; line-height: 1; transition: all 0.15s;
   }
   .takes-hdr-btn:hover { background: var(--border); color: var(--text); }
-  .takes-list { max-height: 300px; overflow-y: auto; flex: 1; }
+  .takes-list { overflow-y: auto; flex: 1 1 0; min-height: 0; }
   .takes-list::-webkit-scrollbar { width: 3px; }
   .takes-list::-webkit-scrollbar-track { background: transparent; }
   .takes-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .takes-empty { padding: 16px 14px; font-size: 11px; color: var(--text-muted); font-style: italic; text-align: center; }
+  .takes-resize-handle { width: 14px; height: 14px; position: absolute; bottom: 0; right: 0; cursor: nwse-resize; z-index: 1; }
+  .takes-resize-handle::after {
+    content: ""; position: absolute; bottom: 4px; right: 4px;
+    width: 10px; height: 10px;
+    border-right: 2px solid var(--border); border-bottom: 2px solid var(--border);
+  }
   .take-row { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 0.5px solid var(--border); font-size: 12px; transition: background 0.1s; }
   .take-row:last-child { border-bottom: none; }
   .take-row:hover { background: var(--bg); }
   .take-row.selected { background: var(--accent-bg); }
-  .take-play-btn { width: 28px; height: 28px; border-radius: 50%; border: 0.5px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; transition: all 0.15s; }
-  .take-play-btn:hover { border-color: var(--border-hi); background: var(--bg-surface); }
-  .take-play-btn.playing { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+  .take-play-btn { width: 30px; height: 30px; border-radius: 50%; border: 0.5px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; padding: 0; }
+  .take-play-btn svg { width: 14px; height: 14px; }
+  .take-play-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+  .take-play-btn.playing { background: var(--accent); border-color: var(--accent); color: #fff; }
   .take-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
   .take-label { font-weight: 500; font-size: 11px; color: var(--text); letter-spacing: -0.01em; }
   .take-preview { font-size: 10px; color: var(--text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -321,8 +348,10 @@
 
 <div class="app">
   <div class="topbar">
-    <h1>MeWorld · Content Arc</h1>
-    <div class="topbar-actions">
+    <div class="topbar-left">
+      <h1>MeWorld · Content Arc</h1>
+    </div>
+    <div class="topbar-right">
       <button class="chip active" id="btn-story" onclick="toggleSpine()" title="Toggle floating spine panel">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M4 6h16M4 12h10M4 18h8"/></svg>
         Spine
@@ -334,11 +363,6 @@
       <button class="chip active" id="btn-timeline" onclick="toggleTimeline()" title="Toggle floating timeline panel">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="1.5"/><circle cx="19" cy="7" r="1.5"/><circle cx="8" cy="19" r="1.5"/></svg>
         Map
-      </button>
-      <button class="chip" id="btn-mic" onclick="toggleMic()" title="Speech-to-text — read aloud to transcribe">
-        <svg id="mic-idle" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg>
-        <svg id="mic-rec" viewBox="0 0 24 24" fill="none" stroke-width="1.5" style="display:none"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
-        Read
       </button>
       <button class="chip" id="btn-takes" onclick="toggleTakes()" title="Toggle floating takes panel">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -352,6 +376,14 @@
       <button class="chip" id="btn-theme" onclick="toggleTheme()" title="Toggle light/dark mode">
         <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
         <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+      <button class="chip" onclick="packageAll()" title="Package JSON + audio into a zip folder by spine">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 2l7 7H5l7-7z"/><rect x="4" y="9" width="16" height="13" rx="2"/><line x1="9" y1="16" x2="15" y2="16"/></svg>
+        Package
+      </button>
+      <button class="chip" onclick="importTakes()" title="Import takes from JSON file">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Import
       </button>
     </div>
   </div>
@@ -391,10 +423,12 @@
       <span>Takes</span>
       <div class="takes-header-actions">
         <span id="takes-count"></span>
+        <button class="takes-hdr-btn" id="takes-min-btn" onclick="minimizeTakes()" title="Minimize / Expand">−</button>
         <button class="takes-hdr-btn" onclick="hideTakes()" title="Close">×</button>
       </div>
     </div>
     <div class="takes-list" id="takes-list"></div>
+    <div class="takes-resize-handle" id="takes-resize-handle"></div>
   </div>
 
   <!-- READER -->
@@ -404,12 +438,16 @@
         <span class="act-badge" id="r-act"></span>
         <span class="reader-spine-context" id="r-spine-context"></span>
         <button class="reader-edit-btn" id="reader-edit-btn" onclick="toggleReaderEdit()" title="Edit post body">✎</button>
+        <button class="reader-mic-btn" id="btn-mic" onclick="toggleMic()" title="Speech-to-text — read aloud to transcribe">
+          <svg id="mic-idle" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg>
+          <svg id="mic-rec" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor" style="display:none"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+        </button>
       </div>
       <div class="read-toggle-bar" id="read-toggle-bar" style="display:none">
         <span class="read-toggle-label">Text</span>
         <button class="read-toggle-btn active" id="read-toggle-orig" onclick="switchReadMode('original')">Original</button>
         <button class="read-toggle-btn" id="read-toggle-spoken" onclick="switchReadMode('spoken')">My Read</button>
-        <button class="read-toggle-btn" id="read-toggle-fused" onclick="switchReadMode('fused')" style="display:none">Fused</button>
+        <button class="read-toggle-btn" id="read-toggle-fused" onclick="switchReadMode('spoken')" style="display:none">Fused</button>
         <button class="fuse-btn" id="fuse-btn" onclick="fuseWithLLM()">✦ Fuse</button>
       </div>
       <div class="reader-body" id="r-body"></div>
@@ -551,7 +589,8 @@ function renderUmbrella() {
     if (postRefsBySpine[i].length > 0) {
       html += `<span class="spine-post-refs">`;
       postRefsBySpine[i].forEach(pi => {
-        html += `<span class="spine-post-ref${pi===current?' active':''}" data-pi="${pi}" onclick="event.stopPropagation();goTo(${pi})" title="Post ${pi+1}"></span>`;
+        const st = getStatus(pi);
+        html += `<span class="spine-post-ref ${st}${pi===current?' active':''}" data-pi="${pi}" onclick="event.stopPropagation();goTo(${pi})" title="Post ${pi+1} · ${st}"></span>`;
       });
       html += `</span>`;
     }
@@ -610,9 +649,9 @@ function renderReader() {
   const showToggle = !!selTake;
   g("read-toggle-bar").style.display = showToggle ? "" : "none";
 
-  // show Fused button only when the selected take has a fused version
-  const hasFused = !!(selTake && selTake.fused);
-  g("read-toggle-fused").style.display = hasFused ? "" : "none";
+  const isFused = !!(selTake && selTake.type === "fused");
+  g("read-toggle-spoken").style.display = (showToggle && !isFused) ? "" : "none";
+  g("read-toggle-fused").style.display = isFused ? "" : "none";
   g("fuse-btn").style.display = showToggle ? "" : "none";
 
   // clear all actives
@@ -620,12 +659,9 @@ function renderReader() {
   g("read-toggle-spoken").classList.remove("active");
   g("read-toggle-fused").classList.remove("active");
 
-  if (readMode === "fused" && hasFused) {
-    g("r-body").textContent = selTake.fused;
-    g("read-toggle-fused").classList.add("active");
-  } else if (readMode === "spoken" && selTake) {
+  if (readMode === "spoken" && selTake) {
     g("r-body").textContent = selTake.transcript;
-    g("read-toggle-spoken").classList.add("active");
+    (isFused ? g("read-toggle-fused") : g("read-toggle-spoken")).classList.add("active");
   } else {
     g("r-body").textContent = p.body;
     g("read-toggle-orig").classList.add("active");
@@ -666,11 +702,8 @@ function toggleReaderEdit() {
 function saveReaderEdit() {
   const text = g("reader-edit-textarea").value.trim();
   if (!text) return;
-  // save to the right source
   const selTake = getSelectedTake(current);
-  if (readMode === "fused" && selTake) {
-    selTake.fused = text; saveTakesMeta();
-  } else if (readMode === "spoken" && selTake) {
+  if (readMode === "spoken" && selTake) {
     selTake.transcript = text; saveTakesMeta();
   } else {
     posts[current].body = text;
@@ -691,12 +724,23 @@ async function fuseWithLLM() {
   const spoken = selTake.transcript;
   if (!spoken || !original) return;
 
+  // find the most recent fused take for iterative chaining
+  const takes = speechTakes[current] || [];
+  let previousFused = null;
+  for (let i = takes.length - 1; i >= 0; i--) {
+    if (takes[i].type === "fused" && takes[i].transcript) {
+      previousFused = takes[i].transcript; break;
+    }
+  }
+  const base = previousFused || original;
+
   const btn = g("fuse-btn");
   btn.disabled = true;
   btn.textContent = "Fusing…";
   btn.classList.add("fusing");
 
   try {
+    const prevBlock = previousFused ? `PREVIOUS FUSED (last iteration):\n${previousFused}\n\n` : "";
     const r = await fetch("https://api.deepseek.com/v1/chat/completions", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${DEEPSEEK_KEY}` },
@@ -705,25 +749,40 @@ async function fuseWithLLM() {
         max_tokens: 2000,
         temperature: 0.7,
         messages: [
-          { role: "system", content: `You are a rewriting assistant. Your job is to fuse a polished ORIGINAL post with the user's SPOKEN TRANSCRIPT of them reading it aloud.
+          { role: "system", content: `You are a rewriting assistant in an iterative visual-arts–style refinement loop.
 
-The output must:
-- Preserve EVERY key idea, fact, and structural beat from the ORIGINAL — nothing important gets dropped.
-- Rewrite the text entirely in the user's natural voice, cadence, and phrasing as heard in the SPOKEN TRANSCRIPT.
-- The result should sound like the user thought it, said it, then tightened it — not like they memorized someone else's script.
-- Keep the same length and paragraph structure as the ORIGINAL.
-- Never add markdown, quotes, labels, or commentary. Return ONLY the fused post body.` },
-          { role: "user", content: `ORIGINAL:\n${original}\n\nSPOKEN TRANSCRIPT (my read):\n${spoken}\n\nFUSED POST:` }
+The user records themselves reading a text aloud, then you fuse their spoken voice with the written base.
+
+This may be the first iteration or a later one. If a PREVIOUS FUSED version exists, BUILD ON IT — don't restart from scratch.
+The ORIGINAL post is the anchor — every key idea, fact, and structural beat must be preserved across all iterations.
+The SPOKEN TRANSCRIPT is the primary voice source — rewrite the text entirely in the user's natural voice, cadence, and phrasing as heard there.
+The result should sound like the user thought it, said it, then tightened it — not like they memorized someone else's script.
+Keep the same length and paragraph structure as the base.
+Never add markdown, quotes, labels, or commentary. Return ONLY the fused post body.` },
+          { role: "user", content: `ORIGINAL (anchor — all key ideas must survive):\n${original}\n\n${prevBlock}SPOKEN TRANSCRIPT (my read):\n${spoken}\n\nFUSED POST:` }
         ]
       })
     });
     if (!r.ok) { const err = await r.text(); throw new Error(err || `DeepSeek error ${r.status}`); }
     const data = await r.json();
-    const fused = data.choices?.[0]?.message?.content?.trim();
-    if (fused) {
-      selTake.fused = fused;
-      saveTakesMeta();
-      readMode = "fused";
+    const fusedText = data.choices?.[0]?.message?.content?.trim();
+    if (fusedText) {
+      // create a NEW separate take entry for the fused result
+      if (!speechTakes[current]) speechTakes[current] = [];
+      const takeId = "f_" + current + "_" + Date.now();
+      const selIdx = selectedTake[current];
+      const fusedTake = {
+        id: takeId,
+        type: "fused",
+        transcript: fusedText,
+        fusedFrom: selIdx != null ? selIdx : null,
+        duration: 0,
+        timestamp: Date.now()
+      };
+      speechTakes[current].push(fusedTake);
+      selectedTake[current] = speechTakes[current].length - 1;
+      saveTakesMeta(); saveSelTake();
+      readMode = "spoken";
     }
   } catch(e) {
     alert("Fusion failed: " + (e.message || e));
@@ -811,6 +870,7 @@ function minimizeSpine() {
     if (!dragging) return;
     dragging = false;
     panel.style.transition = "";
+    savePositions();
   }
   handle.addEventListener("mousedown", onStart);
   window.addEventListener("mousemove", onMove);
@@ -879,6 +939,7 @@ function minimizeTimeline() {
     if (!dragging) return;
     dragging = false;
     panel.style.transition = "";
+    savePositions();
   }
   handle.addEventListener("mousedown", onStart);
   window.addEventListener("mousemove", onMove);
@@ -890,11 +951,22 @@ function minimizeTimeline() {
 
 /* ── FLOATING TAKES PANEL (right side) ── */
 let takesOpen = true;
+let takesMinimized = false;
 let takesX = null, takesY = null;
+let takesW = null, takesH = null; // persisted width/height in px
 
 function hideTakes() { takesOpen = false; g("takes-panel").classList.remove("visible"); syncTakesChip(); }
-function showTakes() { takesOpen = true; renderTakes(); syncTakesChip(); }
+function showTakes() {
+  takesOpen = true;
+  takesMinimized = false;
+  renderTakes();
+  syncTakesChip();
+}
 function toggleTakes() { if (takesOpen) hideTakes(); else showTakes(); }
+function minimizeTakes() {
+  takesMinimized = !takesMinimized;
+  renderTakes();
+}
 function syncTakesChip() {
   const btn = g("btn-takes");
   if (takesOpen) btn.classList.add("active"); else btn.classList.remove("active");
@@ -925,12 +997,55 @@ function syncTakesChip() {
     const vw = window.innerWidth, vh = window.innerHeight;
     nx = Math.max(0, Math.min(nx, vw - pw));
     ny = Math.max(0, Math.min(ny, vh - 40));
+    takesX = nx; takesY = ny;
     panel.style.left = nx + "px"; panel.style.top = ny + "px"; panel.style.right = "auto";
   }
   function onEnd() {
     if (!dragging) return;
     dragging = false;
     panel.style.transition = "";
+    savePositions();
+  }
+  handle.addEventListener("mousedown", onStart);
+  window.addEventListener("mousemove", onMove);
+  window.addEventListener("mouseup", onEnd);
+  handle.addEventListener("touchstart", onStart, {passive: false});
+  window.addEventListener("touchmove", onMove, {passive: false});
+  window.addEventListener("touchend", onEnd);
+})();
+
+(function initTakesResize() {
+  const panel = g("takes-panel");
+  const handle = g("takes-resize-handle");
+  let resizing = false, startX, startY, origW, origH;
+  function onStart(e) {
+    resizing = true;
+    const pt = e.touches ? e.touches[0] : e;
+    startX = pt.clientX; startY = pt.clientY;
+    origW = panel.offsetWidth; origH = panel.offsetHeight;
+    panel.style.transition = "none";
+    // un-center the panel so resize grows from bottom-right
+    panel.style.transform = "none";
+    panel.style.left = panel.getBoundingClientRect().left + "px";
+    panel.style.top = panel.getBoundingClientRect().top + "px";
+    e.preventDefault(); e.stopPropagation();
+  }
+  function onMove(e) {
+    if (!resizing) return;
+    const pt = e.touches ? e.touches[0] : e;
+    const dx = pt.clientX - startX, dy = pt.clientY - startY;
+    let nw = origW + dx, nh = origH + dy;
+    nw = Math.max(220, Math.min(nw, window.innerWidth - 20));
+    nh = Math.max(100, Math.min(nh, window.innerHeight - 100));
+    panel.style.width = nw + "px"; panel.style.height = nh + "px";
+    panel.style.maxHeight = nh + "px";
+    takesW = nw; takesH = nh;
+  }
+  function onEnd() {
+    if (!resizing) return;
+    resizing = false;
+    panel.style.transition = "";
+    savePositions();
   }
   handle.addEventListener("mousedown", onStart);
   window.addEventListener("mousemove", onMove);
@@ -1028,6 +1143,51 @@ try {
 } catch(e) {}
 function saveTakesMeta() { try { localStorage.setItem("arc-viz-takes", JSON.stringify(speechTakes)); } catch(e) {} }
 function saveSelTake() { try { localStorage.setItem("arc-viz-selTake", JSON.stringify(selectedTake)); } catch(e) {} }
+function savePositions() {
+  try {
+    const vw = window.innerWidth, vh = window.innerHeight;
+    // save as percentages of viewport so positions scale across screens
+    localStorage.setItem("arc-viz-pos", JSON.stringify({
+      spineXPct: spineX != null ? Math.round(spineX / vw * 10000) / 100 : null,
+      spineYPct: spineY != null ? Math.round(spineY / vh * 10000) / 100 : null,
+      tlXPct: tlX != null ? Math.round(tlX / vw * 10000) / 100 : null,
+      tlYPct: tlY != null ? Math.round(tlY / vh * 10000) / 100 : null,
+      takesXPct: takesX != null ? Math.round(takesX / vw * 10000) / 100 : null,
+      takesYPct: takesY != null ? Math.round(takesY / vh * 10000) / 100 : null,
+      takesWPct: takesW != null ? Math.round(takesW / vw * 10000) / 100 : null,
+      takesHPct: takesH != null ? Math.round(takesH / vh * 10000) / 100 : null,
+    }));
+  } catch(e) {}
+}
+function loadPositions() {
+  try {
+    const pos = JSON.parse(localStorage.getItem("arc-viz-pos") || "null");
+    if (!pos) return;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    // support legacy absolute px keys, otherwise use percentages
+    if (pos.spineXPct != null) { spineX = pos.spineXPct / 100 * vw; spineY = pos.spineYPct / 100 * vh; }
+    else if (pos.spineX != null) { spineX = pos.spineX; spineY = pos.spineY; }
+    if (pos.tlXPct != null) { tlX = pos.tlXPct / 100 * vw; tlY = pos.tlYPct / 100 * vh; }
+    else if (pos.tlX != null) { tlX = pos.tlX; tlY = pos.tlY; }
+    if (pos.takesXPct != null) { takesX = pos.takesXPct / 100 * vw; takesY = pos.takesYPct / 100 * vh; }
+    else if (pos.takesX != null) { takesX = pos.takesX; takesY = pos.takesY; }
+    if (pos.takesWPct != null) { takesW = pos.takesWPct / 100 * vw; takesH = pos.takesHPct / 100 * vh; }
+  } catch(e) {}
+}
+function applyPositions() {
+  if (spineX != null) { const p = g("spine-panel"); p.style.left = spineX + "px"; p.style.top = spineY + "px"; p.style.right = "auto"; }
+  if (tlX != null) { const p = g("tl-panel"); p.style.left = tlX + "px"; p.style.top = tlY + "px"; p.style.right = "auto"; }
+  if (takesX != null) {
+    const p = g("takes-panel");
+    p.style.left = takesX + "px"; p.style.top = takesY + "px"; p.style.right = "auto";
+    p.style.transform = "none"; p.style.bottom = "auto";
+  }
+  if (takesW != null) {
+    const p = g("takes-panel");
+    p.style.width = takesW + "px"; p.style.height = takesH + "px";
+    p.style.maxHeight = takesH + "px";
+  }
+}
 
 function getSelectedTake(postIdx) {
   const takes = speechTakes[postIdx];
@@ -1035,6 +1195,73 @@ function getSelectedTake(postIdx) {
   const idx = selectedTake[postIdx];
   if (idx != null && idx < takes.length) return takes[idx];
   return takes[takes.length - 1]; // fallback to last take
+}
+
+// ── WAV conversion (webm blob → stereo 16-bit PCM WAV) ──
+function webmToWav(blob) {
+  return new Promise((resolve, reject) => {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const reader = new FileReader();
+    reader.onload = () => {
+      ctx.decodeAudioData(reader.result, (buffer) => {
+        const numChannels = Math.min(buffer.numberOfChannels, 2);
+        const sampleRate = buffer.sampleRate;
+        const length = buffer.length;
+        const bitsPerSample = 16;
+        const bytesPerSample = bitsPerSample / 8;
+        const blockAlign = numChannels * bytesPerSample;
+        const dataSize = length * blockAlign;
+        const fileSize = 44 + dataSize;
+
+        const wav = new ArrayBuffer(fileSize);
+        const view = new DataView(wav);
+
+        // RIFF header
+        writeString(view, 0, "RIFF");
+        view.setUint32(4, fileSize - 8, true);
+        writeString(view, 8, "WAVE");
+
+        // fmt chunk
+        writeString(view, 12, "fmt ");
+        view.setUint32(16, 16, true);           // chunk size
+        view.setUint16(20, 1, true);            // PCM
+        view.setUint16(22, numChannels, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * blockAlign, true); // byte rate
+        view.setUint16(32, blockAlign, true);
+        view.setUint16(34, bitsPerSample, true);
+
+        // data chunk
+        writeString(view, 36, "data");
+        view.setUint32(40, dataSize, true);
+
+        // interleave stereo PCM 16-bit
+        const chData = [];
+        for (let c = 0; c < numChannels; c++) chData.push(buffer.getChannelData(c));
+
+        let offset = 44;
+        for (let i = 0; i < length; i++) {
+          for (let c = 0; c < numChannels; c++) {
+            const sample = Math.max(-1, Math.min(1, chData[c][i]));
+            const int16 = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+            view.setInt16(offset, int16, true);
+            offset += 2;
+          }
+        }
+
+        ctx.close();
+        resolve(new Blob([wav], { type: "audio/wav" }));
+      }, () => {
+        ctx.close();
+        resolve(null); // decode failed, return null
+      });
+    };
+    reader.onerror = () => { ctx.close(); resolve(null); };
+    reader.readAsArrayBuffer(blob);
+  });
+}
+function writeString(view, offset, str) {
+  for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
 }
 
 // ── Mic ──
@@ -1063,7 +1290,9 @@ async function startMic() {
   // MediaRecorder for audio
   audioChunks = []; recStartTime = Date.now();
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { channelCount: 2, echoCancellation: true, noiseSuppression: true }
+    });
     const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus") ? "audio/webm;codecs=opus" : "audio/webm";
     mediaRecorder = new MediaRecorder(stream, { mimeType: mime });
     mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
@@ -1102,13 +1331,19 @@ async function stopMic() {
   if (text || audioBlob) {
     if (!speechTakes[current]) speechTakes[current] = [];
     const takeId = "t_" + current + "_" + Date.now();
-    const take = { id: takeId, transcript: text, duration, timestamp: Date.now() };
+    const take = { id: takeId, type: "raw", transcript: text, duration, timestamp: Date.now() };
     speechTakes[current].push(take);
-    if (audioBlob && audioBlob.size > 0) { try { await idbSave(takeId, audioBlob); } catch(_) {} }
+    if (audioBlob && audioBlob.size > 0) {
+      try {
+        const wav = await webmToWav(audioBlob);
+        if (wav) await idbSave(takeId, wav);
+        else await idbSave(takeId, audioBlob); // fallback to webm blob
+      } catch(_) { try { await idbSave(takeId, audioBlob); } catch(__) {} }
+    }
     selectedTake[current] = speechTakes[current].length - 1;
     saveTakesMeta(); saveSelTake();
     if (readMode === "original") readMode = "spoken";
-    takesOpen = true; // auto-show panel after recording
+    takesOpen = true; takesMinimized = false; // auto-show panel after recording, expanded
   }
 
   liveBase = ""; liveInterim = "";
@@ -1124,43 +1359,62 @@ function renderTakes() {
   const panel = g("takes-panel"), list = g("takes-list"), countEl = g("takes-count");
   const takes = speechTakes[current] || [];
   const hasTakes = takes.length > 0;
- 
-  if (hasTakes && takesOpen) panel.classList.add("visible");
-  else panel.classList.remove("visible");
- 
-  if (!hasTakes) { list.innerHTML = ""; syncTakesChip(); return; }
+  const minBtn = g("takes-min-btn");
+
+  // always sync visibility and minimized state from the current flags
+  panel.classList.toggle("visible", takesOpen);
+  panel.classList.toggle("minimized", takesMinimized);
+  if (minBtn) minBtn.textContent = takesMinimized ? "+" : "−";
+
   syncTakesChip();
-  countEl.textContent = takes.length === 1 ? "1 take" : takes.length + " takes";
+
+  if (!hasTakes) {
+    countEl.textContent = "";
+    list.innerHTML = '<div class="takes-empty">No takes yet. Tap the mic to record.</div>';
+    return;
+  }
+
+  countEl.textContent = takes.length === 1 ? "1 entry" : takes.length + " entries";
 
   list.innerHTML = takes.map((take, i) => {
     const sel = selectedTake[current] === i;
     const isEditing = editingTakeIdx === i;
+    const isFused = take.type === "fused";
+    const typeBadge = isFused ? '<span class="tl-take-count" style="margin-left:4px">✦</span>' : '<span class="tl-take-count" style="margin-left:4px;font-size:7px">🎤</span>';
+    const label = isFused ? `Fusion ${i + 1}` : `Take ${i + 1}`;
     const preview = take.transcript ? take.transcript.slice(0, 60) + (take.transcript.length > 60 ? "…" : "") : "No transcript";
     const time = new Date(take.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     const dur = take.duration ? take.duration + "s" : "";
-    const fusedTag = take.fused ? '<span class="tl-take-count" style="margin-left:4px;font-size:7px">✦</span>' : "";
+    const hasAudio = take.type === "raw";
+
     if (isEditing) {
       return `<div class="take-row${sel ? " selected" : ""}" onclick="selectTake(${i})">
-        <button class="take-play-btn" id="take-play-${i}" onclick="event.stopPropagation();playTake(${i})">▶</button>
-        <div class="take-info">
-          <span class="take-label">Take ${i + 1}${fusedTag}</span>
-          <textarea id="edit-textarea-${i}" class="take-edit-textarea" rows="3" onclick="event.stopPropagation()">${esc(take.transcript || "")}</textarea>
-        </div>
-        <div class="take-actions" style="flex-direction:column;gap:4px;">
-          <button class="take-edit-save" onclick="event.stopPropagation();saveEdit(${i})">Save</button>
-          <button class="take-edit-cancel" onclick="event.stopPropagation();cancelEdit()">Cancel</button>
-        </div>
-      </div>`;
+      ${hasAudio ? `<button class="take-play-btn" id="take-play-${i}" onclick="event.stopPropagation();playTake(${i})" title="Play">
+        <svg class="take-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg>
+        <svg class="take-pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </button>` : '<div class="take-play-btn" style="visibility:hidden"></div>'}
+      <div class="take-info">
+        <span class="take-label">${label}${typeBadge}</span>
+        <textarea id="edit-textarea-${i}" class="take-edit-textarea" rows="3" onclick="event.stopPropagation()">${esc(take.transcript || "")}</textarea>
+      </div>
+      <div class="take-actions" style="flex-direction:column;gap:4px;">
+        <button class="take-edit-save" onclick="event.stopPropagation();saveEdit(${i})">Save</button>
+        <button class="take-edit-cancel" onclick="event.stopPropagation();cancelEdit()">Cancel</button>
+      </div>
+    </div>`;
     }
     return `<div class="take-row${sel ? " selected" : ""}" onclick="selectTake(${i})">
-      <button class="take-play-btn" id="take-play-${i}" onclick="event.stopPropagation();playTake(${i})" title="Play / Pause">▶</button>
+      ${hasAudio ? `<button class="take-play-btn" id="take-play-${i}" onclick="event.stopPropagation();playTake(${i})" title="Play">
+        <svg class="take-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg>
+        <svg class="take-pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </button>` : '<div class="take-play-btn" style="visibility:hidden"></div>'}
       <div class="take-info">
-        <span class="take-label">Take ${i + 1}${fusedTag}</span>
+        <span class="take-label">${label}${typeBadge}</span>
         <span class="take-preview">${esc(preview)}</span>
         <span class="take-meta"><span>${time}</span>${dur ? "<span>" + dur + "</span>" : ""}</span>
       </div>
       <div class="take-actions">
-        <button class="take-edit-btn" onclick="event.stopPropagation();editTake(${i})">Amend</button>
+        ${!isFused ? `<button class="take-edit-btn" onclick="event.stopPropagation();editTake(${i})">Amend</button>` : `<button class="take-edit-btn" onclick="event.stopPropagation();editTake(${i})">Edit</button>`}
         <button class="take-use-btn${sel ? " used" : ""}" onclick="event.stopPropagation();selectTake(${i})">${sel ? "Active" : "Use"}</button>
         <button class="take-del-btn" onclick="event.stopPropagation();deleteTake(${i})" title="Delete">×</button>
       </div>
@@ -1174,9 +1428,25 @@ async function playTake(takeIdx) {
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
 
   const btn = g("take-play-" + takeIdx);
-  if (btn.classList.contains("playing")) { btn.classList.remove("playing"); btn.textContent = "▶"; return; }
+  const playIcon = btn.querySelector(".take-play-icon");
+  const pauseIcon = btn.querySelector(".take-pause-icon");
 
-  document.querySelectorAll(".take-play-btn").forEach(b => { b.classList.remove("playing"); b.textContent = "▶"; });
+  // clicking currently-playing → stop
+  if (btn.classList.contains("playing")) {
+    btn.classList.remove("playing");
+    if (playIcon) playIcon.style.display = "";
+    if (pauseIcon) pauseIcon.style.display = "none";
+    return;
+  }
+
+  // stop any other playing
+  document.querySelectorAll(".take-play-btn").forEach(b => {
+    b.classList.remove("playing");
+    const pi = b.querySelector(".take-play-icon");
+    const pa = b.querySelector(".take-pause-icon");
+    if (pi) pi.style.display = "";
+    if (pa) pa.style.display = "none";
+  });
 
   try {
     const blob = await idbLoad(take.id);
@@ -1184,12 +1454,19 @@ async function playTake(takeIdx) {
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);
     currentAudio = audio;
-    btn.classList.add("playing"); btn.textContent = "⏸";
-    audio.onended = audio.onerror = () => {
-      btn.classList.remove("playing"); btn.textContent = "▶";
+    btn.classList.add("playing");
+    if (playIcon) playIcon.style.display = "none";
+    if (pauseIcon) pauseIcon.style.display = "";
+    const cleanup = () => {
+      btn.classList.remove("playing");
+      if (playIcon) playIcon.style.display = "";
+      if (pauseIcon) pauseIcon.style.display = "none";
       URL.revokeObjectURL(url); currentAudio = null;
     };
-    audio.play();
+    audio.addEventListener("ended", cleanup);
+    audio.addEventListener("error", cleanup);
+    audio.addEventListener("pause", cleanup);
+    await audio.play();
   } catch(_) {}
 }
 
@@ -1249,6 +1526,110 @@ document.addEventListener("keydown", e => {
 // also stop mic on any copy (right-click copy, edit menu)
 document.addEventListener("copy", () => { if (micOn) stopMic(); });
 
+/* ── PACKAGE (ZIP) ── */
+function spineSlug(s) {
+  return (s || "").toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).slice(0, 5).join("-") || "spine";
+}
+async function packageAll() {
+  if (typeof JSZip === "undefined") { alert("JSZip not loaded — check your internet connection."); return; }
+  const zip = new JSZip();
+  const root = `meworld-package-${new Date().toISOString().slice(0,10)}`;
+  const master = { exported: new Date().toISOString(), spine, posts: [] };
+  let audioCount = 0;
+
+  // capture current panel positions as percentages
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const posRef = {
+    viewport: { w: vw, h: vh },
+    spine: { xPct: spineX != null ? Math.round(spineX / vw * 10000) / 100 : null, yPct: spineY != null ? Math.round(spineY / vh * 10000) / 100 : null },
+    timeline: { xPct: tlX != null ? Math.round(tlX / vw * 10000) / 100 : null, yPct: tlY != null ? Math.round(tlY / vh * 10000) / 100 : null },
+    takes: {
+      xPct: takesX != null ? Math.round(takesX / vw * 10000) / 100 : null,
+      yPct: takesY != null ? Math.round(takesY / vh * 10000) / 100 : null,
+      wPct: takesW != null ? Math.round(takesW / vw * 10000) / 100 : null,
+      hPct: takesH != null ? Math.round(takesH / vh * 10000) / 100 : null,
+    }
+  };
+  master.positions = posRef;
+
+  for (let i = 0; i < posts.length; i++) {
+    const p = posts[i];
+    const si = p.spineIdx != null && p.spineIdx < spine.length ? p.spineIdx : i;
+    const slug = `${String(si).padStart(2,"0")}-${spineSlug(spine[si])}`;
+    const folder = `${root}/posts/${slug}`;
+
+    // post JSON
+    const postEntry = {
+      index: i, date: p.date, act: p.act, spineIdx: p.spineIdx,
+      spine: p.spine, body: p.body, status: getStatus(i),
+      takes: (speechTakes[i] || []).map(t => ({
+        id: t.id, type: t.type, transcript: t.transcript,
+        duration: t.duration, timestamp: t.timestamp, fusedFrom: t.fusedFrom || null
+      })),
+      selectedTake: selectedTake[i] ?? null
+    };
+    master.posts.push(postEntry);
+    zip.file(`${folder}/post.json`, JSON.stringify(postEntry, null, 2));
+
+    // audio files
+    const takes = speechTakes[i] || [];
+    for (let j = 0; j < takes.length; j++) {
+      const take = takes[j];
+      if (take.type !== "raw") continue;
+      try {
+        const blob = await idbLoad(take.id);
+        if (!blob) continue;
+        zip.file(`${folder}/take-${j+1}.wav`, blob);
+        audioCount++;
+      } catch(_) {}
+    }
+  }
+
+  // master JSON at root
+  zip.file(`${root}/_master.json`, JSON.stringify(master, null, 2));
+  // standalone positions reference
+  zip.file(`${root}/positions.json`, JSON.stringify(posRef, null, 2));
+
+  const zipBlob = await zip.generateAsync({ type: "blob" });
+  const url = URL.createObjectURL(zipBlob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `${root}.zip`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  alert(`Packaged ${master.posts.length} posts, ${audioCount} audio file${audioCount !== 1 ? "s" : ""}.`);
+}
+async function importTakes() {
+  const input = document.createElement("input");
+  input.type = "file"; input.accept = ".json";
+  input.onchange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const raw = await file.text();
+      const data = JSON.parse(raw);
+      if (!data.posts || !Array.isArray(data.posts)) { alert("Invalid export file — no posts array"); return; }
+      let imported = 0;
+      for (const pi of data.posts) {
+        if (!pi.takes || !pi.takes.length) continue;
+        // import transcripts for this post
+        speechTakes[pi.index] = pi.takes.map(t => ({
+          id: t.id, type: t.type || "raw", transcript: t.transcript,
+          duration: t.duration || 0, timestamp: t.timestamp || Date.now(),
+          fusedFrom: t.fusedFrom || null
+        }));
+        if (pi.selectedTake != null) selectedTake[pi.index] = pi.selectedTake;
+        imported++;
+      }
+      saveTakesMeta(); saveSelTake();
+      alert(`Imported takes for ${imported} post${imported !== 1 ? "s" : ""}. Audio files are not included — re-record to recapture.`);
+      refresh();
+    } catch(err) {
+      alert("Failed to parse export file: " + (err.message || err));
+    }
+  };
+  input.click();
+}
+
 /* ── INIT ── */
 if (dark) {
   document.documentElement.setAttribute("data-theme", "dark");
@@ -1261,6 +1642,9 @@ try {
   if (saved) fontSize = parseInt(saved, 10) || 17;
 } catch(e) {}
 applyFontSize();
+// load persisted panel positions
+loadPositions();
+applyPositions();
 refresh();
 </script>
 
