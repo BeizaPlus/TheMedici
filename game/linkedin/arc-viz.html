@@ -1385,7 +1385,7 @@ function renderTakes() {
     const preview = take.transcript ? take.transcript.slice(0, 60) + (take.transcript.length > 60 ? "…" : "") : "No transcript";
     const time = new Date(take.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     const dur = take.duration ? take.duration + "s" : "";
-    const hasAudio = take.type === "raw";
+    const hasAudio = !take.type || take.type === "raw";
 
     if (isEditing) {
       return `<div class="take-row${sel ? " selected" : ""}" onclick="selectTake(${i})">
@@ -1575,7 +1575,7 @@ async function packageAll() {
     const takes = speechTakes[i] || [];
     for (let j = 0; j < takes.length; j++) {
       const take = takes[j];
-      if (take.type !== "raw") continue;
+      if (take.type === "fused") continue;
       try {
         const blob = await idbLoad(take.id);
         if (!blob) continue;
