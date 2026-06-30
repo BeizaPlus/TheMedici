@@ -137,7 +137,7 @@ import { TEXT_PREFS_CHANGED } from '../lib/textPrefsSync.js';
 import { clearFirstOpinionMemoryForCase } from '../lib/orderWhy.js';
 import { hydrateCaseNotes } from '../lib/caseNotes.js';
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
-import { computePinDisplayPercent } from '../lib/pinLayout.js';
+import { computePinDisplayPercent, getMagneticRepositioning, setMagneticRepositioning } from '../lib/pinLayout.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { looksLikeTutorQuestion } from '../lib/chatIntentRouting.js';
 import {
@@ -692,6 +692,7 @@ export default function Play({
       return false;
     }
   });
+  const [magneticOn, setMagneticOn] = useState(() => getMagneticRepositioning());
   const [timedMode, setTimedMode] = useState(() => readUiPrefs().timedMode);
   const startRef = useRef(Date.now());
   const sceneRef = useRef(null);
@@ -3333,6 +3334,24 @@ export default function Play({
     );
   }, [pins, caseData.id]);
 
+  const autoSavePinsTimerRef = useRef(null);
+  const AUTO_SAVE_DELAY_MS = 30000; // 30s of inactivity before auto-save
+
+  useEffect(() => {
+    const hasPositions = pins.some((p) => p.ivId && p.cx != null && p.cy != null);
+    if (!hasPositions) return undefined;
+
+    if (autoSavePinsTimerRef.current) window.clearTimeout(autoSavePinsTimerRef.current);
+    autoSavePinsTimerRef.current = window.setTimeout(() => {
+      const pinMap = captureCasePinLayout(pins);
+      writeCasePinLayout(caseData.id, pinMap);
+    }, AUTO_SAVE_DELAY_MS);
+
+    return () => {
+      if (autoSavePinsTimerRef.current) window.clearTimeout(autoSavePinsTimerRef.current);
+    };
+  }, [pins, caseData.id]);
+
   const movePinsToSavedPosition = useCallback(() => {
     const layout = readCasePinLayout(caseData.id);
     if (!layout?.pins) {
@@ -4255,6 +4274,19 @@ export default function Play({
               <button type="button" onClick={saveCasePinLayoutSnapshot}>
                 Save layout
               </button>
+              <button
+                type="button"
+                className={magneticOn ? 'active settings-popover-btn--on' : ''}
+                aria-pressed={magneticOn}
+                onClick={() => {
+                  const next = !magneticOn;
+                  setMagneticOn(next);
+                  setMagneticRepositioning(next);
+                  showToast(next ? 'Magnetic positioning ON — pins pushed outside patient' : 'Magnetic positioning OFF — pins stay where dropped', 'ok');
+                }}
+              >
+                Magnetic: {magneticOn ? 'ON' : 'OFF'}
+              </button>
               <button type="button" onClick={openCaseStory}>
                 Case story
               </button>
@@ -5035,27 +5067,60 @@ export default function Play({
                   Video note: {thanksVideoIssue}
                 </p>
               )}
-              {postVideoRows.length > 0 && (
-                <div className="post-review-flow-wrap">
-                  <p className="post-review-flow-label">
-                    Standard order
-                    {reviewRevealStep > 0 && reviewRevealStep < postVideoRows.length
-                      ? ` · step ${reviewRevealStep} of ${postVideoRows.length}`
-                      : ''}
-                  </p>
-                  <div className="post-review-flow" aria-label="Expected clinical flow">
-                    {postVideoRows.map((row) => (
-                      <span
-                        key={row.id}
-                        className={`post-review-flow-chip ${row.ok ? 'ok' : 'bad'} ${row.orderOk === false ? 'order-late' : ''} ${row.seq <= reviewRevealStep ? 'is-revealed' : 'is-reveal-pending'} ${row.seq === reviewRevealStep ? 'is-reveal-active' : ''}`}
-                        title={`${row.seq}. ${row.label}${row.placedOrder != null ? ` · you placed #${row.placedOrder}` : ''}`}
+              <div className="review-organogram" aria-label="Attending order flow">
+                {postVideoRows.length === 0 && (
+                  <p className="post-review-empty">Complete a review to see the attending order flow here.</p>
+                )}
+                {postVideoRows.map((row, i) => {
+                  const isStudentReviewed = reviewChecked.includes(row.seq);
+                  return (
+                    <div
+                      key={row.id}
+                      className={`organogram-row ${row.ok ? 'ok' : 'bad'} ${isStudentReviewed ? 'student-reviewed' : ''} ${row.seq <= reviewRevealStep ? 'revealed' : 'pending'}`}
+                    >
+                      <div className="organogram-track">
+                        <span className={`organogram-dot ${row.ok ? 'ok' : 'bad'} ${row.seq <= reviewRevealStep ? 'revealed' : ''}`}>
+                          {row.seq}
+                        </span>
+                        {i < postVideoRows.length - 1 && (
+                          <span className="organogram-connector" aria-hidden />
+                        )}
+                      </div>
+                      <div className="organogram-body">
+                        <span className="organogram-label">
+                          <span className="organogram-check">
+                            {row.ok ? '✓' : '✕'}
+                          </span>
+                          {row.label}
+                        </span>
+                        {row.seq <= reviewRevealStep && (
+                          <div className="organogram-why teach-me-text-block selectable-text">
+                            {renderChatMarkdown(row.why)}
+                            {row.guideline && (
+                              <p className="organogram-guideline">{row.guideline}</p>
+                            )}
+                            {row.placedOrder != null && (
+                              <p className="organogram-meta">
+                                Expected #{row.expectedOrder}
+                                {row.placedOrder ? ` · placed #${row.placedOrder}` : ' · not placed'}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        className={`organogram-check-btn ${isStudentReviewed ? 'checked' : ''}`}
+                        onClick={() => toggleReviewCardChecked(row.seq)}
+                        aria-label={isStudentReviewed ? `Mark order ${row.seq} checked` : `Mark order ${row.seq} reviewed`}
+                        aria-pressed={isStudentReviewed}
                       >
-                        {row.seq}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
+                        {isStudentReviewed ? '✓' : ''}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
               {reviewed && extraOrders.length > 0 && (
                 <section className="post-review-extra-orders" aria-label="Extra orders placed">
                   <p className="post-review-flow-label">Orders not in case stacks</p>
@@ -5066,21 +5131,6 @@ export default function Play({
                         <span className="post-review-extra-note">Extra order (outside case stacks)</span>
                       </li>
                     ))}
-                  </ul>
-                </section>
-              )}
-              {reviewed && postVideoRows.some((row) => !row.ok) && (
-                <section className="post-review-missed" aria-label="Missed case stacks">
-                  <p className="post-review-flow-label">Should have ordered</p>
-                  <ul className="post-review-extra-list">
-                    {postVideoRows
-                      .filter((row) => !row.ok)
-                      .map((row) => (
-                        <li key={row.id} className="post-review-extra-item missed">
-                          <strong>{row.label}</strong>
-                          {row.why ? <span className="post-review-extra-note">{row.why}</span> : null}
-                        </li>
-                      ))}
                   </ul>
                 </section>
               )}
@@ -5097,77 +5147,6 @@ export default function Play({
                   ))}
                 </div>
               )}
-              <div className="post-review-list">
-                {postVideoRows.length === 0 && (
-                  <p className="post-review-empty">Complete a review to see stack rationales here.</p>
-                )}
-                {postVideoRows.map((row) => {
-                  const isStudentReviewed = reviewChecked.includes(row.seq);
-                  const revealClass =
-                    row.seq > reviewRevealStep
-                      ? 'is-reveal-pending'
-                      : row.seq === reviewRevealStep
-                        ? 'is-reveal-active'
-                        : 'is-revealed';
-                  return (
-                  <article
-                    key={row.id}
-                    className={`post-review-row ${row.ok ? 'ok' : 'bad'} ${isStudentReviewed ? 'is-student-reviewed' : ''} ${revealClass}`}
-                  >
-                    <button
-                      type="button"
-                      className={`post-review-check ${isStudentReviewed ? 'is-checked' : ''}`}
-                      onClick={() => toggleReviewCardChecked(row.seq)}
-                      aria-label={isStudentReviewed ? `Mark order ${row.seq} unchecked` : `Mark order ${row.seq} reviewed`}
-                      aria-pressed={isStudentReviewed}
-                    >
-                      {isStudentReviewed ? <span aria-hidden="true">✓</span> : null}
-                    </button>
-                    <div className="post-review-row-content">
-                    <div className="post-review-head">
-                      <span className="post-review-step">#{row.seq}</span>
-                      <span
-                        className={`post-review-status ${
-                          isStudentReviewed
-                            ? 'student-reviewed'
-                            : row.ok
-                              ? row.orderOk === false
-                                ? 'late'
-                                : 'ok'
-                              : 'bad'
-                        }`}
-                      >
-                        {isStudentReviewed
-                          ? 'Reviewed'
-                          : row.ok
-                            ? row.orderOk === false
-                              ? 'Late order'
-                              : 'Correct'
-                            : 'Needs review'}
-                      </span>
-                      <strong className="post-review-label">{row.label}</strong>
-                    </div>
-                    <div className="post-review-why teach-me-text-block selectable-text">
-                      {renderChatMarkdown(row.why)}
-                    </div>
-                    {(row.guideline || row.placedOrder != null) && (
-                      <p className="post-review-meta">
-                        {row.placedOrder != null && (
-                          <span className="post-review-meta-item">
-                            Emergent #{row.expectedOrder}
-                            {row.placedOrder ? ` · placed #${row.placedOrder}` : ' · not placed'}
-                          </span>
-                        )}
-                        {row.guideline && (
-                          <span className="post-review-meta-item">{row.guideline}</span>
-                        )}
-                      </p>
-                    )}
-                    </div>
-                  </article>
-                  );
-                })}
-              </div>
               <div className="post-review-actions">
                 <button
                   type="button"

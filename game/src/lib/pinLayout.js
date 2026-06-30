@@ -1,4 +1,5 @@
 import { getPhysicalExamPinPosition, sectionIdForPin } from './physicalExamPinLayout.js';
+import { STORAGE } from './storageKeys.js';
 
 /** Keep stack pins off the patient torso and out from under dock UI. */
 
@@ -6,6 +7,25 @@ const PATIENT_KEEP_OUT = { x0: 0.26, y0: 0.18, x1: 0.74, y1: 0.8 };
 
 /** Vertical offset per additional pin in the same zone (in 0-1 space). */
 const ZONE_STACK_STEP = 0.045;
+
+/** Magnetic repositioning — pushes pins out of the patient torso zone. Default OFF. */
+export function getMagneticRepositioning() {
+  if (typeof window === 'undefined') return false;
+  try {
+    const raw = localStorage.getItem(STORAGE.magneticRepositioning);
+    return raw === 'true';
+  } catch {
+    return false;
+  }
+}
+
+export function setMagneticRepositioning(val) {
+  try {
+    localStorage.setItem(STORAGE.magneticRepositioning, val ? 'true' : 'false');
+  } catch {
+    /* ignore */
+  }
+}
 
 function isPhysicalExamPin(pin) {
   const label = String(pin?.label || '');
@@ -78,7 +98,9 @@ export function computePinDisplayPercent(pin, zones, frame, index = 0) {
     };
   }
 
-  if (!insidePatientZone(rx, ry)) {
+  // Magnetic repositioning: push zone-based pins out of the patient torso.
+  // Off by default — user drops pins exactly where they want them.
+  if (!getMagneticRepositioning() || !insidePatientZone(rx, ry)) {
     return { leftPct, topPct };
   }
 
