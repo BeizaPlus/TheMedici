@@ -31,11 +31,17 @@ export function computePinDisplayPercent(pin, zones, frame, index = 0) {
   const frameW = frame?.w ?? 100;
   const frameH = frame?.h ?? 100;
 
-  // User-dragged or free-drop position — always honor (incl. physical exam labels).
+  // User-dragged or free-drop position — clamp to the drop margin frame.
   if (pin.cx != null && pin.cy != null) {
+    const marginLeft = frameLeft / 100;
+    const marginRight = (100 - frameLeft - frameW) / 100;
+    const marginTop = frameTop / 100;
+    const marginBottom = (100 - frameTop - frameH) / 100;
+    const clampedCx = Math.max(marginLeft, Math.min(1 - marginRight, pin.cx));
+    const clampedCy = Math.max(marginTop, Math.min(1 - marginBottom, pin.cy));
     return {
-      leftPct: pin.cx * 100,
-      topPct: pin.cy * 100,
+      leftPct: clampedCx * 100,
+      topPct: clampedCy * 100,
     };
   }
 

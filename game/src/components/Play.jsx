@@ -2059,8 +2059,8 @@ export default function Play({
         const { cx, cy } = clampPinAwayFromUi(rawCx, rawCy, sceneRef.current);
         effectiveTarget = {
           zoneId,
-          cx,
-          cy,
+          cx: Math.max(imageFrame.x, Math.min(imageFrame.x + imageFrame.w, cx)),
+          cy: Math.max(imageFrame.y, Math.min(imageFrame.y + imageFrame.h, cy)),
         };
       } else if (typeof target === 'string') {
         effectiveTarget = dropZone;
@@ -2144,7 +2144,7 @@ export default function Play({
         ...(viaCommand ? { method: 'command' } : {}),
       });
     },
-    [logDecoyAttempt, logTimeline, teachMeMode, placementOrder.length, zones, dropMode, showOrderWhyInDock],
+    [logDecoyAttempt, logTimeline, teachMeMode, placementOrder.length, zones, dropMode, showOrderWhyInDock, imageFrame],
   );
 
 
@@ -4791,8 +4791,11 @@ export default function Play({
                 const rawCx = (e.clientX - rect.left - offX) / rect.width;
                 const rawCy = (e.clientY - rect.top - offY) / rect.height;
                 const { cx, cy } = clampPinAwayFromUi(rawCx, rawCy, sceneEl);
+                // Clamp to drop margin frame to keep pins inside the valid zone
+                const clampedCx = Math.max(imageFrame.x, Math.min(imageFrame.x + imageFrame.w, cx));
+                const clampedCy = Math.max(imageFrame.y, Math.min(imageFrame.y + imageFrame.h, cy));
                 pinDragSuppressClickRef.current = { ivId: p.ivId, at: Date.now() };
-                handleMovePin(p.ivId, { cx, cy, zoneId: 'zone-custom-1' });
+                handleMovePin(p.ivId, { cx: clampedCx, cy: clampedCy, zoneId: 'zone-custom-1' });
               }}
               onClick={() => {
                 if (!p.ivId) return;
