@@ -1,57 +1,140 @@
 {
   "id": 147,
   "topic": "Heart Palpitations",
-  "diagnosis": "Possible cardiac arrhythmia or other underlying heart condition",
-  "confidence": "inferred",
-  "source": "preparedCases+fmgmatch+mistral",
+  "title": "Heart Palpitations",
+  "diagnosis": "Postpartum Thyroiditis",
+  "confidence": "screenshot",
+  "source": "ccs_screenshots/case_147_Heart_Palpitations.png + RapidOCR",
   "correct_orders": [
-    "Order a 12-lead ECG to evaluate for any cardiac arrhythmias.",
-    "Refer the patient to a cardiologist for further evaluation and management.",
-    "Oxygen",
-    "IV access \u00d72"
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "T3, serum (free/total)",
+    "T4, serum (free/total)",
+    "TSH, ultrasensitive",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Propranolol"
   ],
   "should_avoid": [
-    "Initiate unnecessary invasive procedures at this stage, as the diagnosis is still uncertain."
+    "Thyroid uptake — contraindicated in breastfeeding (radioactive breastmilk)",
+    "Thyroid scan — contraindicated in breastfeeding (radioactive breastmilk)",
+    "Methimazole / PTU — T4/T3 synthesis decreased, not increased, in postpartum thyroiditis",
+    "Atenolol — less preferred beta-blocker for breastfeeding patients"
   ],
   "rationale": {
-    "Order1": "ECG is a non-invasive diagnostic test that can help identify various types of arrhythmias and other cardiac conditions. A referral to a cardiologist ensures proper management and further investigation.",
-    "should_avoid1": "Avoiding invasive procedures at this stage helps minimize patient discomfort, potential complications, and reduces unnecessary costs.",
-    "Oxygen": "The patient is experiencing heart palpitations, which can potentially be life-threatening. Oxygen is crucial to provide immediate support for any respiratory distress.",
-    "IV access \u00d72": "Immediate IV access is essential for the administration of medications and fluids if necessary."
+    "Physical Exam: General Appearance": "It would be a good idea to take a general look at the patient to see how the patient looks.",
+    "Physical Exam: Heart / Cardiovascular": "This is the patient's chief concern, so this should be evaluated.",
+    "Physical Exam: HEENT / Neck": "A HEENT should be done to look at the patient's thyroid as the patient's symptoms are suspicious for hyperthyroidism.",
+    "CBC with differential": "A CBC should be ordered to look for infection that could be causing the palpitations.",
+    "T3, serum (free/total)": "Getting a T3 will help differentiate Graves' disease from Postpartum Thyroiditis.",
+    "T4, serum (free/total)": "This will confirm hyperthyroidism. The etiology of the hyperthyroidism is the next step in diagnosis.",
+    "TSH, ultrasensitive": "A TSH would be a good lab to order to screen for abnormal thyroid levels which could contribute to the patient's current symptoms.",
+    "Basic metabolic profile / Comprehensive metabolic profile": "Chemistries are important to get to rule out other conditions.",
+    "Propranolol": "As the patient is symptomatic with palpitations and tremor, the patient should be treated with a beta-blocker. Propranolol is the preferred agent here because the patient is breast feeding. Atenolol should be avoided due to this. Metoprolol is not as good of a choice as propranolol due to the breastfeeding aspect."
   },
-  "hpi": null,
+  "hpi": "{{patient_name}} is a postpartum woman presenting with palpitations and tremor. She is breastfeeding. The symptoms began gradually after delivery and have been worsening. She denies chest pain, dyspnea, or syncope. No personal or family history of thyroid disease.",
+  "hpi_narrative": "{{patient_name}} is a postpartum woman presenting with palpitations and tremor. She is breastfeeding. The symptoms began gradually after delivery and have been worsening. She denies chest pain, dyspnea, or syncope. No personal or family history of thyroid disease.\n\nDiagnosis: Postpartum Thyroiditis — an autoimmune disorder that attacks the thyroid similar to Hashimoto's thyroiditis. Antibodies against the thyroid cause inflammation which damages thyroid follicles, causing release of large amounts of T4/T3 into circulation. Most symptomatic patients recover within 1 year. The hyperthyroidism is transitory.\n\nKey differential: Graves' disease. In Graves', T3 is more elevated than T4. In postpartum thyroiditis, T4 is typically elevated while T3 is slightly elevated or within normal limits. Free T4 is disproportionately elevated (~4x ULN) while Free T3 is only borderline elevated — this is the classic pattern.\n\nWorkup: thyroid exam (HEENT/Neck), CBC, T3/T4/TSH, BMP. Optional: thyroid antibody, thyroid US (low blood flow = postpartum thyroiditis vs high flow = Graves).\n\nTreatment: Propranolol for symptomatic relief (safe in breastfeeding). Avoid Atenolol (less preferred for breastfeeding), Methimazole/PTU (T4/T3 synthesis decreased, not increased, in this condition), thyroid uptake/scan (radioactive, contraindicated in breastfeeding).\n\nFollow-up: Serial free T4/TSH. May enter hypothyroid phase requiring levothyroxine. Most stabilize within 1 year postpartum.",
   "physical_exam": [
-    [
-      "General",
-      "Heart Palpitations \u2014 exam tailored to chief complaint on arrival."
-    ],
-    [
-      "Cardiovascular",
-      "HR 100; BP 89/56; hypotensive."
-    ],
-    [
-      "Respiratory",
-      "RR 21; SpO\u2082 88%; hypoxemic."
-    ],
-    [
-      "Abdomen",
-      "Soft, non-distended, no focal peritoneal signs on initial exam."
-    ],
-    [
-      "Neuro",
-      "Alert and oriented unless perfusion or metabolic derangement present."
-    ],
-    [
-      "Skin",
-      "No acute rash; capillary refill and perfusion assessed."
-    ]
+    ["General", "Appears anxious, fine tremor of outstretched hands. No acute distress."],
+    ["Cardiovascular", "Tachycardic, regular rhythm. No murmurs, rubs, or gallops. Brisk pulses."],
+    ["HEENT / Neck", "Thyroid mildly enlarged, non-tender, no discrete nodules. No lid lag or proptosis."],
+    ["Respiratory", "Clear to auscultation. No respiratory distress."],
+    ["Skin", "Warm, moist. No rash. Normal capillary refill."]
   ],
-  "vitals": null,
-  "patient_voice": null,
+  "vitals": {
+    "hr": 110,
+    "spo2": 98,
+    "bp": "128/74",
+    "rr": 18,
+    "temp": 37.2
+  },
+  "patient_voice": {
+    "chief_complaint": "Palpitations and tremor, postpartum, breastfeeding",
+    "history": "{{patient_name}} is a postpartum woman presenting with palpitations and tremor. She is breastfeeding. Symptoms began gradually after delivery and have been worsening. She denies chest pain, dyspnea, or syncope.",
+    "pain": "None. Just this fluttering feeling in my chest and my hands shake."
+  },
+  "patient_sex": "female",
+  "patient_name": "Akua Mensah",
+  "ccs_category": "OB/GYN",
+  "chief_complaint": "Heart palpitations and tremor, postpartum",
+  "case_summary": "Postpartum Thyroiditis — autoimmune destruction of thyroid follicles releasing stored T4/T3. Disproportionately elevated T4 relative to T3 distinguishes from Graves' disease. Transitory hyperthyroidism; most recover within 1 year. Symptomatic treatment with propranolol (breastfeeding-safe). Avoid radioactive studies and thionamides.",
+  "decoys": [
+    "Thyroid uptake",
+    "Thyroid scan"
+  ],
+  "distractors": [],
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "type": "correctlyOrdered",
+      "finding": "See how the patient looks — anxious, fine tremor.",
+      "aliases": ["General Appearance"]
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "type": "correctlyOrdered",
+      "finding": "Chief concern — tachycardic, regular, no murmurs.",
+      "aliases": ["Cardiovascular Exam", "Heart Exam"]
+    },
+    {
+      "label": "Physical Exam: HEENT / Neck",
+      "type": "correctlyOrdered",
+      "finding": "Thyroid exam — mildly enlarged, non-tender, suspicious for hyperthyroidism.",
+      "aliases": ["HEENT", "Neck Exam", "Thyroid Exam"]
+    },
+    {
+      "label": "CBC with differential",
+      "type": "correctlyOrdered",
+      "finding": "Rule out infection causing palpitations.",
+      "aliases": ["CBC", "Complete Blood Count"]
+    },
+    {
+      "label": "T3, serum (free/total)",
+      "type": "correctlyOrdered",
+      "finding": "Differentiate Graves' disease from Postpartum Thyroiditis. T3 borderline elevated (680 pg/dL vs 230-660).",
+      "aliases": ["T3", "Triiodothyronine", "Free T3"]
+    },
+    {
+      "label": "T4, serum (free/total)",
+      "type": "correctlyOrdered",
+      "finding": "Confirm hyperthyroidism. Free T4 10.2 ng/dL (ULN 2.4) — 4x elevation, disproportionate to T3.",
+      "aliases": ["T4", "Thyroxine", "Free T4"]
+    },
+    {
+      "label": "TSH, ultrasensitive",
+      "type": "correctlyOrdered",
+      "finding": "Screen for abnormal thyroid levels. TSH suppressed in hyperthyroidism.",
+      "aliases": ["TSH", "Thyroid Stimulating Hormone"]
+    },
+    {
+      "label": "Basic metabolic profile / Comprehensive metabolic profile",
+      "type": "correctlyOrdered",
+      "finding": "Chemistries to rule out other conditions.",
+      "aliases": ["BMP", "CMP", "Metabolic Panel", "Chemistries"]
+    },
+    {
+      "label": "Propranolol",
+      "type": "correctlyOrdered",
+      "finding": "Beta-blocker for palpitations and tremor. Preferred agent in breastfeeding. Avoid Atenolol.",
+      "aliases": ["Beta blocker", "Inderal"]
+    }
+  ],
+  "order_sets": [
+    "Physical Exam: General Appearance",
+    "Physical Exam: Heart / Cardiovascular",
+    "Physical Exam: HEENT / Neck",
+    "CBC with differential",
+    "T3, serum (free/total)",
+    "T4, serum (free/total)",
+    "TSH, ultrasensitive",
+    "Basic metabolic profile / Comprehensive metabolic profile",
+    "Propranolol"
+  ],
   "complete": true,
-  "screenshot_processed": false,
+  "extraction_method": "ccs_screenshot_ocr",
   "enrichment_sources": [
-    "fmgmatch",
-    "mistral"
-  ]
+    "ccs_screenshots/case_147_Heart_Palpitations.png"
+  ],
+  "extraction_notes": "Rebuilt from CCS screenshot (RapidOCR, 2026-06-30). Original DeepSeek pass hallucinated cardiac arrhythmia/ECG/O2 — replaced entirely. Case is OB/GYN (postpartum thyroiditis), female, breastfeeding."
 }

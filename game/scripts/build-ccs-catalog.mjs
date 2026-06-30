@@ -16,6 +16,10 @@ function resolveStep3Root() {
   return STEP3_CANDIDATES.find((p) => fs.existsSync(path.join(p, 'ccs_mirror'))) || STEP3_CANDIDATES[0];
 }
 
+const CASE_CATEGORY_OVERRIDE = {
+  '147': 'OB/GYN',  // Postpartum Thyroiditis — palpitations in postpartum woman
+};
+
 const TITLE_TO_CATEGORY = [
   [/chest pain|palpitation|shortness of breath|cough|sob/i, 'Cardiopulmonary'],
   [/abdominal|epigastric|nausea|vomit|diarrhea|constipation|hematemesis/i, 'GI & Abdomen'],
@@ -29,7 +33,10 @@ const TITLE_TO_CATEGORY = [
   [/knee|back pain|leg pain|weakness|muscle|wrist|foot|joint/i, 'MSK & General'],
 ];
 
-function categorize(title) {
+function categorize(title, caseNumber) {
+  if (caseNumber != null && CASE_CATEGORY_OVERRIDE[String(caseNumber)]) {
+    return CASE_CATEGORY_OVERRIDE[String(caseNumber)];
+  }
   for (const [re, cat] of TITLE_TO_CATEGORY) {
     if (re.test(title)) return cat;
   }
@@ -123,7 +130,7 @@ const cases = data.cases.map((c) => ({
   id: String(c.caseNumber).padStart(3, '0'),
   caseNumber: c.caseNumber,
   title: c.title,
-  category: categorize(c.title),
+  category: categorize(c.title, c.caseNumber),
   timeLimit: c.timeLimit,
   averageGrade: c.averageGrade,
   highYield: c.highYield,
