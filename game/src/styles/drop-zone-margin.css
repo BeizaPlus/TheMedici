@@ -1,0 +1,141 @@
+/* Drop Zone Margin Control — popover via toolbar portal */
+
+.toolbar-margin-portal {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  z-index: 9999;
+}
+
+/* 4-slider panel */
+.drop-zone-margin-panel {
+  width: 220px;
+  background: rgba(12, 12, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  backdrop-filter: blur(12px);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.drop-zone-margin-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drop-zone-margin-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.drop-zone-margin-close {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.drop-zone-margin-close:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.drop-zone-margin-desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.drop-zone-margin-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.drop-zone-margin-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drop-zone-margin-edge {
+  width: 40px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.drop-zone-margin-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+  cursor: pointer;
+}
+
+.drop-zone-margin-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e8b84b;
+  border: 2px solid rgba(12, 12, 20, 0.9);
+  cursor: pointer;
+}
+
+.drop-zone-margin-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e8b84b;
+  border: 2px solid rgba(12, 12, 20, 0.9);
+  cursor: pointer;
+}
+
+.drop-zone-margin-val {
+  width: 32px;
+  text-align: right;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.drop-zone-margin-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.drop-zone-margin-reset {
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.drop-zone-margin-reset:hover {
+  color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.3);
+}

@@ -2,7 +2,7 @@
 
 Medical training game: **181 CCS cases**, drag-and-place clinical orders onto a patient scene. React 19 + Vite 6 + Express.
 
-**Latest session (2026-06-21):** [`docs/CHANGELOG-2026-06-21-agent-handoff.md`](docs/CHANGELOG-2026-06-21-agent-handoff.md) — lab picker, patient mode, TTS fallback, attending anchor fix, case story compile loop.
+**Latest session (2026-06-30):** Drop zone margin controls — 4-slider panel (top/bottom/left/right) limits stack placement area on the patient scene. Toolbar button in "Display and settings" group (IconMargin). Grid overlay visible while panel open; margins persist in localStorage (`schoonmaker_scene_drop_margin`).
 
 **2026-06-29:** Manual-only portrait regen (serve cache incl. banned, default plate when uncached) + `smoke:play-case` fixes (TDZ, portaled settings popover, `detect-zones` graceful degrade).
 
@@ -484,6 +484,20 @@ Multiple orders dropped into the same grid cell auto-separate via force-directed
 | Algorithm | Groups items by cell → estimates label bounding-box from text length → 20 AABB overlap-detection iterations → repulsive forces with velocity damping (0.7) |
 | Output | Returns `{ x, y }` integer pixel offsets per item; solo items stay at (0,0) — no unnecessary transforms |
 | Marker | `src/components/GridPlacedMarker.jsx` — accepts `offsetX`/`offsetY` (replaced old `offsetIndex` + fixed `OFFSET_STEP_PX` diagonal fan-out) |
+
+### Drop zone margin controls (Steve 2026-06-30)
+
+Four sliders (top/bottom/left/right, 0–50%) shrink the effective drop zone so stacks stay within a defined inner rectangle on the scene. The grid overlay (48×32) respects margins in real time.
+
+| Piece | Path / behavior |
+|-------|-----------------|
+| Toolbar icon | `PlaySceneToolbar.jsx` "Display and settings" group — `IconMargin` (crop/bounds) |
+| Popover | `DropZoneMarginControl.jsx` — 4 sliders + reset, portaled to `document.body` via `toolbar-margin-portal` |
+| State | `Play.jsx` — `dropMargin` state, `imageFrame` derived from margins via `frameFromMargin()` |
+| Persistence | `src/lib/sceneDropMargin.js` — `readSceneDropMargin()` / `writeSceneDropMargin()` → localStorage key `schoonmaker_scene_drop_margin` |
+| Grid visibility | `SceneGridOverlay` renders with `visible` when `marginPanelOpen` (not only during drag) |
+| CSS | `src/styles/drop-zone-margin.css` |
+| Storage key | `src/lib/storageKeys.js` → `sceneDropMargin` |
 
 | Feature | Location |
 |---------|----------|

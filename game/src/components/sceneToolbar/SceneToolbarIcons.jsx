@@ -383,6 +383,17 @@ export function IconWorld(props) {
   );
 }
 
+export function IconMargin(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M4 4v16" />
+      <path d="M20 4v16" />
+      <path d="M4 8h16" />
+      <path d="M4 16h16" />
+    </svg>
+  );
+}
+
 export function IconSettings(props) {
   return (
     <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>

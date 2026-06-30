@@ -19,6 +19,7 @@ import './styles/scene-toolbar.css';
 import './styles/teach-compare-landscape.css';
 import './styles/medical-sequence.css';
 import './styles/case-story.css';
+import './styles/drop-zone-margin.css';
 
 migrateLegacyStorage();
 void migrateAllLegacyCaseNotes();

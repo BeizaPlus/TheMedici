@@ -5,6 +5,7 @@ import {
   IconClipboardPulse,
   IconEyeOff,
   IconLockOpen,
+  IconMargin,
   IconMessage,
   IconMoon,
   IconPill,
@@ -69,6 +70,11 @@ export default function PlaySceneToolbar({
   onToggleDropMode,
   onToggleSettings,
   stacksDisabled = false,
+  // Drop zone margin
+  marginOpen = false,
+  onToggleMargin,
+  marginRef,
+  marginPopover = null,
 }) {
   // The settings popover is portaled to <body> so it can sit ABOVE the floating
   // sidebar. The toolbar lives inside .game-scene-capture (z-index:1), which traps
@@ -162,6 +168,15 @@ export default function PlaySceneToolbar({
 
       <ToolbarGroup label="Display and settings">
         <ToolbarBtn
+          active={marginOpen}
+          onClick={onToggleMargin}
+          title="Scene drop margin"
+          aria-label="Scene drop margin"
+          aria-expanded={marginOpen}
+        >
+          <IconMargin />
+        </ToolbarBtn>
+        <ToolbarBtn
           active={scenePinsHidden}
           onClick={onToggleScenePins}
           title={scenePinsHidden ? 'Show scene stack labels' : 'Hide scene stack labels'}
@@ -214,6 +229,12 @@ export default function PlaySceneToolbar({
             >
               {settingsPopover}
             </div>,
+            document.body,
+          )
+        : null}
+      {marginOpen && marginPopover
+        ? createPortal(
+            <div className="toolbar-margin-portal">{marginPopover}</div>,
             document.body,
           )
         : null}

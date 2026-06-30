@@ -66,6 +66,7 @@ export const STORAGE = {
   caseStoryStarted: 'schoonmaker_case_story_started',
   physicalExamPinLayout: 'schoonmaker_physical_exam_pin_layout',
   teachingMoments: 'schoonmaker_teaching_moments',
+  sceneDropMargin: 'schoonmaker_scene_drop_margin',
 };
 
 const LEGACY = {

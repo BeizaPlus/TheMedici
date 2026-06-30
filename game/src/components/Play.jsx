@@ -172,8 +172,11 @@ import {
   suggestedLabNamesFromInterventions,
 } from '../data/labOrders.js';
 import '../styles/physical-exam-picker.css';
+import '../styles/drop-zone-margin.css';
 import { pickTeachingVideo, preloadTeachingVideo } from '../lib/caseTeachingVideo.js';
 import { decoyReason, handleDecoyOrder } from '../lib/decoyOrder.js';
+import { readSceneDropMargin, writeSceneDropMargin, frameFromMargin } from '../lib/sceneDropMargin.js';
+import DropZoneMarginControl from './DropZoneMarginControl.jsx';
 import { toTitleCase } from '../lib/clinicalTextFormat.js';
 import CaseTeachingVideoOverlay from './CaseTeachingVideoOverlay.jsx';
 import TeachMeSceneOverlay from './TeachMeSceneOverlay.jsx';
@@ -587,6 +590,18 @@ export default function Play({
     });
   }, []);
 
+  const handleDropMarginChange = useCallback((m) => {
+    const clamped = {
+      top: Math.max(0, Math.min(0.5, m.top)),
+      bottom: Math.max(0, Math.min(0.5, m.bottom)),
+      left: Math.max(0, Math.min(0.5, m.left)),
+      right: Math.max(0, Math.min(0.5, m.right)),
+    };
+    setDropMargin(clamped);
+    writeSceneDropMargin(clamped);
+    setImageFrame(frameFromMargin(clamped));
+  }, []);
+
   const onCollapsePanelClick = useCallback(() => {
     if (collapseClickTimerRef.current) {
       window.clearTimeout(collapseClickTimerRef.current);
@@ -675,7 +690,9 @@ export default function Play({
   const sceneRef = useRef(null);
   const patientImgRef = useRef(null);
   const dockRef = useRef(null);
-  const [imageFrame, setImageFrame] = useState({ x: 0, y: 0, w: 1, h: 1 });
+  const [dropMargin, setDropMargin] = useState(() => readSceneDropMargin());
+  const [imageFrame, setImageFrame] = useState(() => frameFromMargin(readSceneDropMargin()));
+  const [marginPanelOpen, setMarginPanelOpen] = useState(false);
   const interventions = useMemo(() => getCaseInterventions(caseData), [caseData]);
   const requiredOrderTotal = interventions.length;
   const decoyInterventions = useMemo(
@@ -4260,6 +4277,17 @@ export default function Play({
         setBibliographyOpen(false);
       }}
       stacksDisabled={commandUiLocked}
+      marginOpen={marginPanelOpen}
+      onToggleMargin={() => setMarginPanelOpen((v) => !v)}
+      marginPopover={
+        marginPanelOpen ? (
+          <DropZoneMarginControl
+            margin={dropMargin}
+            onChange={handleDropMarginChange}
+            onClose={() => setMarginPanelOpen(false)}
+          />
+        ) : null
+      }
     />
   );
 
@@ -4598,6 +4626,12 @@ export default function Play({
             frame={imageFrame}
             visible={showCues && dragging}
             dropTarget
+          />
+        )}
+        {marginPanelOpen && (
+          <SceneGridOverlay
+            frame={imageFrame}
+            visible
           />
         )}
         {studioCapture && (
