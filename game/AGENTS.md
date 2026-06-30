@@ -6,7 +6,48 @@ Medical training game: **181 CCS cases**, drag-and-place clinical orders onto a 
 
 **2026-06-29:** Manual-only portrait regen (serve cache incl. banned, default plate when uncached) + `smoke:play-case` fixes (TDZ, portaled settings popover, `detect-zones` graceful degrade).
 
-**Order sequence replay** is now a **floating, draggable, resizable scrubber bar** that controls pin visibility on the live scene (`OrderSequenceScrubber`) — scrub step-by-step to reveal placed orders one-by-one. Also added **grid label collision repulsion** so overlapping labels in the same cell auto-separate via force-directed layout.
+**Order sequence replay** is now a **floating, draggable, resizable scrubber bar** that controls pin visibility on the live scene (`OrderSequenceScrubber`) — scrub step-by-step to reveal placed orders one-by-one. Also added **grid label collision repulsion** so overlapping labels in the same cell auto-separate via force-directed layout. The scrubber also has full **media-player controls** (⏮ ◀ track ▶/⏸ auto-play ⏭) and a `replaySignal`-driven "Review order sequence" replay-from-scratch; the old `OrderSequencePlayer` modal was deleted. Detail: *Play UX → Order sequence replay*.
+
+---
+
+## ⚡ ACTIVE SESSION HANDOFF — next agent, read first (2026-06-29 ~20:50)
+
+**Two trees are running at once. Do NOT touch the study tree.**
+
+| Tree | Folder | Web | API | HMR | Who | Rule |
+|------|--------|-----|-----|-----|-----|------|
+| **MAIN dev — work here** | `C:\Users\steve\MeWorld\game` | http://localhost:5173/ | :3001 | on | **VS Code agent (you)** | Build features, commit |
+| **STUDY snapshot — leave alone** | `C:\Users\steve\MeWorld-study\game` | http://localhost:5174/ | :3002 | off | **Steve is studying live** | **Never edit; never restart; never run `create-study-snapshot.ps1`** |
+
+- **Edit only `MeWorld\game`.** The study tree is a frozen copy Steve is actively using; touching it (code edits, snapshot refresh, killing :3002/:5174) interrupts his session. It was just synced to main, so it already has all 2026-06-29 work.
+- **Model:** Steve runs **DeepSeek** in VS Code (`deepseek-chat` for tool/agent work; `deepseek-reasoner` for reasoning, no tools). DeepSeek is **text-only — never paste/attach images** (use `ollama_vision_read.py` on a file path). Rule: `deepseek-primary-fallback.mdc`.
+
+### Next task — **patient scene "zones"**
+
+Clickable/drop **anatomical zones** on the patient portrait (where orders/exams land + vision auto-detection). Key files:
+
+| Piece | Path |
+|-------|------|
+| Zone definitions | `src/data/zones.js` |
+| Zone authoring UI | `src/components/StudioMode.jsx` · `src/components/ZoneRail.jsx` · `src/lib/zoneStudio.js` |
+| Placement / grid math | `src/lib/sceneGrid.js` · `src/lib/placementGrid.js` · `src/lib/torsoDropZone.js` · `src/lib/pinLayout.js` |
+| Vision auto-detect | `POST /api/detect-zones` in `server/index.js` — **gracefully degrades to `zones:null` when `OPENAI_API_KEY` missing/invalid** (don't "fix" the 401; it's intentional). Needs a valid `OPENAI_API_KEY` in `game/.env` to actually return zones. |
+
+**Before coding zones:** `graphify query "patient scene zones and drop placement"` from `C:\Users\steve\MeWorld` (rule `graphify.mdc`), then read the files above.
+
+### Run / verify (main only)
+
+```powershell
+cd C:\Users\steve\MeWorld\game
+npm run dev            # auto-frees :3001/:5173 — safe; does NOT touch study :3002/:5174
+npm run smoke:pre-serve   # vite build + CSS audit before declaring done
+```
+
+### When Steve wants study updated with new zones work
+
+Ask first (he must pause studying), then from `C:\Users\steve\MeWorld`: `powershell -File scripts\create-study-snapshot.ps1` (stashes study `user-data`, mirrors code). **Do not run while he's mid-case.**
+
+---
 
 **Repo:** `git@github.com:BeizaPlus/TheSchoonMaker.git` (SSH as **BeizaPlus** — configured on this machine)
 
