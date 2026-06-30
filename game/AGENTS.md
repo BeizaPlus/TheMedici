@@ -22,6 +22,21 @@ Medical training game: **181 CCS cases**, drag-and-place clinical orders onto a 
 - **Edit only `MeWorld\game`.** The study tree is a frozen copy Steve is actively using; touching it (code edits, snapshot refresh, killing :3002/:5174) interrupts his session. It was just synced to main, so it already has all 2026-06-29 work.
 - **Model:** Steve runs **DeepSeek** in VS Code (`deepseek-chat` for tool/agent work; `deepseek-reasoner` for reasoning, no tools). DeepSeek is **text-only — never paste/attach images** (use `ollama_vision_read.py` on a file path). Rule: `deepseek-primary-fallback.mdc`.
 
+### Generating images & video (Steve's machine)
+
+> **Stills = Magnific MCP. Video = ComfyUI MCP (Steve's PC).** Fal is **expired — never call it**.
+> Canonical rules: `C:\Users\steve\.cursor\rules\steve-generation-access.mdc` (stills) + `comfyui-video.mdc` (video). Skill: `C:\Users\steve\.agents\skills\comfyui-video\SKILL.md`. Cursor command: `/comfy-generate-video`.
+
+| Task | Backend | How |
+|------|---------|-----|
+| **Stills** (case portraits, char sheets, scene frames) | **Magnific MCP** `user-Magnific` → Higgsfield fallback | `images_generate` · `imagen-nano-banana-2` / `-pro` · `resolution: "2k"`. MeWorld portraits already wired — see *Case portraits (Magnific MCP)* below. |
+| **Video** (motion, i2v clips) | **ComfyUI MCP** `user-comfyui` **only** | `health_check` → `upload_image` (start still) → `enqueue_workflow` *or* `generate_with_api_node` (read `get_api_node_schema` first) → `get_job_status` → `get_history` → save MP4 |
+
+- **ComfyUI on Steve's PC:** Comfy Cloud API key lives in `C:\Users\steve\.cursor\mcp.json` (`COMFYUI_API_KEY`); the **local** instance is `M:\ComfyUI_windows_portablev01 - GenFill - LITE\` at `http://127.0.0.1:8188` (launch `LAUNCH_COMFYUI_FOR_NIMA.bat`). With the key set, MCP targets Cloud; unset it (or point MCP local) for the local GPU.
+- **Always read the tool schema** under the project `mcps/user-comfyui/tools/` (and `mcps/user-Magnific/`) **before** calling, via `CallMcpTool`.
+- **MeWorld video output:** save under the project, then copy to `MeWorld\game\public\assets\video\` only when Steve asks (pattern `{beat}-{label}-{duration}s-comfy.mp4`).
+- **Do NOT** use Higgsfield/Magnific *video* or `fal_generate.py` unless Steve explicitly overrides for one beat.
+
 ### Next task — **patient scene "zones"**
 
 Clickable/drop **anatomical zones** on the patient portrait (where orders/exams land + vision auto-detection). Key files:
