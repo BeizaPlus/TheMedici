@@ -186,6 +186,8 @@ function convertCase(entry) {
     physical_exam: buildPhysicalExam(entry),
     vitals: entry.vitals || null,
     patient_voice: buildPatientVoice(entry),
+    patient_sex: entry.patient_sex || entry.patient_sex_legacy || null,
+    patient_name: entry.patient_name || null,
     ccs_category: entry.specialty || null,
     chief_complaint: entry.chief_complaint || null,
     case_summary: entry.case_summary || null,

@@ -6,87 +6,175 @@
   "confidence": "screenshot",
   "source": "data/cases/case_N.json (DeepSeek)",
   "correct_orders": [
-    "ABG / Lactate / BMP",
-    "Hydroxocobalamin IV",
-    "100% O2",
-    "Supportive care",
+    "Arterial blood gases",
+    "Lactate, serum",
+    "Carbon monoxide, blood",
+    "Comprehensive metabolic profile",
+    "Electrocardiography, 12 lead",
+    "100% O2 via non-rebreather",
+    "Intubation, endotracheal",
+    "Intravenous access",
+    "IV fluids (Normal saline / Lactated Ringer)",
+    "Hydroxocobalamin IV (Cyanokit)",
     "Admit to ICU"
   ],
   "should_avoid": [],
   "rationale": {
-    "ABG / Lactate / BMP": "High AG metabolic acidosis, elevated lactate.",
-    "Hydroxocobalamin IV": "First-line. Binds cyanide.",
-    "100% O2": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
-    "Supportive care": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
-    "Admit to ICU": "Critical care monitoring."
+    "Arterial blood gases": "Partially compensated metabolic acidosis. PaO2 normal despite tissue hypoxia (cyanide blocks O2 utilization, not delivery).",
+    "Lactate, serum": "Markedly elevated (>10 mmol/L). High lactate with normal carboxyhemoglobin points to cyanide over CO poisoning.",
+    "Carbon monoxide, blood": "Carboxyhemoglobin ~10% (mildly elevated, not enough to explain severe acidosis).",
+    "Comprehensive metabolic profile": "High anion gap metabolic acidosis. Assess renal function, electrolytes, glucose.",
+    "Electrocardiography, 12 lead": "Sinus tachycardia. Evaluate for arrhythmias or ischemic changes from hypoxia.",
+    "100% O2 via non-rebreather": "Maximize oxygen delivery. Displace CO from hemoglobin. Supportive for cyanide toxicity.",
+    "Intubation, endotracheal": "Airway protection in unconscious patient with high suspicion for cyanide poisoning. Secure before deterioration.",
+    "Intravenous access": "Two large-bore IV lines for fluids and medications.",
+    "IV fluids (Normal saline / Lactated Ringer)": "Fluid resuscitation for hypotension and support of hemodynamics in cyanide poisoning.",
+    "Hydroxocobalamin IV (Cyanokit)": "First-line antidote. Binds cyanide to form cyanocobalamin (renally excreted). Give 5g IV. Repeat if no rapid improvement; third dose with sodium thiosulfate.",
+    "Admit to ICU": "Critical care monitoring for cyanide poisoning. Intubated patient needs ventilator management."
   },
-  "hpi": "{{patient_name}} presents found unconscious with cherry-red skin, bitter almond breath odor (only 40% can detect), high anion gap metabolic acidosis, and elevated lactate. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks oxidative phosphorylation → cells cannot use oxygen → tissue hypoxia despite normal PaO2 → anaerobic metabolism → lactic acidosis. Sources: smoke inhalation (burning plastics/wool), industrial exposure, sodium nitroprusside infusion. Treatment: hydroxocobalamin (Cyanokit — first-line, binds cyanide to form cyanocobalamin which is renally excreted). Alternative: sodium nitrite + sodium thiosulfate (older regimen, risk of methemoglobinemia). Supportive: 100% oxygen, airway management, IVF, vasopressors if needed. Admit to ICU.",
-  "hpi_narrative": "{{patient_name}} presents found unconscious with cherry-red skin, bitter almond breath odor (only 40% can detect), high anion gap metabolic acidosis, and elevated lactate. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks oxidative phosphorylation → cells cannot use oxygen → tissue hypoxia despite normal PaO2 → anaerobic metabolism → lactic acidosis. Sources: smoke inhalation (burning plastics/wool), industrial exposure, sodium nitroprusside infusion. Treatment: hydroxocobalamin (Cyanokit — first-line, binds cyanide to form cyanocobalamin which is renally excreted). Alternative: sodium nitrite + sodium thiosulfate (older regimen, risk of methemoglobinemia). Supportive: 100% oxygen, airway management, IVF, vasopressors if needed. Admit to ICU.",
+  "hpi": "{{patient_name}} presents found unconscious with cherry-red skin after being pulled from a burning building with dense acrid smoke. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks oxidative phosphorylation → cells cannot use oxygen → tissue hypoxia despite normal PaO2 → anaerobic metabolism → lactic acidosis. Sources: smoke inhalation (burning plastics/wool/synthetics), industrial exposure, sodium nitroprusside infusion. Treatment: hydroxocobalamin (Cyanokit — first-line, binds cyanide to form cyanocobalamin which is renally excreted). Alternative: sodium nitrite + sodium thiosulfate (older regimen, risk of methemoglobinemia). Avoid amyl/sodium nitrite if concurrent CO toxicity. Supportive: 100% oxygen, airway management/intubation, IVF, vasopressors if needed. Admit to ICU.",
+  "hpi_narrative": "{{patient_name}} presents found unconscious with cherry-red skin after being pulled from a burning building with dense acrid smoke. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks oxidative phosphorylation → cells cannot use oxygen → tissue hypoxia despite normal PaO2 → anaerobic metabolism → lactic acidosis. Sources: smoke inhalation (burning plastics/wool/synthetics), industrial exposure, sodium nitroprusside infusion. Treatment: hydroxocobalamin (Cyanokit — first-line, binds cyanide to form cyanocobalamin which is renally excreted). Alternative: sodium nitrite + sodium thiosulfate (older regimen, risk of methemoglobinemia). Avoid amyl/sodium nitrite if concurrent CO toxicity. Supportive: 100% oxygen, airway management/intubation, IVF, vasopressors if needed. Admit to ICU.",
   "physical_exam": [],
   "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp": null,
-    "rr": null,
-    "temp": null
+    "hr": 114,
+    "spo2": 89,
+    "bp": "119/76",
+    "rr": 23,
+    "temp": 37.3
   },
   "patient_voice": {
-    "chief_complaint": "Found unconscious, cherry-red skin, metabolic acidosis",
-    "history": "{{patient_name}} presents found unconscious with cherry-red skin, bitter almond breath odor (only 40% can detect), high anion gap metabolic acidosis, and elevated lactate. Cyanide inhibits cytochrome…",
-    "pain": "Found unconscious, cherry-red skin, metabolic acidosis"
+    "chief_complaint": "Found unconscious after house fire, cherry-red skin",
+    "history": "{{patient_name}} presents found unconscious with cherry-red skin after being pulled from a burning building with dense acrid smoke. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks …",
+    "pain": "Found unconscious after house fire, cherry-red skin"
   },
+  "patient_sex": "male",
+  "patient_name": "Abukari Yakubu",
   "ccs_category": "Toxicology / Critical Care",
-  "chief_complaint": "Found unconscious, cherry-red skin, metabolic acidosis",
+  "chief_complaint": "Found unconscious after house fire, cherry-red skin",
   "case_summary": null,
   "decoys": [],
   "distractors": [],
   "stacks": [
     {
-      "label": "ABG / Lactate / BMP",
+      "label": "Arterial blood gases",
       "type": "correctlyOrdered",
-      "finding": "High AG metabolic acidosis, elevated lactate.",
+      "finding": "Partially compensated metabolic acidosis. PaO2 normal despite tissue hypoxia (cyanide blocks O2 utilization, not delivery).",
       "aliases": [
-        "ABG"
+        "ABG",
+        "arterial blood gas"
       ]
     },
     {
-      "label": "Hydroxocobalamin IV",
+      "label": "Lactate, serum",
       "type": "correctlyOrdered",
-      "finding": "First-line. Binds cyanide.",
+      "finding": "Markedly elevated (>10 mmol/L). High lactate with normal carboxyhemoglobin points to cyanide over CO poisoning.",
       "aliases": [
-        "Cyanokit"
+        "lactate",
+        "lactic acid"
       ]
     },
     {
-      "label": "100% O2",
+      "label": "Carbon monoxide, blood",
       "type": "correctlyOrdered",
-      "finding": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
+      "finding": "Carboxyhemoglobin ~10% (mildly elevated, not enough to explain severe acidosis).",
       "aliases": [
-        "O2"
+        "CO level",
+        "carboxyhemoglobin"
       ]
     },
     {
-      "label": "Supportive care",
+      "label": "Comprehensive metabolic profile",
       "type": "correctlyOrdered",
-      "finding": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
+      "finding": "High anion gap metabolic acidosis. Assess renal function, electrolytes, glucose.",
       "aliases": [
-        "O2"
+        "BMP",
+        "CMP",
+        "metabolic panel"
+      ]
+    },
+    {
+      "label": "Electrocardiography, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "Sinus tachycardia. Evaluate for arrhythmias or ischemic changes from hypoxia.",
+      "aliases": [
+        "ECG",
+        "EKG",
+        "12-lead"
+      ]
+    },
+    {
+      "label": "100% O2 via non-rebreather",
+      "type": "correctlyOrdered",
+      "finding": "Maximize oxygen delivery. Displace CO from hemoglobin. Supportive for cyanide toxicity.",
+      "aliases": [
+        "oxygen",
+        "O2",
+        "non-rebreather"
+      ]
+    },
+    {
+      "label": "Intubation, endotracheal",
+      "type": "correctlyOrdered",
+      "finding": "Airway protection in unconscious patient with high suspicion for cyanide poisoning. Secure before deterioration.",
+      "aliases": [
+        "intubate",
+        "ET tube",
+        "mechanical ventilation"
+      ]
+    },
+    {
+      "label": "Intravenous access",
+      "type": "correctlyOrdered",
+      "finding": "Two large-bore IV lines for fluids and medications.",
+      "aliases": [
+        "IV",
+        "IV line",
+        "IV access"
+      ]
+    },
+    {
+      "label": "IV fluids (Normal saline / Lactated Ringer)",
+      "type": "correctlyOrdered",
+      "finding": "Fluid resuscitation for hypotension and support of hemodynamics in cyanide poisoning.",
+      "aliases": [
+        "fluids",
+        "saline",
+        "LR",
+        "crystalloid"
+      ]
+    },
+    {
+      "label": "Hydroxocobalamin IV (Cyanokit)",
+      "type": "correctlyOrdered",
+      "finding": "First-line antidote. Binds cyanide to form cyanocobalamin (renally excreted). Give 5g IV. Repeat if no rapid improvement; third dose with sodium thiosulfate.",
+      "aliases": [
+        "Cyanokit",
+        "vitamin B12",
+        "B12 therapy",
+        "antidote"
       ]
     },
     {
       "label": "Admit to ICU",
       "type": "correctlyOrdered",
-      "finding": "Critical care monitoring.",
+      "finding": "Critical care monitoring for cyanide poisoning. Intubated patient needs ventilator management.",
       "aliases": [
-        "ICU"
+        "ICU",
+        "intensive care"
       ]
     }
   ],
   "order_sets": [
-    "ABG / Lactate / BMP",
-    "Hydroxocobalamin IV",
-    "100% O2",
-    "Supportive care",
+    "Arterial blood gases",
+    "Lactate, serum",
+    "Carbon monoxide, blood",
+    "Comprehensive metabolic profile",
+    "Electrocardiography, 12 lead",
+    "100% O2 via non-rebreather",
+    "Intubation, endotracheal",
+    "Intravenous access",
+    "IV fluids (Normal saline / Lactated Ringer)",
+    "Hydroxocobalamin IV (Cyanokit)",
     "Admit to ICU"
   ],
   "complete": true,

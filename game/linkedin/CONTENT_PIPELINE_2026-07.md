@@ -1,10 +1,12 @@
-# Immersa / MeWorld — Monthly Content Pipeline (July 2026)
+# Immersa / MeWorld — Content Pipeline (July - August 2026)
 
-**One document, two jobs:**
-1. **The signature** — every post we have written so far, plus the distilled voice and the selling arc, so the pattern is explicit.
-2. **The pipeline** — a full month of LinkedIn posts (4 weeks, 16 posts) built on that signature, structured to *sell the better learning platform over a period*, not in a single pitch.
+**Two-month spread. Starting Wed July 1, ending Fri August 14. Cadence: Mon / Wed / Fri.**
+
+This file is the source of truth for the 20-post pipeline, now spread across 6.5 weeks.
 
 This file is meant to be uploaded to Claude for refinement. The refine prompt is at the very bottom.
+
+**Last rescheduled: 2026-06-30 — spread from 1 month to 2 months. First post: Wed Jul 1. Last: Fri Aug 14.**
 
 Source of truth this was built from (do not contradict): `AGENT_HANDOFF.md` (product + pillars), `VOICE_AND_FORMAT.md` (voice rules), `CONTENT_BACKLOG.md` (idea bank), `MEWORLD_FOUR_LAYER_FRAMEWORK.md` (positioning layers). Every product claim below traces to a shipped feature in `AGENT_HANDOFF.md` section 3.
 
@@ -44,7 +46,7 @@ Read the corpus in section 3 and you will see the same machine every time:
 
 Bold below is shown as markdown `**`; in production it is posted as Unicode bold (or a `<strong>` tag if edited in the Postiz UI).
 
-### LIVE / scheduled — week of Jun 29 (this is the template week: problem → demo → answer)
+### LIVE / scheduled — starting Jul 1 (rescheduled to 2-month spread)
 
 **[MON Jun 29 · MW · screenshot-demo · image: case library]**
 > Imagine you are in a simulated hospital **where everything feels real**, and as a physician, you move through cases that react to your decisions in real time. You treat what you find, and an experienced attending guides you while using real numbers and real scenarios. The patients respond to how you act, just like in the real world, but now you are in a safe space where you can learn and make mistakes.
@@ -118,54 +120,47 @@ We do not pitch once. We move the reader through four acts over four weeks. Each
 
 | Act / Week | Reader goes from → to | Job of the week | Pillar weight |
 |------------|----------------------|-----------------|---------------|
-| **I — The Problem** (Jul 6) | "med ed is fine" → "the gap between knowing and doing is real, and it's dangerous" | Agitate. Establish credibility. No selling yet. | PB heavy, 1 MW teaching |
-| **II — The Mechanism** (Jul 13) | "interesting problem" → "this specific thing is different from a quiz app" | Show the magic: the attending, the depth dial, the deterioration, Interpret. | MW heavy |
-| **III — Proof for Anyone** (Jul 20) | "looks cool for med students" → "this is rigorous and it works for anyone" | Range + pure-value teaching + build-in-public credibility. | MW + 1 SC |
-| **IV — The Bigger Game** (Jul 27) | "nice product" → "this is a movement worth following / trying" | Why it matters: trust, legacy, scale. Soft CTA. | BZ, SC, PB close |
+| **I — The Problem** (Jul 10-17) | "med ed is fine" → "the gap between knowing and doing is real, and it's dangerous" | Agitate. Establish credibility. No selling yet. | PB heavy, 1 MW teaching |
+| **II — The Mechanism** (Jul 20-27) | "interesting problem" → "this specific thing is different from a quiz app" | Show the magic: the attending, the depth dial, the deterioration, Interpret. | MW heavy |
+| **III — Proof for Anyone** (Jul 29 - Aug 5) | "looks cool for med students" → "this is rigorous and it works for anyone" | Range + pure-value teaching + build-in-public credibility. | MW + 1 SC |
+| **IV — The Bigger Game** (Aug 7-14) | "nice product" → "this is a movement worth following / trying" | Why it matters: trust, legacy, scale. Soft CTA. | BZ, SC, PB close |
 
-The week of Jun 29 (section 3) already runs this arc in miniature — problem (Tue), demos (Mon/Thu), answer (Fri). The month widens it.
+The week of Jul 1-8 (posts 1-4) runs the Jun 29 mini-arc — problem (Fri Jul 3), demos (Wed Jul 1, Mon Jul 6), answer (Wed Jul 8). Then the main 16-post arc spans Jul 10 to Aug 14.
 
 ---
 
-## 5. The pipeline — 16 posts, 4 per week
+## 5. The pipeline — 20 posts over 2 months
 
-Cadence: **Mon, Tue, Thu, Fri at 09:00 ET (13:00 UTC)**, matching the current schedule. Each post: pillar, type, draft hook (refine in Claude), the beat, the asset (have / needs capture), and its job in the arc. Every product claim is grounded in `AGENT_HANDOFF.md` §3.
+Cadence: **Mon / Wed / Fri at 09:00 ET (13:00 UTC)**. Starting Wed July 1, ending Fri August 14.
 
-### WEEK 1 — Act I: The Problem (week of Jul 6)
+### New Schedule (rescheduled 2026-06-30)
 
-| Day | Pillar | Type | Draft hook | Beat | Asset | Arc job |
-|-----|--------|------|-----------|------|-------|---------|
-| Mon Jul 6 | PB | worldview | "You can pass every exam and still freeze on your first real shift." | The gap between recall and judgment. Name it from lived experience. | text (or portrait) | Open the wound |
-| Tue Jul 7 | PB | worldview | "I trained in a system that rewards memorizing over understanding." | Origin story: why this frustration started everything. | text | Credibility / why me |
-| Thu Jul 9 | MW | teaching (pure value) | "Hypotension without hypovolemia. Why fluids sometimes do nothing." | Teach the mechanism the way the attending would. No product mention. Use `immersa-explainer` skill. | attending screenshot or none | Prove he thinks in mechanisms |
-| Fri Jul 10 | PB→MW | worldview/bridge | "There is no practice round in medicine. So I'm building one." | Short. First naming of the solution. Hands off to Act II. | bedside scene (command UI closed) | Turn toward the answer |
+| # | Day | Date | Slot | Pillar | Image |
+|---|-----|------|------|--------|-------|
+| 1 | Wed | Jul 1 | Simulated hospital | MW | case library |
+| 2 | Fri | Jul 3 | No practice round | PB | text |
+| 3 | Mon | Jul 6 | Sore throat ER case | MW | sore throat |
+| 4 | Wed | Jul 8 | Immersa changes that | MW | text |
+| 5 | Fri | Jul 10 | Pass the exam (Act I) | PB | text |
+| 6 | Mon | Jul 13 | Trained to memorize | PB | text |
+| 7 | Wed | Jul 15 | Hypotension mechanism | MW | text |
+| 8 | Fri | Jul 17 | No practice round, built one | MW | bedside |
+| 9 | Mon | Jul 20 | Attending reads labs (Act II) | MW | attending full |
+| 10 | Wed | Jul 22 | Two teachers | MW | attending brief |
+| 11 | Fri | Jul 24 | Patient deteriorates | MW | text |
+| 12 | Mon | Jul 27 | Interpret button | MW | text |
+| 13 | Wed | Jul 29 | 13yo + physician (Act III) | MW | case library |
+| 14 | Fri | Jul 31 | EKG at K 6.2 | MW | text |
+| 15 | Mon | Aug 3 | Not only hearts and labs | MW | text |
+| 16 | Wed | Aug 5 | One order log | SC | command UI |
+| 17 | Fri | Aug 7 | Deterministic core (Act IV) | MW | text |
+| 18 | Mon | Aug 10 | Documenting how I think | BZ | text |
+| 19 | Wed | Aug 12 | Build document handoff | SC | text |
+| 20 | Fri | Aug 14 | Built so next doctor doesn't have to | PB | case library |
 
-### WEEK 2 — Act II: The Mechanism (week of Jul 13)
+The four-act selling arc stays intact, now spread across 6.5 weeks instead of 4.
 
-| Day | Pillar | Type | Draft hook | Beat | Asset | Arc job |
-|-----|--------|------|-----------|------|-------|---------|
-| Mon Jul 13 | MW | screenshot-demo | "Ask my AI attending why she's crashing. It answers from her actual labs." | Live case ledger: it reads *this* patient's vitals/labs in real time and remembers the conversation. | attending chat (Full arc) | The core magic |
-| Tue Jul 14 | MW | screenshot-demo | "Same question. Two teachers. Watch the answer change." | Depth dial + teaching leans. One line vs full arc, your choice. (Already drafted — see corpus.) | attending Brief + Full arc (dual) | It adapts to you |
-| Thu Jul 16 | MW | screenshot-demo | "Get it wrong and the patient gets worse. On purpose." | Deterministic trajectory + patient life bar. The LLM explains; physiology decides. | NEEDS CAPTURE: patient life bar declining / monitor | Real stakes = real learning |
-| Fri Jul 17 | MW | screenshot-demo | "Tap Interpret. The attending reads those exact values against this patient." | The Interpret button on a lab card; explanation logged to chat. | NEEDS CAPTURE: result card + Interpret | Learning at the point of confusion |
-
-### WEEK 3 — Act III: Proof for Anyone (week of Jul 20)
-
-| Day | Pillar | Type | Draft hook | Beat | Asset | Arc job |
-|-----|--------|------|-----------|------|-------|---------|
-| Mon Jul 20 | MW | worldview | "A 13 year old and a physician can walk the same case. Both learn." | The model generalizes. Understanding scales down and up. | case library | It's not just for med students |
-| Tue Jul 21 | MW | teaching (pure value) | "What the EKG shows at potassium 6.2." | Hyperkalemia ECG stages, taught cleanly. Pure value, depth of the engine. | NEEDS CAPTURE: ECG / monitor at K+ 6.2 | Rigor on display |
-| Thu Jul 23 | MW | screenshot-demo | "Medicine is not only hearts and labs." | Psychiatry / social cases; the patient that stays in character and lets you miss the person. (Held post — swap the sensitive image first.) | swap to non-sensitive psych/social or patient-chat | Range into the human cases |
-| Fri Jul 24 | SC | build-in-public | "One order log. Every screen reads from it." | The system underneath: one source of truth drives chart, exam, results, attending. Not a demo, a system. | command UI | It's real infrastructure |
-
-### WEEK 4 — Act IV: The Bigger Game (week of Jul 27)
-
-| Day | Pillar | Type | Draft hook | Beat | Asset | Arc job |
-|-----|--------|------|-----------|------|-------|---------|
-| Mon Jul 27 | MW | build-in-public | "Deterministic core, narrative shell." | The trust argument: the LLM never decides whether potassium rose. Physiology does; the LLM explains. | text / simple diagram | Why you can trust it |
-| Tue Jul 28 | BZ | legacy | "I'm documenting how I think, not just what I build." | The blueprint the next generation inherits. The why beneath the why. | text | The deeper why |
-| Thu Jul 30 | SC | scale | "Build it. Document it. Hand it off." | Systems that run without the founder. The long game (9 years, not 70). | text | The operator's horizon |
-| Fri Jul 31 | PB | worldview + soft CTA | "I trained to memorize. I'm building so the next doctor doesn't have to." | Close the month. Tie back to Jul 6. Invite: try Immersa / follow the build (link in first comment). | case library or hero shot | The ask |
+Postiz IDs saved to `C:\dev\Schedular\logs\rescheduled-aug14-ids.json`.
 
 ---
 
@@ -207,3 +202,46 @@ This pipeline draws from `CONTENT_BACKLOG.md`: #8 (Jul 6), #7/#13 (Jul 7), #15 (
 > 5. Keep most posts 80–200 words. Teaching posts can run longer; demo posts shorter.
 >
 > Then propose: (a) any hook A/B variants worth testing, (b) which 3 posts are the strongest "hero" posts to boost, and (c) what is missing to make this convert (CTA, lead magnet, first-comment strategy).
+
+---
+
+## 9. Postiz IDs (rescheduled 2026-06-30 — v2: 32 posts with case demos)
+
+**Cadence: Mon-Fri. Narrative posts Mon/Wed/Fri. Case demos Tue/Thu.**
+
+```
+cmr0pljy2001a1tw4ky0pw2c7  Jul 1   Simulated hospital (NARR)
+cmr0pljys001b1tw42gos3zd8  Jul 3   No practice round (NARR)
+cmr0pljzd001c1tw4sivl33tv  Jul 6   Sore throat (NARR)
+cmr0pljzz001d1tw4taxedgb3  Jul 7   CASE: Tension Pneumothorax
+cmr0plk0m001e1tw4evd9tt4r  Jul 8   Immersa changes that (NARR)
+cmr0plk1e001f1tw41lu14qzm  Jul 9   CASE: NPH (Reversible Dementia)
+cmr0plk23001g1tw4aa7zkk2l  Jul 10  Pass the exam (NARR)
+cmr0plk2q001h1tw487zwba74  Jul 13  Trained to memorize (NARR)
+cmr0plk3d001i1tw4f5l0wbpx  Jul 14  CASE: IBS
+cmr0plk41001j1tw4n9ed73uy  Jul 15  Hypotension mechanism (NARR)
+cmr0plk4q001k1tw4qgiv2jds  Jul 16  CASE: TCA Overdose
+cmr0plk5c001l1tw4ac0g5d81  Jul 17  No practice round, built one (NARR)
+cmr0plk61001m1tw44b76gdvl  Jul 20  Attending reads labs (NARR)
+cmr0plk6j001n1tw4a8iekgm1  Jul 21  CASE: Pre-Eclampsia
+cmr0plk71001o1tw43493n4ti  Jul 22  Two teachers (NARR)
+cmr0plk7j001p1tw4ahu9p53l  Jul 23  CASE: Pancreatic Adenocarcinoma
+cmr0plk84001q1tw4tnerzjvd  Jul 24  Patient deteriorates (NARR)
+cmr0plk8r001r1tw4lfh7ktac  Jul 27  Interpret button (NARR)
+cmr0plk9b001s1tw4ose5cv95  Jul 28  CASE: Sickle Cell + ACS
+cmr0plk9t001t1tw49ax8ytfg  Jul 29  13yo + physician (NARR)
+cmr0plkaa001u1tw447m60k83  Jul 30  CASE: Graves vs Panic
+cmr0plkat001v1tw4ls5nft6f  Jul 31  EKG at K 6.2 (NARR)
+cmr0plkbc001w1tw4dlh3sfdp  Aug 3   Not only hearts and labs (NARR)
+cmr0plkbu001x1tw4ivsz28dv  Aug 4   CASE: Pericarditis
+cmr0plkcd001y1tw4hb3se8xx  Aug 5   One order log (NARR)
+cmr0plkcv001z1tw49ye7tph9  Aug 6   CASE: Hodgkin Lymphoma
+cmr0plkdb00201tw4qvd0icvl  Aug 7   Deterministic core (NARR)
+cmr0plkdt00211tw4418ho1my  Aug 10  Documenting how I think (NARR)
+cmr0plkea00221tw4p5dyf8ht  Aug 11  CASE: Hypertensive Emergency
+cmr0plkeq00231tw4p7dp3vgr  Aug 12  Build document handoff (NARR)
+cmr0plkf500241tw4horxms6s  Aug 13  CASE: Duodenal Ulcer + IDA
+cmr0plkfn00251tw4qoct31xy  Aug 14  Built so next doctor (NARR)
+```
+
+**Total: 32 posts. 20 narrative (Mon/Wed/Fri) + 12 case demos (Tue/Thu) over 6.5 weeks, Jul 1 - Aug 14.**

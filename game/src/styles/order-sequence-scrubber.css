@@ -124,19 +124,39 @@
 .oss-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
   background: #e8b84b;
   border: 2px solid rgba(10,10,16,0.9);
   box-shadow: 0 0 0 2px rgba(232,184,75,0.4), 0 2px 8px rgba(0,0,0,0.4);
   cursor: grab;
   transition: box-shadow 0.15s;
+  /* Tablet icon via data URI SVG */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23101016' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='2' width='16' height='20' rx='2' ry='2'/%3E%3Cline x1='12' y1='18' x2='12.01' y2='18'/%3E%3C/svg%3E");
+  background-size: 14px 14px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .oss-slider::-webkit-slider-thumb:active {
   cursor: grabbing;
   box-shadow: 0 0 0 4px rgba(232,184,75,0.5), 0 2px 12px rgba(0,0,0,0.5);
+}
+
+/* Firefox thumb */
+.oss-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: #e8b84b;
+  border: 2px solid rgba(10,10,16,0.9);
+  box-shadow: 0 0 0 2px rgba(232,184,75,0.4), 0 2px 8px rgba(0,0,0,0.4);
+  cursor: grab;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23101016' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='2' width='16' height='20' rx='2' ry='2'/%3E%3Cline x1='12' y1='18' x2='12.01' y2='18'/%3E%3C/svg%3E");
+  background-size: 14px 14px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .oss-ticks {

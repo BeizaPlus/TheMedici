@@ -1,0 +1,34 @@
+﻿{
+    "4":  {
+              "inputs":  {
+                             "format":  "mp4",
+                             "codec":  "h264",
+                             "filename_prefix":  "U15-DKA-genie",
+                             "video":  [
+                                           "3",
+                                           0
+                                       ]
+                         },
+              "class_type":  "SaveVideo"
+          },
+    "1":  {
+              "inputs":  {
+                             "image":  "U15-DKA-pancreas-genie-v2.png"
+                         },
+              "class_type":  "LoadImage"
+          },
+    "3":  {
+              "inputs":  {
+                             "prompt":  "A Black woman with copper-red afro in hospital gown holds and rubs an anatomical pancreas like a genie lamp. The pancreas glows faintly but produces nothing. Dark clinical moody lighting, cinematic.",
+                             "duration":  5,
+                             "mode":  "pro",
+                             "model_name":  "kling-v2-6",
+                             "start_frame":  [
+                                                 "1",
+                                                 0
+                                             ],
+                             "generate_audio":  false
+                         },
+              "class_type":  "KlingImageToVideoWithAudio"
+          }
+}

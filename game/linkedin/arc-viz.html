@@ -213,6 +213,8 @@
   .reader-wrap.collapsed { opacity: 0; flex: 0; min-height: 0; }
   .reader { background: var(--bg-subtle); border-radius: 16px; box-shadow: var(--shadow); padding: 20px; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
   .reader-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .reader-video { margin-bottom: 12px; border-radius: 10px; overflow: hidden; background: #000; flex-shrink: 0; }
+  .reader-video video { display: block; width: 100%; max-height: 320px; object-fit: contain; border-radius: 10px; }
   .act-badge { font-size: 9px; padding: 3px 10px; border-radius: 14px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; flex-shrink: 0; }
   .reader-spine-context { font-size: 0.65rem; color: var(--text-muted); font-weight: 400; font-style: italic; letter-spacing: -0.01em; flex-shrink: 0; }
   .reader-edit-btn { width: 28px; height: 28px; border-radius: 50%; border: 0.5px solid var(--border); background: var(--bg); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.15s; flex-shrink: 0; }
@@ -474,6 +476,7 @@
         <span class="act-badge" id="r-act"></span>
         <span class="reader-spine-context" id="r-spine-context"></span>
       </div>
+      <div class="reader-video" id="r-video" style="display:none"><video id="r-video-player" controls playsinline></video></div>
       <div class="read-toggle-bar" id="read-toggle-bar" style="display:none">
         <span class="read-toggle-label">Text</span>
         <button class="read-toggle-btn active" id="read-toggle-orig" onclick="switchReadMode('original')">Original</button>
@@ -551,9 +554,12 @@ const posts = [
   { date:"Thu Jul 16", act:"The missing link", spineIdx:10, spine:"Medicine never had a sandbox.", body:"Medicine never had a sandbox.\n\nEvery other craft that produces mastery has one. Artists have sketchbooks. Musicians have practice rooms. Pilots have simulators. Athletes have training grounds where the consequence of a mistake is a lost rep, not a lost life.\n\nMedicine has textbooks and then a real patient.\n\nThat gap is not a gap in knowledge. It is a gap in reps. And you cannot close a reps gap by reading more. You close it by doing more. In a space where the doing is safe.\n\nThat room just was not there.\n\nAnd once I saw that clearly, I could not look away from it. Because the implications were enormous. Every doctor who ever froze at a bedside. Every hesitation that cost someone something. Traced back to the same missing thing.\n\nThe sandbox that nobody built." },
   { date:"Fri Jul 17", act:"Cannot ignore it", spineIdx:11, spine:"Once I saw that, I could not ignore it.", body:"Once I saw that, I could not ignore it.\n\nNot because I am particularly noble. But because I had lived on both sides of it. I knew what learning felt like when the feedback was real and immediate and safe. And I knew what it felt like when it was not.\n\nAnd the difference was not small. The difference was the difference between moving with conviction and moving with fear.\n\nMastery comes from doing. From failing and trying again, fast, in a space that can hold the failure. That is not a philosophy. That is just how humans learn things. It is how Caleb learned. It is how I learned to draw. It is how pilots learn to land.\n\nMedicine had decided it was exempt from that rule.\n\nIt is not." },
   { date:"Mon Jul 20", act:"Building the room", spineIdx:12, spine:"So I built the room.", body:"So I built the room.\n\nNot a question bank. Not a flashcard app. Not another way to memorize pathways.\n\nA room. With a patient in it. A real case, a real history, real numbers on a real monitor. And a clock that moves whether you are ready or not. Because in medicine the clock always moves.\n\nYou walk in. You talk to the patient. You order the labs. You read what comes back. You treat what you find. And an AI attending teaches you while you work, using the actual numbers in front of you.\n\nNot a textbook case. This case. This patient. This potassium of 6.2 at this moment in this presentation.\n\nAnd if you get it wrong, something happens. The pressure keeps falling. The rhythm changes. The physiology responds the way real physiology does.\n\nBecause consequences are the teacher. And this room can hold them." },
+  { date:"Wed Jul 22", act:"The Build: DKA", spineIdx:12, spine:"So I built the room.", video:"HHS_DKA.mp4", body:"I needed a first case. Something that tests whether the room actually works.\n\nYaw Boateng is 22. No medical history. She walks into the ER with abdominal pain, vomiting for two days, and she cannot stay awake. The point-of-care glucose reads north of 600.\n\nHer pancreas has stopped making insulin.\n\nIn DKA, the body turns to fat for fuel because glucose cannot enter the cells. The fat breaks down into ketones. The ketones make the blood acidic. The kidneys try to compensate but cannot keep up. The breathing gets deep and fast. The mucous membranes go dry. And the abdominal pain \u2014 classic DKA presentation \u2014 mimics an acute surgical abdomen so well that inexperienced clinicians order CT scans instead of insulin.\n\nI built this case as a timed room. The glucose is high. The anion gap is open. The potassium is borderline. And the clock is ticking.\n\nThe video below is the visual metaphor. A pancreas that should be pouring out insulin but produces nothing. You stroke it. You wait. Nothing comes out.\n\nBecause in DKA, the organ is present but silent.\n\nThis is the first case in the room. Real physiology. Real consequences. No textbook chapter." },
   { date:"Tue Jul 21", act:"What the room looks like", spineIdx:13, spine:"You do not choose a topic. You choose a patient.", body:"You do not choose a topic. You choose a patient.\n\nTom Hayes is in the resuscitation bay. Sarah Mensah is three days post-op and her numbers are moving in the wrong direction. An elderly man comes in with a sore throat that is not a sore throat.\n\nYou walk in. You work the case. Emergency, ICU, ward. Timed cases that move whether you are ready or not.\n\nAnd the library does not run out. Because that is the other thing about reps. You need volume. You need to see cardiomyopathy presenting as crackles enough times that your hands know before your mind catches up. You need to see the sore throat that is an airway closing. You need to have been in that room before the day it matters.\n\nThis is that room. Before the day it matters." },
   { date:"Thu Jul 23", act:"The attending", spineIdx:14, spine:"An AI attending teaches while you work, using the actual numbers in front of you.", body:"An AI attending teaches while you work, using the actual numbers in front of you.\n\nNot a textbook paragraph. Not a generic explanation of what pulmonary edema is. It reads this patient's vitals, this patient's results, what you have already ordered, and it teaches from there.\n\nWhy is she still hypotensive after fluids? It looks at the pressure that will not budge and walks you to the answer. The vessels are open. She needs tone, not more volume.\n\nIt remembers what you asked five minutes ago. It teaches the case in front of you, not a generic one.\n\nCaleb never taught me from a manual. He taught me from the problem we were both looking at. That is the difference. The teaching that sticks is always attached to something real." },
+  { date:"Sat Jul 25", act:"The Build: Teaching", spineIdx:14, spine:"An AI attending teaches while you work, using the actual numbers in front of you.", body:"The AI attending does not just explain DKA. It explains Yaw Boateng\u2019s DKA.\n\nHer glucose is 642. Her sodium is 134. Her potassium is 4.8. Her anion gap is 28.\n\nThe attending reads the numbers in front of you and teaches from there:\n\nFirst \u2014 fluids. She is profoundly dehydrated. Normal saline, wide open. The fluid alone will bring her glucose down before a single unit of insulin.\n\nThen \u2014 potassium. Check it before the insulin goes in, because insulin drives potassium into cells and if her K drops below 3.5 on the drip she could arrest. Her K is 4.8 now. That is safe. Start the insulin.\n\nThen \u2014 watch the anion gap. Do not watch the glucose. The glucose will normalize before the gap closes. If you stop the insulin when the glucose hits 200, the ketosis continues and she drifts back into acidosis. The gap is the true marker of resolution.\n\nThe attending does not lecture on DKA. It teaches the patient in front of you. The potassium of 4.8. The gap of 28. The decision to hold dextrose until she crosses 250.\n\nCaleb never taught from a manual. The AI attending never teaches from a textbook. It teaches from the numbers that are actually on your screen.\n\nAnd it remembers what you asked three minutes ago." },
   { date:"Fri Jul 24", act:"Getting it wrong", spineIdx:15, spine:"Get it wrong and the patient gets worse. On purpose.", body:"Get it wrong and the patient gets worse. On purpose.\n\nIn most medical education, a wrong answer turns red and you move on. Nothing happens to anyone. The stakes are always zero.\n\nBut zero stakes produce zero learning at the level that matters.\n\nHere, something happens. Miss the bleed and the pressure keeps falling. Push the wrong drug and the rhythm changes. The physiology responds the way biology says it must.\n\nAnd you remember it. Not because someone told you it was wrong. Because you watched it cost something.\n\nThat is how Caleb taught me. Not by correcting my mistakes from a distance. By letting me see what the mistake produced. The joint that did not hold. The line that was not true. The consequence was the lesson.\n\nThe room that can hold your failures is the room where you actually learn." },
+  { date:"Sun Jul 26", act:"The Build: What Wrong Looks Like", spineIdx:15, spine:"Get it wrong and the patient gets worse. On purpose.", body:"Here is what happens when you miss DKA.\n\nYou see abdominal pain. You order a CT abdomen with contrast. The patient waits. The glucose stays in the 600s. The ketones keep rising. The gap widens. By the time the CT comes back negative, she is four hours deeper into acidosis.\n\nOr you see the leukocytosis and start antibiotics. DKA causes leukocytosis from catecholamine release and dehydration \u2014 not infection. The white count does not mean sepsis. It means her body is stressed. You just bought an infectious workup for a metabolic problem.\n\nOr you give dextrose. Glucose is 600 but the protocol says D5 for all. And you watch the numbers climb.\n\nThe room does not stop you from making these calls. It lets you make them. And then it shows you what the physiology does in response.\n\nThat is the difference between a question bank and a sandbox. A question bank tells you you are wrong. A sandbox lets you watch the consequence unfold and live inside it long enough to feel it.\n\nThe first time I ran Yaw\u2019s case and gave dextrose before checking potassium, I watched the ECG flatten on the monitor. I knew the physiology. But knowing it and watching it are not the same thing.\n\nThat is the room. Not safe in the way a textbook is safe. Safe in the way a simulator is safe. You feel the cost without paying it." },
   { date:"Mon Jul 27", act:"Both audiences", spineIdx:16, spine:"A 13 year old and a physician can walk the same case. Both should learn something.", body:"A 13 year old and a physician can walk the same case. Both should learn something.\n\nThat is my test for whether the teaching is right.\n\nIf the only way to learn is to already have the vocabulary, it is not teaching. It is gatekeeping. And medicine has enough of that already.\n\nThe body is not a secret. It is a system. And any person willing to walk through a case and pay attention should be able to follow what is happening and why.\n\nThe AI attending reads the room. Sometimes you need one line. Sometimes the whole mechanism. You choose how deep to go. The teaching meets you where you are.\n\nThat is what Caleb did. He did not speak above me. He spoke to where my hands were. And he let the problem do most of the teaching." },
   { date:"Tue Jul 28", act:"The physiology decides", spineIdx:17, spine:"The AI explains. The physiology decides.", body:"The most important rule in the engine. The AI never decides whether the potassium rose.\n\nThe physiology decides. Vitals, electrolytes, the ECG stage, all follow explicit rules written into the case. Give the wrong treatment and the numbers move the way biology says they must. Not the way a language model thinks they should.\n\nThe AI's job is to explain, not to invent. It reads what the engine produced and teaches the mechanism behind it.\n\nThat line matters more than anything else in the build. It is the difference between a tutor you can trust and a tool that will confidently make something up.\n\nIn a sandbox for medicine, the medicine has to be real. The story can flex. The physiology cannot." },
   { date:"Thu Jul 30", act:"What I am documenting", spineIdx:18, spine:"I am documenting how I think, not just what I built.", body:"I am documenting how I think, not just what I built.\n\nAnyone can inherit a product. Few inherit the reasoning behind it. Why cases instead of flashcards. Why the physiology is fixed and the teaching is flexible. Why the patient is allowed to get worse.\n\nCaleb never just showed me the finished piece. He showed me why every decision was made. The joint, the angle, the grain of the wood. The thinking behind the hands.\n\nThat is what I want to pass on. Not the tool. The understanding of why the tool is built this way and not another way.\n\nBecause the next person who builds something like this should not have to start from zero. They should be able to start from here." },
@@ -564,21 +570,21 @@ const actColors = {
   "Two worlds":"#EEEDFE","The sandbox":"#EEEDFE","The master":"#EEEDFE","Real time feedback":"#EEEDFE",
   "Walking in":"#FAEEDA","Routinization":"#FAEEDA","The freeze":"#FAEEDA","Imposter syndrome":"#FAEEDA",
   "Ordering tests":"#E6F1FB","Defensive medicine":"#E6F1FB","The missing link":"#E6F1FB","Cannot ignore it":"#E6F1FB",
-  "Building the room":"#EAF3DE","What the room looks like":"#EAF3DE","The attending":"#EAF3DE","Getting it wrong":"#EAF3DE",
+  "Building the room":"#EAF3DE","What the room looks like":"#EAF3DE","The attending":"#EAF3DE","Getting it wrong":"#EAF3DE","The Build: DKA":"#E0F4F1","The Build: Teaching":"#E0F4F1","The Build: What Wrong Looks Like":"#E0F4F1",
   "Both audiences":"#FAECE7","The physiology decides":"#FAECE7","What I am documenting":"#FAECE7","What the next doctor deserves":"#FAECE7"
 };
 const actTexts  = {
   "Two worlds":"#26215C","The sandbox":"#26215C","The master":"#26215C","Real time feedback":"#26215C",
   "Walking in":"#633806","Routinization":"#633806","The freeze":"#633806","Imposter syndrome":"#633806",
   "Ordering tests":"#042C53","Defensive medicine":"#042C53","The missing link":"#042C53","Cannot ignore it":"#042C53",
-  "Building the room":"#27500A","What the room looks like":"#27500A","The attending":"#27500A","Getting it wrong":"#27500A",
+  "Building the room":"#27500A","What the room looks like":"#27500A","The attending":"#27500A","Getting it wrong":"#27500A","The Build: DKA":"#1B5C4E","The Build: Teaching":"#1B5C4E","The Build: What Wrong Looks Like":"#1B5C4E",
   "Both audiences":"#4A1B0C","The physiology decides":"#4A1B0C","What I am documenting":"#4A1B0C","What the next doctor deserves":"#4A1B0C"
 };
 const actColorsD = {
   "Two worlds":"#1E1B3A","The sandbox":"#1E1B3A","The master":"#1E1B3A","Real time feedback":"#1E1B3A",
   "Walking in":"#2D2010","Routinization":"#2D2010","The freeze":"#2D2010","Imposter syndrome":"#2D2010",
   "Ordering tests":"#0E1C2A","Defensive medicine":"#0E1C2A","The missing link":"#0E1C2A","Cannot ignore it":"#0E1C2A",
-  "Building the room":"#112415","What the room looks like":"#112415","The attending":"#112415","Getting it wrong":"#112415",
+  "Building the room":"#112415","What the room looks like":"#112415","The attending":"#112415","Getting it wrong":"#112415","The Build: DKA":"#0F2A25","The Build: Teaching":"#0F2A25","The Build: What Wrong Looks Like":"#0F2A25",
   "Both audiences":"#22100A","The physiology decides":"#22100A","What I am documenting":"#22100A","What the next doctor deserves":"#22100A"
 };
 
@@ -676,6 +682,19 @@ function renderReader() {
   } else {
     g("r-spine-context").textContent = "";
   }
+
+  // video embed
+  const videoEl = g("r-video");
+  const videoPlayer = g("r-video-player");
+  if (p.video) {
+    videoPlayer.src = p.video;
+    videoPlayer.load();
+    videoEl.style.display = "";
+  } else {
+    videoPlayer.pause();
+    videoPlayer.removeAttribute("src");
+    videoEl.style.display = "none";
+  }
   
   const selTake = getSelectedTake(current);
   const extraSrcs = fuseSources[current] || [];
@@ -705,8 +724,6 @@ function renderReader() {
   }
   
   g("post-num").textContent = `${current+1} of ${posts.length}`;
-  g("prev-btn").disabled = current===0;
-  g("next-btn").disabled = current===posts.length-1;
   g("reader").style.borderTop = `3px solid ${cAct(p)}`;
 
   g("status-group").innerHTML = ["draft","ready","posted"].map(s =>
@@ -831,7 +848,7 @@ function goToSpine(si) {
   const refs = posts.map((p,i) => p.spineIdx === si ? i : -1).filter(n => n >= 0);
   if (refs.length > 0) { current = refs[0]; refresh(); }
 }
-function navigate(d) { goTo(Math.max(0, Math.min(posts.length-1, current+d))); }
+function navigate(d) { goTo((current + d + posts.length) % posts.length); }
 
 function refresh() {
   renderUmbrella();

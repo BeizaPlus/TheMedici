@@ -1284,6 +1284,90 @@
           "guideline": "AAN"
         }
       ]
+    },
+    "146": {
+      "diagnosis": "Cyanide Poisoning",
+      "clinical_tip": "Cherry-red skin + house fire + high lactate + normal carboxyhemoglobin = cyanide toxicity. Hydroxocobalamin first-line.",
+      "objective": "Stabilize airway, run key labs to differentiate cyanide from CO poisoning, give antidote, admit to ICU.",
+      "interventions": [
+        {
+          "id": "abg-146",
+          "label": "Arterial blood gases",
+          "correct_zone": "zone-blood",
+          "why": "Partially compensated metabolic acidosis. PaO2 normal despite tissue hypoxia — cyanide blocks O2 utilization not delivery.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "lactate-146",
+          "label": "Lactate, serum",
+          "correct_zone": "zone-blood",
+          "why": "Markedly elevated (>10). High lactate with normal carboxyhemoglobin points to cyanide over CO poisoning.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "co-level-146",
+          "label": "Carbon monoxide, blood",
+          "correct_zone": "zone-blood",
+          "why": "Carboxyhemoglobin ~10% — mildly elevated, not enough to explain severe acidosis. Rules out primary CO poisoning.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "bmp-146",
+          "label": "Comprehensive metabolic profile",
+          "correct_zone": "zone-blood",
+          "why": "High anion gap metabolic acidosis. Assess renal function, electrolytes, glucose.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "ecg-146",
+          "label": "Electrocardiography, 12 lead",
+          "correct_zone": "zone-monitor",
+          "why": "Sinus tachycardia. Evaluate for arrhythmias or ischemic changes from hypoxia.",
+          "guideline": "AHA"
+        },
+        {
+          "id": "o2-146",
+          "label": "100% O2 via non-rebreather",
+          "correct_zone": "zone-monitor",
+          "why": "Maximize oxygen delivery. Displace CO from hemoglobin. Supportive for cyanide toxicity.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "intubation-146",
+          "label": "Intubation, endotracheal",
+          "correct_zone": "zone-custom-1",
+          "why": "Airway protection in unconscious patient with high suspicion for cyanide poisoning. Secure before deterioration.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv-access-146",
+          "label": "Intravenous access",
+          "correct_zone": "zone-arm",
+          "why": "Two large-bore IV lines for fluids and medications.",
+          "guideline": "ACEP"
+        },
+        {
+          "id": "iv-fluids-146",
+          "label": "IV fluids (Normal saline / LR)",
+          "correct_zone": "zone-iv-bag",
+          "why": "Fluid resuscitation for hemodynamic support in cyanide poisoning.",
+          "guideline": "SSC"
+        },
+        {
+          "id": "hydroxocobalamin-146",
+          "label": "Hydroxocobalamin IV (Cyanokit)",
+          "correct_zone": "zone-arm",
+          "why": "First-line antidote. Binds cyanide → cyanocobalamin (renally excreted). 5g IV. Repeat if needed; third dose with sodium thiosulfate. Avoid nitrites if CO toxicity present.",
+          "guideline": "ACMT"
+        },
+        {
+          "id": "icu-146",
+          "label": "Admit to ICU",
+          "correct_zone": "zone-icu",
+          "why": "Critical care monitoring. Intubated patient needs ventilator management. Serial lactate and ABG monitoring.",
+          "guideline": "ACEP"
+        }
+      ]
     }
   }
 }

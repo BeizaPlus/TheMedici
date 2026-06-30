@@ -4,6 +4,48 @@ import GridPlacedMarker from './GridPlacedMarker.jsx';
 import { GRID_COLS, GRID_ROWS } from '../lib/sceneGrid.js';
 import { itemAtCell } from '../lib/gridPlacement.js';
 
+/** Vertical stacking offset (px) per item within the same zone. */
+const STACK_STEP_Y = 28;
+
+/**
+ * Compute Y-only stacking offsets grouped by zone, ordered by placementOrder.
+ * Items in the same zone stack vertically so all labels are visible.
+ * Falls back to grid-cell repulsion for items without a zone.
+ */
+function computeStackingOffsets(items) {
+  const offsets = {};
+
+  // Group items by zone id
+  const zoneGroups = {};
+  const noZoneItems = [];
+  for (const item of items) {
+    if (item.zoneId) {
+      if (!zoneGroups[item.zoneId]) zoneGroups[item.zoneId] = [];
+      zoneGroups[item.zoneId].push(item);
+    } else {
+      noZoneItems.push(item);
+    }
+  }
+
+  // Zone-grouped: Y-only stacking sorted by placementOrder
+  for (const group of Object.values(zoneGroups)) {
+    group.sort((a, b) => (a.placementOrder ?? 0) - (b.placementOrder ?? 0));
+    for (let i = 0; i < group.length; i++) {
+      offsets[group[i].id] = { x: 0, y: i * STACK_STEP_Y };
+    }
+  }
+
+  // Items without a zone: use grid-cell repulsion (original behavior)
+  if (noZoneItems.length > 0) {
+    const repulsionOffsets = computeRepulsionOffsets(noZoneItems);
+    for (const [id, off] of Object.entries(repulsionOffsets)) {
+      offsets[id] = off;
+    }
+  }
+
+  return offsets;
+}
+
 /** Collision-detection repulsion: auto-separate overlapping labels in the same cell. */
 function cellKey(col, row) { return `${col}-${row}`; }
 
@@ -115,7 +157,7 @@ export default function GridPlacementLayer({
   onRemove,
   onItemClick,
 }) {
-  const repulsionOffsets = useMemo(() => computeRepulsionOffsets(items), [items]);
+  const stackingOffsets = useMemo(() => computeStackingOffsets(items), [items]);
 
   const handleCell = (cell) => {
     if (selectedId && onMove) {
@@ -149,8 +191,8 @@ export default function GridPlacementLayer({
           cols={cols}
           rows={rows}
           selected={item.id === selectedId}
-          offsetX={repulsionOffsets[item.id]?.x ?? 0}
-          offsetY={repulsionOffsets[item.id]?.y ?? 0}
+          offsetX={stackingOffsets[item.id]?.x ?? 0}
+          offsetY={stackingOffsets[item.id]?.y ?? 0}
           onClick={(e) => {
             e.stopPropagation();
             if (onItemClick) {

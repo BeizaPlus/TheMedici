@@ -3,8 +3,8 @@
   "topic": "Found Unconscious",
   "title": "Found Unconscious",
   "diagnosis": "Cyanide Poisoning",
-  "hpi_narrative": "{{patient_name}} presents found unconscious with cherry-red skin, bitter almond breath odor (only 40% can detect), high anion gap metabolic acidosis, and elevated lactate. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks oxidative phosphorylation → cells cannot use oxygen → tissue hypoxia despite normal PaO2 → anaerobic metabolism → lactic acidosis. Sources: smoke inhalation (burning plastics/wool), industrial exposure, sodium nitroprusside infusion. Treatment: hydroxocobalamin (Cyanokit — first-line, binds cyanide to form cyanocobalamin which is renally excreted). Alternative: sodium nitrite + sodium thiosulfate (older regimen, risk of methemoglobinemia). Supportive: 100% oxygen, airway management, IVF, vasopressors if needed. Admit to ICU.",
-  "chief_complaint": "Found unconscious, cherry-red skin, metabolic acidosis",
+  "hpi_narrative": "{{patient_name}} presents found unconscious with cherry-red skin after being pulled from a burning building with dense acrid smoke. Cyanide inhibits cytochrome c oxidase (Complex IV of ETC) → blocks oxidative phosphorylation → cells cannot use oxygen → tissue hypoxia despite normal PaO2 → anaerobic metabolism → lactic acidosis. Sources: smoke inhalation (burning plastics/wool/synthetics), industrial exposure, sodium nitroprusside infusion. Treatment: hydroxocobalamin (Cyanokit — first-line, binds cyanide to form cyanocobalamin which is renally excreted). Alternative: sodium nitrite + sodium thiosulfate (older regimen, risk of methemoglobinemia). Avoid amyl/sodium nitrite if concurrent CO toxicity. Supportive: 100% oxygen, airway management/intubation, IVF, vasopressors if needed. Admit to ICU.",
+  "chief_complaint": "Found unconscious after house fire, cherry-red skin",
   "patient": null,
   "patient_name": "Abukari Yakubu",
   "patient_sex": "male",
@@ -12,56 +12,83 @@
   "specialty": "Toxicology / Critical Care",
   "stacks": [
     {
-      "label": "ABG / Lactate / BMP",
+      "label": "Arterial blood gases",
       "type": "correctlyOrdered",
-      "finding": "High AG metabolic acidosis, elevated lactate.",
-      "aliases": [
-        "ABG"
-      ]
+      "finding": "Partially compensated metabolic acidosis. PaO2 normal despite tissue hypoxia (cyanide blocks O2 utilization, not delivery).",
+      "aliases": ["ABG", "arterial blood gas"]
     },
     {
-      "label": "Hydroxocobalamin IV",
+      "label": "Lactate, serum",
       "type": "correctlyOrdered",
-      "finding": "First-line. Binds cyanide.",
-      "aliases": [
-        "Cyanokit"
-      ]
+      "finding": "Markedly elevated (>10 mmol/L). High lactate with normal carboxyhemoglobin points to cyanide over CO poisoning.",
+      "aliases": ["lactate", "lactic acid"]
     },
     {
-      "label": "100% O2",
+      "label": "Carbon monoxide, blood",
       "type": "correctlyOrdered",
-      "finding": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
-      "aliases": [
-        "O2"
-      ]
+      "finding": "Carboxyhemoglobin ~10% (mildly elevated, not enough to explain severe acidosis).",
+      "aliases": ["CO level", "carboxyhemoglobin"]
     },
     {
-      "label": "Supportive care",
+      "label": "Comprehensive metabolic profile",
       "type": "correctlyOrdered",
-      "finding": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
-      "aliases": [
-        "O2"
-      ]
+      "finding": "High anion gap metabolic acidosis. Assess renal function, electrolytes, glucose.",
+      "aliases": ["BMP", "CMP", "metabolic panel"]
+    },
+    {
+      "label": "Electrocardiography, 12 lead",
+      "type": "correctlyOrdered",
+      "finding": "Sinus tachycardia. Evaluate for arrhythmias or ischemic changes from hypoxia.",
+      "aliases": ["ECG", "EKG", "12-lead"]
+    },
+    {
+      "label": "100% O2 via non-rebreather",
+      "type": "correctlyOrdered",
+      "finding": "Maximize oxygen delivery. Displace CO from hemoglobin. Supportive for cyanide toxicity.",
+      "aliases": ["oxygen", "O2", "non-rebreather"]
+    },
+    {
+      "label": "Intubation, endotracheal",
+      "type": "correctlyOrdered",
+      "finding": "Airway protection in unconscious patient with high suspicion for cyanide poisoning. Secure before deterioration.",
+      "aliases": ["intubate", "ET tube", "mechanical ventilation"]
+    },
+    {
+      "label": "Intravenous access",
+      "type": "correctlyOrdered",
+      "finding": "Two large-bore IV lines for fluids and medications.",
+      "aliases": ["IV", "IV line", "IV access"]
+    },
+    {
+      "label": "IV fluids (Normal saline / Lactated Ringer)",
+      "type": "correctlyOrdered",
+      "finding": "Fluid resuscitation for hypotension and support of hemodynamics in cyanide poisoning.",
+      "aliases": ["fluids", "saline", "LR", "crystalloid"]
+    },
+    {
+      "label": "Hydroxocobalamin IV (Cyanokit)",
+      "type": "correctlyOrdered",
+      "finding": "First-line antidote. Binds cyanide to form cyanocobalamin (renally excreted). Give 5g IV. Repeat if no rapid improvement; third dose with sodium thiosulfate.",
+      "aliases": ["Cyanokit", "vitamin B12", "B12 therapy", "antidote"]
     },
     {
       "label": "Admit to ICU",
       "type": "correctlyOrdered",
-      "finding": "Critical care monitoring.",
-      "aliases": [
-        "ICU"
-      ]
+      "finding": "Critical care monitoring for cyanide poisoning. Intubated patient needs ventilator management.",
+      "aliases": ["ICU", "intensive care"]
     }
   ],
   "vitals": {
-    "hr": null,
-    "spo2": null,
-    "bp": null,
-    "rr": null,
-    "temp": null
+    "hr": 114,
+    "spo2": 89,
+    "bp": "119/76",
+    "rr": 23,
+    "temp": 37.3
   },
-  "confidence": 94,
-  "source": "DeepSeek v4 Pro",
-  "extraction_method": "deepseek_direct",
+  "confidence": 98,
+  "source": "CCS OCR + DeepSeek v4 Pro",
+  "extraction_method": "ccs_ocr_reviewed",
   "complete": true,
-  "parse_error": false
+  "parse_error": false,
+  "reviewed": true
 }

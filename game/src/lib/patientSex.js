@@ -57,12 +57,12 @@ function inferSexFromHeuristics(blob) {
   const femaleHits =
     (blob.match(/\bfemale\b|\bwoman\b|\bwomen\b|\bgirl\b|\bdaughter\b|\bmother\b|\bgravida\b|\bg\d+p\d+\b/gi) || [])
       .length +
-    (/\bpregnant\b|\bchildbearing\s+age\b|\bmenstrual\b|\btampon\b|\bpap\s+smear\b|\bhpv\b|\btdap\b|\bectopic\b|\bpelvic\s+pain\b|\bobstetric\b|\bvaginal\b|\bvulvar\b|\bcervix\b|\bcervical\b|\bdyspareunia\b|\bbartholin\b|\bendometrial\b|\bovarian\b|\buterine\b|\bclitoris\b|\blabia\b|\bbreast\b|\bmammary\b|\bmastectomy\b|\bhysterectomy\b|\boophorectomy\b|\bmenopause\b|\bmenorrhagia\b|\bendometriosis\b|\blactation\b/gi.test(
+    (/\bpregnant\b|\bchildbearing\s+age\b|\bmenstrual\b|\btampon\b|\bpap\s+smear\b|\bhpv\b|\btdap\b|\bectopic\b|\bpelvic\s+pain\b|\bobstetric\b|\bvaginal\b|\bvulvar\b|\bcervix\b|\bcervical\b|\bdyspareunia\b|\bbartholin\b|\bendometrial\b|\bovarian\b|\buterine\b|\bclitoris\b|\blabia\b|\bbreast\b|\bmammary\b|\bmastectomy\b|\bhysterectomy\b|\boophorectomy\b|\bmenopause\b|\bmenorrhagia\b|\bendometriosis\b|\blactation\b|\bvaginitis\b|\bcontraceptive\b|\bcontraception\b|\boral\s+contraceptive\b|\bocp\b|\biud\b|\bintrauterine\b|\bfibroid\b|\bleiomyoma\b|\bmyoma\b|\bprolapse\b|\bincontinence\b|\buti\b|\burinary\s+tract\s+infection\b|\bvaginal\s+discharge\b|\bvaginal\s+itching\b|\bvaginal\s+dryness\b|\bvaginal\s+bleeding\b|\bpostmenopausal\b|\bperimenopausal\b|\bhrl\b|\bhormone\s+replacement\b|\bmammogram\b|\bcolposcopy\b|\blaparoscopy\b|\bhysterosalpingogram\b|\bhsg\b|\bamniocentesis\b|\bchorionic\b|\bterbutaline\b|\bmagnesium\s+sulfate\b|\bpreeclampsia\b|\bgestational\b|\bpostpartum\b|\bperineal\b|\bepisiotomy\b|\blochia\b|\bcolostrum\b|\bmecenium\b|\bneonatal\b|\bnewborn\b|\bwell\s+woman\b|\bwell-woman\b|\bannual\s+exam\b|\bpelvic\s+exam\b|\bbimanual\b|\bspeculum\b|\bwet\s+mount\b|\bkoh\b|\bclue\s+cell\b|\bwhiff\s+test\b|\bamniotic\b|\bchorioamnionitis\b|\bendometritis\b|\bsalpingitis\b|\bpid\b|\bpelvic\s+inflammatory\b|\bvaginal\s+atrophy\b|\bvaginal\s+stenosis\b|\bvaginal\s+septum\b|\bvaginal\s+agenesis\b|\bmullerian\b/gi.test(
       blob,
     )
       ? 2
       : 0);
-  const maleHits = (blob.match(/\bmale\b|\bman\b|\bmen\b|\bboy\b|\bson\b|\bfather\b/gi) || []).length;
+  const maleHits = (blob.match(/\bmale\b|\bman\b|\bmen\b|\bboy\b|\bson\b|\bfather\b|\bprostate\b|\btesticle\b|\btesticular\b|\bscrotum\b|\bscrotal\b|\bpenis\b|\bpenile\b|\bphimosis\b|\bcircumcision\b|\buncircumcised\b|\bvasectomy\b|\bsemen\b|\bsperm\b|\bepididymis\b|\bepididymitis\b|\bvaricocele\b|\bhydrocele\b|\bingunial\b|\bhernia\b|\bherniorrhaphy\b|\bdht\b|\btestosterone\b|\bandrogen\b|\bandropause\b|\bpsa\b|\bprostatitis\b|\bbenign\s+prostatic\b|\bbph\b|\bpriapism\b|\bhematospermia\b|\bhypogonadism\b|\bgyno\b|\bgynecomastia\b/gi) || []).length;
   if (femaleHits > maleHits) return 'female';
   if (maleHits > femaleHits) return 'male';
 

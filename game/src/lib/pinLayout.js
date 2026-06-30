@@ -4,6 +4,9 @@ import { getPhysicalExamPinPosition, sectionIdForPin } from './physicalExamPinLa
 
 const PATIENT_KEEP_OUT = { x0: 0.26, y0: 0.18, x1: 0.74, y1: 0.8 };
 
+/** Vertical offset per additional pin in the same zone (in 0-1 space). */
+const ZONE_STACK_STEP = 0.045;
+
 function isPhysicalExamPin(pin) {
   const label = String(pin?.label || '');
   const id = String(pin?.ivId || '').toLowerCase();
@@ -43,6 +46,11 @@ export function computePinDisplayPercent(pin, zones, frame, index = 0) {
   if (!z) return null;
   leftPct = frameLeft + z.cx * frameW;
   topPct = frameTop + z.cy * frameH;
+
+  // Zone-based vertical stacking: offset each subsequent pin in the same zone
+  if (!isPhysicalExamPin(pin) && index > 0) {
+    topPct += index * ZONE_STACK_STEP * frameH;
+  }
 
   const rx = (leftPct - frameLeft) / frameW;
   const ry = (topPct - frameTop) / frameH;

@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-06-29T20:17:35.465Z",
+  "builtAt": "2026-06-30T13:11:56.281Z",
   "cases": {
     "100": {
       "physical-exam-pelvic": {
@@ -1609,28 +1609,58 @@
       }
     },
     "146": {
-      "abg-lactate-bmp": {
-        "why": "High AG metabolic acidosis, elevated lactate.",
-        "orderLabel": "ABG / Lactate / BMP",
+      "arterial-blood-gases": {
+        "why": "Partially compensated metabolic acidosis. PaO2 normal despite tissue hypoxia (cyanide blocks O2 utilization, not delivery).",
+        "orderLabel": "Arterial blood gases",
         "source": "playbook"
       },
-      "hydroxocobalamin-iv": {
-        "why": "First-line. Binds cyanide.",
-        "orderLabel": "Hydroxocobalamin IV",
+      "lactate-serum": {
+        "why": "Markedly elevated (>10 mmol/L). High lactate with normal carboxyhemoglobin points to cyanide over CO poisoning.",
+        "orderLabel": "Lactate, serum",
         "source": "playbook"
       },
-      "100-o2": {
-        "why": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
-        "orderLabel": "100% O2",
+      "carbon-monoxide-blood": {
+        "why": "Carboxyhemoglobin ~10% (mildly elevated, not enough to explain severe acidosis).",
+        "orderLabel": "Carbon monoxide, blood",
         "source": "playbook"
       },
-      "supportive-care": {
-        "why": "[Auto-split from bundled label \"100% O2 + supportive care\"] Maximize O2 delivery.",
-        "orderLabel": "Supportive care",
+      "comprehensive-metabolic-profile": {
+        "why": "High anion gap metabolic acidosis. Assess renal function, electrolytes, glucose.",
+        "orderLabel": "Comprehensive metabolic profile",
+        "source": "playbook"
+      },
+      "electrocardiography-12-lead": {
+        "why": "Sinus tachycardia. Evaluate for arrhythmias or ischemic changes from hypoxia.",
+        "orderLabel": "Electrocardiography, 12 lead",
+        "source": "playbook"
+      },
+      "100-o2-via-non-rebreather": {
+        "why": "Maximize oxygen delivery. Displace CO from hemoglobin. Supportive for cyanide toxicity.",
+        "orderLabel": "100% O2 via non-rebreather",
+        "source": "playbook"
+      },
+      "intubation-endotracheal": {
+        "why": "Airway protection in unconscious patient with high suspicion for cyanide poisoning. Secure before deterioration.",
+        "orderLabel": "Intubation, endotracheal",
+        "source": "playbook"
+      },
+      "intravenous-access": {
+        "why": "Two large-bore IV lines for fluids and medications.",
+        "orderLabel": "Intravenous access",
+        "source": "playbook"
+      },
+      "iv-fluids-normal-saline-lactated-ringer": {
+        "why": "Fluid resuscitation for hypotension and support of hemodynamics in cyanide poisoning.",
+        "orderLabel": "IV fluids (Normal saline / Lactated Ringer)",
+        "source": "playbook"
+      },
+      "hydroxocobalamin-iv-cyanokit": {
+        "why": "First-line antidote. Binds cyanide to form cyanocobalamin (renally excreted). Give 5g IV. Repeat if no rapid improvement; third dose with sodium thiosulfate.",
+        "orderLabel": "Hydroxocobalamin IV (Cyanokit)",
         "source": "playbook"
       },
       "admit-to-icu": {
-        "why": "Critical care monitoring.",
+        "why": "Critical care monitoring for cyanide poisoning. Intubated patient needs ventilator management.",
         "orderLabel": "Admit to ICU",
         "source": "playbook"
       }
@@ -10351,5 +10381,5 @@
     }
   },
   "caseCount": 214,
-  "entryCount": 1984
+  "entryCount": 1990
 }

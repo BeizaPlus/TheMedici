@@ -16,7 +16,7 @@ Single-file, self-contained HTML/JS/CSS app. One CDN dependency: JSZip (for Pack
 
 ## What it does
 
-Content arc visualizer for MeWorld LinkedIn posts — 20-post spine with floating panels, speech-to-text, multi-take audio, DeepSeek LLM fusion, inline editing, zip packaging.
+Content arc visualizer for MeWorld LinkedIn posts — 23-post spine with floating panels, speech-to-text, multi-take audio, DeepSeek LLM fusion, inline editing, video embeds, zip packaging.
 
 ## Storage (all browser-local, nothing serverside)
 
@@ -76,13 +76,13 @@ Each `post.json` (and the `posts[]` inside `_master.json`) carries the full take
 
 ## Key JS globals
 
-- `posts[]` — hardcoded post array (date, act, spineIdx, spine, body)
+- `posts[]` — hardcoded post array (date, act, spineIdx, spine, body, optional video)
 - `spine[]` — 20-sentence narrative spine
 - `speechTakes{}` — `{ postIndex: [{ id, type:"raw"|"fused", transcript, duration, timestamp, segments, originalId, originalSegments, fusedFrom }] }`
 - `selectedTake{}` — which take index is active per post
 - `readMode` — `"original"` | `"spoken"`
 - `statuses{}` — `{ postIndex: "draft"|"ready"|"posted" }`
-- `current` — current post index (0–19)
+- `current` — current post index (0–22)
 - `sidePanelTab` — `"story"` | `"takes"`
 - `sidePanelOpen`, `sidePanelMinimized` — side panel state
 - `sideX`, `sideY`, `sideW`, `sideH` — panel position/size in px
@@ -96,6 +96,10 @@ Each `post.json` (and the `posts[]` inside `_master.json`) carries the full take
 4. Click **✦ Fuse (N)** in the read-toggle-bar → all selected source transcripts are sent to DeepSeek to blend
 5. A new fused entry is created (`type: "fused"`, with `fusedFrom: [sourceIndexes]`)
 6. Every entry is a separate clickable row in the Takes panel (🎤 raw, ✦ fused)
+
+## Video support
+
+Posts can carry an optional `video` field (path to a `.mp4` file relative to `arc-viz.html`). When present, `renderReader()` shows a `<video>` player between the act-badge/spine context and the body text. When absent, the video container hides. The video player has controls, rounded corners, and a 320px max-height. Only the first post ("The Build: DKA", post index 13) currently carries video.
 
 ## Audio format
 
@@ -130,6 +134,13 @@ After recording, the transcript is stored with `segments[]` — each segment has
 
 ## Recent changes
 
+- **2026-06-30** — Video support + 3 Daily Build case posts infused into the "show, don't tell" section:
+  - Added `video` field to posts array and `.reader-video` player in reader HTML/CSS
+  - Inserted "The Build: DKA" (post 13, after "Building the room") — introduces Yaw Boateng DKA case with HHS_DKA.mp4 video
+  - Inserted "The Build: Teaching" (post 16, after "The attending") — AI attending walks through real DKA numbers (K 4.8, gap 28)
+  - Inserted "The Build: What Wrong Looks Like" (post 18, after "Getting it wrong") — CT instead of fluids, dextrose in DKA, missed potassium
+  - New teal act colors for all 3 builds: `#E0F4F1` / `#1B5C4E` (light), `#0F2A25` (dark)
+  - Post count: 20 → 23. Spine unchanged (20 sentences). Build posts share spineIdx with nearby philosophy posts.
 - **2026-06-29** — Three fixes after a live browser smoke test (code-only review had missed the first two):
   1. **Side panel collapsed on fresh load.** With no saved size in `arc-viz-pos`, the flex body (`min-height:0`, `flex:1 1 0`) shrank to 0 and the panel showed only its 42px header — the entire spine/Takes area was invisible. Added `height: 70vh` to `.side-panel` plus `.side-panel.minimized { height:auto !important }`.
   2. **Spine had no padding and no highlight.** `#umbrella` was missing `class="spine-body"`, so the `.spine-body`-scoped CSS (24px padding, current-sentence `.highlight`, `.faded`, `:hover`) applied to nothing. Added the class — current-post highlight (bright text + accent underline) and 24px padding now render and track the selected post.

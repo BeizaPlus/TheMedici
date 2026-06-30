@@ -14,32 +14,45 @@ function clamp(n, min, max) {
 
 export const DOCK_CHROME_COLLAPSED_HEIGHT = 148;
 
-export function defaultPlayDockLayout() {
-  if (typeof window === 'undefined') {
-    return { x: 12, y: 52, width: 360, height: 520, clinicalPx: 200, stacksListPx: 0 };
+// Command dock opens compact & short — calibrated to Steve's manual resize
+// 2026-06-30 (measured at vw 996: play 400×187, preview 414×126).
+// Width scales with screen width; height follows from each dock's own aspect
+// ratio so the SHAPE is identical on any display. Pinned top-left.
+const PLAY_DOCK_SPEC = { wRatio: 0.4, aspect: 400 / 187, clinicalFrac: 161 / 187 }; // ~2.14:1
+const BRIEFING_DOCK_SPEC = { wRatio: 0.415, aspect: 414 / 126, clinicalFrac: 100 / 126 }; // ~3.29:1
+
+function buildDockLayout(spec) {
+  const ssr = typeof window === 'undefined';
+  const vw = ssr ? 1280 : window.innerWidth;
+  const vh = ssr ? 800 : window.innerHeight;
+  const compact = vw <= 900;
+  // Slightly wider fraction on small screens so it stays usable.
+  let width = compact
+    ? clamp(Math.round(vw * (spec.wRatio + 0.2)), 300, vw - 16)
+    : clamp(Math.round(vw * spec.wRatio), 320, 820);
+  let height = Math.round(width / spec.aspect);
+  // Safety cap — never taller than ~42% of the viewport.
+  const maxH = Math.round(vh * 0.42);
+  if (height > maxH) {
+    height = maxH;
+    width = clamp(Math.round(height * spec.aspect), MIN_W, vw - 24);
   }
-  const compact = window.innerWidth <= 900;
-  const width = compact
-    ? Math.min(window.innerWidth - 16, 640)
-    : clamp(Math.round(window.innerWidth * 0.4), 340, 520);
-  const height = compact
-    ? clamp(Math.round(window.innerHeight * 0.52), 320, 560)
-    : clamp(Math.round(window.innerHeight * 0.78), 360, 860);
-  const x = compact ? 8 : Math.max(12, window.innerWidth - width - 18);
-  const y = compact ? Math.max(44, window.innerHeight - height - 52) : 52;
-  const clinicalPx = clamp(Math.round(height * 0.38), 0, Math.max(0, height - DOCK_HANDLE_PX - 8));
+  const x = compact ? 8 : 16;
+  const y = compact ? Math.max(44, vh - height - 52) : 52;
+  const clinicalPx = clamp(
+    Math.round(height * spec.clinicalFrac),
+    0,
+    Math.max(0, height - DOCK_HANDLE_PX - 4),
+  );
   return { x, y, width, height, clinicalPx, stacksListPx: 0 };
 }
 
+export function defaultPlayDockLayout() {
+  return buildDockLayout(PLAY_DOCK_SPEC);
+}
+
 export function defaultBriefingDockLayout() {
-  const base = defaultPlayDockLayout();
-  if (typeof window === 'undefined') return base;
-  return {
-    ...base,
-    x: Math.max(12, window.innerWidth - base.width - 18),
-    y: 52,
-    height: clamp(Math.round(window.innerHeight * 0.72), 360, 780),
-  };
+  return buildDockLayout(BRIEFING_DOCK_SPEC);
 }
 
 export function isDockLayoutOnScreen(layout) {
