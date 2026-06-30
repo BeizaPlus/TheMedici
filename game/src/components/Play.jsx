@@ -159,6 +159,13 @@ import { applyLayoutToPhysicalExamPin,
   persistPhysicalExamSectionMove,
   writePhysicalExamPinLayout,
 } from '../lib/physicalExamPinLayout.js';
+import {
+  captureCasePinLayout,
+  writeCasePinLayout,
+  readCasePinLayout,
+  applyCasePinLayout,
+  persistCasePinMove,
+} from '../lib/casePinLayout.js';
 import PhysicalExamPickerDialog from './PhysicalExamPickerDialog.jsx';
 import LabOrderPickerDialog from './LabOrderPickerDialog.jsx';
 import { addTeachingMoment } from '../lib/teachingMoments.js';
@@ -3293,6 +3300,46 @@ export default function Play({
     }
   }, [pins]);
 
+  const saveCasePinLayoutSnapshot = useCallback(() => {
+    const pinMap = captureCasePinLayout(pins);
+    const count = Object.keys(pinMap).length;
+    if (!count) {
+      showToast('Place orders and drag labels first (move icon)', 'bad');
+      return;
+    }
+    const result = writeCasePinLayout(caseData.id, pinMap);
+    showToast(
+      result
+        ? `Saved ${count} pin position${count > 1 ? 's' : ''} for this case`
+        : 'Save failed — storage full',
+      result ? 'ok' : 'bad',
+    );
+  }, [pins, caseData.id]);
+
+  const movePinsToSavedPosition = useCallback(() => {
+    const layout = readCasePinLayout(caseData.id);
+    if (!layout?.pins) {
+      showToast('No saved layout — place and save pin positions first', 'bad');
+      return;
+    }
+    const count = Object.keys(layout.pins).length;
+    const nextPins = applyCasePinLayout(pins, caseData.id);
+    if (nextPins === pins) {
+      showToast('Pins already at saved positions', '');
+      return;
+    }
+    setPins(nextPins);
+    // Update placed positions too
+    const newPlaced = { ...placed };
+    nextPins.forEach((p) => {
+      if (p.ivId && p.cx != null && p.cy != null) {
+        newPlaced[p.ivId] = { cx: p.cx, cy: p.cy, zoneId: p.zoneId || 'zone-custom-1' };
+      }
+    });
+    setPlaced(newPlaced);
+    showToast(`Snapped ${count} pins to saved layout`, 'ok');
+  }, [pins, placed, caseData.id]);
+
   const wrapUpCase = useCallback(
     ({ requireAllPlaced = true } = {}) => {
       const results = {};
@@ -4183,6 +4230,12 @@ export default function Play({
               </button>
               <button type="button" onClick={autoLayoutPins}>
                 Auto-layout pins
+              </button>
+              <button type="button" onClick={movePinsToSavedPosition}>
+                Move to position
+              </button>
+              <button type="button" onClick={saveCasePinLayoutSnapshot}>
+                Save layout
               </button>
               <button type="button" onClick={openCaseStory}>
                 Case story
