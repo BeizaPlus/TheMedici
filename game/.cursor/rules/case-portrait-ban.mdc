@@ -12,10 +12,30 @@ alwaysApply: false
 
 **Canonical:** `dev/case-portraits/BANNED.md` + `server/bannedCasePortraits.js`
 
-## Before serving or screenshotting a cached portrait
+## Regeneration is MANUAL ONLY (do not break this)
 
-1. Check `isCasePortraitBanned(caseId)` — if banned, cache is **invalid** (treat as missing; regen only after Steve removes ban).
-2. Run `node scripts/purge-banned-case-portraits.mjs` after updating the ban list.
+Portraits regenerate **only** on an explicit `refresh: true` (the Regenerate Portrait
+button — `RegeneratePatientButton.jsx` / `CasePortraitBriefPanel.jsx`). Case **load must
+never auto-regenerate** — not on sex / uber / frame-version / layer-version drift, and
+**not on a ban**. Regenerating on load = the ~90s "regenerates every time" bug Steve hit.
+
+- Server load path (`/api/regenerate-patient-from-case` with `refresh:false`, and
+  `GET /api/case-portrait/:caseId`) calls `readPortraitCache(dir, id, { allowBanned: true })`
+  and returns the cached portrait whenever the PNG exists.
+- Client `regeneratePatientFromCase` (`src/lib/patientRegen.js`) reuses any existing
+  cached portrait on load; staleness checks must **not** clear + re-request.
+- `refresh: true` skips the cache entirely and rebuilds (optionally with a character ref).
+- **Not-yet-generated case (no cache) → default sex-aware plate.** `ensureCasePortrait`
+  (`src/lib/patientRegen.js`) returns `getBuiltInPatientSrc(caseData)` (male / female /
+  pediatric) on load when there is no cached portrait — it does **not** generate. The
+  first real portrait is built only when the user presses Regenerate.
+
+## What the ban still means
+
+`isCasePortraitBanned(caseId)` = **never reuse as a generation reference and never
+ship/screenshot as canonical**. It no longer forces a load-time regen. To actually
+replace a banned plate, Steve presses Regenerate (or runs
+`node scripts/purge-banned-case-portraits.mjs` after editing the ban list).
 
 ## Never ship these failure modes
 

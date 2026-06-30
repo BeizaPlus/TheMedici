@@ -62,6 +62,7 @@ import {
 } from '../lib/caseTimer.js';
 import { getBranding } from '../data/gameData.js';
 import PatientOrderTimeline from './PatientOrderTimeline.jsx';
+import OrderSequenceScrubber from './OrderSequenceScrubber.jsx';
 import SceneOrderCommandDock from './SceneOrderCommandDock.jsx';
 import PlayChatNotesTabPanel from './PlayChatNotesTabPanel.jsx';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
@@ -78,6 +79,7 @@ import {
   rebuildOrderTimelineFromCheckpoint,
   orderTimelineFromServerSession,
   pickBestOrderTimeline,
+  orderTimelineSequenceFromEvents,
 } from '../lib/orderTimeline.js';
 import {
   appendSessionOrderTimeline,
@@ -417,6 +419,26 @@ export default function Play({
     readCaseStoryStarted(caseData?.id),
   );
 
+  // Attending demo mode — attendant demonstrates the workup step by step
+  const [attendingDemoMode, setAttendingDemoMode] = useState(false);
+  const [demoStepIndex, setDemoStepIndex] = useState(0);
+  const demoRunningRef = useRef(false);
+
+  // Order sequence replay — "Review order sequence" replays the drops one by one
+  // on the live scene via the overlay scrubber (no separate modal). Bumping this
+  // signal tells the scrubber to jump to the first order and auto-play.
+  const [scrubberReplaySignal, setScrubberReplaySignal] = useState(0);
+  const replayOrderSequence = useCallback(() => {
+    setScrubberIndex(0);
+    setScrubberReplaySignal((n) => n + 1);
+  }, []);
+
+  // Scrubber index — controls pin visibility on the scene.
+  // NOTE: scrubberVisibleIds + the auto-advance effect live BELOW the
+  // orderTimelineEvents useState declaration — referencing it here causes a
+  // temporal-dead-zone crash (blank play scene). Do not move them back up.
+  const [scrubberIndex, setScrubberIndex] = useState(0);
+
   const openCaseStory = useCallback(() => {
     markCaseStoryStarted(caseData?.id);
     setCaseStoryStarted(true);
@@ -687,6 +709,26 @@ export default function Play({
   const [sessionStartedAt, setSessionStartedAt] = useState(() => playBoot.sessionStartedAt);
   const sessionStartedAtRef = useRef(playBoot.sessionStartedAt);
   const orderTimelineSeqRef = useRef(playBoot.seq);
+
+  // Scrubber pin visibility + auto-advance — MUST be declared after
+  // orderTimelineEvents (above) to avoid a temporal-dead-zone crash.
+  const scrubberVisibleIds = useMemo(() => {
+    const seq = orderTimelineSequenceFromEvents(orderTimelineEvents)
+      .filter((s) => s.kind === 'order');
+    const ids = seq.slice(0, scrubberIndex + 1).map((s) => s.stackId).filter(Boolean);
+    return new Set(ids);
+  }, [orderTimelineEvents, scrubberIndex]);
+
+  const scrubberTotalOrdersRef = useRef(0);
+  useEffect(() => {
+    const seq = orderTimelineSequenceFromEvents(orderTimelineEvents)
+      .filter((s) => s.kind === 'order');
+    const newTotal = seq.length;
+    if (newTotal > scrubberTotalOrdersRef.current && newTotal > 0) {
+      setScrubberIndex(newTotal - 1);
+    }
+    scrubberTotalOrdersRef.current = newTotal;
+  }, [orderTimelineEvents]);
 
   useEffect(() => {
     sessionStartedAtRef.current = sessionStartedAt;
@@ -2107,6 +2149,73 @@ export default function Play({
     [commitStackPlacement, teachMeMode],
   );
 
+  // ---- Attending Demo: auto-complete remaining timeline ----
+  const remainingDemoStacks = useMemo(() => {
+    if (!attendingDemoMode) return [];
+    return interventions.filter((iv) => !placed[iv.id]);
+  }, [attendingDemoMode, interventions, placed]);
+
+  const completeAttendingTimeline = useCallback(() => {
+    if (demoRunningRef.current) return;
+    const remaining = interventions.filter((iv) => !placed[iv.id]);
+    if (!remaining.length) {
+      showToast('All orders already placed.', '');
+      return;
+    }
+    demoRunningRef.current = true;
+    setDemoStepIndex(0);
+
+    const runSequence = async () => {
+      for (let i = 0; i < remaining.length; i += 1) {
+        const iv = remaining[i];
+        setDemoStepIndex(i + 1);
+        const dropZone = stackDropZoneForIv(iv, placementOrder.length + i);
+        setPlaced((p) => ({ ...p, [iv.id]: dropZone }));
+        setPlacementOrder((prev) => (prev.includes(iv.id) ? prev : [...prev, iv.id]));
+        setPins((prev) => [
+          ...prev.filter((pin) => pin.ivId !== iv.id && pin.label !== iv.label),
+          applyLayoutToPhysicalExamPin({
+            zoneId: dropZone,
+            label: iv.label,
+            ivId: iv.id,
+            ok: null,
+          }),
+        ]);
+        setStackMoveMode(true);
+        setReviewed(false);
+        setReviewResults({});
+        setOrderReview({});
+        setReviewedAt(null);
+        setWhyPanel(null);
+        setTeachFocusId(null);
+        logTimeline({
+          type: 'stack',
+          stackId: iv.id,
+          label: iv.label,
+          correct: true,
+          method: 'complete',
+        });
+        if (teachMeMode) showOrderWhyInDock(iv);
+        // Staggered visual — next stack drops 500ms later
+        if (i < remaining.length - 1) {
+          await new Promise((r) => window.setTimeout(r, 500));
+        }
+      }
+      demoRunningRef.current = false;
+      setDemoStepIndex(remaining.length);
+      showToast(`Timeline complete — ${remaining.length} orders`, 'ok');
+    };
+
+    void runSequence();
+  }, [
+    interventions,
+    placed,
+    placementOrder.length,
+    logTimeline,
+    teachMeMode,
+    showOrderWhyInDock,
+  ]);
+
   useEffect(() => {
     if (!showPostVideoReview || decoyAttempts.length === 0) return undefined;
 
@@ -3332,6 +3441,9 @@ export default function Play({
     const closeOnOutside = (e) => {
       if (stackCommandRef.current?.contains(e.target)) return;
       if (bibliographyRef.current?.contains(e.target)) return;
+      // Settings popover is portaled to <body>, so it is outside stackCommandRef —
+      // keep it open when the click lands inside the popover itself.
+      if (e.target?.closest?.('.toolbar-settings-popover')) return;
       setStackSettingsOpen(false);
       setBibliographyOpen(false);
     };
@@ -4364,6 +4476,15 @@ export default function Play({
             onToggleScenePins={() => setScenePinsHidden((v) => !v)}
             caseId={caseData.id}
             caseData={caseData}
+            demoMode={attendingDemoMode}
+            onToggleDemoMode={() => {
+              setAttendingDemoMode((v) => !v);
+              if (demoRunningRef.current) demoRunningRef.current = false;
+            }}
+            onCompleteTimeline={completeAttendingTimeline}
+            demoRunning={demoRunningRef.current}
+            demoStep={demoStepIndex}
+            demoTotal={remainingDemoStacks.length}
           />
         </div>
         <div className="scene-timeline-dock">
@@ -4419,6 +4540,7 @@ export default function Play({
               sessionStartedAt={sessionStartedAt}
               footProps={timelineFootProps}
               toolbar={playSceneToolbar}
+              onReviewSequence={replayOrderSequence}
             />
           )}
         </div>
@@ -4537,7 +4659,16 @@ export default function Play({
             onSelectStep={explainCompareStep}
           />
         )}
-        {pins.map((p, i) => {
+        {pins
+          .filter((p) => {
+            // If no orders placed yet, show all pins
+            if (scrubberVisibleIds.size === 0) return true;
+            // Pins without ivId are always visible
+            if (!p.ivId) return true;
+            // Only show pins whose stack is within the current scrubber window
+            return scrubberVisibleIds.has(p.ivId);
+          })
+          .map((p, i) => {
           const frame = { left: frameLeft, top: frameTop, w: frameW, h: frameH };
           const pos = computePinDisplayPercent(p, zones, frame, i);
           if (!pos) return null;
@@ -5258,6 +5389,14 @@ export default function Play({
           onComplete={() => showToast('Resuscitation sequence complete', 'ok')}
         />
       )}
+
+      <OrderSequenceScrubber
+        events={orderTimelineEvents}
+        interventionById={interventionById}
+        index={scrubberIndex}
+        onIndexChange={setScrubberIndex}
+        replaySignal={scrubberReplaySignal}
+      />
 
     </div>
   );

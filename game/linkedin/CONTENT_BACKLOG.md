@@ -31,6 +31,7 @@ The bank. Pull the next idea from here, build it as a post folder under `schedul
 | 11 | BZ | The blueprint my sons inherit | "Not just money. The thinking behind it." | idea |
 | 12 | SC | Build it, document it, hand it off | "The only way it scales without me in every room." | idea |
 | 13 | PB | Why I left memorization behind | the frustration that started MeWorld | idea |
+| 21 | PB | The sandbox nobody built | "And once I saw that clearly, I could not look away." | idea -> `ideas/the-sandbox-nobody-built.md` |
 
 ## Teaching moments (use immersa-explainer skill, pure value)
 

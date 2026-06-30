@@ -28,6 +28,7 @@ export default function PatientOrderTimeline({
   footProps = null,
   toolbar = null,
   footOnly = false,
+  onReviewSequence = null,
 }) {
   const trackRef = useRef(null);
   const [collapsed, setCollapsed] = useState(readCollapsed);
@@ -82,46 +83,60 @@ export default function PatientOrderTimeline({
             {collapsed ? '▴' : '▾'}
           </span>
         </button>
+        {onReviewSequence && sorted.length > 0 && (
+          <button
+            type="button"
+            className="patient-order-timeline-review-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              onReviewSequence();
+            }}
+            title="Review order sequence step by step"
+            aria-label="Review order sequence"
+          >
+            Review
+          </button>
+        )}
       </header>
       {!collapsed && (
-        <>
-          <div className="patient-order-timeline-track" ref={trackRef}>
-            {sorted.length === 0 ? (
-              <p className="patient-order-timeline-empty">
-                Orders appear here as you treat the patient — oldest at the bottom, newest above.
-              </p>
-            ) : (
-              <ol className="patient-order-timeline-list">
-                <li className="patient-order-timeline-spine" aria-hidden />
-                {sorted.map((ev) => (
-                  <li
-                    key={ev.id}
-                    className={`patient-order-timeline-item kind-${ev.kind || 'order'}`}
-                  >
-                    <span className="patient-order-timeline-dot" aria-hidden />
-                    <div className="patient-order-timeline-body">
-                      <time
-                        className="patient-order-timeline-time"
-                        dateTime={new Date(ev.at).toISOString()}
-                      >
-                        {formatElapsed(ev.at, sessionStartedAt)}
-                      </time>
-                      <span className="patient-order-timeline-label">{ev.label}</span>
-                      {ev.orderIndex != null && (
-                        <span className="patient-order-timeline-seq">#{ev.orderIndex}</span>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            )}
-          </div>
-          {footProps && (
-            <div className="patient-order-timeline-foot">
-              <PlayNotesSessionFoot {...footProps} toolbar={toolbar} />
-            </div>
+        <div className="patient-order-timeline-track" ref={trackRef}>
+          {sorted.length === 0 ? (
+            <p className="patient-order-timeline-empty">
+              Orders appear here as you treat the patient — oldest at the bottom, newest above.
+            </p>
+          ) : (
+            <ol className="patient-order-timeline-list">
+              <li className="patient-order-timeline-spine" aria-hidden />
+              {sorted.map((ev) => (
+                <li
+                  key={ev.id}
+                  className={`patient-order-timeline-item kind-${ev.kind || 'order'}`}
+                >
+                  <span className="patient-order-timeline-dot" aria-hidden />
+                  <div className="patient-order-timeline-body">
+                    <time
+                      className="patient-order-timeline-time"
+                      dateTime={new Date(ev.at).toISOString()}
+                    >
+                      {formatElapsed(ev.at, sessionStartedAt)}
+                    </time>
+                    <span className="patient-order-timeline-label">{ev.label}</span>
+                    {ev.orderIndex != null && (
+                      <span className="patient-order-timeline-seq">#{ev.orderIndex}</span>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
           )}
-        </>
+        </div>
+      )}
+      {/* Foot (settings gear, lock, exam/history toolbar) stays visible even when the
+          order list is collapsed — these are primary play controls, not list chrome. */}
+      {footProps && (
+        <div className="patient-order-timeline-foot">
+          <PlayNotesSessionFoot {...footProps} toolbar={toolbar} />
+        </div>
       )}
     </aside>
   );

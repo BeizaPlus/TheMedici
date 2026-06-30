@@ -14,6 +14,7 @@ export function orderTimelineEntryFromEvent(event, { orderIndex = null } = {}) {
       label: event.label || 'Order',
       kind: 'order',
       orderIndex,
+      stackId: event.stackId || null,
     };
   }
   if (event.type === 'extra_order') {
@@ -23,6 +24,7 @@ export function orderTimelineEntryFromEvent(event, { orderIndex = null } = {}) {
       label: event.label || 'Order',
       kind: 'extra',
       orderIndex,
+      stackId: null,
     };
   }
   if (event.type === 'location') {
@@ -52,6 +54,7 @@ export function rebuildOrderTimelineFromCheckpoint({
       label: iv?.label || stackId,
       kind: 'order',
       orderIndex: idx + 1,
+      stackId,
     });
   });
   const base = sessionStartedAt + placementOrder.length * 1000;
@@ -62,6 +65,7 @@ export function rebuildOrderTimelineFromCheckpoint({
       label: order.name,
       kind: 'extra',
       orderIndex: placementOrder.length + idx + 1,
+      stackId: null,
     });
   });
   return events;
@@ -82,6 +86,7 @@ export function orderTimelineFromServerSession(session) {
           label: ev.label || 'Order',
           kind: 'order',
           orderIndex,
+          stackId: ev.stackId || null,
         };
       }
       if (ev.type === 'extra_order') {
@@ -92,6 +97,7 @@ export function orderTimelineFromServerSession(session) {
           label: ev.label || 'Order',
           kind: 'extra',
           orderIndex,
+          stackId: null,
         };
       }
       if (ev.type === 'location') {
@@ -158,4 +164,21 @@ export function pickBestOrderTimeline(...candidates) {
     }
   }
   return dedupeOrderTimeline(merged);
+}
+
+/** Sort timeline events into a stable ordered sequence for the sequence player.
+ *  Returns events sorted by orderIndex then at, with a fresh seq number. */
+export function orderTimelineSequenceFromEvents(events = []) {
+  const orderEvents = events.filter((ev) => ev.kind === 'order');
+  if (!orderEvents.length) return [];
+
+  // Sort by orderIndex (assigned at placement time), then by at timestamp
+  const sorted = [...orderEvents].sort((a, b) => {
+    if (a.orderIndex != null && b.orderIndex != null) return a.orderIndex - b.orderIndex;
+    if (a.orderIndex != null) return -1;
+    if (b.orderIndex != null) return 1;
+    return (a.at || 0) - (b.at || 0);
+  });
+
+  return sorted.map((ev, i) => ({ ...ev, seq: i + 1 }));
 }

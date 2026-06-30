@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { FiMessageSquare, FiSend, FiX, FiStar } from 'react-icons/fi';
+import { FiMessageSquare, FiSend, FiX, FiStar, FiPlayCircle } from 'react-icons/fi';
 import { IconCamera, IconFileMedical, IconRefresh } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseRecordButton from './CaseRecordButton.jsx';
 import PatientReplyPlayButton from './PatientReplyPlayButton.jsx';
@@ -113,6 +113,13 @@ function SceneOrderCommandDock({
   patientRecording = null,
   resetKey,
   caseData = null,
+  // Attending demo mode
+  demoMode = false,
+  onToggleDemoMode,
+  onCompleteTimeline,
+  demoRunning = false,
+  demoStep = 0,
+  demoTotal = 0,
 }) {
   const inputRef = useRef(null);
   const [draft, setDraft] = useState('');
@@ -199,6 +206,18 @@ function SceneOrderCommandDock({
           </div>
         ) : null}
         <div className="scene-order-command-head-tools">
+          {onToggleDemoMode && (
+            <button
+              type="button"
+              className={`scene-order-command-icon-btn scene-order-command-demo-btn${demoMode ? ' is-active' : ''}`}
+              onClick={onToggleDemoMode}
+              disabled={demoRunning}
+              title={demoMode ? 'Exit attending demo' : 'Attending Demo — the attending walks you through the workup'}
+              aria-label={demoMode ? 'Exit attending demo' : 'Start attending demo'}
+            >
+              <FiPlayCircle aria-hidden />
+            </button>
+          )}
           {!patientMode && onNewAngle ? (
             <button
               type="button"
@@ -315,6 +334,36 @@ function SceneOrderCommandDock({
           </div>
         )}
       </form>
+
+      {demoMode && onCompleteTimeline && (
+        <div className="scene-order-demo-bar">
+          {demoRunning ? (
+            <div className="scene-order-demo-progress">
+              <span className="scene-order-demo-progress-text">
+                Placing order {demoStep}/{demoTotal}…
+              </span>
+              <div className="scene-order-demo-progress-track">
+                <div
+                  className="scene-order-demo-progress-fill"
+                  style={{ width: `${demoTotal > 0 ? (demoStep / demoTotal) * 100 : 0}%` }}
+                />
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="scene-order-demo-complete-btn"
+              onClick={onCompleteTimeline}
+              disabled={demoTotal === 0}
+            >
+              <FiPlayCircle aria-hidden />
+              {demoTotal > 0
+                ? `Complete Timeline (${demoTotal} remaining)`
+                : 'All orders placed'}
+            </button>
+          )}
+        </div>
+      )}
 
       {hasOrderContext && (
         <div

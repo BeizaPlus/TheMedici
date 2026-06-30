@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-06-28T22:23:32.900Z",
+  "builtAt": "2026-06-29T20:17:35.817Z",
   "sourceDir": "C:\\Users\\steve\\MeWorld\\data\\cases",
   "source": "MeWorld/data/cases/case_N.json",
   "count": 181,
@@ -2714,7 +2714,27 @@
         },
         {
           "status": "missed",
-          "order": "IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)",
+          "order": "Ceftriaxone IV",
+          "reason": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed."
+        },
+        {
+          "status": "missed",
+          "order": "Metronidazole IV",
+          "reason": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed."
+        },
+        {
+          "status": "missed",
+          "order": "Pip-Tazo",
+          "reason": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed."
+        },
+        {
+          "status": "missed",
+          "order": "Ampicillin-Sulbactam",
+          "reason": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed."
+        },
+        {
+          "status": "missed",
+          "order": "Cefazolin IV",
           "reason": "Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed."
         },
         {
@@ -2745,7 +2765,7 @@
       ],
       "intro": "LLQ pain, fever, nausea, vomiting",
       "history": "{{patient_name}} presents with the classic triad of diverticulitis: LLQ pain, low-grade fever, and leukocytosis. He has changes in bowel habits with nausea and vomiting. He meets SIRS criteria (fever >100.4°F, WBC >12,000). CT abdomen/pelvis with IV and oral contrast is the gold standard — findings include bowel wall thickening, pericolic fat stranding, and a 2 cm abscess (complicated diverticulitis). Abscesses <3-4 cm can be managed conservatively with antibiotics alone without percutaneous drainage. Colonoscopy and barium enema are CONTRAINDICATED in acute diverticulitis due to risk of perforation. Treatment: NPO for bowel rest, IV fluids, IV antibiotics (cefazolin + metronidazole, cefuroxime + metronidazole, ceftriaxone + metronidazole, or ampicillin/sulbactam). High-fiber diet at discharge for prevention.\n\nComplicated acute diverticulitis with 2 cm abscess. LLQ pain + fever + leukocytosis (SIRS). CT confirms. NPO + IV fluids + IV ceftriaxone/metronidazole. No drainage needed (<3-4 cm). Avoid colonoscopy. High-fiber diet at discharge.",
-      "ordersText": "[OK] Physical Exam: General Appearance\n   Determine how sick the patient looks.\n\n[OK] Physical Exam: Chest / Lungs\n   Investigate for lung pathology.\n\n[OK] Physical Exam: Heart / Cardiovascular\n   Investigate for cardiovascular pathology.\n\n[OK] Physical Exam: Abdomen\n   Chief complaint — LLQ tenderness. Assess for peritoneal signs.\n\n[OK] Physical Exam: Rectal\n   Could be source of symptoms — DRE.\n\n[OK] CBC with differential\n   Leukocytosis supports infection. SIRS: WBC >12K + fever >100.4°F.\n\n[OK] Urinalysis\n   GU pathology can present as abdominal pain.\n\n[OK] Bacterial culture, blood\n   Meets SIRS criteria — blood cultures warranted.\n\n[Missed] Bacterial culture, urine\n   Abdominal pain + fever + elevated WBC — urine culture may determine cause.\n\n[OK] Abdominal X-ray (acute series / AP)\n   Good start. Rule out free air (perforation).\n\n[Missed] CT abdomen/pelvis with contrast\n   Gold standard for definitive diagnosis. Will show 2 cm abscess — complicated diverticulitis.\n\n[OK] Occult blood, stool\n   Good screening. Can be gathered from DRE.\n\n[OK] BMP / CMP / LFTs\n   Screening labs.\n\n[OK] IV fluids (NS / LR / D5LR)\n   Nausea and vomiting — IV fluids for hydration.\n\n[OK] Diet, NPO\n   Bowel rest — essential in acute diverticulitis.\n\n[Missed] IV antibiotics (Ceftriaxone + Metronidazole / Pip-Tazo / Ampicillin-Sulbactam / Cefazolin + Metronidazole)\n   Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.\n\n[OK] Intravenous access\n   Good practice for IV fluids/medications.\n\n[Missed] Colonoscopy / Sigmoidoscopy / Barium enema\n   COLONOSCOPY AND BARIUM ENEMA ARE CONTRAINDICATED in acute diverticulitis — risk of perforation of inflamed bowel.\n\n[Missed] Diet, high fiber\n   High-fiber diet at discharge to prevent further occurrences. Gradually advance from low to high residue.\n\n[Avoid] Colonoscopy / Barium enema\n   ABSOLUTELY CONTRAINDICATED in acute diverticulitis. Risk of bowel perforation from inflamed, friable tissue. Colonoscopy only after diverticulitis completely resolves (to rule out malignancy).\n\n[Avoid] Percutaneous drainage for 2 cm abscess\n   Abscesses <3-4 cm can be managed with antibiotics alone. Drainage indicated for abscesses >4 cm.",
+      "ordersText": "[OK] Physical Exam: General Appearance\n   Determine how sick the patient looks.\n\n[OK] Physical Exam: Chest / Lungs\n   Investigate for lung pathology.\n\n[OK] Physical Exam: Heart / Cardiovascular\n   Investigate for cardiovascular pathology.\n\n[OK] Physical Exam: Abdomen\n   Chief complaint — LLQ tenderness. Assess for peritoneal signs.\n\n[OK] Physical Exam: Rectal\n   Could be source of symptoms — DRE.\n\n[OK] CBC with differential\n   Leukocytosis supports infection. SIRS: WBC >12K + fever >100.4°F.\n\n[OK] Urinalysis\n   GU pathology can present as abdominal pain.\n\n[OK] Bacterial culture, blood\n   Meets SIRS criteria — blood cultures warranted.\n\n[Missed] Bacterial culture, urine\n   Abdominal pain + fever + elevated WBC — urine culture may determine cause.\n\n[OK] Abdominal X-ray (acute series / AP)\n   Good start. Rule out free air (perforation).\n\n[Missed] CT abdomen/pelvis with contrast\n   Gold standard for definitive diagnosis. Will show 2 cm abscess — complicated diverticulitis.\n\n[OK] Occult blood, stool\n   Good screening. Can be gathered from DRE.\n\n[OK] BMP / CMP / LFTs\n   Screening labs.\n\n[OK] IV fluids (NS / LR / D5LR)\n   Nausea and vomiting — IV fluids for hydration.\n\n[OK] Diet, NPO\n   Bowel rest — essential in acute diverticulitis.\n\n[Missed] Ceftriaxone IV\n   Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.\n\n[Missed] Metronidazole IV\n   Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.\n\n[Missed] Pip-Tazo\n   Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.\n\n[Missed] Ampicillin-Sulbactam\n   Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.\n\n[Missed] Cefazolin IV\n   Complicated diverticulitis: IV cefazolin/cefuroxime/ceftriaxone + metronidazole or ampicillin/sulbactam alone. Small abscess (<3-4 cm) = antibiotics alone, no drainage needed.\n\n[OK] Intravenous access\n   Good practice for IV fluids/medications.\n\n[Missed] Colonoscopy / Sigmoidoscopy / Barium enema\n   COLONOSCOPY AND BARIUM ENEMA ARE CONTRAINDICATED in acute diverticulitis — risk of perforation of inflamed bowel.\n\n[Missed] Diet, high fiber\n   High-fiber diet at discharge to prevent further occurrences. Gradually advance from low to high residue.\n\n[Avoid] Colonoscopy / Barium enema\n   ABSOLUTELY CONTRAINDICATED in acute diverticulitis. Risk of bowel perforation from inflamed, friable tissue. Colonoscopy only after diverticulitis completely resolves (to rule out malignancy).\n\n[Avoid] Percutaneous drainage for 2 cm abscess\n   Abscesses <3-4 cm can be managed with antibiotics alone. Drainage indicated for abscesses >4 cm.",
       "hasReview": true,
       "structuredBy": "deepseek_direct",
       "parseQuality": "good",

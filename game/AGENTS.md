@@ -4,6 +4,10 @@ Medical training game: **181 CCS cases**, drag-and-place clinical orders onto a 
 
 **Latest session (2026-06-21):** [`docs/CHANGELOG-2026-06-21-agent-handoff.md`](docs/CHANGELOG-2026-06-21-agent-handoff.md) — lab picker, patient mode, TTS fallback, attending anchor fix, case story compile loop.
 
+**2026-06-29:** Manual-only portrait regen (serve cache incl. banned, default plate when uncached) + `smoke:play-case` fixes (TDZ, portaled settings popover, `detect-zones` graceful degrade).
+
+**Order sequence replay** is now a **floating, draggable, resizable scrubber bar** that controls pin visibility on the live scene (`OrderSequenceScrubber`) — scrub step-by-step to reveal placed orders one-by-one. Also added **grid label collision repulsion** so overlapping labels in the same cell auto-separate via force-directed layout.
+
 **Repo:** `git@github.com:BeizaPlus/TheSchoonMaker.git` (SSH as **BeizaPlus** — configured on this machine)
 
 **Baseline architecture:** commit `92a2586` · tag `base-architecture-2026-06-16` · see **`ARCHITECTURE.md`** in this folder.
@@ -276,7 +280,7 @@ BEIZA on-brand **Kwabena / POLYMATH** TV feed stills for CCS intros — **one** 
 | Static URL | `GET http://127.0.0.1:3001/case-portraits/case_N.png` |
 | API | `GET /api/case-portrait/:id` · `POST /api/regenerate-patient-from-case` · `POST /api/case-persona` |
 | Client | `src/lib/patientRegen.js` — `ensureCasePortrait()`, `regeneratePatientFromCase()` |
-| Auto-load | Briefing + Play on case enter (cache hit = instant) |
+| Auto-load | Briefing + Play on case enter = **serve cache, never regenerate**. Regen is **manual-only** (`refresh:true` / Regenerate button). Load path uses `readPortraitCache(..., { allowBanned:true })` so even banned cases serve instantly instead of rebuilding ~90s every open. Guard: `.cursor/rules/case-portrait-ban.mdc` |
 
 ### Custom portrait brief (per case)
 
@@ -395,8 +399,39 @@ When tapping a stack row in compare/review, show **explanation only** (do not re
 
 Implementation: `Play.jsx` — `handleDrop`, `commitStackPlacement`, `submitOrderCommand`, `processDecoyOrder`.
 
+### Order sequence replay — overlay scrubber (Steve 2026-06-29)
+
+The work-up replay is a **floating media-player bar over the live scene** — **not** a separate tab/modal. Slide or auto-play to reveal the dropped stacks one by one (first-dropped → last-dropped), like watching a brilliant attending build the case from scratch.
+
+| Piece | Behavior |
+|-------|----------|
+| Component | `src/components/OrderSequenceScrubber.jsx` (`.oss-bar`, `position: absolute`, `z-index:7000`) — controls shared `scrubberIndex` |
+| Draggable | Left-edge grab tab (`⠿`) — `setPointerCapture` drag anywhere |
+| Resizable | Gold grips on right edge (width), bottom edge (height), corner (both). Min 260×72, max 900×180 |
+| Controls | ◀ step-back · scrub track (gold dot) · ▶/⏸ **auto-play** (~1.1s/step) · skip-to-ends · step label/why row |
+| Pin reveal | `scrubberIndex` → `scrubberVisibleIds` (in `Play.jsx`) filters which placed pins show on the patient. Pins appear one-by-one as you advance. Empty set = show all |
+| On load | Sits at last step (all pins visible), **not** playing. Play at end **restarts from step 1** |
+| Auto-advance | When new orders are dropped, scrubber jumps to last step |
+| "Review order sequence" | Orders-panel + timeline button → `replayOrderSequence()` bumps `scrubberReplaySignal` → scrubber jumps to step 1 and auto-plays (no modal) |
+| StrictMode guard | Replay effect compares the **signal value** (not a first-run ref flag) so dev double-mount can't auto-start playback |
+| **Removed** | `OrderSequencePlayer.jsx` (old full-screen `.osq-overlay` modal) — deleted; `.osq-*` CSS is orphan/harmless |
+
+CSS: `src/styles/order-sequence-scrubber.css` (`.oss-btn-play` is the gold primary control; `.oss-bar.is-playing` glow).
+
+### Grid label collision repulsion (Steve 2026-06-29)
+
+Multiple orders dropped into the same grid cell auto-separate via force-directed layout instead of overlapping.
+
+| Piece | Behavior |
+|-------|----------|
+| Component | `src/components/GridPlacementLayer.jsx` — `computeRepulsionOffsets(items)` uses `useMemo` |
+| Algorithm | Groups items by cell → estimates label bounding-box from text length → 20 AABB overlap-detection iterations → repulsive forces with velocity damping (0.7) |
+| Output | Returns `{ x, y }` integer pixel offsets per item; solo items stay at (0,0) — no unnecessary transforms |
+| Marker | `src/components/GridPlacedMarker.jsx` — accepts `offsetX`/`offsetY` (replaced old `offsetIndex` + fixed `OFFSET_STEP_PX` diagonal fan-out) |
+
 | Feature | Location |
 |---------|----------|
+| Order sequence replay | `OrderSequenceScrubber.jsx` overlay (above) — no separate modal |
 | Next case | `IconSkipForward` in play panel stack (`Play.jsx` + `App.jsx` `skipToNextCase`) |
 | Shuffle case | `IconShuffle` in Briefing case picker |
 | Case creativity | Play gear settings (not in chat thread) |
@@ -435,6 +470,9 @@ Implementation: `Play.jsx` — `handleDrop`, `commitStackPlacement`, `submitOrde
 | `src/data/gameData.js` | Merges catalog + preparedCases + playbooks → game case |
 | `src/data/useCcsCatalog.js` | Catalog hook |
 | `src/components/Play.jsx` | Main play UI + command dock |
+| `src/components/OrderSequenceScrubber.jsx` | Overlay replay player — scrub/auto-play reveals pins in drop order |
+| `src/components/GridPlacementLayer.jsx` | Grid collision repulsion — auto-separates overlapping labels |
+| `src/components/GridPlacedMarker.jsx` | Grid label marker — accepts offsetX/offsetY from repulsion |
 | `src/lib/patientRegen.js` | Case portrait load/regenerate |
 | `src/lib/casePortraitBrief.js` | Per-case custom portrait text |
 | `src/lib/patientFactsFromHpi.js` | Patient demographics for chat |

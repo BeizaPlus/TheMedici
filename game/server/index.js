@@ -2278,9 +2278,14 @@ Return JSON:
 });
 
 app.post('/api/detect-zones', async (req, res) => {
+  // Vision zone-detection is an OPTIONAL enhancement (clickable hotspots on the
+  // portrait). When it can't run — no key, expired/invalid key, upstream error —
+  // degrade gracefully with HTTP 200 + zones:null instead of forwarding a 4xx/5xx.
+  // A hard error here was surfacing OpenAI's 401 to the browser console and failing
+  // the play-case smoke even though the client already handles "no zones" fine.
   const key = process.env.OPENAI_API_KEY;
   if (!key) {
-    return res.status(400).json({ error: 'Add OPENAI_API_KEY to MeWorld/.env' });
+    return res.json({ ok: true, zones: null, skipped: true, reason: 'no-openai-key' });
   }
   const { imageBase64, mimeType = 'image/jpeg' } = req.body || {};
   if (!imageBase64) return res.status(400).json({ error: 'Missing image' });
@@ -2306,7 +2311,8 @@ app.post('/api/detect-zones', async (req, res) => {
     });
     if (!r.ok) {
       const err = await r.text();
-      return res.status(r.status).json({ error: err });
+      console.warn(`[detect-zones] upstream ${r.status}; skipping zones: ${err.slice(0, 160)}`);
+      return res.json({ ok: true, zones: null, skipped: true, reason: `upstream-${r.status}` });
     }
     const data = await r.json();
     const text = data.choices?.[0]?.message?.content || '';
@@ -2314,7 +2320,8 @@ app.post('/api/detect-zones', async (req, res) => {
     const zones = JSON.parse(clean);
     res.json({ zones });
   } catch (e) {
-    res.status(500).json({ error: String(e.message || e) });
+    console.warn(`[detect-zones] error; skipping zones: ${String(e.message || e)}`);
+    res.json({ ok: true, zones: null, skipped: true, reason: 'error' });
   }
 });
 
@@ -2344,7 +2351,7 @@ app.get('/api/case-portrait/:caseId', async (req, res) => {
   const caseId = String(req.params.caseId || '').trim();
   if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
   try {
-    const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId);
+    const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId, { allowBanned: true });
     if (!cached.exists) {
       return res.json({ ok: true, exists: false, caseId });
     }
@@ -2507,24 +2514,18 @@ app.post('/api/regenerate-patient-from-case', async (req, res) => {
 
   try {
     const portraitSex = resolvePortraitSex(caseContext || {});
-    const layerState = await readPortraitLayers(CASE_PORTRAIT_DIR, caseId);
 
     if (!refresh) {
-      const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId);
-      const cachedSex = cached.meta?.patientSex || cached.meta?.analysis?.sex || null;
-      const sexMismatch = cachedSex && portraitSex && cachedSex !== portraitSex;
-      const expectedUber =
-        caseContext?.uberFaceSlug || resolvePatientUberRef(caseContext || {})?.slug || null;
-      const cachedUber = cached.meta?.uberRefSlug || null;
-      const uberMismatch = expectedUber && cachedUber !== expectedUber;
-      const frameStale = (cached.meta?.portraitFrameVersion || 1) < PORTRAIT_FRAME_VERSION;
-      const layersStale =
-        (cached.meta?.portraitLayersVersion || 0) < PORTRAIT_LAYERS_VERSION
-        || !layerState.iv
-        || !layerState.mask;
-      if (cached.exists && !sexMismatch && !uberMismatch && !frameStale && !layersStale) {
+      const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId, { allowBanned: true });
+      // Reuse the cached portrait whenever one exists. Regeneration is MANUAL ONLY:
+      // it happens solely on an explicit refresh (the "Regenerate portrait" button),
+      // never automatically on case load. This lets the user attach a character
+      // reference first and deliberately rebuild, instead of every case open
+      // silently triggering a ~90s portrait rebuild on version/staleness drift.
+      if (cached.exists) {
         const origin = serverOrigin(req);
         const url = portraitPublicUrl(caseId, origin);
+        const cachedSex = cached.meta?.patientSex || cached.meta?.analysis?.sex || null;
         const persona = cached.meta?.persona || cached.meta?.analysis?.persona || buildPortraitPersona(caseContext);
         return res.json({
           ok: true,

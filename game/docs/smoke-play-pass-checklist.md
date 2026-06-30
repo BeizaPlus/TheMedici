@@ -23,6 +23,20 @@ One doc. Six passes. Run **Pass A** automated; verify **B–F** before telling S
 
 Paste `docs/smoke-screenshots/<date>/play-case/run-*/` path in chat.
 
+> **`smoke:play-case` times out on `.game-scene`? It is NOT "flakiness."**
+> The historical cause was **portrait auto-regeneration (~90s) blocking scene mount**.
+> Portrait regeneration is now **manual-only** (`refresh: true` / Regenerate button) — a
+> cached portrait is always served on load, even for banned cases (`allowBanned`). So a
+> `.game-scene` timeout now means a **real regression**, not portrait gen. Before blaming
+> flakiness, check:
+> 1. API is up (`/api/health` 200) and `/api/case-portrait/:id` returns `exists:true` fast.
+> 2. `POST /api/regenerate-patient-from-case` with `refresh:false` returns `cached:true` in
+>    <1s (NOT ~90s). If it regenerates on load → the manual-only guard was reverted; see
+>    `.cursor/rules/case-portrait-ban.mdc`.
+> 3. Only a brand-new case with **no** cached portrait should ever generate on first open.
+>
+> Never re-document this timeout as "known flaky scene-selector" — fix the cause.
+
 ---
 
 ## Pass B — Treatment stack drag (each pill → patient)
@@ -72,12 +86,16 @@ Paste `docs/smoke-screenshots/<date>/play-case/run-*/` path in chat.
 
 | Step | Pass criteria |
 |------|----------------|
-| 1 | Baseplate loads |
-| 2 | Regenerate / session update |
-| 3 | Scene img src changes in real time |
+| 1 | Cached portrait → loads from cache instantly. **No cached portrait → default sex-aware plate** (male / female / pediatric). Loading a case must NEVER generate. |
+| 2 | Regenerate **only** via Regenerate button (`refresh:true`) — sex/uber/frame/layer/ban drift must not trigger auto-regen |
+| 3 | Scene img src changes in real time **after an explicit regenerate** |
 | 4 | Case **121** pediatric ref in `patientPediatricRefs.json` |
 
-**Requires:** `MAGNIFIC_API_KEY` for full pass.
+**Manual-only regen guard:** load paths serve cache (`readPortraitCache(..., { allowBanned: true })`).
+Only `refresh:true` rebuilds. Verify a re-open of any case (incl. a banned one like 031) is
+instant `cached:true`, not a ~90s rebuild. Guardrail: `.cursor/rules/case-portrait-ban.mdc`.
+
+**Requires:** `MAGNIFIC_API_KEY` for a full *manual* regenerate pass.
 
 ---
 

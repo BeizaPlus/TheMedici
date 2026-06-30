@@ -415,6 +415,24 @@
   display: inline-flex;
 }
 
+/* Portaled to <body> so the popover escapes the .game-scene-capture (z-index:1)
+   stacking trap and renders above the floating sidebar. The fixed container is a
+   zero-size anchor at the trigger's top-right; the popover hangs up-and-left from it. */
+.toolbar-settings-portal {
+  position: fixed;
+  z-index: 4000;
+  width: 0;
+  height: 0;
+}
+
+.toolbar-settings-portal .toolbar-settings-popover {
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+  left: auto;
+  top: auto;
+}
+
 .toolbar-settings-popover {
   bottom: calc(100% + 10px);
   right: 0;

@@ -9976,3 +9976,415 @@ body.stack-drag-over-patient {
   min-width: 0;
   text-align: center;
 }
+
+/* ---- Attending Demo bar ---- */
+.scene-order-demo-bar {
+  padding: 6px 10px 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.scene-order-demo-complete-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(232, 184, 75, 0.35);
+  background: rgba(232, 184, 75, 0.1);
+  color: #e8b84b;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  justify-content: center;
+}
+
+.scene-order-demo-complete-btn:hover {
+  background: rgba(232, 184, 75, 0.18);
+  border-color: rgba(232, 184, 75, 0.55);
+}
+
+.scene-order-demo-complete-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.scene-order-demo-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scene-order-demo-progress-text {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.scene-order-demo-progress-track {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.scene-order-demo-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #e8b84b, #d4a033);
+  transition: width 0.35s ease;
+}
+
+.scene-order-command-demo-btn.is-active {
+  color: #e8b84b;
+  background: rgba(232, 184, 75, 0.12);
+  border-radius: 6px;
+}
+
+/* ---- Order Sequence Player ---- */
+.osq-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 8000;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.osq-frame {
+  width: min(520px, 94vw);
+  max-height: 82vh;
+  background: #12121a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
+
+.osq-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.osq-head-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.osq-kicker {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.osq-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #e8b84b;
+}
+
+.osq-head-tools {
+  display: flex;
+  gap: 4px;
+}
+
+.osq-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.osq-icon-btn:hover {
+  color: #e8b84b;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.osq-empty {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+/* Slider */
+.osq-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 14px 10px;
+}
+
+.osq-slider-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.osq-slider-btn:hover:not(:disabled) {
+  color: #e8b84b;
+  background: rgba(232, 184, 75, 0.12);
+}
+
+.osq-slider-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.osq-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+  cursor: pointer;
+}
+
+.osq-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e8b84b;
+  border: 2px solid #12121a;
+  box-shadow: 0 0 0 2px rgba(232, 184, 75, 0.3);
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+
+.osq-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 4px rgba(232, 184, 75, 0.35);
+}
+
+/* Current step detail */
+.osq-detail {
+  padding: 0 14px;
+}
+
+.osq-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(232, 184, 75, 0.25);
+  border-radius: 8px;
+  background: rgba(232, 184, 75, 0.06);
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: left;
+  font: inherit;
+}
+
+.osq-detail-header:hover {
+  border-color: rgba(232, 184, 75, 0.5);
+  background: rgba(232, 184, 75, 0.1);
+}
+
+.osq-detail-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #e8b84b;
+  min-width: 2em;
+}
+
+.osq-detail-label {
+  flex: 1;
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.osq-detail-time {
+  font-size: 0.68rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.osq-detail-chevron {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.osq-detail-body {
+  padding: 12px 12px 4px;
+  border-left: 2px solid rgba(232, 184, 75, 0.25);
+  margin-left: 22px;
+  animation: osq-fade-in 0.2s ease;
+}
+
+@keyframes osq-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.osq-why,
+.osq-finding {
+  margin-bottom: 10px;
+}
+
+.osq-why-label,
+.osq-finding-label {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.osq-why-text,
+.osq-finding-text {
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0;
+}
+
+.osq-no-data {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Context steps */
+.osq-context {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+}
+
+.osq-context-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  transition: border-color 0.15s;
+}
+
+.osq-context-step:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.osq-context-num {
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+.osq-context-label {
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.osq-context-why {
+  font-size: 0.68rem;
+  color: var(--muted);
+  line-height: 1.4;
+  opacity: 0.75;
+}
+
+/* Step ticks */
+.osq-ticks {
+  display: flex;
+  gap: 4px;
+  padding: 10px 14px 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.osq-tick {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.osq-tick:hover {
+  background: rgba(232, 184, 75, 0.4);
+}
+
+.osq-tick.is-current {
+  background: #e8b84b;
+  transform: scale(1.4);
+  box-shadow: 0 0 6px rgba(232, 184, 75, 0.5);
+}
+
+.osq-playing-badge {
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  color: #e8b84b;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  animation: osq-pulse 1s ease-in-out infinite;
+}
+
+@keyframes osq-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Review button in timeline */
+.patient-order-timeline-review-btn {
+  margin-left: auto;
+  padding: 3px 10px;
+  border: 1px solid rgba(232, 184, 75, 0.3);
+  border-radius: 4px;
+  background: rgba(232, 184, 75, 0.08);
+  color: #e8b84b;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.patient-order-timeline-review-btn:hover {
+  background: rgba(232, 184, 75, 0.16);
+  border-color: rgba(232, 184, 75, 0.55);
+}

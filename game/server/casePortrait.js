@@ -476,10 +476,14 @@ export function buildPortraitAnalysis(caseContext = {}, persona = null) {
   return { ...base, persona };
 }
 
-export async function readPortraitCache(portraitDir, caseId) {
+export async function readPortraitCache(portraitDir, caseId, { allowBanned = false } = {}) {
   const fileName = portraitFileName(caseId);
   if (!fileName) return { exists: false, fileName: null, meta: null };
-  if (isCasePortraitBanned(caseId)) {
+  // A banned portrait is normally hidden (never reused as a generation reference or
+  // shipped). On the live LOAD path we pass allowBanned so an existing portrait is
+  // still served instead of triggering a ~90s rebuild on every case open — the bad
+  // portrait is only replaced when the user explicitly presses Regenerate (refresh).
+  if (!allowBanned && isCasePortraitBanned(caseId)) {
     return { exists: false, fileName, pngPath: path.join(portraitDir, fileName), meta: null, banned: true };
   }
   const pngPath = path.join(portraitDir, fileName);

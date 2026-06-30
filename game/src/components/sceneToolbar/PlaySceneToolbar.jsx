@@ -1,3 +1,5 @@
+import { useLayoutEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   IconClipboardList,
   IconClipboardPulse,
@@ -68,6 +70,31 @@ export default function PlaySceneToolbar({
   onToggleSettings,
   stacksDisabled = false,
 }) {
+  // The settings popover is portaled to <body> so it can sit ABOVE the floating
+  // sidebar. The toolbar lives inside .game-scene-capture (z-index:1), which traps
+  // its stacking context below the sidebar — an absolutely-positioned popover here
+  // would be hidden/un-clickable. Portaling escapes that trap.
+  const [settingsAnchor, setSettingsAnchor] = useState(null);
+  useLayoutEffect(() => {
+    if (!settingsOpen) {
+      setSettingsAnchor(null);
+      return undefined;
+    }
+    const update = () => {
+      const el = settingsRef?.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      setSettingsAnchor({ left: r.right, top: r.top });
+    };
+    update();
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, true);
+    return () => {
+      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', update, true);
+    };
+  }, [settingsOpen, settingsRef]);
+
   return (
     <nav className="dock-toolbar-nav" aria-label="Scene controls">
       <ToolbarGroup label="Clinical panels">
@@ -177,9 +204,19 @@ export default function PlaySceneToolbar({
           >
             <IconSettings />
           </ToolbarBtn>
-          {settingsOpen && settingsPopover}
         </span>
       </ToolbarGroup>
+      {settingsOpen && settingsPopover && settingsAnchor
+        ? createPortal(
+            <div
+              className="toolbar-settings-portal"
+              style={{ left: settingsAnchor.left, top: settingsAnchor.top }}
+            >
+              {settingsPopover}
+            </div>,
+            document.body,
+          )
+        : null}
     </nav>
   );
 }
