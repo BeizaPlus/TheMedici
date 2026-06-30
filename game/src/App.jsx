@@ -179,7 +179,7 @@ export default function App() {
     (result) => {
       if (currentCase?.id) {
         recordCaseComplete(currentCase.id, result);
-        clearCasePlayCheckpoint(currentCase.id);
+        // Per-case checkpoint stays for re-entry display; cleared on play-again / restart
       }
       clearPlayCheckpoint();
       setResumeCheckpoint(null);
@@ -192,10 +192,11 @@ export default function App() {
 
   const playAgain = useCallback(() => {
     clearPlayCheckpoint();
+    if (currentCase?.id) clearCasePlayCheckpoint(currentCase.id);
     setResumeCheckpoint(null);
     startIcuMonitor({ fadeMs: 0 });
     setScreen(SCREENS.briefing);
-  }, []);
+  }, [currentCase?.id]);
 
   const goHome = useCallback(() => {
     endSessionMonitor({ fadeMs: 900 });

@@ -754,6 +754,18 @@ export default function Play({
     scrubberTotalOrdersRef.current = newTotal;
   }, [orderTimelineEvents]);
 
+  // When the user scrubs to a different order on the timeline, load that
+  // order's result in the Order·Chat dock so they see the up-to-date treatment.
+  useEffect(() => {
+    if (!reviewed) return;
+    const seq = orderTimelineSequenceFromEvents(orderTimelineEvents)
+      .filter((s) => s.kind === 'order');
+    const step = seq[scrubberIndex];
+    if (!step?.stackId) return;
+    const iv = interventionById[step.stackId];
+    if (iv?.id) setOrderResultIvId(iv.id);
+  }, [scrubberIndex, orderTimelineEvents, interventionById, reviewed]);
+
   useEffect(() => {
     sessionStartedAtRef.current = sessionStartedAt;
   }, [sessionStartedAt]);
@@ -3099,11 +3111,16 @@ export default function Play({
         total,
         completed: true,
       });
-      clearCasePlayCheckpoint(caseData.id);
+      // Preserve placed pins + review state so re-entry shows the learner's work.
+      // The per-case snapshot survives; only the active session checkpoint clears.
+      const snapshot = buildCheckpoint();
+      snapshot.checkpoint.completed = true;
+      snapshot.checkpoint.timerPaused = true;
+      writeCasePlayCheckpoint(caseData.id, snapshot);
       clearPlayCheckpoint();
       onComplete(result);
     },
-    [onComplete, endCurrentPlaySession, doneCount, total],
+    [onComplete, endCurrentPlaySession, doneCount, total, buildCheckpoint, caseData.id],
   );
 
   const playTeachingVideo = useCallback(
@@ -3879,6 +3896,7 @@ export default function Play({
     soapLoggedRef.current = { assessment: null, plan: null };
 
     clearPlayCheckpoint();
+    clearCasePlayCheckpoint(caseData.id);
     startRef.current = Date.now();
 
     try {
