@@ -21,6 +21,18 @@ import { resolvePatientSex } from '../src/lib/patientSex.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
+const uberRefsJson = JSON.parse(
+  fs.readFileSync(path.join(ROOT, 'src/data/patientUberRefs.json'), 'utf8'),
+);
+
+function uberFaceSlugForCaseId(caseId, bankCase) {
+  const fromBank = bankCase?.uberFaceSlug || bankCase?.uber_face_slug;
+  if (fromBank) return fromBank;
+  const raw = String(caseId ?? '').trim();
+  const padded = /^\d+$/.test(raw) ? raw.padStart(3, '0') : raw;
+  return uberRefsJson.caseSlugs?.[raw] || uberRefsJson.caseSlugs?.[padded] || undefined;
+}
+
 const CATALOG_PATH = path.join(ROOT, 'src/data/ccsCatalog.json');
 const PLAYBOOKS_PATH = path.join(ROOT, 'src/data/playbooks.json');
 const OUT_PATH = path.join(ROOT, 'src/data/preparedCases.json');
@@ -499,7 +511,7 @@ for (const ccsCase of catalog.cases) {
       patientSex: bankCase?.patient_sex,
       preparedIntro: intro,
     }),
-    uberFaceSlug: bankCase?.uberFaceSlug || bankCase?.uber_face_slug || undefined,
+    uberFaceSlug: uberFaceSlugForCaseId(id, bankCase),
     portraitNote: bankCase?.portraitNote || bankCase?.portrait_note || undefined,
     hpi_narrative: hpiNarrative || undefined,
     patient_name_default: bankCase?.patient_name_default || undefined,

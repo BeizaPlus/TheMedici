@@ -18,7 +18,16 @@
 | **1 — Identity** | Photoreal **CHARACTER-MAP** contact sheet (9:16, white bg) | `character-maps-pending/<slug>-CHARACTER-MAP-alt*.png` | Steve picks alt → `public/assets/patient/uber/<slug>-CHARACTER-MAP.png` |
 | **2 — Game scene** | Stylized **ED game environment** plate (16:9, camera lock) | `game-scenes-pending/<slug>-GAME-SCENE-alt*.png` | Steve picks alt → `public/assets/patient/uber/<slug>-GAME-SCENE.png` |
 
-Step 2 uses source portrait + approved/pending character map as identity refs; **shared male anatomic crop lock** (`dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png`) sets camera/room only — never `patient-scene-female.png` (POV standing-feet artifact).
+**Step 2 — two methods:**
+
+| Method | When | Command |
+|--------|------|---------|
+| **A — Default script** | Male patient, or regen from crop lock | `node scripts/generate-uber-game-scenes.mjs --slug=<slug> --3d` |
+| **B — Identity swap (preferred)** | Female on male gold, or `--3d` drifts room/face/body | `node scripts/generate-uber-game-scene-idswap.mjs --slug=<slug> --force` |
+
+Method **B** uses **`vitiligo-wink-diastema-GAME-SCENE-alt2.png` as the Magnific edit base** (not `male-ed-anatomic-plate-a.png`). Character map + source photo = identity. See `RULES_IMAGE_GENERATION.md` § Step 2b.
+
+Step 2 method A uses source portrait + character map as identity refs; **shared male anatomic crop lock** (`dev/anatomic-plates/raw/male-ed-anatomic-plate-a.png`) sets camera/room only — never `patient-scene-female.png` (POV standing-feet artifact).
 
 **Composition:** patient supine on stretcher mattress; feet on sheet at foot of bed; solo patient — no POV feet, no standing on equipment. See `game-scenes-pending/README-APPROVAL.md`.
 
@@ -30,6 +39,7 @@ node scripts/generate-uber-game-scenes.mjs         # step 2 (default: Steve prio
 node scripts/generate-uber-game-scenes.mjs --all-missing
 node scripts/generate-uber-game-scenes.mjs --regen-lock   # angle-lock regen (skips gold)
 node scripts/generate-uber-game-scenes.mjs --audit       # list approved vs needs regen
+node scripts/generate-uber-game-scene-idswap.mjs --slug=copper-twa-nose-stud --force   # Step 2b identity swap
 ```
 
 Do **not** promote either step to `public/` until Steve approves.

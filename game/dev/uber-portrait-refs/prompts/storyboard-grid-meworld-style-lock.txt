@@ -1,0 +1,42 @@
+# Storyboard grid — MeWorld visual style lock (Steve approved 2026-06-30)
+# Paste with game-engine-stylization-pass.txt on every narrative storyboard grid.
+
+GRID FORMAT:
+- ONE image only — Magnific count: 1 (never A/B; grid has enough angles)
+- Layout: 2 columns × 4 rows = 8 panels
+- Thin black dividers; no text labels; no watermark
+
+## Plate aspect (video-ready 16:9 per panel)
+
+Each cell must crop to **1920×1080 landscape** without stretch.
+
+Formula: plate ratio = (cols × 16) : (rows × 9)
+
+| Layout | Plate ratio | Target pixels |
+|--------|-------------|---------------|
+| **2×4 (8 panels)** | **8:9** | **3840 × 4320** |
+| 2×3 (6 panels) | 32:27 | 3840 × 3240 |
+
+Magnific / REST: `aspect_ratio: "8:9"` · `resolution: "4K"` (or nearest; verify output ≥3840 wide).
+
+Do NOT use 9:16 overall plate for 2×4 grids — panels will not crop clean to 16:9.
+
+RENDER (mandatory — MeWorld Play, NOT photoreal documentary):
+Cinematic hospital film-still CGI + sculptural desert beats in SAME render family.
+Tactile stylized 3D, muted palette, soft GI, AO, subsurface scatter.
+Match vitiligo / subway uber GAME-SCENE gold. NOT stock photo, NOT line art.
+
+STYLE REFS: shipped *-GAME-SCENE.png + CHARACTER-MAP + vitiligo GAME-SCENE alt2 (style).
+
+CASE 090 — "What The Body Is Testing For" (gestational hypertension / new-paternity immune metaphor):
+Son’s anger = fear of fifteenth pregnancy, NOT moral judgment of her past. Subtext only.
+
+2×4 PANEL MAP (Steve refined 2026-06-30):
+R1L Wide desert — she rides camel, hand on belly; SECOND camel behind with adult son, body turned looking BACK the way they came, not forward with her; distance between them is the story.
+R1R Close — camel mouth/jaw stretches wide testing for water.
+R2L Hospital bed — same woman, same hand on same belly; desert and hospital folded into one scene.
+R2R Camel neck insert — thromboxane/prostacyclin: muscle under skin tightens in ripple, almost releases, cannot fully; vessel stays narrow; subtle clinical motion.
+R3L Her face close — still, watching something she cannot name.
+R3R Son from behind — sits apart, faces horizon not her; fear lives here without dialogue.
+R4L Her hand on pregnant belly close — unchanged gesture across fourteen pregnancies.
+R4R Wide distant — far ahead water (oasis or heat mirage); she and camel walk toward it; distance never closes — end-organ perfusion made visual.

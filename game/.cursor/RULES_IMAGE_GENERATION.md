@@ -51,6 +51,7 @@ Steve has already provisioned Magnific REST. **Do not ask for a new key** unless
 |----------|------------|----------------|-------------|
 | Uber identity maps | `npm run gen:uber-maps` | `dev/uber-portrait-refs/character-maps-pending/` | `dev/uber-portrait-refs/README.md` |
 | Uber game scenes | `npm run gen:uber-scenes` | `dev/uber-portrait-refs/game-scenes-pending/` | `dev/uber-portrait-refs/GAME_SCENE_CAMERA_LOCK.md` |
+| **Uber game scene — identity swap (preferred when gold is male)** | `node scripts/generate-uber-game-scene-idswap.mjs --slug=<slug> --force` | `game-scenes-pending/<slug>-GAME-SCENE-alt*-idswap-*.png` | § Step 2b below |
 | Ship approved uber scenes | `npm run ship:uber-scenes` | `public/assets/patient/uber/*-GAME-SCENE.png` | `dev/uber-portrait-refs/WIRED_UBER_CASES.md` |
 | Pediatric character maps | `npm run gen:ped-maps` | `dev/pediatric-portrait-refs/character-maps-pending/` | `dev/pediatric-portrait-refs/README.md` |
 | Case story plates | `npm run gen:case-story -- 051` | `.case-story-cache/` | `dev/case-story/README.md` |
@@ -305,6 +306,32 @@ Agents without REST key: run MCP workflow above manually.
 
 Portrait runtime still uses **16:9 ED baseplate** — map is face/hair/gown identity only.
 
+### C2. Uber game scene — identity swap on gold base (Step 2b · Steve 2026-06-30)
+
+**When to use:** `generate-uber-game-scenes.mjs --3d` uses `male-ed-anatomic-plate-a.png` as the Magnific **edit base**. That often drifts — wrong room (side window), wrong face, **male body on female characters** (vitiligo gold is a male patient).
+
+**Fix:** Use an **approved GAME-SCENE gold** as the edit base; swap **identity + body only**.
+
+| Input | Path |
+|-------|------|
+| Scene lock (base image) | `dev/uber-portrait-refs/game-scenes-pending/vitiligo-wink-diastema-GAME-SCENE-alt2.png` (default) |
+| Identity | `public/assets/patient/uber/<slug>-CHARACTER-MAP.png` or `character-maps-pending/<slug>-CHARACTER-MAP-alt1.png` |
+| Source photo | `dev/uber-portrait-refs/sources/<sourceFile>` |
+| Registry | `src/data/patientUberRefs.json` → `identityPrompt`, `sex: female` |
+
+```powershell
+cd C:\Users\steve\MeWorld\game
+npm run verify:magnific
+node scripts/generate-uber-game-scene-idswap.mjs --slug=copper-twa-nose-stud
+node scripts/generate-uber-game-scene-idswap.mjs --slug=copper-twa-nose-stud --gold=vitiligo-wink-diastema-GAME-SCENE-alt2.png --force
+```
+
+**Female patients on male gold:** prompt must include **feminine body block** — full bust under gown, curved waist, wider hips; **NOT** male vitiligo torso. Script adds this automatically when `sex: female` in `patientUberRefs.json`.
+
+**Do not** use anatomic crop lock as base for this pass. **Do** keep vitiligo overhead angle, dark ED, crown→toes, toes on mattress.
+
+Output: `*-GAME-SCENE-alt*-idswap-YYYYMMDD.png` in `game-scenes-pending/` — Steve approves → ship to `public/assets/patient/uber/<slug>-GAME-SCENE.png`.
+
 ### D. Scene element hero (anti-slop)
 
 **When:** Registry entry lacks `approvedLayer.path` or `characterMap.status` is not `"approved"`.
@@ -414,10 +441,29 @@ docs/portrait-previews/case-{id}-pediatric-preview.png   ← agent review
 
 ---
 
+## 8b. Storyboard grids (video prep — Steve 2026-06-30)
+
+**Rule file:** `.cursor/rules/storyboard-grid-generation.mdc`  
+**Style lock:** `dev/uber-portrait-refs/prompts/storyboard-grid-meworld-style-lock.txt` + `game-engine-stylization-pass.txt`
+
+| Param | Value |
+|-------|--------|
+| Layout | **2×4** (8 panels), thin black dividers, no text |
+| Plate aspect | **8:9** overall — `(cols×16):(rows×9)` → each panel crops **16:9 @ 1920×1080** |
+| Target size | **3840×4320** for 2×4; **3840×3240** for 2×3 |
+| Magnific `count` | **1 only** — grids already multi-angle; **no alt1/alt2** unless Steve rejects and asks regen |
+| Style | MeWorld sculptural CGI on **all** panels (hospital + desert/camel); NOT photoreal documentary |
+
+Output: `dev/uber-portrait-refs/video-pending/<slug>-<scene>-storyboard-2x4-portrait.png`
+
+Exception to §9 A/B: **single-shot portraits** → count 2 OK; **storyboard grids** → count 1 always.
+
+---
+
 ## 9. Review delivery (Steve)
 
 1. **`creations_show`** after every `images_generate` — do not wait for full batch silently.
-2. Run **A/B (count: 2)** on portraits; pick winner before upscale or promote.
+2. Run **A/B (count: 2)** on **single** portraits and character maps; pick winner before upscale or promote. **Storyboard grids: count 1** (§8b).
 3. Open refs in vision context when describing picks.
 4. On approval → `fitToBaseplate` → copy to `.case-portraits/` → set `provider: magnific` in JSON meta.
 5. Validate scene lock before baseplate promote: `node scripts/validate-scene-lock.mjs`.

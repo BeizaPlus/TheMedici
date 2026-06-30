@@ -22,14 +22,16 @@ export function resolveUberCasePreviewScene(caseContext = {}) {
 /** Tier A play — angled in-case plate (GAME-PLAY-SCENE or gamePlaySceneFile). */
 export function resolveUberCasePlayScene(caseContext = {}) {
   const ref = resolvePatientUberRef(caseContext);
-  if (!ref?.gamePlaySceneUrl) return null;
-  if (!SHIPPED_GAME_SCENE_STATUSES.has(ref.gamePlaySceneStatus || ref.gameSceneStatus)) return null;
+  const playFile = ref?.gamePlaySceneFile || ref?.gameSceneFile;
+  const playStatus = ref?.gamePlaySceneStatus || ref?.gameSceneStatus;
+  if (!playFile || !SHIPPED_GAME_SCENE_STATUSES.has(playStatus)) return null;
+  const assetBase = uberRefs.assetBase || '/assets/patient/uber';
   return {
     slug: ref.slug,
     caseId: ref.caseId,
-    url: ref.gamePlaySceneUrl,
-    file: ref.gamePlaySceneFile,
-    status: ref.gamePlaySceneStatus || ref.gameSceneStatus,
+    url: `${assetBase}/${playFile}`,
+    file: playFile,
+    status: playStatus,
     tier: 'play',
   };
 }

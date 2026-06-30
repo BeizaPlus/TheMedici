@@ -29,6 +29,8 @@ Scripts: `generate-ped-character-maps.mjs`, `generate-uber-character-maps.mjs`, 
 
 **Anti-overwrite:** pending `*-alt*.png` skipped on re-run; ship to `public/` only after Steve approves one alt per slug.
 
+**Uber female on male gold (Step 2b):** Do not use crop-lock base — use `generate-uber-game-scene-idswap.mjs` with vitiligo alt2 as base. See `RULES_IMAGE_GENERATION.md` § C2.
+
 ## Step 2 — Game scene (stylized pass)
 
 **Never** paste character-map photorealism into scene prompts. Always composite identity onto an approved **16:9 ED baseplate** with MeWorld camera lock.

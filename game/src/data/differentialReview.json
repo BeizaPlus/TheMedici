@@ -1,10 +1,10 @@
 {
-  "builtAt": "2026-06-30T14:48:32.198Z",
+  "builtAt": "2026-06-30T18:03:47.400Z",
   "sourceDir": "C:\\Users\\steve\\MeWorld\\data\\cases",
   "source": "MeWorld/data/cases/case_N.json",
   "count": 181,
   "completeCount": 181,
-  "withOrders": 153,
+  "withOrders": 154,
   "cases": {
     "1": {
       "caseId": 1,
@@ -15493,24 +15493,85 @@
     "147": {
       "caseId": 147,
       "title": "Heart Palpitations",
-      "diagnosis": "Possible cardiac arrhythmia or other underlying heart condition",
-      "chiefComplaint": "",
-      "patientSex": "",
+      "diagnosis": "Postpartum Thyroiditis",
+      "chiefComplaint": "Heart palpitations and tremor, postpartum",
+      "patientSex": "female",
       "specialty": "",
       "location": "",
       "scores": null,
-      "caseSummary": "",
-      "hpiNarrative": "",
-      "orders": [],
-      "intro": "Possible cardiac arrhythmia or other underlying heart condition",
-      "history": "",
-      "ordersText": "",
-      "hasReview": false,
-      "structuredBy": "preparedCases+fmgmatch+mistral",
+      "caseSummary": "Postpartum Thyroiditis — autoimmune destruction of thyroid follicles releasing stored T4/T3. Disproportionately elevated T4 relative to T3 distinguishes from Graves' disease. Transitory hyperthyroidism; most recover within 1 year. Symptomatic treatment with propranolol (breastfeeding-safe). Avoid radioactive studies and thionamides.",
+      "hpiNarrative": "{{patient_name}} is a postpartum woman presenting with palpitations and tremor. She is breastfeeding. The symptoms began gradually after delivery and have been worsening. She denies chest pain, dyspnea, or syncope. No personal or family history of thyroid disease.\n\nDiagnosis: Postpartum Thyroiditis — an autoimmune disorder that attacks the thyroid similar to Hashimoto's thyroiditis. Antibodies against the thyroid cause inflammation which damages thyroid follicles, causing release of large amounts of T4/T3 into circulation. Most symptomatic patients recover within 1 year. The hyperthyroidism is transitory.\n\nKey differential: Graves' disease. In Graves', T3 is more elevated than T4. In postpartum thyroiditis, T4 is typically elevated while T3 is slightly elevated or within normal limits. Free T4 is disproportionately elevated (~4x ULN) while Free T3 is only borderline elevated — this is the classic pattern.\n\nWorkup: thyroid exam (HEENT/Neck), CBC, T3/T4/TSH, BMP. Optional: thyroid antibody, thyroid US (low blood flow = postpartum thyroiditis vs high flow = Graves).\n\nTreatment: Propranolol for symptomatic relief (safe in breastfeeding). Avoid Atenolol (less preferred for breastfeeding), Methimazole/PTU (T4/T3 synthesis decreased, not increased, in this condition), thyroid uptake/scan (radioactive, contraindicated in breastfeeding).\n\nFollow-up: Serial free T4/TSH. May enter hypothyroid phase requiring levothyroxine. Most stabilize within 1 year postpartum.",
+      "orders": [
+        {
+          "status": "missed",
+          "order": "·Physical Exam: General Appearance",
+          "reason": "It would be a good idea to take a general look at the patient to see how the patient looks."
+        },
+        {
+          "status": "missed",
+          "order": "Physical Exam: Heart / Cardiovascular",
+          "reason": "This is the patient's chief concern, so this should be evaluated."
+        },
+        {
+          "status": "missed",
+          "order": "Physical Exam: HEENT / Neck",
+          "reason": ""
+        },
+        {
+          "status": "missed",
+          "order": "CBC with differential",
+          "reason": "A CBC should be ordered to look for infection that could be causing the palpitations."
+        },
+        {
+          "status": "missed",
+          "order": "Triiodothyronine, serum, free / Triiodothyronine, serum, total",
+          "reason": "Getting a T3 will help differentiate Graves' disease from Postpartum Thyroiditis"
+        },
+        {
+          "status": "missed",
+          "order": "·Thyroxine, serum, free / Thyroxine, serum, total",
+          "reason": "This will confirm hyperthyroidism. The etiology of the hyperthyroidism is the next step in diagnosis."
+        },
+        {
+          "status": "missed",
+          "order": "Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum",
+          "reason": "A TSH would be a good lab to order to screen for abnormal thyroid levels which could contribute to the patient's current symptoms Optional Order - Not Required - Does not affect grade: ·Antibody, thyroid, serum"
+        },
+        {
+          "status": "missed",
+          "order": "Basic metabolic profile / Comprehensive metabolic profile",
+          "reason": "Chemistries are important to get to rule out other conditions."
+        },
+        {
+          "status": "avoided",
+          "order": "·Thyroid uptake",
+          "reason": "This should be avoided in breastfeeding mothers as this can cause the breastmilk to be radioactive. If it were done, points would be lost, but the uptake would be very low."
+        },
+        {
+          "status": "avoided",
+          "order": "Scan, thyroid",
+          "reason": "This should be avoided in breastfeeding mothers as this can cause the breastmilk to be radioactive. If it were done, points would be lost."
+        },
+        {
+          "status": "missed",
+          "order": "--- Section 4 (y=4765-6353) ---",
+          "reason": "As the patient is symptomatic with palpitations and tremor, the patient should be treated with a beta-blocker. Propranolol is the preferred agent here because the patient is breast feeding. Atenolol should be avoided due to this. Points would be lost if Atenolol were chosen as the agent. Metoprolol is not as good of a choice as propranolol due to the breastfeeding aspect."
+        },
+        {
+          "status": "avoided",
+          "order": "Methimazole / Propylthiouracil",
+          "reason": "Points would be lost for ordering methimazole/PTU as T4/T3 synthesis is decreased, not increased."
+        }
+      ],
+      "intro": "Heart palpitations and tremor, postpartum",
+      "history": "{{patient_name}} is a postpartum woman presenting with palpitations and tremor. She is breastfeeding. The symptoms began gradually after delivery and have been worsening. She denies chest pain, dyspnea, or syncope. No personal or family history of thyroid disease.\n\nDiagnosis: Postpartum Thyroiditis — an autoimmune disorder that attacks the thyroid similar to Hashimoto's thyroiditis. Antibodies against the thyroid cause inflammation which damages thyroid follicles, causing release of large amounts of T4/T3 into circulation. Most symptomatic patients recover within 1 year. The hyperthyroidism is transitory.\n\nKey differential: Graves' disease. In Graves', T3 is more elevated than T4. In postpartum thyroiditis, T4 is typically elevated while T3 is slightly elevated or within normal limits. Free T4 is disproportionately elevated (~4x ULN) while Free T3 is only borderline elevated — this is the classic pattern.\n\nWorkup: thyroid exam (HEENT/Neck), CBC, T3/T4/TSH, BMP. Optional: thyroid antibody, thyroid US (low blood flow = postpartum thyroiditis vs high flow = Graves).\n\nTreatment: Propranolol for symptomatic relief (safe in breastfeeding). Avoid Atenolol (less preferred for breastfeeding), Methimazole/PTU (T4/T3 synthesis decreased, not increased, in this condition), thyroid uptake/scan (radioactive, contraindicated in breastfeeding).\n\nFollow-up: Serial free T4/TSH. May enter hypothyroid phase requiring levothyroxine. Most stabilize within 1 year postpartum.\n\nPostpartum Thyroiditis — autoimmune destruction of thyroid follicles releasing stored T4/T3. Disproportionately elevated T4 relative to T3 distinguishes from Graves' disease. Transitory hyperthyroidism; most recover within 1 year. Symptomatic treatment with propranolol (breastfeeding-safe). Avoid radioactive studies and thionamides.",
+      "ordersText": "[Missed] ·Physical Exam: General Appearance\n   It would be a good idea to take a general look at the patient to see how the patient looks.\n\n[Missed] Physical Exam: Heart / Cardiovascular\n   This is the patient's chief concern, so this should be evaluated.\n\n[Missed] Physical Exam: HEENT / Neck\n\n[Missed] CBC with differential\n   A CBC should be ordered to look for infection that could be causing the palpitations.\n\n[Missed] Triiodothyronine, serum, free / Triiodothyronine, serum, total\n   Getting a T3 will help differentiate Graves' disease from Postpartum Thyroiditis\n\n[Missed] ·Thyroxine, serum, free / Thyroxine, serum, total\n   This will confirm hyperthyroidism. The etiology of the hyperthyroidism is the next step in diagnosis.\n\n[Missed] Hormone, thyroid stimulating, serum ultrasensitive / Hormone, thyroid stimulating, serum\n   A TSH would be a good lab to order to screen for abnormal thyroid levels which could contribute to the patient's current symptoms Optional Order - Not Required - Does not affect grade: ·Antibody, thyroid, serum\n\n[Missed] Basic metabolic profile / Comprehensive metabolic profile\n   Chemistries are important to get to rule out other conditions.\n\n[Avoid] ·Thyroid uptake\n   This should be avoided in breastfeeding mothers as this can cause the breastmilk to be radioactive. If it were done, points would be lost, but the uptake would be very low.\n\n[Avoid] Scan, thyroid\n   This should be avoided in breastfeeding mothers as this can cause the breastmilk to be radioactive. If it were done, points would be lost.\n\n[Missed] --- Section 4 (y=4765-6353) ---\n   As the patient is symptomatic with palpitations and tremor, the patient should be treated with a beta-blocker. Propranolol is the preferred agent here because the patient is breast feeding. Atenolol should be avoided due to this. Points would be lost if Atenolol were chosen as the agent. Metoprolol is not as good of a choice as propranolol due to the breastfeeding aspect.\n\n[Avoid] Methimazole / Propylthiouracil\n   Points would be lost for ordering methimazole/PTU as T4/T3 synthesis is decreased, not increased.",
+      "hasReview": true,
+      "structuredBy": "ccs_screenshot_ocr",
       "parseQuality": "good",
-      "ordersSource": "none",
+      "ordersSource": "ocr",
       "complete": true,
-      "confidence": "inferred"
+      "confidence": "screenshot"
     },
     "148": {
       "caseId": 148,

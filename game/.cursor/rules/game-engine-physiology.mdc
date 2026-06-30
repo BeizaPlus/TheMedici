@@ -1,0 +1,104 @@
+# Game engine — physiology simulation + trending rules (Steve spec)
+
+**Status:** Documented — do NOT implement yet. Steve is studying.
+
+## 1. Interpret button → attendant chat
+
+When the user clicks **Interpret** on a lab/imaging result:
+- Open the **Order · Chat dock** in **attending mode** (tutor)
+- Send the lab result value/text into the chat as context
+- The AI attendant discusses the result with the learner — mechanism, significance, next step
+- Do NOT switch to patient mode or open a separate panel
+
+## 2. Timeline scrubber loads results as attendant teaches
+
+When the attendant is walking through the case order sequence and the user scrubs the timeline:
+- Each order step that comes into view should auto-load its result card
+- The Order · Chat dock (Results panel) should update to show the result for the scrubbed-to order
+- Vitals should snap to what they'd be at that point in the sequence (see §4)
+
+## 3. Repeated orders = trending lines
+
+If the user orders the same test twice (e.g., CBC x2):
+- The engine recognizes this as a **trending request** — time has passed, re-assessment wanted
+- Show both results side-by-side or as a trend (delta, arrow, time elapsed)
+- Example: CBC#1 at T+0:00, CBC#2 at T+1:30 → show Hgb trending down, WBC trending up
+- This applies to any repeatable lab: CBC, BMP, lactate, troponin, ABG, coagulation, etc.
+- Imaging repeats (e.g. CT head #2) are also valid trending — show comparison if prior exists
+
+## 4. Slider switches order context
+
+When sliding the timeline scrubber from one order to another:
+- The order display/summary switches to the order at that position
+- If sliding from "Labetalol" to "Low-dose aspirin", the order label/card updates
+- Result panel shows the result for the current scrubber position's order
+- Vitals reflect the physiological state at that point in the sequence
+
+## 5. Vitals respond to treatments (physiology simulation)
+
+### Core rule
+Every intervention placed on the patient should affect vitals according to real physiology. The engine must model cause → effect with realistic timing.
+
+### IV Fluids
+- **Effect:** Crystalloid bolus (1-2L NS/LR) → plasma volume expansion
+- **Vitals change:** HR decreases (tachycardia resolves), SBP increases, DBP may stay similar
+- **Onset:** Begins within minutes, peak effect 15-30 min
+- **Magnitude:** HR drop 10-30 bpm for hypovolemic tachycardia; SBP rise 5-15 mmHg if hypotensive
+- **Limit:** If euvolemic, additional fluids have diminishing/no effect (do not overshoot)
+
+### Antihypertensives (e.g., Labetalol)
+- **Effect:** IV labetalol → alpha + beta blockade → peripheral vasodilation + reduced cardiac output
+- **Vitals change:** SBP and DBP both decrease; HR may decrease slightly (beta blockade)
+- **Onset:** IV: 5-15 min · PO: 30-60 min
+- **Magnitude:** Dose-dependent; typical IV 20mg → SBP drop 20-40 mmHg in severe HTN
+- **Duration:** IV: 2-4 hours · PO: 8-12 hours
+- **Rule:** Do NOT drop BP instantly on order placement — simulate pharmacokinetics
+
+### Antibiotics
+- **Effect:** No immediate vital sign change (antibiotics take hours-days)
+- **Fever:** May begin to defervesce 24-48h after first dose
+- **Sepsis vitals:** HR and RR may improve over hours, not minutes
+- **Rule:** Placing antibiotics does not instantly fix vitals — time delay required
+
+### Oxygen / Respiratory support
+- **Effect:** SpO2 rises within seconds-minutes of O2 application
+- **Magnitude:** Depends on delivery (NC 2L → small rise; NRB 15L → large rise)
+- **Rule:** Modeling is fast and direct for SpO2; does not fix underlying cause
+
+### Pain medications / Sedation
+- **Effect:** HR decreases (pain control), RR may decrease (opioids/sedation)
+- **Onset:** IV: 2-5 min · PO: 30-60 min
+- **Rule:** Model analgesic effect on HR (pain-driven tachycardia resolves)
+
+### Steroids
+- **Effect:** No immediate vital sign change
+- **Rule:** Inflammatory markers (CRP, ESR) improve over days, not minutes
+
+### Transfusion
+- **Effect:** Hb rises, HR may decrease if tachycardic from anemia
+- **Onset:** During and after transfusion (1-4 hours)
+- **Rule:** Model Hb rise (~1 g/dL per unit PRBC)
+
+### General simulation principles
+- Every drug has an **onset**, **peak**, and **duration** — respect them
+- Vitals do NOT snap-change on order placement
+- The scrubber drives time — as you slide forward, vitals evolve based on what was ordered
+- Trending labs auto-adjust based on modeled physiology (e.g., Hct rises after fluids)
+- Reference: standard pharmacology texts, UpToDate drug monographs, physiology textbooks
+- If uncertain about a drug's timing/magnitude: ask Steve to confirm the rule
+
+### Vitals model (per time-step)
+```
+vitals(t) = baseline + Σ effect(drug_i, t - t_ordered_i)
+```
+Where `effect(drug, elapsed_time)` follows onset/peak/duration curves per drug class.
+
+## 6. Fetal ultrasound / OB-specific
+
+For OB cases (like case 90 — Gestational Hypertension):
+- Fetal ultrasound results should be available as an order result
+- BPP (biophysical profile), NST (non-stress test), growth US, amniotic fluid index
+- Do NOT model fetal vitals as part of the main patient vitals panel (separate concern)
+
+## Do not implement
+Steve is currently studying. These are specifications only. Confirm with Steve before coding any of these rules.

@@ -1,0 +1,30 @@
+# Case review — state preservation bug (Steve)
+
+**Status:** Documented — do NOT implement yet. Steve is studying.
+
+## Symptom
+After placing all orders and completing the review (or watching the teaching video), returning to the case shows no pins/stacks — everything is gone.
+
+## Root cause
+`Play.jsx` → `completeNow` (line ~3085-3107) calls:
+- `clearPlayCheckpoint()` — wipes active checkpoint
+- `clearCasePlayCheckpoint(caseData.id)` — wipes saved case snapshot
+- `onComplete(result)` — navigates away
+
+The checkpoint that held `placed`, `pins`, and `placementOrder` is deleted. On re-entry, `resumePlaySession` finds no checkpoint and the case starts fresh.
+
+## Why this is wrong
+The user's stacks represent their clinical reasoning. After review, the learner should still see their work — what they ordered, where they placed it, what was correct/missed. The review panel shows this, but once exited, it's gone.
+
+## Expected behavior
+- After completing review: stacks remain visible on the patient (with ok/bad markings from review)
+- Placements persist across case re-entries
+- The checkpoint should NOT be cleared — instead, mark it as "completed" so pins/placed are still loaded
+- Or: save a separate "completed snapshot" that the case always loads as the "last attempt display"
+
+## Files involved
+- `src/components/Play.jsx` — `completeNow`, `wrapUpCase`, `confirmExitCase`
+- `src/lib/playCheckpoint.js` — `clearPlayCheckpoint`, `clearCasePlayCheckpoint`
+
+## Do not implement
+Steve is studying. Confirm before coding.

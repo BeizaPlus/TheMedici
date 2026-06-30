@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-06-30T14:48:31.774Z",
+  "builtAt": "2026-06-30T18:03:46.902Z",
   "cases": {
     "100": {
       "physical-exam-pelvic": {
@@ -1666,24 +1666,49 @@
       }
     },
     "147": {
-      "order-a-12-lead-ecg-to-evaluate-for-any-": {
-        "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to heart palpitations.",
-        "orderLabel": "Order a 12-lead ECG to evaluate for any cardiac arrhythmias.",
+      "physical-exam-general-appearance": {
+        "why": "See how the patient looks — anxious, fine tremor.",
+        "orderLabel": "Physical Exam: General Appearance",
         "source": "playbook"
       },
-      "refer-the-patient-to-a-cardiologist-for-": {
-        "why": "Appropriate CCS order for Possible cardiac arrhythmia or other underlying heart condition: Refer the patient to a cardiologist for further evaluation and management..",
-        "orderLabel": "Refer the patient to a cardiologist for further evaluation and management.",
+      "physical-exam-heart-cardiovascular": {
+        "why": "Chief concern — tachycardic, regular, no murmurs.",
+        "orderLabel": "Physical Exam: Heart / Cardiovascular",
         "source": "playbook"
       },
-      "oxygen": {
-        "why": "The patient is experiencing heart palpitations, which can potentially be life-threatening. Oxygen is crucial to provide immediate support for any respiratory distress.",
-        "orderLabel": "Oxygen",
+      "physical-exam-heent-neck": {
+        "why": "Thyroid exam — mildly enlarged, non-tender, suspicious for hyperthyroidism.",
+        "orderLabel": "Physical Exam: HEENT / Neck",
         "source": "playbook"
       },
-      "iv-access-2": {
-        "why": "Immediate IV access is essential for the administration of medications and fluids if necessary.",
-        "orderLabel": "IV access ×2",
+      "cbc-with-differential": {
+        "why": "Rule out infection causing palpitations.",
+        "orderLabel": "CBC with differential",
+        "source": "playbook"
+      },
+      "t3-serum-free-total": {
+        "why": "Differentiate Graves' disease from Postpartum Thyroiditis. T3 borderline elevated (680 pg/dL vs 230-660).",
+        "orderLabel": "T3, serum (free/total)",
+        "source": "playbook"
+      },
+      "t4-serum-free-total": {
+        "why": "Confirm hyperthyroidism. Free T4 10.2 ng/dL (ULN 2.4) — 4x elevation, disproportionate to T3.",
+        "orderLabel": "T4, serum (free/total)",
+        "source": "playbook"
+      },
+      "tsh-ultrasensitive": {
+        "why": "Screen for abnormal thyroid levels. TSH suppressed in hyperthyroidism.",
+        "orderLabel": "TSH, ultrasensitive",
+        "source": "playbook"
+      },
+      "basic-metabolic-profile-comprehensive-me": {
+        "why": "Chemistries to rule out other conditions.",
+        "orderLabel": "Basic metabolic profile / Comprehensive metabolic profile",
+        "source": "playbook"
+      },
+      "propranolol": {
+        "why": "Beta-blocker for palpitations and tremor. Preferred agent in breastfeeding. Avoid Atenolol.",
+        "orderLabel": "Propranolol",
         "source": "playbook"
       }
     },
@@ -10381,5 +10406,5 @@
     }
   },
   "caseCount": 214,
-  "entryCount": 1990
+  "entryCount": 1995
 }

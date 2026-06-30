@@ -1,0 +1,44 @@
+---
+description: MeWorld narrative storyboard grids — one 2×4 portrait image, MeWorld CGI style lock, no A/B waste
+globs:
+  - "**/video-pending/**"
+  - "**/storyboard*"
+  - "**/uber-portrait-refs/**"
+---
+
+# Storyboard grid generation (Steve policy)
+
+When Steve asks for a **storyboard grid** (multi-panel contact sheet for video prep):
+
+## Grid spec (default)
+
+| Param | Value |
+|-------|--------|
+| **Layout** | **2×4** (2 columns, 4 rows = **8 panels**) |
+| **Plate aspect** | **8:9** — `(2×16):(4×9)` so each cell crops to **16:9 @ 1920×1080** |
+| **Target pixels** | **3840 × 4320** (4K plate) |
+| **Count** | **`count: 1` only** — never generate alt1/alt2 for grids |
+| **Why** | One grid already delivers many angles; a second full grid wastes time and credits |
+
+## Visual style (locked)
+
+**Always** read and paste:
+- `dev/uber-portrait-refs/prompts/storyboard-grid-meworld-style-lock.txt`
+- `dev/uber-portrait-refs/prompts/game-engine-stylization-pass.txt`
+
+**MeWorld sculptural CGI** — same family as uber GAME-SCENE gold plates. **NOT** photoreal documentary.
+
+Magnific refs per run:
+1. Shipped `public/assets/patient/uber/<slug>-GAME-SCENE.png` (patient + hospital panels)
+2. `CHARACTER-MAP` for identity
+3. Style gold: `vitiligo-wink-diastema-GAME-SCENE-alt2.png` (pending or public)
+
+## Output path
+
+`dev/uber-portrait-refs/video-pending/<slug>-<scene-slug>-storyboard-2x4-portrait.png`
+
+Do not write A/B suffixes (`-alt1`, `-alt2`) unless Steve explicitly asks for a second grid after rejecting the first.
+
+## Video follow-up
+
+After grid approval → pick hero panel(s) → ComfyUI Kling i2v per `comfyui-video.mdc` (one clip at a time unless Steve asks for batch).
