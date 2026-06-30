@@ -1,0 +1,30 @@
+# Toolbar icons — Tabler only (Steve)
+
+**Every toolbar, sidebar rail, dock, popover, and UI chrome icon must come from [Tabler Icons](https://tabler.io/icons)** — outline 24×24, stroke 2, `class="toolbar-icon"`.
+
+## Allowed icon source (sole)
+
+| Source | How |
+|---|---|
+| **`src/components/sceneToolbar/SceneToolbarIcons.jsx`** | Export named `Icon*` component with SVG from Tabler · pattern: `<svg class="toolbar-icon" xmlns="..." width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>` + paths |
+
+## Strictly forbidden
+
+- ❌ `react-icons` (any package — `fa`, `md`, `fi`, `io`, `io5`, `bi`, etc.)
+- ❌ Emoji as UI controls (🏥, ➕, ❌, ✓, etc.)
+- ❌ Custom hand-drawn SVG outside the Tabler spec
+- ❌ New icon npm packages
+- ❌ Inline data-URI SVG that isn't a Tabler path
+
+## When you need a new icon
+
+1. Search https://tabler.io/icons for the concept
+2. Copy the SVG `path` elements (no `<svg>` wrapper — use the template pattern)
+3. Export as `IconCamelName` in `SceneToolbarIcons.jsx`
+4. Import and use: `<IconCamelName />` with `className="toolbar-icon"`
+
+## Why
+
+- Tabler was chosen because it's consistent, open-source, and already threaded through every toolbar button in the game
+- Mixing icon sets (react-icons, emoji, hand-drawn) creates visual noise that breaks the UI coherence
+- The toolbar-icon CSS class (`scene-toolbar.css`) depends on Tabler's outline/stroke-2 format for correct sizing, hover, and active-state coloring

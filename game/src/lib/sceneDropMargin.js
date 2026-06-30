@@ -1,6 +1,6 @@
 import { STORAGE } from './storageKeys.js';
 
-const DEFAULT_MARGIN = { top: 0, bottom: 0, left: 0, right: 0 };
+const DEFAULT_MARGIN = { top: 0.01, bottom: 0.07, left: 0.18, right: 0.18 };
 const MAX_MARGIN = 0.5;
 
 /** Read the user's drop margin from localStorage */

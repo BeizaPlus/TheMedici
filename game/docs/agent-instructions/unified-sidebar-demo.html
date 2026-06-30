@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unified Sidebar — Full Game-Matched Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+/* ── Game CSS variables (exact match from index.css) ── */
+:root {
+  --bg: #0c0c10;
+  --panel: #14141c;
+  --border: #2a2a38;
+  --gold: #e8b84b;
+  --green: #3ecf8e;
+  --red: #ef5350;
+  --text: #f4f4f6;
+  --muted: #8b8b9a;
+  --font: 'Archivo', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%; overflow: hidden;
+  background: var(--bg); color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-wrap {
+  display: flex; width: 100%; height: 100vh;
+  flex-direction: row;
+}
+
+/* ── Scene area (fills left) ── */
+.scene-area {
+  flex: 1; min-width: 0;
+  position: relative;
+  background: #0a0a14;
+  overflow: hidden;
+}
+.scene-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+}
+.scene-darken {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none;
+}
+
+/* ── Patient Life Bar (top) ── */
+.life-bar-wrap {
+  position: absolute; top: 12px; left: 16px; right: 380px;
+  z-index: 20;
+  display: flex; align-items: center; gap: 12px;
+}
+.life-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px;
+  color: rgba(255,255,255,0.55); white-space: nowrap;
+  font-family: var(--font); font-weight: 600;
+  min-width: 90px;
+}
+.life-label .state {
+  margin-left: 4px; font-weight: 700;
+}
+.life-label .state.stable { color: var(--green); }
+.life-label .state.guarded { color: var(--gold); }
+.life-label .state.critical { color: var(--red); }
+.life-track {
+  flex: 1; height: 8px; border-radius: 4px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden; position: relative;
+}
+.life-fill {
+  height: 100%; border-radius: 4px;
+  transition: width 0.25s ease;
+}
+.life-fill.stable { background: linear-gradient(90deg, #2bbf77, var(--green)); }
+.life-fill.guarded { background: linear-gradient(90deg, #d69b21, var(--gold)); }
+.life-fill.critical { background: linear-gradient(90deg, #b43a39, var(--red)); }
+.life-pct {
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7);
+  min-width: 36px; text-align: right; font-family: var(--font);
+}
+
+/* ── ICU Monitor (bottom-left) ── */
+.monitor-strip {
+  position: absolute; bottom: 80px; left: 16px;
+  display: flex; align-items: center; gap: 0;
+  background: rgba(14, 16, 22, 0.85);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 4px 2px;
+  z-index: 15;
+  backdrop-filter: blur(12px);
+}
+.monitor-item {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 6px 12px; min-width: 58px;
+}
+.monitor-item + .monitor-item {
+  border-left: 1px solid rgba(255,255,255,0.06);
+}
+.monitor-val {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 16px; font-weight: 700; line-height: 1;
+  color: rgba(255,255,255,0.85);
+}
+.monitor-val.warn { color: var(--gold); }
+.monitor-unit {
+  font-size: 9px; color: rgba(255,255,255,0.3);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-top: 2px; font-family: var(--font);
+}
+.monitor-label {
+  font-size: 9px; color: rgba(255,255,255,0.3);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  font-family: var(--font);
+}
+
+/* ── Quick Chat / Order Input (stays on scene — not sidebar) ── */
+/* The game's existing SceneOrderCommandDock handles this. This demo
+   shows the life bar + monitor as HUD reference only. */
+
+/* ── Icon rail (far right) ── */
+.icon-rail {
+  width: 52px; flex-shrink: 0;
+  background: #0f0f1a;
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center;
+  padding-top: 12px; gap: 2px; z-index: 10;
+}
+.icon-rail-btn {
+  width: 40px; height: 40px; border: none; background: transparent;
+  border-radius: 8px; color: rgba(255, 255, 255, 0.4); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; position: relative;
+  transition: color 0.15s, background 0.15s;
+}
+.icon-rail-btn svg { width: 20px; height: 20px; }
+.icon-rail-btn:hover { color: rgba(255, 255, 255, 0.75); background: rgba(255, 255, 255, 0.06); }
+.icon-rail-btn.active { color: var(--gold); background: rgba(232, 184, 75, 0.1); }
+.icon-rail-btn.active::before {
+  content: ''; position: absolute; right: 0; top: 10px; bottom: 10px;
+  width: 3px; background: var(--gold); border-radius: 2px 0 0 2px;
+}
+.icon-rail-spacer { flex: 1; }
+.icon-rail-collapse {
+  width: 40px; height: 40px; border: none; background: transparent;
+  border-radius: 8px; color: rgba(255, 255, 255, 0.25); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.icon-rail-collapse svg { width: 16px; height: 16px; }
+.icon-rail-collapse:hover { color: rgba(255, 255, 255, 0.6); }
+
+/* ── Sidebar panel ── */
+.sidebar-panel {
+  width: 360px; flex-shrink: 0;
+  border-left: 1px solid var(--border);
+  background: var(--panel);
+  display: flex; flex-direction: column; overflow: hidden;
+  position: relative;
+  transition: width 0.2s ease;
+}
+.sidebar-panel.collapsed { width: 0; overflow: hidden; border-left: none; }
+.sidebar-head {
+  padding: 14px 16px 10px; font-size: 13px; font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase; letter-spacing: 0.6px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+  font-family: var(--font);
+}
+.sidebar-body { flex: 1; overflow-y: auto; padding: 8px 0; }
+.sidebar-body::-webkit-scrollbar { width: 6px; }
+.sidebar-body::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); }
+.sidebar-body::-webkit-scrollbar-thumb { background: rgba(232,184,75,0.25); border-radius: 3px; }
+.sidebar-body::-webkit-scrollbar-thumb:hover { background: rgba(232,184,75,0.45); }
+
+/* ── Resize handle ── */
+.resize-handle {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  cursor: col-resize; z-index: 20;
+}
+.resize-handle:hover, .resize-handle.dragging { background: rgba(232, 184, 75, 0.25); }
+
+/* ── Sidebar sections ── */
+.sidebar-section { padding: 0 16px; }
+.sidebar-section-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--muted); padding: 12px 0 6px;
+  font-family: var(--font); font-weight: 600;
+}
+
+/* ── Settings sub-nav ── */
+.settings-subnav {
+  display: flex; gap: 4px; padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.settings-subnav-btn {
+  font-size: 11px; font-family: var(--font); font-weight: 500;
+  padding: 5px 12px; border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.45);
+  background: transparent; cursor: pointer; white-space: nowrap;
+  transition: all 0.12s;
+}
+.settings-subnav-btn:hover { border-color: rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.75); }
+.settings-subnav-btn.active { background: rgba(232, 184, 75, 0.12); border-color: rgba(232, 184, 75, 0.35); color: var(--gold); }
+
+/* ── Toggle row ── */
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 16px; cursor: pointer; font-family: var(--font);
+  font-size: 13px; color: rgba(255, 255, 255, 0.6);
+  border-radius: 6px; transition: background 0.12s;
+}
+.toggle-row:hover { background: rgba(255, 255, 255, 0.03); }
+.toggle-switch {
+  width: 36px; height: 20px; border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1); position: relative;
+  cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+}
+.toggle-switch.on { background: var(--gold); }
+.toggle-switch::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; transition: left 0.2s;
+}
+.toggle-switch.on::after { left: 18px; }
+
+/* ── Buttons ── */
+.btn-sm {
+  min-height: 28px; padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.11); border-radius: 7px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(240, 238, 232, 0.78);
+  font-family: var(--font); font-size: 11px; cursor: pointer;
+  transition: all 0.12s;
+}
+.btn-sm:hover { border-color: rgba(232, 184, 75, 0.4); color: var(--gold); }
+.btn-sm.on {
+  border-color: rgba(232, 184, 75, 0.85);
+  background: rgba(232, 184, 75, 0.16);
+  color: var(--gold);
+  box-shadow: 0 0 0 1px rgba(232, 184, 75, 0.22);
+}
+.btn-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 16px; }
+
+.toolbar-btn-sb {
+  appearance: none; -webkit-appearance: none;
+  width: 36px; height: 36px;
+  background: transparent; border: none;
+  color: rgba(255, 255, 255, 0.72); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+}
+.toolbar-btn-sb:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; }
+.toolbar-btn-sb svg { width: 20px; height: 20px; }
+.toolbar-btn-sb:hover svg { color: #ffffff; }
+
+/* ── Inline panels ── */
+.inline-panel {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px; margin: 6px 16px; padding: 12px;
+}
+.inline-panel-label {
+  font-size: 11px; font-family: var(--font);
+  color: var(--muted); margin-bottom: 6px;
+}
+.inline-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.inline-chip {
+  font-size: 11px; font-family: var(--font);
+  padding: 4px 10px; border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px; background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.55); cursor: pointer;
+  transition: all 0.12s;
+}
+.inline-chip:hover { border-color: rgba(232, 184, 75, 0.3); color: var(--gold); }
+.inline-chip.selected {
+  border-color: rgba(232, 184, 75, 0.85);
+  background: rgba(232, 184, 75, 0.16);
+  color: var(--gold);
+}
+
+/* ── Margin sliders ── */
+.margin-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.margin-label {
+  width: 44px; font-size: 11px; font-family: var(--font);
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px;
+  font-weight: 500;
+}
+.margin-slider {
+  flex: 1; -webkit-appearance: none; height: 4px;
+  border-radius: 2px; background: rgba(255, 255, 255, 0.10);
+  outline: none; cursor: pointer;
+}
+.margin-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 12px; height: 12px;
+  border-radius: 50%; background: var(--gold); cursor: pointer;
+}
+.margin-val { width: 30px; text-align: right; font-size: 11px; font-family: var(--font); color: var(--muted); }
+
+/* ── Style chips ── */
+.style-row { display: flex; gap: 6px; padding: 6px 16px; flex-wrap: wrap; }
+.style-chip {
+  font-size: 11px; font-family: var(--font);
+  padding: 5px 10px; border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.5);
+  background: transparent; cursor: pointer;
+}
+.style-chip:hover { border-color: rgba(232, 184, 75, 0.25); }
+.style-chip.on {
+  border-color: rgba(232, 184, 75, 0.85);
+  background: rgba(232, 184, 75, 0.16);
+  color: var(--gold);
+}
+
+/* ── Level sliders ── */
+.level-row { display: flex; align-items: center; gap: 8px; padding: 6px 16px; }
+.level-label {
+  font-size: 11px; font-family: var(--font);
+  color: var(--muted); width: 70px; flex-shrink: 0;
+}
+.level-slider {
+  flex: 1; -webkit-appearance: none; height: 4px;
+  border-radius: 2px; background: rgba(255, 255, 255, 0.10);
+  outline: none; cursor: pointer;
+}
+.level-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 12px; height: 12px;
+  border-radius: 50%; background: var(--gold); cursor: pointer;
+}
+.level-val {
+  font-size: 11px; font-family: var(--font);
+  color: var(--muted); width: 32px; text-align: right;
+}
+
+.case-badge {
+  font-size: 12px; font-weight: 700; color: rgba(255, 255, 255, 0.8);
+  padding: 8px 0 2px; font-family: var(--font);
+}
+.case-sub { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.case-narrative {
+  font-size: 12px; line-height: 1.6; color: rgba(255, 255, 255, 0.55);
+  padding: 4px 0;
+}
+.order-item { padding: 4px 0; font-size: 12px; color: rgba(255, 255, 255, 0.5); }
+.order-item .done { color: var(--green); }
+.order-item .pending { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="app-wrap">
+
+  <!-- SCENE AREA -->
+  <div class="scene-area">
+    <!-- Case portrait image -->
+    <img class="scene-img"
+         src="file:///C:/Users/steve/MeWorld/game/public/assets/patient/patient-scene.png"
+         alt="Case 147 — Patient Scene"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="scene-darken"></div>
+
+    <!-- Fallback placeholder if image fails -->
+    <div style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(ellipse at center,#181830 0%,#0c0c10 100%)">
+      <span style="font-size:52px;opacity:0.2">🏥</span>
+      <span style="font-size:13px;color:var(--muted);margin-top:12px">Patient Scene — CASE 147</span>
+    </div>
+
+    <!-- PATIENT LIFE BAR -->
+    <div class="life-bar-wrap">
+      <div class="life-label">PATIENT LIFE <span class="state guarded">GUARDED</span></div>
+      <div class="life-track">
+        <div class="life-fill guarded" style="width:68%"></div>
+      </div>
+      <div class="life-pct">68%</div>
+    </div>
+
+    <!-- ICU MONITOR -->
+    <div class="monitor-strip">
+      <div class="monitor-item">
+        <span class="monitor-val">142</span>
+        <span class="monitor-unit">bpm</span>
+        <span class="monitor-label">HR</span>
+      </div>
+      <div class="monitor-item">
+        <span class="monitor-val">97</span>
+        <span class="monitor-unit">%</span>
+        <span class="monitor-label">SpO₂</span>
+      </div>
+      <div class="monitor-item">
+        <span class="monitor-val">118</span>
+        <span class="monitor-unit">/72</span>
+        <span class="monitor-label">NIBP</span>
+      </div>
+      <div class="monitor-item">
+        <span class="monitor-val">18</span>
+        <span class="monitor-unit">/min</span>
+        <span class="monitor-label">RR</span>
+      </div>
+      <div class="monitor-item">
+        <span class="monitor-val">37.1</span>
+        <span class="monitor-unit">°C</span>
+        <span class="monitor-label">Temp</span>
+      </div>
+    </div>
+
+    <!-- NOTE: The game's existing chat/order dock (SceneOrderCommandDock), monitor, and
+         life bar stay on the scene as-is. Sidebar only consolidates scattered controls. -->
+
+  </div>
+
+  <!-- SIDEBAR PANEL -->
+  <div class="sidebar-panel" id="sidebarPanel">
+    <div class="resize-handle" id="resizeHandle"></div>
+    <div class="sidebar-head" id="sidebarHead">CASE CONTEXT</div>
+    <div class="sidebar-body" id="sidebarBody"></div>
+  </div>
+
+  <!-- ICON RAIL -->
+  <div class="icon-rail" id="iconRail">
+    <button class="icon-rail-btn active" data-section="context" title="Case Context">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7a4 4 0 1 0 8 0 4 4 0 0 0-8 0"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
+    </button>
+    <button class="icon-rail-btn" data-section="tools" title="Tools">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+    </button>
+    <button class="icon-rail-btn" data-section="settings" title="Settings">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37 1 .608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+    <button class="icon-rail-btn" data-section="dock" title="Case Controls">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5z"/><path d="M8 10h8"/><path d="M8 14h6"/></svg>
+    </button>
+    <div class="icon-rail-spacer"></div>
+    <button class="icon-rail-collapse" id="collapseBtn" title="Collapse sidebar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/><path d="M21 12H9"/></svg>
+    </button>
+  </div>
+
+</div>
+
+<script>
+const s = {
+  context: {
+    t: 'CASE CONTEXT',
+    r(el) {
+      el.innerHTML = `<div class="sidebar-section"><div class="case-badge">CASE 147 · Heart Palpitations</div><div class="case-sub">Emergency Room — acute resuscitation bay</div></div>
+      <div class="sidebar-section"><div class="sidebar-section-label">HPI</div><div class="case-narrative">A 42-year-old man presents with sudden-onset palpitations that started 2 hours ago while at rest. He describes a "fluttering" sensation in his chest. No chest pain, no syncope. Denies caffeine or stimulant use.</div></div>
+      <div class="sidebar-section"><div class="sidebar-section-label">Physical Exam</div><div class="case-narrative"><div>· HR 142, irregularly irregular</div><div>· BP 118/72, RR 18, SpO₂ 97%</div><div>· No murmurs, rubs, or gallops</div><div>· Lungs clear, no edema</div></div></div>
+      <div class="sidebar-section"><div class="sidebar-section-label">Orders Placed</div><div class="order-item">1. ECG — <span class="done">&#10003; Atrial fibrillation, RVR</span></div><div class="order-item">2. CBC, BMP, TSH — <span class="pending">pending</span></div><div class="order-item">3. Portable CXR — <span class="pending">pending</span></div><div class="order-item">4. IV access, rate control — <span class="pending">pending</span></div></div>
+      <div class="sidebar-section"><div class="sidebar-section-label">Results</div><div style="font-size:11px;color:var(--muted);padding:4px 0">No results yet — place orders first.</div></div>`;
+    }
+  },
+  tools: {
+    t: 'TOOLS &amp; ACTIONS',
+    r(el) {
+      el.innerHTML = `<div class="sidebar-section"><div class="sidebar-section-label">Place Order</div><div class="inline-panel"><div class="inline-panel-label">Search labs &amp; imaging</div><div class="inline-chips"><span class="inline-chip selected">ECG (12-lead)</span><span class="inline-chip">CBC with diff</span><span class="inline-chip">BMP</span><span class="inline-chip">TSH, Free T4</span><span class="inline-chip">Troponin I</span><span class="inline-chip">CXR portable</span><span class="inline-chip">Echo</span><span class="inline-chip">D-dimer</span></div><div style="margin-top:10px;display:flex;gap:6px"><button class="btn-sm on">+ Add selected</button><button class="btn-sm">Clear</button></div></div></div>
+      <div class="sidebar-section"><div class="sidebar-section-label">Physical Exam</div><div class="inline-panel"><div class="inline-panel-label">Select maneuvers to overlay</div><div class="inline-chips"><span class="inline-chip selected">Cardiac auscultation</span><span class="inline-chip">Lung auscultation</span><span class="inline-chip">JVP assessment</span><span class="inline-chip">Peripheral pulses</span><span class="inline-chip">Abdominal exam</span></div><div style="margin-top:10px"><button class="btn-sm on">Apply to scene</button></div></div></div>
+      <div class="sidebar-section"><div class="sidebar-section-label">Quick Actions</div><div class="toggle-row" onclick="this.querySelector('.toggle-switch').classList.toggle('on')"><span>SOAP chart overlay</span><div class="toggle-switch"></div></div>
+      <div class="toggle-row" onclick="this.querySelector('.toggle-switch').classList.toggle('on')"><span>Bibliography &amp; sources</span><div class="toggle-switch"></div></div></div>`;
+    }
+  },
+  settings: {
+    t: 'SETTINGS',
+    rSub(el, sub) {
+      const subs = {
+        display: () => el.innerHTML = this._subNav('display') +
+          `<div class="sidebar-section"><div class="toggle-row" onclick="this.querySelector('.toggle-switch').classList.toggle('on')"><span>Dark mode</span><div class="toggle-switch on"></div></div>
+          <div class="toggle-row" onclick="this.querySelector('.toggle-switch').classList.toggle('on')"><span>Show drop zone cues</span><div class="toggle-switch on"></div></div>
+          <div class="toggle-row" onclick="this.querySelector('.toggle-switch').classList.toggle('on')"><span>Scene stack labels</span><div class="toggle-switch on"></div></div>
+          <div class="toggle-row" onclick="this.querySelector('.toggle-switch').classList.toggle('on')"><span>Fail-first drop mode</span><div class="toggle-switch"></div></div></div>
+          <div class="sidebar-section"><div class="sidebar-section-label">Scene Drop Margin</div><div style="padding:0 16px 4px;font-size:11px;color:var(--muted)">Shrink drop zone to keep pins away from UI edges</div>
+          <div class="margin-row"><span class="margin-label">Top</span><input type="range" class="margin-slider" min="0" max="50" value="1" oninput="this.nextElementSibling.textContent=this.value+'%'"><span class="margin-val">1%</span></div>
+          <div class="margin-row"><span class="margin-label">Bot</span><input type="range" class="margin-slider" min="0" max="50" value="7" oninput="this.nextElementSibling.textContent=this.value+'%'"><span class="margin-val">7%</span></div>
+          <div class="margin-row"><span class="margin-label">Left</span><input type="range" class="margin-slider" min="0" max="50" value="18" oninput="this.nextElementSibling.textContent=this.value+'%'"><span class="margin-val">18%</span></div>
+          <div class="margin-row"><span class="margin-label">Right</span><input type="range" class="margin-slider" min="0" max="50" value="18" oninput="this.nextElementSibling.textContent=this.value+'%'"><span class="margin-val">18%</span></div>
+          <div style="padding:6px 16px;text-align:right"><button class="btn-sm">Reset</button></div></div>`,
+        audio: () => el.innerHTML = this._subNav('audio') +
+          `<div class="sidebar-section"><div class="sidebar-section-label">Clinical Text Size</div><div class="level-row"><span class="level-label">Font scale</span><input type="range" class="level-slider" min="8" max="24" value="14" oninput="this.nextElementSibling.textContent=this.value+'px'"><span class="level-val">14px</span></div><div class="level-row"><span class="level-label">Weight</span><input type="range" class="level-slider" min="300" max="700" step="100" value="400" oninput="this.nextElementSibling.textContent=this.value"><span class="level-val">400</span></div><div style="padding:6px 16px"><button class="btn-sm on">Bold</button><button class="btn-sm">-</button><button class="btn-sm">+</button><button class="btn-sm">Reset</button></div></div>
+          <div class="sidebar-section"><div class="sidebar-section-label">Teach Me Notes</div><div class="level-row"><span class="level-label">Font scale</span><input type="range" class="level-slider" min="8" max="24" value="16" oninput="this.nextElementSibling.textContent=this.value+'px'"><span class="level-val">16px</span></div><div class="level-row"><span class="level-label">Weight</span><input type="range" class="level-slider" min="300" max="700" step="100" value="500" oninput="this.nextElementSibling.textContent=this.value"><span class="level-val">500</span></div></div>
+          <div class="sidebar-section"><div class="sidebar-section-label">Audio</div><div class="toggle-row" onclick="this.querySelector('.toggle-switch').classList.toggle('on')"><span>Game sounds</span><div class="toggle-switch"></div></div><div class="toggle-row" onclick="this.querySelector('.toggle-switch').classList.toggle('on')"><span>TTS voice</span><div class="toggle-switch on"></div></div><div class="level-row"><span class="level-label">Volume</span><input type="range" class="level-slider" min="0" max="100" value="70" oninput="this.nextElementSibling.textContent=this.value+'%'"><span class="level-val">70%</span></div></div>`,
+        cases: () => el.innerHTML = this._subNav('cases') +
+          `<div class="sidebar-section"><div class="toggle-row" onclick="this.querySelector('.toggle-switch').classList.toggle('on')"><span>Timed mode</span><div class="toggle-switch"></div></div></div>
+          <div class="btn-row"><button class="btn-sm">Reset placements</button><button class="btn-sm">Auto-layout pins</button><button class="btn-sm">Case story</button><button class="btn-sm on">Deterioration: ON</button></div>
+          <div class="sidebar-section"><div class="sidebar-section-label">Patient</div><div style="padding:0 16px;font-size:12px;color:rgba(255,255,255,0.5)"><div>Case portrait regen</div><div style="margin-top:6px"><button class="btn-sm">Regenerate from case</button></div></div></div>`,
+        ai: () => el.innerHTML = this._subNav('ai') +
+          `<div class="sidebar-section"><div class="sidebar-section-label">Attending Style</div><div class="style-row"><span class="style-chip on">Brilliant</span><span class="style-chip">Socratic</span><span class="style-chip">Concise</span><span class="style-chip">Detailed</span><span class="style-chip">Case-based</span></div></div>
+          <div class="sidebar-section"><div class="sidebar-section-label">First Opinion Depth</div><div class="level-row"><span class="level-label">Depth</span><input type="range" class="level-slider" min="1" max="5" value="3" oninput="this.nextElementSibling.textContent=this.value"><span class="level-val">3</span></div></div>
+          <div class="sidebar-section"><div class="sidebar-section-label">Case Creativity</div><div class="style-row"><span class="style-chip on">Standard</span><span class="style-chip">Creative</span><span class="style-chip">Rigorous</span></div></div>
+          <div class="sidebar-section"><div class="sidebar-section-label">Global</div><div class="style-row"><span class="style-chip on">Use case override</span><span class="style-chip">Global default</span></div></div>`
+      };
+      (subs[sub] || subs.display)();
+    },
+    _subNav(active) {
+      const items = ['display','audio','cases','ai'];
+      const labels = { display:'Display', audio:'Text &amp; Audio', cases:'Case Controls', ai:'AI &amp; Tutor'};
+      return `<div class="settings-subnav">` + items.map(k =>
+        `<button class="settings-subnav-btn${k === active ? ' active' : ''}" data-sub="${k}">${labels[k]}</button>`
+      ).join('') + `</div>`;
+    },
+    r(el) { this.rSub(el, 'display'); }
+  },
+  dock: {
+    t: 'CASE CONTROLS',
+    r(el) {
+      el.innerHTML = `<div class="sidebar-section"><div class="sidebar-section-label">Patient Interaction</div>
+        <div style="display:flex;gap:4px;padding:4px 0;align-items:center">
+          <button class="toolbar-btn-sb" title="Stethoscope (patient mode)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h-1a2 2 0 0 0-2 2v3.5a5.5 5.5 0 0 0 11 0v-3.5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 1 0 12 0v-3"/><path d="M11 3v2"/><path d="M6 3v2"/><path d="M18 10a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/></svg>
+          </button>
+          <button class="toolbar-btn-sb" title="SOAP chart">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 12h-11"/><path d="M17.5 8h-11"/><path d="M14.5 16h-7"/><path d="M4 4h16v16H4z"/></svg>
+          </button>
+          <button class="toolbar-btn-sb" title="Stacks">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>
+          </button>
+          <button class="toolbar-btn-sb" title="Chat">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-section"><div class="sidebar-section-label">Navigation</div>
+        <div style="display:flex;gap:4px;padding:4px 0;align-items:center">
+          <button class="toolbar-btn-sb" title="Previous case">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <button class="toolbar-btn-sb" title="Next case">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+          <button class="toolbar-btn-sb" title="End case">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+          <button class="toolbar-btn-sb" title="Exit case">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-section"><div class="sidebar-section-label">Learning Mode</div>
+        <div style="display:flex;gap:6px;padding:4px 0">
+          <button class="btn-sm on">Teach Me</button>
+          <button class="btn-sm">Review</button>
+        </div>
+      </div>
+      <div class="sidebar-section"><div class="sidebar-section-label">Progress</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--font);padding:4px 0">4/4 ORDERS &middot; 0:00</div>
+        <div style="height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin:4px 0 12px"><div style="height:3px;width:100%;background:var(--gold);border-radius:2px"></div></div>
+      </div>`;
+    }
+  }
+};
+
+let active = 'context', sub = 'display', collapsed = false;
+const panel = document.getElementById('sidebarPanel');
+const head = document.getElementById('sidebarHead');
+const body = document.getElementById('sidebarBody');
+
+function render(k) {
+  const sec = s[k]; if (!sec) return;
+  active = k; head.textContent = sec.t;
+  body.innerHTML = '';
+  if (k === 'settings') sec.rSub(body, sub); else sec.r(body);
+  document.querySelectorAll('.icon-rail-btn').forEach(b => b.classList.toggle('active', b.dataset.section === k));
+  if (collapsed) toggle();
+}
+
+function toggle() {
+  collapsed = !collapsed;
+  panel.classList.toggle('collapsed', collapsed);
+}
+
+document.getElementById('iconRail').addEventListener('click', e => {
+  const btn = e.target.closest('.icon-rail-btn');
+  if (btn && btn.dataset.section) render(btn.dataset.section);
+  if (e.target.closest('.icon-rail-collapse')) toggle();
+});
+
+body.addEventListener('click', e => {
+  const sb = e.target.closest('.settings-subnav-btn');
+  if (sb && sb.dataset.sub) { sub = sb.dataset.sub; s.settings.rSub(body, sub); }
+});
+
+document.addEventListener('click', e => {
+  const chip = e.target.closest('.inline-chip');
+  if (chip) chip.classList.toggle('selected');
+  const sc = e.target.closest('.style-chip');
+  if (sc) { sc.parentElement.querySelectorAll('.style-chip').forEach(c => c.classList.remove('on')); sc.classList.add('on'); }
+});
+
+// Resize
+const rh = document.getElementById('resizeHandle');
+let rz = false, sx, sw;
+rh.addEventListener('mousedown', e => {
+  rz = true; sx = e.clientX; sw = panel.offsetWidth;
+  rh.classList.add('dragging'); document.body.style.cursor = 'col-resize'; document.body.style.userSelect = 'none';
+  e.preventDefault();
+});
+document.addEventListener('mousemove', e => {
+  if (!rz) return;
+  const nw = Math.max(240, Math.min(600, sw - (e.clientX - sx)));
+  panel.style.width = nw + 'px';
+});
+document.addEventListener('mouseup', () => {
+  if (!rz) return; rz = false;
+  rh.classList.remove('dragging'); document.body.style.cursor = ''; document.body.style.userSelect = '';
+});
+
+render('context');
+</script>
+</body>
+</html>
