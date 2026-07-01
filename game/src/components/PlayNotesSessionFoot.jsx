@@ -1,10 +1,6 @@
-import {
-  IconLayoutSidebarRightCollapse,
-  IconLayoutSidebarRightExpand,
-} from './sceneToolbar/SceneToolbarIcons.jsx';
-
 /**
- * Session progress + Teach Me / Review — lives in the expanded order timeline.
+ * Session progress — dots + mode legend. Lives in the order timeline.
+ * Action buttons (Teach Me, Review) and counter are now in the sidebar rail.
  */
 export default function PlayNotesSessionFoot({
   doneCount,
@@ -12,28 +8,11 @@ export default function PlayNotesSessionFoot({
   interventions,
   placed,
   timedModeEnabled,
-  timerLabel,
-  timerState,
   caseData,
-  dropMode,
   teachMeMode,
-  onToggleTeachMe,
-  onReview,
-  reviewDisabled,
-  toolbarCollapsed,
-  onToggleToolbarCollapsed,
-  toolbar,
 }) {
   return (
     <div className="play-notes-session-foot">
-      <p className="play-sidebar-foot">
-        <span>
-          {doneCount}/{total} orders to save patient
-        </span>
-        <span className={`play-sidebar-timer ${timedModeEnabled ? timerState : 'untimed'}`}>
-          {timedModeEnabled ? timerLabel : 'Untimed'}
-        </span>
-      </p>
       <div
         className={`progress-dots ${total > 12 ? 'progress-dots-many' : total > 8 ? 'progress-dots-compact' : ''}`}
         aria-label={`Case progress ${doneCount} of ${total} orders`}
@@ -51,40 +30,6 @@ export default function PlayNotesSessionFoot({
         {caseData.sessionDifficulty || 'standard'} · Practice ·{' '}
         {timedModeEnabled ? 'Timed' : 'Untimed'} · {teachMeMode ? 'Teach Me: on' : 'Teach Me: off'}
       </span>
-      <div className="sidebar-foot-buttons">
-        <button type="button" className="btn-ghost" onClick={onToggleTeachMe}>
-          {teachMeMode ? 'Teach Me: ON' : 'Teach Me'}
-        </button>
-        <button type="button" className="btn-ghost" onClick={onReview} disabled={reviewDisabled}>
-          Review
-        </button>
-      </div>
-      <div className={`dock-toolbar dock-toolbar--collapsible ${toolbarCollapsed ? 'is-collapsed' : ''}`}>
-        <button
-          type="button"
-          className="dock-toolbar-toggle btn-ghost"
-          onClick={onToggleToolbarCollapsed}
-          aria-expanded={!toolbarCollapsed}
-          aria-controls="play-notes-toolbar"
-        >
-          {toolbarCollapsed ? (
-            <>
-              <IconLayoutSidebarRightExpand />
-              Scene tools
-            </>
-          ) : (
-            <>
-              <IconLayoutSidebarRightCollapse />
-              Hide tools
-            </>
-          )}
-        </button>
-        {!toolbarCollapsed && (
-          <div id="play-notes-toolbar" className="dock-toolbar-body">
-            {toolbar}
-          </div>
-        )}
-      </div>
     </div>
   );
 }

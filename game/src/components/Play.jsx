@@ -1224,7 +1224,6 @@ export default function Play({
   }, [commandUiLocked, infoTab]);
 
   const [threadViewCaseId, setThreadViewCaseId] = useState(() => String(caseData?.id || ''));
-  const [dockToolbarCollapsed, setDockToolbarCollapsed] = useState(playUiFavorite.dockToolbarCollapsed);
 
   useEffect(() => {
     if (infoTab !== 'chat') {
@@ -3537,7 +3536,6 @@ export default function Play({
     if (!stackSettingsOpen && !bibliographyOpen) return undefined;
     const closeOnOutside = (e) => {
       if (stackCommandRef.current?.contains(e.target)) return;
-      if (bibliographyRef.current?.contains(e.target)) return;
       // Settings popover is portaled to <body>, so it is outside stackCommandRef —
       // keep it open when the click lands inside the popover itself.
       if (e.target?.closest?.('.toolbar-settings-popover')) return;
@@ -4152,21 +4150,8 @@ export default function Play({
       interventions,
       placed,
       timedModeEnabled,
-      timerLabel,
-      timerState,
       caseData,
-      dropMode,
       teachMeMode,
-      reviewDisabled: doneCount === 0,
-      toolbarCollapsed: dockToolbarCollapsed,
-      onToggleToolbarCollapsed: () => setDockToolbarCollapsed((v) => !v),
-      onToggleTeachMe: () => {
-        setTeachMeMode((v) => {
-          if (v) setTeachFocusId(null);
-          return !v;
-        });
-      },
-      onReview: reviewPlacements,
     }),
     [
       doneCount,
@@ -4174,13 +4159,8 @@ export default function Play({
       interventions,
       placed,
       timedModeEnabled,
-      timerLabel,
-      timerState,
       caseData,
-      dropMode,
       teachMeMode,
-      dockToolbarCollapsed,
-      reviewPlacements,
     ],
   );
 
@@ -4322,6 +4302,38 @@ export default function Play({
           aria-label="Exit case"
         >
           <IconDoorExit />
+        </button>
+        <div className="panel-rail-sep" aria-hidden />
+        <div className="panel-rail-progress">
+          <span className="panel-progress-count">{doneCount}/{total}</span>
+          <span className={`panel-progress-timer ${timedModeEnabled ? timerState : 'untimed'}`}>
+            {timedModeEnabled ? timerLabel : 'Untimed'}
+          </span>
+        </div>
+        <button
+          type="button"
+          className={`panel-rail-btn${teachMeMode ? ' active' : ''}`}
+          onClick={() => {
+            setTeachMeMode((v) => {
+              if (v) setTeachFocusId(null);
+              return !v;
+            });
+          }}
+          title={teachMeMode ? 'Teach Me: ON' : 'Teach Me'}
+          aria-label="Teach Me"
+          aria-pressed={teachMeMode}
+        >
+          {teachMeMode ? 'TM' : '?M'}
+        </button>
+        <button
+          type="button"
+          className="panel-rail-btn"
+          onClick={reviewPlacements}
+          disabled={doneCount === 0}
+          title="Review order sequence"
+          aria-label="Review orders"
+        >
+          Rv
         </button>
         <div className="panel-rail-sep" aria-hidden />
         <button

@@ -352,6 +352,81 @@
   background: rgba(232, 184, 75, 0.24);
 }
 
+/* --- Rail: compact progress + action buttons --- */
+
+.panel-rail-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 2px 0;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.54rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-align: center;
+  min-height: 32px;
+  justify-content: center;
+}
+
+.panel-progress-count {
+  color: rgba(255,255,255,0.85);
+  font-size: 0.62rem;
+}
+
+.panel-progress-timer {
+  color: rgba(161, 228, 185, 0.8);
+  font-size: 0.5rem;
+}
+
+.panel-progress-timer.untimed {
+  color: rgba(255,255,255,0.4);
+}
+
+.panel-progress-timer.timed,
+.panel-progress-timer.warning {
+  color: rgba(241, 196, 15, 0.85);
+}
+
+.panel-progress-timer.overtime,
+.panel-progress-timer.critical {
+  color: rgba(231, 76, 60, 0.85);
+}
+
+.panel-rail-btn {
+  width: 42px;
+  height: 34px;
+  background: rgba(14,16,22,0.8);
+  border: none;
+  border-radius: 8px;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0;
+}
+
+.panel-rail-btn:hover:not(:disabled) {
+  color: #ffffff;
+  background: rgba(14,16,22,0.95);
+}
+
+.panel-rail-btn.active {
+  color: #f3d060;
+  background: rgba(232, 184, 75, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.45);
+}
+
+.panel-rail-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 .conversation-log {
   width: 480px;
   max-height: 320px;
