@@ -123,6 +123,7 @@ import {
   IconPuzzle,
   IconStethoscope,
   IconTimeline,
+  IconUsersGroup,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
 import IcuMonitorStrip from './IcuMonitorStrip.jsx';
@@ -201,6 +202,7 @@ import TeachMeComparePanel from './TeachMeComparePanel.jsx';
 import TeachMeCompareLandscape from './TeachMeCompareLandscape.jsx';
 import MedicalSequencePanel from './MedicalSequencePanel.jsx';
 import CaseStoryPanel from './CaseStoryPanel.jsx';
+import CharacterMapsPendant from './CharacterMapsPendant.jsx';
 import { markCaseStoryStarted, readCaseStoryStarted } from '../lib/caseStoryStarted.js';
 import {
   buildTeachCompareReport,
@@ -471,6 +473,8 @@ export default function Play({
   const [decoyAttempts, setDecoyAttempts] = useState([]);
   const [stackSettingsOpen, setStackSettingsOpen] = useState(false);
   const [bibliographyOpen, setBibliographyOpen] = useState(false);
+  const [characterMapsOpen, setCharacterMapsOpen] = useState(false);
+  const [selectedLadyRefSlug, setSelectedLadyRefSlug] = useState(null);
   const playUiFavorite = readPlayUiFavorite();
   const teachCompareLandscape = teachMeMode && teachCompareLayout === 'landscape';
   const [stacksVisible, setStacksVisible] = useState(playUiFavorite.stacksVisible);
@@ -523,6 +527,7 @@ export default function Play({
   const playSessionIdRef = useRef(playBoot.sessionId);
   const stackCommandRef = useRef(null);
   const bibliographyRef = useRef(null);
+  const characterMapsRef = useRef(null);
   const expandedDockLayoutRef = useRef(null);
   const [dockCollapsed, setDockCollapsed] = useState(false);
   const [dockHidden, setDockHidden] = useState(false);
@@ -4333,6 +4338,16 @@ export default function Play({
         >
           <IconSettings />
         </button>
+        <button
+          type="button"
+          className={`panel-char-btn${characterMapsOpen ? ' active' : ''}`}
+          ref={characterMapsRef}
+          onClick={() => setCharacterMapsOpen((v) => !v)}
+          title="Character maps"
+          aria-label="Character maps"
+        >
+          <IconUsersGroup size={14} />
+        </button>
       </div>
       {stackSettingsOpen && createPortal(
         <div
@@ -4527,6 +4542,16 @@ export default function Play({
           </CollapsibleSettingsSection>
         </div>,
         document.body,
+      )}
+      {caseData?.id && (
+        <CharacterMapsPendant
+          caseId={caseData?.id}
+          open={characterMapsOpen}
+          onClose={() => setCharacterMapsOpen(false)}
+          onSelect={(slug) => setSelectedLadyRefSlug(slug)}
+          selectedSlug={selectedLadyRefSlug}
+          anchorRef={characterMapsRef}
+        />
       )}
       <div
         className={`game-scene ${vitals.spo2 < 92 || vitals.sbp < 95 || vitals.hr > 120 ? 'icu-alarm' : ''} ${teachMeMode ? 'teach-me-active' : ''}${stackMoveMode ? ' pin-move-mode' : ''}`}
