@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-06-30T18:03:46.902Z",
+  "builtAt": "2026-07-01T13:17:12.676Z",
   "cases": {
     "100": {
       "physical-exam-pelvic": {
@@ -1794,23 +1794,53 @@
       }
     },
     "151": {
-      "abg-with-cohb": {
-        "why": "COHb >25%. Normal PaO2.",
-        "orderLabel": "ABG with COHb",
+      "physical-exam-general-appearance": {
+        "why": "Patient unconscious — assess general appearance, cherry-red skin, signs of smoke inhalation.",
+        "orderLabel": "Physical Exam: General Appearance",
+        "source": "playbook"
+      },
+      "physical-exam-neuro-psych": {
+        "why": "Unconscious patient requires full neurologic exam to establish baseline.",
+        "orderLabel": "Physical Exam: Neuro / Psych",
+        "source": "playbook"
+      },
+      "physical-exam-chest-lungs": {
+        "why": "Smoke exposure — evaluate for inhalation injury.",
+        "orderLabel": "Physical Exam: Chest / Lungs",
+        "source": "playbook"
+      },
+      "physical-exam-heart-cardiovascular": {
+        "why": "CO poisoning can cause cardiac ischemia.",
+        "orderLabel": "Physical Exam: Heart / Cardiovascular",
+        "source": "playbook"
+      },
+      "arterial-blood-gases": {
+        "why": "ABG with COHb is the definitive diagnostic test.",
+        "orderLabel": "Arterial blood gases",
+        "source": "playbook"
+      },
+      "lactate-serum": {
+        "why": "Elevated lactate suggests tissue hypoxia; if markedly elevated, consider concurrent cyanide poisoning.",
+        "orderLabel": "Lactate, serum",
+        "source": "playbook"
+      },
+      "carbon-monoxide-blood": {
+        "why": "Direct COHb measurement — diagnostic confirmation.",
+        "orderLabel": "Carbon monoxide, blood",
         "source": "playbook"
       },
       "100-o2-non-rebreather": {
-        "why": "Decrease COHb half-life to 1h.",
+        "why": "Start immediately — reduces COHb half-life to ~1 hour.",
         "orderLabel": "100% O2 non-rebreather",
         "source": "playbook"
       },
       "hyperbaric-o2-if-severe": {
-        "why": "COHb >25%, LOC, neuro, cardiac, pregnancy.",
+        "why": "Consider for COHb >25%, LOC, neuro deficits, cardiac ischemia, pregnancy.",
         "orderLabel": "Hyperbaric O2 (if severe)",
         "source": "playbook"
       },
       "monitor-for-neurologic-sequelae": {
-        "why": "Delayed onset possible.",
+        "why": "Delayed neurologic syndrome can occur 2-40 days post-recovery.",
         "orderLabel": "Monitor for neurologic sequelae",
         "source": "playbook"
       }
@@ -2269,14 +2299,14 @@
         "orderLabel": "Consult psychiatry for further evaluation and management",
         "source": "playbook"
       },
-      "if-the-patient-is-a-danger-to-themselves": {
-        "why": "Appropriate CCS order for Possible neuropsychiatric disorders such as delirium, dementia, or psychiatric emergencies: If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold.",
-        "orderLabel": "If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold",
+      "consider-voluntary-hospitalization-if-th": {
+        "why": "To determine the appropriate level of care and ensure patient safety",
+        "orderLabel": "Consider voluntary hospitalization — if the patient poses a risk to self or others, escalate to involuntary psychiatric hold",
         "source": "playbook"
       },
       "cmp-bmp": {
         "why": "To evaluate electrolytes, renal and liver function which could contribute to the patient's agitation",
-        "orderLabel": "CMP/BMP",
+        "orderLabel": "CMP / BMP",
         "source": "playbook"
       },
       "ua": {
@@ -7516,29 +7546,54 @@
       }
     },
     "055": {
-      "obtain-electrocardiogram-ecg-to-assess-h": {
-        "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath. Finding: HR 124, tachycardic; BP 107/68.",
-        "orderLabel": "Obtain electrocardiogram (ECG) to assess heart function and rule out acute coronary syndrome",
+      "chest-x-ray": {
+        "why": "Obtain to evaluate for alternative causes of dyspnea and assess cardiac silhouette. May show Westermark sign or Hampton hump in PE but is often normal.",
+        "orderLabel": "Chest X-ray",
         "source": "playbook"
       },
-      "chest-x-ray-to-evaluate-lung-fields-card": {
-        "why": "Evaluate chest and lungs as part of the initial exam for shortness of breath. Finding: RR 27, tachypneic; SpO₂ 94%.",
-        "orderLabel": "Chest X-ray to evaluate lung fields, cardiac silhouette, and pleural effusions",
+      "cbc-with-differential": {
+        "why": "Assess for anemia; baseline prior to anticoagulation.",
+        "orderLabel": "CBC with differential",
+        "source": "playbook"
+      },
+      "ekg": {
+        "why": "Assess for right heart strain pattern (S1Q3T3, right axis deviation) and rule out ACS.",
+        "orderLabel": "EKG",
+        "source": "playbook"
+      },
+      "troponin": {
+        "why": "Elevated troponin in PE indicates right ventricular strain and worse prognosis.",
+        "orderLabel": "Troponin",
+        "source": "playbook"
+      },
+      "doppler-lower-extremities-venous-duplex-": {
+        "why": "Confirm DVT as embolic source. Positive + high pretest probability establishes diagnosis.",
+        "orderLabel": "Doppler, lower extremities, venous / Duplex ultrasound",
+        "source": "playbook"
+      },
+      "ct-pulmonary-angiography-ctpa": {
+        "why": "Gold standard diagnostic test for PE. Visualizes filling defects in pulmonary arteries. Obtain after initial stabilization and risk stratification. Definitively confirms diagnosis.",
+        "orderLabel": "CT pulmonary angiography (CTPA)",
+        "source": "playbook"
+      },
+      "arterial-blood-gases": {
+        "why": "Evaluate for hypoxia and calculate A-a gradient. PE causes increased dead space.",
+        "orderLabel": "Arterial blood gases",
         "source": "playbook"
       },
       "oxygen": {
-        "why": "The patient presents with shortness of breath which is a life-threatening symptom. Immediate administration of oxygen is crucial to stabilize the patient.",
+        "why": "Patient presents with shortness of breath and hypoxemia. Immediate oxygen crucial to stabilize.",
         "orderLabel": "Oxygen",
         "source": "playbook"
       },
-      "iv-access": {
-        "why": "Vascular access for fluids and meds during the acute phase.",
-        "orderLabel": "IV access",
+      "heparin-low-molecular-weight-or-fondapar": {
+        "why": "Appropriate CCS order for Pulmonary Embolism: Heparin, low molecular weight OR Fondaparinux OR Rivaroxaban OR Apixaban OR Dabigatran OR Edoxaban.",
+        "orderLabel": "Heparin, low molecular weight OR Fondaparinux OR Rivaroxaban OR Apixaban OR Dabigatran OR Edoxaban",
         "source": "playbook"
       },
-      "fingerstick-glucose": {
-        "why": "Reversible hypoglycemia must be excluded early in acute presentations.",
-        "orderLabel": "Fingerstick glucose",
+      "monitor-cardiac": {
+        "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
+        "orderLabel": "Monitor, cardiac",
         "source": "playbook"
       }
     },
@@ -10406,5 +10461,5 @@
     }
   },
   "caseCount": 214,
-  "entryCount": 1995
+  "entryCount": 2006
 }

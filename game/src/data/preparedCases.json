@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "builtAt": "2026-06-30T18:03:46.498Z",
+  "builtAt": "2026-07-01T13:17:12.261Z",
   "totalCases": 197,
   "caseBankMerged": 181,
   "caseBankSource": "ollama-case-bank",
@@ -9124,28 +9124,28 @@
     "151": {
       "id": "151",
       "title": "Found Unconscious",
-      "category": "Toxicology / Hyperbaric Medicine",
+      "category": "Neurology",
       "presentationKey": "Found Unconscious",
       "playbookKey": "case-bank-151",
       "diagnosis": "Carbon Monoxide Poisoning",
       "patient_voice": {
-        "chief_complaint": "Found unconscious, cherry-red skin",
-        "history": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x…",
-        "pain": "Found unconscious, cherry-red skin"
+        "chief_complaint": "",
+        "history": "7-year-old girl found unconscious at scene — unable to provide history. Firefighters report heavy smoke, enclosed-space fire. Parents en route to hospital.",
+        "pain": ""
       },
       "caseBankSource": "deepseek_direct",
       "hasSourceIntro": true,
       "vitals": {
-        "sbp": 113,
-        "dbp": 72,
-        "hr": 106,
-        "rr": 21,
-        "temp": 37.3,
-        "spo2": 97,
-        "lactate": 2
+        "sbp": 151,
+        "dbp": 90,
+        "hr": 110,
+        "rr": 22,
+        "temp": 37.1,
+        "spo2": 99,
+        "lactate": 1.6
       },
-      "vitalsSource": "template",
-      "vitalsText": "Pulse: 106 beats/min Blood pressure 113/72 mmHg Respiratory rate: 21 /minute Temperature: 37.3 C SpO2: 97% Lactate: 2 mmol/L",
+      "vitalsSource": "bank-object",
+      "vitalsText": "Pulse: 110 beats/min Blood pressure 151/90 mmHg Respiratory rate: 22 /minute Temperature: 37.1 C SpO2: 99% Lactate: 1.6 mmol/L",
       "flowTrack": "Standard ED pathway",
       "dispositionUnits": [
         "ER",
@@ -9156,46 +9156,96 @@
       "exam": [
         [
           "General",
-          "presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire)."
+          "7-year-old girl unresponsive, cherry-red skin discoloration, soot on face and clothing, pediatric body proportions on ED stretcher"
         ],
         [
           "Cardiovascular",
-          "HR 106; BP 113/72."
+          "CO poisoning can cause cardiac ischemia even in children — monitor for arrhythmia"
         ],
         [
           "Respiratory",
-          "RR 21; SpO₂ 97%."
-        ],
-        [
-          "Abdomen",
-          "Deferred until stable unless trauma pathway"
+          "Smoke inhalation risk — pediatric airway is narrower and more reactive; evaluate for wheezing, stridor, carbonaceous sputum"
         ],
         [
           "Neuro",
-          "Altered mental status with attention and command-following documented."
+          "Unconscious — pediatric neuro exam shows altered mental status; baseline deficits must be documented"
         ],
         [
           "Skin",
-          "Trauma survey for lacerations, track marks, temperature"
+          "Cherry-red discoloration; check for burns and soot"
         ]
       ],
-      "patientSex": "male",
-      "hpi_narrative": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
+      "patientSex": "female",
+      "hpi_narrative": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
       "difficulty": "standard",
       "clinical_tip": "Carbon Monoxide Poisoning — follow CCS review orders.",
       "objective": "Complete diagnosis and treatment orders for Carbon Monoxide Poisoning.",
       "interventionIds": [
-        "abg-with-cohb",
+        "physical-exam-general-appearance",
+        "physical-exam-neuro-psych",
+        "physical-exam-chest-lungs",
+        "physical-exam-heart-cardiovascular",
+        "arterial-blood-gases",
+        "lactate-serum",
+        "carbon-monoxide-blood",
         "100-o2-non-rebreather",
         "hyperbaric-o2-if-severe",
         "monitor-for-neurologic-sequelae"
       ],
       "interventions": [
         {
-          "id": "abg-with-cohb",
-          "label": "ABG with COHb",
-          "correct_zone": "zone-monitor",
-          "why": "COHb >25%. Normal PaO2.",
+          "id": "physical-exam-general-appearance",
+          "label": "Physical Exam: General Appearance",
+          "correct_zone": "zone-custom-1",
+          "why": "Patient unconscious — assess general appearance, cherry-red skin, signs of smoke inhalation.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "physical-exam-neuro-psych",
+          "label": "Physical Exam: Neuro / Psych",
+          "correct_zone": "zone-icu",
+          "why": "Unconscious patient requires full neurologic exam to establish baseline.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "physical-exam-chest-lungs",
+          "label": "Physical Exam: Chest / Lungs",
+          "correct_zone": "zone-custom-1",
+          "why": "Smoke exposure — evaluate for inhalation injury.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "physical-exam-heart-cardiovascular",
+          "label": "Physical Exam: Heart / Cardiovascular",
+          "correct_zone": "zone-custom-1",
+          "why": "CO poisoning can cause cardiac ischemia.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "arterial-blood-gases",
+          "label": "Arterial blood gases",
+          "correct_zone": "zone-arm",
+          "why": "ABG with COHb is the definitive diagnostic test.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "lactate-serum",
+          "label": "Lactate, serum",
+          "correct_zone": "zone-blood",
+          "why": "Elevated lactate suggests tissue hypoxia; if markedly elevated, consider concurrent cyanide poisoning.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "carbon-monoxide-blood",
+          "label": "Carbon monoxide, blood",
+          "correct_zone": "zone-arm",
+          "why": "Direct COHb measurement — diagnostic confirmation.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -9203,7 +9253,7 @@
           "id": "100-o2-non-rebreather",
           "label": "100% O2 non-rebreather",
           "correct_zone": "zone-monitor",
-          "why": "Decrease COHb half-life to 1h.",
+          "why": "Start immediately — reduces COHb half-life to ~1 hour.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -9211,7 +9261,7 @@
           "id": "hyperbaric-o2-if-severe",
           "label": "Hyperbaric O2 (if severe)",
           "correct_zone": "zone-monitor",
-          "why": "COHb >25%, LOC, neuro, cardiac, pregnancy.",
+          "why": "Consider for COHb >25%, LOC, neuro deficits, cardiac ischemia, pregnancy.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -9219,7 +9269,7 @@
           "id": "monitor-for-neurologic-sequelae",
           "label": "Monitor for neurologic sequelae",
           "correct_zone": "zone-monitor",
-          "why": "Delayed onset possible.",
+          "why": "Delayed neurologic syndrome can occur 2-40 days post-recovery.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         }
@@ -9229,22 +9279,22 @@
         "doctor": {
           "easy": {
             "intro": "Found unconscious, cherry-red skin",
-            "hpi": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
-            "vitalsText": "Pulse: 106 beats/min Blood pressure 113/72 mmHg Respiratory rate: 21 /minute Temperature: 37.3 C SpO2: 97% Lactate: 2 mmol/L",
+            "hpi": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 151/90 mmHg Respiratory rate: 22 /minute Temperature: 37.1 C SpO2: 99% Lactate: 1.6 mmol/L",
             "clinicalTip": "Teaching hint: Carbon Monoxide Poisoning — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Carbon Monoxide Poisoning. Start with stabilization, then targeted testing."
           },
           "standard": {
             "intro": "Found unconscious, cherry-red skin",
-            "hpi": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
-            "vitalsText": "Pulse: 106 beats/min Blood pressure 113/72 mmHg Respiratory rate: 21 /minute Temperature: 37.3 C SpO2: 97% Lactate: 2 mmol/L",
+            "hpi": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 151/90 mmHg Respiratory rate: 22 /minute Temperature: 37.1 C SpO2: 99% Lactate: 1.6 mmol/L",
             "clinicalTip": "Carbon Monoxide Poisoning — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Carbon Monoxide Poisoning."
           },
           "hard": {
             "intro": "Found unconscious, cherry-red skin",
-            "hpi": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
-            "vitalsText": "Pulse: 106 beats/min Blood pressure 113/72 mmHg Respiratory rate: 21 /minute Temperature: 37.3 C SpO2: 97% Lactate: 2 mmol/L",
+            "hpi": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 151/90 mmHg Respiratory rate: 22 /minute Temperature: 37.1 C SpO2: 99% Lactate: 1.6 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
             "objective": "High-acuity workup: Complete diagnosis and treatment orders for Carbon Monoxide Poisoning."
           }
@@ -9252,22 +9302,22 @@
         "patient": {
           "easy": {
             "intro": "Found unconscious, cherry-red skin",
-            "hpi": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
-            "vitalsText": "Pulse: 106 beats/min Blood pressure 113/72 mmHg Respiratory rate: 21 /minute Temperature: 37.3 C SpO2: 97% Lactate: 2 mmol/L",
+            "hpi": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 151/90 mmHg Respiratory rate: 22 /minute Temperature: 37.1 C SpO2: 99% Lactate: 1.6 mmol/L",
             "clinicalTip": "Teaching hint: Carbon Monoxide Poisoning — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Carbon Monoxide Poisoning. Share your symptoms clearly with the team."
           },
           "standard": {
             "intro": "Found unconscious, cherry-red skin",
-            "hpi": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
-            "vitalsText": "Pulse: 106 beats/min Blood pressure 113/72 mmHg Respiratory rate: 21 /minute Temperature: 37.3 C SpO2: 97% Lactate: 2 mmol/L",
+            "hpi": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 151/90 mmHg Respiratory rate: 22 /minute Temperature: 37.1 C SpO2: 99% Lactate: 1.6 mmol/L",
             "clinicalTip": "Carbon Monoxide Poisoning — follow CCS review orders.",
             "objective": "Complete diagnosis and treatment orders for Carbon Monoxide Poisoning."
           },
           "hard": {
             "intro": "Found unconscious, cherry-red skin",
-            "hpi": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
-            "vitalsText": "Pulse: 106 beats/min Blood pressure 113/72 mmHg Respiratory rate: 21 /minute Temperature: 37.3 C SpO2: 97% Lactate: 2 mmol/L",
+            "hpi": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
+            "vitalsText": "Pulse: 110 beats/min Blood pressure 151/90 mmHg Respiratory rate: 22 /minute Temperature: 37.1 C SpO2: 99% Lactate: 1.6 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
             "objective": "High-acuity workup: Complete diagnosis and treatment orders for Carbon Monoxide Poisoning."
           }
@@ -9477,6 +9527,7 @@
         ]
       ],
       "patientSex": "female",
+      "uberFaceSlug": "ngavu-yellow-party",
       "hpi_narrative": "{{patient_name}} presents with fragile skin, blistering lesions on sun-exposed areas (hands, face, forearms), milia, hyperpigmentation, and hypertrichosis. PCT is the most common porphyria — caused by deficiency of uroporphyrinogen decarboxylase (UROD) → accumulation of uroporphyrins in skin → photosensitivity. Acquired form associated with: alcohol, hepatitis C, HIV, hemochromatosis, estrogen therapy. Diagnosis: elevated uroporphyrins and heptacarboxyl porphyrins in urine, plasma porphyrins (peak at 620nm), stool isocoproporphyrin. Treatment: phlebotomy (remove iron — goal ferritin low-normal) or low-dose hydroxychloroquine (mobilizes porphyrins). Avoid sun exposure, alcohol, and estrogens. Screen for HCV, HIV, hemochromatosis.",
       "difficulty": "standard",
       "clinical_tip": "Porphyria Cutanea Tarda — follow CCS review orders.",
@@ -11495,6 +11546,7 @@
         ]
       ],
       "patientSex": "male",
+      "uberFaceSlug": "hemarthrosis-athlete-knee",
       "hpi_narrative": "{{patient_name}} presents with excessive bleeding after minor trauma, easy bruising, hemarthrosis (bleeding into joints — knees, ankles, elbows), and prolonged PTT with normal PT and normal platelet count. Hemophilia A is X-linked recessive deficiency of Factor VIII. Severity: mild (5-40% FVIII), moderate (1-5%), severe (<1%). PTT is prolonged (intrinsic pathway), PT normal (extrinsic pathway intact), platelets normal. Mixing study: PTT corrects (rules out inhibitor). Factor VIII assay confirms low activity. Treatment: factor VIII concentrate (recombinant preferred) for bleeding episodes or prophylaxis. Desmopressin (DDAVP) for mild hemophilia A (releases stored VIII and vWF). Avoid aspirin, NSAIDs, IM injections. Genetic counseling (X-linked).",
       "difficulty": "standard",
       "clinical_tip": "Hemophilia A (Factor VIII Deficiency) — follow CCS review orders.",
@@ -12272,7 +12324,7 @@
         "order-laboratory-workup-cbc-electrolytes",
         "order-imaging-studies-if-necessary-ct-sc",
         "consult-psychiatry-for-further-evaluatio",
-        "if-the-patient-is-a-danger-to-themselves",
+        "consider-voluntary-hospitalization-if-th",
         "cmp-bmp",
         "ua"
       ],
@@ -12310,16 +12362,16 @@
           "teachingChannel": "consult"
         },
         {
-          "id": "if-the-patient-is-a-danger-to-themselves",
-          "label": "If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold",
+          "id": "consider-voluntary-hospitalization-if-th",
+          "label": "Consider voluntary hospitalization — if the patient poses a risk to self or others, escalate to involuntary psychiatric hold",
           "correct_zone": "zone-icu",
-          "why": "Appropriate CCS order for Possible neuropsychiatric disorders such as delirium, dementia, or psychiatric emergencies: If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold.",
+          "why": "To determine the appropriate level of care and ensure patient safety",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
         {
           "id": "cmp-bmp",
-          "label": "CMP/BMP",
+          "label": "CMP / BMP",
           "correct_zone": "zone-blood",
           "why": "To evaluate electrolytes, renal and liver function which could contribute to the patient's agitation",
           "guideline": "ACEP",
@@ -13473,6 +13525,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "subway-afro-dandy",
       "difficulty": "standard",
       "clinical_tip": "Rabies, Cellulitis, Tetanus — follow CCS review orders.",
       "objective": "Complete diagnosis and treatment orders for Rabies, Cellulitis, Tetanus.",
@@ -29437,20 +29490,25 @@
       "category": "Cardiopulmonary",
       "presentationKey": "Shortness of Breath",
       "playbookKey": "case-bank-55",
-      "diagnosis": "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
+      "diagnosis": "Pulmonary Embolism",
+      "patient_voice": {
+        "chief_complaint": "I can't catch my breath — it came on so fast out of nowhere. I'm really scared.",
+        "history": "I was just at home sitting down and suddenly I felt like I couldn't breathe. No coughing, no fever.",
+        "pain": "There's this tightness in my chest. I'm afraid something bad is happening."
+      },
       "caseBankSource": "deepseek_direct",
-      "hasSourceIntro": false,
+      "hasSourceIntro": true,
       "vitals": {
         "sbp": 107,
         "dbp": 68,
         "hr": 124,
         "rr": 27,
-        "temp": 36.8,
-        "spo2": 89,
+        "temp": 36.9,
+        "spo2": 94,
         "lactate": 2.4
       },
       "vitalsSource": "clinical-rule",
-      "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.8 C SpO2: 89% Lactate: 2.4 mmol/L",
+      "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.9 C SpO2: 94% Lactate: 2.4 mmol/L",
       "flowTrack": "Standard ED pathway",
       "dispositionUnits": [
         "ER",
@@ -29461,15 +29519,15 @@
       "exam": [
         [
           "General",
-          "Dyspneic, speaking in short phrases if severe"
+          "Dyspneic, speaking in short phrases"
         ],
         [
           "Cardiovascular",
-          "HR 124, tachycardic; BP 107/68."
+          "HR 124, tachycardic; BP 107/68; regular rhythm"
         ],
         [
           "Respiratory",
-          "RR 27, tachypneic; SpO₂ 94%."
+          "RR 27, tachypneic; SpO₂ 94% on room air; clear to auscultation bilaterally"
         ],
         [
           "Abdomen",
@@ -29477,38 +29535,88 @@
         ],
         [
           "Neuro",
-          "Alert unless hypercapnic or hypoxic"
+          "Alert, oriented"
         ],
         [
           "Skin",
-          "Cyanosis absent unless critical hypoxemia"
+          "No cyanosis, no diaphoresis"
+        ],
+        [
+          "Extremities",
+          "No edema, no calf tenderness"
         ]
       ],
-      "patientSex": "unknown",
+      "patientSex": "female",
+      "hpi_narrative": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
       "difficulty": "standard",
-      "clinical_tip": "Pulmonary Edema or Congestive Heart Failure until proven otherwise — follow CCS review orders.",
-      "objective": "Complete diagnosis and treatment orders for Pulmonary Edema or Congestive Heart Failure until proven otherwise.",
+      "clinical_tip": "Pulmonary Embolism — follow CCS review orders.",
+      "objective": "Complete diagnosis and treatment orders for Pulmonary Embolism.",
       "interventionIds": [
-        "obtain-electrocardiogram-ecg-to-assess-h",
-        "chest-x-ray-to-evaluate-lung-fields-card",
+        "chest-x-ray",
+        "cbc-with-differential",
+        "ekg",
+        "troponin",
+        "doppler-lower-extremities-venous-duplex-",
+        "ct-pulmonary-angiography-ctpa",
+        "arterial-blood-gases",
         "oxygen",
-        "iv-access",
-        "fingerstick-glucose"
+        "heparin-low-molecular-weight-or-fondapar",
+        "monitor-cardiac"
       ],
       "interventions": [
         {
-          "id": "obtain-electrocardiogram-ecg-to-assess-h",
-          "label": "Obtain electrocardiogram (ECG) to assess heart function and rule out acute coronary syndrome",
+          "id": "chest-x-ray",
+          "label": "Chest X-ray",
           "correct_zone": "zone-monitor",
-          "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath. Finding: HR 124, tachycardic; BP 107/68.",
+          "why": "Obtain to evaluate for alternative causes of dyspnea and assess cardiac silhouette. May show Westermark sign or Hampton hump in PE but is often normal.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
         {
-          "id": "chest-x-ray-to-evaluate-lung-fields-card",
-          "label": "Chest X-ray to evaluate lung fields, cardiac silhouette, and pleural effusions",
+          "id": "cbc-with-differential",
+          "label": "CBC with differential",
+          "correct_zone": "zone-blood",
+          "why": "Assess for anemia; baseline prior to anticoagulation.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "ekg",
+          "label": "EKG",
           "correct_zone": "zone-monitor",
-          "why": "Evaluate chest and lungs as part of the initial exam for shortness of breath. Finding: RR 27, tachypneic; SpO₂ 94%.",
+          "why": "Assess for right heart strain pattern (S1Q3T3, right axis deviation) and rule out ACS.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "troponin",
+          "label": "Troponin",
+          "correct_zone": "zone-blood",
+          "why": "Elevated troponin in PE indicates right ventricular strain and worse prognosis.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "doppler-lower-extremities-venous-duplex-",
+          "label": "Doppler, lower extremities, venous / Duplex ultrasound",
+          "correct_zone": "zone-monitor",
+          "why": "Confirm DVT as embolic source. Positive + high pretest probability establishes diagnosis.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "ct-pulmonary-angiography-ctpa",
+          "label": "CT pulmonary angiography (CTPA)",
+          "correct_zone": "zone-monitor",
+          "why": "Gold standard diagnostic test for PE. Visualizes filling defects in pulmonary arteries. Obtain after initial stabilization and risk stratification. Definitively confirms diagnosis.",
+          "guideline": "ACEP",
+          "teachingChannel": "workup"
+        },
+        {
+          "id": "arterial-blood-gases",
+          "label": "Arterial blood gases",
+          "correct_zone": "zone-arm",
+          "why": "Evaluate for hypoxia and calculate A-a gradient. PE causes increased dead space.",
           "guideline": "ACEP",
           "teachingChannel": "workup"
         },
@@ -29516,80 +29624,86 @@
           "id": "oxygen",
           "label": "Oxygen",
           "correct_zone": "zone-monitor",
-          "why": "The patient presents with shortness of breath which is a life-threatening symptom. Immediate administration of oxygen is crucial to stabilize the patient.",
+          "why": "Patient presents with shortness of breath and hypoxemia. Immediate oxygen crucial to stabilize.",
           "guideline": "ACEP",
           "teachingChannel": "acute"
         },
         {
-          "id": "iv-access",
-          "label": "IV access",
-          "correct_zone": "zone-arm",
-          "why": "Vascular access for fluids and meds during the acute phase.",
+          "id": "heparin-low-molecular-weight-or-fondapar",
+          "label": "Heparin, low molecular weight OR Fondaparinux OR Rivaroxaban OR Apixaban OR Dabigatran OR Edoxaban",
+          "correct_zone": "zone-iv-bag",
+          "why": "Appropriate CCS order for Pulmonary Embolism: Heparin, low molecular weight OR Fondaparinux OR Rivaroxaban OR Apixaban OR Dabigatran OR Edoxaban.",
           "guideline": "ACEP",
-          "teachingChannel": "acute"
+          "teachingChannel": "workup"
         },
         {
-          "id": "fingerstick-glucose",
-          "label": "Fingerstick glucose",
-          "correct_zone": "zone-blood",
-          "why": "Reversible hypoglycemia must be excluded early in acute presentations.",
+          "id": "monitor-cardiac",
+          "label": "Monitor, cardiac",
+          "correct_zone": "zone-monitor",
+          "why": "Cardiovascular exam is part of the ED survey; rule out cardiopulmonary contributors to shortness of breath.",
           "guideline": "ACEP",
-          "teachingChannel": "acute"
+          "teachingChannel": "workup"
         }
       ],
       "decoys": [
         {
           "id": "decoy-avoid-55-0",
           "label": "Starting a broad-spectrum antibiotic therapy without culture results",
-          "why": "This should be avoided because it can lead to antibiotic resistance and unnecessary costs",
+          "why": "Advanced imaging is not indicated early for Pulmonary Embolism when the diagnosis is clinical.",
           "correct_zone": "zone-iv-bag"
+        },
+        {
+          "id": "decoy-avoid-55-1",
+          "label": "Thrombolytics without confirmed massive PE and hemodynamic instability",
+          "why": "CCS review: avoid this order for Pulmonary Embolism — it does not change acute management.",
+          "correct_zone": "zone-arm"
         }
       ],
       "narrative": {
         "doctor": {
           "easy": {
-            "intro": "Shortness of Breath — emergency presentation.",
-            "hpi": "Shortness of Breath — emergency presentation.",
-            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.8 C SpO2: 89% Lactate: 2.4 mmol/L",
-            "clinicalTip": "Teaching hint: Pulmonary Edema or Congestive Heart Failure until proven otherwise — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Pulmonary Edema or Congestive Heart Failure until proven otherwise. Start with stabilization, then targeted testing."
+            "intro": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "hpi": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.9 C SpO2: 94% Lactate: 2.4 mmol/L",
+            "clinicalTip": "Teaching hint: Pulmonary Embolism — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Pulmonary Embolism. Start with stabilization, then targeted testing."
           },
           "standard": {
-            "intro": "Shortness of Breath — emergency presentation.",
-            "hpi": "Shortness of Breath — emergency presentation.",
-            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.8 C SpO2: 89% Lactate: 2.4 mmol/L",
-            "clinicalTip": "Pulmonary Edema or Congestive Heart Failure until proven otherwise — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Pulmonary Edema or Congestive Heart Failure until proven otherwise."
+            "intro": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "hpi": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.9 C SpO2: 94% Lactate: 2.4 mmol/L",
+            "clinicalTip": "Pulmonary Embolism — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Pulmonary Embolism."
           },
           "hard": {
-            "intro": "Shortness of Breath — emergency presentation.",
-            "hpi": "Shortness of Breath — emergency presentation.",
-            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.8 C SpO2: 89% Lactate: 2.4 mmol/L",
+            "intro": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "hpi": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.9 C SpO2: 94% Lactate: 2.4 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Pulmonary Edema or Congestive Heart Failure until proven otherwise."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Pulmonary Embolism."
           }
         },
         "patient": {
           "easy": {
-            "intro": "Shortness of Breath — emergency presentation.",
-            "hpi": "Shortness of Breath — emergency presentation.",
-            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.8 C SpO2: 89% Lactate: 2.4 mmol/L",
-            "clinicalTip": "Teaching hint: Pulmonary Edema or Congestive Heart Failure until proven otherwise — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Pulmonary Edema or Congestive Heart Failure until proven otherwise. Share your symptoms clearly with the team."
+            "intro": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "hpi": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.9 C SpO2: 94% Lactate: 2.4 mmol/L",
+            "clinicalTip": "Teaching hint: Pulmonary Embolism — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Pulmonary Embolism. Share your symptoms clearly with the team."
           },
           "standard": {
-            "intro": "Shortness of Breath — emergency presentation.",
-            "hpi": "Shortness of Breath — emergency presentation.",
-            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.8 C SpO2: 89% Lactate: 2.4 mmol/L",
-            "clinicalTip": "Pulmonary Edema or Congestive Heart Failure until proven otherwise — follow CCS review orders.",
-            "objective": "Complete diagnosis and treatment orders for Pulmonary Edema or Congestive Heart Failure until proven otherwise."
+            "intro": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "hpi": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.9 C SpO2: 94% Lactate: 2.4 mmol/L",
+            "clinicalTip": "Pulmonary Embolism — follow CCS review orders.",
+            "objective": "Complete diagnosis and treatment orders for Pulmonary Embolism."
           },
           "hard": {
-            "intro": "Shortness of Breath — emergency presentation.",
-            "hpi": "Shortness of Breath — emergency presentation.",
-            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.8 C SpO2: 89% Lactate: 2.4 mmol/L",
+            "intro": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "hpi": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
+            "vitalsText": "Pulse: 124 beats/min Blood pressure 107/68 mmHg Respiratory rate: 27 /minute Temperature: 36.9 C SpO2: 94% Lactate: 2.4 mmol/L",
             "clinicalTip": "Minimal coaching — prioritize life threats without hand-holding.",
-            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Pulmonary Edema or Congestive Heart Failure until proven otherwise."
+            "objective": "High-acuity workup: Complete diagnosis and treatment orders for Pulmonary Embolism."
           }
         }
       }
@@ -35515,6 +35629,7 @@
         ]
       ],
       "patientSex": "male",
+      "uberFaceSlug": "adpkd-long-nose-elder",
       "hpi_narrative": "{{patient_name}} presents with hematuria, flank pain, hypertension, and palpable bilateral flank masses. Family history of ADPKD (autosomal dominant — 50% of children inherit). ADPKD is the most common inherited kidney disease — mutations in PKD1 (85%, chromosome 16) or PKD2 (15%, chromosome 4). Cysts develop in kidneys (and liver, pancreas) over decades, eventually causing renal failure by age 50-60. Diagnosis: renal ultrasound — multiple bilateral cysts in enlarged kidneys (usually by age 30 for PKD1). CT/MRI for more detail. Labs: elevated Cr (declining renal function), UA shows hematuria. Screen for cerebral aneurysms (berry aneurysms — 5-10% of ADPKD patients, higher if family history) with MRA/CTA brain. Management: BP control with ACEI/ARB (nephroprotective), treat UTIs aggressively, avoid contact sports (cyst rupture risk). Tolvaptan (vasopressin antagonist) slows cyst growth. Genetic counseling.",
       "difficulty": "standard",
       "clinical_tip": "Autosomal Dominant Polycystic Kidney Disease — follow CCS review orders.",
@@ -38005,6 +38120,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "copper-afro-headwrap-africa",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -38164,6 +38280,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "vitiligo-wink-diastema",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -38323,6 +38440,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "hijab-albino-freckles",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -38482,6 +38600,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "albino-male-freckles-profile",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -38641,6 +38760,7 @@
         ]
       ],
       "patientSex": "female",
+      "uberFaceSlug": "hijab-albino-freckles",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -38800,6 +38920,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "craniofacial-asymmetry-goatee",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -38959,6 +39080,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "nevus-speckled-laugh",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -39118,6 +39240,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "subway-afro-dandy",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -39436,6 +39559,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "vitiligo-wink-diastema",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -39595,6 +39719,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "subway-afro-dandy",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -39754,6 +39879,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "craniofacial-asymmetry-goatee",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -39913,6 +40039,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "nevus-speckled-laugh",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -40072,6 +40199,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "deep-black-youth",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",
@@ -40231,6 +40359,7 @@
         ]
       ],
       "patientSex": "unknown",
+      "uberFaceSlug": "copper-afro-headwrap-africa",
       "difficulty": "standard",
       "clinical_tip": "Stabilize first — ABCs, IV access, monitor, then targeted workup.",
       "objective": "Identify and treat life threats within the time limit.",

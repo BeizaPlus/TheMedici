@@ -2059,6 +2059,35 @@ button {
   color: rgba(255, 255, 255, 0.38);
 }
 
+.briefing-picker-hide-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+
+.briefing-picker-hide-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.briefing-picker-hide-toggle input[type='checkbox'] {
+  accent-color: #3ecf8e;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+}
+
 .briefing-shuffle-btn:hover:not(:disabled) {
   border-color: rgba(62, 207, 142, 0.45);
   background: rgba(62, 207, 142, 0.1);

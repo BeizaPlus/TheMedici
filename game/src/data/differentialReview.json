@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-06-30T18:03:47.400Z",
+  "builtAt": "2026-07-01T13:17:13.189Z",
   "sourceDir": "C:\\Users\\steve\\MeWorld\\data\\cases",
   "source": "MeWorld/data/cases/case_N.json",
   "count": 181,
@@ -7392,7 +7392,7 @@
     "55": {
       "caseId": 55,
       "title": "Shortness of Breath",
-      "diagnosis": "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
+      "diagnosis": "Pulmonary Embolism",
       "chiefComplaint": "",
       "patientSex": "",
       "specialty": "",
@@ -7401,15 +7401,15 @@
       "caseSummary": "",
       "hpiNarrative": "",
       "orders": [],
-      "intro": "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
+      "intro": "Pulmonary Embolism",
       "history": "",
       "ordersText": "",
       "hasReview": false,
-      "structuredBy": "preparedCases+fmgmatch+mistral",
+      "structuredBy": "ccs_screenshots/case_059 (OCR + Ollama Mistral)",
       "parseQuality": "good",
       "ordersSource": "none",
       "complete": true,
-      "confidence": "inferred"
+      "confidence": "screenshot"
     },
     "56": {
       "caseId": 56,
@@ -15842,12 +15842,12 @@
       "title": "Found Unconscious",
       "diagnosis": "Carbon Monoxide Poisoning",
       "chiefComplaint": "Found unconscious, cherry-red skin",
-      "patientSex": "male",
-      "specialty": "Toxicology / Hyperbaric Medicine",
-      "location": "ER",
+      "patientSex": "female",
+      "specialty": "",
+      "location": "",
       "scores": null,
       "caseSummary": "Differential: Cyanide poisoning, Hydrogen sulfide gas poisoning, Phosphine poisoning\n\nThe patient has carbon monoxide poisoning. The most common cause of carbon monoxide poisoning in the United States is due to inhalation of fire-related smoke. Carbon Monoxide causes its detrimental effects by binding\nto the iron moiety of heme. This binding changes the hemoglobin and greatly decreased the effectiveness of delivering oxygen to tissues.\n\nLactate aids in differentiating between cyanide poisoning and carbon monoxide poisoning. If lactate is normal or mildly elevated, then this would be more consistent with carbon monoxide poisoning alone.\n\n‘An EKG should be done to check for cardiac ischemia as this can occur in carbon monoxide poisoning. A pregnancy test should be done as pregnancy can change treatment. Note that a pulse oximeter will be normal as a\npulse oximeter cannot tell the difference between carboxyhemoglobin from oxyhemoglobin.\n\nThe patient should be immediately intubated and ventilated and started on 100% oxygen. Hyperbaric oxygen should be done in a patient if the patient has one of the following: COHb > 25%, COHb > 20% if the patient is\npregnant, unconscious; cardiac/neurologic ischemia; severe metabolic acidosis of pH < 7.1.\n\nAfter treatment, the patient will improve and the case will end.",
-      "hpiNarrative": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
+      "hpiNarrative": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
       "orders": [
         {
           "status": "correct",
@@ -15926,14 +15926,14 @@
         }
       ],
       "intro": "Found unconscious, cherry-red skin",
-      "history": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
+      "history": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
       "ordersText": "[OK] Physical Exam: General Appearance\n   It would be a good idea to take a general look at the patient to see how ill the patient looks.\n\n[OK] Physical Exam: Neuro / Psych\n   As the patient presented unconscious, a neuro exam should be done to evaluate the patient's neurological status.\n\n[OK] Physical Exam: Chest / Lungs\n   The patient was found in a burning building filled with smoke. The patient could have severe lung damage, so this should be evaluated.\n\n[OK] Physical Exam: Heart / Cardiovascular\n   Carbon Monoxide poisoning can cause cardiac ischemia, so a cardiac exam should be done.\n\n[OK] Arterial blood gases\n   ABG is important to determine the acid/base status. This will show a primary respiratory acidosis with secondary metabolic acidosis.\n\n[Missed] Lactate, serum / Lactate dehydrogenase, serum / Lactate dehydrogenase, serum, total and isoenzymes\n   Lactate aids in differentiating between cyanide poisoning and carbon monoxide poisoning. If lactate is normal or mildly elevated, then this would be more consistent with carbon monoxide poisoning alone (as in this case).\n\n[OK] Carbon monoxide, blood\n   The patient was found in a burning building. Carbon Monoxide poisoning is high on the differential. This should be checked.\n\n[Missed] Electrocardiography, 12 lead / Electrocardiography, ambulatory / Electrocardiography, rhythm strip, long\n   An EKG should be done to check for cardiac ischemia as this can occur in carbon monoxide poisoning.\n\n[Missed] HCG, beta, urine, qualitative / HCG, beta, serum, qualitative / Beta HCG, serum, quantitative / HCG, total, serum, qualitative\n   Any woman of child-bearing age should receive a urine pregnancy test. A pregnancy test should be done as pregnancy can change treatment.\n\n[OK] Comprehensive metabolic profile / Basic metabolic profile\n   A metabolic panel would be important to get in an unconscious patient.\n\n[OK] Mechanical ventilation\n   Carbon Monoxide Poisoning is potentially lethal. As the patient has severe carbon monoxide poisoning and is unconscious, the patient should immediately be intubated and put on a ventilator.\n\n[OK] Intubation, endotracheal\n   Carbon Monoxide Poisoning is potentially lethal. As the patient has severe carbon monoxide poisoning and is unconscious, the patient should immediately be intubated and put on a ventilator.\n\n[OK] Saline solution, normal / Lactated Ringer solution\n   The patient should be given fluids.\n\n[Missed] Oxygen\n   Oxygen is the first treatment after intubation/ventilation to treat carbon monoxide poisoning.\n\n[OK] Hyperbaric oxygen\n   Hyperbaric oxygen should be given in this patient due to having COHb > 25% and being unconscious.",
       "hasReview": true,
       "structuredBy": "deepseek_direct",
       "parseQuality": "good",
       "ordersSource": "ocr",
       "complete": true,
-      "confidence": 93
+      "confidence": "screenshot"
     },
     "152": {
       "caseId": 152,

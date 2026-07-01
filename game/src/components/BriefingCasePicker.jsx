@@ -106,6 +106,11 @@ export default function BriefingCasePicker({
   });
   const [query, setQuery] = useState('');
   const [checkVersion, setCheckVersion] = useState(0);
+  const [hideAttempted, setHideAttempted] = useState(() => {
+    const ctx = readCaseBrowseContext();
+    // Default ON — hide attempted cases so Steve plays unattempted ones first
+    return ctx?.hideAttempted !== false;
+  });
 
   useEffect(() => {
     const cat = visibleCategories.find((c) => c.caseIds?.includes(currentCaseId));
@@ -141,21 +146,32 @@ export default function BriefingCasePicker({
     let pool = q
       ? visibleAllCases.filter((c) => !isUberCatalogId(c.id))
       : activeBatch?.cases || casesInCategory;
-    if (!q) return pool;
-    return pool.filter((c) => {
-      const num = String(c.ccsNumber || '');
-      return (
-        c.title.toLowerCase().includes(q) ||
-        num.includes(q) ||
-        (c.category || '').toLowerCase().includes(q) ||
-        (c.chief_complaint || '').toLowerCase().includes(q) ||
-        (c.diagnosis || '').toLowerCase().includes(q)
-      );
-    });
-  }, [visibleAllCases, casesInCategory, activeBatch, query]);
+    if (q) {
+      pool = pool.filter((c) => {
+        const num = String(c.ccsNumber || '');
+        return (
+          c.title.toLowerCase().includes(q) ||
+          num.includes(q) ||
+          (c.category || '').toLowerCase().includes(q) ||
+          (c.chief_complaint || '').toLowerCase().includes(q) ||
+          (c.diagnosis || '').toLowerCase().includes(q)
+        );
+      });
+    }
+    if (hideAttempted) {
+      pool = pool.filter((c) => !isCaseAttempted(c.id));
+    }
+    return pool;
+  }, [visibleAllCases, casesInCategory, activeBatch, query, hideAttempted, checkVersion]);
 
   const activeCategory = visibleCategories.find((c) => c.id === categoryId);
   const overallStats = useMemo(() => getCompletionStats(allCases.length), [allCases.length]);
+  const unattemptedCount = useMemo(() => {
+    const base = query.trim()
+      ? visibleAllCases.filter((c) => !isUberCatalogId(c.id))
+      : activeBatch?.cases || casesInCategory;
+    return base.filter((c) => !isCaseAttempted(c.id)).length;
+  }, [visibleAllCases, casesInCategory, activeBatch, query, checkVersion]);
 
   const clampPos = useCallback((x, y) => {
     const width = pickerRef.current?.offsetWidth || PICKER_WIDTH;
@@ -331,6 +347,18 @@ export default function BriefingCasePicker({
             </button>
           </div>
 
+          <label className="briefing-picker-hide-toggle">
+            <input
+              type="checkbox"
+              checked={hideAttempted}
+              onChange={(e) => {
+                setHideAttempted(e.target.checked);
+                writeCaseBrowseContext({ categoryId, batchIndex, catalogLane: catalogLaneTab, hideAttempted: e.target.checked });
+              }}
+            />
+            <span>Hide attempted ({unattemptedCount} left)</span>
+          </label>
+
           {laneTabsActive && !query.trim() && (
             <div className="briefing-picker-lanes" role="tablist" aria-label="Case source lane">
               {Object.values(CATALOG_LANES).map((lane) => (
@@ -376,27 +404,36 @@ export default function BriefingCasePicker({
 
           <p className="briefing-picker-meta">
             {query.trim()
-              ? `${filteredCases.length} match${filteredCases.length === 1 ? '' : 'es'}`
+              ? `${filteredCases.length} match${filteredCases.length === 1 ? '' : 'es'}${hideAttempted ? ' · unattempted' : ''}`
               : activeCategory && activeBatch
                 ? studyBatches.length > 1
-                  ? `${activeBatch.cases.length} in batch ${activeBatch.batchNumber} of ${activeBatch.totalBatches} · ${activeBatch.theme} · ${activeCategory.label}`
+                  ? `${filteredCases.length} in batch ${activeBatch.batchNumber} of ${activeBatch.totalBatches} · ${activeBatch.theme} · ${activeCategory.label}${hideAttempted ? ` · ${unattemptedCount} unplayed` : ''}`
                   : laneTabsActive
-                    ? `${filteredCases.length} in ${activeCategory.label} · ${CATALOG_LANES[catalogLaneTab]?.label || 'Core'}`
-                    : `${filteredCases.length} in ${activeCategory.label}`
+                    ? `${filteredCases.length} in ${activeCategory.label} · ${CATALOG_LANES[catalogLaneTab]?.label || 'Core'}${hideAttempted ? ` · ${unattemptedCount} unplayed` : ''}`
+                    : `${filteredCases.length} in ${activeCategory.label}${hideAttempted ? ` · ${unattemptedCount} unplayed` : ''}`
                 : ''}
           </p>
-          <p className="briefing-picker-shuffle-hint">
-            Shuffle skips cases already on your Timeline (Home → Timeline).
-            Revisit finished cases there.
-            {onReplayPrecall ? ' Click a case to open it — pre-call video plays on select (click again to replay).' : ''}
-          </p>
+          {hideAttempted && (
+            <p className="briefing-picker-shuffle-hint">
+              Showing only unattempted cases. Shuffle and skip-next both prefer fresh cases.
+            </p>
+          )}
+          {!hideAttempted && (
+            <p className="briefing-picker-shuffle-hint">
+              Shuffle skips cases already on your Timeline (Home → Timeline).
+              Revisit finished cases there.
+              {onReplayPrecall ? ' Click a case to open it — pre-call video plays on select (click again to replay).' : ''}
+            </p>
+          )}
 
           <div className="briefing-picker-list" role="listbox" aria-label="Cases in category">
             {filteredCases.length === 0 && (
               <p className="briefing-picker-empty">
-                {catalogLaneTab === 'extended'
-                  ? 'Scenario cases are importing from the archive — run inventory-uword-trauma-tox, then promote.'
-                  : 'No cases match your search.'}
+                {hideAttempted && unattemptedCount === 0
+                  ? 'All cases in this group attempted — uncheck "Hide attempted" to review.'
+                  : catalogLaneTab === 'extended'
+                    ? 'Scenario cases are importing from the archive — run inventory-uword-trauma-tox, then promote.'
+                    : 'No cases match your search.'}
               </p>
             )}
             {filteredCases.map((c) => {
