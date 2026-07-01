@@ -1164,6 +1164,7 @@ function toggleReader() {
     el.classList.remove("collapsed");
     btn.classList.add("active");
     nav.style.display = "";
+    speech.style.display = ""; // clear any lingering inline hidden
   } else {
     el.classList.add("collapsed");
     btn.classList.remove("active");
