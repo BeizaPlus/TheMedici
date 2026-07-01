@@ -293,6 +293,65 @@
   color: inherit;
 }
 
+/* --- Sidebar rail: clinical & utility buttons --- */
+
+.panel-rail-sep {
+  width: 34px;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 4px auto;
+  border: 0;
+}
+
+.panel-clinical-btn,
+.panel-restart-btn,
+.panel-settings-btn,
+.panel-review-btn {
+  width: 42px;
+  height: 42px;
+  background: rgba(14,16,22,0.8);
+  border: none;
+  border-radius: 8px;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  padding: 0;
+}
+.panel-clinical-btn:hover,
+.panel-restart-btn:hover,
+.panel-settings-btn:hover,
+.panel-review-btn:hover {
+  color: #ffffff;
+  background: rgba(14,16,22,0.95);
+}
+.panel-clinical-btn.active,
+.panel-settings-btn.active {
+  color: #f3d060;
+  background: rgba(232, 184, 75, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.45);
+}
+.panel-review-btn {
+  position: relative;
+}
+.panel-review-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 0.48rem;
+  font-weight: 700;
+  background: rgba(232, 184, 75, 0.14);
+  color: #f3d060;
+  border-radius: 4px;
+  padding: 1px 4px;
+  line-height: 1.2;
+}
+.panel-review-btn:hover .panel-review-badge {
+  background: rgba(232, 184, 75, 0.24);
+}
+
 .conversation-log {
   width: 480px;
   max-height: 320px;

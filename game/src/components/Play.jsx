@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import PatientScene from './PatientScene.jsx';
 import ClinicalAlgorithm from './ClinicalAlgorithm.jsx';
 import WhyPanel from './WhyPanel.jsx';
@@ -64,7 +65,7 @@ import SceneOrderCommandDock from './SceneOrderCommandDock.jsx';
 import PlayChatNotesTabPanel from './PlayChatNotesTabPanel.jsx';
 import { renderChatMarkdown } from '../lib/chatMessageFormat.jsx';
 import CaseReviewFlagButton from './CaseReviewFlagButton.jsx';
-import PlaySceneToolbar from './sceneToolbar/PlaySceneToolbar.jsx';
+import CaseRecordButton from './CaseRecordButton.jsx';
 import { useCaseRecording } from '../hooks/useCaseRecording.js';
 import { useCaseChat } from '../hooks/useCaseChat.js';
 import { getCaseById } from '../data/useCcsCatalog.js';
@@ -104,12 +105,23 @@ import { readExportUseLiveScene, writeExportUseLiveScene } from '../lib/exportLi
 import {
   IconLayoutSidebarRightCollapse,
   IconLayoutSidebarRightExpand,
+  IconBibliography,
   IconClipboardList,
+  IconClipboardPulse,
   IconDoorExit,
+  IconEyeOff,
   IconFlagCheckered,
+  IconLabFlask,
+  IconLockOpen,
+  IconMargin,
   IconMessage,
+  IconMoon,
+  IconPill,
+  IconRotate,
+  IconSettings,
   IconSkipForward,
   IconPuzzle,
+  IconStethoscope,
   IconTimeline,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
@@ -4168,170 +4180,6 @@ export default function Play({
     ],
   );
 
-  const playSceneToolbar = (
-    <PlaySceneToolbar
-      examOpen={activeDrawer === 'exam'}
-      historyOpen={activeDrawer === 'history'}
-      stacksOpen={!dockCollapsed && infoTab === 'treatment'}
-      chatOpen={infoTab === 'chat'}
-      recordButtonProps={caseRecording}
-      showCues={showCues}
-      scenePinsHidden={scenePinsHidden}
-      darkMode={theme === 'dark'}
-      freeDrop={dropMode === 'free'}
-      settingsOpen={stackSettingsOpen}
-      settingsRef={stackCommandRef}
-      settingsPopover={
-        <div className="settings-popover toolbar-settings-popover" role="dialog" aria-label="Toolbar settings">
-          <CollapsibleSettingsSection title="Clinical text">
-            <ClinicalFontControls
-              compact
-              showLabel={false}
-              prefs={textPrefs}
-              onChange={setTextPrefs}
-              writePrefs={writeClinicalTextPrefs}
-            />
-          </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Teach Me notes">
-            <ClinicalFontControls
-              compact
-              showLabel={false}
-              prefs={teachMeTextPrefs}
-              onChange={setTeachMeTextPrefs}
-              writePrefs={writeTeachMeTextPrefs}
-              resetTo={{ fontScale: 1.24, weight: 500 }}
-              styleFn={teachMeTextStyle}
-            />
-          </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Case controls" defaultOpen>
-            <div className="settings-popover-row settings-popover-row-2">
-              <button
-                type="button"
-                className={timedModeEnabled ? 'active settings-popover-btn--on' : ''}
-                aria-pressed={timedModeEnabled}
-                onClick={toggleTimedMode}
-              >
-                {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
-              </button>
-              <button type="button" onClick={resetPlacements}>
-                Reset placements
-              </button>
-              <button type="button" onClick={autoLayoutPins}>
-                Auto-layout pins
-              </button>
-              <button type="button" onClick={movePinsToSavedPosition}>
-                Move to position
-              </button>
-              <button type="button" onClick={saveCasePinLayoutSnapshot}>
-                Save layout
-              </button>
-              <button type="button" onClick={openCaseStory}>
-                Case story
-              </button>
-              <button
-                type="button"
-                className={simDeteriorationActive ? 'active settings-popover-btn--on' : ''}
-                aria-pressed={simDeteriorationActive}
-                onClick={() => {
-                  const death = document.getElementById('death');
-                  const idleSlots = document.querySelectorAll('.idle-slot');
-                  if (simDeteriorationActive) {
-                    if (death) {
-                      death.style.opacity = '0';
-                      death.style.zIndex = '0';
-                      death.pause();
-                    }
-                    idleSlots.forEach((slot) => {
-                      slot.style.opacity = '1';
-                    });
-                    setSimDeteriorationActive(false);
-                    return;
-                  }
-                  setSimDeteriorationActive(true);
-                  idleSlots.forEach((slot) => {
-                    slot.pause();
-                    slot.style.opacity = '0';
-                  });
-                  if (!death) return;
-                  death.style.opacity = '1';
-                  death.style.zIndex = '2';
-                  death.currentTime = 0;
-                  death.play().catch(() => {});
-                }}
-              >
-                {simDeteriorationActive ? 'Deterioration: ON' : 'Simulate deterioration'}
-              </button>
-            </div>
-          </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Attending style" defaultOpen>
-            <AttendingStyleControl
-              compact
-              onStyleChange={() => {
-                if (caseData?.id) clearFirstOpinionMemoryForCase(caseData.id);
-                void caseChat.resetSession?.();
-              }}
-            />
-          </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Case creativity">
-            <SimulationCreativityControl
-              caseId={caseData.id}
-              showCaseOverride
-              onCreativityChange={() => void caseChat.resetSession?.()}
-            />
-          </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Audio">
-            <AudioSettingsPanel embedded showGameSounds={false} />
-          </CollapsibleSettingsSection>
-        </div>
-      }
-      showBibliography={caseHasBibliography(caseData)}
-      bibliographyOpen={bibliographyOpen}
-      bibliographyRef={bibliographyRef}
-      bibliographyPopover={
-        <div className="settings-popover toolbar-bibliography-popover" role="dialog" aria-label="Bibliography and sources">
-          <CaseBibliographyPanel caseData={caseData} compact />
-        </div>
-      }
-      onToggleBibliography={() => {
-        setBibliographyOpen((v) => !v);
-        setStackSettingsOpen(false);
-      }}
-      onToggleExam={() => setPhysicalExamPickerOpen(true)}
-      onToggleLabs={() => setLabPickerOpen(true)}
-      onToggleHistory={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
-      onOpenStacks={() => {
-        if (commandUiLocked) return;
-        expandDockPanel();
-        setInfoTab('treatment');
-      }}
-      onToggleChat={() => {
-        expandDockPanel();
-        setInfoTab((tab) => (tab === 'chat' ? 'treatment' : 'chat'));
-      }}
-      onRestart={restartCurrentCase}
-      onToggleCues={() => setShowCues((v) => !v)}
-      onToggleScenePins={() => setScenePinsHidden((v) => !v)}
-      onToggleTheme={toggleTheme}
-      onToggleDropMode={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
-      onToggleSettings={() => {
-        setStackSettingsOpen((v) => !v);
-        setBibliographyOpen(false);
-      }}
-      stacksDisabled={commandUiLocked}
-      marginOpen={marginPanelOpen}
-      onToggleMargin={() => setMarginPanelOpen((v) => !v)}
-      marginPopover={
-        marginPanelOpen ? (
-          <DropZoneMarginControl
-            margin={dropMargin}
-            onChange={handleDropMarginChange}
-            onClose={() => setMarginPanelOpen(false)}
-          />
-        ) : null
-      }
-    />
-  );
-
   return (
     <div
       className={`game ${finalMode ? 'final-mode' : ''} ${activeDrawer ? 'drawer-open' : ''}${teachMeMode ? ' teach-me-focus' : ''}${teachCompareLandscape ? ' teach-compare-landscape' : ''}${exportUseLiveScene ? ' live-scene-export' : ''}${scenePinsHidden ? ' scene-pins-hidden' : ''}`}
@@ -4471,7 +4319,244 @@ export default function Play({
         >
           <IconDoorExit />
         </button>
+        <div className="panel-rail-sep" aria-hidden />
+        <button
+          type="button"
+          className={`panel-clinical-btn${activeDrawer === 'exam' ? ' active' : ''}`}
+          onClick={() => setPhysicalExamPickerOpen(true)}
+          title="Physical exam — order exam and place findings on patient"
+          aria-label="Physical exam"
+        >
+          <IconStethoscope />
+        </button>
+        <button
+          type="button"
+          className="panel-clinical-btn"
+          onClick={() => setLabPickerOpen(true)}
+          title="Order labs"
+          aria-label="Order labs"
+        >
+          <IconLabFlask />
+        </button>
+        <button
+          type="button"
+          className={`panel-clinical-btn${activeDrawer === 'history' ? ' active' : ''}`}
+          onClick={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
+          title="SOAP chart — clinical note"
+          aria-label="SOAP chart"
+        >
+          <IconClipboardPulse />
+        </button>
+        {caseHasBibliography(caseData) && (
+          <span className="panel-bibliography-wrap" ref={bibliographyRef}>
+            <button
+              type="button"
+              className={`panel-clinical-btn${bibliographyOpen ? ' active' : ''}`}
+              onClick={() => {
+                setBibliographyOpen((v) => !v);
+                setStackSettingsOpen(false);
+              }}
+              title="Bibliography & sources"
+              aria-label="Bibliography and sources"
+              aria-expanded={bibliographyOpen}
+            >
+              <IconBibliography />
+            </button>
+            {bibliographyOpen && (
+              createPortal(
+                <div className="settings-popover toolbar-bibliography-popover" role="dialog" aria-label="Bibliography and sources">
+                  <CaseBibliographyPanel caseData={caseData} compact />
+                </div>,
+                document.body,
+              )
+            )}
+          </span>
+        )}
+        {caseRecording && (
+          <CaseRecordButton {...caseRecording} variant="toolbar" iconOnly />
+        )}
+        <button
+          type="button"
+          className="panel-restart-btn"
+          onClick={restartCurrentCase}
+          title="Restart case"
+          aria-label="Restart case"
+        >
+          <IconRotate />
+        </button>
+        <button
+          type="button"
+          className={`panel-settings-btn${stackSettingsOpen ? ' active' : ''}`}
+          ref={stackCommandRef}
+          onClick={() => {
+            setStackSettingsOpen((v) => !v);
+            setBibliographyOpen(false);
+          }}
+          title="Scene tools & settings"
+          aria-label="Scene tools"
+          aria-expanded={stackSettingsOpen}
+        >
+          <IconSettings />
+        </button>
       </div>
+      {stackSettingsOpen && createPortal(
+        <div
+          className="settings-popover toolbar-settings-popover"
+          role="dialog"
+          aria-label="Scene tools"
+          style={{ position: 'fixed', right: 56, top: Math.max(8, (stackCommandRef.current?.getBoundingClientRect()?.top ?? 120) - 8), maxHeight: 'calc(100vh - 16px)', overflowY: 'auto' }}
+        >
+          <CollapsibleSettingsSection title="Display">
+            <div className="settings-popover-row settings-popover-row-1">
+              <button
+                type="button"
+                className={marginPanelOpen ? 'active settings-popover-btn--on' : ''}
+                onClick={() => setMarginPanelOpen((v) => !v)}
+              >
+                <IconMargin size={14} /> Drop margins
+              </button>
+              <button
+                type="button"
+                className={scenePinsHidden ? 'active settings-popover-btn--on' : ''}
+                onClick={() => setScenePinsHidden((v) => !v)}
+              >
+                <IconPill size={14} /> {scenePinsHidden ? 'Show labels' : 'Hide labels'}
+              </button>
+              <button
+                type="button"
+                className={!showCues ? 'active settings-popover-btn--on' : ''}
+                onClick={() => setShowCues((v) => !v)}
+              >
+                <IconEyeOff size={14} /> {showCues ? 'Hide cues' : 'Show cues'}
+              </button>
+              <button
+                type="button"
+                className={theme === 'dark' ? 'active settings-popover-btn--on' : ''}
+                onClick={toggleTheme}
+              >
+                <IconMoon size={14} /> {theme === 'dark' ? 'Dark' : 'Light'}
+              </button>
+              <button
+                type="button"
+                className="active settings-popover-btn--on"
+                onClick={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
+                title="Free drop: pins placed anywhere for review"
+              >
+                <IconLockOpen size={14} /> Free drop
+              </button>
+            </div>
+            {marginPanelOpen && (
+              <div style={{ paddingTop: 8 }}>
+                <DropZoneMarginControl
+                  margin={dropMargin}
+                  onChange={handleDropMarginChange}
+                  onClose={() => setMarginPanelOpen(false)}
+                />
+              </div>
+            )}
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Clinical text">
+            <ClinicalFontControls
+              compact
+              showLabel={false}
+              prefs={textPrefs}
+              onChange={setTextPrefs}
+              writePrefs={writeClinicalTextPrefs}
+            />
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Teach Me notes">
+            <ClinicalFontControls
+              compact
+              showLabel={false}
+              prefs={teachMeTextPrefs}
+              onChange={setTeachMeTextPrefs}
+              writePrefs={writeTeachMeTextPrefs}
+              resetTo={{ fontScale: 1.24, weight: 500 }}
+              styleFn={teachMeTextStyle}
+            />
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Case controls" defaultOpen>
+            <div className="settings-popover-row settings-popover-row-2">
+              <button
+                type="button"
+                className={timedModeEnabled ? 'active settings-popover-btn--on' : ''}
+                aria-pressed={timedModeEnabled}
+                onClick={toggleTimedMode}
+              >
+                {timedModeEnabled ? 'Timed: ON' : 'Untimed'}
+              </button>
+              <button type="button" onClick={resetPlacements}>
+                Reset placements
+              </button>
+              <button type="button" onClick={autoLayoutPins}>
+                Auto-layout pins
+              </button>
+              <button type="button" onClick={movePinsToSavedPosition}>
+                Move to position
+              </button>
+              <button type="button" onClick={saveCasePinLayoutSnapshot}>
+                Save layout
+              </button>
+              <button type="button" onClick={openCaseStory}>
+                Case story
+              </button>
+              <button
+                type="button"
+                className={simDeteriorationActive ? 'active settings-popover-btn--on' : ''}
+                aria-pressed={simDeteriorationActive}
+                onClick={() => {
+                  const death = document.getElementById('death');
+                  const idleSlots = document.querySelectorAll('.idle-slot');
+                  if (simDeteriorationActive) {
+                    if (death) {
+                      death.style.opacity = '0';
+                      death.style.zIndex = '0';
+                      death.pause();
+                    }
+                    idleSlots.forEach((slot) => {
+                      slot.style.opacity = '1';
+                    });
+                    setSimDeteriorationActive(false);
+                    return;
+                  }
+                  setSimDeteriorationActive(true);
+                  idleSlots.forEach((slot) => {
+                    slot.pause();
+                    slot.style.opacity = '0';
+                  });
+                  if (!death) return;
+                  death.style.opacity = '1';
+                  death.style.zIndex = '2';
+                  death.currentTime = 0;
+                  death.play().catch(() => {});
+                }}
+              >
+                {simDeteriorationActive ? 'Deterioration: ON' : 'Simulate deterioration'}
+              </button>
+            </div>
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Attending style" defaultOpen>
+            <AttendingStyleControl
+              compact
+              onStyleChange={() => {
+                if (caseData?.id) clearFirstOpinionMemoryForCase(caseData.id);
+                void caseChat.resetSession?.();
+              }}
+            />
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Case creativity">
+            <SimulationCreativityControl
+              caseId={caseData.id}
+              showCaseOverride
+              onCreativityChange={() => void caseChat.resetSession?.()}
+            />
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="Audio">
+            <AudioSettingsPanel embedded showGameSounds={false} />
+          </CollapsibleSettingsSection>
+        </div>,
+        document.body,
+      )}
       <div
         className={`game-scene ${vitals.spo2 < 92 || vitals.sbp < 95 || vitals.hr > 120 ? 'icu-alarm' : ''} ${teachMeMode ? 'teach-me-active' : ''}${stackMoveMode ? ' pin-move-mode' : ''}`}
         ref={sceneRef}
@@ -4625,7 +4710,6 @@ export default function Play({
               events={orderTimelineEvents}
               sessionStartedAt={sessionStartedAt}
               footProps={timelineFootProps}
-              toolbar={playSceneToolbar}
               onReviewSequence={replayOrderSequence}
             />
           )}
@@ -4670,7 +4754,6 @@ export default function Play({
                 <PatientOrderTimeline
                   footOnly
                   footProps={timelineFootProps}
-                  toolbar={playSceneToolbar}
                 />
               }
             />
