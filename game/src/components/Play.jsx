@@ -1224,6 +1224,7 @@ export default function Play({
   }, [commandUiLocked, infoTab]);
 
   const [threadViewCaseId, setThreadViewCaseId] = useState(() => String(caseData?.id || ''));
+  const [dockToolbarCollapsed, setDockToolbarCollapsed] = useState(playUiFavorite.dockToolbarCollapsed);
 
   useEffect(() => {
     if (infoTab !== 'chat') {
@@ -3537,6 +3538,7 @@ export default function Play({
     if (!stackSettingsOpen && !bibliographyOpen) return undefined;
     const closeOnOutside = (e) => {
       if (stackCommandRef.current?.contains(e.target)) return;
+      if (bibliographyRef.current?.contains(e.target)) return;
       // Settings popover is portaled to <body>, so it is outside stackCommandRef —
       // keep it open when the click lands inside the popover itself.
       if (e.target?.closest?.('.toolbar-settings-popover')) return;
@@ -4151,8 +4153,21 @@ export default function Play({
       interventions,
       placed,
       timedModeEnabled,
+      timerLabel,
+      timerState,
       caseData,
+      dropMode,
       teachMeMode,
+      reviewDisabled: doneCount === 0,
+      toolbarCollapsed: dockToolbarCollapsed,
+      onToggleToolbarCollapsed: () => setDockToolbarCollapsed((v) => !v),
+      onToggleTeachMe: () => {
+        setTeachMeMode((v) => {
+          if (v) setTeachFocusId(null);
+          return !v;
+        });
+      },
+      onReview: reviewPlacements,
     }),
     [
       doneCount,
@@ -4160,8 +4175,13 @@ export default function Play({
       interventions,
       placed,
       timedModeEnabled,
+      timerLabel,
+      timerState,
       caseData,
+      dropMode,
       teachMeMode,
+      dockToolbarCollapsed,
+      reviewPlacements,
     ],
   );
 
