@@ -433,6 +433,7 @@ export default function Play({
   const casePuzzle = useMemo(() => getPuzzleForCase(caseData.id), [caseData.id]);
   const [timelineOpen, setTimelineOpen] = useState(false);
   const caseTimeline = useMemo(() => getTimelineForCase(caseData.id), [caseData.id]);
+  const [timelineExpanded, setTimelineExpanded] = useState(false); // Toggle order timeline from rail
   const [caseStoryOpen, setCaseStoryOpen] = useState(false);
   const [caseStorySessionContext, setCaseStorySessionContext] = useState(null);
   const [caseStoryStarted, setCaseStoryStarted] = useState(() =>
@@ -4284,12 +4285,17 @@ export default function Play({
           <IconDoorExit />
         </button>
         <div className="panel-rail-sep" aria-hidden />
-        <div className="panel-rail-progress">
+        <button
+          type="button"
+          className={`panel-rail-btn panel-timeline-btn${timelineExpanded ? ' active' : ''}`}
+          onClick={() => setTimelineExpanded((v) => !v)}
+          title="Toggle order timeline"
+          aria-label="Toggle order timeline"
+          aria-pressed={timelineExpanded}
+        >
+          <IconTimeline size={14} />
           <span className="panel-progress-count">{doneCount}/{total}</span>
-          <span className={`panel-progress-timer ${timedModeEnabled ? timerState : 'untimed'}`}>
-            {timedModeEnabled ? timerLabel : 'Untimed'}
-          </span>
-        </div>
+        </button>
         <button
           type="button"
           className={`panel-rail-btn${teachMeMode ? ' active' : ''}`}
@@ -4670,7 +4676,7 @@ export default function Play({
               </div>
             </aside>
           )}
-          {!teachCompareLandscape && (
+          {(timelineExpanded || teachCompareLandscape) && (
             <PatientOrderTimeline
               events={orderTimelineEvents}
               sessionStartedAt={sessionStartedAt}
