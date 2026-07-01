@@ -5,6 +5,10 @@
 
 echo === MeWorld Boot ===
 
+:: 0. Start the arc-viz auto-save state server (port 9801)
+start "" /MIN node "C:\dev\Schedular\state-server.js"
+echo    state server launched
+
 :: 1. Start the arc-viz HTTP server (minimized, port 8080)
 start "" /MIN python -m http.server 8080
 timeout /t 2 /nobreak >nul

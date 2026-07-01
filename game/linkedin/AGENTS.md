@@ -1,10 +1,11 @@
 # arc-viz.html — Agent Handoff
 
-> **Current state (2026-06-29):** Browser smoke test run (served over `http://localhost`, `file://` is blocked in the test browser). Three fixes landed today — see "Recent changes" at the bottom. The spine Story panel, its 24px padding, and the current-post highlight are all confirmed working via screenshots.
+> **Current state (2026-06-30):** All 20 takes restored across 7 posts from 3 backup packages. Auto-save system added — every mutation (record, edit, fuse, delete, select) persists full state to disk via `state-server.js` on port 9801. State server auto-launches with Windows. WAV audio files copied to HTTP directory for persistent access.
 >
 > **Watch out (regression-prone areas):**
 > - The side panel needs an explicit `height` (`70vh`) or its `min-height:0` flex body collapses to the header on a fresh load (empty `arc-viz-pos`). Don't remove the `height` / the `.minimized { height:auto }` override.
 > - The spine container `#umbrella` MUST keep `class="spine-body"` — all spine padding + highlight/fade/hover CSS is scoped under `.spine-body`. Without it the highlight silently does nothing.
+> - Auto-save depends on `state-server.js` running on port 9801. If it's down, saves fail silently (localStorage still holds data).
 
 ## File
 
@@ -27,6 +28,22 @@ Content arc visualizer for MeWorld LinkedIn posts — 23-post spine with floatin
 | Font size preference | localStorage | `arc-viz-fontSize` |
 | Panel positions | localStorage | `arc-viz-pos` |
 | Audio blobs (.wav) | IndexedDB | DB: `arc-viz-takes` / store: `audio` |
+
+## Auto-save to disk
+
+Every mutation (record, edit, fuse, delete, select take) triggers `autoSave()` → POSTs complete state to `http://127.0.0.1:9801/save`. The state server (`C:\dev\Schedular\state-server.js`) writes:
+- A timestamped snapshot to `C:\Users\steve\MeWorld\game\linkedin\state-autosave\state-YYYY-MM-DDTHH-MM-SS.json`
+- An always-current copy at `latest.json`
+- Keeps last 50 snapshots, auto-prunes older ones
+
+**State server endpoints:**
+- `POST /save` — save current state JSON
+- `GET /latest` — retrieve most recent save
+- `GET /list` — list all snapshots
+
+**Fallback:** If the state server is down, saves fail silently — localStorage still holds the data. Next time the server is up, the next mutation will save the complete state.
+
+**WAV audio persistence:** All 9 raw take WAVs (`t_*_*.wav`) are copied to `C:\Users\steve\MeWorld\game\linkedin\` and loaded into IndexedDB on page load from the merged-all-takes.json import.
 
 ## Topbar + toolbar
 
@@ -134,6 +151,13 @@ After recording, the transcript is stored with `segments[]` — each segment has
 
 ## Recent changes
 
+- **2026-06-30 (later)** — Auto-save system added:
+  - Created `state-server.js` (Node.js, port 9801) — persists full state as JSON snapshots on every mutation
+  - Patched `saveTakesMeta()`, `saveSelTake()`, `saveFuseSources()` to call `autoSave()` → POSTs state (speechTakes, selectedTake, fuseSources, positions, font, theme) to state server
+  - State server writes timestamped snapshots + `latest.json`, keeps 50 rolling copies
+  - Added state server to `startup-all.bat` and `launch-postiz.ps1` for auto-launch
+  - Restored all 20 takes across 7 posts from 3 backup packages (0629, 0629v2, 0630)
+  - 9 WAV audio files (10–35 MB each) copied to HTTP directory, loaded into IndexedDB
 - **2026-06-30** — Video support + 3 Daily Build case posts infused into the "show, don't tell" section:
   - Added `video` field to posts array and `.reader-video` player in reader HTML/CSS
   - Inserted "The Build: DKA" (post 13, after "Building the room") — introduces Yaw Boateng DKA case with HHS_DKA.mp4 video

@@ -453,6 +453,7 @@
       <button class="fs-btn" onclick="changeFontSize(1)" title="Larger text">A+</button>
     </div>
     <button class="reader-edit-btn" id="reader-edit-btn" onclick="toggleReaderEdit()" title="Edit post body">✎</button>
+    <button class="reader-edit-btn" id="reader-copy-btn" onclick="copyReaderText()" title="Copy current text">⧉</button>
     <button class="reader-mic-btn" id="btn-mic" onclick="toggleMic()" title="Speech-to-text — read aloud to transcribe">
       <svg id="mic-idle" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg>
       <svg id="mic-rec" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor" style="display:none"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
@@ -736,6 +737,22 @@ function renderReader() {
 function switchReadMode(mode) { readMode = mode; renderReader(); }
 
 let readerEditing = false;
+function copyReaderText() {
+  const text = g("r-body").textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = g("reader-copy-btn");
+    btn.textContent = "✓";
+    btn.style.color = "#22C55E";
+    setTimeout(() => { btn.textContent = "⧉"; btn.style.color = ""; }, 1200);
+  }).catch(() => {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+    const btn = g("reader-copy-btn");
+    btn.textContent = "✓"; btn.style.color = "#22C55E";
+    setTimeout(() => { btn.textContent = "⧉"; btn.style.color = ""; }, 1200);
+  });
+}
 function toggleReaderEdit() {
   readerEditing = !readerEditing;
   const body = g("r-body");
@@ -801,16 +818,26 @@ async function fuseWithLLM() {
         max_tokens: 2000,
         temperature: 0.7,
         messages: [
-          { role: "system", content: `You are a fusion assistant. You receive text sources and blend them into one cohesive, natural read.
+          { role: "system", content: `You are Steve Oppong's writing assistant. You receive text sources and blend them into one cohesive, natural read that matches his exact voice.
 
+VOICE RULES (non-negotiable):
+- Spoken words only. Short sentences. Specific concrete details.
+- Additive accumulation. Never use "not X but Y" contrast framing.
+- No em dashes. No hedging. No grandstanding. No exclamation marks.
+- Plain, direct, unhurried. Earned endings.
+- Preserve natural spoken cadence — conjunctions (And, But, Because) at sentence starts.
+- No triple repetition. No structural symmetry as a substitute for emotion.
+- One idea per sentence. Short words, active voice.
+- Strip these words completely: delve, navigate, resonate, meticulous, tapestry, underscores, testament, landscape, commendable, comprehensive, swift.
+
+SOURCES:
 The ORIGINAL is the anchor — every key idea, fact, and structural beat must survive.
 The SPOKEN transcript is the primary voice source — rewrite entirely in the user's natural cadence and phrasing.
 Any EXTRA SOURCEs are additional takes/fusions to draw nuance from.
-Your job: merge the best of all sources into a single polished text that reads as if spoken naturally by one person.
-Adopt the strongest voice and phrasing from among the sources.
-The result should sound like a single, confident read — not a committee draft.
-Keep the same length and paragraph structure as the original.
-Never add markdown, quotes, labels, or commentary. Return ONLY the fused text.` },
+
+Your job: merge the best of all sources into a single polished text that reads as if spoken naturally by one person standing at a bedside explaining something to a friend.
+
+Keep the same length and paragraph structure as the original. Return ONLY the fused text — no labels, no commentary, no markdown.` },
           { role: "user", content: `${srcBlocks}\n\nFUSED TEXT:` }
         ]
       })
@@ -1097,7 +1124,8 @@ function toggleReader() {
 }
 
 /* ── STATUS ── */
-function setStatus(s) { statuses[current] = s; refresh(); }
+function setStatus(s) { statuses[current] = s; saveStatuses(); refresh(); }
+function saveStatuses() { try { localStorage.setItem("arc-viz-statuses", JSON.stringify(statuses)); } catch(e) {} autoSave(); }
 
 /* ── SPEECH-TO-TEXT + MULTI-TAKE ── */
 let micOn = false;
@@ -1161,23 +1189,112 @@ function idbDel(id) {
   }));
 }
 
-// ── Load persisted metadata ──
-try {
-  const saved = JSON.parse(localStorage.getItem("arc-viz-takes") || "{}");
-  Object.assign(speechTakes, saved);
-} catch(e) {}
-try {
-  const sel = JSON.parse(localStorage.getItem("arc-viz-selTake") || "{}");
-  Object.assign(selectedTake, sel);
-} catch(e) {}
-try {
-  const srcs = JSON.parse(localStorage.getItem("arc-viz-fuseSources") || "{}");
-  // Convert loaded arrays back so they're usable (JSON doesn't store sets)
-  for (const k of Object.keys(srcs)) { if (Array.isArray(srcs[k])) fuseSources[k] = [...srcs[k]]; }
-} catch(e) {}
-function saveTakesMeta() { try { localStorage.setItem("arc-viz-takes", JSON.stringify(speechTakes)); } catch(e) {} }
-function saveSelTake() { try { localStorage.setItem("arc-viz-selTake", JSON.stringify(selectedTake)); } catch(e) {} }
-function saveFuseSources() { try { localStorage.setItem("arc-viz-fuseSources", JSON.stringify(fuseSources)); } catch(e) {} }
+// ── Load persisted metadata (with server bootstrap for fresh browsers) ──
+(async function bootstrapTakes() {
+  // 1. Try localStorage first
+  let hasLocal = false;
+  try {
+    const saved = JSON.parse(localStorage.getItem("arc-viz-takes") || "{}");
+    if (Object.keys(saved).length > 0) { Object.assign(speechTakes, saved); hasLocal = true; }
+  } catch(e) {}
+  
+  // 2. If no localStorage, load from merged-all-takes.json on the server
+  if (!hasLocal) {
+    try {
+      const resp = await fetch("merged-all-takes.json");
+      if (resp.ok) {
+        const data = await resp.json();
+        for (const p of data.posts) {
+          if (!p.takes || !p.takes.length) continue;
+          speechTakes[p.index] = p.takes.map(t => ({
+            id: t.id, type: t.type || "raw", transcript: t.transcript || "",
+            duration: t.duration || 0, timestamp: t.timestamp || Date.now(),
+            fusedFrom: t.fusedFrom || null,
+            segments: t.segments || null,
+            originalId: t.originalId || null, originalSegments: t.originalSegments || null
+          }));
+          if (p.selectedTake != null && p.selectedTake >= 0) selectedTake[p.index] = p.selectedTake;
+        }
+        if (data.fuseSources) { for (const k of Object.keys(data.fuseSources)) { if (Array.isArray(data.fuseSources[k])) fuseSources[k] = [...data.fuseSources[k]]; } }
+      saveTakesMeta(); saveSelTake(); saveFuseSources();
+      refresh(); // re-render after bootstrap load
+    }
+  } catch(e) { /* no file or server down — starting fresh is fine */ }
+    
+    // 3. Auto-load WAV audio into IndexedDB (for browsers that haven't cached it yet)
+    try {
+      const db = await idbOpen();
+      for (const [idx, takes] of Object.entries(speechTakes)) {
+        for (const t of takes) {
+          if (t.type === "fused" || !t.id) continue;
+          const existing = await new Promise(r => { const tx = db.transaction("audio", "readonly"); const req = tx.objectStore("audio").get(t.id); req.onsuccess = () => r(req.result); req.onerror = () => r(null); });
+          if (existing) continue;
+          const wr = await fetch(t.id + ".wav");
+          if (!wr.ok) continue;
+          const buf = await wr.arrayBuffer();
+          const blob = new Blob([buf], { type: "audio/wav" });
+          await new Promise((resolve, reject) => { const tx = db.transaction("audio", "readwrite"); tx.objectStore("audio").put({ id: t.id, blob }); tx.oncomplete = resolve; tx.onerror = () => reject(tx.error); });
+        }
+      }
+      } catch(e) { /* audio non-critical */ }
+  }
+  // 4. Load selectedTake + fuseSources from localStorage (now populated by bootstrap)
+  try { const sel = JSON.parse(localStorage.getItem("arc-viz-selTake") || "{}"); Object.assign(selectedTake, sel); } catch(e) {}
+  try { const srcs = JSON.parse(localStorage.getItem("arc-viz-fuseSources") || "{}"); for (const k of Object.keys(srcs)) { if (Array.isArray(srcs[k])) fuseSources[k] = [...srcs[k]]; } } catch(e) {}
+  // 5. Load post statuses from localStorage
+  try { const st = JSON.parse(localStorage.getItem("arc-viz-statuses") || "{}"); Object.assign(statuses, st); } catch(e) {}
+})().then(() => {
+  // Now safe to init UI — takes are loaded
+  if (dark) {
+    document.documentElement.setAttribute("data-theme", "dark");
+    g("icon-sun").style.display = "none";
+    g("icon-moon").style.display = "";
+  }
+  try {
+    const saved = localStorage.getItem("arc-viz-fontSize");
+    if (saved) fontSize = parseInt(saved, 10) || 17;
+  } catch(e) {}
+  applyFontSize();
+  loadPositions();
+  applyPositions();
+  refresh();
+});
+// ── Remove the old duplicate sync loads below (replaced by bootstrap) ──
+// These were: load selTake, load fuseSources
+"__bootstrap_replaced_sync_loads__";
+function saveTakesMeta() { try { localStorage.setItem("arc-viz-takes", JSON.stringify(speechTakes)); } catch(e) {} autoSave(); }
+function saveSelTake() { try { localStorage.setItem("arc-viz-selTake", JSON.stringify(selectedTake)); } catch(e) {} autoSave(); }
+function saveFuseSources() { try { localStorage.setItem("arc-viz-fuseSources", JSON.stringify(fuseSources)); } catch(e) {} autoSave(); }
+
+// ── Auto-save: persists all takes + state to disk via state-server.js ──
+const STATE_SERVER = "http://127.0.0.1:9801";
+let _autoSavePending = false;
+async function autoSave() {
+  if (_autoSavePending) return; // debounce
+  _autoSavePending = true;
+  try {
+    const state = {
+      speechTakes, selectedTake, fuseSources, statuses,
+      fontSize, dark, sideX, sideY, sideW, sideH, tlX, tlY,
+      sidePanelOpen, sidePanelMinimized, sidePanelTab,
+      _at: new Date().toISOString()
+    };
+    await fetch(STATE_SERVER + "/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(state)
+    });
+    // console.log("autoSave OK");
+  } catch(e) {
+    // State server may not be running — silent fail, localStorage still holds data
+  }
+  _autoSavePending = false;
+}
+
+// Manual save button in toolbar
+function manualSave() {
+  autoSave().then(() => alert("State saved to disk.")).catch(() => alert("State server not running. Start: node C:\\dev\\Schedular\\state-server.js"));
+}
 function savePositions() {
   try {
     const vw = window.innerWidth, vh = window.innerHeight;
@@ -2134,7 +2251,29 @@ async function importTakes() {
         saveFuseSources();
       }
       saveTakesMeta(); saveSelTake();
-      alert(`Imported takes for ${imported} post${imported !== 1 ? "s" : ""}. Audio files are not included — re-record to recapture.`);
+      // Try loading audio from local server WAVs
+      let audioLoaded = 0;
+      try {
+        const db = await idbOpen();
+        for (const pi of data.posts) {
+          if (!pi.takes || !pi.takes.length) continue;
+          for (const t of pi.takes) {
+            if (t.type === "fused" || !t.id) continue;
+            const existing = await new Promise(r => { const tx = db.transaction("audio", "readonly"); const req = tx.objectStore("audio").get(t.id); req.onsuccess = () => r(req.result); req.onerror = () => r(null); });
+            if (existing) continue;
+            try {
+              const wr = await fetch(t.id + ".wav");
+              if (!wr.ok) continue;
+              const buf = await wr.arrayBuffer();
+              const blob = new Blob([buf], { type: "audio/wav" });
+              await new Promise((resolve, reject) => { const tx = db.transaction("audio", "readwrite"); tx.objectStore("audio").put({ id: t.id, blob }); tx.oncomplete = resolve; tx.onerror = () => reject(tx.error); });
+              audioLoaded++;
+            } catch(wavErr) {}
+          }
+        }
+      } catch(e) {}
+      const msg = `Imported ${imported} post${imported !== 1 ? "s" : ""} with ${audioLoaded} audio file${audioLoaded !== 1 ? "s" : ""} restored.`;
+      alert(msg);
       refresh();
     } catch(err) {
       alert("Failed to parse export file: " + (err.message || err));
@@ -2144,21 +2283,8 @@ async function importTakes() {
 }
 
 /* ── INIT ── */
-if (dark) {
-  document.documentElement.setAttribute("data-theme", "dark");
-  g("icon-sun").style.display = "none";
-  g("icon-moon").style.display = "";
-}
-// load persisted font size
-try {
-  const saved = localStorage.getItem("arc-viz-fontSize");
-  if (saved) fontSize = parseInt(saved, 10) || 17;
-} catch(e) {}
-applyFontSize();
-// load persisted panel positions
-loadPositions();
-applyPositions();
-refresh();
+// All init is now handled by bootstrapTakes().then() above.
+// The refresh() call runs after takes are loaded from localStorage or server.
 </script>
 
 </body>
