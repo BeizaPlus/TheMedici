@@ -124,6 +124,8 @@ import {
   IconStethoscope,
   IconTimeline,
   IconUsersGroup,
+  IconListCheck,
+  IconBrain,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
 import IcuMonitorStrip from './IcuMonitorStrip.jsx';
@@ -4314,7 +4316,7 @@ export default function Play({
           aria-label="Teach Me"
           aria-pressed={teachMeMode}
         >
-          {teachMeMode ? 'TM' : '?M'}
+          <IconBrain size={14} />
         </button>
         <button
           type="button"
@@ -4324,7 +4326,7 @@ export default function Play({
           title="Review order sequence"
           aria-label="Review orders"
         >
-          Rv
+          <IconListCheck size={14} />
         </button>
         <div className="panel-rail-sep" aria-hidden />
         <button

@@ -437,3 +437,31 @@ export function IconUsersGroup(props) {
 export function IconStethoscopeSecond(props) {
   return <IconUsersGroup {...props} />;
 }
+
+/** Tabler: list-check — review / checklist — https://tabler.io/icons/icon/list-check */
+export function IconListCheck(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M3.5 5.5l1.5 1.5l2.5 -2.5" />
+      <path d="M3.5 11.5l1.5 1.5l2.5 -2.5" />
+      <path d="M3.5 17.5l1.5 1.5l2.5 -2.5" />
+      <path d="M11 6l9 0" />
+      <path d="M11 12l9 0" />
+      <path d="M11 18l9 0" />
+    </svg>
+  );
+}
+
+/** Tabler: brain — teach / learn / mechanism — https://tabler.io/icons/icon/brain */
+export function IconBrain(props) {
+  return (
+    <svg className="toolbar-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      <path d="M15.5 13a3.5 3.5 0 0 0 -3.5 3.5v1a3.5 3.5 0 0 0 7 0v-1.8" />
+      <path d="M8.5 13a3.5 3.5 0 0 1 3.5 3.5v1a3.5 3.5 0 0 1 -7 0v-1.8" />
+      <path d="M17.5 7.5a3.5 3.5 0 0 1 0 7" />
+      <path d="M6.5 7.5a3.5 3.5 0 0 0 0 7" />
+      <path d="M12 3a2.5 2.5 0 0 0 0 5" />
+      <path d="M12 12a1 1 0 0 0 0 2" />
+    </svg>
+  );
+}
