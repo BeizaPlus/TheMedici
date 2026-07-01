@@ -134,6 +134,8 @@ import {
   formatPersonaForChat,
   generatePortraitWithFallback,
   portraitPublicUrl,
+  portraitPreviewFileName,
+  portraitPreviewPublicUrl,
   portraitBaselinePublicUrl,
   portraitBaselineFileName,
   readPortraitCache,
@@ -2349,8 +2351,27 @@ app.post('/api/case-persona', async (req, res) => {
 
 app.get('/api/case-portrait/:caseId', async (req, res) => {
   const caseId = String(req.params.caseId || '').trim();
+  const isPreview = req.query.preview === '1';
   if (!caseId) return res.status(400).json({ error: 'Missing caseId' });
   try {
+    // Check for preview variant first
+    if (isPreview) {
+      const previewFileName = portraitPreviewFileName(caseId);
+      if (previewFileName) {
+        const previewPath = path.join(CASE_PORTRAIT_DIR, previewFileName);
+        try {
+          await fsp.access(previewPath);
+          const origin = serverOrigin(req);
+          return res.json({
+            ok: true,
+            exists: true,
+            caseId,
+            url: portraitPreviewPublicUrl(caseId, origin),
+            preview: true,
+          });
+        } catch { /* no preview — fall through to main portrait */ }
+      }
+    }
     const cached = await readPortraitCache(CASE_PORTRAIT_DIR, caseId, { allowBanned: true });
     if (!cached.exists) {
       return res.json({ ok: true, exists: false, caseId });

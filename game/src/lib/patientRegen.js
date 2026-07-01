@@ -102,19 +102,21 @@ export function buildSceneSourceSig(caseData, erSrc) {
   return `${caseData.id}:${sex}:${erSrc.slice(0, 96)}:${erSrc.length}`;
 }
 
-export async function fetchCasePortraitStatus(caseId) {
+export async function fetchCasePortraitStatus(caseId, { preview = false } = {}) {
   if (!caseId) return { exists: false, url: null };
   try {
-    const r = await fetch(apiUrl(`/api/case-portrait/${encodeURIComponent(caseId)}`));
+    const params = preview ? '?preview=1' : '';
+    const r = await fetch(apiUrl(`/api/case-portrait/${encodeURIComponent(caseId)}${params}`));
     if (!r.ok) return { exists: false, url: null };
     const data = await r.json();
     if (data.exists && data.url) {
-      if (data.persona) writeCasePortraitPersona(caseId, data.persona);
+      if (!preview && data.persona) writeCasePortraitPersona(caseId, data.persona);
       const busted = portraitCacheBust(
         data.url,
         data.cachedAt || data.ladyRefSlug || data.patientSex || caseId,
       );
-      writeCaseRegenImage(caseId, busted);
+      // Only cache the main portrait, not previews
+      if (!preview) writeCaseRegenImage(caseId, busted);
       return {
         exists: true,
         url: busted,

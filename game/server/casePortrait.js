@@ -115,6 +115,22 @@ export function portraitPublicUrl(caseId, origin) {
   return `${base}/case-portraits/${fileName}`;
 }
 
+export function portraitPreviewFileName(caseId) {
+  const slug = normalizeCaseId(caseId);
+  return slug ? `${slug}_preview.png` : null;
+}
+
+export function portraitPreviewPublicUrl(caseId, origin) {
+  const fileName = portraitPreviewFileName(caseId);
+  if (!fileName) return null;
+  const port = Number(process.env.PORT || process.env.SPORTMAKER_API_PORT || 3001);
+  const base =
+    origin
+    || process.env.PUBLIC_URL?.replace(/\/$/, '')
+    || `http://127.0.0.1:${port}`;
+  return `${base}/case-portraits/${fileName}`;
+}
+
 function presentationCueForComplaint(cc) {
   const ccLower = String(cc || '').toLowerCase();
   if (/chest pain|mi|acs|angina/.test(ccLower)) {

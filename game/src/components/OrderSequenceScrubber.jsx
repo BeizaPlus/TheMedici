@@ -8,7 +8,7 @@ const AUTOPLAY_STEP_MS = 1100;
 
 function useScrubberLayout() {
   const [pos, setPos] = useState(() => ({ x: 0, y: 0 }));
-  const [size, setSize] = useState(() => ({ w: 480, h: 72 }));
+  const [size, setSize] = useState(() => ({ w: 864, h: 72 }));
   const draggingRef = useRef(null);
   const resizingRef = useRef(null);
 
@@ -29,7 +29,7 @@ function useScrubberLayout() {
     initRef.current = true;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    setPos({ x: Math.max(0, (vw - 480) / 2), y: vh - 110 });
+    setPos({ x: Math.max(0, (vw - 864) / 2), y: vh - 110 });
   }, []);
 
   // Drag
@@ -79,7 +79,7 @@ function useScrubberLayout() {
       if (r.edge.includes('s')) nh = r.origH + dy;
       if (nw < 260) nw = 260;
       if (nh < 72) nh = 72;
-      if (nw > 900) nw = 900;
+      if (nw > 1200) nw = 1200;
       if (nh > 180) nh = 180;
       setSize({ w: nw, h: nh });
     }

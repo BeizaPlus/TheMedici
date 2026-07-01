@@ -2484,12 +2484,20 @@ button {
   cursor: grab;
   touch-action: none;
   z-index: 80;
+  transition: transform 0.15s ease, opacity 0.15s;
 }
 
 .pin.pin-grid.pin-dragging {
   cursor: grabbing;
   z-index: 120;
-  opacity: 0.92;
+  opacity: 0.88;
+  transform: scale(1.06);
+}
+
+/* Pin drag-over highlight on scene (when dragging a placed pin over the scene) */
+.pin.pin-grid.pin-drag-over {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(232, 184, 75, 0.5);
 }
 
 .pin.pin-has-result {
@@ -5166,6 +5174,8 @@ button {
   align-items: flex-start;
   gap: 8px;
   cursor: grab;
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s, transform 0.12s, opacity 0.12s;
+  will-change: transform;
 }
 
 .pill-text {
@@ -5180,12 +5190,37 @@ button {
 
 .drag-pill.pill:hover {
   border-color: var(--gold);
+  transform: translateY(-1px);
 }
 
-.drag-pill.pill.dragging {
+.drag-pill.pill:active {
   cursor: grabbing;
+}
+
+.drag-pill-wrap.pack-item.is-dragging .drag-pill.pill {
+  cursor: grabbing;
+  opacity: 0.5;
+  transform: scale(0.97);
   border-color: var(--gold);
   box-shadow: 0 8px 28px rgba(232, 184, 75, 0.35);
+}
+
+/* Scene drop zone — highlight when hovering with a stack pill */
+.game-scene.drag-over::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--gold);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 100;
+  background: rgba(232, 184, 75, 0.04);
+  animation: drag-over-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes drag-over-pulse {
+  0%, 100% { border-color: rgba(232, 184, 75, 0.5); }
+  50% { border-color: rgba(232, 184, 75, 0.9); }
 }
 
 .drag-pill-wrap.pill-placed .drag-pill {
@@ -10172,10 +10207,6 @@ button {
     opacity: 0;
     transform: translateY(-28px);
   }
-}
-
-body.stack-drag-over-patient {
-  cursor: crosshair;
 }
 
 [data-viewport='compact'] .sidebar-foot .btn-ghost {

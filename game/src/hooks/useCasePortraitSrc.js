@@ -9,6 +9,7 @@ import {
 import {
   clearCaseRegenImage,
   ensureCasePortrait,
+  fetchCasePortraitStatus,
   readCaseRegenImage,
   writeCaseRegenImage,
 } from '../lib/patientRegen.js';
@@ -31,17 +32,27 @@ export function useCasePortraitSrc(
   const tierAPreview = psychPreview || uberPlay || uberPreview;
   const [portraitTick, setPortraitTick] = useState(0);
   const bumpPortrait = useCallback(() => setPortraitTick((n) => n + 1), []);
+  const [previewSrc, setPreviewSrc] = useState(null);
 
   useEffect(() => {
     if (!caseId || tierAPreview?.url) return undefined;
     let cancelled = false;
+    // When preferUberPreviewPlate and no uber/psych plate, try case-level _preview.png
+    if (preferUberPreviewPlate) {
+      fetchCasePortraitStatus(caseId, { preview: true }).then((status) => {
+        if (!cancelled && status?.url) {
+          setPreviewSrc(status.url);
+          bumpPortrait();
+        }
+      });
+    }
     void ensureCasePortrait(caseData).then((url) => {
       if (!cancelled && url) bumpPortrait();
     });
     return () => {
       cancelled = true;
     };
-  }, [caseId, caseData?.patientSex, caseData, bumpPortrait, tierAPreview?.url]);
+  }, [caseId, caseData?.patientSex, caseData, bumpPortrait, tierAPreview?.url, preferUberPreviewPlate]);
 
   useEffect(() => {
     if (!caseId) return undefined;
@@ -57,8 +68,9 @@ export function useCasePortraitSrc(
   const portraitForceSrc = useMemo(() => {
     void portraitTick;
     if (tierAPreview?.url) return tierAPreview.url;
+    if (preferUberPreviewPlate && previewSrc) return previewSrc;
     return caseId ? readCaseRegenImage(caseId) : null;
-  }, [caseId, portraitTick, tierAPreview?.url]);
+  }, [caseId, portraitTick, tierAPreview?.url, preferUberPreviewPlate, previewSrc]);
 
   const portraitDisplaySrc = useMemo(
     () =>

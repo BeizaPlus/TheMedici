@@ -483,6 +483,8 @@ export default function Play({
   const [stackMoveMode, setStackMoveMode] = useState(false);
   const pinDragSuppressClickRef = useRef(null);
   const [dragging, setDragging] = useState(false);
+  const [dragIvId, setDragIvId] = useState(null);   // which pill is actively being dragged
+  const [dragOverScene, setDragOverScene] = useState(false); // drop-zone highlight
   const [timedOut, setTimedOut] = useState(false);
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [vitalsHighlight, setVitalsHighlight] = useState(false);
@@ -949,14 +951,15 @@ export default function Play({
     return (
       <div
         key={iv.id}
-        className={`drag-pill-wrap pack-item ${showDecoyVisual && !blendVisual ? 'pack-item-decoy' : ''} ${placed[iv.id] ? 'is-placed is-expandable' : ''} ${teachMeMode && placed[iv.id] ? 'teach-pill-placed' : ''} ${expandedStackId === iv.id ? 'expanded' : ''} ${isTeachFocused ? 'teach-pill-focused' : ''} ${isTeachNext ? 'teach-pill-next' : ''} ${isTeachLocked ? 'teach-pill-locked' : ''}`}
+        className={`drag-pill-wrap pack-item ${showDecoyVisual && !blendVisual ? 'pack-item-decoy' : ''} ${placed[iv.id] ? 'is-placed is-expandable' : ''} ${teachMeMode && placed[iv.id] ? 'teach-pill-placed' : ''} ${expandedStackId === iv.id ? 'expanded' : ''} ${isTeachFocused ? 'teach-pill-focused' : ''} ${isTeachNext ? 'teach-pill-next' : ''} ${isTeachLocked ? 'teach-pill-locked' : ''} ${dragIvId === iv.id ? 'is-dragging' : ''}`}
         draggable
         onDragStart={(e) => {
           e.dataTransfer.setData('application/stack-iv-id', iv.id);
           e.dataTransfer.effectAllowed = 'move';
           setDragging(true);
+          setDragIvId(iv.id);
         }}
-        onDragEnd={() => setDragging(false)}
+        onDragEnd={() => { setDragging(false); setDragIvId(null); }}
         onClick={(e) => {
           if (e.currentTarget?.dataset?.didDrag === 'true') {
             e.currentTarget.dataset.didDrag = '';
@@ -3269,10 +3272,17 @@ export default function Play({
   const handleSceneDragOver = useCallback((e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    setDragOverScene(true);
+  }, []);
+
+  const handleSceneDragLeave = useCallback(() => {
+    setDragOverScene(false);
   }, []);
 
   const handleSceneDrop = useCallback((e) => {
     e.preventDefault();
+    setDragOverScene(false);
+    setDragIvId(null);
     const ivId = e.dataTransfer.getData('application/stack-iv-id');
     if (!ivId) return;
 
@@ -4556,9 +4566,10 @@ export default function Play({
         />
       )}
       <div
-        className={`game-scene ${vitals.spo2 < 92 || vitals.sbp < 95 || vitals.hr > 120 ? 'icu-alarm' : ''} ${teachMeMode ? 'teach-me-active' : ''}${stackMoveMode ? ' pin-move-mode' : ''}`}
+        className={`game-scene ${vitals.spo2 < 92 || vitals.sbp < 95 || vitals.hr > 120 ? 'icu-alarm' : ''} ${teachMeMode ? 'teach-me-active' : ''}${stackMoveMode ? ' pin-move-mode' : ''}${dragOverScene ? ' drag-over' : ''}`}
         ref={sceneRef}
         onDragOver={handleSceneDragOver}
+        onDragLeave={handleSceneDragLeave}
         onDrop={handleSceneDrop}
         data-dropzone
       >
@@ -4849,7 +4860,7 @@ export default function Play({
           return (
             <div
               key={`${p.ivId || p.zoneId}-${i}-${p.label}`}
-              className={`pin ${p.ivId ? 'pin-draggable' : ''} ${stackMoveMode && p.ivId ? 'pin-move-active' : ''} ${useGridPlacement ? 'pin-grid' : ''} ${p.ok === true ? 'ok' : ''} ${p.ok === false ? 'bad' : ''} ${p.ivId ? 'pin-has-result' : ''} ${orderResultIvId === p.ivId ? 'pin-active' : ''}`}
+              className={`pin ${p.ivId ? 'pin-draggable' : ''} ${stackMoveMode && p.ivId ? 'pin-move-active' : ''} ${useGridPlacement ? 'pin-grid' : ''} ${p.ok === true ? 'ok' : ''} ${p.ok === false ? 'bad' : ''} ${p.ivId ? 'pin-has-result' : ''} ${orderResultIvId === p.ivId ? 'pin-active' : ''} ${dragIvId === p.ivId ? 'pin-dragging' : ''}`}
               data-iv-id={p.ivId || ''}
               draggable={Boolean(p.ivId)}
               onDragStart={(e) => {
@@ -4861,8 +4872,10 @@ export default function Play({
                 e.currentTarget.dataset.dragOffsetY = offY;
                 e.dataTransfer.setData('application/reposition-pin', p.ivId);
                 e.dataTransfer.effectAllowed = 'move';
+                setDragIvId(p.ivId);
               }}
               onDragEnd={(e) => {
+                setDragIvId(null);
                 if (!p.ivId) return;
                 const sceneEl = sceneRef.current;
                 if (!sceneEl) return;
