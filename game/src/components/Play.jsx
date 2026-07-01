@@ -135,7 +135,7 @@ import { TEXT_PREFS_CHANGED } from '../lib/textPrefsSync.js';
 import { clearFirstOpinionMemoryForCase } from '../lib/orderWhy.js';
 import { hydrateCaseNotes } from '../lib/caseNotes.js';
 import { getBriefingExam, getBriefingHpi } from '../lib/caseBriefing.js';
-import { computePinDisplayPercent, getMagneticRepositioning, setMagneticRepositioning } from '../lib/pinLayout.js';
+import { computePinDisplayPercent } from '../lib/pinLayout.js';
 import { parseChatModeCommand } from '../lib/chatModeCommands.js';
 import { looksLikeTutorQuestion } from '../lib/chatIntentRouting.js';
 import {
@@ -690,7 +690,6 @@ export default function Play({
       return false;
     }
   });
-  const [magneticOn, setMagneticOn] = useState(() => getMagneticRepositioning());
   const [timedMode, setTimedMode] = useState(() => readUiPrefs().timedMode);
   const startRef = useRef(Date.now());
   const sceneRef = useRef(null);
@@ -2060,8 +2059,8 @@ export default function Play({
         const { cx, cy } = clampPinAwayFromUi(rawCx, rawCy, sceneRef.current);
         effectiveTarget = {
           zoneId,
-          cx: Math.max(imageFrame.x, Math.min(imageFrame.x + imageFrame.w, cx)),
-          cy: Math.max(imageFrame.y, Math.min(imageFrame.y + imageFrame.h, cy)),
+          cx,
+          cy,
         };
       } else if (typeof target === 'string') {
         effectiveTarget = dropZone;
@@ -4225,19 +4224,6 @@ export default function Play({
               </button>
               <button type="button" onClick={saveCasePinLayoutSnapshot}>
                 Save layout
-              </button>
-              <button
-                type="button"
-                className={magneticOn ? 'active settings-popover-btn--on' : ''}
-                aria-pressed={magneticOn}
-                onClick={() => {
-                  const next = !magneticOn;
-                  setMagneticOn(next);
-                  setMagneticRepositioning(next);
-                  showToast(next ? 'Magnetic positioning ON — pins pushed outside patient' : 'Magnetic positioning OFF — pins stay where dropped', 'ok');
-                }}
-              >
-                Magnetic: {magneticOn ? 'ON' : 'OFF'}
               </button>
               <button type="button" onClick={openCaseStory}>
                 Case story
