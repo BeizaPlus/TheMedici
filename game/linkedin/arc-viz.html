@@ -215,8 +215,15 @@
   .reader-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
   .reader-video { margin-bottom: 12px; border-radius: 10px; overflow: hidden; background: #000; flex-shrink: 0; }
   .reader-video video { display: block; width: 100%; max-height: 320px; object-fit: contain; border-radius: 10px; }
-  .reader-image { margin-bottom: 12px; border-radius: 10px; overflow: hidden; background: var(--bg-subtle); flex-shrink: 0; }
-  .reader-image img { display: block; width: 100%; max-height: 420px; object-fit: contain; border-radius: 10px; }
+  .reader-image { margin-bottom: 12px; border-radius: 10px; overflow: hidden; border: 0.5px solid var(--border); flex-shrink: 0; }
+  .reader-image-bar { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-surface); cursor: pointer; user-select: none; border-bottom: 0.5px solid var(--border); }
+  .reader-image-bar:hover { background: var(--bg-subtle); }
+  .reader-image-label { font-size: 10px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .reader-image-name { font-size: 11px; color: var(--text-soft); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .reader-image-toggle { font-size: 14px; color: var(--text-muted); width: 18px; text-align: center; line-height: 1; }
+  .reader-image-body { background: var(--bg-subtle); transition: max-height 0.3s ease, opacity 0.25s ease; max-height: 420px; opacity: 1; overflow: hidden; }
+  .reader-image.collapsed .reader-image-body { max-height: 0; opacity: 0; }
+  .reader-image img { display: block; width: 100%; max-height: 420px; object-fit: contain; }
   .act-badge { font-size: 9px; padding: 3px 10px; border-radius: 14px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; flex-shrink: 0; }
   .reader-spine-context { font-size: 0.65rem; color: var(--text-muted); font-weight: 400; font-style: italic; letter-spacing: -0.01em; flex-shrink: 0; }
   .reader-edit-btn { width: 28px; height: 28px; border-radius: 50%; border: 0.5px solid var(--border); background: var(--bg); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.15s; flex-shrink: 0; }
@@ -480,7 +487,14 @@
         <span class="reader-spine-context" id="r-spine-context"></span>
       </div>
       <div class="reader-video" id="r-video" style="display:none"><video id="r-video-player" controls playsinline></video></div>
-      <div class="reader-image" id="r-image" style="display:none"><img id="r-image-img" alt="" /></div>
+      <div class="reader-image" id="r-image" style="display:none">
+        <div class="reader-image-bar" id="r-image-bar" onclick="toggleImage()">
+          <span class="reader-image-label">img</span>
+          <span class="reader-image-name" id="r-image-name"></span>
+          <span class="reader-image-toggle" id="r-image-toggle">−</span>
+        </div>
+        <div class="reader-image-body" id="r-image-body"><img id="r-image-img" alt="" /></div>
+      </div>
       <div class="read-toggle-bar" id="read-toggle-bar" style="display:none">
         <span class="read-toggle-label">Text</span>
         <button class="read-toggle-btn active" id="read-toggle-orig" onclick="switchReadMode('original')">Original</button>
@@ -598,6 +612,7 @@ let current = 0;
 let readerOpen = true;
 let dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 let fontSize = 17;
+let collapsedImages = {}; // per-post image collapse state
 let readMode = "original"; // "original" | "spoken"
 
 function g(id) { return document.getElementById(id); }
@@ -704,9 +719,19 @@ function renderReader() {
   // image embed
   const imageEl = g("r-image");
   const imageImg = g("r-image-img");
+  const imageName = g("r-image-name");
+  const imageToggle = g("r-image-toggle");
   if (p.image) {
     imageImg.src = p.image;
+    imageName.textContent = p.image;
     imageEl.style.display = "";
+    if (collapsedImages[current]) {
+      imageEl.classList.add("collapsed");
+      if (imageToggle) imageToggle.textContent = "+";
+    } else {
+      imageEl.classList.remove("collapsed");
+      if (imageToggle) imageToggle.textContent = "\u2212";
+    }
   } else {
     imageImg.removeAttribute("src");
     imageEl.style.display = "none";
@@ -767,6 +792,14 @@ function copyReaderText() {
     btn.textContent = "✓"; btn.style.color = "#22C55E";
     setTimeout(() => { btn.textContent = "⧉"; btn.style.color = ""; }, 1200);
   });
+}
+function toggleImage() {
+  const el = g("r-image");
+  if (!el) return;
+  el.classList.toggle("collapsed");
+  collapsedImages[current] = el.classList.contains("collapsed");
+  const toggle = g("r-image-toggle");
+  toggle.textContent = el.classList.contains("collapsed") ? "+" : "\u2212";
 }
 function toggleReaderEdit() {
   readerEditing = !readerEditing;
