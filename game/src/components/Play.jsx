@@ -2874,6 +2874,7 @@ export default function Play({
         `Interpret the ${label} results for this patient. Relate each abnormal value to the clinical picture and say what it changes in management — be specific.\n\n${label}: ${text}`;
       expandDockPanel();
       setInfoTab('chat');
+      setDockRole(DOCK_ROLE.TUTOR); // Force attending mode toggle when interpreting labs
       showToast('Asking the attending to interpret…', '');
       const reply = await caseChat.sendMessage(prompt, { chatMode: 'tutor' });
       showToast(
@@ -2881,7 +2882,7 @@ export default function Play({
         reply ? 'ok' : 'bad',
       );
     },
-    [caseChat, expandDockPanel],
+    [caseChat, expandDockPanel, setDockRole],
   );
 
   // Attending "new angle" — refresh button that makes the attending quiz the
