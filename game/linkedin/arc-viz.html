@@ -1164,7 +1164,6 @@ function toggleReader() {
     el.classList.remove("collapsed");
     btn.classList.add("active");
     nav.style.display = "";
-    if (speech.classList.contains("recording")) speech.style.display = "flex";
   } else {
     el.classList.add("collapsed");
     btn.classList.remove("active");
@@ -1505,7 +1504,6 @@ async function startMic() {
   } catch(_) { mediaRecorder = null; }
 
   micOn = true;
-  g("speech-bar").style.display = "flex";
   g("speech-bar").classList.add("recording");
   g("btn-mic").classList.add("recording");
   g("mic-idle").style.display = "none";
@@ -1610,9 +1608,7 @@ async function stopMic() {
   }
 
   liveBase = ""; liveInterim = "";
-  const speechBar = g("speech-bar");
-  speechBar.classList.remove("recording");
-  speechBar.style.display = "";
+  g("speech-bar").classList.remove("recording");
   g("btn-mic").classList.remove("recording");
   g("mic-idle").style.display = "";
   g("mic-rec").style.display = "none";
