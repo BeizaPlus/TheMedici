@@ -14,31 +14,54 @@ function clamp(n, min, max) {
 
 export const DOCK_CHROME_COLLAPSED_HEIGHT = 148;
 
-// Command dock opens compact & short — calibrated to Steve's manual resize
-// 2026-06-30 (measured at vw 996: play 400×187, preview 414×126).
-// Width scales with screen width; height follows from each dock's own aspect
-// ratio so the SHAPE is identical on any display. Pinned top-left.
-const PLAY_DOCK_SPEC = { wRatio: 0.4, aspect: 400 / 187, clinicalFrac: 161 / 187 }; // ~2.14:1
-const BRIEFING_DOCK_SPEC = { wRatio: 0.415, aspect: 414 / 126, clinicalFrac: 100 / 126 }; // ~3.29:1
+// Steve manual dock lock — Play + Briefing preview share PLAY_DOCK_SPEC.
+// 2026-06-30 @ 996×996: wRatio 0.269, xCenter 0.807, yTop 0.044, aspect 368/199.
+const PLAY_DOCK_SPEC = {
+  wRatio: 0.269,
+  aspect: 368 / 199,
+  clinicalFrac: 161 / 187,
+  xCenterFrac: 0.807,
+  yFrac: 0.044,
+  rightRailPx: 56,
+  fixedRatio: true,
+};
+/** Case preview (Briefing) uses the same dock size/position as Play. */
+const BRIEFING_DOCK_SPEC = PLAY_DOCK_SPEC;
 
 function buildDockLayout(spec) {
   const ssr = typeof window === 'undefined';
   const vw = ssr ? 1280 : window.innerWidth;
   const vh = ssr ? 800 : window.innerHeight;
-  const compact = vw <= 900;
+  const compact = vw <= 900 && !spec.fixedRatio;
   // Slightly wider fraction on small screens so it stays usable.
   let width = compact
     ? clamp(Math.round(vw * (spec.wRatio + 0.2)), 300, vw - 16)
     : clamp(Math.round(vw * spec.wRatio), 320, 820);
   let height = Math.round(width / spec.aspect);
-  // Safety cap — never taller than ~42% of the viewport.
-  const maxH = Math.round(vh * 0.42);
+  // Safety cap — never taller than ~42% of the viewport (skip when ratio is author-locked).
+  const maxH = Math.round(vh * (spec.fixedRatio ? 0.55 : 0.42));
   if (height > maxH) {
     height = maxH;
     width = clamp(Math.round(height * spec.aspect), MIN_W, vw - 24);
   }
-  const x = compact ? 8 : 16;
-  const y = compact ? Math.max(44, vh - height - 52) : 52;
+  const rightRail = spec.rightRailPx ?? 56;
+  const rightPad = spec.fixedRatio ? 8 : rightRail + 12;
+  const x =
+    spec.xCenterFrac != null
+      ? clamp(
+          Math.round(vw * spec.xCenterFrac - width / 2),
+          16,
+          Math.max(16, vw - width - rightPad),
+        )
+      : compact
+        ? 8
+        : 16;
+  const y =
+    spec.yFrac != null
+      ? clamp(Math.round(vh * spec.yFrac), 44, Math.max(44, vh - height - 8))
+      : compact
+        ? Math.max(44, vh - height - 52)
+        : 52;
   const clinicalPx = clamp(
     Math.round(height * spec.clinicalFrac),
     0,
