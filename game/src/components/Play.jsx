@@ -2071,8 +2071,8 @@ export default function Play({
         const { cx, cy } = clampPinAwayFromUi(rawCx, rawCy, sceneRef.current);
         effectiveTarget = {
           zoneId,
-          cx,
-          cy,
+          cx: Math.max(imageFrame.x, Math.min(imageFrame.x + imageFrame.w, cx)),
+          cy: Math.max(imageFrame.y, Math.min(imageFrame.y + imageFrame.h, cy)),
         };
       } else if (typeof target === 'string') {
         effectiveTarget = dropZone;
