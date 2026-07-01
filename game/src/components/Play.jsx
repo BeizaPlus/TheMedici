@@ -36,7 +36,7 @@ import {
   resolveSceneSrc,
 } from '../lib/patientImage.js';
 import GridPlacementLayer from './GridPlacementLayer.jsx';
-import { GRID_COLS, GRID_ROWS } from '../lib/sceneGrid.js';
+import { GRID_COLS, GRID_ROWS, snapPoint } from '../lib/sceneGrid.js';
 import {
   createGridItem,
   moveGridItem,
@@ -2069,10 +2069,14 @@ export default function Play({
         const rawCx = (clientX - rect.left) / rect.width;
         const rawCy = (clientY - rect.top) / rect.height;
         const { cx, cy } = clampPinAwayFromUi(rawCx, rawCy, sceneRef.current);
+        // Clamp to the scene margin frame, then snap to the nearest grid intersection
+        const clampedCx = Math.max(imageFrame.x, Math.min(imageFrame.x + imageFrame.w, cx));
+        const clampedCy = Math.max(imageFrame.y, Math.min(imageFrame.y + imageFrame.h, cy));
+        const snapped = snapPoint(clampedCx, clampedCy);
         effectiveTarget = {
           zoneId,
-          cx: Math.max(imageFrame.x, Math.min(imageFrame.x + imageFrame.w, cx)),
-          cy: Math.max(imageFrame.y, Math.min(imageFrame.y + imageFrame.h, cy)),
+          cx: snapped.cx,
+          cy: snapped.cy,
         };
       } else if (typeof target === 'string') {
         effectiveTarget = dropZone;
