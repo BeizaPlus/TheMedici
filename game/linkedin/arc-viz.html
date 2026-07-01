@@ -184,6 +184,10 @@
     display: flex; align-items: center; justify-content: center;
     line-height: 1;
   }
+  .tl-image-dot {
+    font-size: 9px; color: var(--text-muted); flex-shrink: 0;
+    opacity: 0.5; line-height: 1;
+  }
   .tl-row.active .tl-take-count {
     background: var(--accent); color: #fff; border-color: var(--accent);
   }
@@ -673,13 +677,15 @@ function renderTimeline() {
     const activeClass = i === current ? " active" : "";
     const takeCount = (speechTakes[i] && speechTakes[i].length) || 0;
     const countHtml = takeCount > 0 ? `<span class="tl-take-count">${takeCount}</span>` : "";
+    const imageHtml = p.image ? `<span class="tl-image-dot" title="Has image">◻</span>` : "";
+    const videoHtml = p.video ? `<span class="tl-image-dot" title="Has video">▶</span>` : "";
     html += `<div class="tl-row ${st}${activeClass}" onclick="goTo(${i})">
       <div class="tl-dot">${i + 1}</div>
       <div class="tl-info">
         <span class="tl-date">${p.date}</span>
         <span class="tl-act">${p.act}</span>
       </div>
-      ${countHtml}
+      ${imageHtml}${videoHtml}${countHtml}
     </div>`;
   });
   el.innerHTML = html;
