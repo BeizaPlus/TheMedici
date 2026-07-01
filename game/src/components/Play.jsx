@@ -4326,77 +4326,10 @@ export default function Play({
         <div className="panel-rail-sep" aria-hidden />
         <button
           type="button"
-          className={`panel-clinical-btn${activeDrawer === 'exam' ? ' active' : ''}`}
-          onClick={() => setPhysicalExamPickerOpen(true)}
-          title="Physical exam — order exam and place findings on patient"
-          aria-label="Physical exam"
-        >
-          <IconStethoscope />
-        </button>
-        <button
-          type="button"
-          className="panel-clinical-btn"
-          onClick={() => setLabPickerOpen(true)}
-          title="Order labs"
-          aria-label="Order labs"
-        >
-          <IconLabFlask />
-        </button>
-        <button
-          type="button"
-          className={`panel-clinical-btn${activeDrawer === 'history' ? ' active' : ''}`}
-          onClick={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
-          title="SOAP chart — clinical note"
-          aria-label="SOAP chart"
-        >
-          <IconClipboardPulse />
-        </button>
-        {caseHasBibliography(caseData) && (
-          <span className="panel-bibliography-wrap" ref={bibliographyRef}>
-            <button
-              type="button"
-              className={`panel-clinical-btn${bibliographyOpen ? ' active' : ''}`}
-              onClick={() => {
-                setBibliographyOpen((v) => !v);
-                setStackSettingsOpen(false);
-              }}
-              title="Bibliography & sources"
-              aria-label="Bibliography and sources"
-              aria-expanded={bibliographyOpen}
-            >
-              <IconBibliography />
-            </button>
-            {bibliographyOpen && (
-              createPortal(
-                <div className="settings-popover toolbar-bibliography-popover" role="dialog" aria-label="Bibliography and sources">
-                  <CaseBibliographyPanel caseData={caseData} compact />
-                </div>,
-                document.body,
-              )
-            )}
-          </span>
-        )}
-        {caseRecording && (
-          <CaseRecordButton {...caseRecording} variant="toolbar" iconOnly />
-        )}
-        <button
-          type="button"
-          className="panel-restart-btn"
-          onClick={restartCurrentCase}
-          title="Restart case"
-          aria-label="Restart case"
-        >
-          <IconRotate />
-        </button>
-        <button
-          type="button"
           className={`panel-settings-btn${stackSettingsOpen ? ' active' : ''}`}
           ref={stackCommandRef}
-          onClick={() => {
-            setStackSettingsOpen((v) => !v);
-            setBibliographyOpen(false);
-          }}
-          title="Scene tools & settings"
+          onClick={() => setStackSettingsOpen((v) => !v)}
+          title="Scene tools"
           aria-label="Scene tools"
           aria-expanded={stackSettingsOpen}
         >
@@ -4408,9 +4341,43 @@ export default function Play({
           className="settings-popover toolbar-settings-popover"
           role="dialog"
           aria-label="Scene tools"
-          style={{ position: 'fixed', right: 56, top: Math.max(8, (stackCommandRef.current?.getBoundingClientRect()?.top ?? 120) - 8), maxHeight: 'calc(100vh - 16px)', overflowY: 'auto' }}
+          style={{ position: 'fixed', right: 56, top: Math.max(8, (stackCommandRef.current?.getBoundingClientRect()?.top ?? 120) - 8), maxHeight: 'calc(100vh - 16px)', overflowY: 'auto', width: 320 }}
         >
-          <CollapsibleSettingsSection title="Display">
+          <CollapsibleSettingsSection title="🩺 Clinical tools" defaultOpen>
+            <div className="settings-popover-row settings-popover-row-1">
+              <button type="button" onClick={() => setPhysicalExamPickerOpen(true)}>
+                <IconStethoscope size={14} /> Physical exam
+              </button>
+              <button type="button" onClick={() => setLabPickerOpen(true)}>
+                <IconLabFlask size={14} /> Order labs
+              </button>
+              <button
+                type="button"
+                className={activeDrawer === 'history' ? 'active settings-popover-btn--on' : ''}
+                onClick={() => setActiveDrawer((d) => (d === 'history' ? null : 'history'))}
+              >
+                <IconClipboardPulse size={14} /> SOAP chart
+              </button>
+              {caseHasBibliography(caseData) && (
+                <button
+                  type="button"
+                  className={bibliographyOpen ? 'active settings-popover-btn--on' : ''}
+                  onClick={() => setBibliographyOpen((v) => !v)}
+                >
+                  <IconBibliography size={14} /> Bibliography
+                </button>
+              )}
+              {caseRecording && (
+                <CaseRecordButton {...caseRecording} variant="toolbar" iconOnly />
+              )}
+            </div>
+            {bibliographyOpen && (
+              <div style={{ paddingTop: 8 }}>
+                <CaseBibliographyPanel caseData={caseData} compact />
+              </div>
+            )}
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="🎛 Display">
             <div className="settings-popover-row settings-popover-row-1">
               <button
                 type="button"
@@ -4444,7 +4411,6 @@ export default function Play({
                 type="button"
                 className="active settings-popover-btn--on"
                 onClick={() => setDropMode((m) => (m === 'free' ? 'strict' : 'free'))}
-                title="Free drop: pins placed anywhere for review"
               >
                 <IconLockOpen size={14} /> Free drop
               </button>
@@ -4459,28 +4425,11 @@ export default function Play({
               </div>
             )}
           </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Clinical text">
-            <ClinicalFontControls
-              compact
-              showLabel={false}
-              prefs={textPrefs}
-              onChange={setTextPrefs}
-              writePrefs={writeClinicalTextPrefs}
-            />
-          </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Teach Me notes">
-            <ClinicalFontControls
-              compact
-              showLabel={false}
-              prefs={teachMeTextPrefs}
-              onChange={setTeachMeTextPrefs}
-              writePrefs={writeTeachMeTextPrefs}
-              resetTo={{ fontScale: 1.24, weight: 500 }}
-              styleFn={teachMeTextStyle}
-            />
-          </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Case controls" defaultOpen>
+          <CollapsibleSettingsSection title="🎬 Case controls" defaultOpen>
             <div className="settings-popover-row settings-popover-row-2">
+              <button type="button" onClick={restartCurrentCase}>
+                <IconRotate size={14} /> Restart case
+              </button>
               <button
                 type="button"
                 className={timedModeEnabled ? 'active settings-popover-btn--on' : ''}
@@ -4539,7 +4488,27 @@ export default function Play({
               </button>
             </div>
           </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Attending style" defaultOpen>
+          <CollapsibleSettingsSection title="📝 Clinical text">
+            <ClinicalFontControls
+              compact
+              showLabel={false}
+              prefs={textPrefs}
+              onChange={setTextPrefs}
+              writePrefs={writeClinicalTextPrefs}
+            />
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="📖 Teach Me notes">
+            <ClinicalFontControls
+              compact
+              showLabel={false}
+              prefs={teachMeTextPrefs}
+              onChange={setTeachMeTextPrefs}
+              writePrefs={writeTeachMeTextPrefs}
+              resetTo={{ fontScale: 1.24, weight: 500 }}
+              styleFn={teachMeTextStyle}
+            />
+          </CollapsibleSettingsSection>
+          <CollapsibleSettingsSection title="🧠 Attending style">
             <AttendingStyleControl
               compact
               onStyleChange={() => {
@@ -4548,14 +4517,14 @@ export default function Play({
               }}
             />
           </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Case creativity">
+          <CollapsibleSettingsSection title="✨ Case creativity">
             <SimulationCreativityControl
               caseId={caseData.id}
               showCaseOverride
               onCreativityChange={() => void caseChat.resetSession?.()}
             />
           </CollapsibleSettingsSection>
-          <CollapsibleSettingsSection title="Audio">
+          <CollapsibleSettingsSection title="🔊 Audio">
             <AudioSettingsPanel embedded showGameSounds={false} />
           </CollapsibleSettingsSection>
         </div>,
