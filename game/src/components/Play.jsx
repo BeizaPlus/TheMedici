@@ -23,9 +23,6 @@ import { getCaseFlow } from '../data/caseFlows.js';
 import {
   FiBox,
   FiCamera,
-  FiMaximize2,
-  FiMinimize2,
-  FiX,
   FiEye,
   FiSun,
   FiUnlock,
@@ -107,6 +104,7 @@ import { readExportUseLiveScene, writeExportUseLiveScene } from '../lib/exportLi
 import {
   IconLayoutSidebarRightCollapse,
   IconLayoutSidebarRightExpand,
+  IconClipboardList,
   IconDoorExit,
   IconFlagCheckered,
   IconMessage,
@@ -1194,18 +1192,11 @@ export default function Play({
   const [thanksVideoIssue, setThanksVideoIssue] = useState('');
   const [showPostVideoReview, setShowPostVideoReview] = useState(false);
   const finalMode = showThanksVideo || showPostVideoReview;
-  const [reviewCentered, setReviewCentered] = useState(false);
   const [postVideoRows, setPostVideoRows] = useState([]);
   const [reviewChecked, setReviewChecked] = useState([]);
   const [reviewContinuePulse, setReviewContinuePulse] = useState(false);
   const reviewAllDoneRef = useRef(false);
   const teachingVideoStartedRef = useRef(false);
-  const [reviewPanelCollapsed, setReviewPanelCollapsed] = useState(false);
-  const [reviewPanelDragging, setReviewPanelDragging] = useState(false);
-  const [reviewPanelPos, setReviewPanelPos] = useState(() => ({
-    x: Math.max(16, (window.innerWidth - 520) / 2),
-    y: Math.max(64, window.innerHeight - 320),
-  }));
   const [reviewRevealStep, setReviewRevealStep] = useState(0);
   const reviewRevealTimerRef = useRef(null);
   const [infoTab, setInfoTab] = useState(
@@ -1268,9 +1259,6 @@ export default function Play({
     if (!threadViewCaseId) return;
     void hydrateCaseNotes(threadViewCaseId);
   }, [threadViewCaseId, notesVersion]);
-
-  const reviewPanelRef = useRef(null);
-  const reviewPanelDragRef = useRef({ dx: 0, dy: 0 });
   const sceneCaptureRef = useRef(null);
   const caseNumber = String(caseData.ccsNumber || caseData.id || '0');
   const nextCaptureAttempt = useMemo(
@@ -3011,11 +2999,9 @@ export default function Play({
   }, [interventions, interventionById, placementOrder, reviewed, reviewResults, placed]);
 
   const dismissPostVideoReview = useCallback(() => {
-    setReviewCentered(false);
     setShowPostVideoReview(false);
     setShowThanksVideo(false);
     setActiveThanksVideo(null);
-    setReviewPanelDragging(false);
     teachingVideoStartedRef.current = false;
   }, []);
 
@@ -3026,8 +3012,6 @@ export default function Play({
     setReviewContinuePulse(false);
     setReviewRevealStep(0);
     collapseDockPanel();
-    setReviewPanelCollapsed(false);
-    setReviewCentered(true);
     setShowPostVideoReview(true);
   }, [computePostVideoRows, caseData.id, collapseDockPanel]);
 
@@ -3102,9 +3086,7 @@ export default function Play({
       setActiveThanksVideo(null);
       setThanksVideoIssue('');
       setShowPostVideoReview(false);
-      setReviewCentered(false);
       setPostVideoRows([]);
-      setReviewPanelCollapsed(false);
       setPendingCompleteResult(null);
       void endCurrentPlaySession({
         ...result,
@@ -3787,38 +3769,10 @@ export default function Play({
   };
 
   useEffect(() => {
-    if (!reviewPanelDragging) return undefined;
-
-    const onMove = (event) => {
-      const width = reviewPanelRef.current?.offsetWidth || 520;
-      const height = reviewPanelRef.current?.offsetHeight || 280;
-      const x = event.clientX - reviewPanelDragRef.current.dx;
-      const y = event.clientY - reviewPanelDragRef.current.dy;
-      const clampedX = Math.min(Math.max(8, x), Math.max(8, window.innerWidth - width - 8));
-      const clampedY = Math.min(Math.max(48, y), Math.max(48, window.innerHeight - height - 8));
-      setReviewPanelPos({ x: clampedX, y: clampedY });
-    };
-
-    const onUp = () => setReviewPanelDragging(false);
-
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
-    return () => {
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerup', onUp);
-    };
-  }, [reviewPanelDragging]);
-
-  const onReviewPanelDragStart = (event) => {
-    if (reviewCentered || event.button !== 0) return;
-    const rect = reviewPanelRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    reviewPanelDragRef.current = {
-      dx: event.clientX - rect.left,
-      dy: event.clientY - rect.top,
-    };
-    setReviewPanelDragging(true);
-  };
+    if (teachCompareLandscape) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; };
+  }, [teachCompareLandscape]);
 
   const resetPlacements = () => {
     setPlaced({});
@@ -3898,14 +3852,12 @@ export default function Play({
     setThanksVideoIssue('');
     teachingVideoStartedRef.current = false;
     setShowPostVideoReview(false);
-    setReviewCentered(false);
     setPostVideoRows([]);
     clearReviewChecked(caseData.id);
     setReviewChecked([]);
     reviewAllDoneRef.current = false;
     setReviewContinuePulse(false);
     setPendingCompleteResult(null);
-    setReviewPanelCollapsed(false);
     setActiveDrawer(null);
     setOrderTimelineEvents([]);
     orderTimelineSeqRef.current = 0;
@@ -4507,6 +4459,23 @@ export default function Play({
         >
           <IconFlagCheckered />
         </button>
+        {showPostVideoReview && (
+          <button
+            type="button"
+            className={`panel-review-btn${reviewProgress.allReviewed ? ' is-complete' : ''}`}
+            onClick={() => {
+              setShowPostVideoReview((v) => !v);
+            }}
+            title={`Review breakdown — ${reviewProgress.count}/${reviewProgress.total} reviewed`}
+            aria-label="Review breakdown"
+            aria-pressed={showPostVideoReview}
+          >
+            <IconClipboardList />
+            <span className="panel-review-badge">
+              {reviewed ? `${reviewProgress.count}/${reviewProgress.total}` : `${doneCount}/${total}`}
+            </span>
+          </button>
+        )}
         <button
           type="button"
           className="panel-exit-btn"
@@ -4996,82 +4965,23 @@ export default function Play({
         </div>
       </div>
 
-      {showPostVideoReview && reviewCentered && (
-        <div
-          className="review-backdrop"
-          aria-hidden
-          onClick={dismissPostVideoReview}
-        />
-      )}
       {showPostVideoReview && (
-        <div
-          ref={reviewPanelRef}
-          className={`post-review-panel review-breakdown ${reviewCentered ? 'centered' : ''} ${reviewPanelCollapsed ? 'collapsed' : ''} ${reviewPanelDragging ? 'dragging' : ''}`}
-          style={
-            reviewCentered
-              ? undefined
-              : { left: `${reviewPanelPos.x}px`, top: `${reviewPanelPos.y}px` }
-          }
-          role="dialog"
-          aria-label="Review breakdown"
-        >
-          <div
-            className="post-review-handle"
-            onPointerDown={onReviewPanelDragStart}
-            title={reviewCentered ? undefined : 'Drag to move'}
-          >
-            <span className="post-review-handle-grip">⋮⋮</span>
-            <div className="post-review-handle-text">
-              <span className="post-review-kicker">Review breakdown</span>
-              <strong>What was correct and why</strong>
-              {postVideoRows.length > 0 && (
-                <span
-                  className={`post-review-progress ${reviewProgress.allReviewed ? 'is-complete' : ''}`}
-                >
-                  {reviewProgress.allReviewed
-                    ? 'All reviewed ✓'
-                    : `Reviewed ${reviewProgress.count} / ${reviewProgress.total}`}
-                </span>
-              )}
-            </div>
-            <div className="post-review-handle-actions">
-              <button
-                type="button"
-                className="post-review-icon-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setReviewPanelCollapsed((v) => !v);
-                }}
-                title={reviewPanelCollapsed ? 'Expand panel' : 'Minimize panel'}
-              >
-                {reviewPanelCollapsed ? <FiMaximize2 size={14} /> : <FiMinimize2 size={14} />}
-              </button>
-              <button
-                type="button"
-                className="post-review-icon-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  dismissPostVideoReview();
-                }}
-                title="Close review"
-                aria-label="Close review"
-              >
-                <FiX size={14} />
-              </button>
-            </div>
+        <div className="scene-drawer scene-drawer-review open" role="dialog" aria-label="Review breakdown">
+          <div className="scene-drawer-head">
+            <span>Review breakdown · {reviewProgress.allReviewed ? 'All reviewed ✓' : `Reviewed ${reviewProgress.count} / ${reviewProgress.total}`}</span>
+            <button type="button" onClick={dismissPostVideoReview}>✕</button>
           </div>
-          {!reviewPanelCollapsed && (
-            <div className="post-review-body">
-              {thanksVideoIssue && (
-                <p className="post-review-guideline post-review-video-note">
-                  Video note: {thanksVideoIssue}
-                </p>
+          <div className="post-review-body">
+            {thanksVideoIssue && (
+              <p className="post-review-guideline post-review-video-note">
+                Video note: {thanksVideoIssue}
+              </p>
+            )}
+            <div className="review-organogram" aria-label="Attending order flow">
+              {postVideoRows.length === 0 && (
+                <p className="post-review-empty">Complete a review to see the attending order flow here.</p>
               )}
-              <div className="review-organogram" aria-label="Attending order flow">
-                {postVideoRows.length === 0 && (
-                  <p className="post-review-empty">Complete a review to see the attending order flow here.</p>
-                )}
-                {postVideoRows.map((row, i) => {
+              {postVideoRows.map((row, i) => {
                   const isStudentReviewed = reviewChecked.includes(row.seq);
                   return (
                     <div
@@ -5159,22 +5069,7 @@ export default function Play({
                 </button>
               </div>
             </div>
-          )}
-          {reviewPanelCollapsed && (
-            <div className="post-review-collapsed-foot">
-              <span>{postVideoRows.length} stacks · drag header to move</span>
-              <button
-                type="button"
-                className="btn-primary btn-sm"
-                onClick={() => {
-                  if (pendingCompleteResult) completeNow(pendingCompleteResult);
-                }}
-              >
-                Continue →
-              </button>
-            </div>
-          )}
-        </div>
+          </div>
       )}
 
       <aside

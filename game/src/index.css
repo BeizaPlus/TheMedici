@@ -3479,6 +3479,33 @@ button {
   font-size: 0.8rem;
 }
 
+/* Review drawer — slides from the right, full-height beside the scene */
+.scene-drawer-review {
+  left: auto;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: min(520px, 68vw);
+  border-right: 0;
+  border-left: 1px solid var(--border);
+  transform: translateX(104%);
+}
+.scene-drawer-review.open {
+  position: absolute;
+  transform: translateX(0);
+  z-index: 56;
+  pointer-events: auto;
+}
+.scene-drawer-review .post-review-body {
+  padding: 16px 20px 20px;
+  overflow-y: auto;
+  height: calc(100% - 34px);
+}
+.scene-drawer-review .post-review-actions {
+  padding: 12px 20px 20px;
+  border-top: 1px solid var(--border);
+}
+
 .vitals-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(120px, 1fr));
