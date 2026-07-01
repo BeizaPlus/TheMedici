@@ -1224,13 +1224,6 @@ export default function Play({
   }, [commandUiLocked, infoTab]);
 
   const [threadViewCaseId, setThreadViewCaseId] = useState(() => String(caseData?.id || ''));
-  const [dockToolbarCollapsed, setDockToolbarCollapsed] = useState(playUiFavorite.dockToolbarCollapsed);
-
-  useEffect(() => {
-    if (infoTab !== 'chat') {
-      setDockToolbarCollapsed(true);
-    }
-  }, [infoTab]);
 
   useEffect(() => {
     setThreadViewCaseId(String(caseData.id));
@@ -4147,42 +4140,8 @@ export default function Play({
   }, [finalMode]);
 
   const timelineFootProps = useMemo(
-    () => ({
-      doneCount,
-      total,
-      interventions,
-      placed,
-      timedModeEnabled,
-      timerLabel,
-      timerState,
-      caseData,
-      dropMode,
-      teachMeMode,
-      reviewDisabled: doneCount === 0,
-      toolbarCollapsed: dockToolbarCollapsed,
-      onToggleToolbarCollapsed: () => setDockToolbarCollapsed((v) => !v),
-      onToggleTeachMe: () => {
-        setTeachMeMode((v) => {
-          if (v) setTeachFocusId(null);
-          return !v;
-        });
-      },
-      onReview: reviewPlacements,
-    }),
-    [
-      doneCount,
-      total,
-      interventions,
-      placed,
-      timedModeEnabled,
-      timerLabel,
-      timerState,
-      caseData,
-      dropMode,
-      teachMeMode,
-      dockToolbarCollapsed,
-      reviewPlacements,
-    ],
+    () => ({ doneCount, total, interventions, placed }),
+    [doneCount, total, interventions, placed],
   );
 
   return (

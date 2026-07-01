@@ -1,15 +1,12 @@
 /**
- * Session progress — dots + mode legend. Lives in the order timeline.
- * Action buttons (Teach Me, Review) and counter are now in the sidebar rail.
+ * Session progress — dots only. Lives in the order timeline.
+ * Counter, timer, Teach Me, and Review are now in the sidebar rail.
  */
 export default function PlayNotesSessionFoot({
   doneCount,
   total,
   interventions,
   placed,
-  timedModeEnabled,
-  caseData,
-  teachMeMode,
 }) {
   return (
     <div className="play-notes-session-foot">
@@ -25,11 +22,6 @@ export default function PlayNotesSessionFoot({
           />
         ))}
       </div>
-      <span className="mode-legend">
-        {caseData.playRole === 'patient' ? 'Patient view' : 'Doctor view'} ·{' '}
-        {caseData.sessionDifficulty || 'standard'} · Practice ·{' '}
-        {timedModeEnabled ? 'Timed' : 'Untimed'} · {teachMeMode ? 'Teach Me: on' : 'Teach Me: off'}
-      </span>
     </div>
   );
 }
