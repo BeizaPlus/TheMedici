@@ -12,9 +12,14 @@
     "Read game/.cursor/RULES_IMAGE_GENERATION.md before any gen"
   ],
   "caseSlugs": {
+    "90": "blue-hijab-prenatal-mother",
+    "99": "pipe-tweed-mustache-bank",
+    "113": "ngavu-yellow-party",
     "153": "ngavu-yellow-party",
     "166": "hemarthrosis-athlete-knee",
     "176": "subway-afro-dandy",
+    "181": "trail-heavy-hiker-bank",
+    "099": "pipe-tweed-mustache-bank",
     "U01": "copper-afro-headwrap-africa",
     "U02": "vitiligo-wink-diastema",
     "U03": "hijab-albino-freckles",
@@ -30,7 +35,6 @@
     "U14": "deep-black-youth",
     "U15": "copper-afro-headwrap-africa",
     "086": "adpkd-long-nose-elder",
-    "90": "blue-hijab-prenatal-mother",
     "090": "blue-hijab-prenatal-mother"
   },
   "bankSlugs": [
@@ -220,12 +224,13 @@
       "label": "N'Gavu · yellow jacket · village party PCT",
       "sex": "male",
       "catalogCases": [
-        "153"
+        "153",
+        "113"
       ],
-      "identityPrompt": "Match likeness: N'Gavu — young Black man, mustard-yellow textured party jacket (hospital gown in ED), thin mustache, tired bloodshot eyes, direct gaze. Village party backstory — beer bottles as patient property on bedside table; mustard-yellow shirt draped on chair beside stretcher. Blistered dorsal hands and forearms, fragile photosensitive skin on sun-exposed areas. MeWorld sculptural CGI — dignified clinical training portrait, NOT photoreal stock.",
+      "identityPrompt": "Match likeness: Black man, late 30s, oval face with full cheeks that round gently when smiling, warm medium-dark brown skin tone with even smooth complexion. Very short close-cropped natural Black hair — nearly buzzed, fine even texture across the scalp, no defined part or hairline pattern, reads as natural short crop (NOT fully bald, NOT long hair, NOT waves, NOT a fade). Warm dark brown eyes with a relaxed, gentle expression — closed-lip smile that reaches the eyes with light crinkling at the outer corners. Medium-width nose with a softly rounded tip. Medium-full natural lips. Clean-shaven face — no beard, no mustache, no goatee. Medium adult male build — natural frame, not thin, not heavily muscular. No glasses, no visible jewelry, no distinguishing marks. Friendly, warm, confident presence. NOT young under 30, NOT elderly over 55, NOT heavy beard, NOT very dark or very light skin, NOT thin angular face. COSTUME: bright mustard-yellow textured blazer/jacket (signature piece), worn over a darker collared shirt. For ED scene — yellow jacket draped on bedside chair as patient property, hospital gown on patient.",
       "characterMapStatus": "approved",
-      "characterMapShippedFrom": "17-ngavu-yellow-jacket-party.png",
-      "characterMapShippedAt": "2026-06-19",
+      "characterMapShippedFrom": "ngavu-yellow-party-CHARACTER-MAP-nanobanana-alt2.png",
+      "characterMapShippedAt": "2026-07-01",
       "status": "approved"
     },
     "hemarthrosis-athlete-knee": {
@@ -315,8 +320,42 @@
     "pipe-tweed-mustache-bank": {
       "sourceFile": "15-pipe-tweed-mustache-bank.png",
       "mapFile": null,
-      "label": "BANK — pipe + tweed mustache",
-      "status": "bank-only"
+      "label": "BANK — pipe + tweed mustache · Back Pain (099)",
+      "sex": "male",
+      "catalogCases": [
+        "099",
+        "99"
+      ],
+      "identityPrompt": "Match likeness: older white man ~65, weathered outdoorsman face with deep-set eyes and pronounced crow's feet, very full bushy grey-white handlebar/tweed mustache that drapes down past the corners of the mouth, receding grey hairline with wisps swept back, strong jaw. Warm ruddy complexion. Hospital gown on ED stretcher. Dignified clinical training portrait.",
+      "status": "approved",
+      "gameSceneFile": "pipe-tweed-mustache-bank-GAME-SCENE.png",
+      "gameSceneStatus": "approved",
+      "gameSceneShippedAt": "2026-07-01",
+      "gameSceneAlt": "alt2",
+      "gameSceneShippedFrom": "pipe-tweed-mustache-bank-GAME-SCENE-alt2-3d-v3-20260701.png",
+      "gamePlaySceneFile": "pipe-tweed-mustache-bank-GAME-SCENE.png",
+      "gamePlaySceneStatus": "approved"
+    },
+    "elder-silver-curls-floral-apron": {
+      "sourceFile": "23-elder-silver-curls-floral-apron.png",
+      "mapFile": "elder-silver-curls-floral-apron-CHARACTER-MAP.png",
+      "label": "Reserved — elder silver curls · laundry-day ref",
+      "sex": "female",
+      "catalogCases": [],
+      "identityPrompt": "Match likeness: elderly woman late seventies, compact white-silver tight curly hair, warm tanned weathered skin, deep forehead and cheek wrinkles, kind focused expression. Replace red floral dress and pink apron with simple hospital gown on contact sheet — preserve face, hair, and skin only. Dignified geriatrics training portrait — NOT caricature, NOT poverty spectacle. MeWorld identity lock.",
+      "characterMapStatus": "approved",
+      "characterMapShippedFrom": "elder-silver-curls-floral-apron-CHARACTER-MAP-alt1.png",
+      "characterMapShippedAt": "2026-07-01",
+      "gameSceneFile": "elder-silver-curls-floral-apron-GAME-SCENE.png",
+      "gameSceneStatus": "approved",
+      "gameSceneAlt": "alt1-idswap",
+      "gameSceneShippedFrom": "elder-silver-curls-floral-apron-GAME-SCENE-alt1-idswap-20260701.png",
+      "gameSceneShippedAt": "2026-07-01",
+      "gamePlaySceneFile": "elder-silver-curls-floral-apron-GAME-SCENE.png",
+      "gamePlaySceneStatus": "approved",
+      "gameSceneNote": "Female gold idswap — vitiligo alt2 base, geriatrics elder identity lock.",
+      "status": "approved",
+      "note": "Source: Steve laundry-day ref 2026-07-01 — shipped CHARACTER-MAP + GAME-SCENE; wire catalogCases when brief is ready."
     },
     "distorted-excluded-do-not-gen": {
       "sourceFile": "08-distorted-excluded-do-not-gen.png",
@@ -324,6 +363,28 @@
       "label": "EXCLUDED — warped reference",
       "status": "excluded",
       "identityPrompt": "DO NOT USE for Magnific or portrait generation."
+    },
+    "trail-heavy-hiker-bank": {
+      "sourceFile": "28-trail-heavy-hiker-bank.jpg",
+      "mapFile": "trail-heavy-hiker-bank-CHARACTER-MAP.png",
+      "label": "Bank — trail heavy hiker · obese male reference",
+      "sex": "male",
+      "identityPrompt": "Match likeness: white male late 40s-early 50s, receding light brown hair, outdoorsman build with substantial body mass. Heavy-set frame, solid build. Clinical character — preserve dignified likeness, NOT caricature. Hospital gown or neutral clinical presentation. Avoid exaggerated proportions.",
+      "characterMapStatus": "approved",
+      "status": "approved",
+      "note": "Onboarded 2026-07-02 via uber-onboard-face.mjs",
+      "catalogCases": [
+        "181"
+      ],
+      "characterMapShippedFrom": "trail-heavy-hiker-bank-CHARACTER-MAP-alt1.png",
+      "characterMapShippedAt": "2026-07-02",
+      "gameSceneFile": "trail-heavy-hiker-bank-GAME-SCENE.png",
+      "gameSceneStatus": "approved",
+      "gameSceneAlt": "alt2",
+      "gameSceneShippedFrom": "trail-heavy-hiker-bank-GAME-SCENE-alt2-3d-v3-20260702.png",
+      "gameSceneShippedAt": "2026-07-02",
+      "gamePlaySceneFile": "trail-heavy-hiker-bank-GAME-SCENE.png",
+      "gamePlaySceneStatus": "approved"
     }
   }
 }
