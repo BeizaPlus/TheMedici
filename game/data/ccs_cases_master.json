@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T18:03:46.348Z",
+  "generated_at": "2026-07-02T13:26:55.592Z",
   "builder": "import-ollama-cases",
   "source": "game/data/ollama/cases.json",
   "total_cases": 181,
@@ -14462,37 +14462,50 @@
       "id": 55,
       "topic": "Shortness of Breath",
       "title": "Shortness of Breath",
-      "diagnosis": "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
+      "diagnosis": "Pulmonary Embolism",
       "confidence": "screenshot",
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
-        "Obtain electrocardiogram (ECG) to assess heart function and rule out acute coronary syndrome",
-        "Chest X-ray to evaluate lung fields, cardiac silhouette, and pleural effusions",
+        "Chest X-ray",
+        "CBC with differential",
+        "EKG",
+        "Troponin",
+        "Doppler, lower extremities, venous / Duplex ultrasound",
+        "CT pulmonary angiography (CTPA)",
+        "Arterial blood gases",
         "Oxygen",
-        "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+        "Heparin, low molecular weight OR Fondaparinux OR Rivaroxaban OR Apixaban OR Dabigatran OR Edoxaban",
+        "Monitor, cardiac"
       ],
       "should_avoid": [
-        "Starting a broad-spectrum antibiotic therapy without culture results"
+        "Starting a broad-spectrum antibiotic therapy without culture results",
+        "Thrombolytics without confirmed massive PE and hemodynamic instability"
       ],
       "rationale": {
-        "Starting a broad-spectrum antibiotic therapy without culture results": "This should be avoided because it can lead to antibiotic resistance and unnecessary costs",
-        "Oxygen": "The patient presents with shortness of breath which is a life-threatening symptom. Immediate administration of oxygen is crucial to stabilize the patient.",
-        "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "IV access and glucose check are also important for immediate stabilization of the patient."
+        "Chest X-ray": "Obtain to evaluate for alternative causes of dyspnea and assess cardiac silhouette. May show Westermark sign or Hampton hump in PE but is often normal.",
+        "EKG": "Assess for right heart strain pattern (S1Q3T3, right axis deviation) and rule out ACS.",
+        "Troponin": "Elevated troponin in PE indicates right ventricular strain and worse prognosis.",
+        "Arterial blood gases": "Evaluate for hypoxia and calculate A-a gradient. PE causes increased dead space.",
+        "Doppler, lower extremities, venous / Duplex ultrasound": "Confirm DVT as embolic source. Positive + high pretest probability establishes diagnosis.",
+        "CT pulmonary angiography (CTPA)": "Gold standard diagnostic test for PE. Visualizes filling defects in pulmonary arteries. Obtain after initial stabilization and risk stratification. Definitively confirms diagnosis.",
+        "Heparin, low molecular weight": "Immediate anticoagulation is the cornerstone of PE management.",
+        "Oxygen": "Patient presents with shortness of breath and hypoxemia. Immediate oxygen crucial to stabilize.",
+        "CBC with differential": "Assess for anemia; baseline prior to anticoagulation."
       },
-      "hpi": null,
+      "hpi": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO₂ of 94% on room air.",
       "hpi_narrative": null,
       "physical_exam": [
         [
           "General",
-          "Dyspneic, speaking in short phrases if severe"
+          "Dyspneic, speaking in short phrases"
         ],
         [
           "Cardiovascular",
-          "HR 124, tachycardic; BP 107/68."
+          "HR 124, tachycardic; BP 107/68; regular rhythm"
         ],
         [
           "Respiratory",
-          "RR 27, tachypneic; SpO₂ 94%."
+          "RR 27, tachypneic; SpO₂ 94% on room air; clear to auscultation bilaterally"
         ],
         [
           "Abdomen",
@@ -14500,15 +14513,30 @@
         ],
         [
           "Neuro",
-          "Alert unless hypercapnic or hypoxic"
+          "Alert, oriented"
         ],
         [
           "Skin",
-          "Cyanosis absent unless critical hypoxemia"
+          "No cyanosis, no diaphoresis"
+        ],
+        [
+          "Extremities",
+          "No edema, no calf tenderness"
         ]
       ],
-      "vitals": null,
-      "patient_voice": null,
+      "vitals": {
+        "hr": 124,
+        "spo2": 94,
+        "bp_systolic": 107,
+        "bp_diastolic": 68,
+        "rr": 27,
+        "temp": 37.1
+      },
+      "patient_voice": {
+        "chief_complaint": "I can't catch my breath — it came on so fast out of nowhere. I'm really scared.",
+        "history": "I was just at home sitting down and suddenly I felt like I couldn't breathe. No coughing, no fever.",
+        "pain": "There's this tightness in my chest. I'm afraid something bad is happening."
+      },
       "patient_sex": null,
       "patient_name": null,
       "ccs_category": null,
@@ -14518,18 +14546,24 @@
       "distractors": [],
       "stacks": [],
       "order_sets": [
-        "Obtain electrocardiogram (ECG) to assess heart function and rule out acute coronary syndrome",
-        "Chest X-ray to evaluate lung fields, cardiac silhouette, and pleural effusions",
+        "Chest X-ray",
+        "CBC with differential",
+        "EKG",
+        "Troponin",
+        "Doppler, lower extremities, venous / Duplex ultrasound",
+        "CT pulmonary angiography (CTPA)",
+        "Arterial blood gases",
         "Oxygen",
-        "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+        "Heparin, low molecular weight OR Fondaparinux OR Rivaroxaban OR Apixaban OR Dabigatran OR Edoxaban",
+        "Monitor, cardiac"
       ],
       "complete": true,
       "extraction_method": "deepseek_direct",
       "enrichment_sources": [
-        "fmgmatch",
-        "mistral"
+        "ccs_screenshot",
+        "ollama_mistral_extraction"
       ],
-      "extraction_notes": "Pass-through DeepSeek/converted case."
+      "extraction_notes": "Pytesseract OCR + Ollama Mistral from CCS review screenshot (2026-07-01). Corrected from prior DeepSeek inferred diagnosis of Pulmonary Edema/CHF to actual CCS answer-key diagnosis of Pulmonary Embolism."
     },
     {
       "id": 56,
@@ -26133,76 +26167,133 @@
       "confidence": "screenshot",
       "source": "data/cases/case_N.json (DeepSeek)",
       "correct_orders": [
-        "ABG with COHb",
+        "Physical Exam: General Appearance",
+        "Physical Exam: Neuro / Psych",
+        "Physical Exam: Chest / Lungs",
+        "Physical Exam: Heart / Cardiovascular",
+        "Arterial blood gases",
+        "Lactate, serum",
+        "Carbon monoxide, blood",
         "100% O2 non-rebreather",
         "Hyperbaric O2 (if severe)",
         "Monitor for neurologic sequelae"
       ],
       "should_avoid": [],
       "rationale": {
-        "ABG with COHb": "COHb >25%. Normal PaO2.",
-        "100% O2 non-rebreather": "Decrease COHb half-life to 1h.",
-        "Hyperbaric O2 (if severe)": "COHb >25%, LOC, neuro, cardiac, pregnancy.",
-        "Monitor for neurologic sequelae": "Delayed onset possible."
+        "Physical Exam: General Appearance": "Patient unconscious — assess general appearance, cherry-red skin, signs of smoke inhalation.",
+        "Physical Exam: Neuro / Psych": "Unconscious patient requires full neurologic exam to establish baseline.",
+        "Physical Exam: Chest / Lungs": "Smoke exposure — evaluate for inhalation injury.",
+        "Physical Exam: Heart / Cardiovascular": "CO poisoning can cause cardiac ischemia.",
+        "Arterial blood gases": "ABG with COHb is the definitive diagnostic test.",
+        "Lactate, serum": "Elevated lactate suggests tissue hypoxia; if markedly elevated, consider concurrent cyanide poisoning.",
+        "Carbon monoxide, blood": "Direct COHb measurement — diagnostic confirmation.",
+        "100% O2 non-rebreather": "Start immediately — reduces COHb half-life to ~1 hour.",
+        "Hyperbaric O2 (if severe)": "Consider for COHb >25%, LOC, neuro deficits, cardiac ischemia, pregnancy.",
+        "Monitor for neurologic sequelae": "Delayed neurologic syndrome can occur 2-40 days post-recovery."
       },
-      "hpi": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
-      "hpi_narrative": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x affinity of O2 → carboxyhemoglobin (COHb) → impaired O2 delivery + cellular toxicity (binds cytochrome c oxidase). Pulse oximetry falsely NORMAL (cannot distinguish COHb from O2Hb). ABG: normal PaO2, elevated COHb (>3% nonsmokers, >10% smokers). Treatment: 100% oxygen via non-rebreather (reduces COHb half-life from 5h to 1h). Hyperbaric O2 if: COHb >25%, LOC, neurologic symptoms, cardiac ischemia, pregnancy. Monitor for delayed neurologic sequelae. Identify source — others at risk.",
-      "physical_exam": [],
+      "hpi": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
+      "hpi_narrative": "Ama Serwaa is a 7-year-old girl with no known past medical history who was found unconscious in a burning building by firefighters. She was exposed to dense smoke and had loss of consciousness at the scene. On arrival to the emergency department she remains unresponsive with cherry-red skin — a hallmark of carbon monoxide poisoning. The clinical question: with a history of enclosed-space fire exposure and altered mental status, what is the severity of her CO poisoning (COHb level), are there concurrent inhalation injuries or cyanide toxicity, and does she meet criteria for hyperbaric oxygen therapy?",
+      "physical_exam": [
+        [
+          "General",
+          "7-year-old girl unresponsive, cherry-red skin discoloration, soot on face and clothing, pediatric body proportions on ED stretcher"
+        ],
+        [
+          "Cardiovascular",
+          "CO poisoning can cause cardiac ischemia even in children — monitor for arrhythmia"
+        ],
+        [
+          "Respiratory",
+          "Smoke inhalation risk — pediatric airway is narrower and more reactive; evaluate for wheezing, stridor, carbonaceous sputum"
+        ],
+        [
+          "Neuro",
+          "Unconscious — pediatric neuro exam shows altered mental status; baseline deficits must be documented"
+        ],
+        [
+          "Skin",
+          "Cherry-red discoloration; check for burns and soot"
+        ]
+      ],
       "vitals": {
-        "hr": null,
-        "spo2": null,
-        "bp": null,
-        "rr": null,
-        "temp": null
+        "hr": 110,
+        "spo2": 99,
+        "bp": 95,
+        "rr": 22,
+        "temp": 37.1
       },
       "patient_voice": {
-        "chief_complaint": "Found unconscious, cherry-red skin",
-        "history": "{{patient_name}} presents found unconscious in an enclosed space with possible exposure (car exhaust, faulty heater, fire). Cherry-red skin, headache, confusion, nausea. CO binds hemoglobin with 240x…",
-        "pain": "Found unconscious, cherry-red skin"
+        "chief_complaint": "",
+        "history": "7-year-old girl found unconscious at scene — unable to provide history. Firefighters report heavy smoke, enclosed-space fire. Parents en route to hospital.",
+        "pain": ""
       },
-      "patient_sex": "male",
-      "patient_name": "Sulemana Azindow",
-      "ccs_category": "Toxicology / Hyperbaric Medicine",
+      "patient_sex": "female",
+      "patient_name": "Ama Serwaa",
+      "ccs_category": null,
       "chief_complaint": "Found unconscious, cherry-red skin",
       "case_summary": null,
       "decoys": [],
       "distractors": [],
       "stacks": [
         {
-          "label": "ABG with COHb",
+          "label": "Physical Exam: General Appearance",
           "type": "correctlyOrdered",
-          "finding": "COHb >25%. Normal PaO2.",
-          "aliases": [
-            "CO level"
-          ]
+          "finding": "Patient unconscious — assess general appearance, cherry-red skin, signs of smoke inhalation."
+        },
+        {
+          "label": "Physical Exam: Neuro / Psych",
+          "type": "correctlyOrdered",
+          "finding": "Unconscious patient requires full neurologic exam to establish baseline."
+        },
+        {
+          "label": "Physical Exam: Chest / Lungs",
+          "type": "correctlyOrdered",
+          "finding": "Smoke exposure — evaluate for inhalation injury."
+        },
+        {
+          "label": "Physical Exam: Heart / Cardiovascular",
+          "type": "correctlyOrdered",
+          "finding": "CO poisoning can cause cardiac ischemia."
+        },
+        {
+          "label": "Arterial blood gases",
+          "type": "correctlyOrdered",
+          "finding": "ABG with COHb is the definitive diagnostic test."
+        },
+        {
+          "label": "Lactate, serum",
+          "type": "shouldHaveOrdered",
+          "finding": "Elevated lactate suggests tissue hypoxia; if markedly elevated, consider concurrent cyanide poisoning."
+        },
+        {
+          "label": "Carbon monoxide, blood",
+          "type": "correctlyOrdered",
+          "finding": "Direct COHb measurement — diagnostic confirmation."
         },
         {
           "label": "100% O2 non-rebreather",
           "type": "correctlyOrdered",
-          "finding": "Decrease COHb half-life to 1h.",
-          "aliases": [
-            "O2"
-          ]
+          "finding": "Start immediately — reduces COHb half-life to ~1 hour."
         },
         {
           "label": "Hyperbaric O2 (if severe)",
           "type": "correctlyOrdered",
-          "finding": "COHb >25%, LOC, neuro, cardiac, pregnancy.",
-          "aliases": [
-            "HBO"
-          ]
+          "finding": "Consider for COHb >25%, LOC, neuro deficits, cardiac ischemia, pregnancy."
         },
         {
           "label": "Monitor for neurologic sequelae",
           "type": "correctlyOrdered",
-          "finding": "Delayed onset possible.",
-          "aliases": [
-            "Observation"
-          ]
+          "finding": "Delayed neurologic syndrome can occur 2-40 days post-recovery."
         }
       ],
       "order_sets": [
-        "ABG with COHb",
+        "Physical Exam: General Appearance",
+        "Physical Exam: Neuro / Psych",
+        "Physical Exam: Chest / Lungs",
+        "Physical Exam: Heart / Cardiovascular",
+        "Arterial blood gases",
+        "Lactate, serum",
+        "Carbon monoxide, blood",
         "100% O2 non-rebreather",
         "Hyperbaric O2 (if severe)",
         "Monitor for neurologic sequelae"
@@ -26210,9 +26301,11 @@
       "complete": true,
       "extraction_method": "deepseek_direct",
       "enrichment_sources": [
+        "ccs_screenshot",
+        "ollama_mistral_extraction",
         "deepseek"
       ],
-      "extraction_notes": "Converted from DeepSeek stacks format. Diagnosis: Carbon Monoxide Poisoning."
+      "extraction_notes": "Pytesseract OCR + Ollama Mistral from CCS review screenshot (2026-07-01). Enriched from DeepSeek baseline with physical exam steps and diagnostic cascade from actual CCS stack cards. Diagnosis confirmed: Carbon Monoxide Poisoning."
     },
     {
       "id": 152,
@@ -27879,8 +27972,8 @@
         "Order laboratory workup: CBC, electrolytes, glucose, renal/hepatic function tests, thyroid function tests, urine toxicology screen",
         "Order imaging studies if necessary (CT scan or MRI of the brain)",
         "Consult psychiatry for further evaluation and management",
-        "If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold",
-        "CMP/BMP",
+        "Consider voluntary hospitalization — if the patient poses a risk to self or others, escalate to involuntary psychiatric hold",
+        "CMP / BMP",
         "UA"
       ],
       "should_avoid": [
@@ -27891,8 +27984,9 @@
         "Order laboratory workup": "To help rule out medical causes of agitation such as electrolyte imbalances, infections, or metabolic disorders",
         "Order imaging studies": "If necessary to further evaluate potential neurological conditions",
         "Consult psychiatry": "For a comprehensive evaluation and management plan",
+        "Consider voluntary hospitalization — if the patient poses a risk to self or others, escalate to involuntary psychiatric hold": "To determine the appropriate level of care and ensure patient safety",
         "Prescribe medications without a clear diagnosis": "Could lead to incorrect treatment and potential harm due to lack of proper diagnostics",
-        "CMP/BMP": "To evaluate electrolytes, renal and liver function which could contribute to the patient's agitation",
+        "CMP / BMP": "To evaluate electrolytes, renal and liver function which could contribute to the patient's agitation",
         "UA": "To rule out urinary tract infection or other kidney-related issues"
       },
       "hpi": null,
@@ -27938,8 +28032,8 @@
         "Order laboratory workup: CBC, electrolytes, glucose, renal/hepatic function tests, thyroid function tests, urine toxicology screen",
         "Order imaging studies if necessary (CT scan or MRI of the brain)",
         "Consult psychiatry for further evaluation and management",
-        "If the patient is a danger to themselves or others, consider involuntary hospitalization under a psychiatric hold",
-        "CMP/BMP",
+        "Consider voluntary hospitalization — if the patient poses a risk to self or others, escalate to involuntary psychiatric hold",
+        "CMP / BMP",
         "UA"
       ],
       "complete": true,
@@ -29303,8 +29397,8 @@
         "history": "{{patient_name}} presents with primary or secondary nocturnal enuresis (bedwetting), loud snoring, restless sleep, daytime fatigue, and behavioral issues. Severe OSA causes nocturnal enuresis through…",
         "pain": "Nocturnal enuresis, loud snoring, daytime fatigue"
       },
-      "patient_sex": "female",
-      "patient_name": "Abiba Andani",
+      "patient_sex": "male",
+      "patient_name": "Marcus Cole",
       "ccs_category": "Pediatrics / Sleep Medicine",
       "chief_complaint": "Nocturnal enuresis, loud snoring, daytime fatigue",
       "case_summary": null,
