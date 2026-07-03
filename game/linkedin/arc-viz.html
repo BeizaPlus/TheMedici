@@ -339,9 +339,10 @@
     background: var(--bg-surface); color: var(--text-muted);
     cursor: pointer; transition: all 0.15s;
     user-select: none; line-height: 1.2;
+    opacity: 0.25;
   }
-  .li-indicator:hover { border-color: var(--border-hi); color: var(--text-soft); }
-  .li-indicator.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .li-indicator:hover { border-color: var(--border-hi); color: var(--text-soft); opacity: 0.6; }
+  .li-indicator.active { background: var(--accent); border-color: var(--accent); color: #fff; opacity: 1; }
   @keyframes fuse-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
   .reader-body { font-size: var(--fs-reader); color: var(--text); line-height: 1.85; white-space: pre-wrap; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 420; letter-spacing: -0.01em; flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 8px; }
   .reader-body::-webkit-scrollbar { width: 4px; }
