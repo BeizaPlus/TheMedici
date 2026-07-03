@@ -16,7 +16,6 @@ import { nudgeVitalsAfterOrder } from '../lib/vitalsProgression.js';
 import { useTeachCompareDockWidth } from '../hooks/useTeachCompareDockWidth.js';
 import { isCorrectGridPlacement, zoneIdForCell, zoneToGridCell } from '../lib/placementGrid.js';
 import { isTorsoDropZone, stackDropZoneForIv } from '../lib/torsoDropZone.js';
-import { clampPinAwayFromUi } from '../lib/scenePinPlacement.js';
 import SceneGridOverlay from './SceneGridOverlay.jsx';
 import { playWrong, playComplete } from '../lib/audio.js';
 import { mergeZonesForPlay } from '../lib/zoneStudio.js';
@@ -36,7 +35,7 @@ import {
   resolveSceneSrc,
 } from '../lib/patientImage.js';
 import GridPlacementLayer from './GridPlacementLayer.jsx';
-import { GRID_COLS, GRID_ROWS, snapPoint } from '../lib/sceneGrid.js';
+import { GRID_COLS, GRID_ROWS } from '../lib/sceneGrid.js';
 import {
   createGridItem,
   moveGridItem,
@@ -116,7 +115,6 @@ import {
   IconMargin,
   IconMessage,
   IconMoon,
-  IconPill,
   IconRotate,
   IconSettings,
   IconSkipForward,
@@ -126,6 +124,8 @@ import {
   IconUsersGroup,
   IconListCheck,
   IconBrain,
+  IconEye,
+  IconSlideshow,
 } from './sceneToolbar/SceneToolbarIcons.jsx';
 import CaseContextPanel from './CaseContextPanel.jsx';
 import IcuMonitorStrip from './IcuMonitorStrip.jsx';
@@ -206,6 +206,7 @@ import MedicalSequencePanel from './MedicalSequencePanel.jsx';
 import CaseStoryPanel from './CaseStoryPanel.jsx';
 import CharacterMapsPendant from './CharacterMapsPendant.jsx';
 import { markCaseStoryStarted, readCaseStoryStarted } from '../lib/caseStoryStarted.js';
+import { classifyInterventionTier } from '../lib/caseBareEssentials.js';
 import {
   buildTeachCompareReport,
   copyTeachCompareReport,
@@ -429,6 +430,21 @@ export default function Play({
     setTeachMeMode(true);
     onTeachMeConsumed?.();
   }, [caseData.id, initialTeachMe, onTeachMeConsumed]);
+  // Blind Practice: hide stack labels after attending demo; reveal when user types matching order
+  const [blindPracticeMode, setBlindPracticeMode] = useState(false);
+  const [revealedStackIds, setRevealedStackIds] = useState(new Set());
+  // Reset blind practice state when case changes
+  useEffect(() => {
+    setBlindPracticeMode(false);
+    setRevealedStackIds(new Set());
+  }, [caseData.id]);
+  // Turn off blind practice when teach me turns on
+  useEffect(() => {
+    if (teachMeMode && blindPracticeMode) {
+      setBlindPracticeMode(false);
+      setRevealedStackIds(new Set());
+    }
+  }, [teachMeMode, blindPracticeMode]);
   const [teachCompareLayout, setTeachCompareLayout] = useState(readTeachCompareLayout);
   const [medicalSequenceOpen, setMedicalSequenceOpen] = useState(false);
   const attendingAngleIndexRef = useRef(0);
@@ -447,6 +463,7 @@ export default function Play({
   // Attending demo mode — attendant demonstrates the workup step by step
   const [attendingDemoMode, setAttendingDemoMode] = useState(false);
   const [demoStepIndex, setDemoStepIndex] = useState(0);
+  const [demoTier, setDemoTier] = useState(null); // null = show toggles; 'general'|'critical'|'misc' = running tier
   const demoRunningRef = useRef(false);
 
   // Order sequence replay — "Review order sequence" replays the drops one by one
@@ -463,6 +480,8 @@ export default function Play({
   // orderTimelineEvents useState declaration — referencing it here causes a
   // temporal-dead-zone crash (blank play scene). Do not move them back up.
   const [scrubberIndex, setScrubberIndex] = useState(0);
+  // Scrubber visibility — collapsed by default, toggled via rail button or close on bar
+  const [scrubberCollapsed, setScrubberCollapsed] = useState(true);
 
   const openCaseStory = useCallback(() => {
     markCaseStoryStarted(caseData?.id);
@@ -705,13 +724,26 @@ export default function Play({
       return true;
     }
   });
-  const [scenePinsHidden, setScenePinsHidden] = useState(() => {
+  // Per-tier pin visibility — which tiers to HIDE (empty = show all)
+  const PIN_TIER_STORAGE = 'schoonmaker_hidden_pin_tiers_v1';
+  const [hiddenPinTiers, setHiddenPinTiers] = useState(() => {
     try {
-      return localStorage.getItem(STORAGE.scenePinsHidden) === '1';
+      const raw = localStorage.getItem(PIN_TIER_STORAGE);
+      return raw ? new Set(JSON.parse(raw)) : new Set();
     } catch {
-      return false;
+      return new Set();
     }
   });
+
+  const toggleHiddenPinTier = (tier) => {
+    setHiddenPinTiers((prev) => {
+      const next = new Set(prev);
+      if (next.has(tier)) next.delete(tier);
+      else next.add(tier);
+      try { localStorage.setItem(PIN_TIER_STORAGE, JSON.stringify([...next])); } catch { /* noop */ }
+      return next;
+    });
+  };
   const [timedMode, setTimedMode] = useState(() => readUiPrefs().timedMode);
   const startRef = useRef(Date.now());
   const sceneRef = useRef(null);
@@ -948,10 +980,13 @@ export default function Play({
     const isTeachNext = teachMeMode && iv.id === nextExpectedId;
     const isTeachFocused = teachMeMode && teachFocusId === iv.id;
     const isTeachLocked = teachMeMode && !isDecoy && !placed[iv.id] && iv.id !== nextExpectedId;
+    // Blind Practice: show dimmed placeholder when label hasn't been revealed yet
+    const isBlindHidden = blindPracticeMode && !isDecoy && !revealedStackIds.has(iv.id);
+    const justRevealed = blindPracticeMode && !isDecoy && revealedStackIds.has(iv.id);
     return (
       <div
         key={iv.id}
-        className={`drag-pill-wrap pack-item ${showDecoyVisual && !blendVisual ? 'pack-item-decoy' : ''} ${placed[iv.id] ? 'is-placed is-expandable' : ''} ${teachMeMode && placed[iv.id] ? 'teach-pill-placed' : ''} ${expandedStackId === iv.id ? 'expanded' : ''} ${isTeachFocused ? 'teach-pill-focused' : ''} ${isTeachNext ? 'teach-pill-next' : ''} ${isTeachLocked ? 'teach-pill-locked' : ''} ${dragIvId === iv.id ? 'is-dragging' : ''}`}
+        className={`drag-pill-wrap pack-item ${showDecoyVisual && !blendVisual ? 'pack-item-decoy' : ''} ${placed[iv.id] ? 'is-placed is-expandable' : ''} ${teachMeMode && placed[iv.id] ? 'teach-pill-placed' : ''} ${expandedStackId === iv.id ? 'expanded' : ''} ${isTeachFocused ? 'teach-pill-focused' : ''} ${isTeachNext ? 'teach-pill-next' : ''} ${isTeachLocked ? 'teach-pill-locked' : ''} ${dragIvId === iv.id ? 'is-dragging' : ''} ${isBlindHidden ? 'blind-practice-hidden' : ''} ${justRevealed ? 'blind-practice-revealed' : ''}`}
         draggable
         onDragStart={(e) => {
           e.dataTransfer.setData('application/stack-iv-id', iv.id);
@@ -977,9 +1012,13 @@ export default function Play({
         >
           <span
             className="pill-text"
-            title={stackPillDisplayLabel(iv)}
+            title={isBlindHidden ? `Memory slot #${displayNum ?? '?'}` : stackPillDisplayLabel(iv)}
           >
-            {stackPillDisplayLabel(iv)}
+            {isBlindHidden ? (
+              <span className="pill-text-dimmed">— memory slot —</span>
+            ) : (
+              stackPillDisplayLabel(iv)
+            )}
           </span>
           <span className="pill-meta">
             <span className="pill-stack">x1</span>
@@ -2070,17 +2109,12 @@ export default function Play({
         effectiveTarget = { zoneId, cx: target.cx, cy: target.cy };
       } else if (dropMode === 'free' && sceneRef.current && clientX != null && clientY != null) {
         const rect = sceneRef.current.getBoundingClientRect();
-        const rawCx = (clientX - rect.left) / rect.width;
-        const rawCy = (clientY - rect.top) / rect.height;
-        const { cx, cy } = clampPinAwayFromUi(rawCx, rawCy, sceneRef.current);
-        // Clamp to the scene margin frame, then snap to the nearest grid intersection
-        const clampedCx = Math.max(imageFrame.x, Math.min(imageFrame.x + imageFrame.w, cx));
-        const clampedCy = Math.max(imageFrame.y, Math.min(imageFrame.y + imageFrame.h, cy));
-        const snapped = snapPoint(clampedCx, clampedCy);
+        const cx = (clientX - rect.left) / rect.width;
+        const cy = (clientY - rect.top) / rect.height;
         effectiveTarget = {
           zoneId,
-          cx: snapped.cx,
-          cy: snapped.cy,
+          cx,
+          cy,
         };
       } else if (typeof target === 'string') {
         effectiveTarget = dropZone;
@@ -2138,6 +2172,11 @@ export default function Play({
 
       if (!teachMeMode) {
         showToast(viaCommand ? `Ordered ${iv.label}` : `Placed ${iv.label}`, 'ok');
+        // Blind Practice: reveal the matched stack label
+        if (blindPracticeMode && !silentDecoy && !revealedStackIds.has(iv.id)) {
+          setRevealedStackIds((prev) => new Set([...prev, iv.id]));
+          showToast(`Matched: ${iv.label}`, 'ok');
+        }
         if (!silentDecoy) {
           logTimeline({
             type: 'stack',
@@ -2164,7 +2203,7 @@ export default function Play({
         ...(viaCommand ? { method: 'command' } : {}),
       });
     },
-    [logDecoyAttempt, logTimeline, teachMeMode, placementOrder.length, zones, dropMode, showOrderWhyInDock, imageFrame],
+    [logDecoyAttempt, logTimeline, teachMeMode, blindPracticeMode, revealedStackIds, placementOrder.length, zones, dropMode, showOrderWhyInDock, imageFrame],
   );
 
 
@@ -2194,18 +2233,59 @@ export default function Play({
   );
 
   // ---- Attending Demo: auto-complete remaining timeline ----
+  const interventionsByTier = useMemo(() => {
+    const tiers = { general: [], critical: [], misc: [] };
+    for (const iv of interventions) {
+      const tier = classifyInterventionTier(iv);
+      tiers[tier].push(iv);
+    }
+    return tiers;
+  }, [interventions]);
+
+  // Map ivId → tier for pin filtering
+  const pinTierMap = useMemo(() => {
+    const map = {};
+    for (const tier of ['general', 'critical', 'misc']) {
+      for (const iv of interventionsByTier[tier]) {
+        map[iv.id] = tier;
+      }
+    }
+    return map;
+  }, [interventionsByTier]);
+
   const remainingDemoStacks = useMemo(() => {
     if (!attendingDemoMode) return [];
     return interventions.filter((iv) => !placed[iv.id]);
   }, [attendingDemoMode, interventions, placed]);
 
-  const completeAttendingTimeline = useCallback(() => {
+  const remainingDemoByTier = useMemo(() => {
+    if (!attendingDemoMode) return { general: [], critical: [], misc: [] };
+    const tiers = { general: [], critical: [], misc: [] };
+    for (const iv of interventionsByTier.general) {
+      if (!placed[iv.id]) tiers.general.push(iv);
+    }
+    for (const iv of interventionsByTier.critical) {
+      if (!placed[iv.id]) tiers.critical.push(iv);
+    }
+    for (const iv of interventionsByTier.misc) {
+      if (!placed[iv.id]) tiers.misc.push(iv);
+    }
+    return tiers;
+  }, [attendingDemoMode, interventionsByTier, placed]);
+
+  const completeAttendingTimeline = useCallback((tier = null) => {
     if (demoRunningRef.current) return;
-    const remaining = interventions.filter((iv) => !placed[iv.id]);
+    let remaining;
+    if (tier) {
+      remaining = remainingDemoByTier[tier];
+    } else {
+      remaining = interventions.filter((iv) => !placed[iv.id]);
+    }
     if (!remaining.length) {
       showToast('All orders already placed.', '');
       return;
     }
+    if (tier) setDemoTier(tier);
     demoRunningRef.current = true;
     setDemoStepIndex(0);
 
@@ -2247,12 +2327,15 @@ export default function Play({
       }
       demoRunningRef.current = false;
       setDemoStepIndex(remaining.length);
+      setDemoTier(null);
       showToast(`Timeline complete — ${remaining.length} orders`, 'ok');
     };
 
     void runSequence();
   }, [
     interventions,
+    interventionsByTier,
+    remainingDemoByTier,
     placed,
     placementOrder.length,
     logTimeline,
@@ -2342,6 +2425,10 @@ export default function Play({
             method: 'command',
           });
           placedCount += 1;
+          // Blind Practice: reveal matched stack
+          if (blindPracticeMode && !revealedStackIds.has(stackMatch.id)) {
+            setRevealedStackIds((prev) => new Set([...prev, stackMatch.id]));
+          }
           continue;
         }
 
@@ -2439,6 +2526,8 @@ export default function Play({
       interventions,
       decoyInterventions,
       teachMeMode,
+      blindPracticeMode,
+      revealedStackIds,
       nextExpectedId,
       logTimeline,
     ],
@@ -2482,6 +2571,10 @@ export default function Play({
             method: 'command',
           });
           placedCount += 1;
+          // Blind Practice: reveal matched stack
+          if (blindPracticeMode && !revealedStackIds.has(stackMatch.id)) {
+            setRevealedStackIds((prev) => new Set([...prev, stackMatch.id]));
+          }
           continue;
         }
 
@@ -2581,6 +2674,8 @@ export default function Play({
       interventions,
       decoyInterventions,
       teachMeMode,
+      blindPracticeMode,
+      revealedStackIds,
       nextExpectedId,
       logTimeline,
     ],
@@ -2700,6 +2795,11 @@ export default function Play({
         setExpandedStackId(stackMatch.id);
         setOrderCommandQuery('');
         showToast(teachMeMode ? `Ordered ${stackMatch.label}` : 'Order placed.', 'ok');
+        // Blind Practice: reveal the matched stack label
+        if (blindPracticeMode && !revealedStackIds.has(stackMatch.id)) {
+          setRevealedStackIds((prev) => new Set([...prev, stackMatch.id]));
+          showToast(`Matched: ${stackMatch.label}`, 'ok');
+        }
         logTimeline({
           type: 'stack',
           stackId: stackMatch.id,
@@ -2824,6 +2924,8 @@ export default function Play({
     [
       orderCommandQuery,
       teachMeMode,
+      blindPracticeMode,
+      revealedStackIds,
       nextExpectedId,
       interventionById,
       interventions,
@@ -3539,11 +3641,11 @@ export default function Play({
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE.scenePinsHidden, scenePinsHidden ? '1' : '0');
+      localStorage.setItem(PIN_TIER_STORAGE, JSON.stringify([...hiddenPinTiers]));
     } catch {
       /* ignore */
     }
-  }, [scenePinsHidden]);
+  }, [hiddenPinTiers]);
 
   useEffect(() => {
     if (!stackSettingsOpen && !bibliographyOpen) return undefined;
@@ -4164,7 +4266,7 @@ export default function Play({
 
   return (
     <div
-      className={`game ${finalMode ? 'final-mode' : ''} ${activeDrawer ? 'drawer-open' : ''}${teachMeMode ? ' teach-me-focus' : ''}${teachCompareLandscape ? ' teach-compare-landscape' : ''}${exportUseLiveScene ? ' live-scene-export' : ''}${scenePinsHidden ? ' scene-pins-hidden' : ''}`}
+      className={`game ${finalMode ? 'final-mode' : ''} ${activeDrawer ? 'drawer-open' : ''}${teachMeMode ? ' teach-me-focus' : ''}${teachCompareLandscape ? ' teach-compare-landscape' : ''}${exportUseLiveScene ? ' live-scene-export' : ''}${hiddenPinTiers.size > 0 ? ' scene-pins-hidden' : ''}`}
       style={{
         gridTemplateColumns: '1fr',
         gridTemplateRows: '1fr',
@@ -4330,6 +4432,32 @@ export default function Play({
         </button>
         <button
           type="button"
+          className={`panel-rail-btn${blindPracticeMode ? ' active' : ''}`}
+          onClick={() => {
+            setBlindPracticeMode((v) => !v);
+            if (!blindPracticeMode) setRevealedStackIds(new Set());
+          }}
+          title={blindPracticeMode ? 'Blind Practice: ON — type orders from memory' : 'Blind Practice — type orders from memory'}
+          aria-label="Blind Practice"
+          aria-pressed={blindPracticeMode}
+        >
+          <IconEye size={14} />
+        </button>
+        <button
+          type="button"
+          className={`panel-rail-btn${!scrubberCollapsed ? ' active' : ''}`}
+          onClick={() => {
+            setScrubberCollapsed((v) => !v);
+            if (scrubberCollapsed) setScrubberIndex(0);
+          }}
+          title={scrubberCollapsed ? 'Show order sequence scrubber' : 'Hide order sequence scrubber'}
+          aria-label="Toggle order sequence scrubber"
+          aria-pressed={!scrubberCollapsed}
+        >
+          <IconSlideshow size={14} />
+        </button>
+        <button
+          type="button"
           className="panel-rail-btn"
           onClick={reviewPlacements}
           disabled={doneCount === 0}
@@ -4411,13 +4539,27 @@ export default function Play({
               >
                 <IconMargin size={14} /> Drop margins
               </button>
-              <button
-                type="button"
-                className={scenePinsHidden ? 'active settings-popover-btn--on' : ''}
-                onClick={() => setScenePinsHidden((v) => !v)}
-              >
-                <IconPill size={14} /> {scenePinsHidden ? 'Show labels' : 'Hide labels'}
-              </button>
+              <div className="settings-popover-pin-tiers">
+                <span className="settings-popover-pin-tiers-label">Labels</span>
+                <div className="settings-popover-pin-tier-row">
+                  {(['general', 'critical', 'misc']).map((tier) => {
+                    const hidden = hiddenPinTiers.has(tier);
+                    const label = tier === 'general' ? 'Gen' : tier === 'critical' ? 'Crit' : 'Misc';
+                    const cls = tier === 'general' ? 'tier-general' : tier === 'critical' ? 'tier-critical' : 'tier-misc';
+                    return (
+                      <button
+                        key={tier}
+                        type="button"
+                        className={`settings-popover-pin-tier-btn ${cls}${!hidden ? ' is-on' : ''}`}
+                        onClick={() => toggleHiddenPinTier(tier)}
+                        title={`${hidden ? 'Show' : 'Hide'} ${tier === 'general' ? 'General' : tier === 'critical' ? 'Critical' : 'Miscellaneous'} labels`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
               <button
                 type="button"
                 className={!showCues ? 'active settings-popover-btn--on' : ''}
@@ -4652,19 +4794,20 @@ export default function Play({
             onSavePhysicalExamLayout={savePhysicalExamLayout}
             onOpenLabPicker={() => setLabPickerOpen(true)}
             onPinTeachingMoment={pinTeachingMoment}
-            scenePinsHidden={scenePinsHidden}
-            onToggleScenePins={() => setScenePinsHidden((v) => !v)}
             caseId={caseData.id}
             caseData={caseData}
             demoMode={attendingDemoMode}
             onToggleDemoMode={() => {
               setAttendingDemoMode((v) => !v);
               if (demoRunningRef.current) demoRunningRef.current = false;
+              setDemoTier(null);
             }}
             onCompleteTimeline={completeAttendingTimeline}
             demoRunning={demoRunningRef.current}
             demoStep={demoStepIndex}
             demoTotal={remainingDemoStacks.length}
+            demoTier={demoTier}
+            demoByTier={remainingDemoByTier}
           />
         </div>
         <div className="scene-timeline-dock">
@@ -4849,6 +4992,8 @@ export default function Play({
             if (scrubberVisibleIds.size === 0) return true;
             // Pins without ivId are always visible
             if (!p.ivId) return true;
+            // Hide pins whose tier is hidden by the user
+            if (p.ivId && hiddenPinTiers.has(pinTierMap[p.ivId])) return false;
             // Only show pins whose stack is within the current scrubber window
             return scrubberVisibleIds.has(p.ivId);
           })
@@ -4889,12 +5034,8 @@ export default function Play({
                 const offY = parseFloat(e.currentTarget.dataset.dragOffsetY || 0);
                 const rawCx = (e.clientX - rect.left - offX) / rect.width;
                 const rawCy = (e.clientY - rect.top - offY) / rect.height;
-                const { cx, cy } = clampPinAwayFromUi(rawCx, rawCy, sceneEl);
-                // Clamp to drop margin frame to keep pins inside the valid zone
-                const clampedCx = Math.max(imageFrame.x, Math.min(imageFrame.x + imageFrame.w, cx));
-                const clampedCy = Math.max(imageFrame.y, Math.min(imageFrame.y + imageFrame.h, cy));
                 pinDragSuppressClickRef.current = { ivId: p.ivId, at: Date.now() };
-                handleMovePin(p.ivId, { cx: clampedCx, cy: clampedCy, zoneId: 'zone-custom-1' });
+                handleMovePin(p.ivId, { cx: rawCx, cy: rawCy, zoneId: 'zone-custom-1' });
               }}
               onClick={() => {
                 if (!p.ivId) return;
@@ -5452,13 +5593,16 @@ export default function Play({
         />
       )}
 
-      <OrderSequenceScrubber
-        events={orderTimelineEvents}
-        interventionById={interventionById}
-        index={scrubberIndex}
-        onIndexChange={setScrubberIndex}
-        replaySignal={scrubberReplaySignal}
-      />
+      {!scrubberCollapsed && (
+        <OrderSequenceScrubber
+          events={orderTimelineEvents}
+          interventionById={interventionById}
+          index={scrubberIndex}
+          onIndexChange={setScrubberIndex}
+          replaySignal={scrubberReplaySignal}
+          onClose={() => setScrubberCollapsed(true)}
+        />
+      )}
 
     </div>
   );

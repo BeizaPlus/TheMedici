@@ -120,6 +120,8 @@ function SceneOrderCommandDock({
   demoRunning = false,
   demoStep = 0,
   demoTotal = 0,
+  demoTier = null,
+  demoByTier = { general: [], critical: [], misc: [] },
 }) {
   const inputRef = useRef(null);
   const [draft, setDraft] = useState('');
@@ -340,7 +342,7 @@ function SceneOrderCommandDock({
           {demoRunning ? (
             <div className="scene-order-demo-progress">
               <span className="scene-order-demo-progress-text">
-                Placing order {demoStep}/{demoTotal}…
+                {demoTier ? `Placing ${demoTier === 'general' ? 'General' : demoTier === 'critical' ? 'Critical' : 'Miscellaneous'} — order ${demoStep}/${demoTotal}…` : `Placing order ${demoStep}/${demoTotal}…`}
               </span>
               <div className="scene-order-demo-progress-track">
                 <div
@@ -350,17 +352,35 @@ function SceneOrderCommandDock({
               </div>
             </div>
           ) : (
-            <button
-              type="button"
-              className="scene-order-demo-complete-btn"
-              onClick={onCompleteTimeline}
-              disabled={demoTotal === 0}
-            >
-              <FiPlayCircle aria-hidden />
-              {demoTotal > 0
-                ? `Complete Timeline (${demoTotal} remaining)`
-                : 'All orders placed'}
-            </button>
+            <div className="scene-order-demo-tiers">
+              <button
+                type="button"
+                className={`scene-order-demo-tier-btn tier-general`}
+                onClick={() => onCompleteTimeline('general')}
+                disabled={demoByTier.general.length === 0}
+              >
+                <span className="tier-label">General</span>
+                <span className="tier-count">{demoByTier.general.length}</span>
+              </button>
+              <button
+                type="button"
+                className={`scene-order-demo-tier-btn tier-critical`}
+                onClick={() => onCompleteTimeline('critical')}
+                disabled={demoByTier.critical.length === 0}
+              >
+                <span className="tier-label">Critical</span>
+                <span className="tier-count">{demoByTier.critical.length}</span>
+              </button>
+              <button
+                type="button"
+                className={`scene-order-demo-tier-btn tier-misc`}
+                onClick={() => onCompleteTimeline('misc')}
+                disabled={demoByTier.misc.length === 0}
+              >
+                <span className="tier-label">Misc</span>
+                <span className="tier-count">{demoByTier.misc.length}</span>
+              </button>
+            </div>
           )}
         </div>
       )}

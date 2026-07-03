@@ -3297,6 +3297,62 @@ button {
   box-shadow: 0 0 0 1px rgba(232, 184, 75, 0.22);
 }
 
+.settings-popover-pin-tiers {
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.settings-popover-pin-tiers-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.settings-popover-pin-tier-row {
+  display: flex;
+  gap: 4px;
+}
+
+.settings-popover-pin-tier-btn {
+  flex: 1;
+  padding: 4px 0;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.settings-popover-pin-tier-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.settings-popover-pin-tier-btn.is-on.tier-general {
+  background: rgba(126, 200, 227, 0.15);
+  border-color: rgba(126, 200, 227, 0.5);
+  color: #7ec8e3;
+}
+
+.settings-popover-pin-tier-btn.is-on.tier-critical {
+  background: rgba(232, 184, 75, 0.15);
+  border-color: rgba(232, 184, 75, 0.5);
+  color: #e8b84b;
+}
+
+.settings-popover-pin-tier-btn.is-on.tier-misc {
+  background: rgba(167, 139, 250, 0.15);
+  border-color: rgba(167, 139, 250, 0.5);
+  color: #a78bfa;
+}
+
 .settings-popover-row-2 {
   padding-top: 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.09);
@@ -5221,6 +5277,35 @@ button {
 @keyframes drag-over-pulse {
   0%, 100% { border-color: rgba(232, 184, 75, 0.5); }
   50% { border-color: rgba(232, 184, 75, 0.9); }
+}
+
+/* Blind Practice — dimmed hidden slots (type from memory) */
+.drag-pill-wrap.pack-item.blind-practice-hidden .drag-pill.pill {
+  background: linear-gradient(180deg, #1a1a22, #121218);
+  border-color: rgba(255, 255, 255, 0.06);
+  opacity: 0.55;
+  filter: grayscale(0.4);
+}
+
+.drag-pill-wrap.pack-item.blind-practice-hidden .pill-text-dimmed {
+  color: rgba(255, 255, 255, 0.18);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+/* Blind Practice — just-revealed animation */
+.drag-pill-wrap.pack-item.blind-practice-revealed .drag-pill.pill {
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+  background: linear-gradient(180deg, #1f1f2a, #161620);
+  border-color: var(--gold);
+  box-shadow: 0 0 16px rgba(232, 184, 75, 0.25);
+  animation: blind-reveal-pulse 0.6s ease-out;
+}
+
+@keyframes blind-reveal-pulse {
+  0% { border-color: var(--gold); box-shadow: 0 0 24px rgba(232, 184, 75, 0.5); }
+  100% { border-color: var(--border); box-shadow: none; }
 }
 
 .drag-pill-wrap.pill-placed .drag-pill {
@@ -10246,6 +10331,68 @@ button {
 .scene-order-demo-complete-btn:disabled {
   opacity: 0.35;
   cursor: not-allowed;
+}
+
+.scene-order-demo-tiers {
+  display: flex;
+  gap: 6px;
+}
+
+.scene-order-demo-tier-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.scene-order-demo-tier-btn .tier-label {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.scene-order-demo-tier-btn .tier-count {
+  font-size: 0.8rem;
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+.scene-order-demo-tier-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.scene-order-demo-tier-btn.tier-general:hover {
+  color: #7ec8e3;
+  border-color: rgba(126, 200, 227, 0.4);
+  background: rgba(126, 200, 227, 0.08);
+}
+
+.scene-order-demo-tier-btn.tier-critical:hover {
+  color: #e8b84b;
+  border-color: rgba(232, 184, 75, 0.4);
+  background: rgba(232, 184, 75, 0.08);
+}
+
+.scene-order-demo-tier-btn.tier-misc:hover {
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.4);
+  background: rgba(167, 139, 250, 0.08);
+}
+
+.scene-order-demo-tier-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .scene-order-demo-progress {
