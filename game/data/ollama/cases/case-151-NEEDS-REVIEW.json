@@ -1,0 +1,122 @@
+{
+  "case_number": 106,
+  "title": "Found Unconscious",
+  "specialty": "Emergency Medicine",
+  "chief_complaint": "Unconscious",
+  "patient": "40-year-old male",
+  "location": "ER",
+  "diagnosis": "Carbon Monoxide Poisoning",
+  "hpi_narrative": "A 40-year-old male is found unconscious with Carbon Monoxide Poisoning. Onset was sudden upon entering a burning building. Associated symptoms include potential neurological deficits, severe lung damage, and possible cardiac ischemia.",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": "Carbon Monoxide poisoning can cause cardiac ischemia",
+    "respiratory": "The patient was found in a burning building filled with smoke. The patient could have severe lung damage",
+    "abdominal": null,
+    "neurological": "Neuro exam shows neurological deficits",
+    "skin": null,
+    "heent": null,
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null
+  },
+  "stacks": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "aliases": [],
+      "finding": "Patient unconscious \u2014 appropriate to look at patient's general appearance.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "aliases": [],
+      "finding": "As the patient presented unconscious, a neuro exam should be done to evaluate the patient's neurological status.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Chest / Lungs",
+      "aliases": [],
+      "finding": "The patient was found in a burning building filled with smoke. The patient could have severe lung damage, so this should be evaluated.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Heart / Cardiovascular",
+      "aliases": [],
+      "finding": "Carbon Monoxide poisoning can cause cardiac ischemia, so a cardiac exam should be done.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Arterial blood gases",
+      "aliases": [],
+      "finding": "ABG is important to determine the acid/base status. This will show a primary respiratory acidosis with secondary metabolic acidosis.",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Lactate, serum",
+      "aliases": [],
+      "finding": "Lactate aids in differentiating between cyanide poisoning and carbon monoxide poisoning. If lactate is normal or mildly elevated, then this would be more consistent with carbon monoxide poisoning alone.",
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Carbon monoxide, blood",
+      "aliases": [],
+      "finding": "The patient was found in a burning building. Carbon Monoxide poisoning is high on the differential. This should be checked.",
+      "type": "correctlyOrdered"
+    }
+  ],
+  "order_sets": [
+    {
+      "label": "Physical Exam: General Appearance",
+      "aliases": [],
+      "finding": "Patient unconscious",
+      "type": "correctlyOrdered"
+    },
+    {
+      "label": "Physical Exam: Neuro / Psych",
+      "aliases": [],
+      "finding": null,
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Lactate, serum / Lactate dehydrogenase, serum",
+      "aliases": [],
+      "finding": null,
+      "type": "shouldHaveOrdered"
+    },
+    {
+      "label": "Carbon monoxide, blood",
+      "aliases": [],
+      "finding": null,
+      "type": "shouldHaveOrdered"
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 60,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual case chief complaint in OCR. Title should be 'Found Unconscious' instead of 'Carbon Monoxide Poisoning'.",
+      "fix": "Update title to 'Found Unconscious'"
+    },
+    {
+      "field": "stacks",
+      "problem": "Stack labels have UI noise like 'Correctly Ordered', which should be removed. They should only have clean clinical orders.",
+      "fix": "Remove UI noise from stack labels"
+    },
+    {
+      "field": "hpi_narrative",
+      "problem": "HPI narrative has some issues like 'Associated symptoms' and missing punctuation. It should be a proper clinical narrative with no placeholders or metadata.",
+      "fix": "Update HPI narrative to be a proper clinical narrative with no placeholders or metadata."
+    },
+    {
+      "field": "physical_exam",
+      "problem": "Physical exam findings are not complete. For example, there is no 'cardiovascular' finding in the original OCR text but one was added to the extracted case data.",
+      "fix": "Ensure all physical exam findings mentioned in the original OCR text are included in the extracted case data."
+    }
+  ]
+}

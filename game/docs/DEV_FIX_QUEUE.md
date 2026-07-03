@@ -166,6 +166,7 @@ Run **after** A1–A2 (portrait + markdown) or in same dev batch:
 | C7 | Case **091** promote | `case-091-lump-in-breast.md` — left-breast anchor, exam/HPI scrub, playbook + cache fix |
 | C8 | Case **103** promote | `case-103-routine-check-up.md` — hidden UTI, female patient, FA lactate/ceftriaxone, UA cache |
 | C9 | Case **014** promote | ✅ 2026-06-24 — `promote-case-014.mjs` + portrait regen on dev `:5174` |
+| C10 | Case **099** Cauda Equina — character assets | **Future: do not implement yet.** Refs stored: `24-cauda-equina-gemini-char.png` (AI-photoreal male ~55, salt-pepper hair, pained grimace) + `25-cauda-equina-amazon-ref.jpg` (lumbar brace product ref for world-building). Full identityPrompt + game scene prompt analyzed by vision agent 2026-07-01. Pipeline ready when Steve says go. |
 
 ---
 
@@ -178,6 +179,7 @@ Run **after** A1–A2 (portrait + markdown) or in same dev batch:
 | E3 | Case Story **Scene 1–6** headings (not Storycraft jargon) | **done** — `CASE_STORY_PROMPT_VERSION` 13 |
 | E4 | Case Story prose **collapse** + **Export** markdown | **done** |
 | E5 | Teach-me **dock drag lag** | **done** — defer `localStorage` write until pointer-up |
+| E6 | **Strip canvas placement constraints** | **done 2026-07-01** — removed `clampPinAwayFromUi` (UI pushback), `snapPoint` (grid snap), `imageFrame` clamping (margin bounds) from `commitStackPlacement` + pin `onDragEnd`. Orders now place at exact drop point anywhere on the full scene, no snapping or nudging. |
 
 ---
 

@@ -2,7 +2,7 @@
 
 Medical training game: **181 CCS cases**, drag-and-place clinical orders onto a patient scene. React 19 + Vite 6 + Express.
 
-**Latest session (2026-06-30):** Drop zone margin controls — 4-slider panel (top/bottom/left/right) limits stack placement area on the patient scene. Toolbar button in "Display and settings" group (IconMargin). Grid overlay visible while panel open; margins persist in localStorage (`schoonmaker_scene_drop_margin`).
+**Latest session (2026-07-01):** **Blind Practice** mode — type orders from memory after attending demo. Toggle via eye icon (next to Teach Me brain). Stack pills dim to `— memory slot —`; fuzzy-match reveals them with golden pulse. `blindPracticeMode` + `revealedStackIds` in `Play.jsx`. Also: drop zone margin controls, TV presenter paging, uber portrait face id lock, stack-level storyboard review with pre-video grade card.
 
 **2026-06-29:** Manual-only portrait regen (serve cache incl. banned, default plate when uncached) + `smoke:play-case` fixes (TDZ, portaled settings popover, `detect-zones` graceful degrade).
 
@@ -427,6 +427,7 @@ Case chat in Play and Differentials (DeepSeek or OpenAI from `.env`). **Play def
 |------|--------|
 | **Normal / studying** (`teachMeMode` off) | Place **any** order — case stacks, decoys, extras, any zone. No “not indicated” blocks, no sequence enforcement, no wrong-zone punishment. Everything logs to timeline for review. |
 | **Teach Me** (`teachMeMode` on) | Guided: enforce **next stack in sequence**, compare panel, “not indicated” for extras outside case set. Decoys log silently; **Show Answer** reveals teaching on decoys. |
+| **Blind Practice** (`blindPracticeMode` on) | **Type orders from memory.** Stack pills dim to — memory slot — (position numbers visible). `resolveCaseStackOrder` fuzzy-matches typed text → reveal with golden pulse + “Matched:” toast. Works via type-command, drag-drop, and picker dialogs. Resets on case change. Toggle: eye icon next to Teach Me brain. |
 
 ### Placed order results (pin click + Order · Chat dock)
 

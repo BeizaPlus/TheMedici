@@ -1,0 +1,139 @@
+{
+  "case_number": 206,
+  "title": "Shortness of Breath",
+  "specialty": "Emergency Medicine",
+  "chief_complaint": "Shortness of Breath",
+  "patient": "A 50-year-old female",
+  "location": "ER",
+  "diagnosis": "Pulmonary Embolism",
+  "hpi_narrative": "A 50-year-old female with no significant past medical history presents to the ER with acute onset, dyspneic Shortness of Breath. Severity is high, associated symptoms may include chest pain and tachycardia. Pertinent negatives are normal blood pressure and temperature.",
+  "physical_exam": {
+    "general": null,
+    "cardiovascular": null,
+    "respiratory": "This is the patient's chief complaint",
+    "abdominal": "A quick abdominal exam is important",
+    "neurological": null,
+    "skin": null,
+    "heent": "This could be a source of the patient's symptoms",
+    "musculoskeletal": null,
+    "genitourinary": null,
+    "psychiatric": null
+  },
+  "orders": [
+    {
+      "type": "Imaging",
+      "name": "Chest X-ray"
+    },
+    {
+      "type": "Lab",
+      "name": "CBC"
+    },
+    {
+      "type": "Imaging",
+      "name": "EKG"
+    },
+    {
+      "type": "Lab",
+      "name": "Troponin"
+    },
+    {
+      "type": "Imaging",
+      "name": "Doppler, lower extremities, venous / Duplex ultrasound"
+    },
+    {
+      "type": "Lab",
+      "name": "Arterial blood gases"
+    }
+  ],
+  "treatment_plan": [
+    {
+      "type": "Medication",
+      "name": "Heparin, low molecular weight OR Fondaparinux OR Rivaroxaban OR Apixaban OR Dabigatran OR Edoxaban"
+    },
+    {
+      "type": "Monitoring",
+      "name": "Monitor, cardiac / Monitor, cardiac, check"
+    }
+  ],
+  "stacks_labels": [
+    "Chest X-ray",
+    "CBC with differential",
+    "EKG",
+    "Troponin",
+    "Doppler, lower extremities, venous / Duplex ultrasound",
+    "Arterial blood gases"
+  ],
+  "stacks": [
+    {
+      "label": "Chest X-ray",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "CBC with differential",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "EKG",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Troponin",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Doppler, lower extremities, venous / Duplex ultrasound",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    },
+    {
+      "label": "Arterial blood gases",
+      "aliases": [],
+      "finding": null,
+      "type": null
+    }
+  ],
+  "vitals": {
+    "hr": null,
+    "spo2": null,
+    "bp": null,
+    "rr": null,
+    "temp": null
+  },
+  "_final_confidence": 60,
+  "_final_issues": [
+    {
+      "field": "title",
+      "problem": "Title does not match the actual case chief complaint in OCR. The title should be 'Dyspnea' instead of 'Shortness of Breath'.",
+      "fix": "Change the title to 'Dyspnea'"
+    },
+    {
+      "field": "stacks_labels[0]",
+      "problem": "The label for the first stack contains an unneeded dollar sign. The correct label should be 'Chest X-ray'.",
+      "fix": "Remove the dollar sign from the label"
+    },
+    {
+      "field": "stacks_labels[2]",
+      "problem": "The label for the third stack is a combination of two procedures. It should be separated into 'EKG' and '12 Lead EKG' or 'ECG, Rhythm strip, long'.",
+      "fix": "Separate the label into proper procedure names"
+    },
+    {
+      "field": "physical_exam.cardiovascular",
+      "problem": "There is a finding for cardiovascular exam even though it's null in the data.",
+      "fix": "Remove the cardiovascular entry from physical_exam as it has no findings."
+    },
+    {
+      "field": "physical_exam.abdominal",
+      "problem": "The finding for abdominal exam is not accurate. It should read 'A quick abdominal exam to investigate for abdominal pathology is important'.",
+      "fix": "Change the finding to 'A quick abdominal exam to investigate for abdominal pathology is important'"
+    }
+  ]
+}

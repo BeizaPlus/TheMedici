@@ -1,44 +1,98 @@
 ---
-description: MeWorld narrative storyboard grids — one 2×4 portrait image, MeWorld CGI style lock, no A/B waste
+description: MeWorld narrative storyboard grids — one 2×4 @ 8:9 plate, MeWorld CGI style lock, Magnific 4:5+crop, no A/B
 globs:
   - "**/video-pending/**"
   - "**/storyboard*"
   - "**/uber-portrait-refs/**"
 ---
 
-# Storyboard grid generation (Steve policy)
+# Storyboard grid generation (Steve policy — approved 2026-06-30)
 
-When Steve asks for a **storyboard grid** (multi-panel contact sheet for video prep):
+When Steve asks for a **storyboard grid** (multi-panel contact sheet for Kling / video prep):
 
 ## Grid spec (default)
 
 | Param | Value |
 |-------|--------|
 | **Layout** | **2×4** (2 columns, 4 rows = **8 panels**) |
-| **Plate aspect** | **8:9** — `(2×16):(4×9)` so each cell crops to **16:9 @ 1920×1080** |
-| **Target pixels** | **3840 × 4320** (4K plate) |
-| **Count** | **`count: 1` only** — never generate alt1/alt2 for grids |
+| **Plate aspect** | **8:9** — formula `(cols×16):(rows×9)` |
+| **Per-panel crop** | Each cell → **16:9 @ 1920×1080** (no stretch) |
+| **Target pixels** | **3840 × 4320** |
+| **Count** | **`count: 1` only** — never alt1/alt2 for grids |
 | **Why** | One grid already delivers many angles; a second full grid wastes time and credits |
 
-## Visual style (locked)
+### Aspect math (mandatory)
 
-**Always** read and paste:
+```
+plate ratio = (columns × 16) : (rows × 9)
+```
+
+| Layout | Plate ratio | Target pixels |
+|--------|-------------|---------------|
+| **3×3 (9 panels)** | **16:9** | **5760 × 3240** (1920×1080/cell) or **3840 × 2160** (1280×720/cell) |
+| **2×4 (8 panels)** | **8:9** | **3840 × 4320** |
+| 2×3 (6 panels) | 32:27 | 3840 × 3240 |
+
+**3×3 rule:** equal columns and rows on a **16:9** plate → each cell is also **16:9** (ratio preserved). Do **not** apply the 8:9 crop workflow to 3×3.
+
+**2×4 rule:** columns ≠ rows → use **8:9** plate + Magnific `4:5` crop recipe below.
+
+**Do NOT** use 9:16 overall plate for 2×4 grids — panels will not crop clean to 16:9.
+
+## Generation workflow (approved)
+
+**Gold reference:** `dev/uber-portrait-refs/video-pending/blue-hijab-body-testing-storyboard-2x4-8x9.png` (Case 090 — Steve approved 2026-06-30)
+
+**Canonical script:** `scripts/gen-storyboard-grid-once.mjs` — copy/adapt per slug; do not hand-roll one-off prompts without the style lock files.
+
+### Magnific REST (primary)
+
+Magnific API does **not** accept `8:9`. Use this recipe:
+
+1. `aspect_ratio: "4:5"` · `resolution: "4K"` (closest supported taller plate)
+2. **Center-crop** result to **8:9** (trim equal strips top/bottom)
+3. **Resize** to **3840 × 4320** with `sharp`
+4. `count: 1` — REST edit or MCP `images_generate` with `count: 1`
+
+### Comfy / Flux (alternate)
+
+Direct **`width: 3840` · `height: 4320`** when the backend accepts custom pixels.
+
+### Prompt files (always paste both)
+
 - `dev/uber-portrait-refs/prompts/storyboard-grid-meworld-style-lock.txt`
 - `dev/uber-portrait-refs/prompts/game-engine-stylization-pass.txt`
 
-**MeWorld sculptural CGI** — same family as uber GAME-SCENE gold plates. **NOT** photoreal documentary.
+### Magnific refs per run
 
-Magnific refs per run:
 1. Shipped `public/assets/patient/uber/<slug>-GAME-SCENE.png` (patient + hospital panels)
 2. `CHARACTER-MAP` for identity
-3. Style gold: `vitiligo-wink-diastema-GAME-SCENE-alt2.png` (pending or public)
+3. Style gold: `vitiligo-wink-diastema-GAME-SCENE-alt2.png`
+
+## Visual style (locked)
+
+**MeWorld sculptural CGI** on **every** panel — hospital and desert/metaphor in the **same** render family. Match uber GAME-SCENE gold (AO, soft GI, muted clinical grade). **NOT** photoreal documentary, **NOT** stock photo, **NOT** line art.
+
+Thin black dividers · no text labels · no watermark.
+
+## Narrative framing (clinical storyboards)
+
+When a beat involves family conflict (e.g. gestational hypertension / immune metaphor):
+
+- **Subtext over direct statement** — Immersa voice standard
+- Relative anger points at **fear**, not moral judgment of the patient's past
+- Example (Case 090): son is not mad she had other partners; he is scared because he has watched her body do this fourteen times and does not know how to stop fearing the fifteenth
 
 ## Output path
 
-`dev/uber-portrait-refs/video-pending/<slug>-<scene-slug>-storyboard-2x4-portrait.png`
+`dev/uber-portrait-refs/video-pending/<slug>-<scene-slug>-storyboard-2x4-8x9.png`
 
-Do not write A/B suffixes (`-alt1`, `-alt2`) unless Steve explicitly asks for a second grid after rejecting the first.
+Do not write `-alt1` / `-alt2` unless Steve explicitly asks for a second grid after rejecting the first.
 
 ## Video follow-up
 
-After grid approval → pick hero panel(s) → ComfyUI Kling i2v per `comfyui-video.mdc` (one clip at a time unless Steve asks for batch).
+**ONE master plate → ONE Kling job.** Rule: `.cursor/rules/meworld-kling-comfy-preflight.mdc`  
+Handoff: `dev/uber-portrait-refs/COMFY_KLING_QUEUE.md`  
+Script: `python dev/uber-portrait-refs/run_case090_master_plate_kling.py`  
+
+Never batch per-panel Kling jobs. Boot: `run_nvidia_gpu_kling26.bat` (not NIMA Photoshop Comfy).

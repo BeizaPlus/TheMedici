@@ -7,7 +7,8 @@
 **Manifest:** `uberCases.json` + `caseSlugs` in JSON above
 
 **Magnific:** https://www.magnific.com/app · API: https://www.magnific.com/developers  
-**Image rules:** `game/.cursor/RULES_IMAGE_GENERATION.md` (read before any gen)
+**Image rules:** `game/.cursor/RULES_IMAGE_GENERATION.md` (read before any gen)  
+**Onboard new face (slash):** `/uber-onboard-face` · `node scripts/uber-onboard-face.mjs` · `npm run uber:onboard`
 
 ---
 

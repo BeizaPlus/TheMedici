@@ -21,7 +21,7 @@
 
 | 15 | `15-pipe-tweed-mustache-bank.png` | `pipe-tweed-mustache-bank` | 099 | ✅ shipped |
 
-| 28 | `28-trail-heavy-hiker-bank.jpg` | `trail-heavy-hiker-bank` | — (reserved) | ✅ map shipped |
+| 28 | `28-trail-heavy-hiker-bank.jpg` | `trail-heavy-hiker-bank` | — (reserved) | ✅ shipped |
 
 **Primary assignments:** 8 uber cases → **7 unique slugs** (U03 + U05 share `hijab-albino-freckles`)  
 **Bank:** 7 alternates  

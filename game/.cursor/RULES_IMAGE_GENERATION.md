@@ -441,20 +441,24 @@ docs/portrait-previews/case-{id}-pediatric-preview.png   ← agent review
 
 ---
 
-## 8b. Storyboard grids (video prep — Steve 2026-06-30)
+## 8b. Storyboard grids (video prep — Steve approved 2026-06-30)
 
 **Rule file:** `.cursor/rules/storyboard-grid-generation.mdc`  
-**Style lock:** `dev/uber-portrait-refs/prompts/storyboard-grid-meworld-style-lock.txt` + `game-engine-stylization-pass.txt`
+**Style lock:** `dev/uber-portrait-refs/prompts/storyboard-grid-meworld-style-lock.txt` + `game-engine-stylization-pass.txt`  
+**Gold plate:** `dev/uber-portrait-refs/video-pending/blue-hijab-body-testing-storyboard-2x4-8x9.png`  
+**Script:** `scripts/gen-storyboard-grid-once.mjs` (Magnific `4:5` @ 4K → center-crop **8:9** → **3840×4320** via `sharp`)
 
 | Param | Value |
 |-------|--------|
 | Layout | **2×4** (8 panels), thin black dividers, no text |
-| Plate aspect | **8:9** overall — `(cols×16):(rows×9)` → each panel crops **16:9 @ 1920×1080** |
+| Plate aspect | **8:9** — `(cols×16):(rows×9)` → each panel crops **16:9 @ 1920×1080** |
 | Target size | **3840×4320** for 2×4; **3840×3240** for 2×3 |
+| Magnific API | No native `8:9` — generate **`4:5` @ 4K**, center-crop to 8:9, resize to target (or Comfy/Flux at exact pixels) |
 | Magnific `count` | **1 only** — grids already multi-angle; **no alt1/alt2** unless Steve rejects and asks regen |
-| Style | MeWorld sculptural CGI on **all** panels (hospital + desert/camel); NOT photoreal documentary |
+| Style | MeWorld sculptural CGI on **all** panels (hospital + metaphor beats in same render family); NOT photoreal documentary |
+| Narrative | Family conflict = **fear subtext**, not moral judgment of patient choices (Immersa voice standard) |
 
-Output: `dev/uber-portrait-refs/video-pending/<slug>-<scene>-storyboard-2x4-portrait.png`
+Output: `dev/uber-portrait-refs/video-pending/<slug>-<scene>-storyboard-2x4-8x9.png`
 
 Exception to §9 A/B: **single-shot portraits** → count 2 OK; **storyboard grids** → count 1 always.
 

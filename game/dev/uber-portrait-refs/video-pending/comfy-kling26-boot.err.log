@@ -1,0 +1,41 @@
+WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+Found comfy_kitchen backend triton: {'available': False, 'disabled': True, 'unavailable_reason': "ImportError: No module named 'triton'", 'capabilities': []}
+Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_nvfp4']}
+Found comfy_kitchen backend cuda: {'available': True, 'disabled': True, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8']}
+Checkpoint files will always be loaded safely.
+Total VRAM 16376 MB, total RAM 65244 MB
+pytorch version: 2.6.0+cu124
+Set vram state to: NORMAL_VRAM
+Device: cuda:0 NVIDIA GeForce RTX 4090 Laptop GPU : cudaMallocAsync
+Using async weight offloading with 2 streams
+Enabled pinned memory 29359.0
+Using pytorch attention
+Unsupported Pytorch detected. DynamicVRAM support requires Pytorch version 2.8 or later. Falling back to legacy ModelPatcher. VRAM estimates may be unreliable especially on Windows
+Python version: 3.11.8 (tags/v3.11.8:db85d51, Feb  6 2024, 22:03:32) [MSC v.1937 64 bit (AMD64)]
+ComfyUI version: 0.18.2
+comfy-aimdo version: 0.2.12
+comfy-kitchen version: 0.2.8
+ComfyUI frontend version: 1.41.21
+[Prompt Server] web root: M:\ComfyUI_windows_portablev01 - GenFill - LITE\python_embeded\Lib\site-packages\comfyui_frontend_package\static
+Asset seeder disabled
+Skipping loading of custom nodes
+Context impl SQLiteImpl.
+Will assume non-transactional DDL.
+Failed to initialize database. Please ensure you have installed the latest requirements. If the error persists, please report this as in future the database will be required: Could not acquire lock on database 'M:\ComfyUI_windows_portablev01 - GenFill - LITE\ComfyUI\user\comfyui.db'. Another ComfyUI process may already be using it. Use --database-url to specify a separate database file.
+Starting server
+
+Traceback (most recent call last):
+  File "M:\ComfyUI_windows_portablev01 - GenFill - LITE\ComfyUI\main.py", line 484, in <module>
+    event_loop.run_until_complete(x)
+  File "asyncio\base_events.py", line 654, in run_until_complete
+  File "M:\ComfyUI_windows_portablev01 - GenFill - LITE\ComfyUI\main.py", line 461, in start_all
+    await run(prompt_server, address=args.listen, port=args.port, verbose=not args.dont_print_server, call_on_start=call_on_start)
+  File "M:\ComfyUI_windows_portablev01 - GenFill - LITE\ComfyUI\main.py", line 333, in run
+    await asyncio.gather(
+  File "M:\ComfyUI_windows_portablev01 - GenFill - LITE\ComfyUI\server.py", line 1239, in start_multi_address
+    await site.start()
+  File "M:\ComfyUI_windows_portablev01 - GenFill - LITE\python_embeded\Lib\site-packages\aiohttp\web_runner.py", line 121, in start
+    self._server = await loop.create_server(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncio\base_events.py", line 1536, in create_server
+OSError: [Errno 10048] error while attempting to bind on address ('127.0.0.1', 8188): only one usage of each socket address (protocol/network address/port) is normally permitted

@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
-import { IconPlayerPlay, IconPlayerPause } from './sceneToolbar/SceneToolbarIcons.jsx';
+import { IconPlayerPlay, IconPlayerPause, IconX } from './sceneToolbar/SceneToolbarIcons.jsx';
 import { orderTimelineSequenceFromEvents } from '../lib/orderTimeline.js';
 import '../styles/order-sequence-scrubber.css';
 
@@ -108,6 +108,7 @@ export default function OrderSequenceScrubber({
   index = 0,
   onIndexChange,
   replaySignal = 0,
+  onClose,
 }) {
   const {
     barRef,
@@ -283,6 +284,17 @@ export default function OrderSequenceScrubber({
         >
           ⏭
         </button>
+        {onClose && (
+          <button
+            type="button"
+            className="oss-btn oss-btn-close"
+            onClick={onClose}
+            aria-label="Close scrubber"
+            title="Hide order sequence scrubber"
+          >
+            <IconX size={14} />
+          </button>
+        )}
       </div>
 
       <div className="oss-label-row">

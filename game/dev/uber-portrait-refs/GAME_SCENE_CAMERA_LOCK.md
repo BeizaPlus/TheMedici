@@ -253,6 +253,8 @@ Steve review: **nevus-speckled-laugh-GAME-SCENE-alt2** — composition good but 
 
 | `refs/COMPOSITION_GOLD-pipe-tweed-mustache-bank-alt1-angle-lock.png` | **Bank gold** — Steve approved 2026-06-18 (pipe-tweed alt1 angle-lock v2) |
 
+| `refs/COMPOSITION_GOLD-closeup-cinematic-case-preview-craniofacial-alt1-3d-v3.png` | **Cinematic case preview gold** — Steve approved 2026-07-01: tighter 3/4 bedside angle, dramatic sculptural lighting, strong depth of field, patient fills more of frame (not full head-to-toe). Use for case preview / briefing portraits where cinematic impact matters more than clinical inspection. |
+
 | `nevus-speckled-laugh-GAME-SCENE-alt2.png` | Superseded — **alt2 anamorphic v2 approved** (pending ship) |
 
 | `refs/nevus-speckled-laugh-GAME-SCENE-alt2-too-flat-20260618.png` | Steve reject note — flat rectilinear overhead |
@@ -462,6 +464,7 @@ All other files in `game-scenes-pending/` are pending review or need pose/angle-
 | **Game-cam gold PNG** | `game-scenes-pending/hijab-albino-freckles-GAME-SCENE-alt2-v2-20260618-approved-pending-ship.png` |
 
 | **Anamorphic gold PNG** | `refs/COMPOSITION_GOLD-nevus-speckled-laugh-alt2-anamorphic-v2.png` |
+| **Cinematic case preview gold PNG** | `refs/COMPOSITION_GOLD-closeup-cinematic-case-preview-craniofacial-alt1-3d-v3.png` |
 
 | **Loader** | `src/lib/sceneCameraLock.js` |
 

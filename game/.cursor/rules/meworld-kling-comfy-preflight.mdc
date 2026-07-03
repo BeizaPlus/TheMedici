@@ -1,0 +1,90 @@
+---
+description: MeWorld Kling i2v — Comfy boot, queue preflight, one job only, never batch storyboard clips
+globs:
+  - "**/video-pending/**"
+  - "**/run_case090*kling*"
+  - "**/COMFY*QUEUE*"
+  - "**/storyboard*"
+---
+
+# MeWorld Kling video — agent preflight (mandatory)
+
+Prevents zombie queue, multi-hour hangs, and wrong Comfy boot.
+
+## What went wrong (2026-06-30 — do not repeat)
+
+1. Agent queued **batch** per-panel jobs (`--priority` clips 3–8) **before** master plate.
+2. Clip 3 sat in `queue_running` for **hours** with **empty** `/history/{id}` — blocked master plate behind it.
+3. Agent tried `curl` queue clear from PowerShell with **bad JSON** → Comfy `JSONDecodeError` spam in log (not Kling failure).
+4. Comfy was sometimes on **NIMA Photoshop** boot (`whitelist-custom-nodes comfyui-photoshop`) instead of **Kling26** boot.
+
+## Boot Comfy (Kling video)
+
+| Task | Launcher |
+|------|----------|
+| **Kling 2.6 i2v** | `M:\ComfyUI_windows_portablev01 - GenFill - LITE\run_nvidia_gpu_kling26.bat` |
+| Photoshop bridge only | `LAUNCH_COMFYUI_FOR_NIMA.bat` — **not for Kling** |
+
+Wait 60–120s after boot. `GET http://127.0.0.1:8188/system_stats` → 200.
+
+### "Skipping custom nodes" in log — expected
+
+`run_nvidia_gpu_kling26.bat` uses `--disable-all-custom-nodes` (no whitelist). Custom packs (VideoHelperSuite, Wan, etc.) are **intentionally skipped**. **Kling is not a custom node** — it lives in built-in `comfy_api_nodes` (`KlingImageToVideoWithAudio`). Verify:
+
+```
+GET http://127.0.0.1:8188/object_info/KlingImageToVideoWithAudio
+```
+
+Must return node schema. If 404 → wrong Comfy build or not fully booted.
+
+NIMA boot shows `whitelist-custom_nodes comfyui-photoshop` — only PS plugin loads; Kling API node can still work, but prefer **kling26.bat** for video work.
+
+## Storyboard video policy
+
+| Do | Don't |
+|----|--------|
+| **ONE** Kling job from **full master plate** PNG | Extract 9 panels and queue 9 jobs |
+| `run_case090_master_plate_kling.py` (one invocation) | `run_case090_kling_clips.py --priority` or `--all` |
+| Default **duration 5** | Default 10s unless Steve asks |
+| Poll until done or **15 min timeout** then STOP | Leave zombie in queue and queue another job |
+
+## Preflight checklist (run before EVERY enqueue)
+
+```python
+# 1. Comfy up
+GET /system_stats → 200
+
+# 2. Kling node exists
+GET /object_info/KlingImageToVideoWithAudio → has input schema
+
+# 3. Queue empty
+GET /queue → queue_running.length == 0 AND queue_pending.length == 0
+# If not empty: tell Steve — restart run_nvidia_gpu_kling26.bat. Do NOT enqueue.
+
+# 4. No zombie
+# If queue_running has a job but GET /history/{prompt_id} is {} for >15 min → stuck.
+# Tell Steve to restart Comfy. Do NOT add jobs.
+```
+
+**Never** clear queue with raw `curl` from PowerShell (JSON escaping breaks Comfy). Use Python `urllib` + `json.dumps` or tell Steve to restart Comfy.
+
+## Enqueue recipe (same as U12 / Beat 95)
+
+Script: `dev/uber-portrait-refs/run_case090_master_plate_kling.py`  
+Pattern: `dev/u12-tom-precall/run_u12_tom_truck_kling26_local.py`
+
+- `extra_data.api_key_comfy_org` via `comfy_local_auth.comfy_prompt_extra_data()`
+- **Not** in node inputs
+- Compress start still long edge ≤1536 JPEG
+- `model_name`: `kling-v2-6` · `mode`: `pro` · `generate_audio`: false
+
+## Output
+
+`dev/uber-portrait-refs/video-pending/case-090-3x3-master-plate-5s-kling26.mp4`  
+Comfy raw: `ComfyUI/output/video/case090-3x3-master-plate*.mp4`
+
+## Reference docs
+
+- `dev/u12-tom-precall/COMFY_QUEUE.md` (yesterday's working recipe)
+- `C:\Users\steve\.cursor\commands\comfy-generate-video.md`
+- `C:\Users\steve\.cursor\rules\comfyui-video.mdc`

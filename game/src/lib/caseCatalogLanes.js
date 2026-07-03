@@ -18,7 +18,7 @@ export const CATALOG_LANES = {
 };
 
 /** Categories that show Core | Scenarios tabs in the case picker. */
-export const LANE_TAB_CATEGORIES = new Set(['Trauma & Toxicology']);
+export const LANE_TAB_CATEGORIES = new Set([]);
 
 export function categoryHasLaneTabs(categoryId) {
   return LANE_TAB_CATEGORIES.has(categoryId);

@@ -287,3 +287,21 @@
 .oss-resize-se:hover {
   background: rgba(232,184,75,0.25);
 }
+
+/* Close button — right edge of the bar */
+.oss-btn-close {
+  margin-left: 2px;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+}
+
+.oss-btn-close:hover:not(:disabled) {
+  opacity: 1;
+  background: rgba(255, 70, 70, 0.12);
+  border-color: rgba(255, 70, 70, 0.25);
+}
+
+.oss-btn-close svg {
+  width: 13px;
+  height: 13px;
+}
