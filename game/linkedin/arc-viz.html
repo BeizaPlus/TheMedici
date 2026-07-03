@@ -351,6 +351,12 @@
   .reader-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 1.25rem; flex-wrap: wrap; }
   .nav-group { display: flex; gap: 8px; align-items: center; }
   .status-group { display: flex; gap: 6px; align-items: center; }
+  .post-li-btn { font-size: 10px; padding: 5px 14px; border-radius: 14px; border: none; background: var(--accent); color: #fff; cursor: pointer; font-family: inherit; font-weight: 500; letter-spacing: -0.01em; transition: all 0.15s; white-space: nowrap; }
+  .post-li-btn:hover { filter: brightness(1.1); }
+  .post-li-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .post-li-btn.posting { animation: post-pulse 0.8s ease infinite; }
+  @keyframes post-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+
 
   /* NAV BAR (outside reader card) */
   .nav-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; padding: 8px 0; flex-wrap: wrap; flex-shrink: 0; }
@@ -651,6 +657,7 @@
       <span class="post-num" id="post-num"></span>
       <button class="nav-btn" id="next-btn">Next →</button>
     </div>
+    <button class="post-li-btn" id="post-li-btn" onclick="postToLinkedIn()">Post LI</button>
     <div class="status-group" id="status-group"></div>
   </div>
 
@@ -754,6 +761,8 @@ let collapsedImages = {}; // per-post image collapse state
 let collapsedVideos = {}; // per-post video collapse state
 let readMode = "original"; // "original" | "spoken"
 let linkedinTake = {}; // per-post: maps index -> "original"|"spoken"|"fused" — which version gets posted
+let platformStates = {}; // per-post waterfall states: { n: { linkedin, facebook, instagram } }
+let platformTexts = {}; // per-post platform text overrides
 
 function g(id) { return document.getElementById(id); }
 function getStatus(i) { return statuses[i] || "draft"; }
@@ -1827,6 +1836,8 @@ function idbDel(id) {
   try { const ci = JSON.parse(localStorage.getItem("arc-viz-collapsedImages") || "{}"); Object.assign(collapsedImages, ci); } catch(e) {}
   try { const cv = JSON.parse(localStorage.getItem("arc-viz-collapsedVideos") || "{}"); Object.assign(collapsedVideos, cv); } catch(e) {}
   try { const lt = JSON.parse(localStorage.getItem("arc-viz-linkedinTake") || "{}"); Object.assign(linkedinTake, lt); } catch(e) {}
+  try { const ps = JSON.parse(localStorage.getItem("arc-viz-platformStates") || "{}"); Object.assign(platformStates, ps); } catch(e) {}
+  try { const pt = JSON.parse(localStorage.getItem("arc-viz-platformTexts") || "{}"); Object.assign(platformTexts, pt); } catch(e) {}
 })().then(() => {
   // Now safe to init UI — takes are loaded
   if (dark) {
@@ -1860,6 +1871,7 @@ async function autoSave() {
   try {
     const state = {
       speechTakes, selectedTake, fuseSources, statuses, linkedinTake,
+      platformStates, platformTexts,
       fontSize, dark, sideX, sideY, sideW, sideH, tlX, tlY,
       sidePanelOpen, sidePanelMinimized, sidePanelTab,
       _at: new Date().toISOString()
@@ -1880,6 +1892,78 @@ async function autoSave() {
 function manualSave() {
   autoSave().then(() => alert("State saved to disk.")).catch(() => alert("State server not running. Start: node C:\\dev\\Schedular\\state-server.js"));
 }
+
+/* POST TO LINKEDIN */
+function postToLinkedIn() {
+  const p = posts[current];
+  const btn = document.getElementById("post-li-btn");
+  if (btn.classList.contains("posting")) return;
+  btn.disabled = true;
+  btn.classList.add("posting");
+  btn.textContent = "Posting...";
+
+  // Determine text: linkedinTake selection or original body
+  let text = p.body;
+  const liTake = linkedinTake[current];
+  if (liTake === "spoken" || liTake === "fused") {
+    const take = getSelectedTake(current);
+    if (take) text = take.transcript;
+  }
+
+  const payload = {
+    index: current,
+    platform: "linkedin",
+    text: text,
+    image: p.image || null,
+    video: p.video || null
+  };
+
+  fetch("http://127.0.0.1:9801/post-platform", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+  .then(r => r.json())
+  .then(data => {
+    console.log("Post result:", data);
+    if (data.ok) {
+      setStatus("posted");
+      btn.textContent = "Posted";
+      btn.style.background = "#22C55E";
+      // Cascade to FB
+      if (typeof platformStates !== "undefined") {
+        if (!platformStates[current]) platformStates[current] = {};
+        platformStates[current].facebook = "ready";
+        savePlatformStates();
+      }
+      autoSave();
+    } else {
+      btn.textContent = "Failed";
+      btn.style.background = "#EF4444";
+      console.error("Post failed:", data.error);
+    }
+  })
+  .catch(err => {
+    console.error("Post error:", err);
+    btn.textContent = "Error";
+    btn.style.background = "#EF4444";
+  })
+  .finally(() => {
+    btn.disabled = false;
+    btn.classList.remove("posting");
+    setTimeout(() => {
+      if (btn.textContent === "Posted" || btn.textContent === "Failed" || btn.textContent === "Error") {
+        btn.textContent = "Post LI";
+        btn.style.background = "";
+      }
+    }, 3000);
+  });
+}
+
+function savePlatformStates() {
+  try { localStorage.setItem("arc-viz-platformStates", JSON.stringify(platformStates)); } catch(e) {}
+}
+
 function savePositions() {
   try {
     const vw = window.innerWidth, vh = window.innerHeight;
