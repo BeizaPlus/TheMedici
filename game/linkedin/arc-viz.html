@@ -198,6 +198,17 @@
   .tl-date { font-size: 9px; color: var(--text-muted); font-weight: 450; letter-spacing: 0.02em; }
   .tl-act { font-size: 8px; color: var(--text-muted); font-weight: 450; letter-spacing: 0.03em; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .tl-row.active .tl-date, .tl-row.active .tl-act { color: var(--text-soft); }
+  .tl-row.drag-over { border-top: 2px solid var(--accent); margin-top: -2px; }
+  .tl-row.dragging { opacity: 0.4; background: var(--accent-bg); }
+  .tl-grip { width: 18px; height: 18px; flex-shrink: 0; cursor: grab; display: none; align-items: center; justify-content: center; color: var(--text-muted); font-size: 12px; border-radius: 3px; }
+  .tl-grip:hover { color: var(--text); background: var(--border); }
+  .tl-grip:active { cursor: grabbing; }
+  .tl-grip.visible { display: flex; }
+  .reorder-mode .tl-row .tl-dot { display: none; }
+  .reorder-mode .tl-row .tl-grip { display: flex; }
+  .reorder-mode .tl-row { cursor: grab; }
+  .tl-hdr-btn.reorder-active { background: var(--accent-bg); color: var(--accent); }
+
   .tl-divider {
     padding: 4px 14px 2px; font-size: 8px; font-weight: 500;
     color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;
@@ -502,6 +513,8 @@
       <span>Timeline</span>
       <div class="tl-handle-actions">
         <button class="tl-hdr-btn" id="tl-min-btn" onclick="minimizeTimeline()" title="Minimize / Expand">−</button>
+        
+        <button class="tl-hdr-btn" id="tl-reorder-btn" onclick="toggleReorder()" title="Reorder posts">☰</button>
         <button class="tl-hdr-btn" onclick="hideTimeline()" title="Close">×</button>
       </div>
     </div>
@@ -791,25 +804,47 @@ function renderTimeline() {
   let lastAct = null;
   posts.forEach((p, i) => {
     if (p.act !== lastAct) {
-      html += `<div class="tl-divider">${p.act}</div>`;
+      html += '<div class="tl-divider">' + p.act + '</div>';
       lastAct = p.act;
     }
     const st = getStatus(i);
     const activeClass = i === current ? " active" : "";
     const takeCount = (speechTakes[i] && speechTakes[i].length) || 0;
-    const countHtml = takeCount > 0 ? `<span class="tl-take-count">${takeCount}</span>` : "";
-    const imageHtml = p.image ? `<span class="tl-image-dot" title="Has image">◻</span>` : "";
-    const videoHtml = p.video ? `<span class="tl-image-dot" title="Has video">▶</span>` : "";
-    html += `<div class="tl-row ${st}${activeClass}" onclick="goTo(${i})">
-      <div class="tl-dot">${i + 1}</div>
-      <div class="tl-info">
-        <span class="tl-date">${p.date}</span>
-        <span class="tl-act">${p.act}</span>
-      </div>
-      ${imageHtml}${videoHtml}${countHtml}
-    </div>`;
+    const countHtml = takeCount > 0 ? '<span class="tl-take-count">' + takeCount + '</span>' : "";
+    const imageHtml = p.image ? '<span class="tl-image-dot" title="Has image">◻</span>' : "";
+    const videoHtml = p.video ? '<span class="tl-image-dot" title="Has video">▶</span>' : "";
+    html += '<div class="tl-row ' + st + activeClass + '" draggable="' + String(reorderMode) + '" data-idx="' + i + '">';
+    html += '<div class="tl-grip visible" title="Drag to reorder">☰</div>';
+    html += '<div class="tl-dot">' + (i + 1) + '</div>';
+    html += '<div class="tl-info">';
+    html += '<span class="tl-date">' + p.date + '</span>';
+    html += '<span class="tl-act">' + p.act + '</span>';
+    html += '</div>';
+    html += imageHtml + videoHtml + countHtml;
+    html += '</div>';
   });
   el.innerHTML = html;
+
+  // Attach drag handlers
+  if (reorderMode) {
+    el.querySelectorAll(".tl-row").forEach(function(row) {
+      var idx = parseInt(row.getAttribute("data-idx"));
+      row.addEventListener("dragstart", function(e) { handleDragStart(e, idx); });
+      row.addEventListener("dragend", handleDragEnd);
+      row.addEventListener("dragover", handleDragOver);
+      row.addEventListener("dragleave", handleDragLeave);
+      row.addEventListener("drop", function(e) { handleDrop(e, idx); });
+    });
+  } else {
+    // Normal click-to-navigate
+    el.querySelectorAll(".tl-row").forEach(function(row) {
+      var idx = parseInt(row.getAttribute("data-idx"));
+      row.addEventListener("click", function() { goTo(idx); });
+    });
+    // Keep grip hidden
+    el.querySelectorAll(".tl-grip").forEach(function(g) { g.classList.remove("visible"); });
+  }
+
   // scroll active into view
   const activeRow = el.querySelector(".tl-row.active");
   if (activeRow) activeRow.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -1450,6 +1485,108 @@ function hideTimeline() {
 function toggleTimeline() {
   if (tlOpen) hideTimeline(); else showTimeline();
 }
+
+/* TIMELINE REORDER */
+let reorderMode = false;
+let dragIndex = -1;
+
+function toggleReorder() {
+  reorderMode = !reorderMode;
+  var btn = document.getElementById("tl-reorder-btn");
+  var panel = document.getElementById("tl-panel");
+  if (reorderMode) {
+    btn.classList.add("reorder-active");
+    panel.classList.add("reorder-mode");
+  } else {
+    btn.classList.remove("reorder-active");
+    panel.classList.remove("reorder-mode");
+    dragIndex = -1;
+    clearDragState();
+  }
+  renderTimeline();
+}
+
+function clearDragState() {
+  var rows = document.querySelectorAll(".tl-row");
+  rows.forEach(function(r) { r.classList.remove("dragging","drag-over"); });
+}
+
+function handleDragStart(e, i) {
+  if (!reorderMode) return;
+  dragIndex = i;
+  e.currentTarget.classList.add("dragging");
+  e.dataTransfer.effectAllowed = "move";
+  e.dataTransfer.setData("text/plain", String(i));
+}
+
+function handleDragEnd(e) {
+  e.currentTarget.classList.remove("dragging");
+  clearDragState();
+  dragIndex = -1;
+}
+
+function handleDragOver(e) {
+  if (!reorderMode) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  var row = e.currentTarget;
+  if (!row.classList.contains("dragging")) {
+    clearDragState();
+    row.classList.add("drag-over");
+  }
+}
+
+function handleDragLeave(e) {
+  e.currentTarget.classList.remove("drag-over");
+}
+
+function handleDrop(e, targetIdx) {
+  e.preventDefault();
+  clearDragState();
+  if (!reorderMode || dragIndex < 0 || dragIndex === targetIdx) return;
+
+  // Reorder posts array
+  var item = posts.splice(dragIndex, 1)[0];
+  posts.splice(targetIdx, 0, item);
+
+  // Reorder all per-index data structures
+  function reorderIndexed(obj) {
+    if (!obj) return;
+    var keys = Object.keys(obj).map(Number).sort(function(a,b){ return a - b; });
+    var entries = [];
+    keys.forEach(function(k) { entries.push([k, obj[k]]); });
+    // Remove then insert at new position
+    if (dragIndex < entries.length) {
+      var moved = entries.splice(dragIndex, 1)[0];
+      entries.splice(targetIdx, 0, moved);
+    }
+    // Rebuild with new indices
+    var result = {};
+    entries.forEach(function(e, newIdx) { result[newIdx] = e[1]; });
+    for (var k in obj) { if (obj.hasOwnProperty(k)) delete obj[k]; }
+    for (var k in result) { if (result.hasOwnProperty(k)) obj[k] = result[k]; }
+  }
+
+  reorderIndexed(statuses);
+  reorderIndexed(linkedinTake);
+  reorderIndexed(selectedTake);
+  reorderIndexed(speechTakes);
+  reorderIndexed(fuseSources);
+  if (typeof platformStates !== "undefined") reorderIndexed(platformStates);
+  if (typeof platformTexts !== "undefined") reorderIndexed(platformTexts);
+  if (typeof collapsedImages !== "undefined") reorderIndexed(collapsedImages);
+  if (typeof collapsedVideos !== "undefined") reorderIndexed(collapsedVideos);
+
+  // Restore current pointer
+  if (current === dragIndex) current = targetIdx;
+  else if (current > dragIndex && current <= targetIdx) current--;
+  else if (current < dragIndex && current >= targetIdx) current++;
+
+  dragIndex = -1;
+  saveAll();
+  refresh();
+}
+
 function minimizeTimeline() {
   tlMinimized = !tlMinimized;
   const panel = g("tl-panel");
