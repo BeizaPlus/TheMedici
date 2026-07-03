@@ -1,56 +1,65 @@
 {
   "id": 55,
   "topic": "Shortness of Breath",
-  "diagnosis": "Pulmonary Edema or Congestive Heart Failure until proven otherwise",
-  "confidence": "inferred",
-  "source": "preparedCases+fmgmatch+mistral",
+  "diagnosis": "Pulmonary Embolism",
+  "confidence": "screenshot",
+  "source": "ccs_screenshots/case_059 (OCR + Ollama Mistral)",
   "correct_orders": [
-    "Obtain electrocardiogram (ECG) to assess heart function and rule out acute coronary syndrome",
-    "Chest X-ray to evaluate lung fields, cardiac silhouette, and pleural effusions",
+    "Chest X-ray",
+    "CBC with differential",
+    "EKG",
+    "Troponin",
+    "Doppler, lower extremities, venous / Duplex ultrasound",
+    "CT pulmonary angiography (CTPA)",
+    "Arterial blood gases",
     "Oxygen",
-    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)"
+    "Heparin, low molecular weight OR Fondaparinux OR Rivaroxaban OR Apixaban OR Dabigatran OR Edoxaban",
+    "Monitor, cardiac"
   ],
   "should_avoid": [
-    "Starting a broad-spectrum antibiotic therapy without culture results"
+    "Starting a broad-spectrum antibiotic therapy without culture results",
+    "Thrombolytics without confirmed massive PE and hemodynamic instability"
   ],
   "rationale": {
-    "Starting a broad-spectrum antibiotic therapy without culture results": "This should be avoided because it can lead to antibiotic resistance and unnecessary costs",
-    "Oxygen": "The patient presents with shortness of breath which is a life-threatening symptom. Immediate administration of oxygen is crucial to stabilize the patient.",
-    "Order: Order: time-sensitive interventions first; (oxygen, IV access, glucose check)": "IV access and glucose check are also important for immediate stabilization of the patient."
+    "Chest X-ray": "Obtain to evaluate for alternative causes of dyspnea and assess cardiac silhouette. May show Westermark sign or Hampton hump in PE but is often normal.",
+    "EKG": "Assess for right heart strain pattern (S1Q3T3, right axis deviation) and rule out ACS.",
+    "Troponin": "Elevated troponin in PE indicates right ventricular strain and worse prognosis.",
+    "Arterial blood gases": "Evaluate for hypoxia and calculate A-a gradient. PE causes increased dead space.",
+    "Doppler, lower extremities, venous / Duplex ultrasound": "Confirm DVT as embolic source. Positive + high pretest probability establishes diagnosis.",
+    "CT pulmonary angiography (CTPA)": "Gold standard diagnostic test for PE. Visualizes filling defects in pulmonary arteries. Obtain after initial stabilization and risk stratification. Definitively confirms diagnosis.",
+    "Heparin, low molecular weight": "Immediate anticoagulation is the cornerstone of PE management.",
+    "Oxygen": "Patient presents with shortness of breath and hypoxemia. Immediate oxygen crucial to stabilize.",
+    "CBC with differential": "Assess for anemia; baseline prior to anticoagulation."
   },
-  "hpi": null,
+  "hpi": "Ms. X is a 50-year-old woman with no significant past medical history who presents to the emergency department with acute onset shortness of breath. The dyspnea is severe, associated with chest discomfort and tachycardia. On arrival she is tachypneic with an SpO\u2082 of 94% on room air.",
   "physical_exam": [
-    [
-      "General",
-      "Dyspneic, speaking in short phrases if severe"
-    ],
-    [
-      "Cardiovascular",
-      "HR 124, tachycardic; BP 107/68."
-    ],
-    [
-      "Respiratory",
-      "RR 27, tachypneic; SpO\u2082 94%."
-    ],
-    [
-      "Abdomen",
-      "Soft, non-distended"
-    ],
-    [
-      "Neuro",
-      "Alert unless hypercapnic or hypoxic"
-    ],
-    [
-      "Skin",
-      "Cyanosis absent unless critical hypoxemia"
-    ]
+    ["General", "Dyspneic, speaking in short phrases"],
+    ["Cardiovascular", "HR 124, tachycardic; BP 107/68; regular rhythm"],
+    ["Respiratory", "RR 27, tachypneic; SpO\u2082 94% on room air; clear to auscultation bilaterally"],
+    ["Abdomen", "Soft, non-distended"],
+    ["Neuro", "Alert, oriented"],
+    ["Skin", "No cyanosis, no diaphoresis"],
+    ["Extremities", "No edema, no calf tenderness"]
   ],
-  "vitals": null,
-  "patient_voice": null,
+  "vitals": {
+    "hr": 124,
+    "spo2": 94,
+    "bp_systolic": 107,
+    "bp_diastolic": 68,
+    "rr": 27,
+    "temp": 37.1
+  },
+  "patient_voice": {
+    "chief_complaint": "I can't catch my breath \u2014 it came on so fast out of nowhere. I'm really scared.",
+    "history": "I was just at home sitting down and suddenly I felt like I couldn't breathe. No coughing, no fever.",
+    "pain": "There's this tightness in my chest. I'm afraid something bad is happening."
+  },
   "complete": true,
-  "screenshot_processed": false,
+  "screenshot_processed": true,
+  "ccs_number": 59,
   "enrichment_sources": [
-    "fmgmatch",
-    "mistral"
-  ]
+    "ccs_screenshot",
+    "ollama_mistral_extraction"
+  ],
+  "extraction_notes": "Pytesseract OCR + Ollama Mistral from CCS review screenshot (2026-07-01). Corrected from prior DeepSeek inferred diagnosis of Pulmonary Edema/CHF to actual CCS answer-key diagnosis of Pulmonary Embolism."
 }
